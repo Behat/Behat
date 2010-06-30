@@ -126,13 +126,11 @@ class Parser
             preg_match($this->regex->getStepsRegex(), $this->currentLine, $values)
         ) {
             $step = new Step($values['type'], $values['step']);
-            // pystring?
-            if (preg_match($this->regex->getPyStringStarterRegex(), $this->getNextLine())) {
-                $step->addArgument($this->getNextPyString());
+            if ('' !== $pystring = $this->getNextPyString()) {
+                $step->addArgument($pystring);
             }
-            // table?
-            if (preg_match($this->regex->getTableRegex(), $this->getNextLine())) {
-                $step->addArgument($this->getNextTable());
+            if (count($table = $this->getNextTable())) {
+                $step->addArgument($table);
             }
             $steps[] = $step;
         }
@@ -155,6 +153,7 @@ class Parser
                 $value .= $this->currentLine . "\n";
             }
         }
+        $this->moveToPreviousLine();
 
         return trim($value);
     }
@@ -182,9 +181,7 @@ class Parser
                 $table[] = $hash;
             }
         }
-        if (count($table)) {
-            $this->moveToPreviousLine();
-        }
+        $this->moveToPreviousLine();
 
         return $table;
     }
