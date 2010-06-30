@@ -16,7 +16,7 @@ class Parser
         $this->currentLine = '';
         $this->lines = explode("\n", $this->cleanup($value));
 
-        if (preg_match('#^\#language\:\s*(?P<lang>[\w]+?)\s*$#', $this->lines[0], $values)) {
+        if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w]+?)\s*$#', $this->lines[0], $values)) {
             $class = sprintf("Gherkin\\I18n\\%s", $values['lang']);
             $this->regex = new $class;
         } else {
@@ -36,9 +36,7 @@ class Parser
             // feature?
             if (preg_match($this->regex->getFeatureRegex(), $this->currentLine, $values)) {
                 $this->feature = new Feature;
-                if (isset($values['title'])) {
-                    $this->feature->setTitle($values['title']);
-                }
+                $this->feature->setTitle(isset($values['title']) ? $values['title'] : '');
                 $this->feature->addTags($this->getPreviousTags());
                 $this->feature->addDescriptions($this->getNextDescriptions());
             }
@@ -46,9 +44,9 @@ class Parser
             // background?
             if (preg_match($this->regex->getBackgroundRegex(), $this->currentLine, $values)) {
                 $background = new Background;
-                if (isset($values['title'])) {
-                    $background->setTitle($values['title']);
-                }
+                $background->setTitle($this->getNextTitle(
+                    isset($values['title']) ? $values['title'] : ''
+                ));
                 $background->addSteps($this->getNextSteps());
 
                 $this->feature->addBackground($background);
@@ -57,9 +55,9 @@ class Parser
             // scenario?
             if (preg_match($this->regex->getScenarioRegex(), $this->currentLine, $values)) {
                 $scenario = new Scenario;
-                if (isset($values['title'])) {
-                    $scenario->setTitle($values['title']);
-                }
+                $scenario->setTitle($this->getNextTitle(
+                    isset($values['title']) ? $values['title'] : ''
+                ));
                 $scenario->addTags($this->getPreviousTags());
                 $scenario->addSteps($this->getNextSteps());
 
@@ -69,9 +67,9 @@ class Parser
             // scenario outline?
             if (preg_match($this->regex->getScenarioOutlineRegex(), $this->currentLine, $values)) {
                 $outline = new ScenarioOutline;
-                if (isset($values['title'])) {
-                    $outline->setTitle($values['title']);
-                }
+                $outline->setTitle($this->getNextTitle(
+                    isset($values['title']) ? $values['title'] : ''
+                ));
                 $outline->addTags($this->getPreviousTags());
                 $outline->addSteps($this->getNextSteps());
                 $outline->setExamples($this->getNextExamples());
@@ -100,19 +98,43 @@ class Parser
         return $tags;
     }
 
+    protected function getNextTitle($title = '')
+    {
+        while($this->moveToNextLine()) {
+            if ($this->isCurrentLineEmpty()) {
+                continue;
+            }
+            if (
+                preg_match($this->regex->getStepsRegex(), $this->currentLine) ||
+                preg_match($this->regex->getTableRegex(), $this->currentLine)
+            ) {
+                break;
+            }
+            $title .= empty($title) ? trim($this->currentLine) : ' ' . trim($this->currentLine);
+        }
+        $this->moveToPreviousLine();
+
+        return $title;
+    }
+
     protected function getNextDescriptions()
     {
         $lines = array();
 
-        while (
-            $this->moveToNextLine() &&
-            preg_match($this->regex->getDescriptionRegex(), $this->currentLine, $values)
-        ) {
+        while ($this->moveToNextLine()) {
+            if ($this->isCurrentLineEmpty()) {
+                continue;
+            }
+            if (!preg_match($this->regex->getDescriptionRegex(), $this->currentLine, $values)) {
+                break;
+            }
+
             $description = trim($values['description']);
             if (!empty($description)) {
                 $lines[] = $values['description'];
             }
         }
+        $this->moveToPreviousLine();
 
         return $lines;
     }
@@ -121,10 +143,14 @@ class Parser
     {
         $steps = array();
 
-        while (
-            $this->moveToNextLine() &&
-            preg_match($this->regex->getStepsRegex(), $this->currentLine, $values)
-        ) {
+        while ($this->moveToNextLine()) {
+            if ($this->isCurrentLineEmpty()) {
+                continue;
+            }
+            if (!preg_match($this->regex->getStepsRegex(), $this->currentLine, $values)) {
+                break;
+            }
+
             $step = new Step($values['type'], $values['step']);
             if ('' !== $pystring = $this->getNextPyString()) {
                 $step->addArgument($pystring);
@@ -163,10 +189,14 @@ class Parser
         $keys   = array();
         $table  = array();
 
-        while (
-            $this->moveToNextLine() &&
-            preg_match($this->regex->getTableRegex(), $this->currentLine, $values)
-        ) {
+        while ($this->moveToNextLine()) {
+            if ($this->isCurrentLineEmpty()) {
+                continue;
+            }
+            if (!preg_match($this->regex->getTableRegex(), $this->currentLine, $values)) {
+                break;
+            }
+
             $row = array_map(function($item) {
                 return trim($item);
             }, explode($this->regex->getTableSplitter(), $values['row']));
@@ -193,6 +223,7 @@ class Parser
         }
 
         if (preg_match($this->regex->getExamplesRegex(), $this->currentLine, $values)) {
+            $title = $this->getNextTitle(isset($values['title']) ? $values['title'] : '');
             return $this->getNextTable();
         } else {
             return array();

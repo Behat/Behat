@@ -7,7 +7,7 @@ class ru extends \Gherkin\RegexHolder
     protected $feature          = 'Функционал';
     protected $background       = 'Предыстория';
     protected $scenario         = 'Сценарий';
-    protected $scenarioOutline  = 'План Сценария';
+    protected $scenarioOutline  = 'Структура сценария';
     protected $examples         = 'Значения';
-    protected $stepTypes        = array('Допустим', 'Тогда', 'Если', 'И', 'Но');
+    protected $stepTypes        = array('Допустим', 'То', 'Если', 'И', 'Но');
 }

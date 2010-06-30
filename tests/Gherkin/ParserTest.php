@@ -260,4 +260,264 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             $outline->getExamples()
         );
     }
+
+    public function testMultilineName()
+    {
+        $feature = $this->loadFeature('multiline_name.feature');
+
+        $this->assertEquals('multiline', $feature->getTitle());
+        $this->assertFalse($feature->hasDescription());
+        $this->assertTrue($feature->hasBackgrounds());
+        $this->assertEquals(1, count($feature->getBackgrounds()));
+
+        $item = end($feature->getBackgrounds());
+
+        $this->assertEquals(
+            "I'm a multiline name which goes on and on and on for three lines yawn", 
+            $item->getTitle()
+        );
+
+        $this->assertTrue($item->hasSteps());
+        $this->assertEquals(1, count($item->getSteps()));
+        $this->assertEquals('Given', end($item->getSteps())->getType());
+        $this->assertEquals('passing without a table', end($item->getSteps())->getText());
+
+        $scenarios = $feature->getScenarios();
+
+        $item = $scenarios[0];
+        $this->assertEquals(
+            "I'm a multiline name which goes on and on and on for three lines yawn", 
+            $item->getTitle()
+        );
+
+        $this->assertTrue($item->hasSteps());
+        $this->assertEquals(1, count($item->getSteps()));
+        $this->assertEquals('Given', end($item->getSteps())->getType());
+        $this->assertEquals('passing without a table', end($item->getSteps())->getText());
+
+        $item = $scenarios[1];
+        $this->assertEquals(
+            "I'm a multiline name which goes on and on and on for three lines yawn", 
+            $item->getTitle()
+        );
+
+        $this->assertTrue($item->hasSteps());
+        $this->assertEquals(1, count($item->getSteps()));
+        $this->assertEquals('Given', end($item->getSteps())->getType());
+        $this->assertEquals('<state> without a table', end($item->getSteps())->getText());
+        $this->assertEquals(array(array('state' => 'passing')), $item->getExamples());
+
+        $item = $scenarios[2];
+        $this->assertEquals('name', $item->getTitle());
+
+        $this->assertTrue($item->hasSteps());
+        $this->assertEquals(1, count($item->getSteps()));
+        $this->assertEquals('Given', end($item->getSteps())->getType());
+        $this->assertEquals('<state> without a table', end($item->getSteps())->getText());
+        $this->assertEquals(array(array('state' => 'passing')), $item->getExamples());
+    }
+
+    public function test172()
+    {
+        $feature = $this->loadFeature('172.feature');
+
+        $this->assertEquals('Login', $feature->getTitle());
+        $this->assertTrue($feature->hasDescription());
+        $this->assertEquals(
+            array(
+                'To ensure the safety of the application',
+                'A regular user of the system',
+                'Must authenticate before using the app'
+            ),
+            $feature->getDescription()
+        );
+
+        $this->assertTrue($feature->hasScenarios());
+        $this->assertEquals(1, count($feature->getScenarios()));
+
+        $scenario = end($feature->getScenarios());
+
+        $this->assertEquals('Failed Login', $scenario->getTitle());
+        $this->assertTrue($scenario->hasExamples());
+        $this->assertEquals(
+            array(
+                array('login' => '', 'password' => ''),
+                array('login' => 'unknown_user', 'password' => ''),
+                array('login' => 'known_user', 'password' => ''),
+                array('login' => '', 'password' => 'wrong_password'),
+                array('login' => '', 'password' => 'known_userpass'),
+                array('login' => 'unknown_user', 'password' => 'wrong_password'),
+                array('login' => 'unknown_user', 'password' => 'known_userpass'),
+                array('login' => 'known_user', 'password' => 'wrong_password'),
+            ),
+            $scenario->getExamples()
+        );
+
+        $this->assertTrue($scenario->hasSteps());
+        $steps = $scenario->getSteps();
+        $this->assertEquals(8, count($steps));
+
+        $this->assertEquals('Given', $steps[0]->getType());
+        $this->assertEquals('the user "known_user"', $steps[0]->getText());
+
+        $this->assertEquals('When', $steps[1]->getType());
+        $this->assertEquals('I go to the main page', $steps[1]->getText());
+
+        $this->assertEquals('Then', $steps[2]->getType());
+        $this->assertEquals('I should see the login form', $steps[2]->getText());
+
+        $this->assertEquals('When', $steps[3]->getType());
+        $this->assertEquals('I fill in "login" with "<login>"', $steps[3]->getText());
+
+        $this->assertEquals('And', $steps[4]->getType());
+        $this->assertEquals('I fill in "password" with "<password>"', $steps[4]->getText());
+
+        $this->assertEquals('And', $steps[5]->getType());
+        $this->assertEquals('I press "Log In"', $steps[5]->getText());
+
+        $this->assertEquals('Then', $steps[6]->getType());
+        $this->assertEquals('the login request should fail', $steps[6]->getText());
+
+        $this->assertEquals('And', $steps[7]->getType());
+        $this->assertEquals(
+            'I should see the error message "Login or Password incorrect"',
+            $steps[7]->getText()
+        );
+    }
+
+    public function test180()
+    {
+        $feature = $this->loadFeature('180.feature');
+
+        $this->assertEquals('Cucumber command line', $feature->getTitle());
+        $this->assertEquals(
+            array(
+                'In order to write better software',
+                'Developers should be able to execute requirements as tests'
+            ),
+            $feature->getDescription()
+        );
+        $this->assertTrue($feature->hasScenarios());
+        $this->assertEquals(1, count($feature->getScenarios()));
+        $this->assertEquals(
+            'Pending Scenario at the end of a file with whitespace after it',
+            end($feature->getScenarios())->getTitle()
+        );
+        $this->assertFalse(end($feature->getScenarios())->hasSteps());
+    }
+
+    public function test236()
+    {
+        $feature = $this->loadFeature('236.feature');
+
+        $this->assertEquals('Unsubstituted argument placeholder', $feature->getTitle());
+        $this->assertFalse($feature->hasDescription());
+        $this->assertTrue($feature->hasScenarios());
+        $this->assertEquals(1, count($feature->getScenarios()));
+
+        $scenario = end($feature->getScenarios());
+        $this->assertEquals(
+            'See Annual Leave Details (as Management & Human Resource)',
+            $scenario->getTitle()
+        );
+        $this->assertTrue($scenario->hasSteps());
+        $this->assertEquals(1, count($scenario->getSteps()));
+        $this->assertEquals(
+            array(
+                array('role' => 'HUMAN RESOURCE')
+            ),
+            $scenario->getExamples()
+        );
+
+        $step = end($scenario->getSteps());
+        $this->assertEquals('Given', $step->getType());
+        $this->assertEquals('the following users exist in the system', $step->getText());
+        $this->assertEquals(
+            array(array(
+                array('name' => 'Jane', 'email' => 'jane@fmail.com', 'role_assignments' => '<role>', 'group_memberships' => 'Sales (manager)'),
+                array('name' => 'Max', 'email' => 'max@fmail.com', 'role_assignments' => '', 'group_memberships' => 'Sales (member)'),
+                array('name' => 'Carol', 'email' => 'carol@fmail.com', 'role_assignments' => '', 'group_memberships' => 'Sales (member)'),
+                array('name' => 'Cat', 'email' => 'cat@fmail.com', 'role_assignments' => '', 'group_memberships' => ''),
+            )),
+            $step->getArguments()
+        );
+    }
+
+    public function test241()
+    {
+        $feature = $this->loadFeature('241.feature');
+
+        $this->assertEquals('Using the Console Formatter', $feature->getTitle());
+        $this->assertEquals(
+            array(
+                'In order to verify this error',
+                'I want to run this feature using the progress format',
+                'So that it can be fixed'
+            ),
+            $feature->getDescription()
+        );
+
+        $this->assertTrue($feature->hasScenarios());
+        $this->assertEquals(1, count($feature->getScenarios()));
+        $this->assertEquals('A normal feature', end($feature->getScenarios())->getTitle());
+
+        $steps = end($feature->getScenarios())->getSteps();
+        $this->assertEquals(3, count($steps));
+
+        $this->assertEquals('Given', $steps[0]->getType());
+        $this->assertEquals('I have a pending step', $steps[0]->getText());
+
+        $this->assertEquals('When', $steps[1]->getType());
+        $this->assertEquals('I run this feature with the progress format', $steps[1]->getText());
+
+        $this->assertEquals('Then', $steps[2]->getType());
+        $this->assertEquals("I should get a no method error for 'backtrace_line'", $steps[2]->getText());
+    }
+
+    public function test246()
+    {
+        $feature = $this->loadFeature('246.feature');
+
+        $this->assertEquals('https://rspec.lighthouseapp.com/projects/16211/tickets/246-distorted-console-output-for-slightly-complicated-step-regexp-match', $feature->getTitle());
+        $this->assertEquals('See "No Record(s) Found" for Zero Existing', end($feature->getScenarios())->getTitle());
+        $this->assertEquals(1, count(end($feature->getScenarios())->getSteps()));
+    }
+
+    public function testRuAddition()
+    {
+        $feature = $this->loadFeature('ru_addition.feature');
+
+        $this->assertEquals('Сложение чисел', $feature->getTitle());
+        $this->assertEquals(
+            array(
+                'Чтобы не складывать в уме',
+                'Все, у кого с этим туго',
+                'Хотят автоматическое сложение целых чисел'
+            ),
+            $feature->getDescription()
+        );
+
+        $this->assertTrue($feature->hasScenarios());
+        $this->assertEquals(1, count($feature->getScenarios()));
+
+        $scenario = end($feature->getScenarios());
+
+        $this->assertEquals('Сложение двух целых чисел', $scenario->getTitle());
+
+        $steps = $scenario->getSteps();
+
+        $this->assertEquals(4, count($steps));
+
+        $this->assertEquals('Допустим', $steps[0]->getType());
+        $this->assertEquals('я ввожу число 50', $steps[0]->getText());
+
+        $this->assertEquals('И', $steps[1]->getType());
+        $this->assertEquals('затем ввожу число 70', $steps[1]->getText());
+
+        $this->assertEquals('Если', $steps[2]->getType());
+        $this->assertEquals('я нажимаю "+"', $steps[2]->getText());
+
+        $this->assertEquals('То', $steps[3]->getType());
+        $this->assertEquals('результатом должно быть число 120', $steps[3]->getText());
+    }
 }

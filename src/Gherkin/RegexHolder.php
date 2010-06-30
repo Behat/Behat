@@ -60,7 +60,7 @@ abstract class RegexHolder
 
     public function getExamplesRegex()
     {
-        return '#^\s*' . $this->examples . '\:\s*$#';
+        return '#^\s*' . $this->examples . '\:(?:\s+(?P<title>.+?))?\s*$#';
     }
 
     public function getTagsRegex()
