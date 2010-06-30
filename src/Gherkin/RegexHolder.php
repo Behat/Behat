@@ -2,8 +2,8 @@
 
 namespace Gherkin;
 
-class RegexHolder
-{    
+abstract class RegexHolder
+{
     protected $tagKeyword       = '@';
     protected $tableSplitter    = '|';
     protected $feature          = 'Feature';

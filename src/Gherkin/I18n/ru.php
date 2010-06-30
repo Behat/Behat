@@ -2,7 +2,7 @@
 
 namespace Gherkin\I18n;
 
-class ru extends en
+class ru extends \Gherkin\RegexHolder
 {
     protected $feature          = 'Функционал';
     protected $background       = 'Предыстория';
