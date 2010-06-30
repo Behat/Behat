@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-require_once 'PHPUnit/Framework.php';
 require_once __DIR__ . '/../UniversalClassLoader.php';
 
 $loader = new UniversalClassLoader();
