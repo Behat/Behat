@@ -84,10 +84,9 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @dataProvider featuresProvider 
      */
-    public function runFeature(\Gherkin\Feature $feature)
+    public function testFeature(\Gherkin\Feature $feature)
     {
         foreach ($feature->getScenarios() as $scenario) {
             foreach ($scenario->getSteps() as $step) {

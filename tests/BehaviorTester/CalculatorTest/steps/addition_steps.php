@@ -19,7 +19,6 @@ $this
         array_walk($t->numbers, function($num) use($t) {
             $t->result /= $num;
         });
-        2/0;
         $t->numbers = array();
     })
 
