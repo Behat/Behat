@@ -15,6 +15,9 @@
         <testsuite name="Gherkin Test Suite">
             <directory>./tests/Gherkin/</directory>
         </testsuite>
+        <testsuite name="BehaviorTester Test Suite">
+            <directory>./tests/BehaviorTester/</directory>
+        </testsuite>
     </testsuites>
 
     <filter>

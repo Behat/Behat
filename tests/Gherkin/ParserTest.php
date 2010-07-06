@@ -520,4 +520,54 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('То', $steps[3]->getType());
         $this->assertEquals('результатом должно быть число 120', $steps[3]->getText());
     }
+
+    public function testAddition()
+    {
+        $feature = $this->loadFeature('addition.feature');
+        $this->assertEquals(
+            array(
+                'In order to avoid silly mistakes',
+                'As a math idiot',
+                'I want to be told the sum of two numbers'
+            ),
+            $feature->getDescription()
+        );
+
+        $this->assertTrue($feature->hasScenarios());
+        $this->assertEquals(2, count($feature->getScenarios()));
+
+        $scenarios = $feature->getScenarios();
+
+        $this->assertEquals('Add two numbers', $scenarios[0]->getTitle());
+        $steps = $scenarios[0]->getSteps();
+        $this->assertEquals(4, count($steps));
+
+        $this->assertEquals('Given', $steps[0]->getType());
+        $this->assertEquals('I have entered 11 into the calculator', $steps[0]->getText());
+
+        $this->assertEquals('And', $steps[1]->getType());
+        $this->assertEquals('I have entered 12 into the calculator', $steps[1]->getText());
+
+        $this->assertEquals('When', $steps[2]->getType());
+        $this->assertEquals('I press add', $steps[2]->getText());
+
+        $this->assertEquals('Then', $steps[3]->getType());
+        $this->assertEquals('the result should be 23 on the screen', $steps[3]->getText());
+
+        $this->assertEquals('Div two numbers', $scenarios[1]->getTitle());
+        $steps = $scenarios[1]->getSteps();
+        $this->assertEquals(4, count($steps));
+
+        $this->assertEquals('Given', $steps[0]->getType());
+        $this->assertEquals('I have entered 10 into the calculator', $steps[0]->getText());
+
+        $this->assertEquals('And', $steps[1]->getType());
+        $this->assertEquals('I have entered 2 into the calculator', $steps[1]->getText());
+
+        $this->assertEquals('When', $steps[2]->getType());
+        $this->assertEquals('I press div', $steps[2]->getText());
+
+        $this->assertEquals('Then', $steps[3]->getType());
+        $this->assertEquals('the result should be 5 on the screen', $steps[3]->getText());
+    }
 }

@@ -160,6 +160,7 @@ class Parser
             }
             $steps[] = $step;
         }
+        $this->moveToPreviousLine();
 
         return $steps;
     }
@@ -218,6 +219,7 @@ class Parser
 
     protected function getNextExamples()
     {
+        $this->moveToNextLine();
         while($this->isCurrentLineEmpty()) {
             $this->moveToNextLine();
         }
@@ -228,6 +230,7 @@ class Parser
         } else {
             return array();
         }
+        $this->moveToPreviousLine();
     }
 
     protected function getPreviousLine()

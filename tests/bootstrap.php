@@ -12,4 +12,5 @@ require_once __DIR__ . '/../UniversalClassLoader.php';
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespace('Gherkin', realpath(__DIR__ . '/../src'));
+$loader->registerNamespace('BehaviorTester', realpath(__DIR__ . '/../src'));
 $loader->register();
