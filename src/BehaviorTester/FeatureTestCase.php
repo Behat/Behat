@@ -7,26 +7,9 @@ abstract class FeatureTestCase extends \PHPUnit_Framework_TestCase
     protected $feature;
     protected $steps = array();
 
-    abstract protected function getStepsPath();
     abstract protected function getFeaturesPath();
     abstract protected function getFeatureName();
-
-    protected function initStepDefinition()
-    {
-        $iterator = new \RecursiveDirectoryIterator(
-            $this->getStepsPath(),
-            \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS
-        );
-        $iterator = new \RecursiveIteratorIterator(
-            $iterator, \RecursiveIteratorIterator::SELF_FIRST
-        );
-
-        $this->steps = array();
-        $t = $this;
-        foreach ($iterator as $file) {
-            require $file;
-        }
-    }
+    abstract protected function initStepDefinition();
 
     public function defineStep($type, $definition, $callback)
     {
