@@ -19,9 +19,16 @@ class Step
         return $this->type;
     }
 
-    public function getText()
+    public function getText(array $tokens = array())
     {
-        return $this->text;
+        $text = $this->text;
+
+        foreach ($tokens as $key => $value)
+        {
+          $text = str_replace('<'.$key.'>', $value, $text, $count);
+        }
+
+        return $text;
     }
 
     public function addArgument($argument)

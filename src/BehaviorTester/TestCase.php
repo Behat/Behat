@@ -88,27 +88,45 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function testFeature(\Gherkin\Feature $feature)
     {
+        foreach ($feature->getBackgrounds() as $background) {
+            $this->runScenario($background);
+        }
+
         foreach ($feature->getScenarios() as $scenario) {
+            $this->runScenario($scenario);
+        }
+    }
+
+    protected function runScenario(\Gherkin\Background $scenario)
+    {
+        if ($scenario instanceof \Gherkin\ScenarioOutline) {
+            foreach ($scenario->getExamples() as $parameters) {
+                foreach ($scenario->getSteps() as $step) {
+                    $this->runStep($step, $parameters);
+                }
+            }
+        } else {
             foreach ($scenario->getSteps() as $step) {
                 $this->runStep($step);
             }
         }
     }
 
-    protected function runStep(\Gherkin\Step $step)
+    protected function runStep(\Gherkin\Step $step, array $parameters = array())
     {
+        $description = $step->getText($parameters);
+
         foreach ($this->steps as $regex => $params) {
-            if (preg_match($regex, $step->getText(), $values)) {
-                array_shift($values);
+            if (preg_match($regex, $description, $values)) {
                 call_user_func_array(
-                    $params['callback'], array_merge($values, $step->getArguments())
+                    $params['callback'], array_merge(array_slice($values, 1), $step->getArguments())
                 );
 
                 return;
             }
         }
 
-        $this->notImplemented($step->getText());
+        $this->notImplemented($description);
     }
 
     protected function notImplemented($action)
