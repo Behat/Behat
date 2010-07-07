@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/BaseFeatureTest.php';
+require_once __DIR__ . '/BaseCalculatorTest.php';
 
-class DivisionTest extends BaseFeatureTest
+class DivisionTest extends BaseCalculatorTest
 {
     protected function getFeatureName()
     {

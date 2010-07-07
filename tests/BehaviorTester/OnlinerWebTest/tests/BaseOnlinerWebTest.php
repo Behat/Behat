@@ -1,6 +1,6 @@
 <?php
 
-abstract class BaseFeatureTest extends \BehaviorTester\WebFeatureTestCase
+abstract class BaseOnlinerWebTest extends \BehaviorTester\WebFeatureTestCase
 {
     public function getFeaturesPath()
     {

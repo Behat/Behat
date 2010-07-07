@@ -1,6 +1,6 @@
 <?php
 
-abstract class BaseFeatureTest extends \BehaviorTester\FeatureTestCase
+abstract class BaseCalculatorTest extends \BehaviorTester\FeatureTestCase
 {
     public $numbers = array();
     public $result;
