@@ -4,6 +4,8 @@ namespace BehaviorTester;
 
 class FeaturesTestSuite extends \PHPUnit_Framework_TestSuite
 {
+    protected $features = array();
+
     public function __construct($directory, array $options = array())
     {
         if (is_string($directory) && is_dir($directory)) {
@@ -18,7 +20,7 @@ class FeaturesTestSuite extends \PHPUnit_Framework_TestSuite
             );
             $parser = new \Gherkin\Parser;
 
-            foreach ($iterator as $file) {
+            foreach ($iterator as $i => $file) {
                 $casesPath = dirname($file) . '/../cases/';
                 $featureName = strtr(basename($file), array('.feature' => 'FeatureCase'));
                 if (is_file($casesPath . $featureName . '.php')) {
@@ -28,7 +30,10 @@ class FeaturesTestSuite extends \PHPUnit_Framework_TestSuite
                 }
                 require_once $casesPath . $class . '.php';
 
-                $this->addTest(new $class($parser->parse(file_get_contents($file))));
+                $this->features[] = $parser->parse(file_get_contents($file));
+
+                $this->addTestSuite($class);
+//                $this->addTest(new $class($parser->parse(file_get_contents($file))));
             }
         } else {
             throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'directory name');

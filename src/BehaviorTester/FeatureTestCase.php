@@ -7,12 +7,6 @@ abstract class FeatureTestCase extends \PHPUnit_Framework_TestCase
     protected $feature;
     protected $steps = array();
 
-    public function __construct(\Gherkin\Feature $feature)
-    {
-        parent::__construct($feature->getTitle());
-        $this->feature = $feature;
-    }
-
     abstract protected function getStepsPath();
 
     protected function loadSteps()
@@ -46,13 +40,20 @@ abstract class FeatureTestCase extends \PHPUnit_Framework_TestCase
 
     public function getFeature()
     {
+        if (null === $this->feature) {
+            $parser = new \Gherkin\Parser;
+            $this->feature = $parser->parse(file_get_contents($this->getFeaturePath()));
+        }
+
         return $this->feature;
     }
+
+    abstract public function getFeaturePath();
 
     protected function setUp()
     {
         $this->loadSteps();
-        foreach ($this->feature->getBackgrounds() as $background) {
+        foreach ($this->getFeature()->getBackgrounds() as $background) {
             $this->runScenario($background);
         }
     }
@@ -61,7 +62,7 @@ abstract class FeatureTestCase extends \PHPUnit_Framework_TestCase
     {
         $scenarios = array();
 
-        array_walk($this->feature->getScenarios(), function($scenario) use(&$scenarios) {
+        array_walk($this->getFeature()->getScenarios(), function($scenario) use(&$scenarios) {
             $scenarios[] = array($scenario);
         });
 
