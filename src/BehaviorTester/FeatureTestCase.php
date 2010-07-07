@@ -9,7 +9,7 @@ abstract class FeatureTestCase extends \PHPUnit_Framework_TestCase
 
     abstract protected function getStepsPath();
 
-    protected function loadSteps()
+    protected function initStepDefinition()
     {
         $iterator = new \RecursiveDirectoryIterator(
             $this->getStepsPath(),
@@ -48,11 +48,17 @@ abstract class FeatureTestCase extends \PHPUnit_Framework_TestCase
         return $this->feature;
     }
 
-    abstract public function getFeaturePath();
+    abstract protected function getFeaturesPath();
+    abstract protected function getFeatureName();
+
+    protected function getFeaturePath()
+    {
+        return $this->getFeaturesPath() . $this->getFeatureName();
+    }
 
     protected function setUp()
     {
-        $this->loadSteps();
+        $this->initStepDefinition();
         foreach ($this->getFeature()->getBackgrounds() as $background) {
             $this->runScenario($background);
         }

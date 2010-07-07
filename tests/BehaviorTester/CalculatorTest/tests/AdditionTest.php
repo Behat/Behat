@@ -4,8 +4,8 @@ require_once __DIR__ . '/BaseFeatureTest.php';
 
 class AdditionTest extends BaseFeatureTest
 {
-    public function getFeaturePath()
+    protected function getFeatureName()
     {
-        return __DIR__ . '/../features/addition.feature';
+        return 'addition.feature';
     }
 }
