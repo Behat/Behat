@@ -8,6 +8,8 @@ abstract class FeatureTestCase extends \PHPUnit_Framework_TestCase
     protected $steps = array();
 
     abstract protected function getStepsPath();
+    abstract protected function getFeaturesPath();
+    abstract protected function getFeatureName();
 
     protected function initStepDefinition()
     {
@@ -47,9 +49,6 @@ abstract class FeatureTestCase extends \PHPUnit_Framework_TestCase
 
         return $this->feature;
     }
-
-    abstract protected function getFeaturesPath();
-    abstract protected function getFeatureName();
 
     protected function getFeaturePath()
     {
