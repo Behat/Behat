@@ -58,9 +58,9 @@ abstract class FeatureTestCase extends \PHPUnit_Framework_TestCase
     {
         $scenarios = array();
 
-        array_walk($this->getFeature()->getScenarios(), function($scenario) use(&$scenarios) {
+        foreach ($this->getFeature()->getScenarios() as $scenario) {
             $scenarios[] = array($scenario);
-        });
+        }
 
         return $scenarios;
     }
