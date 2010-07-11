@@ -9,53 +9,23 @@ use \Symfony\Components\Console\Input\InputOption;
 use \Symfony\Components\Console\Output\OutputInterface;
 use \Symfony\Components\Finder\Finder;
 
-use \BehaviorTester\StepsDefinition;
-use \BehaviorTester\Exceptions\Redundant;
-use \BehaviorTester\Exceptions\Ambiguous;
-use \BehaviorTester\Exceptions\Undefined;
-
-use \Gherkin\Parser;
 use \Gherkin\Feature;
+use \Gherkin\Background;
 use \Gherkin\Scenario;
 use \Gherkin\ScenarioOutline;
 
-class Test extends Command
+use \BehaviorTester\StepsDefinition;
+use \BehaviorTester\FeatureRuner;
+use \BehaviorTester\OutputLogger;
+
+class Test extends Command implements OutputLogger
 {
+    protected $output;
     protected $basePath;
-    protected $finished = array();
 
-    protected $featureNum = -1;
-    protected $scenarioNum = -1;
-
-    protected function startNewFeature()
+    protected function ltrimPaths($message)
     {
-        $this->featureNum++;
-        $this->scenarioNum = -1;
-
-        $this->finished[$this->featureNum] = array();
-    }
-
-    protected function startNewScenario()
-    {
-        $this->scenarioNum++;
-
-        $this->finished[$this->featureNum][$this->scenarioNum] = array(
-            'failed'    => array(),
-            'passed'    => array(),
-            'skipped'   => array(),
-            'pending'   => array(),
-            'undefined' => array()
-        );
-    }
-
-    protected function logStep($step, $status)
-    {
-        $this->finished[$this->featureNum][$this->scenarioNum][$status][] = $step;
-    }
-
-    protected function hasFailedStepsInCurrentScenario()
-    {
-        return count($this->finished[$this->featureNum][$this->scenarioNum]['failed']);
+        return strtr($message, array($this->basePath . '/' => ''));
     }
 
     protected function configure()
@@ -67,13 +37,9 @@ class Test extends Command
         ));
     }
 
-    protected function ltrimPaths($message)
-    {
-        return strtr($message, array($this->basePath . '/' => ''));
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->output = $output;
         $this->basePath = realpath(dirname($input->getArgument('features')));
 
         // Read steps definition from files
@@ -92,94 +58,62 @@ class Test extends Command
         $finder = new Finder();
         $files = $finder->files()->name('*.feature')->in($input->getArgument('features'));
 
-        $parser = new Parser();
         foreach ($files as $file) {
-            $feature = $parser->parse(file_get_contents($file));
-
-            $this->startNewFeature();
-            $output->writeln(sprintf("Feature: %s  <comment>#%s</comment>",
-                $feature->getTitle(), $this->ltrimPaths(realpath($file))
-            ));
-            foreach ($feature->getDescription() as $description) {
-                $output->writeln(sprintf('  %s', $description));
-            }
+            $runer = new FeatureRuner($file, $this, $steps);
+            $runer->run();
             $output->writeln('');
-
-            foreach ($feature->getScenarios() as $scenario) {
-                $this->startNewScenario();
-                if ($scenario instanceof \Gherkin\ScenarioOutline) {
-                    $output->writeln(sprintf('    <passed>Scenario Outline: %s</passed>',
-                        $scenario->getTitle()
-                    ));
-
-                    foreach ($scenario->getExamples() as $values) {
-                        $this->runScenario($scenario, $steps, $output, $values);
-                    }
-                } else {
-                    $output->writeln(sprintf('    <passed>Scenario: %s</passed>',
-                        $scenario->getTitle()
-                    ));
-
-                    $this->runScenario($scenario, $steps, $output);
-                }
-            }
         }
     }
 
-    protected function runScenario(Scenario $scenario, StepsDefinition $steps,
-                                   OutputInterface $output, array $values = array())
+    public function logFeature(Feature $feature, $file)
     {
-        foreach ($scenario->getSteps() as $step) {
-            try {
-                try {
-                    $definition = $steps->findDefinition($step, $values);
-                } catch (Ambiguous $e) {
-                    $this->logStep($step, 'failed');
-                    $output->writeln(sprintf("      <failed>%s %s</failed>",
-                        $step->getType(),
-                        $step->getText()
-                    ));
-                    $output->writeln(sprintf("        <failed>%s</failed>",
-                        strtr($this->ltrimPaths($e), array("\n" => "\n        "))
-                    ));
-                }
-            } catch (Undefined $e) {
-                $this->logStep($step, 'undefined');
-                $output->writeln(sprintf("      <undefined>%s %s</undefined>",
-                    $step->getType(),
-                    $step->getText()
-                ));
-            }
+        $this->output->writeln(sprintf("Feature: %s  <comment>#%s</comment>",
+            $feature->getTitle(), $this->ltrimPaths(realpath($file))
+        ));
+        foreach ($feature->getDescription() as $description) {
+            $this->output->writeln(sprintf('  %s', $description));
+        }
+    }
 
-            if ($this->hasFailedStepsInCurrentScenario()) {
-                $output->writeln(sprintf("      <skipped>%s %s</skipped>  <comment>#%s</comment>",
-                    $definition['type'],
-                    $definition['description'],
-                    $this->ltrimPaths($definition['file']) . ':' . $definition['line']
-                ));
-            } else {
-                try {
-                    call_user_func_array($definition['callback'], $definition['values']);
-                    $this->logStep($definition, 'passed');
-                    $output->writeln(sprintf("      <passed>%s %s</passed>  <comment>#%s</comment>",
-                        $definition['type'],
-                        $definition['description'],
-                        $this->ltrimPaths($definition['file']) . ':' . $definition['line']
-                    ));
-                } catch (\Exception $e) {
-                    $this->logStep($definition, 'failed');
-                    $output->writeln(sprintf("      <failed>%s %s</failed>  <comment>#%s</comment>",
-                        $definition['type'],
-                        $definition['description'],
-                        $this->ltrimPaths($definition['file']) . ':' . $definition['line']
-                    ));
-                    $output->writeln(sprintf("        <failed>%s</failed>",
-                        strtr($e, array("\n" => "\n        "))
-                    ));
-                }
-            }
+    public function logBackground(Background $background)
+    {
+        $this->output->writeln(sprintf("\n    <passed>Background: %s</passed>",
+            $background->getTitle()
+        ));
+    }
+
+    public function logScenarioOutline(ScenarioOutline $scenario)
+    {
+        $this->output->writeln(sprintf("\n    <passed>Scenario Outline: %s</passed>",
+            $scenario->getTitle()
+        ));
+    }
+
+    public function logScenario(Scenario $scenario)
+    {
+        $this->output->writeln(sprintf("\n    <passed>Scenario: %s</passed>",
+            $scenario->getTitle()
+        ));
+    }
+
+    public function logStep($code, $type, $definition, $file = null,
+                            $line = null, \Exception $e = null)
+    {
+        $status = sprintf('      <%s>%s</%s>', $code, $type . ' ' . $definition, $code);
+        $status = str_pad($status, 60 + (strlen($code) * 2));
+
+        if (null !== $file && null !== $line) {
+            $status .= sprintf('<comment>%s:%d</comment>',
+                $this->ltrimPaths(realpath($file)), $line
+            );
         }
 
-        $output->writeln('');
+        $this->output->writeln($status);
+
+        if (null !== $e) {
+            $this->output->writeln(sprintf("          <failed>%s</failed>",
+                strtr($this->ltrimPaths($e), array("\n" => "\n        "))
+            ));
+        }
     }
 }

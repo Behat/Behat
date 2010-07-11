@@ -3,7 +3,7 @@
 $steps
 
 ->  Given('/I have entered (\d+) into the calculator/', function($num) {
-#        throw new \Exception('Error processing request');
+//        throw new \BehaviorTester\Exceptions\Pending;
     })
 
 ->  When('/I press add/', function() {
