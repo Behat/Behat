@@ -3,7 +3,8 @@
 namespace Behat\Console;
 
 use \Symfony\Components\Console\Application as BaseApplication;
-use \Symfony\Components\Console\Output\Output;
+
+use \Behat\Console\Commands\TestCommand;
 
 class BehatApplication extends BaseApplication
 {
@@ -12,7 +13,7 @@ class BehatApplication extends BaseApplication
         parent::__construct('BehaviorTester', '0.1');
 
         $this->addCommands(array(
-            new \Behat\Console\Commands\TestCommand()
+            new TestCommand()
         ));
     }
 }

@@ -11,5 +11,8 @@ $loader->registerNamespace('Gherkin', realpath(__DIR__ . '/../src'));
 $loader->registerNamespace('Behat', realpath(__DIR__ . '/../src'));
 $loader->register();
 
+// Inject command in application call
+array_splice($argv, 1, 0, 'test');
+
 $app = new \Behat\Console\BehatApplication();
-$app->run();
+$app->run(new \Symfony\Components\Console\Input\ArgvInput($argv));
