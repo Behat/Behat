@@ -18,6 +18,18 @@ class ConsolePrinter implements Printer
     {
         $this->output = $output;
         $this->basePath = $basePath;
+        $this->setColors();
+    }
+
+    protected function setColors()
+    {
+        $this->output->setStyle('failed',      array('fg' => 'red'));
+        $this->output->setStyle('undefined',   array('fg' => 'yellow'));
+        $this->output->setStyle('pending',     array('fg' => 'yellow'));
+        $this->output->setStyle('passed',      array('fg' => 'green'));
+        $this->output->setStyle('skipped',     array('fg' => 'cyan'));
+        $this->output->setStyle('comment',     array('fg' => 'black'));
+        $this->output->setStyle('tag',         array('fg' => 'cyan'));
     }
 
     protected function ltrimPaths($message)
