@@ -1,8 +1,8 @@
 <?php
 
-namespace BehaviorTester\Exceptions;
+namespace Behat\Exceptions;
 
-use \BehaviorTester\StepDefinition;
+use \Behat\StepDefinition;
 
 class Redundant extends BehaviorException
 {

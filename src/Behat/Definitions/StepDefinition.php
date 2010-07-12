@@ -1,6 +1,6 @@
 <?php
 
-namespace BehaviorTester\Definitions;
+namespace Behat\Definitions;
 
 class StepDefinition
 {

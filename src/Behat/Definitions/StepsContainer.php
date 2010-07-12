@@ -1,8 +1,11 @@
 <?php
 
-namespace BehaviorTester\Definitions;
+namespace Behat\Definitions;
 
-use \BehaviorTester\Definitions\StepDefinition;
+use \Behat\Definitions\StepDefinition;
+use \Behat\Exceptions\Redundant;
+use \Behat\Exceptions\Ambiguous;
+use \Behat\Exceptions\Undefined;
 
 class StepsContainer
 {
@@ -18,7 +21,7 @@ class StepsContainer
         );
 
         if (isset($this->steps[$definition->getRegex()])) {
-            throw new \BehaviorTester\Exceptions\Redundant(
+            throw new Redundant(
                 $definition, $this->steps[$definition->getRegex()]
             );
         }
@@ -42,11 +45,11 @@ class StepsContainer
         }
 
         if (count($matches) > 1) {
-            throw new \BehaviorTester\Exceptions\Ambiguous($text, $matches);
+            throw new Ambiguous($text, $matches);
         }
 
         if (0 === count($matches)) {
-            throw new \BehaviorTester\Exceptions\Undefined($text);
+            throw new Undefined($text);
         }
 
         return $matches[0];

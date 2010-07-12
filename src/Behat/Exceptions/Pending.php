@@ -1,6 +1,6 @@
 <?php
 
-namespace BehaviorTester\Exceptions;
+namespace Behat\Exceptions;
 
 class Pending extends BehaviorException
 {

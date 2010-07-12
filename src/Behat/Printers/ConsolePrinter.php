@@ -1,6 +1,6 @@
 <?php
 
-namespace BehaviorTester\Printers;
+namespace Behat\Printers;
 
 use \Gherkin\Feature;
 use \Gherkin\Background;

@@ -16,6 +16,6 @@ $loader->registerNamespace('Zend', realpath(__DIR__ . '/../vendor/Zend/library')
 $loader->registerNamespace('Goutte', realpath(__DIR__ . '/../vendor/Goutte/src'));
 
 $loader->registerNamespace('Gherkin', realpath(__DIR__ . '/../src'));
-$loader->registerNamespace('BehaviorTester', realpath(__DIR__ . '/../src'));
+$loader->registerNamespace('Behat', realpath(__DIR__ . '/../src'));
 
 $loader->register();

@@ -1,6 +1,6 @@
 <?php
 
-namespace BehaviorTester\Console\Commands;
+namespace Behat\Console\Commands;
 
 use \Symfony\Components\Console\Command\Command;
 use \Symfony\Components\Console\Input\InputInterface;
@@ -14,9 +14,9 @@ use \Gherkin\Background;
 use \Gherkin\Scenario;
 use \Gherkin\ScenarioOutline;
 
-use \BehaviorTester\FeatureRuner;
-use \BehaviorTester\Definitions\StepsContainer;
-use \BehaviorTester\Printers\ConsolePrinter;
+use \Behat\FeatureRuner;
+use \Behat\Definitions\StepsContainer;
+use \Behat\Printers\ConsolePrinter;
 
 class TestCommand extends Command
 {

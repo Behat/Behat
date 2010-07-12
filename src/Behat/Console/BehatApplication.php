@@ -1,8 +1,8 @@
 <?php
 
-namespace BehaviorTester\Console;
+namespace Behat\Console;
 
-use Symfony\Components\Console\Application as BaseApplication;
+use \Symfony\Components\Console\Application as BaseApplication;
 use \Symfony\Components\Console\Output\Output;
 
 class BehatApplication extends BaseApplication
@@ -20,7 +20,7 @@ class BehatApplication extends BaseApplication
         Output::setStyle('tag',         array('fg' => 'cyan'));
 
         $this->addCommands(array(
-            new \BehaviorTester\Console\Commands\TestCommand()
+            new \Behat\Console\Commands\TestCommand()
         ));
     }
 }

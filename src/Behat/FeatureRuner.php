@@ -1,6 +1,6 @@
 <?php
 
-namespace BehaviorTester;
+namespace Behat;
 
 use \Gherkin\Parser;
 use \Gherkin\Feature;
@@ -9,14 +9,13 @@ use \Gherkin\ScenarioOutline;
 use \Gherkin\Scenario;
 use \Gherkin\Step;
 
-use \BehaviorTester\Definitions\StepsContainer;
-use \BehaviorTester\Definitions\StepDefinition;
-use \BehaviorTester\Printers\BasePrinter;
-
-use \BehaviorTester\Exceptions\Pending;
-use \BehaviorTester\Exceptions\Redundant;
-use \BehaviorTester\Exceptions\Ambiguous;
-use \BehaviorTester\Exceptions\Undefined;
+use \Behat\Definitions\StepsContainer;
+use \Behat\Definitions\StepDefinition;
+use \Behat\Printers\BasePrinter;
+use \Behat\Exceptions\Pending;
+use \Behat\Exceptions\Redundant;
+use \Behat\Exceptions\Ambiguous;
+use \Behat\Exceptions\Undefined;
 
 class FeatureRuner
 {
