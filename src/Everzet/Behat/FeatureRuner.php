@@ -12,10 +12,24 @@ use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Definitions\StepDefinition;
 use \Everzet\Behat\Printers\Printer;
 use \Everzet\Behat\Exceptions\Pending;
-use \Everzet\Behat\Exceptions\Redundant;
 use \Everzet\Behat\Exceptions\Ambiguous;
 use \Everzet\Behat\Exceptions\Undefined;
 
+/*
+ * This file is part of the behat package.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Runs specific feature
+ *
+ * @package     behat
+ * @subpackage  Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class FeatureRuner
 {
     protected $printer;
@@ -33,10 +47,19 @@ class FeatureRuner
         );
     }
 
+    /**
+     * Initiates feature runer
+     *
+     * @param   string          $file       *.feature file path
+     * @param   Printer         $printer    test output printer
+     * @param   StepsContainer  $steps      steps container
+     * 
+     * @throws  \InvalidArgumentException   if feature file doesn't exists
+     */
     public function __construct($file, Printer $printer, StepsContainer $steps)
     {
         if (!is_file($file)) {
-            throw new InvalidArgumentException(sprintf('File %s does not exists', $file));
+            throw new \InvalidArgumentException(sprintf('File %s does not exists', $file));
         }
 
         $this->file = $file;
@@ -44,6 +67,11 @@ class FeatureRuner
         $this->steps = $steps;
     }
 
+    /**
+     * Abstract method to parse & test feature file
+     *
+     * @return  mixed   feature test statuses
+     */
     public function run()
     {
         $parser = new Parser;
@@ -53,6 +81,13 @@ class FeatureRuner
         return $this->runFeature($feature);
     }
 
+    /**
+     * Runs feature tests
+     *
+     * @param   Feature $feature    feature instance
+     * 
+     * @return  mixed               status codes
+     */
     public function runFeature(Feature $feature)
     {
         $statuses = $this->initStatusesArray();
@@ -80,6 +115,13 @@ class FeatureRuner
         return $statuses;
     }
 
+    /**
+     * Runs Scenario Outline tests
+     *
+     * @param   ScenarioOutline $scenario   ScenarioOutline instance
+     * 
+     * @return  mixed                       status codes
+     */
     public function runScenarioOutline(ScenarioOutline $scenario)
     {
         $statuses = $this->initStatusesArray();
@@ -93,6 +135,13 @@ class FeatureRuner
         return $statuses;
     }
 
+    /**
+     * Runs Scenario tests
+     *
+     * @param   Background  $scenario   background instance
+     * 
+     * @return  mixed                   status codes
+     */
     public function runScenario(Background $scenario, array $values = array())
     {
         $statuses = $this->initStatusesArray();
@@ -109,6 +158,15 @@ class FeatureRuner
         return $statuses;
     }
 
+    /**
+     * Calls step printer with specific step
+     *
+     * @param   string      $code   step status code
+     * @param   Step        $step   step instance
+     * @param   Exception   $e      throwed exception
+     * 
+     * @return  string              step status code
+     */
     protected function logStep($code, Step $step, \Exception $e = null)
     {
         $this->printer->logStep(
@@ -118,6 +176,15 @@ class FeatureRuner
         return $code;
     }
 
+    /**
+     * Calls step printer with specific step definition
+     *
+     * @param   string          $code           step status code
+     * @param   StepDefinition  $definition     step definition instance
+     * @param   Exception       $e              throwed exception
+     * 
+     * @return  string                          step status code
+     */
     protected function logStepDefinition($code, StepDefinition $definition, \Exception $e = null)
     {
         $this->printer->logStep(
@@ -128,6 +195,19 @@ class FeatureRuner
         return $code;
     }
 
+    /**
+     * Runs Step test
+     *
+     * @param   Step    $step   step instance to test
+     * @param   array   $values example tokens
+     * @param   boolean $skip   do we need to mark this step as skipped
+     * 
+     * @return  mixed           status codes
+     * 
+     * @throws  \Everzet\Behat\Exceptions\Pending       if step throws Pending exception
+     * @throws  \Everzet\Behat\Exceptions\Ambiguous     if step matches multiple definitions
+     * @throws  \Everzet\Behat\Exceptions\Undefined     if step definition not found
+     */
     public function runStep(Step $step, array $values = array(), $skip = false)
     {
         try {

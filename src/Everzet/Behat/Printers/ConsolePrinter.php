@@ -9,11 +9,32 @@ use \Everzet\Gherkin\Scenario;
 
 use \Symfony\Components\Console\Output\OutputInterface;
 
+/*
+ * This file is part of the behat package.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * ConsolePrinter implements Printer interface with Symfony's OutputInterface methods
+ *
+ * @package     behat
+ * @subpackage  Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class ConsolePrinter implements Printer
 {
     protected $output;
     protected $basePath;
 
+    /**
+     * Constructs new printer
+     *
+     * @param   OutputInterface $output     Symfony's OutputInterface object
+     * @param   string          $basePath   features base path
+     */
     public function __construct(OutputInterface $output, $basePath)
     {
         $this->output = $output;
@@ -21,6 +42,9 @@ class ConsolePrinter implements Printer
         $this->setColors();
     }
 
+    /**
+     * Sets console colors
+     */
     protected function setColors()
     {
         $this->output->setStyle('failed',      array('fg' => 'red'));
@@ -32,11 +56,21 @@ class ConsolePrinter implements Printer
         $this->output->setStyle('tag',         array('fg' => 'cyan'));
     }
 
+    /**
+     * Left trims base path out of message
+     *
+     * @param   string  $message    message to be trimmed
+     * 
+     * @return  string              trimmed message
+     */
     protected function ltrimPaths($message)
     {
         return strtr($message, array($this->basePath . '/' => ''));
     }
 
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
     public function logFeature(Feature $feature, $file)
     {
         $this->output->writeln(sprintf("Feature: %s  <comment>#%s</comment>",
@@ -47,6 +81,9 @@ class ConsolePrinter implements Printer
         }
     }
 
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
     public function logBackground(Background $background)
     {
         $this->output->writeln(sprintf("\n    <passed>Background: %s</passed>",
@@ -54,6 +91,9 @@ class ConsolePrinter implements Printer
         ));
     }
 
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
     public function logScenarioOutline(ScenarioOutline $scenario)
     {
         $this->output->writeln(sprintf("\n    <passed>Scenario Outline: %s</passed>",
@@ -61,6 +101,9 @@ class ConsolePrinter implements Printer
         ));
     }
 
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
     public function logScenario(Scenario $scenario)
     {
         $this->output->writeln(sprintf("\n    <passed>Scenario: %s</passed>",
@@ -68,6 +111,9 @@ class ConsolePrinter implements Printer
         ));
     }
 
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
     public function logStep($code, $type, $text, $file = null,
                             $line = null, \Exception $e = null)
     {

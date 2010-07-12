@@ -17,8 +17,26 @@ use \Everzet\Behat\FeatureRuner;
 use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Printers\ConsolePrinter;
 
+/*
+ * This file is part of the behat package.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Behat console test command.
+ *
+ * @package     behat
+ * @subpackage  Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class TestCommand extends Command
 {
+    /**
+     * @see \Symfony\Components\Console\Command\Command
+     */
     protected function configure()
     {
         $this->setName('test');
@@ -28,6 +46,9 @@ class TestCommand extends Command
         ));
     }
 
+    /**
+     * @see \Symfony\Components\Console\Command\Command
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $basePath = realpath(dirname($input->getArgument('features')));
