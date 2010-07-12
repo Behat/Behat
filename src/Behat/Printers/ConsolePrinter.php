@@ -9,7 +9,7 @@ use \Gherkin\Scenario;
 
 use \Symfony\Components\Console\Output\OutputInterface;
 
-class ConsolePrinter implements BasePrinter
+class ConsolePrinter implements Printer
 {
     protected $output;
     protected $basePath;

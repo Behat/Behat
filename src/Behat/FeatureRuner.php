@@ -11,7 +11,7 @@ use \Gherkin\Step;
 
 use \Behat\Definitions\StepsContainer;
 use \Behat\Definitions\StepDefinition;
-use \Behat\Printers\BasePrinter;
+use \Behat\Printers\Printer;
 use \Behat\Exceptions\Pending;
 use \Behat\Exceptions\Redundant;
 use \Behat\Exceptions\Ambiguous;
@@ -34,7 +34,7 @@ class FeatureRuner
         );
     }
 
-    public function __construct($file, BasePrinter $printer, StepsContainer $steps)
+    public function __construct($file, Printer $printer, StepsContainer $steps)
     {
         if (!is_file($file)) {
             throw new InvalidArgumentException(sprintf('File %s does not exists', $file));

@@ -7,7 +7,7 @@ use \Gherkin\Background;
 use \Gherkin\ScenarioOutline;
 use \Gherkin\Scenario;
 
-interface BasePrinter
+interface Printer
 {
     public function logFeature(Feature $feature, $file);
     public function logBackground(Background $background);
