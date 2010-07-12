@@ -572,4 +572,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Then', $steps[3]->getType());
         $this->assertEquals('the result should be 5 on the screen', $steps[3]->getText());
     }
+
+    public function testEmptyOutline()
+    {
+        $this->setExpectedException('\Everzet\Gherkin\ParserException');
+        $feature = $this->loadFeature('empty_outline.feature');
+    }
 }

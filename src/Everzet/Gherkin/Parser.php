@@ -1,15 +1,24 @@
 <?php
 
+namespace Everzet\Gherkin;
+
+use \Everzet\Gherkin\ParserException;
+
 /*
- * This file is part of the BehaviorTester.
+ * This file is part of the behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Everzet\Gherkin;
-
+/**
+ * Gherkin Parser.
+ *
+ * @package     behat
+ * @subpackage  Gherkin
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class Parser
 {
     protected $lines            = array();
@@ -80,7 +89,12 @@ class Parser
                 ));
                 $outline->addTags($this->getPreviousTags());
                 $outline->addSteps($this->getNextSteps());
-                $outline->setExamples($this->getNextExamples());
+                if (!count($examples = $this->getNextExamples())) {
+                    throw new ParserException(
+                        sprintf('No examples in %s outline', $outline->getTitle())
+                    );
+                }
+                $outline->setExamples($examples);
 
                 $this->feature->addScenario($outline);
             }
@@ -227,11 +241,11 @@ class Parser
 
     protected function getNextExamples()
     {
-        $this->moveToNextLine();
-        while($this->isCurrentLineEmpty()) {
-            $this->moveToNextLine();
+        while($this->moveToNextLine()) {
+            if (!$this->isCurrentLineEmpty()) {
+                break;
+            }
         }
-
         if (preg_match($this->regex->getExamplesRegex(), $this->currentLine, $values)) {
             $title = $this->getNextTitle(isset($values['title']) ? $values['title'] : '');
             return $this->getNextTable();
