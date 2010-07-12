@@ -4,10 +4,10 @@ namespace BehaviorTester\Exceptions;
 
 class Ambiguous extends BehaviorException
 {
-    protected $definition;
+    protected $text;
     protected $matches = array();
 
-    public function __construct($definition, array $matches)
+    public function __construct($text, array $matches)
     {
         $this->definition = $definition;
         $this->matches = $matches;
@@ -17,10 +17,12 @@ class Ambiguous extends BehaviorException
 
     public function __toString()
     {
-        $string = sprintf("Ambiguous match of \"%s\":", $this->definition);
+        $string = sprintf("Ambiguous match of \"%s\":", $this->text);
 
-        foreach ($this->matches as $match){
-            $string .= sprintf("\n%s:%d:in `%s`", $match['file'], $match['line'], $match['step']);
+        foreach ($this->matches as $definition){
+            $string .= sprintf("\n%s:%d:in `%s`",
+                $definition->getFile(), $definition->getLine(), $definition->getRegex()
+            );
         }
 
         return $string;

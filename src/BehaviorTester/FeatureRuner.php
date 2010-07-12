@@ -9,19 +9,18 @@ use \Gherkin\ScenarioOutline;
 use \Gherkin\Scenario;
 use \Gherkin\Step;
 
-use \BehaviorTester\StepsDefinition;
-use \BehaviorTester\OutputLogger;
+use \BehaviorTester\Definitions\StepsContainer;
+use \BehaviorTester\Definitions\StepDefinition;
+use \BehaviorTester\Printers\BasePrinter;
 
 use \BehaviorTester\Exceptions\Pending;
 use \BehaviorTester\Exceptions\Redundant;
 use \BehaviorTester\Exceptions\Ambiguous;
 use \BehaviorTester\Exceptions\Undefined;
 
-use \Symfony\Components\Console\Output\OutputInterface;
-
 class FeatureRuner
 {
-    protected $output;
+    protected $printer;
     protected $file;
     protected $steps;
 
@@ -36,14 +35,14 @@ class FeatureRuner
         );
     }
 
-    public function __construct($file, OutputLogger $output, StepsDefinition $steps)
+    public function __construct($file, BasePrinter $printer, StepsContainer $steps)
     {
         if (!is_file($file)) {
             throw new InvalidArgumentException(sprintf('File %s does not exists', $file));
         }
 
         $this->file = $file;
-        $this->output = $output;
+        $this->printer = $printer;
         $this->steps = $steps;
     }
 
@@ -51,7 +50,7 @@ class FeatureRuner
     {
         $parser = new Parser;
         $feature = $parser->parse(file_get_contents($this->file));
-        $this->output->logFeature($feature, $this->file);
+        $this->printer->logFeature($feature, $this->file);
 
         return $this->runFeature($feature);
     }
@@ -61,7 +60,7 @@ class FeatureRuner
         $statuses = $this->initStatusesArray();
 
         foreach ($feature->getBackgrounds() as $background) {
-            $this->output->logBackground($background);
+            $this->printer->logBackground($background);
             $scenarioStatuses = $this->runScenario($background);
             foreach ($scenarioStatuses as $status => $num) {
                 $statuses[$status] += $num;
@@ -69,10 +68,10 @@ class FeatureRuner
         }
         foreach ($feature->getScenarios() as $scenario) {
             if ($scenario instanceof ScenarioOutline) {
-                $this->output->logScenarioOutline($scenario);
+                $this->printer->logScenarioOutline($scenario);
                 $scenarioStatuses = $this->runScenarioOutline($scenario);
             } else {
-                $this->output->logScenario($scenario);
+                $this->printer->logScenario($scenario);
                 $scenarioStatuses = $this->runScenario($scenario);
             }
             foreach ($scenarioStatuses as $status => $num) {
@@ -112,50 +111,49 @@ class FeatureRuner
         return $statuses;
     }
 
+    protected function logStep($code, Step $step, \Exception $e = null)
+    {
+        $this->printer->logStep(
+            $step->getType(), $step->getText($values), null, null, $e
+        );
+
+        return $code;
+    }
+
+    protected function logStepDefinition($code, StepDefinition $definition, \Exception $e = null)
+    {
+        $this->printer->logStep(
+            $code, $definition->getType(), $definition->getMatchedText(),
+            $definition->getFile(), $definition->getLine(), $e
+        );
+
+        return $code;
+    }
+
     public function runStep(Step $step, array $values = array(), $skip = false)
     {
         try {
             try {
                 $definition = $this->steps->findDefinition($step, $values);
             } catch (Ambiguous $e) {
-                $this->output->logStep(
-                    'failed', $step->getType(), $step->getText($values), null, null, $e
-                );
-                return 'failed';
+                return $this->logStep('failed', $step, $e);
             }
         } catch (Undefined $e) {
-            $this->output->logStep('undefined', $step->getType(), $step->getText($values));
-            return 'undefined';
+            return $this->logStep('undefined', $step);
         }
 
         if ($skip) {
-            $this->output->logStep(
-                'skipped', $definition['type'], $definition['description'],
-                $definition['file'], $definition['line']
-            );
-            return 'skipped';
+            return $this->logStepDefinition('skipped', $definition);
         } else {
             try {
                 try {
-                    call_user_func_array($definition['callback'], $definition['values']);
-                    $this->output->logStep(
-                        'passed', $definition['type'], $definition['description'],
-                        $definition['file'], $definition['line']
-                    );
-                    return 'passed';
+                    $definition->run();
+                    return $this->logStepDefinition('passed', $definition);
                 } catch (Pending $e) {
-                    $this->output->logStep(
-                        'pending', $definition['type'], $definition['description'],
-                        $definition['file'], $definition['line']
-                    );
-                    return 'pending';
+                    return $this->logStepDefinition('pending', $definition);
                 }
             } catch (\Exception $e) {
-                $this->output->logStep(
-                    'failed', $definition['type'], $definition['description'],
-                    $definition['file'], $definition['line'], $e
-                );
-                return 'failed';
+                return $this->logStepDefinition('failed', $definition, $e);
             }
         }
     }

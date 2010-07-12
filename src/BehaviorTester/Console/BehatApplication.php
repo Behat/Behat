@@ -20,7 +20,7 @@ class BehatApplication extends BaseApplication
         Output::setStyle('tag',         array('fg' => 'cyan'));
 
         $this->addCommands(array(
-            new \BehaviorTester\Console\Commands\Test()
+            new \BehaviorTester\Console\Commands\TestCommand()
         ));
     }
 }

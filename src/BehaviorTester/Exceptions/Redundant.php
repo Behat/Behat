@@ -2,12 +2,14 @@
 
 namespace BehaviorTester\Exceptions;
 
+use \BehaviorTester\StepDefinition;
+
 class Redundant extends BehaviorException
 {
     protected $step1;
     protected $step2;
 
-    public function __construct($step2, $step1)
+    public function __construct(StepDefinition $step2, StepDefinition $step1)
     {
         $this->step1 = $step1;
         $this->step2 = $step2;
@@ -18,10 +20,10 @@ class Redundant extends BehaviorException
     public function __toString()
     {
         return sprintf("Step \"%s\" is already defined in %s:%d\n\n%s:%d\n%s:%d",
-            $this->step2['step'], $this->step1['file'], $this->step1['line'],
+            $this->step2->getRegex(), $this->step1->getFile(), $this->step1->getLine(),
 
-            $this->step1['file'], $this->step1['line'],
-            $this->step2['file'], $this->step2['line']
+            $this->step1->getFile(), $this->step1->getLine(),
+            $this->step2->getFile(), $this->step2->getLine()
         );
     }
 }
