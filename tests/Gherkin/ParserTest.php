@@ -1,10 +1,12 @@
 <?php
 
+use \Everzet\Gherkin\Parser;
+
 class ParserTest extends \PHPUnit_Framework_TestCase
 {
     private function loadFeature($path)
     {
-        $parser = new \Gherkin\Parser;
+        $parser = new Parser;
         return $parser->parse(file_get_contents(__DIR__ . '/../fixtures/features/' . $path));
     }
 
