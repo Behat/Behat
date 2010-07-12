@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gherkin;
+namespace Everzet\Gherkin;
 
 class Parser
 {
@@ -25,10 +25,10 @@ class Parser
         $this->lines = explode("\n", $this->cleanup($value));
 
         if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w]+?)\s*$#', $this->lines[0], $values)) {
-            $class = sprintf("Gherkin\\I18n\\%s", $values['lang']);
+            $class = sprintf("Everzet\Gherkin\\I18n\\%s", $values['lang']);
             $this->regex = new $class;
         } else {
-            $this->regex = new \Gherkin\I18n\en;
+            $this->regex = new \Everzet\Gherkin\I18n\en;
         }
 
         if (function_exists('mb_internal_encoding') && ((int) ini_get('mbstring.func_overload')) & 2) {

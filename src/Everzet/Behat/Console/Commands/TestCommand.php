@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Console\Commands;
+namespace Everzet\Behat\Console\Commands;
 
 use \Symfony\Components\Console\Command\Command;
 use \Symfony\Components\Console\Input\InputInterface;
@@ -9,14 +9,13 @@ use \Symfony\Components\Console\Input\InputOption;
 use \Symfony\Components\Console\Output\OutputInterface;
 use \Symfony\Components\Finder\Finder;
 
-use \Gherkin\Feature;
-use \Gherkin\Background;
-use \Gherkin\Scenario;
-use \Gherkin\ScenarioOutline;
-
-use \Behat\FeatureRuner;
-use \Behat\Definitions\StepsContainer;
-use \Behat\Printers\ConsolePrinter;
+use \Everzet\Gherkin\Feature;
+use \Everzet\Gherkin\Background;
+use \Everzet\Gherkin\Scenario;
+use \Everzet\Gherkin\ScenarioOutline;
+use \Everzet\Behat\FeatureRuner;
+use \Everzet\Behat\Definitions\StepsContainer;
+use \Everzet\Behat\Printers\ConsolePrinter;
 
 class TestCommand extends Command
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Behat\Console;
+namespace Everzet\Behat\Console;
 
 use \Symfony\Components\Console\Application as BaseApplication;
 
-use \Behat\Console\Commands\TestCommand;
+use \Everzet\Behat\Console\Commands\TestCommand;
 
 class BehatApplication extends BaseApplication
 {

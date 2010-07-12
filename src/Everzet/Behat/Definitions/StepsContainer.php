@@ -1,11 +1,12 @@
 <?php
 
-namespace Behat\Definitions;
+namespace Everzet\Behat\Definitions;
 
-use \Behat\Definitions\StepDefinition;
-use \Behat\Exceptions\Redundant;
-use \Behat\Exceptions\Ambiguous;
-use \Behat\Exceptions\Undefined;
+use \Everzet\Gherkin\Step;
+use \Everzet\Behat\Definitions\StepDefinition;
+use \Everzet\Behat\Exceptions\Redundant;
+use \Everzet\Behat\Exceptions\Ambiguous;
+use \Everzet\Behat\Exceptions\Undefined;
 
 class StepsContainer
 {
@@ -31,7 +32,7 @@ class StepsContainer
         return $this;
     }
 
-    public function findDefinition(\Gherkin\Step $step, array $examples = array())
+    public function findDefinition(Step $step, array $examples = array())
     {
         $text = $step->getText($examples);
         $matches = array();

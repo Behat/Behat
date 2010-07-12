@@ -1,11 +1,11 @@
 <?php
 
-namespace Behat\Printers;
+namespace Everzet\Behat\Printers;
 
-use \Gherkin\Feature;
-use \Gherkin\Background;
-use \Gherkin\ScenarioOutline;
-use \Gherkin\Scenario;
+use \Everzet\Gherkin\Feature;
+use \Everzet\Gherkin\Background;
+use \Everzet\Gherkin\ScenarioOutline;
+use \Everzet\Gherkin\Scenario;
 
 interface Printer
 {

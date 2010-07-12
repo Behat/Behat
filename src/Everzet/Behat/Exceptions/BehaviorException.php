@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Exceptions;
+namespace Everzet\Behat\Exceptions;
 
 abstract class BehaviorException extends \Exception
 {

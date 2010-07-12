@@ -1,21 +1,20 @@
 <?php
 
-namespace Behat;
+namespace Everzet\Behat;
 
-use \Gherkin\Parser;
-use \Gherkin\Feature;
-use \Gherkin\Background;
-use \Gherkin\ScenarioOutline;
-use \Gherkin\Scenario;
-use \Gherkin\Step;
-
-use \Behat\Definitions\StepsContainer;
-use \Behat\Definitions\StepDefinition;
-use \Behat\Printers\Printer;
-use \Behat\Exceptions\Pending;
-use \Behat\Exceptions\Redundant;
-use \Behat\Exceptions\Ambiguous;
-use \Behat\Exceptions\Undefined;
+use \Everzet\Gherkin\Parser;
+use \Everzet\Gherkin\Feature;
+use \Everzet\Gherkin\Background;
+use \Everzet\Gherkin\ScenarioOutline;
+use \Everzet\Gherkin\Scenario;
+use \Everzet\Gherkin\Step;
+use \Everzet\Behat\Definitions\StepsContainer;
+use \Everzet\Behat\Definitions\StepDefinition;
+use \Everzet\Behat\Printers\Printer;
+use \Everzet\Behat\Exceptions\Pending;
+use \Everzet\Behat\Exceptions\Redundant;
+use \Everzet\Behat\Exceptions\Ambiguous;
+use \Everzet\Behat\Exceptions\Undefined;
 
 class FeatureRuner
 {

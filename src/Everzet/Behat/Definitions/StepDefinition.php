@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Definitions;
+namespace Everzet\Behat\Definitions;
 
 class StepDefinition
 {

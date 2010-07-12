@@ -7,12 +7,11 @@ $loader = new \Symfony\Foundation\UniversalClassLoader();
 $loader->registerNamespace('Symfony', realpath(__DIR__ . '/../vendor/symfony/src'));
 $loader->registerNamespace('Zend', realpath(__DIR__ . '/../vendor/Zend/library'));
 $loader->registerNamespace('Goutte', realpath(__DIR__ . '/../vendor/Goutte/src'));
-$loader->registerNamespace('Gherkin', realpath(__DIR__ . '/../src'));
-$loader->registerNamespace('Behat', realpath(__DIR__ . '/../src'));
+$loader->registerNamespace('Everzet', realpath(__DIR__ . '/../src'));
 $loader->register();
 
 // Inject command in application call
 array_splice($argv, 1, 0, 'test');
 
-$app = new \Behat\Console\BehatApplication();
+$app = new \Everzet\Behat\Console\BehatApplication();
 $app->run(new \Symfony\Components\Console\Input\ArgvInput($argv));

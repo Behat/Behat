@@ -8,9 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Gherkin\I18n;
+namespace Everzet\Gherkin\I18n;
 
-class ru extends \Gherkin\RegexHolder
+use \Everzet\Gherkin\RegexHolder;
+
+class ru extends RegexHolder
 {
     protected $feature          = 'Функционал';
     protected $background       = 'Предыстория';

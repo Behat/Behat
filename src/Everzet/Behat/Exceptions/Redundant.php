@@ -1,8 +1,8 @@
 <?php
 
-namespace Behat\Exceptions;
+namespace Everzet\Behat\Exceptions;
 
-use \Behat\StepDefinition;
+use \Everzet\Behat\StepDefinition;
 
 class Redundant extends BehaviorException
 {
