@@ -1,5 +1,5 @@
 <?php
-use \Everzet\Behat\Exceptions\Pending;
+
 $steps->
 
 Given('/I have entered (\d+) into the calculator/', function($num) use($world) {
