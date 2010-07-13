@@ -17,6 +17,7 @@ use \Everzet\Behat\FeatureRuner;
 use \Everzet\Behat\World;
 use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Printers\ConsolePrinter;
+use \Everzet\Behat\Exceptions\Redundant;
 
 /*
  * This file is part of the behat package.
@@ -72,6 +73,7 @@ class TestCommand extends Command
             $output->writeln(sprintf("<failed>%s</failed>\n",
                 strtr($e, array($basePath . '/' => ''))
             ));
+            die();
         }
 
         // Read feature files
