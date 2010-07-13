@@ -26,6 +26,7 @@ use \Symfony\Components\Console\Output\OutputInterface;
  */
 class ConsolePrinter implements Printer
 {
+    protected $verbose;
     protected $output;
     protected $basePath;
 
@@ -35,10 +36,11 @@ class ConsolePrinter implements Printer
      * @param   OutputInterface $output     Symfony's OutputInterface object
      * @param   string          $basePath   features base path
      */
-    public function __construct(OutputInterface $output, $basePath)
+    public function __construct(OutputInterface $output, $basePath, $verbose = false)
     {
         $this->output = $output;
         $this->basePath = $basePath;
+        $this->verbose = $verbose;
         $this->setColors();
     }
 
@@ -129,8 +131,13 @@ class ConsolePrinter implements Printer
         $this->output->writeln($status);
 
         if (null !== $e) {
-            $this->output->writeln(sprintf("          <failed>%s</failed>",
-                strtr($this->ltrimPaths($e), array("\n" => "\n        "))
+            $error = $this->verbose ? $e->__toString() : $e->getMessage();
+            $this->output->writeln(sprintf("        <failed>%s</failed>",
+                strtr($this->ltrimPaths($error), array(
+                    "\n"    =>  "\n        ",
+                    "<"     =>  "[",
+                    ">"     =>  "]"
+                ))
             ));
         }
     }

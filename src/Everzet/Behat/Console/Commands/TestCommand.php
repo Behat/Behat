@@ -14,6 +14,7 @@ use \Everzet\Gherkin\Background;
 use \Everzet\Gherkin\Scenario;
 use \Everzet\Gherkin\ScenarioOutline;
 use \Everzet\Behat\FeatureRuner;
+use \Everzet\Behat\World;
 use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Printers\ConsolePrinter;
 
@@ -54,12 +55,15 @@ class TestCommand extends Command
         $basePath = realpath(dirname($input->getArgument('features')));
 
         // Init test printer
-        $printer = new ConsolePrinter($output, $basePath);
+        $printer = new ConsolePrinter($output, $basePath, $input->getOption('verbose'));
 
         // Read steps definition from files
         $finder = new Finder();
         $files = $finder->files()->name('*.php')->in($basePath . '/steps');
         $steps = new StepsContainer();
+        $world = new World(
+            is_file($basePath . '/support/env.php') ? $basePath . '/support/env.php' : null
+        );
         try {
             foreach ($files as $file) {
                 require $file;
@@ -75,7 +79,7 @@ class TestCommand extends Command
         $files = $finder->files()->name('*.feature')->in($input->getArgument('features'));
 
         foreach ($files as $file) {
-            $runer = new FeatureRuner($file, $printer, $steps);
+            $runer = new FeatureRuner($file, $printer, $steps, &$world);
             $runer->run();
             $output->writeln('');
         }

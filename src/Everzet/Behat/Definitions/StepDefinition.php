@@ -106,13 +106,13 @@ class StepDefinition
     }
 
     /**
-     * Adds step parameters for call
+     * Sets step parameters for call
      *
      * @param   array   $values step parameters
      */
-    public function addValues(array $values)
+    public function setValues(array $values)
     {
-        $this->values = array_merge($this->values, $values);
+        $this->values = $values;
     }
 
     /**

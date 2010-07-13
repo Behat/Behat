@@ -74,7 +74,7 @@ class StepsContainer
         foreach ($this->steps as $regex => $definition) {
             if (preg_match($regex, $text, $values)) {
                 $definition->setMatchedText($text);
-                $definition->addValues(array_merge(array_slice($values, 1), $step->getArguments()));
+                $definition->setValues(array_merge(array_slice($values, 1), $step->getArguments()));
                 $matches[] = $definition;
             }
         }

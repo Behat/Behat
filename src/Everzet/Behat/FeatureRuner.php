@@ -8,6 +8,7 @@ use \Everzet\Gherkin\Background;
 use \Everzet\Gherkin\ScenarioOutline;
 use \Everzet\Gherkin\Scenario;
 use \Everzet\Gherkin\Step;
+use \Everzet\Behat\World;
 use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Definitions\StepDefinition;
 use \Everzet\Behat\Printers\Printer;
@@ -35,6 +36,7 @@ class FeatureRuner
     protected $printer;
     protected $file;
     protected $steps;
+    protected $world;
 
     protected function initStatusesArray()
     {
@@ -56,12 +58,13 @@ class FeatureRuner
      * 
      * @throws  \InvalidArgumentException   if feature file doesn't exists
      */
-    public function __construct($file, Printer $printer, StepsContainer $steps)
+    public function __construct($file, Printer $printer, StepsContainer $steps, World $world)
     {
         if (!is_file($file)) {
             throw new \InvalidArgumentException(sprintf('File %s does not exists', $file));
         }
 
+        $this->world = $world;
         $this->file = $file;
         $this->printer = $printer;
         $this->steps = $steps;
@@ -92,14 +95,15 @@ class FeatureRuner
     {
         $statuses = $this->initStatusesArray();
 
-        foreach ($feature->getBackgrounds() as $background) {
-            $this->printer->logBackground($background);
-            $scenarioStatuses = $this->runScenario($background);
-            foreach ($scenarioStatuses as $status => $num) {
-                $statuses[$status] += $num;
-            }
-        }
         foreach ($feature->getScenarios() as $scenario) {
+            $this->world->flush();
+            foreach ($feature->getBackgrounds() as $background) {
+                $this->printer->logBackground($background);
+                $scenarioStatuses = $this->runScenario($background);
+                foreach ($scenarioStatuses as $status => $num) {
+                    $statuses[$status] += $num;
+                }
+            }
             if ($scenario instanceof ScenarioOutline) {
                 $this->printer->logScenarioOutline($scenario);
                 $scenarioStatuses = $this->runScenarioOutline($scenario);
