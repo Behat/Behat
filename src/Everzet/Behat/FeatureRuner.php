@@ -171,10 +171,10 @@ class FeatureRuner
      * 
      * @return  string              step status code
      */
-    protected function logStep($code, Step $step, \Exception $e = null)
+    protected function logStep($code, Step $step, array $values = array(), \Exception $e = null)
     {
         $this->printer->logStep(
-            $step->getType(), $step->getText($values), null, null, $e
+            $code, $step->getType(), $step->getText($values), null, null, $e
         );
 
         return $code;
@@ -218,10 +218,10 @@ class FeatureRuner
             try {
                 $definition = $this->steps->findDefinition($step, $values);
             } catch (Ambiguous $e) {
-                return $this->logStep('failed', $step, $e);
+                return $this->logStep('failed', $step, $values, $e);
             }
         } catch (Undefined $e) {
-            return $this->logStep('undefined', $step);
+            return $this->logStep('undefined', $step, $values);
         }
 
         if ($skip) {
