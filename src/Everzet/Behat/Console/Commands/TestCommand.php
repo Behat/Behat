@@ -69,9 +69,9 @@ class TestCommand extends Command
             }
         } catch (Redundant $e) {
             $output->writeln(sprintf("<failed>%s</failed>\n",
-                strtr($e, array($basePath . '/' => ''))
+                strtr($e->getMessage(), array($basePath . '/' => ''))
             ));
-            die();
+            exit;
         }
 
         // Read feature files

@@ -10,6 +10,13 @@ namespace Everzet\Behat\Exceptions;
  * file that was distributed with this source code.
  */
 
+/**
+ * Abstract behat Exception
+ *
+ * @package     behat
+ * @subpackage  Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 abstract class BehaviorException extends \Exception
 {
 }

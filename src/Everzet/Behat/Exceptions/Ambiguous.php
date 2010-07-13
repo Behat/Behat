@@ -10,29 +10,36 @@ namespace Everzet\Behat\Exceptions;
  * file that was distributed with this source code.
  */
 
+/**
+ * Ambiguous Exception
+ *
+ * @package     behat
+ * @subpackage  Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class Ambiguous extends BehaviorException
 {
     protected $text;
     protected $matches = array();
 
+    /**
+     * Creates exception
+     *
+     * @param   string  $text       step description
+     * @param   array   $matches    ambigious matches (array of StepDefinition's)
+     */
     public function __construct($text, array $matches)
     {
+        parent::__construct();
+
         $this->definition = $definition;
         $this->matches = $matches;
 
-        parent::__construct();
-    }
-
-    public function __toString()
-    {
-        $string = sprintf("Ambiguous match of \"%s\":", $this->text);
-
+        $this->message = sprintf("Ambiguous match of \"%s\":", $this->text);
         foreach ($this->matches as $definition){
-            $string .= sprintf("\n%s:%d:in `%s`",
+            $this->message .= sprintf("\n%s:%d:in `%s`",
                 $definition->getFile(), $definition->getLine(), $definition->getRegex()
             );
         }
-
-        return $string;
     }
 }

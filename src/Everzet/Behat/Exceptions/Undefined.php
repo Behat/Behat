@@ -10,19 +10,26 @@ namespace Everzet\Behat\Exceptions;
  * file that was distributed with this source code.
  */
 
+/**
+ * Undefined step Exception
+ *
+ * @package     behat
+ * @subpackage  Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class Undefined extends BehaviorException
 {
-    protected $step;
+    protected $text;
 
-    public function __construct($step)
+    /**
+     * Creates Exception
+     *
+     * @param   string  $text   step description
+     */
+    public function __construct($text)
     {
-        $this->step = $step;
-
         parent::__construct();
-    }
-
-    public function __toString()
-    {
-        return sprintf('Undefined step "%s"', $this->step);
+        $this->text = $text;
+        $this->message = sprintf('Undefined step "%s"', $this->text);
     }
 }

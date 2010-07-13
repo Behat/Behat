@@ -2,6 +2,8 @@
 
 namespace Everzet\Behat\Definitions;
 
+use \Everzet\Behat\Exceptions\Error;
+
 /*
  * This file is part of the behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -116,12 +118,28 @@ class StepDefinition
     }
 
     /**
+     * Custom Error handler
+     *
+     * @see     set_error_handler
+     * 
+     * @throws  \Everzet\Behat\Exceptions\Error that encapsulates error information
+     */
+    public function errorHandler($code, $message, $file, $line)
+    {
+        throw new Error($code, $message, $file, $line);
+    }
+
+    /**
      * Runs step definition
      *
      * @return  void
      */
     public function run()
     {
+        $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL);
         call_user_func_array($this->callback, $this->values);
+        if (null !== $oldHandler) {
+            set_error_handler($oldHandler);
+        }
     }
 }
