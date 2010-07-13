@@ -14,8 +14,8 @@ use \Everzet\Gherkin\Background;
 use \Everzet\Gherkin\Scenario;
 use \Everzet\Gherkin\ScenarioOutline;
 use \Everzet\Behat\FeatureRuner;
-use \Everzet\Behat\World;
 use \Everzet\Behat\Definitions\StepsContainer;
+use \Everzet\Behat\Environment\SimpleWorld;
 use \Everzet\Behat\Printers\ConsolePrinter;
 use \Everzet\Behat\Exceptions\Redundant;
 
@@ -62,9 +62,7 @@ class TestCommand extends Command
         $finder = new Finder();
         $files = $finder->files()->name('*.php')->in($basePath . '/steps');
         $steps = new StepsContainer();
-        $world = new World(
-            is_file($basePath . '/support/env.php') ? $basePath . '/support/env.php' : null
-        );
+        $world = new SimpleWorld($basePath . '/support/env.php');
         try {
             foreach ($files as $file) {
                 require $file;
