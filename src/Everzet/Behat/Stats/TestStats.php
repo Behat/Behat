@@ -54,7 +54,7 @@ class TestStats
     public function getStatisticStatusTypes()
     {
         return array(
-            'failed', 'undefined', 'passed'
+            'pending', 'failed', 'undefined', 'passed'
         );
     }
 }

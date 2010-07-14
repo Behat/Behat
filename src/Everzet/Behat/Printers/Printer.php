@@ -63,10 +63,19 @@ interface Printer
      * @param   string      $text   step text (description)
      * @param   string      $file   step definition file
      * @param   integer     $line   step definition line
+     * @param   array       $args   step arguments
      * @param   \Exception  $e      step exception to print
      */
-    public function logStep($code, $type, $text, $file = null,
-                            $line = null, \Exception $e = null);
+     public function logStep($code, $type, $text, $file = null,
+                             $line = null, array $args = array(), \Exception $e = null);
+
+    /**
+     * Prints step arguments
+     *
+     * @param   string  $code   status code
+     * @param   array   $args   arguments list
+     */
+    public function logStepArguments($code, array $args);
 
     /**
      * Prints tests statistics

@@ -3,6 +3,8 @@
 namespace Everzet\Behat\Definitions;
 
 use \Everzet\Gherkin\Step;
+use \Everzet\Gherkin\InlineStructures\PyString;
+use \Everzet\Gherkin\InlineStructures\Table;
 use \Everzet\Behat\Definitions\StepDefinition;
 use \Everzet\Behat\Exceptions\Redundant;
 use \Everzet\Behat\Exceptions\Ambiguous;
@@ -96,8 +98,15 @@ class StepsContainer
             array('/\"([\w ]+)\"/', '/(\d+)/'), array("\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
         );
         $args = array();
-        for ($i = 0; $i < ($count + $step->getArgumentsCount()); $i++) {
+        for ($i = 0; $i < $count; $i++) {
             $args[] = "\$arg".($i + 1);
+        }
+        foreach ($step->getArguments() as $argument) {
+            if ($argument instanceof PyString) {
+                $args[] = "\$string";
+            } elseif ($argument instanceof Table) {
+                $args[] = "\$table";
+            }
         }
 
         return sprintf("\$steps->%s('/^%s$/', function(%s) use(\$world) {\n    throw new \Everzet\Behat\Exceptions\Pending;\n});",

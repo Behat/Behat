@@ -41,6 +41,60 @@ class Table
         }
     }
 
+    public function getKeysAsString()
+    {
+        $keys = array();
+        foreach ($this->keys as $col => $key) {
+            $keys[] = str_pad(' '.$key.' ', $this->getMaxLengthForColumn($col) + 2);
+        }
+
+        return sprintf('|%s|', implode('|', $keys));
+    }
+
+    public function getRowAsString($rowNum)
+    {
+        $values = array();
+        foreach ($this->values[$rowNum] as $col => $value) {
+            $values[] = str_pad(' '.$value.' ', $this->getMaxLengthForColumn($col) + 2);
+        }
+
+        return sprintf('|%s|', implode('|', $values));
+    }
+
+    public function __toString()
+    {
+        $string = $this->getKeysAsString();
+        for ($i = 0; $i < count($this->values); $i++) {
+            $string .= "\n" . $this->getRowAsString($i);
+        }
+
+        return $string;
+    }
+
+    public function getMaxLengthForColumn($columnNum)
+    {
+        $key = $this->keys[$columnNum];
+        $max = strlen($key);
+
+        foreach ($this->getHash() as $row) {
+            if (($tmp = strlen($row[$key])) > $max) {
+                $max = $tmp;
+            }
+        }
+
+        return $max;
+    }
+
+    public function getKeys()
+    {
+        return $this->keys;
+    }
+
+    public function getValues()
+    {
+        return $this->values;
+    }
+
     public function getHash()
     {
         $hash = array();

@@ -161,7 +161,8 @@ class FeatureRuner
     protected function logStep($code, Step $step, array $values = array(), \Exception $e = null)
     {
         $this->printer->logStep(
-            $code, $step->getType(), $step->getText($values), null, null, $e
+            $code, $step->getType(), $step->getText($values), null, null,
+            $step->getArguments(), $e
         );
 
         return $code;
@@ -176,11 +177,12 @@ class FeatureRuner
      * 
      * @return  string                          step status code
      */
-    protected function logStepDefinition($code, StepDefinition $definition, \Exception $e = null)
+    protected function logStepDefinition($code, StepDefinition $definition,
+                                         array $args = array(), \Exception $e = null)
     {
         $this->printer->logStep(
             $code, $definition->getType(), $definition->getMatchedText(),
-            $definition->getFile(), $definition->getLine(), $e
+            $definition->getFile(), $definition->getLine(), $args, $e
         );
 
         return $code;
@@ -212,17 +214,17 @@ class FeatureRuner
         }
 
         if ($skip) {
-            return $this->logStepDefinition('skipped', $definition);
+            return $this->logStepDefinition('skipped', $definition, $step->getArguments());
         } else {
             try {
                 try {
                     $definition->run();
-                    return $this->logStepDefinition('passed', $definition);
+                    return $this->logStepDefinition('passed', $definition, $step->getArguments());
                 } catch (Pending $e) {
-                    return $this->logStepDefinition('pending', $definition);
+                    return $this->logStepDefinition('pending', $definition, $step->getArguments());
                 }
             } catch (\Exception $e) {
-                return $this->logStepDefinition('failed', $definition, $e);
+                return $this->logStepDefinition('failed', $definition, $step->getArguments(), $e);
             }
         }
     }

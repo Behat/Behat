@@ -6,6 +6,10 @@ use \Everzet\Gherkin\Feature;
 use \Everzet\Gherkin\Background;
 use \Everzet\Gherkin\ScenarioOutline;
 use \Everzet\Gherkin\Scenario;
+use \Everzet\Gherkin\Step;
+use \Everzet\Gherkin\InlineStructures\PyString;
+use \Everzet\Gherkin\InlineStructures\Table;
+use \Everzet\Gherkin\InlineStructures\Examples;
 use \Everzet\Behat\Stats\TestStats;
 use \Everzet\Behat\Definitions\StepsContainer;
 
@@ -90,7 +94,7 @@ class ConsolePrinter implements Printer
      */
     public function logBackground(Background $background)
     {
-        $this->output->writeln(sprintf("\n    <passed>Background: %s</passed>",
+        $this->output->writeln(sprintf("\n  <passed>Background: %s</passed>",
             $background->getTitle()
         ));
     }
@@ -100,7 +104,7 @@ class ConsolePrinter implements Printer
      */
     public function logScenarioOutline(ScenarioOutline $scenario)
     {
-        $this->output->writeln(sprintf("\n    <passed>Scenario Outline: %s</passed>",
+        $this->output->writeln(sprintf("\n  <passed>Scenario Outline: %s</passed>",
             $scenario->getTitle()
         ));
     }
@@ -110,7 +114,7 @@ class ConsolePrinter implements Printer
      */
     public function logScenario(Scenario $scenario)
     {
-        $this->output->writeln(sprintf("\n    <passed>Scenario: %s</passed>",
+        $this->output->writeln(sprintf("\n  <passed>Scenario: %s</passed>",
             $scenario->getTitle()
         ));
     }
@@ -119,9 +123,10 @@ class ConsolePrinter implements Printer
      * @see \Everzet\Behat\Printers\Printer
      */
     public function logStep($code, $type, $text, $file = null,
-                            $line = null, \Exception $e = null)
+                            $line = null, array $args = array(), \Exception $e = null)
     {
-        $status = sprintf('      <%s>%s</%s>', $code, $type . ' ' . $text, $code);
+        $description = sprintf('%s %s', $type, $text);
+        $status = sprintf('    <%s>%s</%s>', $code, $description, $code);
         $status = str_pad($status, 60 + (strlen($code) * 2));
 
         if (null !== $file && null !== $line) {
@@ -129,8 +134,9 @@ class ConsolePrinter implements Printer
                 $this->ltrimPaths(realpath($file)), $line
             );
         }
-
         $this->output->writeln($status);
+
+        $this->logStepArguments($code, $args);
 
         if (null !== $e) {
             $error = $this->verbose ? $e->__toString() : $e->getMessage();
@@ -142,6 +148,56 @@ class ConsolePrinter implements Printer
                 ))
             ));
         }
+    }
+
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
+    public function logStepArguments($code, array $args)
+    {
+        foreach ($args as $argument) {
+            if ($argument instanceof PyString) {
+                $this->output->writeln(sprintf("<%s>%s</%s>",
+                    $code, $this->getPyString($argument, 6), $code
+                ));
+            } elseif ($argument instanceof Table) {
+                $this->output->writeln(sprintf("<%s>%s</%s>",
+                    $code, $this->getTable($argument, 6), $code
+                ));
+            }
+        }
+    }
+
+    /**
+     * Returns formatted PyString, prepared for console output
+     *
+     * @param   PyString    $pystring   PyString instance
+     * @param   integer     $indent     indentation spaces count
+     * 
+     * @return  string
+     */
+    protected function getPyString(PyString $pystring, $indent = 6)
+    {
+        return strtr(
+            sprintf("%s\"\"\"\n%s\n\"\"\"", str_repeat(' ', $indent), (string) $pystring),
+            array("\n" => "\n" . str_repeat(' ', $indent))
+        );
+    }
+
+    /**
+     * Returns formatted Table, prepared for console output
+     *
+     * @param   Table       $table      Table instance
+     * @param   string      $indent     indentation spaces count
+     * 
+     * @return  string
+     */
+    protected function getTable(Table $table, $indent = 6)
+    {
+        return strtr(
+            sprintf(str_repeat(' ', $indent).'%s', $table),
+            array("\n" => "\n".str_repeat(' ', $indent))
+        );
     }
 
     /**
@@ -175,7 +231,7 @@ class ConsolePrinter implements Printer
 
         if ($stats->getStepStatusCount('undefined')) {
             $this->output->writeln(sprintf(
-                "\n<undefined>You can implement step definitions for undefined steps with these snippets:%s</undefined>\n",
+                "\n<undefined>You can implement step definitions for undefined steps with these snippets:</undefined>%s\n",
                 $steps->getUndefinedStepsSnippets()
             ));
         } else {
