@@ -89,7 +89,7 @@ class FeatureRuner
         foreach ($feature->getScenarios() as $scenario) {
             if ($scenario instanceof ScenarioOutline) {
                 $this->printer->logScenarioOutline($scenario);
-                foreach ($scenario->getExamples() as $values) {
+                foreach ($scenario->getExamples()->getTable()->getHash() as $values) {
                     $this->world->flush();
 
                     $stats = $this->runFeatureBackgrounds($feature);

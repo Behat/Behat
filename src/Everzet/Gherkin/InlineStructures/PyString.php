@@ -19,10 +19,10 @@ namespace Everzet\Gherkin\InlineStructures;
  */
 class PyString
 {
-    protected $lines;
     protected $ltrimCount;
+    protected $lines = array();
 
-    public function __construct($ltrimCount)
+    public function __construct($ltrimCount = 4)
     {
         $this->ltrimCount = $ltrimCount;
     }

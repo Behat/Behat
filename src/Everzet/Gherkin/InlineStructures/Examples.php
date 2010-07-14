@@ -1,8 +1,8 @@
 <?php
 
-namespace Everzet\Gherkin;
+namespace Everzet\Gherkin\InlineStructures;
 
-use \Everzet\Gherkin\InlineStructures\Examples;
+use \Everzet\Gherkin\InlineStructures\Table;
 
 /*
  * This file is part of the behat package.
@@ -13,28 +13,29 @@ use \Everzet\Gherkin\InlineStructures\Examples;
  */
 
 /**
- * Scenario Outline.
+ * Examples.
  *
  * @package     behat
  * @subpackage  Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ScenarioOutline extends Scenario
+class Examples
 {
-    protected $examples;
+    protected $title;
+    protected $table;
 
-    public function setExamples(Examples $examples)
+    public function __construct($title)
     {
-        $this->examples = $examples;
+        $this->title = $title;
     }
 
-    public function hasExamples()
+    public function setTable(Table $table)
     {
-        return null !== $this->examples;
+        $this->table = $table;
     }
 
-    public function getExamples()
+    public function getTable()
     {
-        return $this->examples;
+        return $this->table;
     }
 }

@@ -3,6 +3,7 @@
 namespace Everzet\Behat\Definitions;
 
 use \Everzet\Gherkin\InlineStructures\PyString;
+use \Everzet\Gherkin\InlineStructures\Table;
 use \Everzet\Behat\Exceptions\Error;
 
 /*
@@ -142,6 +143,8 @@ class StepDefinition
         call_user_func_array($this->callback, array_map(function($value) {
             if ($value instanceof PyString) {
                 return (string) $value;
+            } elseif ($value instanceof Table) {
+                return $value->getHash();
             } else {
                 return $value;
             }

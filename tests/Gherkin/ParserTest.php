@@ -89,7 +89,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Given', end($scenarios[1]->getSteps())->getType());
         $this->assertEquals('<state>', end($scenarios[1]->getSteps())->getText());
         $this->assertTrue($scenarios[1]->hasExamples());
-        $this->assertEquals(array(array('state' => 'missing')), $scenarios[1]->getExamples());
+        $this->assertEquals(
+            array(array('state' => 'missing')),
+            $scenarios[1]->getExamples()->getTable()->getHash()
+        );
 
         $this->assertEquals('Skipped', $scenarios[2]->getTitle());
         $this->assertTrue($scenarios[2]->hasTags());
@@ -125,8 +128,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('I the result should be <c>', $steps[2]->getText());
 
         $this->assertEquals(
-            array(array(array('foo' => 'bar', 'bar' => 'baz'))),
-            $steps[1]->getArguments()
+            array(array('foo' => 'bar', 'bar' => 'baz')),
+            end($steps[1]->getArguments())->getHash()
         );
 
         $this->assertTrue($outline->hasExamples());
@@ -135,7 +138,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
                 array('a' => '1', 'b' => '2', 'c' => '3'),
                 array('a' => '2', 'b' => '3', 'c' => '4'),
             ),
-            $outline->getExamples()
+            $outline->getExamples()->getTable()->getHash()
         );
     }
 
@@ -185,7 +188,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $step = end($scenarios[1]->getSteps());
         $this->assertEquals('Given', $step->getType());
         $this->assertEquals('a table', $step->getText());
-        $this->assertEquals(array(array(array('table' => 'example'))), $step->getArguments());
+        $this->assertEquals(
+            array(array('table' => 'example')),
+            end($step->getArguments())->getHash()
+        );
     }
 
     public function testUnit()
@@ -259,7 +265,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
                 array('n' => 9, 'series' => '[1, 1, 2, 3, 5, 8]'),
                 array('n' => 100, 'series' => '[1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]'),
             ),
-            $outline->getExamples()
+            $outline->getExamples()->getTable()->getHash()
         );
     }
 
@@ -307,7 +313,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($item->getSteps()));
         $this->assertEquals('Given', end($item->getSteps())->getType());
         $this->assertEquals('<state> without a table', end($item->getSteps())->getText());
-        $this->assertEquals(array(array('state' => 'passing')), $item->getExamples());
+        $this->assertEquals(
+            array(array('state' => 'passing')),
+            $item->getExamples()->getTable()->getHash()
+        );
 
         $item = $scenarios[2];
         $this->assertEquals('name', $item->getTitle());
@@ -316,7 +325,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($item->getSteps()));
         $this->assertEquals('Given', end($item->getSteps())->getType());
         $this->assertEquals('<state> without a table', end($item->getSteps())->getText());
-        $this->assertEquals(array(array('state' => 'passing')), $item->getExamples());
+        $this->assertEquals(
+            array(array('state' => 'passing')),
+            $item->getExamples()->getTable()->getHash()
+        );
     }
 
     public function test172()
@@ -352,7 +364,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
                 array('login' => 'unknown_user', 'password' => 'known_userpass'),
                 array('login' => 'known_user', 'password' => 'wrong_password'),
             ),
-            $scenario->getExamples()
+            $scenario->getExamples()->getTable()->getHash()
         );
 
         $this->assertTrue($scenario->hasSteps());
@@ -428,20 +440,20 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array(
                 array('role' => 'HUMAN RESOURCE')
             ),
-            $scenario->getExamples()
+            $scenario->getExamples()->getTable()->getHash()
         );
 
         $step = end($scenario->getSteps());
         $this->assertEquals('Given', $step->getType());
         $this->assertEquals('the following users exist in the system', $step->getText());
         $this->assertEquals(
-            array(array(
+            array(
                 array('name' => 'Jane', 'email' => 'jane@fmail.com', 'role_assignments' => '<role>', 'group_memberships' => 'Sales (manager)'),
                 array('name' => 'Max', 'email' => 'max@fmail.com', 'role_assignments' => '', 'group_memberships' => 'Sales (member)'),
                 array('name' => 'Carol', 'email' => 'carol@fmail.com', 'role_assignments' => '', 'group_memberships' => 'Sales (member)'),
                 array('name' => 'Cat', 'email' => 'cat@fmail.com', 'role_assignments' => '', 'group_memberships' => ''),
-            )),
-            $step->getArguments()
+            ),
+            end($step->getArguments())->getHash()
         );
     }
 

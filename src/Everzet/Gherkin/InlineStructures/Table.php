@@ -19,5 +19,36 @@ namespace Everzet\Gherkin\InlineStructures;
  */
 class Table
 {
+    protected $rowSplitter;
+    protected $keys = array();
+    protected $values = array();
 
+    public function __construct($rowSplitter = '|')
+    {
+        $this->rowSplitter = $rowSplitter;
+    }
+
+    public function addRow($row)
+    {
+        $items = array_map(function($item) {
+            return trim($item);
+        }, explode($this->rowSplitter, $row));
+
+        if (empty($this->keys)) {
+            $this->keys = $items;
+        } else {
+            $this->values[] = $items;
+        }
+    }
+
+    public function getHash()
+    {
+        $hash = array();
+
+        foreach ($this->values as $rowValues) {
+            $hash[] = array_combine($this->keys, $rowValues);
+        }
+
+        return $hash;
+    }
 }

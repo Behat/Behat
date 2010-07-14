@@ -5,6 +5,7 @@ namespace Everzet\Gherkin;
 use \Everzet\Gherkin\ParserException;
 use \Everzet\Gherkin\InlineStructures\PyString;
 use \Everzet\Gherkin\InlineStructures\Table;
+use \Everzet\Gherkin\InlineStructures\Examples;
 
 /*
  * This file is part of the behat package.
@@ -91,7 +92,7 @@ class Parser
                 ));
                 $outline->addTags($this->getPreviousTags());
                 $outline->addSteps($this->getNextSteps());
-                if (!count($examples = $this->getNextExamples())) {
+                if (null === ($examples = $this->getNextExamples())) {
                     throw new ParserException(
                         sprintf('No examples in %s outline', $outline->getTitle())
                     );
@@ -179,7 +180,7 @@ class Parser
             if (null !== ($pystring = $this->getNextPyString())) {
                 $step->addArgument($pystring);
             }
-            if (count($table = $this->getNextTable())) {
+            if (null !== ($table = $this->getNextTable())) {
                 $step->addArgument($table);
             }
             $steps[] = $step;
@@ -213,8 +214,7 @@ class Parser
 
     protected function getNextTable()
     {
-        $keys   = array();
-        $table  = array();
+        $table = null;
 
         while ($this->moveToNextLine()) {
             if ($this->isCurrentLineEmpty()) {
@@ -224,19 +224,10 @@ class Parser
                 break;
             }
 
-            $row = array_map(function($item) {
-                return trim($item);
-            }, explode($this->regex->getTableSplitter(), $values['row']));
-
-            if (empty($keys)) {
-                $keys = $row;
-            } else {
-                $hash = array();
-                foreach ($row as $i => $item) {
-                    $hash[$keys[$i]] = $item;
-                }
-                $table[] = $hash;
+            if (null === $table) {
+                $table = new Table($this->regex->getTableSplitter());
             }
+            $table->addRow($values['row']);
         }
         $this->moveToPreviousLine();
 
@@ -245,18 +236,22 @@ class Parser
 
     protected function getNextExamples()
     {
+        $examples = null;
+
         while($this->moveToNextLine()) {
             if (!$this->isCurrentLineEmpty()) {
                 break;
             }
         }
         if (preg_match($this->regex->getExamplesRegex(), $this->currentLine, $values)) {
-            $title = $this->getNextTitle(isset($values['title']) ? $values['title'] : '');
-            return $this->getNextTable();
-        } else {
-            return array();
+            $examples = new Examples(
+                $this->getNextTitle(isset($values['title']) ? $values['title'] : '')
+            );
+            $examples->setTable($this->getNextTable());
         }
         $this->moveToPreviousLine();
+
+        return $examples;
     }
 
     protected function getPreviousLine()
