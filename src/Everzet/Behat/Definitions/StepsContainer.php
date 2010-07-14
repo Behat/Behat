@@ -26,6 +26,7 @@ use \Everzet\Behat\Exceptions\Undefined;
 class StepsContainer
 {
     protected $steps = array();
+    protected $undefinedSteps = array();
 
     /**
      * Define a step with ->Given('/regex/', callback)
@@ -53,6 +54,48 @@ class StepsContainer
         $this->steps[$definition->getRegex()] = $definition;
 
         return $this;
+    }
+
+    /**
+     * Returns undefined steps array
+     *
+     * @return  array
+     */
+    public function getUndefinedSteps()
+    {
+        return $this->undefinedSteps;
+    }
+
+    /**
+     * Returns snippets for undefined steps
+     *
+     * @return  string
+     */
+    public function getUndefinedStepsSnippets()
+    {
+        $snippets = '';
+
+        foreach ($this->undefinedSteps as $text => $step) {
+            $snippets .= sprintf("\n\n\$steps->%s('/%s/', function() use(\$world) {\n  throw new \Everzet\Behat\Exceptions\Pending;\n});",
+                $step->getType(), $text
+            );
+        }
+
+        return $snippets;
+    }
+
+    /**
+     * Prepares step description to be inserted as step into steps definition
+     *
+     * @param string $text 
+     * @return void
+     * @author Konstantin Kudryashov <ever.zet@gmail.com>
+     */
+    protected function convertStepTextToRegexp($text)
+    {
+        return preg_replace(
+            array('/\"([\w ]+)\"/', '/(\d+)/'), array("([\\w ]+)", "(\\d+)"), $text
+        );
     }
 
     /**
@@ -84,6 +127,7 @@ class StepsContainer
         }
 
         if (0 === count($matches)) {
+            $this->undefinedSteps[$this->convertStepTextToRegexp($text)] = $step;
             throw new Undefined($text);
         }
 

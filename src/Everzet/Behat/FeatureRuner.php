@@ -8,6 +8,8 @@ use \Everzet\Gherkin\Background;
 use \Everzet\Gherkin\ScenarioOutline;
 use \Everzet\Gherkin\Scenario;
 use \Everzet\Gherkin\Step;
+use \Everzet\Behat\Stats\ScenarioStats;
+use \Everzet\Behat\Stats\FeatureStats;
 use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Definitions\StepDefinition;
 use \Everzet\Behat\Environment\World;
@@ -38,17 +40,6 @@ class FeatureRuner
     protected $steps;
     protected $world;
 
-    protected function initStatusesArray()
-    {
-        return array(
-            'failed'    => 0,
-            'passed'    => 0,
-            'skipped'   => 0,
-            'undefined' => 0,
-            'pending'   => 0
-        );
-    }
-
     /**
      * Initiates feature runer
      *
@@ -73,7 +64,7 @@ class FeatureRuner
     /**
      * Abstract method to parse & test feature file
      *
-     * @return  mixed   feature test statuses
+     * @return  \Everzet\Behat\Stats\FeatureStats   feature test run statuses
      */
     public function run()
     {
@@ -87,79 +78,65 @@ class FeatureRuner
     /**
      * Runs feature tests
      *
-     * @param   Feature $feature    feature instance
+     * @param   Feature $feature                    feature instance
      * 
-     * @return  mixed               status codes
+     * @return  \Everzet\Behat\Stats\FeatureStats   feature test run statuses
      */
     public function runFeature(Feature $feature)
     {
-        $statuses = $this->initStatusesArray();
+        $featureStats = new FeatureStats;
 
         foreach ($feature->getScenarios() as $scenario) {
-            $this->world->flush();
-            foreach ($feature->getBackgrounds() as $background) {
-                $this->printer->logBackground($background);
-                $scenarioStatuses = $this->runScenario($background);
-                foreach ($scenarioStatuses as $status => $num) {
-                    $statuses[$status] += $num;
-                }
-            }
             if ($scenario instanceof ScenarioOutline) {
                 $this->printer->logScenarioOutline($scenario);
-                $scenarioStatuses = $this->runScenarioOutline($scenario);
+                foreach ($scenario->getExamples() as $values) {
+                    $this->world->flush();
+                    $this->runFeatureBackgrounds($feature);
+                    $featureStats->addScenarioStatuses($this->runScenario($scenario, $values));
+                }
             } else {
+                $this->world->flush();
+                $this->runFeatureBackgrounds($feature);
                 $this->printer->logScenario($scenario);
-                $scenarioStatuses = $this->runScenario($scenario);
-            }
-            foreach ($scenarioStatuses as $status => $num) {
-                $statuses[$status] += $num;
+                $featureStats->addScenarioStatuses($this->runScenario($scenario));
             }
         }
 
-        return $statuses;
+        return $featureStats;
     }
 
     /**
-     * Runs Scenario Outline tests
+     * Runs feature backgrounds (called between scenarios)
      *
-     * @param   ScenarioOutline $scenario   ScenarioOutline instance
-     * 
-     * @return  mixed                       status codes
+     * @param   Feature $feature    feature instance
      */
-    public function runScenarioOutline(ScenarioOutline $scenario)
+    public function runFeatureBackgrounds(Feature $feature)
     {
-        $statuses = $this->initStatusesArray();
-
-        foreach ($scenario->getExamples() as $values) {
-            foreach ($this->runScenario($scenario, $values) as $status => $num) {
-                $statuses[$status] += $num;
-            }
+        foreach ($feature->getBackgrounds() as $background) {
+            $this->runScenario($background);
         }
-
-        return $statuses;
     }
 
     /**
      * Runs Scenario tests
      *
-     * @param   Background  $scenario   background instance
+     * @param   Background  $scenario               background instance
      * 
-     * @return  mixed                   status codes
+     * @return  \Everzet\Behat\Stats\ScenarioStats  scenario steps statuses
      */
     public function runScenario(Background $scenario, array $values = array())
     {
-        $statuses = $this->initStatusesArray();
+        $scenarioStats = new ScenarioStats;
         $skip = false;
 
         foreach ($scenario->getSteps() as $step) {
-            $status = $this->runStep($step, $values, $skip);
-            if ('failed' === $status) {
+            $scenarioStats->addStepStatus($this->runStep($step, $values, $skip));
+            if ('failed' === $scenarioStats->getLastStepStatus()) {
                 $skip = true;
             }
-            $statuses[$status]++;
         }
 
-        return $statuses;
+        return $scenarioStats;
     }
 
     /**
@@ -206,7 +183,7 @@ class FeatureRuner
      * @param   array   $values example tokens
      * @param   boolean $skip   do we need to mark this step as skipped
      * 
-     * @return  mixed           status codes
+     * @return  string          status code
      * 
      * @throws  \Everzet\Behat\Exceptions\Pending       if step throws Pending exception
      * @throws  \Everzet\Behat\Exceptions\Ambiguous     if step matches multiple definitions

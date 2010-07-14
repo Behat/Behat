@@ -17,6 +17,7 @@ use \Everzet\Behat\FeatureRuner;
 use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Environment\SimpleWorld;
 use \Everzet\Behat\Printers\ConsolePrinter;
+use \Everzet\Behat\Stats\TestStats;
 use \Everzet\Behat\Exceptions\Redundant;
 
 /*
@@ -78,10 +79,39 @@ class TestCommand extends Command
         $finder = new Finder();
         $files = $finder->files()->name('*.feature')->in($input->getArgument('features'));
 
+        $stats = new TestStats;
         foreach ($files as $file) {
             $runer = new FeatureRuner($file, $printer, $steps, &$world);
-            $runer->run();
+            $stats->addFeatureStatuses($runer->run());
             $output->writeln('');
         }
+        $this->writeStats($stats, $output);
+
+        if ($stats->getStepStatusCount('undefined')) {
+            $output->writeln(sprintf(
+                "\n<undefined>You can implement step definitions for undefined steps with these snippets:%s</undefined>\n",
+                $steps->getUndefinedStepsSnippets()
+            ));
+        } else {
+            $output->writeln('');
+        }
+    }
+
+    protected function writeStats(TestStats $stats, OutputInterface $output)
+    {
+        $output->writeln(sprintf(
+            '%d scenarios (<failed>%d failed</failed>, <undefined>%d undefined</undefined>, <passed>%d passed</passed>)',
+            $stats->getScenariosCount(),
+            $stats->getScenarioStatusCount('failed'),
+            $stats->getScenarioStatusCount('undefined'),
+            $stats->getScenarioStatusCount('passed')
+        ));
+        $output->writeln(sprintf(
+            '%d steps (<failed>%d failed</failed>, <undefined>%d undefined</undefined>, <passed>%d passed</passed>)',
+            $stats->getStepsCount(),
+            $stats->getStepStatusCount('failed'),
+            $stats->getStepStatusCount('undefined'),
+            $stats->getStepStatusCount('passed')
+        ));
     }
 }
