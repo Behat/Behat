@@ -2,6 +2,8 @@
 
 namespace Everzet\Gherkin;
 
+use \Everzet\Gherkin\I18n;
+use \Everzet\Gherkin\RegexHolder;
 use \Everzet\Gherkin\ParserException;
 use \Everzet\Gherkin\Structures\Feature;
 use \Everzet\Gherkin\Structures\Step;
@@ -29,11 +31,17 @@ use \Everzet\Gherkin\Structures\Inline\Examples;
  */
 class Parser
 {
+    protected $i18n             = null;
     protected $lines            = array();
     protected $currentLineNb    = -1;
     protected $currentLine      = '';
     protected $regex            = null;
     protected $feature          = null;
+
+    public function __construct(I18n $i18n)
+    {
+        $this->i18n = $i18n;
+    }
 
     public function parse($value)
     {
@@ -42,11 +50,11 @@ class Parser
         $this->lines = explode("\n", $this->cleanup($value));
 
         if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w]+?)\s*$#', $this->lines[0], $values)) {
-            $class = sprintf("Everzet\Gherkin\\I18n\\%s", $values['lang']);
-            $this->regex = new $class;
+            $this->i18n->loadLang($values['lang']);
         } else {
-            $this->regex = new \Everzet\Gherkin\I18n\en;
+            $this->i18n->loadLang('en');
         }
+        $this->regex = new RegexHolder($this->i18n);
 
         if (function_exists('mb_internal_encoding') && ((int) ini_get('mbstring.func_overload')) & 2) {
             $mbEncoding = mb_internal_encoding();

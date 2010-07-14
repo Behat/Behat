@@ -9,6 +9,7 @@ use \Symfony\Components\Console\Input\InputOption;
 use \Symfony\Components\Console\Output\OutputInterface;
 use \Symfony\Components\Finder\Finder;
 
+use \Everzet\Gherkin\I18n;
 use \Everzet\Behat\FeatureRuner;
 use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Environment\SimpleWorld;
@@ -74,13 +75,16 @@ class TestCommand extends Command
             exit;
         }
 
+        // Init I18n for Gherkin with translations path
+        $i18n = new I18n(realpath(__DIR__ . '/../../../../../i18n'));
+
         // Read feature files
         $finder = new Finder();
         $files = $finder->files()->name('*.feature')->in($input->getArgument('features'));
 
         $stats = new TestStats;
         foreach ($files as $file) {
-            $runer = new FeatureRuner($file, $printer, $steps, &$world);
+            $runer = new FeatureRuner($file, $printer, $steps, $world, $i18n);
             $stats->addFeatureStatuses($runer->run());
             $output->writeln('');
         }

@@ -2,6 +2,8 @@
 
 namespace Everzet\Gherkin;
 
+use \Everzet\Gherkin\I18n;
+
 /*
  * This file is part of the behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -17,35 +19,58 @@ namespace Everzet\Gherkin;
  * @subpackage  Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class RegexHolder
+class RegexHolder
 {
-    protected $tagKeyword       = '@';
-    protected $tableSplitter    = '|';
-    protected $feature          = 'Feature';
-    protected $background       = 'Background';
-    protected $scenario         = 'Scenario';
-    protected $scenarioOutline  = 'Scenario Outline';
-    protected $examples         = 'Examples';
-    protected $stepTypes        = array('Given', 'Then', 'When', 'And', 'But');
+    protected $i18n;
+
+    public function __construct(I18n $i18n)
+    {
+        $this->i18n = $i18n;
+    }
 
     public function getTagKeyword()
     {
-        return $this->tagKeyword;
+        return $this->i18n->__('tag-keyword', '@');
     }
 
     public function getTableSplitter()
     {
-        return $this->tableSplitter;
+        return $this->i18n->__('table-splitter', '|');
     }
 
     public function getStepTypes()
     {
-        return $this->stepTypes;
+        return $this->i18n->__('step-types', array('Given', 'When', 'Then', 'And', 'But'));
+    }
+
+    public function getFeatureKeyword()
+    {
+        return $this->i18n->__('feature', 'Feature');
+    }
+
+    public function getBackgroundKeyword()
+    {
+        return $this->i18n->__('background', 'Background');
+    }
+
+    public function getScenarioKeyword()
+    {
+        return $this->i18n->__('scenario', 'Scenario');
+    }
+
+    public function getScenarioOutlineKeyword()
+    {
+        return $this->i18n->__('scenario-outline', 'Scenario Outline');
+    }
+
+    public function getExamplesKeyword()
+    {
+        return $this->i18n->__('examples', 'Examples');
     }
 
     private function getStepTypesRegex()
     {
-        return implode('|', $this->stepTypes);
+        return implode('|', $this->getStepTypes());
     }
 
     private function getNotOneOfRegex(array $names)
@@ -55,41 +80,43 @@ abstract class RegexHolder
 
     public function getFeatureRegex()
     {
-        return '#^\s*' . $this->feature . '\:\s*(?P<title>.+?)?\s*$#';
+        return '#^\s*' . $this->getFeatureKeyword() . '\:\s*(?P<title>.+?)?\s*$#';
     }
 
     public function getBackgroundRegex()
     {
-        return '#^\s*' . $this->background . '\:\s*(?P<title>.+?)?\s*$#';
+        return '#^\s*' . $this->getBackgroundKeyword() . '\:\s*(?P<title>.+?)?\s*$#';
     }
 
     public function getScenarioRegex()
     {
-        return '#^\s*' . $this->scenario . '\:(?:\s+(?P<title>.+?))?\s*$#';
+        return '#^\s*' . $this->getScenarioKeyword() . '\:(?:\s+(?P<title>.+?))?\s*$#';
     }
 
     public function getScenarioOutlineRegex()
     {
-        return '#^\s*' . $this->scenarioOutline . '\:(?:\s+(?P<title>.+?))?\s*$#';
+        return '#^\s*' . $this->getScenarioOutlineKeyword() . '\:(?:\s+(?P<title>.+?))?\s*$#';
     }
 
     public function getExamplesRegex()
     {
-        return '#^\s*' . $this->examples . '\:(?:\s+(?P<title>.+?))?\s*$#';
+        return '#^\s*' . $this->getExamplesKeyword() . '\:(?:\s+(?P<title>.+?))?\s*$#';
     }
 
     public function getTagsRegex()
     {
-        return '#^\s*' . "\\" . $this->tagKeyword . '(?P<tags>.+?)\s*$#';
+        return '#^\s*' . "\\" . $this->getTagKeyword() . '(?P<tags>.+?)\s*$#';
     }
 
     public function getDescriptionRegex()
     {
         $isNotOneOfRegex = $this->getNotOneOfRegex(
             array_merge(
-                array($this->background, $this->scenarioOutline, $this->scenario,
-                    "\\" . $this->tagKeyword, "\\" . $this->tableSplitter),
-                $this->stepTypes
+                array($this->getBackgroundKeyword(), $this->getScenarioOutlineKeyword(), 
+                    $this->getScenarioKeyword(), "\\" . $this->getTagKeyword(),
+                    "\\" . $this->getTableSplitter()
+                ),
+                $this->getStepTypes()
             )
         );
 
@@ -108,6 +135,6 @@ abstract class RegexHolder
 
     public function getTableRegex()
     {
-        return "#^\s*\\" . $this->tableSplitter . "(?P<row>.+?)\\" . $this->tableSplitter . "\s*$#";
+        return "#^\s*\\" . $this->getTableSplitter() . "(?P<row>.+?)\\" . $this->getTableSplitter() . "\s*$#";
     }
 }

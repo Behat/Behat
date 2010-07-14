@@ -2,6 +2,7 @@
 
 namespace Everzet\Behat;
 
+use \Everzet\Gherkin\I18n;
 use \Everzet\Gherkin\Parser;
 use \Everzet\Gherkin\Structures\Feature;
 use \Everzet\Gherkin\Structures\Step;
@@ -49,16 +50,18 @@ class FeatureRuner
      * 
      * @throws  \InvalidArgumentException   if feature file doesn't exists
      */
-    public function __construct($file, Printer $printer, StepsContainer $steps, World $world)
+    public function __construct($file, Printer $printer, StepsContainer $steps,
+                                World $world, I18n $i18n)
     {
         if (!is_file($file)) {
             throw new \InvalidArgumentException(sprintf('File %s does not exists', $file));
         }
 
-        $this->world = $world;
         $this->file = $file;
         $this->printer = $printer;
         $this->steps = $steps;
+        $this->world = $world;
+        $this->i18n = $i18n;
     }
 
     /**
@@ -68,7 +71,7 @@ class FeatureRuner
      */
     public function run()
     {
-        $parser = new Parser;
+        $parser = new Parser($this->i18n);
         $feature = $parser->parse(file_get_contents($this->file));
         $this->printer->logFeature($feature, $this->file);
 
