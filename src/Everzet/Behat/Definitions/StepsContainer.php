@@ -75,26 +75,33 @@ class StepsContainer
     {
         $snippets = '';
 
-        foreach ($this->undefinedSteps as $text => $step) {
-            $snippets .= sprintf("\n\n\$steps->%s('/%s/', function() use(\$world) {\n  throw new \Everzet\Behat\Exceptions\Pending;\n});",
-                $step->getType(), $text
-            );
+        foreach ($this->undefinedSteps as $regexp => $step) {
+            $snippets .= sprintf("\n\n\%s", $regexp);
         }
 
         return $snippets;
     }
 
     /**
-     * Prepares step description to be inserted as step into steps definition
+     * Translates step description into definition
      *
-     * @param string $text 
-     * @return void
-     * @author Konstantin Kudryashov <ever.zet@gmail.com>
+     * @param   string  $type   step type
+     * @param   string  $text   step test
+     * 
+     * @return  string          definition
      */
-    protected function convertStepTextToRegexp($text)
+    protected function convertDescriptionToDefinition($type, $text)
     {
-        return preg_replace(
-            array('/\"([\w ]+)\"/', '/(\d+)/'), array("([\\w ]+)", "(\\d+)"), $text
+        $regexp = preg_replace(
+            array('/\"([\w ]+)\"/', '/(\d+)/'), array("\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
+        );
+        $args = array();
+        for ($i = 0; $i < $count; $i++) {
+            $args[] = "\$arg".($i + 1);
+        }
+
+        return sprintf("\$steps->%s('/^%s$/', function(%s) use(\$world) {\n  throw new \Everzet\Behat\Exceptions\Pending;\n});",
+            $type, $regexp, implode(', ', $args)
         );
     }
 
@@ -127,7 +134,8 @@ class StepsContainer
         }
 
         if (0 === count($matches)) {
-            $this->undefinedSteps[$this->convertStepTextToRegexp($text)] = $step;
+            $regexp = $this->convertDescriptionToDefinition($step->getType(), $text);
+            $this->undefinedSteps[$regexp] = $step;
             throw new Undefined($text);
         }
 
