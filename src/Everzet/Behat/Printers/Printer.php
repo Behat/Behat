@@ -6,6 +6,8 @@ use \Everzet\Gherkin\Feature;
 use \Everzet\Gherkin\Background;
 use \Everzet\Gherkin\ScenarioOutline;
 use \Everzet\Gherkin\Scenario;
+use \Everzet\Behat\Stats\TestStats;
+use \Everzet\Behat\Definitions\StepsContainer;
 
 /*
  * This file is part of the behat package.
@@ -65,4 +67,12 @@ interface Printer
      */
     public function logStep($code, $type, $text, $file = null,
                             $line = null, \Exception $e = null);
+
+    /**
+     * Prints tests statistics
+     *
+     * @param   TestStats       $stats  runer statistics
+     * @param   StepsContainer  $steps  steps definition container
+     */
+    public function logStats(TestStats $stats, StepsContainer $steps);
 }

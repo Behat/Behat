@@ -6,6 +6,8 @@ use \Everzet\Gherkin\Feature;
 use \Everzet\Gherkin\Background;
 use \Everzet\Gherkin\ScenarioOutline;
 use \Everzet\Gherkin\Scenario;
+use \Everzet\Behat\Stats\TestStats;
+use \Everzet\Behat\Definitions\StepsContainer;
 
 use \Symfony\Components\Console\Output\OutputInterface;
 
@@ -139,6 +141,45 @@ class ConsolePrinter implements Printer
                     ">"     =>  "]"
                 ))
             ));
+        }
+    }
+
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
+    public function logStats(TestStats $stats, StepsContainer $steps)
+    {
+        $details = array();
+        foreach ($stats->getStatisticStatusTypes() as $type) {
+            if ($stats->getScenarioStatusCount($type)) {
+                $details[] = sprintf('<%s>%d %s</%s>',
+                    $type, $stats->getScenarioStatusCount($type), $type, $type
+                );
+            }
+        }
+        $this->output->writeln(sprintf('%d scenarios (%s)',
+            $stats->getScenariosCount(), implode(', ', $details)
+        ));
+
+        $details = array();
+        foreach ($stats->getStatisticStatusTypes() as $type) {
+            if ($stats->getStepStatusCount($type)) {
+                $details[] = sprintf('<%s>%d %s</%s>',
+                    $type, $stats->getStepStatusCount($type), $type, $type
+                );
+            }
+        }
+        $this->output->writeln(sprintf('%d steps (%s)',
+            $stats->getStepsCount(), implode(', ', $details)
+        ));
+
+        if ($stats->getStepStatusCount('undefined')) {
+            $this->output->writeln(sprintf(
+                "\n<undefined>You can implement step definitions for undefined steps with these snippets:%s</undefined>\n",
+                $steps->getUndefinedStepsSnippets()
+            ));
+        } else {
+            $this->output->writeln('');
         }
     }
 }

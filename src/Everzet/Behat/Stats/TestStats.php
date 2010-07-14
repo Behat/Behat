@@ -50,4 +50,11 @@ class TestStats
 
         return $count;
     }
+
+    public function getStatisticStatusTypes()
+    {
+        return array(
+            'failed', 'undefined', 'passed'
+        );
+    }
 }

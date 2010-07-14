@@ -91,14 +91,18 @@ class FeatureRuner
                 $this->printer->logScenarioOutline($scenario);
                 foreach ($scenario->getExamples() as $values) {
                     $this->world->flush();
-                    $this->runFeatureBackgrounds($feature);
-                    $featureStats->addScenarioStatuses($this->runScenario($scenario, $values));
+
+                    $stats = $this->runFeatureBackgrounds($feature);
+                    $stats->mergeStatuses($this->runScenario($scenario, $values));
+                    $featureStats->addScenarioStatuses($stats);
                 }
             } else {
                 $this->world->flush();
-                $this->runFeatureBackgrounds($feature);
                 $this->printer->logScenario($scenario);
-                $featureStats->addScenarioStatuses($this->runScenario($scenario));
+
+                $stats = $this->runFeatureBackgrounds($feature);
+                $stats->mergeStatuses($this->runScenario($scenario));
+                $featureStats->addScenarioStatuses($stats);
             }
         }
 
@@ -109,12 +113,18 @@ class FeatureRuner
      * Runs feature backgrounds (called between scenarios)
      *
      * @param   Feature $feature    feature instance
+     * 
+     * @return  \Everzet\Behat\Stats\ScenarioStats  background steps statuses
      */
     public function runFeatureBackgrounds(Feature $feature)
     {
+        $backgroundsStats = new ScenarioStats;
+
         foreach ($feature->getBackgrounds() as $background) {
-            $this->runScenario($background);
+            $backgroundsStats->mergeStatuses($this->runScenario($background));
         }
+
+        return $backgroundsStats;
     }
 
     /**

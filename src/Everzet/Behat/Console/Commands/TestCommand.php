@@ -45,7 +45,7 @@ class TestCommand extends Command
         $this->setName('test');
 
         $this->setDefinition(array(
-            new InputArgument('features', InputArgument::OPTIONAL, 'Features folder', './features')
+            new InputArgument('features', InputArgument::OPTIONAL, 'Features folder', 'features')
         ));
     }
 
@@ -54,7 +54,10 @@ class TestCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $basePath = realpath(dirname($input->getArgument('features')));
+        $basePath = realpath($input->getArgument('features'));
+        if (is_dir($basePath.'/features')) {
+            $basePath .= '/features';
+        }
 
         // Init test printer
         $printer = new ConsolePrinter($output, $basePath, $input->getOption('verbose'));
@@ -85,33 +88,7 @@ class TestCommand extends Command
             $stats->addFeatureStatuses($runer->run());
             $output->writeln('');
         }
-        $this->writeStats($stats, $output);
 
-        if ($stats->getStepStatusCount('undefined')) {
-            $output->writeln(sprintf(
-                "\n<undefined>You can implement step definitions for undefined steps with these snippets:%s</undefined>\n",
-                $steps->getUndefinedStepsSnippets()
-            ));
-        } else {
-            $output->writeln('');
-        }
-    }
-
-    protected function writeStats(TestStats $stats, OutputInterface $output)
-    {
-        $output->writeln(sprintf(
-            '%d scenarios (<failed>%d failed</failed>, <undefined>%d undefined</undefined>, <passed>%d passed</passed>)',
-            $stats->getScenariosCount(),
-            $stats->getScenarioStatusCount('failed'),
-            $stats->getScenarioStatusCount('undefined'),
-            $stats->getScenarioStatusCount('passed')
-        ));
-        $output->writeln(sprintf(
-            '%d steps (<failed>%d failed</failed>, <undefined>%d undefined</undefined>, <passed>%d passed</passed>)',
-            $stats->getStepsCount(),
-            $stats->getStepStatusCount('failed'),
-            $stats->getStepStatusCount('undefined'),
-            $stats->getStepStatusCount('passed')
-        ));
+        $printer->logStats($stats, $steps);
     }
 }
