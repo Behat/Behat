@@ -16,7 +16,7 @@ if (is_file(__DIR__.'/../autoload.php')) {
 }
 
 // Inject command in application call
-array_splice($argv, 1, 0, 'test');
+array_splice($argv, 1, 0, 'behat');
 
 $app = new \Everzet\Behat\Console\BehatApplication();
 $app->run(

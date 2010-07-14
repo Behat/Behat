@@ -4,7 +4,7 @@ namespace Everzet\Behat\Console;
 
 use \Symfony\Components\Console\Application as BaseApplication;
 
-use \Everzet\Behat\Console\Commands\TestCommand;
+use \Everzet\Behat\Console\Commands\BehatCommand;
 
 /*
  * This file is part of the behat package.
@@ -31,7 +31,7 @@ class BehatApplication extends BaseApplication
         parent::__construct('BehaviorTester', '0.1');
 
         $this->addCommands(array(
-            new TestCommand()
+            new BehatCommand()
         ));
     }
 }
