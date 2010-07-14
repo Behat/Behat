@@ -157,7 +157,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('Then', $step->getType());
         $this->assertEquals('I should see', $step->getText());
-        $this->assertEquals(array('a string'), $step->getArguments());
+        $this->assertEquals('a string', (string) end($step->getArguments()));
     }
 
     public function testUndefinedMultilineArgs()
@@ -177,7 +177,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $step = end($scenarios[0]->getSteps());
         $this->assertEquals('Given', $step->getType());
         $this->assertEquals('a pystring', $step->getText());
-        $this->assertEquals(array('  example'), $step->getArguments());
+        $this->assertEquals('  example', (string) end($step->getArguments()));
 
         $this->assertEquals('table', $scenarios[1]->getTitle());
         $this->assertEquals(1, count($scenarios[0]->getSteps()));
@@ -589,6 +589,6 @@ be
 a
 u
   ti
-    ful', end(end(end($feature->getScenarios())->getSteps())->getArguments()));
+    ful', (string) end(end(end($feature->getScenarios())->getSteps())->getArguments()));
     }
 }

@@ -3,6 +3,8 @@
 namespace Everzet\Gherkin;
 
 use \Everzet\Gherkin\ParserException;
+use \Everzet\Gherkin\InlineStructures\PyString;
+use \Everzet\Gherkin\InlineStructures\Table;
 
 /*
  * This file is part of the behat package.
@@ -174,7 +176,7 @@ class Parser
             }
 
             $step = new Step($values['type'], $values['step']);
-            if ('' !== $pystring = $this->getNextPyString()) {
+            if (null !== ($pystring = $this->getNextPyString())) {
                 $step->addArgument($pystring);
             }
             if (count($table = $this->getNextTable())) {
@@ -189,25 +191,24 @@ class Parser
 
     protected function getNextPyString()
     {
-        $value  = '';
+        $pystring = null;
 
         if (
             $this->moveToNextLine() &&
             preg_match($this->regex->getPyStringStarterRegex(), $this->currentLine, $values)
         ) {
-            $trimSpaces = strlen($values['indent']);
+            $pystring = new PyString(strlen($values['indent']));
+
             while (
                 $this->moveToNextLine() &&
                 !preg_match($this->regex->getPyStringStarterRegex(), $this->currentLine)
             ) {
-                $value .= preg_replace(
-                    "/^\s{0,$trimSpaces}/", '', $this->currentLine
-                ) . "\n";
+                $pystring->addLine($this->currentLine);
             }
         }
         $this->moveToPreviousLine();
 
-        return rtrim($value);
+        return $pystring;
     }
 
     protected function getNextTable()

@@ -2,6 +2,7 @@
 
 namespace Everzet\Behat\Definitions;
 
+use \Everzet\Gherkin\InlineStructures\PyString;
 use \Everzet\Behat\Exceptions\Error;
 
 /*
@@ -137,7 +138,15 @@ class StepDefinition
     public function run()
     {
         $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL);
-        call_user_func_array($this->callback, $this->values);
+
+        call_user_func_array($this->callback, array_map(function($value) {
+            if ($value instanceof PyString) {
+                return (string) $value;
+            } else {
+                return $value;
+            }
+        }, $this->values));
+
         if (null !== $oldHandler) {
             set_error_handler($oldHandler);
         }
