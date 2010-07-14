@@ -2,6 +2,8 @@
 
 namespace Everzet\Behat\Environment;
 
+use \Everzet\Behat\Environment\World;
+
 /*
  * This file is part of the behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>

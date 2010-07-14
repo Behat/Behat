@@ -2,6 +2,8 @@
 
 namespace Everzet\Behat\Stats;
 
+use \Everzet\Behat\Stats\FeatureStats;
+
 class TestStats
 {
     protected $featuresStats = array();

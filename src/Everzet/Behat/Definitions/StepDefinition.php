@@ -2,8 +2,8 @@
 
 namespace Everzet\Behat\Definitions;
 
-use \Everzet\Gherkin\InlineStructures\PyString;
-use \Everzet\Gherkin\InlineStructures\Table;
+use \Everzet\Gherkin\Structures\Inline\PyString;
+use \Everzet\Gherkin\Structures\Inline\Table;
 use \Everzet\Behat\Exceptions\Error;
 
 /*

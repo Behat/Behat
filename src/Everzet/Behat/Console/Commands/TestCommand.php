@@ -9,10 +9,6 @@ use \Symfony\Components\Console\Input\InputOption;
 use \Symfony\Components\Console\Output\OutputInterface;
 use \Symfony\Components\Finder\Finder;
 
-use \Everzet\Gherkin\Feature;
-use \Everzet\Gherkin\Background;
-use \Everzet\Gherkin\Scenario;
-use \Everzet\Gherkin\ScenarioOutline;
 use \Everzet\Behat\FeatureRuner;
 use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Environment\SimpleWorld;

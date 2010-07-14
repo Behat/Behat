@@ -1,6 +1,8 @@
 <?php
 
-namespace Everzet\Gherkin;
+namespace Everzet\Gherkin\Structures\Scenario;
+
+use \Everzet\Gherkin\Structures\Scenario\Background;
 
 /*
  * This file is part of the behat package.

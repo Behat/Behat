@@ -2,9 +2,9 @@
 
 namespace Everzet\Behat\Definitions;
 
-use \Everzet\Gherkin\Step;
-use \Everzet\Gherkin\InlineStructures\PyString;
-use \Everzet\Gherkin\InlineStructures\Table;
+use \Everzet\Gherkin\Structures\Step;
+use \Everzet\Gherkin\Structures\Inline\PyString;
+use \Everzet\Gherkin\Structures\Inline\Table;
 use \Everzet\Behat\Definitions\StepDefinition;
 use \Everzet\Behat\Exceptions\Redundant;
 use \Everzet\Behat\Exceptions\Ambiguous;

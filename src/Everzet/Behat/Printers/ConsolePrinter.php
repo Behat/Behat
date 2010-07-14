@@ -2,16 +2,17 @@
 
 namespace Everzet\Behat\Printers;
 
-use \Everzet\Gherkin\Feature;
-use \Everzet\Gherkin\Background;
-use \Everzet\Gherkin\ScenarioOutline;
-use \Everzet\Gherkin\Scenario;
-use \Everzet\Gherkin\Step;
-use \Everzet\Gherkin\InlineStructures\PyString;
-use \Everzet\Gherkin\InlineStructures\Table;
-use \Everzet\Gherkin\InlineStructures\Examples;
+use \Everzet\Gherkin\Structures\Feature;
+use \Everzet\Gherkin\Structures\Step;
+use \Everzet\Gherkin\Structures\Scenario\Background;
+use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
+use \Everzet\Gherkin\Structures\Scenario\Scenario;
+use \Everzet\Gherkin\Structures\Inline\PyString;
+use \Everzet\Gherkin\Structures\Inline\Table;
+use \Everzet\Gherkin\Structures\Inline\Examples;
 use \Everzet\Behat\Stats\TestStats;
 use \Everzet\Behat\Definitions\StepsContainer;
+use \Everzet\Behat\Printers\Printer;
 
 use \Symfony\Components\Console\Output\OutputInterface;
 

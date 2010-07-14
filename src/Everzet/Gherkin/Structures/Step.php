@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin;
+namespace Everzet\Gherkin\Structures;
 
 /*
  * This file is part of the behat package.

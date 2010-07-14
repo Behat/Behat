@@ -2,6 +2,8 @@
 
 namespace Everzet\Behat\Exceptions;
 
+use \Everzet\Behat\Exceptions\BehaviorException as BaseException;
+
 /*
  * This file is part of the behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -17,7 +19,7 @@ namespace Everzet\Behat\Exceptions;
  * @subpackage  Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Ambiguous extends BehaviorException
+class Ambiguous extends BaseException
 {
     protected $text;
     protected $matches = array();

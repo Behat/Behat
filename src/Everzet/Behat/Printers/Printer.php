@@ -2,10 +2,10 @@
 
 namespace Everzet\Behat\Printers;
 
-use \Everzet\Gherkin\Feature;
-use \Everzet\Gherkin\Background;
-use \Everzet\Gherkin\ScenarioOutline;
-use \Everzet\Gherkin\Scenario;
+use \Everzet\Gherkin\Structures\Feature;
+use \Everzet\Gherkin\Structures\Scenario\Background;
+use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
+use \Everzet\Gherkin\Structures\Scenario\Scenario;
 use \Everzet\Behat\Stats\TestStats;
 use \Everzet\Behat\Definitions\StepsContainer;
 

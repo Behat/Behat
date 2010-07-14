@@ -3,9 +3,14 @@
 namespace Everzet\Gherkin;
 
 use \Everzet\Gherkin\ParserException;
-use \Everzet\Gherkin\InlineStructures\PyString;
-use \Everzet\Gherkin\InlineStructures\Table;
-use \Everzet\Gherkin\InlineStructures\Examples;
+use \Everzet\Gherkin\Structures\Feature;
+use \Everzet\Gherkin\Structures\Step;
+use \Everzet\Gherkin\Structures\Scenario\Background;
+use \Everzet\Gherkin\Structures\Scenario\Scenario;
+use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
+use \Everzet\Gherkin\Structures\Inline\PyString;
+use \Everzet\Gherkin\Structures\Inline\Table;
+use \Everzet\Gherkin\Structures\Inline\Examples;
 
 /*
  * This file is part of the behat package.

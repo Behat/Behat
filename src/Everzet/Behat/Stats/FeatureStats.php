@@ -2,6 +2,8 @@
 
 namespace Everzet\Behat\Stats;
 
+use \Everzet\Behat\Stats\ScenarioStats;
+
 class FeatureStats
 {
     protected $scenariosStats = array();

@@ -1,6 +1,10 @@
 <?php
 
-namespace Everzet\Gherkin;
+namespace Everzet\Gherkin\Structures;
+
+use \Everzet\Gherkin\Structures\Section;
+use \Everzet\Gherkin\Structures\Scenario\Background;
+use \Everzet\Gherkin\Structures\Scenario\Scenario;
 
 /*
  * This file is part of the behat package.

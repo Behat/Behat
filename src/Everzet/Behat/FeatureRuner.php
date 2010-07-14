@@ -3,11 +3,11 @@
 namespace Everzet\Behat;
 
 use \Everzet\Gherkin\Parser;
-use \Everzet\Gherkin\Feature;
-use \Everzet\Gherkin\Background;
-use \Everzet\Gherkin\ScenarioOutline;
-use \Everzet\Gherkin\Scenario;
-use \Everzet\Gherkin\Step;
+use \Everzet\Gherkin\Structures\Feature;
+use \Everzet\Gherkin\Structures\Step;
+use \Everzet\Gherkin\Structures\Scenario\Background;
+use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
+use \Everzet\Gherkin\Structures\Scenario\Scenario;
 use \Everzet\Behat\Stats\ScenarioStats;
 use \Everzet\Behat\Stats\FeatureStats;
 use \Everzet\Behat\Definitions\StepsContainer;
