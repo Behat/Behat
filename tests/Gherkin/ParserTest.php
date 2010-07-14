@@ -591,7 +591,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $feature = $this->loadFeature('empty_outline.feature');
     }
 
-    public function testTrimPyStringFeature()
+    public function testTrimPyString()
     {
         $feature = $this->loadFeature('trimpystring.feature');
 
@@ -602,5 +602,28 @@ a
 u
   ti
     ful', (string) end(end(end($feature->getScenarios())->getSteps())->getArguments()));
+    }
+
+    public function testMultiplePyString()
+    {
+        $feature = $this->loadFeature('multiplepystrings.feature');
+
+        $steps = end($feature->getScenarios())->getSteps();
+
+        $this->assertEquals(2, count($steps));
+        $this->assertEquals('   a string
+  with something
+be
+a
+u
+  ti
+    ful', (string) end($steps[0]->getArguments()));
+        $this->assertEquals('   a string
+  with something
+be
+a
+u
+  ti
+    ful', (string) end($steps[1]->getArguments()));
     }
 }

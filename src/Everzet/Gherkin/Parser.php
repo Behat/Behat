@@ -206,8 +206,9 @@ class Parser
             ) {
                 $pystring->addLine($this->currentLine);
             }
+        } else {
+            $this->moveToPreviousLine();
         }
-        $this->moveToPreviousLine();
 
         return $pystring;
     }
