@@ -76,7 +76,7 @@ class StepsContainer
         $snippets = '';
 
         foreach ($this->undefinedSteps as $regexp => $step) {
-            $snippets .= sprintf("\n\n\%s", $regexp);
+            $snippets .= sprintf("\n\n%s", $regexp);
         }
 
         return $snippets;
@@ -100,7 +100,7 @@ class StepsContainer
             $args[] = "\$arg".($i + 1);
         }
 
-        return sprintf("\$steps->%s('/^%s$/', function(%s) use(\$world) {\n  throw new \Everzet\Behat\Exceptions\Pending;\n});",
+        return sprintf("\$steps->%s('/^%s$/', function(%s) use(\$world) {\n    throw new \Everzet\Behat\Exceptions\Pending;\n});",
             $step->getType(), $regexp, implode(', ', $args)
         );
     }

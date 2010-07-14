@@ -193,18 +193,21 @@ class Parser
 
         if (
             $this->moveToNextLine() &&
-            preg_match($this->regex->getPyStringStarterRegex(), $this->currentLine)
+            preg_match($this->regex->getPyStringStarterRegex(), $this->currentLine, $values)
         ) {
+            $trimSpaces = strlen($values['indent']);
             while (
                 $this->moveToNextLine() &&
                 !preg_match($this->regex->getPyStringStarterRegex(), $this->currentLine)
             ) {
-                $value .= $this->currentLine . "\n";
+                $value .= preg_replace(
+                    "/^\s{0,$trimSpaces}/", '', $this->currentLine
+                ) . "\n";
             }
         }
         $this->moveToPreviousLine();
 
-        return trim($value);
+        return rtrim($value);
     }
 
     protected function getNextTable()

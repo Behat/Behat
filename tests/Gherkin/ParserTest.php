@@ -7,7 +7,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     private function loadFeature($path)
     {
         $parser = new Parser;
-        return $parser->parse(file_get_contents(__DIR__ . '/../fixtures/features/' . $path));
+        return $parser->parse(file_get_contents(__DIR__ . '/fixtures/features/' . $path));
     }
 
     public function testDosLineEndingsFeature()
@@ -177,7 +177,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $step = end($scenarios[0]->getSteps());
         $this->assertEquals('Given', $step->getType());
         $this->assertEquals('a pystring', $step->getText());
-        $this->assertEquals(array('example'), $step->getArguments());
+        $this->assertEquals(array('  example'), $step->getArguments());
 
         $this->assertEquals('table', $scenarios[1]->getTitle());
         $this->assertEquals(1, count($scenarios[0]->getSteps()));
@@ -577,5 +577,18 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\Everzet\Gherkin\ParserException');
         $feature = $this->loadFeature('empty_outline.feature');
+    }
+
+    public function testTrimPyStringFeature()
+    {
+        $feature = $this->loadFeature('trimpystring.feature');
+
+        $this->assertEquals('   a string
+  with something
+be
+a
+u
+  ti
+    ful', end(end(end($feature->getScenarios())->getSteps())->getArguments()));
     }
 }

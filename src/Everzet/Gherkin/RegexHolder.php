@@ -103,7 +103,7 @@ abstract class RegexHolder
 
     public function getPyStringStarterRegex()
     {
-        return '#^\s*\"\"\"\s*$#';
+        return '#^(?P<indent>\s*?)\"\"\"\s*$#';
     }
 
     public function getTableRegex()
