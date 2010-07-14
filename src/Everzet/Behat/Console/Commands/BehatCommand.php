@@ -84,7 +84,7 @@ class BehatCommand extends Command
         $i18n = new I18n(realpath(__DIR__ . '/../../../../../i18n'));
 
         // Init test printer
-        $printer = new ConsolePrinter($output, $basePath, $input->getOption('verbose'));
+        $printer = new ConsolePrinter($output, $i18n, $basePath, $input->getOption('verbose'));
 
         // Init statistics container
         $stats = new TestStats;

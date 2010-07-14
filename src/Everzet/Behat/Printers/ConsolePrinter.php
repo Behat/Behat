@@ -2,6 +2,7 @@
 
 namespace Everzet\Behat\Printers;
 
+use \Everzet\Gherkin\I18n;
 use \Everzet\Gherkin\Structures\Feature;
 use \Everzet\Gherkin\Structures\Step;
 use \Everzet\Gherkin\Structures\Scenario\Background;
@@ -33,6 +34,7 @@ use \Symfony\Components\Console\Output\OutputInterface;
  */
 class ConsolePrinter implements Printer
 {
+    protected $i18n;
     protected $verbose;
     protected $output;
     protected $basePath;
@@ -41,10 +43,13 @@ class ConsolePrinter implements Printer
      * Constructs new printer
      *
      * @param   OutputInterface $output     Symfony's OutputInterface object
+     * @param   I18n            $i18n       I18n instance
      * @param   string          $basePath   features base path
+     * @param   boolean         $verbose    is output verbose
      */
-    public function __construct(OutputInterface $output, $basePath, $verbose = false)
+    public function __construct(OutputInterface $output, I18n $i18n, $basePath, $verbose = false)
     {
+        $this->i18n = $i18n;
         $this->output = $output;
         $this->basePath = $basePath;
         $this->verbose = $verbose;
@@ -82,7 +87,8 @@ class ConsolePrinter implements Printer
      */
     public function logFeature(Feature $feature, $file)
     {
-        $this->output->writeln(sprintf("Feature: %s  <comment>#%s</comment>",
+        $this->output->writeln(sprintf("%s: %s  <comment>#%s</comment>",
+            $this->i18n->__('feature', 'Feature'),
             $feature->getTitle(), $this->ltrimPaths(realpath($file))
         ));
         foreach ($feature->getDescription() as $description) {
@@ -95,7 +101,8 @@ class ConsolePrinter implements Printer
      */
     public function logBackground(Background $background)
     {
-        $this->output->writeln(sprintf("\n  <passed>Background: %s</passed>",
+        $this->output->writeln(sprintf("\n  <passed>%s: %s</passed>",
+            $this->i18n->__('background', 'Background'),
             $background->getTitle()
         ));
     }
@@ -105,7 +112,8 @@ class ConsolePrinter implements Printer
      */
     public function logScenarioOutline(ScenarioOutline $scenario)
     {
-        $this->output->writeln(sprintf("\n  <passed>Scenario Outline: %s</passed>",
+        $this->output->writeln(sprintf("\n  <passed>%s: %s</passed>",
+            $this->i18n->__('scenario-outline', 'Scenario Outline'),
             $scenario->getTitle()
         ));
     }
@@ -115,7 +123,8 @@ class ConsolePrinter implements Printer
      */
     public function logScenario(Scenario $scenario)
     {
-        $this->output->writeln(sprintf("\n  <passed>Scenario: %s</passed>",
+        $this->output->writeln(sprintf("\n  <passed>%s: %s</passed>",
+            $this->i18n->__('scenario', 'Scenario'),
             $scenario->getTitle()
         ));
     }
