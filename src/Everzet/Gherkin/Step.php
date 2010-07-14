@@ -56,6 +56,11 @@ class Step
         return count($this->arguments) > 0;
     }
 
+    public function getArgumentsCount()
+    {
+        return count($this->arguments);
+    }
+
     public function getArguments()
     {
         return $this->arguments;

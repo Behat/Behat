@@ -85,23 +85,23 @@ class StepsContainer
     /**
      * Translates step description into definition
      *
-     * @param   string  $type   step type
+     * @param   Step    $step   step instance
      * @param   string  $text   step test
      * 
      * @return  string          definition
      */
-    protected function convertDescriptionToDefinition($type, $text)
+    protected function convertDescriptionToDefinition($step, $text)
     {
         $regexp = preg_replace(
             array('/\"([\w ]+)\"/', '/(\d+)/'), array("\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
         );
         $args = array();
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < ($count + $step->getArgumentsCount()); $i++) {
             $args[] = "\$arg".($i + 1);
         }
 
         return sprintf("\$steps->%s('/^%s$/', function(%s) use(\$world) {\n  throw new \Everzet\Behat\Exceptions\Pending;\n});",
-            $type, $regexp, implode(', ', $args)
+            $step->getType(), $regexp, implode(', ', $args)
         );
     }
 
@@ -134,7 +134,7 @@ class StepsContainer
         }
 
         if (0 === count($matches)) {
-            $regexp = $this->convertDescriptionToDefinition($step->getType(), $text);
+            $regexp = $this->convertDescriptionToDefinition($step, $text);
             $this->undefinedSteps[$regexp] = $step;
             throw new Undefined($text);
         }
