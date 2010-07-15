@@ -1,5 +1,7 @@
+@feature @fast
 Feature: A py string feature
 
+  @string @slow @everzet
   Scenario: 
     When I enter a string
    """

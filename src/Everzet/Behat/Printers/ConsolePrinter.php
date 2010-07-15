@@ -3,6 +3,7 @@
 namespace Everzet\Behat\Printers;
 
 use \Everzet\Gherkin\I18n;
+use \Everzet\Gherkin\Structures\Section;
 use \Everzet\Gherkin\Structures\Feature;
 use \Everzet\Gherkin\Structures\Step;
 use \Everzet\Gherkin\Structures\Scenario\Background;
@@ -87,6 +88,9 @@ class ConsolePrinter implements Printer
      */
     public function logFeature(Feature $feature, $file)
     {
+        if ($feature->hasTags()) {
+            $this->output->writeln(sprintf("<tag>%s</tag>", $this->getTagsString($feature)));
+        }
         $this->output->writeln(sprintf("%s: %s  <comment>#%s</comment>",
             $this->i18n->__('feature', 'Feature'),
             $feature->getTitle(), $this->ltrimPaths(realpath($file))
@@ -112,7 +116,12 @@ class ConsolePrinter implements Printer
      */
     public function logScenarioOutline(ScenarioOutline $scenario)
     {
-        $this->output->writeln(sprintf("\n  <passed>%s: %s</passed>",
+        if ($scenario->hasTags()) {
+            $this->output->writeln(sprintf("\n  <tag>%s</tag>", $this->getTagsString($scenario)));
+        } else {
+            $this->output->writeln('');
+        }
+        $this->output->writeln(sprintf("  <passed>%s: %s</passed>",
             $this->i18n->__('scenario-outline', 'Scenario Outline'),
             $scenario->getTitle()
         ));
@@ -123,7 +132,12 @@ class ConsolePrinter implements Printer
      */
     public function logScenario(Scenario $scenario)
     {
-        $this->output->writeln(sprintf("\n  <passed>%s: %s</passed>",
+        if ($scenario->hasTags()) {
+            $this->output->writeln(sprintf("\n  <tag>%s</tag>", $this->getTagsString($scenario)));
+        } else {
+            $this->output->writeln('');
+        }
+        $this->output->writeln(sprintf("  <passed>%s: %s</passed>",
             $this->i18n->__('scenario', 'Scenario'),
             $scenario->getTitle()
         ));
@@ -176,6 +190,23 @@ class ConsolePrinter implements Printer
                 ));
             }
         }
+    }
+
+    /**
+     * Returns formatted tag string, prepared for console output
+     *
+     * @param   Section $section    section instance
+     * 
+     * @return  string
+     */
+    protected function getTagsString(Section $section)
+    {
+        $tags = array();
+        foreach ($section->getTags() as $tag) {
+            $tags[] = '@' . $tag;
+        }
+
+        return implode(' ', $tags);
     }
 
     /**
