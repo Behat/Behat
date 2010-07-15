@@ -40,10 +40,34 @@ class SimpleWorld implements World
   public function flush()
   {
       $this->values = array();
+      $world = $this;
 
       if (null !== $this->file && is_file($this->file)) {
           require $this->file;
       }
+  }
+
+  /**
+   * Calls previously saved in values closure
+   *
+   * @param     string  $fn     function name
+   * @param     array   $args   closure arguments
+   * 
+   * @return    mixed
+   */
+  public function __call($fn, array $args)
+  {
+    if (isset($this->values[$fn]) && is_callable($this->values[$fn])) {
+        return call_user_func_array($this->values[$fn], $args);
+    } else {
+        $trace = debug_backtrace();
+        trigger_error(
+            'Call to undefined method ' . get_class($this) . '::' . $fn .
+            ' in ' . $trace[0]['file'] .
+            ' on line ' . $trace[0]['line'],
+            E_FATAL_ERROR
+        );
+    }
   }
 
   /**
