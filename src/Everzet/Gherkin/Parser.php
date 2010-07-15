@@ -211,7 +211,7 @@ class Parser
             $this->moveToNextLine() &&
             preg_match($this->regex->getPyStringStarterRegex(), $this->currentLine, $values)
         ) {
-            $pystring = new PyString(strlen($values['indent']));
+            $pystring = new PyString(mb_strlen($values['indent']));
 
             while (
                 $this->moveToNextLine() &&

@@ -41,11 +41,20 @@ class Table
         }
     }
 
+    protected function padRight($text, $length)
+    {
+        while ($length > mb_strlen($text)) {
+            $text = $text . ' ';
+        }
+
+        return $text;
+    }
+
     public function getKeysAsString()
     {
         $keys = array();
         foreach ($this->keys as $col => $key) {
-            $keys[] = str_pad(' '.$key.' ', $this->getMaxLengthForColumn($col) + 2);
+            $keys[] = $this->padRight(' '.$key.' ', $this->getMaxLengthForColumn($col) + 2);
         }
 
         return sprintf('|%s|', implode('|', $keys));
@@ -55,7 +64,7 @@ class Table
     {
         $values = array();
         foreach ($this->values[$rowNum] as $col => $value) {
-            $values[] = str_pad(' '.$value.' ', $this->getMaxLengthForColumn($col) + 2);
+            $values[] = $this->padRight(' '.$value.' ', $this->getMaxLengthForColumn($col) + 2);
         }
 
         return sprintf('|%s|', implode('|', $values));
@@ -74,10 +83,10 @@ class Table
     public function getMaxLengthForColumn($columnNum)
     {
         $key = $this->keys[$columnNum];
-        $max = strlen($key);
+        $max = mb_strlen($key);
 
         foreach ($this->getHash() as $row) {
-            if (($tmp = strlen($row[$key])) > $max) {
+            if (($tmp = mb_strlen($row[$key])) > $max) {
                 $max = $tmp;
             }
         }

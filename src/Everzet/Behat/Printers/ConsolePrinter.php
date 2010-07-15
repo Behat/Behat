@@ -144,7 +144,7 @@ class ConsolePrinter implements Printer
             );
             $this->output->write($description);
 
-            $this->logLineSourceComment(strlen($description), $this->file, $background->getLine());
+            $this->logLineSourceComment(mb_strlen($description), $this->file, $background->getLine());
         }
     }
 
@@ -179,7 +179,7 @@ class ConsolePrinter implements Printer
             $scenario->getTitle() ? ' ' . $scenario->getTitle() : ''
         );
         $this->output->write($description);
-        $this->logLineSourceComment(strlen($description), $this->file, $scenario->getLine());
+        $this->logLineSourceComment(mb_strlen($description), $this->file, $scenario->getLine());
     }
 
     /**
@@ -205,7 +205,7 @@ class ConsolePrinter implements Printer
                 $description = sprintf('    %s %s', $step->getType(), $step->getText());
                 $this->output->write(sprintf("\033[36m%s\033[0m", $description), false, 1);
                 $this->logLineSourceComment(
-                    strlen($description),
+                    mb_strlen($description),
                     $this->outlineStepsInfo[$i][0],
                     $this->outlineStepsInfo[$i][1]
                 );
@@ -269,7 +269,7 @@ class ConsolePrinter implements Printer
             $scenario->getTitle() ? ' ' . $scenario->getTitle() : ''
         );
         $this->output->write($description);
-        $this->logLineSourceComment(strlen($description), $this->file, $scenario->getLine());
+        $this->logLineSourceComment(mb_strlen($description), $this->file, $scenario->getLine());
     }
 
     /**
@@ -299,7 +299,7 @@ class ConsolePrinter implements Printer
 
             if (null !== $file && null !== $line) {
                 $this->logLineSourceComment(
-                    strlen($description),
+                    mb_strlen($description),
                     $file, $line
                 );
             } else {
@@ -378,21 +378,21 @@ class ConsolePrinter implements Printer
     {
         $max = $this->stepsMaxLength;
 
-        if ($scenario instanceof Scenario) {
-            $type = $this->i18n->__('scenario', 'Scenario') . ':';
-        } else if ($scenario instanceof ScenarioOutline) {
+        if ($scenario instanceof ScenarioOutline) {
             $type = $this->i18n->__('scenario-outline', 'Scenario Outline') . ':';
+        } else if ($scenario instanceof Scenario) {    
+            $type = $this->i18n->__('scenario', 'Scenario') . ':';
         } else if ($scenario instanceof Background) {
             $type = $this->i18n->__('background', 'Background') . ':';
         }
         $scenarioDescription = $scenario->getTitle() ? $type . ' ' . $scenario->getTitle() : $type;
 
-        if (($tmp = strlen($scenarioDescription) + 2) > $max) {
+        if (($tmp = mb_strlen($scenarioDescription) + 2) > $max) {
             $max = $tmp;
         }
         foreach ($scenario->getSteps() as $step) {
             $stepDescription = $step->getType() . ' ' . $step->getText();
-            if (($tmp = strlen($stepDescription) + 4) > $max) {
+            if (($tmp = mb_strlen($stepDescription) + 4) > $max) {
                 $max = $tmp;
             }
         }
