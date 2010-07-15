@@ -71,6 +71,7 @@ class FeatureRuner
      */
     public function run()
     {
+        $this->printer->setFile($this->file);
         $parser = new Parser($this->i18n);
         $feature = $parser->parse(file_get_contents($this->file));
 
@@ -91,26 +92,13 @@ class FeatureRuner
         $this->printer->logFeatureBegin($feature, $this->file);
         foreach ($feature->getScenarios() as $scenario) {
             if ($scenario instanceof ScenarioOutline) {
-                $this->printer->logScenarioOutlineBegin($scenario);
-                foreach ($scenario->getExamples()->getTable()->getHash() as $values) {
-                    $this->world->flush();
-                    $stats = $this->runFeatureBackgrounds($feature);
-
-                    $this->printer->logScenarioBegin($scenario);
-                    $stats->mergeStatuses($this->runScenario($scenario, $values));
-                    $this->printer->logScenarioEnd($scenario);
-
+                foreach ($this->runScenarioOutline($scenario, $feature) as $stats) {
                     $featureStats->addScenarioStatuses($stats);
                 }
-                $this->printer->logScenarioOutlineEnd($scenario);
             } else {
                 $this->world->flush();
                 $stats = $this->runFeatureBackgrounds($feature);
-
-                $this->printer->logScenarioBegin($scenario);
                 $stats->mergeStatuses($this->runScenario($scenario));
-                $this->printer->logScenarioEnd($scenario);
-
                 $featureStats->addScenarioStatuses($stats);
             }
         }
@@ -132,21 +120,57 @@ class FeatureRuner
 
         foreach ($feature->getBackgrounds() as $background) {
             $this->printer->logBackgroundBegin($background);
-            $backgroundsStats->mergeStatuses($this->runScenario($background));
+            $backgroundsStats->mergeStatuses($this->runScenarioSteps($background));
             $this->printer->logBackgroundEnd($background);
         }
 
         return $backgroundsStats;
     }
 
+    public function runScenarioOutline(ScenarioOutline $outline, Feature $feature)
+    {
+        $scenariosStats = array();
+
+        $this->printer->logScenarioOutlineBegin($outline);
+        foreach ($outline->getExamples()->getTable()->getHash() as $values) {
+            $this->world->flush();
+
+            $stats = $this->runFeatureBackgrounds($feature);
+            $stats->mergeStatuses($this->runScenarioSteps($outline, $values, true));
+
+            $scenariosStats[] = $stats;
+        }
+        $this->printer->logScenarioOutlineEnd($outline);
+
+        return $scenariosStats;
+    }
+
     /**
      * Runs Scenario tests
+     *
+     * @param   Scenario    $scenario   background instance
+     * @param   array       $values     examples values
+     * 
+     * @return  \Everzet\Behat\Stats\ScenarioStats  scenario steps statuses
+     */
+    public function runScenario(Scenario $scenario, array $values = array())
+    {
+        $this->printer->logScenarioBegin($scenario);
+        $scenarioStats = $this->runScenarioSteps($scenario, $values);
+        $this->printer->logScenarioEnd($scenario);
+
+        return $scenarioStats;
+    }
+
+    /**
+     * Runs Scenario steps
      *
      * @param   Background  $scenario               background instance
      * 
      * @return  \Everzet\Behat\Stats\ScenarioStats  scenario steps statuses
      */
-    public function runScenario(Background $scenario, array $values = array())
+    public function runScenarioSteps(Background $scenario, array $values = array(),
+                                     $inOutline = false)
     {
         $scenarioStats = new ScenarioStats;
         $skip = false;
@@ -156,6 +180,9 @@ class FeatureRuner
             if ('failed' === $scenarioStats->getLastStepStatus()) {
                 $skip = true;
             }
+        }
+        if ($inOutline) {
+            $this->printer->logIntermediateOutlineScenario($scenario);
         }
 
         return $scenarioStats;

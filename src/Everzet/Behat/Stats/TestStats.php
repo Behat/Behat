@@ -7,6 +7,18 @@ use \Everzet\Behat\Stats\FeatureStats;
 class TestStats
 {
     protected $featuresStats = array();
+    protected $startTime;
+    protected $resultTime;
+
+    public function __construct()
+    {
+        $this->startTime = microtime(true);
+    }
+
+    public function getTime()
+    {
+        return sprintf('%.0f', (microtime(true) - $this->startTime) * 1000);
+    }
 
     public function addFeatureStatuses(FeatureStats $featureStats)
     {

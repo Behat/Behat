@@ -76,7 +76,7 @@ class Parser
 
             // background?
             if (preg_match($this->regex->getBackgroundRegex(), $this->currentLine, $values)) {
-                $background = new Background;
+                $background = new Background($this->currentLineNb);
                 $background->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -87,7 +87,7 @@ class Parser
 
             // scenario?
             if (preg_match($this->regex->getScenarioRegex(), $this->currentLine, $values)) {
-                $scenario = new Scenario;
+                $scenario = new Scenario($this->currentLineNb);
                 $scenario->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -99,7 +99,7 @@ class Parser
 
             // scenario outline?
             if (preg_match($this->regex->getScenarioOutlineRegex(), $this->currentLine, $values)) {
-                $outline = new ScenarioOutline;
+                $outline = new ScenarioOutline($this->currentLineNb);
                 $outline->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -189,7 +189,7 @@ class Parser
                 break;
             }
 
-            $step = new Step($values['type'], $values['step']);
+            $step = new Step($values['type'], $values['step'], $this->currentLineNb);
             if (null !== ($pystring = $this->getNextPyString())) {
                 $step->addArgument($pystring);
             }

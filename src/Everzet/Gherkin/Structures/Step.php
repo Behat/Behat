@@ -22,11 +22,18 @@ class Step
     protected $type;
     protected $text;
     protected $arguments = array();
+    protected $line;
 
-    public function __construct($type, $text)
+    public function __construct($type, $text, $line = 0)
     {
         $this->type = $type;
         $this->text = $text;
+        $this->line = $line;
+    }
+
+    public function getLine()
+    {
+        return $this->line;
     }
 
     public function getType()

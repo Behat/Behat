@@ -23,6 +23,27 @@ use \Everzet\Gherkin\Structures\Step;
 class Background extends Section
 {
     protected $steps = array();
+    protected $line;
+
+    /**
+     * Creates new instance
+     *
+     * @param   string  $line   parsed feature line
+     */
+    public function __construct($line = 0)
+    {
+        $this->line = $line;
+    }
+
+    /**
+     * Returns line definition number
+     *
+     * @return  integer
+     */
+    public function getLine()
+    {
+        return $this->line;
+    }
 
     /**
      * Adds steps to background

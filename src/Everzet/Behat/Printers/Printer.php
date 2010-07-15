@@ -27,6 +27,13 @@ use \Everzet\Behat\Definitions\StepsContainer;
 interface Printer
 {
     /**
+     * Sets tested Feature file
+     *
+     * @param   string  $file   filename
+     */
+    public function setFile($file);
+
+    /**
      * Prints feature begin
      *
      * @param   Feature $feature    feature instance
@@ -69,6 +76,13 @@ interface Printer
      * @param   ScenarioOutline $scenario   scenario outline instance
      */
     public function logScenarioOutlineEnd(ScenarioOutline $scenario);
+
+    /**
+     * Prints intermediate scenario of outline
+     *
+     * @param   Scenario    $scenario   scenario instance
+     */
+    public function logIntermediateOutlineScenario(Scenario $scenario);
 
     /**
      * Prints scenario begin
