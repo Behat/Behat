@@ -4,3 +4,6 @@
 [submodule "vendor/Zend"]
 	path = vendor/Zend
 	url = http://github.com/zendframework/zf2.git
+[submodule "vendor/Goutte"]
+	path = vendor/Goutte
+	url = http://github.com/fabpot/Goutte.git
