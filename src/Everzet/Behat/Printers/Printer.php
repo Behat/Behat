@@ -27,33 +27,62 @@ use \Everzet\Behat\Definitions\StepsContainer;
 interface Printer
 {
     /**
-     * Prints feature
+     * Prints feature begin
      *
      * @param   Feature $feature    feature instance
      * @param   string  $file       feature file
      */
-    public function logFeature(Feature $feature, $file);
+    public function logFeatureBegin(Feature $feature, $file);
 
     /**
-     * Prints background
+     * Prints feature end
+     *
+     * @param   Feature $feature    feature instance
+     * @param   string  $file       feature file
+     */
+    public function logFeatureEnd(Feature $feature, $file);
+
+    /**
+     * Prints background begin
      *
      * @param   Background  $background background instance
      */
-    public function logBackground(Background $background);
+    public function logBackgroundBegin(Background $background);
 
     /**
-     * Prints scenario outline
+     * Prints background end
+     *
+     * @param   Background  $background background instance
+     */
+    public function logBackgroundEnd(Background $background);
+
+    /**
+     * Prints scenario outline begin
      *
      * @param   ScenarioOutline $scenario   scenario outline instance
      */
-    public function logScenarioOutline(ScenarioOutline $scenario);
+    public function logScenarioOutlineBegin(ScenarioOutline $scenario);
 
     /**
-     * Prints scenario
+     * Prints scenario outline end
+     *
+     * @param   ScenarioOutline $scenario   scenario outline instance
+     */
+    public function logScenarioOutlineEnd(ScenarioOutline $scenario);
+
+    /**
+     * Prints scenario begin
      *
      * @param   Scenario    $scenario   scenario instance
      */
-    public function logScenario(Scenario $scenario);
+    public function logScenarioBegin(Scenario $scenario);
+
+    /**
+     * Prints scenario end
+     *
+     * @param   Scenario    $scenario   scenario instance
+     */
+    public function logScenarioEnd(Scenario $scenario);
 
     /**
      * Prints step

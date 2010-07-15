@@ -39,6 +39,8 @@ class ConsolePrinter implements Printer
     protected $verbose;
     protected $output;
     protected $basePath;
+    protected $stepsMaxLength = 0;
+    protected $baseIndent = 0;
 
     /**
      * Constructs new printer
@@ -86,7 +88,7 @@ class ConsolePrinter implements Printer
     /**
      * @see \Everzet\Behat\Printers\Printer
      */
-    public function logFeature(Feature $feature, $file)
+    public function logFeatureBegin(Feature $feature, $file)
     {
         if ($feature->hasTags()) {
             $this->output->writeln(sprintf("<tag>%s</tag>", $this->getTagsString($feature)));
@@ -98,49 +100,93 @@ class ConsolePrinter implements Printer
         foreach ($feature->getDescription() as $description) {
             $this->output->writeln(sprintf('  %s', $description));
         }
+        $this->output->writeln('');
     }
 
     /**
      * @see \Everzet\Behat\Printers\Printer
      */
-    public function logBackground(Background $background)
+    public function logFeatureEnd(Feature $feature, $file)
     {
-        $this->output->writeln(sprintf("\n  <passed>%s: %s</passed>",
-            $this->i18n->__('background', 'Background'),
-            $background->getTitle()
-        ));
+        $this->output->writeln('');
     }
 
     /**
      * @see \Everzet\Behat\Printers\Printer
      */
-    public function logScenarioOutline(ScenarioOutline $scenario)
+    public function logBackgroundBegin(Background $background)
+    {
+        $space = str_repeat(' ', 2 + $this->baseIndent);
+
+        $this->output->writeln(sprintf("%s<passed>%s: %s</passed>",
+            $space, $this->i18n->__('background', 'Background'), $background->getTitle()
+        ));
+
+        // Calculate max step description length
+        $this->stepsMaxLength = $this->getStepsMaxLength($background);
+    }
+
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
+    public function logBackgroundEnd(Background $background)
+    {
+        $this->output->writeln('');
+    }
+
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
+    public function logScenarioOutlineBegin(ScenarioOutline $scenario)
     {
         if ($scenario->hasTags()) {
-            $this->output->writeln(sprintf("\n  <tag>%s</tag>", $this->getTagsString($scenario)));
-        } else {
-            $this->output->writeln('');
+            $this->output->writeln(sprintf("  <tag>%s</tag>", $this->getTagsString($scenario)));
         }
         $this->output->writeln(sprintf("  <passed>%s: %s</passed>",
             $this->i18n->__('scenario-outline', 'Scenario Outline'),
             $scenario->getTitle()
         ));
+        $this->baseIndent += 2;
+        $this->output->writeln('');
+
+        // Calculate max step description length
+        $this->stepsMaxLength = $this->getStepsMaxLength($scenario);
     }
 
     /**
      * @see \Everzet\Behat\Printers\Printer
      */
-    public function logScenario(Scenario $scenario)
+    public function logScenarioOutlineEnd(ScenarioOutline $scenario)
     {
+        $this->baseIndent -= 2;
+    }
+
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
+    public function logScenarioBegin(Scenario $scenario)
+    {
+        $space = str_repeat(' ', 2 + $this->baseIndent);
+
         if ($scenario->hasTags()) {
-            $this->output->writeln(sprintf("\n  <tag>%s</tag>", $this->getTagsString($scenario)));
-        } else {
-            $this->output->writeln('');
+            $this->output->writeln(sprintf("%s<tag>%s</tag>",
+                $space, $this->getTagsString($scenario)
+            ));
         }
-        $this->output->writeln(sprintf("  <passed>%s: %s</passed>",
-            $this->i18n->__('scenario', 'Scenario'),
-            $scenario->getTitle()
+        $this->output->writeln(sprintf("%s<passed>%s: %s</passed>",
+            $space, $this->i18n->__('scenario', 'Scenario'), $scenario->getTitle()
         ));
+
+        // Calculate max step description length
+        $this->stepsMaxLength = $this->getStepsMaxLength($scenario);
+    }
+
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
+    public function logScenarioEnd(Scenario $scenario)
+    {
+        $this->output->writeln('');
     }
 
     /**
@@ -149,9 +195,23 @@ class ConsolePrinter implements Printer
     public function logStep($code, $type, $text, $file = null,
                             $line = null, array $args = array(), \Exception $e = null)
     {
+        $space = str_repeat(' ', 4 + $this->baseIndent);
+        $errorsSpace = str_repeat(' ', 6 + $this->baseIndent);
+
         $description = sprintf('%s %s', $type, $text);
-        $status = sprintf('    <%s>%s</%s>', $code, $description, $code);
-        $status = str_pad($status, 60 + (strlen($code) * 2));
+        $status = sprintf('%s<%s>%s</%s>', $space, $code, $description, $code);
+
+        // Calculate pad length (between comment & step description)
+        $length  = $this->stepsMaxLength;
+        // Code tags
+        $length += 5 + (strlen($code) * 2);
+        // Indentation
+        $length += 4 + $this->baseIndent;
+        // Space between
+        $length += 2;
+
+        // Pad step description right
+        $status = str_pad($status, $length);
 
         if (null !== $file && null !== $line) {
             $status .= sprintf('<comment>%s:%d</comment>',
@@ -164,9 +224,10 @@ class ConsolePrinter implements Printer
 
         if (null !== $e) {
             $error = $this->verbose ? $e->__toString() : $e->getMessage();
-            $this->output->writeln(sprintf("        <failed>%s</failed>",
+            $this->output->writeln(sprintf("%s<failed>%s</failed>",
+                $errorsSpace,
                 strtr($this->ltrimPaths($error), array(
-                    "\n"    =>  "\n        ",
+                    "\n"    =>  "\n" . $errorsSpace,
                     "<"     =>  "[",
                     ">"     =>  "]"
                 ))
@@ -182,14 +243,35 @@ class ConsolePrinter implements Printer
         foreach ($args as $argument) {
             if ($argument instanceof PyString) {
                 $this->output->writeln(sprintf("<%s>%s</%s>",
-                    $code, $this->getPyString($argument, 6), $code
+                    $code, $this->getPyString($argument, 6 + $this->baseIndent), $code
                 ));
             } elseif ($argument instanceof Table) {
                 $this->output->writeln(sprintf("<%s>%s</%s>",
-                    $code, $this->getTable($argument, 6), $code
+                    $code, $this->getTable($argument, 6 + $this->baseIndent), $code
                 ));
             }
         }
+    }
+
+    /**
+     * Calculates max step description size for scenario/background
+     *
+     * @param   Section $scenario   scenario for calculations
+     * 
+     * @return  integer             description length
+     */
+    protected function getStepsMaxLength(Section $scenario)
+    {
+        $max = 0;
+
+        foreach ($scenario->getSteps() as $step) {
+            $stepDefinition = $step->getType() . ' ' . $step->getText();
+            if (($tmp = strlen($stepDefinition)) > $max) {
+                $max = $tmp;
+            }
+        }
+
+        return $max;
     }
 
     /**

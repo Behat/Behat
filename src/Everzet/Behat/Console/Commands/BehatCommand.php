@@ -92,7 +92,6 @@ class BehatCommand extends Command
         foreach ($featureFiles as $featureFile) {
             $runer = new FeatureRuner($featureFile, $printer, $steps, $world, $i18n);
             $stats->addFeatureStatuses($runer->run());
-            $output->writeln('');
         }
 
         $printer->logStats($stats, $steps);

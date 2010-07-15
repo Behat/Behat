@@ -73,7 +73,6 @@ class FeatureRuner
     {
         $parser = new Parser($this->i18n);
         $feature = $parser->parse(file_get_contents($this->file));
-        $this->printer->logFeature($feature, $this->file);
 
         return $this->runFeature($feature);
     }
@@ -89,25 +88,33 @@ class FeatureRuner
     {
         $featureStats = new FeatureStats;
 
+        $this->printer->logFeatureBegin($feature, $this->file);
         foreach ($feature->getScenarios() as $scenario) {
             if ($scenario instanceof ScenarioOutline) {
-                $this->printer->logScenarioOutline($scenario);
+                $this->printer->logScenarioOutlineBegin($scenario);
                 foreach ($scenario->getExamples()->getTable()->getHash() as $values) {
                     $this->world->flush();
-
                     $stats = $this->runFeatureBackgrounds($feature);
+
+                    $this->printer->logScenarioBegin($scenario);
                     $stats->mergeStatuses($this->runScenario($scenario, $values));
+                    $this->printer->logScenarioEnd($scenario);
+
                     $featureStats->addScenarioStatuses($stats);
                 }
+                $this->printer->logScenarioOutlineEnd($scenario);
             } else {
                 $this->world->flush();
-                $this->printer->logScenario($scenario);
-
                 $stats = $this->runFeatureBackgrounds($feature);
+
+                $this->printer->logScenarioBegin($scenario);
                 $stats->mergeStatuses($this->runScenario($scenario));
+                $this->printer->logScenarioEnd($scenario);
+
                 $featureStats->addScenarioStatuses($stats);
             }
         }
+        $this->printer->logFeatureEnd($feature, $this->file);
 
         return $featureStats;
     }
@@ -124,7 +131,9 @@ class FeatureRuner
         $backgroundsStats = new ScenarioStats;
 
         foreach ($feature->getBackgrounds() as $background) {
+            $this->printer->logBackgroundBegin($background);
             $backgroundsStats->mergeStatuses($this->runScenario($background));
+            $this->printer->logBackgroundEnd($background);
         }
 
         return $backgroundsStats;
