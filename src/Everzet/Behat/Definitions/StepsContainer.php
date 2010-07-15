@@ -77,7 +77,7 @@ class StepsContainer
     {
         $snippets = '';
 
-        foreach ($this->undefinedSteps as $regexp => $step) {
+        foreach ($this->undefinedSteps as $id => $regexp) {
             $snippets .= sprintf("\n\n%s", $regexp);
         }
 
@@ -95,7 +95,7 @@ class StepsContainer
     protected function convertDescriptionToDefinition($step, $text)
     {
         $regexp = preg_replace(
-            array('/\"([\w ]+)\"/', '/(\d+)/'), array("\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
+            array('/\"([^\"]*)\"/', '/(\d+)/'), array("\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
         );
         $args = array();
         for ($i = 0; $i < $count; $i++) {
@@ -110,7 +110,7 @@ class StepsContainer
         }
 
         return sprintf("\$steps->%s('/^%s$/', function(%s) use(\$world) {\n    throw new \Everzet\Behat\Exceptions\Pending;\n});",
-            $step->getType(), $regexp, implode(', ', $args)
+            '%s', $regexp, implode(', ', $args)
         );
     }
 
@@ -144,7 +144,9 @@ class StepsContainer
 
         if (0 === count($matches)) {
             $regexp = $this->convertDescriptionToDefinition($step, $text);
-            $this->undefinedSteps[$regexp] = $step;
+            if (!isset($this->undefinedSteps[$regexp])) {
+                $this->undefinedSteps[$regexp] = sprintf($regexp, $step->getType());
+            }
             throw new Undefined($text);
         }
 

@@ -62,6 +62,12 @@ class BehatCommand extends Command
         // Init World object
         $world = new SimpleWorld($basePath . '/support/env.php');
 
+        // Init I18n for Gherkin with translations path
+        $i18n = new I18n(realpath(__DIR__ . '/../../../../../i18n'));
+
+        // Init test printer
+        $printer = new ConsolePrinter($output, $i18n, $basePath, $input->getOption('verbose'));
+
         // Read steps definition from files
         $finder = new Finder();
         $stepsFiles = $finder->files()->name('*.php')->in($basePath . '/steps');
@@ -79,12 +85,6 @@ class BehatCommand extends Command
         // Read feature files
         $finder = new Finder();
         $featureFiles = $finder->files()->name('*.feature')->in($input->getArgument('features'));
-
-        // Init I18n for Gherkin with translations path
-        $i18n = new I18n(realpath(__DIR__ . '/../../../../../i18n'));
-
-        // Init test printer
-        $printer = new ConsolePrinter($output, $i18n, $basePath, $input->getOption('verbose'));
 
         // Init statistics container
         $stats = new TestStats;
