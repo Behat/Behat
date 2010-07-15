@@ -40,7 +40,6 @@ class ConsolePrinter implements Printer
     protected $output;
     protected $basePath;
     protected $stepsMaxLength = 0;
-    protected $baseIndent = 0;
 
     /**
      * Constructs new printer
@@ -116,10 +115,10 @@ class ConsolePrinter implements Printer
      */
     public function logBackgroundBegin(Background $background)
     {
-        $space = str_repeat(' ', 2 + $this->baseIndent);
+        $spaces = str_repeat(' ', 2);
 
         $this->output->writeln(sprintf("%s<passed>%s: %s</passed>",
-            $space, $this->i18n->__('background', 'Background'), $background->getTitle()
+            $spaces, $this->i18n->__('background', 'Background'), $background->getTitle()
         ));
 
         // Calculate max step description length
@@ -146,7 +145,6 @@ class ConsolePrinter implements Printer
             $this->i18n->__('scenario-outline', 'Scenario Outline'),
             $scenario->getTitle()
         ));
-        $this->baseIndent += 2;
         $this->output->writeln('');
 
         // Calculate max step description length
@@ -157,24 +155,22 @@ class ConsolePrinter implements Printer
      * @see \Everzet\Behat\Printers\Printer
      */
     public function logScenarioOutlineEnd(ScenarioOutline $scenario)
-    {
-        $this->baseIndent -= 2;
-    }
+    {}
 
     /**
      * @see \Everzet\Behat\Printers\Printer
      */
     public function logScenarioBegin(Scenario $scenario)
     {
-        $space = str_repeat(' ', 2 + $this->baseIndent);
+        $spaces = str_repeat(' ', 2);
 
         if ($scenario->hasTags()) {
             $this->output->writeln(sprintf("%s<tag>%s</tag>",
-                $space, $this->getTagsString($scenario)
+                $spaces, $this->getTagsString($scenario)
             ));
         }
         $this->output->writeln(sprintf("%s<passed>%s: %s</passed>",
-            $space, $this->i18n->__('scenario', 'Scenario'), $scenario->getTitle()
+            $spaces, $this->i18n->__('scenario', 'Scenario'), $scenario->getTitle()
         ));
 
         // Calculate max step description length
@@ -195,18 +191,18 @@ class ConsolePrinter implements Printer
     public function logStep($code, $type, $text, $file = null,
                             $line = null, array $args = array(), \Exception $e = null)
     {
-        $space = str_repeat(' ', 4 + $this->baseIndent);
-        $errorsSpace = str_repeat(' ', 6 + $this->baseIndent);
+        $spaces = str_repeat(' ', 4);
+        $errorsSpaces = str_repeat(' ', 6);
 
         $description = sprintf('%s %s', $type, $text);
-        $status = sprintf('%s<%s>%s</%s>', $space, $code, $description, $code);
+        $status = sprintf('%s<%s>%s</%s>', $spaces, $code, $description, $code);
 
         // Calculate pad length (between comment & step description)
         $length  = $this->stepsMaxLength;
         // Code tags
         $length += 5 + (strlen($code) * 2);
         // Indentation
-        $length += 4 + $this->baseIndent;
+        $length += strlen($spaces);
         // Space between
         $length += 2;
 
@@ -225,9 +221,9 @@ class ConsolePrinter implements Printer
         if (null !== $e) {
             $error = $this->verbose ? $e->__toString() : $e->getMessage();
             $this->output->writeln(sprintf("%s<failed>%s</failed>",
-                $errorsSpace,
+                $errorsSpaces,
                 strtr($this->ltrimPaths($error), array(
-                    "\n"    =>  "\n" . $errorsSpace,
+                    "\n"    =>  "\n" . $errorsSpaces,
                     "<"     =>  "[",
                     ">"     =>  "]"
                 ))
@@ -240,14 +236,16 @@ class ConsolePrinter implements Printer
      */
     public function logStepArguments($code, array $args)
     {
+        $spacesCount = 6;
+
         foreach ($args as $argument) {
             if ($argument instanceof PyString) {
                 $this->output->writeln(sprintf("<%s>%s</%s>",
-                    $code, $this->getPyString($argument, 6 + $this->baseIndent), $code
+                    $code, $this->getPyString($argument, $spacesCount), $code
                 ));
             } elseif ($argument instanceof Table) {
                 $this->output->writeln(sprintf("<%s>%s</%s>",
-                    $code, $this->getTable($argument, 6 + $this->baseIndent), $code
+                    $code, $this->getTableString($argument, $spacesCount), $code
                 ));
             }
         }
@@ -272,6 +270,45 @@ class ConsolePrinter implements Printer
         }
 
         return $max;
+    }
+
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
+    public function logStats(TestStats $stats, StepsContainer $steps)
+    {
+        $details = array();
+        foreach ($stats->getStatisticStatusTypes() as $type) {
+            if ($stats->getScenarioStatusCount($type)) {
+                $details[] = sprintf('<%s>%d %s</%s>',
+                    $type, $stats->getScenarioStatusCount($type), $type, $type
+                );
+            }
+        }
+        $this->output->writeln(sprintf('%d scenarios (%s)',
+            $stats->getScenariosCount(), implode(', ', $details)
+        ));
+
+        $details = array();
+        foreach ($stats->getStatisticStatusTypes() as $type) {
+            if ($stats->getStepStatusCount($type)) {
+                $details[] = sprintf('<%s>%d %s</%s>',
+                    $type, $stats->getStepStatusCount($type), $type, $type
+                );
+            }
+        }
+        $this->output->writeln(sprintf('%d steps (%s)',
+            $stats->getStepsCount(), implode(', ', $details)
+        ));
+
+        if ($stats->getStepStatusCount('undefined')) {
+            $this->output->writeln(sprintf(
+                "\n<undefined>You can implement step definitions for undefined steps with these snippets:</undefined>%s\n",
+                $steps->getUndefinedStepsSnippets()
+            ));
+        } else {
+            $this->output->writeln('');
+        }
     }
 
     /**
@@ -315,50 +352,11 @@ class ConsolePrinter implements Printer
      * 
      * @return  string
      */
-    protected function getTable(Table $table, $indent = 6)
+    protected function getTableString(Table $table, $indent = 6)
     {
         return strtr(
             sprintf(str_repeat(' ', $indent).'%s', $table),
             array("\n" => "\n".str_repeat(' ', $indent))
         );
-    }
-
-    /**
-     * @see \Everzet\Behat\Printers\Printer
-     */
-    public function logStats(TestStats $stats, StepsContainer $steps)
-    {
-        $details = array();
-        foreach ($stats->getStatisticStatusTypes() as $type) {
-            if ($stats->getScenarioStatusCount($type)) {
-                $details[] = sprintf('<%s>%d %s</%s>',
-                    $type, $stats->getScenarioStatusCount($type), $type, $type
-                );
-            }
-        }
-        $this->output->writeln(sprintf('%d scenarios (%s)',
-            $stats->getScenariosCount(), implode(', ', $details)
-        ));
-
-        $details = array();
-        foreach ($stats->getStatisticStatusTypes() as $type) {
-            if ($stats->getStepStatusCount($type)) {
-                $details[] = sprintf('<%s>%d %s</%s>',
-                    $type, $stats->getStepStatusCount($type), $type, $type
-                );
-            }
-        }
-        $this->output->writeln(sprintf('%d steps (%s)',
-            $stats->getStepsCount(), implode(', ', $details)
-        ));
-
-        if ($stats->getStepStatusCount('undefined')) {
-            $this->output->writeln(sprintf(
-                "\n<undefined>You can implement step definitions for undefined steps with these snippets:</undefined>%s\n",
-                $steps->getUndefinedStepsSnippets()
-            ));
-        } else {
-            $this->output->writeln('');
-        }
     }
 }
