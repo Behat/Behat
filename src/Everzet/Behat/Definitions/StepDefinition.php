@@ -138,7 +138,7 @@ class StepDefinition
      */
     public function run()
     {
-        $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL);
+        $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
 
         call_user_func_array($this->callback, array_map(function($value) {
             if ($value instanceof PyString) {
