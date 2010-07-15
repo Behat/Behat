@@ -33,17 +33,15 @@ class ScenarioStats
 
     public function getScenarioStatusCount($status)
     {
-        if ('passed' === $status) {
-            foreach ($this->statuses as $currentStatus) {
-                if ('passed' !== $currentStatus) {
-                    return 0;
-                }
+        if (in_array('failed', $this->statuses)) {
+            if ('failed' === $status) {
+                return 1;
+            } else {
+                return 0;
             }
-
-            return 1;
-        } else {
-            return intval(in_array($status, $this->statuses));
         }
+
+        return intval(in_array($status, $this->statuses));
     }
 
     public function getStepStatusCount($status)
