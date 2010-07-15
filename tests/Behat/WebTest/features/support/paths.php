@@ -6,7 +6,11 @@ $this->pathTo = function($page) {
             return 'http://www.onliner.by/';
         case 'каталог':
             return 'http://catalog.onliner.by/';
+        case 'homepage':
+            return 'http://everzet.com/';
+        case 'about page':
+            return 'http://everzet.com/about';
         default:
-            return 'http://www.onliner.by/';
+            return 'localhost';
     }
 };
