@@ -52,8 +52,13 @@ class BehatCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $basePath = realpath($input->getArgument('features'));
+        $featureFiles = array();
+
         if (is_dir($basePath.'/features')) {
             $basePath .= '/features';
+        } elseif (is_file($basePath)) {
+            $featureFiles[] = $basePath;
+            $basePath = dirname($basePath);
         }
 
         // Init steps container
@@ -83,8 +88,12 @@ class BehatCommand extends Command
         }
 
         // Read feature files
-        $finder = new Finder();
-        $featureFiles = $finder->files()->name('*.feature')->in($input->getArgument('features'));
+        if (!count($featureFiles)) {
+            $finder = new Finder();
+            $featureFiles = $finder->files()->name('*.feature')->in(
+                $input->getArgument('features')
+            );
+        }
 
         // Init statistics container
         $stats = new TestStats;
