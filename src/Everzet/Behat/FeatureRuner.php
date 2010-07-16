@@ -216,11 +216,11 @@ class FeatureRuner
      * 
      * @return  string                          step status code
      */
-    protected function logStepDefinition($code, StepDefinition $definition,
+    protected function logStepDefinition($code, $type, StepDefinition $definition,
                                          array $args = array(), \Exception $e = null)
     {
         $this->printer->logStep(
-            $code, $definition->getType(), $definition->getMatchedText(),
+            $code, $type, $definition->getMatchedText(),
             $definition->getFile(), $definition->getLine(), $args, $e
         );
 
@@ -253,17 +253,25 @@ class FeatureRuner
         }
 
         if ($skip) {
-            return $this->logStepDefinition('skipped', $definition, $step->getArguments());
+            return $this->logStepDefinition(
+                'skipped', $step->getType(), $definition, $step->getArguments()
+            );
         } else {
             try {
                 try {
                     $definition->run();
-                    return $this->logStepDefinition('passed', $definition, $step->getArguments());
+                    return $this->logStepDefinition(
+                        'passed', $step->getType(), $definition, $step->getArguments()
+                    );
                 } catch (Pending $e) {
-                    return $this->logStepDefinition('pending', $definition, $step->getArguments());
+                    return $this->logStepDefinition(
+                        'pending', $step->getType(), $definition, $step->getArguments()
+                    );
                 }
             } catch (\Exception $e) {
-                return $this->logStepDefinition('failed', $definition, $step->getArguments(), $e);
+                return $this->logStepDefinition(
+                    'failed', $step->getType(), $definition, $step->getArguments(), $e
+                );
             }
         }
     }
