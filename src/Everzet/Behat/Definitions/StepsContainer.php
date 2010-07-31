@@ -9,6 +9,7 @@ use \Everzet\Behat\Definitions\StepDefinition;
 use \Everzet\Behat\Exceptions\Redundant;
 use \Everzet\Behat\Exceptions\Ambiguous;
 use \Everzet\Behat\Exceptions\Undefined;
+use \Everzet\Behat\Environment\World;
 
 /*
  * This file is part of the behat package.
@@ -29,6 +30,21 @@ class StepsContainer
 {
     protected $steps = array();
     protected $undefinedSteps = array();
+
+    /**
+     * Creates steps container & load step definitions
+     *
+     * @param   \Iterator   $definitionFiles    step definition files
+     * @param   World       $world              world object instance
+     */
+    public function __construct(\Iterator $definitionFiles, World $world = null)
+    {
+        $steps = $this;
+
+        foreach ($definitionFiles as $definitionFile) {
+            require $definitionFile;
+        }
+    }
 
     /**
      * Define a step with ->Given('/regex/', callback)

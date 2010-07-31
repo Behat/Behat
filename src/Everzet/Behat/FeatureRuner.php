@@ -13,8 +13,8 @@ use \Everzet\Behat\Stats\ScenarioStats;
 use \Everzet\Behat\Stats\FeatureStats;
 use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Definitions\StepDefinition;
-use \Everzet\Behat\Environment\World;
 use \Everzet\Behat\Printers\Printer;
+use \Everzet\Behat\Exceptions\Redundant;
 use \Everzet\Behat\Exceptions\Pending;
 use \Everzet\Behat\Exceptions\Ambiguous;
 use \Everzet\Behat\Exceptions\Undefined;
@@ -38,8 +38,8 @@ class FeatureRuner
 {
     protected $printer;
     protected $file;
-    protected $steps;
-    protected $world;
+    protected $stepDefinitions;
+    protected $worldClass;
 
     /**
      * Initiates feature runer
@@ -50,8 +50,8 @@ class FeatureRuner
      * 
      * @throws  \InvalidArgumentException   if feature file doesn't exists
      */
-    public function __construct($file, Printer $printer, StepsContainer $steps,
-                                World $world, I18n $i18n)
+    public function __construct($file, Printer $printer, \Iterator $stepDefinitions,
+                                $worldClass, I18n $i18n)
     {
         if (!is_file($file)) {
             throw new \InvalidArgumentException(sprintf('File %s does not exists', $file));
@@ -59,8 +59,8 @@ class FeatureRuner
 
         $this->file = $file;
         $this->printer = $printer;
-        $this->steps = $steps;
-        $this->world = $world;
+        $this->stepDefinitions = $stepDefinitions;
+        $this->worldClass = $worldClass;
         $this->i18n = $i18n;
     }
 
@@ -76,6 +76,24 @@ class FeatureRuner
         $feature = $parser->parse(file_get_contents($this->file));
 
         return $this->runFeature($feature);
+    }
+
+    /**
+     * Creates & returns StepsContainer instance
+     *
+     * @return  StepsContainer
+     */
+    protected function createStepsContainer()
+    {
+        $class = $this->worldClass;
+        $world = new $class;
+        try {
+            $steps = new StepsContainer($this->stepDefinitions, $world);
+        } catch (Redundant $e) {
+            $this->printer->logStatus('failed', $e->getMessage());
+        }
+
+        return $steps;
     }
 
     /**
@@ -96,9 +114,9 @@ class FeatureRuner
                     $featureStats->addScenarioStatuses($stats);
                 }
             } else {
-                $this->world->flush();
-                $stats = $this->runFeatureBackgrounds($feature);
-                $stats->mergeStatuses($this->runScenario($scenario));
+                $steps = $this->createStepsContainer();
+                $stats = $this->runFeatureBackgrounds($feature, $steps);
+                $stats->mergeStatuses($this->runScenario($scenario, $steps));
                 $featureStats->addScenarioStatuses($stats);
             }
         }
@@ -108,35 +126,22 @@ class FeatureRuner
     }
 
     /**
-     * Runs feature backgrounds (called between scenarios)
-     *
-     * @param   Feature $feature    feature instance
+     * Runs scenario outline tests
      * 
-     * @return  \Everzet\Behat\Stats\ScenarioStats  background steps statuses
+     * @param   ScenarioOutline     $outline        outline instance
+     * @param   Feature             $feature        feature instance
+     * 
+     * @return  \Everzet\Behat\Stats\ScenarioStats  outline steps statuses
      */
-    public function runFeatureBackgrounds(Feature $feature)
-    {
-        $backgroundsStats = new ScenarioStats;
-
-        foreach ($feature->getBackgrounds() as $background) {
-            $this->printer->logBackgroundBegin($background);
-            $backgroundsStats->mergeStatuses($this->runScenarioSteps($background));
-            $this->printer->logBackgroundEnd($background);
-        }
-
-        return $backgroundsStats;
-    }
-
     public function runScenarioOutline(ScenarioOutline $outline, Feature $feature)
     {
         $scenariosStats = array();
 
         $this->printer->logScenarioOutlineBegin($outline);
         foreach ($outline->getExamples()->getTable()->getHash() as $values) {
-            $this->world->flush();
-
-            $stats = $this->runFeatureBackgrounds($feature);
-            $stats->mergeStatuses($this->runScenarioSteps($outline, $values, true));
+            $steps = $this->createStepsContainer();
+            $stats = $this->runFeatureBackgrounds($feature, $steps);
+            $stats->mergeStatuses($this->runScenarioSteps($outline, $values, true, $steps));
 
             $scenariosStats[] = $stats;
         }
@@ -146,17 +151,40 @@ class FeatureRuner
     }
 
     /**
+     * Runs feature backgrounds (called between scenarios)
+     *
+     * @param   Feature         $feature    feature instance
+     * @param   StepsContainer  $steps      steps definitions
+     * 
+     * @return  \Everzet\Behat\Stats\ScenarioStats  background steps statuses
+     */
+    public function runFeatureBackgrounds(Feature $feature, StepsContainer $steps)
+    {
+        $backgroundsStats = new ScenarioStats;
+
+        foreach ($feature->getBackgrounds() as $background) {
+            $this->printer->logBackgroundBegin($background);
+            $backgroundsStats->mergeStatuses(
+                $this->runScenarioSteps($background, array(), false, $steps)
+            );
+            $this->printer->logBackgroundEnd($background);
+        }
+
+        return $backgroundsStats;
+    }
+
+    /**
      * Runs Scenario tests
      *
-     * @param   Scenario    $scenario   background instance
-     * @param   array       $values     examples values
+     * @param   Scenario        $scenario   background instance
+     * @param   StepsContainer  $steps      steps definitions
      * 
      * @return  \Everzet\Behat\Stats\ScenarioStats  scenario steps statuses
      */
-    public function runScenario(Scenario $scenario, array $values = array())
+    public function runScenario(Scenario $scenario, StepsContainer $steps)
     {
         $this->printer->logScenarioBegin($scenario);
-        $scenarioStats = $this->runScenarioSteps($scenario, $values);
+        $scenarioStats = $this->runScenarioSteps($scenario, array(), false, $steps);
         $this->printer->logScenarioEnd($scenario);
 
         return $scenarioStats;
@@ -165,18 +193,21 @@ class FeatureRuner
     /**
      * Runs Scenario steps
      *
-     * @param   Background  $scenario               background instance
+     * @param   Background      $scenario   background instance
+     * @param   array           $values     examples values
+     * @param   boolean         $inOutline  are we in outline?
+     * @param   StepsContainer  $steps      steps definitions
      * 
      * @return  \Everzet\Behat\Stats\ScenarioStats  scenario steps statuses
      */
     public function runScenarioSteps(Background $scenario, array $values = array(),
-                                     $inOutline = false)
+                                     $inOutline = false, StepsContainer $steps)
     {
         $scenarioStats = new ScenarioStats;
         $skip = false;
 
         foreach ($scenario->getSteps() as $step) {
-            $scenarioStats->addStepStatus($this->runStep($step, $values, $skip));
+            $scenarioStats->addStepStatus($this->runStep($step, $values, $skip, $steps));
             if ('failed' === $scenarioStats->getLastStepStatus()) {
                 $skip = true;
             }
@@ -186,6 +217,57 @@ class FeatureRuner
         }
 
         return $scenarioStats;
+    }
+
+    /**
+     * Runs Step test
+     *
+     * @param   Step            $step       step instance to test
+     * @param   array           $values     example tokens
+     * @param   boolean         $skip       do we need to mark this step as skipped
+     * @param   StepsContainer  $steps      steps definitions
+     * 
+     * @return  string                      status code
+     * 
+     * @throws  \Everzet\Behat\Exceptions\Pending       if step throws Pending exception
+     * @throws  \Everzet\Behat\Exceptions\Ambiguous     if step matches multiple definitions
+     * @throws  \Everzet\Behat\Exceptions\Undefined     if step definition not found
+     */
+    public function runStep(Step $step, array $values = array(), $skip = false,
+                            StepsContainer $steps)
+    {
+        try {
+            try {
+                $definition = $steps->findDefinition($step, $values);
+            } catch (Ambiguous $e) {
+                return $this->logStep('failed', $step, $values, $e);
+            }
+        } catch (Undefined $e) {
+            return $this->logStep('undefined', $step, $values);
+        }
+
+        if ($skip) {
+            return $this->logStepDefinition(
+                'skipped', $step->getType(), $definition, $step->getArguments()
+            );
+        } else {
+            try {
+                try {
+                    $definition->run();
+                    return $this->logStepDefinition(
+                        'passed', $step->getType(), $definition, $step->getArguments()
+                    );
+                } catch (Pending $e) {
+                    return $this->logStepDefinition(
+                        'pending', $step->getType(), $definition, $step->getArguments()
+                    );
+                }
+            } catch (\Exception $e) {
+                return $this->logStepDefinition(
+                    'failed', $step->getType(), $definition, $step->getArguments(), $e
+                );
+            }
+        }
     }
 
     /**
@@ -225,54 +307,5 @@ class FeatureRuner
         );
 
         return $code;
-    }
-
-    /**
-     * Runs Step test
-     *
-     * @param   Step    $step   step instance to test
-     * @param   array   $values example tokens
-     * @param   boolean $skip   do we need to mark this step as skipped
-     * 
-     * @return  string          status code
-     * 
-     * @throws  \Everzet\Behat\Exceptions\Pending       if step throws Pending exception
-     * @throws  \Everzet\Behat\Exceptions\Ambiguous     if step matches multiple definitions
-     * @throws  \Everzet\Behat\Exceptions\Undefined     if step definition not found
-     */
-    public function runStep(Step $step, array $values = array(), $skip = false)
-    {
-        try {
-            try {
-                $definition = $this->steps->findDefinition($step, $values);
-            } catch (Ambiguous $e) {
-                return $this->logStep('failed', $step, $values, $e);
-            }
-        } catch (Undefined $e) {
-            return $this->logStep('undefined', $step, $values);
-        }
-
-        if ($skip) {
-            return $this->logStepDefinition(
-                'skipped', $step->getType(), $definition, $step->getArguments()
-            );
-        } else {
-            try {
-                try {
-                    $definition->run();
-                    return $this->logStepDefinition(
-                        'passed', $step->getType(), $definition, $step->getArguments()
-                    );
-                } catch (Pending $e) {
-                    return $this->logStepDefinition(
-                        'pending', $step->getType(), $definition, $step->getArguments()
-                    );
-                }
-            } catch (\Exception $e) {
-                return $this->logStepDefinition(
-                    'failed', $step->getType(), $definition, $step->getArguments(), $e
-                );
-            }
-        }
     }
 }

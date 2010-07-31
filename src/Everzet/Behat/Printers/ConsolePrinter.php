@@ -15,6 +15,7 @@ use \Everzet\Gherkin\Structures\Inline\Examples;
 use \Everzet\Behat\Stats\TestStats;
 use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Printers\Printer;
+use \Everzet\Behat\Exceptions\Redundant;
 
 use \Symfony\Components\Console\Output\OutputInterface;
 
@@ -92,6 +93,16 @@ class ConsolePrinter implements Printer
     protected function ltrimPaths($message)
     {
         return strtr($message, array($this->basePath . '/' => ''));
+    }
+
+    /**
+     * @see \Everzet\Behat\Printers\Printer
+     */
+    public function logStatus($code, $message)
+    {
+        $this->output->writeln(sprintf('<%s>%s</%s>',
+            $code, strtr($message, array($this->basePath . '/' => '')), $code
+        ));
     }
 
     /**
@@ -403,8 +414,14 @@ class ConsolePrinter implements Printer
     /**
      * @see \Everzet\Behat\Printers\Printer
      */
-    public function logStats(TestStats $stats, StepsContainer $steps)
+    public function logStats(TestStats $stats, \Iterator $stepDefinitions)
     {
+        try {
+            $steps = new StepsContainer($stepDefinitions);
+        } catch (Redundant $e) {
+            $this->logStatus('failed', $e->getMessage());
+        }
+
         $details = array();
         foreach ($stats->getStatisticStatusTypes() as $type) {
             if ($stats->getScenarioStatusCount($type)) {

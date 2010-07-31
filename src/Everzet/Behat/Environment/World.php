@@ -20,9 +20,9 @@ namespace Everzet\Behat\Environment;
 interface World
 {
     /**
-     * Flushes world content between scenarios
+     * Sets environment config file
      *
      * @return  void
      */
-    public function flush();
+    static public function setEnvFile($envFile);
 }

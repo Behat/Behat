@@ -12,7 +12,6 @@ use \Symfony\Components\Finder\Finder;
 use \Everzet\Gherkin\I18n;
 use \Everzet\Behat\FeatureRuner;
 use \Everzet\Behat\Definitions\StepsContainer;
-use \Everzet\Behat\Environment\SimpleWorld;
 use \Everzet\Behat\Printers\ConsolePrinter;
 use \Everzet\Behat\Stats\TestStats;
 use \Everzet\Behat\Exceptions\Redundant;
@@ -61,30 +60,28 @@ class BehatCommand extends Command
             $basePath = dirname($basePath);
         }
 
-        // Init steps container
-        $steps = new StepsContainer();
-
-        // Init World object
-        $world = new SimpleWorld($basePath . '/support/env.php');
-
         // Init I18n for Gherkin with translations path
         $i18n = new I18n(realpath(__DIR__ . '/../../../../../i18n'));
 
         // Init test printer
         $printer = new ConsolePrinter($output, $i18n, $basePath, $input->getOption('verbose'));
 
-        // Read steps definition from files
+        // Sets world class name & environment config path
+        $worldClass = 'Everzet\Behat\Environment\SimpleWorld';
+        $worldClass::setEnvFile($basePath . '/support/env.php');
+
+        // Find step definition files
         $finder = new Finder();
-        $stepsFiles = $finder->files()->name('*.php')->in($basePath . '/steps');
+        $stepDefinitions = $finder->files()->name('*.php')->in($basePath . '/steps')->getIterator();
+
+        // Check if we had redundant definitions
         try {
-            foreach ($stepsFiles as $stepsFile) {
-                require $stepsFile;
-            }
+            new StepsContainer($stepDefinitions);
         } catch (Redundant $e) {
-            $output->writeln(sprintf("<failed>%s</failed>\n",
+            $output->writeln(sprintf("<failed>%s</failed>",
                 strtr($e->getMessage(), array($basePath . '/' => ''))
             ));
-            exit;
+            return 1;
         }
 
         // Read feature files
@@ -98,10 +95,10 @@ class BehatCommand extends Command
         // Init statistics container
         $stats = new TestStats;
         foreach ($featureFiles as $featureFile) {
-            $runer = new FeatureRuner($featureFile, $printer, $steps, $world, $i18n);
+            $runer = new FeatureRuner($featureFile, $printer, $stepDefinitions, $worldClass, $i18n);
             $stats->addFeatureStatuses($runer->run());
         }
 
-        $printer->logStats($stats, $steps);
+        $printer->logStats($stats, $stepDefinitions);
     }
 }

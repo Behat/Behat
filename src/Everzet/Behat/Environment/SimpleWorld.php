@@ -21,29 +21,29 @@ use \Everzet\Behat\Environment\World;
  */
 class SimpleWorld implements World
 {
-  protected $file;
+  protected static $envFile;
   protected $values = array();
+
+  /**
+   * @see   \Everzet\Behat\Environment\World
+   */
+  static public function setEnvFile($envFile)
+  {
+    self::$envFile = $envFile;
+  }
 
   /**
    * Constructs World instance.
    *
    * @param     string  $file       file path to require on flushes
    */
-  public function __construct($file = null)
+  public function __construct($envFile = null)
   {
-      $this->file = $file;
-  }
+      $envFile = null !== $envFile ? $envFile : self::$envFile;
 
-  /**
-   * @see   \Everzet\Behat\Environment\World
-   */
-  public function flush()
-  {
-      $this->values = array();
-      $world = $this;
-
-      if (null !== $this->file && is_file($this->file)) {
-          require $this->file;
+      if (null !== $envFile && is_file($envFile)) {
+          $world = $this;
+          require $envFile;
       }
   }
 

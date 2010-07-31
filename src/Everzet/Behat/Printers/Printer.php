@@ -34,6 +34,14 @@ interface Printer
     public function setFile($file);
 
     /**
+     * Printes status with message
+     *
+     * @param   string  $code       status code (f.e. failed)
+     * @param   string  $message    message
+     */
+    public function logStatus($code, $message);
+
+    /**
      * Prints feature begin
      *
      * @param   Feature $feature    feature instance
@@ -123,8 +131,8 @@ interface Printer
     /**
      * Prints tests statistics
      *
-     * @param   TestStats       $stats  runer statistics
-     * @param   StepsContainer  $steps  steps definition container
+     * @param   TestStats       $stats              runer statistics
+     * @param   \Iterator       $stepDefinitions    step definition files
      */
-    public function logStats(TestStats $stats, StepsContainer $steps);
+    public function logStats(TestStats $stats, \Iterator $stepDefinitions);
 }
