@@ -87,11 +87,7 @@ class FeatureRuner
     {
         $class = $this->worldClass;
         $world = new $class;
-        try {
-            $steps = new StepsContainer($this->stepDefinitions, $world);
-        } catch (Redundant $e) {
-            $this->printer->logStatus('failed', $e->getMessage());
-        }
+        $steps = new StepsContainer($this->stepDefinitions, $world);
 
         return $steps;
     }

@@ -95,7 +95,9 @@ class BehatCommand extends Command
         // Init statistics container
         $stats = new TestStats;
         foreach ($featureFiles as $featureFile) {
-            $runer = new FeatureRuner($featureFile, $printer, $stepDefinitions, $worldClass, $i18n);
+            $runer = new FeatureRuner(
+                $featureFile, $printer, $stepDefinitions, $worldClass, $i18n
+            );
             $stats->addFeatureStatuses($runer->run());
         }
 

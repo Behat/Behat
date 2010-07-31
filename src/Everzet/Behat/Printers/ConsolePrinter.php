@@ -416,11 +416,7 @@ class ConsolePrinter implements Printer
      */
     public function logStats(TestStats $stats, \Iterator $stepDefinitions)
     {
-        try {
-            $steps = new StepsContainer($stepDefinitions);
-        } catch (Redundant $e) {
-            $this->logStatus('failed', $e->getMessage());
-        }
+        $steps = new StepsContainer($stepDefinitions);
 
         $details = array();
         foreach ($stats->getStatisticStatusTypes() as $type) {
