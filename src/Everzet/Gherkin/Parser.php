@@ -31,6 +31,7 @@ use \Everzet\Gherkin\Structures\Inline\Examples;
  */
 class Parser
 {
+    protected $file             = null;
     protected $i18n             = null;
     protected $lines            = array();
     protected $currentLineNb    = -1;
@@ -43,18 +44,31 @@ class Parser
         $this->i18n = $i18n;
     }
 
-    public function parse($value)
+    protected function initLang($value)
     {
-        $this->currentLineNb = -1;
-        $this->currentLine = '';
-        $this->lines = explode("\n", $this->cleanup($value));
-
         if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w]+?)\s*$#', $this->lines[0], $values)) {
             $this->i18n->loadLang($values['lang']);
         } else {
             $this->i18n->loadLang('en');
         }
         $this->regex = new RegexHolder($this->i18n);
+    }
+
+    public function parseFile($file)
+    {
+        $this->file = $file;
+        $feature = $this->parse(file_get_contents($file));
+        $this->file = null;
+
+        return $feature;
+    }
+
+    public function parse($value)
+    {
+        $this->currentLineNb = -1;
+        $this->currentLine = '';
+        $this->lines = explode("\n", $this->cleanup($value));
+        $this->initLang($value);
 
         if (function_exists('mb_internal_encoding') && ((int) ini_get('mbstring.func_overload')) & 2) {
             $mbEncoding = mb_internal_encoding();
@@ -68,7 +82,7 @@ class Parser
 
             // feature?
             if (preg_match($this->regex->getFeatureRegex(), $this->currentLine, $values)) {
-                $this->feature = new Feature;
+                $this->feature = new Feature($this->i18n, $this->file);
                 $this->feature->setTitle(isset($values['title']) ? $values['title'] : '');
                 $this->feature->addTags($this->getPreviousTags());
                 $this->feature->addDescriptions($this->getNextDescriptions());
@@ -76,7 +90,7 @@ class Parser
 
             // background?
             if (preg_match($this->regex->getBackgroundRegex(), $this->currentLine, $values)) {
-                $background = new Background($this->currentLineNb);
+                $background = new Background($this->currentLineNb, $this->i18n, $this->file);
                 $background->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -87,7 +101,7 @@ class Parser
 
             // scenario?
             if (preg_match($this->regex->getScenarioRegex(), $this->currentLine, $values)) {
-                $scenario = new Scenario($this->currentLineNb);
+                $scenario = new Scenario($this->currentLineNb, $this->i18n, $this->file);
                 $scenario->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -99,7 +113,7 @@ class Parser
 
             // scenario outline?
             if (preg_match($this->regex->getScenarioOutlineRegex(), $this->currentLine, $values)) {
-                $outline = new ScenarioOutline($this->currentLineNb);
+                $outline = new ScenarioOutline($this->currentLineNb, $this->i18n, $this->file);
                 $outline->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));

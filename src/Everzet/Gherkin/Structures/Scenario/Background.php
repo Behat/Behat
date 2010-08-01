@@ -2,6 +2,7 @@
 
 namespace Everzet\Gherkin\Structures\Scenario;
 
+use \Everzet\Gherkin\I18n;
 use \Everzet\Gherkin\Structures\Section;
 use \Everzet\Gherkin\Structures\Step;
 
@@ -30,9 +31,10 @@ class Background extends Section
      *
      * @param   string  $line   parsed feature line
      */
-    public function __construct($line = 0)
+    public function __construct($line = 0, I18n $i18n, $file = null)
     {
         $this->line = $line;
+        parent::__construct($i18n, $file);
     }
 
     /**

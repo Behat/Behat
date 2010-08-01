@@ -2,6 +2,8 @@
 
 namespace Everzet\Gherkin\Structures;
 
+use \Everzet\Gherkin\I18n;
+
 /*
  * This file is part of the behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -21,6 +23,24 @@ abstract class Section
 {
     protected $title = '';
     protected $tags = array();
+    protected $i18n;
+    protected $file;
+
+    public function __construct(I18n $i18n, $file = null)
+    {
+        $this->file = $file;
+        $this->i18n = $i18n;
+    }
+
+    public function getI18n()
+    {
+        return $this->i18n;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
 
     public function setTitle($title)
     {

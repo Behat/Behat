@@ -12,6 +12,13 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         return $parser->parse(file_get_contents(__DIR__ . '/fixtures/features/' . $path));
     }
 
+    private function loadFeatureFromFile($path)
+    {
+        $i18n = new I18n(__DIR__ . '/../../i18n');
+        $parser = new Parser($i18n);
+        return $parser->parseFile(__DIR__ . '/fixtures/features/' . $path);
+    }
+
     public function testDosLineEndingsFeature()
     {
         $feature = $this->loadFeature('dos_line_endings.feature');
@@ -627,5 +634,39 @@ a
 u
   ti
     ful', (string) end($steps[1]->getArguments()));
+    }
+
+    public function testFileGetter()
+    {
+        $feature = $this->loadFeature('addition.feature');
+
+        $this->assertEquals(null, $feature->getFile());
+        $this->assertEquals(null, end($feature->getScenarios())->getFile());
+
+        $feature = $this->loadFeatureFromFile('addition.feature');
+
+        $this->assertEquals('addition.feature', basename($feature->getFile()));
+        $this->assertEquals('addition.feature', basename(end($feature->getScenarios())->getFile()));
+
+        $feature = $this->loadFeatureFromFile('tables.feature');
+
+        $this->assertEquals('tables.feature', basename($feature->getFile()));
+    }
+
+    public function testI18n()
+    {
+        foreach (array($this->loadFeature('addition.feature'), $this->loadFeatureFromFile('addition.feature')) as $feature) {
+            $this->assertEquals('Feature', $feature->getI18n()->__('feature', 'Feature'));
+            $this->assertEquals('Scenario',
+                end($feature->getScenarios())->getI18n()->__('scenario', 'Scenario')
+            );
+        }
+
+        foreach (array($this->loadFeature('ru_addition.feature'), $this->loadFeatureFromFile('ru_addition.feature')) as $feature) {
+            $this->assertEquals('Функционал', $feature->getI18n()->__('feature', 'Feature'));
+            $this->assertEquals('Сценарий',
+                end($feature->getScenarios())->getI18n()->__('scenario', 'Scenario')
+            );
+        }
     }
 }
