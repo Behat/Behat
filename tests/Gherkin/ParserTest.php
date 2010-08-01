@@ -25,7 +25,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('DOS line endings', $feature->getTitle());
         $this->assertTrue($feature->hasDescription());
-        $this->assertFalse($feature->hasBackgrounds());
+        $this->assertFalse($feature->hasBackground());
         $this->assertEquals('I want to write features with DOS line endigs', 
             end($feature->getDescription()));
         $this->assertTrue($feature->hasScenarios());
@@ -49,9 +49,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('Feature with background', $feature->getTitle());
         $this->assertFalse($feature->hasDescription());
-        $this->assertTrue($feature->hasBackgrounds());
+        $this->assertTrue($feature->hasBackground());
 
-        $background = end($feature->getBackgrounds());
+        $background = $feature->getBackground();
         $this->assertTrue($background->hasSteps());
         $this->assertEquals('Given', end($background->getSteps())->getType());
         $this->assertEquals('a passing step', end($background->getSteps())->getText());
@@ -284,10 +284,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('multiline', $feature->getTitle());
         $this->assertFalse($feature->hasDescription());
-        $this->assertTrue($feature->hasBackgrounds());
-        $this->assertEquals(1, count($feature->getBackgrounds()));
+        $this->assertTrue($feature->hasBackground());
+        $this->assertNotEquals(null, $feature->getBackground());
 
-        $item = end($feature->getBackgrounds());
+        $item = $feature->getBackground();
 
         $this->assertEquals(
             "I'm a multiline name which goes on and on and on for three lines yawn", 

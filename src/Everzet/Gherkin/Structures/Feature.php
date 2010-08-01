@@ -22,9 +22,9 @@ use \Everzet\Gherkin\Structures\Scenario\Scenario;
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Feature extends Section
-{
+{    
+    protected $background;
     protected $description = array();
-    protected $backgrounds = array();
     protected $scenarios = array();
 
     /**
@@ -82,19 +82,19 @@ class Feature extends Section
      *
      * @param   Background  $background background instance
      */
-    public function addBackground(Background $background)
+    public function setBackground(Background $background)
     {
-        $this->backgrounds[] = $background;
+        $this->background = $background;
     }
 
     /**
-     * Does Feature has backgrounds?
+     * Does Feature has background?
      *
      * @return  boolean true if has
      */
-    public function hasBackgrounds()
+    public function hasBackground()
     {
-        return count($this->backgrounds) > 0;
+        return null !== $this->background;
     }
 
     /**
@@ -102,9 +102,9 @@ class Feature extends Section
      *
      * @return  array array of Background instances
      */
-    public function getBackgrounds()
+    public function getBackground()
     {
-        return $this->backgrounds;
+        return $this->background;
     }
 
     /**

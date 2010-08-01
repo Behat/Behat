@@ -96,7 +96,7 @@ class Parser
                 ));
                 $background->addSteps($this->getNextSteps());
 
-                $this->feature->addBackground($background);
+                $this->feature->setBackground($background);
             }
 
             // scenario?
