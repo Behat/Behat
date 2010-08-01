@@ -27,35 +27,18 @@ use \Everzet\Behat\Definitions\StepsContainer;
 interface Printer
 {
     /**
-     * Sets tested Feature file
-     *
-     * @param   string  $file   filename
-     */
-    public function setFile($file);
-
-    /**
-     * Printes status with message
-     *
-     * @param   string  $code       status code (f.e. failed)
-     * @param   string  $message    message
-     */
-    public function logStatus($code, $message);
-
-    /**
      * Prints feature begin
      *
      * @param   Feature $feature    feature instance
-     * @param   string  $file       feature file
      */
-    public function logFeatureBegin(Feature $feature, $file);
+    public function logFeatureBegin(Feature $feature);
 
     /**
      * Prints feature end
      *
      * @param   Feature $feature    feature instance
-     * @param   string  $file       feature file
      */
-    public function logFeatureEnd(Feature $feature, $file);
+    public function logFeatureEnd(Feature $feature);
 
     /**
      * Prints background begin
@@ -119,20 +102,4 @@ interface Printer
      */
      public function logStep($code, $type, $text, $file = null,
                              $line = null, array $args = array(), \Exception $e = null);
-
-    /**
-     * Prints step arguments
-     *
-     * @param   string  $code   status code
-     * @param   array   $args   arguments list
-     */
-    public function logStepArguments($code, array $args);
-
-    /**
-     * Prints tests statistics
-     *
-     * @param   TestStats       $stats              runer statistics
-     * @param   \Iterator       $stepDefinitions    step definition files
-     */
-    public function logStats(TestStats $stats, \Iterator $stepDefinitions);
 }

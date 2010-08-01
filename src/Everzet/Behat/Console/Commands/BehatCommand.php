@@ -7,12 +7,7 @@ use \Symfony\Components\Console\Input\InputInterface;
 use \Symfony\Components\Console\Input\InputArgument;
 use \Symfony\Components\Console\Input\InputOption;
 use \Symfony\Components\Console\Output\OutputInterface;
-use \Symfony\Components\Finder\Finder;
 
-use \Everzet\Gherkin\I18n;
-use \Everzet\Behat\FeatureRuner;
-use \Everzet\Behat\Definitions\StepsContainer;
-use \Everzet\Behat\Printers\ConsolePrinter;
 use \Everzet\Behat\Stats\TestStats;
 use \Everzet\Behat\Exceptions\Redundant;
 
@@ -50,6 +45,58 @@ class BehatCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $container = new \Symfony\Components\DependencyInjection\Builder();
+
+        $container->
+            register('parser', '%parser.class%')->
+            addArgument(new \Symfony\Components\DependencyInjection\Reference('i18n'))->
+            setShared(false);
+
+        $container->
+            register('i18n', '%i18n.class%')->
+            addArgument('%i18n.path%')->
+            setShared(false);
+
+        $container->
+            register('world', '%world.class%')->
+            addArgument('%world.file%')->
+            setShared(false);
+
+        $container->
+            register('features.loader', '%features.loader.class%')->
+            addArgument('%features.path%')->
+            addArgument('%container%')->
+            setShared(false);
+
+        $container->
+            register('steps.loader', '%steps.loader.class%')->
+            addArgument('%steps.loader.path%')->
+            addArgument(new \Symfony\Components\DependencyInjection\Reference('world'))->
+            setShared(false);
+
+        $container->
+            register('printer', '%printer.class%')->
+            addArgument('%output%')->
+            addArgument('%features.path%')->
+            addArgument('%printer.verbose%')->
+            setShared(false);
+
+        // Default parameters
+        $container->setParameter('parser.class', 'Everzet\\Gherkin\\Parser');
+        $container->setParameter('i18n.class', 'Everzet\\Gherkin\\I18n');
+        $container->setParameter('world.class', 'Everzet\\Behat\\Environment\\SimpleWorld');
+        $container->setParameter('features.loader.class', 'Everzet\\Behat\\Loaders\\FeaturesLoader');
+        $container->setParameter('steps.loader.class', 'Everzet\\Behat\\Loaders\\StepsLoader');
+        $container->setParameter('printer.class', 'Everzet\\Behat\\Printers\\ConsolePrinter');
+
+        $dumper = new \Symfony\Components\DependencyInjection\Dumper\PhpDumper($container);
+        file_put_contents(__DIR__ . '/../../ServiceContainer/Container.php', $dumper->dump(
+            array('class' => 'Container')
+        ));
+
+
+
+
         $basePath = realpath($input->getArgument('features'));
         $featureFiles = array();
 
@@ -60,23 +107,18 @@ class BehatCommand extends Command
             $basePath = dirname($basePath);
         }
 
-        // Init I18n for Gherkin with translations path
-        $i18n = new I18n(realpath(__DIR__ . '/../../../../../i18n'));
-
-        // Init test printer
-        $printer = new ConsolePrinter($output, $i18n, $basePath, $input->getOption('verbose'));
-
-        // Sets world class name & environment config path
-        $worldClass = 'Everzet\Behat\Environment\SimpleWorld';
-        $worldClass::setEnvFile($basePath . '/support/env.php');
-
-        // Find step definition files
-        $finder = new Finder();
-        $stepDefinitions = $finder->files()->name('*.php')->in($basePath . '/steps')->getIterator();
+        // Sets parameters
+        $container->setParameter('container',           $container);
+        $container->setParameter('output',              $output);
+        $container->setParameter('i18n.path',           realpath(__DIR__ . '/../../../../../i18n'));
+        $container->setParameter('features.path',       $basePath);
+        $container->setParameter('world.file',          $basePath . '/support/env.php');
+        $container->setParameter('steps.loader.path',   $basePath . '/steps');
+        $container->setParameter('printer.verbose',     $input->getOption('verbose'));
 
         // Check if we had redundant definitions
         try {
-            new StepsContainer($stepDefinitions);
+            $container->getSteps_LoaderService();
         } catch (Redundant $e) {
             $output->writeln(sprintf("<failed>%s</failed>",
                 strtr($e->getMessage(), array($basePath . '/' => ''))
@@ -84,23 +126,8 @@ class BehatCommand extends Command
             return 1;
         }
 
-        // Read feature files
-        if (!count($featureFiles)) {
-            $finder = new Finder();
-            $featureFiles = $finder->files()->name('*.feature')->in(
-                $input->getArgument('features')
-            );
+        foreach ($container->getFeatures_LoaderService() as $feature) {
+            $feature->run();
         }
-
-        // Init statistics container
-        $stats = new TestStats;
-        foreach ($featureFiles as $featureFile) {
-            $runer = new FeatureRuner(
-                $featureFile, $printer, $stepDefinitions, $worldClass, $i18n
-            );
-            $stats->addFeatureStatuses($runer->run());
-        }
-
-        $printer->logStats($stats, $stepDefinitions);
     }
 }

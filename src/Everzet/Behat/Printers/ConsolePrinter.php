@@ -13,7 +13,6 @@ use \Everzet\Gherkin\Structures\Inline\PyString;
 use \Everzet\Gherkin\Structures\Inline\Table;
 use \Everzet\Gherkin\Structures\Inline\Examples;
 use \Everzet\Behat\Stats\TestStats;
-use \Everzet\Behat\Definitions\StepsContainer;
 use \Everzet\Behat\Printers\Printer;
 use \Everzet\Behat\Exceptions\Redundant;
 
@@ -36,8 +35,6 @@ use \Symfony\Components\Console\Output\OutputInterface;
  */
 class ConsolePrinter implements Printer
 {
-    protected $file;
-    protected $i18n;
     protected $verbose;
     protected $output;
     protected $basePath;
@@ -60,9 +57,8 @@ class ConsolePrinter implements Printer
      * @param   string          $basePath   features base path
      * @param   boolean         $verbose    is output verbose
      */
-    public function __construct(OutputInterface $output, I18n $i18n, $basePath, $verbose = false)
+    public function __construct(OutputInterface $output, $basePath, $verbose = false)
     {
-        $this->i18n = $i18n;
         $this->output = $output;
         $this->basePath = $basePath;
         $this->verbose = $verbose;
@@ -98,31 +94,13 @@ class ConsolePrinter implements Printer
     /**
      * @see \Everzet\Behat\Printers\Printer
      */
-    public function logStatus($code, $message)
-    {
-        $this->output->writeln(sprintf('<%s>%s</%s>',
-            $code, strtr($message, array($this->basePath . '/' => '')), $code
-        ));
-    }
-
-    /**
-     * @see \Everzet\Behat\Printers\Printer
-     */
-    public function setFile($file)
-    {
-        $this->file = realpath($file);
-    }
-
-    /**
-     * @see \Everzet\Behat\Printers\Printer
-     */
-    public function logFeatureBegin(Feature $feature, $file)
+    public function logFeatureBegin(Feature $feature)
     {
         if ($feature->hasTags()) {
             $this->output->writeln(sprintf("<tag>%s</tag>", $this->getTagsString($feature)));
         }
         $this->output->writeln(sprintf("%s: %s",
-            $this->i18n->__('feature', 'Feature'),
+            $feature->getI18n()->__('feature', 'Feature'),
             $feature->getTitle()
         ));
         foreach ($feature->getDescription() as $description) {
@@ -134,7 +112,7 @@ class ConsolePrinter implements Printer
     /**
      * @see \Everzet\Behat\Printers\Printer
      */
-    public function logFeatureEnd(Feature $feature, $file)
+    public function logFeatureEnd(Feature $feature)
     {
         $this->output->writeln('');
     }
@@ -150,12 +128,12 @@ class ConsolePrinter implements Printer
             $this->recalcStepsMaxLength($background);
 
             $description = sprintf("  %s:%s",
-                $this->i18n->__('background', 'Background'),
+                $background->getI18n()->__('background', 'Background'),
                 $background->getTitle() ? ' ' . $background->getTitle() : ''
             );
             $this->output->write($description);
 
-            $this->logLineSourceComment(mb_strlen($description), $this->file, $background->getLine());
+            $this->logLineSourceComment(mb_strlen($description), $background->getFile(), $background->getLine());
         }
     }
 
@@ -186,11 +164,11 @@ class ConsolePrinter implements Printer
         }
 
         $description = sprintf("  %s:%s",
-            $this->i18n->__('scenario-outline', 'Scenario Outline'),
+            $scenario->getI18n()->__('scenario-outline', 'Scenario Outline'),
             $scenario->getTitle() ? ' ' . $scenario->getTitle() : ''
         );
         $this->output->write($description);
-        $this->logLineSourceComment(mb_strlen($description), $this->file, $scenario->getLine());
+        $this->logLineSourceComment(mb_strlen($description), $scenario->getFile(), $scenario->getLine());
     }
 
     /**
@@ -223,7 +201,7 @@ class ConsolePrinter implements Printer
             }
 
             // Print Examples:
-            $this->output->writeln(sprintf("\n    %s:", $this->i18n->__('examples', 'Examples')));
+            $this->output->writeln(sprintf("\n    %s:", $scenario->getI18n()->__('examples', 'Examples')));
 
             // Print table header
             $this->output->writeln(preg_replace(
@@ -276,11 +254,11 @@ class ConsolePrinter implements Printer
         }
 
         $description = sprintf("  %s:%s",
-            $this->i18n->__('scenario', 'Scenario'),
+            $scenario->getI18n()->__('scenario', 'Scenario'),
             $scenario->getTitle() ? ' ' . $scenario->getTitle() : ''
         );
         $this->output->write($description);
-        $this->logLineSourceComment(mb_strlen($description), $this->file, $scenario->getLine());
+        $this->logLineSourceComment(mb_strlen($description), $scenario->getFile(), $scenario->getLine());
     }
 
     /**
@@ -360,9 +338,6 @@ class ConsolePrinter implements Printer
         ));
     }
 
-    /**
-     * @see \Everzet\Behat\Printers\Printer
-     */
     public function logStepArguments($code, array $args)
     {
         foreach ($args as $argument) {
@@ -390,11 +365,11 @@ class ConsolePrinter implements Printer
         $max = $this->stepsMaxLength;
 
         if ($scenario instanceof ScenarioOutline) {
-            $type = $this->i18n->__('scenario-outline', 'Scenario Outline') . ':';
+            $type = $scenario->getI18n()->__('scenario-outline', 'Scenario Outline') . ':';
         } else if ($scenario instanceof Scenario) {    
-            $type = $this->i18n->__('scenario', 'Scenario') . ':';
+            $type = $scenario->getI18n()->__('scenario', 'Scenario') . ':';
         } else if ($scenario instanceof Background) {
-            $type = $this->i18n->__('background', 'Background') . ':';
+            $type = $scenario->getI18n()->__('background', 'Background') . ':';
         }
         $scenarioDescription = $scenario->getTitle() ? $type . ' ' . $scenario->getTitle() : $type;
 
@@ -409,47 +384,6 @@ class ConsolePrinter implements Printer
         }
 
         $this->stepsMaxLength = $max;
-    }
-
-    /**
-     * @see \Everzet\Behat\Printers\Printer
-     */
-    public function logStats(TestStats $stats, \Iterator $stepDefinitions)
-    {
-        $steps = new StepsContainer($stepDefinitions);
-
-        $details = array();
-        foreach ($stats->getStatisticStatusTypes() as $type) {
-            if ($stats->getScenarioStatusCount($type)) {
-                $details[] = sprintf('<%s>%d %s</%s>',
-                    $type, $stats->getScenarioStatusCount($type), $type, $type
-                );
-            }
-        }
-        $this->output->writeln(sprintf('%d scenarios (%s)',
-            $stats->getScenariosCount(), implode(', ', $details)
-        ));
-
-        $details = array();
-        foreach ($stats->getStatisticStatusTypes() as $type) {
-            if ($stats->getStepStatusCount($type)) {
-                $details[] = sprintf('<%s>%d %s</%s>',
-                    $type, $stats->getStepStatusCount($type), $type, $type
-                );
-            }
-        }
-        $this->output->writeln(sprintf('%d steps (%s)',
-            $stats->getStepsCount(), implode(', ', $details)
-        ));
-
-        if ($stats->getStepStatusCount('undefined')) {
-            $this->output->writeln(sprintf(
-                "\n<undefined>You can implement step definitions for undefined steps with these snippets:</undefined>%s\n",
-                $steps->getUndefinedStepsSnippets()
-            ));
-        }
-
-        $this->output->writeln($stats->getTime() . 'ms');
     }
 
     /**

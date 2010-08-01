@@ -20,9 +20,9 @@ namespace Everzet\Behat\Environment;
 interface World
 {
     /**
-     * Sets environment config file
+     * Constructs World instance.
      *
-     * @return  void
+     * @param     string  $file       file path to require on flushes
      */
-    static public function setEnvFile($envFile);
+    public function __construct($envFile);
 }

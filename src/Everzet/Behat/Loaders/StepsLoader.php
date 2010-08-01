@@ -1,15 +1,16 @@
 <?php
 
-namespace Everzet\Behat\Definitions;
+namespace Everzet\Behat\Loaders;
 
-use \Everzet\Gherkin\Structures\Step;
+use \Symfony\Components\Finder\Finder;
+
 use \Everzet\Gherkin\Structures\Inline\PyString;
 use \Everzet\Gherkin\Structures\Inline\Table;
 use \Everzet\Behat\Definitions\StepDefinition;
+use \Everzet\Behat\Environment\World;
 use \Everzet\Behat\Exceptions\Redundant;
 use \Everzet\Behat\Exceptions\Ambiguous;
 use \Everzet\Behat\Exceptions\Undefined;
-use \Everzet\Behat\Environment\World;
 
 /*
  * This file is part of the behat package.
@@ -26,7 +27,7 @@ use \Everzet\Behat\Environment\World;
  * @subpackage  Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepsContainer
+class StepsLoader
 {
     protected $steps = array();
     protected $undefinedSteps = array();
@@ -37,11 +38,12 @@ class StepsContainer
      * @param   \Iterator   $definitionFiles    step definition files
      * @param   World       $world              world object instance
      */
-    public function __construct(\Iterator $definitionFiles, World $world = null)
+    public function __construct($path, World $world = null)
     {
         $steps = $this;
 
-        foreach ($definitionFiles as $definitionFile) {
+        $finder = new Finder();
+        foreach ($finder->files()->name('*.php')->in($path) as $definitionFile) {
             require $definitionFile;
         }
     }
@@ -141,15 +143,14 @@ class StepsContainer
      * @throws  \Everzet\Behat\Exceptions\Ambiguous if step description is ambiguous
      * @throws  \Everzet\Behat\Exceptions\Undefined if step definition not found
      */
-    public function findDefinition(Step $step, array $examples = array())
+    public function findDefinition($text, array $args = array())
     {
-        $text = $step->getText($examples);
         $matches = array();
 
         foreach ($this->steps as $regex => $definition) {
             if (preg_match($regex, $text, $values)) {
                 $definition->setMatchedText($text);
-                $definition->setValues(array_merge(array_slice($values, 1), $step->getArguments()));
+                $definition->setValues(array_merge(array_slice($values, 1), $args));
                 $matches[] = $definition;
             }
         }
@@ -159,10 +160,6 @@ class StepsContainer
         }
 
         if (0 === count($matches)) {
-            $regexp = $this->convertDescriptionToDefinition($step, $text);
-            if (!isset($this->undefinedSteps[$regexp])) {
-                $this->undefinedSteps[$regexp] = sprintf($regexp, $step->getType());
-            }
             throw new Undefined($text);
         }
 
