@@ -2,13 +2,14 @@
 
 namespace Everzet\Behat\Runners;
 
-use Symfony\Components\DependencyInjection\Container;
+use \Symfony\Components\DependencyInjection\Container;
 
 use \Everzet\Gherkin\Structures\Feature;
 use \Everzet\Gherkin\Structures\Scenario\Scenario;
 use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
 use \Everzet\Behat\Runners\ScenarioOutlineRunner;
 use \Everzet\Behat\Runners\ScenarioRunner;
+use \Everzet\Behat\Loggers\Base\FeatureLogger;
 
 /*
  * This file is part of the behat package.
@@ -49,14 +50,19 @@ class FeatureRunner
         }
     }
 
-    public function run()
+    public function getSubject()
     {
-        $printer = $this->container->getPrinterService();
+        return $this->feature;
+    }
 
-        $printer->logFeatureBegin($this->feature);
+    public function run(FeatureLogger $logger)
+    {
         foreach ($this->scenarioRunners as $runner) {
-            $runner->run();
+            if ($runner instanceof ScenarioOutlineRunner) {
+                $logger->logScenarioOutline($runner)->run();
+            } elseif ($runner instanceof ScenarioRunner) {
+                $logger->logScenario($runner)->run();
+            }
         }
-        $printer->logFeatureEnd($this->feature);
     }
 }

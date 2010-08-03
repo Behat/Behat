@@ -44,7 +44,7 @@ class Parser
         $this->i18n = $i18n;
     }
 
-    protected function initLang($value)
+    protected function initLang()
     {
         if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w]+?)\s*$#', $this->lines[0], $values)) {
             $this->i18n->loadLang($values['lang']);
@@ -68,7 +68,7 @@ class Parser
         $this->currentLineNb = -1;
         $this->currentLine = '';
         $this->lines = explode("\n", $this->cleanup($value));
-        $this->initLang($value);
+        $this->initLang();
 
         if (function_exists('mb_internal_encoding') && ((int) ini_get('mbstring.func_overload')) & 2) {
             $mbEncoding = mb_internal_encoding();

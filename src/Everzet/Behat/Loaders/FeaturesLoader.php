@@ -5,6 +5,7 @@ namespace Everzet\Behat\Loaders;
 use \Symfony\Components\DependencyInjection\Container;
 use \Symfony\Components\Finder\Finder;
 
+use \Everzet\Behat\Loggers\Detailed\FeatureLogger;
 use \Everzet\Behat\Runners\FeatureRunner;
 
 /*
@@ -30,12 +31,14 @@ class FeaturesLoader implements \Iterator
     public function __construct($path, Container $container)
     {
         $finder = new Finder();
-        $parser = $container->getParserService();
+
+        $loggerLoader = $container->getLogger_LoaderService();
+        $loggerLoader->load($container);
 
         foreach ($finder->files()->name('*.feature')->in($path) as $featureFile) {
-            $this->featureRunners[] = new FeatureRunner(
-                $parser->parseFile($featureFile), $container
-            );
+            $this->featureRunners[] = new FeatureLogger(new FeatureRunner(
+                $container->getParserService()->parseFile($featureFile), $container
+            ), $container);
         }
     }
 

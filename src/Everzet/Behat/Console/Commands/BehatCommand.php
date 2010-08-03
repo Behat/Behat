@@ -8,7 +8,6 @@ use \Symfony\Components\Console\Input\InputArgument;
 use \Symfony\Components\Console\Input\InputOption;
 use \Symfony\Components\Console\Output\OutputInterface;
 
-use \Everzet\Behat\Stats\TestStats;
 use \Everzet\Behat\Exceptions\Redundant;
 
 /*
@@ -63,6 +62,10 @@ class BehatCommand extends Command
             setShared(false);
 
         $container->
+            register('logger.loader', '%logger.loader.class%')->
+            setShared(false);
+
+        $container->
             register('features.loader', '%features.loader.class%')->
             addArgument('%features.path%')->
             addArgument('%container%')->
@@ -74,20 +77,13 @@ class BehatCommand extends Command
             addArgument(new \Symfony\Components\DependencyInjection\Reference('world'))->
             setShared(false);
 
-        $container->
-            register('printer', '%printer.class%')->
-            addArgument('%output%')->
-            addArgument('%features.path%')->
-            addArgument('%printer.verbose%')->
-            setShared(false);
-
         // Default parameters
         $container->setParameter('parser.class', 'Everzet\\Gherkin\\Parser');
         $container->setParameter('i18n.class', 'Everzet\\Gherkin\\I18n');
         $container->setParameter('world.class', 'Everzet\\Behat\\Environment\\SimpleWorld');
         $container->setParameter('features.loader.class', 'Everzet\\Behat\\Loaders\\FeaturesLoader');
         $container->setParameter('steps.loader.class', 'Everzet\\Behat\\Loaders\\StepsLoader');
-        $container->setParameter('printer.class', 'Everzet\\Behat\\Printers\\ConsolePrinter');
+        $container->setParameter('logger.loader.class', 'Everzet\\Behat\\Loggers\\Detailed\\Loader');
 
         $dumper = new \Symfony\Components\DependencyInjection\Dumper\PhpDumper($container);
         file_put_contents(__DIR__ . '/../../ServiceContainer/Container.php', $dumper->dump(
@@ -114,7 +110,7 @@ class BehatCommand extends Command
         $container->setParameter('features.path',       $basePath);
         $container->setParameter('world.file',          $basePath . '/support/env.php');
         $container->setParameter('steps.loader.path',   $basePath . '/steps');
-        $container->setParameter('printer.verbose',     $input->getOption('verbose'));
+        $container->setParameter('logger.verbose',      $input->getOption('verbose'));
 
         // Check if we had redundant definitions
         try {

@@ -6,34 +6,34 @@ use Symfony\Components\DependencyInjection\Container;
 
 use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
 use \Everzet\Gherkin\Structures\Scenario\Background;
+use \Everzet\Behat\Runners\ScenarioRunner;
+use \Everzet\Behat\Loggers\Base\ScenarioOutlineLogger;
 
-class ScenarioOutlineRunner extends ScenarioRunner
+class ScenarioOutlineRunner
 {
     protected $outline;
+    protected $background;
+    protected $container;
 
-    public function __construct(ScenarioOutline $outline, Background $background, 
+    public function __construct(ScenarioOutline $outline, Background $background = null, 
                                 Container $container)
     {
-        $this->outline = $outline;
-        $this->background = $background;
-        $this->container = $container;
-        $this->printer = $container->getPrinterService();
+        $this->outline      = $outline;
+        $this->background   = $background;
+        $this->container    = $container;
     }
 
-    public function run()
+    public function getSubject()
     {
-        $this->printer->logScenarioOutlineBegin($this->outline);
-        foreach ($this->outline->getExamples() as $tokens) {
-            $definitions = $this->container->getSteps_LoaderService();
-            $this->runBackground($definitions);
-            foreach ($this->outline->getSteps() as $step) {
-                $runner = new StepRunner($step, $definitions, $this->container);
-                $runner->setTokens($tokens);
-                $runner->setIsInOutline(true);
-                $runner->run();
-            }
-            $this->printer->logIntermediateOutlineScenario($this->outline);
+        return $this->outline;
+    }
+
+    public function run(ScenarioOutlineLogger $logger)
+    {
+        foreach ($this->outline->getExamples()->getTable()->getHash() as $tokens) {
+            $runner = new ScenarioRunner($this->outline, $this->background, $this->container);
+            $runner->setTokens($tokens);
+            $logger->logScenario($runner)->run();
         }
-        $this->printer->logScenarioOutlineEnd($this->outline);
     }
 }

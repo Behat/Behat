@@ -668,5 +668,12 @@ u
                 end($feature->getScenarios())->getI18n()->__('scenario', 'Scenario')
             );
         }
+
+        foreach (array($this->loadFeature('addition.feature'), $this->loadFeatureFromFile('addition.feature')) as $feature) {
+            $this->assertEquals('Feature', $feature->getI18n()->__('feature', 'Feature'));
+            $this->assertEquals('Scenario',
+                end($feature->getScenarios())->getI18n()->__('scenario', 'Scenario')
+            );
+        }
     }
 }

@@ -64,6 +64,19 @@ class Container extends Container
     }
 
     /**
+     * Gets the 'logger.loader' service.
+     *
+     * @return Object A %logger.loader.class% instance.
+     */
+    protected function getLogger_LoaderService()
+    {
+        $class = $this->getParameter('logger.loader.class');
+        $instance = new $class();
+
+        return $instance;
+    }
+
+    /**
      * Gets the 'features.loader' service.
      *
      * @return Object A %features.loader.class% instance.
@@ -85,19 +98,6 @@ class Container extends Container
     {
         $class = $this->getParameter('steps.loader.class');
         $instance = new $class($this->getParameter('steps.loader.path'), $this->getWorldService());
-
-        return $instance;
-    }
-
-    /**
-     * Gets the 'printer' service.
-     *
-     * @return Object A %printer.class% instance.
-     */
-    protected function getPrinterService()
-    {
-        $class = $this->getParameter('printer.class');
-        $instance = new $class($this->getParameter('output'), $this->getParameter('features.path'), $this->getParameter('printer.verbose'));
 
         return $instance;
     }
@@ -130,7 +130,7 @@ class Container extends Container
             'world.class' => 'Everzet\\Behat\\Environment\\SimpleWorld',
             'features.loader.class' => 'Everzet\\Behat\\Loaders\\FeaturesLoader',
             'steps.loader.class' => 'Everzet\\Behat\\Loaders\\StepsLoader',
-            'printer.class' => 'Everzet\\Behat\\Printers\\ConsolePrinter',
+            'logger.loader.class' => 'Everzet\\Behat\\Loggers\\Detailed\\Loader',
         );
     }
 }

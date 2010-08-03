@@ -14,15 +14,26 @@ class StepRunner
     protected $definitions;
     protected $container;
     protected $tokens = array();
-    protected $inOutline = false;
-    protected $printer;
+
+    protected $definition;
+    protected $status;
+    protected $exception;
 
     public function __construct(Step $step, StepsLoader $definitions, Container $container)
     {
-        $this->step = $step;
-        $this->definitions = $definitions;
-        $this->container = $container;
-        $this->printer = $container->getPrinterService();
+        $this->step         = $step;
+        $this->definitions  = $definitions;
+        $this->container    = $container;
+    }
+
+    public function getSubject()
+    {
+        return $this->step;
+    }
+
+    public function getDefinition()
+    {
+        return $this->definition;
     }
 
     public function setTokens(array $tokens)
@@ -30,89 +41,62 @@ class StepRunner
         $this->tokens = $tokens;
     }
 
-    public function setIsInOutline($inOutline)
+    public function getTokens()
     {
-        $this->inOutline = (bool) $inOutline;
+        return $this->tokens;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function getException()
+    {
+        return $this->exception;
+    }
+
+    protected function findDefinition()
+    {
+        try {
+            try {
+                $this->definition = $this->definitions->findDefinition(
+                    $this->step->getText($this->tokens), $this->step->getArguments()
+                );
+            } catch (Ambiguous $e) {
+                $this->exception = $e;
+                $this->status = 'failed';
+            }
+        } catch (Undefined $e) {
+            $this->status = 'undefined';
+        }
     }
 
     public function run()
     {
-        try {
-            try {
-                $definition = $this->definitions->findDefinition(
-                    $this->step->getText($this->tokens), $this->step->getArguments()
-                );
-            } catch (Ambiguous $e) {
-                return $this->logStep('failed', $e);
-            }
-        } catch (Undefined $e) {
-            return $this->logStep('undefined');
-        }
+        $this->findDefinition();
 
-        try {
+        if (null === $this->status) {
             try {
-                $definition->run();
-                return $this->logStepDefinition('passed', $definition);
-            } catch (Pending $e) {
-                return $this->logStepDefinition('pending', $definition);
+                try {
+                    $this->definition->run();
+                    $this->status = 'passed';
+                } catch (Pending $e) {
+                    $this->status = 'pending';
+                }
+            } catch (\Exception $e) {
+                $this->status = 'failed';
+                $this->exception = $e;
             }
-        } catch (\Exception $e) {
-            return $this->logStepDefinition('failed', $definition, $e);
         }
     }
 
     public function skip()
     {
-        try {
-            try {
-                $definition = $this->definitions->findDefinition($this->step, $values);
-            } catch (Ambiguous $e) {
-                return $this->logStep('failed', $e);
-            }
-        } catch (Undefined $e) {
-            return $this->logStep('undefined');
+        $this->findDefinition();
+
+        if (null === $this->status) {
+            $this->status = 'skipped';
         }
-
-        return $this->logStepDefinition(
-            'skipped', $this->step->getType(), $definition, $this->step->getArguments()
-        );
-    }
-
-    /**
-     * Calls step printer with specific step
-     *
-     * @param   string      $code   step status code
-     * @param   Step        $step   step instance
-     * @param   Exception   $e      throwed exception
-     * 
-     * @return  string              step status code
-     */
-    protected function logStep($code, \Exception $e = null)
-    {
-        $this->printer->logStep(
-            $code, $this->step->getType(), $this->step->getText($this->tokens), null, null,
-            $this->step->getArguments(), $e
-        );
-
-        return $code;
-    }
-
-    /**
-     * Calls step printer with specific step definition
-     *
-     * @param   string          $code           step status code
-     * @param   StepDefinition  $definition     step definition instance
-     * @param   Exception       $e              throwed exception
-     * 
-     * @return  string                          step status code
-     */
-    protected function logStepDefinition($code, StepDefinition $definition, \Exception $e = null)
-    {
-        $this->printer->logStep(
-            $code, $this->step->getType(), $definition->getMatchedText(),
-            $definition->getFile(), $definition->getLine(), $this->step->getArguments(), $e
-        );
-
-        return $code;
     }
 }
