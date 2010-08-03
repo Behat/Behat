@@ -8,6 +8,7 @@ use \Symfony\Components\Console\Input\InputArgument;
 use \Symfony\Components\Console\Input\InputOption;
 use \Symfony\Components\Console\Output\OutputInterface;
 
+use \Everzet\Behat\ServiceContainer\Container;
 use \Everzet\Behat\Exceptions\Redundant;
 
 /*
@@ -44,55 +45,6 @@ class BehatCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = new \Symfony\Components\DependencyInjection\Builder();
-
-        $container->
-            register('parser', '%parser.class%')->
-            addArgument(new \Symfony\Components\DependencyInjection\Reference('i18n'))->
-            setShared(false);
-
-        $container->
-            register('i18n', '%i18n.class%')->
-            addArgument('%i18n.path%')->
-            setShared(false);
-
-        $container->
-            register('world', '%world.class%')->
-            addArgument('%world.file%')->
-            setShared(false);
-
-        $container->
-            register('logger.loader', '%logger.loader.class%')->
-            setShared(false);
-
-        $container->
-            register('features.loader', '%features.loader.class%')->
-            addArgument('%features.path%')->
-            addArgument('%container%')->
-            setShared(false);
-
-        $container->
-            register('steps.loader', '%steps.loader.class%')->
-            addArgument('%steps.loader.path%')->
-            addArgument(new \Symfony\Components\DependencyInjection\Reference('world'))->
-            setShared(false);
-
-        // Default parameters
-        $container->setParameter('parser.class', 'Everzet\\Gherkin\\Parser');
-        $container->setParameter('i18n.class', 'Everzet\\Gherkin\\I18n');
-        $container->setParameter('world.class', 'Everzet\\Behat\\Environment\\SimpleWorld');
-        $container->setParameter('features.loader.class', 'Everzet\\Behat\\Loaders\\FeaturesLoader');
-        $container->setParameter('steps.loader.class', 'Everzet\\Behat\\Loaders\\StepsLoader');
-        $container->setParameter('logger.loader.class', 'Everzet\\Behat\\Loggers\\Detailed\\Loader');
-
-        $dumper = new \Symfony\Components\DependencyInjection\Dumper\PhpDumper($container);
-        file_put_contents(__DIR__ . '/../../ServiceContainer/Container.php', $dumper->dump(
-            array('class' => 'Container')
-        ));
-
-
-
-
         $basePath = realpath($input->getArgument('features'));
         $featureFiles = array();
 
@@ -103,7 +55,8 @@ class BehatCommand extends Command
             $basePath = dirname($basePath);
         }
 
-        // Sets parameters
+        // Configure DIC
+        $container = new Container();
         $container->setParameter('container',           $container);
         $container->setParameter('output',              $output);
         $container->setParameter('i18n.path',           realpath(__DIR__ . '/../../../../../i18n'));

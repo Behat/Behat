@@ -1,7 +1,9 @@
 <?php
 
+namespace Everzet\Behat\ServiceContainer;
+
 use Symfony\Components\DependencyInjection\ContainerInterface;
-use Symfony\Components\DependencyInjection\Container;
+use Symfony\Components\DependencyInjection\Container as BaseContainer;
 use Symfony\Components\DependencyInjection\Reference;
 use Symfony\Components\DependencyInjection\Parameter;
 use Symfony\Components\DependencyInjection\ParameterBag\ParameterBag;
@@ -12,7 +14,7 @@ use Symfony\Components\DependencyInjection\ParameterBag\ParameterBag;
  * This class has been auto-generated
  * by the Symfony Dependency Injection Component.
  */
-class Container extends Container
+class Container extends BaseContainer
 {
     protected $shared = array();
 
