@@ -23,7 +23,7 @@ class DetailedLogger implements LoggerInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->output       = $container->getParameter('output');
+        $this->output       = $container->getParameter('logger.output');
         $this->verbose      = $container->getParameter('logger.verbose');
 
         $this->output->setStyle('failed',      array('fg' => 'red'));

@@ -86,7 +86,7 @@ class Container extends BaseContainer
     protected function getFeatures_LoaderService()
     {
         $class = $this->getParameter('features.loader.class');
-        $instance = new $class($this->getParameter('features.path'), $this->getParameter('container'));
+        $instance = new $class($this->getParameter('features.path'), $this);
 
         return $instance;
     }
@@ -99,7 +99,7 @@ class Container extends BaseContainer
     protected function getSteps_LoaderService()
     {
         $class = $this->getParameter('steps.loader.class');
-        $instance = new $class($this->getParameter('steps.loader.path'), $this->getEnvironmentService());
+        $instance = new $class($this->getParameter('steps.path'), $this->getEnvironmentService());
 
         return $instance;
     }
@@ -113,8 +113,7 @@ class Container extends BaseContainer
      */
     public function findAnnotatedServiceIds($name)
     {
-        static $annotations = array (
-);
+        static $annotations = array();
 
         return isset($annotations[$name]) ? $annotations[$name] : array();
     }
@@ -127,12 +126,12 @@ class Container extends BaseContainer
     protected function getDefaultParameters()
     {
         return array(
-            'parser.class' => 'Everzet\\Gherkin\\Parser',
-            'i18n.class' => 'Everzet\\Gherkin\\I18n',
-            'environment.class' => 'Everzet\\Behat\\Environment\\WorldEnvironment',
+            'parser.class'          => 'Everzet\\Gherkin\\Parser',
+            'i18n.class'            => 'Everzet\\Gherkin\\I18n',
+            'environment.class'     => 'Everzet\\Behat\\Environment\\WorldEnvironment',
             'features.loader.class' => 'Everzet\\Behat\\Loader\\FeaturesLoader',
-            'steps.loader.class' => 'Everzet\\Behat\\Loader\\StepsLoader',
-            'logger.class' => 'Everzet\\Behat\\Logger\\DetailedLogger',
+            'steps.loader.class'    => 'Everzet\\Behat\\Loader\\StepsLoader',
+            'logger.class'          => 'Everzet\\Behat\\Logger\\DetailedLogger',
         );
     }
 }

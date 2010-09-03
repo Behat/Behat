@@ -57,12 +57,11 @@ class TestCommand extends Command
 
         // Configure DIC
         $container = new Container();
-        $container->setParameter('container',           $container);
-        $container->setParameter('output',              $output);
         $container->setParameter('i18n.path',           realpath(__DIR__ . '/../../../../../i18n'));
         $container->setParameter('features.path',       $basePath);
+        $container->setParameter('steps.path',          $basePath . '/steps');
         $container->setParameter('environment.file',    $basePath . '/support/env.php');
-        $container->setParameter('steps.loader.path',   $basePath . '/steps');
+        $container->setParameter('logger.output',       $output);
         $container->setParameter('logger.verbose',      $input->getOption('verbose'));
 
         // Check if we had redundant definitions
