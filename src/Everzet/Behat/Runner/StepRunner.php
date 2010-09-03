@@ -3,31 +3,31 @@
 namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Element\StepElement;
 
 use Everzet\Behat\Definition\StepDefinition;
 use Everzet\Behat\Loader\StepsLoader;
-use Everzet\Behat\Logger\LoggerInterface;
 
 class StepRunner extends BaseRunner implements RunnerInterface
 {
     protected $step;
     protected $definitions;
     protected $container;
+    protected $dispatcher;
     protected $tokens = array();
 
     protected $definition;
     protected $status;
     protected $exception;
 
-    public function __construct(StepElement $step, StepsLoader $definitions, Container $container,
-                                LoggerInterface $logger)
+    public function __construct(StepElement $step, StepsLoader $definitions, Container $container)
     {
         $this->step         = $step;
         $this->definitions  = $definitions;
         $this->container    = $container;
-        $this->setLogger(     $logger);
+        $this->dispatcher   = $container->getEventDispatcherService();
     }
 
     public function setTokens(array $tokens)
@@ -79,7 +79,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
     public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
-        $this->getLogger()->beforeStep($this);
+        $this->dispatcher->notify(new Event($this, 'step.pre_test'));
 
         $this->findDefinition();
 
@@ -97,7 +97,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
             }
         }
 
-        $this->getLogger()->afterStep($this);
+        $this->dispatcher->notify(new Event($this, 'step.post_test'));
 
         return $this->status;
     }
@@ -105,7 +105,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
     public function skip(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
-        $this->getLogger()->beforeStep($this);
+        $this->dispatcher->notify(new Event($this, 'step.pre_test'));
 
         $this->findDefinition();
 
@@ -113,6 +113,6 @@ class StepRunner extends BaseRunner implements RunnerInterface
             $this->status = 'skipped';
         }
 
-        $this->getLogger()->afterStep($this);
+        $this->dispatcher->notify(new Event($this, 'step.post_test'));
     }
 }

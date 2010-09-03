@@ -3,18 +3,18 @@
 namespace Everzet\Behat\ServiceContainer;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Container as BaseContainer;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
- * Container
+ * ServiceContainer
  *
  * This class has been auto-generated
  * by the Symfony Dependency Injection Component.
  */
-class Container extends BaseContainer
+class ServiceContainer extends Container
 {
     protected $shared = array();
 
@@ -24,6 +24,25 @@ class Container extends BaseContainer
     public function __construct()
     {
         parent::__construct(new ParameterBag($this->getDefaultParameters()));
+    }
+
+    /**
+     * Gets the 'event_dispatcher' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Object A %event_dispatcher.class% instance.
+     */
+    protected function getEventDispatcherService()
+    {
+        if (isset($this->shared['event_dispatcher'])) return $this->shared['event_dispatcher'];
+
+        $class = $this->getParameter('event_dispatcher.class');
+        $instance = new $class($this);
+        $this->shared['event_dispatcher'] = $instance;
+
+        return $instance;
     }
 
     /**
@@ -55,7 +74,7 @@ class Container extends BaseContainer
     /**
      * Gets the 'environment' service.
      *
-     * @return Object A %world.class% instance.
+     * @return Object A %environment.class% instance.
      */
     protected function getEnvironmentService()
     {
@@ -68,7 +87,7 @@ class Container extends BaseContainer
     /**
      * Gets the 'logger' service.
      *
-     * @return Object A %logger.class% instance
+     * @return Object A %logger.class% instance.
      */
     protected function getLoggerService()
     {
@@ -79,43 +98,45 @@ class Container extends BaseContainer
     }
 
     /**
-     * Gets the 'features.loader' service.
+     * Gets the 'features_loader' service.
      *
-     * @return Object A %features.loader.class% instance.
+     * @return Object A %features_loader.class% instance.
      */
-    protected function getFeatures_LoaderService()
+    protected function getFeaturesLoaderService()
     {
-        $class = $this->getParameter('features.loader.class');
+        $class = $this->getParameter('features_loader.class');
         $instance = new $class($this->getParameter('features.path'), $this);
 
         return $instance;
     }
 
     /**
-     * Gets the 'steps.loader' service.
+     * Gets the 'steps_loader' service.
      *
-     * @return Object A %steps.loader.class% instance.
+     * @return Object A %steps_loader.class% instance.
      */
-    protected function getSteps_LoaderService()
+    protected function getStepsLoaderService()
     {
-        $class = $this->getParameter('steps.loader.class');
+        $class = $this->getParameter('steps_loader.class');
         $instance = new $class($this->getParameter('steps.path'), $this->getEnvironmentService());
 
         return $instance;
     }
 
     /**
-     * Returns service ids for a given annotation.
+     * Returns service ids for a given tag.
      *
-     * @param string $name The annotation name
+     * @param string $name The tag name
      *
-     * @return array An array of annotations
+     * @return array An array of tags
      */
-    public function findAnnotatedServiceIds($name)
+    public function findTaggedServiceIds($name)
     {
-        static $annotations = array();
+        static $tags = array(
+            'events_listener' => array('logger'),
+        );
 
-        return isset($annotations[$name]) ? $annotations[$name] : array();
+        return isset($tags[$name]) ? $tags[$name] : array();
     }
 
     /**
@@ -126,12 +147,13 @@ class Container extends BaseContainer
     protected function getDefaultParameters()
     {
         return array(
-            'parser.class'          => 'Everzet\\Gherkin\\Parser',
-            'i18n.class'            => 'Everzet\\Gherkin\\I18n',
-            'environment.class'     => 'Everzet\\Behat\\Environment\\WorldEnvironment',
-            'features.loader.class' => 'Everzet\\Behat\\Loader\\FeaturesLoader',
-            'steps.loader.class'    => 'Everzet\\Behat\\Loader\\StepsLoader',
-            'logger.class'          => 'Everzet\\Behat\\Logger\\DetailedLogger',
+            'parser.class'              => 'Everzet\\Gherkin\\Parser',
+            'i18n.class'                => 'Everzet\\Gherkin\\I18n',
+            'environment.class'         => 'Everzet\\Behat\\Environment\\WorldEnvironment',
+            'features_loader.class'     => 'Everzet\\Behat\\Loader\\FeaturesLoader',
+            'steps_loader.class'        => 'Everzet\\Behat\\Loader\\StepsLoader',
+            'logger.class'              => 'Everzet\\Behat\\Logger\\DetailedLogger',
+            'event_dispatcher.class'    => 'Everzet\\Behat\\EventDispatcher\\EventDispatcher',
         );
     }
 }

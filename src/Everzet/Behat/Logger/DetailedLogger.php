@@ -3,16 +3,16 @@
 namespace Everzet\Behat\Logger;
 
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Element\SectionElement;
 use Everzet\Gherkin\Element\Inline\PyStringElement;
 use Everzet\Gherkin\Element\Inline\TableElement;
 
-use Everzet\Behat\Runner\FeatureRunner;
 use Everzet\Behat\Runner\ScenarioOutlineRunner;
 use Everzet\Behat\Runner\ScenarioRunner;
 use Everzet\Behat\Runner\BackgroundRunner;
-use Everzet\Behat\Runner\StepRunner;
 
 class DetailedLogger implements LoggerInterface
 {
@@ -35,9 +35,26 @@ class DetailedLogger implements LoggerInterface
         $this->output->setStyle('tag',         array('fg' => 'cyan'));
     }
 
-    public function beforeFeature(FeatureRunner $runner)
+    public function registerListeners(EventDispatcher $dispatcher)
     {
-        $feature = $runner->getFeature();
+        $dispatcher->connect('feature.pre_test', array($this, 'beforeFeature'));
+
+        $dispatcher->connect('scenario_outline.pre_test', array($this, 'beforeScenarioOutline'));
+        $dispatcher->connect('scenario_outline.post_test', array($this, 'afterScenarioOutline'));
+
+        $dispatcher->connect('scenario.pre_test', array($this, 'beforeScenario'));
+        $dispatcher->connect('scenario.post_test', array($this, 'afterScenario'));
+
+        $dispatcher->connect('background.pre_test', array($this, 'beforeBackground'));
+        $dispatcher->connect('background.post_test', array($this, 'afterBackground'));
+
+        $dispatcher->connect('step.post_test', array($this, 'afterStep'));
+    }
+
+    public function beforeFeature(Event $event)
+    {
+        $runner     = $event->getSubject();
+        $feature    = $runner->getFeature();
 
         // Print tags if had ones
         if ($feature->hasTags()) {
@@ -60,7 +77,7 @@ class DetailedLogger implements LoggerInterface
         if ($feature->hasBackground()) {
             $runner = new BackgroundRunner(
                 $feature->getBackground()
-              , $this->container->getSteps_LoaderService()
+              , $this->container->getStepsLoaderService()
               , $this->container
               , $this
             );
@@ -68,13 +85,10 @@ class DetailedLogger implements LoggerInterface
         }
     }
 
-    public function afterFeature(FeatureRunner $runner)
+    public function beforeScenarioOutline(Event $event)
     {
-    }
-
-    public function beforeScenarioOutline(ScenarioOutlineRunner $runner)
-    {
-        $outline = $runner->getScenarioOutline();
+        $runner     = $event->getSubject();
+        $outline    = $runner->getScenarioOutline();
 
         // Print tags if had ones
         if ($outline->hasTags()) {
@@ -89,14 +103,15 @@ class DetailedLogger implements LoggerInterface
         $this->output->writeln($description);
     }
 
-    public function afterScenarioOutline(ScenarioOutlineRunner $runner)
+    public function afterScenarioOutline(Event $event)
     {
         $this->output->writeln('');
     }
 
-    public function beforeScenario(ScenarioRunner $runner)
+    public function beforeScenario(Event $event)
     {
-        $scenario = $runner->getScenario();
+        $runner     = $event->getSubject();
+        $scenario   = $runner->getScenario();
 
         if (!$runner->isInOutline()) {
             // Print tags if had ones
@@ -115,9 +130,10 @@ class DetailedLogger implements LoggerInterface
         }
     }
 
-    public function afterScenario(ScenarioRunner $runner)
+    public function afterScenario(Event $event)
     {
-        $scenario = $runner->getScenario();
+        $runner     = $event->getSubject();
+        $scenario   = $runner->getScenario();
 
         if (!$runner->isInOutline()) {
             $this->output->writeln('');
@@ -174,8 +190,10 @@ class DetailedLogger implements LoggerInterface
         }
     }
 
-    public function beforeBackground(BackgroundRunner $runner)
+    public function beforeBackground(Event $event)
     {
+        $runner = $event->getSubject();
+
         if (null === $runner->getCaller()) {
             $background = $runner->getBackground();
 
@@ -187,19 +205,19 @@ class DetailedLogger implements LoggerInterface
         }
     }
 
-    public function afterBackground(BackgroundRunner $runner)
+    public function afterBackground(Event $event)
     {
+        $runner = $event->getSubject();
+
         if (null === $runner->getCaller()) {
             $this->output->writeln('');
         }
     }
 
-    public function beforeStep(StepRunner $runner)
+    public function afterStep(Event $event)
     {
-    }
+        $runner = $event->getSubject();
 
-    public function afterStep(StepRunner $runner)
-    {
         if (
             // Not in scenario background
             !(null !== $runner->getCaller() &&

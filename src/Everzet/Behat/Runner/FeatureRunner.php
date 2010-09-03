@@ -3,13 +3,13 @@
 namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Element\FeatureElement;
 use Everzet\Gherkin\Element\Scenario\ScenarioElement;
 use Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
 
 use Everzet\Behat\Exception\BehaviorException;
-use Everzet\Behat\Logger\LoggerInterface;
 
 /*
  * This file is part of the behat package.
@@ -30,14 +30,14 @@ class FeatureRunner extends BaseRunner implements RunnerInterface
 {
     protected $feature;
     protected $container;
+    protected $dispatcher;
     protected $scenarioRunners = array();
 
-    public function __construct(FeatureElement $feature, Container $container,
-                                LoggerInterface $logger)
+    public function __construct(FeatureElement $feature, Container $container)
     {
         $this->feature      = $feature;
         $this->container    = $container;
-        $this->setLogger(     $logger);
+        $this->dispatcher   = $container->getEventDispatcherService();
 
         foreach ($feature->getScenarios() as $scenario) {
             if ($scenario instanceof ScenarioOutlineElement) {
@@ -45,14 +45,12 @@ class FeatureRunner extends BaseRunner implements RunnerInterface
                     $scenario
                   , $feature->getBackground()
                   , $container
-                  , $logger
                 );
             } elseif ($scenario instanceof ScenarioElement) {
                 $this->scenarioRunners[] = new ScenarioRunner(
                     $scenario
                   , $feature->getBackground()
                   , $container
-                  , $logger
                 );
             } else {
                 throw new BehaviorException('Unknown scenario type: ' . get_class($scenario));
@@ -68,12 +66,12 @@ class FeatureRunner extends BaseRunner implements RunnerInterface
     public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
-        $this->getLogger()->beforeFeature($this);
+        $this->dispatcher->notify(new Event($this, 'feature.pre_test'));
 
         foreach ($this->scenarioRunners as $runner) {
             $runner->run($this);
         }
 
-        $this->getLogger()->afterFeature($this);
+        $this->dispatcher->notify(new Event($this, 'feature.post_test'));
     }
 }

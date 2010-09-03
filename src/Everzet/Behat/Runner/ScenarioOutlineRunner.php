@@ -3,37 +3,35 @@
 namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
 use Everzet\Gherkin\Element\Scenario\BackgroundElement;
-
-use Everzet\Behat\Logger\LoggerInterface;
 
 class ScenarioOutlineRunner extends BaseRunner implements RunnerInterface, \Iterator
 {
     protected $outline;
     protected $background;
     protected $container;
+    protected $dispatcher;
 
     protected $position = 0;
     protected $scenarioRunners = array();
 
     public function __construct(ScenarioOutlineElement $outline,
-                                BackgroundElement $background = null, Container $container,
-                                LoggerInterface $logger)
+                                BackgroundElement $background = null, Container $container)
     {
         $this->position     = 0;
         $this->outline      = $outline;
         $this->background   = $background;
         $this->container    = $container;
-        $this->setLogger(     $logger);
+        $this->dispatcher   = $container->getEventDispatcherService();
 
         foreach ($this->outline->getExamples()->getTable()->getHash() as $tokens) {
             $runner = new ScenarioRunner(
                 $this->outline
               , $this->background
               , $this->container
-              , $this->logger
             );
             $runner->setTokens($tokens);
 
@@ -74,12 +72,12 @@ class ScenarioOutlineRunner extends BaseRunner implements RunnerInterface, \Iter
     public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
-        $this->getLogger()->beforeScenarioOutline($this);
+        $this->dispatcher->notify(new Event($this, 'scenario_outline.pre_test'));
 
         foreach ($this as $runner) {
             $runner->run($this);
         }
 
-        $this->getLogger()->afterScenarioOutline($this);
+        $this->dispatcher->notify(new Event($this, 'scenario_outline.post_test'));
     }
 }

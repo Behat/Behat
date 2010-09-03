@@ -3,35 +3,34 @@
 namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Element\Scenario\ScenarioElement;
 use Everzet\Gherkin\Element\Scenario\BackgroundElement;
-
-use Everzet\Behat\Logger\LoggerInterface;
 
 class ScenarioRunner extends BaseStepsRunner implements RunnerInterface
 {
     protected $scenario;
     protected $container;
+    protected $dispatcher;
     protected $definitions;
     protected $tokens = array();
     protected $backgroundRunner;
     protected $skip = false;
 
     public function __construct(ScenarioElement $scenario, BackgroundElement $background = null,
-                                Container $container, LoggerInterface $logger)
+                                Container $container)
     {
         $this->scenario     = $scenario;
         $this->container    = $container;
-        $this->definitions  = $this->container->getSteps_LoaderService();
-        $this->setLogger(     $logger);
+        $this->definitions  = $this->container->getStepsLoaderService();
+        $this->dispatcher   = $container->getEventDispatcherService();
 
         if (null !== $background) {
             $this->backgroundRunner = new BackgroundRunner(
                 $background
               , $this->definitions
               , $this->container
-              , $this->logger
             );
         }
 
@@ -39,7 +38,6 @@ class ScenarioRunner extends BaseStepsRunner implements RunnerInterface
             $this->scenario->getSteps()
           , $this->definitions
           , $this->container
-          , $this->logger
         );
     }
 
@@ -88,7 +86,7 @@ class ScenarioRunner extends BaseStepsRunner implements RunnerInterface
     public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
-        $this->getLogger()->beforeScenario($this);
+        $this->dispatcher->notify(new Event($this, 'scenario.pre_test'));
 
         if (null !== $this->backgroundRunner) {
             $this->backgroundRunner->run($this);
@@ -107,6 +105,6 @@ class ScenarioRunner extends BaseStepsRunner implements RunnerInterface
             }
         }
 
-        $this->getLogger()->afterScenario($this);
+        $this->dispatcher->notify(new Event($this, 'scenario.post_test'));
     }
 }

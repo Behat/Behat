@@ -18,7 +18,6 @@ class FeaturesRunner implements RunnerInterface, \Iterator
             $this->featureRunners[] = new FeatureRunner(
                 $container->getParserService()->parseFile($file)
               , $container
-              , $container->getLoggerService()
             );
         }
     }

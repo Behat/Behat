@@ -5,7 +5,6 @@ namespace Everzet\Behat\Runner;
 use Symfony\Component\DependencyInjection\Container;
 
 use Everzet\Behat\Loader\StepsLoader;
-use Everzet\Behat\Logger\LoggerInterface;
 
 abstract class BaseStepsRunner extends BaseRunner implements \Iterator
 {
@@ -13,7 +12,7 @@ abstract class BaseStepsRunner extends BaseRunner implements \Iterator
     protected $stepRunners  = array();
 
     protected function initStepRunners(array $steps, StepsLoader $definitions, 
-                                       Container $container, LoggerInterface $logger)
+                                       Container $container)
     {
         $this->position = 0;
 
@@ -22,7 +21,6 @@ abstract class BaseStepsRunner extends BaseRunner implements \Iterator
                 $step
               , $definitions
               , $container
-              , $logger
             );
         }
     }

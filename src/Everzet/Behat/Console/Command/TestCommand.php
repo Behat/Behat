@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Everzet\Behat\ServiceContainer\Container;
+use Everzet\Behat\ServiceContainer\ServiceContainer;
 use Everzet\Behat\Exception\Redundant;
 
 /*
@@ -55,7 +55,7 @@ class TestCommand extends Command
         }
 
         // Configure DIC
-        $container = new Container();
+        $container = new ServiceContainer();
         $container->setParameter('i18n.path',           realpath(__DIR__ . '/../../../../../i18n'));
         $container->setParameter('features.path',       $basePath);
         $container->setParameter('steps.path',          $basePath . '/steps');
@@ -65,7 +65,7 @@ class TestCommand extends Command
 
         // Check if we had redundant definitions
         try {
-            $container->getSteps_LoaderService();
+            $container->getStepsLoaderService();
         } catch (Redundant $e) {
             $output->writeln(sprintf("<failed>%s</failed>",
                 strtr($e->getMessage(), array($basePath . '/' => ''))
@@ -74,7 +74,7 @@ class TestCommand extends Command
         }
 
         $container->
-            getFeatures_LoaderService()->
+            getFeaturesLoaderService()->
             getFeaturesRunner()->
             run();
     }
