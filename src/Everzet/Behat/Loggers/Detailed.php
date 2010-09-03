@@ -72,7 +72,6 @@ class Detailed implements Logger
 
     public function afterFeature(FeatureRunner $runner)
     {
-        $this->output->writeln('');
     }
 
     public function beforeScenarioOutline(ScenarioOutlineRunner $runner)
@@ -94,6 +93,7 @@ class Detailed implements Logger
 
     public function afterScenarioOutline(ScenarioOutlineRunner $runner)
     {
+        $this->output->writeln('');
     }
 
     public function beforeScenario(ScenarioRunner $runner)
