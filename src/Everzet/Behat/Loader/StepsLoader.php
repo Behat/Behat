@@ -2,16 +2,16 @@
 
 namespace Everzet\Behat\Loader;
 
-use \Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\Finder;
 
-use \Everzet\Gherkin\Element\Inline\PyStringElement;
-use \Everzet\Gherkin\Element\Inline\TableElement;
+use Everzet\Gherkin\Element\Inline\PyStringElement;
+use Everzet\Gherkin\Element\Inline\TableElement;
 
-use \Everzet\Behat\Definition\StepDefinition;
-use \Everzet\Behat\Environment\EnvironmentInterface;
-use \Everzet\Behat\Exception\Redundant;
-use \Everzet\Behat\Exception\Ambiguous;
-use \Everzet\Behat\Exception\Undefined;
+use Everzet\Behat\Definition\StepDefinition;
+use Everzet\Behat\Environment\EnvironmentInterface;
+use Everzet\Behat\Exception\Redundant;
+use Everzet\Behat\Exception\Ambiguous;
+use Everzet\Behat\Exception\Undefined;
 
 /*
  * This file is part of the behat package.

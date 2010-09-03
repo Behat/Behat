@@ -2,10 +2,10 @@
 
 namespace Everzet\Behat\Loader;
 
-use \Symfony\Component\DependencyInjection\Container;
-use \Symfony\Component\Finder\Finder;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Finder\Finder;
 
-use \Everzet\Behat\Runner\FeaturesRunner;
+use Everzet\Behat\Runner\FeaturesRunner;
 
 /*
  * This file is part of the behat package.

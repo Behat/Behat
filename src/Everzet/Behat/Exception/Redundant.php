@@ -2,7 +2,7 @@
 
 namespace Everzet\Behat\Exception;
 
-use \Everzet\Behat\Definition\StepDefinition;
+use Everzet\Behat\Definition\StepDefinition;
 
 /*
  * This file is part of the behat package.

@@ -2,7 +2,7 @@
 
 namespace Everzet\Behat\Runner;
 
-use \Everzet\Behat\Logger\LoggerInterface;
+use Everzet\Behat\Logger\LoggerInterface;
 
 abstract class BaseRunner
 {

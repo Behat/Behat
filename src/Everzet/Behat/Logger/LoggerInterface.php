@@ -4,11 +4,11 @@ namespace Everzet\Behat\Logger;
 
 use Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Behat\Runner\FeatureRunner;
-use \Everzet\Behat\Runner\ScenarioOutlineRunner;
-use \Everzet\Behat\Runner\ScenarioRunner;
-use \Everzet\Behat\Runner\BackgroundRunner;
-use \Everzet\Behat\Runner\StepRunner;
+use Everzet\Behat\Runner\FeatureRunner;
+use Everzet\Behat\Runner\ScenarioOutlineRunner;
+use Everzet\Behat\Runner\ScenarioRunner;
+use Everzet\Behat\Runner\BackgroundRunner;
+use Everzet\Behat\Runner\StepRunner;
 
 interface LoggerInterface
 {

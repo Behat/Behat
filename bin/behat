@@ -18,10 +18,5 @@ if (is_file(__DIR__.'/../autoload.php')) {
 // Internal encoding to utf8
 mb_internal_encoding('utf8');
 
-// Inject command in application call
-array_splice($argv, 1, 0, 'behat');
-
 $app = new \Everzet\Behat\Console\BehatApplication();
-$app->run(
-  new \Symfony\Component\Console\Input\ArgvInput($argv)
-);
+$app->run();

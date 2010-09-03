@@ -2,9 +2,9 @@
 
 namespace Everzet\Behat\Definition;
 
-use \Everzet\Gherkin\Element\Inline\PyStringElement;
-use \Everzet\Gherkin\Element\Inline\TableElement;
-use \Everzet\Behat\Exception\Error;
+use Everzet\Gherkin\Element\Inline\PyStringElement;
+use Everzet\Gherkin\Element\Inline\TableElement;
+use Everzet\Behat\Exception\Error;
 
 /*
  * This file is part of the behat package.

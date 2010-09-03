@@ -2,8 +2,8 @@
 
 namespace Everzet\Behat\Runner;
 
-use \Symfony\Component\DependencyInjection\Container;
-use \Symfony\Component\Finder\Finder;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Finder\Finder;
 
 class FeaturesRunner implements RunnerInterface, \Iterator
 {

@@ -2,14 +2,14 @@
 
 namespace Everzet\Behat\Runner;
 
-use \Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Gherkin\Element\FeatureElement;
-use \Everzet\Gherkin\Element\Scenario\ScenarioElement;
-use \Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
+use Everzet\Gherkin\Element\FeatureElement;
+use Everzet\Gherkin\Element\Scenario\ScenarioElement;
+use Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
 
-use \Everzet\Behat\Exception\BehaviorException;
-use \Everzet\Behat\Logger\LoggerInterface;
+use Everzet\Behat\Exception\BehaviorException;
+use Everzet\Behat\Logger\LoggerInterface;
 
 /*
  * This file is part of the behat package.

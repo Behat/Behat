@@ -4,15 +4,15 @@ namespace Everzet\Behat\Logger;
 
 use Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Gherkin\Element\SectionElement;
-use \Everzet\Gherkin\Element\Inline\PyStringElement;
-use \Everzet\Gherkin\Element\Inline\TableElement;
+use Everzet\Gherkin\Element\SectionElement;
+use Everzet\Gherkin\Element\Inline\PyStringElement;
+use Everzet\Gherkin\Element\Inline\TableElement;
 
-use \Everzet\Behat\Runner\FeatureRunner;
-use \Everzet\Behat\Runner\ScenarioOutlineRunner;
-use \Everzet\Behat\Runner\ScenarioRunner;
-use \Everzet\Behat\Runner\BackgroundRunner;
-use \Everzet\Behat\Runner\StepRunner;
+use Everzet\Behat\Runner\FeatureRunner;
+use Everzet\Behat\Runner\ScenarioOutlineRunner;
+use Everzet\Behat\Runner\ScenarioRunner;
+use Everzet\Behat\Runner\BackgroundRunner;
+use Everzet\Behat\Runner\StepRunner;
 
 class DetailedLogger implements LoggerInterface
 {

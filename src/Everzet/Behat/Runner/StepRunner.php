@@ -4,11 +4,11 @@ namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Gherkin\Element\StepElement;
+use Everzet\Gherkin\Element\StepElement;
 
-use \Everzet\Behat\Definition\StepDefinition;
-use \Everzet\Behat\Loader\StepsLoader;
-use \Everzet\Behat\Logger\LoggerInterface;
+use Everzet\Behat\Definition\StepDefinition;
+use Everzet\Behat\Loader\StepsLoader;
+use Everzet\Behat\Logger\LoggerInterface;
 
 class StepRunner extends BaseRunner implements RunnerInterface
 {
