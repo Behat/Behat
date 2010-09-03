@@ -11,7 +11,7 @@ use Everzet\Behat\ServiceContainer\ServiceContainer;
 use Everzet\Behat\Exception\Redundant;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,16 +19,15 @@ use Everzet\Behat\Exception\Redundant;
  */
 
 /**
- * Behat console test command.
+ * Behat application test command.
  *
- * @package     behat
- * @subpackage  Behat
+ * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class TestCommand extends Command
 {
     /**
-     * @see \Symfony\Component\Console\Command\Command
+     * @see Symfony\Component\Console\Command\Command
      */
     protected function configure()
     {
@@ -40,17 +39,16 @@ class TestCommand extends Command
     }
 
     /**
-     * @see \Symfony\Component\Console\Command\Command
+     * @see Symfony\Component\Console\Command\Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $basePath = realpath($input->getArgument('features'));
-        $featureFiles = array();
 
-        if (is_dir($basePath.'/features')) {
+        // Find features path
+        if (is_dir($basePath . '/features')) {
             $basePath .= '/features';
         } elseif (is_file($basePath)) {
-            $featureFiles[] = $basePath;
             $basePath = dirname($basePath);
         }
 
@@ -73,9 +71,10 @@ class TestCommand extends Command
             return 1;
         }
 
-        $container->
-            getFeaturesLoaderService()->
-            getFeaturesRunner()->
-            run();
+        // Get features loader
+        $loader = $container->getFeaturesLoaderService();
+
+        // Run test suite
+        $loader->getFeaturesRunner()->run();
     }
 }

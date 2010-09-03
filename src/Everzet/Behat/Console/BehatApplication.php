@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Everzet\Behat\Console\Command\TestCommand;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,24 +20,19 @@ use Everzet\Behat\Console\Command\TestCommand;
  */
 
 /**
- * Console application.
+ * Behat application.
  *
- * @package     behat
- * @subpackage  Behat
+ * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BehatApplication extends Application
 {
     /**
-     * @see \Symfony\Component\Console\Application
+     * @see Symfony\Component\Console\Application
      */
     public function __construct()
     {
-        parent::__construct('Behat', '0.1');
-
-        $this->addCommands(array(
-            new TestCommand()
-        ));
+        parent::__construct('Behat', '0.1.0');
 
         $this->definition = new InputDefinition(array(
             new InputOption('--help',           '-H', InputOption::PARAMETER_NONE, 'Display this help message.'),
@@ -47,8 +42,15 @@ class BehatApplication extends Application
             new InputOption('--ansi',           '-a', InputOption::PARAMETER_NONE, 'Force ANSI output.'),
             new InputOption('--no-interaction', '-n', InputOption::PARAMETER_NONE, 'Do not ask any interactive question.'),
         ));
+
+        $this->addCommands(array(
+            new TestCommand()
+        ));
     }
 
+    /**
+     * @see Symfony\Component\Console\Application
+     */
     protected function getCommandName(InputInterface $input)
     {
         return 'test';
