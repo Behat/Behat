@@ -6,23 +6,40 @@ use Symfony\Components\DependencyInjection\Container;
 
 use \Everzet\Gherkin\Structures\Scenario\Scenario;
 use \Everzet\Gherkin\Structures\Scenario\Background;
-use \Everzet\Behat\Runners\BackgroundRunner;
-use \Everzet\Behat\Runners\StepRunner;
-use \Everzet\Behat\Loggers\Base\ScenarioLogger;
+use \Everzet\Behat\Loggers\Logger;
 
-class ScenarioRunner
+class ScenarioRunner extends BaseStepsRunner implements Runner
 {
     protected $scenario;
-    protected $background;
     protected $container;
+    protected $definitions;
     protected $tokens = array();
+    protected $backgroundRunner;
+    protected $skip = false;
 
     public function __construct(Scenario $scenario, Background $background = null,
-                                Container $container)
+                                Container $container, Logger $logger)
     {
         $this->scenario     = $scenario;
-        $this->background   = $background;
         $this->container    = $container;
+        $this->definitions  = $this->container->getSteps_LoaderService();
+        $this->setLogger(     $logger);
+
+        if (null !== $background) {
+            $this->backgroundRunner = new BackgroundRunner(
+                $background
+              , $this->definitions
+              , $this->container
+              , $this->logger
+            );
+        }
+
+        $this->initStepRunners(
+            $this->scenario->getSteps()
+          , $this->definitions
+          , $this->container
+          , $this->logger
+        );
     }
 
     public function setTokens(array $tokens)
@@ -30,27 +47,65 @@ class ScenarioRunner
         $this->tokens = $tokens;
     }
 
-    public function getSubject()
+    public function getScenario()
     {
         return $this->scenario;
     }
 
-    public function run(ScenarioLogger $logger)
+    public function isInOutline()
     {
-        $definitions = $this->container->getSteps_LoaderService();
+        return $this->getCaller() instanceof ScenarioOutlineRunner;
+    }
 
-        if (null !== $this->background) {
-            $logger->logBackground(
-                new BackgroundRunner($this->background, $definitions, $this->container)
-            )->run();
+    public function getStatus()
+    {
+        $statuses = array('passed', 'pending', 'undefined', 'failed');
+        $code = -1;
+
+        foreach ($this->getStepRunners() as $stepRunner) {
+            if (($current = array_search($stepRunner->getStatus(), $statuses)) > $code) {
+                $code = $current;
+            }
         }
 
-        foreach ($this->scenario->getSteps() as $step) {
-            $runner = new StepRunner($step, $definitions, $this->container);
-            if (count($this->tokens)) {
+        return $statuses[$code];
+    }
+
+    public function getExceptions()
+    {
+        $exceptions = array();
+
+        foreach ($this->getStepRunners() as $stepRunner) {
+            if (null !== $stepRunner->getException()) {
+                $exceptions[] = $stepRunner->getException();
+            }
+        }
+
+        return $exceptions;
+    }
+
+    public function run(Runner $caller = null)
+    {
+        $this->setCaller($caller);
+        $this->getLogger()->beforeScenario($this);
+
+        if (null !== $this->backgroundRunner) {
+            $this->backgroundRunner->run($this);
+        }
+
+        foreach ($this as $runner) {
+            if (null !== $this->tokens && count($this->tokens)) {
                 $runner->setTokens($this->tokens);
             }
-            $logger->logStep($runner)->run();
+            if (!$this->skip) {
+                if ('passed' !== $runner->run($this)) {
+                    $this->skip = true;
+                }
+            } else {
+                $runner->skip($this);
+            }
         }
+
+        $this->getLogger()->afterScenario($this);
     }
 }

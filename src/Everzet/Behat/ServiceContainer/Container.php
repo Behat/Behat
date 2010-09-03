@@ -66,14 +66,14 @@ class Container extends BaseContainer
     }
 
     /**
-     * Gets the 'logger.loader' service.
+     * Gets the 'logger' service.
      *
-     * @return Object A %logger.loader.class% instance.
+     * @return Object A %logger.class% instance
      */
-    protected function getLogger_LoaderService()
+    protected function getLoggerService()
     {
-        $class = $this->getParameter('logger.loader.class');
-        $instance = new $class();
+        $class = $this->getParameter('logger.class');
+        $instance = new $class($this);
 
         return $instance;
     }
@@ -132,7 +132,7 @@ class Container extends BaseContainer
             'world.class' => 'Everzet\\Behat\\Environment\\SimpleWorld',
             'features.loader.class' => 'Everzet\\Behat\\Loaders\\FeaturesLoader',
             'steps.loader.class' => 'Everzet\\Behat\\Loaders\\StepsLoader',
-            'logger.loader.class' => 'Everzet\\Behat\\Loggers\\Detailed\\Loader',
+            'logger.class' => 'Everzet\\Behat\\Loggers\\Detailed',
         );
     }
 }

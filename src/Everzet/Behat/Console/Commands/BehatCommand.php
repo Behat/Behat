@@ -75,8 +75,9 @@ class BehatCommand extends Command
             return 1;
         }
 
-        foreach ($container->getFeatures_LoaderService() as $feature) {
-            $feature->run();
-        }
+        $container->
+            getFeatures_LoaderService()->
+            getFeaturesRunner()->
+            run();
     }
 }

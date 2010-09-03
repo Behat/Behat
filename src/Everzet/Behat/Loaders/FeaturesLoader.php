@@ -5,8 +5,7 @@ namespace Everzet\Behat\Loaders;
 use \Symfony\Components\DependencyInjection\Container;
 use \Symfony\Components\Finder\Finder;
 
-use \Everzet\Behat\Loggers\Detailed\FeatureLogger;
-use \Everzet\Behat\Runners\FeatureRunner;
+use \Everzet\Behat\Runners\FeaturesRunner;
 
 /*
  * This file is part of the behat package.
@@ -23,47 +22,20 @@ use \Everzet\Behat\Runners\FeatureRunner;
  * @subpackage  Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeaturesLoader implements \Iterator
+class FeaturesLoader
 {
-    protected $pos = 0;
-    protected $featureRunners = array();
+    protected $featuresRunner;
 
     public function __construct($path, Container $container)
     {
         $finder = new Finder();
+        $files  = $finder->files()->name('*.feature')->in($path);
 
-        $loggerLoader = $container->getLogger_LoaderService();
-        $loggerLoader->load($container);
-
-        foreach ($finder->files()->name('*.feature')->in($path) as $featureFile) {
-            $this->featureRunners[] = new FeatureLogger(new FeatureRunner(
-                $container->getParserService()->parseFile($featureFile), $container
-            ), $container);
-        }
+        $this->featuresRunner = new FeaturesRunner($files, $container);
     }
 
-    public function current()
+    public function getFeaturesRunner()
     {
-        return $this->featureRunners[$this->pos];
-    }
-
-    public function key()
-    {
-        return $this->pos;
-    }
-
-    public function next()
-    {
-        ++$this->pos;
-    }
-
-    public function rewind()
-    {
-        $this->pos = 0;
-    }
-
-    public function valid()
-    {
-        return isset($this->featureRunners[$this->pos]);
+        return $this->featuresRunner;
     }
 }

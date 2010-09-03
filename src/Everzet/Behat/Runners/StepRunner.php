@@ -7,8 +7,9 @@ use Symfony\Components\DependencyInjection\Container;
 use \Everzet\Gherkin\Structures\Step;
 use \Everzet\Behat\Definitions\StepDefinition;
 use \Everzet\Behat\Loaders\StepsLoader;
+use \Everzet\Behat\Loggers\Logger;
 
-class StepRunner
+class StepRunner extends BaseRunner implements Runner
 {
     protected $step;
     protected $definitions;
@@ -19,21 +20,13 @@ class StepRunner
     protected $status;
     protected $exception;
 
-    public function __construct(Step $step, StepsLoader $definitions, Container $container)
+    public function __construct(Step $step, StepsLoader $definitions, Container $container,
+                                Logger $logger)
     {
         $this->step         = $step;
         $this->definitions  = $definitions;
         $this->container    = $container;
-    }
-
-    public function getSubject()
-    {
-        return $this->step;
-    }
-
-    public function getDefinition()
-    {
-        return $this->definition;
+        $this->setLogger(     $logger);
     }
 
     public function setTokens(array $tokens)
@@ -46,6 +39,11 @@ class StepRunner
         return $this->tokens;
     }
 
+    public function getStep()
+    {
+        return $this->step;
+    }
+
     public function getStatus()
     {
         return $this->status;
@@ -54,6 +52,11 @@ class StepRunner
     public function getException()
     {
         return $this->exception;
+    }
+
+    public function getDefinition()
+    {
+        return $this->definition;
     }
 
     protected function findDefinition()
@@ -72,8 +75,11 @@ class StepRunner
         }
     }
 
-    public function run()
+    public function run(Runner $caller = null)
     {
+        $this->setCaller($caller);
+        $this->getLogger()->beforeStep($this);
+
         $this->findDefinition();
 
         if (null === $this->status) {
@@ -89,14 +95,23 @@ class StepRunner
                 $this->exception = $e;
             }
         }
+
+        $this->getLogger()->afterStep($this);
+
+        return $this->status;
     }
 
-    public function skip()
+    public function skip(Runner $caller = null)
     {
+        $this->setCaller($caller);
+        $this->getLogger()->beforeStep($this);
+
         $this->findDefinition();
 
         if (null === $this->status) {
             $this->status = 'skipped';
         }
+
+        $this->getLogger()->afterStep($this);
     }
 }
