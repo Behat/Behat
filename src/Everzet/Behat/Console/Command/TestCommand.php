@@ -34,7 +34,7 @@ class TestCommand extends Command
         $this->setName('test');
 
         $this->setDefinition(array(
-            new InputArgument('features', InputArgument::OPTIONAL, 'Features folder', 'features')
+            new InputArgument('features', InputArgument::OPTIONAL, 'Features path', 'features')
         ));
     }
 
