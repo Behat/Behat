@@ -163,7 +163,7 @@ class DetailedLogger implements LoggerInterface
                 } else {
                     $error = $exception->getMessage();
                 }
-                $this->output->writeln(sprintf("      <failed>%s</failed>",
+                $this->output->writeln(sprintf("        <failed>%s</failed>",
                     strtr($error, array(
                         "\n"    =>  "\n      "
                       , "<"     =>  "["
