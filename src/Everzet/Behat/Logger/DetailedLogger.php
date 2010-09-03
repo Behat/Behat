@@ -37,18 +37,18 @@ class DetailedLogger implements LoggerInterface
 
     public function registerListeners(EventDispatcher $dispatcher)
     {
-        $dispatcher->connect('feature.pre_test', array($this, 'beforeFeature'));
+        $dispatcher->connect('feature.pre_test',            array($this, 'beforeFeature'));
 
-        $dispatcher->connect('scenario_outline.pre_test', array($this, 'beforeScenarioOutline'));
-        $dispatcher->connect('scenario_outline.post_test', array($this, 'afterScenarioOutline'));
+        $dispatcher->connect('scenario_outline.pre_test',   array($this, 'beforeScenarioOutline'));
+        $dispatcher->connect('scenario_outline.post_test',  array($this, 'afterScenarioOutline'));
 
-        $dispatcher->connect('scenario.pre_test', array($this, 'beforeScenario'));
-        $dispatcher->connect('scenario.post_test', array($this, 'afterScenario'));
+        $dispatcher->connect('scenario.pre_test',           array($this, 'beforeScenario'));
+        $dispatcher->connect('scenario.post_test',          array($this, 'afterScenario'));
 
-        $dispatcher->connect('background.pre_test', array($this, 'beforeBackground'));
-        $dispatcher->connect('background.post_test', array($this, 'afterBackground'));
+        $dispatcher->connect('background.pre_test',         array($this, 'beforeBackground'));
+        $dispatcher->connect('background.post_test',        array($this, 'afterBackground'));
 
-        $dispatcher->connect('step.post_test', array($this, 'afterStep'));
+        $dispatcher->connect('step.post_test',              array($this, 'afterStep'));
     }
 
     public function beforeFeature(Event $event)
