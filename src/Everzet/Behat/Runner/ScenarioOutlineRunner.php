@@ -12,7 +12,6 @@ class ScenarioOutlineRunner extends BaseRunner implements RunnerInterface, \Iter
 {
     protected $outline;
     protected $background;
-    protected $container;
     protected $dispatcher;
 
     protected $position = 0;
@@ -24,14 +23,13 @@ class ScenarioOutlineRunner extends BaseRunner implements RunnerInterface, \Iter
         $this->position     = 0;
         $this->outline      = $outline;
         $this->background   = $background;
-        $this->container    = $container;
         $this->dispatcher   = $container->getEventDispatcherService();
 
         foreach ($this->outline->getExamples()->getTable()->getHash() as $tokens) {
             $runner = new ScenarioRunner(
                 $this->outline
               , $this->background
-              , $this->container
+              , $container
             );
             $runner->setTokens($tokens);
 

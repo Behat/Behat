@@ -3,16 +3,19 @@
 namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Finder\Finder;
 
 class FeaturesRunner implements RunnerInterface, \Iterator
 {
     protected $position         = 0;
     protected $featureRunners   = array();
+    protected $dispatcher;
 
     public function __construct(Finder $featureFiles, Container $container)
     {
-        $this->position = 0;
+        $this->position     = 0;
+        $this->dispatcher   = $container->getEventDispatcherService();
 
         foreach ($featureFiles as $file) {
             $this->featureRunners[] = new FeatureRunner(
@@ -49,8 +52,12 @@ class FeaturesRunner implements RunnerInterface, \Iterator
 
     public function run(RunnerInterface $parent = null)
     {
+        $this->dispatcher->notify(new Event($this, 'suite.pre_test'));
+
         foreach ($this as $runner) {
             $runner->run($this);
         }
+
+        $this->dispatcher->notify(new Event($this, 'suite.post_test'));
     }
 }

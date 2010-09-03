@@ -14,10 +14,9 @@ class StepRunner extends BaseRunner implements RunnerInterface
 {
     protected $step;
     protected $definitions;
-    protected $container;
     protected $dispatcher;
-    protected $tokens = array();
 
+    protected $tokens = array();
     protected $definition;
     protected $status;
     protected $exception;
@@ -26,7 +25,6 @@ class StepRunner extends BaseRunner implements RunnerInterface
     {
         $this->step         = $step;
         $this->definitions  = $definitions;
-        $this->container    = $container;
         $this->dispatcher   = $container->getEventDispatcherService();
     }
 
@@ -60,7 +58,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
         return $this->definition;
     }
 
-    protected function findDefinition()
+    public function findDefinition()
     {
         try {
             try {

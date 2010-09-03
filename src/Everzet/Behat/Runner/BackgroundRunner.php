@@ -13,7 +13,6 @@ class BackgroundRunner extends BaseStepsRunner implements RunnerInterface
 {
     protected $background;
     protected $definitions;
-    protected $container;
     protected $dispatcher;
 
     public function __construct(BackgroundElement $background, StepsLoader $definitions, 
@@ -21,13 +20,12 @@ class BackgroundRunner extends BaseStepsRunner implements RunnerInterface
     {
         $this->background   = $background;
         $this->definitions  = $definitions;
-        $this->container    = $container;
         $this->dispatcher   = $container->getEventDispatcherService();
 
         $this->initStepRunners(
             $this->background->getSteps()
           , $this->definitions
-          , $this->container
+          , $container
         );
     }
 
