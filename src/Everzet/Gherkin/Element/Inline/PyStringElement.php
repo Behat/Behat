@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin\Structures\Inline;
+namespace Everzet\Gherkin\Element\Inline;
 
 /*
  * This file is part of the behat package.
@@ -17,7 +17,7 @@ namespace Everzet\Gherkin\Structures\Inline;
  * @subpackage  Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PyString
+class PyStringElement
 {
     protected $ltrimCount;
     protected $lines = array();

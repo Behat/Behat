@@ -4,7 +4,6 @@ namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Gherkin\Structures\Scenario\Background;
 use \Everzet\Behat\Loader\StepsLoader;
 use \Everzet\Behat\Logger\LoggerInterface;
 

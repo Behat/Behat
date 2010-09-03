@@ -4,8 +4,9 @@ namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Gherkin\Structures\Scenario\Scenario;
-use \Everzet\Gherkin\Structures\Scenario\Background;
+use \Everzet\Gherkin\Element\Scenario\ScenarioElement;
+use \Everzet\Gherkin\Element\Scenario\BackgroundElement;
+
 use \Everzet\Behat\Logger\LoggerInterface;
 
 class ScenarioRunner extends BaseStepsRunner implements RunnerInterface
@@ -17,7 +18,7 @@ class ScenarioRunner extends BaseStepsRunner implements RunnerInterface
     protected $backgroundRunner;
     protected $skip = false;
 
-    public function __construct(Scenario $scenario, Background $background = null,
+    public function __construct(ScenarioElement $scenario, BackgroundElement $background = null,
                                 Container $container, LoggerInterface $logger)
     {
         $this->scenario     = $scenario;

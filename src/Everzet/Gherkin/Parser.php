@@ -5,14 +5,14 @@ namespace Everzet\Gherkin;
 use \Everzet\Gherkin\I18n;
 use \Everzet\Gherkin\RegexHolder;
 use \Everzet\Gherkin\ParserException;
-use \Everzet\Gherkin\Structures\Feature;
-use \Everzet\Gherkin\Structures\Step;
-use \Everzet\Gherkin\Structures\Scenario\Background;
-use \Everzet\Gherkin\Structures\Scenario\Scenario;
-use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
-use \Everzet\Gherkin\Structures\Inline\PyString;
-use \Everzet\Gherkin\Structures\Inline\Table;
-use \Everzet\Gherkin\Structures\Inline\Examples;
+use \Everzet\Gherkin\Element\FeatureElement;
+use \Everzet\Gherkin\Element\StepElement;
+use \Everzet\Gherkin\Element\Scenario\BackgroundElement;
+use \Everzet\Gherkin\Element\Scenario\ScenarioElement;
+use \Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
+use \Everzet\Gherkin\Element\Inline\PyStringElement;
+use \Everzet\Gherkin\Element\Inline\TableElement;
+use \Everzet\Gherkin\Element\Inline\ExamplesElement;
 
 /*
  * This file is part of the behat package.
@@ -82,7 +82,7 @@ class Parser
 
             // feature?
             if (preg_match($this->regex->getFeatureRegex(), $this->currentLine, $values)) {
-                $this->feature = new Feature($this->i18n, $this->file);
+                $this->feature = new FeatureElement($this->i18n, $this->file);
                 $this->feature->setTitle(isset($values['title']) ? $values['title'] : '');
                 $this->feature->addTags($this->getPreviousTags());
                 $this->feature->addDescriptions($this->getNextDescriptions());
@@ -90,7 +90,7 @@ class Parser
 
             // background?
             if (preg_match($this->regex->getBackgroundRegex(), $this->currentLine, $values)) {
-                $background = new Background($this->currentLineNb, $this->i18n, $this->file);
+                $background = new BackgroundElement($this->currentLineNb, $this->i18n, $this->file);
                 $background->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -101,7 +101,7 @@ class Parser
 
             // scenario?
             if (preg_match($this->regex->getScenarioRegex(), $this->currentLine, $values)) {
-                $scenario = new Scenario($this->currentLineNb, $this->i18n, $this->file);
+                $scenario = new ScenarioElement($this->currentLineNb, $this->i18n, $this->file);
                 $scenario->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -113,7 +113,7 @@ class Parser
 
             // scenario outline?
             if (preg_match($this->regex->getScenarioOutlineRegex(), $this->currentLine, $values)) {
-                $outline = new ScenarioOutline($this->currentLineNb, $this->i18n, $this->file);
+                $outline = new ScenarioOutlineElement($this->currentLineNb, $this->i18n, $this->file);
                 $outline->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -203,7 +203,7 @@ class Parser
                 break;
             }
 
-            $step = new Step($values['type'], $values['step'], $this->currentLineNb);
+            $step = new StepElement($values['type'], $values['step'], $this->currentLineNb);
             if (null !== ($pystring = $this->getNextPyString())) {
                 $step->addArgument($pystring);
             }
@@ -225,7 +225,7 @@ class Parser
             $this->moveToNextLine() &&
             preg_match($this->regex->getPyStringStarterRegex(), $this->currentLine, $values)
         ) {
-            $pystring = new PyString(mb_strlen($values['indent']));
+            $pystring = new PyStringElement(mb_strlen($values['indent']));
 
             while (
                 $this->moveToNextLine() &&
@@ -253,7 +253,7 @@ class Parser
             }
 
             if (null === $table) {
-                $table = new Table($this->regex->getTableSplitter());
+                $table = new TableElement($this->regex->getTableSplitter());
             }
             $table->addRow($values['row']);
         }
@@ -272,7 +272,7 @@ class Parser
             }
         }
         if (preg_match($this->regex->getExamplesRegex(), $this->currentLine, $values)) {
-            $examples = new Examples(
+            $examples = new ExamplesElement(
                 $this->getNextTitle(isset($values['title']) ? $values['title'] : '')
             );
             $examples->setTable($this->getNextTable());

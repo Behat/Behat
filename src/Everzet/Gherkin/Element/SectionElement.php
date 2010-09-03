@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin\Structures;
+namespace Everzet\Gherkin\Element;
 
 use \Everzet\Gherkin\I18n;
 
@@ -19,7 +19,7 @@ use \Everzet\Gherkin\I18n;
  * @subpackage  Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class Section
+abstract class SectionElement
 {
     protected $title = '';
     protected $tags = array();

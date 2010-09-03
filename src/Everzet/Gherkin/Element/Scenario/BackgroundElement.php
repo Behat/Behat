@@ -1,10 +1,10 @@
 <?php
 
-namespace Everzet\Gherkin\Structures\Scenario;
+namespace Everzet\Gherkin\Element\Scenario;
 
 use \Everzet\Gherkin\I18n;
-use \Everzet\Gherkin\Structures\Section;
-use \Everzet\Gherkin\Structures\Step;
+use \Everzet\Gherkin\Element\SectionElement;
+use \Everzet\Gherkin\Element\StepElement;
 
 /*
  * This file is part of the behat package.
@@ -21,7 +21,7 @@ use \Everzet\Gherkin\Structures\Step;
  * @subpackage  Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Background extends Section
+class BackgroundElement extends SectionElement
 {
     protected $steps = array();
     protected $line;
@@ -65,7 +65,7 @@ class Background extends Section
      *
      * @param   Step  $step Step instance
      */
-    public function addStep(Step $step)
+    public function addStep(StepElement $step)
     {
         $this->steps[] = $step;
     }

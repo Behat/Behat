@@ -4,7 +4,8 @@ namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Gherkin\Structures\Step;
+use \Everzet\Gherkin\Element\StepElement;
+
 use \Everzet\Behat\Definition\StepDefinition;
 use \Everzet\Behat\Loader\StepsLoader;
 use \Everzet\Behat\Logger\LoggerInterface;
@@ -20,7 +21,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
     protected $status;
     protected $exception;
 
-    public function __construct(Step $step, StepsLoader $definitions, Container $container,
+    public function __construct(StepElement $step, StepsLoader $definitions, Container $container,
                                 LoggerInterface $logger)
     {
         $this->step         = $step;

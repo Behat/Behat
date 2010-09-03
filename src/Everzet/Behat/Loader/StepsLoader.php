@@ -4,8 +4,9 @@ namespace Everzet\Behat\Loader;
 
 use \Symfony\Component\Finder\Finder;
 
-use \Everzet\Gherkin\Structures\Inline\PyString;
-use \Everzet\Gherkin\Structures\Inline\Table;
+use \Everzet\Gherkin\Element\Inline\PyStringElement;
+use \Everzet\Gherkin\Element\Inline\TableElement;
+
 use \Everzet\Behat\Definition\StepDefinition;
 use \Everzet\Behat\Environment\EnvironmentInterface;
 use \Everzet\Behat\Exception\Redundant;
@@ -120,9 +121,9 @@ class StepsLoader
             $args[] = "\$arg".($i + 1);
         }
         foreach ($step->getArguments() as $argument) {
-            if ($argument instanceof PyString) {
+            if ($argument instanceof PyStringElement) {
                 $args[] = "\$string";
-            } elseif ($argument instanceof Table) {
+            } elseif ($argument instanceof TableElement) {
                 $args[] = "\$table";
             }
         }

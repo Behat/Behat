@@ -4,12 +4,10 @@ namespace Everzet\Behat\Logger;
 
 use Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Gherkin\Structures\Section;
-use \Everzet\Gherkin\Structures\Scenario\Scenario;
-use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
-use \Everzet\Gherkin\Structures\Scenario\Background;
-use \Everzet\Gherkin\Structures\Inline\PyString;
-use \Everzet\Gherkin\Structures\Inline\Table;
+use \Everzet\Gherkin\Element\SectionElement;
+use \Everzet\Gherkin\Element\Inline\PyStringElement;
+use \Everzet\Gherkin\Element\Inline\TableElement;
+
 use \Everzet\Behat\Runner\FeatureRunner;
 use \Everzet\Behat\Runner\ScenarioOutlineRunner;
 use \Everzet\Behat\Runner\ScenarioRunner;
@@ -227,13 +225,13 @@ class DetailedLogger implements LoggerInterface
             // Draw step arguments
             if ($step->hasArguments()) {
                 foreach ($step->getArguments() as $argument) {
-                    if ($argument instanceof PyString) {
+                    if ($argument instanceof PyStringElement) {
                         $this->output->writeln(sprintf("<%s>%s</%s>",
                             $runner->getStatus(),
                             $this->getPyString($argument, 6),
                             $runner->getStatus()
                         ));
-                    } elseif ($argument instanceof Table) {
+                    } elseif ($argument instanceof TableElement) {
                         $this->output->writeln(sprintf("<%s>%s</%s>",
                             $runner->getStatus(),
                             $this->getTableString($argument, 6),
@@ -268,7 +266,7 @@ class DetailedLogger implements LoggerInterface
      * 
      * @return  string
      */
-    protected function getTagsString(Section $section)
+    protected function getTagsString(SectionElement $section)
     {
         $tags = array();
         foreach ($section->getTags() as $tag) {
@@ -286,7 +284,7 @@ class DetailedLogger implements LoggerInterface
      * 
      * @return  string
      */
-    protected function getPyString(PyString $pystring, $indent = 6)
+    protected function getPyString(PyStringElement $pystring, $indent = 6)
     {
         return strtr(
             sprintf("%s\"\"\"\n%s\n\"\"\"", str_repeat(' ', $indent), (string) $pystring),
@@ -302,7 +300,7 @@ class DetailedLogger implements LoggerInterface
      * 
      * @return  string
      */
-    protected function getTableString(Table $table, $indent = 6)
+    protected function getTableString(TableElement $table, $indent = 6)
     {
         return strtr(
             sprintf(str_repeat(' ', $indent).'%s', $table),

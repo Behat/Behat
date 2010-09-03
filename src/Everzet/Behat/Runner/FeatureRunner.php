@@ -4,9 +4,11 @@ namespace Everzet\Behat\Runner;
 
 use \Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Gherkin\Structures\Feature;
-use \Everzet\Gherkin\Structures\Scenario\Scenario;
-use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
+use \Everzet\Gherkin\Element\FeatureElement;
+use \Everzet\Gherkin\Element\Scenario\ScenarioElement;
+use \Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
+
+use \Everzet\Behat\Exception\BehaviorException;
 use \Everzet\Behat\Logger\LoggerInterface;
 
 /*
@@ -30,27 +32,30 @@ class FeatureRunner extends BaseRunner implements RunnerInterface
     protected $container;
     protected $scenarioRunners = array();
 
-    public function __construct(Feature $feature, Container $container, LoggerInterface $logger)
+    public function __construct(FeatureElement $feature, Container $container,
+                                LoggerInterface $logger)
     {
         $this->feature      = $feature;
         $this->container    = $container;
         $this->setLogger(     $logger);
 
         foreach ($feature->getScenarios() as $scenario) {
-            if ($scenario instanceof ScenarioOutline) {
+            if ($scenario instanceof ScenarioOutlineElement) {
                 $this->scenarioRunners[] = new ScenarioOutlineRunner(
                     $scenario
                   , $feature->getBackground()
                   , $container
                   , $logger
                 );
-            } else {
+            } elseif ($scenario instanceof ScenarioElement) {
                 $this->scenarioRunners[] = new ScenarioRunner(
                     $scenario
                   , $feature->getBackground()
                   , $container
                   , $logger
                 );
+            } else {
+                throw new BehaviorException('Unknown scenario type: ' . get_class($scenario));
             }
         }
     }

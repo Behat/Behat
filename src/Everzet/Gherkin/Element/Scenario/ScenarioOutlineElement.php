@@ -1,9 +1,8 @@
 <?php
 
-namespace Everzet\Gherkin\Structures\Scenario;
+namespace Everzet\Gherkin\Element\Scenario;
 
-use \Everzet\Gherkin\Structures\Scenario\Scenario;
-use \Everzet\Gherkin\Structures\Inline\Examples;
+use \Everzet\Gherkin\Element\Inline\ExamplesElement;
 
 /*
  * This file is part of the behat package.
@@ -20,11 +19,11 @@ use \Everzet\Gherkin\Structures\Inline\Examples;
  * @subpackage  Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ScenarioOutline extends Scenario
+class ScenarioOutlineElement extends ScenarioElement
 {
     protected $examples;
 
-    public function setExamples(Examples $examples)
+    public function setExamples(ExamplesElement $examples)
     {
         $this->examples = $examples;
     }

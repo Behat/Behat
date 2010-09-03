@@ -1,8 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin\Structures\Inline;
-
-use \Everzet\Gherkin\Structures\Inline\Table;
+namespace Everzet\Gherkin\Element\Inline;
 
 /*
  * This file is part of the behat package.
@@ -19,7 +17,7 @@ use \Everzet\Gherkin\Structures\Inline\Table;
  * @subpackage  Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Examples
+class ExamplesElement
 {
     protected $title;
     protected $table;
@@ -29,7 +27,7 @@ class Examples
         $this->title = $title;
     }
 
-    public function setTable(Table $table)
+    public function setTable(TableElement $table)
     {
         $this->table = $table;
     }

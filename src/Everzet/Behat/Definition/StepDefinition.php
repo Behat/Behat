@@ -2,8 +2,8 @@
 
 namespace Everzet\Behat\Definition;
 
-use \Everzet\Gherkin\Structures\Inline\PyString;
-use \Everzet\Gherkin\Structures\Inline\Table;
+use \Everzet\Gherkin\Element\Inline\PyStringElement;
+use \Everzet\Gherkin\Element\Inline\TableElement;
 use \Everzet\Behat\Exception\Error;
 
 /*
@@ -141,9 +141,9 @@ class StepDefinition
         $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
 
         call_user_func_array($this->callback, array_map(function($value) {
-            if ($value instanceof PyString) {
+            if ($value instanceof PyStringElement) {
                 return (string) $value;
-            } elseif ($value instanceof Table) {
+            } elseif ($value instanceof TableElement) {
                 return $value->getHash();
             } else {
                 return $value;

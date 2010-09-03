@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin\Structures;
+namespace Everzet\Gherkin\Element;
 
 /*
  * This file is part of the behat package.
@@ -17,7 +17,7 @@ namespace Everzet\Gherkin\Structures;
  * @subpackage  Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Step
+class StepElement
 {
     protected $type;
     protected $text;

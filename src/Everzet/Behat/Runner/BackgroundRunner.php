@@ -4,7 +4,8 @@ namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Gherkin\Structures\Scenario\Background;
+use \Everzet\Gherkin\Element\Scenario\BackgroundElement;
+
 use \Everzet\Behat\Loader\StepsLoader;
 use \Everzet\Behat\Logger\LoggerInterface;
 
@@ -14,7 +15,7 @@ class BackgroundRunner extends BaseStepsRunner implements RunnerInterface
     protected $definitions;
     protected $container;
 
-    public function __construct(Background $background, StepsLoader $definitions, 
+    public function __construct(BackgroundElement $background, StepsLoader $definitions, 
                                 Container $container, LoggerInterface $logger)
     {
         $this->background   = $background;
