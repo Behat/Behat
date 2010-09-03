@@ -1,10 +1,10 @@
 <?php
 
-namespace Everzet\Behat\Definitions;
+namespace Everzet\Behat\Definition;
 
 use \Everzet\Gherkin\Structures\Inline\PyString;
 use \Everzet\Gherkin\Structures\Inline\Table;
-use \Everzet\Behat\Exceptions\Error;
+use \Everzet\Behat\Exception\Error;
 
 /*
  * This file is part of the behat package.

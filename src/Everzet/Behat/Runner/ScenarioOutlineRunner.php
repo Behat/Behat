@@ -1,14 +1,14 @@
 <?php
 
-namespace Everzet\Behat\Runners;
+namespace Everzet\Behat\Runner;
 
-use Symfony\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Container;
 
 use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
 use \Everzet\Gherkin\Structures\Scenario\Background;
-use \Everzet\Behat\Loggers\Logger;
+use \Everzet\Behat\Logger\LoggerInterface;
 
-class ScenarioOutlineRunner extends BaseRunner implements Runner, \Iterator
+class ScenarioOutlineRunner extends BaseRunner implements RunnerInterface, \Iterator
 {
     protected $outline;
     protected $background;
@@ -18,7 +18,7 @@ class ScenarioOutlineRunner extends BaseRunner implements Runner, \Iterator
     protected $scenarioRunners = array();
 
     public function __construct(ScenarioOutline $outline, Background $background = null, 
-                                Container $container, Logger $logger)
+                                Container $container, LoggerInterface $logger)
     {
         $this->position     = 0;
         $this->outline      = $outline;
@@ -69,7 +69,7 @@ class ScenarioOutlineRunner extends BaseRunner implements Runner, \Iterator
         return $this->outline;
     }
 
-    public function run(Runner $caller = null)
+    public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
         $this->getLogger()->beforeScenarioOutline($this);

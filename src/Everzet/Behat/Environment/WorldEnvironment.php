@@ -2,8 +2,6 @@
 
 namespace Everzet\Behat\Environment;
 
-use \Everzet\Behat\Environment\World;
-
 /*
  * This file is part of the behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -19,7 +17,7 @@ use \Everzet\Behat\Environment\World;
  * @subpackage  Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SimpleWorld implements World
+class WorldEnvironment implements EnvironmentInterface
 {
   protected $values = array();
 

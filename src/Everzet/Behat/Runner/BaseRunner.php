@@ -1,15 +1,15 @@
 <?php
 
-namespace Everzet\Behat\Runners;
+namespace Everzet\Behat\Runner;
 
-use \Everzet\Behat\Loggers\Logger;
+use \Everzet\Behat\Logger\LoggerInterface;
 
 abstract class BaseRunner
 {
     protected $logger;
     protected $caller;
 
-    protected function setLogger(Logger $logger)
+    protected function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
@@ -19,7 +19,7 @@ abstract class BaseRunner
         return $this->logger;
     }
 
-    protected function setCaller(Runner $caller = null)
+    protected function setCaller(RunnerInterface $caller = null)
     {
         $this->caller = $caller;
     }

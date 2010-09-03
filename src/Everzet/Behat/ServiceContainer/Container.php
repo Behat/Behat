@@ -2,11 +2,11 @@
 
 namespace Everzet\Behat\ServiceContainer;
 
-use Symfony\Components\DependencyInjection\ContainerInterface;
-use Symfony\Components\DependencyInjection\Container as BaseContainer;
-use Symfony\Components\DependencyInjection\Reference;
-use Symfony\Components\DependencyInjection\Parameter;
-use Symfony\Components\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Container as BaseContainer;
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Parameter;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * Container
@@ -53,14 +53,14 @@ class Container extends BaseContainer
     }
 
     /**
-     * Gets the 'world' service.
+     * Gets the 'environment' service.
      *
      * @return Object A %world.class% instance.
      */
-    protected function getWorldService()
+    protected function getEnvironmentService()
     {
-        $class = $this->getParameter('world.class');
-        $instance = new $class($this->getParameter('world.file'));
+        $class = $this->getParameter('environment.class');
+        $instance = new $class($this->getParameter('environment.file'));
 
         return $instance;
     }
@@ -99,7 +99,7 @@ class Container extends BaseContainer
     protected function getSteps_LoaderService()
     {
         $class = $this->getParameter('steps.loader.class');
-        $instance = new $class($this->getParameter('steps.loader.path'), $this->getWorldService());
+        $instance = new $class($this->getParameter('steps.loader.path'), $this->getEnvironmentService());
 
         return $instance;
     }
@@ -129,10 +129,10 @@ class Container extends BaseContainer
         return array(
             'parser.class' => 'Everzet\\Gherkin\\Parser',
             'i18n.class' => 'Everzet\\Gherkin\\I18n',
-            'world.class' => 'Everzet\\Behat\\Environment\\SimpleWorld',
-            'features.loader.class' => 'Everzet\\Behat\\Loaders\\FeaturesLoader',
-            'steps.loader.class' => 'Everzet\\Behat\\Loaders\\StepsLoader',
-            'logger.class' => 'Everzet\\Behat\\Loggers\\Detailed',
+            'environment.class' => 'Everzet\\Behat\\Environment\\WorldEnvironment',
+            'features.loader.class' => 'Everzet\\Behat\\Loader\\FeaturesLoader',
+            'steps.loader.class' => 'Everzet\\Behat\\Loader\\StepsLoader',
+            'logger.class' => 'Everzet\\Behat\\Logger\\DetailedLogger',
         );
     }
 }

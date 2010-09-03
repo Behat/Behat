@@ -1,8 +1,6 @@
 <?php
 
-namespace Everzet\Behat\Exceptions;
-
-use \Everzet\Behat\Exceptions\BehaviorException as BaseException;
+namespace Everzet\Behat\Exception;
 
 /*
  * This file is part of the behat package.
@@ -19,7 +17,7 @@ use \Everzet\Behat\Exceptions\BehaviorException as BaseException;
  * @subpackage  Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Undefined extends BaseException
+class Undefined extends BehaviorException
 {
     protected $text;
 

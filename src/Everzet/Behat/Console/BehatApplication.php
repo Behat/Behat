@@ -2,9 +2,9 @@
 
 namespace Everzet\Behat\Console;
 
-use \Symfony\Components\Console\Application as BaseApplication;
+use \Symfony\Component\Console\Application as BaseApplication;
 
-use \Everzet\Behat\Console\Commands\BehatCommand;
+use \Everzet\Behat\Console\Command\BehatCommand;
 
 /*
  * This file is part of the behat package.
@@ -24,7 +24,7 @@ use \Everzet\Behat\Console\Commands\BehatCommand;
 class BehatApplication extends BaseApplication
 {
     /**
-     * @see \Symfony\Components\Console\Application
+     * @see \Symfony\Component\Console\Application
      */
     public function __construct()
     {

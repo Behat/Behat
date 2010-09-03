@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Behat\Exceptions;
+namespace Everzet\Behat\Environment;
 
 /*
  * This file is part of the behat package.
@@ -11,12 +11,18 @@ namespace Everzet\Behat\Exceptions;
  */
 
 /**
- * Abstract behat Exception
+ * World container interface.
  *
  * @package     behat
  * @subpackage  Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class BehaviorException extends \Exception
+interface EnvironmentInterface
 {
+    /**
+     * Constructs World instance.
+     *
+     * @param     string  $file       file path to require on flushes
+     */
+    public function __construct($envFile);
 }

@@ -1,9 +1,8 @@
 <?php
 
-namespace Everzet\Behat\Exceptions;
+namespace Everzet\Behat\Exception;
 
-use \Everzet\Behat\Exceptions\BehaviorException as BaseException;
-use \Everzet\Behat\Definitions\StepDefinition;
+use \Everzet\Behat\Definition\StepDefinition;
 
 /*
  * This file is part of the behat package.
@@ -20,7 +19,7 @@ use \Everzet\Behat\Definitions\StepDefinition;
  * @subpackage  Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Redundant extends BaseException
+class Redundant extends BehaviorException
 {
     protected $step1;
     protected $step2;

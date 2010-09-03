@@ -1,14 +1,14 @@
 <?php
 
-namespace Everzet\Behat\Runners;
+namespace Everzet\Behat\Runner;
 
-use Symfony\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Container;
 
 use \Everzet\Gherkin\Structures\Scenario\Scenario;
 use \Everzet\Gherkin\Structures\Scenario\Background;
-use \Everzet\Behat\Loggers\Logger;
+use \Everzet\Behat\Logger\LoggerInterface;
 
-class ScenarioRunner extends BaseStepsRunner implements Runner
+class ScenarioRunner extends BaseStepsRunner implements RunnerInterface
 {
     protected $scenario;
     protected $container;
@@ -18,7 +18,7 @@ class ScenarioRunner extends BaseStepsRunner implements Runner
     protected $skip = false;
 
     public function __construct(Scenario $scenario, Background $background = null,
-                                Container $container, Logger $logger)
+                                Container $container, LoggerInterface $logger)
     {
         $this->scenario     = $scenario;
         $this->container    = $container;
@@ -84,7 +84,7 @@ class ScenarioRunner extends BaseStepsRunner implements Runner
         return $exceptions;
     }
 
-    public function run(Runner $caller = null)
+    public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
         $this->getLogger()->beforeScenario($this);

@@ -1,13 +1,13 @@
 <?php
 
-namespace Everzet\Behat\Runners;
+namespace Everzet\Behat\Runner;
 
-use \Symfony\Components\DependencyInjection\Container;
+use \Symfony\Component\DependencyInjection\Container;
 
 use \Everzet\Gherkin\Structures\Feature;
 use \Everzet\Gherkin\Structures\Scenario\Scenario;
 use \Everzet\Gherkin\Structures\Scenario\ScenarioOutline;
-use \Everzet\Behat\Loggers\Logger;
+use \Everzet\Behat\Logger\LoggerInterface;
 
 /*
  * This file is part of the behat package.
@@ -24,13 +24,13 @@ use \Everzet\Behat\Loggers\Logger;
  * @subpackage  Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureRunner extends BaseRunner implements Runner
+class FeatureRunner extends BaseRunner implements RunnerInterface
 {
     protected $feature;
     protected $container;
     protected $scenarioRunners = array();
 
-    public function __construct(Feature $feature, Container $container, Logger $logger)
+    public function __construct(Feature $feature, Container $container, LoggerInterface $logger)
     {
         $this->feature      = $feature;
         $this->container    = $container;
@@ -60,7 +60,7 @@ class FeatureRunner extends BaseRunner implements Runner
         return $this->feature;
     }
 
-    public function run(Runner $caller = null)
+    public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
         $this->getLogger()->beforeFeature($this);

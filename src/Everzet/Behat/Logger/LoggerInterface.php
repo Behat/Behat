@@ -1,16 +1,16 @@
 <?php
 
-namespace Everzet\Behat\Loggers;
+namespace Everzet\Behat\Logger;
 
-use Symfony\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Container;
 
-use \Everzet\Behat\Runners\FeatureRunner;
-use \Everzet\Behat\Runners\ScenarioOutlineRunner;
-use \Everzet\Behat\Runners\ScenarioRunner;
-use \Everzet\Behat\Runners\BackgroundRunner;
-use \Everzet\Behat\Runners\StepRunner;
+use \Everzet\Behat\Runner\FeatureRunner;
+use \Everzet\Behat\Runner\ScenarioOutlineRunner;
+use \Everzet\Behat\Runner\ScenarioRunner;
+use \Everzet\Behat\Runner\BackgroundRunner;
+use \Everzet\Behat\Runner\StepRunner;
 
-interface Logger
+interface LoggerInterface
 {
     public function __construct(Container $container);
 

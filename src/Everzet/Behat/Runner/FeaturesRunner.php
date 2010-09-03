@@ -1,11 +1,11 @@
 <?php
 
-namespace Everzet\Behat\Runners;
+namespace Everzet\Behat\Runner;
 
-use \Symfony\Components\DependencyInjection\Container;
-use \Symfony\Components\Finder\Finder;
+use \Symfony\Component\DependencyInjection\Container;
+use \Symfony\Component\Finder\Finder;
 
-class FeaturesRunner implements Runner, \Iterator
+class FeaturesRunner implements RunnerInterface, \Iterator
 {
     protected $position         = 0;
     protected $featureRunners   = array();
@@ -48,7 +48,7 @@ class FeaturesRunner implements Runner, \Iterator
         return isset($this->featureRunners[$this->position]);
     }
 
-    public function run(Runner $parent = null)
+    public function run(RunnerInterface $parent = null)
     {
         foreach ($this as $runner) {
             $runner->run($this);

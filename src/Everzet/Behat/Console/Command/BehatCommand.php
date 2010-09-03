@@ -1,15 +1,15 @@
 <?php
 
-namespace Everzet\Behat\Console\Commands;
+namespace Everzet\Behat\Console\Command;
 
-use \Symfony\Components\Console\Command\Command;
-use \Symfony\Components\Console\Input\InputInterface;
-use \Symfony\Components\Console\Input\InputArgument;
-use \Symfony\Components\Console\Input\InputOption;
-use \Symfony\Components\Console\Output\OutputInterface;
+use \Symfony\Component\Console\Command\Command;
+use \Symfony\Component\Console\Input\InputInterface;
+use \Symfony\Component\Console\Input\InputArgument;
+use \Symfony\Component\Console\Input\InputOption;
+use \Symfony\Component\Console\Output\OutputInterface;
 
 use \Everzet\Behat\ServiceContainer\Container;
-use \Everzet\Behat\Exceptions\Redundant;
+use \Everzet\Behat\Exception\Redundant;
 
 /*
  * This file is part of the behat package.
@@ -29,7 +29,7 @@ use \Everzet\Behat\Exceptions\Redundant;
 class BehatCommand extends Command
 {
     /**
-     * @see \Symfony\Components\Console\Command\Command
+     * @see \Symfony\Component\Console\Command\Command
      */
     protected function configure()
     {
@@ -41,7 +41,7 @@ class BehatCommand extends Command
     }
 
     /**
-     * @see \Symfony\Components\Console\Command\Command
+     * @see \Symfony\Component\Console\Command\Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -61,7 +61,7 @@ class BehatCommand extends Command
         $container->setParameter('output',              $output);
         $container->setParameter('i18n.path',           realpath(__DIR__ . '/../../../../../i18n'));
         $container->setParameter('features.path',       $basePath);
-        $container->setParameter('world.file',          $basePath . '/support/env.php');
+        $container->setParameter('environment.file',    $basePath . '/support/env.php');
         $container->setParameter('steps.loader.path',   $basePath . '/steps');
         $container->setParameter('logger.verbose',      $input->getOption('verbose'));
 

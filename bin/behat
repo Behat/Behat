@@ -23,5 +23,5 @@ array_splice($argv, 1, 0, 'behat');
 
 $app = new \Everzet\Behat\Console\BehatApplication();
 $app->run(
-  new \Symfony\Components\Console\Input\ArgvInput($argv)
+  new \Symfony\Component\Console\Input\ArgvInput($argv)
 );

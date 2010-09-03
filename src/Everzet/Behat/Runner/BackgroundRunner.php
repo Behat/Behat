@@ -1,21 +1,21 @@
 <?php
 
-namespace Everzet\Behat\Runners;
+namespace Everzet\Behat\Runner;
 
-use Symfony\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Container;
 
 use \Everzet\Gherkin\Structures\Scenario\Background;
-use \Everzet\Behat\Loaders\StepsLoader;
-use \Everzet\Behat\Loggers\Logger;
+use \Everzet\Behat\Loader\StepsLoader;
+use \Everzet\Behat\Logger\LoggerInterface;
 
-class BackgroundRunner extends BaseStepsRunner implements Runner
+class BackgroundRunner extends BaseStepsRunner implements RunnerInterface
 {
     protected $background;
     protected $definitions;
     protected $container;
 
     public function __construct(Background $background, StepsLoader $definitions, 
-                                Container $container, Logger $logger)
+                                Container $container, LoggerInterface $logger)
     {
         $this->background   = $background;
         $this->definitions  = $definitions;
@@ -35,7 +35,7 @@ class BackgroundRunner extends BaseStepsRunner implements Runner
         return $this->background;
     }
 
-    public function run(Runner $caller = null)
+    public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
         $this->getLogger()->beforeBackground($this);

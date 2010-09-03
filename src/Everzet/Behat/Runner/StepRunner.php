@@ -1,15 +1,15 @@
 <?php
 
-namespace Everzet\Behat\Runners;
+namespace Everzet\Behat\Runner;
 
-use Symfony\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Container;
 
 use \Everzet\Gherkin\Structures\Step;
-use \Everzet\Behat\Definitions\StepDefinition;
-use \Everzet\Behat\Loaders\StepsLoader;
-use \Everzet\Behat\Loggers\Logger;
+use \Everzet\Behat\Definition\StepDefinition;
+use \Everzet\Behat\Loader\StepsLoader;
+use \Everzet\Behat\Logger\LoggerInterface;
 
-class StepRunner extends BaseRunner implements Runner
+class StepRunner extends BaseRunner implements RunnerInterface
 {
     protected $step;
     protected $definitions;
@@ -21,7 +21,7 @@ class StepRunner extends BaseRunner implements Runner
     protected $exception;
 
     public function __construct(Step $step, StepsLoader $definitions, Container $container,
-                                Logger $logger)
+                                LoggerInterface $logger)
     {
         $this->step         = $step;
         $this->definitions  = $definitions;
@@ -75,7 +75,7 @@ class StepRunner extends BaseRunner implements Runner
         }
     }
 
-    public function run(Runner $caller = null)
+    public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
         $this->getLogger()->beforeStep($this);
@@ -101,7 +101,7 @@ class StepRunner extends BaseRunner implements Runner
         return $this->status;
     }
 
-    public function skip(Runner $caller = null)
+    public function skip(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);
         $this->getLogger()->beforeStep($this);

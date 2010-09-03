@@ -1,16 +1,16 @@
 <?php
 
-namespace Everzet\Behat\Loaders;
+namespace Everzet\Behat\Loader;
 
-use \Symfony\Components\Finder\Finder;
+use \Symfony\Component\Finder\Finder;
 
 use \Everzet\Gherkin\Structures\Inline\PyString;
 use \Everzet\Gherkin\Structures\Inline\Table;
-use \Everzet\Behat\Definitions\StepDefinition;
-use \Everzet\Behat\Environment\World;
-use \Everzet\Behat\Exceptions\Redundant;
-use \Everzet\Behat\Exceptions\Ambiguous;
-use \Everzet\Behat\Exceptions\Undefined;
+use \Everzet\Behat\Definition\StepDefinition;
+use \Everzet\Behat\Environment\EnvironmentInterface;
+use \Everzet\Behat\Exception\Redundant;
+use \Everzet\Behat\Exception\Ambiguous;
+use \Everzet\Behat\Exception\Undefined;
 
 /*
  * This file is part of the behat package.
@@ -38,7 +38,7 @@ class StepsLoader
      * @param   \Iterator   $definitionFiles    step definition files
      * @param   World       $world              world object instance
      */
-    public function __construct($path, World $world = null)
+    public function __construct($path, EnvironmentInterface $world = null)
     {
         $steps = $this;
 

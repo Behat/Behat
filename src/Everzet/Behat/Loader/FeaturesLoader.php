@@ -1,11 +1,11 @@
 <?php
 
-namespace Everzet\Behat\Loaders;
+namespace Everzet\Behat\Loader;
 
-use \Symfony\Components\DependencyInjection\Container;
-use \Symfony\Components\Finder\Finder;
+use \Symfony\Component\DependencyInjection\Container;
+use \Symfony\Component\Finder\Finder;
 
-use \Everzet\Behat\Runners\FeaturesRunner;
+use \Everzet\Behat\Runner\FeaturesRunner;
 
 /*
  * This file is part of the behat package.
