@@ -32,11 +32,7 @@ class ScenarioRunner extends StepsRunner implements RunnerInterface
             );
         }
 
-        $this->initStepRunners(
-            $this->scenario->getSteps()
-          , $this->definitions
-          , $container
-        );
+        parent::__construct($scenario->getSteps(), $this->definitions, $container);
     }
 
     public function setTokens(array $tokens)

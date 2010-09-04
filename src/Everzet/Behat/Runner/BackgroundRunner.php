@@ -22,11 +22,7 @@ class BackgroundRunner extends StepsRunner implements RunnerInterface
         $this->definitions  = $definitions;
         $this->dispatcher   = $container->getEventDispatcherService();
 
-        $this->initStepRunners(
-            $this->background->getSteps()
-          , $this->definitions
-          , $container
-        );
+        parent::__construct($background->getSteps(), $this->definitions, $container);
     }
 
     public function getBackground()

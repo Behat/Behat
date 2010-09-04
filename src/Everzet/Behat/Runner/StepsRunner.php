@@ -13,7 +13,7 @@ abstract class StepsRunner extends BaseRunner implements \Iterator
     protected $stepRunners  = array();
     protected $skip         = false;
 
-    protected function initStepRunners(array $steps, StepsLoader $definitions, 
+    protected function __construct(array $steps, StepsLoader $definitions, 
                                        Container $container)
     {
         $this->position = 0;

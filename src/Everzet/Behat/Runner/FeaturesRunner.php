@@ -9,6 +9,8 @@ use Symfony\Component\Finder\Finder;
 class FeaturesRunner implements RunnerInterface, \Iterator
 {
     protected $position         = 0;
+    protected $startTime        = 0;
+    protected $finishTime       = 0;
     protected $featureRunners   = array();
     protected $dispatcher;
 
@@ -58,11 +60,13 @@ class FeaturesRunner implements RunnerInterface, \Iterator
     public function run(RunnerInterface $parent = null)
     {
         $this->dispatcher->notify(new Event($this, 'suite.pre_test'));
+        $this->startTime = microtime(true);
 
         foreach ($this as $runner) {
             $runner->run($this);
         }
 
+        $this->finishTime = microtime(true);
         $this->dispatcher->notify(new Event($this, 'suite.post_test'));
     }
 }
