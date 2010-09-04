@@ -3,26 +3,26 @@
 namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Element\Scenario\BackgroundElement;
 
 use Everzet\Behat\Loader\StepsLoader;
 
-class BackgroundRunner extends StepsRunner implements RunnerInterface
+class BackgroundRunner extends BaseRunner implements RunnerInterface
 {
     protected $background;
-    protected $definitions;
-    protected $dispatcher;
+    protected $skip = false;
 
     public function __construct(BackgroundElement $background, StepsLoader $definitions, 
-                                Container $container)
+                                Container $container, RunnerInterface $parent = null)
     {
-        $this->background   = $background;
-        $this->definitions  = $definitions;
-        $this->dispatcher   = $container->getEventDispatcherService();
+        $this->background = $background;
 
-        parent::__construct($background->getSteps(), $this->definitions, $container);
+        foreach ($background->getSteps() as $step) {
+            $this->addChildRunner(new StepRunner($step, $definitions, $container, $this));
+        }
+
+        parent::__construct('background', $container->getEventDispatcherService(), $parent);
     }
 
     public function getBackground()
@@ -30,15 +30,16 @@ class BackgroundRunner extends StepsRunner implements RunnerInterface
         return $this->background;
     }
 
-    public function run(RunnerInterface $caller = null)
+    protected function doRun()
     {
-        $this->setCaller($caller);
-        $this->dispatcher->notify(new Event($this, 'background.pre_test'));
-
         foreach ($this as $runner) {
-            $this->runStepTest($runner);
+            if (!$this->skip) {
+                if ('passed' !== $runner->run()) {
+                    $this->skip = true;
+                }
+            } else {
+                $runner->skip();
+            }
         }
-
-        $this->dispatcher->notify(new Event($this, 'background.post_test'));
     }
 }

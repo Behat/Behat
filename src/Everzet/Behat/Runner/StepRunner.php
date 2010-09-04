@@ -24,11 +24,13 @@ class StepRunner extends BaseRunner implements RunnerInterface
     protected $status;
     protected $exception;
 
-    public function __construct(StepElement $step, StepsLoader $definitions, Container $container)
+    public function __construct(StepElement $step, StepsLoader $definitions, Container $container,
+                                RunnerInterface $parent)
     {
         $this->step         = $step;
         $this->definitions  = $definitions;
-        $this->dispatcher   = $container->getEventDispatcherService();
+
+        parent::__construct('step', $container->getEventDispatcherService(), $parent);
     }
 
     public function setTokens(array $tokens)
@@ -76,11 +78,8 @@ class StepRunner extends BaseRunner implements RunnerInterface
         }
     }
 
-    public function run(RunnerInterface $caller = null)
+    protected function doRun()
     {
-        $this->setCaller($caller);
-        $this->dispatcher->notify(new Event($this, 'step.pre_test'));
-
         $this->findDefinition();
 
         if (null === $this->status) {
@@ -97,15 +96,12 @@ class StepRunner extends BaseRunner implements RunnerInterface
             }
         }
 
-        $this->dispatcher->notify(new Event($this, 'step.post_test'));
-
         return $this->status;
     }
 
-    public function skip(RunnerInterface $caller = null)
+    public function skip()
     {
-        $this->setCaller($caller);
-        $this->dispatcher->notify(new Event($this, 'step.pre_test'));
+        $this->fireEvent('pre_skip');
 
         $this->findDefinition();
 
@@ -113,6 +109,8 @@ class StepRunner extends BaseRunner implements RunnerInterface
             $this->status = 'skipped';
         }
 
-        $this->dispatcher->notify(new Event($this, 'step.post_test'));
+        $this->fireEvent('post_skip');
+
+        return $this->status;
     }
 }

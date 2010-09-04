@@ -41,21 +41,24 @@ class DetailedLogger implements LoggerInterface
 
     public function registerListeners(EventDispatcher $dispatcher)
     {
-        $dispatcher->connect('feature.pre_test',            array($this, 'beforeFeature'));
+        $dispatcher->connect('feature.pre_test',            array($this, 'printFeatureHeader'));
 
-        $dispatcher->connect('scenario_outline.pre_test',   array($this, 'beforeScenarioOutline'));
-        $dispatcher->connect('scenario_outline.post_test',  array($this, 'afterScenarioOutline'));
+        $dispatcher->connect('scenario_outline.pre_test',   array($this, 'printOutlineHeader'));
+        $dispatcher->connect('scenario_outline.post_test',  array($this, 'printOutlineFooter'));
 
-        $dispatcher->connect('scenario.pre_test',           array($this, 'beforeScenario'));
-        $dispatcher->connect('scenario.post_test',          array($this, 'afterScenario'));
+        $dispatcher->connect('scenario.pre_test',           array($this, 'printScenarioHeader'));
+        $dispatcher->connect('scenario.post_test',          array($this, 'printScenarioFooter'));
 
-        $dispatcher->connect('background.pre_test',         array($this, 'beforeBackground'));
-        $dispatcher->connect('background.post_test',        array($this, 'afterBackground'));
+        $dispatcher->connect('background.pre_test',         array($this, 'printBackgroundHeader'));
+        $dispatcher->connect('background.post_test',        array($this, 'printBackgroundFooter'));
 
-        $dispatcher->connect('step.post_test',              array($this, 'afterStep'));
+        $dispatcher->connect('step.post_test',              array($this, 'printStep'));
+        $dispatcher->connect('step.post_skip',              array($this, 'printStep'));
+
+        $dispatcher->connect('suite.post_test',             array($this, 'printStatistics'));
     }
 
-    public function beforeFeature(Event $event)
+    public function printFeatureHeader(Event $event)
     {
         $runner     = $event->getSubject();
         $feature    = $runner->getFeature();
@@ -83,13 +86,13 @@ class DetailedLogger implements LoggerInterface
                 $feature->getBackground()
               , $this->container->getStepsLoaderService()
               , $this->container
-              , $this
+              , null
             );
             $runner->run();
         }
     }
 
-    public function beforeScenarioOutline(Event $event)
+    public function printOutlineHeader(Event $event)
     {
         $runner     = $event->getSubject();
         $outline    = $runner->getScenarioOutline();
@@ -117,12 +120,12 @@ class DetailedLogger implements LoggerInterface
         ));
     }
 
-    public function afterScenarioOutline(Event $event)
+    public function printOutlineFooter(Event $event)
     {
         $this->output->writeln('');
     }
 
-    public function beforeScenario(Event $event)
+    public function printScenarioHeader(Event $event)
     {
         $runner     = $event->getSubject();
         $scenario   = $runner->getScenario();
@@ -154,7 +157,7 @@ class DetailedLogger implements LoggerInterface
         }
     }
 
-    public function afterScenario(Event $event)
+    public function printScenarioFooter(Event $event)
     {
         $runner     = $event->getSubject();
         $scenario   = $runner->getScenario();
@@ -162,7 +165,7 @@ class DetailedLogger implements LoggerInterface
         if (!$runner->isInOutline()) {
             $this->output->writeln('');
         } else {
-            $outlineRunner  = $runner->getCaller();
+            $outlineRunner  = $runner->getParentRunner();
             $outline        = $outlineRunner->getScenarioOutline();
             $examples       = $outline->getExamples()->getTable();
 
@@ -170,7 +173,7 @@ class DetailedLogger implements LoggerInterface
             if (0 === $outlineRunner->key()) {
 
                 // Print outline steps
-                foreach ($runner->getStepRunners() as $stepRunner) {
+                foreach ($runner->getChildRunners() as $stepRunner) {
                     $step = $stepRunner->getStep();
 
                     // Print step description
@@ -194,13 +197,13 @@ class DetailedLogger implements LoggerInterface
                     $outline->getI18n()->__('examples', 'Examples')
                 ));
 
-                // Draw outline examples header row
+                // print outline examples header row
                 $this->output->writeln(preg_replace(
                     '/|([^|]*)|/', '<skipped>$1</skipped>', '      ' . $examples->getKeysAsString()
                 ));
             }
 
-            // Draw current scenario results row
+            // print current scenario results row
             $this->output->writeln(preg_replace(
                 '/|([^|]*)|/'
               , sprintf('<%s>$1</%s>', $runner->getStatus(), $runner->getStatus())
@@ -225,7 +228,7 @@ class DetailedLogger implements LoggerInterface
         }
     }
 
-    public function beforeBackground(Event $event)
+    public function printBackgroundHeader(Event $event)
     {
         $runner     = $event->getSubject();
         $background = $runner->getBackground();
@@ -233,7 +236,7 @@ class DetailedLogger implements LoggerInterface
         // Recalc maximum description length (for filepath-like comments)
         $this->recalcMaxDescriptionLength($background);
 
-        if (null === $runner->getCaller()) {
+        if (null === $runner->getParentRunner()) {
             // Print description
             $description = sprintf("  %s:%s",
                 $background->getI18n()->__('background', 'Background'),
@@ -250,31 +253,31 @@ class DetailedLogger implements LoggerInterface
         }
     }
 
-    public function afterBackground(Event $event)
+    public function printBackgroundFooter(Event $event)
     {
         $runner = $event->getSubject();
 
-        if (null === $runner->getCaller()) {
+        if (null === $runner->getParentRunner()) {
             $this->output->writeln('');
         }
     }
 
-    public function afterStep(Event $event)
+    public function printStep(Event $event)
     {
         $runner = $event->getSubject();
         $step   = $runner->getStep();
 
         if (
             // Not in scenario background
-            !(null !== $runner->getCaller() &&
-              $runner->getCaller() instanceof BackgroundRunner &&
-              null !== $runner->getCaller()->getCaller() &&
-              $runner->getCaller()->getCaller() instanceof ScenarioRunner) &&
+            !(null !== $runner->getParentRunner() &&
+              $runner->getParentRunner() instanceof BackgroundRunner &&
+              null !== $runner->getParentRunner()->getParentRunner() &&
+              $runner->getParentRunner()->getParentRunner() instanceof ScenarioRunner) &&
 
             // Not in outline
-            !(null !== $runner->getCaller() &&
-              null !== $runner->getCaller()->getCaller() &&
-              $runner->getCaller()->getCaller() instanceof ScenarioOutlineRunner)
+            !(null !== $runner->getParentRunner() &&
+              null !== $runner->getParentRunner()->getParentRunner() &&
+              $runner->getParentRunner()->getParentRunner() instanceof ScenarioOutlineRunner)
            ) {
             // Print step description
             $description = sprintf('    %s %s', $step->getType(), $step->getText());
@@ -293,7 +296,7 @@ class DetailedLogger implements LoggerInterface
                 $this->output->writeln('');
             }
 
-            // Draw step arguments
+            // print step arguments
             if ($step->hasArguments()) {
                 foreach ($step->getArguments() as $argument) {
                     if ($argument instanceof PyStringElement) {
@@ -328,6 +331,13 @@ class DetailedLogger implements LoggerInterface
                 ));
             }
         }
+    }
+
+    public function printStatistics(Event $event)
+    {
+        $runner = $event->getSubject();
+
+        
     }
 
     /**
