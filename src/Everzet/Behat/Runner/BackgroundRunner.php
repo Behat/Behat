@@ -9,7 +9,7 @@ use Everzet\Gherkin\Element\Scenario\BackgroundElement;
 
 use Everzet\Behat\Loader\StepsLoader;
 
-class BackgroundRunner extends BaseStepsRunner implements RunnerInterface
+class BackgroundRunner extends StepsRunner implements RunnerInterface
 {
     protected $background;
     protected $definitions;
@@ -40,7 +40,7 @@ class BackgroundRunner extends BaseStepsRunner implements RunnerInterface
         $this->dispatcher->notify(new Event($this, 'background.pre_test'));
 
         foreach ($this as $runner) {
-            $runner->run($this);
+            $this->runStepTest($runner);
         }
 
         $this->dispatcher->notify(new Event($this, 'background.post_test'));

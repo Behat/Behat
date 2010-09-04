@@ -67,6 +67,11 @@ class ScenarioOutlineRunner extends BaseRunner implements RunnerInterface, \Iter
         return $this->outline;
     }
 
+    public function getStatus()
+    {
+        return $this->getStatusFromArray($this->scenarioRunners);
+    }
+
     public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);

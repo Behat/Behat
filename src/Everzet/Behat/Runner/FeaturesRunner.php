@@ -50,6 +50,11 @@ class FeaturesRunner implements RunnerInterface, \Iterator
         return isset($this->featureRunners[$this->position]);
     }
 
+    public function getStatus()
+    {
+        return $this->getStatusFromArray($this->featureRunners);
+    }
+
     public function run(RunnerInterface $parent = null)
     {
         $this->dispatcher->notify(new Event($this, 'suite.pre_test'));

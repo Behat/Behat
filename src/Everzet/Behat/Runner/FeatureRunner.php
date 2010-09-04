@@ -46,6 +46,11 @@ class FeatureRunner extends BaseRunner implements RunnerInterface
         return $this->feature;
     }
 
+    public function getStatus()
+    {
+        return $this->getStatusFromArray($this->scenarioRunners);
+    }
+
     public function run(RunnerInterface $caller = null)
     {
         $this->setCaller($caller);

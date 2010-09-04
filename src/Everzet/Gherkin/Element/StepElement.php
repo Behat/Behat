@@ -52,6 +52,11 @@ class StepElement
         return $this->tokens;
     }
 
+    public function getCleanText()
+    {
+        return $this->text;
+    }
+
     public function getText(array $tokens = array())
     {
         $tokens = array_merge($this->tokens, $tokens);

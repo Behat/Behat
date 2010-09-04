@@ -4,12 +4,14 @@ namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
 
+use Everzet\Behat\Runner\RunnerInterface;
 use Everzet\Behat\Loader\StepsLoader;
 
-abstract class BaseStepsRunner extends BaseRunner implements \Iterator
+abstract class StepsRunner extends BaseRunner implements \Iterator
 {
     protected $position     = 0;
     protected $stepRunners  = array();
+    protected $skip         = false;
 
     protected function initStepRunners(array $steps, StepsLoader $definitions, 
                                        Container $container)
@@ -53,5 +55,21 @@ abstract class BaseStepsRunner extends BaseRunner implements \Iterator
     public function getStepRunners()
     {
         return $this->stepRunners;
+    }
+
+    public function getStatus()
+    {
+        return $this->getStatusFromArray($this->getStepRunners());
+    }
+
+    protected function runStepTest(RunnerInterface $runner)
+    {
+        if (!$this->skip) {
+            if ('passed' !== $runner->run($this)) {
+                $this->skip = true;
+            }
+        } else {
+            $runner->skip($this);
+        }
     }
 }

@@ -7,6 +7,9 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Element\StepElement;
 
+use Everzet\Behat\Exception\Ambiguous;
+use Everzet\Behat\Exception\Undefined;
+use Everzet\Behat\Exception\Pending;
 use Everzet\Behat\Definition\StepDefinition;
 use Everzet\Behat\Loader\StepsLoader;
 
@@ -63,13 +66,13 @@ class StepRunner extends BaseRunner implements RunnerInterface
         try {
             try {
                 $this->definition = $this->definitions->findDefinition($this->step);
-            } catch (Ambiguous $e) {
+            } catch (Ambiguous $e) {    
+                $this->status    = 'failed';
                 $this->exception = $e;
-                $this->status = 'failed';
             }
         } catch (Undefined $e) {
-            $this->status = 'undefined';
-            $this->snippet = $this->definitions->getStepDefinitionSnippet($this->step);
+            $this->status  = 'undefined';
+            $this->snippet = $this->definitions->proposeDefinition($this->step);
         }
     }
 
@@ -89,7 +92,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
                     $this->status = 'pending';
                 }
             } catch (\Exception $e) {
-                $this->status = 'failed';
+                $this->status    = 'failed';
                 $this->exception = $e;
             }
         }

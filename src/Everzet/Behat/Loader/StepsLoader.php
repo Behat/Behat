@@ -85,7 +85,7 @@ class StepsLoader
      * 
      * @return  string          definition
      */
-    public function getStepDefinitionSnippet(StepElement $step)
+    public function proposeDefinition(StepElement $step)
     {
         $text   = $step->getText();
         $args   = $step->getArguments();
