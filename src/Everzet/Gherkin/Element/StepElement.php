@@ -21,7 +21,8 @@ class StepElement
 {
     protected $type;
     protected $text;
-    protected $arguments = array();
+    protected $tokens       = array();
+    protected $arguments    = array();
     protected $line;
 
     public function __construct($type, $text, $line = 0)
@@ -41,9 +42,20 @@ class StepElement
         return $this->type;
     }
 
+    public function setTokens(array $tokens)
+    {
+        $this->tokens = $tokens;
+    }
+
+    public function getTokens()
+    {
+        return $this->tokens;
+    }
+
     public function getText(array $tokens = array())
     {
-        $text = $this->text;
+        $tokens = array_merge($this->tokens, $tokens);
+        $text   = $this->text;
 
         foreach ($tokens as $key => $value)
         {

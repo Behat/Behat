@@ -233,9 +233,7 @@ class DetailedLogger implements LoggerInterface
             $step = $runner->getStep();
 
             // Print step description
-            $description = sprintf('    %s %s',
-                $step->getType(), $step->getText($runner->getTokens())
-            );
+            $description = sprintf('    %s %s', $step->getType(), $step->getText());
             $this->output->writeln(sprintf('<%s>%s</%s>',
                 $runner->getStatus(), $description, $runner->getStatus()
             ));

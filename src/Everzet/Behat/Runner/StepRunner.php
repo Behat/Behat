@@ -16,8 +16,8 @@ class StepRunner extends BaseRunner implements RunnerInterface
     protected $definitions;
     protected $dispatcher;
 
-    protected $tokens = array();
     protected $definition;
+    protected $snippet;
     protected $status;
     protected $exception;
 
@@ -30,12 +30,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
 
     public function setTokens(array $tokens)
     {
-        $this->tokens = $tokens;
-    }
-
-    public function getTokens()
-    {
-        return $this->tokens;
+        $this->step->setTokens($tokens);
     }
 
     public function getStep()
@@ -58,19 +53,23 @@ class StepRunner extends BaseRunner implements RunnerInterface
         return $this->definition;
     }
 
+    public function getSnippet()
+    {
+        return $this->snippet;
+    }
+
     public function findDefinition()
     {
         try {
             try {
-                $this->definition = $this->definitions->findDefinition(
-                    $this->step->getText($this->tokens), $this->step->getArguments()
-                );
+                $this->definition = $this->definitions->findDefinition($this->step);
             } catch (Ambiguous $e) {
                 $this->exception = $e;
                 $this->status = 'failed';
             }
         } catch (Undefined $e) {
             $this->status = 'undefined';
+            $this->snippet = $this->definitions->getStepDefinitionSnippet($this->step);
         }
     }
 

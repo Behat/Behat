@@ -4,6 +4,7 @@ namespace Everzet\Behat\Loader;
 
 use Symfony\Component\Finder\Finder;
 
+use Everzet\Gherkin\Element\StepElement;
 use Everzet\Gherkin\Element\Inline\PyStringElement;
 use Everzet\Gherkin\Element\Inline\TableElement;
 
@@ -31,7 +32,6 @@ use Everzet\Behat\Exception\Undefined;
 class StepsLoader
 {
     protected $steps = array();
-    protected $undefinedSteps = array();
 
     /**
      * Creates steps container & load step definitions
@@ -78,32 +78,6 @@ class StepsLoader
     }
 
     /**
-     * Returns undefined steps array
-     *
-     * @return  array
-     */
-    public function getUndefinedSteps()
-    {
-        return $this->undefinedSteps;
-    }
-
-    /**
-     * Returns snippets for undefined steps
-     *
-     * @return  string
-     */
-    public function getUndefinedStepsSnippets()
-    {
-        $snippets = '';
-
-        foreach ($this->undefinedSteps as $id => $regexp) {
-            $snippets .= sprintf("\n\n%s", $regexp);
-        }
-
-        return $snippets;
-    }
-
-    /**
      * Translates step description into definition
      *
      * @param   Step    $step   step instance
@@ -111,8 +85,11 @@ class StepsLoader
      * 
      * @return  string          definition
      */
-    protected function convertDescriptionToDefinition($step, $text)
+    public function getStepDefinitionSnippet(StepElement $step)
     {
+        $text   = $step->getText();
+        $args   = $step->getArguments();
+
         $regexp = preg_replace(
             array('/\"([^\"]*)\"/', '/(\d+)/'), array("\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
         );
@@ -120,7 +97,7 @@ class StepsLoader
         for ($i = 0; $i < $count; $i++) {
             $args[] = "\$arg".($i + 1);
         }
-        foreach ($step->getArguments() as $argument) {
+        foreach ($args as $argument) {
             if ($argument instanceof PyStringElement) {
                 $args[] = "\$string";
             } elseif ($argument instanceof TableElement) {
@@ -144,9 +121,11 @@ class StepsLoader
      * @throws  \Everzet\Behat\Exceptions\Ambiguous if step description is ambiguous
      * @throws  \Everzet\Behat\Exceptions\Undefined if step definition not found
      */
-    public function findDefinition($text, array $args = array())
+    public function findDefinition(StepElement $step)
     {
-        $matches = array();
+        $text       = $step->getText();
+        $args       = $step->getArguments();
+        $matches    = array();
 
         foreach ($this->steps as $regex => $definition) {
             if (preg_match($regex, $text, $values)) {
