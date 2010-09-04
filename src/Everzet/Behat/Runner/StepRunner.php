@@ -58,7 +58,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
         return $this->snippet;
     }
 
-    public function findDefinition()
+    protected function findDefinition()
     {
         try {
             try {
