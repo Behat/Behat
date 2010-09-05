@@ -39,7 +39,7 @@ class BackgroundRunner extends BaseRunner implements RunnerInterface
     {
         foreach ($this as $runner) {
             if (!$this->skip) {
-                if ('passed' !== $runner->run()) {
+                if (0 !== $runner->run()) {
                     $this->skip = true;
                 }
             } else {

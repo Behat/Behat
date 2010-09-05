@@ -212,11 +212,11 @@ class PrettyFormatter implements FormatterInterface
             ));
 
             // Print errors
-            foreach ($runner->getExceptions() as $exception) {
+            foreach ($runner->getFailedStepRunners() as $stepRunner) {
                 if ($this->verbose) {
-                    $error = (string) $exception;
+                    $error = (string) $stepRunner->getException();
                 } else {
-                    $error = $exception->getMessage();
+                    $error = $stepRunner->getException()->getMessage();
                 }
                 $this->output->write(sprintf("        \033[31m%s\033[0m",
                     strtr($error, array("\n" => "\n      "))

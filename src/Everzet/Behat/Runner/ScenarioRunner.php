@@ -12,9 +12,9 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
     protected $scenario;
     protected $definitions;
 
-    protected $skip = false;
-    protected $tokens = array();
     protected $backgroundRunner;
+    protected $tokens = array();
+    protected $skip = false;
 
     public function __construct(ScenarioElement $scenario, BackgroundElement $background = null,
                                 Container $container, RunnerInterface $parent)
@@ -124,19 +124,6 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
         return $this->getParentRunner() instanceof ScenarioOutlineRunner;
     }
 
-    public function getExceptions()
-    {
-        $exceptions = array();
-
-        foreach ($this->childs as $stepRunner) {
-            if (null !== $stepRunner->getException()) {
-                $exceptions[] = $stepRunner->getException();
-            }
-        }
-
-        return $exceptions;
-    }
-
     protected function doRun()
     {
         if (null !== $this->backgroundRunner) {
@@ -151,7 +138,7 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
             }
 
             if (!$this->skip) {
-                if ('passed' !== $runner->run()) {
+                if (0 !== $runner->run()) {
                     $this->skip = true;
                 }
             } else {

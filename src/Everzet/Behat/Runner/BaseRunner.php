@@ -11,8 +11,8 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
 
     protected $runnerName;
     protected $dispatcher;
-    protected $parent;
 
+    protected $parent;
     protected $childs = array();
 
     protected $startTime;
@@ -66,6 +66,61 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
         return isset($this->childs[$this->position]);
     }
 
+    public function getFailedStepRunners()
+    {
+        $runners = array();
+
+        foreach ($this as $child) {
+            $runners = array_merge($runners, $child->getFailedStepRunners());
+        }
+
+        return $runners;
+    }
+
+    public function getPendingStepRunners()
+    {
+        $runners = array();
+
+        foreach ($this as $child) {
+            $runners = array_merge($runners, $child->getPendingStepRunners());
+        }
+
+        return $runners;
+    }
+
+    public function getDefinitionSnippets()
+    {
+        $snippets = array();
+
+        foreach ($this as $child) {
+            $snippets = array_merge($snippets, $child->getDefinitionSnippets());
+        }
+
+        return $snippets;
+    }
+
+    public function getScenariosCount()
+    {
+        $count = 0;
+
+        foreach ($this as $child) {
+            $count += $child->getScenariosCount();
+        }
+
+        return $count;
+    }
+
+    public function getStepsCount()
+    {
+        $count = 0;
+
+        foreach ($this as $child) {
+            $count += $child->getStepsCount();
+        }
+
+        return $count;
+    }
+
     public function getScenariosStatusesCount()
     {
         $statuses = array();
@@ -100,61 +155,6 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
         return $statuses;
     }
 
-    public function getScenariosCount()
-    {
-        $count = 0;
-
-        foreach ($this as $child) {
-            $count += $child->getScenariosCount();
-        }
-
-        return $count;
-    }
-
-    public function getStepsCount()
-    {
-        $count = 0;
-
-        foreach ($this as $child) {
-            $count += $child->getStepsCount();
-        }
-
-        return $count;
-    }
-
-    public function getDefinitionSnippets()
-    {
-        $snippets = array();
-
-        foreach ($this as $child) {
-            $snippets = array_merge($snippets, $child->getDefinitionSnippets());
-        }
-
-        return $snippets;
-    }
-
-    public function getFailedStepRunners()
-    {
-        $runners = array();
-
-        foreach ($this as $child) {
-            $runners = array_merge($runners, $child->getFailedStepRunners());
-        }
-
-        return $runners;
-    }
-
-    public function getPendingStepRunners()
-    {
-        $runners = array();
-
-        foreach ($this as $child) {
-            $runners = array_merge($runners, $child->getPendingStepRunners());
-        }
-
-        return $runners;
-    }
-
     public function getStatus()
     {
         $status = 'passed';
@@ -171,9 +171,27 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
         return array_search($this->getStatus(), self::$statuses);
     }
 
+    public function getTime()
+    {
+        return $this->finishTime - $this->startTime;
+    }
+
+    public function run()
+    {
+        $this->fireEvent('pre_test');
+        $this->startTime = microtime(true);
+
+        $this->doRun();
+
+        $this->finishTime = microtime(true);
+        $this->fireEvent('post_test');
+
+        return $this->getStatusCode();
+    }
+
     protected function getHigherStatus($lftStatus, $rgtStatus)
     {
-        $code       = array_search($lftStatus, self::$statuses);
+        $code = array_search($lftStatus, self::$statuses);
 
         if (($rgtCode = array_search($rgtStatus, self::$statuses)) > $code) {
             $code = $rgtCode;
@@ -182,27 +200,9 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
         return self::$statuses[$code];
     }
 
-    public function getTime()
-    {
-        return $this->finishTime - $this->startTime;
-    }
-
-    public function fireEvent($eventName)
+    protected function fireEvent($eventName)
     {
         $this->dispatcher->notify(new Event($this, $this->runnerName . '.' . $eventName));
-    }
-
-    public function run()
-    {
-        $this->fireEvent('pre_test');
-        $this->startTime = microtime(true);
-
-        $status = $this->doRun();
-
-        $this->finishTime = microtime(true);
-        $this->fireEvent('post_test');
-
-        return $status;
     }
 
     abstract protected function doRun();

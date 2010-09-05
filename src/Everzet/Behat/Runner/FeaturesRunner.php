@@ -7,8 +7,6 @@ use Symfony\Component\Finder\Finder;
 
 class FeaturesRunner extends BaseRunner implements RunnerInterface
 {
-    protected $position = 0;
-
     public function __construct(Finder $featureFiles, Container $container)
     {
         foreach ($featureFiles as $file) {

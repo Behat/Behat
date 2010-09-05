@@ -3,7 +3,6 @@
 namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Element\StepElement;
 
@@ -17,7 +16,6 @@ class StepRunner extends BaseRunner implements RunnerInterface
 {
     protected $step;
     protected $definitions;
-    protected $dispatcher;
 
     protected $definition;
     protected $snippet;
@@ -36,16 +34,6 @@ class StepRunner extends BaseRunner implements RunnerInterface
     public function setTokens(array $tokens)
     {
         $this->step->setTokens($tokens);
-    }
-
-    public function getStepsCount()
-    {
-        return 1;
-    }
-
-    public function getStepsStatusesCount()
-    {
-        return array($this->getStatus() => 1);
     }
 
     public function getStep()
@@ -68,14 +56,19 @@ class StepRunner extends BaseRunner implements RunnerInterface
         return $this->definition;
     }
 
-    public function getDefinitionSnippets()
-    {
-        return is_array($this->snippet) ? array(md5($this->snippet[1]) => $this->snippet) : array();
-    }
-
     public function getDefinitionSnippet()
     {
         return $this->snippet;
+    }
+
+    public function getStepsCount()
+    {
+        return 1;
+    }
+
+    public function getStepsStatusesCount()
+    {
+        return array($this->getStatus() => 1);
     }
 
     public function getFailedStepRunners()
@@ -86,6 +79,11 @@ class StepRunner extends BaseRunner implements RunnerInterface
     public function getPendingStepRunners()
     {
         return 'pending' === $this->status ? array($this) : array();
+    }
+
+    public function getDefinitionSnippets()
+    {
+        return is_array($this->snippet) ? array(md5($this->snippet[1]) => $this->snippet) : array();
     }
 
     protected function findDefinition()
@@ -121,8 +119,6 @@ class StepRunner extends BaseRunner implements RunnerInterface
                 $this->exception = $e;
             }
         }
-
-        return $this->status;
     }
 
     public function skip()
@@ -137,6 +133,6 @@ class StepRunner extends BaseRunner implements RunnerInterface
 
         $this->fireEvent('post_skip');
 
-        return $this->status;
+        return $this->getStatusCode();
     }
 }
