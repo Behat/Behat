@@ -218,13 +218,9 @@ class PrettyFormatter implements FormatterInterface
                 } else {
                     $error = $exception->getMessage();
                 }
-                $this->output->writeln(sprintf("        <failed>%s</failed>",
-                    strtr($error, array(
-                        "\n"    =>  "\n      "
-                      , "<"     =>  "["
-                      , ">"     =>  "]"
-                    ))
-                ));
+                $this->output->write(sprintf("        \033[31m%s\033[0m",
+                    strtr($error, array("\n" => "\n      "))
+                ), true, 1);
             }
         }
     }
