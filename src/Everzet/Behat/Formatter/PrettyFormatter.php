@@ -297,17 +297,17 @@ class PrettyFormatter implements FormatterInterface
             if ($step->hasArguments()) {
                 foreach ($step->getArguments() as $argument) {
                     if ($argument instanceof PyStringElement) {
-                        $this->output->writeln(sprintf("<%s>%s</%s>",
-                            $runner->getStatus(),
+                        $this->output->write(sprintf("\033[%sm%s\033[0m",
+                            $this->getStatusColorCode($runner->getStatus()),
                             $this->getPyString($argument, 6),
-                            $runner->getStatus()
-                        ));
+                            $this->getStatusColorCode($runner->getStatus())
+                        ), true, 1);
                     } elseif ($argument instanceof TableElement) {
-                        $this->output->writeln(sprintf("<%s>%s</%s>",
-                            $runner->getStatus(),
+                        $this->output->write(sprintf("\033[%sm%s\033[0m",
+                            $this->getStatusColorCode($runner->getStatus()),
                             $this->getTableString($argument, 6),
-                            $runner->getStatus()
-                        ));
+                            $this->getStatusColorCode($runner->getStatus())
+                        ), true, 1);
                     }
                 }
             }
@@ -426,6 +426,29 @@ class PrettyFormatter implements FormatterInterface
         }
 
         $this->maxDescriptionLength = $max;
+    }
+
+    protected function getStatusColorCode($status)
+    {
+        $colorCode = 32;
+        switch ($status) {
+            case 'failed':
+                $colorCode = 31;
+                break;
+            case 'undefined':
+            case 'pending':
+                $colorCode = 33;
+                break;
+            case 'skipped':
+            case 'tag':
+                $colorCode = 36;
+                break;
+            case 'comment':
+                $colorCode = 30;
+                break;
+        }
+
+        return $colorCode;
     }
 
     /**

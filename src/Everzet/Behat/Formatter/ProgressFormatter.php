@@ -132,17 +132,15 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
         $parentRunner = $stepRunner->getParentRunner();
         if ($parentRunner instanceof BackgroundRunner) {
             $item           = $parentRunner->getBackground();
-            $description    = sprintf("    <%s>From %s.</%s>"
+            $description    = sprintf("    <%s>From scenario background.</%s>"
               , $type
-              , 'scenario background'
               , $type
             );
         } elseif ($parentRunner instanceof ScenarioRunner) {
             $item           = $parentRunner->getScenario();
-            $description    = sprintf("    <%s>From %s `%s'.</%s>"
+            $description    = sprintf("    <%s>From scenario %s.</%s>"
               , $type
-              , 'scenario'
-              , $item->getTitle()
+              , $item->getTitle() ? sprintf("`%s'", $item->getTitle()) : '***'
               , $type
             );
         }
