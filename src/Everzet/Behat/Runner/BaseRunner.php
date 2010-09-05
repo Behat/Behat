@@ -7,6 +7,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 abstract class BaseRunner implements RunnerInterface, \Iterator
 {
+    protected static $statuses = array('passed', 'skipped', 'pending', 'undefined', 'failed');
+
     protected $runnerName;
     protected $dispatcher;
     protected $parent;
@@ -164,16 +166,20 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
         return $status;
     }
 
+    public function getStatusCode()
+    {
+        return array_search($this->getStatus(), self::$statuses);
+    }
+
     protected function getHigherStatus($lftStatus, $rgtStatus)
     {
-        $statuses   = array('passed', 'skipped', 'pending', 'undefined', 'failed');
-        $code       = array_search($lftStatus, $statuses);
+        $code       = array_search($lftStatus, self::$statuses);
 
-        if (($rgtCode = array_search($rgtStatus, $statuses)) > $code) {
+        if (($rgtCode = array_search($rgtStatus, self::$statuses)) > $code) {
             $code = $rgtCode;
         }
 
-        return $statuses[$code];
+        return self::$statuses[$code];
     }
 
     public function getTime()

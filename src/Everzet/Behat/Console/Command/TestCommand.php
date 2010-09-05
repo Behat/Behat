@@ -75,9 +75,12 @@ class TestCommand extends Command
         }
 
         // Get features loader
-        $loader = $container->getFeaturesLoaderService();
+        $runner = $container->getFeaturesLoaderService()->getFeaturesRunner();
 
         // Run test suite
-        $loader->getFeaturesRunner()->run();
+        $runner->run();
+
+        // Return exit code
+        return $runner->getStatusCode();
     }
 }
