@@ -64,12 +64,101 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
         return isset($this->childs[$this->position]);
     }
 
+    public function getScenariosStatusesCount()
+    {
+        $statuses = array();
+
+        foreach ($this as $child) {
+            foreach ($child->getScenariosStatusesCount() as $status => $count) {
+                if (!isset($statuses[$status])) {
+                    $statuses[$status] = 0;
+                }
+
+                $statuses[$status] += $count;
+            }
+        }
+
+        return $statuses;
+    }
+
+    public function getStepsStatusesCount()
+    {
+        $statuses = array();
+
+        foreach ($this as $child) {
+            foreach ($child->getStepsStatusesCount() as $status => $count) {
+                if (!isset($statuses[$status])) {
+                    $statuses[$status] = 0;
+                }
+
+                $statuses[$status] += $count;
+            }
+        }
+
+        return $statuses;
+    }
+
+    public function getScenariosCount()
+    {
+        $count = 0;
+
+        foreach ($this as $child) {
+            $count += $child->getScenariosCount();
+        }
+
+        return $count;
+    }
+
+    public function getStepsCount()
+    {
+        $count = 0;
+
+        foreach ($this as $child) {
+            $count += $child->getStepsCount();
+        }
+
+        return $count;
+    }
+
+    public function getDefinitionSnippets()
+    {
+        $snippets = array();
+
+        foreach ($this as $child) {
+            $snippets = array_merge($snippets, $child->getDefinitionSnippets());
+        }
+
+        return $snippets;
+    }
+
+    public function getFailedStepRunners()
+    {
+        $runners = array();
+
+        foreach ($this as $child) {
+            $runners = array_merge($runners, $child->getFailedStepRunners());
+        }
+
+        return $runners;
+    }
+
+    public function getPendingStepRunners()
+    {
+        $runners = array();
+
+        foreach ($this as $child) {
+            $runners = array_merge($runners, $child->getPendingStepRunners());
+        }
+
+        return $runners;
+    }
+
     public function getStatus()
     {
         $status = 'passed';
 
-        foreach ($this->childs as $child) {
-            $code = $this->getHigherStatus($status, $child->getStatus());
+        foreach ($this as $child) {
+            $status = $this->getHigherStatus($status, $child->getStatus());
         }
 
         return $status;
@@ -77,7 +166,7 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
 
     protected function getHigherStatus($lftStatus, $rgtStatus)
     {
-        $statuses   = array('passed', 'pending', 'undefined', 'failed');
+        $statuses   = array('passed', 'skipped', 'pending', 'undefined', 'failed');
         $code       = array_search($lftStatus, $statuses);
 
         if (($rgtCode = array_search($rgtStatus, $statuses)) > $code) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Behat\Logger;
+namespace Everzet\Behat\Formatter;
 
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -17,7 +17,7 @@ use Everzet\Behat\Runner\ScenarioOutlineRunner;
 use Everzet\Behat\Runner\ScenarioRunner;
 use Everzet\Behat\Runner\BackgroundRunner;
 
-class DetailedLogger implements LoggerInterface
+class PrettyFormatter implements FormatterInterface
 {
     protected $container;
     protected $output;
@@ -27,8 +27,8 @@ class DetailedLogger implements LoggerInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->output       = $container->getParameter('logger.output');
-        $this->verbose      = $container->getParameter('logger.verbose');
+        $this->output       = $container->getParameter('formatter.output');
+        $this->verbose      = $container->getParameter('formatter.verbose');
 
         $this->output->setStyle('failed',      array('fg' => 'red'));
         $this->output->setStyle('undefined',   array('fg' => 'yellow'));
@@ -56,6 +56,7 @@ class DetailedLogger implements LoggerInterface
         $dispatcher->connect('step.post_skip',              array($this, 'printStep'));
 
         $dispatcher->connect('suite.post_test',             array($this, 'printStatistics'));
+        $dispatcher->connect('suite.post_test',             array($this, 'printSnippets'));
     }
 
     public function printFeatureHeader(Event $event)
@@ -113,11 +114,11 @@ class DetailedLogger implements LoggerInterface
         $this->output->write($description);
 
         // Print element path & line
-        $this->output->writeln($this->getLineSourceComment(
+        $this->printLineSourceComment(
             mb_strlen($description)
           , $outline->getFile()
           , $outline->getLine()
-        ));
+        );
     }
 
     public function printOutlineFooter(Event $event)
@@ -149,11 +150,11 @@ class DetailedLogger implements LoggerInterface
             $this->output->write($description);
 
             // Print element path & line
-            $this->output->writeln($this->getLineSourceComment(
+            $this->printLineSourceComment(
                 mb_strlen($description)
               , $scenario->getFile()
               , $scenario->getLine()
-            ));
+            );
         }
     }
 
@@ -182,11 +183,11 @@ class DetailedLogger implements LoggerInterface
 
                     // Print definition/element path
                     if (null !== $stepRunner->getDefinition()) {
-                        $this->output->writeln($this->getLineSourceComment(
+                        $this->printLineSourceComment(
                             mb_strlen($description)
                           , $stepRunner->getDefinition()->getFile()
                           , $stepRunner->getDefinition()->getLine()
-                        ));
+                        );
                     } else {
                         $this->output->writeln('');
                     }
@@ -245,11 +246,11 @@ class DetailedLogger implements LoggerInterface
             $this->output->write($description);
 
             // Print element path & line
-            $this->output->writeln($this->getLineSourceComment(
+            $this->printLineSourceComment(
                 mb_strlen($description)
               , $background->getFile()
               , $background->getLine()
-            ));
+            );
         }
     }
 
@@ -287,11 +288,11 @@ class DetailedLogger implements LoggerInterface
 
             // Print definition path if found one
             if (null !== $runner->getDefinition()) {
-                $this->output->writeln($this->getLineSourceComment(
+                $this->printLineSourceComment(
                     mb_strlen($description)
                   , $runner->getDefinition()->getFile()
                   , $runner->getDefinition()->getLine()
-                ));
+                );
             } else {
                 $this->output->writeln('');
             }
@@ -322,13 +323,10 @@ class DetailedLogger implements LoggerInterface
                 } else {
                     $error = $runner->getException()->getMessage();
                 }
-                $this->output->writeln(sprintf("      <failed>%s</failed>",
-                    strtr($error, array(
-                        "\n"    =>  "\n      ",
-                        "<"     =>  "[",
-                        ">"     =>  "]"
-                    ))
-                ));
+                $this->output->write(sprintf("      \033[%sm%s\033[0m"
+                  , 'failed' === $runner->getStatus() ? '31' : '33'
+                  , strtr($error, array("\n" => "\n      "))
+                ), true, 1);
             }
         }
     }
@@ -337,7 +335,101 @@ class DetailedLogger implements LoggerInterface
     {
         $runner = $event->getSubject();
 
-        
+        $stepsCount             = $runner->getStepsCount();
+        $scenariosCount         = $runner->getScenariosCount();
+        $scenariosStatusesCount = $runner->getScenariosStatusesCount();
+        $stepsStatusesCount     = $runner->getStepsStatusesCount();
+
+        $statuses = array();
+        foreach ($scenariosStatusesCount as $status => $count) {
+            $statuses[] = sprintf('<%s>%s %s</%s>', $status, $count, $status, $status);
+        }
+        $this->output->writeln(sprintf('%d scenarios (%s)',
+            $scenariosCount, implode(', ', $statuses)
+        ));
+
+        $statuses = array();
+        foreach ($stepsStatusesCount as $status => $count) {
+            $statuses[] = sprintf('<%s>%s %s</%s>', $status, $count, $status, $status);
+        }
+        $this->output->writeln(sprintf('%d steps (%s)',
+            $stepsCount, implode(', ', $statuses)
+        ));
+
+        $this->output->writeln(sprintf("%.3fs", $runner->getTime()));
+    }
+
+    public function printSnippets(Event $event)
+    {
+        $runner             = $event->getSubject();
+        $stepsStatusesCount = $runner->getStepsStatusesCount();
+
+        if (isset($stepsStatusesCount['undefined'])) {
+            $this->output->writeln("\n<undefined>" .
+                "You can implement step definitions for undefined steps with these snippets:" .
+            "</undefined>\n");
+
+            foreach ($runner->getDefinitionSnippets() as $key => $snippet) {
+                $this->output->writeln(
+                    '<undefined>' . sprintf($snippet[1], $snippet[0]) . "</undefined>\n"
+                );
+            }
+        }
+    }
+
+    /**
+     * Returns comment line with source info
+     *
+     * @param   integer $lineLength     current line length
+     * @param   integer $stepsMaxLength line max length
+     * @param   string  $file           definition filename
+     * @param   integer $line           definition line
+     */
+    protected function printLineSourceComment($lineLength, $file, $line)
+    {
+        $indent = $lineLength > $this->maxDescriptionLength
+            ? 0
+            : $this->maxDescriptionLength - $lineLength;
+        $file   = preg_replace('/.*\/features\//', 'features/', $file);
+
+        $this->output->writeln(sprintf("%s <comment># %s:%d</comment>",
+            str_repeat(' ', $indent), $file, $line
+        ));
+    }
+
+    /**
+     * Calculates max descriptions size for scenario/background
+     *
+     * @param   Section $scenario   scenario for calculations
+     * 
+     * @return  integer             description length
+     */
+    protected function recalcMaxDescriptionLength(SectionElement $scenario)
+    {
+        $max    = $this->maxDescriptionLength;
+        $type   = '';
+
+        if ($scenario instanceof ScenarioOutlineElement) {
+            $type = $scenario->getI18n()->__('scenario-outline', 'Scenario Outline') . ':';
+        } else if ($scenario instanceof ScenarioElement) {    
+            $type = $scenario->getI18n()->__('scenario', 'Scenario') . ':';
+        } else if ($scenario instanceof BackgroundElement) {
+            $type = $scenario->getI18n()->__('background', 'Background') . ':';
+        }
+        $scenarioDescription = $scenario->getTitle() ? $type . ' ' . $scenario->getTitle() : $type;
+
+        if (($tmp = mb_strlen($scenarioDescription) + 2) > $max) {
+            $max = $tmp;
+        }
+
+        foreach ($scenario->getSteps() as $step) {
+            $stepDescription = $step->getType() . ' ' . $step->getCleanText();
+            if (($tmp = mb_strlen($stepDescription) + 4) > $max) {
+                $max = $tmp;
+            }
+        }
+
+        $this->maxDescriptionLength = $max;
     }
 
     /**
@@ -387,60 +479,5 @@ class DetailedLogger implements LoggerInterface
             sprintf(str_repeat(' ', $indent).'%s', $table),
             array("\n" => "\n".str_repeat(' ', $indent))
         );
-    }
-
-    /**
-     * Returns comment line with source info
-     *
-     * @param   integer $lineLength     current line length
-     * @param   integer $stepsMaxLength line max length
-     * @param   string  $file           definition filename
-     * @param   integer $line           definition line
-     */
-    protected function getLineSourceComment($lineLength, $file, $line)
-    {
-        $indent = $lineLength > $this->maxDescriptionLength
-            ? 0
-            : $this->maxDescriptionLength - $lineLength;
-        $file   = preg_replace('/.*\/features\//', '', $file);
-
-        return sprintf("%s <comment># %s:%d</comment>",
-            str_repeat(' ', $indent), $file, $line
-        );
-    }
-
-    /**
-     * Calculates max descriptions size for scenario/background
-     *
-     * @param   Section $scenario   scenario for calculations
-     * 
-     * @return  integer             description length
-     */
-    protected function recalcMaxDescriptionLength(SectionElement $scenario)
-    {
-        $max    = $this->maxDescriptionLength;
-        $type   = '';
-
-        if ($scenario instanceof ScenarioOutlineElement) {
-            $type = $scenario->getI18n()->__('scenario-outline', 'Scenario Outline') . ':';
-        } else if ($scenario instanceof ScenarioElement) {    
-            $type = $scenario->getI18n()->__('scenario', 'Scenario') . ':';
-        } else if ($scenario instanceof BackgroundElement) {
-            $type = $scenario->getI18n()->__('background', 'Background') . ':';
-        }
-        $scenarioDescription = $scenario->getTitle() ? $type . ' ' . $scenario->getTitle() : $type;
-
-        if (($tmp = mb_strlen($scenarioDescription) + 2) > $max) {
-            $max = $tmp;
-        }
-
-        foreach ($scenario->getSteps() as $step) {
-            $stepDescription = $step->getType() . ' ' . $step->getCleanText();
-            if (($tmp = mb_strlen($stepDescription) + 4) > $max) {
-                $max = $tmp;
-            }
-        }
-
-        $this->maxDescriptionLength = $max;
     }
 }

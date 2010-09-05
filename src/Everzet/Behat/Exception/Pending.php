@@ -19,4 +19,14 @@ namespace Everzet\Behat\Exception;
  */
 class Pending extends BehaviorException
 {
+    /**
+     * Creates Exception
+     *
+     * @param   string  $text   step description
+     */
+    public function __construct($text = 'write pending definition')
+    {
+        parent::__construct();
+        $this->message = sprintf('TODO: %s', $text);
+    }
 }

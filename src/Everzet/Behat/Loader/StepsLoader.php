@@ -105,8 +105,15 @@ class StepsLoader
             }
         }
 
-        return sprintf("\$steps->%s('/^%s$/', function(%s) use(\$world) {\n    throw new \Everzet\Behat\Exceptions\Pending;\n});",
-            '%s', $regexp, implode(', ', $args)
+        return array(
+            $step->getType()
+          , sprintf(<<<PHP
+\$steps->%s('/^%s$/', function(%s) use(\$world) {
+    throw new \Everzet\Behat\Exception\Pending();
+});
+PHP
+              , '%s', $regexp, implode(', ', $args)
+            )
         );
     }
 

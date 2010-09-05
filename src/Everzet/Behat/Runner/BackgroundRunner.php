@@ -25,6 +25,11 @@ class BackgroundRunner extends BaseRunner implements RunnerInterface
         parent::__construct('background', $container->getEventDispatcherService(), $parent);
     }
 
+    public function isSkipped()
+    {
+        return $this->skip;
+    }
+
     public function getBackground()
     {
         return $this->background;

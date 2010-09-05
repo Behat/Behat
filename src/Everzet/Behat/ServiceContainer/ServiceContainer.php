@@ -85,13 +85,14 @@ class ServiceContainer extends Container
     }
 
     /**
-     * Gets the 'logger' service.
+     * Gets the 'formatter' service.
      *
-     * @return Object A %logger.class% instance.
+     * @return Object A %formatter.class% instance.
      */
-    protected function getLoggerService()
+    protected function getFormatterService()
     {
-        $class = $this->getParameter('logger.class');
+        $class = $this->getParameter('formatter.class');
+        $class = strtr($class, array('%formatter.name%' => $this->getParameter('formatter.name')));
         $instance = new $class($this);
 
         return $instance;
@@ -133,7 +134,7 @@ class ServiceContainer extends Container
     public function findTaggedServiceIds($name)
     {
         static $tags = array(
-            'events_listener' => array('logger'),
+            'events_listener' => array('formatter'),
         );
 
         return isset($tags[$name]) ? $tags[$name] : array();
@@ -152,7 +153,7 @@ class ServiceContainer extends Container
             'environment.class'         => 'Everzet\\Behat\\Environment\\WorldEnvironment',
             'features_loader.class'     => 'Everzet\\Behat\\Loader\\FeaturesLoader',
             'steps_loader.class'        => 'Everzet\\Behat\\Loader\\StepsLoader',
-            'logger.class'              => 'Everzet\\Behat\\Logger\\DetailedLogger',
+            'formatter.class'           => 'Everzet\\Behat\\Formatter\\%formatter.name%Formatter',
             'event_dispatcher.class'    => 'Everzet\\Behat\\EventDispatcher\\EventDispatcher',
         );
     }

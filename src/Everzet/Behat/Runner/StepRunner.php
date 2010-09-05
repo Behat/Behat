@@ -38,6 +38,16 @@ class StepRunner extends BaseRunner implements RunnerInterface
         $this->step->setTokens($tokens);
     }
 
+    public function getStepsCount()
+    {
+        return 1;
+    }
+
+    public function getStepsStatusesCount()
+    {
+        return array($this->getStatus() => 1);
+    }
+
     public function getStep()
     {
         return $this->step;
@@ -58,9 +68,24 @@ class StepRunner extends BaseRunner implements RunnerInterface
         return $this->definition;
     }
 
-    public function getSnippet()
+    public function getDefinitionSnippets()
+    {
+        return is_array($this->snippet) ? array(md5($this->snippet[1]) => $this->snippet) : array();
+    }
+
+    public function getDefinitionSnippet()
     {
         return $this->snippet;
+    }
+
+    public function getFailedStepRunners()
+    {
+        return 'failed' === $this->status ? array($this) : array();
+    }
+
+    public function getPendingStepRunners()
+    {
+        return 'pending' === $this->status ? array($this) : array();
     }
 
     protected function findDefinition()
@@ -88,7 +113,8 @@ class StepRunner extends BaseRunner implements RunnerInterface
                     $this->definition->run();
                     $this->status = 'passed';
                 } catch (Pending $e) {
-                    $this->status = 'pending';
+                    $this->status    = 'pending';
+                    $this->exception = $e;
                 }
             } catch (\Exception $e) {
                 $this->status    = 'failed';

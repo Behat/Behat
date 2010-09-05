@@ -5,6 +5,7 @@ namespace Everzet\Behat\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Everzet\Behat\ServiceContainer\ServiceContainer;
@@ -34,7 +35,8 @@ class TestCommand extends Command
         $this->setName('test');
 
         $this->setDefinition(array(
-            new InputArgument('features', InputArgument::OPTIONAL, 'Features path', 'features')
+            new InputArgument('features', InputArgument::OPTIONAL, 'Features path', 'features'),
+            new InputOption('--format', '-f', InputOption::PARAMETER_REQUIRED, 'Change output formatter', 'pretty')
         ));
     }
 
@@ -58,8 +60,9 @@ class TestCommand extends Command
         $container->setParameter('features.path',       $basePath);
         $container->setParameter('steps.path',          $basePath . '/steps');
         $container->setParameter('environment.file',    $basePath . '/support/env.php');
-        $container->setParameter('logger.output',       $output);
-        $container->setParameter('logger.verbose',      $input->getOption('verbose'));
+        $container->setParameter('formatter.output',    $output);
+        $container->setParameter('formatter.verbose',   $input->getOption('verbose'));
+        $container->setParameter('formatter.name',      ucfirst($input->getOption('format')));
 
         // Check if we had redundant definitions
         try {
