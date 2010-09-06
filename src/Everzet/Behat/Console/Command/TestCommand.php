@@ -68,9 +68,9 @@ class TestCommand extends Command
         try {
             $container->getStepsLoaderService();
         } catch (Redundant $e) {
-            $output->writeln(sprintf("\033[31m%s\033[0m",
+            $output->write(sprintf("\033[31m%s\033[0m",
                 strtr($e->getMessage(), array($basePath . '/' => ''))
-            ));
+            ), true, 1);
             return 1;
         }
 
