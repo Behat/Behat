@@ -3,7 +3,7 @@ Feature: World consistency
   As a features developer
   I want, that "World" flushes between scenarios
 
-  Scenario: Test consistency
+  Background:
     Given a standard Behat project directory structure
     And a file named "features/support/env.php" with:
       """
@@ -12,7 +12,9 @@ Feature: World consistency
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/steps/world_steps.php" with:
+
+  Scenario: Test consistency
+    Given a file named "features/steps/world_steps.php" with:
       """
       <?php
 
@@ -66,15 +68,7 @@ Feature: World consistency
       """
 
     Scenario: Test inconsistency
-      Given a standard Behat project directory structure
-      And a file named "features/support/env.php" with:
-        """
-        <?php
-
-        require_once 'PHPUnit/Autoload.php';
-        require_once 'PHPUnit/Framework/Assert/Functions.php';
-        """
-      And a file named "features/steps/world_steps.php" with:
+      Given a file named "features/steps/world_steps.php" with:
         """
         <?php
 
