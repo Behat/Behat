@@ -37,14 +37,21 @@ class BackgroundRunner extends BaseRunner implements RunnerInterface
 
     protected function doRun()
     {
+        $status = $this->statusToCode('passed');
+
         foreach ($this as $runner) {
             if (!$this->skip) {
-                if (0 !== $runner->run()) {
+                $code = $runner->run();
+                if ($this->statusToCode('passed') !== $code) {
                     $this->skip = true;
                 }
+                $status = max($status, $code);
             } else {
-                $runner->skip();
+                $code = $runner->skip();
+                $status = max($status, $code);
             }
         }
+
+        return $status;
     }
 }

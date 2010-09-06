@@ -25,11 +25,11 @@ $steps->When('/^I run "([^"]*)"$/', function($command) use($world) {
     );
 });
 
-$steps->Then('/^print me exit code$/', function() use($world) {
+$steps->Then('/^display last command exit code$/', function() use($world) {
     echo "\n\n(==) debug (==)\n  exit:" . $world->return . "\n(==) debug (==)\n\n";
 });
 
-$steps->Then('/^print me output$/', function() use($world) {
+$steps->Then('/^display last command output$/', function() use($world) {
     echo "\n\n(==) debug (==)\n  " .
         strtr($world->output, array("\n" => "\n  ")) .
         "\n(==) debug (==)\n\n";

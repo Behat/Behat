@@ -35,8 +35,12 @@ class ScenarioOutlineRunner extends BaseRunner implements RunnerInterface, \Iter
 
     protected function doRun()
     {
+        $status = $this->statusToCode('passed');
+
         foreach ($this as $runner) {
-            $runner->run();
+            $status = max($status, $runner->run());
         }
+
+        return $status;
     }
 }

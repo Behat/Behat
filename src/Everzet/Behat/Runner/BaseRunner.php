@@ -7,7 +7,14 @@ use Symfony\Component\EventDispatcher\Event;
 
 abstract class BaseRunner implements RunnerInterface, \Iterator
 {
-    protected static $statuses = array('passed', 'skipped', 'pending', 'undefined', 'failed');
+    protected static $statuses = array(
+        0 => 'passed'
+      , 1 => 'skipped'
+      , 2 => 'pending'
+      , 3 => 'undefined'
+      , 4 => 'failed'
+    );
+    protected $statusCode = 0;
 
     protected $runnerName;
     protected $dispatcher;
@@ -21,6 +28,7 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
     public function __construct($runnerName, EventDispatcher $dispatcher,
                                 RunnerInterface $parent = null)
     {
+        $this->statusCode   = 0;
         $this->runnerName   = $runnerName;
         $this->dispatcher   = $dispatcher;
         $this->parent       = $parent;
@@ -157,18 +165,12 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
 
     public function getStatus()
     {
-        $status = 'passed';
-
-        foreach ($this as $child) {
-            $status = $this->getHigherStatus($status, $child->getStatus());
-        }
-
-        return $status;
+        return $this->codeToStatus($this->statusCode);
     }
 
     public function getStatusCode()
     {
-        return array_search($this->getStatus(), self::$statuses);
+        return $this->statusCode;
     }
 
     public function getTime()
@@ -181,22 +183,21 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
         $this->fireEvent('pre_test');
         $this->startTime = microtime(true);
 
-        $this->doRun();
+        $status = $this->doRun();
 
         $this->finishTime = microtime(true);
         $this->fireEvent('post_test');
 
-        return $this->getStatusCode();
+        return $this->statusCode = $status;
     }
 
-    protected function getHigherStatus($lftStatus, $rgtStatus)
+    protected function statusToCode($status)
     {
-        $code = array_search($lftStatus, self::$statuses);
+        return array_search($status, self::$statuses);
+    }
 
-        if (($rgtCode = array_search($rgtStatus, self::$statuses)) > $code) {
-            $code = $rgtCode;
-        }
-
+    protected function codeToStatus($code)
+    {
         return self::$statuses[$code];
     }
 

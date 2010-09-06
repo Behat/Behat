@@ -19,7 +19,6 @@ class StepRunner extends BaseRunner implements RunnerInterface
 
     protected $definition;
     protected $snippet;
-    protected $status;
     protected $exception;
 
     public function __construct(StepElement $step, StepsLoader $definitions, Container $container,
@@ -39,11 +38,6 @@ class StepRunner extends BaseRunner implements RunnerInterface
     public function getStep()
     {
         return $this->step;
-    }
-
-    public function getStatus()
-    {
-        return $this->status;
     }
 
     public function getException()
@@ -73,12 +67,12 @@ class StepRunner extends BaseRunner implements RunnerInterface
 
     public function getFailedStepRunners()
     {
-        return 'failed' === $this->status ? array($this) : array();
+        return $this->statusToCode('failed') === $this->statusCode ? array($this) : array();
     }
 
     public function getPendingStepRunners()
     {
-        return 'pending' === $this->status ? array($this) : array();
+        return $this->statusToCode('pending') === $this->statusCode ? array($this) : array();
     }
 
     public function getDefinitionSnippets()
@@ -91,13 +85,13 @@ class StepRunner extends BaseRunner implements RunnerInterface
         try {
             try {
                 $this->definition = $this->definitions->findDefinition($this->step);
-            } catch (Ambiguous $e) {    
-                $this->status    = 'failed';
-                $this->exception = $e;
+            } catch (Ambiguous $e) {
+                $this->statusCode   = $this->statusToCode('failed');
+                $this->exception    = $e;
             }
         } catch (Undefined $e) {
-            $this->status  = 'undefined';
-            $this->snippet = $this->definitions->proposeDefinition($this->step);
+            $this->statusCode   = $this->statusToCode('undefined');
+            $this->snippet      = $this->definitions->proposeDefinition($this->step);
         }
     }
 
@@ -105,20 +99,22 @@ class StepRunner extends BaseRunner implements RunnerInterface
     {
         $this->findDefinition();
 
-        if (null === $this->status) {
+        if (0 === $this->statusCode) {
             try {
                 try {
                     $this->definition->run();
-                    $this->status = 'passed';
+                    $this->statusCode = $this->statusToCode('passed');
                 } catch (Pending $e) {
-                    $this->status    = 'pending';
-                    $this->exception = $e;
+                    $this->statusCode   = $this->statusToCode('pending');
+                    $this->exception    = $e;
                 }
             } catch (\Exception $e) {
-                $this->status    = 'failed';
-                $this->exception = $e;
+                $this->statusCode   = $this->statusToCode('failed');
+                $this->exception    = $e;
             }
         }
+
+        return $this->statusCode;
     }
 
     public function skip()
@@ -127,12 +123,12 @@ class StepRunner extends BaseRunner implements RunnerInterface
 
         $this->findDefinition();
 
-        if (null === $this->status) {
-            $this->status = 'skipped';
+        if (0 === $this->statusCode) {
+            $this->statusCode = $this->statusToCode('skipped');
         }
 
         $this->fireEvent('post_skip');
 
-        return $this->getStatusCode();
+        return $this->statusCode;
     }
 }

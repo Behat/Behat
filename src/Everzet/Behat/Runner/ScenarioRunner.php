@@ -126,9 +126,11 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
 
     protected function doRun()
     {
-        if (null !== $this->backgroundRunner) {
-            $this->backgroundRunner->run();
+        $status = $this->statusToCode('passed');
 
+        if (null !== $this->backgroundRunner) {
+            $code = $this->backgroundRunner->run();
+            $status = max($status, $code);
             $this->skip = $this->backgroundRunner->isSkipped();
         }
 
@@ -138,12 +140,17 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
             }
 
             if (!$this->skip) {
-                if (0 !== $runner->run()) {
+                $code = $runner->run();
+                if ($this->statusToCode('passed') !== $code) {
                     $this->skip = true;
                 }
+                $status = max($status, $code);
             } else {
-                $runner->skip();
+                $code = $runner->skip();
+                $status = max($status, $code);
             }
         }
+
+        return $status;
     }
 }
