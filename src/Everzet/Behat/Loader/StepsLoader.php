@@ -87,8 +87,7 @@ class StepsLoader
      */
     public function proposeDefinition(StepElement $step)
     {
-        $text   = $step->getText();
-        $args   = $step->getArguments();
+        $text = $step->getText();
 
         $regexp = preg_replace(
             array('/\"([^\"]*)\"/', '/(\d+)/'), array("\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
@@ -99,7 +98,7 @@ class StepsLoader
             $args[] = "\$arg".($i + 1);
         }
 
-        foreach ($args as $argument) {
+        foreach ($step->getArguments() as $argument) {
             if ($argument instanceof PyStringElement) {
                 $args[] = "\$string";
             } elseif ($argument instanceof TableElement) {
