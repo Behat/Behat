@@ -2,7 +2,7 @@
 
 namespace Everzet\Gherkin\Element;
 
-use \Everzet\Gherkin\I18n;
+use Everzet\Gherkin\I18n;
 
 /*
  * This file is part of the behat package.
@@ -15,8 +15,7 @@ use \Everzet\Gherkin\I18n;
 /**
  * Section.
  *
- * @package     behat
- * @subpackage  Gherkin
+ * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class SectionElement

@@ -2,9 +2,9 @@
 
 namespace Everzet\Gherkin\Element\Scenario;
 
-use \Everzet\Gherkin\I18n;
-use \Everzet\Gherkin\Element\SectionElement;
-use \Everzet\Gherkin\Element\StepElement;
+use Everzet\Gherkin\I18n;
+use Everzet\Gherkin\Element\SectionElement;
+use Everzet\Gherkin\Element\StepElement;
 
 /*
  * This file is part of the behat package.
@@ -17,8 +17,7 @@ use \Everzet\Gherkin\Element\StepElement;
 /**
  * Background.
  *
- * @package     behat
- * @subpackage  Gherkin
+ * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BackgroundElement extends SectionElement

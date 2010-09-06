@@ -11,18 +11,17 @@ namespace Everzet\Behat\Environment;
  */
 
 /**
- * World container interface.
+ * Environment container/loader interface.
  *
- * @package     behat
- * @subpackage  Behat
+ * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface EnvironmentInterface
 {
     /**
-     * Constructs World instance.
+     * Constructs environment instance.
      *
-     * @param     string  $file       file path to require on flushes
+     * @param     string  $file       file path to include initializations from
      */
     public function __construct($envFile);
 }

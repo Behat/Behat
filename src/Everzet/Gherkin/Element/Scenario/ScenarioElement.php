@@ -13,8 +13,7 @@ namespace Everzet\Gherkin\Element\Scenario;
 /**
  * Scenario.
  *
- * @package     behat
- * @subpackage  Gherkin
+ * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ScenarioElement extends BackgroundElement

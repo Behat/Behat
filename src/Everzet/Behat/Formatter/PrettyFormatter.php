@@ -17,6 +17,20 @@ use Everzet\Behat\Runner\ScenarioOutlineRunner;
 use Everzet\Behat\Runner\ScenarioRunner;
 use Everzet\Behat\Runner\BackgroundRunner;
 
+/*
+ * This file is part of the behat package.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Console pretty output formatter.
+ *
+ * @package     Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class PrettyFormatter implements FormatterInterface
 {
     protected $container;
@@ -24,6 +38,9 @@ class PrettyFormatter implements FormatterInterface
     protected $verbose;
     protected $maxDescriptionLength = 0;
 
+    /**
+     * @see Everzet\Behat\Formatter\FormatterInterface
+     */
     public function __construct(Container $container)
     {
         $this->container    = $container;
@@ -39,6 +56,9 @@ class PrettyFormatter implements FormatterInterface
         $this->output->setStyle('tag',         array('fg' => 'cyan'));
     }
 
+    /**
+     * @see Everzet\Behat\Formatter\FormatterInterface
+     */
     public function registerListeners(EventDispatcher $dispatcher)
     {
         $dispatcher->connect('feature.pre_test',            array($this, 'printFeatureHeader'));
@@ -59,6 +79,11 @@ class PrettyFormatter implements FormatterInterface
         $dispatcher->connect('suite.post_test',             array($this, 'printSnippets'));
     }
 
+    /**
+     * Listens to `feature.pre_test` event & prints feature header (title & description)
+     *
+     * @param   Event   $event  notified event
+     */
     public function printFeatureHeader(Event $event)
     {
         $runner     = $event->getSubject();
@@ -93,6 +118,11 @@ class PrettyFormatter implements FormatterInterface
         }
     }
 
+    /**
+      * Listens to `scenario_outline.pre_test` event & prints outline header (title & description)
+      *
+      * @param   Event   $event  notified event
+      */
     public function printOutlineHeader(Event $event)
     {
         $runner     = $event->getSubject();
@@ -121,11 +151,21 @@ class PrettyFormatter implements FormatterInterface
         );
     }
 
+    /**
+      * Listens to `scenario_outline.post_test` event & prints outline footer (newline after)
+      *
+      * @param   Event   $event  notified event
+      */
     public function printOutlineFooter(Event $event)
     {
         $this->output->writeln('');
     }
 
+    /**
+      * Listens to `scenario.pre_test` event & prints scenario header (title & description)
+      *
+      * @param   Event   $event  notified event
+      */
     public function printScenarioHeader(Event $event)
     {
         $runner     = $event->getSubject();
@@ -158,6 +198,11 @@ class PrettyFormatter implements FormatterInterface
         }
     }
 
+    /**
+      * Listens to `scenario.post_test` event & prints scenario footer (newline or outline row)
+      *
+      * @param   Event   $event  notified event
+      */
     public function printScenarioFooter(Event $event)
     {
         $runner     = $event->getSubject();
@@ -225,6 +270,11 @@ class PrettyFormatter implements FormatterInterface
         }
     }
 
+    /**
+      * Listens to `background.pre_test` event & prints background header (if needed)
+      *
+      * @param   Event   $event  notified event
+      */
     public function printBackgroundHeader(Event $event)
     {
         $runner     = $event->getSubject();
@@ -250,6 +300,11 @@ class PrettyFormatter implements FormatterInterface
         }
     }
 
+    /**
+      * Listens to `background.post_test` event & prints background footer (if needed)
+      *
+      * @param   Event   $event  notified event
+      */
     public function printBackgroundFooter(Event $event)
     {
         $runner = $event->getSubject();
@@ -259,6 +314,11 @@ class PrettyFormatter implements FormatterInterface
         }
     }
 
+    /**
+      * Listens to `step.post_test` event & prints step runner information
+      *
+      * @param   Event   $event  notified event
+      */
     public function printStep(Event $event)
     {
         $runner = $event->getSubject();
@@ -327,6 +387,11 @@ class PrettyFormatter implements FormatterInterface
         }
     }
 
+    /**
+      * Listens to `suite.post_test` event & prints all tests statistics
+      *
+      * @param   Event   $event  notified event
+      */
     public function printStatistics(Event $event)
     {
         $runner = $event->getSubject();
@@ -357,6 +422,11 @@ class PrettyFormatter implements FormatterInterface
         $this->output->writeln(sprintf("%.3fs", $runner->getTime()));
     }
 
+    /**
+      * Listens to `suite.post_test` event & prints step snippets for undefined steps
+      *
+      * @param   Event   $event  notified event
+      */
     public function printSnippets(Event $event)
     {
         $runner             = $event->getSubject();
@@ -374,12 +444,11 @@ class PrettyFormatter implements FormatterInterface
     }
 
     /**
-     * Returns comment line with source info
+     * Prints comment line with source info
      *
      * @param   integer $lineLength     current line length
-     * @param   integer $stepsMaxLength line max length
-     * @param   string  $file           definition filename
-     * @param   integer $line           definition line
+     * @param   string  $file           source file
+     * @param   integer $line           source line
      */
     protected function printLineSourceComment($lineLength, $file, $line)
     {
@@ -394,9 +463,9 @@ class PrettyFormatter implements FormatterInterface
     }
 
     /**
-     * Calculates max descriptions size for scenario/background
+     * Recalculates max descriptions size for section elements
      *
-     * @param   Section $scenario   scenario for calculations
+     * @param   Section $scenario   element for calculations
      * 
      * @return  integer             description length
      */
@@ -428,6 +497,13 @@ class PrettyFormatter implements FormatterInterface
         $this->maxDescriptionLength = $max;
     }
 
+    /**
+     * Returns color code for custom status
+     *
+     * @param   string  $status status (passed/skipped/failed etc.)
+     * 
+     * @return  integer         console color code
+     */
     protected function getStatusColorCode($status)
     {
         $colorCode = 32;

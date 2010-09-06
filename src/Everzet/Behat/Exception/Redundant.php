@@ -13,10 +13,9 @@ use Everzet\Behat\Definition\StepDefinition;
  */
 
 /**
- * Redundant Exception
+ * Redundant Exception.
  *
- * @package     behat
- * @subpackage  Behat
+ * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Redundant extends BehaviorException

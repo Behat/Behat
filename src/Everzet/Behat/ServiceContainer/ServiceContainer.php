@@ -8,11 +8,19 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-/**
- * ServiceContainer
+/*
+ * This file is part of the behat package.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
- * This class has been auto-generated
- * by the Symfony Dependency Injection Component.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Behat dependency injection service container.
+ *
+ * @package     Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ServiceContainer extends Container
 {

@@ -15,10 +15,9 @@ use Everzet\Behat\Exception\Error;
  */
 
 /**
- * Step Definition
+ * Step Definition holder.
  *
- * @package     behat
- * @subpackage  Behat
+ * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class StepDefinition
@@ -124,7 +123,7 @@ class StepDefinition
      *
      * @see     set_error_handler
      * 
-     * @throws  \Everzet\Behat\Exceptions\Error that encapsulates error information
+     * @throws  Everzet\Behat\Exception\Error   that incapsulates error information
      */
     public function errorHandler($code, $message, $file, $line)
     {
@@ -135,6 +134,8 @@ class StepDefinition
      * Runs step definition
      *
      * @return  void
+     * 
+     * @throws  Everzet\Behat\Exception\BehaviorException
      */
     public function run()
     {

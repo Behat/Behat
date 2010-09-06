@@ -16,16 +16,21 @@ use Everzet\Behat\Runner\FeaturesRunner;
  */
 
 /**
- * Steps Container
+ * Loads feature/features & pass them into FeaturesRunner.
  *
- * @package     behat
- * @subpackage  Behat
+ * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FeaturesLoader
 {
     protected $featuresRunner;
 
+    /**
+     * Inits loader.
+     *
+     * @param   string      $path       base path
+     * @param   Container   $container  dependency container
+     */
     public function __construct($path, Container $container)
     {
         if (is_file($container->getParameter('features.file'))) {
@@ -40,6 +45,11 @@ class FeaturesLoader
         }
     }
 
+    /**
+     * Returns created FeaturesRunner
+     *
+     * @return  Everzet\Behat\Runner\FeaturesRunner
+     */
     public function getFeaturesRunner()
     {
         return $this->featuresRunner;

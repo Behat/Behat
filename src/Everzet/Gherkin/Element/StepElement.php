@@ -13,8 +13,7 @@ namespace Everzet\Gherkin\Element;
 /**
  * Step.
  *
- * @package     behat
- * @subpackage  Gherkin
+ * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class StepElement

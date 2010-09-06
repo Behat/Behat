@@ -23,10 +23,10 @@ use Everzet\Behat\Exception\Undefined;
  */
 
 /**
- * Steps Container
+ * Steps loader.
+ * Loads & initializates step definitions.
  *
- * @package     behat
- * @subpackage  Behat
+ * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class StepsLoader
@@ -36,8 +36,8 @@ class StepsLoader
     /**
      * Creates steps container & load step definitions
      *
-     * @param   \Iterator   $definitionFiles    step definition files
-     * @param   World       $world              world object instance
+     * @param   string                  $path   step definitions path
+     * @param   EnvironmentInterface    $world  world instance
      */
     public function __construct($path, EnvironmentInterface $world = null)
     {
@@ -55,7 +55,7 @@ class StepsLoader
      * @param   string  $type       step type (Given/When/Then/And or localized one)
      * @param   string  $arguments  step regex & callback
      * 
-     * @throws  \Everzet\Behat\Exceptions\Redundant if step definition is already exists
+     * @throws  Everzet\Behat\Exceptions\Redundant  if step definition is already exists
      */
     public function __call($type, $arguments)
     {
@@ -78,12 +78,12 @@ class StepsLoader
     }
 
     /**
-     * Translates step description into definition
+     * Proposes step definition for step elelemt
      *
-     * @param   Step    $step   step instance
-     * @param   string  $text   step test
+     * @param   StepElement $step   step element
+     * @param   string      $text   step test
      * 
-     * @return  string          definition
+     * @return  array               associative array of (md5_key => definition)
      */
     public function proposeDefinition(StepElement $step)
     {
@@ -120,13 +120,12 @@ PHP
     /**
      * Finds & returns step definition, that matches specific step description
      *
-     * @param   Step            $step       specific step to match
-     * @param   array           $examples   examples tokens to replace description placeholders
+     * @param   StepElement     $step       specific step to match
      * 
      * @return  StepDefinition
      * 
-     * @throws  \Everzet\Behat\Exceptions\Ambiguous if step description is ambiguous
-     * @throws  \Everzet\Behat\Exceptions\Undefined if step definition not found
+     * @throws  Everzet\Behat\Exceptions\Ambiguous  if step description is ambiguous
+     * @throws  Everzet\Behat\Exceptions\Undefined  if step definition not found
      */
     public function findDefinition(StepElement $step)
     {

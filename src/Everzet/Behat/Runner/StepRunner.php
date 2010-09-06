@@ -12,6 +12,21 @@ use Everzet\Behat\Exception\Pending;
 use Everzet\Behat\Definition\StepDefinition;
 use Everzet\Behat\Loader\StepsLoader;
 
+/*
+ * This file is part of the behat package.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Step runner.
+ * Runs step tests.
+ *
+ * @package     Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class StepRunner extends BaseRunner implements RunnerInterface
 {
     protected $step;
@@ -21,7 +36,15 @@ class StepRunner extends BaseRunner implements RunnerInterface
     protected $snippet;
     protected $exception;
 
-    public function __construct(StepElement $step, StepsLoader $definitions, Container $container,
+    /**
+     * Creates runner instance
+     *
+     * @param   StepElement     $step           step element
+     * @param   StepsLoader     $definitions    step definitions holder
+     * @param   Container       $container      dependency container
+     * @param   RunnerInterface $parent         parent runner
+     */
+    public function __construct(StepElement $step, StepsLoader $definitions, Container $container, 
                                 RunnerInterface $parent)
     {
         $this->step         = $step;
@@ -30,46 +53,83 @@ class StepRunner extends BaseRunner implements RunnerInterface
         parent::__construct('step', $container->getEventDispatcherService(), $parent);
     }
 
+    /**
+     * Set step tokens (replace values for <item1>/<item2>)
+     *
+     * @param   array   $tokens associative array of tokens
+     */
     public function setTokens(array $tokens)
     {
         $this->step->setTokens($tokens);
     }
 
+    /**
+     * Returns step element
+     *
+     * @return  StepElement
+     */
     public function getStep()
     {
         return $this->step;
     }
 
+    /**
+     * Returns exception
+     *
+     * @return  BehaviorException
+     */
     public function getException()
     {
         return $this->exception;
     }
 
+    /**
+     * Returns step definition
+     *
+     * @return  StepDefinition
+     */
     public function getDefinition()
     {
         return $this->definition;
     }
 
+    /**
+     * Returns step definition snippet
+     *
+     * @return  array   md5_key => definition
+     */
     public function getDefinitionSnippet()
     {
         return $this->snippet;
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getStepsCount()
     {
         return 1;
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getStepsStatusesCount()
     {
         return array($this->getStatus() => 1);
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getFailedStepRunners()
     {
         return $this->statusToCode('failed') === $this->statusCode ? array($this) : array();
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getPendingStepRunners()
     {
         return $this->statusToCode('pending') === $this->statusCode 
@@ -77,11 +137,17 @@ class StepRunner extends BaseRunner implements RunnerInterface
           : array();
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getDefinitionSnippets()
     {
         return is_array($this->snippet) ? $this->snippet : array();
     }
 
+    /**
+     * Find definition for current step from defintions holder
+     */
     protected function findDefinition()
     {
         try {
@@ -97,6 +163,9 @@ class StepRunner extends BaseRunner implements RunnerInterface
         }
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     protected function doRun()
     {
         $this->findDefinition();
@@ -119,6 +188,11 @@ class StepRunner extends BaseRunner implements RunnerInterface
         return $this->statusCode;
     }
 
+    /**
+     * Skips current step test
+     *
+     * @return  integer status code
+     */
     public function skip()
     {
         $this->fireEvent('pre_skip');

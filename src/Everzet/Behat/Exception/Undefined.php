@@ -11,10 +11,9 @@ namespace Everzet\Behat\Exception;
  */
 
 /**
- * Undefined step Exception
+ * Undefined step Exception.
  *
- * @package     behat
- * @subpackage  Behat
+ * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Undefined extends BehaviorException

@@ -2,8 +2,8 @@
 
 namespace Everzet\Gherkin\Element;
 
-use \Everzet\Gherkin\Element\Scenario\BackgroundElement;
-use \Everzet\Gherkin\Element\Scenario\ScenarioElement;
+use Everzet\Gherkin\Element\Scenario\BackgroundElement;
+use Everzet\Gherkin\Element\Scenario\ScenarioElement;
 
 /*
  * This file is part of the behat package.
@@ -16,8 +16,7 @@ use \Everzet\Gherkin\Element\Scenario\ScenarioElement;
 /**
  * Feature.
  *
- * @package     behat
- * @subpackage  Gherkin
+ * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FeatureElement extends SectionElement

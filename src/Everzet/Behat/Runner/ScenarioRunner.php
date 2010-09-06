@@ -7,6 +7,21 @@ use Symfony\Component\DependencyInjection\Container;
 use Everzet\Gherkin\Element\Scenario\ScenarioElement;
 use Everzet\Gherkin\Element\Scenario\BackgroundElement;
 
+/*
+ * This file is part of the behat package.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Scenario runner.
+ * Runs scenario steps runners.
+ *
+ * @package     Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class ScenarioRunner extends BaseRunner implements RunnerInterface
 {
     protected $scenario;
@@ -16,7 +31,15 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
     protected $tokens = array();
     protected $skip = false;
 
-    public function __construct(ScenarioElement $scenario, BackgroundElement $background = null,
+    /**
+     * Creates runner instance
+     *
+     * @param   ScenarioElement     $scenario   scenario element
+     * @param   BackgroundElement   $background background element
+     * @param   Container           $container  dependency container
+     * @param   RunnerInterface     $parent     parent runner
+     */
+    public function __construct(ScenarioElement $scenario, BackgroundElement $background = null, 
                                 Container $container, RunnerInterface $parent)
     {
         $this->scenario     = $scenario;
@@ -38,16 +61,27 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
         parent::__construct('scenario', $container->getEventDispatcherService(), $parent);
     }
 
+    /**
+     * Sets example tokens for steps (from Outline)
+     *
+     * @param   array   $tokens associative array of tokens
+     */
     public function setTokens(array $tokens)
     {
         $this->tokens = $tokens;
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getScenariosCount()
     {
         return 1;
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getStepsCount()
     {
         $count = parent::getStepsCount();
@@ -59,11 +93,17 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
         return $count;
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getScenariosStatusesCount()
     {
         return array($this->getStatus() => 1);
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getStepsStatusesCount()
     {
         $statuses = parent::getStepsStatusesCount();
@@ -81,6 +121,9 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
         return $statuses;
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getDefinitionSnippets()
     {
         $snippets = parent::getDefinitionSnippets();
@@ -92,6 +135,9 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
         return $snippets;
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getFailedStepRunners()
     {
         $runners = parent::getFailedStepRunners();
@@ -103,6 +149,9 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
         return $runners;
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     public function getPendingStepRunners()
     {
         $runners = parent::getPendingStepRunners();
@@ -114,16 +163,29 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
         return $runners;
     }
 
+    /**
+     * Returns scenario element
+     *
+     * @return  ScenarioElement
+     */
     public function getScenario()
     {
         return $this->scenario;
     }
 
+    /**
+     * Checks if this scenario is part of Scenario Outline
+     *
+     * @return  boolean if this scenario is runned inside Outline
+     */
     public function isInOutline()
     {
         return $this->getParentRunner() instanceof ScenarioOutlineRunner;
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     protected function doRun()
     {
         $status = $this->statusToCode('passed');

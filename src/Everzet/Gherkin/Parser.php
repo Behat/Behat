@@ -2,17 +2,17 @@
 
 namespace Everzet\Gherkin;
 
-use \Everzet\Gherkin\I18n;
-use \Everzet\Gherkin\RegexHolder;
-use \Everzet\Gherkin\ParserException;
-use \Everzet\Gherkin\Element\FeatureElement;
-use \Everzet\Gherkin\Element\StepElement;
-use \Everzet\Gherkin\Element\Scenario\BackgroundElement;
-use \Everzet\Gherkin\Element\Scenario\ScenarioElement;
-use \Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
-use \Everzet\Gherkin\Element\Inline\PyStringElement;
-use \Everzet\Gherkin\Element\Inline\TableElement;
-use \Everzet\Gherkin\Element\Inline\ExamplesElement;
+use Everzet\Gherkin\I18n;
+use Everzet\Gherkin\RegexHolder;
+use Everzet\Gherkin\ParserException;
+use Everzet\Gherkin\Element\FeatureElement;
+use Everzet\Gherkin\Element\StepElement;
+use Everzet\Gherkin\Element\Scenario\BackgroundElement;
+use Everzet\Gherkin\Element\Scenario\ScenarioElement;
+use Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
+use Everzet\Gherkin\Element\Inline\PyStringElement;
+use Everzet\Gherkin\Element\Inline\TableElement;
+use Everzet\Gherkin\Element\Inline\ExamplesElement;
 
 /*
  * This file is part of the behat package.
@@ -25,8 +25,7 @@ use \Everzet\Gherkin\Element\Inline\ExamplesElement;
 /**
  * Gherkin Parser.
  *
- * @package     behat
- * @subpackage  Gherkin
+ * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Parser

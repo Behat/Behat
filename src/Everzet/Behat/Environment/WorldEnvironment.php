@@ -13,8 +13,7 @@ namespace Everzet\Behat\Environment;
 /**
  * World container basic implementation.
  *
- * @package     behat
- * @subpackage  Behat
+ * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class WorldEnvironment implements EnvironmentInterface
@@ -34,6 +33,11 @@ class WorldEnvironment implements EnvironmentInterface
       }
   }
 
+  /**
+   * Prints beautified debug string
+   *
+   * @param     string  $string debug string
+   */
   public function printDebug($string)
   {
       echo "\n\033[36m|  " . strtr($string, array("\n" => "\n|  ")) . "\033[0m\n\n";

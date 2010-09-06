@@ -10,10 +10,32 @@ use Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
 
 use Everzet\Behat\Exception\BehaviorException;
 
+/*
+ * This file is part of the behat package.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Feature runner.
+ * Runs feature element tests.
+ *
+ * @package     Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class FeatureRunner extends BaseRunner implements RunnerInterface
 {
     protected $feature;
 
+    /**
+     * Creates runner instance
+     *
+     * @param   FeatureElement      $feature        parsed feature element
+     * @param   Container           $container      dependency container
+     * @param   RunnerInterface     $parent         parent runner
+     */
     public function __construct(FeatureElement $feature, Container $container,
                                 RunnerInterface $parent)
     {
@@ -42,11 +64,19 @@ class FeatureRunner extends BaseRunner implements RunnerInterface
         parent::__construct('feature', $container->getEventDispatcherService(), $parent);
     }
 
+    /**
+     * Returns feature element
+     *
+     * @return  FeatureElement
+     */
     public function getFeature()
     {
         return $this->feature;
     }
 
+    /**
+     * @see Everzet\Behat\Runner\BaseRunner
+     */
     protected function doRun()
     {
         $status = $this->statusToCode('passed');

@@ -2,7 +2,7 @@
 
 namespace Everzet\Gherkin\Element\Scenario;
 
-use \Everzet\Gherkin\Element\Inline\ExamplesElement;
+use Everzet\Gherkin\Element\Inline\ExamplesElement;
 
 /*
  * This file is part of the behat package.
@@ -15,8 +15,7 @@ use \Everzet\Gherkin\Element\Inline\ExamplesElement;
 /**
  * Scenario Outline.
  *
- * @package     behat
- * @subpackage  Gherkin
+ * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ScenarioOutlineElement extends ScenarioElement

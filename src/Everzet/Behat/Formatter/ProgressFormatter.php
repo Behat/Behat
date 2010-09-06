@@ -10,8 +10,25 @@ use Everzet\Behat\Runner\RunnerInterface;
 use Everzet\Behat\Runner\ScenarioRunner;
 use Everzet\Behat\Runner\BackgroundRunner;
 
+/*
+ * This file is part of the behat package.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Console progress output formatter (phpUnit-like).
+ *
+ * @package     Behat
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class ProgressFormatter extends PrettyFormatter implements FormatterInterface
 {
+    /**
+     * @see Everzet\Behat\Formatter\FormatterInterface
+     */
     public function registerListeners(EventDispatcher $dispatcher)
     {
         $dispatcher->connect('step.post_test',              array($this, 'printStep'));
@@ -24,6 +41,11 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
         $dispatcher->connect('suite.post_test',             array($this, 'printSnippets'));
     }
 
+    /**
+      * Listens to `step.post_test` event & prints step runner information
+      *
+      * @param   Event   $event  notified event
+      */
     public function printStep(Event $event)
     {
         $runner = $event->getSubject();
@@ -47,11 +69,21 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
         }
     }
 
+    /**
+      * Listens to `suite.post_test` event & prints empty line
+      *
+      * @param   Event   $event  notified event
+      */
     public function printEmptyLine(Event $event)
     {
         $this->output->writeln("\n");
     }
 
+    /**
+      * Listens to `suite.post_test` event & prints failed steps info
+      *
+      * @param   Event   $event  notified event
+      */
     public function printFailedSteps(Event $event)
     {
         $runner = $event->getSubject();
@@ -80,6 +112,11 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
         }
     }
 
+    /**
+      * Listens to `suite.post_test` event & prints pending steps info
+      *
+      * @param   Event   $event  notified event
+      */
     public function printPendingSteps(Event $event)
     {
         $runner = $event->getSubject();
@@ -109,6 +146,12 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
         }
     }
 
+    /**
+     * Print step information (filepath, fileline, exception description)
+     *
+     * @param   RunnerInterface $stepRunner runner instance
+     * @param   string          $type       information type (pending/failed etc.)
+     */
     protected function printStepInformation(RunnerInterface $stepRunner, $type)
     {
         // Print step information

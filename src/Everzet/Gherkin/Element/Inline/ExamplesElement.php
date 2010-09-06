@@ -13,8 +13,7 @@ namespace Everzet\Gherkin\Element\Inline;
 /**
  * Examples.
  *
- * @package     behat
- * @subpackage  Gherkin
+ * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ExamplesElement
