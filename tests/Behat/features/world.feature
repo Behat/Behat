@@ -8,7 +8,6 @@ Feature: World consistency
     And a file named "features/support/env.php" with:
       """
       <?php
-
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
