@@ -340,16 +340,18 @@ class PrettyFormatter implements FormatterInterface
         foreach ($scenariosStatusesCount as $status => $count) {
             $statuses[] = sprintf('<%s>%s %s</%s>', $status, $count, $status, $status);
         }
-        $this->output->writeln(sprintf('%d scenarios (%s)',
-            $scenariosCount, implode(', ', $statuses)
+        $this->output->writeln(sprintf('%d scenarios %s',
+            $scenariosCount
+          , count($statuses) ? sprintf('(%s)', implode(', ', $statuses)) : ''
         ));
 
         $statuses = array();
         foreach ($stepsStatusesCount as $status => $count) {
             $statuses[] = sprintf('<%s>%s %s</%s>', $status, $count, $status, $status);
         }
-        $this->output->writeln(sprintf('%d steps (%s)',
-            $stepsCount, implode(', ', $statuses)
+        $this->output->writeln(sprintf('%d steps %s',
+            $stepsCount
+          , count($statuses) ? sprintf('(%s)', implode(', ', $statuses)) : ''
         ));
 
         $this->output->writeln(sprintf("%.3fs", $runner->getTime()));
