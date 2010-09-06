@@ -77,7 +77,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
 
     public function getDefinitionSnippets()
     {
-        return is_array($this->snippet) ? array(md5($this->snippet[1]) => $this->snippet) : array();
+        return is_array($this->snippet) ? $this->snippet : array();
     }
 
     protected function findDefinition()

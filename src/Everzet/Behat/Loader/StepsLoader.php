@@ -93,10 +93,12 @@ class StepsLoader
         $regexp = preg_replace(
             array('/\"([^\"]*)\"/', '/(\d+)/'), array("\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
         );
+
         $args = array();
         for ($i = 0; $i < $count; $i++) {
             $args[] = "\$arg".($i + 1);
         }
+
         foreach ($args as $argument) {
             if ($argument instanceof PyStringElement) {
                 $args[] = "\$string";
@@ -105,16 +107,15 @@ class StepsLoader
             }
         }
 
-        return array(
-            $step->getType()
-          , sprintf(<<<PHP
+        $description = sprintf(<<<PHP
 \$steps->%s('/^%s$/', function(%s) use(\$world) {
     throw new \Everzet\Behat\Exception\Pending();
 });
 PHP
-              , '%s', $regexp, implode(', ', $args)
-            )
+          , '%s', $regexp, implode(', ', $args)
         );
+
+        return array(md5($description) => sprintf($description, $step->getType()));
     }
 
     /**

@@ -366,9 +366,7 @@ class PrettyFormatter implements FormatterInterface
             "</undefined>\n");
 
             foreach ($runner->getDefinitionSnippets() as $key => $snippet) {
-                $this->output->writeln(
-                    '<undefined>' . sprintf($snippet[1], $snippet[0]) . "</undefined>\n"
-                );
+                $this->output->writeln('<undefined>' . $snippet . "</undefined>\n");
             }
         }
     }
