@@ -87,7 +87,8 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
         if (count($stepRunners = $runner->getPendingStepRunners())) {
             $this->output->writeln("<pending>(::) pending steps (::)</pending>\n");
 
-            foreach ($stepRunners as $number => $stepRunner) {
+            $number = 1;
+            foreach ($stepRunners as $key => $stepRunner) {
                 $step = $stepRunner->getStep();
 
                 // Print step exception
@@ -98,7 +99,7 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
                         $error = $stepRunner->getException()->getMessage();
                     }
                     $this->output->write(sprintf("%s. \033[33m%s\033[0m"
-                      , str_pad((string) ($number + 1), 2, '0', STR_PAD_LEFT)
+                      , str_pad((string) $number++, 2, '0', STR_PAD_LEFT)
                       , strtr($error, array("\n" => "\n    "))
                     ), true, 1);
                 }

@@ -72,7 +72,9 @@ class StepRunner extends BaseRunner implements RunnerInterface
 
     public function getPendingStepRunners()
     {
-        return $this->statusToCode('pending') === $this->statusCode ? array($this) : array();
+        return $this->statusToCode('pending') === $this->statusCode 
+          ? array(md5($this->definition->getFile() . $this->definition->getLine()) => $this)
+          : array();
     }
 
     public function getDefinitionSnippets()
