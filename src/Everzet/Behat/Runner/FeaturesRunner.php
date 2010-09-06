@@ -7,11 +7,19 @@ use Symfony\Component\Finder\Finder;
 
 class FeaturesRunner extends BaseRunner implements RunnerInterface
 {
-    public function __construct(Finder $featureFiles, Container $container)
+    public function __construct($featureFiles, Container $container)
     {
-        foreach ($featureFiles as $file) {
+        if ($featureFiles instanceof Finder) {
+            foreach ($featureFiles as $file) {
+                $this->addChildRunner(new FeatureRunner(
+                    $container->getParserService()->parseFile($file)
+                  , $container
+                  , $this
+                ));
+            }
+        } else {
             $this->addChildRunner(new FeatureRunner(
-                $container->getParserService()->parseFile($file)
+                $container->getParserService()->parseFile($featureFiles)
               , $container
               , $this
             ));

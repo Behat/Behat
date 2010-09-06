@@ -28,10 +28,16 @@ class FeaturesLoader
 
     public function __construct($path, Container $container)
     {
-        $finder = new Finder();
-        $files  = $finder->files()->name('*.feature')->in($path);
+        if (is_file($container->getParameter('features.file'))) {
+            $file = $container->getParameter('features.file');
 
-        $this->featuresRunner = new FeaturesRunner($files, $container);
+            $this->featuresRunner = new FeaturesRunner($file, $container);
+        } else {
+            $finder = new Finder();
+            $files  = $finder->files()->name('*.feature')->in($path);
+
+            $this->featuresRunner = new FeaturesRunner($files, $container);
+        }
     }
 
     public function getFeaturesRunner()

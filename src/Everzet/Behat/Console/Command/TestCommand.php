@@ -45,18 +45,21 @@ class TestCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $basePath = realpath($input->getArgument('features'));
+        $featuresPath = realpath($input->getArgument('features'));
 
         // Find features path
-        if (is_dir($basePath . '/features')) {
-            $basePath .= '/features';
-        } elseif (is_file($basePath)) {
-            $basePath = dirname($basePath);
+        if (is_dir($featuresPath . '/features')) {
+            $basePath = $featuresPath . '/features';
+        } elseif (is_file($featuresPath)) {
+            $basePath = dirname($featuresPath);
+        } else {
+            $basePath = $featuresPath;
         }
 
         // Configure DIC
         $container = new ServiceContainer();
         $container->setParameter('i18n.path',           realpath(__DIR__ . '/../../../../../i18n'));
+        $container->setParameter('features.file',       $featuresPath);
         $container->setParameter('features.path',       $basePath);
         $container->setParameter('steps.path',          $basePath . '/steps');
         $container->setParameter('environment.file',    $basePath . '/support/env.php');
