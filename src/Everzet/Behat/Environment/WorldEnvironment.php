@@ -34,6 +34,11 @@ class WorldEnvironment implements EnvironmentInterface
       }
   }
 
+  public function printDebug($string)
+  {
+      echo "\n\033[36m|  " . strtr($string, array("\n" => "\n|  ")) . "\033[0m\n\n";
+  }
+
   /**
    * Calls previously saved in values closure
    *
