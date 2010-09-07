@@ -110,7 +110,7 @@ class PrettyFormatter implements FormatterInterface
         if ($feature->hasBackground()) {
             $runner = new BackgroundRunner(
                 $feature->getBackground()
-              , $this->container->getStepsLoaderService()
+              , $this->container->getEnvironmentService()
               , $this->container
               , null
             );

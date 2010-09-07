@@ -17,16 +17,16 @@ Feature: World consistency
       """
       <?php
 
-      $steps->Given('/I have entered (\d+)/', function($num) use(&$world) {
+      $steps->Given('/I have entered (\d+)/', function($world, $num) {
           assertNull($world->value);
           $world->value = $num;
       });
 
-      $steps->Then('/I must have (\d+)/', function($num) use(&$world) {
+      $steps->Then('/I must have (\d+)/', function($world, $num) {
           assertEquals($num, $world->value);
       });
 
-      $steps->When('/I add (\d+)/', function($num) use(&$world) {
+      $steps->When('/I add (\d+)/', function($world, $num) {
           $world->value += $num;
       });
       """
@@ -48,6 +48,7 @@ Feature: World consistency
           Then I must have 13
 
         Scenario Outline:
+          Given I must have 10
           When I add <value>
           Then I must have <result>
 
@@ -60,10 +61,10 @@ Feature: World consistency
     When I run "behat -f progress features/world.feature"
     Then it should pass with:
       """
-      ..............
+      .................
       
       5 scenarios (5 passed)
-      14 steps (14 passed)
+      17 steps (17 passed)
       """
 
     Scenario: Test inconsistency
@@ -71,16 +72,16 @@ Feature: World consistency
         """
         <?php
 
-        $steps->Given('/I have entered (\d+)/', function($num) use(&$world) {
+        $steps->Given('/I have entered (\d+)/', function($world, $num) {
             assertNull($world->value);
             $world->value = $num;
         });
 
-        $steps->Then('/I must have (\d+)/', function($num) use(&$world) {
+        $steps->Then('/I must have (\d+)/', function($world, $num) {
             assertEquals($num, $world->value);
         });
 
-        $steps->When('/I add (\d+)/', function($num) use(&$world) {
+        $steps->When('/I add (\d+)/', function($world, $num) {
             $world->value += $num;
         });
         """

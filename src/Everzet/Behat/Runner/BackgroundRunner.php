@@ -39,7 +39,7 @@ class BackgroundRunner extends BaseRunner implements RunnerInterface
     public function __construct(BackgroundElement $background, EnvironmentInterface $environment,
                                 Container $container, RunnerInterface $parent = null)
     {
-        $this->background   = $background;
+        $this->background = $background;
 
         foreach ($background->getSteps() as $step) {
             $this->addChildRunner(new StepRunner($step, $environment, $container, $this));

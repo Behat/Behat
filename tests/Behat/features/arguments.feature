@@ -20,16 +20,16 @@ Feature: Step Arguments
     And a file named "features/steps/arguments.php" with:
       """
       <?php
-      $steps->Given('/^a pystring:$/', function($string) use(&$world) {
+      $steps->Given('/^a pystring:$/', function($world, $string) {
           $world->input = $string;
       });
-      $steps->Given('/^a table:$/', function($table) use(&$world) {
+      $steps->Given('/^a table:$/', function($world, $table) {
           $world->input = $table;
       });
-      $steps->Then('/^it must be equals to string (\d+)$/', function($arg1) use(&$world) {
+      $steps->Then('/^it must be equals to string (\d+)$/', function($world, $arg1) {
           assertEquals($world->strings[intval($arg1)], $world->input);
       });
-      $steps->Then('/^it must be equals to table (\d+)$/', function($arg1) use(&$world) {
+      $steps->Then('/^it must be equals to table (\d+)$/', function($world, $arg1) {
           assertEquals($world->tables[intval($arg1)], $world->input);
       });
       """

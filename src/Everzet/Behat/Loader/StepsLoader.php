@@ -9,7 +9,6 @@ use Everzet\Gherkin\Element\Inline\PyStringElement;
 use Everzet\Gherkin\Element\Inline\TableElement;
 
 use Everzet\Behat\Definition\StepDefinition;
-use Everzet\Behat\Environment\EnvironmentInterface;
 use Everzet\Behat\Exception\Redundant;
 use Everzet\Behat\Exception\Ambiguous;
 use Everzet\Behat\Exception\Undefined;
@@ -31,33 +30,21 @@ use Everzet\Behat\Exception\Undefined;
  */
 class StepsLoader
 {
-    protected $environment;
     protected $steps = array();
 
     /**
      * Creates steps container & load step definitions
      *
-     * @param   string                  $path   step definitions path
+     * @param   string  $path   step definitions path
      */
     public function __construct($path)
     {
-        $steps =    $this;
-        $world =&   $this->environment;
+        $steps = $this;
 
         $finder = new Finder();
         foreach ($finder->files()->name('*.php')->in($path) as $definitionFile) {
             require $definitionFile;
         }
-    }
-
-    /**
-     * Sets steps world
-     *
-     * @param   EnvironmentInterface    $environment    environment (world)
-     */
-    public function setEnvironment(EnvironmentInterface $environment)
-    {
-        $this->environment = $environment;
     }
 
     /**
@@ -104,7 +91,7 @@ class StepsLoader
             array('/\"([^\"]*)\"/', '/(\d+)/'), array("\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
         );
 
-        $args = array();
+        $args = array("\$world");
         for ($i = 0; $i < $count; $i++) {
             $args[] = "\$arg".($i + 1);
         }
@@ -118,7 +105,7 @@ class StepsLoader
         }
 
         $description = sprintf(<<<PHP
-\$steps->%s('/^%s$/', function(%s) use(&\$world) {
+\$steps->%s('/^%s$/', function(%s) {
     throw new \Everzet\Behat\Exception\Pending();
 });
 PHP

@@ -25,7 +25,6 @@ use Everzet\Gherkin\Element\Scenario\BackgroundElement;
 class ScenarioRunner extends BaseRunner implements RunnerInterface
 {
     protected $scenario;
-    protected $definitions;
 
     protected $backgroundRunner;
     protected $tokens = array();
@@ -42,9 +41,8 @@ class ScenarioRunner extends BaseRunner implements RunnerInterface
     public function __construct(ScenarioElement $scenario, BackgroundElement $background = null, 
                                 Container $container, RunnerInterface $parent)
     {
-        $this->scenario     = $scenario;
-        $this->definitions  = $container->getStepsLoaderService();
-        $environment        = $container->getEnvironmentService();
+        $this->scenario = $scenario;
+        $environment    = $container->getEnvironmentService();
 
         if (null !== $background) {
             $this->backgroundRunner = new BackgroundRunner(

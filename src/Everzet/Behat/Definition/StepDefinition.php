@@ -4,7 +4,9 @@ namespace Everzet\Behat\Definition;
 
 use Everzet\Gherkin\Element\Inline\PyStringElement;
 use Everzet\Gherkin\Element\Inline\TableElement;
+
 use Everzet\Behat\Exception\Error;
+use Everzet\Behat\Environment\EnvironmentInterface;
 
 /*
  * This file is part of the behat package.
@@ -24,10 +26,10 @@ class StepDefinition
 {
     protected $type;
     protected $regex;
-    protected $matchedText;
     protected $callback;
     protected $file;
     protected $line;
+    protected $matchedText;
     protected $values = array();
 
     /**
@@ -41,11 +43,11 @@ class StepDefinition
      */
     public function __construct($type, $regex, $callback, $file = null, $line = null)
     {
-        $this->type = $type;
-        $this->regex = $regex;
-        $this->callback = $callback;
-        $this->file = $file;
-        $this->line = $line;
+        $this->type         = $type;
+        $this->regex        = $regex;
+        $this->callback     = $callback;
+        $this->file         = $file;
+        $this->line         = $line;
     }
 
     /**
@@ -133,14 +135,18 @@ class StepDefinition
     /**
      * Runs step definition
      *
+     * @param   EnvironmentInterface    $environment    runners shared environment
+     *
      * @return  void
      * 
      * @throws  Everzet\Behat\Exception\BehaviorException
      */
-    public function run()
+    public function run(EnvironmentInterface $environment)
     {
         $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
 
+        $values = $this->values;
+        array_unshift($values, $environment);
         call_user_func_array($this->callback, array_map(function($value) {
             if ($value instanceof PyStringElement) {
                 return (string) $value;
@@ -149,7 +155,7 @@ class StepDefinition
             } else {
                 return $value;
             }
-        }, $this->values));
+        }, $values));
 
         if (null !== $oldHandler) {
             set_error_handler($oldHandler);

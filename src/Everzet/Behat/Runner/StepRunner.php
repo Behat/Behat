@@ -30,10 +30,10 @@ use Everzet\Behat\Environment\EnvironmentInterface;
 class StepRunner extends BaseRunner implements RunnerInterface
 {
     protected $step;
-    protected $definitions;
-
     protected $environment;
+    protected $definitions;
     protected $definition;
+
     protected $snippet;
     protected $exception;
 
@@ -175,8 +175,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
         if (0 === $this->statusCode) {
             try {
                 try {
-                    $this->definitions->setEnvironment($this->environment);
-                    $this->definition->run();
+                    $this->definition->run($this->environment);
                     $this->statusCode = $this->statusToCode('passed');
                 } catch (Pending $e) {
                     $this->statusCode   = $this->statusToCode('pending');

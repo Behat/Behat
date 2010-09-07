@@ -1,6 +1,6 @@
 <?php
 
-$steps->Given('/^a standard Behat project directory structure$/', function() use(&$world) {
+$steps->Given('/^a standard Behat project directory structure$/', function($world) {
     chdir(sys_get_temp_dir());
 
     if (is_dir('features')) {
@@ -12,11 +12,11 @@ $steps->Given('/^a standard Behat project directory structure$/', function() use
     mkdir('features/support');
 });
 
-$steps->Given('/^a file named "([^"]*)" with:$/', function($filename, $content) use(&$world) {
+$steps->Given('/^a file named "([^"]*)" with:$/', function($world, $filename, $content) {
     file_put_contents($filename, strtr($content, array("'''" => '"""')));
 });
 
-$steps->When('/^I run "([^"]*)"$/', function($command) use(&$world) {
+$steps->When('/^I run "([^"]*)"$/', function($world, $command) {
     $world->command = $command;
     exec($command, $world->output, $world->return);
 
@@ -26,15 +26,15 @@ $steps->When('/^I run "([^"]*)"$/', function($command) use(&$world) {
     );
 });
 
-$steps->Then('/^display last command exit code$/', function() use(&$world) {
+$steps->Then('/^display last command exit code$/', function($world) {
     $world->printDebug("`" . $world->command . "`  =>  " . $world->return);
 });
 
-$steps->Then('/^display last command output$/', function() use(&$world) {
+$steps->Then('/^display last command output$/', function($world) {
     $world->printDebug("`" . $world->command . "`:\n" . $world->output);
 });
 
-$steps->Then('/^it should (fail|pass) with:$/', function($success, $data) use(&$world) {
+$steps->Then('/^it should (fail|pass) with:$/', function($world, $success, $data) {
     if ('fail' === $success) {
         assertNotEquals(0, $world->return);
     } else {
@@ -43,7 +43,7 @@ $steps->Then('/^it should (fail|pass) with:$/', function($success, $data) use(&$
     assertEquals(trim($data), $world->output);
 });
 
-$steps->Then('/^it should (fail|pass)$/', function($success) use(&$world) {
+$steps->Then('/^it should (fail|pass)$/', function($world, $success) {
     if ('fail' === $success) {
         assertNotEquals(0, $world->return);
     } else {
@@ -51,10 +51,10 @@ $steps->Then('/^it should (fail|pass)$/', function($success) use(&$world) {
     }
 });
 
-$steps->Then('/^the output should contain$/', function($text) use(&$world) {
+$steps->Then('/^the output should contain$/', function($world, $text) {
     assertContains($text, $world->output);
 });
 
-$steps->Then('/^the output should not contain$/', function($text) use(&$world) {
+$steps->Then('/^the output should not contain$/', function($world, $text) {
     assertNotContains($text, $world->output);
 });
