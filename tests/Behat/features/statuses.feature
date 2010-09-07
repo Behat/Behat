@@ -37,11 +37,11 @@ Feature: Statuses
 
       You can implement step definitions for undefined steps with these snippets:
 
-      $steps->Then('/^I must have (\d+)$/', function($arg1) use($world) {
+      $steps->Then('/^I must have (\d+)$/', function($arg1) use(&$world) {
           throw new \Everzet\Behat\Exception\Pending();
       });
 
-      $steps->Given('/^I have entered (\d+)$/', function($arg1) use($world) {
+      $steps->Given('/^I have entered (\d+)$/', function($arg1) use(&$world) {
           throw new \Everzet\Behat\Exception\Pending();
       });
       """
@@ -64,7 +64,7 @@ Feature: Statuses
     And a file named "features/steps/steps.php" with:
       """
       <?php
-      $steps->Given('/^I have entered (\d+)$/', function($arg1) use($world) {
+      $steps->Given('/^I have entered (\d+)$/', function($arg1) use(&$world) {
           throw new \Everzet\Behat\Exception\Pending();
       });
       """
@@ -84,7 +84,7 @@ Feature: Statuses
 
       You can implement step definitions for undefined steps with these snippets:
 
-      $steps->Then('/^I must have (\d+)$/', function($arg1) use($world) {
+      $steps->Then('/^I must have (\d+)$/', function($arg1) use(&$world) {
           throw new \Everzet\Behat\Exception\Pending();
       });
       """
@@ -108,11 +108,11 @@ Feature: Statuses
     And a file named "features/steps/steps.php" with:
       """
       <?php
-      $steps->Given('/^I have entered (\d+)$/', function($arg1) use($world) {
+      $steps->Given('/^I have entered (\d+)$/', function($arg1) use(&$world) {
           $world->number = $arg1;
       });
 
-      $steps->Then('/^I must have (\d+)$/', function($arg1) use($world) {
+      $steps->Then('/^I must have (\d+)$/', function($arg1) use(&$world) {
           assertEquals($world->number, $arg1);
       });
       """
@@ -156,11 +156,11 @@ Feature: Statuses
     And a file named "features/steps/steps.php" with:
       """
       <?php
-      $steps->Given('/^I have entered (\d+)$/', function($arg1) use($world) {
+      $steps->Given('/^I have entered (\d+)$/', function($arg1) use(&$world) {
           $world->number = $arg1;
       });
 
-      $steps->Then('/^I must have (\d+)$/', function($arg1) use($world) {
+      $steps->Then('/^I must have (\d+)$/', function($arg1) use(&$world) {
           assertEquals($world->number, $arg1);
       });
       """

@@ -14,41 +14,41 @@ Feature: Scenario Outlines
     And a file named "features/steps/math.php" with:
       """
       <?php
-      $steps->Given('/^I have basic calculator$/', function() use($world) {
+      $steps->Given('/^I have basic calculator$/', function() use(&$world) {
           $world->result  = 0;
           $world->numbers = array();
       });
-      $steps->Given('/^I have entered (\d+)$/', function($number) use($world) {
+      $steps->Given('/^I have entered (\d+)$/', function($number) use(&$world) {
           $world->numbers[] = intval($number);
       });
-      $steps->When('/^I add$/', function() use($world) {
+      $steps->When('/^I add$/', function() use(&$world) {
           foreach ($world->numbers as $number) {
               $world->result += $number;
           }
           $world->numbers = array();
       });
-      $steps->When('/^I sub$/', function() use($world) {
+      $steps->When('/^I sub$/', function() use(&$world) {
           $world->result = array_shift($world->numbers);
           foreach ($world->numbers as $number) {
               $world->result -= $number;
           }
           $world->numbers = array();
       });
-      $steps->When('/^I multiply$/', function() use($world) {
+      $steps->When('/^I multiply$/', function() use(&$world) {
           $world->result = array_shift($world->numbers);
           foreach ($world->numbers as $number) {
               $world->result *= $number;
           }
           $world->numbers = array();
       });
-      $steps->When('/^I div$/', function() use($world) {
+      $steps->When('/^I div$/', function() use(&$world) {
           $world->result = array_shift($world->numbers);
           foreach ($world->numbers as $number) {
               $world->result /= $number;
           }
           $world->numbers = array();
       });
-      $steps->Then('/^The result should be (\d+)$/', function($result) use($world) {
+      $steps->Then('/^The result should be (\d+)$/', function($result) use(&$world) {
           assertEquals($result, $world->result);
       });
       """

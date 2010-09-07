@@ -31,22 +31,33 @@ use Everzet\Behat\Exception\Undefined;
  */
 class StepsLoader
 {
+    protected $environment;
     protected $steps = array();
 
     /**
      * Creates steps container & load step definitions
      *
      * @param   string                  $path   step definitions path
-     * @param   EnvironmentInterface    $world  world instance
      */
-    public function __construct($path, EnvironmentInterface $world = null)
+    public function __construct($path)
     {
-        $steps = $this;
+        $steps =    $this;
+        $world =&   $this->environment;
 
         $finder = new Finder();
         foreach ($finder->files()->name('*.php')->in($path) as $definitionFile) {
             require $definitionFile;
         }
+    }
+
+    /**
+     * Sets steps world
+     *
+     * @param   EnvironmentInterface    $environment    environment (world)
+     */
+    public function setEnvironment(EnvironmentInterface $environment)
+    {
+        $this->environment = $environment;
     }
 
     /**
@@ -107,7 +118,7 @@ class StepsLoader
         }
 
         $description = sprintf(<<<PHP
-\$steps->%s('/^%s$/', function(%s) use(\$world) {
+\$steps->%s('/^%s$/', function(%s) use(&\$world) {
     throw new \Everzet\Behat\Exception\Pending();
 });
 PHP
