@@ -36,7 +36,8 @@ class TestCommand extends Command
 
         $this->setDefinition(array(
             new InputArgument('features', InputArgument::OPTIONAL, 'Features path', 'features'),
-            new InputOption('--format', '-f', InputOption::PARAMETER_REQUIRED, 'Change output formatter', 'pretty')
+            new InputOption('--format', '-f', InputOption::PARAMETER_REQUIRED, 'Change output formatter', 'pretty'),
+            new InputOption('--tags',   '-t', InputOption::PARAMETER_REQUIRED, 'Only executes features or scenarios with specified tags')
         ));
     }
 
@@ -59,6 +60,7 @@ class TestCommand extends Command
         // Configure DIC
         $container = new ServiceContainer();
         $container->setParameter('i18n.path',           realpath(__DIR__ . '/../../../../../i18n'));
+        $container->setParameter('filter.tags',         $input->getOption('tags'));
         $container->setParameter('features.file',       $featuresPath);
         $container->setParameter('features.path',       $basePath);
         $container->setParameter('steps.path',          $basePath . '/steps');

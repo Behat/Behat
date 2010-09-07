@@ -30,17 +30,13 @@ class FeaturesRunner extends BaseRunner implements RunnerInterface
      */
     public function __construct($featureFiles, Container $container)
     {
-        if ($featureFiles instanceof Finder) {
-            foreach ($featureFiles as $file) {
-                $this->addChildRunner(new FeatureRunner(
-                    $container->getParserService()->parseFile($file)
-                  , $container
-                  , $this
-                ));
-            }
-        } else {
+        if (!($featureFiles instanceof Finder)) {
+            $featureFiles = array($featureFiles);
+        }
+
+        foreach ($featureFiles as $file) {
             $this->addChildRunner(new FeatureRunner(
-                $container->getParserService()->parseFile($featureFiles)
+                $container->getParserService()->parseFile($file)
               , $container
               , $this
             ));
