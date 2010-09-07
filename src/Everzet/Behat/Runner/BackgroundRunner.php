@@ -26,7 +26,6 @@ use Everzet\Behat\Environment\EnvironmentInterface;
 class BackgroundRunner extends BaseRunner implements RunnerInterface
 {
     protected $background;
-    protected $environment;
     protected $skip = false;
 
     /**
@@ -41,7 +40,6 @@ class BackgroundRunner extends BaseRunner implements RunnerInterface
                                 Container $container, RunnerInterface $parent = null)
     {
         $this->background   = $background;
-        $this->environment  = $environment;
 
         foreach ($background->getSteps() as $step) {
             $this->addChildRunner(new StepRunner($step, $environment, $container, $this));
