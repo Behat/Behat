@@ -32,10 +32,10 @@ class BackgroundRunner extends BaseRunner implements RunnerInterface
     /**
      * Creates runner instance
      *
-     * @param   BackgroundElement   $background     parsed background element
-     * @param   StepsLoader         $definitions    step definitions holder
-     * @param   Container           $container      dependency container
-     * @param   RunnerInterface     $parent         parent runner
+     * @param   BackgroundElement       $background     parsed background element
+     * @param   EnvironmentInterface    $environment    runners environment
+     * @param   Container               $container      dependency container
+     * @param   RunnerInterface         $parent         parent runner
      */
     public function __construct(BackgroundElement $background, EnvironmentInterface $environment,
                                 Container $container, RunnerInterface $parent = null)

@@ -40,10 +40,10 @@ class StepRunner extends BaseRunner implements RunnerInterface
     /**
      * Creates runner instance
      *
-     * @param   StepElement     $step           step element
-     * @param   StepsLoader     $definitions    step definitions holder
-     * @param   Container       $container      dependency container
-     * @param   RunnerInterface $parent         parent runner
+     * @param   StepElement             $step           step element
+     * @param   EnvironmentInterface    $environment    runners environment
+     * @param   Container               $container      dependency container
+     * @param   RunnerInterface         $parent         parent runner
      */
     public function __construct(StepElement $step, EnvironmentInterface $environment,
                                 Container $container, RunnerInterface $parent)
