@@ -10,7 +10,7 @@ use Everzet\Behat\Exception\Ambiguous;
 use Everzet\Behat\Exception\Undefined;
 use Everzet\Behat\Exception\Pending;
 use Everzet\Behat\Definition\StepDefinition;
-use Everzet\Behat\Loader\StepsLoader;
+use Everzet\Behat\Environment\EnvironmentInterface;
 
 /*
  * This file is part of the behat package.
@@ -32,6 +32,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
     protected $step;
     protected $definitions;
 
+    protected $environment;
     protected $definition;
     protected $snippet;
     protected $exception;
@@ -44,11 +45,12 @@ class StepRunner extends BaseRunner implements RunnerInterface
      * @param   Container       $container      dependency container
      * @param   RunnerInterface $parent         parent runner
      */
-    public function __construct(StepElement $step, StepsLoader $definitions, Container $container, 
-                                RunnerInterface $parent)
+    public function __construct(StepElement $step, EnvironmentInterface $environment,
+                                Container $container, RunnerInterface $parent)
     {
         $this->step         = $step;
-        $this->definitions  = $definitions;
+        $this->environment  = $environment;
+        $this->definitions  = $container->getStepsLoaderService();
 
         parent::__construct('step', $container->getEventDispatcherService(), $parent);
     }
@@ -173,6 +175,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
         if (0 === $this->statusCode) {
             try {
                 try {
+                    $this->definitions->setEnvironment($this->environment);
                     $this->definition->run();
                     $this->statusCode = $this->statusToCode('passed');
                 } catch (Pending $e) {

@@ -126,13 +126,11 @@ class ServiceContainer extends Container
      */
     protected function getStepsLoaderService()
     {
-        if (!isset($this->shared['steps_loader'])) {
-            $class      = $this->getParameter('steps_loader.class');
-            $instance   = new $class($this->getParameter('steps.path'));
-        } else {
-            $instance   = clone($this->shared['steps_loader']);
-        }
-        $instance->setEnvironment($this->getEnvironmentService());
+        if (isset($this->shared['steps_loader'])) return $this->shared['steps_loader'];
+
+        $class = $this->getParameter('steps_loader.class');
+        $instance = new $class($this->getParameter('steps.path'));
+        $this->shared['steps_loader'] = $instance;
 
         return $instance;
     }

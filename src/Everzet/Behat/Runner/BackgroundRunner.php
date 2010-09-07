@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\Container;
 
 use Everzet\Gherkin\Element\Scenario\BackgroundElement;
 
-use Everzet\Behat\Loader\StepsLoader;
+use Everzet\Behat\Environment\EnvironmentInterface;
 
 /*
  * This file is part of the behat package.
@@ -26,6 +26,7 @@ use Everzet\Behat\Loader\StepsLoader;
 class BackgroundRunner extends BaseRunner implements RunnerInterface
 {
     protected $background;
+    protected $environment;
     protected $skip = false;
 
     /**
@@ -36,13 +37,14 @@ class BackgroundRunner extends BaseRunner implements RunnerInterface
      * @param   Container           $container      dependency container
      * @param   RunnerInterface     $parent         parent runner
      */
-    public function __construct(BackgroundElement $background, StepsLoader $definitions,
+    public function __construct(BackgroundElement $background, EnvironmentInterface $environment,
                                 Container $container, RunnerInterface $parent = null)
     {
-        $this->background = $background;
+        $this->background   = $background;
+        $this->environment  = $environment;
 
         foreach ($background->getSteps() as $step) {
-            $this->addChildRunner(new StepRunner($step, $definitions, $container, $this));
+            $this->addChildRunner(new StepRunner($step, $environment, $container, $this));
         }
 
         parent::__construct('background', $container->getEventDispatcherService(), $parent);
