@@ -143,7 +143,7 @@ class StepDefinition
      */
     public function run(EnvironmentInterface $environment)
     {
-        $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
+        $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL);
 
         $values = $this->values;
         array_unshift($values, $environment);
