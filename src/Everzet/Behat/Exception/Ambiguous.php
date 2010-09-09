@@ -31,8 +31,8 @@ class Ambiguous extends BehaviorException
     {
         parent::__construct();
 
-        $this->definition = $definition;
-        $this->matches = $matches;
+        $this->definition = $text;
+        $this->matches    = $matches;
 
         $this->message = sprintf("Ambiguous match of \"%s\":", $this->text);
         foreach ($this->matches as $definition){
