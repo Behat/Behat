@@ -42,7 +42,7 @@ class FeaturesRunner extends BaseRunner implements RunnerInterface
             ));
         }
 
-        parent::__construct('suite', $container->getEventDispatcherService());
+        parent::__construct('features', $container->getEventDispatcherService());
     }
 
     /**

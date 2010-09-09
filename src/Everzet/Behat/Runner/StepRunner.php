@@ -197,7 +197,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
      */
     public function skip()
     {
-        $this->fireEvent('pre_skip');
+        $this->fireEvent('skip.before');
 
         $this->findDefinition();
 
@@ -205,7 +205,7 @@ class StepRunner extends BaseRunner implements RunnerInterface
             $this->statusCode = $this->statusToCode('skipped');
         }
 
-        $this->fireEvent('post_skip');
+        $this->fireEvent('skip.after');
 
         return $this->statusCode;
     }

@@ -281,13 +281,13 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
      */
     public function run()
     {
-        $this->fireEvent('pre_test');
+        $this->fireEvent('test.before');
         $this->startTime = microtime(true);
 
         $status = $this->doRun();
 
         $this->finishTime = microtime(true);
-        $this->fireEvent('post_test');
+        $this->fireEvent('test.after');
 
         return $this->statusCode = $status;
     }
