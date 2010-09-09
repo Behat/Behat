@@ -2,6 +2,7 @@
 
 namespace Everzet\Behat\Loader;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Finder\Finder;
 
 use Everzet\Gherkin\Element\StepElement;
@@ -30,16 +31,19 @@ use Everzet\Behat\Exception\Undefined;
  */
 class StepsLoader
 {
+    protected $container;
     protected $steps = array();
 
     /**
      * Creates steps container & load step definitions
      *
-     * @param   string  $path   step definitions path
+     * @param   string    $path       step definitions path
+     * @param   Container $container  dependency container
      */
-    public function __construct($path)
+    public function __construct($path, Container $container)
     {
-        $steps = $this;
+        $this->container    = $container;
+        $steps              = $this;
 
         $finder = new Finder();
         foreach ($finder->files()->name('*.php')->in($path) as $definitionFile) {
@@ -60,7 +64,8 @@ class StepsLoader
         $debug = debug_backtrace();
         $debug = $debug[1];
 
-        $definition = new StepDefinition(
+        $class = $this->container->getParameter('step_definition.class');
+        $definition = new $class(
             $type, $arguments[0], $arguments[1], $debug['file'], $debug['line']
         );
 

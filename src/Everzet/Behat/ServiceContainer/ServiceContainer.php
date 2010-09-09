@@ -129,7 +129,7 @@ class ServiceContainer extends Container
         if (isset($this->shared['steps_loader'])) return $this->shared['steps_loader'];
 
         $class = $this->getParameter('steps_loader.class');
-        $instance = new $class($this->getParameter('steps.path'));
+        $instance = new $class($this->getParameter('steps.path'), $this);
         $this->shared['steps_loader'] = $instance;
 
         return $instance;
@@ -144,8 +144,8 @@ class ServiceContainer extends Container
      */
     public function findTaggedServiceIds($name)
     {
-        static $tags = array(
-            'events_listener' => array('formatter'),
+        $tags = array(
+            'events_listener' => $this->getParameter('event_listeners')
         );
 
         return isset($tags[$name]) ? $tags[$name] : array();
@@ -161,11 +161,13 @@ class ServiceContainer extends Container
         return array(
             'parser.class'              => 'Everzet\\Gherkin\\Parser',
             'i18n.class'                => 'Everzet\\Gherkin\\I18n',
+            'event_dispatcher.class'    => 'Everzet\\Behat\\EventDispatcher\\EventDispatcher',
+            'event_listeners'           => array('formatter'),
+            'formatter.class'           => 'Everzet\\Behat\\Formatter\\%formatter.name%Formatter',
+            'step_definition.class'     => 'Everzet\\Behat\\Definition\\StepDefinition',
             'environment.class'         => 'Everzet\\Behat\\Environment\\WorldEnvironment',
             'features_loader.class'     => 'Everzet\\Behat\\Loader\\FeaturesLoader',
             'steps_loader.class'        => 'Everzet\\Behat\\Loader\\StepsLoader',
-            'formatter.class'           => 'Everzet\\Behat\\Formatter\\%formatter.name%Formatter',
-            'event_dispatcher.class'    => 'Everzet\\Behat\\EventDispatcher\\EventDispatcher',
         );
     }
 }
