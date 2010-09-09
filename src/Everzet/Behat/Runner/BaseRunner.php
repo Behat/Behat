@@ -168,7 +168,7 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
         $snippets = array();
 
         foreach ($this as $child) {
-            $snippets = array_merge($snippets, $child->getDefinitionSnippets());
+            $snippets = array_merge($child->getDefinitionSnippets(), $snippets);
         }
 
         return $snippets;
