@@ -2,13 +2,15 @@
 
 namespace Everzet\Behat\Console\Command;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Everzet\Behat\ServiceContainer\ServiceContainer;
 use Everzet\Behat\Exception\Redundant;
 
 /*
@@ -46,28 +48,51 @@ class TestCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $featuresPath = realpath($input->getArgument('features'));
+        $featuresPath   = realpath($input->getArgument('features'));
+        $featureFile    = null;
 
         // Find features path
         if (is_dir($featuresPath . '/features')) {
-            $basePath = $featuresPath . '/features';
-        } elseif (is_file($featuresPath)) {
-            $basePath = dirname($featuresPath);
-        } else {
-            $basePath = $featuresPath;
+            $featuresPath = $featuresPath . '/features';
+        } elseif (is_file($featuresPath)) {    
+            $featureFile    = $featuresPath;
+            $featuresPath   = dirname($featuresPath);
         }
 
-        // Configure DIC
-        $container = new ServiceContainer();
-        $container->setParameter('i18n.path',           realpath(__DIR__ . '/../../../../../i18n'));
+        // Load container
+        $container  = new ContainerBuilder();
+        $xmlLoader  = new XmlFileLoader($container);
+        $xmlLoader->load(__DIR__ . '/../../ServiceContainer/container.xml');
+
+        // Init default parameters
+        $container->set('output',                       $output);
+        $container->setParameter('features.file',       $featureFile);
+        $container->setParameter('features.path',       $featuresPath);
         $container->setParameter('filter.tags',         $input->getOption('tags'));
-        $container->setParameter('features.file',       $featuresPath);
-        $container->setParameter('features.path',       $basePath);
-        $container->setParameter('steps.path',          $basePath . '/steps');
-        $container->setParameter('environment.file',    $basePath . '/support/env.php');
-        $container->setParameter('formatter.output',    $output);
         $container->setParameter('formatter.verbose',   $input->getOption('verbose'));
-        $container->setParameter('formatter.name',      ucfirst($input->getOption('format')));
+        $container->setParameter('formatter.name',      $input->getOption('format'));
+        $container->setParameter('i18n.path',           realpath(__DIR__ . '/../../../../../i18n'));
+
+        // Load external config file (behat.(xml/yml))
+        if (is_file(($cwd = getcwd()) . '/behat.xml')) {
+            $xmlLoader->import($cwd . '/behat.xml');
+        } elseif (is_file($cwd . '/behat.yml')) {
+            $yamlLoader = new YamlFileLoader($container);
+            $yamlLoader->import($cwd . '/behat.yml');
+        }
+
+        // Fill embed parameter holders
+        $container->setParameter('formatter.name', 
+            ucfirst($container->getParameter('formatter.name'))
+        );
+        foreach ($container->getParameterBag()->all() as $key => $value) {
+            $container->setParameter($key,
+                preg_replace_callback('/%%([^%]+)%%/', function($matches) use($container) {
+                    return $container->getParameter($matches[1]);
+                }
+              , $value
+            ));
+        }
 
         // Check if we had redundant definitions
         try {

@@ -30,7 +30,7 @@ class EventDispatcher extends BaseEventDispatcher
      */
     public function __construct(ContainerInterface $container)
     {
-        foreach ($container->findTaggedServiceIds('events_listener') as $id) {
+        foreach ($container->findTaggedServiceIds('events_listener') as $id => $tag) {
             $container->get($id)->registerListeners($this);
         }
     }

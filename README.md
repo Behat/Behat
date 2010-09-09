@@ -18,7 +18,7 @@ Note on Patches/Pull Requests
 Running tests
 -------------
 
-	behat tests/Behat -f progress
+	behat
 
 If you get errors about missing dependencies - just run
 

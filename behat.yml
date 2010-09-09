@@ -1,0 +1,3 @@
+parameters:
+  features.path:  tests/Behat/features
+  formatter.name: progress

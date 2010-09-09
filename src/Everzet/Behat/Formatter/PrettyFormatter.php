@@ -44,7 +44,7 @@ class PrettyFormatter implements FormatterInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->output       = $container->getParameter('formatter.output');
+        $this->output       = $container->getOutputService();
         $this->verbose      = $container->getParameter('formatter.verbose');
 
         $this->output->setStyle('failed',      array('fg' => 'red'));
