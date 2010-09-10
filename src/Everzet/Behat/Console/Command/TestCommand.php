@@ -29,6 +29,8 @@ use Everzet\Behat\Exception\Redundant;
  */
 class TestCommand extends Command
 {
+    protected $container;
+
     /**
      * @see Symfony\Component\Console\Command\Command
      */
@@ -36,10 +38,33 @@ class TestCommand extends Command
     {
         $this->setName('test');
 
+        // Load container
+        $this->container                = new ContainerBuilder();
+        $xmlLoader                      = new XmlFileLoader($this->container);
+        $xmlLoader->load(               __DIR__ . '/../../ServiceContainer/container.xml');
+        $this->container->setParameter( 'i18n.path', realpath(__DIR__ . '/../../../../../i18n'));
+
+        // Load external config file (behat.(xml/yml))
+        if (is_file(($cwd = getcwd()) . '/behat.xml')) {
+            $xmlLoader->import($cwd . '/behat.xml');
+        } elseif (is_file($cwd . '/behat.yml')) {
+            $yamlLoader = new YamlFileLoader($this->container);
+            $yamlLoader->import($cwd . '/behat.yml');
+        }
+
         $this->setDefinition(array(
-            new InputArgument('features', InputArgument::OPTIONAL, 'Features path', 'features'),
-            new InputOption('--format', '-f', InputOption::PARAMETER_REQUIRED, 'Change output formatter', 'pretty'),
-            new InputOption('--tags',   '-t', InputOption::PARAMETER_REQUIRED, 'Only executes features or scenarios with specified tags')
+            new InputArgument('features',               InputArgument::OPTIONAL
+              , 'Features path'
+              , $this->container->getParameter('features.path')
+            ),
+            new InputOption('--format',         '-f',   InputOption::PARAMETER_REQUIRED
+              , 'Change output formatter'
+              , $this->container->getParameter('formatter.name')
+            ),
+            new InputOption('--tags',           '-t',   InputOption::PARAMETER_REQUIRED
+              , 'Only executes features or scenarios with specified tags'
+              , $this->container->getParameter('filter.tags')
+            ),
         ));
     }
 
@@ -59,34 +84,21 @@ class TestCommand extends Command
             $featuresPath   = dirname($featuresPath);
         }
 
-        // Load container
-        $container  = new ContainerBuilder();
-        $xmlLoader  = new XmlFileLoader($container);
-        $xmlLoader->load(__DIR__ . '/../../ServiceContainer/container.xml');
-
-        // Init default parameters
-        $container->set('output',                       $output);
-        $container->setParameter('features.file',       $featureFile);
-        $container->setParameter('features.path',       $featuresPath);
-        $container->setParameter('filter.tags',         $input->getOption('tags'));
-        $container->setParameter('formatter.verbose',   $input->getOption('verbose'));
-        $container->setParameter('formatter.name',      $input->getOption('format'));
-        $container->setParameter('i18n.path',           realpath(__DIR__ . '/../../../../../i18n'));
-
-        // Load external config file (behat.(xml/yml))
-        if (is_file(($cwd = getcwd()) . '/behat.xml')) {
-            $xmlLoader->import($cwd . '/behat.xml');
-        } elseif (is_file($cwd . '/behat.yml')) {
-            $yamlLoader = new YamlFileLoader($container);
-            $yamlLoader->import($cwd . '/behat.yml');
-        }
+        // Set container parameters
+        $this->container->set('output',                     $output);
+        $this->container->setParameter('features.path',     $featuresPath);
+        $this->container->setParameter('features.file',     $featureFile);
+        $this->container->setParameter('formatter.name',    $input->getOption('format'));
+        $this->container->setParameter('filter.tags',       $input->getOption('tags'));
+        $this->container->setParameter('formatter.verbose', $input->getOption('verbose'));
 
         // Fill embed parameter holders
-        $container->setParameter('formatter.name', 
-            ucfirst($container->getParameter('formatter.name'))
+        $this->container->setParameter('formatter.name', 
+            ucfirst($this->container->getParameter('formatter.name'))
         );
-        foreach ($container->getParameterBag()->all() as $key => $value) {
-            $container->setParameter($key,
+        foreach ($this->container->getParameterBag()->all() as $key => $value) {
+            $container = $this->container;
+            $this->container->setParameter($key,
                 preg_replace_callback('/%%([^%]+)%%/', function($matches) use($container) {
                     return $container->getParameter($matches[1]);
                 }
@@ -96,7 +108,7 @@ class TestCommand extends Command
 
         // Check if we had redundant definitions
         try {
-            $container->getStepsLoaderService();
+            $this->container->getStepsLoaderService();
         } catch (Redundant $e) {
             $output->write(sprintf("\033[31m%s\033[0m",
                 strtr($e->getMessage(), array($basePath . '/' => ''))
@@ -105,7 +117,7 @@ class TestCommand extends Command
         }
 
         // Get features loader, run test suite & return exit code
-        return $container->
+        return $this->container->
             getFeaturesLoaderService()->
             getFeaturesRunner()->
             run();

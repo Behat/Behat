@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
- 
 <container xmlns="http://www.symfony-project.org/schema/dic/services">
   <parameters>
-    <parameter key="features.path">./</parameter>
+    <parameter key="features.path">features</parameter>
     <parameter key="steps.path">%%features.path%%/steps</parameter>
     <parameter key="environment.file">%%features.path%%/support/env.php</parameter>
-    <parameter key="formatter.name">Pretty</parameter>
+    <parameter key="formatter.name">pretty</parameter>
+    <parameter key="filter.tags"></parameter>
     <parameter key="parser.class">Everzet\Gherkin\Parser</parameter>
     <parameter key="i18n.class">Everzet\Gherkin\I18n</parameter>
     <parameter key="event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
@@ -14,6 +14,7 @@
     <parameter key="features_loader.class">Everzet\Behat\Loader\FeaturesLoader</parameter>
     <parameter key="steps_loader.class">Everzet\Behat\Loader\StepsLoader</parameter>
     <parameter key="step_definition.class">Everzet\Behat\Definition\StepDefinition</parameter>
+    <parameter key="tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
   </parameters>
   <services>
     <service id="event_dispatcher" class="%event_dispatcher.class%" shared="true">
@@ -28,17 +29,21 @@
     <service id="environment" class="%environment.class%" shared="false">
       <argument>%environment.file%</argument>
     </service>
-    <service id="formatter" class="%formatter.class%" shared="false">
+    <service id="formatter" class="%formatter.class%" shared="true">
       <argument type="service" id="service_container" />
       <tag name="events_listener" />
     </service>
-    <service id="features_loader" class="%features_loader.class%" shared="false">
+    <service id="features_loader" class="%features_loader.class%" shared="true">
       <argument>%features.path%</argument>
       <argument type="service" id="service_container" />
     </service>
     <service id="steps_loader" class="%steps_loader.class%" shared="true">
       <argument>%steps.path%</argument>
       <argument type="service" id="service_container" />
+    </service>
+    <service id="tag_filter" class="%tag_filter.class%" shared="true">
+      <argument type="service" id="service_container" />
+      <tag name="events_listener" />
     </service>
   </services>
 </container>
