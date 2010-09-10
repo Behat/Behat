@@ -32,7 +32,7 @@ class BehatApplication extends Application
      */
     public function __construct()
     {
-        parent::__construct('Behat','0.1.1');
+        parent::__construct('Behat','0.1.2');
 
         $this->definition = new InputDefinition(array(
             new InputOption('--help',           '-H', InputOption::PARAMETER_NONE, 'Display this help message.'),
