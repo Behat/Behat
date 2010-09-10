@@ -87,6 +87,16 @@ abstract class BaseRunner implements RunnerInterface, \Iterator
     }
 
     /**
+     * Sets child runners array
+     *
+     * @param   array   $runners    array of RunnerInstance
+     */
+    protected function setChildRunners(array $runners)
+    {
+        $this->childs = $runners;
+    }
+
+    /**
      * @see \Iterator
      */
     public function key()

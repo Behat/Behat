@@ -3,6 +3,7 @@
 namespace Everzet\Behat\Runner;
 
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Element\FeatureElement;
 use Everzet\Gherkin\Element\Scenario\ScenarioElement;
@@ -40,72 +41,36 @@ class FeatureRunner extends BaseRunner implements RunnerInterface
                                 RunnerInterface $parent)
     {
         $this->feature  = $feature;
-        $tagsFilter     = $container->getParameter('filter.tags');
 
         foreach ($feature->getScenarios() as $scenario) {
-            if ($this->isScenarioSatisfiesTagEx($feature, $scenario, $tagsFilter)) {
-                if ($scenario instanceof ScenarioOutlineElement) {
-                    $this->addChildRunner(new ScenarioOutlineRunner(
-                        $scenario
-                      , $feature->getBackground()
-                      , $container
-                      , $this
-                    ));
-                } elseif ($scenario instanceof ScenarioElement) {
-                    $this->addChildRunner(new ScenarioRunner(
-                        $scenario
-                      , $feature->getBackground()
-                      , $container
-                      , $this
-                    ));
-                } else {
-                    throw new BehaviorException('Unknown scenario type: ' . get_class($scenario));
-                }
+            if ($scenario instanceof ScenarioOutlineElement) {
+                $this->addChildRunner(new ScenarioOutlineRunner(
+                    $scenario
+                  , $feature->getBackground()
+                  , $container
+                  , $this
+                ));
+            } elseif ($scenario instanceof ScenarioElement) {
+                $this->addChildRunner(new ScenarioRunner(
+                    $scenario
+                  , $feature->getBackground()
+                  , $container
+                  , $this
+                ));
+            } else {
+                throw new BehaviorException('Unknown scenario type: ' . get_class($scenario));
             }
         }
 
-        parent::__construct('feature', $container->getEventDispatcherService(), $parent);
-    }
+        // Filter scenarios
+        $dispatcher = $container->getEventDispatcherService();
+        $event      = new Event($this, 'feature.test.filter_scenarios');
+        $dispatcher->filter($event, $this->getChildRunners());
 
-    /**
-     * Checks if scenario satisfies tag filter expression
-     *
-     * @param   FeatureElement  $feature        parent feature
-     * @param   ScenarioElement $scenario       scenario
-     * @param   string          $tagExpression  expression
-     * 
-     * @return  boolean
-     */
-    protected function isScenarioSatisfiesTagEx(FeatureElement $feature, ScenarioElement $scenario, 
-                                                $tagExpression)
-    {
-        if ($tagExpression) {
-            $tags = explode(',', $tagExpression);
+        // Write back filtered scenarios
+        $this->setChildRunners($event->getReturnValue());
 
-            $satisfies = false;
-
-            foreach ($tags as $exp) {
-                $exp = trim($exp);
-
-                if ('~' === $exp[0]) {
-                    $tag = substr($exp, 2);
-
-                    if (!$scenario->hasTag($tag) && !$feature->hasTag($tag)) {
-                        $satisfies = true;
-                    }
-                } else {
-                    $tag = substr($exp, 1);
-
-                    if ($scenario->hasTag($tag) || $feature->hasTag($tag)) {
-                        $satisfies = true;
-                    }
-                }
-            }
-
-            return $satisfies;
-        } else {
-            return true;
-        }
+        parent::__construct('feature', $dispatcher, $parent);
     }
 
     /**
