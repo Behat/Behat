@@ -30,11 +30,11 @@ class FeaturesLoader
     /**
      * Inits loader.
      *
-     * @param   string          $path       base path
+     * @param   string|array    $paths      features path(s)
      * @param   Container       $container  dependency container
      * @param   EventDispatcher $dispatcher event dispatcher
      */
-    public function __construct($path, Container $container, EventDispatcher $dispatcher)
+    public function __construct($paths, Container $container, EventDispatcher $dispatcher)
     {
         $dispatcher->notify(new Event($this, 'features.load.before'));
 
@@ -44,9 +44,10 @@ class FeaturesLoader
             $this->featuresRunner = new FeaturesRunner($file, $container);
         } else {
             $finder = new Finder();
-            $files  = $finder->files()->name('*.feature')->in($path);
-
-            $this->featuresRunner = new FeaturesRunner($files, $container);
+            foreach ((array) $paths as $path) {
+                $files  = $finder->files()->name('*.feature')->in($path);
+                $this->featuresRunner = new FeaturesRunner($files, $container);
+            }
         }
 
         $dispatcher->notify(new Event($this, 'features.load.after'));

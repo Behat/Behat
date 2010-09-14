@@ -25,16 +25,18 @@ class HooksLoader
     /**
      * Inits loader
      *
-     * @param   string          $hooksFile  hook file to load from
+     * @param   string|array    $hooksFile  file or list of files to load hooks from
      * @param   EventDispatcher $dispatcher event dispatcher
      */
-    public function __construct($hooksFile, EventDispatcher $dispatcher)
+    public function __construct($hooksFiles, EventDispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
 
-        if (null !== $hooksFile && is_file($hooksFile)) {
-            $hooks = $this;
-            require $hooksFile;
+        foreach ((array) $hooksFiles as $hooksFile) {
+            if (null !== $hooksFile && is_file($hooksFile)) {
+                $hooks = $this;
+                require $hooksFile;
+            }
         }
     }
 

@@ -39,11 +39,11 @@ class StepsLoader
     /**
      * Creates steps container & load step definitions
      *
-     * @param   string          $path       step definitions path
+     * @param   string|array    $paths      step definitions path(s)
      * @param   Container       $container  dependency container
      * @param   EventDispatcher $dispatcher event dispatcher
      */
-    public function __construct($path, Container $container, EventDispatcher $dispatcher)
+    public function __construct($paths, Container $container, EventDispatcher $dispatcher)
     {
         $dispatcher->notify(new Event($this, 'steps.load.before'));
 
@@ -51,8 +51,10 @@ class StepsLoader
         $steps              = $this;
 
         $finder = new Finder();
-        foreach ($finder->files()->name('*.php')->in($path) as $definitionFile) {
-            require $definitionFile;
+        foreach ((array) $paths as $path) {
+            foreach ($finder->files()->name('*.php')->in($path) as $definitionFile) {
+                require $definitionFile;
+            }
         }
 
         $dispatcher->notify(new Event($this, 'steps.load.after'));
