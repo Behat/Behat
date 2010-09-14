@@ -61,7 +61,7 @@ class WorldEnvironment implements EnvironmentInterface
             'Call to undefined method ' . get_class($this) . '::' . $fn .
             ' in ' . $trace[0]['file'] .
             ' on line ' . $trace[0]['line'],
-            E_FATAL_ERROR
+            E_USER_ERROR
         );
     }
   }
