@@ -8,7 +8,9 @@
  * file that was distributed with this source code.
  */
 
-require_once __DIR__.'/vendor/symfony/src/Symfony/Framework/UniversalClassLoader.php';
+if (!class_exists('Symfony\\Framework\\UniversalClassLoader')) {
+    require_once __DIR__.'/vendor/symfony/src/Symfony/Framework/UniversalClassLoader.php';
+}
 use Symfony\Framework\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
