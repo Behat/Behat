@@ -42,10 +42,13 @@ class TestCommand extends Command
         $this->container                = new ContainerBuilder();
         $xmlLoader                      = new XmlFileLoader($this->container);
         $xmlLoader->load(               __DIR__ . '/../../ServiceContainer/container.xml');
-        $this->container->setParameter( 'i18n.path', realpath(__DIR__ . '/../../../../../i18n'));
+
+        // Set initial container parameters
+        $this->container->setParameter('i18n.path', realpath(__DIR__ . '/../../../../../i18n'));
+        $this->container->setParameter('cwd',       $cwd = getcwd());
 
         // Load external config file (behat.(xml/yml))
-        if (is_file(($cwd = getcwd()) . '/behat.xml')) {
+        if (is_file($cwd . '/behat.xml')) {
             $xmlLoader->import($cwd . '/behat.xml');
         } elseif (is_file($cwd . '/behat.yml')) {
             $yamlLoader = new YamlFileLoader($this->container);
@@ -97,13 +100,18 @@ class TestCommand extends Command
             ucfirst($this->container->getParameter('formatter.name'))
         );
         foreach ($this->container->getParameterBag()->all() as $key => $value) {
-            $container = $this->container;
-            $this->container->setParameter($key,
-                preg_replace_callback('/%%([^%]+)%%/', function($matches) use($container) {
-                    return $container->getParameter($matches[1]);
-                }
-              , $value
-            ));
+            $compiled   = array();
+            $container  = $this->container;
+            foreach ((array) $value as $i => $item) {
+                $compiled[$i] = 
+                    preg_replace_callback('/%%([^%]+)%%/', function($matches) use($container) {
+                        return $container->getParameter($matches[1]);
+                    }, $item);
+            }
+            if (!isset($compiled[0])) {
+                $compiled[0] = $value;
+            }
+            $this->container->setParameter($key, is_array($value) ? $compiled : $compiled[0]);
         }
 
         // Load & bind hooks
@@ -113,9 +121,9 @@ class TestCommand extends Command
         try {
             $this->container->getStepsLoaderService();
         } catch (Redundant $e) {
-            $output->write(sprintf("\033[31m%s\033[0m",
-                strtr($e->getMessage(), array($basePath . '/' => ''))
-            ), true, 1);
+            $output->write(sprintf("\033[31m%s\033[0m", strtr($e->getMessage(),
+                array($this->container->getParameter('features.path') . '/' => '')
+            )), true, 1);
             return 1;
         }
 
