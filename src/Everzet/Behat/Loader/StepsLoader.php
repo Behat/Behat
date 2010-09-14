@@ -3,6 +3,8 @@
 namespace Everzet\Behat\Loader;
 
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Finder\Finder;
 
 use Everzet\Gherkin\Element\StepElement;
@@ -37,11 +39,14 @@ class StepsLoader
     /**
      * Creates steps container & load step definitions
      *
-     * @param   string    $path       step definitions path
-     * @param   Container $container  dependency container
+     * @param   string          $path       step definitions path
+     * @param   Container       $container  dependency container
+     * @param   EventDispatcher $dispatcher event dispatcher
      */
-    public function __construct($path, Container $container)
+    public function __construct($path, Container $container, EventDispatcher $dispatcher)
     {
+        $dispatcher->notify(new Event($this, 'steps.load.before'));
+
         $this->container    = $container;
         $steps              = $this;
 
@@ -49,6 +54,8 @@ class StepsLoader
         foreach ($finder->files()->name('*.php')->in($path) as $definitionFile) {
             require $definitionFile;
         }
+
+        $dispatcher->notify(new Event($this, 'steps.load.after'));
     }
 
     /**

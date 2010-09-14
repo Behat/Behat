@@ -106,6 +106,9 @@ class TestCommand extends Command
             ));
         }
 
+        // Load & bind hooks
+        $this->container->getHooksLoaderService();
+
         // Check if we had redundant definitions
         try {
             $this->container->getStepsLoaderService();

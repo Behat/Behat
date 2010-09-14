@@ -3,6 +3,8 @@
 namespace Everzet\Behat\Loader;
 
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Finder\Finder;
 
 use Everzet\Behat\Runner\FeaturesRunner;
@@ -28,11 +30,14 @@ class FeaturesLoader
     /**
      * Inits loader.
      *
-     * @param   string      $path       base path
-     * @param   Container   $container  dependency container
+     * @param   string          $path       base path
+     * @param   Container       $container  dependency container
+     * @param   EventDispatcher $dispatcher event dispatcher
      */
-    public function __construct($path, Container $container)
+    public function __construct($path, Container $container, EventDispatcher $dispatcher)
     {
+        $dispatcher->notify(new Event($this, 'features.load.before'));
+
         if (is_file($container->getParameter('features.file'))) {
             $file = $container->getParameter('features.file');
 
@@ -43,6 +48,8 @@ class FeaturesLoader
 
             $this->featuresRunner = new FeaturesRunner($files, $container);
         }
+
+        $dispatcher->notify(new Event($this, 'features.load.after'));
     }
 
     /**
