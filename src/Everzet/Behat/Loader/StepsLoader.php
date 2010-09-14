@@ -50,10 +50,12 @@ class StepsLoader
         $this->container    = $container;
         $steps              = $this;
 
-        $finder = new Finder();
         foreach ((array) $paths as $path) {
-            foreach ($finder->files()->name('*.php')->in($path) as $definitionFile) {
-                require $definitionFile;
+            if (is_dir($path)) {
+                $finder = new Finder();
+                foreach ($finder->files()->name('*.php')->in($path) as $definitionFile) {
+                    require $definitionFile;
+                }
             }
         }
 

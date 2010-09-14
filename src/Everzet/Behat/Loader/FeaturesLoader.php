@@ -43,8 +43,8 @@ class FeaturesLoader
 
             $this->featuresRunner = new FeaturesRunner($file, $container);
         } else {
-            $finder = new Finder();
             foreach ((array) $paths as $path) {
+                $finder = new Finder();
                 $files  = $finder->files()->name('*.feature')->in($path);
                 $this->featuresRunner = new FeaturesRunner($files, $container);
             }
