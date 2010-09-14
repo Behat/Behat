@@ -61,22 +61,22 @@ class PrettyFormatter implements FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
-        $dispatcher->connect('feature.test.before',         array($this, 'printFeatureHeader'));
+        $dispatcher->connect('feature.test.before',         array($this, 'printFeatureHeader'), 10);
 
-        $dispatcher->connect('scenario_outline.test.before',array($this, 'printOutlineHeader'));
-        $dispatcher->connect('scenario_outline.test.after', array($this, 'printOutlineFooter'));
+        $dispatcher->connect('scenario_outline.test.before',array($this, 'printOutlineHeader'), 10);
+        $dispatcher->connect('scenario_outline.test.after', array($this, 'printOutlineFooter'), 10);
 
-        $dispatcher->connect('scenario.test.before',        array($this, 'printScenarioHeader'));
-        $dispatcher->connect('scenario.test.after',         array($this, 'printScenarioFooter'));
+        $dispatcher->connect('scenario.test.before',        array($this, 'printScenarioHeader'),10);
+        $dispatcher->connect('scenario.test.after',         array($this, 'printScenarioFooter'),10);
 
-        $dispatcher->connect('background.test.before',      array($this, 'printBackgroundHeader'));
-        $dispatcher->connect('background.test.after',       array($this, 'printBackgroundFooter'));
+        $dispatcher->connect('background.test.before',  array($this, 'printBackgroundHeader'),  10);
+        $dispatcher->connect('background.test.after',   array($this, 'printBackgroundFooter'),  10);
 
-        $dispatcher->connect('step.test.after',             array($this, 'printStep'));
-        $dispatcher->connect('step.skip.after',             array($this, 'printStep'));
+        $dispatcher->connect('step.test.after',         array($this, 'printStep'),              10);
+        $dispatcher->connect('step.skip.after',         array($this, 'printStep'),              10);
 
-        $dispatcher->connect('features.test.after',         array($this, 'printStatistics'));
-        $dispatcher->connect('features.test.after',         array($this, 'printSnippets'));
+        $dispatcher->connect('features.test.after',     array($this, 'printStatistics'),        10);
+        $dispatcher->connect('features.test.after',     array($this, 'printSnippets'),          10);
     }
 
     /**

@@ -31,14 +31,14 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
-        $dispatcher->connect('step.test.after',             array($this, 'printStep'));
-        $dispatcher->connect('step.skip.after',             array($this, 'printStep'));
+        $dispatcher->connect('step.test.after',             array($this, 'printStep'),          10);
+        $dispatcher->connect('step.skip.after',             array($this, 'printStep'),          10);
 
-        $dispatcher->connect('features.test.after',         array($this, 'printEmptyLine'));
-        $dispatcher->connect('features.test.after',         array($this, 'printFailedSteps'));
-        $dispatcher->connect('features.test.after',         array($this, 'printPendingSteps'));
-        $dispatcher->connect('features.test.after',         array($this, 'printStatistics'));
-        $dispatcher->connect('features.test.after',         array($this, 'printSnippets'));
+        $dispatcher->connect('features.test.after',         array($this, 'printEmptyLine'),     10);
+        $dispatcher->connect('features.test.after',         array($this, 'printFailedSteps'),   10);
+        $dispatcher->connect('features.test.after',         array($this, 'printPendingSteps'),  10);
+        $dispatcher->connect('features.test.after',         array($this, 'printStatistics'),    10);
+        $dispatcher->connect('features.test.after',         array($this, 'printSnippets'),      10);
     }
 
     /**
