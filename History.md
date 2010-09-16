@@ -1,3 +1,10 @@
+0.1.4 / 2010-09-16
+==================
+
+  * refactored code
+  * removed logic from object constructors
+  * added Loader & Filter interfaces
+
 0.1.3 / 2010-09-14
 ==================
 
