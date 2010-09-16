@@ -25,7 +25,6 @@ use Everzet\Gherkin\Element\Inline\ExamplesElement;
 /**
  * Gherkin Parser.
  *
- * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Parser

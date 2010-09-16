@@ -13,7 +13,6 @@ namespace Everzet\Behat\Exception;
 /**
  * Ambiguous Exception.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Ambiguous extends BehaviorException

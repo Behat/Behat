@@ -13,7 +13,6 @@ namespace Everzet\Behat\Exception;
 /**
  * Pending exception (throw this to mark pending definition).
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Pending extends BehaviorException

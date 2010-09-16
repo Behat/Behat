@@ -13,7 +13,6 @@ namespace Everzet\Gherkin\Element\Inline;
 /**
  * PyString.
  *
- * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PyStringElement

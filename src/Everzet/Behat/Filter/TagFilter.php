@@ -19,10 +19,9 @@ use Everzet\Behat\Runner\ScenarioOutlineRunner;
 /**
  * Filters scenarios by feature/scenario tag.
  *
- * @package    Behat
  * @author     Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TagFilter
+class TagFilter implements FilterInterface
 {
     protected $tags;
 
@@ -39,7 +38,7 @@ class TagFilter
     /**
      * Registers listeners on filter
      *
-     * @param   EventDispatcher $dispatcher event dispatcher
+     * @see     Everzet\Behat\Filter\FilterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {

@@ -22,7 +22,6 @@ use Everzet\Behat\Console\Command\TestCommand;
 /**
  * Behat main application.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BehatApplication extends Application

@@ -20,7 +20,9 @@
   </parameters>
   <services>
     <service id="event_dispatcher" class="%event_dispatcher.class%" shared="true">
-      <argument type="service" id="service_container" />
+      <call method="bindEventListeners">
+        <argument type="service" id="service_container" />
+      </call>
     </service>
     <service id="i18n" class="%i18n.class%" shared="false">
       <argument>%i18n.path%</argument>
@@ -29,23 +31,22 @@
       <argument type="service" id="i18n" />
     </service>
     <service id="environment" class="%environment.class%" shared="false">
-      <argument>%environment.file%</argument>
+      <call method="loadEnvironmentFile">
+        <argument>%environment.file%</argument>
+      </call>
     </service>
     <service id="formatter" class="%formatter.class%" shared="true">
       <argument type="service" id="service_container" />
       <tag name="events_listener" />
     </service>
     <service id="hooks_loader" class="%hooks_loader.class%" shared="true">
-      <argument>%hooks.file%</argument>
       <argument type="service" id="event_dispatcher" />
     </service>
     <service id="features_loader" class="%features_loader.class%" shared="true">
-      <argument>%features.path%</argument>
       <argument type="service" id="service_container" />
       <argument type="service" id="event_dispatcher" />
     </service>
     <service id="steps_loader" class="%steps_loader.class%" shared="true">
-      <argument>%steps.path%</argument>
       <argument type="service" id="service_container" />
       <argument type="service" id="event_dispatcher" />
     </service>

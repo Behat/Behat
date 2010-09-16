@@ -20,7 +20,6 @@ use Everzet\Behat\Environment\EnvironmentInterface;
  * Background runner.
  * Runs background element tests.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BackgroundRunner extends BaseRunner implements RunnerInterface

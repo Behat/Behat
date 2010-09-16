@@ -19,7 +19,6 @@ use Everzet\Gherkin\Element\Scenario\BackgroundElement;
  * Scenario outline runner.
  * Runs 'exampled' scenarios.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ScenarioOutlineRunner extends BaseRunner implements RunnerInterface, \Iterator

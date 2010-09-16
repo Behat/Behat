@@ -15,7 +15,6 @@ use Everzet\Gherkin\I18n;
 /**
  * Regular expressions container.
  *
- * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class RegexHolder

@@ -13,7 +13,6 @@ namespace Everzet\Behat\Environment;
 /**
  * World container basic implementation.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class WorldEnvironment implements EnvironmentInterface
@@ -21,16 +20,16 @@ class WorldEnvironment implements EnvironmentInterface
   protected $values = array();
 
   /**
-   * Constructs World instance.
-   *
-   * @param     string  $file       file path to require on flushes
+   * Loads environment configuration from env.php (or different env file)
+   * 
+   * @see   Everzet\Behat\Environment\EnvironmentInterface
    */
-  public function __construct($envFile)
+  public function loadEnvironmentFile($envFile)
   {
-      if (null !== $envFile && is_file($envFile)) {
-          $world = $this;
-          require $envFile;
-      }
+      if (is_file($envFile)) {
+            $world = $this;
+            require $envFile;
+        }
   }
 
   /**

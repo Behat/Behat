@@ -15,7 +15,6 @@ use Everzet\Gherkin\I18n;
 /**
  * Section.
  *
- * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class SectionElement

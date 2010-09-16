@@ -19,7 +19,6 @@ use Everzet\Behat\Environment\EnvironmentInterface;
 /**
  * Step Definition holder.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class StepDefinition

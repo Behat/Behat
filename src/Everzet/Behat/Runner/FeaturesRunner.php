@@ -17,7 +17,6 @@ use Symfony\Component\Finder\Finder;
  * Features runner.
  * Runs all initialized features runners.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FeaturesRunner extends BaseRunner implements RunnerInterface

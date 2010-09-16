@@ -1,6 +1,8 @@
 <?php
 
-namespace Everzet\Gherkin;
+namespace Everzet\Behat\Loader;
+
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /*
  * This file is part of the behat package.
@@ -11,10 +13,16 @@ namespace Everzet\Gherkin;
  */
 
 /**
- * Gherkin parser exception.
+ * Loader interface
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ParserException extends \Exception
+interface LoaderInterface
 {
+    /**
+     * Loads files/scripts
+     *
+     * @param   string  $paths  paths to load from
+     */
+    public function load($paths);
 }

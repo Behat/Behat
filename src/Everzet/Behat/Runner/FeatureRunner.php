@@ -23,7 +23,6 @@ use Everzet\Behat\Exception\BehaviorException;
  * Feature runner.
  * Runs feature element tests.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FeatureRunner extends BaseRunner implements RunnerInterface

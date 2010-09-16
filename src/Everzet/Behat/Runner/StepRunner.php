@@ -24,7 +24,6 @@ use Everzet\Behat\Environment\EnvironmentInterface;
  * Step runner.
  * Runs step tests.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class StepRunner extends BaseRunner implements RunnerInterface

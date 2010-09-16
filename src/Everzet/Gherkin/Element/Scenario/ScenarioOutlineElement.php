@@ -15,7 +15,6 @@ use Everzet\Gherkin\Element\Inline\ExamplesElement;
 /**
  * Scenario Outline.
  *
- * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ScenarioOutlineElement extends ScenarioElement

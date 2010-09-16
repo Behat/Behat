@@ -13,7 +13,6 @@ namespace Everzet\Gherkin;
 /**
  * I18n.
  *
- * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class I18n

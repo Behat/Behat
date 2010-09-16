@@ -16,7 +16,6 @@ use Everzet\Gherkin\Element\Scenario\ScenarioElement;
 /**
  * Feature.
  *
- * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FeatureElement extends SectionElement

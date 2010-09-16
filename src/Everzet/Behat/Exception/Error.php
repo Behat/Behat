@@ -13,7 +13,6 @@ namespace Everzet\Behat\Exception;
 /**
  * Error handler Exception.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Error extends BehaviorException

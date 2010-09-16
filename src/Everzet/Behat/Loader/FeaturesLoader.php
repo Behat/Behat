@@ -20,37 +20,50 @@ use Everzet\Behat\Runner\FeaturesRunner;
 /**
  * Loads feature/features & pass them into FeaturesRunner.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeaturesLoader
+class FeaturesLoader implements LoaderInterface
 {
+    protected $container;
+    protected $dispatcher;
     protected $featuresRunner;
 
     /**
      * Inits loader.
      *
-     * @param   string|array    $paths      features path(s)
      * @param   Container       $container  dependency container
      * @param   EventDispatcher $dispatcher event dispatcher
      */
-    public function __construct($paths, Container $container, EventDispatcher $dispatcher)
+    public function __construct(Container $container, EventDispatcher $dispatcher)
     {
-        $dispatcher->notify(new Event($this, 'features.load.before'));
+        $this->container    = $container;
+        $this->dispatcher   = $dispatcher;
+    }
 
-        if (is_file($container->getParameter('features.file'))) {
-            $file = $container->getParameter('features.file');
+    /**
+     * Loads features from specified path(s)
+     *
+     * @param   string|array    $paths  features path(s)
+     * 
+     * @return  FeaturesRunner          features runner instance
+     */
+    public function load($paths)
+    {
+        $this->dispatcher->notify(new Event($this, 'features.load.before'));
 
-            $this->featuresRunner = new FeaturesRunner($file, $container);
+        if (!is_array($paths) && is_file($paths)) {
+            $this->featuresRunner = new FeaturesRunner($paths, $this->container);
         } else {
             foreach ((array) $paths as $path) {
                 $finder = new Finder();
                 $files  = $finder->files()->name('*.feature')->in($path);
-                $this->featuresRunner = new FeaturesRunner($files, $container);
+                $this->featuresRunner = new FeaturesRunner($files, $this->container);
             }
         }
 
-        $dispatcher->notify(new Event($this, 'features.load.after'));
+        $this->dispatcher->notify(new Event($this, 'features.load.after'));
+
+        return $this->featuresRunner;
     }
 
     /**

@@ -21,7 +21,6 @@ use Everzet\Behat\Runner\BackgroundRunner;
 /**
  * Console progress output formatter (phpUnit-like).
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ProgressFormatter extends PrettyFormatter implements FormatterInterface

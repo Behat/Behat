@@ -13,7 +13,6 @@ namespace Everzet\Behat\Runner;
 /**
  * Runners interface.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface RunnerInterface

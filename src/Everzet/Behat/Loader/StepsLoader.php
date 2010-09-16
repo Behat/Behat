@@ -28,28 +28,38 @@ use Everzet\Behat\Exception\Undefined;
  * Steps loader.
  * Loads & initializates step definitions.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepsLoader
+class StepsLoader implements LoaderInterface
 {
     protected $container;
+    protected $dispatcher;
     protected $steps = array();
 
     /**
-     * Creates steps container & load step definitions
+     * Creates steps loader
      *
-     * @param   string|array    $paths      step definitions path(s)
      * @param   Container       $container  dependency container
      * @param   EventDispatcher $dispatcher event dispatcher
      */
-    public function __construct($paths, Container $container, EventDispatcher $dispatcher)
+    public function __construct(Container $container, EventDispatcher $dispatcher)
     {
-        $dispatcher->notify(new Event($this, 'steps.load.before'));
-
         $this->container    = $container;
-        $steps              = $this;
+        $this->dispatcher   = $dispatcher;
+    }
 
+    /**
+     * Loads step definitions from specified path(s)
+     *
+     * @param   string|array    $paths      step definitions path(s)
+     * 
+     * @return  Everzet\Behat\Loader\StepsLoader
+     */
+    public function load($paths)
+    {
+        $this->dispatcher->notify(new Event($this, 'steps.load.before'));
+
+        $steps = $this;
         foreach ((array) $paths as $path) {
             if (is_dir($path)) {
                 $finder = new Finder();
@@ -59,7 +69,7 @@ class StepsLoader
             }
         }
 
-        $dispatcher->notify(new Event($this, 'steps.load.after'));
+        $this->dispatcher->notify(new Event($this, 'steps.load.after'));
     }
 
     /**

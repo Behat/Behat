@@ -24,7 +24,6 @@ use Everzet\Behat\Exception\Redundant;
 /**
  * Behat application test command.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class TestCommand extends Command
@@ -39,9 +38,9 @@ class TestCommand extends Command
         $this->setName('test');
 
         // Load container
-        $this->container                = new ContainerBuilder();
-        $xmlLoader                      = new XmlFileLoader($this->container);
-        $xmlLoader->load(               __DIR__ . '/../../ServiceContainer/container.xml');
+        $this->container    = new ContainerBuilder();
+        $xmlLoader          = new XmlFileLoader($this->container);
+        $xmlLoader->load(__DIR__ . '/../../ServiceContainer/container.xml');
 
         // Set initial container parameters
         $this->container->setParameter('i18n.path', realpath(__DIR__ . '/../../../../../i18n'));
@@ -55,6 +54,7 @@ class TestCommand extends Command
             $yamlLoader->import($cwd . '/behat.yml');
         }
 
+        // Set commands default parameters from container loaded ones
         $this->setDefinition(array(
             new InputArgument('features',               InputArgument::OPTIONAL
               , 'Features path'
@@ -82,20 +82,20 @@ class TestCommand extends Command
         // Find features path
         if (is_dir($featuresPath . '/features')) {
             $featuresPath = $featuresPath . '/features';
-        } elseif (is_file($featuresPath)) {    
+        } elseif (is_file($featuresPath)) {
             $featureFile    = $featuresPath;
             $featuresPath   = dirname($featuresPath);
         }
 
         // Set container parameters
         $this->container->set('output',                     $output);
-        $this->container->setParameter('features.path',     $featuresPath);
         $this->container->setParameter('features.file',     $featureFile);
+        $this->container->setParameter('features.path',     $featuresPath);
         $this->container->setParameter('formatter.name',    $input->getOption('format'));
         $this->container->setParameter('filter.tags',       $input->getOption('tags'));
         $this->container->setParameter('formatter.verbose', $input->getOption('verbose'));
 
-        // Fill embed parameter holders
+        // Fill embedded parameter holders
         $this->container->setParameter('formatter.name', 
             ucfirst($this->container->getParameter('formatter.name'))
         );
@@ -103,10 +103,12 @@ class TestCommand extends Command
             $compiled   = array();
             $container  = $this->container;
             foreach ((array) $value as $i => $item) {
-                $compiled[$i] = 
-                    preg_replace_callback('/%%([^%]+)%%/', function($matches) use($container) {
+                $compiled[$i] = preg_replace_callback('/%%([^%]+)%%/', 
+                    function($matches) use($container) {
                         return $container->getParameter($matches[1]);
-                    }, $item);
+                    }
+                  , $item
+                );
             }
             if (!isset($compiled[0])) {
                 $compiled[0] = $value;
@@ -114,12 +116,16 @@ class TestCommand extends Command
             $this->container->setParameter($key, is_array($value) ? $compiled : $compiled[0]);
         }
 
-        // Load & bind hooks
-        $this->container->getHooksLoaderService();
+        // Load hooks
+        $this->container->
+            getHooksLoaderService()->
+            load($this->container->getParameter('hooks.file'));
 
-        // Check if we had redundant definitions
+        // Load steps
         try {
-            $this->container->getStepsLoaderService();
+            $this->container->
+                getStepsLoaderService()->
+                load($this->container->getParameter('steps.path'));
         } catch (Redundant $e) {
             $output->write(sprintf("\033[31m%s\033[0m", strtr($e->getMessage(),
                 array($this->container->getParameter('features.path') . '/' => '')
@@ -127,10 +133,16 @@ class TestCommand extends Command
             return 1;
         }
 
-        // Get features loader, run test suite & return exit code
-        return $this->container->
+        // Load features runner
+        $runner = $this->container->
             getFeaturesLoaderService()->
-            getFeaturesRunner()->
-            run();
+            load(
+                is_file($this->container->getParameter('features.file'))
+                ? $this->container->getParameter('features.file')
+                : $this->container->getParameter('features.path')
+            );
+
+        // Run test suite & return exit code
+        return $runner->run();
     }
 }

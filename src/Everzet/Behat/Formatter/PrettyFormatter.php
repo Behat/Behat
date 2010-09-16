@@ -28,7 +28,6 @@ use Everzet\Behat\Runner\BackgroundRunner;
 /**
  * Console pretty output formatter.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PrettyFormatter implements FormatterInterface

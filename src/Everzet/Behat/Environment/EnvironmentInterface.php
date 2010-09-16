@@ -13,15 +13,14 @@ namespace Everzet\Behat\Environment;
 /**
  * Environment container/loader interface.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface EnvironmentInterface
 {
     /**
-     * Constructs environment instance.
-     *
+     * Loads environment configuration from env.php (or different env file)
+     * 
      * @param     string  $file       file path to include initializations from
      */
-    public function __construct($envFile);
+    public function loadEnvironmentFile($envFile);
 }

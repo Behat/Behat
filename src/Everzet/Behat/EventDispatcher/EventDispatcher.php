@@ -18,17 +18,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Event dispatcher.
  * Dispatches custom Behat events to hook with.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class EventDispatcher extends BaseEventDispatcher
 {
     /**
-     * Creates dispatcher & run registerListeners on all services with tag 'event_listener'
+     * Run registerListeners on all container services with tag 'event_listener'
      *
      * @param   ContainerInterface  $container  dependency container
      */
-    public function __construct(ContainerInterface $container)
+    public function bindEventListeners(ContainerInterface $container)
     {
         foreach ($container->findTaggedServiceIds('events_listener') as $id => $tag) {
             $container->get($id)->registerListeners($this);

@@ -17,7 +17,6 @@ use Symfony\Component\EventDispatcher\Event;
  * Abstract runner instance.
  * Implements base runners actions.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class BaseRunner implements RunnerInterface, \Iterator

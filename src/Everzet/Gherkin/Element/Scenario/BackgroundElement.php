@@ -17,7 +17,6 @@ use Everzet\Gherkin\Element\StepElement;
 /**
  * Background.
  *
- * @package     Gherkin
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BackgroundElement extends SectionElement

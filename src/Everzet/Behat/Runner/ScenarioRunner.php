@@ -19,7 +19,6 @@ use Everzet\Gherkin\Element\Scenario\BackgroundElement;
  * Scenario runner.
  * Runs scenario steps runners.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ScenarioRunner extends BaseRunner implements RunnerInterface

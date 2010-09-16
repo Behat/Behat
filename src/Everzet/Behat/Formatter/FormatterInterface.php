@@ -16,7 +16,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 /**
  * Base interface for Behat output formatters.
  *
- * @package     Behat
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface FormatterInterface
