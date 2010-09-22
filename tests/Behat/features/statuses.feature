@@ -22,6 +22,7 @@ Feature: Statuses
 
         Scenario:
           Then I must have 10
+          Then String must be 'string'
 
         Scenario:
           When I have entered 30
@@ -30,10 +31,10 @@ Feature: Statuses
     When I run "behat -f progress features/statuses.feature"
     Then it should fail with:
       """
-      UUUUU
+      UUUUUU
 
       2 scenarios (2 undefined)
-      5 steps (5 undefined)
+      6 steps (6 undefined)
 
       You can implement step definitions for undefined steps with these snippets:
 
@@ -42,6 +43,10 @@ Feature: Statuses
       });
 
       $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
+          throw new \Everzet\Behat\Exception\Pending();
+      });
+
+      $steps->Then('/^String must be \'([^\']*)\'$/', function($world, $arg1) {
           throw new \Everzet\Behat\Exception\Pending();
       });
       """

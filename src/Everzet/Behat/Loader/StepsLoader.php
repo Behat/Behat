@@ -114,7 +114,7 @@ class StepsLoader implements LoaderInterface
         $text = $step->getText();
 
         $regexp = preg_replace(
-            array('/\"([^\"]*)\"/', '/(\d+)/'), array("\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
+            array('/\'([^\']*)\'/', '/\"([^\"]*)\"/', '/(\d+)/'), array("\'([^\']*)\'", "\"([^\"]*)\"", "(\\d+)"), $text, -1, $count
         );
 
         $args = array("\$world");
