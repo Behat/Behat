@@ -1,58 +1,63 @@
 <?xml version="1.0" ?>
 <container xmlns="http://www.symfony-project.org/schema/dic/services">
-  <parameters>
-    <parameter key="features.path">features</parameter>
-    <parameter key="steps.path">%%features.path%%/steps</parameter>
-    <parameter key="environment.file">%%features.path%%/support/env.php</parameter>
-    <parameter key="hooks.file">%%features.path%%/support/hooks.php</parameter>
-    <parameter key="formatter.name">pretty</parameter>
-    <parameter key="filter.tags"></parameter>
-    <parameter key="parser.class">Everzet\Gherkin\Parser</parameter>
-    <parameter key="i18n.class">Everzet\Gherkin\I18n</parameter>
-    <parameter key="event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
-    <parameter key="formatter.class">Everzet\Behat\Formatter\%%formatter.name%%Formatter</parameter>
-    <parameter key="environment.class">Everzet\Behat\Environment\WorldEnvironment</parameter>
-    <parameter key="hooks_loader.class">Everzet\Behat\Loader\HooksLoader</parameter>
-    <parameter key="features_loader.class">Everzet\Behat\Loader\FeaturesLoader</parameter>
-    <parameter key="steps_loader.class">Everzet\Behat\Loader\StepsLoader</parameter>
-    <parameter key="step_definition.class">Everzet\Behat\Definition\StepDefinition</parameter>
-    <parameter key="tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
-  </parameters>
-  <services>
-    <service id="event_dispatcher" class="%event_dispatcher.class%" shared="true">
-      <call method="bindEventListeners">
-        <argument type="service" id="service_container" />
-      </call>
-    </service>
-    <service id="i18n" class="%i18n.class%" shared="false">
-      <argument>%i18n.path%</argument>
-    </service>
-    <service id="parser" class="%parser.class%" shared="false">
-      <argument type="service" id="i18n" />
-    </service>
-    <service id="environment" class="%environment.class%" shared="false">
-      <call method="loadEnvironmentFile">
-        <argument>%environment.file%</argument>
-      </call>
-    </service>
-    <service id="formatter" class="%formatter.class%" shared="true">
-      <argument type="service" id="service_container" />
-      <tag name="events_listener" />
-    </service>
-    <service id="hooks_loader" class="%hooks_loader.class%" shared="true">
-      <argument type="service" id="event_dispatcher" />
-    </service>
-    <service id="features_loader" class="%features_loader.class%" shared="true">
-      <argument type="service" id="service_container" />
-      <argument type="service" id="event_dispatcher" />
-    </service>
-    <service id="steps_loader" class="%steps_loader.class%" shared="true">
-      <argument type="service" id="service_container" />
-      <argument type="service" id="event_dispatcher" />
-    </service>
-    <service id="tag_filter" class="%tag_filter.class%" shared="true">
-      <argument type="service" id="service_container" />
-      <tag name="events_listener" />
-    </service>
-  </services>
+    <parameters>
+        <parameter key="features.path">features</parameter>
+        <parameter key="steps.path">%%features.path%%/steps</parameter>
+        <parameter key="environment.file">%%features.path%%/support/env.php</parameter>
+        <parameter key="hooks.file">%%features.path%%/support/hooks.php</parameter>
+        <parameter key="formatter.name">pretty</parameter>
+        <parameter key="filter.tags"></parameter>
+        <parameter key="parser.class">Everzet\Gherkin\Parser</parameter>
+        <parameter key="i18n.class">Everzet\Gherkin\I18n</parameter>
+        <parameter key="i18n.path">%%dir.lib%%/i18n</parameter>
+        <parameter key="event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
+        <parameter key="formatter.class">Everzet\Behat\Formatter\%%formatter.name%%Formatter</parameter>
+        <parameter key="environment.class">Everzet\Behat\Environment\WorldEnvironment</parameter>
+        <parameter key="configuration_loader.class">Everzet\Behat\Loader\ConfigurationLoader</parameter>
+        <parameter key="hooks_loader.class">Everzet\Behat\Loader\HooksLoader</parameter>
+        <parameter key="features_loader.class">Everzet\Behat\Loader\FeaturesLoader</parameter>
+        <parameter key="steps_loader.class">Everzet\Behat\Loader\StepsLoader</parameter>
+        <parameter key="step_definition.class">Everzet\Behat\Definition\StepDefinition</parameter>
+        <parameter key="tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
+    </parameters>
+    <services>
+        <service id="configuration_loader" class="%configuration_loader.class%" shared="true">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="event_dispatcher" class="%event_dispatcher.class%" shared="true">
+            <call method="bindEventListeners">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="i18n" class="%i18n.class%" shared="false">
+            <argument>%i18n.path%</argument>
+        </service>
+        <service id="parser" class="%parser.class%" shared="false">
+            <argument type="service" id="i18n" />
+        </service>
+        <service id="environment" class="%environment.class%" shared="false">
+            <call method="loadEnvironmentFile">
+                <argument>%environment.file%</argument>
+            </call>
+        </service>
+        <service id="formatter" class="%formatter.class%" shared="true">
+            <argument type="service" id="service_container" />
+            <tag name="events_listener" />
+        </service>
+        <service id="hooks_loader" class="%hooks_loader.class%" shared="true">
+            <argument type="service" id="event_dispatcher" />
+        </service>
+        <service id="features_loader" class="%features_loader.class%" shared="true">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="event_dispatcher" />
+        </service>
+        <service id="steps_loader" class="%steps_loader.class%" shared="true">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="event_dispatcher" />
+        </service>
+        <service id="tag_filter" class="%tag_filter.class%" shared="true">
+            <argument type="service" id="service_container" />
+            <tag name="events_listener" />
+        </service>
+    </services>
 </container>
