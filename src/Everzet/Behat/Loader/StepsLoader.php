@@ -74,6 +74,8 @@ class StepsLoader implements LoaderInterface
 
     /**
      * Define a step with ->Given('/regex/', callback)
+     * OR call a step with ->Given('I enter "12" in the field', $world)
+     * OR even with arguments ->Given('I fill up fields', $world, $table)
      *
      * @param   string  $type       step type (Given/When/Then/And or localized one)
      * @param   string  $arguments  step regex & callback
@@ -82,21 +84,33 @@ class StepsLoader implements LoaderInterface
      */
     public function __call($type, $arguments)
     {
-        $debug = debug_backtrace();
-        $debug = $debug[1];
+        if (2 == count($arguments) && is_callable($arguments[1]))
+        {
+            $debug = debug_backtrace();
+            $debug = $debug[1];
 
-        $class = $this->container->getParameter('step_definition.class');
-        $definition = new $class(
-            $type, $arguments[0], $arguments[1], $debug['file'], $debug['line']
-        );
-
-        if (isset($this->steps[$definition->getRegex()])) {
-            throw new Redundant(
-                $definition, $this->steps[$definition->getRegex()]
+            $class = $this->container->getParameter('step_definition.class');
+            $definition = new $class(
+                $type, $arguments[0], $arguments[1], $debug['file'], $debug['line']
             );
-        }
 
-        $this->steps[$definition->getRegex()] = $definition;
+            if (isset($this->steps[$definition->getRegex()])) {
+                throw new Redundant(
+                    $definition, $this->steps[$definition->getRegex()]
+                );
+            }
+
+            $this->steps[$definition->getRegex()] = $definition;
+        } else {
+            $text   = array_shift($arguments);
+            $world  = array_shift($arguments);
+
+            $step   = new StepElement($type, $text);
+            $step->setArguments($arguments);
+
+            $definition = $this->findDefinition($step);
+            $definition->run($world);
+        }
 
         return $this;
     }
@@ -178,3 +192,4 @@ PHP
         return $matches[0];
     }
 }
+

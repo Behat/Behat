@@ -68,6 +68,11 @@ class StepElement
         return $text;
     }
 
+    public function setArguments(array $arguments)
+    {
+        $this->arguments = $arguments;
+    }
+
     public function addArgument($argument)
     {
         $this->arguments[] = $argument;
