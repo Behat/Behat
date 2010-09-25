@@ -1,18 +1,26 @@
+0.1.5 / 2010-09-25
+
+  * Added ability to call other steps inside step definition
+  * Added profiles
+  * Refactored container creation routine
+  * Single quotes support in step definitions
+  * Added tests for hooks, profiles, inline steps
+
 0.1.4 / 2010-09-16
 ==================
 
-  * refactored code
-  * removed logic from object constructors
-  * added Loader & Filter interfaces
+  * Refactored code
+  * Removed logic from object constructors
+  * Added Loader & Filter interfaces
 
 0.1.3 / 2010-09-14
 ==================
 
-  * ability to specify arrays of paths/files for loaders
-  * event hooks and support for `support/hooks.php`
-  * formatters listens events with smallest priority
-  * don't try to load steps if `steps` folder doesn't exists
-  * bugfixes/refactoring
+  * Ability to specify arrays of paths/files for loaders
+  * Event hooks and support for `support/hooks.php`
+  * Formatters listens events with smallest priority
+  * Don't try to load steps if `steps` folder doesn't exists
+  * Bugfixes/refactoring
 
 0.1.2 / 2010-09-10
 ==================
