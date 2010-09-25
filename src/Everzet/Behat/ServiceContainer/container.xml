@@ -1,5 +1,8 @@
 <?xml version="1.0" ?>
 <container xmlns="http://www.symfony-project.org/schema/dic/services">
+    <imports>
+        <import resource="../../Gherkin/ServiceContainer/container.xml"/>
+    </imports>
     <parameters>
         <parameter key="features.path">features</parameter>
         <parameter key="steps.path">%%features.path%%/steps</parameter>
@@ -33,7 +36,7 @@
             <argument>%i18n.path%</argument>
         </service>
         <service id="parser" class="%parser.class%" shared="false">
-            <argument type="service" id="i18n" />
+            <argument type="service" id="service_container" />
         </service>
         <service id="environment" class="%environment.class%" shared="false">
             <call method="loadEnvironmentFile">

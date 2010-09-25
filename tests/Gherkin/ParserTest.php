@@ -1,21 +1,18 @@
 <?php
 
-use \Everzet\Gherkin\I18n;
 use \Everzet\Gherkin\Parser;
 
 class ParserTest extends \PHPUnit_Framework_TestCase
 {
     private function loadFeature($path)
     {
-        $i18n = new I18n(__DIR__ . '/../../i18n');
-        $parser = new Parser($i18n);
+        $parser = new Parser();
         return $parser->parse(file_get_contents(__DIR__ . '/fixtures/features/' . $path));
     }
 
     private function loadFeatureFromFile($path)
     {
-        $i18n = new I18n(__DIR__ . '/../../i18n');
-        $parser = new Parser($i18n);
+        $parser = new Parser();
         return $parser->parseFile(__DIR__ . '/fixtures/features/' . $path);
     }
 

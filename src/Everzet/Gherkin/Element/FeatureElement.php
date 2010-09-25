@@ -19,7 +19,7 @@ use Everzet\Gherkin\Element\Scenario\ScenarioElement;
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FeatureElement extends SectionElement
-{    
+{
     protected $background;
     protected $description = array();
     protected $scenarios = array();

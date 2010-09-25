@@ -2,17 +2,12 @@
 
 namespace Everzet\Gherkin;
 
-use Everzet\Gherkin\I18n;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+
 use Everzet\Gherkin\RegexHolder;
 use Everzet\Gherkin\ParserException;
-use Everzet\Gherkin\Element\FeatureElement;
-use Everzet\Gherkin\Element\StepElement;
-use Everzet\Gherkin\Element\Scenario\BackgroundElement;
-use Everzet\Gherkin\Element\Scenario\ScenarioElement;
-use Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
-use Everzet\Gherkin\Element\Inline\PyStringElement;
-use Everzet\Gherkin\Element\Inline\TableElement;
-use Everzet\Gherkin\Element\Inline\ExamplesElement;
 
 /*
  * This file is part of the behat package.
@@ -31,15 +26,23 @@ class Parser
 {
     protected $file             = null;
     protected $i18n             = null;
+    protected $container        = null;
     protected $lines            = array();
     protected $currentLineNb    = -1;
     protected $currentLine      = '';
     protected $regex            = null;
     protected $feature          = null;
 
-    public function __construct(I18n $i18n)
+    public function __construct(Container $container = null)
     {
-        $this->i18n = $i18n;
+        if (null === $container) {
+            $container  = new ContainerBuilder();
+            $xmlLoader  = new XmlFileLoader($container);
+            $xmlLoader->load(__DIR__ . '/ServiceContainer/container.xml');
+        }
+
+        $this->container    = $container;
+        $this->i18n         = $container->getI18nService();
     }
 
     protected function initLang()
@@ -80,7 +83,8 @@ class Parser
 
             // feature?
             if (preg_match($this->regex->getFeatureRegex(), $this->currentLine, $values)) {
-                $this->feature = new FeatureElement($this->i18n, $this->file);
+                $class = $this->container->getParameter('feature_element.class');
+                $this->feature = new $class($this->i18n, $this->file);
                 $this->feature->setTitle(isset($values['title']) ? $values['title'] : '');
                 $this->feature->addTags($this->getPreviousTags());
                 $this->feature->addDescriptions($this->getNextDescriptions());
@@ -88,7 +92,8 @@ class Parser
 
             // background?
             if (preg_match($this->regex->getBackgroundRegex(), $this->currentLine, $values)) {
-                $background = new BackgroundElement($this->currentLineNb, $this->i18n, $this->file);
+                $class = $this->container->getParameter('background_element.class');
+                $background = new $class($this->currentLineNb, $this->i18n, $this->file);
                 $background->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -99,7 +104,8 @@ class Parser
 
             // scenario?
             if (preg_match($this->regex->getScenarioRegex(), $this->currentLine, $values)) {
-                $scenario = new ScenarioElement($this->currentLineNb, $this->i18n, $this->file);
+                $class = $this->container->getParameter('scenario_element.class');
+                $scenario = new $class($this->currentLineNb, $this->i18n, $this->file);
                 $scenario->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -111,7 +117,8 @@ class Parser
 
             // scenario outline?
             if (preg_match($this->regex->getScenarioOutlineRegex(), $this->currentLine, $values)) {
-                $outline = new ScenarioOutlineElement($this->currentLineNb, $this->i18n, $this->file);
+                $class = $this->container->getParameter('scenario_outline_element.class');
+                $outline = new $class($this->currentLineNb, $this->i18n, $this->file);
                 $outline->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -201,7 +208,8 @@ class Parser
                 break;
             }
 
-            $step = new StepElement($values['type'], $values['step'], $this->currentLineNb);
+            $class = $this->container->getParameter('step_element.class');
+            $step = new $class($values['type'], $values['step'], $this->currentLineNb);
             if (null !== ($pystring = $this->getNextPyString())) {
                 $step->addArgument($pystring);
             }
@@ -223,7 +231,8 @@ class Parser
             $this->moveToNextLine() &&
             preg_match($this->regex->getPyStringStarterRegex(), $this->currentLine, $values)
         ) {
-            $pystring = new PyStringElement(mb_strlen($values['indent']));
+            $class = $this->container->getParameter('pystring_element.class');
+            $pystring = new $class(mb_strlen($values['indent']));
 
             while (
                 $this->moveToNextLine() &&
@@ -251,7 +260,8 @@ class Parser
             }
 
             if (null === $table) {
-                $table = new TableElement($this->regex->getTableSplitter());
+                $class = $this->container->getParameter('table_element.class');
+                $table = new $class($this->regex->getTableSplitter());
             }
             $table->addRow($values['row']);
         }
@@ -270,7 +280,8 @@ class Parser
             }
         }
         if (preg_match($this->regex->getExamplesRegex(), $this->currentLine, $values)) {
-            $examples = new ExamplesElement(
+            $class = $this->container->getParameter('examples_element.class');
+            $examples = new $class(
                 $this->getNextTitle(isset($values['title']) ? $values['title'] : '')
             );
             $examples->setTable($this->getNextTable());
