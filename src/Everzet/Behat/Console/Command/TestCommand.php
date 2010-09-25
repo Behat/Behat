@@ -4,7 +4,6 @@ namespace Everzet\Behat\Console\Command;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -28,8 +27,6 @@ use Everzet\Behat\Exception\Redundant;
  */
 class TestCommand extends Command
 {
-    protected $container;
-
     /**
      * @see Symfony\Component\Console\Command\Command
      */
@@ -37,36 +34,23 @@ class TestCommand extends Command
     {
         $this->setName('test');
 
-        // Load container
-        $this->container    = new ContainerBuilder();
-        $xmlLoader          = new XmlFileLoader($this->container);
-        $xmlLoader->load(__DIR__ . '/../../ServiceContainer/container.xml');
-
-        // Set initial container parameters
-        $this->container->setParameter('i18n.path', realpath(__DIR__ . '/../../../../../i18n'));
-        $this->container->setParameter('cwd',       $cwd = getcwd());
-
-        // Load external config file (behat.(xml/yml))
-        if (is_file($cwd . '/behat.xml')) {
-            $xmlLoader->import($cwd . '/behat.xml');
-        } elseif (is_file($cwd . '/behat.yml')) {
-            $yamlLoader = new YamlFileLoader($this->container);
-            $yamlLoader->import($cwd . '/behat.yml');
-        }
-
         // Set commands default parameters from container loaded ones
         $this->setDefinition(array(
-            new InputArgument('features',               InputArgument::OPTIONAL
+            new InputArgument('features'
+              , InputArgument::OPTIONAL
               , 'Features path'
-              , $this->container->getParameter('features.path')
             ),
-            new InputOption('--format',         '-f',   InputOption::PARAMETER_REQUIRED
+            new InputOption('--configuration',  '-c'
+              , InputOption::PARAMETER_REQUIRED
+              , 'Specify configuration file (*.xml or *.yml)'
+            ),
+            new InputOption('--format',         '-f'
+              , InputOption::PARAMETER_REQUIRED
               , 'Change output formatter'
-              , $this->container->getParameter('formatter.name')
             ),
-            new InputOption('--tags',           '-t',   InputOption::PARAMETER_REQUIRED
+            new InputOption('--tags',           '-t'
+              , InputOption::PARAMETER_REQUIRED
               , 'Only executes features or scenarios with specified tags'
-              , $this->container->getParameter('filter.tags')
             ),
         ));
     }
@@ -76,73 +60,75 @@ class TestCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $featuresPath   = realpath($input->getArgument('features'));
-        $featureFile    = null;
+        // Init container
+        $container  = new ContainerBuilder();
+        $xmlLoader  = new XmlFileLoader($container);
+        $xmlLoader->load(__DIR__ . '/../../ServiceContainer/container.xml');
 
-        // Find features path
-        if (is_dir($featuresPath . '/features')) {
-            $featuresPath = $featuresPath . '/features';
-        } elseif (is_file($featuresPath)) {
-            $featureFile    = $featuresPath;
-            $featuresPath   = dirname($featuresPath);
+        // Set initial container services & parameters
+        $container->set('output',               $output);
+        $container->setParameter('dir.work',    $cwd = getcwd());
+        $container->setParameter('dir.lib',     realpath(__DIR__ . '/../../../../../'));
+
+        // Guess configuration file path
+        if (null !== $input->getOption('configuration')) {
+            $container->setParameter('configuration.path', $input->getOption('configuration'));
+        } elseif (is_file($cwd . '/behat.yml')) {
+            $container->setParameter('configuration.path', $cwd . '/behat.yml');
+        } elseif (is_file($cwd . '/behat.xml')) {
+            $container->setParameter('configuration.path', $cwd . '/behat.xml');
         }
 
-        // Set container parameters
-        $this->container->set('output',                     $output);
-        $this->container->setParameter('features.file',     $featureFile);
-        $this->container->setParameter('features.path',     $featuresPath);
-        $this->container->setParameter('formatter.name',    $input->getOption('format'));
-        $this->container->setParameter('filter.tags',       $input->getOption('tags'));
-        $this->container->setParameter('formatter.verbose', $input->getOption('verbose'));
-
-        // Fill embedded parameter holders
-        $this->container->setParameter('formatter.name', 
-            ucfirst($this->container->getParameter('formatter.name'))
-        );
-        foreach ($this->container->getParameterBag()->all() as $key => $value) {
-            $compiled   = array();
-            $container  = $this->container;
-            foreach ((array) $value as $i => $item) {
-                $compiled[$i] = preg_replace_callback('/%%([^%]+)%%/', 
-                    function($matches) use($container) {
-                        return $container->getParameter($matches[1]);
-                    }
-                  , $item
-                );
-            }
-            if (!isset($compiled[0])) {
-                $compiled[0] = $value;
-            }
-            $this->container->setParameter($key, is_array($value) ? $compiled : $compiled[0]);
+        // Load external configuration
+        if ($container->hasParameter('configuration.path')) {
+            $container->
+                getConfigurationLoaderService()->
+                load($container->getParameter('configuration.path'));
         }
+
+        // Read command arguments & options
+        if (null !== $input->getArgument('features')) {
+            $container->setParameter('features.path',     realpath($input->getArgument('features')));
+        }
+        if (null !== $input->getOption('format')) {
+            $container->setParameter('formatter.name',    $input->getOption('format'));
+        }
+        if (null !== $input->getOption('tags')) {
+            $container->setParameter('filter.tags',       $input->getOption('tags'));
+        }
+        if (null !== $input->getOption('verbose')) {
+            $container->setParameter('formatter.verbose', $input->getOption('verbose'));
+        }
+
+        // Replace parameter tokens
+        $container->
+            getConfigurationLoaderService()->
+            prepareContainerParameters();
 
         // Load hooks
-        $this->container->
+        $container->
             getHooksLoaderService()->
-            load($this->container->getParameter('hooks.file'));
+            load($container->getParameter('hooks.file'));
 
         // Load steps
         try {
-            $this->container->
+            $container->
                 getStepsLoaderService()->
-                load($this->container->getParameter('steps.path'));
+                load($container->getParameter('steps.path'));
         } catch (Redundant $e) {
             $output->write(sprintf("\033[31m%s\033[0m", strtr($e->getMessage(),
-                array($this->container->getParameter('features.path') . '/' => '')
+                array($container->getParameter('features.path') . '/' => '')
             )), true, 1);
             return 1;
         }
 
         // Load features runner
-        $runner = $this->container->
+        $featuresRunner = $container->
             getFeaturesLoaderService()->
-            load(
-                is_file($this->container->getParameter('features.file'))
-                ? $this->container->getParameter('features.file')
-                : $this->container->getParameter('features.path')
-            );
+            load($container->getParameter('features.files'));
 
         // Run test suite & return exit code
-        return $runner->run();
+        return $featuresRunner->run();
     }
 }
+
