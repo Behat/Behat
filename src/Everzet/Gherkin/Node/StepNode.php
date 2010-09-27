@@ -31,7 +31,7 @@ class StepNode
         $this->line = $line;
     }
 
-    public function setParent(BackgroundNode $parent)
+    public function setParent(ScenarioNode $parent)
     {
         $this->parent = $parent;
     }

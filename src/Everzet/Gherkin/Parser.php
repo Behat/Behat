@@ -90,11 +90,11 @@ class Parser
             // background?
             if (preg_match($this->lexer->getBackgroundRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('background_node.class');
-                $background = new $class($this->currentLineNb, $this->i18n, $this->file);
+                $background = new $class($this->i18n, $this->file, $this->currentLineNb);
                 $background->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
-                $background->addSteps($this->getNextSteps());
+                $background->setSteps($this->getNextSteps());
 
                 $this->feature->setBackground($background);
             }
@@ -102,12 +102,12 @@ class Parser
             // scenario?
             if (preg_match($this->lexer->getScenarioRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('scenario_node.class');
-                $scenario = new $class($this->currentLineNb, $this->i18n, $this->file);
+                $scenario = new $class($this->i18n, $this->file, $this->currentLineNb);
                 $scenario->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
                 $scenario->addTags($this->getPreviousTags());
-                $scenario->addSteps($this->getNextSteps());
+                $scenario->setSteps($this->getNextSteps());
 
                 $this->feature->addScenario($scenario);
             }
@@ -115,12 +115,12 @@ class Parser
             // scenario outline?
             if (preg_match($this->lexer->getScenarioOutlineRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('outline_node.class');
-                $outline = new $class($this->currentLineNb, $this->i18n, $this->file);
+                $outline = new $class($this->i18n, $this->file, $this->currentLineNb);
                 $outline->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
                 $outline->addTags($this->getPreviousTags());
-                $outline->addSteps($this->getNextSteps());
+                $outline->setSteps($this->getNextSteps());
                 if (null === ($examples = $this->getNextExamples())) {
                     throw new ParserException(
                         sprintf('No examples in %s outline', $outline->getTitle())

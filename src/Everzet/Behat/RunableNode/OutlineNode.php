@@ -32,10 +32,10 @@ class OutlineNode extends BaseNode implements RunableNodeInterface
         $dispatcher->notify(new Event($this, 'outline.run.before'));
 
         foreach ($this->getExamples()->getTable()->getHash() as $tokens) {
-            $scenario = new ScenarioNode($this->getLine(), $this->getI18n(), $this->getFile());
+            $scenario = new ScenarioNode($this->getI18n(), $this->getFile(), $this->getLine());
             $scenario->setFeature($this->getFeature());
             $scenario->setOutline($this);
-            $scenario->addSteps($this->getSteps());
+            $scenario->setSteps($this->getSteps());
 
             $this->result = max($this->result, $scenario->run($container, $tokens));
             ++$this->finishedScenarios;
