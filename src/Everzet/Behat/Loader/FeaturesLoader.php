@@ -26,7 +26,6 @@ class FeaturesLoader implements LoaderInterface
 {
     protected $container;
     protected $dispatcher;
-    protected $featuresRunner;
 
     /**
      * Inits loader.
@@ -49,30 +48,25 @@ class FeaturesLoader implements LoaderInterface
      */
     public function load($paths)
     {
+        $features = array();
+
         $this->dispatcher->notify(new Event($this, 'features.load.before'));
 
         if (!is_array($paths) && is_file($paths)) {
-            $this->featuresRunner = new FeaturesRunner($paths, $this->container);
+            $features[] = $this->container->getParserService()->parseFile($paths);
         } else {
             foreach ((array) $paths as $path) {
                 $finder = new Finder();
                 $files  = $finder->files()->name('*.feature')->in($path);
-                $this->featuresRunner = new FeaturesRunner($files, $this->container);
+
+                foreach ($files as $file) {
+                    $features[] = $this->container->getParserService()->parseFile($file);
+                }
             }
         }
 
         $this->dispatcher->notify(new Event($this, 'features.load.after'));
 
-        return $this->featuresRunner;
-    }
-
-    /**
-     * Returns created FeaturesRunner
-     *
-     * @return  Everzet\Behat\Runner\FeaturesRunner
-     */
-    public function getFeaturesRunner()
-    {
-        return $this->featuresRunner;
+        return $features;
     }
 }

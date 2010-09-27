@@ -17,7 +17,7 @@ use Everzet\Gherkin\I18n;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RegexHolder
+class Lexer
 {
     protected $i18n;
 

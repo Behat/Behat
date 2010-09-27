@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin\Element;
+namespace Everzet\Gherkin\Node;
 
 use Everzet\Gherkin\I18n;
 
@@ -17,7 +17,7 @@ use Everzet\Gherkin\I18n;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class SectionElement
+abstract class SectionNode
 {
     protected $title = '';
     protected $tags = array();
@@ -26,8 +26,8 @@ abstract class SectionElement
 
     public function __construct(I18n $i18n, $file = null)
     {
-        $this->file = $file;
         $this->i18n = $i18n;
+        $this->file = $file;
     }
 
     public function getI18n()

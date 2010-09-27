@@ -6,16 +6,15 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Gherkin\Element\SectionElement;
-use Everzet\Gherkin\Element\ScenarioOutlineElement;
-use Everzet\Gherkin\Element\ScenarioElement;
-use Everzet\Gherkin\Element\BackgroundElement;
-use Everzet\Gherkin\Element\Inline\PyStringElement;
-use Everzet\Gherkin\Element\Inline\TableElement;
-
-use Everzet\Behat\Runner\ScenarioOutlineRunner;
-use Everzet\Behat\Runner\ScenarioRunner;
-use Everzet\Behat\Runner\BackgroundRunner;
+use Everzet\Gherkin\Node\FeatureNode;
+use Everzet\Gherkin\Node\StepNode;
+use Everzet\Gherkin\Node\BackgroundNode;
+use Everzet\Gherkin\Node\SectionNode;
+use Everzet\Gherkin\Node\ScenarioNode;
+use Everzet\Gherkin\Node\OutlineNode;
+use Everzet\Gherkin\Node\PyStringNode;
+use Everzet\Gherkin\Node\TableNode;
+use Everzet\Gherkin\Node\ExamplesNode;
 
 /*
  * This file is part of the behat package.
@@ -30,7 +29,7 @@ use Everzet\Behat\Runner\BackgroundRunner;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettyFormatter implements FormatterInterface
+class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
 {
     protected $container;
     protected $output;
@@ -60,22 +59,24 @@ class PrettyFormatter implements FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
-        $dispatcher->connect('feature.test.before',         array($this, 'printFeatureHeader'), 10);
+        $this->registerRunCounters($dispatcher);
 
-        $dispatcher->connect('scenario_outline.test.before',array($this, 'printOutlineHeader'), 10);
-        $dispatcher->connect('scenario_outline.test.after', array($this, 'printOutlineFooter'), 10);
+        $dispatcher->connect('feature.run.before',      array($this, 'printFeatureHeader'),     10);
 
-        $dispatcher->connect('scenario.test.before',        array($this, 'printScenarioHeader'),10);
-        $dispatcher->connect('scenario.test.after',         array($this, 'printScenarioFooter'),10);
+        $dispatcher->connect('outline.run.before',      array($this, 'printOutlineHeader'),     10);
+        $dispatcher->connect('outline.run.after',       array($this, 'printOutlineFooter'),     10);
 
-        $dispatcher->connect('background.test.before',  array($this, 'printBackgroundHeader'),  10);
-        $dispatcher->connect('background.test.after',   array($this, 'printBackgroundFooter'),  10);
+        $dispatcher->connect('scenario.run.before',     array($this, 'printScenarioHeader'),    10);
+        $dispatcher->connect('scenario.run.after',      array($this, 'printScenarioFooter'),    10);
 
-        $dispatcher->connect('step.test.after',         array($this, 'printStep'),              10);
+        $dispatcher->connect('background.run.before',   array($this, 'printBackgroundHeader'),  10);
+        $dispatcher->connect('background.run.after',    array($this, 'printBackgroundFooter'),  10);
+
+        $dispatcher->connect('step.run.after',          array($this, 'printStep'),              10);
         $dispatcher->connect('step.skip.after',         array($this, 'printStep'),              10);
 
-        $dispatcher->connect('features.test.after',     array($this, 'printStatistics'),        10);
-        $dispatcher->connect('features.test.after',     array($this, 'printSnippets'),          10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printStatistics'),        10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printSnippets'),          10);
     }
 
     /**
@@ -85,35 +86,28 @@ class PrettyFormatter implements FormatterInterface
      */
     public function printFeatureHeader(Event $event)
     {
-        $runner     = $event->getSubject();
-        $feature    = $runner->getFeature();
+        $feature = $event->getSubject();
 
         // Print tags if had ones
         if ($feature->hasTags()) {
-            $this->output->writeln(sprintf("<tag>%s</tag>", $this->getTagsString($feature)));
+            $this->write($this->getTagsString($feature), 'tag');
         }
 
         // Print feature title
-        $this->output->writeln(sprintf("%s: %s",
-            $feature->getI18n()->__('feature', 'Feature'),
-            $feature->getTitle()
-        ));
+        $this->write($feature->getI18n()->__('feature', 'Feature') . ': ' . $feature->getTitle());
 
         // Print feature description
         foreach ($feature->getDescription() as $description) {
-            $this->output->writeln(sprintf('  %s', $description));
+            $this->write('  ' . $description);
         }
-        $this->output->writeln('');
+        $this->write();
 
         // Run fake background to test if it runs without errors & prints it output
         if ($feature->hasBackground()) {
-            $runner = new BackgroundRunner(
-                $feature->getBackground()
-              , $this->container->getEnvironmentService()
-              , $this->container
-              , null
-            );
-            $runner->run();
+            $background = $feature->getBackground();
+            $background->setPrintable();
+            $background->run($this->container, $this->container->getEnvironmentService());
+            $background->setPrintable(false);
         }
     }
 
@@ -124,15 +118,14 @@ class PrettyFormatter implements FormatterInterface
       */
     public function printOutlineHeader(Event $event)
     {
-        $runner     = $event->getSubject();
-        $outline    = $runner->getScenarioOutline();
+        $outline = $event->getSubject();
 
         // Recalc maximum description length (for filepath-like comments)
         $this->recalcMaxDescriptionLength($outline);
 
         // Print tags if had ones
         if ($outline->hasTags()) {
-            $this->output->writeln(sprintf("<tag>%s</tag>", $this->getTagsString($outline)));
+            $this->write($this->getTagsString($outline), 'tag');
         }
 
         // Print outline description
@@ -140,7 +133,7 @@ class PrettyFormatter implements FormatterInterface
             $outline->getI18n()->__('scenario-outline', 'Scenario Outline'),
             $outline->getTitle() ? ' ' . $outline->getTitle() : ''
         );
-        $this->output->write($description);
+        $this->write($description, null, false);
 
         // Print element path & line
         $this->printLineSourceComment(
@@ -157,7 +150,7 @@ class PrettyFormatter implements FormatterInterface
       */
     public function printOutlineFooter(Event $event)
     {
-        $this->output->writeln('');
+        $this->write();
     }
 
     /**
@@ -167,18 +160,15 @@ class PrettyFormatter implements FormatterInterface
       */
     public function printScenarioHeader(Event $event)
     {
-        $runner     = $event->getSubject();
-        $scenario   = $runner->getScenario();
+        $scenario = $event->getSubject();
 
         // Recalc maximum description length (for filepath-like comments)
         $this->recalcMaxDescriptionLength($scenario);
 
-        if (!$runner->isInOutline()) {
+        if (!$scenario->isInOutline()) {
             // Print tags if had ones
             if ($scenario->hasTags()) {
-                $this->output->writeln(sprintf("  <tag>%s</tag>",
-                    $this->getTagsString($scenario)
-                ));
+                $this->write($this->getTagsString($scenario), 'tag');
             }
 
             // Print scenario description
@@ -186,7 +176,7 @@ class PrettyFormatter implements FormatterInterface
                 $scenario->getI18n()->__('scenario', 'Scenario'),
                 $scenario->getTitle() ? ' ' . $scenario->getTitle() : ''
             );
-            $this->output->write($description);
+            $this->write($description, null, false);
 
             // Print element path & line
             $this->printLineSourceComment(
@@ -204,67 +194,67 @@ class PrettyFormatter implements FormatterInterface
       */
     public function printScenarioFooter(Event $event)
     {
-        $runner     = $event->getSubject();
-        $scenario   = $runner->getScenario();
+        $scenario = $event->getSubject();
 
-        if (!$runner->isInOutline()) {
-            $this->output->writeln('');
+        if (!$scenario->isInOutline()) {
+            $this->write();
         } else {
-            $outlineRunner  = $runner->getParentRunner();
-            $outline        = $outlineRunner->getScenarioOutline();
-            $examples       = $outline->getExamples()->getTable();
+            $outline    = $scenario->getOutline();
+            $examples   = $outline->getExamples()->getTable();
 
             // Print outline description with steps & examples after first scenario in batch runned
-            if (0 === $outlineRunner->key()) {
+            if (0 === $outline->getFinishedScenariosCount()) {
 
                 // Print outline steps
-                foreach ($runner->getChildRunners() as $stepRunner) {
-                    $step = $stepRunner->getStep();
-
+                foreach ($outline->getSteps() as $step) {
                     // Print step description
                     $description = sprintf('    %s %s', $step->getType(), $step->getCleanText());
-                    $this->output->write(sprintf("\033[36m%s\033[0m", $description), false, 1);
+                    $this->write($description, 'skipped', false);
 
                     // Print definition/element path
-                    if (null !== $stepRunner->getDefinition()) {
+                    if (null !== $step->getDefinition()) {
                         $this->printLineSourceComment(
                             mb_strlen($description)
-                          , $stepRunner->getDefinition()->getFile()
-                          , $stepRunner->getDefinition()->getLine()
+                          , $step->getDefinition()->getFile()
+                          , $step->getDefinition()->getLine()
                         );
                     } else {
-                        $this->output->writeln('');
+                        $this->write();
                     }
                 }
 
                 // Print outline examples title
-                $this->output->writeln(sprintf("\n    %s:",
-                    $outline->getI18n()->__('examples', 'Examples')
-                ));
+                $this->write(sprintf("\n    %s:", $outline->getI18n()->__('examples', 'Examples')));
 
                 // print outline examples header row
-                $this->output->writeln(preg_replace(
-                    '/|([^|]*)|/', '<skipped>$1</skipped>', '      ' . $examples->getKeysAsString()
-                ));
+                $this->write(
+                    preg_replace(
+                        '/|([^|]*)|/'
+                      , $this->colorize('$1', 'skipped')
+                      , '      ' . $examples->getKeysAsString()
+                    )
+                );
             }
 
             // print current scenario results row
-            $this->output->writeln(preg_replace(
-                '/|([^|]*)|/'
-              , sprintf('<%s>$1</%s>', $runner->getStatus(), $runner->getStatus())
-              , '      ' . $examples->getRowAsString($outlineRunner->key())
-            ));
+            $this->write(
+                preg_replace(
+                    '/|([^|]*)|/'
+                  , $this->colorize('$1', $scenario->getResult())
+                  , '      ' . $examples->getRowAsString($outline->getFinishedScenariosCount())
+                )
+            );
 
             // Print errors
-            foreach ($runner->getFailedStepRunners() as $stepRunner) {
-                if ($this->verbose) {
-                    $error = (string) $stepRunner->getException();
-                } else {
-                    $error = $stepRunner->getException()->getMessage();
+            foreach ($scenario->getSteps() as $step) {
+                if (null !== $step->getException()) {
+                    if ($this->verbose) {
+                        $error = (string) $step->getException();
+                    } else {
+                        $error = $step->getException()->getMessage();
+                    }
+                    $this->write('        ' . strtr($error, array("\n" => "\n      ")), 'failed');
                 }
-                $this->output->write(sprintf("        \033[31m%s\033[0m",
-                    strtr($error, array("\n" => "\n      "))
-                ), true, 1);
             }
         }
     }
@@ -276,19 +266,18 @@ class PrettyFormatter implements FormatterInterface
       */
     public function printBackgroundHeader(Event $event)
     {
-        $runner     = $event->getSubject();
-        $background = $runner->getBackground();
+        $background = $event->getSubject();
 
         // Recalc maximum description length (for filepath-like comments)
         $this->recalcMaxDescriptionLength($background);
 
-        if (null === $runner->getParentRunner()) {
+        if ($background->isPrintable()) {
             // Print description
             $description = sprintf("  %s:%s",
                 $background->getI18n()->__('background', 'Background'),
                 $background->getTitle() ? ' ' . $background->getTitle() : ''
             );
-            $this->output->write($description);
+            $this->write($description, null, false);
 
             // Print element path & line
             $this->printLineSourceComment(
@@ -306,10 +295,10 @@ class PrettyFormatter implements FormatterInterface
       */
     public function printBackgroundFooter(Event $event)
     {
-        $runner = $event->getSubject();
+        $background = $event->getSubject();
 
-        if (null === $runner->getParentRunner()) {
-            $this->output->writeln('');
+        if ($background->isPrintable()) {
+            $this->write();
         }
     }
 
@@ -320,145 +309,47 @@ class PrettyFormatter implements FormatterInterface
       */
     public function printStep(Event $event)
     {
-        $runner = $event->getSubject();
-        $step   = $runner->getStep();
+        $step = $event->getSubject();
 
-        if (
-            // Not in scenario background
-            !(null !== $runner->getParentRunner() &&
-              $runner->getParentRunner() instanceof BackgroundRunner &&
-              null !== $runner->getParentRunner()->getParentRunner() &&
-              $runner->getParentRunner()->getParentRunner() instanceof ScenarioRunner) &&
-
-            // Not in outline
-            !(null !== $runner->getParentRunner() &&
-              null !== $runner->getParentRunner()->getParentRunner() &&
-              $runner->getParentRunner()->getParentRunner() instanceof ScenarioOutlineRunner)
-           ) {
+        if ($step->isPrintable()) {
             // Print step description
             $description = sprintf('    %s %s', $step->getType(), $step->getText());
-            $this->output->write(sprintf('<%s>%s</%s>',
-                $runner->getStatus(), $description, $runner->getStatus()
-            ));
+            $this->write($description, $step->getResult(), false);
 
             // Print definition path if found one
-            if (null !== $runner->getDefinition()) {
+            if (null !== $step->getDefinition()) {
                 $this->printLineSourceComment(
                     mb_strlen($description)
-                  , $runner->getDefinition()->getFile()
-                  , $runner->getDefinition()->getLine()
+                  , $step->getDefinition()->getFile()
+                  , $step->getDefinition()->getLine()
                 );
             } else {
-                $this->output->writeln('');
+                $this->write();
             }
 
             // print step arguments
             if ($step->hasArguments()) {
                 foreach ($step->getArguments() as $argument) {
-                    if ($argument instanceof PyStringElement) {
-                        $this->output->write(sprintf("\033[%sm%s\033[0m",
-                            $this->getStatusColorCode($runner->getStatus()),
-                            $this->getPyString($argument, 6),
-                            $this->getStatusColorCode($runner->getStatus())
-                        ), true, 1);
-                    } elseif ($argument instanceof TableElement) {
-                        $this->output->write(sprintf("\033[%sm%s\033[0m",
-                            $this->getStatusColorCode($runner->getStatus()),
-                            $this->getTableString($argument, 6),
-                            $this->getStatusColorCode($runner->getStatus())
-                        ), true, 1);
+                    if ($argument instanceof PyStringNode) {
+                        $this->write($this->getPyString($argument, 6), $step->getResult());
+                    } elseif ($argument instanceof TableNode) {
+                        $this->write($this->getTableString($argument, 6), $step->getResult());
                     }
                 }
             }
 
             // Print step exception
-            if (null !== $runner->getException()) {
+            if (null !== $step->getException()) {
                 if ($this->verbose) {
-                    $error = (string) $runner->getException();
+                    $error = (string) $step->getException();
                 } else {
-                    $error = $runner->getException()->getMessage();
+                    $error = $step->getException()->getMessage();
                 }
-                $this->output->write(sprintf("      \033[%sm%s\033[0m"
-                  , 'failed' === $runner->getStatus() ? '31' : '33'
-                  , strtr($error, array("\n" => "\n      "))
-                ), true, 1);
+                $this->write(
+                    '      ' . strtr($error, array("\n" => "\n      ")), $step->getResult()
+                );
             }
         }
-    }
-
-    /**
-      * Listens to `suite.post_test` event & prints all tests statistics
-      *
-      * @param   Event   $event  notified event
-      */
-    public function printStatistics(Event $event)
-    {
-        $runner = $event->getSubject();
-
-        $stepsCount             = $runner->getStepsCount();
-        $scenariosCount         = $runner->getScenariosCount();
-        $scenariosStatusesCount = $runner->getScenariosStatusesCount();
-        $stepsStatusesCount     = $runner->getStepsStatusesCount();
-
-        $statuses = array();
-        foreach ($scenariosStatusesCount as $status => $count) {
-            $statuses[] = sprintf('<%s>%s %s</%s>', $status, $count, $status, $status);
-        }
-        $this->output->writeln(sprintf('%d scenarios %s',
-            $scenariosCount
-          , count($statuses) ? sprintf('(%s)', implode(', ', $statuses)) : ''
-        ));
-
-        $statuses = array();
-        foreach ($stepsStatusesCount as $status => $count) {
-            $statuses[] = sprintf('<%s>%s %s</%s>', $status, $count, $status, $status);
-        }
-        $this->output->writeln(sprintf('%d steps %s',
-            $stepsCount
-          , count($statuses) ? sprintf('(%s)', implode(', ', $statuses)) : ''
-        ));
-
-        $this->output->writeln(sprintf("%.3fs", $runner->getTime()));
-    }
-
-    /**
-      * Listens to `suite.post_test` event & prints step snippets for undefined steps
-      *
-      * @param   Event   $event  notified event
-      */
-    public function printSnippets(Event $event)
-    {
-        $runner             = $event->getSubject();
-        $stepsStatusesCount = $runner->getStepsStatusesCount();
-
-        if (isset($stepsStatusesCount['undefined'])) {
-            $this->output->writeln("\n<undefined>" .
-                "You can implement step definitions for undefined steps with these snippets:" .
-            "</undefined>\n");
-
-            foreach ($runner->getDefinitionSnippets() as $key => $snippet) {
-                $this->output->writeln('<undefined>' . $snippet . "</undefined>\n");
-            }
-        }
-    }
-
-    /**
-     * Prints comment line with source info
-     *
-     * @param   integer $lineLength     current line length
-     * @param   string  $file           source file
-     * @param   integer $line           source line
-     */
-    protected function printLineSourceComment($lineLength, $file, $line)
-    {
-        $indent = $lineLength > $this->maxDescriptionLength
-            ? 0
-            : $this->maxDescriptionLength - $lineLength;
-        $file   = preg_replace('/.*\/features\//', 'features/', $file);
-
-        $this->output->writeln(sprintf("%s <comment># %s:%d</comment>",
-            str_repeat(' ', $indent), $file, $line
-        ));
     }
 
     /**
@@ -468,16 +359,16 @@ class PrettyFormatter implements FormatterInterface
      * 
      * @return  integer             description length
      */
-    protected function recalcMaxDescriptionLength(SectionElement $scenario)
+    protected function recalcMaxDescriptionLength(SectionNode $scenario)
     {
         $max    = $this->maxDescriptionLength;
         $type   = '';
 
-        if ($scenario instanceof ScenarioOutlineElement) {
+        if ($scenario instanceof OutlineNode) {
             $type = $scenario->getI18n()->__('scenario-outline', 'Scenario Outline') . ':';
-        } else if ($scenario instanceof ScenarioElement) {    
+        } else if ($scenario instanceof ScenarioNode) {    
             $type = $scenario->getI18n()->__('scenario', 'Scenario') . ':';
-        } else if ($scenario instanceof BackgroundElement) {
+        } else if ($scenario instanceof BackgroundNode) {
             $type = $scenario->getI18n()->__('background', 'Background') . ':';
         }
         $scenarioDescription = $scenario->getTitle() ? $type . ' ' . $scenario->getTitle() : $type;
@@ -497,43 +388,13 @@ class PrettyFormatter implements FormatterInterface
     }
 
     /**
-     * Returns color code for custom status
-     *
-     * @param   string  $status status (passed/skipped/failed etc.)
-     * 
-     * @return  integer         console color code
-     */
-    protected function getStatusColorCode($status)
-    {
-        $colorCode = 32;
-        switch ($status) {
-            case 'failed':
-                $colorCode = 31;
-                break;
-            case 'undefined':
-            case 'pending':
-                $colorCode = 33;
-                break;
-            case 'skipped':
-            case 'tag':
-                $colorCode = 36;
-                break;
-            case 'comment':
-                $colorCode = 30;
-                break;
-        }
-
-        return $colorCode;
-    }
-
-    /**
      * Returns formatted tag string, prepared for console output
      *
      * @param   Section $section    section instance
      * 
      * @return  string
      */
-    protected function getTagsString(SectionElement $section)
+    protected function getTagsString(SectionNode $section)
     {
         $tags = array();
         foreach ($section->getTags() as $tag) {
@@ -551,7 +412,7 @@ class PrettyFormatter implements FormatterInterface
      * 
      * @return  string
      */
-    protected function getPyString(PyStringElement $pystring, $indent = 6)
+    protected function getPyString(PyStringNode $pystring, $indent = 6)
     {
         return strtr(
             sprintf("%s\"\"\"\n%s\n\"\"\"", str_repeat(' ', $indent), (string) $pystring),
@@ -567,7 +428,7 @@ class PrettyFormatter implements FormatterInterface
      * 
      * @return  string
      */
-    protected function getTableString(TableElement $table, $indent = 6)
+    protected function getTableString(TableNode $table, $indent = 6)
     {
         return strtr(
             sprintf(str_repeat(' ', $indent).'%s', $table),

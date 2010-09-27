@@ -3,14 +3,14 @@
     <parameters>
         <parameter key="i18n.class">Everzet\Gherkin\I18n</parameter>
         <parameter key="i18n.path">../../../i18n</parameter>
-        <parameter key="feature_element.class">Everzet\Gherkin\Element\FeatureElement</parameter>
-        <parameter key="step_element.class">Everzet\Gherkin\Element\StepElement</parameter>
-        <parameter key="background_element.class">Everzet\Gherkin\Element\Scenario\BackgroundElement</parameter>
-        <parameter key="scenario_element.class">Everzet\Gherkin\Element\Scenario\ScenarioElement</parameter>
-        <parameter key="scenario_outline_element.class">Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement</parameter>
-        <parameter key="pystring_element.class">Everzet\Gherkin\Element\Inline\PyStringElement</parameter>
-        <parameter key="table_element.class">Everzet\Gherkin\Element\Inline\TableElement</parameter>
-        <parameter key="examples_element.class">Everzet\Gherkin\Element\Inline\ExamplesElement</parameter>
+        <parameter key="feature_node.class">Everzet\Gherkin\Node\FeatureNode</parameter>
+        <parameter key="step_node.class">Everzet\Gherkin\Node\StepNode</parameter>
+        <parameter key="background_node.class">Everzet\Gherkin\Node\BackgroundNode</parameter>
+        <parameter key="scenario_node.class">Everzet\Gherkin\Node\ScenarioNode</parameter>
+        <parameter key="outline_node.class">Everzet\Gherkin\Node\OutlineNode</parameter>
+        <parameter key="pystring_node.class">Everzet\Gherkin\Node\PyStringNode</parameter>
+        <parameter key="table_node.class">Everzet\Gherkin\Node\TableNode</parameter>
+        <parameter key="examples_node.class">Everzet\Gherkin\Node\ExamplesNode</parameter>
     </parameters>
     <services>
         <service id="i18n" class="%i18n.class%" shared="false">

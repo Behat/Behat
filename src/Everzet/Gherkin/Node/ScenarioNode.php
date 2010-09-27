@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin\Element\Scenario;
+namespace Everzet\Gherkin\Node;
 
 /*
  * This file is part of the behat package.
@@ -15,6 +15,6 @@ namespace Everzet\Gherkin\Element\Scenario;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ScenarioElement extends BackgroundElement
+class ScenarioNode extends BackgroundNode
 {
 }

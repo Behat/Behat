@@ -6,8 +6,6 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Behat\Runner\ScenarioOutlineRunner;
-
 /*
  * This file is part of the behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -42,7 +40,7 @@ class TagFilter implements FilterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
-        $dispatcher->connect('feature.test.filter_scenarios', array($this, 'filterScenarios'));
+        $dispatcher->connect('feature.run.filter_scenarios', array($this, 'filterScenarios'));
     }
 
     /**
@@ -53,20 +51,15 @@ class TagFilter implements FilterInterface
      * 
      * @return  array                       filtered scenario runners
      */
-    public function filterScenarios(Event $event, array $scenarioRunners)
+    public function filterScenarios(Event $event, array $scenarios)
     {
         $filteredScenarios = array();
 
         if ($this->tags) {
             $tags = explode(',', $this->tags);
 
-            foreach ($scenarioRunners as $runner) {
-                if ($runner instanceof ScenarioOutlineRunner) {
-                    $scenario = $runner->getScenarioOutline();
-                } else {
-                    $scenario = $runner->getScenario();
-                }
-                $feature    = $runner->getParentRunner()->getFeature();
+            foreach ($scenarios as $scenario) {
+                $feature    = $scenario->getFeature();
                 $satisfies  = false;
 
                 foreach ($tags as $tag) {
@@ -87,10 +80,12 @@ class TagFilter implements FilterInterface
                     }
                 }
 
-                if ($satisfies) $filteredScenarios[] = $runner;
+                if ($satisfies) {
+                    $filteredScenarios[] = $scenario;
+                }
             }
         } else {
-            $filteredScenarios = $scenarioRunners;
+            $filteredScenarios = $scenarios;
         }
 
         return $filteredScenarios;

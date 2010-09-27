@@ -7,9 +7,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Finder\Finder;
 
-use Everzet\Gherkin\Element\StepElement;
-use Everzet\Gherkin\Element\Inline\PyStringElement;
-use Everzet\Gherkin\Element\Inline\TableElement;
+use Everzet\Gherkin\Node\StepNode;
+use Everzet\Gherkin\Node\PyStringNode;
+use Everzet\Gherkin\Node\TableNode;
 
 use Everzet\Behat\Definition\StepDefinition;
 use Everzet\Behat\Exception\Redundant;
@@ -105,7 +105,7 @@ class StepsLoader implements LoaderInterface
             $text   = array_shift($arguments);
             $world  = array_shift($arguments);
 
-            $step   = new StepElement($type, $text);
+            $step   = new StepNode($type, $text);
             $step->setArguments($arguments);
 
             $definition = $this->findDefinition($step);
@@ -118,12 +118,12 @@ class StepsLoader implements LoaderInterface
     /**
      * Proposes step definition for step elelemt
      *
-     * @param   StepElement $step   step element
+     * @param   StepNode $step   step element
      * @param   string      $text   step test
      * 
      * @return  array               associative array of (md5_key => definition)
      */
-    public function proposeDefinition(StepElement $step)
+    public function proposeDefinition(StepNode $step)
     {
         $text = $step->getText();
 
@@ -139,9 +139,9 @@ class StepsLoader implements LoaderInterface
         }
 
         foreach ($step->getArguments() as $argument) {
-            if ($argument instanceof PyStringElement) {
+            if ($argument instanceof PyStringNode) {
                 $args[] = "\$string";
-            } elseif ($argument instanceof TableElement) {
+            } elseif ($argument instanceof TableNode) {
                 $args[] = "\$table";
             }
         }
@@ -160,14 +160,14 @@ PHP
     /**
      * Finds & returns step definition, that matches specific step description
      *
-     * @param   StepElement     $step       specific step to match
+     * @param   StepNode     $step       specific step to match
      * 
      * @return  StepDefinition
      * 
      * @throws  Everzet\Behat\Exceptions\Ambiguous  if step description is ambiguous
      * @throws  Everzet\Behat\Exceptions\Undefined  if step definition not found
      */
-    public function findDefinition(StepElement $step)
+    public function findDefinition(StepNode $step)
     {
         $text       = $step->getText();
         $args       = $step->getArguments();

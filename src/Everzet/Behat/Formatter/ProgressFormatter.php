@@ -10,6 +10,11 @@ use Everzet\Behat\Runner\RunnerInterface;
 use Everzet\Behat\Runner\ScenarioRunner;
 use Everzet\Behat\Runner\BackgroundRunner;
 
+use Everzet\Behat\RunableNode\RunableNodeInterface;
+use Everzet\Behat\RunableNode\StepNode;
+use Everzet\Behat\RunableNode\ScenarioNode;
+use Everzet\Behat\RunableNode\BackgroundNode;
+
 /*
  * This file is part of the behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -23,21 +28,46 @@ use Everzet\Behat\Runner\BackgroundRunner;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ProgressFormatter extends PrettyFormatter implements FormatterInterface
+class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
 {
+    protected $container;
+    protected $output;
+    protected $verbose;
+    protected $maxDescriptionLength = 0;
+
+    /**
+     * @see Everzet\Behat\Formatter\FormatterInterface
+     */
+    public function __construct(Container $container)
+    {
+        $this->container    = $container;
+        $this->output       = $container->getOutputService();
+        $this->verbose      = $container->getParameter('formatter.verbose');
+
+        $this->output->setStyle('failed',      array('fg' => 'red'));
+        $this->output->setStyle('undefined',   array('fg' => 'yellow'));
+        $this->output->setStyle('pending',     array('fg' => 'yellow'));
+        $this->output->setStyle('passed',      array('fg' => 'green'));
+        $this->output->setStyle('skipped',     array('fg' => 'cyan'));
+        $this->output->setStyle('comment',     array('fg' => 'black'));
+        $this->output->setStyle('tag',         array('fg' => 'cyan'));
+    }
+
     /**
      * @see Everzet\Behat\Formatter\FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
-        $dispatcher->connect('step.test.after',             array($this, 'printStep'),          10);
-        $dispatcher->connect('step.skip.after',             array($this, 'printStep'),          10);
+        $this->registerRunCounters($dispatcher);
 
-        $dispatcher->connect('features.test.after',         array($this, 'printEmptyLine'),     10);
-        $dispatcher->connect('features.test.after',         array($this, 'printFailedSteps'),   10);
-        $dispatcher->connect('features.test.after',         array($this, 'printPendingSteps'),  10);
-        $dispatcher->connect('features.test.after',         array($this, 'printStatistics'),    10);
-        $dispatcher->connect('features.test.after',         array($this, 'printSnippets'),      10);
+        $dispatcher->connect('step.run.after',          array($this, 'printStep'),          10);
+        $dispatcher->connect('step.skip.after',         array($this, 'printStep'),          10);
+
+        $dispatcher->connect('suite.run.after',         array($this, 'printEmptyLine'),     10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printFailedSteps'),   10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printPendingSteps'),  10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printStatistics'),    10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printSnippets'),      10);
     }
 
     /**
@@ -47,23 +77,23 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
       */
     public function printStep(Event $event)
     {
-        $runner = $event->getSubject();
+        $step = $event->getSubject();
 
-        switch ($runner->getStatus()) {
-            case 'passed':
-                $this->output->write('<passed>.</passed>');
+        switch ($step->getResult()) {
+            case RunableNodeInterface::PASSED:
+                $this->write('.', 'passed', false);
                 break;
-            case 'skipped':
-                $this->output->write('<skipped>-</skipped>');
+            case RunableNodeInterface::SKIPPED:
+                $this->write('-', 'skipped', false);
                 break;
-            case 'pending':
-                $this->output->write('<pending>P</pending>');
+            case RunableNodeInterface::PENDING:
+                $this->write('P', 'pending', false);
                 break;
-            case 'undefined':
-                $this->output->write('<undefined>U</undefined>');
+            case RunableNodeInterface::UNDEFINED:
+                $this->write('U', 'undefined', false);
                 break;
-            case 'failed':
-                $this->output->write('<failed>F</failed>');
+            case RunableNodeInterface::FAILED:
+                $this->write('F', 'failed', false);
                 break;
         }
     }
@@ -75,7 +105,7 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
       */
     public function printEmptyLine(Event $event)
     {
-        $this->output->writeln("\n");
+        $this->write("\n");
     }
 
     /**
@@ -85,28 +115,26 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
       */
     public function printFailedSteps(Event $event)
     {
-        $runner = $event->getSubject();
+        if (count($this->failedSteps)) {
+            $this->write("(::) failed steps (::)\n", 'failed');
 
-        if (count($stepRunners = $runner->getFailedStepRunners())) {
-            $this->output->writeln("<failed>(::) failed steps (::)</failed>\n");
-
-            foreach ($stepRunners as $number => $stepRunner) {
-                $step = $stepRunner->getStep();
-
+            foreach ($this->failedSteps as $number => $step) {
                 // Print step exception
-                if (null !== $stepRunner->getException()) {
+                if (null !== $step->getException()) {
                     if ($this->verbose) {
-                        $error = (string) $stepRunner->getException();
+                        $error = (string) $step->getException();
                     } else {
-                        $error = $stepRunner->getException()->getMessage();
+                        $error = $step->getException()->getMessage();
                     }
-                    $this->output->write(sprintf("%s. \033[31m%s\033[0m"
-                      , str_pad((string) ($number + 1), 2, '0', STR_PAD_LEFT)
-                      , strtr($error, array("\n" => "\n    "))
-                    ), true, 1);
+                    $this->write(
+                        sprintf("%s. %s"
+                          , str_pad((string) ($number + 1), 2, '0', STR_PAD_LEFT)
+                          , strtr($error, array("\n" => "\n    "))
+                        )
+                    , 'failed');
                 }
 
-                $this->printStepInformation($stepRunner, 'failed');
+                $this->printStepInformation($step, 'failed');
             }
         }
     }
@@ -118,29 +146,26 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
       */
     public function printPendingSteps(Event $event)
     {
-        $runner = $event->getSubject();
+        if (count($this->pendingSteps)) {
+            $this->write("(::) pending steps (::)\n", 'pending');
 
-        if (count($stepRunners = $runner->getPendingStepRunners())) {
-            $this->output->writeln("<pending>(::) pending steps (::)</pending>\n");
-
-            $number = 1;
-            foreach ($stepRunners as $key => $stepRunner) {
-                $step = $stepRunner->getStep();
-
+            foreach ($this->pendingSteps as $number => $step) {
                 // Print step exception
-                if (null !== $stepRunner->getException()) {
+                if (null !== $step->getException()) {
                     if ($this->verbose) {
-                        $error = (string) $stepRunner->getException();
+                        $error = (string) $step->getException();
                     } else {
-                        $error = $stepRunner->getException()->getMessage();
+                        $error = $step->getException()->getMessage();
                     }
-                    $this->output->write(sprintf("%s. \033[33m%s\033[0m"
-                      , str_pad((string) $number++, 2, '0', STR_PAD_LEFT)
-                      , strtr($error, array("\n" => "\n    "))
-                    ), true, 1);
+                    $this->write(
+                        sprintf("%s. %s"
+                          , str_pad((string) ($number + 1), 2, '0', STR_PAD_LEFT)
+                          , strtr($error, array("\n" => "\n    "))
+                        )
+                    , 'pending');
                 }
 
-                $this->printStepInformation($stepRunner, 'pending');
+                $this->printStepInformation($step, 'pending');
             }
         }
     }
@@ -151,51 +176,42 @@ class ProgressFormatter extends PrettyFormatter implements FormatterInterface
      * @param   RunnerInterface $stepRunner runner instance
      * @param   string          $type       information type (pending/failed etc.)
      */
-    protected function printStepInformation(RunnerInterface $stepRunner, $type)
+    protected function printStepInformation(StepNode $step, $type)
     {
         // Print step information
-        $step = $stepRunner->getStep();
-        $description = sprintf("    <%s>In step `%s %s'.</%s>"
-          , $type
-          , $step->getType()
-          , $step->getText()
-          , $type
-        );
+        $description = $this->colorize(
+            sprintf("    In step `%s %s'.", $step->getType(), $step->getText())
+        , $type);
         $this->maxDescriptionLength = $this->maxDescriptionLength > mb_strlen($description)
             ? $this->maxDescriptionLength
             : mb_strlen($description);
-        $this->output->write($description);
+        $this->write($description, null, false);
         $this->printLineSourceComment(
             mb_strlen($description)
-          , $stepRunner->getDefinition()->getFile()
-          , $stepRunner->getDefinition()->getLine()
+          , $step->getDefinition()->getFile()
+          , $step->getDefinition()->getLine()
         );
 
         // Print scenario information
-        $parentRunner = $stepRunner->getParentRunner();
-        if ($parentRunner instanceof BackgroundRunner) {
-            $item           = $parentRunner->getBackground();
-            $description    = sprintf("    <%s>From scenario background.</%s>"
-              , $type
-              , $type
-            );
-        } elseif ($parentRunner instanceof ScenarioRunner) {
-            $item           = $parentRunner->getScenario();
-            $description    = sprintf("    <%s>From scenario %s.</%s>"
-              , $type
-              , $item->getTitle() ? sprintf("`%s'", $item->getTitle()) : '***'
-              , $type
-            );
+        $item = $step->getParent();
+        if ($item instanceof BackgroundNode) {
+            $description    = $this->colorize('    From scenario background.', $type);
+        } elseif ($item instanceof ScenarioNode) {
+            $description    = $this->colorize(
+                sprintf("    From scenario %s."
+                  , $item->getTitle() ? sprintf("`%s'", $item->getTitle()) : '***'
+                )
+            , $type);
         }
         $this->maxDescriptionLength = $this->maxDescriptionLength > mb_strlen($description)
             ? $this->maxDescriptionLength
             : mb_strlen($description);
-        $this->output->write($description);
+        $this->write($description, null, false);
         $this->printLineSourceComment(
             mb_strlen($description)
           , $item->getFile()
           , $item->getLine()
         );
-        $this->output->writeln('');
+        $this->write();
     }
 }

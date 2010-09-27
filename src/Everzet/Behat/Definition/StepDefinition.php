@@ -2,8 +2,8 @@
 
 namespace Everzet\Behat\Definition;
 
-use Everzet\Gherkin\Element\Inline\PyStringElement;
-use Everzet\Gherkin\Element\Inline\TableElement;
+use Everzet\Gherkin\Node\PyStringNode;
+use Everzet\Gherkin\Node\TableNode;
 
 use Everzet\Behat\Exception\Error;
 use Everzet\Behat\Environment\EnvironmentInterface;
@@ -147,9 +147,9 @@ class StepDefinition
         $values = $this->values;
         array_unshift($values, $environment);
         call_user_func_array($this->callback, array_map(function($value) {
-            if ($value instanceof PyStringElement) {
+            if ($value instanceof PyStringNode) {
                 return (string) $value;
-            } elseif ($value instanceof TableElement) {
+            } elseif ($value instanceof TableNode) {
                 return $value->getHash();
             } else {
                 return $value;

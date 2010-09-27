@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin\Element;
+namespace Everzet\Gherkin\Node;
 
 /*
  * This file is part of the behat package.
@@ -15,19 +15,30 @@ namespace Everzet\Gherkin\Element;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepElement
+class StepNode
 {
     protected $type;
     protected $text;
-    protected $tokens       = array();
-    protected $arguments    = array();
+    protected $tokens               = array();
+    protected $arguments            = array();
     protected $line;
+    protected $parent;
 
     public function __construct($type, $text, $line = 0)
     {
         $this->type = $type;
         $this->text = $text;
         $this->line = $line;
+    }
+
+    public function setParent(BackgroundNode $parent)
+    {
+        $this->parent = $parent;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
     }
 
     public function getLine()

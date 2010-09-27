@@ -22,6 +22,11 @@
         <parameter key="steps_loader.class">Everzet\Behat\Loader\StepsLoader</parameter>
         <parameter key="step_definition.class">Everzet\Behat\Definition\StepDefinition</parameter>
         <parameter key="tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
+        <parameter key="feature_node.class">Everzet\Behat\RunableNode\FeatureNode</parameter>
+        <parameter key="step_node.class">Everzet\Behat\RunableNode\StepNode</parameter>
+        <parameter key="background_node.class">Everzet\Behat\RunableNode\BackgroundNode</parameter>
+        <parameter key="scenario_node.class">Everzet\Behat\RunableNode\ScenarioNode</parameter>
+        <parameter key="outline_node.class">Everzet\Behat\RunableNode\OutlineNode</parameter>
     </parameters>
     <services>
         <service id="configuration_loader" class="%configuration_loader.class%" shared="true">

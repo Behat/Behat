@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Behat\Exception\Redundant;
 
@@ -110,6 +111,11 @@ class TestCommand extends Command
             getHooksLoaderService()->
             load($container->getParameter('hooks.file'));
 
+        // Notify suite.run.before event
+        $container->
+            getEventDispatcherService()->
+            notify(new Event($this, 'suite.run.before'));
+
         // Load steps
         try {
             $container->
@@ -123,12 +129,27 @@ class TestCommand extends Command
         }
 
         // Load features runner
-        $featuresRunner = $container->
+        $features = $container->
             getFeaturesLoaderService()->
             load($container->getParameter('features.files'));
 
-        // Run test suite & return exit code
-        return $featuresRunner->run();
+        // Run features
+        $result = 0;
+        $timer  = microtime(true);
+        foreach ($features as $feature) {
+            $result = max($result, $feature->run($container));
+        }
+        $timer  = microtime(true) - $timer;
+
+        // Notify suite.run.after event
+        $container->
+            getEventDispatcherService()->
+            notify(new Event($this, 'suite.run.after'));
+
+        // Print run time
+        $output->writeln(sprintf("%.3fs", $timer));
+
+        // Return exit code
+        return $result;
     }
 }
-

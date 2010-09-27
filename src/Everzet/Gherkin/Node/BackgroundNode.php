@@ -1,10 +1,8 @@
 <?php
 
-namespace Everzet\Gherkin\Element\Scenario;
+namespace Everzet\Gherkin\Node;
 
 use Everzet\Gherkin\I18n;
-use Everzet\Gherkin\Element\SectionElement;
-use Everzet\Gherkin\Element\StepElement;
 
 /*
  * This file is part of the behat package.
@@ -19,10 +17,11 @@ use Everzet\Gherkin\Element\StepElement;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BackgroundElement extends SectionElement
+class BackgroundNode extends SectionNode
 {
-    protected $steps = array();
+    protected $feature;
     protected $line;
+    protected $steps = array();
 
     /**
      * Creates new instance
@@ -33,6 +32,16 @@ class BackgroundElement extends SectionElement
     {
         $this->line = $line;
         parent::__construct($i18n, $file);
+    }
+
+    public function setFeature(FeatureNode $feature)
+    {
+        $this->feature = $feature;
+    }
+
+    public function getFeature()
+    {
+        return $this->feature;
     }
 
     /**
@@ -52,8 +61,7 @@ class BackgroundElement extends SectionElement
      */
     public function addSteps(array $steps)
     {
-        foreach ($steps as $step)
-        {
+        foreach ($steps as $step) {
             $this->addStep($step);
         }
     }
@@ -63,8 +71,9 @@ class BackgroundElement extends SectionElement
      *
      * @param   Step  $step Step instance
      */
-    public function addStep(StepElement $step)
+    public function addStep(StepNode $step)
     {
+        $step->setParent($this);
         $this->steps[] = $step;
     }
 
