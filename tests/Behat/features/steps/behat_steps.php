@@ -40,7 +40,7 @@ $steps->Then('/^it should (fail|pass) with:$/', function($world, $success, $data
     } else {
         assertEquals(0, $world->return);
     }
-    assertEquals(trim($data), $world->output);
+    assertEquals($data, $world->output);
 });
 
 $steps->Then('/^it should (fail|pass)$/', function($world, $success) {

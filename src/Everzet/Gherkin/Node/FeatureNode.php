@@ -1,9 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin\Element;
-
-use Everzet\Gherkin\Element\Scenario\BackgroundElement;
-use Everzet\Gherkin\Element\Scenario\ScenarioElement;
+namespace Everzet\Gherkin\Node;
 
 /*
  * This file is part of the behat package.
@@ -18,11 +15,16 @@ use Everzet\Gherkin\Element\Scenario\ScenarioElement;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureElement extends SectionElement
-{    
+class FeatureNode extends SectionNode
+{
     protected $background;
     protected $description = array();
     protected $scenarios = array();
+
+    public function accept(NodeVisitorInterface $visitor)
+    {
+        return $visitor->visit($this);
+    }
 
     /**
      * Adds description lines to Feature
@@ -79,8 +81,9 @@ class FeatureElement extends SectionElement
      *
      * @param   Background  $background background instance
      */
-    public function setBackground(BackgroundElement $background)
+    public function setBackground(BackgroundNode $background)
     {
+        $background->setFeature($this);
         $this->background = $background;
     }
 
@@ -109,8 +112,9 @@ class FeatureElement extends SectionElement
      *
      * @param   Scenario  $scenario Scenario instance
      */
-    public function addScenario(ScenarioElement $scenario)
+    public function addScenario(ScenarioNode $scenario)
     {
+        $scenario->setFeature($this);
         $this->scenarios[] = $scenario;
     }
 

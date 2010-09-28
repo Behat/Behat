@@ -23,6 +23,10 @@ class I18n
 
     public function __construct($xliffPath, $xliffFilesExtension = '.xml')
     {
+        if ('/' !== $xliffPath[0]) {
+            $xliffPath = __DIR__ . '/' . $xliffPath;
+        }
+
         if (!is_dir($xliffPath)) {
             throw new \InvalidArgumentException(sprintf('Path "%s" is invalid', $xliffPath));
         }

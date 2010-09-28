@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin\Element\Inline;
+namespace Everzet\Gherkin\Node;
 
 /*
  * This file is part of the behat package.
@@ -11,27 +11,26 @@ namespace Everzet\Gherkin\Element\Inline;
  */
 
 /**
- * Examples.
+ * Scenario Outline.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExamplesElement
+class OutlineNode extends ScenarioNode
 {
-    protected $title;
-    protected $table;
+    protected $examples;
 
-    public function __construct($title)
+    public function setExamples(ExamplesNode $examples)
     {
-        $this->title = $title;
+        $this->examples = $examples;
     }
 
-    public function setTable(TableElement $table)
+    public function hasExamples()
     {
-        $this->table = $table;
+        return null !== $this->examples;
     }
 
-    public function getTable()
+    public function getExamples()
     {
-        return $this->table;
+        return $this->examples;
     }
 }

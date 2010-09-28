@@ -2,17 +2,9 @@
 
 namespace Everzet\Gherkin;
 
-use Everzet\Gherkin\I18n;
-use Everzet\Gherkin\RegexHolder;
-use Everzet\Gherkin\ParserException;
-use Everzet\Gherkin\Element\FeatureElement;
-use Everzet\Gherkin\Element\StepElement;
-use Everzet\Gherkin\Element\Scenario\BackgroundElement;
-use Everzet\Gherkin\Element\Scenario\ScenarioElement;
-use Everzet\Gherkin\Element\Scenario\ScenarioOutlineElement;
-use Everzet\Gherkin\Element\Inline\PyStringElement;
-use Everzet\Gherkin\Element\Inline\TableElement;
-use Everzet\Gherkin\Element\Inline\ExamplesElement;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /*
  * This file is part of the behat package.
@@ -31,15 +23,23 @@ class Parser
 {
     protected $file             = null;
     protected $i18n             = null;
+    protected $container        = null;
     protected $lines            = array();
     protected $currentLineNb    = -1;
     protected $currentLine      = '';
     protected $regex            = null;
     protected $feature          = null;
 
-    public function __construct(I18n $i18n)
+    public function __construct(Container $container = null)
     {
-        $this->i18n = $i18n;
+        if (null === $container) {
+            $container  = new ContainerBuilder();
+            $xmlLoader  = new XmlFileLoader($container);
+            $xmlLoader->load(__DIR__ . '/ServiceContainer/container.xml');
+        }
+
+        $this->container    = $container;
+        $this->i18n         = $container->getI18nService();
     }
 
     protected function initLang()
@@ -49,7 +49,7 @@ class Parser
         } else {
             $this->i18n->loadLang('en');
         }
-        $this->regex = new RegexHolder($this->i18n);
+        $this->lexer = new Lexer($this->i18n);
     }
 
     public function parseFile($file)
@@ -79,44 +79,48 @@ class Parser
             }
 
             // feature?
-            if (preg_match($this->regex->getFeatureRegex(), $this->currentLine, $values)) {
-                $this->feature = new FeatureElement($this->i18n, $this->file);
+            if (preg_match($this->lexer->getFeatureRegex(), $this->currentLine, $values)) {
+                $class = $this->container->getParameter('feature_node.class');
+                $this->feature = new $class($this->i18n, $this->file);
                 $this->feature->setTitle(isset($values['title']) ? $values['title'] : '');
                 $this->feature->addTags($this->getPreviousTags());
                 $this->feature->addDescriptions($this->getNextDescriptions());
             }
 
             // background?
-            if (preg_match($this->regex->getBackgroundRegex(), $this->currentLine, $values)) {
-                $background = new BackgroundElement($this->currentLineNb, $this->i18n, $this->file);
+            if (preg_match($this->lexer->getBackgroundRegex(), $this->currentLine, $values)) {
+                $class = $this->container->getParameter('background_node.class');
+                $background = new $class($this->i18n, $this->file, $this->currentLineNb);
                 $background->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
-                $background->addSteps($this->getNextSteps());
+                $background->setSteps($this->getNextSteps());
 
                 $this->feature->setBackground($background);
             }
 
             // scenario?
-            if (preg_match($this->regex->getScenarioRegex(), $this->currentLine, $values)) {
-                $scenario = new ScenarioElement($this->currentLineNb, $this->i18n, $this->file);
+            if (preg_match($this->lexer->getScenarioRegex(), $this->currentLine, $values)) {
+                $class = $this->container->getParameter('scenario_node.class');
+                $scenario = new $class($this->i18n, $this->file, $this->currentLineNb);
                 $scenario->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
                 $scenario->addTags($this->getPreviousTags());
-                $scenario->addSteps($this->getNextSteps());
+                $scenario->setSteps($this->getNextSteps());
 
                 $this->feature->addScenario($scenario);
             }
 
             // scenario outline?
-            if (preg_match($this->regex->getScenarioOutlineRegex(), $this->currentLine, $values)) {
-                $outline = new ScenarioOutlineElement($this->currentLineNb, $this->i18n, $this->file);
+            if (preg_match($this->lexer->getScenarioOutlineRegex(), $this->currentLine, $values)) {
+                $class = $this->container->getParameter('outline_node.class');
+                $outline = new $class($this->i18n, $this->file, $this->currentLineNb);
                 $outline->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
                 $outline->addTags($this->getPreviousTags());
-                $outline->addSteps($this->getNextSteps());
+                $outline->setSteps($this->getNextSteps());
                 if (null === ($examples = $this->getNextExamples())) {
                     throw new ParserException(
                         sprintf('No examples in %s outline', $outline->getTitle())
@@ -139,10 +143,10 @@ class Parser
     {
         $tags = array();
 
-        if (preg_match($this->regex->getTagsRegex(), $this->getPreviousLine(), $values)) {
+        if (preg_match($this->lexer->getTagsRegex(), $this->getPreviousLine(), $values)) {
             $tags = array_map(function($item) {
                 return trim($item);
-            }, explode($this->regex->getTagKeyword(), $values['tags']));
+            }, explode($this->lexer->getTagKeyword(), $values['tags']));
         }
 
         return $tags;
@@ -155,8 +159,8 @@ class Parser
                 continue;
             }
             if (
-                preg_match($this->regex->getStepsRegex(), $this->currentLine) ||
-                preg_match($this->regex->getTableRegex(), $this->currentLine)
+                preg_match($this->lexer->getStepsRegex(), $this->currentLine) ||
+                preg_match($this->lexer->getTableRegex(), $this->currentLine)
             ) {
                 break;
             }
@@ -175,7 +179,7 @@ class Parser
             if ($this->isCurrentLineEmpty()) {
                 continue;
             }
-            if (!preg_match($this->regex->getDescriptionRegex(), $this->currentLine, $values)) {
+            if (!preg_match($this->lexer->getDescriptionRegex(), $this->currentLine, $values)) {
                 break;
             }
 
@@ -197,11 +201,12 @@ class Parser
             if ($this->isCurrentLineEmpty()) {
                 continue;
             }
-            if (!preg_match($this->regex->getStepsRegex(), $this->currentLine, $values)) {
+            if (!preg_match($this->lexer->getStepsRegex(), $this->currentLine, $values)) {
                 break;
             }
 
-            $step = new StepElement($values['type'], $values['step'], $this->currentLineNb);
+            $class = $this->container->getParameter('step_node.class');
+            $step = new $class($values['type'], $values['step'], $this->currentLineNb);
             if (null !== ($pystring = $this->getNextPyString())) {
                 $step->addArgument($pystring);
             }
@@ -221,13 +226,14 @@ class Parser
 
         if (
             $this->moveToNextLine() &&
-            preg_match($this->regex->getPyStringStarterRegex(), $this->currentLine, $values)
+            preg_match($this->lexer->getPyStringStarterRegex(), $this->currentLine, $values)
         ) {
-            $pystring = new PyStringElement(mb_strlen($values['indent']));
+            $class = $this->container->getParameter('pystring_node.class');
+            $pystring = new $class(mb_strlen($values['indent']));
 
             while (
                 $this->moveToNextLine() &&
-                !preg_match($this->regex->getPyStringStarterRegex(), $this->currentLine)
+                !preg_match($this->lexer->getPyStringStarterRegex(), $this->currentLine)
             ) {
                 $pystring->addLine($this->currentLine);
             }
@@ -246,12 +252,13 @@ class Parser
             if ($this->isCurrentLineEmpty()) {
                 continue;
             }
-            if (!preg_match($this->regex->getTableRegex(), $this->currentLine, $values)) {
+            if (!preg_match($this->lexer->getTableRegex(), $this->currentLine, $values)) {
                 break;
             }
 
             if (null === $table) {
-                $table = new TableElement($this->regex->getTableSplitter());
+                $class = $this->container->getParameter('table_node.class');
+                $table = new $class($this->lexer->getTableSplitter());
             }
             $table->addRow($values['row']);
         }
@@ -269,8 +276,9 @@ class Parser
                 break;
             }
         }
-        if (preg_match($this->regex->getExamplesRegex(), $this->currentLine, $values)) {
-            $examples = new ExamplesElement(
+        if (preg_match($this->lexer->getExamplesRegex(), $this->currentLine, $values)) {
+            $class = $this->container->getParameter('examples_node.class');
+            $examples = new $class(
                 $this->getNextTitle(isset($values['title']) ? $values['title'] : '')
             );
             $examples->setTable($this->getNextTable());

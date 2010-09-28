@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Everzet\Behat\Console\Command\TestCommand;
 
 /*
- * This file is part of the Behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,7 +27,7 @@ use Everzet\Behat\Console\Command\TestCommand;
 class BehatApplication extends Application
 {
     /**
-     * @see Symfony\Component\Console\Application
+     * @see     Symfony\Component\Console\Application
      */
     public function __construct()
     {
@@ -48,7 +48,7 @@ class BehatApplication extends Application
     }
 
     /**
-     * @see Symfony\Component\Console\Application
+     * @see     Symfony\Component\Console\Application
      */
     protected function getCommandName(InputInterface $input)
     {

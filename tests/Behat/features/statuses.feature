@@ -38,17 +38,18 @@ Feature: Statuses
 
       You can implement step definitions for undefined steps with these snippets:
 
-      $steps->Then('/^I must have (\d+)$/', function($world, $arg1) {
+      $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
           throw new \Everzet\Behat\Exception\Pending();
       });
 
-      $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
+      $steps->Then('/^I must have (\d+)$/', function($world, $arg1) {
           throw new \Everzet\Behat\Exception\Pending();
       });
 
       $steps->Then('/^String must be \'([^\']*)\'$/', function($world, $arg1) {
           throw new \Everzet\Behat\Exception\Pending();
       });
+
       """
 
   Scenario: Pending steps
@@ -84,14 +85,19 @@ Feature: Statuses
           In step `Given I have entered 10'. # features/steps/steps.php:4
           From scenario background.          # features/statuses.feature:2
 
+      02. TODO: write pending definition
+          In step `Given I have entered 10'. # features/steps/steps.php:4
+          From scenario background.          # features/statuses.feature:2
+
       2 scenarios (2 undefined)
-      5 steps (2 undefined, 2 pending, 1 skipped)
+      5 steps (1 skipped, 2 pending, 2 undefined)
 
       You can implement step definitions for undefined steps with these snippets:
 
       $steps->Then('/^I must have (\d+)$/', function($world, $arg1) {
           throw new \Everzet\Behat\Exception\Pending();
       });
+
       """
 
   Scenario: Failed
@@ -137,7 +143,7 @@ Feature: Statuses
           From scenario ***.             # features/statuses.feature:8
 
       2 scenarios (2 failed)
-      6 steps (2 failed, 4 passed)
+      6 steps (4 passed, 2 failed)
       """
 
   Scenario: Skipped
@@ -185,5 +191,5 @@ Feature: Statuses
           From scenario ***.             # features/statuses.feature:8
 
       2 scenarios (2 failed)
-      8 steps (2 failed, 4 passed, 2 skipped)
+      8 steps (4 passed, 2 skipped, 2 failed)
       """

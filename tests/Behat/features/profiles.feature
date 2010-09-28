@@ -114,4 +114,3 @@ Feature: Profiles
       3 scenarios (3 passed)
       15 steps (15 passed)
       """
-

@@ -3,7 +3,7 @@
 namespace Everzet\Behat\Environment;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,8 +20,6 @@ class WorldEnvironment implements EnvironmentInterface
   protected $values = array();
 
   /**
-   * Loads environment configuration from env.php (or different env file)
-   * 
    * @see   Everzet\Behat\Environment\EnvironmentInterface
    */
   public function loadEnvironmentFile($envFile)
@@ -33,9 +31,9 @@ class WorldEnvironment implements EnvironmentInterface
   }
 
   /**
-   * Prints beautified debug string
+   * Print beautified debug string.
    *
-   * @param     string  $string debug string
+   * @param     string  $string     debug string
    */
   public function printDebug($string)
   {
@@ -43,10 +41,10 @@ class WorldEnvironment implements EnvironmentInterface
   }
 
   /**
-   * Calls previously saved in values closure
+   * Call previously saved in values closure.
    *
-   * @param     string  $fn     function name
-   * @param     array   $args   closure arguments
+   * @param     string  $fn         function name
+   * @param     array   $args       closure arguments
    * 
    * @return    mixed
    */
@@ -66,7 +64,7 @@ class WorldEnvironment implements EnvironmentInterface
   }
 
   /**
-   * Sets a value in world.
+   * Set a value in world.
    *
    * @param     string  $key        The unique identifier for service
    * @param     object  $service    The object to call
@@ -77,7 +75,7 @@ class WorldEnvironment implements EnvironmentInterface
   }
 
   /**
-   * Checks if value is set in current world.
+   * Check if value is set in current world.
    *
    * @param     string  $key        The unique identifier for service
    * 
@@ -89,7 +87,7 @@ class WorldEnvironment implements EnvironmentInterface
   }
 
   /**
-   * Returns value by key.
+   * Return value by key.
    *
    * @param     string  $key        The unique identifier for service
    * 

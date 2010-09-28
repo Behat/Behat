@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Gherkin\Element\Inline;
+namespace Everzet\Gherkin\Node;
 
 /*
  * This file is part of the behat package.
@@ -15,7 +15,7 @@ namespace Everzet\Gherkin\Element\Inline;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PyStringElement
+class PyStringNode
 {
     protected $ltrimCount;
     protected $lines = array();

@@ -7,10 +7,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Finder\Finder;
 
-use Everzet\Behat\Runner\FeaturesRunner;
-
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +16,8 @@ use Everzet\Behat\Runner\FeaturesRunner;
  */
 
 /**
- * Loads feature/features & pass them into FeaturesRunner.
+ * Features Loader.
+ * Load feature/features.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -26,10 +25,9 @@ class FeaturesLoader implements LoaderInterface
 {
     protected $container;
     protected $dispatcher;
-    protected $featuresRunner;
 
     /**
-     * Inits loader.
+     * Initialize loader.
      *
      * @param   Container       $container  dependency container
      * @param   EventDispatcher $dispatcher event dispatcher
@@ -41,7 +39,7 @@ class FeaturesLoader implements LoaderInterface
     }
 
     /**
-     * Loads features from specified path(s)
+     * Load features from specified path(s).
      *
      * @param   string|array    $paths  features path(s)
      * 
@@ -49,30 +47,25 @@ class FeaturesLoader implements LoaderInterface
      */
     public function load($paths)
     {
+        $features = array();
+
         $this->dispatcher->notify(new Event($this, 'features.load.before'));
 
         if (!is_array($paths) && is_file($paths)) {
-            $this->featuresRunner = new FeaturesRunner($paths, $this->container);
+            $features[] = $this->container->getParserService()->parseFile($paths);
         } else {
             foreach ((array) $paths as $path) {
                 $finder = new Finder();
                 $files  = $finder->files()->name('*.feature')->in($path);
-                $this->featuresRunner = new FeaturesRunner($files, $this->container);
+
+                foreach ($files as $file) {
+                    $features[] = $this->container->getParserService()->parseFile($file);
+                }
             }
         }
 
         $this->dispatcher->notify(new Event($this, 'features.load.after'));
 
-        return $this->featuresRunner;
-    }
-
-    /**
-     * Returns created FeaturesRunner
-     *
-     * @return  Everzet\Behat\Runner\FeaturesRunner
-     */
-    public function getFeaturesRunner()
-    {
-        return $this->featuresRunner;
+        return $features;
     }
 }
