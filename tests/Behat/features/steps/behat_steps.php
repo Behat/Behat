@@ -1,7 +1,9 @@
 <?php
 
 $steps->Given('/^a standard Behat project directory structure$/', function($world) {
-    chdir(sys_get_temp_dir());
+    $dir = sys_get_temp_dir() . '/behat/' . microtime(true);
+    mkdir($dir, 0777, true);
+    chdir($dir);
 
     if (is_dir('features')) {
         exec('rm -rf features');
