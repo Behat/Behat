@@ -7,6 +7,20 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Behat\Tester\StepTester;
 
+/*
+ * This file is part of the Behat.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Abstract Console Formatter.
+ * Implements basic console printing operations.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 abstract class ConsoleFormatter
 {
     protected $statuses = array(
@@ -18,7 +32,7 @@ abstract class ConsoleFormatter
     );
 
     /**
-      * Listens to `suite.post_test` event & prints all tests statistics
+      * Listen to some event & print suite statistics.
       *
       * @param   Event   $event  notified event
       */
@@ -50,7 +64,7 @@ abstract class ConsoleFormatter
     }
 
     /**
-      * Listens to `suite.post_test` event & prints step snippets for undefined steps
+      * Listen to some event & print step definition snippets.
       *
       * @param   Event   $event  notified event
       */
@@ -70,6 +84,14 @@ abstract class ConsoleFormatter
         }
     }
 
+    /**
+     * Set color of string.
+     *
+     * @param   string          $string     string to colorize
+     * @param   integer|string  $result     result code or status string
+     * 
+     * @return  string                      colorized string (with console color codes added)
+     */
     protected function colorize($string, $result = null)
     {
         if (null !== $result) {
@@ -83,17 +105,24 @@ abstract class ConsoleFormatter
         }
     }
 
+    /**
+     * Print string to console.
+     *
+     * @param   string          $string     string to print
+     * @param   integer|string  $result     result code or status string to colorize
+     * @param   boolean         $newline    add newline after?
+     */
     protected function write($string = '', $result = null, $newline = true)
     {
         $this->output->write($this->colorize($string, $result), $newline, 1);
     }
 
     /**
-     * Returns color code for custom status
+     * Return result code for custom status.
      *
      * @param   string  $status status (passed/skipped/failed etc.)
      * 
-     * @return  integer         console color code
+     * @return  integer         result code
      */
     protected function getStatusColorCode($status)
     {
@@ -119,7 +148,7 @@ abstract class ConsoleFormatter
     }
 
     /**
-     * Prints comment line with source info
+     * Print comment line with source info.
      *
      * @param   integer $lineLength     current line length
      * @param   string  $file           source file

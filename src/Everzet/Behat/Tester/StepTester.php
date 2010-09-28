@@ -12,6 +12,19 @@ use Everzet\Behat\Exception\Ambiguous;
 use Everzet\Behat\Exception\Undefined;
 use Everzet\Behat\Exception\Pending;
 
+/*
+ * This file is part of the Behat.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Step Tester.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class StepTester implements NodeVisitorInterface
 {
     const PASSED    = 0;
@@ -27,6 +40,11 @@ class StepTester implements NodeVisitorInterface
     protected $tokens = array();
     protected $skip = false;
 
+    /**
+     * Initialize tester.
+     *
+     * @param   Container   $container  injection container
+     */
     public function __construct(Container $container)
     {
         $this->container    = $container;
@@ -34,21 +52,43 @@ class StepTester implements NodeVisitorInterface
         $this->definitions  = $container->getStepsLoaderService();
     }
 
+    /**
+     * Set run environment.
+     *
+     * @param   EnvironmentInterface    $environment    environment
+     */
     public function setEnvironment(EnvironmentInterface $environment)
     {
         $this->environment = $environment;
     }
 
+    /**
+     * Set step tokens.
+     *
+     * @param   array   $tokens     step tokens
+     */
     public function setTokens(array $tokens)
     {
         $this->tokens = $tokens;
     }
 
+    /**
+     * Set test to skip.
+     *
+     * @param   boolean $skip   skip test?
+     */
     public function skip($skip = true)
     {
         $this->skip = $skip;
     }
 
+    /**
+     * Visit StepNode & run tests against it.
+     *
+     * @param   Everzet\Gherkin\Node\StepNode       $step       step node
+     * 
+     * @return  integer                                         result
+     */
     public function visit($step)
     {
         $step->setTokens($this->tokens);

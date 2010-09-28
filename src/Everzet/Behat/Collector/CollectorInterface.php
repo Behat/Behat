@@ -1,8 +1,7 @@
 <?php
 
-namespace Everzet\Behat\Formatter;
+namespace Everzet\Behat\Collector;
 
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /*
@@ -14,21 +13,14 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 
 /**
- * Formatter Interface.
+ * Collector interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface FormatterInterface
+interface CollectorInterface
 {
     /**
-     * Initialize formatter.
-     *
-     * @param   Container   $container  dependency container
-     */
-    public function __construct(Container $container);
-
-    /**
-     * Register listeners in formatter.
+     * Registers custom listeners on event dispatcher.
      *
      * @param   EventDispatcher $dispatcher event dispatcher
      */

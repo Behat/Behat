@@ -7,7 +7,20 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Behat\Tester\StepTester;
 
-class StatisticsCollector
+/*
+ * This file is part of the Behat.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Collects run statistics during testsuite lifetime.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
+class StatisticsCollector implements CollectorInterface
 {
     protected $paused               = false;
 
@@ -29,6 +42,9 @@ class StatisticsCollector
     protected $failedStepsEvents    = array();
     protected $pendingStepsEvents   = array();
 
+    /**
+     * Initializes collector.
+     */
     public function __construct()
     {
         $this->stepsStatuses = array_combine(
@@ -41,41 +57,79 @@ class StatisticsCollector
         );
     }
 
+    /**
+     * Return total steps count.
+     *
+     * @return  integer
+     */
     public function getStepsCount()
     {
         return $this->stepsCount;
     }
 
+    /**
+     * Return total scenarios count.
+     *
+     * @return  integer
+     */
     public function getScenariosCount()
     {
         return $this->scenariosCount;
     }
 
+    /**
+     * Return associative array of steps statuses count.
+     *
+     * @return  array       associative array (ex: passed => 10, failed => 2)
+     */
     public function getStepsStatuses()
     {
         return $this->stepsStatuses;
     }
 
+    /**
+     * Return associative array of scenarios statuses count.
+     *
+     * @return  array       associative array (ex: passed => 10, failed => 2)
+     */
     public function getScenariosStatuses()
     {
         return $this->scenariosStatuses;
     }
 
+    /**
+     * Return array of definition snippets for undefined steps.
+     *
+     * @return  array       associative array with md5 as key and snippet as value
+     */
     public function getDefinitionsSnippets()
     {
         return $this->definitionsSnippets;
     }
 
+    /**
+     * Return array of failed steps events.
+     *
+     * @return  array
+     */
     public function getFailedStepsEvents()
     {
         return $this->failedStepsEvents;
     }
 
+    /**
+     * Return array of pending steps events;
+     *
+     * @return  array
+     */
     public function getPendingStepsEvents()
     {
         return $this->pendingStepsEvents;
     }
 
+    /**
+     * @see     Everzet\Behat\Collector\CollectorInterface
+     */
     public function registerListeners(EventDispatcher $dispatcher)
     {
         $dispatcher->connect('scenario.run.after',      array($this, 'collectScenarioStats'),   5);
@@ -83,16 +137,27 @@ class StatisticsCollector
         $dispatcher->connect('step.run.after',          array($this, 'collectStepStats'),       5);
     }
 
+    /**
+     * Pause collecting.
+     */
     public function pause()
     {
         $this->paused = true;
     }
 
+    /**
+     * Resume collecting.
+     */
     public function resume()
     {
         $this->paused = false;
     }
 
+    /**
+     * Listens to `scenario.run.after` & `outline.sub.run.after` events & collect stats.
+     *
+     * @param   Event   $event  event
+     */
     public function collectScenarioStats(Event $event)
     {
         if (!$this->paused) {
@@ -101,6 +166,11 @@ class StatisticsCollector
         }
     }
 
+    /**
+     * Listens to `step.run.after` events & collect stats.
+     *
+     * @param   Event   $event  event
+     */
     public function collectStepStats(Event $event)
     {
         if (!$this->paused) {

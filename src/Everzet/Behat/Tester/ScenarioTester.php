@@ -7,12 +7,30 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Node\NodeVisitorInterface;
 
+/*
+ * This file is part of the Behat.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Scenario Tester.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class ScenarioTester implements NodeVisitorInterface
 {
     protected $container;
     protected $dispatcher;
     protected $environment;
 
+    /**
+     * Initialize tester.
+     *
+     * @param   Container   $container  injection container
+     */
     public function __construct(Container $container)
     {
         $this->container    = $container;
@@ -20,6 +38,13 @@ class ScenarioTester implements NodeVisitorInterface
         $this->environment  = $this->container->getEnvironmentService();
     }
 
+    /**
+     * Visit ScenarioNode & run tests against it.
+     *
+     * @param   Everzet\Gherkin\Node\ScenarioNode       $scenario       scenario node
+     * 
+     * @return  integer                                                 result
+     */
     public function visit($scenario)
     {
         $this->dispatcher->notify(new Event($scenario, 'scenario.run.before'));

@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -16,8 +16,8 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
  */
 
 /**
- * ConfigurationLoader 
- * Loads configuration from external file(s)
+ * Configuration Loader.
+ * Loads configuration from external file(s).
  * 
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -26,7 +26,7 @@ class ConfigurationLoader implements LoaderInterface
     protected $container;
 
     /**
-     * Inits loader
+     * Initialize loader.
      * 
      * @param   ContainerBuilder    $container 
      */
@@ -36,7 +36,7 @@ class ConfigurationLoader implements LoaderInterface
     }
 
     /**
-     * Loads configuration from specified path(s)
+     * Load configuration from specified path(s).
      *
      * @param   string|array    $paths  features path(s)
      * 
@@ -63,7 +63,7 @@ class ConfigurationLoader implements LoaderInterface
     }
 
     /**
-     * Prepares container parameterers to work 
+     * Prepare container parameterers to work.
      */
     public function prepareContainerParameters()
     {
@@ -100,4 +100,3 @@ class ConfigurationLoader implements LoaderInterface
         }
     }
 }
-

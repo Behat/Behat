@@ -7,10 +7,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Finder\Finder;
 
-use Everzet\Behat\Runner\FeaturesRunner;
-
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +16,8 @@ use Everzet\Behat\Runner\FeaturesRunner;
  */
 
 /**
- * Loads feature/features & pass them into FeaturesRunner.
+ * Features Loader.
+ * Load feature/features.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -28,7 +27,7 @@ class FeaturesLoader implements LoaderInterface
     protected $dispatcher;
 
     /**
-     * Inits loader.
+     * Initialize loader.
      *
      * @param   Container       $container  dependency container
      * @param   EventDispatcher $dispatcher event dispatcher
@@ -40,7 +39,7 @@ class FeaturesLoader implements LoaderInterface
     }
 
     /**
-     * Loads features from specified path(s)
+     * Load features from specified path(s).
      *
      * @param   string|array    $paths  features path(s)
      * 

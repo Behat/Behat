@@ -14,7 +14,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Everzet\Behat\Exception\Redundant;
 
 /*
- * This file is part of the Behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -29,7 +29,7 @@ use Everzet\Behat\Exception\Redundant;
 class TestCommand extends Command
 {
     /**
-     * @see Symfony\Component\Console\Command\Command
+     * @see     Symfony\Component\Console\Command\Command
      */
     protected function configure()
     {
@@ -57,7 +57,7 @@ class TestCommand extends Command
     }
 
     /**
-     * @see Symfony\Component\Console\Command\Command
+     * @see     Symfony\Component\Console\Command\Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -128,7 +128,7 @@ class TestCommand extends Command
             return 1;
         }
 
-        // Load features runner
+        // Load features
         $features = $container->
             getFeaturesLoaderService()->
             load($container->getParameter('features.files'));

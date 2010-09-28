@@ -3,7 +3,7 @@
 namespace Everzet\Behat\Environment;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,14 +11,14 @@ namespace Everzet\Behat\Environment;
  */
 
 /**
- * Environment container/loader interface.
+ * Environment interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface EnvironmentInterface
 {
     /**
-     * Loads environment configuration from env.php (or different env file)
+     * Load environment configuration from env.php (or different env file).
      * 
      * @param     string  $file       file path to include initializations from
      */

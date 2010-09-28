@@ -12,7 +12,7 @@ use Everzet\Gherkin\Node\BackgroundNode;
 use Everzet\Behat\Tester\StepTester;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,7 +20,7 @@ use Everzet\Behat\Tester\StepTester;
  */
 
 /**
- * Console progress output formatter (phpUnit-like).
+ * Progress Console Formatter.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -32,7 +32,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     protected $maxDescriptionLength = 0;
 
     /**
-     * @see Everzet\Behat\Formatter\FormatterInterface
+     * @see     Everzet\Behat\Formatter\FormatterInterface
      */
     public function __construct(Container $container)
     {
@@ -42,7 +42,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * @see Everzet\Behat\Formatter\FormatterInterface
+     * @see     Everzet\Behat\Formatter\FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
@@ -57,7 +57,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `step.post_test` event & prints step runner information
+      * Listen to `step.run.after` event & print step run information.
       *
       * @param   Event   $event  notified event
       */
@@ -85,7 +85,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `suite.post_test` event & prints empty line
+      * Listen to `suite.run.after` event & print empty line.
       *
       * @param   Event   $event  notified event
       */
@@ -95,7 +95,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `suite.post_test` event & prints failed steps info
+      * Listen to `suite.run.after` event & print failed steps info.
       *
       * @param   Event   $event  notified event
       */
@@ -128,7 +128,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `suite.post_test` event & prints pending steps info
+      * Listen to `suite.run.after` event & print pending steps info.
       *
       * @param   Event   $event  notified event
       */
@@ -161,10 +161,10 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Print step information (filepath, fileline, exception description)
+     * Print step information (filepath, fileline, exception description).
      *
-     * @param   RunnerInterface $stepRunner runner instance
-     * @param   string          $type       information type (pending/failed etc.)
+     * @param   Event   $event  step event
+     * @param   string  $type   information type (pending/failed etc.)
      */
     protected function printStepEventInformation(Event $event, $type)
     {

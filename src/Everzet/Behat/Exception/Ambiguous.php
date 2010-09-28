@@ -3,7 +3,7 @@
 namespace Everzet\Behat\Exception;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -21,7 +21,7 @@ class Ambiguous extends BehaviorException
     protected $matches = array();
 
     /**
-     * Creates exception
+     * Initialize exception.
      *
      * @param   string  $text       step description
      * @param   array   $matches    ambigious matches (array of StepDefinition's)

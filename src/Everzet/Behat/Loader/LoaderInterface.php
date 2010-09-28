@@ -5,7 +5,7 @@ namespace Everzet\Behat\Loader;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -13,14 +13,14 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 
 /**
- * Loader interface
+ * Loader Interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface LoaderInterface
 {
     /**
-     * Loads files/scripts
+     * Load something.
      *
      * @param   string  $paths  paths to load from
      */

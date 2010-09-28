@@ -7,17 +7,42 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Node\NodeVisitorInterface;
 
+/*
+ * This file is part of the Behat.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Outline Tester.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class OutlineTester implements NodeVisitorInterface
 {
     protected $container;
     protected $dispatcher;
 
+    /**
+     * Initialize tester.
+     *
+     * @param   Container   $container  injection container
+     */
     public function __construct(Container $container)
     {
         $this->container    = $container;
         $this->dispatcher   = $container->getEventDispatcherService();
     }
 
+    /**
+     * Visit OutlineNode & run tests against it.
+     *
+     * @param   Everzet\Gherkin\Node\OutlineNode        $outline        outline node
+     * 
+     * @return  integer                                                 result
+     */
     public function visit($outline)
     {
         $this->dispatcher->notify(new Event($outline, 'outline.run.before'));

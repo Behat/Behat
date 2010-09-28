@@ -19,7 +19,7 @@ use Everzet\Gherkin\Node\ExamplesNode;
 use Everzet\Behat\Exception\Pending;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,7 +27,7 @@ use Everzet\Behat\Exception\Pending;
  */
 
 /**
- * Console pretty output formatter.
+ * Pretty Console Formatter.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -42,7 +42,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     protected $outlineSubresultExceptions   = array();
 
     /**
-     * @see Everzet\Behat\Formatter\FormatterInterface
+     * @see     Everzet\Behat\Formatter\FormatterInterface
      */
     public function __construct(Container $container)
     {
@@ -52,7 +52,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * @see Everzet\Behat\Formatter\FormatterInterface
+     * @see     Everzet\Behat\Formatter\FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
@@ -76,7 +76,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Listens to `feature.pre_test` event & prints feature header (title & description)
+     * Listen to `feature.run.before` event & print feature header.
      *
      * @param   Event   $event  notified event
      */
@@ -98,7 +98,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
         }
         $this->write();
 
-        // Run fake background to test if it runs without errors & prints it output
+        // Run fake background to test if it runs without errors & print it output
         if ($feature->hasBackground()) {
             $this->container->getStatisticsCollectorService()->pause();
             $tester = $this->container->getBackgroundTesterService();
@@ -110,9 +110,9 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `scenario_outline.pre_test` event & prints outline header (title & description)
+      * Listen to `outline.run.before` event & print outline header.
       *
-      * @param   Event   $event  notified event
+      * @param  Event   $event  notified event
       */
     public function printOutlineHeader(Event $event)
     {
@@ -168,6 +168,11 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
         );
     }
 
+    /**
+     * Listen to `outline.sub.run.after` event & print outline subscenario results.
+     *
+     * @param   Event   $event  notified event
+     */
     public function printOutlineSubResult(Event $event)
     {
         $outline    = $event->getSubject();
@@ -200,7 +205,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `scenario_outline.post_test` event & prints outline footer (newline after)
+      * Listen to `outline.run.after` event & print outline footer.
       *
       * @param   Event   $event  notified event
       */
@@ -210,7 +215,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `scenario.pre_test` event & prints scenario header (title & description)
+      * Listen to `scenario.run.before` event & print scenario header.
       *
       * @param   Event   $event  notified event
       */
@@ -242,7 +247,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `scenario.post_test` event & prints scenario footer (newline or outline row)
+      * Listen to `scenario.run.after` event & print scenario footer.
       *
       * @param   Event   $event  notified event
       */
@@ -252,7 +257,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `background.pre_test` event & prints background header (if needed)
+      * Listen to `background.run.before` event & print background header.
       *
       * @param   Event   $event  notified event
       */
@@ -281,7 +286,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `background.post_test` event & prints background footer (if needed)
+      * Listen to `background.run.after` event & print background footer.
       *
       * @param   Event   $event  notified event
       */
@@ -293,7 +298,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-      * Listens to `step.post_test` event & prints step runner information
+      * Listen to `step.run.after` event & print step run information.
       *
       * @param   Event   $event  notified event
       */
@@ -350,11 +355,11 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Recalculates max descriptions size for section elements
+     * Recalculate max descriptions size for section elements.
      *
-     * @param   Section $scenario   element for calculations
+     * @param   SectionNode $scenario   element for calculations
      * 
-     * @return  integer             description length
+     * @return  integer                 description length
      */
     protected function recalcMaxDescriptionLength(SectionNode $scenario)
     {
@@ -385,9 +390,9 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Returns formatted tag string, prepared for console output
+     * Return formatted tag string, prepared for console output.
      *
-     * @param   Section $section    section instance
+     * @param   SectionNode $section    section instance
      * 
      * @return  string
      */
@@ -402,10 +407,10 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Returns formatted PyString, prepared for console output
+     * Return formatted PyString, prepared for console output.
      *
-     * @param   PyString    $pystring   PyString instance
-     * @param   integer     $indent     indentation spaces count
+     * @param   PyStringNode    $pystring   PyString
+     * @param   integer         $indent     indentation spaces count
      * 
      * @return  string
      */
@@ -418,9 +423,9 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Returns formatted Table, prepared for console output
+     * Return formatted Table, prepared for console output.
      *
-     * @param   Table       $table      Table instance
+     * @param   TableNode   $table      Table instance
      * @param   string      $indent     indentation spaces count
      * 
      * @return  string
