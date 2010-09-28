@@ -29,6 +29,11 @@ class ScenarioNode extends SectionNode
         parent::__construct($i18n, $file);
     }
 
+    public function accept(NodeVisitorInterface $visitor)
+    {
+        return $visitor->visit($this);
+    }
+
     public function setFeature(FeatureNode $feature)
     {
         $this->feature = $feature;

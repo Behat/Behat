@@ -14,6 +14,8 @@
         <parameter key="i18n.class">Everzet\Gherkin\I18n</parameter>
         <parameter key="i18n.path">%%dir.lib%%/i18n</parameter>
         <parameter key="event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
+        <parameter key="tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
+        <parameter key="statistics_collector.class">Everzet\Behat\Collector\StatisticsCollector</parameter>
         <parameter key="formatter.class">Everzet\Behat\Formatter\%%formatter.name%%Formatter</parameter>
         <parameter key="environment.class">Everzet\Behat\Environment\WorldEnvironment</parameter>
         <parameter key="configuration_loader.class">Everzet\Behat\Loader\ConfigurationLoader</parameter>
@@ -21,12 +23,11 @@
         <parameter key="features_loader.class">Everzet\Behat\Loader\FeaturesLoader</parameter>
         <parameter key="steps_loader.class">Everzet\Behat\Loader\StepsLoader</parameter>
         <parameter key="step_definition.class">Everzet\Behat\Definition\StepDefinition</parameter>
-        <parameter key="tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
-        <parameter key="feature_node.class">Everzet\Behat\RunableNode\FeatureNode</parameter>
-        <parameter key="step_node.class">Everzet\Behat\RunableNode\StepNode</parameter>
-        <parameter key="background_node.class">Everzet\Behat\RunableNode\BackgroundNode</parameter>
-        <parameter key="scenario_node.class">Everzet\Behat\RunableNode\ScenarioNode</parameter>
-        <parameter key="outline_node.class">Everzet\Behat\RunableNode\OutlineNode</parameter>
+        <parameter key="feature_tester.class">Everzet\Behat\Tester\FeatureTester</parameter>
+        <parameter key="background_tester.class">Everzet\Behat\Tester\BackgroundTester</parameter>
+        <parameter key="scenario_tester.class">Everzet\Behat\Tester\ScenarioTester</parameter>
+        <parameter key="outline_tester.class">Everzet\Behat\Tester\OutlineTester</parameter>
+        <parameter key="step_tester.class">Everzet\Behat\Tester\StepTester</parameter>
     </parameters>
     <services>
         <service id="configuration_loader" class="%configuration_loader.class%" shared="true">
@@ -48,6 +49,14 @@
                 <argument>%environment.file%</argument>
             </call>
         </service>
+        <service id="tag_filter" class="%tag_filter.class%" shared="true">
+            <argument type="service" id="service_container" />
+            <tag name="events_listener" />
+        </service>
+        <service id="statistics_collector" class="%statistics_collector.class%" shared="true">
+            <argument type="service" id="service_container" />
+            <tag name="events_listener" />
+        </service>
         <service id="formatter" class="%formatter.class%" shared="true">
             <argument type="service" id="service_container" />
             <tag name="events_listener" />
@@ -63,9 +72,20 @@
             <argument type="service" id="service_container" />
             <argument type="service" id="event_dispatcher" />
         </service>
-        <service id="tag_filter" class="%tag_filter.class%" shared="true">
+        <service id="feature_tester" class="%feature_tester.class%" shared="false">
             <argument type="service" id="service_container" />
-            <tag name="events_listener" />
+        </service>
+        <service id="background_tester" class="%background_tester.class%" shared="false">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="scenario_tester" class="%scenario_tester.class%" shared="false">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="outline_tester" class="%outline_tester.class%" shared="false">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="step_tester" class="%step_tester.class%" shared="false">
+            <argument type="service" id="service_container" />
         </service>
     </services>
 </container>

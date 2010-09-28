@@ -31,6 +31,11 @@ class StepNode
         $this->line = $line;
     }
 
+    public function accept(NodeVisitorInterface $visitor)
+    {
+        return $visitor->visit($this);
+    }
+
     public function setParent(ScenarioNode $parent)
     {
         $this->parent = $parent;

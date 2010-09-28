@@ -21,6 +21,11 @@ class FeatureNode extends SectionNode
     protected $description = array();
     protected $scenarios = array();
 
+    public function accept(NodeVisitorInterface $visitor)
+    {
+        return $visitor->visit($this);
+    }
+
     /**
      * Adds description lines to Feature
      *

@@ -28,7 +28,7 @@ use Everzet\Behat\RunableNode\BackgroundNode;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
+class ProgressFormatter implements FormatterInterface
 {
     protected $container;
     protected $output;
@@ -58,16 +58,16 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
-        $this->registerRunCounters($dispatcher);
-
-        $dispatcher->connect('step.run.after',          array($this, 'printStep'),          10);
-        $dispatcher->connect('step.skip.after',         array($this, 'printStep'),          10);
-
-        $dispatcher->connect('suite.run.after',         array($this, 'printEmptyLine'),     10);
-        $dispatcher->connect('suite.run.after',         array($this, 'printFailedSteps'),   10);
-        $dispatcher->connect('suite.run.after',         array($this, 'printPendingSteps'),  10);
-        $dispatcher->connect('suite.run.after',         array($this, 'printStatistics'),    10);
-        $dispatcher->connect('suite.run.after',         array($this, 'printSnippets'),      10);
+#        $this->registerRunCounters($dispatcher);
+#
+#        $dispatcher->connect('step.run.after',          array($this, 'printStep'),          10);
+#        $dispatcher->connect('step.skip.after',         array($this, 'printStep'),          10);
+#
+#        $dispatcher->connect('suite.run.after',         array($this, 'printEmptyLine'),     10);
+#        $dispatcher->connect('suite.run.after',         array($this, 'printFailedSteps'),   10);
+#        $dispatcher->connect('suite.run.after',         array($this, 'printPendingSteps'),  10);
+#        $dispatcher->connect('suite.run.after',         array($this, 'printStatistics'),    10);
+#        $dispatcher->connect('suite.run.after',         array($this, 'printSnippets'),      10);
     }
 
     /**

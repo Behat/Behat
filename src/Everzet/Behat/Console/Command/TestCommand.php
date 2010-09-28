@@ -137,7 +137,8 @@ class TestCommand extends Command
         $result = 0;
         $timer  = microtime(true);
         foreach ($features as $feature) {
-            $result = max($result, $feature->run($container));
+            $tester = $container->getFeatureTesterService();
+            $result = max($result, $feature->accept($tester));
         }
         $timer  = microtime(true) - $timer;
 
