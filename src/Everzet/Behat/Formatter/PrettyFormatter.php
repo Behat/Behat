@@ -16,6 +16,8 @@ use Everzet\Gherkin\Node\PyStringNode;
 use Everzet\Gherkin\Node\TableNode;
 use Everzet\Gherkin\Node\ExamplesNode;
 
+use Everzet\Behat\Exception\Pending;
+
 /*
  * This file is part of the behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -34,7 +36,10 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     protected $container;
     protected $output;
     protected $verbose;
-    protected $maxDescriptionLength = 0;
+    protected $backgroundPrinted            = false;
+    protected $outlineStepsPrinted          = false;
+    protected $maxDescriptionLength         = 0;
+    protected $outlineSubresultExceptions   = array();
 
     /**
      * @see Everzet\Behat\Formatter\FormatterInterface
@@ -44,14 +49,6 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
         $this->container    = $container;
         $this->output       = $container->getOutputService();
         $this->verbose      = $container->getParameter('formatter.verbose');
-
-        $this->output->setStyle('failed',      array('fg' => 'red'));
-        $this->output->setStyle('undefined',   array('fg' => 'yellow'));
-        $this->output->setStyle('pending',     array('fg' => 'yellow'));
-        $this->output->setStyle('passed',      array('fg' => 'green'));
-        $this->output->setStyle('skipped',     array('fg' => 'cyan'));
-        $this->output->setStyle('comment',     array('fg' => 'black'));
-        $this->output->setStyle('tag',         array('fg' => 'cyan'));
     }
 
     /**
@@ -59,11 +56,10 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
-        $this->registerRunCounters($dispatcher);
-
         $dispatcher->connect('feature.run.before',      array($this, 'printFeatureHeader'),     10);
 
         $dispatcher->connect('outline.run.before',      array($this, 'printOutlineHeader'),     10);
+        $dispatcher->connect('outline.sub.run.after',   array($this, 'printOutlineSubResult'),  10);
         $dispatcher->connect('outline.run.after',       array($this, 'printOutlineFooter'),     10);
 
         $dispatcher->connect('scenario.run.before',     array($this, 'printScenarioHeader'),    10);
@@ -104,10 +100,12 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
 
         // Run fake background to test if it runs without errors & prints it output
         if ($feature->hasBackground()) {
-            $background = $feature->getBackground();
-            $background->setPrintable();
-            $background->run($this->container, $this->container->getEnvironmentService());
-            $background->setPrintable(false);
+            $this->container->getStatisticsCollectorService()->pause();
+            $tester = $this->container->getBackgroundTesterService();
+            $tester->setEnvironment($this->container->getEnvironmentService());
+            $feature->getBackground()->accept($tester);
+            $this->container->getStatisticsCollectorService()->resume();
+            $this->backgroundPrinted = true;
         }
     }
 
@@ -118,7 +116,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
       */
     public function printOutlineHeader(Event $event)
     {
-        $outline = $event->getSubject();
+        $outline    = $event->getSubject();
+        $examples   = $outline->getExamples()->getTable();
 
         // Recalc maximum description length (for filepath-like comments)
         $this->recalcMaxDescriptionLength($outline);
@@ -141,6 +140,63 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
           , $outline->getFile()
           , $outline->getLine()
         );
+
+        // Print outline steps
+        $environment = $this->container->getEnvironmentService();
+        $this->container->getStatisticsCollectorService()->pause();
+        foreach ($outline->getSteps() as $step) {
+            $tester = $this->container->getStepTesterService();
+            $tester->setEnvironment($environment);
+            $tester->setTokens(current($examples->getHash()));
+            $tester->skip();
+            $step->accept($tester);
+        }
+        $this->container->getStatisticsCollectorService()->resume();
+
+        $this->outlineStepsPrinted = true;
+
+        // Print outline examples title
+        $this->write(sprintf("\n    %s:", $outline->getI18n()->__('examples', 'Examples')));
+
+        // print outline examples header row
+        $this->write(
+            preg_replace(
+                '/|([^|]*)|/'
+              , $this->colorize('$1', 'skipped')
+              , '      ' . $examples->getKeysAsString()
+            )
+        );
+    }
+
+    public function printOutlineSubResult(Event $event)
+    {
+        $outline    = $event->getSubject();
+        $examples   = $outline->getExamples()->getTable();
+
+        // print current scenario results row
+        $this->write(
+            preg_replace(
+                '/|([^|]*)|/'
+              , $this->colorize('$1', $event['result'])
+              , '      ' . $examples->getRowAsString($event['iteration'])
+            )
+        );
+
+        // Print errors
+        foreach ($this->outlineSubresultExceptions as $exception) {
+            if ($this->verbose) {
+                $error = (string) $exception;
+            } else {
+                $error = $exception->getMessage();
+            }
+            if ($exception instanceof Pending) {
+                $status = 'pending';
+            } else {
+                $status = 'failed';
+            }
+            $this->write('        ' . strtr($error, array("\n" => "\n      ")), $status);
+        }
+        $this->outlineSubresultExceptions = array();
     }
 
     /**
@@ -165,26 +221,24 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
         // Recalc maximum description length (for filepath-like comments)
         $this->recalcMaxDescriptionLength($scenario);
 
-        if (!$scenario->isInOutline()) {
-            // Print tags if had ones
-            if ($scenario->hasTags()) {
-                $this->write($this->getTagsString($scenario), 'tag');
-            }
-
-            // Print scenario description
-            $description = sprintf("  %s:%s",
-                $scenario->getI18n()->__('scenario', 'Scenario'),
-                $scenario->getTitle() ? ' ' . $scenario->getTitle() : ''
-            );
-            $this->write($description, null, false);
-
-            // Print element path & line
-            $this->printLineSourceComment(
-                mb_strlen($description)
-              , $scenario->getFile()
-              , $scenario->getLine()
-            );
+        // Print tags if had ones
+        if ($scenario->hasTags()) {
+            $this->write($this->getTagsString($scenario), 'tag');
         }
+
+        // Print scenario description
+        $description = sprintf("  %s:%s",
+            $scenario->getI18n()->__('scenario', 'Scenario'),
+            $scenario->getTitle() ? ' ' . $scenario->getTitle() : ''
+        );
+        $this->write($description, null, false);
+
+        // Print element path & line
+        $this->printLineSourceComment(
+            mb_strlen($description)
+          , $scenario->getFile()
+          , $scenario->getLine()
+        );
     }
 
     /**
@@ -194,69 +248,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
       */
     public function printScenarioFooter(Event $event)
     {
-        $scenario = $event->getSubject();
-
-        if (!$scenario->isInOutline()) {
-            $this->write();
-        } else {
-            $outline    = $scenario->getOutline();
-            $examples   = $outline->getExamples()->getTable();
-
-            // Print outline description with steps & examples after first scenario in batch runned
-            if (0 === $outline->getFinishedScenariosCount()) {
-
-                // Print outline steps
-                foreach ($outline->getSteps() as $step) {
-                    // Print step description
-                    $description = sprintf('    %s %s', $step->getType(), $step->getCleanText());
-                    $this->write($description, 'skipped', false);
-
-                    // Print definition/element path
-                    if (null !== $step->getDefinition()) {
-                        $this->printLineSourceComment(
-                            mb_strlen($description)
-                          , $step->getDefinition()->getFile()
-                          , $step->getDefinition()->getLine()
-                        );
-                    } else {
-                        $this->write();
-                    }
-                }
-
-                // Print outline examples title
-                $this->write(sprintf("\n    %s:", $outline->getI18n()->__('examples', 'Examples')));
-
-                // print outline examples header row
-                $this->write(
-                    preg_replace(
-                        '/|([^|]*)|/'
-                      , $this->colorize('$1', 'skipped')
-                      , '      ' . $examples->getKeysAsString()
-                    )
-                );
-            }
-
-            // print current scenario results row
-            $this->write(
-                preg_replace(
-                    '/|([^|]*)|/'
-                  , $this->colorize('$1', $scenario->getResult())
-                  , '      ' . $examples->getRowAsString($outline->getFinishedScenariosCount())
-                )
-            );
-
-            // Print errors
-            foreach ($scenario->getSteps() as $step) {
-                if (null !== $step->getException()) {
-                    if ($this->verbose) {
-                        $error = (string) $step->getException();
-                    } else {
-                        $error = $step->getException()->getMessage();
-                    }
-                    $this->write('        ' . strtr($error, array("\n" => "\n      ")), 'failed');
-                }
-            }
-        }
+        $this->write();
     }
 
     /**
@@ -266,12 +258,12 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
       */
     public function printBackgroundHeader(Event $event)
     {
-        $background = $event->getSubject();
+        if (!$this->backgroundPrinted) {
+            $background = $event->getSubject();
 
-        // Recalc maximum description length (for filepath-like comments)
-        $this->recalcMaxDescriptionLength($background);
+            // Recalc maximum description length (for filepath-like comments)
+            $this->recalcMaxDescriptionLength($background);
 
-        if ($background->isPrintable()) {
             // Print description
             $description = sprintf("  %s:%s",
                 $background->getI18n()->__('background', 'Background'),
@@ -295,9 +287,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
       */
     public function printBackgroundFooter(Event $event)
     {
-        $background = $event->getSubject();
-
-        if ($background->isPrintable()) {
+        if (!$this->backgroundPrinted) {
             $this->write();
         }
     }
@@ -311,43 +301,50 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     {
         $step = $event->getSubject();
 
-        if ($step->isPrintable()) {
-            // Print step description
-            $description = sprintf('    %s %s', $step->getType(), $step->getText());
-            $this->write($description, $step->getResult(), false);
+        if (!($step->getParent() instanceof BackgroundNode) || !$this->backgroundPrinted) {
+            if (!($step->getParent() instanceof OutlineNode) || !$this->outlineStepsPrinted) {
+                // Print step description
+                $text = $this->outlineStepsPrinted ? $step->getText() : $step->getCleanText();
+                $description = sprintf('    %s %s', $step->getType(), $text);
+                $this->write($description, $event['result'], false);
 
-            // Print definition path if found one
-            if (null !== $step->getDefinition()) {
-                $this->printLineSourceComment(
-                    mb_strlen($description)
-                  , $step->getDefinition()->getFile()
-                  , $step->getDefinition()->getLine()
-                );
-            } else {
-                $this->write();
-            }
+                // Print definition path if found one
+                if (null !== $event['definition']) {
+                    $this->printLineSourceComment(
+                        mb_strlen($description)
+                      , $event['definition']->getFile()
+                      , $event['definition']->getLine()
+                    );
+                } else {
+                    $this->write();
+                }
 
-            // print step arguments
-            if ($step->hasArguments()) {
-                foreach ($step->getArguments() as $argument) {
-                    if ($argument instanceof PyStringNode) {
-                        $this->write($this->getPyString($argument, 6), $step->getResult());
-                    } elseif ($argument instanceof TableNode) {
-                        $this->write($this->getTableString($argument, 6), $step->getResult());
+                // print step arguments
+                if ($step->hasArguments()) {
+                    foreach ($step->getArguments() as $argument) {
+                        if ($argument instanceof PyStringNode) {
+                            $this->write($this->getPyString($argument, 6), $event['result']);
+                        } elseif ($argument instanceof TableNode) {
+                            $this->write($this->getTableString($argument, 6), $event['result']);
+                        }
                     }
                 }
-            }
 
-            // Print step exception
-            if (null !== $step->getException()) {
-                if ($this->verbose) {
-                    $error = (string) $step->getException();
-                } else {
-                    $error = $step->getException()->getMessage();
+                // Print step exception
+                if (null !== $event['exception']) {
+                    if ($this->verbose) {
+                        $error = (string) $event['exception'];
+                    } else {
+                        $error = $event['exception']->getMessage();
+                    }
+                    $this->write(
+                        '      ' . strtr($error, array("\n" => "\n      ")), $event['result']
+                    );
                 }
-                $this->write(
-                    '      ' . strtr($error, array("\n" => "\n      ")), $step->getResult()
-                );
+            } else {
+                if (null !== $event['exception']) {
+                    $this->outlineSubresultExceptions[] = $event['exception'];
+                }
             }
         }
     }

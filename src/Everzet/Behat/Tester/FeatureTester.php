@@ -6,6 +6,10 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Gherkin\Node\NodeVisitorInterface;
+use Everzet\Gherkin\Node\ScenarioNode;
+use Everzet\Gherkin\Node\OutlineNode;
+
+use Everzet\Behat\Exception\BehaviorException;
 
 class FeatureTester implements NodeVisitorInterface
 {
@@ -30,7 +34,15 @@ class FeatureTester implements NodeVisitorInterface
 
         // Test filtered scenarios
         foreach ($event->getReturnValue() as $scenario) {
-            $tester = $this->container->getScenarioTesterService();
+            if ($scenario instanceof OutlineNode) {
+                $tester = $this->container->getOutlineTesterService();
+            } elseif ($scenario instanceof ScenarioNode) {    
+                $tester = $this->container->getScenarioTesterService();
+            } else {
+                throw new BehaviorException(
+                    'Unknown scenario type found: ' . get_class($scenario)
+                );
+            }
             $result = max($result, $scenario->accept($tester));
         }
 

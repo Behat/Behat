@@ -9,7 +9,14 @@ use Everzet\Behat\RunableNode\RunableNodeInterface;
 
 abstract class BaseStatisticsFormatter
 {
-    protected $statuses         = array();
+    protected $statuses         = array(
+        RunableNodeInterface::PASSED    => 'passed'
+      , RunableNodeInterface::SKIPPED   => 'skipped'
+      , RunableNodeInterface::PENDING   => 'pending'
+      , RunableNodeInterface::UNDEFINED => 'undefined'
+      , RunableNodeInterface::FAILED    => 'failed'
+    );
+
     protected $stepsCount       = 0;
     protected $scenariosCount   = 0;
     protected $stepsResults     = array();
@@ -21,13 +28,6 @@ abstract class BaseStatisticsFormatter
 
     protected function registerRunCounters(EventDispatcher $dispatcher)
     {
-        $this->statuses = array(
-            RunableNodeInterface::PASSED    => 'passed'
-          , RunableNodeInterface::SKIPPED   => 'skipped'
-          , RunableNodeInterface::PENDING   => 'pending'
-          , RunableNodeInterface::UNDEFINED => 'undefined'
-          , RunableNodeInterface::FAILED    => 'failed'
-        );
         $this->stepsResults = array_combine(
             array_values($this->statuses),
             array_fill(0, count($this->statuses), 0)

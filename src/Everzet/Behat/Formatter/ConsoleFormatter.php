@@ -5,10 +5,18 @@ namespace Everzet\Behat\Formatter;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Behat\RunableNode\RunableNodeInterface;
+use Everzet\Behat\Tester\StepTester;
 
-abstract class ConsoleFormatter extends BaseStatisticsFormatter
+abstract class ConsoleFormatter
 {
+    protected $statuses = array(
+        StepTester::PASSED    => 'passed'
+      , StepTester::SKIPPED   => 'skipped'
+      , StepTester::PENDING   => 'pending'
+      , StepTester::UNDEFINED => 'undefined'
+      , StepTester::FAILED    => 'failed'
+    );
+
     /**
       * Listens to `suite.post_test` event & prints all tests statistics
       *
@@ -16,25 +24,27 @@ abstract class ConsoleFormatter extends BaseStatisticsFormatter
       */
     public function printStatistics(Event $event)
     {
+        $statistics = $event->getSubject()->getStatisticsCollectorService();
+
         $statuses = array();
-        foreach ($this->scenariosResults as $status => $count) {
+        foreach ($statistics->getScenariosStatuses() as $status => $count) {
             if ($count) {
                 $statuses[] = $this->colorize(sprintf('%s %s', $count, $status), $status);
             }
         }
         $this->write(sprintf('%d scenarios %s',
-            $this->scenariosCount
+            $statistics->getScenariosCount()
           , count($statuses) ? sprintf('(%s)', implode(', ', $statuses)) : ''
         ));
 
         $statuses = array();
-        foreach ($this->stepsResults as $status => $count) {
+        foreach ($statistics->getStepsStatuses() as $status => $count) {
             if ($count) {
                 $statuses[] = $this->colorize(sprintf('%s %s', $count, $status), $status);
             }
         }
         $this->write(sprintf('%d steps %s',
-            $this->stepsCount
+            $statistics->getStepsCount()
           , count($statuses) ? sprintf('(%s)', implode(', ', $statuses)) : ''
         ));
     }
@@ -46,13 +56,15 @@ abstract class ConsoleFormatter extends BaseStatisticsFormatter
       */
     public function printSnippets(Event $event)
     {
-        if (count($this->snippets)) {
+        $statistics = $event->getSubject()->getStatisticsCollectorService();
+
+        if (count($statistics->getDefinitionsSnippets())) {
             $this->write("\n" .
                 "You can implement step definitions for undefined steps with these snippets:" .
-            "\n", RunableNodeInterface::UNDEFINED);
+            "\n", 'undefined');
 
-            foreach ($this->snippets as $key => $snippet) {
-                $this->write($snippet, RunableNodeInterface::UNDEFINED);
+            foreach ($statistics->getDefinitionsSnippets() as $key => $snippet) {
+                $this->write($snippet, 'undefined');
                 $this->write();
             }
         }

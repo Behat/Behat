@@ -6,14 +6,10 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Behat\Runner\RunnerInterface;
-use Everzet\Behat\Runner\ScenarioRunner;
-use Everzet\Behat\Runner\BackgroundRunner;
+use Everzet\Gherkin\Node\ScenarioNode;
+use Everzet\Gherkin\Node\BackgroundNode;
 
-use Everzet\Behat\RunableNode\RunableNodeInterface;
-use Everzet\Behat\RunableNode\StepNode;
-use Everzet\Behat\RunableNode\ScenarioNode;
-use Everzet\Behat\RunableNode\BackgroundNode;
+use Everzet\Behat\Tester\StepTester;
 
 /*
  * This file is part of the behat package.
@@ -28,7 +24,7 @@ use Everzet\Behat\RunableNode\BackgroundNode;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ProgressFormatter implements FormatterInterface
+class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
 {
     protected $container;
     protected $output;
@@ -43,14 +39,6 @@ class ProgressFormatter implements FormatterInterface
         $this->container    = $container;
         $this->output       = $container->getOutputService();
         $this->verbose      = $container->getParameter('formatter.verbose');
-
-        $this->output->setStyle('failed',      array('fg' => 'red'));
-        $this->output->setStyle('undefined',   array('fg' => 'yellow'));
-        $this->output->setStyle('pending',     array('fg' => 'yellow'));
-        $this->output->setStyle('passed',      array('fg' => 'green'));
-        $this->output->setStyle('skipped',     array('fg' => 'cyan'));
-        $this->output->setStyle('comment',     array('fg' => 'black'));
-        $this->output->setStyle('tag',         array('fg' => 'cyan'));
     }
 
     /**
@@ -58,16 +46,14 @@ class ProgressFormatter implements FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
-#        $this->registerRunCounters($dispatcher);
-#
-#        $dispatcher->connect('step.run.after',          array($this, 'printStep'),          10);
-#        $dispatcher->connect('step.skip.after',         array($this, 'printStep'),          10);
-#
-#        $dispatcher->connect('suite.run.after',         array($this, 'printEmptyLine'),     10);
-#        $dispatcher->connect('suite.run.after',         array($this, 'printFailedSteps'),   10);
-#        $dispatcher->connect('suite.run.after',         array($this, 'printPendingSteps'),  10);
-#        $dispatcher->connect('suite.run.after',         array($this, 'printStatistics'),    10);
-#        $dispatcher->connect('suite.run.after',         array($this, 'printSnippets'),      10);
+        $dispatcher->connect('step.run.after',          array($this, 'printStep'),          10);
+        $dispatcher->connect('step.skip.after',         array($this, 'printStep'),          10);
+
+        $dispatcher->connect('suite.run.after',         array($this, 'printEmptyLine'),     10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printFailedSteps'),   10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printPendingSteps'),  10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printStatistics'),    10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printSnippets'),      10);
     }
 
     /**
@@ -79,20 +65,20 @@ class ProgressFormatter implements FormatterInterface
     {
         $step = $event->getSubject();
 
-        switch ($step->getResult()) {
-            case RunableNodeInterface::PASSED:
+        switch ($event['result']) {
+            case StepTester::PASSED:
                 $this->write('.', 'passed', false);
                 break;
-            case RunableNodeInterface::SKIPPED:
+            case StepTester::SKIPPED:
                 $this->write('-', 'skipped', false);
                 break;
-            case RunableNodeInterface::PENDING:
+            case StepTester::PENDING:
                 $this->write('P', 'pending', false);
                 break;
-            case RunableNodeInterface::UNDEFINED:
+            case StepTester::UNDEFINED:
                 $this->write('U', 'undefined', false);
                 break;
-            case RunableNodeInterface::FAILED:
+            case StepTester::FAILED:
                 $this->write('F', 'failed', false);
                 break;
         }
@@ -115,16 +101,18 @@ class ProgressFormatter implements FormatterInterface
       */
     public function printFailedSteps(Event $event)
     {
-        if (count($this->failedSteps)) {
+        $statistics = $event->getSubject()->getStatisticsCollectorService();
+
+        if (count($statistics->getFailedStepsEvents())) {
             $this->write("(::) failed steps (::)\n", 'failed');
 
-            foreach ($this->failedSteps as $number => $step) {
+            foreach ($statistics->getFailedStepsEvents() as $number => $event) {
                 // Print step exception
-                if (null !== $step->getException()) {
+                if (null !== $event['exception']) {
                     if ($this->verbose) {
-                        $error = (string) $step->getException();
+                        $error = (string) $event['exception'];
                     } else {
-                        $error = $step->getException()->getMessage();
+                        $error = $event['exception']->getMessage();
                     }
                     $this->write(
                         sprintf("%s. %s"
@@ -134,7 +122,7 @@ class ProgressFormatter implements FormatterInterface
                     , 'failed');
                 }
 
-                $this->printStepInformation($step, 'failed');
+                $this->printStepEventInformation($event, 'failed');
             }
         }
     }
@@ -146,16 +134,18 @@ class ProgressFormatter implements FormatterInterface
       */
     public function printPendingSteps(Event $event)
     {
-        if (count($this->pendingSteps)) {
+        $statistics = $event->getSubject()->getStatisticsCollectorService();
+
+        if (count($statistics->getPendingStepsEvents())) {
             $this->write("(::) pending steps (::)\n", 'pending');
 
-            foreach ($this->pendingSteps as $number => $step) {
+            foreach ($statistics->getPendingStepsEvents() as $number => $event) {
                 // Print step exception
-                if (null !== $step->getException()) {
+                if (null !== $event['exception']) {
                     if ($this->verbose) {
-                        $error = (string) $step->getException();
+                        $error = (string) $event['exception'];
                     } else {
-                        $error = $step->getException()->getMessage();
+                        $error = $event['exception']->getMessage();
                     }
                     $this->write(
                         sprintf("%s. %s"
@@ -165,7 +155,7 @@ class ProgressFormatter implements FormatterInterface
                     , 'pending');
                 }
 
-                $this->printStepInformation($step, 'pending');
+                $this->printStepEventInformation($event, 'pending');
             }
         }
     }
@@ -176,8 +166,10 @@ class ProgressFormatter implements FormatterInterface
      * @param   RunnerInterface $stepRunner runner instance
      * @param   string          $type       information type (pending/failed etc.)
      */
-    protected function printStepInformation(StepNode $step, $type)
+    protected function printStepEventInformation(Event $event, $type)
     {
+        $step = $event->getSubject();
+
         // Print step information
         $description = $this->colorize(
             sprintf("    In step `%s %s'.", $step->getType(), $step->getText())
@@ -188,8 +180,8 @@ class ProgressFormatter implements FormatterInterface
         $this->write($description, null, false);
         $this->printLineSourceComment(
             mb_strlen($description)
-          , $step->getDefinition()->getFile()
-          , $step->getDefinition()->getLine()
+          , $event['definition']->getFile()
+          , $event['definition']->getLine()
         );
 
         // Print scenario information

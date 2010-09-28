@@ -114,7 +114,7 @@ class TestCommand extends Command
         // Notify suite.run.before event
         $container->
             getEventDispatcherService()->
-            notify(new Event($this, 'suite.run.before'));
+            notify(new Event($container, 'suite.run.before'));
 
         // Load steps
         try {
@@ -145,7 +145,7 @@ class TestCommand extends Command
         // Notify suite.run.after event
         $container->
             getEventDispatcherService()->
-            notify(new Event($this, 'suite.run.after'));
+            notify(new Event($container, 'suite.run.after'));
 
         // Print run time
         $output->writeln(sprintf("%.3fs", $timer));

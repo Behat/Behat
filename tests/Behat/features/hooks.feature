@@ -34,7 +34,7 @@ Feature: hooks
           echo 'BEFORE suite.run: ' . get_class($event->getSubject()) . "\n";
       });
       $hooks->after('suite.run', function($event) {
-          echo 'AFTER features.test: ' . get_class($event->getSubject()) . "\n";
+          echo 'AFTER suite.run: ' . get_class($event->getSubject()) . "\n";
       });
       """
 
@@ -49,10 +49,10 @@ Feature: hooks
     When I run "behat -f progress"
     Then it should pass with:
       """
-      BEFORE suite.run: Everzet\Behat\Console\Command\TestCommand
+      BEFORE suite.run: Symfony\Component\DependencyInjection\ContainerBuilder
       BEFORE features.load: Everzet\Behat\Loader\FeaturesLoader
       AFTER features.load: Everzet\Behat\Loader\FeaturesLoader
-      ..AFTER features.test: Everzet\Behat\Console\Command\TestCommand
+      ..AFTER suite.run: Symfony\Component\DependencyInjection\ContainerBuilder
       
       
       1 scenarios (1 passed)
