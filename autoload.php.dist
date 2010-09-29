@@ -15,7 +15,12 @@ use Everzet\Behat\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony' => __DIR__.'/vendor/symfony/src',
-    'Everzet' => __DIR__.'/src'
+    'Symfony\Component\Console'             => __DIR__.'/vendor/symfony/src',
+    'Symfony\Component\DependencyInjection' => __DIR__.'/vendor/symfony/src',
+    'Symfony\Component\EventDispatcher'     => __DIR__.'/vendor/symfony/src',
+    'Symfony\Component\Finder'              => __DIR__.'/vendor/symfony/src',
+    'Symfony\Component\Yaml'                => __DIR__.'/vendor/symfony/src',
+    'Everzet'                               => __DIR__.'/src'
 ));
 $loader->register();
+
