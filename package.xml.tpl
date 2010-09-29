@@ -3,7 +3,7 @@
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
-    <name>Behat</name>
+    <name>behat</name>
     <channel>pear.everzet.com</channel>
     <summary>Behat is BDD framework for PHP</summary>
     <description>
@@ -40,9 +40,9 @@
             <file role="php" baseinstalldir="behat" name="phpunit.xml.dist" />
             <file role="php" baseinstalldir="behat" name="behat.yml" />
 
-            <file role="doc" baseinstalldir="behat" name="History.md" />
-            <file role="doc" baseinstalldir="behat" name="LICENSE" />
-            <file role="doc" baseinstalldir="behat" name="README.md" />
+            <file role="php" baseinstalldir="behat" name="History.md" />
+            <file role="php" baseinstalldir="behat" name="LICENSE" />
+            <file role="php" baseinstalldir="behat" name="README.md" />
 
         </dir>
     </contents>

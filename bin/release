@@ -47,8 +47,6 @@ $dirs = array(
     'src'
   , 'tests'
   , 'i18n'
-  , 'vendor/symfony/LICENSE'
-  , 'vendor/symfony/README'
   , 'vendor/symfony/src/Symfony/Component/Console'
   , 'vendor/symfony/src/Symfony/Component/DependencyInjection'
   , 'vendor/symfony/src/Symfony/Component/EventDispatcher'
