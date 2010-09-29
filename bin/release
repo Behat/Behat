@@ -24,7 +24,7 @@ if (is_file(__DIR__ . '/../autoload.php')) {
 }
 
 if (!isset($argv[1])) {
-  throw new Exception('You must provide version prefix.');
+  throw new Exception('You must provide version.');
 }
 
 if (!isset($argv[2])) {
@@ -42,7 +42,6 @@ if (is_file('package.xml')) {
 
 copy(getcwd().'/package.xml.tpl', getcwd().'/package.xml');
 
-$xmlSourceFiles = '';
 $dirs = array(
     'src'
   , 'tests'
@@ -53,6 +52,8 @@ $dirs = array(
   , 'vendor/symfony/src/Symfony/Component/Finder'
   , 'vendor/symfony/src/Symfony/Component/Yaml'
 );
+
+$xmlSourceFiles = '';
 foreach ($dirs as $dir) {
     $finder = new Symfony\Component\Finder\Finder();
     $sourceFiles = $finder->files()->in($dir);
