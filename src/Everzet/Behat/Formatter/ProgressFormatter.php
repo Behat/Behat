@@ -47,7 +47,6 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     public function registerListeners(EventDispatcher $dispatcher)
     {
         $dispatcher->connect('step.run.after',          array($this, 'printStep'),          10);
-        $dispatcher->connect('step.skip.after',         array($this, 'printStep'),          10);
 
         $dispatcher->connect('suite.run.after',         array($this, 'printEmptyLine'),     10);
         $dispatcher->connect('suite.run.after',         array($this, 'printFailedSteps'),   10);

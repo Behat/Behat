@@ -69,7 +69,6 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
         $dispatcher->connect('background.run.after',    array($this, 'printBackgroundFooter'),  10);
 
         $dispatcher->connect('step.run.after',          array($this, 'printStep'),              10);
-        $dispatcher->connect('step.skip.after',         array($this, 'printStep'),              10);
 
         $dispatcher->connect('suite.run.after',         array($this, 'printStatistics'),        10);
         $dispatcher->connect('suite.run.after',         array($this, 'printSnippets'),          10);
