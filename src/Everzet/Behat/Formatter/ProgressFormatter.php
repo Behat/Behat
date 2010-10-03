@@ -26,6 +26,7 @@ use Everzet\Behat\Tester\StepTester;
  */
 class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
 {
+    protected $i18n;
     protected $container;
     protected $output;
     protected $verbose;
@@ -39,6 +40,19 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
         $this->container    = $container;
         $this->output       = $container->getOutputService();
         $this->verbose      = $container->getParameter('formatter.verbose');
+    }
+
+    /**
+     * @see     Everzet\Behat\Formatter\ConsoleFormatter 
+     */
+    protected function getI18n()
+    {
+        if (!$this->i18n) {
+            $this->i18n = $container->getI18nService();
+            $this->i18n->loadLang($this->container->getParameter('formatter.i18n'));
+        }
+
+        return $this->i18n;
     }
 
     /**

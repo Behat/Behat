@@ -32,6 +32,13 @@ abstract class ConsoleFormatter
     );
 
     /**
+     * Return I18n service. 
+     * 
+     * @return  Everzet\Gherkin\I18n
+     */
+    abstract protected function getI18n();
+
+    /**
       * Listen to some event & print suite statistics.
       *
       * @param   Event   $event  notified event
@@ -164,3 +171,4 @@ abstract class ConsoleFormatter
         $this->write(sprintf("%s # %s:%d", str_repeat(' ', $indent), $file, $line), 'comment');
     }
 }
+
