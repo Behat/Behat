@@ -138,3 +138,4 @@ class FeatureNode extends SectionNode
         return $this->scenarios;
     }
 }
+

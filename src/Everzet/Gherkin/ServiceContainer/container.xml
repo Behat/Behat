@@ -1,8 +1,13 @@
 <?xml version="1.0" ?>
 <container xmlns="http://www.symfony-project.org/schema/dic/services">
     <parameters>
-        <parameter key="i18n.class">Everzet\Gherkin\I18n</parameter>
-        <parameter key="i18n.path">../../../i18n</parameter>
+        <parameter key="translator.class">Everzet\Gherkin\Translator</parameter>
+        <parameter key="message_selector.class">Symfony\Component\Translation\MessageSelector</parameter>
+        <parameter key="xliff.resources" type="collection">
+            <parameter key="en">../../../i18n/en.xml</parameter>
+            <parameter key="ru">../../../i18n/ru.xml</parameter>
+        </parameter>
+        <parameter key="xliff_loader.class">Symfony\Component\Translation\Loader\XliffFileLoader</parameter>
         <parameter key="feature_node.class">Everzet\Gherkin\Node\FeatureNode</parameter>
         <parameter key="step_node.class">Everzet\Gherkin\Node\StepNode</parameter>
         <parameter key="background_node.class">Everzet\Gherkin\Node\BackgroundNode</parameter>
@@ -13,8 +18,13 @@
         <parameter key="examples_node.class">Everzet\Gherkin\Node\ExamplesNode</parameter>
     </parameters>
     <services>
-        <service id="i18n" class="%i18n.class%" shared="false">
-            <argument>%i18n.path%</argument>
+        <service id="translator" class="%translator.class%" shared="false">
+            <argument>en</argument>
+            <argument type="service" id="message_selector" />
+            <argument type="service" id="xliff_loader" />
+            <argument>%xliff.resources%</argument>
         </service>
+        <service id="message_selector" class="%message_selector.class%" shared="false" />
+        <service id="xliff_loader" class="%xliff_loader.class%" shared="false" />
     </services>
 </container>

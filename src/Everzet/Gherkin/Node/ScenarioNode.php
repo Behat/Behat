@@ -2,8 +2,6 @@
 
 namespace Everzet\Gherkin\Node;
 
-use Everzet\Gherkin\I18n;
-
 /*
  * This file is part of the behat package.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -23,10 +21,10 @@ class ScenarioNode extends SectionNode
     protected $line;
     protected $steps = array();
 
-    public function __construct(I18n $i18n, $file = null, $line = 0)
+    public function __construct($locale, $file = null, $line = 0)
     {
         $this->line = $line;
-        parent::__construct($i18n, $file);
+        parent::__construct($locale, $file);
     }
 
     public function accept(NodeVisitorInterface $visitor)
@@ -74,3 +72,4 @@ class ScenarioNode extends SectionNode
         return $this->steps;
     }
 }
+

@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Gherkin.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 class Parser
 {
     protected $file             = null;
-    protected $i18n             = null;
+    protected $translator       = null;
     protected $container        = null;
     protected $lines            = array();
     protected $currentLineNb    = -1;
@@ -39,17 +39,7 @@ class Parser
         }
 
         $this->container    = $container;
-        $this->i18n         = $container->getI18nService();
-    }
-
-    protected function initLang()
-    {
-        if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w]+?)\s*$#', $this->lines[0], $values)) {
-            $this->i18n->loadLang($values['lang']);
-        } else {
-            $this->i18n->loadLang('en');
-        }
-        $this->lexer = new Lexer($this->i18n);
+        $this->translator   = $container->getTranslatorService();
     }
 
     public function parseFile($file)
@@ -66,7 +56,11 @@ class Parser
         $this->currentLineNb = -1;
         $this->currentLine = '';
         $this->lines = explode("\n", $this->cleanup($value));
-        $this->initLang();
+
+        if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w]+?)\s*$#', $this->lines[0], $values)) {
+            $this->translator->setLocale($values['lang']);
+        }
+        $this->lexer = new Lexer($this->translator);
 
         if (function_exists('mb_internal_encoding') && ((int) ini_get('mbstring.func_overload')) & 2) {
             $mbEncoding = mb_internal_encoding();
@@ -81,7 +75,7 @@ class Parser
             // feature?
             if (preg_match($this->lexer->getFeatureRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('feature_node.class');
-                $this->feature = new $class($this->i18n, $this->file);
+                $this->feature = new $class($this->translator->getLocale(), $this->file);
                 $this->feature->setTitle(isset($values['title']) ? $values['title'] : '');
                 $this->feature->addTags($this->getPreviousTags());
                 $this->feature->addDescriptions($this->getNextDescriptions());
@@ -90,7 +84,7 @@ class Parser
             // background?
             if (preg_match($this->lexer->getBackgroundRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('background_node.class');
-                $background = new $class($this->i18n, $this->file, $this->currentLineNb);
+                $background = new $class($this->translator->getLocale(), $this->file, $this->currentLineNb);
                 $background->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -102,7 +96,7 @@ class Parser
             // scenario?
             if (preg_match($this->lexer->getScenarioRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('scenario_node.class');
-                $scenario = new $class($this->i18n, $this->file, $this->currentLineNb);
+                $scenario = new $class($this->translator->getLocale(), $this->file, $this->currentLineNb);
                 $scenario->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -115,7 +109,7 @@ class Parser
             // scenario outline?
             if (preg_match($this->lexer->getScenarioOutlineRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('outline_node.class');
-                $outline = new $class($this->i18n, $this->file, $this->currentLineNb);
+                $outline = new $class($this->translator->getLocale(), $this->file, $this->currentLineNb);
                 $outline->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));

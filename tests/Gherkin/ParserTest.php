@@ -653,24 +653,19 @@ u
     public function testI18n()
     {
         foreach (array($this->loadFeature('addition.feature'), $this->loadFeatureFromFile('addition.feature')) as $feature) {
-            $this->assertEquals('Feature', $feature->getI18n()->__('feature', 'Feature'));
-            $this->assertEquals('Scenario',
-                end($feature->getScenarios())->getI18n()->__('scenario', 'Scenario')
-            );
+            $this->assertEquals('en', $feature->getLocale());
+            $this->assertEquals('en', end($feature->getScenarios())->getLocale());
         }
 
         foreach (array($this->loadFeature('ru_addition.feature'), $this->loadFeatureFromFile('ru_addition.feature')) as $feature) {
-            $this->assertEquals('Функционал', $feature->getI18n()->__('feature', 'Feature'));
-            $this->assertEquals('Сценарий',
-                end($feature->getScenarios())->getI18n()->__('scenario', 'Scenario')
-            );
+            $this->assertEquals('ru', $feature->getLocale());
+            $this->assertEquals('ru', end($feature->getScenarios())->getLocale());
         }
 
         foreach (array($this->loadFeature('addition.feature'), $this->loadFeatureFromFile('addition.feature')) as $feature) {
-            $this->assertEquals('Feature', $feature->getI18n()->__('feature', 'Feature'));
-            $this->assertEquals('Scenario',
-                end($feature->getScenarios())->getI18n()->__('scenario', 'Scenario')
-            );
+            $this->assertEquals('en', $feature->getLocale());
+            $this->assertEquals('en', end($feature->getScenarios())->getLocale());
         }
     }
 }
+
