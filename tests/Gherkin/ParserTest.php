@@ -2,6 +2,19 @@
 
 use \Everzet\Gherkin\Parser;
 
+/*
+ * This file is part of the Gherkin.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Gherkin Parser Text.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class ParserTest extends \PHPUnit_Framework_TestCase
 {
     private function loadFeature($path)
