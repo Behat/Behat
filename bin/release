@@ -47,6 +47,7 @@ $dirs = array(
   , 'tests'
   , 'i18n'
   , 'vendor/symfony/src/Symfony/Component/Console'
+  , 'vendor/symfony/src/Symfony/Component/Translation'
   , 'vendor/symfony/src/Symfony/Component/DependencyInjection'
   , 'vendor/symfony/src/Symfony/Component/EventDispatcher'
   , 'vendor/symfony/src/Symfony/Component/Finder'
