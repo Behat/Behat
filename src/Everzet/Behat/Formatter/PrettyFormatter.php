@@ -33,7 +33,7 @@ use Everzet\Behat\Exception\Pending;
  */
 class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
 {
-    protected $i18n;
+    protected $translator;
     protected $container;
     protected $output;
     protected $verbose;
@@ -55,14 +55,14 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     /**
      * @see     Everzet\Behat\Formatter\ConsoleFormatter 
      */
-    protected function getI18n()
+    protected function getTranslator()
     {
-        if (!$this->i18n) {
-            $this->i18n = $container->getI18nService();
-            $this->i18n->loadLang($this->container->getParameter('formatter.i18n'));
+        if (!$this->translator) {
+            $this->translator = $this->container->getTranslatorService();
+            $this->translator->setLocale($this->container->getParameter('formatter.locale'));
         }
 
-        return $this->i18n;
+        return $this->translator;
     }
 
     /**
@@ -103,7 +103,10 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
         }
 
         // Print feature title
-        $this->write($feature->getI18n()->__('feature', 'Feature') . ': ' . $feature->getTitle());
+        $this->write(
+            $this->getTranslator()->trans('Feature', array(), 'messages', $feature->getLocale())
+          . ': ' . $feature->getTitle()
+        );
 
         // Print feature description
         foreach ($feature->getDescription() as $description) {
@@ -142,8 +145,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
 
         // Print outline description
         $description = sprintf("  %s:%s",
-            $outline->getI18n()->__('scenario-outline', 'Scenario Outline'),
-            $outline->getTitle() ? ' ' . $outline->getTitle() : ''
+            $this->getTranslator()->trans('Scenario Outline', array(), 'messages', $outline->getLocale())
+          , $outline->getTitle() ? ' ' . $outline->getTitle() : ''
         );
         $this->write($description, null, false);
 
@@ -169,7 +172,9 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
         $this->outlineStepsPrinted = true;
 
         // Print outline examples title
-        $this->write(sprintf("\n    %s:", $outline->getI18n()->__('examples', 'Examples')));
+        $this->write(sprintf("\n    %s:",
+            $this->getTranslator()->trans('Examples', array(), 'messages', $outline->getLocale())
+        ));
 
         // print outline examples header row
         $this->write(
@@ -246,8 +251,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
 
         // Print scenario description
         $description = sprintf("  %s:%s",
-            $scenario->getI18n()->__('scenario', 'Scenario'),
-            $scenario->getTitle() ? ' ' . $scenario->getTitle() : ''
+            $this->getTranslator()->trans('Scenario', array(), 'messages', $scenario->getLocale())
+          , $scenario->getTitle() ? ' ' . $scenario->getTitle() : ''
         );
         $this->write($description, null, false);
 
@@ -284,8 +289,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
 
             // Print description
             $description = sprintf("  %s:%s",
-                $background->getI18n()->__('background', 'Background'),
-                $background->getTitle() ? ' ' . $background->getTitle() : ''
+                $this->getTranslator()->trans('Background', array(), 'messages', $background->getLocale())
+              , $background->getTitle() ? ' ' . $background->getTitle() : ''
             );
             $this->write($description, null, false);
 
@@ -380,13 +385,13 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
         $type   = '';
 
         if ($scenario instanceof OutlineNode) {
-            $type = $scenario->getI18n()->__('scenario-outline', 'Scenario Outline') . ':';
+            $type = $this->getTranslator()->trans('Scenario Outline', array(), 'messages', $scenario->getLocale());
         } else if ($scenario instanceof ScenarioNode) {    
-            $type = $scenario->getI18n()->__('scenario', 'Scenario') . ':';
+            $type = $this->getTranslator()->trans('Scenario', array(), 'messages', $scenario->getLocale());
         } else if ($scenario instanceof BackgroundNode) {
-            $type = $scenario->getI18n()->__('background', 'Background') . ':';
+            $type = $this->getTranslator()->trans('Background', array(), 'messages', $scenario->getLocale());
         }
-        $scenarioDescription = $scenario->getTitle() ? $type . ' ' . $scenario->getTitle() : $type;
+        $scenarioDescription = $scenario->getTitle() ? $type . ': ' . $scenario->getTitle() : $type;
 
         if (($tmp = mb_strlen($scenarioDescription) + 2) > $max) {
             $max = $tmp;

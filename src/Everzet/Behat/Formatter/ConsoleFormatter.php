@@ -32,11 +32,11 @@ abstract class ConsoleFormatter
     );
 
     /**
-     * Return I18n service. 
+     * Return Translator Service. 
      * 
-     * @return  Everzet\Gherkin\I18n
+     * @return  Symfony\Component\Translation\TranslatorInterface
      */
-    abstract protected function getI18n();
+    abstract protected function getTranslator();
 
     /**
       * Listen to some event & print suite statistics.

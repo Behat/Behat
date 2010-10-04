@@ -105,7 +105,9 @@ class TestCommand extends Command
             $container->setParameter('formatter.verbose', $input->getOption('verbose'));
         }
         if (null !== $input->getOption('i18n')) {
-            $container->setParameter('formatter.i18n', $input->getOption('i18n'));
+            $container->setParameter('formatter.locale', $input->getOption('i18n'));
+        } else {
+            $container->setParameter('formatter.locale', 'en');
         }
 
         // Replace parameter tokens
