@@ -154,6 +154,5 @@ Feature: I18n
       $steps->И('/^Что-то новое$/', function($world) {
           throw new \Everzet\Behat\Exception\Pending();
       });
-      
 
       """

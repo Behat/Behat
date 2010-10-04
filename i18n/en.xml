@@ -30,6 +30,14 @@
         <source>You can implement step definitions for undefined steps with these snippets:</source>
         <target>You can implement step definitions for undefined steps with these snippets:</target>
       </trans-unit>
+      <trans-unit id="failed-steps-title">
+        <source>failed steps</source>
+        <target>failed steps</target>
+      </trans-unit>
+      <trans-unit id="pending-steps-title">
+        <source>pending steps</source>
+        <target>pending steps</target>
+      </trans-unit>
       <trans-unit id="scenarios-count">
         <source><![CDATA[{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios]]></source>
         <target><![CDATA[{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios]]></target>

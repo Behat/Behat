@@ -117,7 +117,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
         $statistics = $event->getSubject()->getStatisticsCollectorService();
 
         if (count($statistics->getFailedStepsEvents())) {
-            $this->write("(::) failed steps (::)\n", 'failed');
+            $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('failed steps')), 'failed');
 
             foreach ($statistics->getFailedStepsEvents() as $number => $event) {
                 // Print step exception
@@ -150,7 +150,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
         $statistics = $event->getSubject()->getStatisticsCollectorService();
 
         if (count($statistics->getPendingStepsEvents())) {
-            $this->write("(::) pending steps (::)\n", 'pending');
+            $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('pending steps')), 'failed');
 
             foreach ($statistics->getPendingStepsEvents() as $number => $event) {
                 // Print step exception
