@@ -48,7 +48,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     protected function getTranslator()
     {
         if (!$this->translator) {
-            $this->translator = $container->getTranslator();
+            $this->translator = $this->container->getTranslatorService();
             $this->translator->setLocale($this->container->getParameter('formatter.locale'));
         }
 

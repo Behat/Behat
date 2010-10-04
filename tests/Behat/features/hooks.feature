@@ -55,7 +55,7 @@ Feature: hooks
       ..AFTER suite.run: Symfony\Component\DependencyInjection\ContainerBuilder
       
       
-      1 scenarios (1 passed)
+      1 scenario (1 passed)
       2 steps (2 passed)
       """
 

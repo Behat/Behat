@@ -68,7 +68,6 @@ Feature: I18n
             |  23      | 32        |
       """
     When I run "behat -f pretty --i18n=ru"
-    Then display last command output
     Then it should fail with:
       """
       Функционал: Постоянство мира
