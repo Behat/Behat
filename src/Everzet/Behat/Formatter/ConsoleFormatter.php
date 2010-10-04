@@ -32,6 +32,13 @@ abstract class ConsoleFormatter
     );
 
     /**
+     * Return Translator Service. 
+     * 
+     * @return  Symfony\Component\Translation\TranslatorInterface
+     */
+    abstract protected function getTranslator();
+
+    /**
       * Listen to some event & print suite statistics.
       *
       * @param   Event   $event  notified event
@@ -40,27 +47,51 @@ abstract class ConsoleFormatter
     {
         $statistics = $event->getSubject()->getStatisticsCollectorService();
 
+        $this->write(
+            $this->getTranslator()->transChoice(
+                '{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios'
+                , $statistics->getScenariosCount()
+                , array('%1%' => $statistics->getScenariosCount())
+            )
+          , null
+          , false
+        );
+
         $statuses = array();
         foreach ($statistics->getScenariosStatuses() as $status => $count) {
             if ($count) {
-                $statuses[] = $this->colorize(sprintf('%s %s', $count, $status), $status);
+                $transStatus = $this->getTranslator()->transChoice(
+                    "[1,Inf] %1% $status"
+                  , $count
+                  , array('%1%' => $count)
+                );
+                $statuses[] = $this->colorize($transStatus, $status);
             }
         }
-        $this->write(sprintf('%d scenarios %s',
-            $statistics->getScenariosCount()
-          , count($statuses) ? sprintf('(%s)', implode(', ', $statuses)) : ''
-        ));
+        $this->write(count($statuses) ? ' ' . sprintf('(%s)', implode(', ', $statuses)) : '');
+
+        $this->write(
+            $this->getTranslator()->transChoice(
+                '{0} No steps|{1} 1 step|]1,Inf] %1% steps'
+                , $statistics->getStepsCount()
+                , array('%1%' => $statistics->getStepsCount())
+            )
+          , null
+          , false
+        );
 
         $statuses = array();
         foreach ($statistics->getStepsStatuses() as $status => $count) {
             if ($count) {
-                $statuses[] = $this->colorize(sprintf('%s %s', $count, $status), $status);
+                $transStatus = $this->getTranslator()->transChoice(
+                    "[1,Inf] %1% $status"
+                  , $count
+                  , array('%1%' => $count)
+                );
+                $statuses[] = $this->colorize($transStatus, $status);
             }
         }
-        $this->write(sprintf('%d steps %s',
-            $statistics->getStepsCount()
-          , count($statuses) ? sprintf('(%s)', implode(', ', $statuses)) : ''
-        ));
+        $this->write(count($statuses) ? ' ' . sprintf('(%s)', implode(', ', $statuses)) : '');
     }
 
     /**
@@ -74,7 +105,9 @@ abstract class ConsoleFormatter
 
         if (count($statistics->getDefinitionsSnippets())) {
             $this->write("\n" .
-                "You can implement step definitions for undefined steps with these snippets:" .
+                $this->getTranslator()->trans(
+                    "You can implement step definitions for undefined steps with these snippets:"
+                ) .
             "\n", 'undefined');
 
             foreach ($statistics->getDefinitionsSnippets() as $key => $snippet) {
@@ -164,3 +197,4 @@ abstract class ConsoleFormatter
         $this->write(sprintf("%s # %s:%d", str_repeat(' ', $indent), $file, $line), 'comment');
     }
 }
+

@@ -55,7 +55,7 @@ Feature: Call step in other step
       """
       .....
       
-      1 scenarios (1 passed)
+      1 scenario (1 passed)
       5 steps (5 passed)
       """      
 
@@ -79,7 +79,7 @@ Feature: Call step in other step
           In step `Then I should see "8" on the screen'. # features/steps/calc_steps_en.php:11
           From scenario ***.                             # features/calc_en.feature:1
       
-      1 scenarios (1 failed)
+      1 scenario (1 failed)
       3 steps (2 passed, 1 failed)
       """
 
@@ -99,7 +99,7 @@ Feature: Call step in other step
       """
       ....
       
-      1 scenarios (1 passed)
+      1 scenario (1 passed)
       4 steps (4 passed)
       """      
 
@@ -124,6 +124,6 @@ Feature: Call step in other step
           In step `То Я должен увидеть на экране "8"'. # features/steps/calc_steps_ru.php:10
           From scenario ***.                           # features/calc_ru.feature:2
       
-      1 scenarios (1 failed)
+      1 scenario (1 failed)
       3 steps (2 passed, 1 failed)
       """

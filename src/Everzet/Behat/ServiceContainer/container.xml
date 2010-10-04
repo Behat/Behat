@@ -11,8 +11,6 @@
         <parameter key="formatter.name">pretty</parameter>
         <parameter key="filter.tags"></parameter>
         <parameter key="parser.class">Everzet\Gherkin\Parser</parameter>
-        <parameter key="i18n.class">Everzet\Gherkin\I18n</parameter>
-        <parameter key="i18n.path">%%dir.lib%%/i18n</parameter>
         <parameter key="event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
         <parameter key="tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
         <parameter key="statistics_collector.class">Everzet\Behat\Collector\StatisticsCollector</parameter>
@@ -37,9 +35,6 @@
             <call method="bindEventListeners">
                 <argument type="service" id="service_container" />
             </call>
-        </service>
-        <service id="i18n" class="%i18n.class%" shared="false">
-            <argument>%i18n.path%</argument>
         </service>
         <service id="parser" class="%parser.class%" shared="false">
             <argument type="service" id="service_container" />

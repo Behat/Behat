@@ -2,6 +2,19 @@
 
 use \Everzet\Gherkin\Parser;
 
+/*
+ * This file is part of the Gherkin.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Gherkin Parser Text.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class ParserTest extends \PHPUnit_Framework_TestCase
 {
     private function loadFeature($path)
@@ -653,24 +666,19 @@ u
     public function testI18n()
     {
         foreach (array($this->loadFeature('addition.feature'), $this->loadFeatureFromFile('addition.feature')) as $feature) {
-            $this->assertEquals('Feature', $feature->getI18n()->__('feature', 'Feature'));
-            $this->assertEquals('Scenario',
-                end($feature->getScenarios())->getI18n()->__('scenario', 'Scenario')
-            );
+            $this->assertEquals('en', $feature->getLocale());
+            $this->assertEquals('en', end($feature->getScenarios())->getLocale());
         }
 
         foreach (array($this->loadFeature('ru_addition.feature'), $this->loadFeatureFromFile('ru_addition.feature')) as $feature) {
-            $this->assertEquals('Функционал', $feature->getI18n()->__('feature', 'Feature'));
-            $this->assertEquals('Сценарий',
-                end($feature->getScenarios())->getI18n()->__('scenario', 'Scenario')
-            );
+            $this->assertEquals('ru', $feature->getLocale());
+            $this->assertEquals('ru', end($feature->getScenarios())->getLocale());
         }
 
         foreach (array($this->loadFeature('addition.feature'), $this->loadFeatureFromFile('addition.feature')) as $feature) {
-            $this->assertEquals('Feature', $feature->getI18n()->__('feature', 'Feature'));
-            $this->assertEquals('Scenario',
-                end($feature->getScenarios())->getI18n()->__('scenario', 'Scenario')
-            );
+            $this->assertEquals('en', $feature->getLocale());
+            $this->assertEquals('en', end($feature->getScenarios())->getLocale());
         }
     }
 }
+

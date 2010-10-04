@@ -26,6 +26,7 @@ use Everzet\Behat\Tester\StepTester;
  */
 class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
 {
+    protected $translator;
     protected $container;
     protected $output;
     protected $verbose;
@@ -42,12 +43,24 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
+     * @see     Everzet\Behat\Formatter\ConsoleFormatter 
+     */
+    protected function getTranslator()
+    {
+        if (!$this->translator) {
+            $this->translator = $this->container->getTranslatorService();
+            $this->translator->setLocale($this->container->getParameter('formatter.locale'));
+        }
+
+        return $this->translator;
+    }
+
+    /**
      * @see     Everzet\Behat\Formatter\FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
         $dispatcher->connect('step.run.after',          array($this, 'printStep'),          10);
-        $dispatcher->connect('step.skip.after',         array($this, 'printStep'),          10);
 
         $dispatcher->connect('suite.run.after',         array($this, 'printEmptyLine'),     10);
         $dispatcher->connect('suite.run.after',         array($this, 'printFailedSteps'),   10);
@@ -104,7 +117,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
         $statistics = $event->getSubject()->getStatisticsCollectorService();
 
         if (count($statistics->getFailedStepsEvents())) {
-            $this->write("(::) failed steps (::)\n", 'failed');
+            $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('failed steps')), 'failed');
 
             foreach ($statistics->getFailedStepsEvents() as $number => $event) {
                 // Print step exception
@@ -137,7 +150,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
         $statistics = $event->getSubject()->getStatisticsCollectorService();
 
         if (count($statistics->getPendingStepsEvents())) {
-            $this->write("(::) pending steps (::)\n", 'pending');
+            $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('pending steps')), 'failed');
 
             foreach ($statistics->getPendingStepsEvents() as $number => $event) {
                 // Print step exception
