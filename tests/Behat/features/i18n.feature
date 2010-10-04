@@ -3,7 +3,7 @@ Feature: I18n
   As a feature writer
   I need to have i18n support
 
-  Scenario: Complex
+  Background:
     Given a standard Behat project directory structure
     And a file named "features/support/env.php" with:
       """
@@ -67,6 +67,8 @@ Feature: I18n
             |  10      | 20        |
             |  23      | 32        |
       """
+
+  Scenario: Pretty
     When I run "behat -f pretty --i18n=ru"
     Then it should fail with:
       """
@@ -115,5 +117,43 @@ Feature: I18n
       $steps->И('/^Что-то новое$/', function($world) {
           throw new \Everzet\Behat\Exception\Pending();
       });
+
+      """
+
+  Scenario: Progress
+    When I run "behat -f progress --i18n=ru"
+    Then it should fail with:
+      """
+      ..U-..P-..F...F.......F
+      
+      (::) проваленные шаги (::)
+      
+      01. Failed asserting that <integer:14> is equal to <string:13>.
+          In step `То Я должен иметь 13'. # features/steps/math.php:9
+          From scenario `Провален'.       # features/World.feature:19
+      
+      02. Failed asserting that <integer:15> is equal to <string:16>.
+          In step `То Я должен иметь 32'. # features/steps/math.php:9
+          From scenario `Пройдено и Провалено'. # features/World.feature:23
+      
+      03. Failed asserting that <integer:33> is equal to <string:32>.
+          In step `То Я должен иметь 32'.       # features/steps/math.php:9
+          From scenario `Пройдено и Провалено'. # features/World.feature:23
+      
+      (::) шаги в ожидании (::)
+      
+      01. TODO: write pending definition
+          In step `И Что-то еще не сделано'.    # features/steps/math.php:17
+          From scenario `В ожидании'.           # features/World.feature:14
+      
+      6 сценариев (1 пройден, 1 в ожидании, 1 не определен, 3 провалено)
+      23 шага (16 пройдено, 2 пропущено, 1 в ожидании, 1 не определен, 3 провалено)
+      
+      Вы можете реализовать определения для новых шагов с помощью этих шаблонов:
+      
+      $steps->И('/^Что-то новое$/', function($world) {
+          throw new \Everzet\Behat\Exception\Pending();
+      });
+      
 
       """
