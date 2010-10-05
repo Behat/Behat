@@ -1,7 +1,7 @@
 <?php
 
 $steps->Given('/^a standard Behat project directory structure$/', function($world) {
-    $dir = sys_get_temp_dir() . '/behat/' . microtime(true);
+    $dir = sys_get_temp_dir() . '/behat/' . microtime() * rand(0, 10000);
     mkdir($dir, 0777, true);
     chdir($dir);
 

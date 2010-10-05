@@ -37,7 +37,7 @@ class FeatureTester implements NodeVisitorInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->dispatcher   = $container->getEventDispatcherService();
+        $this->dispatcher   = $container->getBehat_EventDispatcherService();
     }
 
     /**
@@ -60,9 +60,9 @@ class FeatureTester implements NodeVisitorInterface
         // Test filtered scenarios
         foreach ($event->getReturnValue() as $scenario) {
             if ($scenario instanceof OutlineNode) {
-                $tester = $this->container->getOutlineTesterService();
+                $tester = $this->container->getBehat_OutlineTesterService();
             } elseif ($scenario instanceof ScenarioNode) {    
-                $tester = $this->container->getScenarioTesterService();
+                $tester = $this->container->getBehat_ScenarioTesterService();
             } else {
                 throw new BehaviorException(
                     'Unknown scenario type found: ' . get_class($scenario)

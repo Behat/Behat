@@ -22,25 +22,6 @@ use Symfony\Component\Translation\Loader\LoaderInterface;
 class Translator extends BaseTranslator
 {
     /**
-     * Initializes Translator. 
-     * 
-     * @param   string          $locale         default locale
-     * @param   MessageSelector $selector       choices selector
-     * @param   LoaderInterface $xliffLoader    xliff files loader
-     * @param   array           $resources      xliff resources
-     */
-    public function __construct($locale, MessageSelector $selector, LoaderInterface $xliffLoader, $resources)
-    {
-        parent::__construct($locale, $selector);
-
-        $this->addLoader('xliff', $xliffLoader);
-
-        foreach ($resources as $locale => $resource) {
-            $this->addResource('xliff', __DIR__ . '/' . $resource, $locale);
-        }
-    }
-
-    /**
      * Return current locale. 
      * 
      * @return  string

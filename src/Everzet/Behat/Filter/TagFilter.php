@@ -30,7 +30,7 @@ class TagFilter implements FilterInterface
      */
     public function __construct(Container $container)
     {
-        $this->tags = $container->getParameter('filter.tags');
+        $this->tags = $container->getParameter('behat.filter.tags');
     }
 
     /**

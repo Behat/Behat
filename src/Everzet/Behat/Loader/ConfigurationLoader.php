@@ -46,8 +46,8 @@ class ConfigurationLoader implements LoaderInterface
     {
         foreach ((array) $paths as $path) {
             $path = strtr($path, array(
-                '%%dir.work%%'  => $this->container->getParameter('dir.work')
-              , '%%dir.lib%%'   => $this->container->getParameter('dir.lib')
+                '%%behat.work.path%%' => $this->container->getParameter('behat.work.path')
+              , '%%behat.path%%'      => $this->container->getParameter('behat.path')
             ));
 
             if (false !== mb_stripos($path, '.xml')) {
@@ -68,18 +68,18 @@ class ConfigurationLoader implements LoaderInterface
     public function prepareContainerParameters()
     {
         // Find proper features path
-        $featuresPath   = $this->container->getParameter('features.path');
+        $featuresPath   = $this->container->getParameter('behat.features.path');
         if (is_dir($featuresPath . '/features')) {
             $featuresPath = $featuresPath . '/features';
-            $this->container->setParameter('features.path', $featuresPath);
+            $this->container->setParameter('behat.features.path', $featuresPath);
         } elseif (is_file($featuresPath)) {
-            $this->container->setParameter('features.path', dirname($featuresPath));
+            $this->container->setParameter('behat.features.path', dirname($featuresPath));
         }
-        $this->container->setParameter('features.files', $featuresPath);
+        $this->container->setParameter('behat.features.files', $featuresPath);
 
         // Uppercasing formatter name
-        $this->container->setParameter('formatter.name', 
-            ucfirst($this->container->getParameter('formatter.name'))
+        $this->container->setParameter('behat.formatter.name', 
+            ucfirst($this->container->getParameter('behat.formatter.name'))
         );
 
         foreach ($this->container->getParameterBag()->all() as $key => $value) {

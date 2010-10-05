@@ -71,89 +71,89 @@ class TestCommand extends Command
         $xmlLoader->load(__DIR__ . '/../../ServiceContainer/container.xml');
 
         // Set initial container services & parameters
-        $container->set('output',               $output);
-        $container->setParameter('dir.work',    $cwd = getcwd());
-        $container->setParameter('dir.lib',     realpath(__DIR__ . '/../../../../../'));
+        $container->set('behat.output',             $output);
+        $container->setParameter('behat.work.path', $cwd = getcwd());
+        $container->setParameter('behat.path',      realpath(__DIR__ . '/../../../../../'));
 
         // Guess configuration file path
         if (null !== $input->getOption('configuration')) {
-            $container->setParameter('configuration.path', $input->getOption('configuration'));
+            $container->setParameter('behat.configuration.path', $input->getOption('configuration'));
         } elseif (is_file($cwd . '/behat.yml')) {
-            $container->setParameter('configuration.path', $cwd . '/behat.yml');
+            $container->setParameter('behat.configuration.path', $cwd . '/behat.yml');
         } elseif (is_file($cwd . '/behat.xml')) {
-            $container->setParameter('configuration.path', $cwd . '/behat.xml');
+            $container->setParameter('behat.configuration.path', $cwd . '/behat.xml');
         }
 
         // Load external configuration
-        if ($container->hasParameter('configuration.path')) {
+        if ($container->hasParameter('behat.configuration.path')) {
             $container->
-                getConfigurationLoaderService()->
-                load($container->getParameter('configuration.path'));
+                getBehat_ConfigurationLoaderService()->
+                load($container->getParameter('behat.configuration.path'));
         }
 
         // Read command arguments & options
         if (null !== $input->getArgument('features')) {
-            $container->setParameter('features.path',     realpath($input->getArgument('features')));
+            $container->setParameter('behat.features.path',     realpath($input->getArgument('features')));
         }
         if (null !== $input->getOption('format')) {
-            $container->setParameter('formatter.name',    $input->getOption('format'));
+            $container->setParameter('behat.formatter.name',    $input->getOption('format'));
         }
         if (null !== $input->getOption('tags')) {
-            $container->setParameter('filter.tags',       $input->getOption('tags'));
+            $container->setParameter('behat.filter.tags',       $input->getOption('tags'));
         }
         if (null !== $input->getOption('verbose')) {
-            $container->setParameter('formatter.verbose', $input->getOption('verbose'));
+            $container->setParameter('behat.formatter.verbose', $input->getOption('verbose'));
         }
         if (null !== $input->getOption('i18n')) {
-            $container->setParameter('formatter.locale', $input->getOption('i18n'));
+            $container->setParameter('behat.formatter.locale',  $input->getOption('i18n'));
         } else {
-            $container->setParameter('formatter.locale', 'en');
+            $container->setParameter('behat.formatter.locale',  'en');
         }
 
         // Replace parameter tokens
         $container->
-            getConfigurationLoaderService()->
+            getBehat_ConfigurationLoaderService()->
             prepareContainerParameters();
 
         // Load hooks
         $container->
-            getHooksLoaderService()->
-            load($container->getParameter('hooks.file'));
+            getBehat_HooksLoaderService()->
+            load($container->getParameter('behat.hooks.file'));
 
         // Notify suite.run.before event
         $container->
-            getEventDispatcherService()->
+            getBehat_EventDispatcherService()->
             notify(new Event($container, 'suite.run.before'));
 
         // Load steps
         try {
             $container->
-                getStepsLoaderService()->
-                load($container->getParameter('steps.path'));
+                getBehat_StepsLoaderService()->
+                load($container->getParameter('behat.steps.path'));
         } catch (Redundant $e) {
             $output->write(sprintf("\033[31m%s\033[0m", strtr($e->getMessage(),
-                array($container->getParameter('features.path') . '/' => '')
+                array($container->getParameter('behat.features.path') . '/' => '')
             )), true, 1);
             return 1;
         }
 
         // Load features
         $features = $container->
-            getFeaturesLoaderService()->
-            load($container->getParameter('features.files'));
+            getBehat_FeaturesLoaderService()->
+            load($container->getParameter('behat.features.files'));
 
         // Run features
         $result = 0;
         $timer  = microtime(true);
         foreach ($features as $feature) {
-            $tester = $container->getFeatureTesterService();
+            $tester = $container->getBehat_FeatureTesterService();
             $result = max($result, $feature->accept($tester));
         }
         $timer  = microtime(true) - $timer;
 
         // Notify suite.run.after event
         $container->
-            getEventDispatcherService()->
+            getBehat_EventDispatcherService()->
             notify(new Event($container, 'suite.run.after'));
 
         // Print run time

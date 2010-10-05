@@ -89,7 +89,7 @@ class StepsLoader implements LoaderInterface
             $debug = debug_backtrace();
             $debug = $debug[1];
 
-            $class = $this->container->getParameter('step_definition.class');
+            $class = $this->container->getParameter('behat.step_definition.class');
             $definition = new $class(
                 $type, $arguments[0], $arguments[1], $debug['file'], $debug['line']
             );

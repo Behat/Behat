@@ -39,7 +39,7 @@ class Parser
         }
 
         $this->container    = $container;
-        $this->translator   = $container->getTranslatorService();
+        $this->translator   = $container->getGherkin_TranslatorService();
     }
 
     public function parseFile($file)
@@ -74,7 +74,7 @@ class Parser
 
             // feature?
             if (preg_match($this->lexer->getFeatureRegex(), $this->currentLine, $values)) {
-                $class = $this->container->getParameter('feature_node.class');
+                $class = $this->container->getParameter('gherkin.feature_node.class');
                 $this->feature = new $class($this->translator->getLocale(), $this->file);
                 $this->feature->setTitle(isset($values['title']) ? $values['title'] : '');
                 $this->feature->addTags($this->getPreviousTags());
@@ -83,7 +83,7 @@ class Parser
 
             // background?
             if (preg_match($this->lexer->getBackgroundRegex(), $this->currentLine, $values)) {
-                $class = $this->container->getParameter('background_node.class');
+                $class = $this->container->getParameter('gherkin.background_node.class');
                 $background = new $class($this->translator->getLocale(), $this->file, $this->currentLineNb);
                 $background->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
@@ -95,7 +95,7 @@ class Parser
 
             // scenario?
             if (preg_match($this->lexer->getScenarioRegex(), $this->currentLine, $values)) {
-                $class = $this->container->getParameter('scenario_node.class');
+                $class = $this->container->getParameter('gherkin.scenario_node.class');
                 $scenario = new $class($this->translator->getLocale(), $this->file, $this->currentLineNb);
                 $scenario->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
@@ -108,7 +108,7 @@ class Parser
 
             // scenario outline?
             if (preg_match($this->lexer->getScenarioOutlineRegex(), $this->currentLine, $values)) {
-                $class = $this->container->getParameter('outline_node.class');
+                $class = $this->container->getParameter('gherkin.outline_node.class');
                 $outline = new $class($this->translator->getLocale(), $this->file, $this->currentLineNb);
                 $outline->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
@@ -199,7 +199,7 @@ class Parser
                 break;
             }
 
-            $class = $this->container->getParameter('step_node.class');
+            $class = $this->container->getParameter('gherkin.step_node.class');
             $step = new $class($values['type'], $values['step'], $this->currentLineNb);
             if (null !== ($pystring = $this->getNextPyString())) {
                 $step->addArgument($pystring);
@@ -222,7 +222,7 @@ class Parser
             $this->moveToNextLine() &&
             preg_match($this->lexer->getPyStringStarterRegex(), $this->currentLine, $values)
         ) {
-            $class = $this->container->getParameter('pystring_node.class');
+            $class = $this->container->getParameter('gherkin.pystring_node.class');
             $pystring = new $class(mb_strlen($values['indent']));
 
             while (
@@ -251,7 +251,7 @@ class Parser
             }
 
             if (null === $table) {
-                $class = $this->container->getParameter('table_node.class');
+                $class = $this->container->getParameter('gherkin.table_node.class');
                 $table = new $class($this->lexer->getTableSplitter());
             }
             $table->addRow($values['row']);
@@ -271,7 +271,7 @@ class Parser
             }
         }
         if (preg_match($this->lexer->getExamplesRegex(), $this->currentLine, $values)) {
-            $class = $this->container->getParameter('examples_node.class');
+            $class = $this->container->getParameter('gherkin.examples_node.class');
             $examples = new $class(
                 $this->getNextTitle(isset($values['title']) ? $values['title'] : '')
             );

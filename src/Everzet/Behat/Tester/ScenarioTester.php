@@ -34,8 +34,8 @@ class ScenarioTester implements NodeVisitorInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->dispatcher   = $container->getEventDispatcherService();
-        $this->environment  = $this->container->getEnvironmentService();
+        $this->dispatcher   = $container->getBehat_EventDispatcherService();
+        $this->environment  = $container->getBehat_EnvironmentService();
     }
 
     /**
@@ -54,7 +54,7 @@ class ScenarioTester implements NodeVisitorInterface
 
         // Visit & test background if has one
         if ($scenario->getFeature()->hasBackground()) {
-            $tester = $this->container->getBackgroundTesterService();
+            $tester = $this->container->getBehat_BackgroundTesterService();
             $tester->setEnvironment($this->environment);
 
             $bgResult = $scenario->getFeature()->getBackground()->accept($tester);
@@ -67,7 +67,7 @@ class ScenarioTester implements NodeVisitorInterface
 
         // Visit & test steps
         foreach ($scenario->getSteps() as $step) {
-            $tester = $this->container->getStepTesterService();
+            $tester = $this->container->getBehat_StepTesterService();
             $tester->setEnvironment($this->environment);
             $tester->skip($skip);
 
