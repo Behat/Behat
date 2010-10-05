@@ -22,6 +22,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 class Parser
 {
     protected $file             = null;
+    protected $locale           = 'en';
     protected $translator       = null;
     protected $container        = null;
     protected $lines            = array();
@@ -58,7 +59,8 @@ class Parser
         $this->lines = explode("\n", $this->cleanup($value));
 
         if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w]+?)\s*$#', $this->lines[0], $values)) {
-            $this->translator->setLocale($values['lang']);
+            $this->locale = $values['lang'];
+            $this->translator->setLocale($this->locale);
         }
         $this->lexer = new Lexer($this->translator);
 
@@ -75,7 +77,7 @@ class Parser
             // feature?
             if (preg_match($this->lexer->getFeatureRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('gherkin.feature_node.class');
-                $this->feature = new $class($this->translator->getLocale(), $this->file);
+                $this->feature = new $class($this->locale, $this->file);
                 $this->feature->setTitle(isset($values['title']) ? $values['title'] : '');
                 $this->feature->addTags($this->getPreviousTags());
                 $this->feature->addDescriptions($this->getNextDescriptions());
@@ -84,7 +86,7 @@ class Parser
             // background?
             if (preg_match($this->lexer->getBackgroundRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('gherkin.background_node.class');
-                $background = new $class($this->translator->getLocale(), $this->file, $this->currentLineNb);
+                $background = new $class($this->locale, $this->file, $this->currentLineNb);
                 $background->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -96,7 +98,7 @@ class Parser
             // scenario?
             if (preg_match($this->lexer->getScenarioRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('gherkin.scenario_node.class');
-                $scenario = new $class($this->translator->getLocale(), $this->file, $this->currentLineNb);
+                $scenario = new $class($this->locale, $this->file, $this->currentLineNb);
                 $scenario->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -109,7 +111,7 @@ class Parser
             // scenario outline?
             if (preg_match($this->lexer->getScenarioOutlineRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('gherkin.outline_node.class');
-                $outline = new $class($this->translator->getLocale(), $this->file, $this->currentLineNb);
+                $outline = new $class($this->locale, $this->file, $this->currentLineNb);
                 $outline->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));

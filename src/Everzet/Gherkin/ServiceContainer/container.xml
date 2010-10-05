@@ -2,7 +2,9 @@
 <container xmlns="http://www.symfony-project.org/schema/dic/services">
     <parameters>
         <parameter key="gherkin.i18n.resources_path">i18n</parameter>
-        <parameter key="gherkin.translator.class">Everzet\Gherkin\Translator</parameter>
+        <parameter key="gherkin.translator.class">Symfony\Component\Translation\Translator</parameter>
+        <parameter key="gherkin.message_selector.class">Symfony\Component\Translation\MessageSelector</parameter>
+        <parameter key="gherkin.xliff_loader.class">Symfony\Component\Translation\Loader\XliffFileLoader</parameter>
         <parameter key="gherkin.feature_node.class">Everzet\Gherkin\Node\FeatureNode</parameter>
         <parameter key="gherkin.step_node.class">Everzet\Gherkin\Node\StepNode</parameter>
         <parameter key="gherkin.background_node.class">Everzet\Gherkin\Node\BackgroundNode</parameter>
@@ -16,12 +18,12 @@
         <service id="gherkin.translator" class="%gherkin.translator.class%" shared="false">
             <argument>en</argument>
             <argument type="service">
-              <service class="Symfony\Component\Translation\MessageSelector" />
+              <service class="%gherkin.message_selector.class%" />
             </argument>
             <call method="addLoader">
               <argument>xliff</argument>
               <argument type="service">
-                <service class="Symfony\Component\Translation\Loader\XliffFileLoader" />
+                <service class="%gherkin.xliff_loader.class%" />
               </argument>
             </call>
             <call method="addResource">
