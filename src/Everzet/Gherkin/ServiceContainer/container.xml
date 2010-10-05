@@ -1,30 +1,39 @@
 <?xml version="1.0" ?>
 <container xmlns="http://www.symfony-project.org/schema/dic/services">
     <parameters>
-        <parameter key="translator.class">Everzet\Gherkin\Translator</parameter>
-        <parameter key="message_selector.class">Symfony\Component\Translation\MessageSelector</parameter>
-        <parameter key="xliff.resources" type="collection">
-            <parameter key="en">../../../i18n/en.xml</parameter>
-            <parameter key="ru">../../../i18n/ru.xml</parameter>
-        </parameter>
-        <parameter key="xliff_loader.class">Symfony\Component\Translation\Loader\XliffFileLoader</parameter>
-        <parameter key="feature_node.class">Everzet\Gherkin\Node\FeatureNode</parameter>
-        <parameter key="step_node.class">Everzet\Gherkin\Node\StepNode</parameter>
-        <parameter key="background_node.class">Everzet\Gherkin\Node\BackgroundNode</parameter>
-        <parameter key="scenario_node.class">Everzet\Gherkin\Node\ScenarioNode</parameter>
-        <parameter key="outline_node.class">Everzet\Gherkin\Node\OutlineNode</parameter>
-        <parameter key="pystring_node.class">Everzet\Gherkin\Node\PyStringNode</parameter>
-        <parameter key="table_node.class">Everzet\Gherkin\Node\TableNode</parameter>
-        <parameter key="examples_node.class">Everzet\Gherkin\Node\ExamplesNode</parameter>
+        <parameter key="gherkin.i18n.resources_path">i18n</parameter>
+        <parameter key="gherkin.translator.class">Everzet\Gherkin\Translator</parameter>
+        <parameter key="gherkin.feature_node.class">Everzet\Gherkin\Node\FeatureNode</parameter>
+        <parameter key="gherkin.step_node.class">Everzet\Gherkin\Node\StepNode</parameter>
+        <parameter key="gherkin.background_node.class">Everzet\Gherkin\Node\BackgroundNode</parameter>
+        <parameter key="gherkin.scenario_node.class">Everzet\Gherkin\Node\ScenarioNode</parameter>
+        <parameter key="gherkin.outline_node.class">Everzet\Gherkin\Node\OutlineNode</parameter>
+        <parameter key="gherkin.pystring_node.class">Everzet\Gherkin\Node\PyStringNode</parameter>
+        <parameter key="gherkin.table_node.class">Everzet\Gherkin\Node\TableNode</parameter>
+        <parameter key="gherkin.examples_node.class">Everzet\Gherkin\Node\ExamplesNode</parameter>
     </parameters>
     <services>
-        <service id="translator" class="%translator.class%" shared="false">
+        <service id="gherkin.translator" class="%gherkin.translator.class%" shared="false">
             <argument>en</argument>
-            <argument type="service" id="message_selector" />
-            <argument type="service" id="xliff_loader" />
-            <argument>%xliff.resources%</argument>
+            <argument type="service">
+              <service class="Symfony\Component\Translation\MessageSelector" />
+            </argument>
+            <call method="addLoader">
+              <argument>xliff</argument>
+              <argument type="service">
+                <service class="Symfony\Component\Translation\Loader\XliffFileLoader" />
+              </argument>
+            </call>
+            <call method="addResource">
+              <argument>xliff</argument>
+              <argument>%gherkin.i18n.resources_path%/en.xml</argument>
+              <argument>en</argument>
+            </call>
+            <call method="addResource">
+              <argument>xliff</argument>
+              <argument>%gherkin.i18n.resources_path%/ru.xml</argument>
+              <argument>ru</argument>
+            </call>
         </service>
-        <service id="message_selector" class="%message_selector.class%" shared="false" />
-        <service id="xliff_loader" class="%xliff_loader.class%" shared="false" />
     </services>
 </container>
