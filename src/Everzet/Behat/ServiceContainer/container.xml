@@ -4,82 +4,91 @@
         <import resource="../../Gherkin/ServiceContainer/container.xml"/>
     </imports>
     <parameters>
-        <parameter key="features.path">features</parameter>
-        <parameter key="steps.path">%%features.path%%/steps</parameter>
-        <parameter key="environment.file">%%features.path%%/support/env.php</parameter>
-        <parameter key="hooks.file">%%features.path%%/support/hooks.php</parameter>
-        <parameter key="formatter.name">pretty</parameter>
-        <parameter key="filter.tags"></parameter>
-        <parameter key="parser.class">Everzet\Gherkin\Parser</parameter>
-        <parameter key="event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
-        <parameter key="tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
-        <parameter key="statistics_collector.class">Everzet\Behat\Collector\StatisticsCollector</parameter>
-        <parameter key="formatter.class">Everzet\Behat\Formatter\%%formatter.name%%Formatter</parameter>
-        <parameter key="environment.class">Everzet\Behat\Environment\WorldEnvironment</parameter>
-        <parameter key="configuration_loader.class">Everzet\Behat\Loader\ConfigurationLoader</parameter>
-        <parameter key="hooks_loader.class">Everzet\Behat\Loader\HooksLoader</parameter>
-        <parameter key="features_loader.class">Everzet\Behat\Loader\FeaturesLoader</parameter>
-        <parameter key="steps_loader.class">Everzet\Behat\Loader\StepsLoader</parameter>
-        <parameter key="step_definition.class">Everzet\Behat\Definition\StepDefinition</parameter>
-        <parameter key="feature_tester.class">Everzet\Behat\Tester\FeatureTester</parameter>
-        <parameter key="background_tester.class">Everzet\Behat\Tester\BackgroundTester</parameter>
-        <parameter key="scenario_tester.class">Everzet\Behat\Tester\ScenarioTester</parameter>
-        <parameter key="outline_tester.class">Everzet\Behat\Tester\OutlineTester</parameter>
-        <parameter key="step_tester.class">Everzet\Behat\Tester\StepTester</parameter>
+        <!-- paths -->
+        <parameter key="behat.features.path">features</parameter>
+        <parameter key="behat.steps.path">%%behat.features.path%%/steps</parameter>
+        <parameter key="behat.environment.file">%%behat.features.path%%/support/env.php</parameter>
+        <parameter key="behat.hooks.file">%%behat.features.path%%/support/hooks.php</parameter>
+        <!-- gherkin -->
+        <parameter key="gherkin.parser.class">Everzet\Gherkin\Parser</parameter>
+        <parameter key="gherkin.i18n.resources_path">%%behat.path%%/i18n</parameter>
+        <!-- events -->
+        <parameter key="behat.event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
+        <parameter key="behat.statistics_collector.class">Everzet\Behat\Collector\StatisticsCollector</parameter>
+        <!-- formatters -->
+        <parameter key="behat.formatter.name">pretty</parameter>
+        <parameter key="behat.formatter.class">Everzet\Behat\Formatter\%%behat.formatter.name%%Formatter</parameter>
+        <parameter key="behat.formatter.verbose">false</parameter>
+        <!-- filters -->
+        <parameter key="behat.filter.tags"></parameter>
+        <parameter key="behat.tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
+        <!-- loaders -->
+        <parameter key="behat.configuration_loader.class">Everzet\Behat\Loader\ConfigurationLoader</parameter>
+        <parameter key="behat.hooks_loader.class">Everzet\Behat\Loader\HooksLoader</parameter>
+        <parameter key="behat.features_loader.class">Everzet\Behat\Loader\FeaturesLoader</parameter>
+        <parameter key="behat.steps_loader.class">Everzet\Behat\Loader\StepsLoader</parameter>
+        <parameter key="behat.step_definition.class">Everzet\Behat\Definition\StepDefinition</parameter>
+        <!-- testers -->
+        <parameter key="behat.environment.class">Everzet\Behat\Environment\WorldEnvironment</parameter>
+        <parameter key="behat.feature_tester.class">Everzet\Behat\Tester\FeatureTester</parameter>
+        <parameter key="behat.background_tester.class">Everzet\Behat\Tester\BackgroundTester</parameter>
+        <parameter key="behat.scenario_tester.class">Everzet\Behat\Tester\ScenarioTester</parameter>
+        <parameter key="behat.outline_tester.class">Everzet\Behat\Tester\OutlineTester</parameter>
+        <parameter key="behat.step_tester.class">Everzet\Behat\Tester\StepTester</parameter>
     </parameters>
     <services>
-        <service id="configuration_loader" class="%configuration_loader.class%" shared="true">
+        <service id="behat.configuration_loader" class="%behat.configuration_loader.class%" shared="true">
             <argument type="service" id="service_container" />
         </service>
-        <service id="event_dispatcher" class="%event_dispatcher.class%" shared="true">
+        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" shared="true">
             <call method="bindEventListeners">
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="parser" class="%parser.class%" shared="false">
+        <service id="gherkin.parser" class="%gherkin.parser.class%" shared="false">
             <argument type="service" id="service_container" />
         </service>
-        <service id="environment" class="%environment.class%" shared="false">
+        <service id="behat.environment" class="%behat.environment.class%" shared="false">
             <call method="loadEnvironmentFile">
-                <argument>%environment.file%</argument>
+                <argument>%behat.environment.file%</argument>
             </call>
         </service>
-        <service id="tag_filter" class="%tag_filter.class%" shared="true">
+        <service id="behat.tag_filter" class="%behat.tag_filter.class%" shared="true">
             <argument type="service" id="service_container" />
-            <tag name="events_listener" />
+            <tag name="behat.events_listener" />
         </service>
-        <service id="statistics_collector" class="%statistics_collector.class%" shared="true">
+        <service id="behat.statistics_collector" class="%behat.statistics_collector.class%" shared="true">
             <argument type="service" id="service_container" />
-            <tag name="events_listener" />
+            <tag name="behat.events_listener" />
         </service>
-        <service id="formatter" class="%formatter.class%" shared="true">
+        <service id="behat.formatter" class="%behat.formatter.class%" shared="true">
             <argument type="service" id="service_container" />
-            <tag name="events_listener" />
+            <tag name="behat.events_listener" />
         </service>
-        <service id="hooks_loader" class="%hooks_loader.class%" shared="true">
-            <argument type="service" id="event_dispatcher" />
+        <service id="behat.hooks_loader" class="%behat.hooks_loader.class%" shared="true">
+            <argument type="service" id="behat.event_dispatcher" />
         </service>
-        <service id="features_loader" class="%features_loader.class%" shared="true">
+        <service id="behat.features_loader" class="%behat.features_loader.class%" shared="true">
             <argument type="service" id="service_container" />
-            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="behat.event_dispatcher" />
         </service>
-        <service id="steps_loader" class="%steps_loader.class%" shared="true">
+        <service id="behat.steps_loader" class="%behat.steps_loader.class%" shared="true">
             <argument type="service" id="service_container" />
-            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="behat.event_dispatcher" />
         </service>
-        <service id="feature_tester" class="%feature_tester.class%" shared="false">
-            <argument type="service" id="service_container" />
-        </service>
-        <service id="background_tester" class="%background_tester.class%" shared="false">
+        <service id="behat.feature_tester" class="%behat.feature_tester.class%" shared="false">
             <argument type="service" id="service_container" />
         </service>
-        <service id="scenario_tester" class="%scenario_tester.class%" shared="false">
+        <service id="behat.background_tester" class="%behat.background_tester.class%" shared="false">
             <argument type="service" id="service_container" />
         </service>
-        <service id="outline_tester" class="%outline_tester.class%" shared="false">
+        <service id="behat.scenario_tester" class="%behat.scenario_tester.class%" shared="false">
             <argument type="service" id="service_container" />
         </service>
-        <service id="step_tester" class="%step_tester.class%" shared="false">
+        <service id="behat.outline_tester" class="%behat.outline_tester.class%" shared="false">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="behat.step_tester" class="%behat.step_tester.class%" shared="false">
             <argument type="service" id="service_container" />
         </service>
     </services>

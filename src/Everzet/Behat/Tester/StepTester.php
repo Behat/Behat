@@ -48,8 +48,8 @@ class StepTester implements NodeVisitorInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->dispatcher   = $container->getEventDispatcherService();
-        $this->definitions  = $container->getStepsLoaderService();
+        $this->dispatcher   = $container->getBehat_EventDispatcherService();
+        $this->definitions  = $container->getBehat_StepsLoaderService();
     }
 
     /**

@@ -28,7 +28,7 @@ class EventDispatcher extends BaseEventDispatcher
      */
     public function bindEventListeners(ContainerInterface $container)
     {
-        foreach ($container->findTaggedServiceIds('events_listener') as $id => $tag) {
+        foreach ($container->findTaggedServiceIds('behat.events_listener') as $id => $tag) {
             $container->get($id)->registerListeners($this);
         }
     }

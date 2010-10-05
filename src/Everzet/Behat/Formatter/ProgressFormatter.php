@@ -38,8 +38,8 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->output       = $container->getOutputService();
-        $this->verbose      = $container->getParameter('formatter.verbose');
+        $this->output       = $container->getBehat_OutputService();
+        $this->verbose      = $container->getParameter('behat.formatter.verbose');
     }
 
     /**
@@ -48,8 +48,8 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     protected function getTranslator()
     {
         if (!$this->translator) {
-            $this->translator = $this->container->getTranslatorService();
-            $this->translator->setLocale($this->container->getParameter('formatter.locale'));
+            $this->translator = $this->container->getGherkin_TranslatorService();
+            $this->translator->setLocale($this->container->getParameter('behat.formatter.locale'));
         }
 
         return $this->translator;
@@ -114,7 +114,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
       */
     public function printFailedSteps(Event $event)
     {
-        $statistics = $event->getSubject()->getStatisticsCollectorService();
+        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
 
         if (count($statistics->getFailedStepsEvents())) {
             $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('failed steps')), 'failed');
@@ -147,7 +147,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
       */
     public function printPendingSteps(Event $event)
     {
-        $statistics = $event->getSubject()->getStatisticsCollectorService();
+        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
 
         if (count($statistics->getPendingStepsEvents())) {
             $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('pending steps')), 'failed');

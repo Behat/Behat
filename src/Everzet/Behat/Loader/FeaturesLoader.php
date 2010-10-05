@@ -52,14 +52,14 @@ class FeaturesLoader implements LoaderInterface
         $this->dispatcher->notify(new Event($this, 'features.load.before'));
 
         if (!is_array($paths) && is_file($paths)) {
-            $features[] = $this->container->getParserService()->parseFile($paths);
+            $features[] = $this->container->getGherkin_ParserService()->parseFile($paths);
         } else {
             foreach ((array) $paths as $path) {
                 $finder = new Finder();
                 $files  = $finder->files()->name('*.feature')->in($path);
 
                 foreach ($files as $file) {
-                    $features[] = $this->container->getParserService()->parseFile($file);
+                    $features[] = $this->container->getGherkin_ParserService()->parseFile($file);
                 }
             }
         }

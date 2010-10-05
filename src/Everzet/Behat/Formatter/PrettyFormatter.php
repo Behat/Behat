@@ -48,8 +48,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->output       = $container->getOutputService();
-        $this->verbose      = $container->getParameter('formatter.verbose');
+        $this->output       = $container->getBehat_OutputService();
+        $this->verbose      = $container->getParameter('behat.formatter.verbose');
     }
 
     /**
@@ -58,8 +58,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     protected function getTranslator()
     {
         if (!$this->translator) {
-            $this->translator = $this->container->getTranslatorService();
-            $this->translator->setLocale($this->container->getParameter('formatter.locale'));
+            $this->translator = $this->container->getGherkin_TranslatorService();
+            $this->translator->setLocale($this->container->getParameter('behat.formatter.locale'));
         }
 
         return $this->translator;
@@ -116,11 +116,11 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
 
         // Run fake background to test if it runs without errors & print it output
         if ($feature->hasBackground()) {
-            $this->container->getStatisticsCollectorService()->pause();
-            $tester = $this->container->getBackgroundTesterService();
-            $tester->setEnvironment($this->container->getEnvironmentService());
+            $this->container->getBehat_StatisticsCollectorService()->pause();
+            $tester = $this->container->getBehat_BackgroundTesterService();
+            $tester->setEnvironment($this->container->getBehat_EnvironmentService());
             $feature->getBackground()->accept($tester);
-            $this->container->getStatisticsCollectorService()->resume();
+            $this->container->getBehat_StatisticsCollectorService()->resume();
             $this->backgroundPrinted = true;
         }
     }
@@ -158,16 +158,16 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
         );
 
         // Print outline steps
-        $environment = $this->container->getEnvironmentService();
-        $this->container->getStatisticsCollectorService()->pause();
+        $environment = $this->container->getBehat_EnvironmentService();
+        $this->container->getBehat_StatisticsCollectorService()->pause();
         foreach ($outline->getSteps() as $step) {
-            $tester = $this->container->getStepTesterService();
+            $tester = $this->container->getBehat_StepTesterService();
             $tester->setEnvironment($environment);
             $tester->setTokens(current($examples->getHash()));
             $tester->skip();
             $step->accept($tester);
         }
-        $this->container->getStatisticsCollectorService()->resume();
+        $this->container->getBehat_StatisticsCollectorService()->resume();
 
         $this->outlineStepsPrinted = true;
 
