@@ -80,7 +80,6 @@ Feature: Step Arguments
             | hello, | l     |
       """
     When I run "behat -f progress features/pystring_tokens.feature"
-    Then display last command output
     Then it should pass with:
       """
       ..
@@ -101,6 +100,30 @@ Feature: Step Arguments
           Then it must be equals to table 1
       """
     When I run "behat -f progress features/table.feature"
+    Then it should pass with:
+      """
+      ..
+
+      1 scenario (1 passed)
+      2 steps (2 passed)
+      """
+
+  Scenario: Table tokens
+    Given a file named "features/table_tokens.feature" with:
+      """
+      Feature: Tables
+        Scenario Outline:
+          Given a table:
+            | item1   | item2   | item3   |
+            | <word1> | <word3> | extra   |
+            | hyper   | mini    | <word2> |
+          Then it must be equals to table 1
+
+          Examples:
+            | word1 | word2 | word3 |
+            | super | XXL   | mega  |
+      """
+    When I run "behat -f progress features/table_tokens.feature"
     Then it should pass with:
       """
       ..
