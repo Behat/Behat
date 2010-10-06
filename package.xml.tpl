@@ -40,7 +40,7 @@
             <file role="php" baseinstalldir="behat" name="phpunit.xml.dist" />
             <file role="php" baseinstalldir="behat" name="behat.yml" />
 
-            <file role="php" baseinstalldir="behat" name="History.md" />
+            <file role="php" baseinstalldir="behat" name="CHANGES.md" />
             <file role="php" baseinstalldir="behat" name="LICENSE" />
             <file role="php" baseinstalldir="behat" name="README.md" />
 
