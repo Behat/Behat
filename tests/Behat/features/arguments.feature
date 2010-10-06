@@ -88,26 +88,6 @@ Feature: Step Arguments
       2 steps (2 passed)
       """
 
-  Scenario: Table
-    Given a file named "features/table.feature" with:
-      """
-      Feature: Tables
-        Scenario:
-          Given a table:
-            | item1 | item2 | item3 |
-            | super | mega  | extra |
-            | hyper | mini  | XXL   |
-          Then it must be equals to table 1
-      """
-    When I run "behat -f progress features/table.feature"
-    Then it should pass with:
-      """
-      ..
-
-      1 scenario (1 passed)
-      2 steps (2 passed)
-      """
-
   Scenario: Table tokens
     Given a file named "features/table_tokens.feature" with:
       """
@@ -124,6 +104,26 @@ Feature: Step Arguments
             | super | XXL   | mega  |
       """
     When I run "behat -f progress features/table_tokens.feature"
+    Then it should pass with:
+      """
+      ..
+
+      1 scenario (1 passed)
+      2 steps (2 passed)
+      """
+
+  Scenario: Table
+    Given a file named "features/table.feature" with:
+      """
+      Feature: Tables
+        Scenario:
+          Given a table:
+            | item1 | item2 | item3 |
+            | super | mega  | extra |
+            | hyper | mini  | XXL   |
+          Then it must be equals to table 1
+      """
+    When I run "behat -f progress features/table.feature"
     Then it should pass with:
       """
       ..
