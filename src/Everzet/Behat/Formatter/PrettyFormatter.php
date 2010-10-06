@@ -181,7 +181,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
             preg_replace(
                 '/|([^|]*)|/'
               , $this->colorize('$1', 'skipped')
-              , '      ' . $examples->getKeysAsString()
+              , '      ' . $examples->getRowAsString(0)
             )
         );
     }
@@ -201,7 +201,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
             preg_replace(
                 '/|([^|]*)|/'
               , $this->colorize('$1', $event['result'])
-              , '      ' . $examples->getRowAsString($event['iteration'])
+              , '      ' . $examples->getRowAsString($event['iteration'] + 1)
             )
         );
 
