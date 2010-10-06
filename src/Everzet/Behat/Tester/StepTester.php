@@ -118,7 +118,7 @@ class StepTester implements NodeVisitorInterface
             if (!$this->skip) {
                 try {
                     try {
-                        $definition->run($this->environment);
+                        $definition->run($this->environment, $this->tokens);
                         $result = self::PASSED;
                     } catch (Pending $e) {
                         $result    = self::PENDING;

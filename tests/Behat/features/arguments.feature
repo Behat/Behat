@@ -59,6 +59,59 @@ Feature: Step Arguments
       2 steps (2 passed)
       """
 
+  Scenario: PyStrings tokens
+    Given a file named "features/pystring_tokens.feature" with:
+      """
+      Feature: PyStrings
+        Scenario Outline:
+          Given a pystring:
+            '''
+            <word1>
+              w
+               o
+          r
+           <word2>
+               d
+            '''
+          Then it must be equals to string 1
+
+          Examples:
+            | word1  | word2 |
+            | hello, | l     |
+      """
+    When I run "behat -f progress features/pystring_tokens.feature"
+    Then it should pass with:
+      """
+      ..
+      
+      1 scenario (1 passed)
+      2 steps (2 passed)
+      """
+
+  Scenario: Table tokens
+    Given a file named "features/table_tokens.feature" with:
+      """
+      Feature: Tables
+        Scenario Outline:
+          Given a table:
+            | item1   | item2   | item3   |
+            | <word1> | <word3> | extra   |
+            | hyper   | mini    | <word2> |
+          Then it must be equals to table 1
+
+          Examples:
+            | word1 | word2 | word3 |
+            | super | XXL   | mega  |
+      """
+    When I run "behat -f progress features/table_tokens.feature"
+    Then it should pass with:
+      """
+      ..
+
+      1 scenario (1 passed)
+      2 steps (2 passed)
+      """
+
   Scenario: Table
     Given a file named "features/table.feature" with:
       """

@@ -25,6 +25,15 @@ class PyStringNode
         $this->ltrimCount = $ltrimCount;
     }
 
+    public function replaceTokens(array $tokens)
+    {
+        foreach ($tokens as $key => $value) {
+            foreach (array_keys($this->lines) as $line) {
+                $this->lines[$line] = str_replace('<'.$key.'>', $value, $this->lines[$line], $count);
+            }
+        }
+    }
+
     public function addLine($line)
     {
         $this->lines[] = preg_replace('/^\s{0,'.$this->ltrimCount.'}/', '', $line);
