@@ -27,8 +27,8 @@ class PyStringNode
 
     public function replaceTokens(array $tokens)
     {
-        foreach (array_keys($this->lines) as $line) {
-            foreach ($tokens as $key => $value) {
+        foreach ($tokens as $key => $value) {
+            foreach (array_keys($this->lines) as $line) {
                 $this->lines[$line] = str_replace('<'.$key.'>', $value, $this->lines[$line], $count);
             }
         }

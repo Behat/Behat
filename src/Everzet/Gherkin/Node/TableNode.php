@@ -54,6 +54,13 @@ class TableNode
 
     public function replaceTokens(array $tokens)
     {
+        foreach ($tokens as $key => $value) {
+            foreach (array_keys($this->rows) as $row) {
+                foreach (array_keys($this->rows[$row]) as $col) {
+                    $this->rows[$row][$col] = str_replace('<'.$key.'>', $value, $this->rows[$row][$col], $count);
+                }
+            }
+        }
     }
 
     public function getHash()
