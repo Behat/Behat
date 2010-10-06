@@ -11,7 +11,7 @@
         <parameter key="behat.hooks.file">%%behat.features.path%%/support/hooks.php</parameter>
         <!-- gherkin -->
         <parameter key="gherkin.parser.class">Everzet\Gherkin\Parser</parameter>
-        <parameter key="gherkin.i18n.resources_path">%%behat.path%%/i18n</parameter>
+        <parameter key="gherkin.i18n.resources_path">%%behat.lib.path%%/i18n</parameter>
         <!-- events -->
         <parameter key="behat.event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
         <parameter key="behat.statistics_collector.class">Everzet\Behat\Collector\StatisticsCollector</parameter>
