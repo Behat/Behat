@@ -27,10 +27,10 @@ Feature: Step Arguments
           $world->input = $table;
       });
       $steps->Then('/^it must be equals to string (\d+)$/', function($world, $arg1) {
-          assertEquals($world->strings[intval($arg1)], $world->input);
+          assertEquals($world->strings[intval($arg1)], (string) $world->input);
       });
       $steps->Then('/^it must be equals to table (\d+)$/', function($world, $arg1) {
-          assertEquals($world->tables[intval($arg1)], $world->input);
+          assertEquals($world->tables[intval($arg1)], $world->input->getHash());
       });
       """
 

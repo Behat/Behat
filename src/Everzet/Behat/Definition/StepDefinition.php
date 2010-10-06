@@ -141,18 +141,10 @@ class StepDefinition
     public function run(EnvironmentInterface $environment)
     {
         $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
+        $values     = $this->values;
 
-        $values = $this->values;
         array_unshift($values, $environment);
-        call_user_func_array($this->callback, array_map(function($value) {
-            if ($value instanceof PyStringNode) {
-                return (string) $value;
-            } elseif ($value instanceof TableNode) {
-                return $value->getHash();
-            } else {
-                return $value;
-            }
-        }, $values));
+        call_user_func_array($this->callback, $values);
 
         if (null !== $oldHandler) {
             set_error_handler($oldHandler);
