@@ -138,10 +138,19 @@ class StepDefinition
      * 
      * @throws  Everzet\Behat\Exception\BehaviorException
      */
-    public function run(EnvironmentInterface $environment)
+    public function run(EnvironmentInterface $environment, $tokens = array())
     {
         $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
         $values     = $this->values;
+
+        if (count($tokens)) {
+            foreach ($values as $i => $value) {
+                if ($value instanceof TableNode || $value instanceof PyStringNode) {
+                    $values[$i] = clone $value;
+                    $values[$i]->replaceTokens($tokens);
+                }
+            }
+        }
 
         array_unshift($values, $environment);
         call_user_func_array($this->callback, $values);

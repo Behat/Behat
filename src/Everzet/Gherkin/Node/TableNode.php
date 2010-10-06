@@ -52,6 +52,10 @@ class TableNode
         return sprintf($this->colSplitter . '%s' . $this->colSplitter, implode($this->colSplitter, $values));
     }
 
+    public function replaceTokens(array $tokens)
+    {
+    }
+
     public function getHash()
     {
         $rows = $this->getRows();
