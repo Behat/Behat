@@ -46,8 +46,8 @@ class ConfigurationLoader implements LoaderInterface
     {
         foreach ((array) $paths as $path) {
             $path = strtr($path, array(
-                '%%behat.work.path%%' => $this->container->getParameter('behat.work.path')
-              , '%%behat.path%%'      => $this->container->getParameter('behat.path')
+                '%%behat.work.path%%'   => $this->container->getParameter('behat.work.path')
+              , '%%behat.lib.path%%'    => $this->container->getParameter('behat.lib.path')
             ));
 
             if (false !== mb_stripos($path, '.xml')) {

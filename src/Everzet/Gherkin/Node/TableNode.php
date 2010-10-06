@@ -17,26 +17,79 @@ namespace Everzet\Gherkin\Node;
  */
 class TableNode
 {
-    protected $rowSplitter;
-    protected $keys = array();
-    protected $values = array();
+    protected $colSplitter;
+    protected $rows = array();
 
-    public function __construct($rowSplitter = '|')
+    public function __construct($colSplitter = '|')
     {
-        $this->rowSplitter = $rowSplitter;
+        $this->colSplitter = $colSplitter;
     }
 
     public function addRow($row)
     {
-        $items = array_map(function($item) {
+        $this->rows[] = array_map(function($item) {
             return trim($item);
-        }, explode($this->rowSplitter, $row));
+        }, explode($this->colSplitter, $row));
+    }
 
-        if (empty($this->keys)) {
-            $this->keys = $items;
-        } else {
-            $this->values[] = $items;
+    public function getRows()
+    {
+        return $this->rows;
+    }
+
+    public function getRow($rowNum)
+    {
+        return $this->rows[$rowNum];
+    }
+
+    public function getRowAsString($rowNum)
+    {
+        $values = array();
+        foreach ($this->getRow($rowNum) as $col => $value) {
+            $values[] = $this->padRight(' '.$value.' ', $this->getMaxLengthForColumn($col) + 2);
         }
+
+        return sprintf($this->colSplitter . '%s' . $this->colSplitter, implode($this->colSplitter, $values));
+    }
+
+    public function getHash()
+    {
+        $rows = $this->getRows();
+        $keys = array_shift($rows);
+
+        $hash = array();
+        foreach ($rows as $row) {
+            $hash[] = array_combine($keys, $row);
+        }
+
+        return $hash;
+    }
+
+    public function __toString()
+    {
+        $string = '';
+
+        for ($i = 0; $i < count($this->getRows()); $i++) {
+            if ('' !== $string) {
+                $string .= "\n";
+            }
+            $string .= $this->getRowAsString($i);
+        }
+
+        return $string;
+    }
+
+    protected function getMaxLengthForColumn($columnNum)
+    {
+        $max = 0;
+
+        foreach ($this->getRows() as $row) {
+            if (($tmp = mb_strlen($row[$columnNum])) > $max) {
+                $max = $tmp;
+            }
+        }
+
+        return $max;
     }
 
     protected function padRight($text, $length)
@@ -46,70 +99,5 @@ class TableNode
         }
 
         return $text;
-    }
-
-    public function getKeysAsString()
-    {
-        $keys = array();
-        foreach ($this->keys as $col => $key) {
-            $keys[] = $this->padRight(' '.$key.' ', $this->getMaxLengthForColumn($col) + 2);
-        }
-
-        return sprintf('|%s|', implode('|', $keys));
-    }
-
-    public function getRowAsString($rowNum)
-    {
-        $values = array();
-        foreach ($this->values[$rowNum] as $col => $value) {
-            $values[] = $this->padRight(' '.$value.' ', $this->getMaxLengthForColumn($col) + 2);
-        }
-
-        return sprintf('|%s|', implode('|', $values));
-    }
-
-    public function __toString()
-    {
-        $string = $this->getKeysAsString();
-        for ($i = 0; $i < count($this->values); $i++) {
-            $string .= "\n" . $this->getRowAsString($i);
-        }
-
-        return $string;
-    }
-
-    public function getMaxLengthForColumn($columnNum)
-    {
-        $key = $this->keys[$columnNum];
-        $max = mb_strlen($key);
-
-        foreach ($this->getHash() as $row) {
-            if (($tmp = mb_strlen($row[$key])) > $max) {
-                $max = $tmp;
-            }
-        }
-
-        return $max;
-    }
-
-    public function getKeys()
-    {
-        return $this->keys;
-    }
-
-    public function getValues()
-    {
-        return $this->values;
-    }
-
-    public function getHash()
-    {
-        $hash = array();
-
-        foreach ($this->values as $rowValues) {
-            $hash[] = array_combine($this->keys, $rowValues);
-        }
-
-        return $hash;
     }
 }

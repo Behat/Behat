@@ -73,7 +73,7 @@ class TestCommand extends Command
         // Set initial container services & parameters
         $container->set('behat.output',             $output);
         $container->setParameter('behat.work.path', $cwd = getcwd());
-        $container->setParameter('behat.path',      realpath(__DIR__ . '/../../../../../'));
+        $container->setParameter('behat.lib.path',  realpath(__DIR__ . '/../../../../../'));
 
         // Guess configuration file path
         if (null !== $input->getOption('configuration')) {
