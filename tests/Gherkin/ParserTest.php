@@ -29,6 +29,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         return $parser->parseFile(__DIR__ . '/fixtures/features/' . $path);
     }
 
+    private function lastItem(array $items)
+    {
+        return $items[count($items) - 1];
+    }
+
     public function testDosLineEndingsFeature()
     {
         $feature = $this->loadFeature('dos_line_endings.feature');
@@ -37,10 +42,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($feature->hasDescription());
         $this->assertFalse($feature->hasBackground());
         $this->assertEquals('I want to write features with DOS line endigs', 
-            end($feature->getDescription()));
+            $this->lastItem($var = $feature->getDescription()));
         $this->assertTrue($feature->hasScenarios());
 
-        $scenario = end($feature->getScenarios());
+        $scenario = $this->lastItem($feature->getScenarios());
         $this->assertEquals('Just lots of DOS', $scenario->getTitle());
         $this->assertTrue($scenario->hasSteps());
 
@@ -63,14 +68,14 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $background = $feature->getBackground();
         $this->assertTrue($background->hasSteps());
-        $this->assertEquals('Given', end($background->getSteps())->getType());
-        $this->assertEquals('a passing step', end($background->getSteps())->getText());
+        $this->assertEquals('Given', $this->lastItem($background->getSteps())->getType());
+        $this->assertEquals('a passing step', $this->lastItem($background->getSteps())->getText());
 
-        $scenario = end($feature->getScenarios());
+        $scenario = $this->lastItem($feature->getScenarios());
         $this->assertEquals('', $scenario->getTitle());
         $this->assertTrue($scenario->hasSteps());
-        $this->assertEquals('Given', end($scenario->getSteps())->getType());
-        $this->assertEquals('a failing step', end($scenario->getSteps())->getText());
+        $this->assertEquals('Given', $this->lastItem($scenario->getSteps())->getType());
+        $this->assertEquals('a failing step', $this->lastItem($scenario->getSteps())->getText());
     }
 
     public function testTagsSample()
@@ -93,8 +98,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($scenarios[0]->hasTag('sample_four'));
         $this->assertTrue($scenarios[0]->hasSteps());
         $this->assertEquals(1, count($scenarios[0]->getSteps()));
-        $this->assertEquals('Given', end($scenarios[0]->getSteps())->getType());
-        $this->assertEquals('missing', end($scenarios[0]->getSteps())->getText());
+        $this->assertEquals('Given', $this->lastItem($scenarios[0]->getSteps())->getType());
+        $this->assertEquals('missing', $this->lastItem($scenarios[0]->getSteps())->getText());
 
         $this->assertEquals('', $scenarios[1]->getTitle());
         $this->assertTrue($scenarios[1]->hasTags());
@@ -105,8 +110,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($scenarios[1]->hasTag('sample_four'));
         $this->assertTrue($scenarios[1]->hasSteps());
         $this->assertEquals(1, count($scenarios[1]->getSteps()));
-        $this->assertEquals('Given', end($scenarios[1]->getSteps())->getType());
-        $this->assertEquals('<state>', end($scenarios[1]->getSteps())->getText());
+        $this->assertEquals('Given', $this->lastItem($scenarios[1]->getSteps())->getType());
+        $this->assertEquals('<state>', $this->lastItem($scenarios[1]->getSteps())->getText());
         $this->assertTrue($scenarios[1]->hasExamples());
         $this->assertEquals(
             array(array('state' => 'missing')),
@@ -131,7 +136,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($feature->hasScenarios());
         $this->assertEquals(1, count($feature->getScenarios()));
 
-        $outline = end($feature->getScenarios());
+        $outline = $this->lastItem($feature->getScenarios());
 
         $this->assertEquals('', $outline->getTitle());
         $this->assertTrue($outline->hasSteps());
@@ -148,7 +153,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(array('foo' => 'bar', 'bar' => 'baz')),
-            end($steps[1]->getArguments())->getHash()
+            $this->lastItem($steps[1]->getArguments())->getHash()
         );
 
         $this->assertTrue($outline->hasExamples());
@@ -169,17 +174,17 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($feature->hasScenarios());
         $this->assertEquals(1, count($feature->getScenarios()));
 
-        $scenario = end($feature->getScenarios());
+        $scenario = $this->lastItem($feature->getScenarios());
 
         $this->assertEquals('', $scenario->getTitle());
         $this->assertTrue($scenario->hasSteps());
         $this->assertEquals(1, count($scenario->getSteps()));
 
-        $step = end($scenario->getSteps());
+        $step = $this->lastItem($scenario->getSteps());
 
         $this->assertEquals('Then', $step->getType());
         $this->assertEquals('I should see', $step->getText());
-        $this->assertEquals('a string', (string) end($step->getArguments()));
+        $this->assertEquals('a string', (string) $this->lastItem($step->getArguments()));
     }
 
     public function testUndefinedMultilineArgs()
@@ -196,20 +201,20 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('pystring', $scenarios[0]->getTitle());
         $this->assertEquals(1, count($scenarios[0]->getSteps()));
 
-        $step = end($scenarios[0]->getSteps());
+        $step = $this->lastItem($scenarios[0]->getSteps());
         $this->assertEquals('Given', $step->getType());
         $this->assertEquals('a pystring', $step->getText());
-        $this->assertEquals('  example', (string) end($step->getArguments()));
+        $this->assertEquals('  example', (string) $this->lastItem($step->getArguments()));
 
         $this->assertEquals('table', $scenarios[1]->getTitle());
         $this->assertEquals(1, count($scenarios[0]->getSteps()));
 
-        $step = end($scenarios[1]->getSteps());
+        $step = $this->lastItem($scenarios[1]->getSteps());
         $this->assertEquals('Given', $step->getType());
         $this->assertEquals('a table', $step->getText());
         $this->assertEquals(
             array(array('table' => 'example')),
-            end($step->getArguments())->getHash()
+            $this->lastItem($step->getArguments())->getHash()
         );
     }
 
@@ -231,7 +236,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($feature->hasScenarios());
         $this->assertEquals(1, count($feature->getScenarios()));
 
-        $scenario = end($feature->getScenarios());
+        $scenario = $this->lastItem($feature->getScenarios());
 
         $this->assertEquals('assert_equal', $scenario->getTitle());
         $this->assertEquals(3, count($scenario->getSteps()));
@@ -263,7 +268,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($feature->hasScenarios());
         $this->assertEquals(1, count($feature->getScenarios()));
 
-        $outline = end($feature->getScenarios());
+        $outline = $this->lastItem($feature->getScenarios());
 
         $this->assertEquals('Series', $outline->getTitle());
         $this->assertEquals(2, count($outline->getSteps()));
@@ -306,8 +311,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($item->hasSteps());
         $this->assertEquals(1, count($item->getSteps()));
-        $this->assertEquals('Given', end($item->getSteps())->getType());
-        $this->assertEquals('passing without a table', end($item->getSteps())->getText());
+        $this->assertEquals('Given', $this->lastItem($item->getSteps())->getType());
+        $this->assertEquals('passing without a table', $this->lastItem($item->getSteps())->getText());
 
         $scenarios = $feature->getScenarios();
 
@@ -319,8 +324,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($item->hasSteps());
         $this->assertEquals(1, count($item->getSteps()));
-        $this->assertEquals('Given', end($item->getSteps())->getType());
-        $this->assertEquals('passing without a table', end($item->getSteps())->getText());
+        $this->assertEquals('Given', $this->lastItem($item->getSteps())->getType());
+        $this->assertEquals('passing without a table', $this->lastItem($item->getSteps())->getText());
 
         $item = $scenarios[1];
         $this->assertEquals(
@@ -330,8 +335,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($item->hasSteps());
         $this->assertEquals(1, count($item->getSteps()));
-        $this->assertEquals('Given', end($item->getSteps())->getType());
-        $this->assertEquals('<state> without a table', end($item->getSteps())->getText());
+        $this->assertEquals('Given', $this->lastItem($item->getSteps())->getType());
+        $this->assertEquals('<state> without a table', $this->lastItem($item->getSteps())->getText());
         $this->assertEquals(
             array(array('state' => 'passing')),
             $item->getExamples()->getTable()->getHash()
@@ -342,8 +347,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($item->hasSteps());
         $this->assertEquals(1, count($item->getSteps()));
-        $this->assertEquals('Given', end($item->getSteps())->getType());
-        $this->assertEquals('<state> without a table', end($item->getSteps())->getText());
+        $this->assertEquals('Given', $this->lastItem($item->getSteps())->getType());
+        $this->assertEquals('<state> without a table', $this->lastItem($item->getSteps())->getText());
         $this->assertEquals(
             array(array('state' => 'passing')),
             $item->getExamples()->getTable()->getHash()
@@ -368,7 +373,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($feature->hasScenarios());
         $this->assertEquals(1, count($feature->getScenarios()));
 
-        $scenario = end($feature->getScenarios());
+        $scenario = $this->lastItem($feature->getScenarios());
 
         $this->assertEquals('Failed Login', $scenario->getTitle());
         $this->assertTrue($scenario->hasExamples());
@@ -434,9 +439,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($feature->getScenarios()));
         $this->assertEquals(
             'Pending Scenario at the end of a file with whitespace after it',
-            end($feature->getScenarios())->getTitle()
+            $this->lastItem($feature->getScenarios())->getTitle()
         );
-        $this->assertFalse(end($feature->getScenarios())->hasSteps());
+        $this->assertFalse($this->lastItem($feature->getScenarios())->hasSteps());
     }
 
     public function test236()
@@ -448,7 +453,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($feature->hasScenarios());
         $this->assertEquals(1, count($feature->getScenarios()));
 
-        $scenario = end($feature->getScenarios());
+        $scenario = $this->lastItem($feature->getScenarios());
         $this->assertEquals(
             'See Annual Leave Details (as Management & Human Resource)',
             $scenario->getTitle()
@@ -462,7 +467,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             $scenario->getExamples()->getTable()->getHash()
         );
 
-        $step = end($scenario->getSteps());
+        $step = $this->lastItem($scenario->getSteps());
         $this->assertEquals('Given', $step->getType());
         $this->assertEquals('the following users exist in the system', $step->getText());
         $this->assertEquals(
@@ -472,7 +477,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
                 array('name' => 'Carol', 'email' => 'carol@fmail.com', 'role_assignments' => '', 'group_memberships' => 'Sales (member)'),
                 array('name' => 'Cat', 'email' => 'cat@fmail.com', 'role_assignments' => '', 'group_memberships' => ''),
             ),
-            end($step->getArguments())->getHash()
+            $this->lastItem($step->getArguments())->getHash()
         );
     }
 
@@ -492,9 +497,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($feature->hasScenarios());
         $this->assertEquals(1, count($feature->getScenarios()));
-        $this->assertEquals('A normal feature', end($feature->getScenarios())->getTitle());
+        $this->assertEquals('A normal feature', $this->lastItem($feature->getScenarios())->getTitle());
 
-        $steps = end($feature->getScenarios())->getSteps();
+        $steps = $this->lastItem($feature->getScenarios())->getSteps();
         $this->assertEquals(3, count($steps));
 
         $this->assertEquals('Given', $steps[0]->getType());
@@ -512,8 +517,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $feature = $this->loadFeature('246.feature');
 
         $this->assertEquals('https://rspec.lighthouseapp.com/projects/16211/tickets/246-distorted-console-output-for-slightly-complicated-step-regexp-match', $feature->getTitle());
-        $this->assertEquals('See "No Record(s) Found" for Zero Existing', end($feature->getScenarios())->getTitle());
-        $this->assertEquals(1, count(end($feature->getScenarios())->getSteps()));
+        $this->assertEquals('See "No Record(s) Found" for Zero Existing', $this->lastItem($feature->getScenarios())->getTitle());
+        $this->assertEquals(1, count($this->lastItem($feature->getScenarios())->getSteps()));
     }
 
     public function testRuAddition()
@@ -533,7 +538,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($feature->hasScenarios());
         $this->assertEquals(1, count($feature->getScenarios()));
 
-        $scenario = end($feature->getScenarios());
+        $scenario = $this->lastItem($feature->getScenarios());
 
         $this->assertEquals('Сложение двух целых чисел', $scenario->getTitle());
 
@@ -620,14 +625,14 @@ be
 a
 u
   ti
-    ful', (string) end(end(end($feature->getScenarios())->getSteps())->getArguments()));
+    ful', (string) $this->lastItem($this->lastItem($this->lastItem($feature->getScenarios())->getSteps())->getArguments()));
     }
 
     public function testMultiplePyString()
     {
         $feature = $this->loadFeature('multiplepystrings.feature');
 
-        $steps = end($feature->getScenarios())->getSteps();
+        $steps = $this->lastItem($feature->getScenarios())->getSteps();
 
         $this->assertEquals(2, count($steps));
         $this->assertEquals('   a string
@@ -636,14 +641,14 @@ be
 a
 u
   ti
-    ful', (string) end($steps[0]->getArguments()));
+    ful', (string) $this->lastItem($steps[0]->getArguments()));
         $this->assertEquals('   a string
   with something
 be
 a
 u
   ti
-    ful', (string) end($steps[1]->getArguments()));
+    ful', (string) $this->lastItem($steps[1]->getArguments()));
     }
 
     public function testFileGetter()
@@ -651,12 +656,12 @@ u
         $feature = $this->loadFeature('addition.feature');
 
         $this->assertEquals(null, $feature->getFile());
-        $this->assertEquals(null, end($feature->getScenarios())->getFile());
+        $this->assertEquals(null, $this->lastItem($feature->getScenarios())->getFile());
 
         $feature = $this->loadFeatureFromFile('addition.feature');
 
         $this->assertEquals('addition.feature', basename($feature->getFile()));
-        $this->assertEquals('addition.feature', basename(end($feature->getScenarios())->getFile()));
+        $this->assertEquals('addition.feature', basename($this->lastItem($feature->getScenarios())->getFile()));
 
         $feature = $this->loadFeatureFromFile('tables.feature');
 
@@ -667,17 +672,17 @@ u
     {
         foreach (array($this->loadFeature('addition.feature'), $this->loadFeatureFromFile('addition.feature')) as $feature) {
             $this->assertEquals('en', $feature->getLocale());
-            $this->assertEquals('en', end($feature->getScenarios())->getLocale());
+            $this->assertEquals('en', $this->lastItem($feature->getScenarios())->getLocale());
         }
 
         foreach (array($this->loadFeature('ru_addition.feature'), $this->loadFeatureFromFile('ru_addition.feature')) as $feature) {
             $this->assertEquals('ru', $feature->getLocale());
-            $this->assertEquals('ru', end($feature->getScenarios())->getLocale());
+            $this->assertEquals('ru', $this->lastItem($feature->getScenarios())->getLocale());
         }
 
         foreach (array($this->loadFeature('addition.feature'), $this->loadFeatureFromFile('addition.feature')) as $feature) {
             $this->assertEquals('en', $feature->getLocale());
-            $this->assertEquals('en', end($feature->getScenarios())->getLocale());
+            $this->assertEquals('en', $this->lastItem($feature->getScenarios())->getLocale());
         }
     }
 }
