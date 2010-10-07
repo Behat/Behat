@@ -42,7 +42,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($feature->hasDescription());
         $this->assertFalse($feature->hasBackground());
         $this->assertEquals('I want to write features with DOS line endigs', 
-            $this->lastItem($var = $feature->getDescription()));
+            $this->lastItem($feature->getDescription()));
         $this->assertTrue($feature->hasScenarios());
 
         $scenario = $this->lastItem($feature->getScenarios());
