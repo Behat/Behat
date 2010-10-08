@@ -1,3 +1,28 @@
+0.2.0 / 2010-10-08
+
+  * [Behat] Brand new stateless testers, based on Visitor pattern
+  * [Behat] Refactored event listeners & event names
+  * [Behat] Refactored formatters to confirm with new stateless testers (statuses now sent as event parameters)
+  * [Behat] Refactored ConsoleFormatter (and removed base formatter)
+  * [Behat] Removed custom I18n classes & refactored Translator routines in flavor of Symfony\Component\Translation
+  * [Behat] Added missed translation strings into XLIFF files
+  * [Behat] Optimised multiline arguments (Node instances are sent to definitions instead of their plain representations)
+  * [Behat] Support for Scenario Outline tokens replace in multiline arguments (tables & pystrings)
+  * [Behat] Step arguments transformations (including table transformations)
+  * [Behat] Colorize inline step arguments
+  * [Behat] Optimized exit statuses of CLI
+  * [Behat] Added ability to turn-off colors
+  * [Behat] Added ability to translate formatters output with `--i18n` option
+  * [Behat] Bunch of new core feature tests
+  * [Gherkin] Parser now uses Symfony Dependency Injection to
+  * [Gherkin] Refactored parser to be like AST (Nodes that supports Visitor pattern)
+  * [Gherkin] Comments support
+  * [Gherkin] Fixed PHPUnit warnings
+  * [Behat,Gherkin] PEAR release script to support http://pear.everzet.com release model
+  * [Behat,Gherkin] DIC naming refactoring
+  * [Behat,Gherkin] Autoloader refactoring
+  * [Behat,Gherkin] Removed Zend & Goutte depencies
+
 0.1.5 / 2010-09-25
 
   * Added ability to call other steps inside step definition
