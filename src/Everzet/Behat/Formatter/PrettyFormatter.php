@@ -17,6 +17,7 @@ use Everzet\Gherkin\Node\TableNode;
 use Everzet\Gherkin\Node\ExamplesNode;
 
 use Everzet\Behat\Exception\Pending;
+use Everzet\Behat\Tester\StepTester;
 
 /*
  * This file is part of the Behat.
@@ -47,6 +48,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
      */
     public function __construct(Container $container)
     {
+        parent::__construct();
+
         $this->container    = $container;
         $this->output       = $container->getBehat_OutputService();
         $this->verbose      = $container->getParameter('behat.formatter.verbose');
@@ -326,10 +329,32 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
 
         if (!($step->getParent() instanceof BackgroundNode) || !$this->backgroundPrinted) {
             if (!($step->getParent() instanceof OutlineNode) || !$this->outlineStepsPrinted) {
+                // Get step description
+                $text           = $this->outlineStepsPrinted ? $step->getText() : $step->getCleanText();
+                $printableText  = $text;
+                $description    = sprintf('    %s %s', $step->getType(), $text);
+
+                // Colorize arguments
+                if (StepTester::UNDEFINED !== $event['result']) {
+                    $argStartCode   = $this->colorizeStart($event['result'] + 10);
+                    $argFinishCode  = $this->colorizeFinish() . $this->colorizeStart($event['result']);
+                    $printableText  = preg_replace_callback(
+                        $event['definition']->getRegex()
+                      , function ($matches) use($argStartCode, $argFinishCode) {
+                          $text = array_shift($matches);
+                          foreach ($matches as $match) {
+                              $text = str_replace($match, $argStartCode . $match . $argFinishCode, $text);
+                          }
+
+                          return $text;
+                      }
+                      , $printableText
+                    );
+                }
+
                 // Print step description
-                $text = $this->outlineStepsPrinted ? $step->getText() : $step->getCleanText();
-                $description = sprintf('    %s %s', $step->getType(), $text);
-                $this->write($description, $event['result'], false);
+                $printableDescription = sprintf('    %s %s', $step->getType(), $printableText);
+                $this->write($printableDescription, $event['result'], false);
 
                 // Print definition path if found one
                 if (null !== $event['definition']) {
