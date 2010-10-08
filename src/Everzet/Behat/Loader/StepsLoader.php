@@ -187,22 +187,29 @@ PHP
         // find step to match
         foreach ($this->steps as $regex => $definition) {
             if (preg_match($regex, $text, $arguments)) {
-                $arguments = array_slice($arguments, 1);
+                $arguments = array_merge(array_slice($arguments, 1), $args);
  
                 // transform arguments
                 foreach ($this->transforms as $transformRegex => $transform) {
-                    foreach ($arguments as $num => $value) {
-                        if (preg_match($transformRegex, $value, $transformArguments)) {
-                            $arguments[$num] = call_user_func(
-                                $transform, $transformArguments[1 === count($transformArguments) ? 0 : 1]
-                            );
+                    foreach ($arguments as $num => $argument) {
+                        if ($argument instanceof TableNode) {
+                            $tableMatching = 'table:' . implode(',', $argument->getRow(0));
+                            if (preg_match($transformRegex, $tableMatching)) {
+                                $arguments[$num] = call_user_func($transform, $argument);
+                            }
+                        } elseif (is_string($argument)) {
+                            if (preg_match($transformRegex, $argument, $transformArguments)) {
+                                $arguments[$num] = call_user_func(
+                                    $transform, $transformArguments[1 === count($transformArguments) ? 0 : 1]
+                                );
+                            }
                         }
                     }
                 }
 
                 // set matched definition
                 $definition->setMatchedText($text);
-                $definition->setValues(array_merge($arguments, $args));
+                $definition->setValues($arguments);
                 $matches[] = $definition;
             }
         }
