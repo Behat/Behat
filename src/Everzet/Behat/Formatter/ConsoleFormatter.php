@@ -23,13 +23,23 @@ use Everzet\Behat\Tester\StepTester;
  */
 abstract class ConsoleFormatter
 {
-    protected $statuses = array(
-        StepTester::PASSED    => 'passed'
-      , StepTester::SKIPPED   => 'skipped'
-      , StepTester::PENDING   => 'pending'
-      , StepTester::UNDEFINED => 'undefined'
-      , StepTester::FAILED    => 'failed'
-    );
+    protected $statuses;
+
+    public function __construct()
+    {
+        $this->statuses = array(
+            StepTester::PASSED          => 'passed'
+          , StepTester::SKIPPED         => 'skipped'
+          , StepTester::PENDING         => 'pending'
+          , StepTester::UNDEFINED       => 'undefined'
+          , StepTester::FAILED          => 'failed'
+
+          , StepTester::PASSED  + 10    => 'passed_param'
+          , StepTester::SKIPPED + 10    => 'skipped_param'
+          , StepTester::PENDING + 10    => 'pending_param'
+          , StepTester::FAILED  + 10    => 'failed_param'
+        );
+    }
 
     /**
      * Return Translator Service. 
@@ -128,14 +138,32 @@ abstract class ConsoleFormatter
     protected function colorize($string, $result = null)
     {
         if (null !== $result) {
-            return sprintf("\033[%sm%s\033[0m",
-                $this->getStatusColorCode(is_int($result) ? $this->statuses[$result] : $result)
-              , $string
-              , $this->getStatusColorCode(is_int($result) ? $this->statuses[$result] : $result)
-            );
+            return $this->colorizeStart($result) . $string . $this->colorizeFinish();
         } else {
             return $string;
         }
+    }
+
+    /**
+     * Get color start code. 
+     * 
+     * @param   integer|string  $result     result code or status string
+     *
+     * @return  string                      console color code start
+     */
+    protected function colorizeStart($result)
+    {
+        return sprintf("\033[%sm", $this->getStatusColorCode(is_int($result) ? $this->statuses[$result] : $result));
+    }
+
+    /**
+     * Get color end code. 
+     * 
+     * @return  string                      console color code end
+     */
+    protected function colorizeFinish()
+    {
+        return "\033[0m";
     }
 
     /**
@@ -159,25 +187,30 @@ abstract class ConsoleFormatter
      */
     protected function getStatusColorCode($status)
     {
-        $colorCode = 32;
         switch ($status) {
             case 'failed':
-                $colorCode = 31;
-                break;
+                return 31;
             case 'undefined':
             case 'pending':
-                $colorCode = 33;
-                break;
+                return 33;
             case 'skipped':
             case 'tag':
-                $colorCode = 36;
-                break;
+                return 36;
             case 'comment':
-                $colorCode = 30;
-                break;
+                return 30;
+            case 'passed':
+                return 32;
+            case 'failed_param':
+                return '31;1';
+            case 'pending_param':
+                return '33;1';
+            case 'skipped_param':
+                return '36;1';
+            case 'passed_param':
+                return '32;1';
+            default:
+                return 32;
         }
-
-        return $colorCode;
     }
 
     /**
