@@ -37,6 +37,8 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
      */
     public function __construct(Container $container)
     {
+        parent::__construct();
+
         $this->container    = $container;
         $this->output       = $container->getBehat_OutputService();
         $this->verbose      = $container->getParameter('behat.formatter.verbose');
