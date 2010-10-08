@@ -343,7 +343,13 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
                       , function ($matches) use($argStartCode, $argFinishCode) {
                           $text = array_shift($matches);
                           foreach ($matches as $match) {
-                              $text = str_replace($match, $argStartCode . $match . $argFinishCode, $text);
+                              $text = strtr($text, array(
+                                  '"' . $match . '"'    => '"' . $argStartCode . $match . $argFinishCode . '"'
+                                , '\'' . $match . '\''  => '\'' . $argStartCode . $match . $argFinishCode . '\''
+                                , ' ' . $match . ' '    => ' ' . $argStartCode . $match . $argFinishCode . ' '
+                                , ' ' . $match          => ' ' . $argStartCode . $match . $argFinishCode
+                                , $match . ' '          => $argStartCode . $match . $argFinishCode . ' '
+                              ));
                           }
 
                           return $text;
