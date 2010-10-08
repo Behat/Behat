@@ -34,6 +34,7 @@ class StepsLoader implements LoaderInterface
 {
     protected $container;
     protected $dispatcher;
+    protected $transforms = array();
     protected $steps = array();
 
     /**
@@ -70,6 +71,17 @@ class StepsLoader implements LoaderInterface
         }
 
         $this->dispatcher->notify(new Event($this, 'steps.load.after'));
+    }
+
+    /**
+     * Define argument transformation to container.
+     * 
+     * @param   string      $regex      regex to argument for transformation
+     * @param   callback    $callback   transformation callback (returns transformed argument)
+     */
+    public function Transform($regex, $callback)
+    {
+        $this->transforms[$regex] = $callback;
     }
 
     /**
@@ -172,10 +184,32 @@ PHP
         $args       = $step->getArguments();
         $matches    = array();
 
+        // find step to match
         foreach ($this->steps as $regex => $definition) {
-            if (preg_match($regex, $text, $values)) {
+            if (preg_match($regex, $text, $arguments)) {
+                $arguments = array_merge(array_slice($arguments, 1), $args);
+ 
+                // transform arguments
+                foreach ($this->transforms as $transformRegex => $transform) {
+                    foreach ($arguments as $num => $argument) {
+                        if ($argument instanceof TableNode) {
+                            $tableMatching = 'table:' . implode(',', $argument->getRow(0));
+                            if (preg_match($transformRegex, $tableMatching)) {
+                                $arguments[$num] = call_user_func($transform, $argument);
+                            }
+                        } elseif (is_string($argument)) {
+                            if (preg_match($transformRegex, $argument, $transformArguments)) {
+                                $arguments[$num] = call_user_func(
+                                    $transform, $transformArguments[1 === count($transformArguments) ? 0 : 1]
+                                );
+                            }
+                        }
+                    }
+                }
+
+                // set matched definition
                 $definition->setMatchedText($text);
-                $definition->setValues(array_merge(array_slice($values, 1), $args));
+                $definition->setValues($arguments);
                 $matches[] = $definition;
             }
         }
