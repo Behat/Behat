@@ -1,4 +1,5 @@
 0.2.0 / 2010-10-08
+==================
 
   * [Behat] Brand new stateless testers, based on Visitor pattern
   * [Behat] Refactored event listeners & event names
@@ -24,6 +25,7 @@
   * [Behat,Gherkin] Removed Zend & Goutte depencies
 
 0.1.5 / 2010-09-25
+==================
 
   * Added ability to call other steps inside step definition
   * Added profiles
