@@ -84,7 +84,7 @@ Feature: Tags
       """
       ..
 
-      1 scenarios (1 passed)
+      1 scenario (1 passed)
       2 steps (2 passed)
       """
 
@@ -142,7 +142,7 @@ Feature: Tags
       """
       ....
 
-      1 scenarios (1 passed)
+      1 scenario (1 passed)
       4 steps (4 passed)
       """
     When I run "behat -f progress --tags ~@wip"

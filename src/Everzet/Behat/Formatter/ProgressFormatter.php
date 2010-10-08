@@ -6,12 +6,13 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Behat\Runner\RunnerInterface;
-use Everzet\Behat\Runner\ScenarioRunner;
-use Everzet\Behat\Runner\BackgroundRunner;
+use Everzet\Gherkin\Node\ScenarioNode;
+use Everzet\Gherkin\Node\BackgroundNode;
+
+use Everzet\Behat\Tester\StepTester;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,183 +20,213 @@ use Everzet\Behat\Runner\BackgroundRunner;
  */
 
 /**
- * Console progress output formatter (phpUnit-like).
+ * Progress Console Formatter.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ProgressFormatter extends PrettyFormatter implements FormatterInterface
+class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
 {
-    /**
-     * @see Everzet\Behat\Formatter\FormatterInterface
-     */
-    public function registerListeners(EventDispatcher $dispatcher)
-    {
-        $dispatcher->connect('step.test.after',             array($this, 'printStep'),          10);
-        $dispatcher->connect('step.skip.after',             array($this, 'printStep'),          10);
+    protected $translator;
+    protected $container;
+    protected $output;
+    protected $verbose;
+    protected $maxDescriptionLength = 0;
 
-        $dispatcher->connect('features.test.after',         array($this, 'printEmptyLine'),     10);
-        $dispatcher->connect('features.test.after',         array($this, 'printFailedSteps'),   10);
-        $dispatcher->connect('features.test.after',         array($this, 'printPendingSteps'),  10);
-        $dispatcher->connect('features.test.after',         array($this, 'printStatistics'),    10);
-        $dispatcher->connect('features.test.after',         array($this, 'printSnippets'),      10);
+    /**
+     * @see     Everzet\Behat\Formatter\FormatterInterface
+     */
+    public function __construct(Container $container)
+    {
+        parent::__construct();
+
+        $this->container    = $container;
+        $this->output       = $container->getBehat_OutputService();
+        $this->verbose      = $container->getParameter('behat.formatter.verbose');
     }
 
     /**
-      * Listens to `step.post_test` event & prints step runner information
+     * @see     Everzet\Behat\Formatter\ConsoleFormatter
+     */
+    protected function isColorsAllowed()
+    {
+        return $this->container->getParameter('behat.formatter.colors');
+    }
+
+    /**
+     * @see     Everzet\Behat\Formatter\ConsoleFormatter 
+     */
+    protected function getTranslator()
+    {
+        if (!$this->translator) {
+            $this->translator = $this->container->getGherkin_TranslatorService();
+            $this->translator->setLocale($this->container->getParameter('behat.formatter.locale'));
+        }
+
+        return $this->translator;
+    }
+
+    /**
+     * @see     Everzet\Behat\Formatter\FormatterInterface
+     */
+    public function registerListeners(EventDispatcher $dispatcher)
+    {
+        $dispatcher->connect('step.run.after',          array($this, 'printStep'),          10);
+
+        $dispatcher->connect('suite.run.after',         array($this, 'printEmptyLine'),     10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printFailedSteps'),   10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printPendingSteps'),  10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printStatistics'),    10);
+        $dispatcher->connect('suite.run.after',         array($this, 'printSnippets'),      10);
+    }
+
+    /**
+      * Listen to `step.run.after` event & print step run information.
       *
       * @param   Event   $event  notified event
       */
     public function printStep(Event $event)
     {
-        $runner = $event->getSubject();
+        $step = $event->getSubject();
 
-        switch ($runner->getStatus()) {
-            case 'passed':
-                $this->output->write('<passed>.</passed>');
+        switch ($event['result']) {
+            case StepTester::PASSED:
+                $this->write('.', 'passed', false);
                 break;
-            case 'skipped':
-                $this->output->write('<skipped>-</skipped>');
+            case StepTester::SKIPPED:
+                $this->write('-', 'skipped', false);
                 break;
-            case 'pending':
-                $this->output->write('<pending>P</pending>');
+            case StepTester::PENDING:
+                $this->write('P', 'pending', false);
                 break;
-            case 'undefined':
-                $this->output->write('<undefined>U</undefined>');
+            case StepTester::UNDEFINED:
+                $this->write('U', 'undefined', false);
                 break;
-            case 'failed':
-                $this->output->write('<failed>F</failed>');
+            case StepTester::FAILED:
+                $this->write('F', 'failed', false);
                 break;
         }
     }
 
     /**
-      * Listens to `suite.post_test` event & prints empty line
+      * Listen to `suite.run.after` event & print empty line.
       *
       * @param   Event   $event  notified event
       */
     public function printEmptyLine(Event $event)
     {
-        $this->output->writeln("\n");
+        $this->write("\n");
     }
 
     /**
-      * Listens to `suite.post_test` event & prints failed steps info
+      * Listen to `suite.run.after` event & print failed steps info.
       *
       * @param   Event   $event  notified event
       */
     public function printFailedSteps(Event $event)
     {
-        $runner = $event->getSubject();
+        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
 
-        if (count($stepRunners = $runner->getFailedStepRunners())) {
-            $this->output->writeln("<failed>(::) failed steps (::)</failed>\n");
+        if (count($statistics->getFailedStepsEvents())) {
+            $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('failed steps')), 'failed');
 
-            foreach ($stepRunners as $number => $stepRunner) {
-                $step = $stepRunner->getStep();
-
+            foreach ($statistics->getFailedStepsEvents() as $number => $event) {
                 // Print step exception
-                if (null !== $stepRunner->getException()) {
+                if (null !== $event['exception']) {
                     if ($this->verbose) {
-                        $error = (string) $stepRunner->getException();
+                        $error = (string) $event['exception'];
                     } else {
-                        $error = $stepRunner->getException()->getMessage();
+                        $error = $event['exception']->getMessage();
                     }
-                    $this->output->write(sprintf("%s. \033[31m%s\033[0m"
-                      , str_pad((string) ($number + 1), 2, '0', STR_PAD_LEFT)
-                      , strtr($error, array("\n" => "\n    "))
-                    ), true, 1);
+                    $this->write(
+                        sprintf("%s. %s"
+                          , str_pad((string) ($number + 1), 2, '0', STR_PAD_LEFT)
+                          , strtr($error, array("\n" => "\n    "))
+                        )
+                    , 'failed');
                 }
 
-                $this->printStepInformation($stepRunner, 'failed');
+                $this->printStepEventInformation($event, 'failed');
             }
         }
     }
 
     /**
-      * Listens to `suite.post_test` event & prints pending steps info
+      * Listen to `suite.run.after` event & print pending steps info.
       *
       * @param   Event   $event  notified event
       */
     public function printPendingSteps(Event $event)
     {
-        $runner = $event->getSubject();
+        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
 
-        if (count($stepRunners = $runner->getPendingStepRunners())) {
-            $this->output->writeln("<pending>(::) pending steps (::)</pending>\n");
+        if (count($statistics->getPendingStepsEvents())) {
+            $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('pending steps')), 'failed');
 
-            $number = 1;
-            foreach ($stepRunners as $key => $stepRunner) {
-                $step = $stepRunner->getStep();
-
+            foreach ($statistics->getPendingStepsEvents() as $number => $event) {
                 // Print step exception
-                if (null !== $stepRunner->getException()) {
+                if (null !== $event['exception']) {
                     if ($this->verbose) {
-                        $error = (string) $stepRunner->getException();
+                        $error = (string) $event['exception'];
                     } else {
-                        $error = $stepRunner->getException()->getMessage();
+                        $error = $event['exception']->getMessage();
                     }
-                    $this->output->write(sprintf("%s. \033[33m%s\033[0m"
-                      , str_pad((string) $number++, 2, '0', STR_PAD_LEFT)
-                      , strtr($error, array("\n" => "\n    "))
-                    ), true, 1);
+                    $this->write(
+                        sprintf("%s. %s"
+                          , str_pad((string) ($number + 1), 2, '0', STR_PAD_LEFT)
+                          , strtr($error, array("\n" => "\n    "))
+                        )
+                    , 'pending');
                 }
 
-                $this->printStepInformation($stepRunner, 'pending');
+                $this->printStepEventInformation($event, 'pending');
             }
         }
     }
 
     /**
-     * Print step information (filepath, fileline, exception description)
+     * Print step information (filepath, fileline, exception description).
      *
-     * @param   RunnerInterface $stepRunner runner instance
-     * @param   string          $type       information type (pending/failed etc.)
+     * @param   Event   $event  step event
+     * @param   string  $type   information type (pending/failed etc.)
      */
-    protected function printStepInformation(RunnerInterface $stepRunner, $type)
+    protected function printStepEventInformation(Event $event, $type)
     {
+        $step = $event->getSubject();
+
         // Print step information
-        $step = $stepRunner->getStep();
-        $description = sprintf("    <%s>In step `%s %s'.</%s>"
-          , $type
-          , $step->getType()
-          , $step->getText()
-          , $type
-        );
+        $description = $this->colorize(
+            sprintf("    In step `%s %s'.", $step->getType(), $step->getText())
+        , $type);
         $this->maxDescriptionLength = $this->maxDescriptionLength > mb_strlen($description)
             ? $this->maxDescriptionLength
             : mb_strlen($description);
-        $this->output->write($description);
+        $this->write($description, null, false);
         $this->printLineSourceComment(
             mb_strlen($description)
-          , $stepRunner->getDefinition()->getFile()
-          , $stepRunner->getDefinition()->getLine()
+          , $event['definition']->getFile()
+          , $event['definition']->getLine()
         );
 
         // Print scenario information
-        $parentRunner = $stepRunner->getParentRunner();
-        if ($parentRunner instanceof BackgroundRunner) {
-            $item           = $parentRunner->getBackground();
-            $description    = sprintf("    <%s>From scenario background.</%s>"
-              , $type
-              , $type
-            );
-        } elseif ($parentRunner instanceof ScenarioRunner) {
-            $item           = $parentRunner->getScenario();
-            $description    = sprintf("    <%s>From scenario %s.</%s>"
-              , $type
-              , $item->getTitle() ? sprintf("`%s'", $item->getTitle()) : '***'
-              , $type
-            );
+        $item = $step->getParent();
+        if ($item instanceof BackgroundNode) {
+            $description    = $this->colorize('    From scenario background.', $type);
+        } elseif ($item instanceof ScenarioNode) {
+            $description    = $this->colorize(
+                sprintf("    From scenario %s."
+                  , $item->getTitle() ? sprintf("`%s'", $item->getTitle()) : '***'
+                )
+            , $type);
         }
         $this->maxDescriptionLength = $this->maxDescriptionLength > mb_strlen($description)
             ? $this->maxDescriptionLength
             : mb_strlen($description);
-        $this->output->write($description);
+        $this->write($description, null, false);
         $this->printLineSourceComment(
             mb_strlen($description)
           , $item->getFile()
           , $item->getLine()
         );
-        $this->output->writeln('');
+        $this->write();
     }
 }

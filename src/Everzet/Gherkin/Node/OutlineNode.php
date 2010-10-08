@@ -1,11 +1,9 @@
 <?php
 
-namespace Everzet\Gherkin\Element\Scenario;
-
-use Everzet\Gherkin\Element\Inline\ExamplesElement;
+namespace Everzet\Gherkin\Node;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Gherkin.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -17,11 +15,11 @@ use Everzet\Gherkin\Element\Inline\ExamplesElement;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ScenarioOutlineElement extends ScenarioElement
+class OutlineNode extends ScenarioNode
 {
     protected $examples;
 
-    public function setExamples(ExamplesElement $examples)
+    public function setExamples(ExamplesNode $examples)
     {
         $this->examples = $examples;
     }

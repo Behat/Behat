@@ -6,11 +6,11 @@ The main website with documentation is at [http://everzet.com/Behat](http://ever
 Note on Patches/Pull Requests
 -----------------------------
  
-* Fork the project.
+* Fork the project `develop` branch (all new development happens here, master for releases & hotfixes only).
 * Make your feature addition or bug fix.
-* Add tests for it (in Behat). This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with `BehatApplication` version, or `History.md`.
+* Add features for it (look at test/Behat/features for examples).
+  This is important so I don't break it in a future version unintentionally.
+* Commit, do not mess with `BehatApplication` version, or `CHANGES.md` one.
   (if you want to have your own version, that is fine but
    bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request.

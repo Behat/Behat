@@ -2,10 +2,10 @@
 
 namespace Everzet\Gherkin;
 
-use Everzet\Gherkin\I18n;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Gherkin.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -17,53 +17,53 @@ use Everzet\Gherkin\I18n;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RegexHolder
+class Lexer
 {
-    protected $i18n;
+    protected $translator;
 
-    public function __construct(I18n $i18n)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->i18n = $i18n;
+        $this->translator = $translator;
     }
 
     public function getTagKeyword()
     {
-        return $this->i18n->__('tag-keyword', '@');
+        return '@';
     }
 
     public function getTableSplitter()
     {
-        return $this->i18n->__('table-splitter', '|');
+        return '|';
     }
 
     public function getStepTypes()
     {
-        return $this->i18n->__('step-types', array('Given', 'When', 'Then', 'And', 'But'));
+        return explode('|', $this->translator->trans('Given|Then|When|And|But'));
     }
 
     public function getFeatureKeyword()
     {
-        return $this->i18n->__('feature', 'Feature');
+        return $this->translator->trans('Feature');
     }
 
     public function getBackgroundKeyword()
     {
-        return $this->i18n->__('background', 'Background');
+        return $this->translator->trans('Background');
     }
 
     public function getScenarioKeyword()
     {
-        return $this->i18n->__('scenario', 'Scenario');
+        return $this->translator->trans('Scenario');
     }
 
     public function getScenarioOutlineKeyword()
     {
-        return $this->i18n->__('scenario-outline', 'Scenario Outline');
+        return $this->translator->trans('Scenario Outline');
     }
 
     public function getExamplesKeyword()
     {
-        return $this->i18n->__('examples', 'Examples');
+        return $this->translator->trans('Examples');
     }
 
     private function getStepTypesRegex()
@@ -136,3 +136,4 @@ class RegexHolder
         return "#^\s*\\" . $this->getTableSplitter() . "(?P<row>.+?)\\" . $this->getTableSplitter() . "\s*$#";
     }
 }
+

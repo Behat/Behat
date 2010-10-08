@@ -2,14 +2,14 @@
 
 namespace Everzet\Behat\Definition;
 
-use Everzet\Gherkin\Element\Inline\PyStringElement;
-use Everzet\Gherkin\Element\Inline\TableElement;
+use Everzet\Gherkin\Node\PyStringNode;
+use Everzet\Gherkin\Node\TableNode;
 
 use Everzet\Behat\Exception\Error;
 use Everzet\Behat\Environment\EnvironmentInterface;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -17,7 +17,7 @@ use Everzet\Behat\Environment\EnvironmentInterface;
  */
 
 /**
- * Step Definition holder.
+ * Step Definition.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -32,7 +32,7 @@ class StepDefinition
     protected $values = array();
 
     /**
-     * Constructs new Step Definition
+     * Initialize new definition.
      *
      * @param   string      $type       step type (Given/When/Then/And or localized one)
      * @param   string      $regex      step matching regular expression
@@ -50,7 +50,7 @@ class StepDefinition
     }
 
     /**
-     * Returns step type (Given/When/Then/And or localized one)
+     * Return step type (Given/When/Then/And or localized one).
      *
      * @return  string
      */
@@ -60,7 +60,7 @@ class StepDefinition
     }
 
     /**
-     * Returns step matching regular expression
+     * Return step matching regular expression.
      *
      * @return  string
      */
@@ -70,7 +70,7 @@ class StepDefinition
     }
 
     /**
-     * Sets step text from matched element
+     * Set step text from matched element.
      *
      * @param   string  $text   step text (description)
      */
@@ -80,7 +80,7 @@ class StepDefinition
     }
 
     /**
-     * Returns step text from matched element
+     * Return step text from matched element.
      *
      * @return  string
      */
@@ -90,7 +90,7 @@ class StepDefinition
     }
 
     /**
-     * Returns step definition file path
+     * Return step definition file path.
      *
      * @return  string
      */
@@ -100,7 +100,7 @@ class StepDefinition
     }
 
     /**
-     * Returns step definition line number
+     * Return step definition line number.
      *
      * @return  integer
      */
@@ -110,7 +110,7 @@ class StepDefinition
     }
 
     /**
-     * Sets step parameters for call
+     * Set step parameters for call.
      *
      * @param   array   $values step parameters
      */
@@ -120,7 +120,7 @@ class StepDefinition
     }
 
     /**
-     * Custom Error handler
+     * Custom Error handler.
      *
      * @see     set_error_handler
      * 
@@ -132,29 +132,28 @@ class StepDefinition
     }
 
     /**
-     * Runs step definition
+     * Runs step definition.
      *
      * @param   EnvironmentInterface    $environment    runners shared environment
-     *
-     * @return  void
      * 
      * @throws  Everzet\Behat\Exception\BehaviorException
      */
-    public function run(EnvironmentInterface $environment)
+    public function run(EnvironmentInterface $environment, $tokens = array())
     {
         $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
+        $values     = $this->values;
 
-        $values = $this->values;
-        array_unshift($values, $environment);
-        call_user_func_array($this->callback, array_map(function($value) {
-            if ($value instanceof PyStringElement) {
-                return (string) $value;
-            } elseif ($value instanceof TableElement) {
-                return $value->getHash();
-            } else {
-                return $value;
+        if (count($tokens)) {
+            foreach ($values as $i => $value) {
+                if ($value instanceof TableNode || $value instanceof PyStringNode) {
+                    $values[$i] = clone $value;
+                    $values[$i]->replaceTokens($tokens);
+                }
             }
-        }, $values));
+        }
+
+        array_unshift($values, $environment);
+        call_user_func_array($this->callback, $values);
 
         if (null !== $oldHandler) {
             set_error_handler($oldHandler);

@@ -1,7 +1,9 @@
 <?php
 
 $steps->Given('/^a standard Behat project directory structure$/', function($world) {
-    chdir(sys_get_temp_dir());
+    $dir = sys_get_temp_dir() . '/behat/' . microtime() * rand(0, 10000);
+    mkdir($dir, 0777, true);
+    chdir($dir);
 
     if (is_dir('features')) {
         exec('rm -rf features');
@@ -40,7 +42,7 @@ $steps->Then('/^it should (fail|pass) with:$/', function($world, $success, $data
     } else {
         assertEquals(0, $world->return);
     }
-    assertEquals(trim($data), $world->output);
+    assertEquals((string) $data, $world->output);
 });
 
 $steps->Then('/^it should (fail|pass)$/', function($world, $success) {

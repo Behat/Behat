@@ -123,6 +123,6 @@ Feature: World consistency
             In step `Then I must have 12'. # features/steps/world_steps.php:10
             From scenario ***.             # features/world.feature:8
 
-        5 scenarios (1 failed, 4 passed)
-        14 steps (1 failed, 13 passed)
+        5 scenarios (4 passed, 1 failed)
+        14 steps (13 passed, 1 failed)
         """

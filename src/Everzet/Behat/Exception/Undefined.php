@@ -3,7 +3,7 @@
 namespace Everzet\Behat\Exception;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,7 +20,7 @@ class Undefined extends BehaviorException
     protected $text;
 
     /**
-     * Creates Exception
+     * Initialize Exception.
      *
      * @param   string  $text   step description
      */

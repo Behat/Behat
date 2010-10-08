@@ -7,9 +7,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Finder\Finder;
 
-use Everzet\Gherkin\Element\StepElement;
-use Everzet\Gherkin\Element\Inline\PyStringElement;
-use Everzet\Gherkin\Element\Inline\TableElement;
+use Everzet\Gherkin\Node\StepNode;
+use Everzet\Gherkin\Node\PyStringNode;
+use Everzet\Gherkin\Node\TableNode;
 
 use Everzet\Behat\Definition\StepDefinition;
 use Everzet\Behat\Exception\Redundant;
@@ -17,7 +17,7 @@ use Everzet\Behat\Exception\Ambiguous;
 use Everzet\Behat\Exception\Undefined;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -25,7 +25,7 @@ use Everzet\Behat\Exception\Undefined;
  */
 
 /**
- * Steps loader.
+ * Steps Loader.
  * Loads & initializates step definitions.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
@@ -34,10 +34,11 @@ class StepsLoader implements LoaderInterface
 {
     protected $container;
     protected $dispatcher;
+    protected $transforms = array();
     protected $steps = array();
 
     /**
-     * Creates steps loader
+     * Create steps loader.
      *
      * @param   Container       $container  dependency container
      * @param   EventDispatcher $dispatcher event dispatcher
@@ -49,7 +50,7 @@ class StepsLoader implements LoaderInterface
     }
 
     /**
-     * Loads step definitions from specified path(s)
+     * Load step definitions from specified path(s).
      *
      * @param   string|array    $paths      step definitions path(s)
      * 
@@ -73,14 +74,25 @@ class StepsLoader implements LoaderInterface
     }
 
     /**
-     * Define a step with ->Given('/regex/', callback)
-     * OR call a step with ->Given('I enter "12" in the field', $world)
-     * OR even with arguments ->Given('I fill up fields', $world, $table)
+     * Define argument transformation to container.
+     * 
+     * @param   string      $regex      regex to argument for transformation
+     * @param   callback    $callback   transformation callback (returns transformed argument)
+     */
+    public function Transform($regex, $callback)
+    {
+        $this->transforms[$regex] = $callback;
+    }
+
+    /**
+     * Define a step with ->Given('/regex/', callback) or
+     * call a step with ->Given('I enter "12" in the field', $world) or
+     * even with arguments ->Given('I fill up fields', $world, $table).
      *
      * @param   string  $type       step type (Given/When/Then/And or localized one)
      * @param   string  $arguments  step regex & callback
      * 
-     * @throws  Everzet\Behat\Exceptions\Redundant  if step definition is already exists
+     * @throws  Everzet\Behat\Exception\Redundant  if step definition is already exists
      */
     public function __call($type, $arguments)
     {
@@ -89,7 +101,7 @@ class StepsLoader implements LoaderInterface
             $debug = debug_backtrace();
             $debug = $debug[1];
 
-            $class = $this->container->getParameter('step_definition.class');
+            $class = $this->container->getParameter('behat.step_definition.class');
             $definition = new $class(
                 $type, $arguments[0], $arguments[1], $debug['file'], $debug['line']
             );
@@ -105,7 +117,7 @@ class StepsLoader implements LoaderInterface
             $text   = array_shift($arguments);
             $world  = array_shift($arguments);
 
-            $step   = new StepElement($type, $text);
+            $step   = new StepNode($type, $text);
             $step->setArguments($arguments);
 
             $definition = $this->findDefinition($step);
@@ -116,14 +128,13 @@ class StepsLoader implements LoaderInterface
     }
 
     /**
-     * Proposes step definition for step elelemt
+     * Propose step definition for step node.
      *
-     * @param   StepElement $step   step element
-     * @param   string      $text   step test
+     * @param   StepNode    $step   step node
      * 
      * @return  array               associative array of (md5_key => definition)
      */
-    public function proposeDefinition(StepElement $step)
+    public function proposeDefinition(StepNode $step)
     {
         $text = $step->getText();
 
@@ -139,9 +150,9 @@ class StepsLoader implements LoaderInterface
         }
 
         foreach ($step->getArguments() as $argument) {
-            if ($argument instanceof PyStringElement) {
+            if ($argument instanceof PyStringNode) {
                 $args[] = "\$string";
-            } elseif ($argument instanceof TableElement) {
+            } elseif ($argument instanceof TableNode) {
                 $args[] = "\$table";
             }
         }
@@ -158,25 +169,47 @@ PHP
     }
 
     /**
-     * Finds & returns step definition, that matches specific step description
+     * Find step definition, that match specified step.
      *
-     * @param   StepElement     $step       specific step to match
+     * @param   StepNode     $step       step
      * 
      * @return  StepDefinition
      * 
-     * @throws  Everzet\Behat\Exceptions\Ambiguous  if step description is ambiguous
-     * @throws  Everzet\Behat\Exceptions\Undefined  if step definition not found
+     * @throws  Everzet\Behat\Exception\Ambiguous  if step description is ambiguous
+     * @throws  Everzet\Behat\Exception\Undefined  if step definition not found
      */
-    public function findDefinition(StepElement $step)
+    public function findDefinition(StepNode $step)
     {
         $text       = $step->getText();
         $args       = $step->getArguments();
         $matches    = array();
 
+        // find step to match
         foreach ($this->steps as $regex => $definition) {
-            if (preg_match($regex, $text, $values)) {
+            if (preg_match($regex, $text, $arguments)) {
+                $arguments = array_merge(array_slice($arguments, 1), $args);
+ 
+                // transform arguments
+                foreach ($this->transforms as $transformRegex => $transform) {
+                    foreach ($arguments as $num => $argument) {
+                        if ($argument instanceof TableNode) {
+                            $tableMatching = 'table:' . implode(',', $argument->getRow(0));
+                            if (preg_match($transformRegex, $tableMatching)) {
+                                $arguments[$num] = call_user_func($transform, $argument);
+                            }
+                        } elseif (is_string($argument)) {
+                            if (preg_match($transformRegex, $argument, $transformArguments)) {
+                                $arguments[$num] = call_user_func(
+                                    $transform, $transformArguments[1 === count($transformArguments) ? 0 : 1]
+                                );
+                            }
+                        }
+                    }
+                }
+
+                // set matched definition
                 $definition->setMatchedText($text);
-                $definition->setValues(array_merge(array_slice($values, 1), $args));
+                $definition->setValues($arguments);
                 $matches[] = $definition;
             }
         }
@@ -192,4 +225,3 @@ PHP
         return $matches[0];
     }
 }
-

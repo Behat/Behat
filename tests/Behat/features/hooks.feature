@@ -30,11 +30,11 @@ Feature: hooks
       $hooks->after('features.load', function($event) {
           echo 'AFTER features.load: ' . get_class($event->getSubject()) . "\n";
       });
-      $hooks->before('features.test', function($event) {
-          echo 'BEFORE features.test: ' . get_class($event->getSubject()) . "\n";
+      $hooks->before('suite.run', function($event) {
+          echo 'BEFORE suite.run: ' . get_class($event->getSubject()) . "\n";
       });
-      $hooks->after('features.test', function($event) {
-          echo 'AFTER features.test: ' . get_class($event->getSubject()) . "\n";
+      $hooks->after('suite.run', function($event) {
+          echo 'AFTER suite.run: ' . get_class($event->getSubject()) . "\n";
       });
       """
 
@@ -49,13 +49,13 @@ Feature: hooks
     When I run "behat -f progress"
     Then it should pass with:
       """
+      BEFORE suite.run: Symfony\Component\DependencyInjection\ContainerBuilder
       BEFORE features.load: Everzet\Behat\Loader\FeaturesLoader
       AFTER features.load: Everzet\Behat\Loader\FeaturesLoader
-      BEFORE features.test: Everzet\Behat\Runner\FeaturesRunner
-      ..AFTER features.test: Everzet\Behat\Runner\FeaturesRunner
+      ..AFTER suite.run: Symfony\Component\DependencyInjection\ContainerBuilder
       
       
-      1 scenarios (1 passed)
+      1 scenario (1 passed)
       2 steps (2 passed)
       """
 

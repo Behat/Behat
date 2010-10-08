@@ -1,9 +1,9 @@
 <?php
 
-namespace Everzet\Gherkin\Element\Inline;
+namespace Everzet\Gherkin\Node;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Gherkin.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -15,7 +15,7 @@ namespace Everzet\Gherkin\Element\Inline;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PyStringElement
+class PyStringNode
 {
     protected $ltrimCount;
     protected $lines = array();
@@ -23,6 +23,15 @@ class PyStringElement
     public function __construct($ltrimCount = 4)
     {
         $this->ltrimCount = $ltrimCount;
+    }
+
+    public function replaceTokens(array $tokens)
+    {
+        foreach ($tokens as $key => $value) {
+            foreach (array_keys($this->lines) as $line) {
+                $this->lines[$line] = str_replace('<'.$key.'>', $value, $this->lines[$line], $count);
+            }
+        }
     }
 
     public function addLine($line)

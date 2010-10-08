@@ -1,0 +1,101 @@
+#!/usr/bin/env php
+<?php
+
+/*
+ * This file is part of the Behat.
+ * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Release script.
+ *
+ * Usage: bin/release 0.2.0 beta
+ *
+ * @author     Konstantin Kudryashov <ever.zet@gmail.com>
+ */
+
+if (is_file(__DIR__ . '/../autoload.php')) {
+  require_once __DIR__ . '/../autoload.php';
+} else {
+  require_once __DIR__ . '/../autoload.php.dist';
+}
+
+if (!isset($argv[1])) {
+  throw new Exception('You must provide version.');
+}
+
+if (!isset($argv[2])) {
+  throw new Exception('You must provide stability status (alpha/beta/stable).');
+}
+
+$version = $argv[1];
+$stability = $argv[2];
+
+print sprintf("Releasing behat version \"%s\".\n", $version);
+
+if (is_file('package.xml')) {
+    unlink(getcwd().'/package.xml');
+}
+
+copy(getcwd().'/package.xml.tpl', getcwd().'/package.xml');
+
+$dirs = array(
+    'src'
+  , 'tests'
+  , 'i18n'
+  , 'vendor/symfony/src/Symfony/Component/Console'
+  , 'vendor/symfony/src/Symfony/Component/Translation'
+  , 'vendor/symfony/src/Symfony/Component/DependencyInjection'
+  , 'vendor/symfony/src/Symfony/Component/EventDispatcher'
+  , 'vendor/symfony/src/Symfony/Component/Finder'
+  , 'vendor/symfony/src/Symfony/Component/Yaml'
+);
+
+$xmlSourceFiles = '';
+foreach ($dirs as $dir) {
+    $finder = new Symfony\Component\Finder\Finder();
+    $sourceFiles = $finder->files()->in($dir);
+
+    foreach ($sourceFiles as $file) {
+        $xmlSourceFiles .= '<file role="php" baseinstalldir="behat" install-as="'.$file->getPathName().'" name="'.$file->getPathName().'" />'."\n";
+    }
+}
+
+function replaceTokens($files, $beginToken, $endToken, $tokens)
+{
+    if (!is_array($files)) {
+        $files = array($files);
+    }
+
+    foreach ($files as $file) {
+        $content = file_get_contents($file);
+        foreach ($tokens as $key => $value) {
+            $content = str_replace($beginToken.$key.$endToken, $value, $content, $count);
+        }
+
+        file_put_contents($file, $content);
+    }
+}
+
+replaceTokens(getcwd().'/package.xml', '##', '##', array(
+    'BEHAT_VERSION' => $version
+  , 'CURRENT_DATE'  => date('Y-m-d')
+  , 'SOURCE_FILES'  => $xmlSourceFiles
+  , 'STABILITY'     => $stability
+));
+replaceTokens(getcwd().'/src/Everzet/Behat/Console/BehatApplication.php', '\'', '\'', array(
+    'DEV'           => "'$version'"
+));
+
+system('pear package');
+
+replaceTokens(getcwd().'/src/Everzet/Behat/Console/BehatApplication.php', '\'', '\'', array(
+    $version        => "'DEV'" 
+));
+
+unlink(getcwd().'/package.xml');
+
+exit(0);

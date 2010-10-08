@@ -1,11 +1,9 @@
 <?php
 
-namespace Everzet\Gherkin\Element;
-
-use Everzet\Gherkin\I18n;
+namespace Everzet\Gherkin\Node;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Gherkin.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -17,22 +15,22 @@ use Everzet\Gherkin\I18n;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class SectionElement
+abstract class SectionNode
 {
     protected $title = '';
     protected $tags = array();
-    protected $i18n;
+    protected $locale;
     protected $file;
 
-    public function __construct(I18n $i18n, $file = null)
+    public function __construct($locale, $file = null)
     {
+        $this->locale = $locale;
         $this->file = $file;
-        $this->i18n = $i18n;
     }
 
-    public function getI18n()
+    public function getLocale()
     {
-        return $this->i18n;
+        return $this->locale;
     }
 
     public function getFile()
@@ -75,3 +73,4 @@ abstract class SectionElement
         return $this->tags;
     }
 }
+

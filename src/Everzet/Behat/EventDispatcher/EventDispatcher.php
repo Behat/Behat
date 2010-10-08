@@ -3,11 +3,10 @@
 namespace Everzet\Behat\EventDispatcher;
 
 use Symfony\Component\EventDispatcher\EventDispatcher as BaseEventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,13 +22,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class EventDispatcher extends BaseEventDispatcher
 {
     /**
-     * Run registerListeners on all container services with tag 'event_listener'
+     * Run registerListeners on all container services with tag 'event_listener'.
      *
      * @param   ContainerInterface  $container  dependency container
      */
     public function bindEventListeners(ContainerInterface $container)
     {
-        foreach ($container->findTaggedServiceIds('events_listener') as $id => $tag) {
+        foreach ($container->findTaggedServiceIds('behat.events_listener') as $id => $tag) {
             $container->get($id)->registerListeners($this);
         }
     }

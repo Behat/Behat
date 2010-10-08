@@ -5,7 +5,7 @@ namespace Everzet\Behat\Exception;
 use Everzet\Behat\Definition\StepDefinition;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,7 +23,7 @@ class Redundant extends BehaviorException
     protected $step2;
 
     /**
-     * Constructs Exception
+     * Initialize Exception.
      *
      * @param   StepDefinition  $step2  duplicate step definition
      * @param   StepDefinition  $step1  firstly matched step definition

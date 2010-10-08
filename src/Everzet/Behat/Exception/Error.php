@@ -3,7 +3,7 @@
 namespace Everzet\Behat\Exception;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +18,7 @@ namespace Everzet\Behat\Exception;
 class Error extends BehaviorException
 {
     /**
-     * Creates Error handler exception
+     * Initialize Error handler exception.
      *
      * @param   string  $code       error code
      * @param   string  $message    error message

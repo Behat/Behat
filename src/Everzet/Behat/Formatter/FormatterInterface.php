@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -14,21 +14,21 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 
 /**
- * Base interface for Behat output formatters.
+ * Formatter Interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface FormatterInterface
 {
     /**
-     * Constructs formatter
+     * Initialize formatter.
      *
      * @param   Container   $container  dependency container
      */
     public function __construct(Container $container);
 
     /**
-     * Registers listeners on formatter
+     * Register listeners in formatter.
      *
      * @param   EventDispatcher $dispatcher event dispatcher
      */

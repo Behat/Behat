@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 /*
- * This file is part of the behat package.
+ * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -16,8 +16,8 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
  */
 
 /**
- * ConfigurationLoader 
- * Loads configuration from external file(s)
+ * Configuration Loader.
+ * Loads configuration from external file(s).
  * 
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -26,7 +26,7 @@ class ConfigurationLoader implements LoaderInterface
     protected $container;
 
     /**
-     * Inits loader
+     * Initialize loader.
      * 
      * @param   ContainerBuilder    $container 
      */
@@ -36,7 +36,7 @@ class ConfigurationLoader implements LoaderInterface
     }
 
     /**
-     * Loads configuration from specified path(s)
+     * Load configuration from specified path(s).
      *
      * @param   string|array    $paths  features path(s)
      * 
@@ -46,8 +46,8 @@ class ConfigurationLoader implements LoaderInterface
     {
         foreach ((array) $paths as $path) {
             $path = strtr($path, array(
-                '%%dir.work%%'  => $this->container->getParameter('dir.work')
-              , '%%dir.lib%%'   => $this->container->getParameter('dir.lib')
+                '%%behat.work.path%%'   => $this->container->getParameter('behat.work.path')
+              , '%%behat.lib.path%%'    => $this->container->getParameter('behat.lib.path')
             ));
 
             if (false !== mb_stripos($path, '.xml')) {
@@ -63,23 +63,23 @@ class ConfigurationLoader implements LoaderInterface
     }
 
     /**
-     * Prepares container parameterers to work 
+     * Prepare container parameterers to work.
      */
     public function prepareContainerParameters()
     {
         // Find proper features path
-        $featuresPath   = $this->container->getParameter('features.path');
+        $featuresPath   = $this->container->getParameter('behat.features.path');
         if (is_dir($featuresPath . '/features')) {
             $featuresPath = $featuresPath . '/features';
-            $this->container->setParameter('features.path', $featuresPath);
+            $this->container->setParameter('behat.features.path', $featuresPath);
         } elseif (is_file($featuresPath)) {
-            $this->container->setParameter('features.path', dirname($featuresPath));
+            $this->container->setParameter('behat.features.path', dirname($featuresPath));
         }
-        $this->container->setParameter('features.files', $featuresPath);
+        $this->container->setParameter('behat.features.files', $featuresPath);
 
         // Uppercasing formatter name
-        $this->container->setParameter('formatter.name', 
-            ucfirst($this->container->getParameter('formatter.name'))
+        $this->container->setParameter('behat.formatter.name', 
+            ucfirst($this->container->getParameter('behat.formatter.name'))
         );
 
         foreach ($this->container->getParameterBag()->all() as $key => $value) {
@@ -100,4 +100,3 @@ class ConfigurationLoader implements LoaderInterface
         }
     }
 }
-

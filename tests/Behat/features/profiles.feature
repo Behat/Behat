@@ -55,7 +55,7 @@ Feature: Profiles
     And a file named "pretty.yml" with:
       """
       parameters:
-        formatter.name: pretty
+        behat.formatter.name: pretty
       imports:
         - { resource: behat.yml }
       """
@@ -67,7 +67,7 @@ Feature: Profiles
     And a file named "behat.yml" with:
       """
       parameters:
-        formatter.name: progress
+        behat.formatter.name: progress
       """
 
   Scenario:
@@ -114,4 +114,3 @@ Feature: Profiles
       3 scenarios (3 passed)
       15 steps (15 passed)
       """
-
