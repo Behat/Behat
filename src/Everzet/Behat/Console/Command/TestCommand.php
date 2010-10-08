@@ -160,6 +160,6 @@ class TestCommand extends Command
         $output->writeln(sprintf("%.3fs", $timer));
 
         // Return exit code
-        return $result;
+        return intval(0 < $result);
     }
 }
