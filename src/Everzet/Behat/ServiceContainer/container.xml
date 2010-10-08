@@ -19,6 +19,7 @@
         <parameter key="behat.formatter.name">pretty</parameter>
         <parameter key="behat.formatter.class">Everzet\Behat\Formatter\%%behat.formatter.name%%Formatter</parameter>
         <parameter key="behat.formatter.verbose">false</parameter>
+        <parameter key="behat.formatter.colors">true</parameter>
         <!-- filters -->
         <parameter key="behat.filter.tags"></parameter>
         <parameter key="behat.tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>

@@ -49,6 +49,13 @@ abstract class ConsoleFormatter
     abstract protected function getTranslator();
 
     /**
+     * Return true if colors allowed. 
+     * 
+     * @return  boolean
+     */
+    abstract protected function isColorsAllowed();
+
+    /**
       * Listen to some event & print suite statistics.
       *
       * @param   Event   $event  notified event
@@ -153,7 +160,11 @@ abstract class ConsoleFormatter
      */
     protected function colorizeStart($result)
     {
-        return sprintf("\033[%sm", $this->getStatusColorCode(is_int($result) ? $this->statuses[$result] : $result));
+        if ($this->isColorsAllowed()) {
+            return sprintf("\033[%sm", $this->getStatusColorCode(is_int($result) ? $this->statuses[$result] : $result));
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -163,7 +174,11 @@ abstract class ConsoleFormatter
      */
     protected function colorizeFinish()
     {
-        return "\033[0m";
+        if ($this->isColorsAllowed()) {
+            return "\033[0m";
+        } else {
+            return '';
+        }
     }
 
     /**

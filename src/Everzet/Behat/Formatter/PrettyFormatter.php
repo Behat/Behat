@@ -56,6 +56,14 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
     }
 
     /**
+     * @see     Everzet\Behat\Formatter\ConsoleFormatter
+     */
+    protected function isColorsAllowed()
+    {
+        return $this->container->getParameter('behat.formatter.colors');
+    }
+
+    /**
      * @see     Everzet\Behat\Formatter\ConsoleFormatter 
      */
     protected function getTranslator()

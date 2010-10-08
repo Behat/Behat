@@ -53,6 +53,10 @@ class TestCommand extends Command
               , InputOption::PARAMETER_REQUIRED
               , 'Only executes features or scenarios with specified tags'
             ),
+            new InputOption('--no-color',       null
+              , InputOption::PARAMETER_NONE
+              , 'No colors in output'
+            ),
             new InputOption('--i18n',           null
               , InputOption::PARAMETER_REQUIRED
               , 'Print formatters output in particular language'
@@ -101,6 +105,9 @@ class TestCommand extends Command
         if (null !== $input->getOption('tags')) {
             $container->setParameter('behat.filter.tags',       $input->getOption('tags'));
         }
+        if (null !== $input->getOption('no-color')) {
+            $container->setParameter('behat.formatter.colors',  !$input->getOption('no-color'));
+        }
         if (null !== $input->getOption('verbose')) {
             $container->setParameter('behat.formatter.verbose', $input->getOption('verbose'));
         }
@@ -126,16 +133,9 @@ class TestCommand extends Command
             notify(new Event($container, 'suite.run.before'));
 
         // Load steps
-        try {
-            $container->
-                getBehat_StepsLoaderService()->
-                load($container->getParameter('behat.steps.path'));
-        } catch (Redundant $e) {
-            $output->write(sprintf("\033[31m%s\033[0m", strtr($e->getMessage(),
-                array($container->getParameter('behat.features.path') . '/' => '')
-            )), true, 1);
-            return 1;
-        }
+        $container->
+            getBehat_StepsLoaderService()->
+            load($container->getParameter('behat.steps.path'));
 
         // Load features
         $features = $container->
