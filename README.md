@@ -1,10 +1,10 @@
 Behat
 =====
 
-The main website with documentation is at [http://everzet.com/Behat](http://everzet.com/Behat)
-Official Google Group is at [http://groups.google.com/group/behat](http://groups.google.com/group/behat)
-The wiki pages is at [http://github.com/everzet/Behat/wiki](http://github.com/everzet/Behat/wiki)
-The API documentation is at [http://everzet.com/Behat/api/](http://everzet.com/Behat/api/)
+* The main website with documentation is at [http://everzet.com/Behat](http://everzet.com/Behat)
+* Official Google Group is at [http://groups.google.com/group/behat](http://groups.google.com/group/behat)
+* The wiki pages is at [http://github.com/everzet/Behat/wiki](http://github.com/everzet/Behat/wiki)
+* The API documentation is at [http://everzet.com/Behat/api/](http://everzet.com/Behat/api/)
 
 
 Note on Patches/Pull Requests
