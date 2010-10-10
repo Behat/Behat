@@ -32,8 +32,7 @@
             ##SOURCE_FILES##
 
             <file role="script" baseinstalldir="/" install-as="behat" name="bin/behat">
-                <tasks:replace type="pear-config" from="@DATA-DIR@" to="data_dir" />
-                <tasks:replace type="pear-config" from="@PEAR-DIR@" to="php_dir" />
+                <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config"/>
             </file>
 
             <file role="php" baseinstalldir="behat" name="autoload.php.dist" />
