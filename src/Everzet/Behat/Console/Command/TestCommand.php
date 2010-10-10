@@ -81,18 +81,19 @@ class TestCommand extends Command
 
         // Guess configuration file path
         if (null !== $input->getOption('configuration')) {
-            $container->setParameter('behat.configuration.path', $input->getOption('configuration'));
+            $container->setParameter('behat.configuration.file', $input->getOption('configuration'));
         } elseif (is_file($cwd . '/behat.yml')) {
-            $container->setParameter('behat.configuration.path', $cwd . '/behat.yml');
+            $container->setParameter('behat.configuration.file', $cwd . '/behat.yml');
         } elseif (is_file($cwd . '/behat.xml')) {
-            $container->setParameter('behat.configuration.path', $cwd . '/behat.xml');
+            $container->setParameter('behat.configuration.file', $cwd . '/behat.xml');
         }
 
-        // Load external configuration
-        if ($container->hasParameter('behat.configuration.path')) {
+        // Load external configuration and set config path
+        if ($container->hasParameter('behat.configuration.file')) {
+            $container->setParameter('behat.configuration.path', dirname($container->getParameter('behat.configuration.file')));
             $container->
                 getBehat_ConfigurationLoaderService()->
-                load($container->getParameter('behat.configuration.path'));
+                load($container->getParameter('behat.configuration.file'));
         }
 
         // Read command arguments & options
