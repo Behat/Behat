@@ -1,3 +1,7 @@
+0.2.2 / 2010-10-10
+
+  * [Behat] Configuration file/path setting update
+
 0.2.1 / 2010-10-10
 ==================
 
