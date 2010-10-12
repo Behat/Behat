@@ -70,32 +70,8 @@ class TestCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Init container
-        $container  = new ContainerBuilder();
-        $xmlLoader  = new XmlFileLoader($container);
-        $xmlLoader->load(__DIR__ . '/../../ServiceContainer/container.xml');
-
-        // Set initial container services & parameters
-        $container->set('behat.output',             $output);
-        $container->setParameter('behat.work.path', $cwd = getcwd());
-        $container->setParameter('behat.lib.path',  realpath(__DIR__ . '/../../../../../'));
-
-        // Guess configuration file path
-        if (null !== $input->getOption('configuration')) {
-            $container->setParameter('behat.configuration.file', $input->getOption('configuration'));
-        } elseif (is_file($cwd . '/behat.yml')) {
-            $container->setParameter('behat.configuration.file', $cwd . '/behat.yml');
-        } elseif (is_file($cwd . '/behat.xml')) {
-            $container->setParameter('behat.configuration.file', $cwd . '/behat.xml');
-        }
-
-        // Load external configuration and set config path
-        if ($container->hasParameter('behat.configuration.file')) {
-            $container->setParameter('behat.configuration.path', dirname($container->getParameter('behat.configuration.file')));
-            $container->
-                getBehat_ConfigurationLoaderService()->
-                load($container->getParameter('behat.configuration.file'));
-        }
+        // Create container
+        $container = $this->createContainer($input->getOption('configuration'), $output);
 
         // Read command arguments & options
         if (null !== $input->getArgument('features')) {
@@ -118,6 +94,10 @@ class TestCommand extends Command
         } else {
             $container->setParameter('behat.formatter.locale',  'en');
         }
+
+
+
+
 
         // Replace parameter tokens
         $container->
@@ -175,6 +155,37 @@ class TestCommand extends Command
 
         // Return exit code
         return intval(0 < $result);
+    }
+
+    protected function createContainer($configurationFile = null, OutputInterface $output)
+    {
+        $container  = new ContainerBuilder();
+        $xmlLoader  = new XmlFileLoader($container);
+        $xmlLoader->load(__DIR__ . '/../../ServiceContainer/container.xml');
+
+        // Set initial container services & parameters
+        $container->set('behat.output',             $output);
+        $container->setParameter('behat.work.path', $cwd = getcwd());
+        $container->setParameter('behat.lib.path',  realpath(__DIR__ . '/../../../../../'));
+
+        // Guess configuration file path
+        if (null !== $configurationFile) {
+            $container->setParameter('behat.configuration.file', $configurationFile);
+        } elseif (is_file($cwd . '/behat.yml')) {
+            $container->setParameter('behat.configuration.file', $cwd . '/behat.yml');
+        } elseif (is_file($cwd . '/behat.xml')) {
+            $container->setParameter('behat.configuration.file', $cwd . '/behat.xml');
+        }
+
+        // Load external configuration and set config path
+        if ($container->hasParameter('behat.configuration.file')) {
+            $container->setParameter('behat.configuration.path', dirname($container->getParameter('behat.configuration.file')));
+            $container->
+                getBehat_ConfigurationLoaderService()->
+                load($container->getParameter('behat.configuration.file'));
+        }
+
+        return $container;
     }
 
     protected function findFeatureResources($featuresPath)
