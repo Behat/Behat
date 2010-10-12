@@ -4,12 +4,16 @@ namespace Everzet\Behat\Console\Command;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use Symfony\Component\EventDispatcher\Event;
+
 use Symfony\Component\Finder\Finder;
 
 use Everzet\Behat\Exception\Redundant;
@@ -71,7 +75,12 @@ class TestCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Create container
-        $container = $this->createContainer($input->getOption('configuration'), $output);
+        $container = $this->createContainer($input->getOption('configuration'));
+
+        // Set initial container services & parameters
+        $container->set('behat.output',                         $output);
+        $container->setParameter('behat.work.path',             $cwd = getcwd());
+        $container->setParameter('behat.lib.path',              realpath(__DIR__ . '/../../../../../'));
 
         // Read command arguments & options
         if (null !== $input->getArgument('features')) {
@@ -91,18 +100,23 @@ class TestCommand extends Command
         }
         if (null !== $input->getOption('i18n')) {
             $container->setParameter('behat.formatter.locale',  $input->getOption('i18n'));
-        } else {
-            $container->setParameter('behat.formatter.locale',  'en');
         }
 
+        // Find proper features path
+        $featuresPath = $container->getParameter('behat.features.path');
+        if (is_dir($featuresPath . '/features')) {
+            $featuresPath = $featuresPath . '/features';
+            $container->setParameter('behat.features.path',     $featuresPath);
+        } elseif (is_file($featuresPath)) {
+            $container->setParameter('behat.features.files',    $featuresPath);
+            $container->setParameter('behat.features.path',     dirname($featuresPath));
+        }
+
+        // Replace parameter tokens (%subparam%)
+        $container->getParameterBag()->resolve();
 
 
 
-
-        // Replace parameter tokens
-        $container->
-            getBehat_ConfigurationLoaderService()->
-            prepareContainerParameters();
 
         // Load hooks
         $container->
@@ -113,11 +127,9 @@ class TestCommand extends Command
 
 
 
-
-
         // Get feature files
         $featuresContainer  = $container->getBehat_FeaturesContainerService();
-        $featuresPath       = $container->getParameter('behat.features.path');
+        $featuresPath       = $container->getParameter('behat.features.files');
 
         // Add features paths to container resources list
         foreach ($this->findFeatureResources($featuresPath) as $path) {
@@ -128,6 +140,7 @@ class TestCommand extends Command
         $definitionsContainer   = $container->getBehat_DefinitionsContainerService();
         $stepsPaths             = $container->getParameter('behat.steps.path');
 
+        // Add definitions files to container resources list
         foreach ((array) $stepsPaths as $stepsPath) {
             foreach ($this->findDefinitionResources($stepsPath) as $path) {
                 $definitionsContainer->addResource('php', $path);
@@ -157,32 +170,37 @@ class TestCommand extends Command
         return intval(0 < $result);
     }
 
-    protected function createContainer($configurationFile = null, OutputInterface $output)
+    protected function createContainer($configurationFile = null)
     {
+        $cwd        = getcwd();
         $container  = new ContainerBuilder();
         $xmlLoader  = new XmlFileLoader($container);
         $xmlLoader->load(__DIR__ . '/../../ServiceContainer/container.xml');
 
-        // Set initial container services & parameters
-        $container->set('behat.output',             $output);
-        $container->setParameter('behat.work.path', $cwd = getcwd());
-        $container->setParameter('behat.lib.path',  realpath(__DIR__ . '/../../../../../'));
-
         // Guess configuration file path
         if (null !== $configurationFile) {
-            $container->setParameter('behat.configuration.file', $configurationFile);
+            $container->setParameter('behat.configuration.path', dirname($configurationFile));
         } elseif (is_file($cwd . '/behat.yml')) {
-            $container->setParameter('behat.configuration.file', $cwd . '/behat.yml');
+            $configurationFile = $cwd . '/behat.yml';
+            $container->setParameter('behat.configuration.path', $cwd);
         } elseif (is_file($cwd . '/behat.xml')) {
-            $container->setParameter('behat.configuration.file', $cwd . '/behat.xml');
+            $configurationFile = $cwd . '/behat.yml';
+            $container->setParameter('behat.configuration.path', $cwd);
         }
 
-        // Load external configuration and set config path
-        if ($container->hasParameter('behat.configuration.file')) {
-            $container->setParameter('behat.configuration.path', dirname($container->getParameter('behat.configuration.file')));
-            $container->
-                getBehat_ConfigurationLoaderService()->
-                load($container->getParameter('behat.configuration.file'));
+        // Load configuration file with proper loader
+        if (null !== $configurationFile) {
+            if (false !== mb_stripos($configurationFile, '.xml')) {
+                $loader = new XmlFileLoader($container);
+            } elseif (false !== mb_stripos($configurationFile, '.yml') || false !== mb_stripos($configurationFile, '.yaml')) {
+                $loader = new YamlFileLoader($container);
+            }
+
+            if (!isset($loader)) {
+                throw new \InvalidArgumentException(sprintf('Unknown configuration file type given "%s"', $configurationFile));
+            }
+
+            $loader->import($configurationFile);
         }
 
         return $container;
