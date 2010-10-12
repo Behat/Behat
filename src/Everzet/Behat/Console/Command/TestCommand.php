@@ -129,10 +129,6 @@ class TestCommand extends Command
             getBehat_HooksLoaderService()->
             load($container->getParameter('behat.hooks.file'));
 
-        // Notify suite.run.before event
-        $container->
-            getBehat_EventDispatcherService()->
-            notify(new Event($container, 'suite.run.before'));
 
 
 
@@ -158,29 +154,21 @@ class TestCommand extends Command
             }
         }
 
-
-
-
+        // Notify suite.run.before event
+        $container->getBehat_EventDispatcherService()->notify(new Event($container, 'suite.run.before'));
+        $timer = microtime(true);
 
         // Run features
         $result = 0;
-        $timer  = microtime(true);
-
         foreach ($featuresContainer->getFeatures() as $feature) {
             $tester = $container->getBehat_FeatureTesterService();
             $result = max($result, $feature->accept($tester));
         }
 
-        $timer  = microtime(true) - $timer;
-
-
-
         // Notify suite.run.after event
-        $container->
-            getBehat_EventDispatcherService()->
-            notify(new Event($container, 'suite.run.after'));
-
-
+        $container->getBehat_EventDispatcherService()->notify(new Event($container, 'suite.run.after', array(
+            'time'  => ($timer = microtime(true) - $timer)
+        )));
 
         // Print run time
         $output->writeln(sprintf("%.3fs", $timer));
