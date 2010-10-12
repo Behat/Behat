@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Behat\Definition;
+namespace Everzet\Behat\StepDefinition;
 
 use Everzet\Gherkin\Node\PyStringNode;
 use Everzet\Gherkin\Node\TableNode;
@@ -21,7 +21,7 @@ use Everzet\Behat\Environment\EnvironmentInterface;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepDefinition
+class Definition
 {
     protected $type;
     protected $regex;
@@ -160,3 +160,4 @@ class StepDefinition
         }
     }
 }
+

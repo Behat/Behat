@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\Finder\Finder;
 
 use Everzet\Behat\Exception\Redundant;
 
@@ -133,29 +134,53 @@ class TestCommand extends Command
             getBehat_EventDispatcherService()->
             notify(new Event($container, 'suite.run.before'));
 
-        // Load steps
-        $container->
-            getBehat_StepsLoaderService()->
-            load($container->getParameter('behat.steps.path'));
 
-        // Load features
-        $features = $container->
-            getBehat_FeaturesLoaderService()->
-            load($container->getParameter('behat.features.files'));
+
+
+
+
+        // Get feature files
+        $featuresContainer  = $container->getBehat_FeaturesContainerService();
+        $featuresPath       = $container->getParameter('behat.features.path');
+
+        // Add features paths to container resources list
+        foreach ($this->findFeatureResources($featuresPath) as $path) {
+            $featuresContainer->addResource('gherkin', $path);
+        }
+
+        // Get definitions files
+        $definitionsContainer   = $container->getBehat_DefinitionsContainerService();
+        $stepsPaths             = $container->getParameter('behat.steps.path');
+
+        foreach ((array) $stepsPaths as $stepsPath) {
+            foreach ($this->findDefinitionResources($stepsPath) as $path) {
+                $definitionsContainer->addResource('php', $path);
+            }
+        }
+
+
+
+
 
         // Run features
         $result = 0;
         $timer  = microtime(true);
-        foreach ($features as $feature) {
+
+        foreach ($featuresContainer->getFeatures() as $feature) {
             $tester = $container->getBehat_FeatureTesterService();
             $result = max($result, $feature->accept($tester));
         }
+
         $timer  = microtime(true) - $timer;
+
+
 
         // Notify suite.run.after event
         $container->
             getBehat_EventDispatcherService()->
             notify(new Event($container, 'suite.run.after'));
+
+
 
         // Print run time
         $output->writeln(sprintf("%.3fs", $timer));
@@ -163,4 +188,27 @@ class TestCommand extends Command
         // Return exit code
         return intval(0 < $result);
     }
+
+    protected function findFeatureResources($featuresPath)
+    {
+        if (is_file($featuresPath)) {
+            $paths  = array($featuresPath);
+        } elseif (is_dir($featuresPath)) {
+            $finder = new Finder();
+            $paths  = $finder->files()->name('*.feature')->in($featuresPath);
+        } else {
+            throw new \InvalidArgumentException(sprintf('Provide correct feature(s) path. "%s" given', $featuresPath));
+        }
+
+        return $paths;
+    }
+
+    protected function findDefinitionResources($stepsPath)
+    {
+        $finder = new Finder();
+        $paths  = $finder->files()->name('*.php')->in($stepsPath);
+
+        return $paths;
+    }
 }
+
