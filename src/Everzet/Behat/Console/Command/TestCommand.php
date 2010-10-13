@@ -86,18 +86,23 @@ class TestCommand extends Command
         if (null !== $input->getArgument('features')) {
             $container->setParameter('behat.features.path',     realpath($input->getArgument('features')));
         }
+
         if (null !== $input->getOption('format')) {
             $container->setParameter('behat.formatter.name',    $input->getOption('format'));
         }
+
         if (null !== $input->getOption('tags')) {
             $container->setParameter('behat.filter.tags',       $input->getOption('tags'));
         }
+
         if (null !== $input->getOption('no-color')) {
             $container->setParameter('behat.formatter.colors',  !$input->getOption('no-color'));
         }
+
         if (null !== $input->getOption('verbose')) {
             $container->setParameter('behat.formatter.verbose', $input->getOption('verbose'));
         }
+
         if (null !== $input->getOption('i18n')) {
             $container->setParameter('behat.formatter.locale',  $input->getOption('i18n'));
         }
@@ -115,21 +120,21 @@ class TestCommand extends Command
         // Replace parameter tokens (%subparam%)
         $container->getParameterBag()->resolve();
 
+        // Get hooks files
+        $hooksContainer         = $container->getBehat_HooksContainerService();
+        $hooksPath              = $container->getParameter('behat.hooks.file');
 
-
-
-        // Load hooks
-        $container->
-            getBehat_HooksLoaderService()->
-            load($container->getParameter('behat.hooks.file'));
-
-
-
-
+        // Add hooks files paths to container resources list
+        foreach ((array) $hooksPath as $path) {
+            if (is_file($path)) {
+                $hooksContainer->addResource('php', $path);
+            }
+        }
+        $hooksContainer->register($container->getBehat_EventDispatcherService());
 
         // Get feature files
-        $featuresContainer  = $container->getBehat_FeaturesContainerService();
-        $featuresPath       = $container->getParameter('behat.features.files');
+        $featuresContainer      = $container->getBehat_FeaturesContainerService();
+        $featuresPath           = $container->getParameter('behat.features.files');
 
         // Add features paths to container resources list
         foreach ($this->findFeatureResources($featuresPath) as $path) {
@@ -170,6 +175,13 @@ class TestCommand extends Command
         return intval(0 < $result);
     }
 
+    /**
+     * Create Dependency Injection Container and import external configuration file into it. 
+     * 
+     * @param   string              $configurationFile  configuration file (may be YAML or XML)
+     *
+     * @return  ContainerBuilder                        container instance
+     */
     protected function createContainer($configurationFile = null)
     {
         $cwd        = getcwd();
@@ -206,6 +218,13 @@ class TestCommand extends Command
         return $container;
     }
 
+    /**
+     * Find features files in specified path. 
+     * 
+     * @param   string  $featuresPath   feature file or path
+     *
+     * @return  mixed                   files iterator
+     */
     protected function findFeatureResources($featuresPath)
     {
         if (is_file($featuresPath)) {
@@ -220,6 +239,13 @@ class TestCommand extends Command
         return $paths;
     }
 
+    /**
+     * Find definitions files in specified path. 
+     * 
+     * @param   string  $stepsPath  steps files path
+     *
+     * @return  mixed               files iterator
+     */
     protected function findDefinitionResources($stepsPath)
     {
         $finder = new Finder();

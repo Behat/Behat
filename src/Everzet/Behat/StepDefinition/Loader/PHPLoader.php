@@ -23,7 +23,7 @@ use Everzet\Behat\StepDefinition\Transformation;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PHPLoader implements DefinitionsLoaderInterface
+class PHPLoader implements LoaderInterface
 {
     protected $dispatcher;
     protected $objects = array();

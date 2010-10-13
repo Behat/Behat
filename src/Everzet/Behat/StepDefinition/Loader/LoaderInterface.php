@@ -17,7 +17,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface DefinitionsLoaderInterface
+interface LoaderInterface
 {
     /**
      * Initialize loader. 

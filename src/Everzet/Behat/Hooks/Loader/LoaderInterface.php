@@ -1,8 +1,6 @@
 <?php
 
-namespace Everzet\Behat\Loader;
-
-use Symfony\Component\EventDispatcher\EventDispatcher;
+namespace Everzet\Behat\Hooks\Loader;
 
 /*
  * This file is part of the Behat.
@@ -13,16 +11,18 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 
 /**
- * Loader Interface.
+ * Hooks Loader Interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface LoaderInterface
 {
     /**
-     * Load something.
-     *
-     * @param   string  $paths  paths to load from
+     * Load hooks from file. 
+     * 
+     * @param   string          $path       plain php file path
+     * @return  array                       array of hooks
      */
-    public function load($paths);
+    public function load($path);
 }
+

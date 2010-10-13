@@ -9,7 +9,7 @@ use Everzet\Gherkin\Node\StepNode;
 use Everzet\Gherkin\Node\PyStringNode;
 use Everzet\Gherkin\Node\TableNode;
 
-use Everzet\Behat\StepDefinition\Loader\DefinitionsLoaderInterface;
+use Everzet\Behat\StepDefinition\Loader\LoaderInterface;
 use Everzet\Behat\Exception\Redundant;
 use Everzet\Behat\Exception\Ambiguous;
 use Everzet\Behat\Exception\Undefined;
@@ -52,10 +52,10 @@ class DefinitionsContainer
     /**
      * Add a loader.
      *
-     * @param   string                      $format     the name of the loader
-     * @param   DefinitionsLoaderInterface  $loader     a DefinitionsLoaderInterface instance
+     * @param   string          $format     the name of the loader
+     * @param   LoaderInterface $loader     a LoaderInterface instance
      */
-    public function addLoader($format, DefinitionsLoaderInterface $loader)
+    public function addLoader($format, LoaderInterface $loader)
     {
         $this->loaders[$format] = $loader;
     }
@@ -156,7 +156,7 @@ PHP
     public function runStep(Event $event)
     {
         $definition = $this->findDefinition($event->getSubject());
-        $definition->run($event['$world']);
+        $definition->run($event['world']);
     }
 
     /**

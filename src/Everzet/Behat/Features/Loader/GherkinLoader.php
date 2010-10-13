@@ -17,7 +17,7 @@ use Everzet\Gherkin\Parser;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GherkinLoader implements FeatureLoaderInterface
+class GherkinLoader implements LoaderInterface
 {
     protected $parser;
 

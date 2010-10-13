@@ -15,7 +15,7 @@ namespace Everzet\Behat\Features\Loader;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface FeatureLoaderInterface
+interface LoaderInterface
 {
     /**
      * Load feature from specified path.

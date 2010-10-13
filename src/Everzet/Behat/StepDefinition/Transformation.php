@@ -28,7 +28,7 @@ class Transformation
      * @param   string      $regex      matching regular expression
      * @param   callback    $callback   callback
      */
-    public function __construct($type, $regex, $callback, $file = null, $line = null)
+    public function __construct($regex, $callback)
     {
         $this->regex        = $regex;
         $this->callback     = $callback;
@@ -59,9 +59,9 @@ class Transformation
             if (preg_match($this->regex, $tableMatching)) {
                 return call_user_func($this->callback, $argument);
             }
-        } else {
+        } elseif (is_string($argument) || $argument instanceof PyStringNode) {
             if (preg_match($this->regex, (string) $argument, $transformArguments)) {
-                return call_user_funct(
+                return call_user_func(
                     $this->callback
                   , $transformArguments[1 === count($transformArguments) ? 0 : 1]
                 );

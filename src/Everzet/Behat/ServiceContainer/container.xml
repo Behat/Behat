@@ -18,12 +18,17 @@
         <parameter key="behat.definitions_loader.php.class">Everzet\Behat\StepDefinition\Loader\PHPLoader</parameter>
 
         <!-- Event Dispatcher -->
-        <parameter key="behat.hooks.file">%behat.features.path%/support/hooks.php</parameter>
         <parameter key="behat.filter.tags"></parameter>
 
         <parameter key="behat.event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
         <parameter key="behat.statistics_collector.class">Everzet\Behat\Collector\StatisticsCollector</parameter>
         <parameter key="behat.tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
+
+        <!-- Hooks -->
+        <parameter key="behat.hooks.file">%behat.features.path%/support/hooks.php</parameter>
+
+        <parameter key="behat.hooks_container.class">Everzet\Behat\Hooks\HooksContainer</parameter>
+        <parameter key="behat.hooks_loader.php.class">Everzet\Behat\Hooks\Loader\PHPLoader</parameter>
 
         <!-- Gherkin -->
         <parameter key="gherkin.i18n.resources_path">%behat.lib.path%/i18n</parameter>
@@ -48,14 +53,8 @@
         <parameter key="behat.outline_tester.class">Everzet\Behat\Tester\OutlineTester</parameter>
         <parameter key="behat.step_tester.class">Everzet\Behat\Tester\StepTester</parameter>
 
-
-        <parameter key="behat.hooks_loader.class">Everzet\Behat\Loader\HooksLoader</parameter>
     </parameters>
     <services>
-        <service id="behat.hooks_loader" class="%behat.hooks_loader.class%" shared="true">
-            <argument type="service" id="behat.event_dispatcher" />
-        </service>
-
         <!-- Features -->
         <service id="behat.features_container" class="%behat.features_container.class%" shared="true">
             <argument type="service" id="behat.event_dispatcher" />
@@ -80,6 +79,18 @@
                 <argument>php</argument>
                 <argument type="service">
                     <service class="%behat.definitions_loader.php.class%">
+                        <argument type="service" id="behat.event_dispatcher" />
+                    </service>
+                </argument>
+            </call>
+        </service>
+
+        <!-- Hooks -->
+        <service id="behat.hooks_container" class="%behat.hooks_container.class%" shared="true">
+            <call method="addLoader">
+                <argument>php</argument>
+                <argument type="service">
+                    <service class="%behat.hooks_loader.php.class%">
                         <argument type="service" id="behat.event_dispatcher" />
                     </service>
                 </argument>

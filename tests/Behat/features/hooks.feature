@@ -50,8 +50,8 @@ Feature: hooks
     Then it should pass with:
       """
       BEFORE suite.run: Symfony\Component\DependencyInjection\ContainerBuilder
-      BEFORE features.load: Everzet\Behat\Loader\FeaturesLoader
-      AFTER features.load: Everzet\Behat\Loader\FeaturesLoader
+      BEFORE features.load: Everzet\Behat\Features\FeaturesContainer
+      AFTER features.load: Everzet\Behat\Features\FeaturesContainer
       ..AFTER suite.run: Symfony\Component\DependencyInjection\ContainerBuilder
       
       

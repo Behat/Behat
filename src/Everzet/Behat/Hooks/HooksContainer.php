@@ -1,11 +1,11 @@
 <?php
 
-namespace Everzet\Behat\Features;
+namespace Everzet\Behat\Hooks;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Behat\Features\Loader\LoaderInterface;
+use Everzet\Behat\Hooks\Loader\LoaderInterface;
 
 /*
  * This file is part of the Behat.
@@ -16,27 +16,32 @@ use Everzet\Behat\Features\Loader\LoaderInterface;
  */
 
 /**
- * Features Container and Loader.
+ * Hooks Container and Loader.
+ * Loads & Initializates Hooks.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeaturesContainer
+class HooksContainer
 {
-    protected $container;
-    protected $dispatcher;
-
     protected $resources    = array();
     protected $loaders      = array();
-    protected $features     = array();
+
+    protected $hooks        = array();
 
     /**
-     * Initialize loader.
-     *
+     * Register Event Listeners. 
+     * 
      * @param   EventDispatcher $dispatcher event dispatcher
      */
-    public function __construct(EventDispatcher $dispatcher)
+    public function register(EventDispatcher $dispatcher)
     {
-        $this->dispatcher = $dispatcher;
+        if (!count($this->hooks)) {
+            $this->loadHooks();
+        }
+
+        foreach ($this->hooks as $hook) {
+            $dispatcher->connect($hook[0], $hook[1], 2);
+        }
     }
 
     /**
@@ -62,39 +67,21 @@ class FeaturesContainer
     }
 
     /**
-     * Return features array. 
-     * 
-     * @return  array                       parsed features list
+     * Parse step hooks with added loaders. 
      */
-    public function getFeatures()
+    protected function loadHooks()
     {
-        if (!count($this->features)) {
-            $this->loadFeatures();
-        }
-
-        return $this->features;
-    }
-
-    /**
-     * Parse features with added loaders. 
-     */
-    protected function loadFeatures()
-    {
-        if (count($this->features)) {
+        if (count($this->hooks)) {
             return;
         }
 
-        $this->dispatcher->notify(new Event($this, 'features.load.before'));
-
         foreach ($this->resources as $resource) {
             if (!isset($this->loaders[$resource[0]])) {
-                throw new \RuntimeException(sprintf('The "%s" features loader is not registered.', $resource[0]));
+                throw new \RuntimeException(sprintf('The "%s" step hook loader is not registered.', $resource[0]));
             }
 
-            $this->features[] = $this->loaders[$resource[0]]->load($resource[1]);
+            $this->hooks = array_merge($this->hooks, $this->loaders[$resource[0]]->load($resource[1]));
         }
-
-        $this->dispatcher->notify(new Event($this, 'features.load.after'));
     }
 }
 
