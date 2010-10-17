@@ -147,8 +147,10 @@ class TestCommand extends Command
 
         // Add definitions files to container resources list
         foreach ((array) $stepsPaths as $stepsPath) {
-            foreach ($this->findDefinitionResources($stepsPath) as $path) {
-                $definitionsContainer->addResource('php', $path);
+            if (is_dir($stepsPath)) {
+                foreach ($this->findDefinitionResources($stepsPath) as $path) {
+                    $definitionsContainer->addResource('php', $path);
+                }
             }
         }
 
