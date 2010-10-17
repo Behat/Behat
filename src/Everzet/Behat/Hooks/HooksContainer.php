@@ -29,18 +29,18 @@ class HooksContainer
     protected $hooks        = array();
 
     /**
-     * Register Event Listeners. 
+     * Register Hooks Event Listeners. 
      * 
      * @param   EventDispatcher $dispatcher event dispatcher
      */
-    public function register(EventDispatcher $dispatcher)
+    public function registerHooks(EventDispatcher $dispatcher)
     {
         if (!count($this->hooks)) {
             $this->loadHooks();
         }
 
         foreach ($this->hooks as $hook) {
-            $dispatcher->connect($hook[0], $hook[1], 2);
+            $dispatcher->connect($hook[0], $hook[1], 1);
         }
     }
 

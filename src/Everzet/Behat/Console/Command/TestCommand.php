@@ -130,7 +130,7 @@ class TestCommand extends Command
                 $hooksContainer->addResource('php', $path);
             }
         }
-        $hooksContainer->register($container->getBehat_EventDispatcherService());
+        $hooksContainer->registerHooks($container->getBehat_EventDispatcherService());
 
         // Get feature files
         $featuresContainer      = $container->getBehat_FeaturesContainerService();
