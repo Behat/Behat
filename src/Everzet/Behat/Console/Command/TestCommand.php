@@ -197,9 +197,15 @@ class TestCommand extends Command
         } elseif (is_file($cwd . '/behat.yml')) {
             $configurationFile = $cwd . '/behat.yml';
             $container->setParameter('behat.configuration.path', $cwd);
+        } elseif (is_file($cwd . '/config/behat.yml')) {
+            $configurationFile = $cwd . '/config/behat.yml';
+            $container->setParameter('behat.configuration.path', $cwd . '/config');
         } elseif (is_file($cwd . '/behat.xml')) {
             $configurationFile = $cwd . '/behat.yml';
             $container->setParameter('behat.configuration.path', $cwd);
+        } elseif (is_file($cwd . '/config/behat.xml')) {
+            $configurationFile = $cwd . '/config/behat.yml';
+            $container->setParameter('behat.configuration.path', $cwd . '/config');
         }
 
         // Load configuration file with proper loader
