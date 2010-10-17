@@ -1,8 +1,6 @@
 <?php
 
-namespace Everzet\Behat\Loader;
-
-use Symfony\Component\EventDispatcher\EventDispatcher;
+namespace Everzet\Behat\Features\Loader;
 
 /*
  * This file is part of the Behat.
@@ -13,16 +11,19 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 
 /**
- * Loader Interface.
+ * Feature Loader Interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface LoaderInterface
 {
     /**
-     * Load something.
+     * Load feature from specified path.
      *
-     * @param   string  $paths  paths to load from
+     * @param   string                              $paths  features path(s)
+     * 
+     * @return  Everzet\Gherkin\Node\FeatureNode            feature node
      */
-    public function load($paths);
+    public function load($path);
 }
+
