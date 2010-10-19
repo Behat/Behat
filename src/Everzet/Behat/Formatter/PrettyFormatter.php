@@ -343,7 +343,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
                 $description    = sprintf('    %s %s', $step->getType(), $text);
 
                 // Colorize arguments
-                if (StepTester::UNDEFINED !== $event['result']) {
+                if (null !== $event['definition'] && StepTester::UNDEFINED !== $event['result']) {
                     $argStartCode   = $this->colorizeStart($event['result'] + 10);
                     $argFinishCode  = $this->colorizeFinish() . $this->colorizeStart($event['result']);
                     $printableText  = preg_replace_callback(

@@ -54,7 +54,7 @@ class FeatureTester implements NodeVisitorInterface
         $result = 0;
 
         // Filter scenarios
-        $event = new Event($this, 'feature.run.filter_scenarios');
+        $event = new Event($feature, 'feature.run.filter_scenarios');
         $this->dispatcher->filter($event, $feature->getScenarios());
 
         // Test filtered scenarios

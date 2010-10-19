@@ -51,14 +51,14 @@ class TagFilter implements FilterInterface
      */
     public function filterScenarios(Event $event, array $scenarios)
     {
-        $filteredScenarios = array();
+        $feature            = $event->getSubject();
+        $filteredScenarios  = array();
 
         if ($this->tags) {
             $tags = explode(',', $this->tags);
 
             foreach ($scenarios as $scenario) {
-                $feature    = $scenario->getFeature();
-                $satisfies  = false;
+                $satisfies = false;
 
                 foreach ($tags as $tag) {
                     $tag = trim($tag);

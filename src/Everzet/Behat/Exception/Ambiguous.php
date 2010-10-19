@@ -2,6 +2,8 @@
 
 namespace Everzet\Behat\Exception;
 
+use Everzet\Behat\Formatter\ConsoleFormatter as Formatter;
+
 /*
  * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -30,14 +32,15 @@ class Ambiguous extends BehaviorException
     {
         parent::__construct();
 
-        $this->definition = $text;
-        $this->matches    = $matches;
+        $this->text     = $text;
+        $this->matches  = $matches;
 
         $this->message = sprintf("Ambiguous match of \"%s\":", $this->text);
         foreach ($this->matches as $definition){
             $this->message .= sprintf("\n%s:%d:in `%s`",
-                $definition->getFile(), $definition->getLine(), $definition->getRegex()
+                Formatter::trimFilename($definition->getFile()), $definition->getLine(), $definition->getRegex()
             );
         }
     }
 }
+
