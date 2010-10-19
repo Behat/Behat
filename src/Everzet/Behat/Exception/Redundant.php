@@ -2,7 +2,8 @@
 
 namespace Everzet\Behat\Exception;
 
-use Everzet\Behat\Definition\StepDefinition;
+use Everzet\Behat\StepDefinition\Definition;
+use Everzet\Behat\Formatter\ConsoleFormatter as Formatter;
 
 /*
  * This file is part of the Behat.
@@ -25,20 +26,20 @@ class Redundant extends BehaviorException
     /**
      * Initialize Exception.
      *
-     * @param   StepDefinition  $step2  duplicate step definition
-     * @param   StepDefinition  $step1  firstly matched step definition
+     * @param   Definition  $step2  duplicate step definition
+     * @param   Definition  $step1  firstly matched step definition
      */
-    public function __construct(StepDefinition $step2, StepDefinition $step1)
+    public function __construct(Definition $step2, Definition $step1)
     {
         parent::__construct();
 
         $this->step1 = $step1;
         $this->step2 = $step2;
         $this->message = sprintf("Step \"%s\" is already defined in %s:%d\n\n%s:%d\n%s:%d",
-            $this->step2->getRegex(), $this->step1->getFile(), $this->step1->getLine(),
-
-            $this->step1->getFile(), $this->step1->getLine(),
-            $this->step2->getFile(), $this->step2->getLine()
+            $this->step2->getRegex(), Formatter::trimFilename($this->step1->getFile()), $this->step1->getLine()
+          , Formatter::trimFilename($this->step1->getFile()), $this->step1->getLine()
+          , Formatter::trimFilename($this->step2->getFile()), $this->step2->getLine()
         );
     }
 }
+

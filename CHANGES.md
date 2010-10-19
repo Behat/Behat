@@ -1,4 +1,16 @@
+0.2.3 / 2010-10-19
+==================
+
+  * [Behat] Filters optimisations
+  * [Behat] Changed Core Loaders with topic-specific (`StepDefinition\Loader\PHPLoader`,
+    `Features\Loader\GherkinLoader`)
+  * [Behat] Simplified TestCommand in prepare of Symfony2 BehatBundle
+  * [Behat] Configuration file/path setting update (you can now create `behat.yml` inside `./config/behat.yml` & Behat
+    will load it
+  * [Behat] Updated Redundant & Ambiguous exceptions behavior
+
 0.2.2 / 2010-10-10
+==================
 
   * [Behat] Configuration file/path setting update
 

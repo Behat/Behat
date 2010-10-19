@@ -54,4 +54,15 @@ class BehatApplication extends Application
     {
         return 'test';
     }
+
+    /**
+     * @see     Symfony\Component\Console\Application 
+     */
+    public function renderException($e, $output)
+    {
+        $this->runningCommand = null;
+
+        parent::renderException($e, $output);
+    }
 }
+

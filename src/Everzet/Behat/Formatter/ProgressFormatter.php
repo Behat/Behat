@@ -201,11 +201,15 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
             ? $this->maxDescriptionLength
             : mb_strlen($description);
         $this->write($description, null, false);
-        $this->printLineSourceComment(
-            mb_strlen($description)
-          , $event['definition']->getFile()
-          , $event['definition']->getLine()
-        );
+        if (null !== $event['definition']) {
+            $this->printLineSourceComment(
+                mb_strlen($description)
+              , $event['definition']->getFile()
+              , $event['definition']->getLine()
+            );
+        } else {
+            $this->write();
+        }
 
         // Print scenario information
         $item = $step->getParent();
