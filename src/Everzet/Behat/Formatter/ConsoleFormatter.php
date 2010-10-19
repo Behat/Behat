@@ -240,9 +240,21 @@ abstract class ConsoleFormatter
         $indent = $lineLength > $this->maxDescriptionLength
             ? 0
             : $this->maxDescriptionLength - $lineLength;
-        $file   = preg_replace('/.*\/features\//', 'features/', $file);
+        $file = self::trimFilename($file);
 
         $this->write(sprintf("%s # %s:%d", str_repeat(' ', $indent), $file, $line), 'comment');
+    }
+
+    /**
+     * Trim filename to features/... 
+     * 
+     * @param   string  $filename   filename
+     *
+     * @return  string              relative filename
+     */
+    public static function trimFilename($filename)
+    {
+        return preg_replace('/.*\/features\//', 'features/', $filename);
     }
 }
 

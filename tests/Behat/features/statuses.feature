@@ -193,3 +193,93 @@ Feature: Statuses
       2 scenarios (2 failed)
       8 steps (4 passed, 2 skipped, 2 failed)
       """
+
+  Scenario: Ambiguous steps
+    Given a file named "features/statuses.feature" with:
+      """
+      Feature: Pending
+
+        Background:
+          Given I have entered 10
+
+        Scenario:
+          Then I must have 10
+
+        Scenario:
+          When I have entered 30
+          Then I must have 30
+      """
+    And a file named "features/steps/steps.php" with:
+      """
+      <?php
+      $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
+          throw new \Everzet\Behat\Exception\Pending();
+      });
+      $steps->Given('/^I have entered 10$/', function($world, $arg1) {
+          assertTrue(true);
+      });
+      """
+    When I run "behat -f progress features/statuses.feature"
+    Then it should fail with:
+      """
+      FUF-U
+      
+      (::) failed steps (::)
+      
+      01. Ambiguous match of "I have entered 10":
+          features/steps/steps.php:4:in `/^I have entered (\d+)$/`
+          features/steps/steps.php:7:in `/^I have entered 10$/`
+          In step `Given I have entered 10'.
+          From scenario background.          # features/statuses.feature:2
+      
+      02. Ambiguous match of "I have entered 10":
+          features/steps/steps.php:4:in `/^I have entered (\d+)$/`
+          features/steps/steps.php:7:in `/^I have entered 10$/`
+          In step `Given I have entered 10'.
+          From scenario background.          # features/statuses.feature:2
+      
+      2 scenarios (2 failed)
+      5 steps (1 skipped, 2 undefined, 2 failed)
+      
+      You can implement step definitions for undefined steps with these snippets:
+      
+      $steps->Then('/^I must have (\d+)$/', function($world, $arg1) {
+          throw new \Everzet\Behat\Exception\Pending();
+      });
+      
+      """
+
+  Scenario: Redundant steps
+    Given a file named "features/statuses.feature" with:
+      """
+      Feature: Pending
+
+        Background:
+          Given I have entered 10
+
+        Scenario:
+          Then I must have 10
+
+        Scenario:
+          When I have entered 30
+          Then I must have 30
+      """
+    And a file named "features/steps/steps.php" with:
+      """
+      <?php
+      $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
+          throw new \Everzet\Behat\Exception\Pending();
+      });
+      $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
+          assertTrue(true);
+      });
+      """
+    When I run "behat -f progress features/statuses.feature"
+    Then it should fail with:
+      """
+      [Everzet\Behat\Exception\Redundant]
+        Step "/^I have entered (\d+)$/" is already defined in features/steps/steps.php:4
+
+        features/steps/steps.php:4
+        features/steps/steps.php:7
+      """
