@@ -1,3 +1,9 @@
+0.2.4 / 2010-10-19
+==================
+
+  * [Behat] Autoguess of colors support
+  * [Behat] Formatter setup bugfix (properl casing)
+
 0.2.3 / 2010-10-19
 ==================
 
