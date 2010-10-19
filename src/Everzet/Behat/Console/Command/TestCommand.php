@@ -109,8 +109,8 @@ class TestCommand extends Command
 
         // Find proper features path
         $featuresPath = $container->getParameter('behat.features.path');
-        if (is_dir($featuresPath . '/features')) {
-            $featuresPath = $featuresPath . '/features';
+        if (is_dir($featuresPath . DIRECTORY_SEPARATOR . 'features')) {
+            $featuresPath = $featuresPath . DIRECTORY_SEPARATOR . 'features';
             $container->setParameter('behat.features.path',     $featuresPath);
         } elseif (is_file($featuresPath)) {
             $container->setParameter('behat.features.files',    $featuresPath);

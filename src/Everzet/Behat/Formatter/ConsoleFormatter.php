@@ -135,6 +135,18 @@ abstract class ConsoleFormatter
     }
 
     /**
+     * Trim filename to features/... 
+     * 
+     * @param   string  $filename   filename
+     *
+     * @return  string              relative filename
+     */
+    public static function trimFilename($filename)
+    {
+        return preg_replace('/.*\/features\\' . DIRECTORY_SEPARATOR . '/', 'features' . DIRECTORY_SEPARATOR, $filename);
+    }
+
+    /**
      * Set color of string.
      *
      * @param   string          $string     string to colorize
@@ -160,7 +172,7 @@ abstract class ConsoleFormatter
      */
     protected function colorizeStart($result)
     {
-        if ($this->isColorsAllowed()) {
+        if ($this->isColorsAllowed() && $this->hasColorSupport()) {
             return sprintf("\033[%sm", $this->getStatusColorCode(is_int($result) ? $this->statuses[$result] : $result));
         } else {
             return '';
@@ -174,7 +186,7 @@ abstract class ConsoleFormatter
      */
     protected function colorizeFinish()
     {
-        if ($this->isColorsAllowed()) {
+        if ($this->isColorsAllowed() && $this->hasColorSupport()) {
             return "\033[0m";
         } else {
             return '';
@@ -246,15 +258,22 @@ abstract class ConsoleFormatter
     }
 
     /**
-     * Trim filename to features/... 
-     * 
-     * @param   string  $filename   filename
+     * Returns true if the stream supports colorization.
      *
-     * @return  string              relative filename
+     * Colorization is disabled if not supported by the stream:
+     *
+     * - windows without ansicon
+     * - non tty consoles
+     *
+     * @return  boolean             true if the stream supports colorization, false otherwise
      */
-    public static function trimFilename($filename)
+    protected function hasColorSupport()
     {
-        return preg_replace('/.*\/features\//', 'features/', $filename);
+        if ('\\' == DIRECTORY_SEPARATOR) {
+            return false !== getenv('ANSICON');
+        } else {
+            return function_exists('posix_isatty') && @posix_isatty($this->output->getStream());
+        }
     }
 }
 
