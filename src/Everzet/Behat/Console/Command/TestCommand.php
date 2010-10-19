@@ -16,8 +16,6 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Symfony\Component\Finder\Finder;
 
-use Everzet\Behat\Exception\Redundant;
-
 /*
  * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
