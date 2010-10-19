@@ -118,7 +118,7 @@ class TestCommand extends Command
         }
 
         // Replace parameter tokens (%subparam%)
-        $container->setParameter('behat.foramtter.name', ucfirst($container->getParameter('behat.formatter.name')));
+        $container->setParameter('behat.formatter.name', ucfirst($container->getParameter('behat.formatter.name')));
         $container->getParameterBag()->resolve();
 
         // Get hooks files
