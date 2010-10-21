@@ -79,11 +79,11 @@ class TestCommand extends Command
         if (null !== $input->getArgument('features')) {
             $container->setParameter('behat.features.path',     realpath($input->getArgument('features')));
         }
-        if (null !== $input->getOption('format')) {
-            $container->setParameter('behat.formatter.name',    $input->getOption('format'));
-        }
         if (null !== $input->getOption('tags')) {
             $container->setParameter('behat.filter.tags',       $input->getOption('tags'));
+        }
+        if (null !== $input->getOption('format')) {
+            $container->setParameter('behat.formatter.name',    $input->getOption('format'));
         }
         if (null !== $input->getOption('no-colors')) {
             $container->setParameter('behat.formatter.colors', !$input->getOption('no-colors'));
