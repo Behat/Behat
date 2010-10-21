@@ -24,13 +24,13 @@ class TagFilter implements FilterInterface
     protected $tags;
 
     /**
-     * Initialize filter.
-     *
-     * @param   Container   $container  dependency container
+     * Set tags to filter. 
+     * 
+     * @param   string  $tags   tags filter string
      */
-    public function __construct(Container $container)
+    public function setTags($tags)
     {
-        $this->tags = $container->getParameter('behat.filter.tags');
+        $this->tags = $tags;
     }
 
     /**

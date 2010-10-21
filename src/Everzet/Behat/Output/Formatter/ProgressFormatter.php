@@ -1,8 +1,7 @@
 <?php
 
-namespace Everzet\Behat\Formatter;
+namespace Everzet\Behat\Output\Formatter;
 
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -26,50 +25,17 @@ use Everzet\Behat\Tester\StepTester;
  */
 class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
 {
-    protected $translator;
-    protected $container;
-    protected $output;
-    protected $verbose;
+    protected $dispatcher;
+
     protected $maxDescriptionLength = 0;
-
-    /**
-     * @see     Everzet\Behat\Formatter\FormatterInterface
-     */
-    public function __construct(Container $container)
-    {
-        parent::__construct();
-
-        $this->container    = $container;
-        $this->output       = $container->getBehat_OutputService();
-        $this->verbose      = $container->getParameter('behat.formatter.verbose');
-    }
-
-    /**
-     * @see     Everzet\Behat\Formatter\ConsoleFormatter
-     */
-    protected function isColorsAllowed()
-    {
-        return $this->container->getParameter('behat.formatter.colors');
-    }
-
-    /**
-     * @see     Everzet\Behat\Formatter\ConsoleFormatter 
-     */
-    protected function getTranslator()
-    {
-        if (!$this->translator) {
-            $this->translator = $this->container->getGherkin_TranslatorService();
-            $this->translator->setLocale($this->container->getParameter('behat.formatter.locale'));
-        }
-
-        return $this->translator;
-    }
 
     /**
      * @see     Everzet\Behat\Formatter\FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
+        $this->dispatcher = $dispatcher;
+
         $dispatcher->connect('step.run.after',          array($this, 'printStep'),          10);
 
         $dispatcher->connect('suite.run.after',         array($this, 'printEmptyLine'),     10);
@@ -77,6 +43,14 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
         $dispatcher->connect('suite.run.after',         array($this, 'printPendingSteps'),  10);
         $dispatcher->connect('suite.run.after',         array($this, 'printStatistics'),    10);
         $dispatcher->connect('suite.run.after',         array($this, 'printSnippets'),      10);
+    }
+
+    /**
+     * @see     ConsoleFormatter 
+     */
+    protected function getDispatcher()
+    {
+        return $this->dispatcher;
     }
 
     /**
@@ -234,3 +208,4 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
         $this->write();
     }
 }
+

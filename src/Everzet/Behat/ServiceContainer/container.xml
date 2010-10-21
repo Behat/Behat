@@ -35,13 +35,13 @@
 
         <parameter key="gherkin.parser.class">Everzet\Gherkin\Parser</parameter>
 
-        <!-- Formatter -->
+        <!-- Output Manager -->
         <parameter key="behat.formatter.name">pretty</parameter>
         <parameter key="behat.formatter.colors">true</parameter>
         <parameter key="behat.formatter.verbose">false</parameter>
         <parameter key="behat.formatter.locale">en</parameter>
 
-        <parameter key="behat.formatter.class">Everzet\Behat\Formatter\%behat.formatter.name%Formatter</parameter>
+        <parameter key="behat.output_manager.class">Everzet\Behat\Output\OutputManager</parameter>
 
         <!-- Tester -->
         <parameter key="behat.environment.file">%behat.features.path%/support/env.php</parameter>
@@ -90,11 +90,10 @@
             <call method="addLoader">
                 <argument>php</argument>
                 <argument type="service">
-                    <service class="%behat.hooks_loader.php.class%">
-                        <argument type="service" id="behat.event_dispatcher" />
-                    </service>
+                    <service class="%behat.hooks_loader.php.class%" />
                 </argument>
             </call>
+            <tag name="behat.events_listener" />
         </service>
 
         <!-- Event Dispatcher -->
@@ -104,7 +103,9 @@
             </call>
         </service>
         <service id="behat.tag_filter" class="%behat.tag_filter.class%" shared="true">
-            <argument type="service" id="service_container" />
+            <call method="setTags">
+                <argument>%behat.filter.tags%</argument>
+            </call>
             <tag name="behat.events_listener" />
         </service>
         <service id="behat.statistics_collector" class="%behat.statistics_collector.class%" shared="true">
@@ -112,9 +113,33 @@
             <tag name="behat.events_listener" />
         </service>
 
-        <!-- Formatter -->
-        <service id="behat.formatter" class="%behat.formatter.class%" shared="true">
+        <!-- Output Manager -->
+        <service id="behat.output_manager" class="%behat.output_manager.class%" shared="true">
             <argument type="service" id="service_container" />
+            <call method="allowColors">
+                <argument>%behat.formatter.colors%</argument>
+            </call>
+            <call method="beVerbose">
+                <argument>%behat.formatter.verbose%</argument>
+            </call>
+            <call method="setLocale">
+                <argument>%behat.formatter.locale%</argument>
+            </call>
+            <call method="addFormatter">
+                <argument>progress</argument>
+                <argument type="service">
+                    <service class="Everzet\Behat\Output\Formatter\ProgressFormatter" />
+                </argument>
+            </call>
+            <call method="addFormatter">
+                <argument>pretty</argument>
+                <argument type="service">
+                    <service class="Everzet\Behat\Output\Formatter\PrettyFormatter" />
+                </argument>
+            </call>
+            <call method="setFormatter">
+                <argument>%behat.formatter.name%</argument>
+            </call>
             <tag name="behat.events_listener" />
         </service>
 
