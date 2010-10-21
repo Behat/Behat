@@ -56,7 +56,7 @@ class TestCommand extends Command
               , InputOption::PARAMETER_REQUIRED
               , 'Only executes features or scenarios with specified tags'
             ),
-            new InputOption('--no-color',       null
+            new InputOption('--no-colors',       null
               , InputOption::PARAMETER_NONE
               , 'No colors in output'
             ),
@@ -85,8 +85,8 @@ class TestCommand extends Command
         if (null !== $input->getOption('tags')) {
             $container->setParameter('behat.filter.tags',       $input->getOption('tags'));
         }
-        if (null !== $input->getOption('no-color')) {
-            $container->setParameter('behat.formatter.colors', !$input->getOption('no-color'));
+        if (null !== $input->getOption('no-colors')) {
+            $container->setParameter('behat.formatter.colors', !$input->getOption('no-colors'));
         }
         if (null !== $input->getOption('verbose')) {
             $container->setParameter('behat.formatter.verbose', $input->getOption('verbose'));
