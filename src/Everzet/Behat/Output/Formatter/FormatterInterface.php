@@ -1,8 +1,7 @@
 <?php
 
-namespace Everzet\Behat\Formatter;
+namespace Everzet\Behat\Output\Formatter;
 
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /*
@@ -20,13 +19,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 interface FormatterInterface
 {
-    /**
-     * Initialize formatter.
-     *
-     * @param   Container   $container  dependency container
-     */
-    public function __construct(Container $container);
-
     /**
      * Register listeners in formatter.
      *

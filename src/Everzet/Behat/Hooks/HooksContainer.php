@@ -33,7 +33,7 @@ class HooksContainer
      * 
      * @param   EventDispatcher $dispatcher event dispatcher
      */
-    public function registerHooks(EventDispatcher $dispatcher)
+    public function registerListeners(EventDispatcher $dispatcher)
     {
         if (!count($this->hooks)) {
             $this->loadHooks();

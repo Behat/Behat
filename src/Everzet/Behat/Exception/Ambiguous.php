@@ -2,7 +2,7 @@
 
 namespace Everzet\Behat\Exception;
 
-use Everzet\Behat\Formatter\ConsoleFormatter as Formatter;
+use Everzet\Behat\Output\Formatter\ConsoleFormatter as Formatter;
 
 /*
  * This file is part of the Behat.

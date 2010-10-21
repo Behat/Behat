@@ -56,7 +56,7 @@ class TestCommand extends Command
               , InputOption::PARAMETER_REQUIRED
               , 'Only executes features or scenarios with specified tags'
             ),
-            new InputOption('--no-color',       null
+            new InputOption('--no-colors',       null
               , InputOption::PARAMETER_NONE
               , 'No colors in output'
             ),
@@ -75,32 +75,22 @@ class TestCommand extends Command
         // Create container
         $container = $this->createContainer($input->getOption('configuration'));
 
-        // Set initial container services & parameters
-        $container->set('behat.output',                         $output);
-        $container->setParameter('behat.work.path',             $cwd = getcwd());
-        $container->setParameter('behat.lib.path',              realpath(__DIR__ . '/../../../../../'));
-
-        // Read command arguments & options
+        // Read command arguments & options into container
         if (null !== $input->getArgument('features')) {
             $container->setParameter('behat.features.path',     realpath($input->getArgument('features')));
         }
-
         if (null !== $input->getOption('format')) {
             $container->setParameter('behat.formatter.name',    $input->getOption('format'));
         }
-
         if (null !== $input->getOption('tags')) {
             $container->setParameter('behat.filter.tags',       $input->getOption('tags'));
         }
-
-        if (null !== $input->getOption('no-color')) {
-            $container->setParameter('behat.formatter.colors',  !$input->getOption('no-color'));
+        if (null !== $input->getOption('no-colors')) {
+            $container->setParameter('behat.formatter.colors', !$input->getOption('no-colors'));
         }
-
         if (null !== $input->getOption('verbose')) {
             $container->setParameter('behat.formatter.verbose', $input->getOption('verbose'));
         }
-
         if (null !== $input->getOption('i18n')) {
             $container->setParameter('behat.formatter.locale',  $input->getOption('i18n'));
         }
@@ -115,37 +105,29 @@ class TestCommand extends Command
             $container->setParameter('behat.features.path',     dirname($featuresPath));
         }
 
-        // Replace parameter tokens (%subparam%)
-        $container->setParameter('behat.formatter.name', ucfirst($container->getParameter('behat.formatter.name')));
-        $container->getParameterBag()->resolve();
+        // Freeze container
+        $container->freeze();
 
-        // Get hooks files
-        $hooksContainer         = $container->getBehat_HooksContainerService();
-        $hooksPath              = $container->getParameter('behat.hooks.file');
+        // Set Output Manager Output instance
+        $container->getBehat_OutputManagerService()->setOutput($output);
 
         // Add hooks files paths to container resources list
-        foreach ((array) $hooksPath as $path) {
+        $hooksContainer = $container->getBehat_HooksContainerService();
+        foreach ((array) $container->getParameter('behat.hooks.file') as $path) {
             if (is_file($path)) {
                 $hooksContainer->addResource('php', $path);
             }
         }
-        $hooksContainer->registerHooks($container->getBehat_EventDispatcherService());
-
-        // Get feature files
-        $featuresContainer      = $container->getBehat_FeaturesContainerService();
-        $featuresPath           = $container->getParameter('behat.features.files');
 
         // Add features paths to container resources list
-        foreach ($this->findFeatureResources($featuresPath) as $path) {
+        $featuresContainer = $container->getBehat_FeaturesContainerService();
+        foreach ($this->findFeatureResources($container->getParameter('behat.features.files')) as $path) {
             $featuresContainer->addResource('gherkin', $path);
         }
 
-        // Get definitions files
-        $definitionsContainer   = $container->getBehat_DefinitionsContainerService();
-        $stepsPaths             = $container->getParameter('behat.steps.path');
-
         // Add definitions files to container resources list
-        foreach ((array) $stepsPaths as $stepsPath) {
+        $definitionsContainer = $container->getBehat_DefinitionsContainerService();
+        foreach ((array) $container->getParameter('behat.steps.path') as $stepsPath) {
             if (is_dir($stepsPath)) {
                 foreach ($this->findDefinitionResources($stepsPath) as $path) {
                     $definitionsContainer->addResource('php', $path);
@@ -221,6 +203,10 @@ class TestCommand extends Command
 
             $loader->import($configurationFile);
         }
+
+        // Set initial container services & parameters
+        $container->setParameter('behat.work.path', $cwd);
+        $container->setParameter('behat.lib.path',  realpath(__DIR__ . '/../../../../../'));
 
         return $container;
     }
