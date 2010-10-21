@@ -159,7 +159,7 @@ abstract class ConsoleFormatter
      */
     public static function trimFilename($filename)
     {
-        return preg_replace('/.*\/features\\' . DIRECTORY_SEPARATOR . '/', 'features' . DIRECTORY_SEPARATOR, $filename);
+        return preg_replace('/.*\/features\\' . DIRECTORY_SEPARATOR . '/i', 'features' . DIRECTORY_SEPARATOR, $filename);
     }
 
     /**
