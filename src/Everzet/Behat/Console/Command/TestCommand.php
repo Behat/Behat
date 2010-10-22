@@ -56,9 +56,13 @@ class TestCommand extends Command
               , InputOption::PARAMETER_REQUIRED
               , 'Only executes features or scenarios with specified tags'
             ),
-            new InputOption('--no-colors',       null
+            new InputOption('--no-colors',      null
               , InputOption::PARAMETER_NONE
               , 'No colors in output'
+            ),
+            new InputOption('--no-time',        null
+              , InputOption::PARAMETER_NONE
+              , 'No timer in output'
             ),
             new InputOption('--i18n',           null
               , InputOption::PARAMETER_REQUIRED
@@ -152,7 +156,9 @@ class TestCommand extends Command
         )));
 
         // Print run time
-        $output->writeln(sprintf("%.3fs", $timer));
+        if (null === $input->getOption('no-time') || !$input->getOption('no-time')) {
+            $output->writeln(sprintf("%.3fs", $timer));
+        }
 
         // Return exit code
         return intval(0 < $result);
