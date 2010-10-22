@@ -1,3 +1,11 @@
+0.2.5 / 2010-10-22
+==================
+
+  * [Behat] Format manager introduced
+  * [Behat] Formatters refactoring
+  * [Behat] Optmized container parameters to support EverzetBehatBundle
+  * [Behat] --no-color => --no-colors
+
 0.2.4 / 2010-10-19
 ==================
 
