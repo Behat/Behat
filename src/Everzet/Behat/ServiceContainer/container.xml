@@ -18,10 +18,14 @@
         <parameter key="behat.definitions_loader.php.class">Everzet\Behat\StepDefinition\Loader\PHPLoader</parameter>
 
         <!-- Event Dispatcher -->
+        <parameter key="behat.event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
+
+        <!-- Collector -->
+        <parameter key="behat.statistics_collector.class">Everzet\Behat\Collector\StatisticsCollector</parameter>
+
+        <!-- Filter -->
         <parameter key="behat.filter.tags"></parameter>
 
-        <parameter key="behat.event_dispatcher.class">Everzet\Behat\EventDispatcher\EventDispatcher</parameter>
-        <parameter key="behat.statistics_collector.class">Everzet\Behat\Collector\StatisticsCollector</parameter>
         <parameter key="behat.tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
 
         <!-- Hooks -->
@@ -35,18 +39,21 @@
 
         <parameter key="gherkin.parser.class">Everzet\Gherkin\Parser</parameter>
 
-        <!-- Formatter -->
+        <!-- Output Manager -->
         <parameter key="behat.formatter.name">pretty</parameter>
         <parameter key="behat.formatter.colors">true</parameter>
         <parameter key="behat.formatter.verbose">false</parameter>
         <parameter key="behat.formatter.locale">en</parameter>
 
-        <parameter key="behat.formatter.class">Everzet\Behat\Formatter\%behat.formatter.name%Formatter</parameter>
+        <parameter key="behat.output_manager.class">Everzet\Behat\Output\OutputManager</parameter>
+        <parameter key="behat.formatter.progress.class">Everzet\Behat\Output\Formatter\ProgressFormatter</parameter>
+        <parameter key="behat.formatter.pretty.class">Everzet\Behat\Output\Formatter\PrettyFormatter</parameter>
 
         <!-- Tester -->
         <parameter key="behat.environment.file">%behat.features.path%/support/env.php</parameter>
 
         <parameter key="behat.environment.class">Everzet\Behat\Environment\WorldEnvironment</parameter>
+
         <parameter key="behat.feature_tester.class">Everzet\Behat\Tester\FeatureTester</parameter>
         <parameter key="behat.background_tester.class">Everzet\Behat\Tester\BackgroundTester</parameter>
         <parameter key="behat.scenario_tester.class">Everzet\Behat\Tester\ScenarioTester</parameter>
@@ -90,11 +97,10 @@
             <call method="addLoader">
                 <argument>php</argument>
                 <argument type="service">
-                    <service class="%behat.hooks_loader.php.class%">
-                        <argument type="service" id="behat.event_dispatcher" />
-                    </service>
+                    <service class="%behat.hooks_loader.php.class%" />
                 </argument>
             </call>
+            <tag name="behat.events_listener" />
         </service>
 
         <!-- Event Dispatcher -->
@@ -103,18 +109,48 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="behat.tag_filter" class="%behat.tag_filter.class%" shared="true">
-            <argument type="service" id="service_container" />
-            <tag name="behat.events_listener" />
-        </service>
+
+        <!-- Collector -->
         <service id="behat.statistics_collector" class="%behat.statistics_collector.class%" shared="true">
             <argument type="service" id="service_container" />
             <tag name="behat.events_listener" />
         </service>
 
-        <!-- Formatter -->
-        <service id="behat.formatter" class="%behat.formatter.class%" shared="true">
+        <!-- Filter -->
+        <service id="behat.tag_filter" class="%behat.tag_filter.class%" shared="true">
+            <call method="setTags">
+                <argument>%behat.filter.tags%</argument>
+            </call>
+            <tag name="behat.events_listener" />
+        </service>
+
+        <!-- Output Manager -->
+        <service id="behat.output_manager" class="%behat.output_manager.class%" shared="true">
             <argument type="service" id="service_container" />
+            <call method="allowColors">
+                <argument>%behat.formatter.colors%</argument>
+            </call>
+            <call method="beVerbose">
+                <argument>%behat.formatter.verbose%</argument>
+            </call>
+            <call method="setLocale">
+                <argument>%behat.formatter.locale%</argument>
+            </call>
+            <call method="addFormatter">
+                <argument>progress</argument>
+                <argument type="service">
+                    <service class="%behat.formatter.progress.class%" />
+                </argument>
+            </call>
+            <call method="addFormatter">
+                <argument>pretty</argument>
+                <argument type="service">
+                    <service class="%behat.formatter.pretty.class%" />
+                </argument>
+            </call>
+            <call method="setFormatter">
+                <argument>%behat.formatter.name%</argument>
+            </call>
             <tag name="behat.events_listener" />
         </service>
 
@@ -124,6 +160,7 @@
                 <argument>%behat.environment.file%</argument>
             </call>
         </service>
+
         <service id="behat.feature_tester" class="%behat.feature_tester.class%" shared="false">
             <argument type="service" id="service_container" />
         </service>

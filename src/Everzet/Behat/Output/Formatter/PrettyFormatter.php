@@ -1,6 +1,6 @@
 <?php
 
-namespace Everzet\Behat\Formatter;
+namespace Everzet\Behat\Output\Formatter;
 
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -32,55 +32,23 @@ use Everzet\Behat\Tester\StepTester;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
+class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, ContainerAwareFormatterInterface
 {
-    protected $translator;
     protected $container;
-    protected $output;
-    protected $verbose;
+    protected $dispatcher;
+
     protected $backgroundPrinted            = false;
     protected $outlineStepsPrinted          = false;
     protected $maxDescriptionLength         = 0;
     protected $outlineSubresultExceptions   = array();
 
     /**
-     * @see     Everzet\Behat\Formatter\FormatterInterface
-     */
-    public function __construct(Container $container)
-    {
-        parent::__construct();
-
-        $this->container    = $container;
-        $this->output       = $container->getBehat_OutputService();
-        $this->verbose      = $container->getParameter('behat.formatter.verbose');
-    }
-
-    /**
-     * @see     Everzet\Behat\Formatter\ConsoleFormatter
-     */
-    protected function isColorsAllowed()
-    {
-        return $this->container->getParameter('behat.formatter.colors');
-    }
-
-    /**
-     * @see     Everzet\Behat\Formatter\ConsoleFormatter 
-     */
-    protected function getTranslator()
-    {
-        if (!$this->translator) {
-            $this->translator = $this->container->getGherkin_TranslatorService();
-            $this->translator->setLocale($this->container->getParameter('behat.formatter.locale'));
-        }
-
-        return $this->translator;
-    }
-
-    /**
-     * @see     Everzet\Behat\Formatter\FormatterInterface
+     * @see     FormatterInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
+        $this->dispatcher = $dispatcher;
+
         $dispatcher->connect('feature.run.before',      array($this, 'printFeatureHeader'),     10);
 
         $dispatcher->connect('outline.run.before',      array($this, 'printOutlineHeader'),     10);
@@ -97,6 +65,22 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface
 
         $dispatcher->connect('suite.run.after',         array($this, 'printStatistics'),        10);
         $dispatcher->connect('suite.run.after',         array($this, 'printSnippets'),          10);
+    }
+
+    /**
+     * @see     ContainerAwareFormatterInterface 
+     */
+    public function setContainer(Container $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @see     ConsoleFormatter 
+     */
+    protected function getDispatcher()
+    {
+        return $this->dispatcher;
     }
 
     /**

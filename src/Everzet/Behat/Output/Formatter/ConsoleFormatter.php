@@ -1,9 +1,10 @@
 <?php
 
-namespace Everzet\Behat\Formatter;
+namespace Everzet\Behat\Output\Formatter;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Everzet\Behat\Tester\StepTester;
 
@@ -22,7 +23,12 @@ use Everzet\Behat\Tester\StepTester;
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class ConsoleFormatter
+    implements TranslatableFormatterInterface, ColorableFormatterInterface, VerbosableFormatterInterface
 {
+    protected $translator;
+    protected $colors   = true;
+    protected $verbose  = false;
+
     protected $statuses;
 
     public function __construct()
@@ -42,18 +48,28 @@ abstract class ConsoleFormatter
     }
 
     /**
-     * Return Translator Service. 
-     * 
-     * @return  Symfony\Component\Translation\TranslatorInterface
+     * @see     TranslatableFormatterInterface 
      */
-    abstract protected function getTranslator();
+    public function setTranslator(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
 
     /**
-     * Return true if colors allowed. 
-     * 
-     * @return  boolean
+     * @see     ColorableFormatterInterface 
      */
-    abstract protected function isColorsAllowed();
+    public function allowColors($colors = true)
+    {
+        $this->colors = (bool) $colors;
+    }
+
+    /**
+     * @see     VerbosableFormatterInterface 
+     */
+    public function beVerbose($verbose = true)
+    {
+        $this->verbose = (bool) $verbose;
+    }
 
     /**
       * Listen to some event & print suite statistics.
@@ -143,7 +159,34 @@ abstract class ConsoleFormatter
      */
     public static function trimFilename($filename)
     {
-        return preg_replace('/.*\/features\\' . DIRECTORY_SEPARATOR . '/', 'features' . DIRECTORY_SEPARATOR, $filename);
+        return preg_replace('/.*\/features\\' . DIRECTORY_SEPARATOR . '/i', 'features' . DIRECTORY_SEPARATOR, $filename);
+    }
+
+    /**
+     * Return Event Dispatcher. 
+     * 
+     * @return  EventDispatcher
+     */
+    abstract protected function getDispatcher();
+
+    /**
+     * Return true if colors allowed. 
+     * 
+     * @return  boolean
+     */
+    protected function isColorsAllowed()
+    {
+        return (bool) $this->colors;
+    }
+
+    /**
+     * Return Translator Service. 
+     * 
+     * @return  Symfony\Component\Translation\TranslatorInterface
+     */
+    protected function getTranslator()
+    {
+        return $this->translator;
     }
 
     /**
@@ -172,7 +215,7 @@ abstract class ConsoleFormatter
      */
     protected function colorizeStart($result)
     {
-        if ($this->isColorsAllowed() && $this->hasColorSupport()) {
+        if ($this->isColorsAllowed()) {
             return sprintf("\033[%sm", $this->getStatusColorCode(is_int($result) ? $this->statuses[$result] : $result));
         } else {
             return '';
@@ -186,7 +229,7 @@ abstract class ConsoleFormatter
      */
     protected function colorizeFinish()
     {
-        if ($this->isColorsAllowed() && $this->hasColorSupport()) {
+        if ($this->isColorsAllowed()) {
             return "\033[0m";
         } else {
             return '';
@@ -202,7 +245,10 @@ abstract class ConsoleFormatter
      */
     protected function write($string = '', $result = null, $newline = true)
     {
-        $this->output->write($this->colorize($string, $result), $newline, 1);
+        $string = $this->colorize($string, $result);
+
+        $event  = new Event($this, 'behat.output.write', array('string' => $string, 'newline' => $newline));
+        $this->getDispatcher()->notify($event);
     }
 
     /**
@@ -255,25 +301,6 @@ abstract class ConsoleFormatter
         $file = self::trimFilename($file);
 
         $this->write(sprintf("%s # %s:%d", str_repeat(' ', $indent), $file, $line), 'comment');
-    }
-
-    /**
-     * Returns true if the stream supports colorization.
-     *
-     * Colorization is disabled if not supported by the stream:
-     *
-     * - windows without ansicon
-     * - non tty consoles
-     *
-     * @return  boolean             true if the stream supports colorization, false otherwise
-     */
-    protected function hasColorSupport()
-    {
-        if ('\\' == DIRECTORY_SEPARATOR) {
-            return false !== getenv('ANSICON');
-        } else {
-            return function_exists('posix_isatty') && @posix_isatty($this->output->getStream());
-        }
     }
 }
 
