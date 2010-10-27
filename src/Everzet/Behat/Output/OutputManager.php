@@ -151,7 +151,7 @@ class OutputManager
      */
     public function write(Event $event)
     {
-        $this->output->write($event['string'], $event['newline'], 1);
+        $this->output->write($event->getParameter('string'), $event->getParameter('newline'), 1);
     }
 
     /**

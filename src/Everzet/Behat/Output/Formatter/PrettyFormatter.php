@@ -195,8 +195,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         $this->write(
             preg_replace(
                 '/|([^|]*)|/'
-              , $this->colorize('$1', $event['result'])
-              , '      ' . $examples->getRowAsString($event['iteration'] + 1)
+              , $this->colorize('$1', $event->getParameter('result'))
+              , '      ' . $examples->getRowAsString($event->getParameter('iteration') + 1)
             )
         );
 
@@ -327,11 +327,11 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
                 $description    = sprintf('    %s %s', $step->getType(), $text);
 
                 // Colorize arguments
-                if (null !== $event['definition'] && StepTester::UNDEFINED !== $event['result']) {
-                    $argStartCode   = $this->colorizeStart($event['result'] + 10);
-                    $argFinishCode  = $this->colorizeFinish() . $this->colorizeStart($event['result']);
+                if (null !== $event->getParameter('definition') && StepTester::UNDEFINED !== $event->getParameter('result')) {
+                    $argStartCode   = $this->colorizeStart($event->getParameter('result') + 10);
+                    $argFinishCode  = $this->colorizeFinish() . $this->colorizeStart($event->getParameter('result'));
                     $printableText  = preg_replace_callback(
-                        $event['definition']->getRegex()
+                        $event->getParameter('definition')->getRegex()
                       , function ($matches) use($argStartCode, $argFinishCode) {
                           $text = array_shift($matches);
                           foreach ($matches as $match) {
@@ -352,14 +352,14 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
 
                 // Print step description
                 $printableDescription = sprintf('    %s %s', $step->getType(), $printableText);
-                $this->write($printableDescription, $event['result'], false);
+                $this->write($printableDescription, $event->getParameter('result'), false);
 
                 // Print definition path if found one
-                if (null !== $event['definition']) {
+                if (null !== $event->getParameter('definition')) {
                     $this->printLineSourceComment(
                         mb_strlen($description)
-                      , $event['definition']->getFile()
-                      , $event['definition']->getLine()
+                      , $event->getParameter('definition')->getFile()
+                      , $event->getParameter('definition')->getLine()
                     );
                 } else {
                     $this->write();
@@ -369,27 +369,27 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
                 if ($step->hasArguments()) {
                     foreach ($step->getArguments() as $argument) {
                         if ($argument instanceof PyStringNode) {
-                            $this->write($this->getPyString($argument, 6), $event['result']);
+                            $this->write($this->getPyString($argument, 6), $event->getParameter('result'));
                         } elseif ($argument instanceof TableNode) {
-                            $this->write($this->getTableString($argument, 6), $event['result']);
+                            $this->write($this->getTableString($argument, 6), $event->getParameter('result'));
                         }
                     }
                 }
 
                 // Print step exception
-                if (null !== $event['exception']) {
+                if (null !== $event->getParameter('exception')) {
                     if ($this->verbose) {
-                        $error = (string) $event['exception'];
+                        $error = (string) $event->getParameter('exception');
                     } else {
-                        $error = $event['exception']->getMessage();
+                        $error = $event->getParameter('exception')->getMessage();
                     }
                     $this->write(
-                        '      ' . strtr($error, array("\n" => "\n      ")), $event['result']
+                        '      ' . strtr($error, array("\n" => "\n      ")), $event->getParameter('result')
                     );
                 }
             } else {
-                if (null !== $event['exception']) {
-                    $this->outlineSubresultExceptions[] = $event['exception'];
+                if (null !== $event->getParameter('exception')) {
+                    $this->outlineSubresultExceptions[] = $event->getParameter('exception');
                 }
             }
         }

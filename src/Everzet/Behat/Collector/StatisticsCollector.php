@@ -162,7 +162,7 @@ class StatisticsCollector implements CollectorInterface
     {
         if (!$this->paused) {
             ++$this->scenariosCount;
-            ++$this->scenariosStatuses[$this->statuses[$event['result']]];
+            ++$this->scenariosStatuses[$this->statuses[$event->getParameter('result')]];
         }
     }
 
@@ -175,21 +175,21 @@ class StatisticsCollector implements CollectorInterface
     {
         if (!$this->paused) {
             ++$this->stepsCount;
-            ++$this->stepsStatuses[$this->statuses[$event['result']]];
+            ++$this->stepsStatuses[$this->statuses[$event->getParameter('result')]];
 
-            if (StepTester::UNDEFINED === $event['result']) {
-                foreach ($event['snippet'] as $key => $snippet) {
+            if (StepTester::UNDEFINED === $event->getParameter('result')) {
+                foreach ($event->getParameter('snippet') as $key => $snippet) {
                     if (!isset($this->definitionsSnippets[$key])) {
                         $this->definitionsSnippets[$key] = $snippet;
                     }
                 }
             }
 
-            if (StepTester::FAILED === $event['result']) {
+            if (StepTester::FAILED === $event->getParameter('result')) {
                 $this->failedStepsEvents[] = $event;
             }
 
-            if (StepTester::PENDING === $event['result']) {
+            if (StepTester::PENDING === $event->getParameter('result')) {
                 $this->pendingStepsEvents[] = $event;
             }
         }
