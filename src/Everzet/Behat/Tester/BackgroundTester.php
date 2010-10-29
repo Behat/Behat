@@ -36,7 +36,7 @@ class BackgroundTester implements NodeVisitorInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->dispatcher   = $container->getBehat_EventDispatcherService();
+        $this->dispatcher   = $container->get('behat.event_dispatcher');
     }
 
     /**
@@ -65,7 +65,7 @@ class BackgroundTester implements NodeVisitorInterface
 
         // Visit & test steps
         foreach ($background->getSteps() as $step) {
-            $tester = $this->container->getBehat_StepTesterService();
+            $tester = $this->container->get('behat.step_tester');
             $tester->setEnvironment($this->environment);
             $tester->skip($skip);
 
