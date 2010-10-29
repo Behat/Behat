@@ -131,7 +131,7 @@ class OutputManager
             $formatter->setContainer($this->container);
         }
         if ($formatter instanceof TranslatableFormatterInterface) {
-            $translator = $this->container->getGherkin_TranslatorService();
+            $translator = $this->container->get('gherkin.translator');
             $translator->setLocale($this->locale);
 
             $formatter->setTranslator($translator);

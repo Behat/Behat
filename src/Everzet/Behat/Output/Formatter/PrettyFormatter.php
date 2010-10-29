@@ -111,11 +111,11 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
 
         // Run fake background to test if it runs without errors & print it output
         if ($feature->hasBackground()) {
-            $this->container->getBehat_StatisticsCollectorService()->pause();
-            $tester = $this->container->getBehat_BackgroundTesterService();
-            $tester->setEnvironment($this->container->getBehat_EnvironmentService());
+            $this->container->get('behat.statistics_collector')->pause();
+            $tester = $this->container->get('behat.background_tester');
+            $tester->setEnvironment($this->container->get('behat.environment'));
             $feature->getBackground()->accept($tester);
-            $this->container->getBehat_StatisticsCollectorService()->resume();
+            $this->container->get('behat.statistics_collector')->resume();
             $this->backgroundPrinted = true;
         }
     }
@@ -153,16 +153,16 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         );
 
         // Print outline steps
-        $environment = $this->container->getBehat_EnvironmentService();
-        $this->container->getBehat_StatisticsCollectorService()->pause();
+        $environment = $this->container->get('behat.environment');
+        $this->container->get('behat.statistics_collector')->pause();
         foreach ($outline->getSteps() as $step) {
-            $tester = $this->container->getBehat_StepTesterService();
+            $tester = $this->container->get('behat.step_tester');
             $tester->setEnvironment($environment);
             $tester->setTokens(current($examples->getHash()));
             $tester->skip();
             $step->accept($tester);
         }
-        $this->container->getBehat_StatisticsCollectorService()->resume();
+        $this->container->get('behat.statistics_collector')->resume();
 
         $this->outlineStepsPrinted = true;
 

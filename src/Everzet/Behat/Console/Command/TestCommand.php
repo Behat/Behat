@@ -113,10 +113,10 @@ class TestCommand extends Command
         $container->freeze();
 
         // Set Output Manager Output instance
-        $container->getBehat_OutputManagerService()->setOutput($output);
+        $container->get('behat.output_manager')->setOutput($output);
 
         // Add hooks files paths to container resources list
-        $hooksContainer = $container->getBehat_HooksContainerService();
+        $hooksContainer = $container->get('behat.hooks_container');
         foreach ((array) $container->getParameter('behat.hooks.file') as $path) {
             if (is_file($path)) {
                 $hooksContainer->addResource('php', $path);
@@ -124,13 +124,13 @@ class TestCommand extends Command
         }
 
         // Add features paths to container resources list
-        $featuresContainer = $container->getBehat_FeaturesContainerService();
+        $featuresContainer = $container->get('behat.features_container');
         foreach ($this->findFeatureResources($container->getParameter('behat.features.files')) as $path) {
             $featuresContainer->addResource('gherkin', $path);
         }
 
         // Add definitions files to container resources list
-        $definitionsContainer = $container->getBehat_DefinitionsContainerService();
+        $definitionsContainer = $container->get('behat.definitions_container');
         foreach ((array) $container->getParameter('behat.steps.path') as $stepsPath) {
             if (is_dir($stepsPath)) {
                 foreach ($this->findDefinitionResources($stepsPath) as $path) {
@@ -140,18 +140,18 @@ class TestCommand extends Command
         }
 
         // Notify suite.run.before event
-        $container->getBehat_EventDispatcherService()->notify(new Event($container, 'suite.run.before'));
+        $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.before'));
         $timer = microtime(true);
 
         // Run features
         $result = 0;
         foreach ($featuresContainer->getFeatures() as $feature) {
-            $tester = $container->getBehat_FeatureTesterService();
+            $tester = $container->get('behat.feature_tester');
             $result = max($result, $feature->accept($tester));
         }
 
         // Notify suite.run.after event
-        $container->getBehat_EventDispatcherService()->notify(new Event($container, 'suite.run.after', array(
+        $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.after', array(
             'time'  => ($timer = microtime(true) - $timer)
         )));
 

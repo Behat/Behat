@@ -33,7 +33,7 @@ class OutlineTester implements NodeVisitorInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->dispatcher   = $container->getBehat_EventDispatcherService();
+        $this->dispatcher   = $container->get('behat.event_dispatcher');
     }
 
     /**
@@ -55,13 +55,13 @@ class OutlineTester implements NodeVisitorInterface
                 'iteration' => $iteration
             )));
 
-            $environment    = $this->container->getBehat_EnvironmentService();
+            $environment    = $this->container->get('behat.environment');
             $itResult       = 0;
             $skip           = false;
 
             // Visit & test background if has one
             if ($outline->getFeature()->hasBackground()) {
-                $tester = $this->container->getBehat_BackgroundTesterService();
+                $tester = $this->container->get('behat.background_tester');
                 $tester->setEnvironment($environment);
 
                 $bgResult = $outline->getFeature()->getBackground()->accept($tester);
@@ -74,7 +74,7 @@ class OutlineTester implements NodeVisitorInterface
 
             // Visit & test steps
             foreach ($outline->getSteps() as $step) {
-                $tester = $this->container->getBehat_StepTesterService();
+                $tester = $this->container->get('behat.step_tester');
                 $tester->setEnvironment($environment);
                 $tester->setTokens($tokens);
                 $tester->skip($skip);

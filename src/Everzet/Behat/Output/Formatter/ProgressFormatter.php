@@ -98,7 +98,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
       */
     public function printFailedSteps(Event $event)
     {
-        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
+        $statistics = $event->getSubject()->get('behat.statistics_collector');
 
         if (count($statistics->getFailedStepsEvents())) {
             $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('failed steps')), 'failed');
@@ -131,7 +131,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
       */
     public function printPendingSteps(Event $event)
     {
-        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
+        $statistics = $event->getSubject()->get('behat.statistics_collector');
 
         if (count($statistics->getPendingStepsEvents())) {
             $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('pending steps')), 'failed');

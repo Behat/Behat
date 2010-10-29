@@ -78,7 +78,7 @@ abstract class ConsoleFormatter
       */
     public function printStatistics(Event $event)
     {
-        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
+        $statistics = $event->getSubject()->get('behat.statistics_collector');
 
         $this->write(
             $this->getTranslator()->transChoice(
@@ -134,7 +134,7 @@ abstract class ConsoleFormatter
       */
     public function printSnippets(Event $event)
     {
-        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
+        $statistics = $event->getSubject()->get('behat.statistics_collector');
 
         if (count($statistics->getDefinitionsSnippets())) {
             $this->write("\n" .
