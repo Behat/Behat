@@ -40,7 +40,7 @@ class Parser
         }
 
         $this->container    = $container;
-        $this->translator   = $container->getGherkin_TranslatorService();
+        $this->translator   = $container->get('gherkin.translator');
     }
 
     public function parseFile($file)
