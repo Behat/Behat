@@ -66,7 +66,7 @@ Feature: Pretty Formatter
             |  10   | 20     |
             |  23   | 32     |
       """
-    When I run "behat -f pretty"
+    When I run "behat -TCf pretty"
     Then it should fail with:
       """
       Feature: World consistency
@@ -74,26 +74,26 @@ Feature: Pretty Formatter
         As a features developer
         I want, that "World" flushes between scenarios
 
-        Background:               # features/World.feature:5
+        Background:               # features/World.feature:6
           Given I have entered 10 # features/steps/math.php:5
 
-        Scenario: Undefined       # features/World.feature:8
+        Scenario: Undefined       # features/World.feature:9
           Then I must have 10     # features/steps/math.php:9
           And Something new
           Then I must have 10     # features/steps/math.php:9
 
-        Scenario: Pending            # features/World.feature:13
+        Scenario: Pending            # features/World.feature:14
           Then I must have 10        # features/steps/math.php:9
           And Something not done yet # features/steps/math.php:17
             TODO: write pending definition
           Then I must have 10        # features/steps/math.php:9
 
-        Scenario: Failed             # features/World.feature:18
+        Scenario: Failed             # features/World.feature:19
           When I add 4               # features/steps/math.php:13
           Then I must have 13        # features/steps/math.php:9
             Failed asserting that <integer:14> is equal to <string:13>.
 
-        Scenario Outline: Passed & Failed # features/World.feature:22
+        Scenario Outline: Passed & Failed # features/World.feature:23
           Given I must have 10            # features/steps/math.php:9
           When I add <value>              # features/steps/math.php:13
           Then I must have <result>       # features/steps/math.php:9
@@ -114,5 +114,4 @@ Feature: Pretty Formatter
       $steps->And('/^Something new$/', function($world) {
           throw new \Everzet\Behat\Exception\Pending();
       });
-
       """

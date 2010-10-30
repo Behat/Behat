@@ -58,7 +58,7 @@ Feature: World consistency
             |  10   | 20     |
             |  23   | 33     |
       """
-    When I run "behat -f progress features/world.feature"
+    When I run "behat -TCf progress features/world.feature"
     Then it should pass with:
       """
       .................
@@ -112,7 +112,7 @@ Feature: World consistency
               |  10   | 20     |
               |  23   | 33     |
         """
-      When I run "behat -f progress features/world.feature"
+      When I run "behat -TCf progress features/world.feature"
       Then it should fail with:
         """
         .F............
@@ -121,7 +121,7 @@ Feature: World consistency
 
         01. Failed asserting that <string:10> is equal to <string:12>.
             In step `Then I must have 12'. # features/steps/world_steps.php:10
-            From scenario ***.             # features/world.feature:8
+            From scenario ***.             # features/world.feature:9
 
         5 scenarios (4 passed, 1 failed)
         14 steps (13 passed, 1 failed)

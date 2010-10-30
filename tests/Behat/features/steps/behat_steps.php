@@ -23,9 +23,7 @@ $steps->When('/^I run "([^"]*)"$/', function($world, $command) {
     exec($command, $world->output, $world->return);
 
     // Remove formatting & time from output
-    $world->output = preg_replace(array("/\n[0-9\.]+s/", "/\\033\[[^m]*m/", "/\\033\[0m/"), '',
-        trim(implode("\n", $world->output))
-    );
+    $world->output = trim(implode("\n", $world->output));
 });
 
 $steps->Then('/^display last command exit code$/', function($world) {

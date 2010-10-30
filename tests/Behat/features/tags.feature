@@ -105,40 +105,40 @@ Feature: Tags
       """
 
   Scenario: Single tag
-    When I run "behat -f pretty --tags @slow"
+    When I run "behat -TCf pretty --tags @slow"
     Then it should pass with:
       """
       @slow
       Feature: Feature #1
       
-        Background:                # features/feature1.feature:3
+        Background:                # features/feature1.feature:4
           Given Some slow step #11 # features/steps/steps.php:2
       
-        Scenario:                  # features/feature1.feature:6
+        Scenario:                  # features/feature1.feature:7
           Given Some slow step #12 # features/steps/steps.php:2
           And Some normal step #13 # features/steps/steps.php:3
       
         @fast
-        Scenario:                  # features/feature1.feature:11
+        Scenario:                  # features/feature1.feature:12
           Given Some fast step #14 # features/steps/steps.php:4
       
       Feature: Feature #2
       
-        Background:                  # features/feature2.feature:2
+        Background:                  # features/feature2.feature:3
           Given Some normal step #21 # features/steps/steps.php:3
       
         @slow @fast
-        Scenario:                    # features/feature2.feature:6
+        Scenario:                    # features/feature2.feature:7
           Given Some slow step #22   # features/steps/steps.php:2
           And Some fast step #23     # features/steps/steps.php:4
       
       Feature: Feature #3
       
-        Background:                  # features/feature3.feature:2
+        Background:                  # features/feature3.feature:3
           Given Some normal step #21 # features/steps/steps.php:3
       
         @slow
-        Scenario Outline:             # features/feature3.feature:6
+        Scenario Outline:             # features/feature3.feature:7
           Given Some slow step #<num> # features/steps/steps.php:2
       
           Examples:
@@ -151,40 +151,40 @@ Feature: Tags
       """
 
   Scenario: Or tags
-    When I run "behat -f pretty --tags @slow,@normal"
+    When I run "behat -TCf pretty --tags @slow,@normal"
     Then it should pass with:
       """
       @slow
       Feature: Feature #1
       
-        Background:                # features/feature1.feature:3
+        Background:                # features/feature1.feature:4
           Given Some slow step #11 # features/steps/steps.php:2
       
-        Scenario:                  # features/feature1.feature:6
+        Scenario:                  # features/feature1.feature:7
           Given Some slow step #12 # features/steps/steps.php:2
           And Some normal step #13 # features/steps/steps.php:3
       
         @fast
-        Scenario:                  # features/feature1.feature:11
+        Scenario:                  # features/feature1.feature:12
           Given Some fast step #14 # features/steps/steps.php:4
       
       Feature: Feature #2
       
-        Background:                  # features/feature2.feature:2
+        Background:                  # features/feature2.feature:3
           Given Some normal step #21 # features/steps/steps.php:3
       
         @slow @fast
-        Scenario:                    # features/feature2.feature:6
+        Scenario:                    # features/feature2.feature:7
           Given Some slow step #22   # features/steps/steps.php:2
           And Some fast step #23     # features/steps/steps.php:4
       
       Feature: Feature #3
       
-        Background:                  # features/feature3.feature:2
+        Background:                  # features/feature3.feature:3
           Given Some normal step #21 # features/steps/steps.php:3
       
         @slow
-        Scenario Outline:             # features/feature3.feature:6
+        Scenario Outline:             # features/feature3.feature:7
           Given Some slow step #<num> # features/steps/steps.php:2
       
           Examples:
@@ -193,11 +193,11 @@ Feature: Tags
             | 32  |
       
         @normal
-        Scenario:                     # features/feature3.feature:15
+        Scenario:                     # features/feature3.feature:16
           Given Some normal step #38  # features/steps/steps.php:3
       
         @normal @fast
-        Scenario Outline:               # features/feature3.feature:28
+        Scenario Outline:               # features/feature3.feature:29
           Given Some normal step #<num> # features/steps/steps.php:3
           And Some fast step #37        # features/steps/steps.php:4
       
@@ -209,7 +209,7 @@ Feature: Tags
       Feature: Feature #4
       
         @normal
-        Scenario:                       # features/feature4.feature:3
+        Scenario:                       # features/feature4.feature:4
           Given Some normal step #41    # features/steps/steps.php:3
           And Some fast step #42        # features/steps/steps.php:4
       
@@ -218,36 +218,36 @@ Feature: Tags
       """
 
   Scenario: And tags
-    When I run "behat -f pretty --tags '@slow,@normal&&@fast'"
+    When I run "behat -TCf pretty --tags '@slow,@normal&&@fast'"
     Then it should pass with:
       """
       @slow
       Feature: Feature #1
       
-        Background:                # features/feature1.feature:3
+        Background:                # features/feature1.feature:4
           Given Some slow step #11 # features/steps/steps.php:2
       
         @fast
-        Scenario:                  # features/feature1.feature:11
+        Scenario:                  # features/feature1.feature:12
           Given Some fast step #14 # features/steps/steps.php:4
       
       Feature: Feature #2
       
-        Background:                  # features/feature2.feature:2
+        Background:                  # features/feature2.feature:3
           Given Some normal step #21 # features/steps/steps.php:3
       
         @slow @fast
-        Scenario:                    # features/feature2.feature:6
+        Scenario:                    # features/feature2.feature:7
           Given Some slow step #22   # features/steps/steps.php:2
           And Some fast step #23     # features/steps/steps.php:4
       
       Feature: Feature #3
       
-        Background:                  # features/feature3.feature:2
+        Background:                  # features/feature3.feature:3
           Given Some normal step #21 # features/steps/steps.php:3
       
         @normal @fast
-        Scenario Outline:               # features/feature3.feature:28
+        Scenario Outline:               # features/feature3.feature:29
           Given Some normal step #<num> # features/steps/steps.php:3
           And Some fast step #37        # features/steps/steps.php:4
       
@@ -261,22 +261,22 @@ Feature: Tags
       """
 
   Scenario: Not tags
-    When I run "behat -f pretty --tags '~@slow&&~@fast'"
+    When I run "behat -TCf pretty --tags '~@slow&&~@fast'"
     Then it should pass with:
       """
       Feature: Feature #3
       
-        Background:                  # features/feature3.feature:2
+        Background:                  # features/feature3.feature:3
           Given Some normal step #21 # features/steps/steps.php:3
       
         @normal
-        Scenario:                    # features/feature3.feature:15
+        Scenario:                    # features/feature3.feature:16
           Given Some normal step #38 # features/steps/steps.php:3
       
       Feature: Feature #4
       
         @normal
-        Scenario:                    # features/feature4.feature:3
+        Scenario:                    # features/feature4.feature:4
           Given Some normal step #41 # features/steps/steps.php:3
           And Some fast step #42     # features/steps/steps.php:4
       
