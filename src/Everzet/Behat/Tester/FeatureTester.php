@@ -49,31 +49,34 @@ class FeatureTester implements NodeVisitorInterface
      */
     public function visit($feature)
     {
-        $this->dispatcher->notify(new Event($feature, 'feature.run.before'));
-
         $result = 0;
 
         // Filter scenarios
         $event = new Event($feature, 'feature.run.filter_scenarios');
         $this->dispatcher->filter($event, $feature->getScenarios());
+        $scenarios = $event->getReturnValue();
 
-        // Test filtered scenarios
-        foreach ($event->getReturnValue() as $scenario) {
-            if ($scenario instanceof OutlineNode) {
-                $tester = $this->container->get('behat.outline_tester');
-            } elseif ($scenario instanceof ScenarioNode) {    
-                $tester = $this->container->get('behat.scenario_tester');
-            } else {
-                throw new BehaviorException(
-                    'Unknown scenario type found: ' . get_class($scenario)
-                );
+        // If feature has scenario - run it
+        if (count($scenarios)) {
+            $this->dispatcher->notify(new Event($feature, 'feature.run.before'));
+
+            foreach ($scenarios as $scenario) {
+                if ($scenario instanceof OutlineNode) {
+                    $tester = $this->container->get('behat.outline_tester');
+                } elseif ($scenario instanceof ScenarioNode) {    
+                    $tester = $this->container->get('behat.scenario_tester');
+                } else {
+                    throw new BehaviorException(
+                        'Unknown scenario type found: ' . get_class($scenario)
+                    );
+                }
+                $result = max($result, $scenario->accept($tester));
             }
-            $result = max($result, $scenario->accept($tester));
-        }
 
-        $this->dispatcher->notify(new Event($feature, 'feature.run.after', array(
-            'result' => $result
-        )));
+            $this->dispatcher->notify(new Event($feature, 'feature.run.after', array(
+                'result' => $result
+            )));
+        }
 
         return $result;
     }

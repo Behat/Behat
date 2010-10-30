@@ -21,16 +21,16 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class TagFilter implements FilterInterface
 {
-    protected $tags;
+    protected $filterString;
 
     /**
-     * Set tags to filter. 
+     * Set filtering string.
      * 
      * @param   string  $tags   tags filter string
      */
-    public function setTags($tags)
+    public function setFilterString($filterString)
     {
-        $this->tags = $tags;
+        $this->filterString = $filterString;
     }
 
     /**
@@ -51,41 +51,38 @@ class TagFilter implements FilterInterface
      */
     public function filterScenarios(Event $event, array $scenarios)
     {
-        $feature            = $event->getSubject();
-        $filteredScenarios  = array();
-
-        if ($this->tags) {
-            $tags = explode(',', $this->tags);
+        if (!empty($this->filterString)) {
+            $feature            = $event->getSubject();
+            $filteredScenarios  = array();
 
             foreach ($scenarios as $scenario) {
-                $satisfies = false;
+                $satisfies = true;
 
-                foreach ($tags as $tag) {
-                    $tag = trim($tag);
+                foreach (explode('&&', $this->filterString) as $andTags) {
+                    $satisfiesComma = false;
 
-                    if ('~' === $tag[0]) {
-                        $tag = mb_substr($tag, 2);
+                    foreach (explode(',', $andTags) as $tag) {
+                        $tag = preg_replace('/\@/', '', trim($tag));
 
-                        if (!$scenario->hasTag($tag) && !$feature->hasTag($tag)) {
-                            $satisfies = true;
-                        }
-                    } else {
-                        $tag = mb_substr($tag, 1);
-
-                        if ($scenario->hasTag($tag) || $feature->hasTag($tag)) {
-                            $satisfies = true;
+                        if ('~' === $tag[0]) {
+                            $tag = mb_substr($tag, 1);
+                            $satisfiesComma = (!$scenario->hasTag($tag) && !$feature->hasTag($tag)) || $satisfiesComma;
+                        } else {
+                            $satisfiesComma = ($scenario->hasTag($tag) || $feature->hasTag($tag)) || $satisfiesComma;
                         }
                     }
+
+                    $satisfies = (false !== $satisfiesComma && $satisfies && $satisfiesComma) || false;
                 }
 
                 if ($satisfies) {
                     $filteredScenarios[] = $scenario;
                 }
             }
-        } else {
-            $filteredScenarios = $scenarios;
+
+            return $filteredScenarios;
         }
 
-        return $filteredScenarios;
+        return $scenarios;
     }
 }

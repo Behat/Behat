@@ -118,7 +118,7 @@
 
         <!-- Filter -->
         <service id="behat.tag_filter" class="%behat.tag_filter.class%" shared="true">
-            <call method="setTags">
+            <call method="setFilterString">
                 <argument>%behat.filter.tags%</argument>
             </call>
             <tag name="behat.events_listener" />
