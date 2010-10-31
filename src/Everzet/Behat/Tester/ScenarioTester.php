@@ -47,7 +47,9 @@ class ScenarioTester implements NodeVisitorInterface
      */
     public function visit($scenario)
     {
-        $this->dispatcher->notify(new Event($scenario, 'scenario.run.before'));
+        $this->dispatcher->notify(new Event($scenario, 'scenario.run.before', array(
+            'environment'   => $this->environment
+        )));
 
         $result = 0;
         $skip   = false;
@@ -80,8 +82,9 @@ class ScenarioTester implements NodeVisitorInterface
         }
 
         $this->dispatcher->notify(new Event($scenario, 'scenario.run.after', array(
-            'result'    => $result
-          , 'skipped'   => $skip
+            'result'        => $result
+          , 'skipped'       => $skip
+          , 'environment'   => $this->environment
         )));
 
         return $result;

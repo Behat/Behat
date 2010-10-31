@@ -27,6 +27,16 @@ class PHPLoader implements LoaderInterface
      */
     public function load($path)
     {
+        $this->hoos = array(
+            'suite.before'      => array()
+          , 'suite.after'       => array()
+          , 'feature.before'    => array()
+          , 'feature.after'     => array()
+          , 'scenario.before'   => array()
+          , 'scenario.after'    => array()
+          , 'step.before'       => array()
+          , 'step.after'        => array()
+        );
         $hooks = $this;
 
         require_once($path);
@@ -35,25 +45,88 @@ class PHPLoader implements LoaderInterface
     }
 
     /**
-     * Hook to `*.before` event.
-     *
-     * @param   string  $context    context name (f.e. features.load => features.load.before event)
-     * @param   string  $callback   callback
+     * Hook Before Suite Run.
+     * 
+     * @param   callback    $callback   hook callback
      */
-    public function before($context, $callback)
+    public function beforeSuite($callback)
     {
-        $this->hooks[] = array($context . '.before', $callback);
+        $this->hooks['suite.before'][] = $callback;
     }
 
     /**
-     * Hook to `*.after` event.
-     *
-     * @param   string  $context    context name (f.e. features.load => features.load.after event)
-     * @param   string  $callback   callback
+     * Hook After Suite Run.
+     * 
+     * @param   callback    $callback   hook callback
      */
-    public function after($context, $callback)
+    public function afterSuite($callback)
     {
-        $this->hooks[] = array($context . '.after', $callback);
+        $this->hooks['suite.after'][] = $callback;
+    }
+
+    /**
+     * Hook Before Feature Run. 
+     * 
+     * @param   string      $filter     filter string (tags or name)
+     * @param   callback    $callback   hook callback
+     */
+    public function beforeFeature($filter, $callback)
+    {
+        $this->hooks['feature.before'][] = array($filter, $callback);
+    }
+
+    /**
+     * Hook After Feature Run. 
+     * 
+     * @param   string      $filter     filter string (tags or name)
+     * @param   callback    $callback   hook callback
+     */
+    public function afterFeature($filter, $callback)
+    {
+        $this->hooks['feature.after'][] = array($filter, $callback);
+    }
+
+    /**
+     * Hook Before Scenario Run. 
+     * 
+     * @param   string      $filter     filter string (tags or name)
+     * @param   callback    $callback   hook callback
+     */
+    public function beforeScenario($filter, $callback)
+    {
+        $this->hooks['scenario.before'][] = array($filter, $callback);
+    }
+
+    /**
+     * Hook After Scenario Run. 
+     * 
+     * @param   string      $filter     filter string (tags or name)
+     * @param   callback    $callback   hook callback
+     */
+    public function afterScenario($filter, $callback)
+    {
+        $this->hooks['scenario.after'][] = array($filter, $callback);
+    }
+
+    /**
+     * Hook Before Step Run. 
+     * 
+     * @param   mixed       $filter     filter string (tags or name)
+     * @param   callback    $callback   hook callback
+     */
+    public function beforeStep($filter, $callback)
+    {
+        $this->hooks['step.before'][] = array($filter, $callback);
+    }
+
+    /**
+     * Hook After Step Run.
+     *
+     * @param   mixed       $filter     filter string (tags or name)
+     * @param   callback    $callback   hook callback
+     */
+    public function afterStep($filter, $callback)
+    {
+        $this->hooks['step.after'][] = array($filter, $callback);
     }
 }
-
