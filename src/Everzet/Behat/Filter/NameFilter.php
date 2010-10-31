@@ -6,6 +6,10 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
+use Everzet\Gherkin\Node\FeatureNode;
+use Everzet\Gherkin\Node\ScenarioNode;
+use Everzet\Gherkin\Node\StepNode;
+
 /*
  * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -52,21 +56,10 @@ class NameFilter implements FilterInterface
     public function filterScenarios(Event $event, array $scenarios)
     {
         if (!empty($this->filterString)) {
-            $feature            = $event->getSubject();
-            $filteredScenarios  = array();
+            $filteredScenarios = array();
 
             foreach ($scenarios as $scenario) {
-                $satisfies = false;
-
-                if ('/' === $this->filterString[0]) {
-                    $satisfies = preg_match($this->filterString, $scenario->getTitle())
-                        || preg_match($this->filterString, $feature->getTitle());
-                } else {
-                    $satisfies = false !== mb_strpos($scenario->getTitle(), $this->filterString)
-                        || false !== mb_strpos($feature->getTitle(), $this->filterString);
-                }
-
-                if ($satisfies) {
+                if ($this->isScenarioMatchFilter($scenario)) {
                     $filteredScenarios[] = $scenario;
                 }
             }
@@ -75,5 +68,63 @@ class NameFilter implements FilterInterface
         }
 
         return $scenarios;
+    }
+
+    /**
+     * Check If Feature Matches Specified Filter. 
+     * 
+     * @param   FeatureNode     $feature    feature
+     * @param   string          $filter     filter string (optional)
+     */
+    public function isFeatureMatchFilter(FeatureNode $feature, $filter = null)
+    {
+        $filter = null !== $filter ? $filter : $this->filterString;
+
+        if ('/' === $filter[0]) {
+            return preg_match($filter, $feature->getTitle());
+        }
+
+        return false !== mb_strpos($feature->getTitle(), $filter);
+    }
+
+    /**
+     * Check If Scenario Or Outline Matches Specified Filter. 
+     * 
+     * @param   ScenarioNode|OutlineNode    $scenario   scenario or outline
+     * @param   string                      $filter     filter string (optional)
+     */
+    public function isScenarioMatchFilter($scenario, $filter = null)
+    {
+        $filter     = null !== $filter ? $filter : $this->filterString;
+        $feature    = $scenario->getFeature();
+
+        if ('/' === $filter[0]) {
+            return preg_match($filter, $scenario->getTitle())
+                || preg_match($filter, $feature->getTitle());
+        }
+
+        return false !== mb_strpos($scenario->getTitle(), $filter)
+            || false !== mb_strpos($feature->getTitle(), $filter);
+    }
+
+    /**
+     * Check If Step Matches Specified Filter. 
+     * 
+     * @param   StepNode    $step       step
+     * @param   string      $filter     filter string (optional)
+     */
+    public function isStepMatchFilter(StepNode $step, $filter = null)
+    {
+        $filter     = null !== $filter ? $filter : $this->filterString;
+        $scenario   = $step->getParent();
+        $feature    = $scenario->getFeature();
+
+        if ('/' === $filter[0]) {
+            return preg_match($filter, $scenario->getTitle())
+                || preg_match($filter, $feature->getTitle());
+        }
+
+        return false !== mb_strpos($scenario->getTitle(), $filter)
+            || false !== mb_strpos($feature->getTitle(), $filter);
     }
 }
