@@ -29,14 +29,14 @@ use Symfony\Component\Finder\Finder;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TestCommand extends Command
+class BehatCommand extends Command
 {
     /**
      * @see     Symfony\Component\Console\Command\Command
      */
     protected function configure()
     {
-        $this->setName('test');
+        $this->setName('behat');
 
         // Set commands default parameters from container loaded ones
         $this->setDefinition(array(
@@ -46,27 +46,43 @@ class TestCommand extends Command
             ),
             new InputOption('--configuration',  '-c'
               , InputOption::PARAMETER_REQUIRED
-              , 'Specify configuration file (*.xml or *.yml)'
+              , 'Specify external configuration file to load (*.xml or *.yml).'
             ),
             new InputOption('--format',         '-f'
               , InputOption::PARAMETER_REQUIRED
-              , 'Change output formatter'
+              , 'How to format features (Default: pretty). Available formats is pretty & progress.'
+            ),
+            new InputOption('--name',           '-n' 
+              , InputOption::PARAMETER_REQUIRED
+              , 'Only execute the feature elements (features or scenarios) which match part of the given name.'
             ),
             new InputOption('--tags',           '-t'
               , InputOption::PARAMETER_REQUIRED
-              , 'Only executes features or scenarios with specified tags'
+              , 'Only execute the features or scenarios with tags matching expression.'
             ),
-            new InputOption('--no-colors',      null
-              , InputOption::PARAMETER_NONE
-              , 'No colors in output'
-            ),
-            new InputOption('--no-time',        null
-              , InputOption::PARAMETER_NONE
-              , 'No timer in output'
-            ),
-            new InputOption('--i18n',           null
+            new InputOption('--i18n',           '-i'
               , InputOption::PARAMETER_REQUIRED
-              , 'Print formatters output in particular language'
+              , 'Print formatters output in particular language.'
+            ),
+            new InputOption('--verbose',        '-v'
+              , InputOption::PARAMETER_NONE
+              , 'Increase verbosity of fail messages.'
+            ),
+            new InputOption('--no-colors',      '-C'
+              , InputOption::PARAMETER_NONE
+              , 'Do not use ANSI color in the output.'
+            ),
+            new InputOption('--no-time',        '-T'
+              , InputOption::PARAMETER_NONE
+              , 'Hide time statistics in output.'
+            ),
+            new InputOption('--help',           '-h'
+              , InputOption::PARAMETER_NONE
+              , 'Display this help message.'
+            ),
+            new InputOption('--version',        '-V'
+              , InputOption::PARAMETER_NONE
+              , 'Display this program version.'
             ),
         ));
     }
@@ -82,6 +98,9 @@ class TestCommand extends Command
         // Read command arguments & options into container
         if (null !== $input->getArgument('features')) {
             $container->setParameter('behat.features.path',     realpath($input->getArgument('features')));
+        }
+        if (null !== $input->getOption('name')) {
+            $container->setParameter('behat.filter.name',       $input->getOption('name'));
         }
         if (null !== $input->getOption('tags')) {
             $container->setParameter('behat.filter.tags',       $input->getOption('tags'));
