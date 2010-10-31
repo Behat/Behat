@@ -25,8 +25,10 @@
 
         <!-- Filter -->
         <parameter key="behat.filter.tags"></parameter>
+        <parameter key="behat.filter.name"></parameter>
 
         <parameter key="behat.tag_filter.class">Everzet\Behat\Filter\TagFilter</parameter>
+        <parameter key="behat.name_filter.class">Everzet\Behat\Filter\NameFilter</parameter>
 
         <!-- Hooks -->
         <parameter key="behat.hooks.file">%behat.features.path%/support/hooks.php</parameter>
@@ -117,6 +119,12 @@
         </service>
 
         <!-- Filter -->
+        <service id="behat.name_filter" class="%behat.name_filter.class%" shared="true">
+            <call method="setFilterString">
+                <argument>%behat.filter.name%</argument>
+            </call>
+            <tag name="behat.events_listener" />
+        </service>
         <service id="behat.tag_filter" class="%behat.tag_filter.class%" shared="true">
             <call method="setFilterString">
                 <argument>%behat.filter.tags%</argument>
