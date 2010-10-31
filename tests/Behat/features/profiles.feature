@@ -71,7 +71,7 @@ Feature: Profiles
       """
 
   Scenario:
-    Given I run "behat features/math.feature"
+    Given I run "behat -TC features/math.feature"
     Then it should pass with:
       """
       ...............
@@ -81,7 +81,7 @@ Feature: Profiles
       """
 
   Scenario:
-    Given I run "behat -c progress.yml"
+    Given I run "behat -TCc progress.yml"
     Then it should pass with:
       """
       ...............
@@ -91,15 +91,15 @@ Feature: Profiles
       """
 
   Scenario:
-    Given I run "behat -c pretty.yml"
+    Given I run "behat -TCc pretty.yml"
     Then it should pass with:
       """
       Feature: Math
       
-        Background:                     # features/math.feature:1
+        Background:                     # features/math.feature:2
           Given I have basic calculator # features/steps/math.php:5
       
-        Scenario Outline:                    # features/math.feature:4
+        Scenario Outline:                    # features/math.feature:5
           Given I have entered <number1>     # features/steps/math.php:8
           And I have entered <number2>       # features/steps/math.php:8
           When I add                         # features/steps/math.php:12

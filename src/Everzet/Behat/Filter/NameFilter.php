@@ -15,11 +15,11 @@ use Symfony\Component\EventDispatcher\Event;
  */
 
 /**
- * Filters scenarios by feature/scenario tag.
+ * Filters scenarios by feature/scenario name.
  *
  * @author     Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TagFilter implements FilterInterface
+class NameFilter implements FilterInterface
 {
     protected $filterString;
 
@@ -30,7 +30,7 @@ class TagFilter implements FilterInterface
      */
     public function setFilterString($filterString)
     {
-        $this->filterString = $filterString;
+        $this->filterString = trim($filterString);
     }
 
     /**
@@ -42,7 +42,7 @@ class TagFilter implements FilterInterface
     }
 
     /**
-     * Filter scenarios by tags.
+     * Filter scenarios by name.
      *
      * @param   Event   $event      filter event
      * @param   array   $scenarios  scenarios
@@ -56,23 +56,14 @@ class TagFilter implements FilterInterface
             $filteredScenarios  = array();
 
             foreach ($scenarios as $scenario) {
-                $satisfies = true;
+                $satisfies = false;
 
-                foreach (explode('&&', $this->filterString) as $andTags) {
-                    $satisfiesComma = false;
-
-                    foreach (explode(',', $andTags) as $tag) {
-                        $tag = preg_replace('/\@/', '', trim($tag));
-
-                        if ('~' === $tag[0]) {
-                            $tag = mb_substr($tag, 1);
-                            $satisfiesComma = (!$scenario->hasTag($tag) && !$feature->hasTag($tag)) || $satisfiesComma;
-                        } else {
-                            $satisfiesComma = ($scenario->hasTag($tag) || $feature->hasTag($tag)) || $satisfiesComma;
-                        }
-                    }
-
-                    $satisfies = (false !== $satisfiesComma && $satisfies && $satisfiesComma) || false;
+                if ('/' === $this->filterString[0]) {
+                    $satisfies = preg_match($this->filterString, $scenario->getTitle())
+                        || preg_match($this->filterString, $feature->getTitle());
+                } else {
+                    $satisfies = false !== mb_strpos($scenario->getTitle(), $this->filterString)
+                        || false !== mb_strpos($feature->getTitle(), $this->filterString);
                 }
 
                 if ($satisfies) {

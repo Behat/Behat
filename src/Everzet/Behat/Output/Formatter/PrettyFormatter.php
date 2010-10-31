@@ -92,6 +92,10 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
     {
         $feature = $event->getSubject();
 
+        // Flush variables
+        $this->backgroundPrinted    = false;
+        $this->outlineStepsPrinted  = false;
+
         // Print tags if had ones
         if ($feature->hasTags()) {
             $this->write($this->getTagsString($feature), 'tag');
@@ -135,7 +139,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
 
         // Print tags if had ones
         if ($outline->hasTags()) {
-            $this->write($this->getTagsString($outline), 'tag');
+            $this->write('  ' . $this->getTagsString($outline), 'tag');
         }
 
         // Print outline description
@@ -224,6 +228,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
       */
     public function printOutlineFooter(Event $event)
     {
+        $this->outlineStepsPrinted = false;
         $this->write();
     }
 
@@ -241,7 +246,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
 
         // Print tags if had ones
         if ($scenario->hasTags()) {
-            $this->write($this->getTagsString($scenario), 'tag');
+            $this->write('  ' . $this->getTagsString($scenario), 'tag');
         }
 
         // Print scenario description

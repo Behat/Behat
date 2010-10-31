@@ -72,7 +72,7 @@ Feature: Scenario Outlines
             | 5       | 3       | 8      |
             | 5       | 5       | 10     |
       """
-    When I run "behat -f progress features/math.feature"
+    When I run "behat -TCf progress features/math.feature"
     Then it should pass with:
       """
       ...............
@@ -116,7 +116,7 @@ Feature: Scenario Outlines
             | 10      | 2       | 5      |
             | 50      | 5       | 10     |
       """
-    When I run "behat -f progress features/math.feature"
+    When I run "behat -TCf progress features/math.feature"
     Then it should pass with:
       """
       .........................
@@ -160,7 +160,7 @@ Feature: Scenario Outlines
             | 10      | 2       | 5      |
             | 50      | 10      | 2      |
       """
-    When I run "behat -f progress features/math.feature"
+    When I run "behat -TCf progress features/math.feature"
     Then it should fail with:
       """
       .........F....F.........F
@@ -169,15 +169,15 @@ Feature: Scenario Outlines
 
       01. Failed asserting that <integer:20> is equal to <string:15>.
           In step `Then The result should be 15'. # features/steps/math.php:38
-          From scenario ***.                      # features/math.feature:4
+          From scenario ***.                      # features/math.feature:5
 
       02. Failed asserting that <integer:6> is equal to <string:7>.
           In step `Then The result should be 7'.  # features/steps/math.php:38
-          From scenario ***.                      # features/math.feature:15
+          From scenario ***.                      # features/math.feature:16
 
       03. Failed asserting that <integer:5> is equal to <string:2>.
           In step `Then The result should be 2'.  # features/steps/math.php:38
-          From scenario ***.                      # features/math.feature:21
+          From scenario ***.                      # features/math.feature:22
 
       5 scenarios (2 passed, 3 failed)
       25 steps (22 passed, 3 failed)

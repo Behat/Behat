@@ -46,7 +46,7 @@ Feature: hooks
           Given I have entered 12
           Then I must have 12
       """
-    When I run "behat -f progress"
+    When I run "behat -TCf progress"
     Then it should pass with:
       """
       BEFORE suite.run: Symfony\Component\DependencyInjection\ContainerBuilder

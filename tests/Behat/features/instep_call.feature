@@ -50,7 +50,7 @@ Feature: Call step in other step
           When I press +
           Then I should see "44" on the screen
       """
-    When I run "behat -f progress features/calc_en.feature"
+    When I run "behat -TCf progress features/calc_en.feature"
     Then it should pass with:
       """
       .....
@@ -68,7 +68,7 @@ Feature: Call step in other step
           When I press +
           Then I should see "8" on the screen
       """
-    When I run "behat -f progress features/calc_en.feature"
+    When I run "behat -TCf progress features/calc_en.feature"
     Then it should fail with:
       """
       ..F
@@ -77,7 +77,7 @@ Feature: Call step in other step
       
       01. Failed asserting that <integer:7> is equal to <string:8>.
           In step `Then I should see "8" on the screen'. # features/steps/calc_steps_en.php:11
-          From scenario ***.                             # features/calc_en.feature:1
+          From scenario ***.                             # features/calc_en.feature:2
       
       1 scenario (1 failed)
       3 steps (2 passed, 1 failed)
@@ -94,7 +94,7 @@ Feature: Call step in other step
           Если Я нажму +
           То Я должен увидеть на экране "39"
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat -TCf progress features/calc_ru.feature"
     Then it should pass with:
       """
       ....
@@ -113,7 +113,7 @@ Feature: Call step in other step
           Если Я нажму +
           То Я должен увидеть на экране "8"
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat -TCf progress features/calc_ru.feature"
     Then it should fail with:
       """
       ..F
@@ -122,7 +122,7 @@ Feature: Call step in other step
       
       01. Failed asserting that <integer:7> is equal to <string:8>.
           In step `То Я должен увидеть на экране "8"'. # features/steps/calc_steps_ru.php:10
-          From scenario ***.                           # features/calc_ru.feature:2
+          From scenario ***.                           # features/calc_ru.feature:3
       
       1 scenario (1 failed)
       3 steps (2 passed, 1 failed)

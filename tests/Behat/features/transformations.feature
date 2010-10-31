@@ -70,7 +70,7 @@ Feature: Step Arguments Transformations
           Then Username must be "antono"
           And Age must be 20
       """
-    When I run "behat -f progress"
+    When I run "behat -TCf progress"
     Then it should pass with:
       """
       ......
@@ -97,7 +97,7 @@ Feature: Step Arguments Transformations
           Then Username must be "vasiljev"
           And Age must be 30
       """
-    When I run "behat -f progress"
+    When I run "behat -TCf progress"
     Then it should pass with:
       """
       ......

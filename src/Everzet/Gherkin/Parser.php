@@ -86,7 +86,7 @@ class Parser
             // background?
             if (preg_match($this->lexer->getBackgroundRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('gherkin.background_node.class');
-                $background = new $class($this->locale, $this->file, $this->currentLineNb);
+                $background = new $class($this->locale, $this->file, $this->getCurrentLineNum());
                 $background->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -98,7 +98,7 @@ class Parser
             // scenario?
             if (preg_match($this->lexer->getScenarioRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('gherkin.scenario_node.class');
-                $scenario = new $class($this->locale, $this->file, $this->currentLineNb);
+                $scenario = new $class($this->locale, $this->file, $this->getCurrentLineNum());
                 $scenario->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -111,7 +111,7 @@ class Parser
             // scenario outline?
             if (preg_match($this->lexer->getScenarioOutlineRegex(), $this->currentLine, $values)) {
                 $class = $this->container->getParameter('gherkin.outline_node.class');
-                $outline = new $class($this->locale, $this->file, $this->currentLineNb);
+                $outline = new $class($this->locale, $this->file, $this->getCurrentLineNum());
                 $outline->setTitle($this->getNextTitle(
                     isset($values['title']) ? $values['title'] : ''
                 ));
@@ -202,7 +202,7 @@ class Parser
             }
 
             $class = $this->container->getParameter('gherkin.step_node.class');
-            $step = new $class($values['type'], $values['step'], $this->currentLineNb);
+            $step = new $class($values['type'], $values['step'], $this->currentLine);
             if (null !== ($pystring = $this->getNextPyString())) {
                 $step->addArgument($pystring);
             }
@@ -282,6 +282,11 @@ class Parser
         $this->moveToPreviousLine();
 
         return $examples;
+    }
+
+    protected function getCurrentLineNum()
+    {
+        return $this->currentLineNb + 1;
     }
 
     protected function getPreviousLine()

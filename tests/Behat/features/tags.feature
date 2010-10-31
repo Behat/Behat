@@ -14,142 +14,272 @@ Feature: Tags
     And a file named "features/steps/steps.php" with:
       """
       <?php
-      $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
-          $world->number = $arg1;
-      });
-      $steps->Then('/^I must have (\d+)$/', function($world, $arg1) {
-          assertEquals($world->number, $arg1);
-      });
+      $steps->Given('/^Some slow step #(\d+)$/', function($world, $num) {});
+      $steps->Given('/^Some normal step #(\d+)$/', function($world, $num) {});
+      $steps->Given('/^Some fast step #(\d+)$/', function($world, $num) {});
       """
-
-  Scenario: Feature tags
-    Given a file named "features/feature1.feature" with:
+    And a file named "features/feature1.feature" with:
       """
-      @first-tag @wip @big
-      Feature: First
+      @slow
+      Feature: Feature #1
 
         Background:
-          Given I have entered 10
+          Given Some slow step #11
 
         Scenario:
-          Then I must have 10
+          Given Some slow step #12
+          And Some normal step #13
 
+        @fast
         Scenario:
-          When I have entered 30
-          Then I must have 30
+          Given Some fast step #14
       """
-    Given a file named "features/feature2.feature" with:
+    And a file named "features/feature2.feature" with:
       """
-      @second-tag @big
-      Feature: Second
+      Feature: Feature #2
 
         Background:
-          Given I have entered 10
+          Given Some normal step #21
 
+        @slow @fast
         Scenario:
-          Then I must have 10
+          Given Some slow step #22
+          And Some fast step #23
 
+        @fast
         Scenario:
-          When I have entered 30
-          Then I must have 30
-          Then I must have 30
+          Given Some fast step #24
+          And Some fast step #25
       """
-    Given a file named "features/feature3.feature" with:
+    And a file named "features/feature3.feature" with:
       """
-      @third-tag @wip
-      Feature: Second
+      Feature: Feature #3
 
+        Background:
+          Given Some normal step #21
+
+        @slow
+        Scenario Outline:
+          Given Some slow step #<num>
+
+          Examples:
+            | num |
+            | 31  |
+            | 32  |
+
+        @normal
         Scenario:
-          Given I have entered 15
-          When I have entered 15
+          Given Some normal step #38
+
+        @fast
+        Scenario Outline:
+          Given Some fast step #<num>
+
+          Examples:
+            | num |
+            | 33  |
+            | 34  |
+
+        @normal @fast
+        Scenario Outline:
+          Given Some normal step #<num>
+          And Some fast step #37
+
+          Examples:
+            | num |
+            | 35  |
+            | 36  |
       """
-    When I run "behat -f progress --tags @wip"
+    And a file named "features/feature4.feature" with:
+      """
+      Feature: Feature #4
+
+        @normal
+        Scenario:
+          Given Some normal step #41
+          And Some fast step #42
+
+        @fast
+        Scenario:
+          Given Some slow step #43
+      """
+
+  Scenario: Single tag
+    When I run "behat -TCf pretty --tags @slow"
     Then it should pass with:
       """
-      .......
-
-      3 scenarios (3 passed)
-      7 steps (7 passed)
-      """
-    When I run "behat -f progress --tags @wip,@second-tag"
-    Then it should pass with:
-      """
-      .............
-
+      @slow
+      Feature: Feature #1
+      
+        Background:                # features/feature1.feature:4
+          Given Some slow step #11 # features/steps/steps.php:2
+      
+        Scenario:                  # features/feature1.feature:7
+          Given Some slow step #12 # features/steps/steps.php:2
+          And Some normal step #13 # features/steps/steps.php:3
+      
+        @fast
+        Scenario:                  # features/feature1.feature:12
+          Given Some fast step #14 # features/steps/steps.php:4
+      
+      Feature: Feature #2
+      
+        Background:                  # features/feature2.feature:3
+          Given Some normal step #21 # features/steps/steps.php:3
+      
+        @slow @fast
+        Scenario:                    # features/feature2.feature:7
+          Given Some slow step #22   # features/steps/steps.php:2
+          And Some fast step #23     # features/steps/steps.php:4
+      
+      Feature: Feature #3
+      
+        Background:                  # features/feature3.feature:3
+          Given Some normal step #21 # features/steps/steps.php:3
+      
+        @slow
+        Scenario Outline:             # features/feature3.feature:7
+          Given Some slow step #<num> # features/steps/steps.php:2
+      
+          Examples:
+            | num |
+            | 31  |
+            | 32  |
+      
       5 scenarios (5 passed)
-      13 steps (13 passed)
+      12 steps (12 passed)
       """
-    When I run "behat -f progress --tags ~@big"
+
+  Scenario: Or tags
+    When I run "behat -TCf pretty --tags @slow,@normal"
     Then it should pass with:
       """
-      ..
-
-      1 scenario (1 passed)
-      2 steps (2 passed)
+      @slow
+      Feature: Feature #1
+      
+        Background:                # features/feature1.feature:4
+          Given Some slow step #11 # features/steps/steps.php:2
+      
+        Scenario:                  # features/feature1.feature:7
+          Given Some slow step #12 # features/steps/steps.php:2
+          And Some normal step #13 # features/steps/steps.php:3
+      
+        @fast
+        Scenario:                  # features/feature1.feature:12
+          Given Some fast step #14 # features/steps/steps.php:4
+      
+      Feature: Feature #2
+      
+        Background:                  # features/feature2.feature:3
+          Given Some normal step #21 # features/steps/steps.php:3
+      
+        @slow @fast
+        Scenario:                    # features/feature2.feature:7
+          Given Some slow step #22   # features/steps/steps.php:2
+          And Some fast step #23     # features/steps/steps.php:4
+      
+      Feature: Feature #3
+      
+        Background:                  # features/feature3.feature:3
+          Given Some normal step #21 # features/steps/steps.php:3
+      
+        @slow
+        Scenario Outline:             # features/feature3.feature:7
+          Given Some slow step #<num> # features/steps/steps.php:2
+      
+          Examples:
+            | num |
+            | 31  |
+            | 32  |
+      
+        @normal
+        Scenario:                     # features/feature3.feature:16
+          Given Some normal step #38  # features/steps/steps.php:3
+      
+        @normal @fast
+        Scenario Outline:               # features/feature3.feature:29
+          Given Some normal step #<num> # features/steps/steps.php:3
+          And Some fast step #37        # features/steps/steps.php:4
+      
+          Examples:
+            | num |
+            | 35  |
+            | 36  |
+      
+      Feature: Feature #4
+      
+        @normal
+        Scenario:                       # features/feature4.feature:4
+          Given Some normal step #41    # features/steps/steps.php:3
+          And Some fast step #42        # features/steps/steps.php:4
+      
+      9 scenarios (9 passed)
+      22 steps (22 passed)
       """
 
-  Scenario: Scenario tags
-    Given a file named "features/feature1.feature" with:
-      """
-      Feature: First
-
-        Background:
-          Given I have entered 10
-
-        @wip
-        Scenario:
-          Then I must have 10
-
-        Scenario:
-          When I have entered 30
-          Then I must have 30
-      """
-    Given a file named "features/feature2.feature" with:
-      """
-      Feature: Second
-
-        Background:
-          Given I have entered 10
-
-        Scenario:
-          Then I must have 10
-
-        @big
-        Scenario:
-          When I have entered 30
-          Then I must have 30
-          Then I must have 30
-      """
-    Given a file named "features/feature3.feature" with:
-      """
-      Feature: Second
-
-        @wip
-        Scenario:
-          Given I have entered 15
-          When I have entered 15
-      """
-    When I run "behat -f progress --tags @wip"
+  Scenario: And tags
+    When I run "behat -TCf pretty --tags '@slow,@normal&&@fast'"
     Then it should pass with:
       """
-      ....
+      @slow
+      Feature: Feature #1
+      
+        Background:                # features/feature1.feature:4
+          Given Some slow step #11 # features/steps/steps.php:2
+      
+        @fast
+        Scenario:                  # features/feature1.feature:12
+          Given Some fast step #14 # features/steps/steps.php:4
+      
+      Feature: Feature #2
+      
+        Background:                  # features/feature2.feature:3
+          Given Some normal step #21 # features/steps/steps.php:3
+      
+        @slow @fast
+        Scenario:                    # features/feature2.feature:7
+          Given Some slow step #22   # features/steps/steps.php:2
+          And Some fast step #23     # features/steps/steps.php:4
+      
+      Feature: Feature #3
+      
+        Background:                  # features/feature3.feature:3
+          Given Some normal step #21 # features/steps/steps.php:3
+      
+        @normal @fast
+        Scenario Outline:               # features/feature3.feature:29
+          Given Some normal step #<num> # features/steps/steps.php:3
+          And Some fast step #37        # features/steps/steps.php:4
+      
+          Examples:
+            | num |
+            | 35  |
+            | 36  |
+      
+      4 scenarios (4 passed)
+      11 steps (11 passed)
+      """
 
+  Scenario: Not tags
+    When I run "behat -TCf pretty --tags '~@slow&&~@fast'"
+    Then it should pass with:
+      """
+      Feature: Feature #3
+      
+        Background:                  # features/feature3.feature:3
+          Given Some normal step #21 # features/steps/steps.php:3
+      
+        @normal
+        Scenario:                    # features/feature3.feature:16
+          Given Some normal step #38 # features/steps/steps.php:3
+      
+      Feature: Feature #4
+      
+        @normal
+        Scenario:                    # features/feature4.feature:4
+          Given Some normal step #41 # features/steps/steps.php:3
+          And Some fast step #42     # features/steps/steps.php:4
+      
       2 scenarios (2 passed)
       4 steps (4 passed)
-      """
-    When I run "behat -f progress --tags @big"
-    Then it should pass with:
-      """
-      ....
-
-      1 scenario (1 passed)
-      4 steps (4 passed)
-      """
-    When I run "behat -f progress --tags ~@wip"
-    Then it should pass with:
-      """
-      .........
-
-      3 scenarios (3 passed)
-      9 steps (9 passed)
       """
