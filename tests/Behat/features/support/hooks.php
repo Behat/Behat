@@ -1,12 +1,12 @@
 <?php
 
-$hooks->before('suite.run', function($event) {
+$hooks->beforeSuite(function($event) {
     if (is_dir($dir = sys_get_temp_dir() . '/behat/')) {
         system('rm -rf ' . $dir);
     }
 });
 
-$hooks->after('suite.run', function($event) {
+$hooks->afterSuite(function($event) {
     if (is_dir($dir = sys_get_temp_dir() . '/behat/')) {
         system('rm -rf ' . $dir);
     }

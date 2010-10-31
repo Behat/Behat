@@ -96,6 +96,12 @@
 
         <!-- Hooks -->
         <service id="behat.hooks_container" class="%behat.hooks_container.class%" shared="true">
+            <call method="setTagsFilter">
+                <argument type="service" id="behat.tag_filter" />
+            </call>
+            <call method="setNameFilter">
+                <argument type="service" id="behat.name_filter" />
+            </call>
             <call method="addLoader">
                 <argument>php</argument>
                 <argument type="service">

@@ -51,13 +51,14 @@ class OutlineTester implements NodeVisitorInterface
 
         // Run subscenarios of outline based on examples
         foreach ($outline->getExamples()->getTable()->getHash() as $iteration => $tokens) {
-            $this->dispatcher->notify(new Event($outline, 'outline.sub.run.before', array(
-                'iteration' => $iteration
-            )));
-
             $environment    = $this->container->get('behat.environment');
             $itResult       = 0;
             $skip           = false;
+
+            $this->dispatcher->notify(new Event($outline, 'outline.sub.run.before', array(
+                'iteration'     => $iteration
+              , 'environment'   => $environment
+            )));
 
             // Visit & test background if has one
             if ($outline->getFeature()->hasBackground()) {
@@ -88,9 +89,10 @@ class OutlineTester implements NodeVisitorInterface
             }
 
             $this->dispatcher->notify(new Event($outline, 'outline.sub.run.after', array(
-                'iteration' => $iteration
-              , 'result'    => $itResult
-              , 'skipped'   => $skip
+                'iteration'     => $iteration
+              , 'result'        => $itResult
+              , 'skipped'       => $skip
+              , 'environment'   => $environment
             )));
 
             $result = max($result, $itResult);
