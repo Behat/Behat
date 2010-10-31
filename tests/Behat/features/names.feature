@@ -91,7 +91,6 @@ Feature: Names
 
   Scenario: RegEx
     When I run "behat -TCf pretty --name '/nd Scenario$/'"
-    Then display last command output
     Then it should pass with:
       """
       Feature: First Feature
