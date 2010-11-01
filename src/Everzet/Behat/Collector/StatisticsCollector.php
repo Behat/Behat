@@ -24,6 +24,7 @@ class StatisticsCollector implements CollectorInterface
 {
     protected $paused               = false;
 
+    protected $isPassed             = true;
     protected $statuses             = array(
         StepTester::PASSED      => 'passed'
       , StepTester::SKIPPED     => 'skipped'
@@ -55,6 +56,16 @@ class StatisticsCollector implements CollectorInterface
             array_values($this->statuses)
           , array_fill(0, count($this->statuses), 0)
         );
+    }
+
+    /**
+     * Return true if suite passed. 
+     * 
+     * @return  boolean
+     */
+    public function isPassed()
+    {
+        return $this->isPassed;
     }
 
     /**
@@ -163,6 +174,9 @@ class StatisticsCollector implements CollectorInterface
         if (!$this->paused) {
             ++$this->scenariosCount;
             ++$this->scenariosStatuses[$this->statuses[$event->getParameter('result')]];
+            if (0 !== $event->getParameter('result')) {
+                $this->isPassed = false;
+            }
         }
     }
 
@@ -176,6 +190,9 @@ class StatisticsCollector implements CollectorInterface
         if (!$this->paused) {
             ++$this->stepsCount;
             ++$this->stepsStatuses[$this->statuses[$event->getParameter('result')]];
+            if (0 !== $event->getParameter('result')) {
+                $this->isPassed = false;
+            }
 
             if (StepTester::UNDEFINED === $event->getParameter('result')) {
                 foreach ($event->getParameter('snippet') as $key => $snippet) {
