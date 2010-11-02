@@ -25,4 +25,11 @@ interface FormatterInterface
      * @param   EventDispatcher $dispatcher event dispatcher
      */
     public function registerListeners(EventDispatcher $dispatcher);
+
+    /**
+     * Set support directory path (used for templates). 
+     * 
+     * @param   string  $path   path to support directory
+     */
+    public function setSupportPath($path);
 }

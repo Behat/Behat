@@ -25,6 +25,7 @@ use Everzet\Behat\Tester\StepTester;
 abstract class ConsoleFormatter
     implements TranslatableFormatterInterface, ColorableFormatterInterface, VerbosableFormatterInterface, TimableFormatterInterface
 {
+    protected $supportPath;
     protected $translator;
     protected $colors   = true;
     protected $timer    = true;
@@ -46,6 +47,14 @@ abstract class ConsoleFormatter
           , StepTester::PENDING + 10    => 'pending_param'
           , StepTester::FAILED  + 10    => 'failed_param'
         );
+    }
+
+    /**
+     * @see     FormatterInterface 
+     */
+    public function setSupportPath($path)
+    {
+        $this->supportPath = $path;
     }
 
     /**

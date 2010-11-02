@@ -36,6 +36,7 @@ use Everzet\Behat\Tester\StepTester;
  */
 class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterface, ContainerAwareFormatterInterface
 {
+    protected $supportPath;
     protected $translator;
     protected $container;
 
@@ -55,6 +56,14 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
           , StepTester::UNDEFINED       => 'undefined'
           , StepTester::FAILED          => 'failed'
         );
+    }
+
+    /**
+     * @see     FormatterInterface 
+     */
+    public function setSupportPath($path)
+    {
+        $this->supportPath = $path;
     }
 
     /**
@@ -556,6 +565,10 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
      */
     protected function getHTMLTemplate()
     {
+        if (is_file($tpl = $this->supportPath . '/templates/html.tpl')) {
+            return file_get_contents($tpl);
+        }
+
         return <<<HTMLTPL
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns ="http://www.w3.org/1999/xhtml">

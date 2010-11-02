@@ -37,6 +37,7 @@ class OutputManager
     protected $timer        = true;
     protected $verbose      = false;
     protected $locale       = 'en';
+    protected $supportPath  = null;
     protected $outputPath   = null;
 
     protected $isFormatterRegistered    = false;
@@ -51,6 +52,16 @@ class OutputManager
     public function __construct(Container $container)
     {
         $this->container = $container;
+    }
+
+    /**
+     * Set support directory path (used for templates). 
+     * 
+     * @param   string  $path   path to support directory
+     */
+    public function setSupportPath($path)
+    {
+        $this->supportPath = $path;
     }
 
     /**
@@ -153,6 +164,7 @@ class OutputManager
 
         $formatter = $this->formatters[$this->formatter];
         $formatter->registerListeners($dispatcher);
+        $formatter->setSupportPath($this->supportPath);
 
         if ($formatter instanceof TimableFormatterInterface) {
             $formatter->showTimer($this->timer);

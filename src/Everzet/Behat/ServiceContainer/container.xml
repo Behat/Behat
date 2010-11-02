@@ -7,6 +7,7 @@
         <!-- Features -->
         <parameter key="behat.features.path">features</parameter>
         <parameter key="behat.features.files">%behat.features.path%</parameter>
+        <parameter key="behat.support.path">%behat.features.path%/support</parameter>
 
         <parameter key="behat.features_container.class">Everzet\Behat\Features\FeaturesContainer</parameter>
         <parameter key="behat.features_loader.gherkin.class">Everzet\Behat\Features\Loader\GherkinLoader</parameter>
@@ -31,7 +32,7 @@
         <parameter key="behat.name_filter.class">Everzet\Behat\Filter\NameFilter</parameter>
 
         <!-- Hooks -->
-        <parameter key="behat.hooks.file">%behat.features.path%/support/hooks.php</parameter>
+        <parameter key="behat.hooks.file">%behat.support.path%/hooks.php</parameter>
 
         <parameter key="behat.hooks_container.class">Everzet\Behat\Hooks\HooksContainer</parameter>
         <parameter key="behat.hooks_loader.php.class">Everzet\Behat\Hooks\Loader\PHPLoader</parameter>
@@ -55,7 +56,7 @@
         <parameter key="behat.formatter.html.class">Everzet\Behat\Output\Formatter\HTMLFormatter</parameter>
 
         <!-- Tester -->
-        <parameter key="behat.environment.file">%behat.features.path%/support/env.php</parameter>
+        <parameter key="behat.environment.file">%behat.support.path%/env.php</parameter>
 
         <parameter key="behat.environment.class">Everzet\Behat\Environment\WorldEnvironment</parameter>
 
@@ -144,6 +145,9 @@
         <!-- Output Manager -->
         <service id="behat.output_manager" class="%behat.output_manager.class%" shared="true">
             <argument type="service" id="service_container" />
+            <call method="setSupportPath">
+                <argument>%behat.support.path%</argument>
+            </call>
             <call method="setOutputPath">
                 <argument>%behat.output.path%</argument>
             </call>
