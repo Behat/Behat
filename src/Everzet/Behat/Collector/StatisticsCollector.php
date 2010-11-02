@@ -23,6 +23,10 @@ use Everzet\Behat\Tester\StepTester;
 class StatisticsCollector implements CollectorInterface
 {
     protected $paused               = false;
+    protected $suiteStartTime;
+    protected $suiteFinishTime;
+    protected $scenarioStartTime;
+    protected $scenarioFinishTime;
 
     protected $isPassed             = true;
     protected $statuses             = array(
@@ -56,6 +60,42 @@ class StatisticsCollector implements CollectorInterface
             array_values($this->statuses)
           , array_fill(0, count($this->statuses), 0)
         );
+    }
+
+    /**
+     * Start suite timer. 
+     */
+    public function startTimer()
+    {
+        $this->suiteStartTime = microtime(true);
+    }
+
+    /**
+     * Stop suite timer. 
+     */
+    public function finishTimer()
+    {
+        $this->suiteFinishTime = microtime(true);
+    }
+
+    /**
+     * Return suite total execution time. 
+     * 
+     * @return  integer miliseconds
+     */
+    public function getTotalTime()
+    {
+        return $this->suiteFinishTime - $this->suiteStartTime;
+    }
+
+    /**
+     * Return last scenario execution time. 
+     * 
+     * @return  integer miliseconds
+     */
+    public function getLastScenarioTime()
+    {
+        return $this->scenarioFinishTime - $this->scenarioStartTime;
     }
 
     /**
@@ -143,9 +183,11 @@ class StatisticsCollector implements CollectorInterface
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
-        $dispatcher->connect('scenario.run.after',      array($this, 'collectScenarioStats'),   5);
-        $dispatcher->connect('outline.sub.run.after',   array($this, 'collectScenarioStats'),   5);
-        $dispatcher->connect('step.run.after',          array($this, 'collectStepStats'),       5);
+        $dispatcher->connect('scenario.run.before',     array($this, 'startScenarioTimer'),     10);
+        $dispatcher->connect('outline.sub.run.before',  array($this, 'startScenarioTimer'),     10);
+        $dispatcher->connect('scenario.run.after',      array($this, 'collectScenarioStats'),   10);
+        $dispatcher->connect('outline.sub.run.after',   array($this, 'collectScenarioStats'),   10);
+        $dispatcher->connect('step.run.after',          array($this, 'collectStepStats'),       10);
     }
 
     /**
@@ -165,6 +207,16 @@ class StatisticsCollector implements CollectorInterface
     }
 
     /**
+     * Listens to `scenario.run.before` & `outline.sub.run.before` events & start scenario timers. 
+     * 
+     * @param   Event   $event  event
+     */
+    public function startScenarioTimer(Event $event)
+    {
+        $this->scenarioStartTime = microtime(true);
+    }
+
+    /**
      * Listens to `scenario.run.after` & `outline.sub.run.after` events & collect stats.
      *
      * @param   Event   $event  event
@@ -178,6 +230,8 @@ class StatisticsCollector implements CollectorInterface
                 $this->isPassed = false;
             }
         }
+
+        $this->scenarioFinishTime = microtime(true);
     }
 
     /**
