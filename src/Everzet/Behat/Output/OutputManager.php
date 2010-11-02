@@ -72,10 +72,6 @@ class OutputManager
     public function setOutputPath($path)
     {
         $this->outputPath = $path;
-
-        if (is_file($path)) {
-            unlink($path);
-        }
     }
 
     /**
@@ -165,6 +161,9 @@ class OutputManager
         $formatter = $this->formatters[$this->formatter];
         $formatter->registerListeners($dispatcher);
         $formatter->setSupportPath($this->supportPath);
+        if (is_file($this->supportPath)) {
+            unlink($this->supportPath);
+        }
 
         if ($formatter instanceof TimableFormatterInterface) {
             $formatter->showTimer($this->timer);
@@ -201,7 +200,7 @@ class OutputManager
                     throw new \InvalidArgumentException(sprintf('Directory path expected as --out, but %s given', $dir));
                 }
 
-                file_put_contents($dir . '/'. $event->getParameter('file'), $event->getParameter('string') . $ending, \FILE_APPEND);
+                file_put_contents($dir . '/'. $event->getParameter('file'), $event->getParameter('string') . $ending);
             } else {
                 file_put_contents($this->outputPath, $event->getParameter('string') . $ending, \FILE_APPEND);
             }
