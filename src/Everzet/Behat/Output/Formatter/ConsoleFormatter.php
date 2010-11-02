@@ -23,10 +23,11 @@ use Everzet\Behat\Tester\StepTester;
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class ConsoleFormatter
-    implements TranslatableFormatterInterface, ColorableFormatterInterface, VerbosableFormatterInterface
+    implements TranslatableFormatterInterface, ColorableFormatterInterface, VerbosableFormatterInterface, TimableFormatterInterface
 {
     protected $translator;
     protected $colors   = true;
+    protected $timer    = true;
     protected $verbose  = false;
 
     protected $statuses;
@@ -58,9 +59,17 @@ abstract class ConsoleFormatter
     /**
      * @see     ColorableFormatterInterface 
      */
-    public function allowColors($colors = true)
+    public function showColors($colors = true)
     {
         $this->colors = (bool) $colors;
+    }
+
+    /**
+     * @see     TimableFormatterInterface
+     */
+    public function showTimer($timer = true)
+    {
+        $this->timer = (bool) $timer;
     }
 
     /**
@@ -125,6 +134,10 @@ abstract class ConsoleFormatter
             }
         }
         $this->write(count($statuses) ? ' ' . sprintf('(%s)', implode(', ', $statuses)) : '');
+
+        if ($this->timer) {
+            $this->write(sprintf("%.3fs", $statistics->getTotalTime()));
+        }
     }
 
     /**

@@ -22,6 +22,5 @@ interface ColorableFormatterInterface
      * 
      * @param   boolean $colors allow colors
      */
-    public function allowColors($colors = true);
+    public function showColors($colors = true);
 }
-
