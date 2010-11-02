@@ -1,3 +1,10 @@
+0.3.1 / 2010-11-02
+==================
+
+  * [Behat] JUnit formatter
+  * [Behat] Pretty & HTML formatter background hooks fix
+  * [Behat] Other small fixes
+
 0.3.0 / 2010-11-02
 ==================
 

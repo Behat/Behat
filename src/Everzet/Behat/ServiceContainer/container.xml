@@ -54,6 +54,7 @@
         <parameter key="behat.formatter.progress.class">Everzet\Behat\Output\Formatter\ProgressFormatter</parameter>
         <parameter key="behat.formatter.pretty.class">Everzet\Behat\Output\Formatter\PrettyFormatter</parameter>
         <parameter key="behat.formatter.html.class">Everzet\Behat\Output\Formatter\HTMLFormatter</parameter>
+        <parameter key="behat.formatter.junit.class">Everzet\Behat\Output\Formatter\JUnitFormatter</parameter>
 
         <!-- Tester -->
         <parameter key="behat.environment.file">%behat.support.path%/env.php</parameter>
@@ -179,6 +180,12 @@
                 <argument>html</argument>
                 <argument type="service">
                     <service class="%behat.formatter.html.class%" />
+                </argument>
+            </call>
+            <call method="addFormatter">
+                <argument>junit</argument>
+                <argument type="service">
+                    <service class="%behat.formatter.junit.class%" />
                 </argument>
             </call>
             <call method="setFormatter">

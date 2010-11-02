@@ -183,10 +183,6 @@ class BehatCommand extends Command
         $container->get('behat.statistics_collector')->finishTimer();
         $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.after'));
 
-        // Print run time
-        if (null === $input->getOption('no-time') || !$input->getOption('no-time')) {
-        }
-
         // Return exit code
         return intval(0 < $result);
     }

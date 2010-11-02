@@ -116,9 +116,20 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         // Run fake background to test if it runs without errors & print it output
         if ($feature->hasBackground()) {
             $this->container->get('behat.statistics_collector')->pause();
+
+            $environment = $this->container->get('behat.environment');
+
+            // Fire `scenario.before` hooks for 1st scenario
+            $scenarios = $feature->getScenarios();
+            $this->container->get('behat.hooks_container')->fireScenarioHooks(
+                new Event($scenarios[0], 'scenario.run.before', array('environment' => $environment))
+            );
+
+            // Run fake background
             $tester = $this->container->get('behat.background_tester');
-            $tester->setEnvironment($this->container->get('behat.environment'));
+            $tester->setEnvironment($environment);
             $feature->getBackground()->accept($tester);
+
             $this->container->get('behat.statistics_collector')->resume();
             $this->backgroundPrinted = true;
         }
