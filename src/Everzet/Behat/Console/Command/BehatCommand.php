@@ -29,14 +29,14 @@ use Symfony\Component\Finder\Finder;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TestCommand extends Command
+class BehatCommand extends Command
 {
     /**
      * @see     Symfony\Component\Console\Command\Command
      */
     protected function configure()
     {
-        $this->setName('test');
+        $this->setName('behat');
 
         // Set commands default parameters from container loaded ones
         $this->setDefinition(array(
@@ -46,27 +46,47 @@ class TestCommand extends Command
             ),
             new InputOption('--configuration',  '-c'
               , InputOption::PARAMETER_REQUIRED
-              , 'Specify configuration file (*.xml or *.yml)'
+              , 'Specify external configuration file to load (*.xml or *.yml).'
             ),
             new InputOption('--format',         '-f'
               , InputOption::PARAMETER_REQUIRED
-              , 'Change output formatter'
+              , 'How to format features (Default: pretty). Available formats is pretty, progress, html.'
+            ),
+            new InputOption('--out',            '-o'
+              , InputOption::PARAMETER_REQUIRED
+              , 'Write output to a file/directory instead of STDOUT.'
+            ),
+            new InputOption('--name',           '-n' 
+              , InputOption::PARAMETER_REQUIRED
+              , 'Only execute the feature elements (features or scenarios) which match part of the given name.'
             ),
             new InputOption('--tags',           '-t'
               , InputOption::PARAMETER_REQUIRED
-              , 'Only executes features or scenarios with specified tags'
+              , 'Only execute the features or scenarios with tags matching expression.'
             ),
-            new InputOption('--no-colors',      null
-              , InputOption::PARAMETER_NONE
-              , 'No colors in output'
-            ),
-            new InputOption('--no-time',        null
-              , InputOption::PARAMETER_NONE
-              , 'No timer in output'
-            ),
-            new InputOption('--i18n',           null
+            new InputOption('--i18n',           '-i'
               , InputOption::PARAMETER_REQUIRED
-              , 'Print formatters output in particular language'
+              , 'Print formatters output in particular language.'
+            ),
+            new InputOption('--verbose',        '-v'
+              , InputOption::PARAMETER_NONE
+              , 'Increase verbosity of fail messages.'
+            ),
+            new InputOption('--no-colors',      '-C'
+              , InputOption::PARAMETER_NONE
+              , 'Do not use ANSI color in the output.'
+            ),
+            new InputOption('--no-time',        '-T'
+              , InputOption::PARAMETER_NONE
+              , 'Hide time statistics in output.'
+            ),
+            new InputOption('--help',           '-h'
+              , InputOption::PARAMETER_NONE
+              , 'Display this help message.'
+            ),
+            new InputOption('--version',        '-V'
+              , InputOption::PARAMETER_NONE
+              , 'Display this program version.'
             ),
         ));
     }
@@ -83,14 +103,23 @@ class TestCommand extends Command
         if (null !== $input->getArgument('features')) {
             $container->setParameter('behat.features.path',     realpath($input->getArgument('features')));
         }
+        if (null !== $input->getOption('name')) {
+            $container->setParameter('behat.filter.name',       $input->getOption('name'));
+        }
         if (null !== $input->getOption('tags')) {
             $container->setParameter('behat.filter.tags',       $input->getOption('tags'));
         }
         if (null !== $input->getOption('format')) {
             $container->setParameter('behat.formatter.name',    $input->getOption('format'));
         }
+        if (null !== $input->getOption('out')) {
+            $container->setParameter('behat.output.path',       $input->getOption('out'));
+        }
         if (null !== $input->getOption('no-colors')) {
             $container->setParameter('behat.formatter.colors', !$input->getOption('no-colors'));
+        }
+        if (null !== $input->getOption('no-time')) {
+            $container->setParameter('behat.formatter.timer',  !$input->getOption('no-time'));
         }
         if (null !== $input->getOption('verbose')) {
             $container->setParameter('behat.formatter.verbose', $input->getOption('verbose'));
@@ -113,10 +142,10 @@ class TestCommand extends Command
         $container->freeze();
 
         // Set Output Manager Output instance
-        $container->getBehat_OutputManagerService()->setOutput($output);
+        $container->get('behat.output_manager')->setOutput($output);
 
         // Add hooks files paths to container resources list
-        $hooksContainer = $container->getBehat_HooksContainerService();
+        $hooksContainer = $container->get('behat.hooks_container');
         foreach ((array) $container->getParameter('behat.hooks.file') as $path) {
             if (is_file($path)) {
                 $hooksContainer->addResource('php', $path);
@@ -124,13 +153,13 @@ class TestCommand extends Command
         }
 
         // Add features paths to container resources list
-        $featuresContainer = $container->getBehat_FeaturesContainerService();
+        $featuresContainer = $container->get('behat.features_container');
         foreach ($this->findFeatureResources($container->getParameter('behat.features.files')) as $path) {
             $featuresContainer->addResource('gherkin', $path);
         }
 
         // Add definitions files to container resources list
-        $definitionsContainer = $container->getBehat_DefinitionsContainerService();
+        $definitionsContainer = $container->get('behat.definitions_container');
         foreach ((array) $container->getParameter('behat.steps.path') as $stepsPath) {
             if (is_dir($stepsPath)) {
                 foreach ($this->findDefinitionResources($stepsPath) as $path) {
@@ -139,25 +168,23 @@ class TestCommand extends Command
             }
         }
 
-        // Notify suite.run.before event
-        $container->getBehat_EventDispatcherService()->notify(new Event($container, 'suite.run.before'));
-        $timer = microtime(true);
+        // Notify suite.run.before event & start timer
+        $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.before'));
+        $container->get('behat.statistics_collector')->startTimer();
 
         // Run features
         $result = 0;
         foreach ($featuresContainer->getFeatures() as $feature) {
-            $tester = $container->getBehat_FeatureTesterService();
+            $tester = $container->get('behat.feature_tester');
             $result = max($result, $feature->accept($tester));
         }
 
         // Notify suite.run.after event
-        $container->getBehat_EventDispatcherService()->notify(new Event($container, 'suite.run.after', array(
-            'time'  => ($timer = microtime(true) - $timer)
-        )));
+        $container->get('behat.statistics_collector')->finishTimer();
+        $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.after'));
 
         // Print run time
         if (null === $input->getOption('no-time') || !$input->getOption('no-time')) {
-            $output->writeln(sprintf("%.3fs", $timer));
         }
 
         // Return exit code

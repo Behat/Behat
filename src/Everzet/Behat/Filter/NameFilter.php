@@ -19,11 +19,11 @@ use Everzet\Gherkin\Node\StepNode;
  */
 
 /**
- * Filters scenarios by feature/scenario tag.
+ * Filters scenarios by feature/scenario name.
  *
  * @author     Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TagFilter implements FilterInterface
+class NameFilter implements FilterInterface
 {
     protected $filterString;
 
@@ -34,7 +34,7 @@ class TagFilter implements FilterInterface
      */
     public function setFilterString($filterString)
     {
-        $this->filterString = $filterString;
+        $this->filterString = trim($filterString);
     }
 
     /**
@@ -46,7 +46,7 @@ class TagFilter implements FilterInterface
     }
 
     /**
-     * Filter scenarios by tags.
+     * Filter scenarios by name.
      *
      * @param   Event   $event      filter event
      * @param   array   $scenarios  scenarios
@@ -78,15 +78,13 @@ class TagFilter implements FilterInterface
      */
     public function isFeatureMatchFilter(FeatureNode $feature, $filter = null)
     {
-        return $this->isClosuresMatchFilter(
-            function($tag) use ($feature) {
-                return $feature->hasTag($tag);
-            }
-          , function($tag) use ($feature) {
-                return !$feature->hasTag($tag);
-            }
-          , null !== $filter ? $filter : $this->filterString
-        );
+        $filter = null !== $filter ? $filter : $this->filterString;
+
+        if ('/' === $filter[0]) {
+            return preg_match($filter, $feature->getTitle());
+        }
+
+        return false !== mb_strpos($feature->getTitle(), $filter);
     }
 
     /**
@@ -97,17 +95,16 @@ class TagFilter implements FilterInterface
      */
     public function isScenarioMatchFilter($scenario, $filter = null)
     {
-        $feature = $scenario->getFeature();
+        $filter     = null !== $filter ? $filter : $this->filterString;
+        $feature    = $scenario->getFeature();
 
-        return $this->isClosuresMatchFilter(
-            function($tag) use ($feature, $scenario) {
-                return $scenario->hasTag($tag) || $feature->hasTag($tag);
-            }
-          , function($tag) use ($feature, $scenario) {
-                return !$scenario->hasTag($tag) && !$feature->hasTag($tag);
-            }
-          , null !== $filter ? $filter : $this->filterString
-        );
+        if ('/' === $filter[0]) {
+            return preg_match($filter, $scenario->getTitle())
+                || preg_match($filter, $feature->getTitle());
+        }
+
+        return false !== mb_strpos($scenario->getTitle(), $filter)
+            || false !== mb_strpos($feature->getTitle(), $filter);
     }
 
     /**
@@ -118,48 +115,16 @@ class TagFilter implements FilterInterface
      */
     public function isStepMatchFilter(StepNode $step, $filter = null)
     {
+        $filter     = null !== $filter ? $filter : $this->filterString;
         $scenario   = $step->getParent();
         $feature    = $scenario->getFeature();
 
-        return $this->isClosuresMatchFilter(
-            function($tag) use ($feature, $scenario) {
-                return $scenario->hasTag($tag) || $feature->hasTag($tag);
-            }
-          , function($tag) use ($feature, $scenario) {
-                return !$scenario->hasTag($tag) && !$feature->hasTag($tag);
-            }
-          , null !== $filter ? $filter : $this->filterString
-        );
-    }
-
-    /**
-     * Check If Passed Has/Hasnt Closures Passes With Filter. 
-     * 
-     * @param   Closure $hasTagCheck    closure to check that something has got tag
-     * @param   Closure $hasntTagCheck  closure to check that something hasn't got tag
-     * @param   string  $filter         filter string
-     */
-    protected function isClosuresMatchFilter(\Closure $hasTagCheck, \Closure $hasntTagCheck, $filter)
-    {
-        $satisfies = true;
-
-        foreach (explode('&&', $filter) as $andTags) {
-            $satisfiesComma = false;
-
-            foreach (explode(',', $andTags) as $tag) {
-                $tag = preg_replace('/\@/', '', trim($tag));
-
-                if ('~' === $tag[0]) {
-                    $tag = mb_substr($tag, 1);
-                    $satisfiesComma = $hasntTagCheck($tag) || $satisfiesComma;
-                } else {
-                    $satisfiesComma = $hasTagCheck($tag) || $satisfiesComma;
-                }
-            }
-
-            $satisfies = (false !== $satisfiesComma && $satisfies && $satisfiesComma) || false;
+        if ('/' === $filter[0]) {
+            return preg_match($filter, $scenario->getTitle())
+                || preg_match($filter, $feature->getTitle());
         }
 
-        return $satisfies;
+        return false !== mb_strpos($scenario->getTitle(), $filter)
+            || false !== mb_strpos($feature->getTitle(), $filter);
     }
 }

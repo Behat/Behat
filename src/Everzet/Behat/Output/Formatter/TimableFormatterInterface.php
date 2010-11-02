@@ -11,16 +11,16 @@ namespace Everzet\Behat\Output\Formatter;
  */
 
 /**
- * Colorable Formatter Interface.
+ * Timable Formatter Interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ColorableFormatterInterface
+interface TimableFormatterInterface
 {
     /**
      * Allow colors in output. 
      * 
-     * @param   boolean $colors allow colors
+     * @param   boolean $tiemr  show timer in output
      */
-    public function showColors($colors = true);
+    public function showTimer($timer = true);
 }

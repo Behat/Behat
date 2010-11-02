@@ -22,4 +22,3 @@ mb_internal_encoding('utf8');
 
 $app = new Everzet\Behat\Console\BehatApplication();
 $app->run();
-

@@ -92,6 +92,10 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
     {
         $feature = $event->getSubject();
 
+        // Flush variables
+        $this->backgroundPrinted    = false;
+        $this->outlineStepsPrinted  = false;
+
         // Print tags if had ones
         if ($feature->hasTags()) {
             $this->write($this->getTagsString($feature), 'tag');
@@ -111,11 +115,11 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
 
         // Run fake background to test if it runs without errors & print it output
         if ($feature->hasBackground()) {
-            $this->container->getBehat_StatisticsCollectorService()->pause();
-            $tester = $this->container->getBehat_BackgroundTesterService();
-            $tester->setEnvironment($this->container->getBehat_EnvironmentService());
+            $this->container->get('behat.statistics_collector')->pause();
+            $tester = $this->container->get('behat.background_tester');
+            $tester->setEnvironment($this->container->get('behat.environment'));
             $feature->getBackground()->accept($tester);
-            $this->container->getBehat_StatisticsCollectorService()->resume();
+            $this->container->get('behat.statistics_collector')->resume();
             $this->backgroundPrinted = true;
         }
     }
@@ -135,7 +139,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
 
         // Print tags if had ones
         if ($outline->hasTags()) {
-            $this->write($this->getTagsString($outline), 'tag');
+            $this->write('  ' . $this->getTagsString($outline), 'tag');
         }
 
         // Print outline description
@@ -153,16 +157,16 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         );
 
         // Print outline steps
-        $environment = $this->container->getBehat_EnvironmentService();
-        $this->container->getBehat_StatisticsCollectorService()->pause();
+        $environment = $this->container->get('behat.environment');
+        $this->container->get('behat.statistics_collector')->pause();
         foreach ($outline->getSteps() as $step) {
-            $tester = $this->container->getBehat_StepTesterService();
+            $tester = $this->container->get('behat.step_tester');
             $tester->setEnvironment($environment);
             $tester->setTokens(current($examples->getHash()));
             $tester->skip();
             $step->accept($tester);
         }
-        $this->container->getBehat_StatisticsCollectorService()->resume();
+        $this->container->get('behat.statistics_collector')->resume();
 
         $this->outlineStepsPrinted = true;
 
@@ -195,8 +199,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         $this->write(
             preg_replace(
                 '/|([^|]*)|/'
-              , $this->colorize('$1', $event['result'])
-              , '      ' . $examples->getRowAsString($event['iteration'] + 1)
+              , $this->colorize('$1', $event->getParameter('result'))
+              , '      ' . $examples->getRowAsString($event->getParameter('iteration') + 1)
             )
         );
 
@@ -224,6 +228,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
       */
     public function printOutlineFooter(Event $event)
     {
+        $this->outlineStepsPrinted = false;
         $this->write();
     }
 
@@ -241,7 +246,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
 
         // Print tags if had ones
         if ($scenario->hasTags()) {
-            $this->write($this->getTagsString($scenario), 'tag');
+            $this->write('  ' . $this->getTagsString($scenario), 'tag');
         }
 
         // Print scenario description
@@ -327,11 +332,11 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
                 $description    = sprintf('    %s %s', $step->getType(), $text);
 
                 // Colorize arguments
-                if (null !== $event['definition'] && StepTester::UNDEFINED !== $event['result']) {
-                    $argStartCode   = $this->colorizeStart($event['result'] + 10);
-                    $argFinishCode  = $this->colorizeFinish() . $this->colorizeStart($event['result']);
+                if (null !== $event->getParameter('definition') && StepTester::UNDEFINED !== $event->getParameter('result')) {
+                    $argStartCode   = $this->colorizeStart($event->getParameter('result') + 10);
+                    $argFinishCode  = $this->colorizeFinish() . $this->colorizeStart($event->getParameter('result'));
                     $printableText  = preg_replace_callback(
-                        $event['definition']->getRegex()
+                        $event->getParameter('definition')->getRegex()
                       , function ($matches) use($argStartCode, $argFinishCode) {
                           $text = array_shift($matches);
                           foreach ($matches as $match) {
@@ -352,14 +357,14 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
 
                 // Print step description
                 $printableDescription = sprintf('    %s %s', $step->getType(), $printableText);
-                $this->write($printableDescription, $event['result'], false);
+                $this->write($printableDescription, $event->getParameter('result'), false);
 
                 // Print definition path if found one
-                if (null !== $event['definition']) {
+                if (null !== $event->getParameter('definition')) {
                     $this->printLineSourceComment(
                         mb_strlen($description)
-                      , $event['definition']->getFile()
-                      , $event['definition']->getLine()
+                      , $event->getParameter('definition')->getFile()
+                      , $event->getParameter('definition')->getLine()
                     );
                 } else {
                     $this->write();
@@ -369,27 +374,27 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
                 if ($step->hasArguments()) {
                     foreach ($step->getArguments() as $argument) {
                         if ($argument instanceof PyStringNode) {
-                            $this->write($this->getPyString($argument, 6), $event['result']);
+                            $this->write($this->getPyString($argument, 6), $event->getParameter('result'));
                         } elseif ($argument instanceof TableNode) {
-                            $this->write($this->getTableString($argument, 6), $event['result']);
+                            $this->write($this->getTableString($argument, 6), $event->getParameter('result'));
                         }
                     }
                 }
 
                 // Print step exception
-                if (null !== $event['exception']) {
+                if (null !== $event->getParameter('exception')) {
                     if ($this->verbose) {
-                        $error = (string) $event['exception'];
+                        $error = (string) $event->getParameter('exception');
                     } else {
-                        $error = $event['exception']->getMessage();
+                        $error = $event->getParameter('exception')->getMessage();
                     }
                     $this->write(
-                        '      ' . strtr($error, array("\n" => "\n      ")), $event['result']
+                        '      ' . strtr($error, array("\n" => "\n      ")), $event->getParameter('result')
                     );
                 }
             } else {
-                if (null !== $event['exception']) {
-                    $this->outlineSubresultExceptions[] = $event['exception'];
+                if (null !== $event->getParameter('exception')) {
+                    $this->outlineSubresultExceptions[] = $event->getParameter('exception');
                 }
             }
         }

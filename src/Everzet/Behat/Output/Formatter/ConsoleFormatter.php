@@ -23,10 +23,12 @@ use Everzet\Behat\Tester\StepTester;
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class ConsoleFormatter
-    implements TranslatableFormatterInterface, ColorableFormatterInterface, VerbosableFormatterInterface
+    implements TranslatableFormatterInterface, ColorableFormatterInterface, VerbosableFormatterInterface, TimableFormatterInterface
 {
+    protected $supportPath;
     protected $translator;
     protected $colors   = true;
+    protected $timer    = true;
     protected $verbose  = false;
 
     protected $statuses;
@@ -48,6 +50,14 @@ abstract class ConsoleFormatter
     }
 
     /**
+     * @see     FormatterInterface 
+     */
+    public function setSupportPath($path)
+    {
+        $this->supportPath = $path;
+    }
+
+    /**
      * @see     TranslatableFormatterInterface 
      */
     public function setTranslator(TranslatorInterface $translator)
@@ -58,9 +68,17 @@ abstract class ConsoleFormatter
     /**
      * @see     ColorableFormatterInterface 
      */
-    public function allowColors($colors = true)
+    public function showColors($colors = true)
     {
         $this->colors = (bool) $colors;
+    }
+
+    /**
+     * @see     TimableFormatterInterface
+     */
+    public function showTimer($timer = true)
+    {
+        $this->timer = (bool) $timer;
     }
 
     /**
@@ -78,7 +96,7 @@ abstract class ConsoleFormatter
       */
     public function printStatistics(Event $event)
     {
-        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
+        $statistics = $event->getSubject()->get('behat.statistics_collector');
 
         $this->write(
             $this->getTranslator()->transChoice(
@@ -125,6 +143,10 @@ abstract class ConsoleFormatter
             }
         }
         $this->write(count($statuses) ? ' ' . sprintf('(%s)', implode(', ', $statuses)) : '');
+
+        if ($this->timer) {
+            $this->write(sprintf("%.3fs", $statistics->getTotalTime()));
+        }
     }
 
     /**
@@ -134,7 +156,7 @@ abstract class ConsoleFormatter
       */
     public function printSnippets(Event $event)
     {
-        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
+        $statistics = $event->getSubject()->get('behat.statistics_collector');
 
         if (count($statistics->getDefinitionsSnippets())) {
             $this->write("\n" .

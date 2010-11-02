@@ -62,7 +62,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     {
         $step = $event->getSubject();
 
-        switch ($event['result']) {
+        switch ($event->getParameter('result')) {
             case StepTester::PASSED:
                 $this->write('.', 'passed', false);
                 break;
@@ -98,18 +98,18 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
       */
     public function printFailedSteps(Event $event)
     {
-        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
+        $statistics = $event->getSubject()->get('behat.statistics_collector');
 
         if (count($statistics->getFailedStepsEvents())) {
             $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('failed steps')), 'failed');
 
             foreach ($statistics->getFailedStepsEvents() as $number => $event) {
                 // Print step exception
-                if (null !== $event['exception']) {
+                if (null !== $event->getParameter('exception')) {
                     if ($this->verbose) {
-                        $error = (string) $event['exception'];
+                        $error = (string) $event->getParameter('exception');
                     } else {
-                        $error = $event['exception']->getMessage();
+                        $error = $event->getParameter('exception')->getMessage();
                     }
                     $this->write(
                         sprintf("%s. %s"
@@ -131,18 +131,18 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
       */
     public function printPendingSteps(Event $event)
     {
-        $statistics = $event->getSubject()->getBehat_StatisticsCollectorService();
+        $statistics = $event->getSubject()->get('behat.statistics_collector');
 
         if (count($statistics->getPendingStepsEvents())) {
             $this->write(sprintf("(::) %s (::)\n", $this->getTranslator()->trans('pending steps')), 'failed');
 
             foreach ($statistics->getPendingStepsEvents() as $number => $event) {
                 // Print step exception
-                if (null !== $event['exception']) {
+                if (null !== $event->getParameter('exception')) {
                     if ($this->verbose) {
-                        $error = (string) $event['exception'];
+                        $error = (string) $event->getParameter('exception');
                     } else {
-                        $error = $event['exception']->getMessage();
+                        $error = $event->getParameter('exception')->getMessage();
                     }
                     $this->write(
                         sprintf("%s. %s"
@@ -175,11 +175,11 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
             ? $this->maxDescriptionLength
             : mb_strlen($description);
         $this->write($description, null, false);
-        if (null !== $event['definition']) {
+        if (null !== $event->getParameter('definition')) {
             $this->printLineSourceComment(
                 mb_strlen($description)
-              , $event['definition']->getFile()
-              , $event['definition']->getLine()
+              , $event->getParameter('definition')->getFile()
+              , $event->getParameter('definition')->getLine()
             );
         } else {
             $this->write();

@@ -34,8 +34,8 @@ class ScenarioTester implements NodeVisitorInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->dispatcher   = $container->getBehat_EventDispatcherService();
-        $this->environment  = $container->getBehat_EnvironmentService();
+        $this->dispatcher   = $container->get('behat.event_dispatcher');
+        $this->environment  = $container->get('behat.environment');
     }
 
     /**
@@ -47,14 +47,16 @@ class ScenarioTester implements NodeVisitorInterface
      */
     public function visit($scenario)
     {
-        $this->dispatcher->notify(new Event($scenario, 'scenario.run.before'));
+        $this->dispatcher->notify(new Event($scenario, 'scenario.run.before', array(
+            'environment'   => $this->environment
+        )));
 
         $result = 0;
         $skip   = false;
 
         // Visit & test background if has one
         if ($scenario->getFeature()->hasBackground()) {
-            $tester = $this->container->getBehat_BackgroundTesterService();
+            $tester = $this->container->get('behat.background_tester');
             $tester->setEnvironment($this->environment);
 
             $bgResult = $scenario->getFeature()->getBackground()->accept($tester);
@@ -67,7 +69,7 @@ class ScenarioTester implements NodeVisitorInterface
 
         // Visit & test steps
         foreach ($scenario->getSteps() as $step) {
-            $tester = $this->container->getBehat_StepTesterService();
+            $tester = $this->container->get('behat.step_tester');
             $tester->setEnvironment($this->environment);
             $tester->skip($skip);
 
@@ -80,8 +82,9 @@ class ScenarioTester implements NodeVisitorInterface
         }
 
         $this->dispatcher->notify(new Event($scenario, 'scenario.run.after', array(
-            'result'    => $result
-          , 'skipped'   => $skip
+            'result'        => $result
+          , 'skipped'       => $skip
+          , 'environment'   => $this->environment
         )));
 
         return $result;

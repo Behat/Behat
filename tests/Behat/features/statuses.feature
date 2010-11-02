@@ -28,7 +28,7 @@ Feature: Statuses
           When I have entered 30
           Then I must have 30
       """
-    When I run "behat -f progress features/statuses.feature"
+    When I run "behat -TCf progress features/statuses.feature"
     Then it should fail with:
       """
       UUUUUU
@@ -49,7 +49,6 @@ Feature: Statuses
       $steps->Then('/^String must be \'([^\']*)\'$/', function($world, $arg1) {
           throw new \Everzet\Behat\Exception\Pending();
       });
-
       """
 
   Scenario: Pending steps
@@ -74,7 +73,7 @@ Feature: Statuses
           throw new \Everzet\Behat\Exception\Pending();
       });
       """
-    When I run "behat -f progress features/statuses.feature"
+    When I run "behat -TCf progress features/statuses.feature"
     Then it should fail with:
       """
       PUP-U
@@ -83,11 +82,11 @@ Feature: Statuses
 
       01. TODO: write pending definition
           In step `Given I have entered 10'. # features/steps/steps.php:4
-          From scenario background.          # features/statuses.feature:2
+          From scenario background.          # features/statuses.feature:3
 
       02. TODO: write pending definition
           In step `Given I have entered 10'. # features/steps/steps.php:4
-          From scenario background.          # features/statuses.feature:2
+          From scenario background.          # features/statuses.feature:3
 
       2 scenarios (2 undefined)
       5 steps (1 skipped, 2 pending, 2 undefined)
@@ -97,7 +96,6 @@ Feature: Statuses
       $steps->Then('/^I must have (\d+)$/', function($world, $arg1) {
           throw new \Everzet\Behat\Exception\Pending();
       });
-
       """
 
   Scenario: Failed
@@ -127,7 +125,7 @@ Feature: Statuses
           assertEquals($world->number, $arg1);
       });
       """
-    When I run "behat -f progress features/statuses.feature"
+    When I run "behat -TCf progress features/statuses.feature"
     Then it should fail with:
       """
       .F...F
@@ -136,11 +134,11 @@ Feature: Statuses
 
       01. Failed asserting that <string:12> is equal to <string:10>.
           In step `Then I must have 12'. # features/steps/steps.php:8
-          From scenario ***.             # features/statuses.feature:5
+          From scenario ***.             # features/statuses.feature:6
 
       02. Failed asserting that <string:31> is equal to <string:30>.
           In step `And I must have 31'.  # features/steps/steps.php:8
-          From scenario ***.             # features/statuses.feature:8
+          From scenario ***.             # features/statuses.feature:9
 
       2 scenarios (2 failed)
       6 steps (4 passed, 2 failed)
@@ -175,7 +173,7 @@ Feature: Statuses
           assertEquals($world->number, $arg1);
       });
       """
-    When I run "behat -f progress features/statuses.feature"
+    When I run "behat -TCf progress features/statuses.feature"
     Then it should fail with:
       """
       .F...F--
@@ -184,11 +182,11 @@ Feature: Statuses
 
       01. Failed asserting that <string:12> is equal to <string:10>.
           In step `Then I must have 12'. # features/steps/steps.php:8
-          From scenario ***.             # features/statuses.feature:5
+          From scenario ***.             # features/statuses.feature:6
 
       02. Failed asserting that <string:31> is equal to <string:30>.
           In step `And I must have 31'.  # features/steps/steps.php:8
-          From scenario ***.             # features/statuses.feature:8
+          From scenario ***.             # features/statuses.feature:9
 
       2 scenarios (2 failed)
       8 steps (4 passed, 2 skipped, 2 failed)
@@ -219,7 +217,7 @@ Feature: Statuses
           assertTrue(true);
       });
       """
-    When I run "behat -f progress features/statuses.feature"
+    When I run "behat -TCf progress features/statuses.feature"
     Then it should fail with:
       """
       FUF-U
@@ -230,13 +228,13 @@ Feature: Statuses
           features/steps/steps.php:4:in `/^I have entered (\d+)$/`
           features/steps/steps.php:7:in `/^I have entered 10$/`
           In step `Given I have entered 10'.
-          From scenario background.          # features/statuses.feature:2
+          From scenario background.          # features/statuses.feature:3
       
       02. Ambiguous match of "I have entered 10":
           features/steps/steps.php:4:in `/^I have entered (\d+)$/`
           features/steps/steps.php:7:in `/^I have entered 10$/`
           In step `Given I have entered 10'.
-          From scenario background.          # features/statuses.feature:2
+          From scenario background.          # features/statuses.feature:3
       
       2 scenarios (2 failed)
       5 steps (1 skipped, 2 undefined, 2 failed)
@@ -246,7 +244,6 @@ Feature: Statuses
       $steps->Then('/^I must have (\d+)$/', function($world, $arg1) {
           throw new \Everzet\Behat\Exception\Pending();
       });
-      
       """
 
   Scenario: Redundant steps
@@ -274,7 +271,7 @@ Feature: Statuses
           assertTrue(true);
       });
       """
-    When I run "behat -f progress features/statuses.feature"
+    When I run "behat -TCf progress features/statuses.feature"
     Then it should fail with:
       """
       [Everzet\Behat\Exception\Redundant]

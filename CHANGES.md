@@ -1,3 +1,15 @@
+0.3.0 / 2010-11-02
+==================
+
+  * [Behat] Refactored tags filter
+  * [Behat] Added name filter
+  * [Behat] Refactored hooks
+  * [Behat] Added tagged/named hooks
+  * [Behat] Customizable HTML formatter with w3c valid default markup
+  * [Behat] Ability to specify out path for formatters
+  * [Behat] Bunch of new options
+  * [Behat] DIC optimisations
+
 0.2.5 / 2010-10-22
 ==================
 

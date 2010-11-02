@@ -69,7 +69,7 @@ Feature: I18n
       """
 
   Scenario: Pretty
-    When I run "behat -f pretty --i18n=ru"
+    When I run "behat -TCf pretty --i18n=ru"
     Then it should fail with:
       """
       Функционал: Постоянство мира
@@ -77,26 +77,26 @@ Feature: I18n
         Как разработчик функционала
         Я хочу чтобы Мир сбрасывался между сценариями
       
-        Предыстория:     # features/World.feature:6
+        Предыстория:     # features/World.feature:7
           Если Я ввел 10 # features/steps/math.php:5
       
-        Сценарий: Неопределен  # features/World.feature:9
+        Сценарий: Неопределен  # features/World.feature:10
           То Я должен иметь 10 # features/steps/math.php:9
           И Что-то новое
           То Я должен иметь 10 # features/steps/math.php:9
       
-        Сценарий: В ожидании      # features/World.feature:14
+        Сценарий: В ожидании      # features/World.feature:15
           То Я должен иметь 10    # features/steps/math.php:9
           И Что-то еще не сделано # features/steps/math.php:17
             TODO: write pending definition
           То Я должен иметь 10    # features/steps/math.php:9
       
-        Сценарий: Провален        # features/World.feature:19
+        Сценарий: Провален        # features/World.feature:20
           Если Я добавлю 4        # features/steps/math.php:13
           То Я должен иметь 13    # features/steps/math.php:9
             Failed asserting that <integer:14> is equal to <string:13>.
       
-        Структура сценария: Пройдено и Провалено # features/World.feature:23
+        Структура сценария: Пройдено и Провалено # features/World.feature:24
           Допустим Я должен иметь 10             # features/steps/math.php:9
           Если Я добавлю <значение>              # features/steps/math.php:13
           То Я должен иметь <результат>          # features/steps/math.php:9
@@ -117,11 +117,10 @@ Feature: I18n
       $steps->И('/^Что-то новое$/', function($world) {
           throw new \Everzet\Behat\Exception\Pending();
       });
-
       """
 
   Scenario: Progress
-    When I run "behat -f progress --i18n=ru"
+    When I run "behat -TCf progress --i18n=ru"
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
@@ -130,21 +129,21 @@ Feature: I18n
       
       01. Failed asserting that <integer:14> is equal to <string:13>.
           In step `То Я должен иметь 13'. # features/steps/math.php:9
-          From scenario `Провален'.       # features/World.feature:19
+          From scenario `Провален'.       # features/World.feature:20
       
       02. Failed asserting that <integer:15> is equal to <string:16>.
           In step `То Я должен иметь 32'. # features/steps/math.php:9
-          From scenario `Пройдено и Провалено'. # features/World.feature:23
+          From scenario `Пройдено и Провалено'. # features/World.feature:24
       
       03. Failed asserting that <integer:33> is equal to <string:32>.
           In step `То Я должен иметь 32'.       # features/steps/math.php:9
-          From scenario `Пройдено и Провалено'. # features/World.feature:23
+          From scenario `Пройдено и Провалено'. # features/World.feature:24
       
       (::) шаги в ожидании (::)
       
       01. TODO: write pending definition
           In step `И Что-то еще не сделано'.    # features/steps/math.php:17
-          From scenario `В ожидании'.           # features/World.feature:14
+          From scenario `В ожидании'.           # features/World.feature:15
       
       6 сценариев (1 пройден, 1 в ожидании, 1 не определен, 3 провалено)
       23 шага (16 пройдено, 2 пропущено, 1 в ожидании, 1 не определен, 3 провалено)
@@ -154,5 +153,4 @@ Feature: I18n
       $steps->И('/^Что-то новое$/', function($world) {
           throw new \Everzet\Behat\Exception\Pending();
       });
-
       """

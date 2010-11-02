@@ -10,6 +10,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Everzet\Behat\Output\Formatter\FormatterInterface;
 use Everzet\Behat\Output\Formatter\TranslatableFormatterInterface;
 use Everzet\Behat\Output\Formatter\ColorableFormatterInterface;
+use Everzet\Behat\Output\Formatter\TimableFormatterInterface;
 use Everzet\Behat\Output\Formatter\VerbosableFormatterInterface;
 use Everzet\Behat\Output\Formatter\ContainerAwareFormatterInterface;
 
@@ -32,9 +33,12 @@ class OutputManager
     protected $container;
 
     protected $output;
-    protected $colors   = true;
-    protected $verbose  = false;
-    protected $locale   = 'en';
+    protected $colors       = true;
+    protected $timer        = true;
+    protected $verbose      = false;
+    protected $locale       = 'en';
+    protected $supportPath  = null;
+    protected $outputPath   = null;
 
     protected $isFormatterRegistered    = false;
     protected $formatters               = array();
@@ -48,6 +52,30 @@ class OutputManager
     public function __construct(Container $container)
     {
         $this->container = $container;
+    }
+
+    /**
+     * Set support directory path (used for templates). 
+     * 
+     * @param   string  $path   path to support directory
+     */
+    public function setSupportPath($path)
+    {
+        $this->supportPath = $path;
+    }
+
+    /**
+     * Set output path for the formatters. 
+     * 
+     * @param   string  $path   output file/folder path
+     */
+    public function setOutputPath($path)
+    {
+        $this->outputPath = $path;
+
+        if (is_file($path)) {
+            unlink($path);
+        }
     }
 
     /**
@@ -65,9 +93,19 @@ class OutputManager
      * 
      * @param   boolean $colors     allow colors in output
      */
-    public function allowColors($colors = true)
+    public function showColors($colors = true)
     {
         $this->colors = (bool) $colors;
+    }
+
+    /**
+     * Show timer in output. 
+     * 
+     * @param   boolean $timer      show timer in output
+     */
+    public function showTimer($timer = true)
+    {
+        $this->timer = (bool) $timer;
     }
 
     /**
@@ -126,18 +164,22 @@ class OutputManager
 
         $formatter = $this->formatters[$this->formatter];
         $formatter->registerListeners($dispatcher);
+        $formatter->setSupportPath($this->supportPath);
 
+        if ($formatter instanceof TimableFormatterInterface) {
+            $formatter->showTimer($this->timer);
+        }
         if ($formatter instanceof ContainerAwareFormatterInterface) {
             $formatter->setContainer($this->container);
         }
         if ($formatter instanceof TranslatableFormatterInterface) {
-            $translator = $this->container->getGherkin_TranslatorService();
+            $translator = $this->container->get('gherkin.translator');
             $translator->setLocale($this->locale);
 
             $formatter->setTranslator($translator);
         }
         if ($formatter instanceof ColorableFormatterInterface) {
-            $formatter->allowColors($this->hasColorSupport());
+            $formatter->showColors($this->hasColorSupport());
         }
         if ($formatter instanceof VerbosableFormatterInterface) {
             $formatter->beVerbose($this->verbose);
@@ -151,7 +193,25 @@ class OutputManager
      */
     public function write(Event $event)
     {
-        $this->output->write($event['string'], $event['newline'], 1);
+        $ending = $event->getParameter('newline') ? "\n" : '';
+
+        if (!empty($this->outputPath)) {
+            if ($event->hasParameter('file')) {
+                if (!is_dir($dir = $this->outputPath)) {
+                    throw new \InvalidArgumentException(sprintf('Directory path expected as --out, but %s given', $dir));
+                }
+
+                file_put_contents($dir . '/'. $event->getParameter('file'), $event->getParameter('string') . $ending, \FILE_APPEND);
+            } else {
+                file_put_contents($this->outputPath, $event->getParameter('string') . $ending, \FILE_APPEND);
+            }
+        } else {
+            if ($event->hasParameter('file')) {
+                throw new \InvalidArgumentException(sprintf('You *must* specify --out DIR for the %s formatter', $this->formatter));
+            }
+
+            $this->output->write($event->getParameter('string'), $event->getParameter('newline'), 1);
+        }
     }
 
     /**

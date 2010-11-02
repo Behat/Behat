@@ -48,8 +48,8 @@ class StepTester implements NodeVisitorInterface
     public function __construct(Container $container)
     {
         $this->container    = $container;
-        $this->dispatcher   = $container->getBehat_EventDispatcherService();
-        $this->definitions  = $container->getBehat_DefinitionsContainerService();
+        $this->dispatcher   = $container->get('behat.event_dispatcher');
+        $this->definitions  = $container->get('behat.definitions_container');
     }
 
     /**
@@ -93,7 +93,9 @@ class StepTester implements NodeVisitorInterface
     {
         $step->setTokens($this->tokens);
 
-        $this->dispatcher->notify(new Event($step, 'step.run.before'));
+        $this->dispatcher->notify(new Event($step, 'step.run.before', array(
+            'environment'   => $this->environment
+        )));
 
         $result     = 0;
         $definition = null;
@@ -138,6 +140,7 @@ class StepTester implements NodeVisitorInterface
           , 'exception'     => $exception
           , 'definition'    => $definition
           , 'snippet'       => $snippet
+          , 'environment'   => $this->environment
         )));
 
         return $result;
