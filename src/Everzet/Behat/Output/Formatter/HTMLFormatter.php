@@ -44,7 +44,6 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
 
     protected $backgroundPrinted            = false;
     protected $outlineStepsPrinted          = false;
-    protected $maxDescriptionLength         = 0;
     protected $outlineSubresultExceptions   = array();
 
     public function __construct()
@@ -123,7 +122,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         if ($feature->hasDescription()) {
             $this->html .= '<p>';
             foreach ($feature->getDescription() as $line) {
-                $this->html .= $line . '<br/>';
+                $this->html .= htmlspecialchars($line) . '<br/>';
             }
             $this->html .= '</p>';
         }
@@ -219,7 +218,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         // Print errors
         foreach ($this->outlineSubresultExceptions as $exception) {
             $this->html .= '<tr class="failed exception">';
-            $this->html .= '<td colspan="' . count($examples->getRow(0)) . '"><pre class="backtrace">' . htmlentities($exception->getMessage()) . '</pre></td>';
+            $this->html .= '<td colspan="' . count($examples->getRow(0)) . '"><pre class="backtrace">' . htmlspecialchars($exception->getMessage()) . '</pre></td>';
             $this->html .= '</tr>';
         }
 
@@ -327,12 +326,12 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
                 $this->html .= '<li class="' . $this->statuses[$event->getParameter('result')] . '">';
 
                 // Get step description
-                $text = $this->outlineStepsPrinted ? $step->getText() : $step->getCleanText();
+                $text = htmlspecialchars($this->outlineStepsPrinted ? $step->getText() : $step->getCleanText());
 
                 // Print step
                 $this->html .= '<div class="step">';
                 $this->html .= '<span class="keyword">' . $step->getType() . '</span> ';
-                $this->html .= '<span class="text">' . $step->getText() . '</span>';
+                $this->html .= '<span class="text">' . $text . '</span>';
                 if (null !== ($def = $event->getParameter('definition'))) {
                     $this->html .= $this->getSourcePathHtml($def->getFile(), $def->getLine());
                 }
@@ -342,7 +341,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
                 if ($step->hasArguments()) {
                     foreach ($step->getArguments() as $argument) {
                         if ($argument instanceof PyStringNode) {
-                            $this->html .= '<pre class="argument">' . (string) $argument . '</pre>';
+                            $this->html .= '<pre class="argument">' . htmlspecialchars($argument) . '</pre>';
                         } elseif ($argument instanceof TableNode) {
                             $this->html .= $this->getTableHtml($argument, 'argument');
                         }
@@ -353,7 +352,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
                 if (null !== $event->getParameter('exception')) {
                     $message    = $event->getParameter('exception')->getMessage();
 
-                    $this->html .= '<div class="backtrace"><pre>' . htmlentities($message) . '</pre></div>';
+                    $this->html .= '<div class="backtrace"><pre>' . htmlspecialchars($message) . '</pre></div>';
                 }
 
                 // Print step snippet
@@ -361,7 +360,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
                     $snippets = array_values($event->getParameter('snippet'));
                     $snippet = $snippets[0];
 
-                    $this->html .= '<div class="snippet"><pre>' . htmlentities($snippet) . '</pre></div>';
+                    $this->html .= '<div class="snippet"><pre>' . htmlspecialchars($snippet) . '</pre></div>';
                 }
 
                 $this->html .= '</li>';
@@ -373,6 +372,11 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         }
     }
 
+    /**
+     * Listen to `suite.run.after` event & print generated markup to console or file. 
+     * 
+     * @param   Event   $event 
+     */
     public function flushHTML(Event $event)
     {
         $statistics = $event->getSubject()->get('behat.statistics_collector');
@@ -422,6 +426,13 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         $this->dispatcher->notify($event);
     }
 
+    /**
+     * Get node tags HTML representation. 
+     * 
+     * @param   Node    $node 
+     *
+     * @return  string  HTML
+     */
     protected function getTagsHtml($node)
     {
         $html = '';
@@ -437,6 +448,14 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         return $html;
     }
 
+    /**
+     * Get keyword HTML representation. 
+     * 
+     * @param   string  $keyword    keyword
+     * @param   string  $locale     locale
+     *
+     * @return  string              HTML
+     */
     protected function getKeywordHtml($keyword, $locale = 'en')
     {
         $html  = '<span class="keyword">';
@@ -446,11 +465,26 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         return $html;
     }
 
+    /**
+     * Get title HTML representation. 
+     * 
+     * @param   string  $title  title
+     *
+     * @return  string          HTML
+     */
     protected function getTitleHtml($title)
     {
         return '<span class="title">' . $title . '</span>';
     }
 
+    /**
+     * Get source HTML representation. 
+     * 
+     * @param   string  $file   filename
+     * @param   string  $line   lineno
+     *
+     * @return  string          HTML
+     */
     protected function getSourcePathHtml($file, $line)
     {
         $html = '';
@@ -466,6 +500,14 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         return $html;
     }
 
+    /**
+     * Get TableNode HTML representation. 
+     * 
+     * @param   TableNode   $table  table node
+     * @param   string      $class  optional css class
+     *
+     * @return  string              HTML
+     */
     protected function getTableHtml(TableNode $table, $class = null)
     {
         if (null === $class) {
@@ -483,6 +525,14 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         return $html;
     }
 
+    /**
+     * Get table row HTML representation. 
+     * 
+     * @param   array   $row    table row as array
+     * @param   string  $class  optional css class
+     * 
+     * @return  string          HTML
+     */
     protected function getTableRow(array $row, $class = null)
     {
         if (null === $class) {
@@ -499,6 +549,11 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         return $html;
     }
 
+    /**
+     * Get HTML body template for the output. 
+     * 
+     * @return  string  HTML
+     */
     protected function getHTMLTemplate()
     {
         return <<<HTMLTPL
@@ -508,7 +563,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
     <meta content="text/html;charset=utf-8"/>
     <title>Behat Test Suite</title> 
     <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css"/>
-    <style>
+    <style type="text/css">
         body {
             margin:0px;
             padding:0px;

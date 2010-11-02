@@ -50,7 +50,11 @@ class BehatCommand extends Command
             ),
             new InputOption('--format',         '-f'
               , InputOption::PARAMETER_REQUIRED
-              , 'How to format features (Default: pretty). Available formats is pretty & progress.'
+              , 'How to format features (Default: pretty). Available formats is pretty, progress, html.'
+            ),
+            new InputOption('--out',            '-o'
+              , InputOption::PARAMETER_REQUIRED
+              , 'Write output to a file/directory instead of STDOUT.'
             ),
             new InputOption('--name',           '-n' 
               , InputOption::PARAMETER_REQUIRED
@@ -108,8 +112,14 @@ class BehatCommand extends Command
         if (null !== $input->getOption('format')) {
             $container->setParameter('behat.formatter.name',    $input->getOption('format'));
         }
+        if (null !== $input->getOption('out')) {
+            $container->setParameter('behat.output.path',       $input->getOption('out'));
+        }
         if (null !== $input->getOption('no-colors')) {
             $container->setParameter('behat.formatter.colors', !$input->getOption('no-colors'));
+        }
+        if (null !== $input->getOption('no-time')) {
+            $container->setParameter('behat.formatter.timer',  !$input->getOption('no-time'));
         }
         if (null !== $input->getOption('verbose')) {
             $container->setParameter('behat.formatter.verbose', $input->getOption('verbose'));
@@ -158,9 +168,9 @@ class BehatCommand extends Command
             }
         }
 
-        // Notify suite.run.before event
+        // Notify suite.run.before event & start timer
         $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.before'));
-        $timer = microtime(true);
+        $container->get('behat.statistics_collector')->startTimer();
 
         // Run features
         $result = 0;
@@ -170,13 +180,11 @@ class BehatCommand extends Command
         }
 
         // Notify suite.run.after event
-        $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.after', array(
-            'time'  => ($timer = microtime(true) - $timer)
-        )));
+        $container->get('behat.statistics_collector')->finishTimer();
+        $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.after'));
 
         // Print run time
         if (null === $input->getOption('no-time') || !$input->getOption('no-time')) {
-            $output->writeln(sprintf("%.3fs", $timer));
         }
 
         // Return exit code

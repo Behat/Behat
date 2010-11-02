@@ -42,8 +42,10 @@
         <parameter key="gherkin.parser.class">Everzet\Gherkin\Parser</parameter>
 
         <!-- Output Manager -->
+        <parameter key="behat.output.path"></parameter>
         <parameter key="behat.formatter.name">pretty</parameter>
         <parameter key="behat.formatter.colors">true</parameter>
+        <parameter key="behat.formatter.timer">true</parameter>
         <parameter key="behat.formatter.verbose">false</parameter>
         <parameter key="behat.formatter.locale">en</parameter>
 
@@ -142,8 +144,14 @@
         <!-- Output Manager -->
         <service id="behat.output_manager" class="%behat.output_manager.class%" shared="true">
             <argument type="service" id="service_container" />
-            <call method="allowColors">
+            <call method="setOutputPath">
+                <argument>%behat.output.path%</argument>
+            </call>
+            <call method="showColors">
                 <argument>%behat.formatter.colors%</argument>
+            </call>
+            <call method="showTimer">
+                <argument>%behat.formatter.timer%</argument>
             </call>
             <call method="beVerbose">
                 <argument>%behat.formatter.verbose%</argument>
