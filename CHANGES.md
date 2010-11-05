@@ -1,3 +1,9 @@
+0.3.2 / 2010-11-06
+==================
+
+  * [Gherkin] Added ability to specify extended langs (en-US)
+  * [Behat,Gherkin] Added pt-BR translation
+
 0.3.1 / 2010-11-02
 ==================
 
