@@ -36,6 +36,11 @@
                 <argument>%gherkin.i18n.resources_path%/ru.xml</argument>
                 <argument>ru</argument>
             </call>
+            <call method="addResource">
+                <argument>xliff</argument>
+                <argument>%gherkin.i18n.resources_path%/pt-BR.xml</argument>
+                <argument>pt-BR</argument>
+            </call>
         </service>
     </services>
 </container>
