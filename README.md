@@ -32,3 +32,10 @@ Copyright
 ---------
 
 Copyright (c) 2010 Konstantin Kudryashov (ever.zet). See LICENSE for details.
+
+Contributors
+------------
+
+* Konstantin Kudryashov [everzet](http://github.com/everzet) [lead developer]
+* Daniel Anderson Tiecher [datiecher](http://github.com/datiecher) [contributor - pt-BR translation]
+
