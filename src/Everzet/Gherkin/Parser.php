@@ -58,7 +58,7 @@ class Parser
         $this->currentLine = '';
         $this->lines = explode("\n", $this->cleanup($value));
 
-        if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w]+?)\s*$#', $this->lines[0], $values)) {
+        if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w-]+?)\s*$#', $this->lines[0], $values)) {
             $this->locale = $values['lang'];
             $this->translator->setLocale($this->locale);
         }
