@@ -685,5 +685,12 @@ u
             $this->assertEquals('en', $this->lastItem($feature->getScenarios())->getLocale());
         }
     }
+
+    public function testI18nAfterComments()
+    {
+        $feature = $this->loadFeature('commented.feature');
+
+        $this->assertEquals('Тест комментов', $feature->getTitle());
+    }
 }
 
