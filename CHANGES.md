@@ -1,3 +1,10 @@
+0.3.3 / 2010-11-07
+==================
+
+  * [Gherkin] Added ability to create Table & PyString nodes with hands (in your step to step calls for example)
+  * [Gherkin] Added getRowsHash() method to TableNode, so now you can "rotate" given tables
+  * [Gherkin] You now can add comments before language specification in your feature files
+
 0.3.2 / 2010-11-06
 ==================
 
