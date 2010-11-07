@@ -1,6 +1,6 @@
 <?php
 
-use \Everzet\Gherkin\Parser;
+use Everzet\Gherkin\Parser;
 
 /*
  * This file is part of the Gherkin.
@@ -11,7 +11,7 @@ use \Everzet\Gherkin\Parser;
  */
 
 /**
- * Gherkin Parser Text.
+ * Gherkin Parser Test.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -684,6 +684,13 @@ u
             $this->assertEquals('en', $feature->getLocale());
             $this->assertEquals('en', $this->lastItem($feature->getScenarios())->getLocale());
         }
+    }
+
+    public function testI18nAfterComments()
+    {
+        $feature = $this->loadFeature('commented.feature');
+
+        $this->assertEquals('Тест комментов', $feature->getTitle());
     }
 }
 

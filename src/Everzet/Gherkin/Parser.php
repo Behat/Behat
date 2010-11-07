@@ -58,12 +58,6 @@ class Parser
         $this->currentLine = '';
         $this->lines = explode("\n", $this->cleanup($value));
 
-        if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w-]+?)\s*$#', $this->lines[0], $values)) {
-            $this->locale = $values['lang'];
-            $this->translator->setLocale($this->locale);
-        }
-        $this->lexer = new Lexer($this->translator);
-
         if (function_exists('mb_internal_encoding') && ((int) ini_get('mbstring.func_overload')) & 2) {
             $mbEncoding = mb_internal_encoding();
             mb_internal_encoding('ASCII');
@@ -71,8 +65,14 @@ class Parser
 
         while ($this->moveToNextLine()) {
             if ($this->isCurrentLineEmpty()) {
+                if (preg_match('#^\#\s*language\:\s*(?P<lang>[\w-]+?)\s*$#', $this->currentLine, $values)) {
+                    $this->locale = $values['lang'];
+                    $this->translator->setLocale($this->locale);
+                }
+
                 continue;
             }
+            $this->lexer = new Lexer($this->translator);
 
             // feature?
             if (preg_match($this->lexer->getFeatureRegex(), $this->currentLine, $values)) {
@@ -225,7 +225,7 @@ class Parser
             preg_match($this->lexer->getPyStringStarterRegex(), $this->currentLine, $values)
         ) {
             $class = $this->container->getParameter('gherkin.pystring_node.class');
-            $pystring = new $class(mb_strlen($values['indent']));
+            $pystring = new $class(null, mb_strlen($values['indent']));
 
             while (
                 $this->moveToNextLine() &&
@@ -254,7 +254,7 @@ class Parser
 
             if (null === $table) {
                 $class = $this->container->getParameter('gherkin.table_node.class');
-                $table = new $class($this->lexer->getTableSplitter());
+                $table = new $class(null, $this->lexer->getTableSplitter());
             }
             $table->addRow($values['row']);
         }
