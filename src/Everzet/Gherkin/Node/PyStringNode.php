@@ -20,9 +20,17 @@ class PyStringNode
     protected $ltrimCount;
     protected $lines = array();
 
-    public function __construct($ltrimCount = 4)
+    public function __construct($string = null, $ltrimCount = 4)
     {
         $this->ltrimCount = $ltrimCount;
+
+        if (null !== $string) {
+            $string = preg_replace("/\r\n|\r/", "\n", $string);
+
+            foreach (explode("\n", $string) as $line) {
+                $this->addLine($line);
+            }
+        }
     }
 
     public function replaceTokens(array $tokens)
@@ -36,7 +44,12 @@ class PyStringNode
 
     public function addLine($line)
     {
-        $this->lines[] = preg_replace('/^\s{0,'.$this->ltrimCount.'}/', '', $line);
+        $this->lines[] = preg_replace('/^\s{1,'.$this->ltrimCount.'}/', '', $line);
+    }
+
+    public function getLines()
+    {
+        return $this->lines;
     }
 
     public function __toString()

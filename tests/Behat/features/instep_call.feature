@@ -10,6 +10,7 @@ Feature: Call step in other step
       <?php
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
+      $world->hash = array('username' => 'everzet', 'password' => 'qwerty');
       """
     And a file named "features/steps/calc_steps_en.php" with:
       """
@@ -24,6 +25,9 @@ Feature: Call step in other step
       $steps->Then('/I should see "([^"]*)" on the screen/', function($world, $result) {
           assertEquals($result, $world->result);
       });
+      $steps->Then('/Table should be:/', function($world, $table) {
+          assertEquals($world->hash, $table->getRowsHash());
+      });
       """
     And a file named "features/steps/calc_steps_ru.php" with:
       """
@@ -36,6 +40,20 @@ Feature: Call step in other step
       });
       $steps->Тогда('/Я должен увидеть на экране "([^"]*)"/', function($world, $result) use($steps) {
           $steps->Then("I should see \"$result\" on the screen", $world);
+      });
+      $steps->Тогда('/Я создам себе failing таблицу/', function($world) use($steps) {
+          $steps->Then('Table should be:', $world, new Everzet\Gherkin\Node\TableNode(<<<TABLE
+            | username | antono |
+            | password | 123    |
+      TABLE
+          ));
+      });
+      $steps->Тогда('/Я создам себе passing таблицу/', function($world) use($steps) {
+          $steps->Then('Table should be:', $world, new Everzet\Gherkin\Node\TableNode(<<<TABLE
+            | username | everzet |
+            | password | qwerty  |
+      TABLE
+          ));
       });
       """
 
@@ -93,14 +111,15 @@ Feature: Call step in other step
           И Я ввел "27"
           Если Я нажму +
           То Я должен увидеть на экране "39"
+          И Я создам себе passing таблицу
       """
     When I run "behat -TCf progress features/calc_ru.feature"
     Then it should pass with:
       """
-      ....
+      .....
       
       1 scenario (1 passed)
-      4 steps (4 passed)
+      5 steps (5 passed)
       """      
 
   Scenario:
@@ -112,11 +131,14 @@ Feature: Call step in other step
           Допустим Я ввел "7"
           Если Я нажму +
           То Я должен увидеть на экране "8"
+
+        Сценарий:
+          Допустим Я создам себе failing таблицу
       """
     When I run "behat -TCf progress features/calc_ru.feature"
     Then it should fail with:
       """
-      ..F
+      ..FF
       
       (::) failed steps (::)
       
@@ -124,6 +146,22 @@ Feature: Call step in other step
           In step `То Я должен увидеть на экране "8"'. # features/steps/calc_steps_ru.php:10
           From scenario ***.                           # features/calc_ru.feature:3
       
-      1 scenario (1 failed)
-      3 steps (2 passed, 1 failed)
+      02. Failed asserting that
+          Array
+          (
+              [username] => antono
+              [password] => 123
+          )
+           is equal to
+          Array
+          (
+              [username] => everzet
+              [password] => qwerty
+          )
+          .
+          In step `Допустим Я создам себе failing таблицу'. # features/steps/calc_steps_ru.php:17
+          From scenario ***.                                # features/calc_ru.feature:8
+      
+      2 scenarios (2 failed)
+      4 steps (2 passed, 2 failed)
       """

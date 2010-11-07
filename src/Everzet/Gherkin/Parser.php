@@ -225,7 +225,7 @@ class Parser
             preg_match($this->lexer->getPyStringStarterRegex(), $this->currentLine, $values)
         ) {
             $class = $this->container->getParameter('gherkin.pystring_node.class');
-            $pystring = new $class(mb_strlen($values['indent']));
+            $pystring = new $class(null, mb_strlen($values['indent']));
 
             while (
                 $this->moveToNextLine() &&
@@ -254,7 +254,7 @@ class Parser
 
             if (null === $table) {
                 $class = $this->container->getParameter('gherkin.table_node.class');
-                $table = new $class($this->lexer->getTableSplitter());
+                $table = new $class(null, $this->lexer->getTableSplitter());
             }
             $table->addRow($values['row']);
         }

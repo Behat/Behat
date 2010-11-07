@@ -133,7 +133,7 @@ class Lexer
 
     public function getTableRegex()
     {
-        return "#^\s*\\" . $this->getTableSplitter() . "(?P<row>.+?)\\" . $this->getTableSplitter() . "\s*$#";
+        return "#^\s*(?P<row>\\" . $this->getTableSplitter() . ".+\\" . $this->getTableSplitter() . "?)\s*$#";
     }
 }
 

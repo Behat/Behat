@@ -20,16 +20,30 @@ class TableNode
     protected $colSplitter;
     protected $rows = array();
 
-    public function __construct($colSplitter = '|')
+    public function __construct($table = null, $colSplitter = '|')
     {
         $this->colSplitter = $colSplitter;
+
+        if (null !== $table) {
+            $table = preg_replace("/\r\n|\r/", "\n", $table);
+
+            foreach (explode("\n", $table) as $row) {
+                $this->addRow($row);
+            }
+        }
     }
 
     public function addRow($row)
     {
-        $this->rows[] = array_map(function($item) {
-            return trim($item);
-        }, explode($this->colSplitter, $row));
+        if (is_array($row)) {
+            $this->rows[] = $row;
+        } else {
+            $row = preg_replace("/^\s*\\" . $this->colSplitter . "|\\" . $this->colSplitter . "\s*$/", '', $row);
+
+            $this->rows[] = array_map(function($item) {
+                return preg_replace("/^\s*|\s*$/", '', $item);
+            }, explode($this->colSplitter, $row));
+        }
     }
 
     public function getRows()
@@ -71,6 +85,18 @@ class TableNode
         $hash = array();
         foreach ($rows as $row) {
             $hash[] = array_combine($keys, $row);
+        }
+
+        return $hash;
+    }
+
+    public function getRowsHash()
+    {
+        $hash = array();
+        $rows = $this->getRows();
+
+        foreach ($this->getRows() as $row) {
+            $hash[$row[0]] = $row[1];
         }
 
         return $hash;
