@@ -1,3 +1,9 @@
+0.3.4 / 2010-11-18
+==================
+
+  * [Behat] introduced environment builder
+  * [Gherkin,Behat] id locale support
+
 0.3.3 / 2010-11-07
 ==================
 
