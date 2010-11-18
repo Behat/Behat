@@ -56,11 +56,14 @@
         <parameter key="behat.formatter.html.class">Everzet\Behat\Output\Formatter\HTMLFormatter</parameter>
         <parameter key="behat.formatter.junit.class">Everzet\Behat\Output\Formatter\JUnitFormatter</parameter>
 
-        <!-- Tester -->
-        <parameter key="behat.environment.file">%behat.support.path%/env.php</parameter>
-
+        <!-- Environment -->
+        <parameter key="behat.environment.file" type="collection">
+            <parameter>%behat.support.path%/env.php</parameter>
+        </parameter>
         <parameter key="behat.environment.class">Everzet\Behat\Environment\WorldEnvironment</parameter>
+        <parameter key="behat.environment_builder.class">Everzet\Behat\Environment\EnvironmentBuilder</parameter>
 
+        <!-- Tester -->
         <parameter key="behat.feature_tester.class">Everzet\Behat\Tester\FeatureTester</parameter>
         <parameter key="behat.background_tester.class">Everzet\Behat\Tester\BackgroundTester</parameter>
         <parameter key="behat.scenario_tester.class">Everzet\Behat\Tester\ScenarioTester</parameter>
@@ -194,13 +197,13 @@
             <tag name="behat.events_listener" />
         </service>
 
-        <!-- Tester -->
-        <service id="behat.environment" class="%behat.environment.class%" shared="false">
-            <call method="loadEnvironmentFile">
-                <argument>%behat.environment.file%</argument>
-            </call>
+        <!-- Environment -->
+        <service id="behat.environment_builder" class="%behat.environment_builder.class%" shared="true">
+            <argument>%behat.environment.class%</argument>
+            <argument>%behat.environment.file%</argument>
         </service>
 
+        <!-- Tester -->
         <service id="behat.feature_tester" class="%behat.feature_tester.class%" shared="false">
             <argument type="service" id="service_container" />
         </service>
