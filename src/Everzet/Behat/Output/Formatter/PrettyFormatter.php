@@ -117,7 +117,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         if ($feature->hasBackground()) {
             $this->container->get('behat.statistics_collector')->pause();
 
-            $environment = $this->container->get('behat.environment');
+            $environment = $this->container->get('behat.environment_builder')->buildEnvironment();
 
             // Fire `scenario.before` hooks for 1st scenario
             $scenarios = $feature->getScenarios();
@@ -168,7 +168,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         );
 
         // Print outline steps
-        $environment = $this->container->get('behat.environment');
+        $environment = $this->container->get('behat.environment_builder')->buildEnvironment();
         $this->container->get('behat.statistics_collector')->pause();
         foreach ($outline->getSteps() as $step) {
             $tester = $this->container->get('behat.step_tester');

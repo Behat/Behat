@@ -140,7 +140,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         if ($feature->hasBackground()) {
             $this->container->get('behat.statistics_collector')->pause();
 
-            $environment = $this->container->get('behat.environment');
+            $environment = $this->container->get('behat.environment_builder')->buildEnvironment();
 
             // Fire `scenario.before` hooks for 1st scenario
             $scenarios = $feature->getScenarios();
@@ -191,7 +191,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
         $this->html .= '</h3>';
 
         // Print outline steps
-        $environment = $this->container->get('behat.environment');
+        $environment = $this->container->get('behat.environment_builder')->buildEnvironment();
         $this->container->get('behat.statistics_collector')->pause();
         $this->html .= '<ol>';
         foreach ($outline->getSteps() as $step) {

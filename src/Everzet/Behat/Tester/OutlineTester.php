@@ -51,7 +51,7 @@ class OutlineTester implements NodeVisitorInterface
 
         // Run subscenarios of outline based on examples
         foreach ($outline->getExamples()->getTable()->getHash() as $iteration => $tokens) {
-            $environment    = $this->container->get('behat.environment');
+            $environment    = $this->container->get('behat.environment_builder')->buildEnvironment();
             $itResult       = 0;
             $skip           = false;
 
