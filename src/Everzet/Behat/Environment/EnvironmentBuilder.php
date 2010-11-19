@@ -2,6 +2,8 @@
 
 namespace Everzet\Behat\Environment;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /*
  * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -17,19 +19,19 @@ namespace Everzet\Behat\Environment;
  */
 class EnvironmentBuilder
 {
-    protected $envClass;
+    protected $container;
     protected $files = array();
 
     /**
      * Initialize builder. 
      * 
-     * @param   string  $envClass   environment class
-     * @param   array   $files      array of enfironment files
+     * @param   ContainerInterface  $envClass   environment class
+     * @param   array               $files      array of enfironment files
      */
-    public function __construct($envClass, array $files = array())
+    public function __construct(ContainerInterface $container, array $files = array())
     {
-        $this->envClass = $envClass;
-        $this->files    = $files;
+        $this->container    = $container;
+        $this->files        = $files;
     }
 
     /**
@@ -49,13 +51,12 @@ class EnvironmentBuilder
      */
     public function buildEnvironment()
     {
-        $class  = $this->envClass;
-        $env    = new $class();
+        $environment = $this->container->get('behat.environment');
 
         foreach ($this->files as $file) {
-            $env->loadEnvironmentFile($file);
+            $environment->loadEnvironmentFile($file);
         }
 
-        return $env;
+        return $environment;
     }
 }
