@@ -1,7 +1,12 @@
+0.3.5 / 2010-11-19
+==================
+
+  * [Behat] Refactored EnvironmentBuilder to allow Environment service definition overload
+
 0.3.4 / 2010-11-18
 ==================
 
-  * [Behat] introduced environment builder
+  * [Behat] Introduced environment builder
   * [Gherkin,Behat] id locale support
 
 0.3.3 / 2010-11-07
