@@ -198,8 +198,9 @@
         </service>
 
         <!-- Environment -->
+        <service id="behat.environment" class="%behat.environment.class%" shared="false" />
         <service id="behat.environment_builder" class="%behat.environment_builder.class%" shared="true">
-            <argument>%behat.environment.class%</argument>
+            <argument type="service" id="service_container" />
             <argument>%behat.environment.file%</argument>
         </service>
 
