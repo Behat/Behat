@@ -24,7 +24,7 @@
       </trans-unit>
       <trans-unit id="step-types">
         <source>Given|Then|When|And|But</source>
-        <target>Vorausgesetzt|Dann|Wenn|Und|Aber</target>
+        <target>Gegeben sei|Dann|Wenn|Und|Aber</target>
       </trans-unit>
       <trans-unit id="proposal-title">
         <source>You can implement step definitions for undefined steps with these snippets:</source>
