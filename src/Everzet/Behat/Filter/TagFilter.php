@@ -147,7 +147,7 @@ class TagFilter implements FilterInterface
             $satisfiesComma = false;
 
             foreach (explode(',', $andTags) as $tag) {
-                $tag = preg_replace('/\@/', '', trim($tag));
+                $tag = str_replace('@', '', trim($tag));
 
                 if ('~' === $tag[0]) {
                     $tag = mb_substr($tag, 1);
