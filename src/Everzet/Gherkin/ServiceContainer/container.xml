@@ -46,6 +46,11 @@
                 <argument>%gherkin.i18n.resources_path%/id.xml</argument>
                 <argument>id</argument>
             </call>
+            <call method="addResource">
+                <argument>xliff</argument>
+                <argument>%gherkin.i18n.resources_path%/de.xml</argument>
+                <argument>de</argument>
+            </call>
         </service>
     </services>
 </container>

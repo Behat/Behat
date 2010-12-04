@@ -28,7 +28,7 @@
       </trans-unit>
       <trans-unit id="proposal-title">
         <source>You can implement step definitions for undefined steps with these snippets:</source>
-        <target>Neue Arbeitsschrittanweisungen für undefinierte Schritte können mit diesen Snippets angelegt werden:</target>
+        <target>Neue Anweisungen für undefinierte Schritte können mit diesen Code-Schnipseln angelegt werden:</target>
       </trans-unit>
       <trans-unit id="failed-steps-title">
         <source>failed steps</source>
@@ -40,11 +40,11 @@
       </trans-unit>
       <trans-unit id="scenarios-count">
         <source><![CDATA[{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios]]></source>
-        <target><![CDATA[{0} Kein Szenario|{1} 1 Szenario|]1,Inf] %1% Szenarien]]></target>
+        <target><![CDATA[{0} Keine Szenarien|{1} 1 Szenario|]1,Inf] %1% Szenarien]]></target>
       </trans-unit>
       <trans-unit id="steps-count">
         <source><![CDATA[{0} No steps|{1} 1 step|]1,Inf] %1% steps]]></source>
-        <target><![CDATA[{0} Kein Schritt|{1} 1 Schritt|]1,Inf] %1% Schritte]]></target>
+        <target><![CDATA[{0} Keine Schritte|{1} 1 Schritt|]1,Inf] %1% Schritte]]></target>
       </trans-unit>
       <trans-unit id="passed-count">
         <source><![CDATA[[1,Inf] %1% passed]]></source>
