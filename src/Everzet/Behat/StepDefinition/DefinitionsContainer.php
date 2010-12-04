@@ -144,7 +144,7 @@ PHP
         );
 
         return array(
-            md5($description) => sprintf($description, preg_replace('/ /', '_', $step->getType()))
+            md5($description) => sprintf($description, str_replace(' ', '_', $step->getType()))
         );
     }
 
