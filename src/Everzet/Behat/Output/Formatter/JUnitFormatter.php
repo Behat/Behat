@@ -99,7 +99,7 @@ class JUnitFormatter implements FormatterInterface, ContainerAwareFormatterInter
         $time       = $this->container->get('behat.statistics_collector')->getLastScenarioTime();
 
         $this->testsCount       += 1;
-        $this->failuresCount    += 0 < $event->getParameter('result') ? 1 : 0;
+        $this->failuresCount    += 0 < $event->get('result') ? 1 : 0;
         $this->totalTime        += $time;
 
         $this->xml .= sprintf('<testcase clasname="%s" name="%s" time="%f">' . "\n", $className, $name, $time);
@@ -107,7 +107,7 @@ class JUnitFormatter implements FormatterInterface, ContainerAwareFormatterInter
             $this->xml .= sprintf(
                 '<failure message="%s" type="%s"><![CDATA[%s]]></failure>' . "\n"
               , htmlspecialchars($exception->getMessage())
-              , $this->statuses[$event->getParameter('result')]
+              , $this->statuses[$event->get('result')]
               , $exception
             );
         }
@@ -125,8 +125,8 @@ class JUnitFormatter implements FormatterInterface, ContainerAwareFormatterInter
     {
         $step = $event->getSubject();
 
-        if (null !== $event->getParameter('exception')) {
-            $this->scenarioExceptions[] = $event->getParameter('exception');
+        if (null !== $event->get('exception')) {
+            $this->scenarioExceptions[] = $event->get('exception');
         }
     }
 
