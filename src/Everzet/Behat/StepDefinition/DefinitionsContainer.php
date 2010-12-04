@@ -143,7 +143,9 @@ PHP
           , '%s', $regexp, implode(', ', $args)
         );
 
-        return array(md5($description) => sprintf($description, $step->getType()));
+        return array(
+            md5($description) => sprintf($description, preg_replace('/ /', '_', $step->getType()))
+        );
     }
 
     /**
