@@ -192,24 +192,24 @@ class OutputManager
      */
     public function write(Event $event)
     {
-        $ending = $event->getParameter('newline') ? "\n" : '';
+        $ending = $event->get('newline') ? "\n" : '';
 
         if (!empty($this->outputPath)) {
-            if ($event->hasParameter('file')) {
+            if ($event->has('file')) {
                 if (!is_dir($dir = $this->outputPath)) {
                     throw new \InvalidArgumentException(sprintf('Directory path expected as --out, but %s given', $dir));
                 }
 
-                file_put_contents($dir . '/'. $event->getParameter('file'), $event->getParameter('string') . $ending);
+                file_put_contents($dir . '/'. $event->get('file'), $event->get('string') . $ending);
             } else {
-                file_put_contents($this->outputPath, $event->getParameter('string') . $ending, \FILE_APPEND);
+                file_put_contents($this->outputPath, $event->get('string') . $ending, \FILE_APPEND);
             }
         } else {
-            if ($event->hasParameter('file')) {
+            if ($event->has('file')) {
                 throw new \InvalidArgumentException(sprintf('You *must* specify --out DIR for the %s formatter', $this->formatter));
             }
 
-            $this->output->write($event->getParameter('string'), $event->getParameter('newline'), 1);
+            $this->output->write($event->get('string'), $event->get('newline'), 1);
         }
     }
 

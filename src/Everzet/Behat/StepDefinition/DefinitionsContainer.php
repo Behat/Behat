@@ -156,7 +156,7 @@ PHP
     public function runStep(Event $event)
     {
         $definition = $this->findDefinition($event->getSubject());
-        $definition->run($event->getParameter('world'));
+        $definition->run($event->get('world'));
     }
 
     /**

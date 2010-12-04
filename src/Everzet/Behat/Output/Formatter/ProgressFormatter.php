@@ -62,7 +62,7 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
     {
         $step = $event->getSubject();
 
-        switch ($event->getParameter('result')) {
+        switch ($event->get('result')) {
             case StepTester::PASSED:
                 $this->write('.', 'passed', false);
                 break;
@@ -105,11 +105,11 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
 
             foreach ($statistics->getFailedStepsEvents() as $number => $event) {
                 // Print step exception
-                if (null !== $event->getParameter('exception')) {
+                if (null !== $event->get('exception')) {
                     if ($this->verbose) {
-                        $error = (string) $event->getParameter('exception');
+                        $error = (string) $event->get('exception');
                     } else {
-                        $error = $event->getParameter('exception')->getMessage();
+                        $error = $event->get('exception')->getMessage();
                     }
                     $this->write(
                         sprintf("%s. %s"
@@ -138,11 +138,11 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
 
             foreach ($statistics->getPendingStepsEvents() as $number => $event) {
                 // Print step exception
-                if (null !== $event->getParameter('exception')) {
+                if (null !== $event->get('exception')) {
                     if ($this->verbose) {
-                        $error = (string) $event->getParameter('exception');
+                        $error = (string) $event->get('exception');
                     } else {
-                        $error = $event->getParameter('exception')->getMessage();
+                        $error = $event->get('exception')->getMessage();
                     }
                     $this->write(
                         sprintf("%s. %s"
@@ -175,11 +175,11 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
             ? $this->maxDescriptionLength
             : mb_strlen($description);
         $this->write($description, null, false);
-        if (null !== $event->getParameter('definition')) {
+        if (null !== $event->get('definition')) {
             $this->printLineSourceComment(
                 mb_strlen($description)
-              , $event->getParameter('definition')->getFile()
-              , $event->getParameter('definition')->getLine()
+              , $event->get('definition')->getFile()
+              , $event->get('definition')->getLine()
             );
         } else {
             $this->write();

@@ -232,7 +232,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
 
         // Print current scenario results row
         $this->html .= $this->getTableRow(
-            $examples->getRow($event->getParameter('iteration') + 1), $this->statuses[$event->getParameter('result')]
+            $examples->getRow($event->get('iteration') + 1), $this->statuses[$event->get('result')]
         );
 
         // Print errors
@@ -343,7 +343,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
 
         if (!($step->getParent() instanceof BackgroundNode) || !$this->backgroundPrinted) {
             if (!($step->getParent() instanceof OutlineNode) || !$this->outlineStepsPrinted) {
-                $this->html .= '<li class="' . $this->statuses[$event->getParameter('result')] . '">';
+                $this->html .= '<li class="' . $this->statuses[$event->get('result')] . '">';
 
                 // Get step description
                 $text = htmlspecialchars($this->outlineStepsPrinted ? $step->getText() : $step->getCleanText());
@@ -352,7 +352,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
                 $this->html .= '<div class="step">';
                 $this->html .= '<span class="keyword">' . $step->getType() . '</span> ';
                 $this->html .= '<span class="text">' . $text . '</span>';
-                if (null !== ($def = $event->getParameter('definition'))) {
+                if (null !== ($def = $event->get('definition'))) {
                     $this->html .= $this->getSourcePathHtml($def->getFile(), $def->getLine());
                 }
                 $this->html .= '</div>';
@@ -369,15 +369,15 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
                 }
 
                 // Print step exception
-                if (null !== $event->getParameter('exception')) {
-                    $message    = $event->getParameter('exception')->getMessage();
+                if (null !== $event->get('exception')) {
+                    $message    = $event->get('exception')->getMessage();
 
                     $this->html .= '<div class="backtrace"><pre>' . htmlspecialchars($message) . '</pre></div>';
                 }
 
                 // Print step snippet
-                if (null !== $event->getParameter('snippet')) {
-                    $snippets = array_values($event->getParameter('snippet'));
+                if (null !== $event->get('snippet')) {
+                    $snippets = array_values($event->get('snippet'));
                     $snippet = $snippets[0];
 
                     $this->html .= '<div class="snippet"><pre>' . htmlspecialchars($snippet) . '</pre></div>';
@@ -385,8 +385,8 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
 
                 $this->html .= '</li>';
             } else {
-                if (null !== $event->getParameter('exception')) {
-                    $this->outlineSubresultExceptions[] = $event->getParameter('exception');
+                if (null !== $event->get('exception')) {
+                    $this->outlineSubresultExceptions[] = $event->get('exception');
                 }
             }
         }
