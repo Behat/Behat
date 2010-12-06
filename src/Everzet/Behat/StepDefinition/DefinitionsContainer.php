@@ -143,7 +143,9 @@ PHP
           , '%s', $regexp, implode(', ', $args)
         );
 
-        return array(md5($description) => sprintf($description, $step->getType()));
+        return array(
+            md5($description) => sprintf($description, str_replace(' ', '_', $step->getType()))
+        );
     }
 
     /**
@@ -156,7 +158,7 @@ PHP
     public function runStep(Event $event)
     {
         $definition = $this->findDefinition($event->getSubject());
-        $definition->run($event->getParameter('world'));
+        $definition->run($event->get('world'));
     }
 
     /**
