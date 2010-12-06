@@ -1,3 +1,11 @@
+0.3.6 / 2010-12-06
+==================
+
+  * [Behat] Updated Symfony2 Components to latest PR4
+  * [Gherkin] Added French support (fr)
+  * [Gherkin] Added German support (de)
+  * [Behat] Small bugfixes
+
 0.3.5 / 2010-11-19
 ==================
 
