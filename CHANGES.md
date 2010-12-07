@@ -1,3 +1,8 @@
+0.3.6 / 2010-12-07
+==================
+
+  * [Behat,Gherkin] Fixed French support includes (fr)
+
 0.3.6 / 2010-12-06
 ==================
 
