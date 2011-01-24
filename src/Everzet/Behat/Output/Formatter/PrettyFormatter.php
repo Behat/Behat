@@ -2,22 +2,23 @@
 
 namespace Everzet\Behat\Output\Formatter;
 
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\DependencyInjection\Container,
+    Symfony\Component\EventDispatcher\EventDispatcher,
+    Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Gherkin\Node\FeatureNode;
-use Everzet\Gherkin\Node\StepNode;
-use Everzet\Gherkin\Node\BackgroundNode;
-use Everzet\Gherkin\Node\SectionNode;
-use Everzet\Gherkin\Node\ScenarioNode;
-use Everzet\Gherkin\Node\OutlineNode;
-use Everzet\Gherkin\Node\PyStringNode;
-use Everzet\Gherkin\Node\TableNode;
-use Everzet\Gherkin\Node\ExamplesNode;
+use Behat\Gherkin\Node\AbstractNode,
+    Behat\Gherkin\Node\AbstractScenarioNode,
+    Behat\Gherkin\Node\FeatureNode,
+    Behat\Gherkin\Node\StepNode,
+    Behat\Gherkin\Node\BackgroundNode,
+    Behat\Gherkin\Node\ScenarioNode,
+    Behat\Gherkin\Node\OutlineNode,
+    Behat\Gherkin\Node\PyStringNode,
+    Behat\Gherkin\Node\TableNode,
+    Behat\Gherkin\Node\ExamplesNode;
 
-use Everzet\Behat\Exception\Pending;
-use Everzet\Behat\Tester\StepTester;
+use Everzet\Behat\Exception\Pending,
+    Everzet\Behat\Tester\StepTester;
 
 /*
  * This file is part of the Behat.
@@ -102,14 +103,16 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         }
 
         // Print feature title
-        $this->write(
-            $this->getTranslator()->trans('Feature', array(), 'messages', $feature->getLocale())
-          . ': ' . $feature->getTitle()
-        );
+        $keyword     = $this->transGherkinKeyword('Feature', $feature->getLanguage());
+        $title       = $feature->getTitle() ? ' ' . $feature->getTitle() : '';
+        $description = sprintf("%s:%s", $keyword, $title);
+        $this->write($description);
 
         // Print feature description
-        foreach ($feature->getDescription() as $description) {
-            $this->write('  ' . $description);
+        if (null !== $feature->getDescription()) {
+            foreach (explode("\n", $feature->getDescription()) as $description) {
+                $this->write('  ' . $description);
+            }
         }
         $this->write();
 
@@ -143,7 +146,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
     public function printOutlineHeader(Event $event)
     {
         $outline    = $event->getSubject();
-        $examples   = $outline->getExamples()->getTable();
+        $examples   = $outline->getExamples();
 
         // Recalc maximum description length (for filepath-like comments)
         $this->recalcMaxDescriptionLength($outline);
@@ -154,10 +157,9 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         }
 
         // Print outline description
-        $description = sprintf("  %s:%s",
-            $this->getTranslator()->trans('Scenario Outline', array(), 'messages', $outline->getLocale())
-          , $outline->getTitle() ? ' ' . $outline->getTitle() : ''
-        );
+        $keyword     = $this->transGherkinKeyword('Scenario Outline', $outline->getLanguage());
+        $title       = $outline->getTitle() ? ' ' . $outline->getTitle() : '';
+        $description = sprintf("  %s:%s", $keyword, $title);
         $this->write($description, null, false);
 
         // Print element path & line
@@ -182,9 +184,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         $this->outlineStepsPrinted = true;
 
         // Print outline examples title
-        $this->write(sprintf("\n    %s:",
-            $this->getTranslator()->trans('Examples', array(), 'messages', $outline->getLocale())
-        ));
+        $keyword = $this->transGherkinKeyword('Examples', $outline->getLanguage());
+        $this->write(sprintf("\n    %s:", $keyword));
 
         // print outline examples header row
         $this->write(
@@ -204,7 +205,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
     public function printOutlineSubResult(Event $event)
     {
         $outline    = $event->getSubject();
-        $examples   = $outline->getExamples()->getTable();
+        $examples   = $outline->getExamples();
 
         // print current scenario results row
         $this->write(
@@ -260,11 +261,10 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
             $this->write('  ' . $this->getTagsString($scenario), 'tag');
         }
 
-        // Print scenario description
-        $description = sprintf("  %s:%s",
-            $this->getTranslator()->trans('Scenario', array(), 'messages', $scenario->getLocale())
-          , $scenario->getTitle() ? ' ' . $scenario->getTitle() : ''
-        );
+        // Print scenario header
+        $keyword     = $this->transGherkinKeyword('Scenario', $scenario->getLanguage());
+        $title       = $scenario->getTitle() ? ' ' . $scenario->getTitle() : '';
+        $description = sprintf("  %s:%s", $keyword, $title);
         $this->write($description, null, false);
 
         // Print element path & line
@@ -299,10 +299,8 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
             $this->recalcMaxDescriptionLength($background);
 
             // Print description
-            $description = sprintf("  %s:%s",
-                $this->getTranslator()->trans('Background', array(), 'messages', $background->getLocale())
-              , $background->getTitle() ? ' ' . $background->getTitle() : ''
-            );
+            $keyword     = $this->transGherkinKeyword('Background', $background->getLanguage());
+            $description = sprintf("  %s:", $keyword);
             $this->write($description, null, false);
 
             // Print element path & line
@@ -414,23 +412,25 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
     /**
      * Recalculate max descriptions size for section elements.
      *
-     * @param   SectionNode $scenario   element for calculations
+     * @param   BackgroundNode $scenario   element for calculations
      * 
      * @return  integer                 description length
      */
-    protected function recalcMaxDescriptionLength(SectionNode $scenario)
+    protected function recalcMaxDescriptionLength(AbstractScenarioNode $scenario)
     {
         $max    = $this->maxDescriptionLength;
         $type   = '';
 
         if ($scenario instanceof OutlineNode) {
-            $type = $this->getTranslator()->trans('Scenario Outline', array(), 'messages', $scenario->getLocale());
-        } else if ($scenario instanceof ScenarioNode) {    
-            $type = $this->getTranslator()->trans('Scenario', array(), 'messages', $scenario->getLocale());
+            $type = $this->transGherkinKeyword('Scenario Outline', $scenario->getLanguage());
+        } else if ($scenario instanceof ScenarioNode) {
+            $type = $this->transGherkinKeyword('Scenario', $scenario->getLanguage());
         } else if ($scenario instanceof BackgroundNode) {
-            $type = $this->getTranslator()->trans('Background', array(), 'messages', $scenario->getLocale());
+            $type = $this->transGherkinKeyword('Background', $scenario->getLanguage());
         }
-        $scenarioDescription = $scenario->getTitle() ? $type . ': ' . $scenario->getTitle() : $type;
+        $scenarioDescription = !($scenario instanceof BackgroundNode) && $scenario->getTitle()
+            ? $type . ': ' . $scenario->getTitle()
+            : $type;
 
         if (($tmp = mb_strlen($scenarioDescription) + 2) > $max) {
             $max = $tmp;
@@ -449,11 +449,11 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
     /**
      * Return formatted tag string, prepared for console output.
      *
-     * @param   SectionNode $section    section instance
+     * @param   BackgroundNode $section    section instance
      * 
      * @return  string
      */
-    protected function getTagsString(SectionNode $section)
+    protected function getTagsString(AbstractNode $section)
     {
         $tags = array();
         foreach ($section->getTags() as $tag) {
@@ -495,4 +495,3 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         );
     }
 }
-

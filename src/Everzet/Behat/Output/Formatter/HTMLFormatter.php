@@ -2,23 +2,23 @@
 
 namespace Everzet\Behat\Output\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher,
+    Symfony\Component\EventDispatcher\Event,
+    Symfony\Component\DependencyInjection\Container,
+    Symfony\Component\Translation\TranslatorInterface;
 
-use Everzet\Gherkin\Node\FeatureNode;
-use Everzet\Gherkin\Node\StepNode;
-use Everzet\Gherkin\Node\BackgroundNode;
-use Everzet\Gherkin\Node\SectionNode;
-use Everzet\Gherkin\Node\ScenarioNode;
-use Everzet\Gherkin\Node\OutlineNode;
-use Everzet\Gherkin\Node\PyStringNode;
-use Everzet\Gherkin\Node\TableNode;
-use Everzet\Gherkin\Node\ExamplesNode;
+use Behat\Gherkin\Node\FeatureNode,
+    Behat\Gherkin\Node\StepNode,
+    Behat\Gherkin\Node\BackgroundNode,
+    Behat\Gherkin\Node\SectionNode,
+    Behat\Gherkin\Node\ScenarioNode,
+    Behat\Gherkin\Node\OutlineNode,
+    Behat\Gherkin\Node\PyStringNode,
+    Behat\Gherkin\Node\TableNode,
+    Behat\Gherkin\Node\ExamplesNode;
 
-use Everzet\Behat\Exception\Pending;
-use Everzet\Behat\Tester\StepTester;
+use Everzet\Behat\Exception\Pending,
+    Everzet\Behat\Tester\StepTester;
 
 /*
  * This file is part of the Behat.
@@ -176,7 +176,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
     public function printOutlineHeader(Event $event)
     {
         $outline    = $event->getSubject();
-        $examples   = $outline->getExamples()->getTable();
+        $examples   = $outline->getExamples();
 
         $this->html .= '<div class="scenario outline">';
 
@@ -228,7 +228,7 @@ class HTMLFormatter implements FormatterInterface, TranslatableFormatterInterfac
     public function printOutlineSubResult(Event $event)
     {
         $outline    = $event->getSubject();
-        $examples   = $outline->getExamples()->getTable();
+        $examples   = $outline->getExamples();
 
         // Print current scenario results row
         $this->html .= $this->getTableRow(

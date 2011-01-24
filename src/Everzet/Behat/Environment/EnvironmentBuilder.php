@@ -23,7 +23,7 @@ class EnvironmentBuilder
     protected $files = array();
 
     /**
-     * Initialize builder. 
+     * Initialize builder.
      * 
      * @param   ContainerInterface  $envClass   environment class
      * @param   array               $files      array of enfironment files
@@ -35,7 +35,7 @@ class EnvironmentBuilder
     }
 
     /**
-     * Add Environment Config to builder. 
+     * Add Environment Config to builder.
      * 
      * @param   string  $file   file path
      */
@@ -45,7 +45,7 @@ class EnvironmentBuilder
     }
 
     /**
-     * Build & Initialize new Environment. 
+     * Build & Initialize new Environment.
      * 
      * @return  EnvironmentInterface
      */

@@ -2,30 +2,6 @@
   <file original="global" source-language="en" target-language="fr" datatype="plaintext">
     <header />
     <body>
-      <trans-unit id="feature">
-        <source>Feature</source>
-        <target>Fonctionnalité</target>
-      </trans-unit>
-      <trans-unit id="background">
-        <source>Background</source>
-        <target>Contexte</target>
-      </trans-unit>
-      <trans-unit id="scenario">
-        <source>Scenario</source>
-        <target>Scénario</target>
-      </trans-unit>
-      <trans-unit id="scenario-outline">
-        <source>Scenario Outline</source>
-        <target>Plan du scénario</target>
-      </trans-unit>
-      <trans-unit id="examples">
-        <source>Examples</source>
-        <target>Exemples</target>
-      </trans-unit>
-      <trans-unit id="step-types">
-        <source>Given|Then|When|And|But</source>
-        <target>Etant donné|Alors|Quand|Et|Mais</target>
-      </trans-unit>
       <trans-unit id="proposal-title">
         <source>You can implement step definitions for undefined steps with these snippets:</source>
         <target>Vous pouvez implémenter les définitions d'étapes pour les étapes non définies avec ces modèles :</target>

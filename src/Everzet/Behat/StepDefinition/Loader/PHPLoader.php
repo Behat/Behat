@@ -5,7 +5,7 @@ namespace Everzet\Behat\StepDefinition\Loader;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Gherkin\Node\StepNode;
+use Behat\Gherkin\Node\StepNode;
 
 use Everzet\Behat\StepDefinition\Definition;
 use Everzet\Behat\StepDefinition\Transformation;
@@ -97,4 +97,3 @@ class PHPLoader implements LoaderInterface
         return $this;
     }
 }
-

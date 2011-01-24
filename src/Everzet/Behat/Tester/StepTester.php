@@ -2,15 +2,16 @@
 
 namespace Everzet\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\DependencyInjection\Container,
+    Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Gherkin\Node\NodeVisitorInterface;
+use Behat\Gherkin\Node\NodeVisitorInterface,
+    Behat\Gherkin\Node\AbstractNode;
 
-use Everzet\Behat\Environment\EnvironmentInterface;
-use Everzet\Behat\Exception\Ambiguous;
-use Everzet\Behat\Exception\Undefined;
-use Everzet\Behat\Exception\Pending;
+use Everzet\Behat\Environment\EnvironmentInterface,
+    Everzet\Behat\Exception\Ambiguous,
+    Everzet\Behat\Exception\Undefined,
+    Everzet\Behat\Exception\Pending;
 
 /*
  * This file is part of the Behat.
@@ -85,11 +86,11 @@ class StepTester implements NodeVisitorInterface
     /**
      * Visit StepNode & run tests against it.
      *
-     * @param   Everzet\Gherkin\Node\StepNode       $step       step node
+     * @param   AbstractNode    $step       step node
      * 
-     * @return  integer                                         result
+     * @return  integer                     result
      */
-    public function visit($step)
+    public function visit(AbstractNode $step)
     {
         $step->setTokens($this->tokens);
 

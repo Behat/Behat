@@ -172,7 +172,7 @@ class OutputManager
             $formatter->setContainer($this->container);
         }
         if ($formatter instanceof TranslatableFormatterInterface) {
-            $translator = $this->container->get('gherkin.translator');
+            $translator = $this->container->get('behat.translator');
             $translator->setLocale($this->locale);
 
             $formatter->setTranslator($translator);
@@ -236,4 +236,3 @@ class OutputManager
         }
     }
 }
-

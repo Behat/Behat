@@ -2,30 +2,6 @@
   <file original="global" source-language="en" target-language="ru" datatype="plaintext">
     <header />
     <body>
-      <trans-unit id="feature">
-        <source>Feature</source>
-        <target>Функционал</target>
-      </trans-unit>
-      <trans-unit id="background">
-        <source>Background</source>
-        <target>Предыстория</target>
-      </trans-unit>
-      <trans-unit id="scenario">
-        <source>Scenario</source>
-        <target>Сценарий</target>
-      </trans-unit>
-      <trans-unit id="scenario-outline">
-        <source>Scenario Outline</source>
-        <target>Структура сценария</target>
-      </trans-unit>
-      <trans-unit id="examples">
-        <source>Examples</source>
-        <target>Значения</target>
-      </trans-unit>
-      <trans-unit id="step-types">
-        <source>Given|Then|When|And|But</source>
-        <target>Допустим|То|Если|И|Но</target>
-      </trans-unit>
       <trans-unit id="proposal-title">
         <source>You can implement step definitions for undefined steps with these snippets:</source>
         <target>Вы можете реализовать определения для новых шагов с помощью этих шаблонов:</target>

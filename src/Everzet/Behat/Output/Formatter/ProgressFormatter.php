@@ -2,11 +2,11 @@
 
 namespace Everzet\Behat\Output\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher,
+    Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Gherkin\Node\ScenarioNode;
-use Everzet\Gherkin\Node\BackgroundNode;
+use Behat\Gherkin\Node\ScenarioNode,
+    Behat\Gherkin\Node\BackgroundNode;
 
 use Everzet\Behat\Tester\StepTester;
 
@@ -187,14 +187,14 @@ class ProgressFormatter extends ConsoleFormatter implements FormatterInterface
 
         // Print scenario information
         $item = $step->getParent();
-        if ($item instanceof BackgroundNode) {
-            $description    = $this->colorize('    From scenario background.', $type);
-        } elseif ($item instanceof ScenarioNode) {
+        if ($item instanceof ScenarioNode) {
             $description    = $this->colorize(
                 sprintf("    From scenario %s."
                   , $item->getTitle() ? sprintf("`%s'", $item->getTitle()) : '***'
                 )
             , $type);
+        } elseif ($item instanceof BackgroundNode) {
+            $description    = $this->colorize('    From scenario background.', $type);
         }
         $this->maxDescriptionLength = $this->maxDescriptionLength > mb_strlen($description)
             ? $this->maxDescriptionLength

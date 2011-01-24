@@ -103,6 +103,7 @@ abstract class ConsoleFormatter
                 '{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios'
                 , $statistics->getScenariosCount()
                 , array('%1%' => $statistics->getScenariosCount())
+                , 'messages'
             )
           , null
           , false
@@ -115,6 +116,7 @@ abstract class ConsoleFormatter
                     "[1,Inf] %1% $status"
                   , $count
                   , array('%1%' => $count)
+                  , 'messages'
                 );
                 $statuses[] = $this->colorize($transStatus, $status);
             }
@@ -126,6 +128,7 @@ abstract class ConsoleFormatter
                 '{0} No steps|{1} 1 step|]1,Inf] %1% steps'
                 , $statistics->getStepsCount()
                 , array('%1%' => $statistics->getStepsCount())
+                , 'messages'
             )
           , null
           , false
@@ -138,6 +141,7 @@ abstract class ConsoleFormatter
                     "[1,Inf] %1% $status"
                   , $count
                   , array('%1%' => $count)
+                  , 'messages'
                 );
                 $statuses[] = $this->colorize($transStatus, $status);
             }
@@ -161,7 +165,9 @@ abstract class ConsoleFormatter
         if (count($statistics->getDefinitionsSnippets())) {
             $this->write("\n" .
                 $this->getTranslator()->trans(
-                    "You can implement step definitions for undefined steps with these snippets:"
+                    "You can implement step definitions for undefined steps with these snippets:",
+                    array(),
+                    'messages'
                 ) .
             "\n", 'undefined');
 
@@ -170,18 +176,6 @@ abstract class ConsoleFormatter
                 $this->write();
             }
         }
-    }
-
-    /**
-     * Trim filename to features/... 
-     * 
-     * @param   string  $filename   filename
-     *
-     * @return  string              relative filename
-     */
-    public static function trimFilename($filename)
-    {
-        return preg_replace('/.*\/features\\' . DIRECTORY_SEPARATOR . '/i', 'features' . DIRECTORY_SEPARATOR, $filename);
     }
 
     /**
@@ -308,6 +302,25 @@ abstract class ConsoleFormatter
         }
     }
 
+    protected function transGherkinKeyword($keyword, $lang)
+    {
+        $keywords = explode('|', $this->getTranslator()->trans($keyword, array(), 'gherkin', $lang));
+
+        return $keywords[0];
+    }
+
+    /**
+     * Trim filename to features/... 
+     * 
+     * @param   string  $filename   filename
+     *
+     * @return  string              relative filename
+     */
+    public static function trimFilename($filename)
+    {
+        return preg_replace('/.*\/features\\' . DIRECTORY_SEPARATOR . '/i', 'features' . DIRECTORY_SEPARATOR, $filename);
+    }
+
     /**
      * Print comment line with source info.
      *
@@ -320,9 +333,9 @@ abstract class ConsoleFormatter
         $indent = $lineLength > $this->maxDescriptionLength
             ? 0
             : $this->maxDescriptionLength - $lineLength;
+
         $file = self::trimFilename($file);
 
         $this->write(sprintf("%s # %s:%d", str_repeat(' ', $indent), $file, $line), 'comment');
     }
 }
-

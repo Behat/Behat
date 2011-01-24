@@ -25,9 +25,9 @@ class WorldEnvironment implements EnvironmentInterface
   public function loadEnvironmentFile($envFile)
   {
       if (is_file($envFile)) {
-            $world = $this;
-            require $envFile;
-        }
+          $world = $this;
+          require $envFile;
+      }
   }
 
   /**

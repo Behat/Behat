@@ -6,7 +6,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
 use Everzet\Behat\Hooks\Loader\LoaderInterface;
-use Everzet\Behat\Filter\FilterInterface;
+
+use Behat\Gherkin\Filter\TagFilter,
+    Behat\Gherkin\Filter\NameFilter;
 
 /*
  * This file is part of the Behat.
@@ -28,30 +30,9 @@ class HooksContainer
     protected $loaders      = array();
 
     protected $hooks        = array();
-    protected $tagsFilter;
 
     /**
-     * Set Tagged Hooks Filter Service. 
-     * 
-     * @param   FilterInterface $tagsFilter tags filter service
-     */
-    public function setTagsFilter(FilterInterface $tagsFilter)
-    {
-        $this->tagsFilter = $tagsFilter;
-    }
-
-    /**
-     * Set Name Filter Service. 
-     * 
-     * @param   FilterInterface $nameFilter name filtering service
-     */
-    public function setNameFilter(FilterInterface $nameFilter)
-    {
-        $this->nameFilter = $nameFilter;
-    }
-
-    /**
-     * Register Hooks Event Listeners. 
+     * Register Hooks Event Listeners.
      * 
      * @param   EventDispatcher $dispatcher event dispatcher
      */
@@ -112,16 +93,18 @@ class HooksContainer
                 break;
         }
 
-        $feature    = $event->getSubject();
-        $tagsFilter = $this->tagsFilter;
-        $nameFilter = $this->nameFilter;
+        $feature = $event->getSubject();
 
         $this->fireHooks($event, $hookName
-            , function($hook) use($feature, $tagsFilter) {
-                return $tagsFilter->isFeatureMatchFilter($feature, $hook[0]);
+            , function($hook) use($feature) {
+                $tagsFilter = new TagFilter($hook[0]);
+
+                return $tagsFilter->isFeatureMatch($feature);
             }
-            , function($hook) use($feature, $nameFilter) {
-                return $nameFilter->isFeatureMatchFilter($feature, $hook[0]);
+            , function($hook) use($feature) {
+                $nameFilter = new NameFilter($hook[0]);
+
+                return $nameFilter->isFeatureMatch($feature);
             }
         );
     }
@@ -144,16 +127,18 @@ class HooksContainer
                 break;
         }
 
-        $scenario   = $event->getSubject();
-        $tagsFilter = $this->tagsFilter;
-        $nameFilter = $this->nameFilter;
+        $scenario = $event->getSubject();
 
         $this->fireHooks($event, $hookName
-            , function($hook) use($scenario, $tagsFilter) {
-                return $tagsFilter->isScenarioMatchFilter($scenario, $hook[0]);
+            , function($hook) use($scenario) {
+                $tagsFilter = new TagFilter($hook[0]);
+
+                return $tagsFilter->isScenarioMatch($scenario);
             }
-            , function($hook) use($scenario, $nameFilter) {
-                return $nameFilter->isScenarioMatchFilter($scenario, $hook[0]);
+            , function($hook) use($scenario) {
+                $nameFilter = new NameFilter($hook[0]);
+
+                return $nameFilter->isScenarioMatch($scenario);
             }
         );
     }
@@ -174,16 +159,18 @@ class HooksContainer
                 break;
         }
 
-        $step       = $event->getSubject();
-        $tagsFilter = $this->tagsFilter;
-        $nameFilter = $this->nameFilter;
+        $step = $event->getSubject();
 
         $this->fireHooks($event, $hookName
-            , function($hook) use($step, $tagsFilter) {
-                return $tagsFilter->isStepMatchFilter($step, $hook[0]);
+            , function($hook) use($step) {
+                $tagsFilter = new TagFilter($hook[0]);
+
+                return $tagsFilter->isScenarioMatch($step->getParent());
             }
-            , function($hook) use($step, $nameFilter) {
-                return $nameFilter->isStepMatchFilter($step, $hook[0]);
+            , function($hook) use($step) {
+                $nameFilter = new NameFilter($hook[0]);
+
+                return $nameFilter->isScenarioMatch($step->getParent());
             }
         );
     }

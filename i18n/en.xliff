@@ -2,30 +2,6 @@
   <file original="global" source-language="en" datatype="plaintext">
     <header />
     <body>
-      <trans-unit id="feature">
-        <source>Feature</source>
-        <target>Feature</target>
-      </trans-unit>
-      <trans-unit id="background">
-        <source>Background</source>
-        <target>Background</target>
-      </trans-unit>
-      <trans-unit id="scenario">
-        <source>Scenario</source>
-        <target>Scenario</target>
-      </trans-unit>
-      <trans-unit id="scenario-outline">
-        <source>Scenario Outline</source>
-        <target>Scenario Outline</target>
-      </trans-unit>
-      <trans-unit id="examples">
-        <source>Examples</source>
-        <target>Examples</target>
-      </trans-unit>
-      <trans-unit id="step-types">
-        <source>Given|Then|When|And|But</source>
-        <target>Given|Then|When|And|But</target>
-      </trans-unit>
       <trans-unit id="proposal-title">
         <source>You can implement step definitions for undefined steps with these snippets:</source>
         <target>You can implement step definitions for undefined steps with these snippets:</target>
