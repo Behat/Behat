@@ -23,6 +23,5 @@ interface LoaderInterface
      * @param   string          $path       plain php file path
      * @return  array                       array of hooks
      */
-    public function load($path);
+    function load($path);
 }
-

@@ -42,4 +42,3 @@ class Redundant extends BehaviorException
         );
     }
 }
-

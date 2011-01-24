@@ -43,4 +43,3 @@ class Ambiguous extends BehaviorException
         }
     }
 }
-

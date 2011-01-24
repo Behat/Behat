@@ -27,7 +27,7 @@ class PHPLoader implements LoaderInterface
      */
     public function load($path)
     {
-        $this->hoos = array(
+        $this->hooks = array(
             'suite.before'      => array()
           , 'suite.after'       => array()
           , 'feature.before'    => array()
