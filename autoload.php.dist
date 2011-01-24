@@ -15,14 +15,13 @@ use Everzet\Behat\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony\Component\Console'             => __DIR__.'/vendor/symfony/src'
-  , 'Symfony\Component\DependencyInjection' => __DIR__.'/vendor/symfony/src'
-  , 'Symfony\Component\Translation'         => __DIR__.'/vendor/symfony/src'
-  , 'Symfony\Component\EventDispatcher'     => __DIR__.'/vendor/symfony/src'
-  , 'Symfony\Component\Finder'              => __DIR__.'/vendor/symfony/src'
-  , 'Symfony\Component\Yaml'                => __DIR__.'/vendor/symfony/src'
-  , 'Everzet\Gherkin'                       => __DIR__.'/src'
-  , 'Everzet\Behat'                         => __DIR__.'/src'
+    'Symfony\Component\Console'             => __DIR__.'/vendor/symfony/src',
+    'Symfony\Component\DependencyInjection' => __DIR__.'/vendor/symfony/src',
+    'Symfony\Component\Translation'         => __DIR__.'/vendor/symfony/src',
+    'Symfony\Component\EventDispatcher'     => __DIR__.'/vendor/symfony/src',
+    'Symfony\Component\Finder'              => __DIR__.'/vendor/symfony/src',
+    'Symfony\Component\Yaml'                => __DIR__.'/vendor/symfony/src',
+    'Behat\Gherkin'                         => __DIR__.'/vendor/gherkin/src',
+    'Everzet\Behat'                         => __DIR__.'/src'
 ));
 $loader->register();
-

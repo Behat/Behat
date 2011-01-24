@@ -2,10 +2,11 @@
 
 namespace Everzet\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\DependencyInjection\Container,
+    Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Gherkin\Node\NodeVisitorInterface;
+use Behat\Gherkin\Node\NodeVisitorInterface,
+    Behat\Gherkin\Node\AbstractNode;
 
 use Everzet\Behat\Environment\EnvironmentInterface;
 
@@ -52,11 +53,11 @@ class BackgroundTester implements NodeVisitorInterface
     /**
      * Visit BackgroundNode & run tests against it.
      *
-     * @param   Everzet\Gherkin\Node\BackgroundNode     $background     background node
+     * @param   AbstractNode    $background background node
      * 
-     * @return  integer                                                 result
+     * @return  integer                     result
      */
-    public function visit($background)
+    public function visit(AbstractNode $background)
     {
         $this->dispatcher->notify(new Event($background, 'background.run.before'));
 

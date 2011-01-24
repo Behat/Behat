@@ -2,12 +2,13 @@
 
 namespace Everzet\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\DependencyInjection\Container,
+    Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Gherkin\Node\NodeVisitorInterface;
-use Everzet\Gherkin\Node\ScenarioNode;
-use Everzet\Gherkin\Node\OutlineNode;
+use Behat\Gherkin\Node\NodeVisitorInterface,
+    Behat\Gherkin\Node\AbstractNode,
+    Behat\Gherkin\Node\ScenarioNode,
+    Behat\Gherkin\Node\OutlineNode;
 
 use Everzet\Behat\Exception\BehaviorException;
 
@@ -43,21 +44,16 @@ class FeatureTester implements NodeVisitorInterface
     /**
      * Visit FeatureNode & run tests against it.
      *
-     * @param   Everzet\Gherkin\Node\FeatureNode        $feature        feature node
+     * @param   AbstractNode    $feature        feature node
      * 
-     * @return  integer                                                 result
+     * @return  integer                         result
      */
-    public function visit($feature)
+    public function visit(AbstractNode $feature)
     {
         $result = 0;
 
-        // Filter scenarios
-        $event = new Event($feature, 'feature.run.filter_scenarios');
-        $this->dispatcher->filter($event, $feature->getScenarios());
-        $scenarios = $event->getReturnValue();
-
-        // If feature has scenario - run it
-        if (count($scenarios)) {
+        // If feature has scenario - run them
+        if (count($scenarios = $feature->getScenarios())) {
             $this->dispatcher->notify(new Event($feature, 'feature.run.before'));
 
             foreach ($scenarios as $scenario) {

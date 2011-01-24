@@ -2,17 +2,17 @@
 
 namespace Everzet\Behat\StepDefinition;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher,
+    Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Gherkin\Node\StepNode;
-use Everzet\Gherkin\Node\PyStringNode;
-use Everzet\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\StepNode,
+    Behat\Gherkin\Node\PyStringNode,
+    Behat\Gherkin\Node\TableNode;
 
-use Everzet\Behat\StepDefinition\Loader\LoaderInterface;
-use Everzet\Behat\Exception\Redundant;
-use Everzet\Behat\Exception\Ambiguous;
-use Everzet\Behat\Exception\Undefined;
+use Everzet\Behat\StepDefinition\Loader\LoaderInterface,
+    Everzet\Behat\Exception\Redundant,
+    Everzet\Behat\Exception\Ambiguous,
+    Everzet\Behat\Exception\Undefined;
 
 /*
  * This file is part of the Behat.
@@ -213,4 +213,3 @@ PHP
         return $matches[0];
     }
 }
-

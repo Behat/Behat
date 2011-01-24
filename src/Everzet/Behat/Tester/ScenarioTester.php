@@ -5,7 +5,8 @@ namespace Everzet\Behat\Tester;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Gherkin\Node\NodeVisitorInterface;
+use Behat\Gherkin\Node\NodeVisitorInterface,
+    Behat\Gherkin\Node\AbstractNode;
 
 /*
  * This file is part of the Behat.
@@ -41,11 +42,11 @@ class ScenarioTester implements NodeVisitorInterface
     /**
      * Visit ScenarioNode & run tests against it.
      *
-     * @param   Everzet\Gherkin\Node\ScenarioNode       $scenario       scenario node
+     * @param   AbstractNode    $scenario       scenario node
      * 
-     * @return  integer                                                 result
+     * @return  integer                         result
      */
-    public function visit($scenario)
+    public function visit(AbstractNode $scenario)
     {
         $this->dispatcher->notify(new Event($scenario, 'scenario.run.before', array(
             'environment'   => $this->environment

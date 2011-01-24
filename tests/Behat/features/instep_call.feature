@@ -42,14 +42,14 @@ Feature: Call step in other step
           $steps->Then("I should see \"$result\" on the screen", $world);
       });
       $steps->Тогда('/Я создам себе failing таблицу/', function($world) use($steps) {
-          $steps->Then('Table should be:', $world, new Everzet\Gherkin\Node\TableNode(<<<TABLE
+          $steps->Then('Table should be:', $world, new Behat\Gherkin\Node\TableNode(<<<TABLE
             | username | antono |
             | password | 123    |
       TABLE
           ));
       });
       $steps->Тогда('/Я создам себе passing таблицу/', function($world) use($steps) {
-          $steps->Then('Table should be:', $world, new Everzet\Gherkin\Node\TableNode(<<<TABLE
+          $steps->Then('Table should be:', $world, new Behat\Gherkin\Node\TableNode(<<<TABLE
             | username | everzet |
             | password | qwerty  |
       TABLE

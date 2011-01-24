@@ -1,3 +1,6 @@
 [submodule "vendor/symfony"]
 	path = vendor/symfony
 	url = git://github.com/symfony/symfony.git
+[submodule "vendor/gherkin"]
+	path = vendor/gherkin
+	url = git://github.com/Behat/Gherkin.git

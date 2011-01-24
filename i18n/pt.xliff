@@ -1,31 +1,7 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file original="global" source-language="en" target-language="pt-BR" datatype="plaintext">
+  <file original="global" source-language="en" target-language="pt" datatype="plaintext">
     <header />
     <body>
-      <trans-unit id="feature">
-        <source>Feature</source>
-        <target>Funcionalidade</target>
-      </trans-unit>
-      <trans-unit id="background">
-        <source>Background</source>
-        <target>Fundamentos</target>
-      </trans-unit>
-      <trans-unit id="scenario">
-        <source>Scenario</source>
-        <target>Cenário</target>
-      </trans-unit>
-      <trans-unit id="scenario-outline">
-        <source>Scenario Outline</source>
-        <target>Descrição do Cenário</target>
-      </trans-unit>
-      <trans-unit id="examples">
-        <source>Examples</source>
-        <target>Exemplos</target>
-      </trans-unit>
-      <trans-unit id="step-types">
-        <source>Given|Then|When|And|But</source>
-        <target>Dado|Então|Quando|E|Mas</target>
-      </trans-unit>
       <trans-unit id="proposal-title">
         <source>You can implement step definitions for undefined steps with these snippets:</source>
         <target>Você pode implementar definições de passos para aqueles ainda não definidos utilizando-se destes trechos:</target>

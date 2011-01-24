@@ -2,11 +2,11 @@
 
 namespace Everzet\Behat\StepDefinition;
 
-use Everzet\Gherkin\Node\PyStringNode;
-use Everzet\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\PyStringNode,
+    Behat\Gherkin\Node\TableNode;
 
-use Everzet\Behat\Exception\Error;
-use Everzet\Behat\Environment\EnvironmentInterface;
+use Everzet\Behat\Exception\Error,
+    Everzet\Behat\Environment\EnvironmentInterface;
 
 /*
  * This file is part of the Behat.
@@ -160,4 +160,3 @@ class Definition
         }
     }
 }
-

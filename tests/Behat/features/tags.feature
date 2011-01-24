@@ -14,53 +14,53 @@ Feature: Tags
     And a file named "features/steps/steps.php" with:
       """
       <?php
-      $steps->Given('/^Some slow step #(\d+)$/', function($world, $num) {});
-      $steps->Given('/^Some normal step #(\d+)$/', function($world, $num) {});
-      $steps->Given('/^Some fast step #(\d+)$/', function($world, $num) {});
+      $steps->Given('/^Some slow step N(\d+)$/', function($world, $num) {});
+      $steps->Given('/^Some normal step N(\d+)$/', function($world, $num) {});
+      $steps->Given('/^Some fast step N(\d+)$/', function($world, $num) {});
       """
     And a file named "features/feature1.feature" with:
       """
       @slow
-      Feature: Feature #1
+      Feature: Feature N1
 
         Background:
-          Given Some slow step #11
+          Given Some slow step N11
 
         Scenario:
-          Given Some slow step #12
-          And Some normal step #13
+          Given Some slow step N12
+          And Some normal step N13
 
         @fast
         Scenario:
-          Given Some fast step #14
+          Given Some fast step N14
       """
     And a file named "features/feature2.feature" with:
       """
-      Feature: Feature #2
+      Feature: Feature N2
 
         Background:
-          Given Some normal step #21
+          Given Some normal step N21
 
         @slow @fast
         Scenario:
-          Given Some slow step #22
-          And Some fast step #23
+          Given Some slow step N22
+          And Some fast step N23
 
         @fast
         Scenario:
-          Given Some fast step #24
-          And Some fast step #25
+          Given Some fast step N24
+          And Some fast step N25
       """
     And a file named "features/feature3.feature" with:
       """
-      Feature: Feature #3
+      Feature: Feature N3
 
         Background:
-          Given Some normal step #21
+          Given Some normal step N21
 
         @slow
         Scenario Outline:
-          Given Some slow step #<num>
+          Given Some slow step N<num>
 
           Examples:
             | num |
@@ -69,11 +69,11 @@ Feature: Tags
 
         @normal
         Scenario:
-          Given Some normal step #38
+          Given Some normal step N38
 
         @fast
         Scenario Outline:
-          Given Some fast step #<num>
+          Given Some fast step N<num>
 
           Examples:
             | num |
@@ -82,8 +82,8 @@ Feature: Tags
 
         @normal @fast
         Scenario Outline:
-          Given Some normal step #<num>
-          And Some fast step #37
+          Given Some normal step N<num>
+          And Some fast step N37
 
           Examples:
             | num |
@@ -92,16 +92,16 @@ Feature: Tags
       """
     And a file named "features/feature4.feature" with:
       """
-      Feature: Feature #4
+      Feature: Feature N4
 
         @normal
         Scenario:
-          Given Some normal step #41
-          And Some fast step #42
+          Given Some normal step N41
+          And Some fast step N42
 
         @fast
         Scenario:
-          Given Some slow step #43
+          Given Some slow step N43
       """
 
   Scenario: Single tag
@@ -109,37 +109,37 @@ Feature: Tags
     Then it should pass with:
       """
       @slow
-      Feature: Feature #1
+      Feature: Feature N1
       
         Background:                # features/feature1.feature:4
-          Given Some slow step #11 # features/steps/steps.php:2
+          Given Some slow step N11 # features/steps/steps.php:2
       
         Scenario:                  # features/feature1.feature:7
-          Given Some slow step #12 # features/steps/steps.php:2
-          And Some normal step #13 # features/steps/steps.php:3
+          Given Some slow step N12 # features/steps/steps.php:2
+          And Some normal step N13 # features/steps/steps.php:3
       
         @fast
         Scenario:                  # features/feature1.feature:12
-          Given Some fast step #14 # features/steps/steps.php:4
+          Given Some fast step N14 # features/steps/steps.php:4
       
-      Feature: Feature #2
+      Feature: Feature N2
       
         Background:                  # features/feature2.feature:3
-          Given Some normal step #21 # features/steps/steps.php:3
+          Given Some normal step N21 # features/steps/steps.php:3
       
         @slow @fast
         Scenario:                    # features/feature2.feature:7
-          Given Some slow step #22   # features/steps/steps.php:2
-          And Some fast step #23     # features/steps/steps.php:4
+          Given Some slow step N22   # features/steps/steps.php:2
+          And Some fast step N23     # features/steps/steps.php:4
       
-      Feature: Feature #3
+      Feature: Feature N3
       
         Background:                  # features/feature3.feature:3
-          Given Some normal step #21 # features/steps/steps.php:3
+          Given Some normal step N21 # features/steps/steps.php:3
       
         @slow
         Scenario Outline:             # features/feature3.feature:7
-          Given Some slow step #<num> # features/steps/steps.php:2
+          Given Some slow step N<num> # features/steps/steps.php:2
       
           Examples:
             | num |
@@ -155,37 +155,37 @@ Feature: Tags
     Then it should pass with:
       """
       @slow
-      Feature: Feature #1
+      Feature: Feature N1
       
         Background:                # features/feature1.feature:4
-          Given Some slow step #11 # features/steps/steps.php:2
+          Given Some slow step N11 # features/steps/steps.php:2
       
         Scenario:                  # features/feature1.feature:7
-          Given Some slow step #12 # features/steps/steps.php:2
-          And Some normal step #13 # features/steps/steps.php:3
+          Given Some slow step N12 # features/steps/steps.php:2
+          And Some normal step N13 # features/steps/steps.php:3
       
         @fast
         Scenario:                  # features/feature1.feature:12
-          Given Some fast step #14 # features/steps/steps.php:4
+          Given Some fast step N14 # features/steps/steps.php:4
       
-      Feature: Feature #2
+      Feature: Feature N2
       
         Background:                  # features/feature2.feature:3
-          Given Some normal step #21 # features/steps/steps.php:3
+          Given Some normal step N21 # features/steps/steps.php:3
       
         @slow @fast
         Scenario:                    # features/feature2.feature:7
-          Given Some slow step #22   # features/steps/steps.php:2
-          And Some fast step #23     # features/steps/steps.php:4
+          Given Some slow step N22   # features/steps/steps.php:2
+          And Some fast step N23     # features/steps/steps.php:4
       
-      Feature: Feature #3
+      Feature: Feature N3
       
         Background:                  # features/feature3.feature:3
-          Given Some normal step #21 # features/steps/steps.php:3
+          Given Some normal step N21 # features/steps/steps.php:3
       
         @slow
         Scenario Outline:             # features/feature3.feature:7
-          Given Some slow step #<num> # features/steps/steps.php:2
+          Given Some slow step N<num> # features/steps/steps.php:2
       
           Examples:
             | num |
@@ -194,24 +194,24 @@ Feature: Tags
       
         @normal
         Scenario:                     # features/feature3.feature:16
-          Given Some normal step #38  # features/steps/steps.php:3
+          Given Some normal step N38  # features/steps/steps.php:3
       
         @normal @fast
         Scenario Outline:               # features/feature3.feature:29
-          Given Some normal step #<num> # features/steps/steps.php:3
-          And Some fast step #37        # features/steps/steps.php:4
+          Given Some normal step N<num> # features/steps/steps.php:3
+          And Some fast step N37        # features/steps/steps.php:4
       
           Examples:
             | num |
             | 35  |
             | 36  |
       
-      Feature: Feature #4
+      Feature: Feature N4
       
         @normal
         Scenario:                       # features/feature4.feature:4
-          Given Some normal step #41    # features/steps/steps.php:3
-          And Some fast step #42        # features/steps/steps.php:4
+          Given Some normal step N41    # features/steps/steps.php:3
+          And Some fast step N42        # features/steps/steps.php:4
       
       9 scenarios (9 passed)
       22 steps (22 passed)
@@ -222,34 +222,34 @@ Feature: Tags
     Then it should pass with:
       """
       @slow
-      Feature: Feature #1
+      Feature: Feature N1
       
         Background:                # features/feature1.feature:4
-          Given Some slow step #11 # features/steps/steps.php:2
+          Given Some slow step N11 # features/steps/steps.php:2
       
         @fast
         Scenario:                  # features/feature1.feature:12
-          Given Some fast step #14 # features/steps/steps.php:4
+          Given Some fast step N14 # features/steps/steps.php:4
       
-      Feature: Feature #2
+      Feature: Feature N2
       
         Background:                  # features/feature2.feature:3
-          Given Some normal step #21 # features/steps/steps.php:3
+          Given Some normal step N21 # features/steps/steps.php:3
       
         @slow @fast
         Scenario:                    # features/feature2.feature:7
-          Given Some slow step #22   # features/steps/steps.php:2
-          And Some fast step #23     # features/steps/steps.php:4
+          Given Some slow step N22   # features/steps/steps.php:2
+          And Some fast step N23     # features/steps/steps.php:4
       
-      Feature: Feature #3
+      Feature: Feature N3
       
         Background:                  # features/feature3.feature:3
-          Given Some normal step #21 # features/steps/steps.php:3
+          Given Some normal step N21 # features/steps/steps.php:3
       
         @normal @fast
         Scenario Outline:               # features/feature3.feature:29
-          Given Some normal step #<num> # features/steps/steps.php:3
-          And Some fast step #37        # features/steps/steps.php:4
+          Given Some normal step N<num> # features/steps/steps.php:3
+          And Some fast step N37        # features/steps/steps.php:4
       
           Examples:
             | num |
@@ -264,21 +264,21 @@ Feature: Tags
     When I run "behat -TCf pretty --tags '~@slow&&~@fast'"
     Then it should pass with:
       """
-      Feature: Feature #3
+      Feature: Feature N3
       
         Background:                  # features/feature3.feature:3
-          Given Some normal step #21 # features/steps/steps.php:3
+          Given Some normal step N21 # features/steps/steps.php:3
       
         @normal
         Scenario:                    # features/feature3.feature:16
-          Given Some normal step #38 # features/steps/steps.php:3
+          Given Some normal step N38 # features/steps/steps.php:3
       
-      Feature: Feature #4
+      Feature: Feature N4
       
         @normal
         Scenario:                    # features/feature4.feature:4
-          Given Some normal step #41 # features/steps/steps.php:3
-          And Some fast step #42     # features/steps/steps.php:4
+          Given Some normal step N41 # features/steps/steps.php:3
+          And Some fast step N42     # features/steps/steps.php:4
       
       2 scenarios (2 passed)
       4 steps (4 passed)

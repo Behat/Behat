@@ -22,5 +22,5 @@ interface EnvironmentInterface
      * 
      * @param     string  $file       file path to include initializations from
      */
-    public function loadEnvironmentFile($envFile);
+    function loadEnvironmentFile($envFile);
 }

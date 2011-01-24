@@ -2,7 +2,7 @@
 
 namespace Everzet\Behat\StepDefinition;
 
-use Everzet\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\TableNode;
 
 /*
  * This file is part of the Behat.
@@ -71,4 +71,3 @@ class Transformation
         return false;
     }
 }
-

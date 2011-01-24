@@ -16,6 +16,9 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Symfony\Component\Finder\Finder;
 
+use Behat\Gherkin\Filter\NameFilter,
+    Behat\Gherkin\Filter\TagFilter;
+
 /*
  * This file is part of the Behat.
  * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
@@ -104,10 +107,10 @@ class BehatCommand extends Command
             $container->setParameter('behat.features.path',     realpath($input->getArgument('features')));
         }
         if (null !== $input->getOption('name')) {
-            $container->setParameter('behat.filter.name',       $input->getOption('name'));
+            $container->setParameter('gherkin.filter.name',     $input->getOption('name'));
         }
         if (null !== $input->getOption('tags')) {
-            $container->setParameter('behat.filter.tags',       $input->getOption('tags'));
+            $container->setParameter('gherkin.filter.tags',     $input->getOption('tags'));
         }
         if (null !== $input->getOption('format')) {
             $container->setParameter('behat.formatter.name',    $input->getOption('format'));
@@ -132,10 +135,10 @@ class BehatCommand extends Command
         $featuresPath = $container->getParameter('behat.features.path');
         if (is_dir($featuresPath . DIRECTORY_SEPARATOR . 'features')) {
             $featuresPath = $featuresPath . DIRECTORY_SEPARATOR . 'features';
-            $container->setParameter('behat.features.path',     $featuresPath);
+            $container->setParameter('behat.features.path',         $featuresPath);
         } elseif (is_file($featuresPath)) {
-            $container->setParameter('behat.features.files',    $featuresPath);
-            $container->setParameter('behat.features.path',     dirname($featuresPath));
+            $container->setParameter('behat.features.path',         dirname($featuresPath));
+            $container->setParameter('behat.features.load_path',    $featuresPath);
         }
 
         // Freeze container
@@ -144,18 +147,28 @@ class BehatCommand extends Command
         // Set Output Manager Output instance
         $container->get('behat.output_manager')->setOutput($output);
 
+        // Translations
+        $translator = $container->get('behat.translator');
+        foreach ($this->findTranslationResources($container->getParameter('behat.i18n.path')) as $path) {
+            $transId = basename($path, '.xliff');
+            $translator->addResource('xliff', $path, $transId);
+        }
+
+        // Configure Gherkin manager
+        $gherkin = $container->get('gherkin');
+        if ($container->getParameter('gherkin.filter.name')) {
+            $gherkin->addFilter(new NameFilter($container->getParameter('gherkin.filter.name')));
+        }
+        if ($container->getParameter('gherkin.filter.tags')) {
+            $gherkin->addFilter(new TagFilter($container->getParameter('gherkin.filter.tags')));
+        }
+
         // Add hooks files paths to container resources list
         $hooksContainer = $container->get('behat.hooks_container');
         foreach ((array) $container->getParameter('behat.hooks.file') as $path) {
             if (is_file($path)) {
                 $hooksContainer->addResource('php', $path);
             }
-        }
-
-        // Add features paths to container resources list
-        $featuresContainer = $container->get('behat.features_container');
-        foreach ($this->findFeatureResources($container->getParameter('behat.features.files')) as $path) {
-            $featuresContainer->addResource('gherkin', $path);
         }
 
         // Add definitions files to container resources list
@@ -168,13 +181,16 @@ class BehatCommand extends Command
             }
         }
 
+        // Load features
+        $features = $gherkin->load($container->getParameter('behat.features.load_path'));
+
         // Notify suite.run.before event & start timer
         $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.before'));
         $container->get('behat.statistics_collector')->startTimer();
 
         // Run features
         $result = 0;
-        foreach ($featuresContainer->getFeatures() as $feature) {
+        foreach ($features as $feature) {
             $tester = $container->get('behat.feature_tester');
             $result = max($result, $feature->accept($tester));
         }
@@ -222,7 +238,7 @@ class BehatCommand extends Command
         if (null !== $configurationFile) {
             if (false !== mb_stripos($configurationFile, '.xml')) {
                 $loader = new XmlFileLoader($container);
-            } elseif (false !== mb_stripos($configurationFile, '.yml') || false !== mb_stripos($configurationFile, '.yaml')) {
+            } elseif (false !== mb_stripos($configurationFile, '.yml')) {
                 $loader = new YamlFileLoader($container);
             }
 
@@ -235,28 +251,23 @@ class BehatCommand extends Command
 
         // Set initial container services & parameters
         $container->setParameter('behat.work.path', $cwd);
-        $container->setParameter('behat.lib.path',  realpath(__DIR__ . '/../../../../../'));
+        $container->setParameter('behat.lib.path',  $behatPath = realpath(__DIR__ . '/../../../../../'));
+        $container->setParameter('gherkin.lib.path',  realpath($behatPath . '/vendor/gherkin'));
 
         return $container;
     }
 
     /**
-     * Find features files in specified path. 
-     * 
-     * @param   string  $featuresPath   feature file or path
+     * Find translations for Behat.
      *
-     * @return  mixed                   files iterator
+     * @param   string  $i18nPath   xliff path
+     * 
+     * @return  mixed               files iterator
      */
-    protected function findFeatureResources($featuresPath)
+    protected function findTranslationResources($i18nPath)
     {
-        if (is_file($featuresPath)) {
-            $paths  = array($featuresPath);
-        } elseif (is_dir($featuresPath)) {
-            $finder = new Finder();
-            $paths  = $finder->files()->name('*.feature')->in($featuresPath);
-        } else {
-            throw new \InvalidArgumentException(sprintf('Provide correct feature(s) path. "%s" given', $featuresPath));
-        }
+        $finder = new Finder();
+        $paths  = $finder->files()->name('*.xliff')->in($i18nPath);
 
         return $paths;
     }
@@ -265,7 +276,7 @@ class BehatCommand extends Command
      * Find definitions files in specified path. 
      * 
      * @param   string  $stepsPath  steps files path
-     *
+     * 
      * @return  mixed               files iterator
      */
     protected function findDefinitionResources($stepsPath)
@@ -276,4 +287,3 @@ class BehatCommand extends Command
         return $paths;
     }
 }
-

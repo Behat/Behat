@@ -2,10 +2,11 @@
 
 namespace Everzet\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\DependencyInjection\Container,
+    Symfony\Component\EventDispatcher\Event;
 
-use Everzet\Gherkin\Node\NodeVisitorInterface;
+use Behat\Gherkin\Node\NodeVisitorInterface,
+    Behat\Gherkin\Node\AbstractNode;
 
 /*
  * This file is part of the Behat.
@@ -39,18 +40,18 @@ class OutlineTester implements NodeVisitorInterface
     /**
      * Visit OutlineNode & run tests against it.
      *
-     * @param   Everzet\Gherkin\Node\OutlineNode        $outline        outline node
+     * @param   AbstractNode    $outline        outline node
      * 
-     * @return  integer                                                 result
+     * @return  integer                         result
      */
-    public function visit($outline)
+    public function visit(AbstractNode $outline)
     {
         $this->dispatcher->notify(new Event($outline, 'outline.run.before'));
 
         $result = 0;
 
         // Run subscenarios of outline based on examples
-        foreach ($outline->getExamples()->getTable()->getHash() as $iteration => $tokens) {
+        foreach ($outline->getExamples()->getHash() as $iteration => $tokens) {
             $environment    = $this->container->get('behat.environment_builder')->buildEnvironment();
             $itResult       = 0;
             $skip           = false;
