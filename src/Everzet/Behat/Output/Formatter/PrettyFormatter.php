@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\Container,
     Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\AbstractNode,
+    Behat\Gherkin\Node\AbstractScenarioNode,
     Behat\Gherkin\Node\FeatureNode,
     Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\BackgroundNode,
@@ -332,10 +333,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
     {
         $step = $event->getSubject();
 
-        $isBackground = $step->getParent() instanceof BackgroundNode
-                     && !($step->getParent() instanceof ScenarioNode);
-
-        if (!$isBackground || !$this->backgroundPrinted) {
+        if (!($step->getParent() instanceof BackgroundNode) || !$this->backgroundPrinted) {
             if (!($step->getParent() instanceof OutlineNode) || !$this->outlineStepsPrinted) {
                 // Get step description
                 $text           = $this->outlineStepsPrinted ? $step->getText() : $step->getCleanText();
@@ -418,7 +416,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
      * 
      * @return  integer                 description length
      */
-    protected function recalcMaxDescriptionLength(BackgroundNode $scenario)
+    protected function recalcMaxDescriptionLength(AbstractScenarioNode $scenario)
     {
         $max    = $this->maxDescriptionLength;
         $type   = '';
@@ -430,8 +428,7 @@ class PrettyFormatter extends ConsoleFormatter implements FormatterInterface, Co
         } else if ($scenario instanceof BackgroundNode) {
             $type = $this->transGherkinKeyword('Background', $scenario->getLanguage());
         }
-        $isBackground = $scenario instanceof BackgroundNode && !($scenario instanceof ScenarioNode);
-        $scenarioDescription = !$isBackground && $scenario->getTitle()
+        $scenarioDescription = !($scenario instanceof BackgroundNode) && $scenario->getTitle()
             ? $type . ': ' . $scenario->getTitle()
             : $type;
 
