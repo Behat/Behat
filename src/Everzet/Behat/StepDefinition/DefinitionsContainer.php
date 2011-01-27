@@ -80,11 +80,11 @@ class DefinitionsContainer
             return;
         }
 
-        $this->dispatcher->notify(new Event($this, 'definitions.load.before'));
-
         foreach ($this->resources as $resource) {
             if (!isset($this->loaders[$resource[0]])) {
-                throw new \RuntimeException(sprintf('The "%s" step definition loader is not registered.', $resource[0]));
+                throw new \RuntimeException(
+                    sprintf('The "%s" step definition loader is not registered.', $resource[0])
+                );
             }
 
             $objects = $this->loaders[$resource[0]]->load($resource[1]);
@@ -94,15 +94,12 @@ class DefinitionsContainer
                     if (isset($this->definitions[$object->getRegex()])) {
                         throw new Redundant($object, $this->definitions[$object->getRegex()]);
                     }
-
                     $this->definitions[$object->getRegex()] = $object;
                 } elseif ($object instanceof Transformation) {
                     $this->transformations[$object->getRegex()] = $object;
                 }
             }
         }
-
-        $this->dispatcher->notify(new Event($this, 'definitions.load.after'));
     }
 
     /**

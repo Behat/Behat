@@ -142,7 +142,7 @@ class BehatCommand extends Command
         }
 
         // Freeze container
-        $container->freeze();
+        $container->compile();
 
         // Set Output Manager Output instance
         $container->get('behat.output_manager')->setOutput($output);

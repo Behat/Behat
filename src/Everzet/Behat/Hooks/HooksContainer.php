@@ -43,7 +43,7 @@ class HooksContainer
         }
 
         $dispatcher->connect('suite.run.before',        array($this, 'fireSuiteHooks'));
-        $dispatcher->connect('suite.run.after',         array($this, 'fireSuiteHooks'));
+        $dispatcher->connect('suite.run.after',         array($this, 'fireSuiteHooks'), 10);
 
         $dispatcher->connect('feature.run.before',      array($this, 'fireFeatureHooks'));
         $dispatcher->connect('feature.run.after',       array($this, 'fireFeatureHooks'));

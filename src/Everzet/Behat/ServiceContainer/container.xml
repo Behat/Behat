@@ -75,7 +75,7 @@
     </parameters>
     <services>
         <!-- Gherkin Manager -->
-        <service id="gherkin" class="%gherkin.class%" shared="true">
+        <service id="gherkin" class="%gherkin.class%">
             <call method="addLoader">
                 <argument type="service">
                     <service class="%gherkin.loader.directory.class%">
@@ -112,7 +112,7 @@
         </service>
 
         <!-- Translator -->
-        <service id="behat.translator" class="%behat.translator.class%" shared="true">
+        <service id="behat.translator" class="%behat.translator.class%">
             <argument>en</argument>
             <argument type="service">
                 <service class="%behat.translator.message_selector.class%" />
@@ -126,7 +126,7 @@
         </service>
 
         <!-- Step Definition -->
-        <service id="behat.definitions_container" class="%behat.definitions_container.class%" shared="true">
+        <service id="behat.definitions_container" class="%behat.definitions_container.class%">
             <argument type="service" id="behat.event_dispatcher" />
             <call method="addLoader">
                 <argument>php</argument>
@@ -139,7 +139,7 @@
         </service>
 
         <!-- Hooks -->
-        <service id="behat.hooks_container" class="%behat.hooks_container.class%" shared="true">
+        <service id="behat.hooks_container" class="%behat.hooks_container.class%">
             <call method="addLoader">
                 <argument>php</argument>
                 <argument type="service">
@@ -150,20 +150,20 @@
         </service>
 
         <!-- Event Dispatcher -->
-        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" shared="true">
+        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%">
             <call method="bindEventListeners">
                 <argument type="service" id="service_container" />
             </call>
         </service>
 
         <!-- Collector -->
-        <service id="behat.statistics_collector" class="%behat.statistics_collector.class%" shared="true">
+        <service id="behat.statistics_collector" class="%behat.statistics_collector.class%">
             <argument type="service" id="service_container" />
             <tag name="behat.events_listener" />
         </service>
 
         <!-- Output Manager -->
-        <service id="behat.output_manager" class="%behat.output_manager.class%" shared="true">
+        <service id="behat.output_manager" class="%behat.output_manager.class%">
             <argument type="service" id="service_container" />
             <call method="setSupportPath">
                 <argument>%behat.support.path%</argument>
@@ -214,26 +214,26 @@
         </service>
 
         <!-- Environment -->
-        <service id="behat.environment" class="%behat.environment.class%" shared="false" />
-        <service id="behat.environment_builder" class="%behat.environment_builder.class%" shared="true">
+        <service id="behat.environment" class="%behat.environment.class%" scope="prototype" />
+        <service id="behat.environment_builder" class="%behat.environment_builder.class%">
             <argument type="service" id="service_container" />
             <argument>%behat.environment.file%</argument>
         </service>
 
         <!-- Tester -->
-        <service id="behat.feature_tester" class="%behat.feature_tester.class%" shared="false">
+        <service id="behat.feature_tester" class="%behat.feature_tester.class%" scope="prototype">
             <argument type="service" id="service_container" />
         </service>
-        <service id="behat.background_tester" class="%behat.background_tester.class%" shared="false">
+        <service id="behat.background_tester" class="%behat.background_tester.class%" scope="prototype">
             <argument type="service" id="service_container" />
         </service>
-        <service id="behat.scenario_tester" class="%behat.scenario_tester.class%" shared="false">
+        <service id="behat.scenario_tester" class="%behat.scenario_tester.class%" scope="prototype">
             <argument type="service" id="service_container" />
         </service>
-        <service id="behat.outline_tester" class="%behat.outline_tester.class%" shared="false">
+        <service id="behat.outline_tester" class="%behat.outline_tester.class%" scope="prototype">
             <argument type="service" id="service_container" />
         </service>
-        <service id="behat.step_tester" class="%behat.step_tester.class%" shared="false">
+        <service id="behat.step_tester" class="%behat.step_tester.class%" scope="prototype">
             <argument type="service" id="service_container" />
         </service>
     </services>
