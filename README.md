@@ -1,7 +1,7 @@
 Behat
 =====
 
-* The main website with documentation is at [http://everzet.com/Behat](http://everzet.com/Behat)
+* The main website with documentation is at [http://behat.org](http://behat.org)
 * Official Google Group is at [http://groups.google.com/group/behat](http://groups.google.com/group/behat)
 * The wiki pages is at [http://github.com/everzet/Behat/wiki](http://github.com/everzet/Behat/wiki)
 * The API documentation is at [http://everzet.com/Behat/api/](http://everzet.com/Behat/api/)

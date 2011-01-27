@@ -28,7 +28,7 @@ Feature: Pretty Formatter
       });
 
       $steps->And('/^Something not done yet$/', function($world) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       """
     And a file named "features/World.feature" with:
@@ -112,6 +112,6 @@ Feature: Pretty Formatter
       You can implement step definitions for undefined steps with these snippets:
 
       $steps->And('/^Something new$/', function($world) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       """

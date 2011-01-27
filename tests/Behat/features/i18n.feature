@@ -28,7 +28,7 @@ Feature: I18n
       });
 
       $steps->And('/^Что-то еще не сделано$/', function($world) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       """
     And a file named "features/World.feature" with:
@@ -115,7 +115,7 @@ Feature: I18n
       Вы можете реализовать определения для новых шагов с помощью этих шаблонов:
       
       $steps->И('/^Что-то новое$/', function($world) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       """
 
@@ -151,6 +151,6 @@ Feature: I18n
       Вы можете реализовать определения для новых шагов с помощью этих шаблонов:
       
       $steps->И('/^Что-то новое$/', function($world) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       """

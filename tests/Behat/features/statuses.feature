@@ -39,15 +39,15 @@ Feature: Statuses
       You can implement step definitions for undefined steps with these snippets:
 
       $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
 
       $steps->Then('/^I must have (\d+)$/', function($world, $arg1) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
 
       $steps->Then('/^String must be \'([^\']*)\'$/', function($world, $arg1) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       """
 
@@ -70,7 +70,7 @@ Feature: Statuses
       """
       <?php
       $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       """
     When I run "behat -TCf progress features/statuses.feature"
@@ -94,7 +94,7 @@ Feature: Statuses
       You can implement step definitions for undefined steps with these snippets:
 
       $steps->Then('/^I must have (\d+)$/', function($world, $arg1) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       """
 
@@ -211,7 +211,7 @@ Feature: Statuses
       """
       <?php
       $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       $steps->Given('/^I have entered 10$/', function($world, $arg1) {
           assertTrue(true);
@@ -242,7 +242,7 @@ Feature: Statuses
       You can implement step definitions for undefined steps with these snippets:
       
       $steps->Then('/^I must have (\d+)$/', function($world, $arg1) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       """
 
@@ -265,7 +265,7 @@ Feature: Statuses
       """
       <?php
       $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
-          throw new \Everzet\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\Pending();
       });
       $steps->Given('/^I have entered (\d+)$/', function($world, $arg1) {
           assertTrue(true);
@@ -274,7 +274,7 @@ Feature: Statuses
     When I run "behat -TCf progress features/statuses.feature"
     Then it should fail with:
       """
-      [Everzet\Behat\Exception\Redundant]
+      [Behat\Behat\Exception\Redundant]
         Step "/^I have entered (\d+)$/" is already defined in features/steps/steps.php:4
 
         features/steps/steps.php:4

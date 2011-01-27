@@ -2,16 +2,16 @@
 
 /*
  * This file is part of the Behat.
- * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-if (!class_exists('Everzet\\Behat\\UniversalClassLoader')) {
-    require_once __DIR__.'/src/Everzet/Behat/UniversalClassLoader.php';
+if (!class_exists('Behat\Behat\UniversalClassLoader')) {
+    require_once __DIR__.'/src/Behat/Behat/UniversalClassLoader.php';
 }
-use Everzet\Behat\UniversalClassLoader;
+use Behat\Behat\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
@@ -21,7 +21,7 @@ $loader->registerNamespaces(array(
     'Symfony\Component\EventDispatcher'     => __DIR__.'/vendor/symfony/src',
     'Symfony\Component\Finder'              => __DIR__.'/vendor/symfony/src',
     'Symfony\Component\Yaml'                => __DIR__.'/vendor/symfony/src',
-    'Behat\Gherkin'                         => __DIR__.'/vendor/gherkin/src',
-    'Everzet\Behat'                         => __DIR__.'/src'
+    'Behat\Behat'                           => __DIR__.'/src',
+    'Behat\Gherkin'                         => __DIR__.'/vendor/gherkin/src'
 ));
 $loader->register();
