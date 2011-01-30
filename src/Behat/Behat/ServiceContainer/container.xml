@@ -210,7 +210,23 @@
             <call method="setFormatter">
                 <argument>%behat.formatter.name%</argument>
             </call>
-            <tag name="behat.events_listener" />
+            <!--tag name="behat.events_listener" /-->
+        </service>
+
+        <!-- Formatters -->
+        <service id="behat.formatter.progress" class="%behat.formatter.progress.class%">
+            <call method="registerListeners">
+                <argument type="service" id="behat.event_dispatcher" />
+            </call>
+            <call method="setTranslator">
+                <argument type="service" id="behat.translator" />
+            </call>
+            <call method="setTranslator">
+                <argument type="service" id="behat.translator" />
+            </call>
+            <call method="showColors">
+                <argument>%behat.formatter.colors%</argument>
+            </call>
         </service>
 
         <!-- Environment -->

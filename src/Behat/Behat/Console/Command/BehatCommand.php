@@ -6,6 +6,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -132,8 +134,10 @@ class BehatCommand extends Command
         }
 
         // Find proper features path
-        $featuresPath = $container->getParameter('behat.features.path');
-        if (is_dir($featuresPath . DIRECTORY_SEPARATOR . 'features')) {
+        $featuresPath = realpath($container->getParameter('behat.features.path'));
+        if (is_dir($featuresPath)) {
+            $container->setParameter('behat.features.path', $featuresPath);
+        } elseif (is_dir($featuresPath . DIRECTORY_SEPARATOR . 'features')) {
             $featuresPath = $featuresPath . DIRECTORY_SEPARATOR . 'features';
             $container->setParameter('behat.features.path',         $featuresPath);
         } elseif (is_file($featuresPath)) {
@@ -143,6 +147,10 @@ class BehatCommand extends Command
 
         // Freeze container
         $container->compile();
+#
+#        $dumper = new PhpDumper($container);
+#        file_put_contents(__DIR__ . '/../../ServiceContainer/BehatServiceContainer.php', $dumper->dump());
+#        $container = new \Behat\Behat\ServiceContainer\BehatServiceContainer();
 
         // Set Output Manager Output instance
         $container->get('behat.output_manager')->setOutput($output);
@@ -154,6 +162,38 @@ class BehatCommand extends Command
             $translator->addResource('xliff', $path, $transId);
         }
 
+        // Add hooks files paths to container resources list
+        $hooksContainer = $container->get('behat.hooks_container');
+        foreach ((array) $container->getParameter('behat.hooks.file') as $path) {
+            if (is_file($path)) {
+                $hooksContainer->addResource('php', $path);
+            }
+        }
+
+
+
+
+
+
+        switch ($container->getParameter('behat.formatter.name')) {
+            case 'progress':
+                $formatter = new \Behat\Behat\Formatter\ProgressFormatter($translator);
+                break;
+            case 'pretty':
+            default:
+                $formatter = new \Behat\Behat\Formatter\PrettyFormatter($translator);
+        }
+
+        $formatter->setParameter('verbose', $container->getParameter('behat.formatter.verbose'));
+        $formatter->setParameter('decorated', $container->getParameter('behat.formatter.colors'));
+        $formatter->setParameter('language', $container->getParameter('behat.formatter.locale'));
+        $formatter->setParameter('time', $container->getParameter('behat.formatter.timer'));
+        $formatter->setParameter('base_path', $container->getParameter('behat.features.path'));
+
+        $container->get('behat.event_dispatcher')->registerFormatter($formatter);
+
+
+
         // Configure Gherkin manager
         $gherkin = $container->get('gherkin');
         if ($container->getParameter('gherkin.filter.name')) {
@@ -161,14 +201,6 @@ class BehatCommand extends Command
         }
         if ($container->getParameter('gherkin.filter.tags')) {
             $gherkin->addFilter(new TagFilter($container->getParameter('gherkin.filter.tags')));
-        }
-
-        // Add hooks files paths to container resources list
-        $hooksContainer = $container->get('behat.hooks_container');
-        foreach ((array) $container->getParameter('behat.hooks.file') as $path) {
-            if (is_file($path)) {
-                $hooksContainer->addResource('php', $path);
-            }
         }
 
         // Add definitions files to container resources list
@@ -185,8 +217,9 @@ class BehatCommand extends Command
         $features = $gherkin->load($container->getParameter('behat.features.load_path'));
 
         // Notify suite.run.before event & start timer
-        $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.before'));
-        $container->get('behat.statistics_collector')->startTimer();
+        $statistics = $container->get('behat.statistics_collector');
+        $container->get('behat.event_dispatcher')->notify(new Event($statistics, 'suite.run.before'));
+        $statistics->startTimer();
 
         // Run features
         $result = 0;
@@ -196,8 +229,8 @@ class BehatCommand extends Command
         }
 
         // Notify suite.run.after event
-        $container->get('behat.statistics_collector')->finishTimer();
-        $container->get('behat.event_dispatcher')->notify(new Event($container, 'suite.run.after'));
+        $statistics->finishTimer();
+        $container->get('behat.event_dispatcher')->notify(new Event($statistics, 'suite.run.after'));
 
         // Return exit code
         return intval(0 < $result);

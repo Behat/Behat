@@ -132,7 +132,7 @@ Feature: I18n
           From scenario `Провален'.       # features/World.feature:20
       
       02. Failed asserting that <integer:15> is equal to <string:16>.
-          In step `То Я должен иметь 32'. # features/steps/math.php:9
+          In step `То Я должен иметь 32'.       # features/steps/math.php:9
           From scenario `Пройдено и Провалено'. # features/World.feature:24
       
       03. Failed asserting that <integer:33> is equal to <string:32>.
