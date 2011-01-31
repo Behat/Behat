@@ -20,12 +20,13 @@ abstract class ConsoleFormatter implements FormatterInterface
     {
         $this->translator = $translator;
         $this->parameters = new ParameterBag(array_merge(array(
-            'stream'    => fopen('php://stdout', 'w'),
-            'verbose'   => false,
-            'decorated' => true,
-            'time'      => true,
-            'language'  => 'en',
-            'base_path' => null,
+            'stream'        => fopen('php://stdout', 'w'),
+            'verbose'       => false,
+            'decorated'     => true,
+            'time'          => true,
+            'language'      => 'en',
+            'base_path'     => null,
+            'output_path'   => null,
         ), $this->getDefaultParameters()));
     }
 

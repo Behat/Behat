@@ -6,7 +6,7 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Tester\StepTester,
     Behat\Behat\StepDefinition\Definition,
-    Behat\Behat\Collector\StatisticsCollector,
+    Behat\Behat\Statistic\StatisticsCollector,
     Behat\Behat\Exception\Pending;
 
 use Behat\Gherkin\Node\BackgroundNode,
@@ -144,16 +144,6 @@ class ProgressFormatter extends ConsoleFormatter
         }
     }
 
-    protected function printPathComment($file, $line, $indentCount)
-    {
-        $indent = str_repeat(' ', $indentCount);
-        if (null !== ($basePath = $this->parameters->get('base_path'))) {
-            $file = str_replace(dirname($basePath) . '/', '', $file);
-        }
-
-        $this->writeln("$indent {+comment}# $file:$line{-comment}");
-    }
-
     protected function printStepPath(StepNode $step, Definition $definition = null,
                                      \Exception $exception = null)
     {
@@ -236,7 +226,11 @@ class ProgressFormatter extends ConsoleFormatter
 
     protected function printTimeSummary(StatisticsCollector $statistics)
     {
-        $this->writeln(sprintf("%.3fs", $statistics->getTotalTime()));
+        $time       = $statistics->getTotalTime();
+        $minutes    = floor($time / 60);
+        $seconds    = round($time - ($minutes * 60), 3);
+
+        $this->writeln($minutes . 'm' . $seconds . 's');
     }
 
     protected function printUndefinedStepsSnippets(StatisticsCollector $statistics)
@@ -251,5 +245,15 @@ class ProgressFormatter extends ConsoleFormatter
                 $this->writeln("{+undefined}$snippet{-undefined}\n");
             }
         }
+    }
+
+    protected function printPathComment($file, $line, $indentCount)
+    {
+        $indent = str_repeat(' ', $indentCount);
+        if (null !== ($basePath = $this->parameters->get('base_path'))) {
+            $file = str_replace(dirname($basePath) . '/', '', $file);
+        }
+
+        $this->writeln("$indent {+comment}# $file:$line{-comment}");
     }
 }

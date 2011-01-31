@@ -94,7 +94,7 @@ class StepTester implements NodeVisitorInterface
     {
         $step->setTokens($this->tokens);
 
-        $this->dispatcher->notify(new Event($step, 'step.run.before', array(
+        $this->dispatcher->notify(new Event($step, 'step.before', array(
             'environment'   => $this->environment
         )));
 
@@ -136,7 +136,7 @@ class StepTester implements NodeVisitorInterface
             }
         }
 
-        $this->dispatcher->notify(new Event($step, 'step.run.after', array(
+        $this->dispatcher->notify(new Event($step, 'step.after', array(
             'result'        => $result
           , 'exception'     => $exception
           , 'definition'    => $definition

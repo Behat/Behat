@@ -1,8 +1,7 @@
 <?php
 
-namespace Behat\Behat\Collector;
+namespace Behat\Behat\Statistic;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Tester\StepTester;
@@ -20,7 +19,7 @@ use Behat\Behat\Tester\StepTester;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StatisticsCollector implements CollectorInterface
+class StatisticsCollector
 {
     protected $paused               = false;
     protected $suiteStartTime;
@@ -63,22 +62,6 @@ class StatisticsCollector implements CollectorInterface
     }
 
     /**
-     * Start suite timer. 
-     */
-    public function startTimer()
-    {
-        $this->suiteStartTime = microtime(true);
-    }
-
-    /**
-     * Stop suite timer. 
-     */
-    public function finishTimer()
-    {
-        $this->suiteFinishTime = microtime(true);
-    }
-
-    /**
      * Return suite total execution time. 
      * 
      * @return  integer miliseconds
@@ -86,26 +69,6 @@ class StatisticsCollector implements CollectorInterface
     public function getTotalTime()
     {
         return $this->suiteFinishTime - $this->suiteStartTime;
-    }
-
-    /**
-     * Return last scenario execution time. 
-     * 
-     * @return  integer miliseconds
-     */
-    public function getLastScenarioTime()
-    {
-        return $this->scenarioFinishTime - $this->scenarioStartTime;
-    }
-
-    /**
-     * Return true if suite passed. 
-     * 
-     * @return  boolean
-     */
-    public function isPassed()
-    {
-        return $this->isPassed;
     }
 
     /**
@@ -178,91 +141,78 @@ class StatisticsCollector implements CollectorInterface
         return $this->pendingStepsEvents;
     }
 
-    /**
-     * @see     Behat\Behat\Collector\CollectorInterface
-     */
-    public function registerListeners(EventDispatcher $dispatcher)
+    public function beforeSuite(Event $event)
     {
-        $dispatcher->connect('scenario.run.before',     array($this, 'startScenarioTimer'),     10);
-        $dispatcher->connect('outline.sub.run.before',  array($this, 'startScenarioTimer'),     10);
-        $dispatcher->connect('scenario.run.after',      array($this, 'collectScenarioStats'),   10);
-        $dispatcher->connect('outline.sub.run.after',   array($this, 'collectScenarioStats'),   10);
-        $dispatcher->connect('step.run.after',          array($this, 'collectStepStats'),       10);
+        $this->startTimer();
     }
 
-    /**
-     * Pause collecting.
-     */
-    public function pause()
+    public function afterSuite(Event $event)
     {
-        $this->paused = true;
+        $this->finishTimer();
     }
 
-    /**
-     * Resume collecting.
-     */
-    public function resume()
+    public function afterScenario(Event $event)
     {
-        $this->paused = false;
+        $this->collectScenarioResult($event->get('result'));
     }
 
-    /**
-     * Listens to `scenario.run.before` & `outline.sub.run.before` events & start scenario timers. 
-     * 
-     * @param   Event   $event  event
-     */
-    public function startScenarioTimer(Event $event)
+    public function afterOutlineExample(Event $event)
     {
-        $this->scenarioStartTime = microtime(true);
+        $this->collectScenarioResult($event->get('result'));
     }
 
-    /**
-     * Listens to `scenario.run.after` & `outline.sub.run.after` events & collect stats.
-     *
-     * @param   Event   $event  event
-     */
-    public function collectScenarioStats(Event $event)
+    public function afterStep(Event $event)
     {
-        if (!$this->paused) {
-            ++$this->scenariosCount;
-            ++$this->scenariosStatuses[$this->statuses[$event->get('result')]];
-            if (0 !== $event->get('result')) {
-                $this->isPassed = false;
-            }
+        $this->collectStepStats($event);
+    }
+
+    protected function collectScenarioResult($result)
+    {
+        ++$this->scenariosCount;
+        ++$this->scenariosStatuses[$this->statuses[$result]];
+        if (0 !== $result) {
+            $this->isPassed = false;
+        }
+    }
+
+    protected function collectStepStats(Event $event)
+    {
+        ++$this->stepsCount;
+        ++$this->stepsStatuses[$this->statuses[$event->get('result')]];
+        if (0 !== $event->get('result')) {
+            $this->isPassed = false;
         }
 
-        $this->scenarioFinishTime = microtime(true);
-    }
-
-    /**
-     * Listens to `step.run.after` events & collect stats.
-     *
-     * @param   Event   $event  event
-     */
-    public function collectStepStats(Event $event)
-    {
-        if (!$this->paused) {
-            ++$this->stepsCount;
-            ++$this->stepsStatuses[$this->statuses[$event->get('result')]];
-            if (0 !== $event->get('result')) {
-                $this->isPassed = false;
-            }
-
-            if (StepTester::UNDEFINED === $event->get('result')) {
-                foreach ($event->get('snippet') as $key => $snippet) {
-                    if (!isset($this->definitionsSnippets[$key])) {
-                        $this->definitionsSnippets[$key] = $snippet;
-                    }
+        if (StepTester::UNDEFINED === $event->get('result')) {
+            foreach ($event->get('snippet') as $key => $snippet) {
+                if (!isset($this->definitionsSnippets[$key])) {
+                    $this->definitionsSnippets[$key] = $snippet;
                 }
             }
-
-            if (StepTester::FAILED === $event->get('result')) {
-                $this->failedStepsEvents[] = $event;
-            }
-
-            if (StepTester::PENDING === $event->get('result')) {
-                $this->pendingStepsEvents[] = $event;
-            }
         }
+
+        if (StepTester::FAILED === $event->get('result')) {
+            $this->failedStepsEvents[] = $event;
+        }
+
+        if (StepTester::PENDING === $event->get('result')) {
+            $this->pendingStepsEvents[] = $event;
+        }
+    }
+
+    /**
+     * Start suite timer.
+     */
+    protected function startTimer()
+    {
+        $this->suiteStartTime = microtime(true);
+    }
+
+    /**
+     * Stop suite timer.
+     */
+    protected function finishTimer()
+    {
+        $this->suiteFinishTime = microtime(true);
     }
 }

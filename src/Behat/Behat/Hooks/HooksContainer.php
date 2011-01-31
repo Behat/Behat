@@ -32,33 +32,6 @@ class HooksContainer
     protected $hooks        = array();
 
     /**
-     * Register Hooks Event Listeners.
-     * 
-     * @param   EventDispatcher $dispatcher event dispatcher
-     */
-    public function registerListeners(EventDispatcher $dispatcher)
-    {
-        if (!count($this->hooks)) {
-            $this->loadHooks();
-        }
-
-        $dispatcher->connect('suite.run.before',        array($this, 'fireSuiteHooks'));
-        $dispatcher->connect('suite.run.after',         array($this, 'fireSuiteHooks'), 10);
-
-        $dispatcher->connect('feature.run.before',      array($this, 'fireFeatureHooks'));
-        $dispatcher->connect('feature.run.after',       array($this, 'fireFeatureHooks'));
-
-        $dispatcher->connect('scenario.run.before',     array($this, 'fireScenarioHooks'));
-        $dispatcher->connect('scenario.run.after',      array($this, 'fireScenarioHooks'));
-
-        $dispatcher->connect('outline.sub.run.before',  array($this, 'fireScenarioHooks'));
-        $dispatcher->connect('outline.sub.run.after',   array($this, 'fireScenarioHooks'));
-
-        $dispatcher->connect('step.run.before',         array($this, 'fireStepHooks'));
-        $dispatcher->connect('step.run.after',          array($this, 'fireStepHooks'));
-    }
-
-    /**
      * Handle Suite Events & Fire Associated Hooks. 
      * 
      * @param   Event   $event  event
@@ -66,10 +39,10 @@ class HooksContainer
     public function fireSuiteHooks(Event $event)
     {
         switch ($event->getName()) {
-            case 'suite.run.before':
+            case 'suite.before':
                 $hookName = 'suite.before';
                 break;
-            case 'suite.run.after':
+            case 'suite.after':
                 $hookName = 'suite.after';
                 break;
         }
@@ -85,10 +58,10 @@ class HooksContainer
     public function fireFeatureHooks(Event $event)
     {
         switch ($event->getName()) {
-            case 'feature.run.before':
+            case 'feature.before':
                 $hookName = 'feature.before';
                 break;
-            case 'feature.run.after':
+            case 'feature.after':
                 $hookName = 'feature.after';
                 break;
         }
@@ -117,12 +90,12 @@ class HooksContainer
     public function fireScenarioHooks(Event $event)
     {
         switch ($event->getName()) {
-            case 'scenario.run.before':
-            case 'outline.sub.run.before':
+            case 'scenario.before':
+            case 'outline.example.before':
                 $hookName = 'scenario.before';
                 break;
-            case 'scenario.run.after':
-            case 'outline.sub.run.after':
+            case 'scenario.after':
+            case 'outline.example.after':
                 $hookName = 'scenario.after';
                 break;
         }
@@ -151,10 +124,10 @@ class HooksContainer
     public function fireStepHooks(Event $event)
     {
         switch ($event->getName()) {
-            case 'step.run.before':
+            case 'step.before':
                 $hookName = 'step.before';
                 break;
-            case 'step.run.after':
+            case 'step.after':
                 $hookName = 'step.after';
                 break;
         }
@@ -185,6 +158,10 @@ class HooksContainer
      */
     protected function fireHooks(Event $event, $name, \Closure $tagsFilter, \Closure $nameFilter)
     {
+        if (!count($this->hooks)) {
+            $this->loadHooks();
+        }
+
         $hooks = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
 
         foreach ($hooks as $hook) {

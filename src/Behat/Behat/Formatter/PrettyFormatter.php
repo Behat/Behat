@@ -6,7 +6,7 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Tester\StepTester,
     Behat\Behat\StepDefinition\Definition,
-    Behat\Behat\Collector\StatisticsCollector;
+    Behat\Behat\Statistic\StatisticsCollector;
 
 use Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\FeatureNode,
@@ -406,16 +406,12 @@ class PrettyFormatter extends ProgressFormatter
         $lines = explode("\n", $this->getFeatureOrScenarioName($scenario, false));
 
         foreach ($lines as $line) {
-            if (($tmp = mb_strlen($line) + 2) > $max) {
-                $max = $tmp;
-            }
+            $max = max($max, mb_strlen($line) + 2);
         }
 
         foreach ($scenario->getSteps() as $step) {
             $stepDescription = $step->getType() . ' ' . $step->getCleanText();
-            if (($tmp = mb_strlen($stepDescription) + 4) > $max) {
-                $max = $tmp;
-            }
+            $max = max($max, mb_strlen($stepDescription) + 4);
         }
 
         return $max;

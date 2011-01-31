@@ -46,7 +46,7 @@ class OutlineTester implements NodeVisitorInterface
      */
     public function visit(AbstractNode $outline)
     {
-        $this->dispatcher->notify(new Event($outline, 'outline.run.before'));
+        $this->dispatcher->notify(new Event($outline, 'outline.before'));
 
         $result = 0;
 
@@ -56,14 +56,14 @@ class OutlineTester implements NodeVisitorInterface
             $itResult       = 0;
             $skip           = false;
 
-            $this->dispatcher->notify(new Event($outline, 'outline.sub.run.before', array(
+            $this->dispatcher->notify(new Event($outline, 'outline.example.before', array(
                 'iteration'     => $iteration
               , 'environment'   => $environment
             )));
 
             // Visit & test background if has one
             if ($outline->getFeature()->hasBackground()) {
-                $tester = $this->container->get('behat.background_tester');
+                $tester = $this->container->get('behat.tester.background');
                 $tester->setEnvironment($environment);
 
                 $bgResult = $outline->getFeature()->getBackground()->accept($tester);
@@ -76,7 +76,7 @@ class OutlineTester implements NodeVisitorInterface
 
             // Visit & test steps
             foreach ($outline->getSteps() as $step) {
-                $tester = $this->container->get('behat.step_tester');
+                $tester = $this->container->get('behat.tester.step');
                 $tester->setEnvironment($environment);
                 $tester->setTokens($tokens);
                 $tester->skip($skip);
@@ -89,7 +89,7 @@ class OutlineTester implements NodeVisitorInterface
                 $itResult = max($itResult, $stResult);
             }
 
-            $this->dispatcher->notify(new Event($outline, 'outline.sub.run.after', array(
+            $this->dispatcher->notify(new Event($outline, 'outline.example.after', array(
                 'iteration'     => $iteration
               , 'result'        => $itResult
               , 'skipped'       => $skip
@@ -99,7 +99,7 @@ class OutlineTester implements NodeVisitorInterface
             $result = max($result, $itResult);
         }
 
-        $this->dispatcher->notify(new Event($outline, 'outline.run.after', array(
+        $this->dispatcher->notify(new Event($outline, 'outline.after', array(
             'result' => $result
         )));
 

@@ -54,13 +54,13 @@ class FeatureTester implements NodeVisitorInterface
 
         // If feature has scenario - run them
         if (count($scenarios = $feature->getScenarios())) {
-            $this->dispatcher->notify(new Event($feature, 'feature.run.before'));
+            $this->dispatcher->notify(new Event($feature, 'feature.before'));
 
             foreach ($scenarios as $scenario) {
                 if ($scenario instanceof OutlineNode) {
-                    $tester = $this->container->get('behat.outline_tester');
+                    $tester = $this->container->get('behat.tester.outline');
                 } elseif ($scenario instanceof ScenarioNode) {    
-                    $tester = $this->container->get('behat.scenario_tester');
+                    $tester = $this->container->get('behat.tester.scenario');
                 } else {
                     throw new BehaviorException(
                         'Unknown scenario type found: ' . get_class($scenario)
@@ -69,7 +69,7 @@ class FeatureTester implements NodeVisitorInterface
                 $result = max($result, $scenario->accept($tester));
             }
 
-            $this->dispatcher->notify(new Event($feature, 'feature.run.after', array(
+            $this->dispatcher->notify(new Event($feature, 'feature.after', array(
                 'result' => $result
             )));
         }

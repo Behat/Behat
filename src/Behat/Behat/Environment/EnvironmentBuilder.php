@@ -28,10 +28,10 @@ class EnvironmentBuilder
      * @param   ContainerInterface  $envClass   environment class
      * @param   array               $files      array of enfironment files
      */
-    public function __construct(ContainerInterface $container, array $files = array())
+    public function __construct(ContainerInterface $container, $files)
     {
         $this->container    = $container;
-        $this->files        = $files;
+        $this->files        = (array) $files;
     }
 
     /**

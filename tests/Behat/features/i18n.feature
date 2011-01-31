@@ -69,7 +69,7 @@ Feature: I18n
       """
 
   Scenario: Pretty
-    When I run "behat -TCf pretty --i18n=ru"
+    When I run "behat -TCf pretty --lang=ru"
     Then it should fail with:
       """
       Функционал: Постоянство мира
@@ -120,7 +120,7 @@ Feature: I18n
       """
 
   Scenario: Progress
-    When I run "behat -TCf progress --i18n=ru"
+    When I run "behat -TCf progress --lang=ru"
     Then it should fail with:
       """
       ..U-..P-..F...F.......F

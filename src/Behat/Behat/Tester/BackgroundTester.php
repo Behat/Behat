@@ -59,14 +59,14 @@ class BackgroundTester implements NodeVisitorInterface
      */
     public function visit(AbstractNode $background)
     {
-        $this->dispatcher->notify(new Event($background, 'background.run.before'));
+        $this->dispatcher->notify(new Event($background, 'background.before'));
 
         $result = 0;
         $skip   = false;
 
         // Visit & test steps
         foreach ($background->getSteps() as $step) {
-            $tester = $this->container->get('behat.step_tester');
+            $tester = $this->container->get('behat.tester.step');
             $tester->setEnvironment($this->environment);
             $tester->skip($skip);
 
@@ -78,7 +78,7 @@ class BackgroundTester implements NodeVisitorInterface
             $result = max($result, $stResult);
         }
 
-        $this->dispatcher->notify(new Event($background, 'background.run.after', array(
+        $this->dispatcher->notify(new Event($background, 'background.after', array(
             'result'    => $result
           , 'skipped'   => $skip
         )));

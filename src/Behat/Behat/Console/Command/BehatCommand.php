@@ -18,6 +18,9 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Symfony\Component\Finder\Finder;
 
+use Behat\Behat\Formatter\ProgressFormatter,
+    Behat\Behat\Formatter\PrettyFormatter;
+
 use Behat\Gherkin\Filter\NameFilter,
     Behat\Gherkin\Filter\TagFilter;
 
@@ -69,7 +72,7 @@ class BehatCommand extends Command
               , InputOption::VALUE_REQUIRED
               , 'Only execute the features or scenarios with tags matching expression.'
             ),
-            new InputOption('--i18n',           '-i'
+            new InputOption('--lang',           '-l'
               , InputOption::VALUE_REQUIRED
               , 'Print formatters output in particular language.'
             ),
@@ -105,107 +108,63 @@ class BehatCommand extends Command
         $container = $this->createContainer($input->getOption('configuration'));
 
         // Read command arguments & options into container
-        if (null !== $input->getArgument('features')) {
-            $container->setParameter('behat.features.path',     realpath($input->getArgument('features')));
-        }
-        if (null !== $input->getOption('name')) {
-            $container->setParameter('gherkin.filter.name',     $input->getOption('name'));
-        }
-        if (null !== $input->getOption('tags')) {
-            $container->setParameter('gherkin.filter.tags',     $input->getOption('tags'));
-        }
-        if (null !== $input->getOption('format')) {
-            $container->setParameter('behat.formatter.name',    $input->getOption('format'));
-        }
-        if (null !== $input->getOption('out')) {
-            $container->setParameter('behat.output.path',       $input->getOption('out'));
-        }
-        if (null !== $input->getOption('no-colors')) {
-            $container->setParameter('behat.formatter.colors', !$input->getOption('no-colors'));
-        }
-        if (null !== $input->getOption('no-time')) {
-            $container->setParameter('behat.formatter.timer',  !$input->getOption('no-time'));
-        }
-        if (null !== $input->getOption('verbose')) {
-            $container->setParameter('behat.formatter.verbose', $input->getOption('verbose'));
-        }
-        if (null !== $input->getOption('i18n')) {
-            $container->setParameter('behat.formatter.locale',  $input->getOption('i18n'));
-        }
-
-        // Find proper features path
-        $featuresPath = realpath($container->getParameter('behat.features.path'));
-        if (is_dir($featuresPath)) {
-            $container->setParameter('behat.features.path', $featuresPath);
-        } elseif (is_dir($featuresPath . DIRECTORY_SEPARATOR . 'features')) {
-            $featuresPath = $featuresPath . DIRECTORY_SEPARATOR . 'features';
-            $container->setParameter('behat.features.path',         $featuresPath);
-        } elseif (is_file($featuresPath)) {
-            $container->setParameter('behat.features.path',         dirname($featuresPath));
-            $container->setParameter('behat.features.load_path',    $featuresPath);
-        }
-
-        // Freeze container
-        $container->compile();
-#
-#        $dumper = new PhpDumper($container);
-#        file_put_contents(__DIR__ . '/../../ServiceContainer/BehatServiceContainer.php', $dumper->dump());
-#        $container = new \Behat\Behat\ServiceContainer\BehatServiceContainer();
-
-        // Set Output Manager Output instance
-        $container->get('behat.output_manager')->setOutput($output);
-
-        // Translations
-        $translator = $container->get('behat.translator');
-        foreach ($this->findTranslationResources($container->getParameter('behat.i18n.path')) as $path) {
-            $transId = basename($path, '.xliff');
-            $translator->addResource('xliff', $path, $transId);
-        }
-
-        // Add hooks files paths to container resources list
-        $hooksContainer = $container->get('behat.hooks_container');
-        foreach ((array) $container->getParameter('behat.hooks.file') as $path) {
-            if (is_file($path)) {
-                $hooksContainer->addResource('php', $path);
+        if ($path = $input->getArgument('features')) {
+            if (is_file(($path = realpath($path)))) {
+                $container->setParameter('behat.paths.base', dirname($path));
+                $container->setParameter('behat.paths.features', $path);
+            } elseif (is_dir($path)) {
+                $container->setParameter('behat.paths.base', $path);
+            } elseif (is_dir($path .= '/features')) {
+                $container->setParameter('behat.paths.base', $path);
+            } else {
+                throw new \InvalidArgumentException("Path $path not found");
             }
         }
-
-
-
-
-
-
-        switch ($container->getParameter('behat.formatter.name')) {
-            case 'progress':
-                $formatter = new \Behat\Behat\Formatter\ProgressFormatter($translator);
-                break;
-            case 'pretty':
-            default:
-                $formatter = new \Behat\Behat\Formatter\PrettyFormatter($translator);
+        if ($name = $input->getOption('name')) {
+            $container->setParameter('gherkin.filter.name', $name);
+        }
+        if ($tags = $input->getOption('tags')) {
+            $container->setParameter('gherkin.filter.tags', $tags);
+        }
+        if ($format = $input->getOption('format')) {
+            $container->setParameter('behat.formatter.name', $format);
+        }
+        if ($out = $input->getOption('out')) {
+            $container->setParameter('behat.formatter.output_path', $out);
+        }
+        if ($noColors = $input->getOption('no-colors')) {
+            $container->setParameter('behat.formatter.decorated', !$noColors);
+        }
+        if ($noTime = $input->getOption('no-time')) {
+            $container->setParameter('behat.formatter.time', !$noTime);
+        }
+        if ($verbose = $input->getOption('verbose')) {
+            $container->setParameter('behat.formatter.verbose', $verbose);
+        }
+        if ($lang = $input->getOption('lang')) {
+            $container->setParameter('behat.formatter.language', $lang);
         }
 
-        $formatter->setParameter('verbose', $container->getParameter('behat.formatter.verbose'));
-        $formatter->setParameter('decorated', $container->getParameter('behat.formatter.colors'));
-        $formatter->setParameter('language', $container->getParameter('behat.formatter.locale'));
-        $formatter->setParameter('time', $container->getParameter('behat.formatter.timer'));
-        $formatter->setParameter('base_path', $container->getParameter('behat.features.path'));
+        // Compile container
+        $container->compile();
 
-        $container->get('behat.event_dispatcher')->registerFormatter($formatter);
+        $eventDispatcher        = $container->get('behat.event_dispatcher');
+        $translator             = $container->get('behat.translator');
+        $gherkin                = $container->get('gherkin');
+        $definitionsContainer   = $container->get('behat.definitions_container');
+        $hooksContainer         = $container->get('behat.hooks_container');
+        $statisticsCollector    = $container->get('behat.statistics_collector');
 
-
-
-        // Configure Gherkin manager
-        $gherkin = $container->get('gherkin');
-        if ($container->getParameter('gherkin.filter.name')) {
-            $gherkin->addFilter(new NameFilter($container->getParameter('gherkin.filter.name')));
+        // Configure Gherkin manager filters
+        if ($name = $container->getParameter('gherkin.filter.name')) {
+            $gherkin->addFilter(new NameFilter($name));
         }
-        if ($container->getParameter('gherkin.filter.tags')) {
-            $gherkin->addFilter(new TagFilter($container->getParameter('gherkin.filter.tags')));
+        if ($tags = $container->getParameter('gherkin.filter.tags')) {
+            $gherkin->addFilter(new TagFilter($tags));
         }
 
         // Add definitions files to container resources list
-        $definitionsContainer = $container->get('behat.definitions_container');
-        foreach ((array) $container->getParameter('behat.steps.path') as $stepsPath) {
+        foreach ((array) $container->getParameter('behat.paths.steps') as $stepsPath) {
             if (is_dir($stepsPath)) {
                 foreach ($this->findDefinitionResources($stepsPath) as $path) {
                     $definitionsContainer->addResource('php', $path);
@@ -213,24 +172,55 @@ class BehatCommand extends Command
             }
         }
 
-        // Load features
-        $features = $gherkin->load($container->getParameter('behat.features.load_path'));
+        // Configure hooks container
+        foreach ((array) $container->getParameter('behat.paths.hooks') as $path) {
+            if (is_file($path)) {
+                $hooksContainer->addResource('php', $path);
+            }
+        }
+        $eventDispatcher->registerHooksContainer($hooksContainer);
 
-        // Notify suite.run.before event & start timer
-        $statistics = $container->get('behat.statistics_collector');
-        $container->get('behat.event_dispatcher')->notify(new Event($statistics, 'suite.run.before'));
-        $statistics->startTimer();
+        // Configure formatter
+        switch ($container->getParameter('behat.formatter.name')) {
+            case 'progress':
+                $formatter = new ProgressFormatter($translator);
+                break;
+            case 'pretty':
+            default:
+                $formatter = new PrettyFormatter($translator);
+        }
+        $formatter->setParameter('verbose', $container->getParameter('behat.formatter.verbose'));
+        $formatter->setParameter('decorated', $container->getParameter('behat.formatter.decorated'));
+        $formatter->setParameter('language', $container->getParameter('behat.formatter.language'));
+        $formatter->setParameter('time', $container->getParameter('behat.formatter.time'));
+        $formatter->setParameter('base_path', $container->getParameter('behat.paths.base'));
+        $eventDispatcher->registerFormatter($formatter);
+
+        // Register statistics collector on Event Dispatcher
+        $eventDispatcher->registerStatisticsCollector($statisticsCollector);
+
+        // Find features paths
+        if (is_dir($container->getParameter('behat.paths.features'))) {
+            $featurePaths = $this->findFeatureResources($container->getParameter('behat.paths.features'));
+        } else {
+            $featurePaths = (array) $container->getParameter('behat.paths.features');
+        }
+
+        // Notify suite.before event
+        $eventDispatcher->notify(new Event($statisticsCollector, 'suite.before'));
 
         // Run features
         $result = 0;
-        foreach ($features as $feature) {
-            $tester = $container->get('behat.feature_tester');
-            $result = max($result, $feature->accept($tester));
+        foreach ($featurePaths as $path) {
+            $features = $gherkin->load((string) $path);
+            foreach ($features as $feature) {
+                $tester = $container->get('behat.tester.feature');
+                $result = max($result, $feature->accept($tester));
+            }
         }
 
-        // Notify suite.run.after event
-        $statistics->finishTimer();
-        $container->get('behat.event_dispatcher')->notify(new Event($statistics, 'suite.run.after'));
+        // Notify suite.after event
+        $eventDispatcher->notify(new Event($statisticsCollector, 'suite.after'));
 
         // Return exit code
         return intval(0 < $result);
@@ -248,7 +238,7 @@ class BehatCommand extends Command
         $cwd        = getcwd();
         $container  = new ContainerBuilder();
         $xmlLoader  = new XmlFileLoader($container);
-        $xmlLoader->load(__DIR__ . '/../../ServiceContainer/container.xml');
+        $xmlLoader->load(__DIR__ . '/../../DependencyInjection/config/behat.xml');
 
         // Guess configuration file path
         if (null !== $configurationFile) {
@@ -283,24 +273,24 @@ class BehatCommand extends Command
         }
 
         // Set initial container services & parameters
-        $container->setParameter('behat.work.path', $cwd);
-        $container->setParameter('behat.lib.path',  $behatPath = realpath(__DIR__ . '/../../../../../'));
-        $container->setParameter('gherkin.lib.path',  realpath($behatPath . '/vendor/gherkin'));
+        $container->setParameter('behat.paths.workdir', $cwd);
+        $container->setParameter('behat.paths.lib',  $behatPath = realpath(__DIR__ . '/../../../../../'));
+        $container->setParameter('gherkin.paths.lib',  realpath($behatPath . '/vendor/gherkin'));
 
         return $container;
     }
 
     /**
-     * Find translations for Behat.
-     *
-     * @param   string  $i18nPath   xliff path
+     * Find definitions files in specified path. 
+     * 
+     * @param   string  $stepsPath  steps files path
      * 
      * @return  mixed               files iterator
      */
-    protected function findTranslationResources($i18nPath)
+    protected function findFeatureResources($featuresPath)
     {
         $finder = new Finder();
-        $paths  = $finder->files()->name('*.xliff')->in($i18nPath);
+        $paths  = $finder->files()->name('*.feature')->in($featuresPath);
 
         return $paths;
     }
