@@ -31,17 +31,17 @@
 
         <!-- Step Definition -->
         <parameter key="behat.definitions_container.class">Behat\Behat\StepDefinition\DefinitionsContainer</parameter>
-        <parameter key="behat.definitions_loader.php.class">Behat\Behat\StepDefinition\Loader\PHPLoader</parameter>
+        <parameter key="behat.definitions_loader.php.class">Behat\Behat\StepDefinition\Loader\PhpFileLoader</parameter>
 
         <!-- Event Dispatcher -->
         <parameter key="behat.event_dispatcher.class">Behat\Behat\EventDispatcher\EventDispatcher</parameter>
 
-        <!-- Collector -->
-        <parameter key="behat.statistics_collector.class">Behat\Behat\Statistic\StatisticsCollector</parameter>
+        <!-- Logger -->
+        <parameter key="behat.logger.class">Behat\Behat\DataCollector\LoggerDataCollector</parameter>
 
         <!-- Hooks -->
-        <parameter key="behat.hooks_container.class">Behat\Behat\Hooks\HooksContainer</parameter>
-        <parameter key="behat.hooks_loader.php.class">Behat\Behat\Hooks\Loader\PHPLoader</parameter>
+        <parameter key="behat.hook_dispatcher.class">Behat\Behat\Hook\HookDispatcher</parameter>
+        <parameter key="behat.hook.loader.php.class">Behat\Behat\Hook\Loader\PhpFileLoader</parameter>
 
         <!-- Environment -->
         <parameter key="behat.environment.class">Behat\Behat\Environment\WorldEnvironment</parameter>
@@ -104,11 +104,11 @@
         </service>
 
         <!-- Hooks -->
-        <service id="behat.hooks_container" class="%behat.hooks_container.class%">
+        <service id="behat.hook_dispatcher" class="%behat.hook_dispatcher.class%">
             <call method="addLoader">
                 <argument>php</argument>
                 <argument type="service">
-                    <service class="%behat.hooks_loader.php.class%" />
+                    <service class="%behat.hook.loader.php.class%" />
                 </argument>
             </call>
         </service>
@@ -116,8 +116,8 @@
         <!-- Event Dispatcher -->
         <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" />
 
-        <!-- Collector -->
-        <service id="behat.statistics_collector" class="%behat.statistics_collector.class%" />
+        <!-- Logger -->
+        <service id="behat.logger" class="%behat.logger.class%" />
 
         <!-- Environment -->
         <service id="behat.environment" class="%behat.environment.class%" scope="prototype" />

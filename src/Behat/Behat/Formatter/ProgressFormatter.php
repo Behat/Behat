@@ -6,7 +6,7 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Tester\StepTester,
     Behat\Behat\StepDefinition\Definition,
-    Behat\Behat\Statistic\StatisticsCollector,
+    Behat\Behat\DataCollector\LoggerDataCollector,
     Behat\Behat\Exception\Pending;
 
 use Behat\Gherkin\Node\BackgroundNode,
@@ -23,13 +23,13 @@ class ProgressFormatter extends ConsoleFormatter
 
     public function afterSuite(Event $event)
     {
-        $statistics = $event->getSubject();
+        $logger = $event->getSubject();
 
         $this->writeln("\n");
-        $this->printFailedSteps($statistics);
-        $this->printPendingSteps($statistics);
-        $this->printSummary($statistics);
-        $this->printUndefinedStepsSnippets($statistics);
+        $this->printFailedSteps($logger);
+        $this->printPendingSteps($logger);
+        $this->printSummary($logger);
+        $this->printUndefinedStepsSnippets($logger);
     }
 
     public function beforeSuite(Event $event)
@@ -101,21 +101,21 @@ class ProgressFormatter extends ConsoleFormatter
         }
     }
 
-    protected function printFailedSteps(StatisticsCollector $statistics)
+    protected function printFailedSteps(LoggerDataCollector $logger)
     {
-        if (count($statistics->getFailedStepsEvents())) {
+        if (count($logger->getFailedStepsEvents())) {
             $header = $this->translate('failed steps');
             $this->writeln("{+failed}(::) $header (::){-failed}\n");
-            $this->printExceptionEvents($statistics->getFailedStepsEvents());
+            $this->printExceptionEvents($logger->getFailedStepsEvents());
         }
     }
 
-    protected function printPendingSteps(StatisticsCollector $statistics)
+    protected function printPendingSteps(LoggerDataCollector $logger)
     {
-        if (count($statistics->getPendingStepsEvents())) {
+        if (count($logger->getPendingStepsEvents())) {
             $header = $this->translate('pending steps');
             $this->writeln("{+pending}(::) $header (::){-pending}\n");
-            $this->printExceptionEvents($statistics->getPendingStepsEvents());
+            $this->printExceptionEvents($logger->getPendingStepsEvents());
         }
     }
 
@@ -136,6 +136,7 @@ class ProgressFormatter extends ConsoleFormatter
                     str_pad((string) ($number + 1), 2, '0', STR_PAD_LEFT),
                     strtr($error, array("\n" => "\n    "))
                 );
+                $error = $this->relativizePathsInString($error);
 
                 $this->writeln("{+$color}$error{-$color}");
             }
@@ -180,34 +181,34 @@ class ProgressFormatter extends ConsoleFormatter
         $this->writeln();
     }
 
-    protected function printSummary(StatisticsCollector $statistics)
+    protected function printSummary(LoggerDataCollector $logger)
     {
-        $this->printScenariosSummary($statistics);
-        $this->printStepsSummary($statistics);
+        $this->printScenariosSummary($logger);
+        $this->printStepsSummary($logger);
 
         if ($this->parameters->get('time')) {
-            $this->printTimeSummary($statistics);
+            $this->printTimeSummary($logger);
         }
     }
 
-    protected function printScenariosSummary(StatisticsCollector $statistics)
+    protected function printScenariosSummary(LoggerDataCollector $logger)
     {
-        $count  = $statistics->getScenariosCount();
+        $count  = $logger->getScenariosCount();
         $header = $this->translateChoice(
             '{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios', $count, array('%1%' => $count)
         );
         $this->write($header);
-        $this->printStatusesSummary($statistics->getScenariosStatuses());
+        $this->printStatusesSummary($logger->getScenariosStatuses());
     }
 
-    protected function printStepsSummary(StatisticsCollector $statistics)
+    protected function printStepsSummary(LoggerDataCollector $logger)
     {
-        $count  = $statistics->getStepsCount();
+        $count  = $logger->getStepsCount();
         $header = $this->translateChoice(
             '{0} No steps|{1} 1 step|]1,Inf] %1% steps', $count, array('%1%' => $count)
         );
         $this->write($header);
-        $this->printStatusesSummary($statistics->getStepsStatuses());
+        $this->printStatusesSummary($logger->getStepsStatuses());
     }
 
     protected function printStatusesSummary(array $statusesStatistics)
@@ -224,24 +225,24 @@ class ProgressFormatter extends ConsoleFormatter
         $this->writeln(count($statuses) ? ' ' . sprintf('(%s)', implode(', ', $statuses)) : '');
     }
 
-    protected function printTimeSummary(StatisticsCollector $statistics)
+    protected function printTimeSummary(LoggerDataCollector $logger)
     {
-        $time       = $statistics->getTotalTime();
+        $time       = $logger->getTotalTime();
         $minutes    = floor($time / 60);
         $seconds    = round($time - ($minutes * 60), 3);
 
         $this->writeln($minutes . 'm' . $seconds . 's');
     }
 
-    protected function printUndefinedStepsSnippets(StatisticsCollector $statistics)
+    protected function printUndefinedStepsSnippets(LoggerDataCollector $logger)
     {
-        if (count($statistics->getDefinitionsSnippets())) {
+        if (count($logger->getDefinitionsSnippets())) {
             $header = $this->translate(
                 'You can implement step definitions for undefined steps with these snippets:'
             );
             $this->writeln("\n{+undefined}$header{-undefined}\n");
 
-            foreach ($statistics->getDefinitionsSnippets() as $key => $snippet) {
+            foreach ($logger->getDefinitionsSnippets() as $key => $snippet) {
                 $this->writeln("{+undefined}$snippet{-undefined}\n");
             }
         }
@@ -250,10 +251,17 @@ class ProgressFormatter extends ConsoleFormatter
     protected function printPathComment($file, $line, $indentCount)
     {
         $indent = str_repeat(' ', $indentCount);
-        if (null !== ($basePath = $this->parameters->get('base_path'))) {
-            $file = str_replace(dirname($basePath) . '/', '', $file);
-        }
+        $file = $this->relativizePathsInString($file);
 
         $this->writeln("$indent {+comment}# $file:$line{-comment}");
+    }
+
+    protected function relativizePathsInString($string)
+    {
+        if (null !== ($basePath = $this->parameters->get('base_path'))) {
+            $string = str_replace(dirname($basePath) . '/', '', $string);
+        }
+
+        return $string;
     }
 }

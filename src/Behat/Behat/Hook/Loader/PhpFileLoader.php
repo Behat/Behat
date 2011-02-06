@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Hooks\Loader;
+namespace Behat\Behat\Hook\Loader;
 
 /*
  * This file is part of the Behat.
@@ -15,7 +15,7 @@ namespace Behat\Behat\Hooks\Loader;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PHPLoader implements LoaderInterface
+class PhpFileLoader implements LoaderInterface
 {
     protected $hooks = array();
 

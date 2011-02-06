@@ -23,7 +23,7 @@ use Behat\Behat\StepDefinition\Transformation;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PHPLoader implements LoaderInterface
+class PhpFileLoader implements LoaderInterface
 {
     protected $dispatcher;
     protected $objects = array();

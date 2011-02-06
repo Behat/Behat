@@ -6,7 +6,7 @@ use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Tester\StepTester,
     Behat\Behat\StepDefinition\Definition,
-    Behat\Behat\Statistic\StatisticsCollector;
+    Behat\Behat\DataCollector\LoggerDataCollector;
 
 use Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\FeatureNode,
@@ -38,10 +38,10 @@ class PrettyFormatter extends ProgressFormatter
 
     public function afterSuite(Event $event)
     {
-        $statistics = $event->getSubject();
+        $logger = $event->getSubject();
 
-        $this->printSummary($statistics);
-        $this->printUndefinedStepsSnippets($statistics);
+        $this->printSummary($logger);
+        $this->printUndefinedStepsSnippets($logger);
     }
 
     public function beforeFeature(Event $event)
@@ -284,6 +284,7 @@ class PrettyFormatter extends ProgressFormatter
                 } else {
                     $error = $exception->getMessage();
                 }
+                $error = $this->relativizePathsInString($error);
 
                 $this->writeln(
                     "        {+$color}" . strtr($error, array("\n" => "\n      ")) . "{-$color}"
@@ -342,6 +343,7 @@ class PrettyFormatter extends ProgressFormatter
         } else {
             $error = $exception->getMessage();
         }
+        $error = $this->relativizePathsInString($error);
 
         $this->writeln(
             "      {+$color}" . strtr($error, array("\n" => "\n      ")) . "{-$color}"

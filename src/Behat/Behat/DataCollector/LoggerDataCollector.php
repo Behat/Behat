@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Statistic;
+namespace Behat\Behat\DataCollector;
 
 use Symfony\Component\EventDispatcher\Event;
 
@@ -19,7 +19,7 @@ use Behat\Behat\Tester\StepTester;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StatisticsCollector
+class LoggerDataCollector
 {
     protected $paused               = false;
     protected $suiteStartTime;

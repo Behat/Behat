@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Hooks\Loader;
+namespace Behat\Behat\Hook\Loader;
 
 /*
  * This file is part of the Behat.

@@ -86,7 +86,7 @@ class BehatCommand extends Command
             ),
             new InputOption('--no-time',        '-T'
               , InputOption::VALUE_NONE
-              , 'Hide time statistics in output.'
+              , 'Hide time in output.'
             ),
             new InputOption('--help',           '-h'
               , InputOption::VALUE_NONE
@@ -152,8 +152,8 @@ class BehatCommand extends Command
         $translator             = $container->get('behat.translator');
         $gherkin                = $container->get('gherkin');
         $definitionsContainer   = $container->get('behat.definitions_container');
-        $hooksContainer         = $container->get('behat.hooks_container');
-        $statisticsCollector    = $container->get('behat.statistics_collector');
+        $hookDispatcher         = $container->get('behat.hook_dispatcher');
+        $logger                 = $container->get('behat.logger');
 
         // Configure Gherkin manager filters
         if ($name = $container->getParameter('gherkin.filter.name')) {
@@ -175,10 +175,10 @@ class BehatCommand extends Command
         // Configure hooks container
         foreach ((array) $container->getParameter('behat.paths.hooks') as $path) {
             if (is_file($path)) {
-                $hooksContainer->addResource('php', $path);
+                $hookDispatcher->addResource('php', $path);
             }
         }
-        $eventDispatcher->registerHooksContainer($hooksContainer);
+        $eventDispatcher->registerHookDispatcher($hookDispatcher);
 
         // Configure formatter
         switch ($container->getParameter('behat.formatter.name')) {
@@ -196,8 +196,8 @@ class BehatCommand extends Command
         $formatter->setParameter('base_path', $container->getParameter('behat.paths.base'));
         $eventDispatcher->registerFormatter($formatter);
 
-        // Register statistics collector on Event Dispatcher
-        $eventDispatcher->registerStatisticsCollector($statisticsCollector);
+        // Register logger
+        $eventDispatcher->registerLogger($logger);
 
         // Find features paths
         if (is_dir($container->getParameter('behat.paths.features'))) {
@@ -207,7 +207,7 @@ class BehatCommand extends Command
         }
 
         // Notify suite.before event
-        $eventDispatcher->notify(new Event($statisticsCollector, 'suite.before'));
+        $eventDispatcher->notify(new Event($logger, 'suite.before'));
 
         // Run features
         $result = 0;
@@ -220,7 +220,7 @@ class BehatCommand extends Command
         }
 
         // Notify suite.after event
-        $eventDispatcher->notify(new Event($statisticsCollector, 'suite.after'));
+        $eventDispatcher->notify(new Event($logger, 'suite.after'));
 
         // Return exit code
         return intval(0 < $result);

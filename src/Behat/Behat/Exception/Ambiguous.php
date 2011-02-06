@@ -2,8 +2,6 @@
 
 namespace Behat\Behat\Exception;
 
-use Behat\Behat\Output\Formatter\ConsoleFormatter as Formatter;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -38,7 +36,7 @@ class Ambiguous extends BehaviorException
         $this->message = sprintf("Ambiguous match of \"%s\":", $this->text);
         foreach ($this->matches as $definition){
             $this->message .= sprintf("\n%s:%d:in `%s`",
-                Formatter::trimFilename($definition->getFile()), $definition->getLine(), $definition->getRegex()
+                $definition->getFile(), $definition->getLine(), $definition->getRegex()
             );
         }
     }

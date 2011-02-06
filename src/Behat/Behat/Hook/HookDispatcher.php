@@ -1,11 +1,11 @@
 <?php
 
-namespace Behat\Behat\Hooks;
+namespace Behat\Behat\Hook;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
-use Behat\Behat\Hooks\Loader\LoaderInterface;
+use Behat\Behat\Hook\Loader\LoaderInterface;
 
 use Behat\Gherkin\Filter\TagFilter,
     Behat\Gherkin\Filter\NameFilter;
@@ -24,7 +24,7 @@ use Behat\Gherkin\Filter\TagFilter,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HooksContainer
+class HookDispatcher
 {
     protected $resources    = array();
     protected $loaders      = array();

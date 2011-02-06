@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EventDispatcher extends BaseEventDispatcher
 {
-    public function registerStatisticsCollector($collector)
+    public function registerLogger($collector)
     {
         $this->connect('suite.before',              array($collector, 'beforeSuite'),               0);
         $this->connect('suite.after',               array($collector, 'afterSuite'),                0);
@@ -30,7 +30,7 @@ class EventDispatcher extends BaseEventDispatcher
         $this->connect('step.after',                array($collector, 'afterStep'),                 0);
     }
 
-    public function registerHooksContainer($hooksContainer)
+    public function registerHookDispatcher($hooksContainer)
     {
         // TODO: optimize
         $this->connect('suite.before',              array($hooksContainer, 'fireSuiteHooks'),       10);
