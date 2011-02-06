@@ -154,6 +154,7 @@ class BehatCommand extends Command
         $definitionDispatcher   = $container->get('behat.definition_dispatcher');
         $hookDispatcher         = $container->get('behat.hook_dispatcher');
         $logger                 = $container->get('behat.logger');
+        $environmentBuilder     = $container->get('behat.environment_builder');
 
         // Configure Gherkin manager filters
         if ($name = $container->getParameter('gherkin.filter.name')) {
@@ -169,6 +170,12 @@ class BehatCommand extends Command
                 foreach ($this->findDefinitionResources($stepsPath) as $path) {
                     $definitionDispatcher->addResource('php', $path);
                 }
+            }
+        }
+
+        foreach ((array) $container->getParameter('behat.paths.environment') as $environmentPath) {
+            if (is_file($environmentPath)) {
+                $environmentBuilder->addResource($environmentPath);
             }
         }
 

@@ -2,9 +2,6 @@
 
 namespace Behat\Behat\Definition;
 
-use Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event;
-
 use Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
@@ -30,24 +27,11 @@ use Behat\Behat\Definition\Loader\LoaderInterface,
  */
 class DefinitionDispatcher
 {
-    protected $dispatcher;
-
     protected $resources        = array();
     protected $loaders          = array();
 
     protected $transformations  = array();
     protected $definitions      = array();
-
-    /**
-     * Create container.
-     *
-     * @param   EventDispatcher $dispatcher event dispatcher
-     */
-    public function __construct(EventDispatcher $dispatcher)
-    {
-        $this->dispatcher = $dispatcher;
-        $this->dispatcher->connect('step.run', array($this, 'runStep'));
-    }
 
     /**
      * Add a loader.
@@ -143,19 +127,6 @@ PHP
         return array(
             md5($description) => sprintf($description, str_replace(' ', '_', $step->getType()))
         );
-    }
-
-    /**
-     * Listen to `step.run` and find/call proper step definition. 
-     * 
-     * @param   Event   $event  step event
-     *
-     * @throws  Behat\Behat\Exception\BehaviorException
-     */
-    public function runStep(Event $event)
-    {
-        $definition = $this->findDefinition($event->getSubject());
-        $definition->run($event->get('world'));
     }
 
     /**

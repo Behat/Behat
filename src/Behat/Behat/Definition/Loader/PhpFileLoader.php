@@ -2,12 +2,10 @@
 
 namespace Behat\Behat\Definition\Loader;
 
-use Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event;
-
 use Behat\Gherkin\Node\StepNode;
 
-use Behat\Behat\Definition\Definition,
+use Behat\Behat\Definition\DefinitionDispatcher,
+    Behat\Behat\Definition\Definition,
     Behat\Behat\Definition\Transformation;
 
 /*
@@ -31,9 +29,9 @@ class PhpFileLoader implements LoaderInterface
     /**
      * Initialize loader. 
      * 
-     * @param   EventDispatcher $dispatcher event dispatcher
+     * @param   DefinitionDispatcher $dispatcher definition dispatcher
      */
-    public function __construct(EventDispatcher $dispatcher)
+    public function __construct(DefinitionDispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
@@ -91,7 +89,8 @@ class PhpFileLoader implements LoaderInterface
             $step   = new StepNode($type, $text);
             $step->setArguments($arguments);
 
-            $this->dispatcher->notify(new Event($step, 'step.run', array('world' => $world)));
+            $definition = $this->dispatcher->findDefinition($step);
+            $definition->run($world);
         }
 
         return $this;

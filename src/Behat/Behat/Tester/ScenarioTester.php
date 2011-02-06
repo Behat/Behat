@@ -36,7 +36,7 @@ class ScenarioTester implements NodeVisitorInterface
     {
         $this->container    = $container;
         $this->dispatcher   = $container->get('behat.event_dispatcher');
-        $this->environment  = $container->get('behat.environment_builder')->buildEnvironment();
+        $this->environment  = $container->get('behat.environment_builder')->build();
     }
 
     /**

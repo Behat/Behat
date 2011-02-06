@@ -20,13 +20,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 interface LoaderInterface
 {
     /**
-     * Initialize loader. 
-     * 
-     * @param   EventDispatcher $dispatcher event dispatcher
-     */
-    public function __construct(EventDispatcher $dispatcher);
-
-    /**
      * Load definitions from file. 
      * 
      * @param   string          $path       plain php file path

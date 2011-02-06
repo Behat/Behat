@@ -26,12 +26,10 @@ class EnvironmentBuilder
      * Initialize builder.
      * 
      * @param   ContainerInterface  $envClass   environment class
-     * @param   array               $files      array of enfironment files
      */
-    public function __construct(ContainerInterface $container, $files)
+    public function __construct(ContainerInterface $container)
     {
-        $this->container    = $container;
-        $this->files        = (array) $files;
+        $this->container = $container;
     }
 
     /**
@@ -39,7 +37,7 @@ class EnvironmentBuilder
      * 
      * @param   string  $file   file path
      */
-    public function addEnvironmentFile($file)
+    public function addResource($file)
     {
         $this->files[] = $file;
     }
@@ -49,7 +47,7 @@ class EnvironmentBuilder
      * 
      * @return  EnvironmentInterface
      */
-    public function buildEnvironment()
+    public function build()
     {
         $environment = $this->container->get('behat.environment');
 

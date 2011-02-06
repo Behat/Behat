@@ -14,7 +14,7 @@
         <parameter key="behat.paths.steps">%behat.paths.base%/steps</parameter>
 
         <parameter key="behat.paths.features">%behat.paths.base%</parameter>
-        <parameter key="behat.paths.environments">%behat.paths.support%/env.php</parameter>
+        <parameter key="behat.paths.environment">%behat.paths.support%/env.php</parameter>
         <parameter key="behat.paths.hooks">%behat.paths.support%/hooks.php</parameter>
 
         <!-- Formatter parameters -->
@@ -44,8 +44,8 @@
         <parameter key="behat.hook.loader.php.class">Behat\Behat\Hook\Loader\PhpFileLoader</parameter>
 
         <!-- Environment -->
-        <parameter key="behat.environment.class">Behat\Behat\Environment\WorldEnvironment</parameter>
         <parameter key="behat.environment_builder.class">Behat\Behat\Environment\EnvironmentBuilder</parameter>
+        <parameter key="behat.environment.class">Behat\Behat\Environment\Environment</parameter>
 
         <!-- Tester -->
         <parameter key="behat.tester.feature.class">Behat\Behat\Tester\FeatureTester</parameter>
@@ -90,20 +90,20 @@
             <argument type="service" id="behat.translator" />
         </service>
 
-        <!-- Step Definition -->
+        <!-- Definition Dispatcher -->
         <service id="behat.definition_dispatcher" class="%behat.definition_dispatcher.class%">
             <argument type="service" id="behat.event_dispatcher" />
             <call method="addLoader">
                 <argument>php</argument>
                 <argument type="service">
                     <service class="%behat.definition.loader.php.class%">
-                        <argument type="service" id="behat.event_dispatcher" />
+                        <argument type="service" id="behat.definition_dispatcher" />
                     </service>
                 </argument>
             </call>
         </service>
 
-        <!-- Hooks -->
+        <!-- Hook Dispatcher -->
         <service id="behat.hook_dispatcher" class="%behat.hook_dispatcher.class%">
             <call method="addLoader">
                 <argument>php</argument>
@@ -123,7 +123,6 @@
         <service id="behat.environment" class="%behat.environment.class%" scope="prototype" />
         <service id="behat.environment_builder" class="%behat.environment_builder.class%">
             <argument type="service" id="service_container" />
-            <argument>%behat.paths.environments%</argument>
         </service>
 
         <!-- Tester -->

@@ -11,11 +11,11 @@ namespace Behat\Behat\Environment;
  */
 
 /**
- * World container basic implementation.
+ * Environment container basic implementation.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class WorldEnvironment implements EnvironmentInterface
+class Environment implements EnvironmentInterface
 {
   protected $values = array();
 
