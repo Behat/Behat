@@ -1,14 +1,14 @@
 <?php
 
-namespace Behat\Behat\StepDefinition\Loader;
+namespace Behat\Behat\Definition\Loader;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher,
+    Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\StepNode;
 
-use Behat\Behat\StepDefinition\Definition;
-use Behat\Behat\StepDefinition\Transformation;
+use Behat\Behat\Definition\Definition,
+    Behat\Behat\Definition\Transformation;
 
 /*
  * This file is part of the Behat.

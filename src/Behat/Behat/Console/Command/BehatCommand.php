@@ -151,7 +151,7 @@ class BehatCommand extends Command
         $eventDispatcher        = $container->get('behat.event_dispatcher');
         $translator             = $container->get('behat.translator');
         $gherkin                = $container->get('gherkin');
-        $definitionsContainer   = $container->get('behat.definitions_container');
+        $definitionDispatcher   = $container->get('behat.definition_dispatcher');
         $hookDispatcher         = $container->get('behat.hook_dispatcher');
         $logger                 = $container->get('behat.logger');
 
@@ -167,7 +167,7 @@ class BehatCommand extends Command
         foreach ((array) $container->getParameter('behat.paths.steps') as $stepsPath) {
             if (is_dir($stepsPath)) {
                 foreach ($this->findDefinitionResources($stepsPath) as $path) {
-                    $definitionsContainer->addResource('php', $path);
+                    $definitionDispatcher->addResource('php', $path);
                 }
             }
         }

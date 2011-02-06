@@ -50,7 +50,7 @@ class StepTester implements NodeVisitorInterface
     {
         $this->container    = $container;
         $this->dispatcher   = $container->get('behat.event_dispatcher');
-        $this->definitions  = $container->get('behat.definitions_container');
+        $this->definitions  = $container->get('behat.definition_dispatcher');
     }
 
     /**

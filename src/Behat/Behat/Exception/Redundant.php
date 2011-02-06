@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Exception;
 
-use Behat\Behat\StepDefinition\Definition;
+use Behat\Behat\Definition\Definition;
 
 /*
  * This file is part of the Behat.

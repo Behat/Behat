@@ -24,7 +24,7 @@ class Ambiguous extends BehaviorException
      * Initialize exception.
      *
      * @param   string  $text       step description
-     * @param   array   $matches    ambigious matches (array of StepDefinition's)
+     * @param   array   $matches    ambigious matches (array of Definition's)
      */
     public function __construct($text, array $matches)
     {

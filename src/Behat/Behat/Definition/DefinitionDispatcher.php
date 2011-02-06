@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\StepDefinition;
+namespace Behat\Behat\Definition;
 
 use Symfony\Component\EventDispatcher\EventDispatcher,
     Symfony\Component\EventDispatcher\Event;
@@ -9,7 +9,7 @@ use Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
-use Behat\Behat\StepDefinition\Loader\LoaderInterface,
+use Behat\Behat\Definition\Loader\LoaderInterface,
     Behat\Behat\Exception\Redundant,
     Behat\Behat\Exception\Ambiguous,
     Behat\Behat\Exception\Undefined;
@@ -28,7 +28,7 @@ use Behat\Behat\StepDefinition\Loader\LoaderInterface,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionsContainer
+class DefinitionDispatcher
 {
     protected $dispatcher;
 
@@ -163,7 +163,7 @@ PHP
      *
      * @param   StepNode     $step       step
      * 
-     * @return  StepDefinition
+     * @return  Definition
      * 
      * @throws  Behat\Behat\Exception\Ambiguous  if step description is ambiguous
      * @throws  Behat\Behat\Exception\Undefined  if step definition not found

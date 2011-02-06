@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\StepDefinition;
+namespace Behat\Behat\Definition;
 
 use Behat\Gherkin\Node\TableNode;
 

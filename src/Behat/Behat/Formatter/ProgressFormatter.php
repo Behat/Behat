@@ -5,7 +5,7 @@ namespace Behat\Behat\Formatter;
 use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Tester\StepTester,
-    Behat\Behat\StepDefinition\Definition,
+    Behat\Behat\Definition\Definition,
     Behat\Behat\DataCollector\LoggerDataCollector,
     Behat\Behat\Exception\Pending;
 

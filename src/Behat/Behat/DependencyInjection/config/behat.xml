@@ -30,8 +30,8 @@
         <parameter key="gherkin.filter.tags">null</parameter>
 
         <!-- Step Definition -->
-        <parameter key="behat.definitions_container.class">Behat\Behat\StepDefinition\DefinitionsContainer</parameter>
-        <parameter key="behat.definitions_loader.php.class">Behat\Behat\StepDefinition\Loader\PhpFileLoader</parameter>
+        <parameter key="behat.definition_dispatcher.class">Behat\Behat\Definition\DefinitionDispatcher</parameter>
+        <parameter key="behat.definition.loader.php.class">Behat\Behat\Definition\Loader\PhpFileLoader</parameter>
 
         <!-- Event Dispatcher -->
         <parameter key="behat.event_dispatcher.class">Behat\Behat\EventDispatcher\EventDispatcher</parameter>
@@ -91,12 +91,12 @@
         </service>
 
         <!-- Step Definition -->
-        <service id="behat.definitions_container" class="%behat.definitions_container.class%">
+        <service id="behat.definition_dispatcher" class="%behat.definition_dispatcher.class%">
             <argument type="service" id="behat.event_dispatcher" />
             <call method="addLoader">
                 <argument>php</argument>
                 <argument type="service">
-                    <service class="%behat.definitions_loader.php.class%">
+                    <service class="%behat.definition.loader.php.class%">
                         <argument type="service" id="behat.event_dispatcher" />
                     </service>
                 </argument>

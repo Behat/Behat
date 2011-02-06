@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\StepDefinition\Loader;
+namespace Behat\Behat\Definition\Loader;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

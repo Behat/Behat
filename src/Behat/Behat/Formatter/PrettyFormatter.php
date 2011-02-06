@@ -5,7 +5,7 @@ namespace Behat\Behat\Formatter;
 use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Tester\StepTester,
-    Behat\Behat\StepDefinition\Definition,
+    Behat\Behat\Definition\Definition,
     Behat\Behat\DataCollector\LoggerDataCollector;
 
 use Behat\Gherkin\Node\AbstractNode,
@@ -303,7 +303,7 @@ class PrettyFormatter extends ProgressFormatter
         $this->write("    {+$color}$type $text{-$color}");
 
         if (null !== $definition) {
-            $this->printStepDefinitionPath($step, $definition);
+            $this->printDefinitionPath($step, $definition);
         } else {
             $this->writeln();
         }
@@ -315,7 +315,7 @@ class PrettyFormatter extends ProgressFormatter
         }
     }
 
-    protected function printStepDefinitionPath(StepNode $step, Definition $definition)
+    protected function printDefinitionPath(StepNode $step, Definition $definition)
     {
         $type           = $step->getType();
         $text           = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
