@@ -2,8 +2,7 @@
 
 namespace Behat\Behat\Exception;
 
-use Behat\Behat\StepDefinition\Definition;
-use Behat\Behat\Output\Formatter\ConsoleFormatter as Formatter;
+use Behat\Behat\Definition\Definition;
 
 /*
  * This file is part of the Behat.
@@ -14,15 +13,12 @@ use Behat\Behat\Output\Formatter\ConsoleFormatter as Formatter;
  */
 
 /**
- * Redundant Exception.
+ * Redundant exception.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Redundant extends BehaviorException
 {
-    protected $step1;
-    protected $step2;
-
     /**
      * Initialize Exception.
      *
@@ -33,12 +29,11 @@ class Redundant extends BehaviorException
     {
         parent::__construct();
 
-        $this->step1 = $step1;
-        $this->step2 = $step2;
         $this->message = sprintf("Step \"%s\" is already defined in %s:%d\n\n%s:%d\n%s:%d",
-            $this->step2->getRegex(), Formatter::trimFilename($this->step1->getFile()), $this->step1->getLine()
-          , Formatter::trimFilename($this->step1->getFile()), $this->step1->getLine()
-          , Formatter::trimFilename($this->step2->getFile()), $this->step2->getLine()
+            $this->step2->getRegex(),
+            $this->step1->getFile(), $this->step1->getLine(),
+            $this->step1->getFile(), $this->step1->getLine(),
+            $this->step2->getFile(), $this->step2->getLine()
         );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\StepDefinition;
+namespace Behat\Behat\Definition;
 
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
@@ -17,22 +17,57 @@ use Behat\Behat\Exception\Error,
  */
 
 /**
- * Step Definition.
+ * Step definition.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Definition
 {
+    /**
+     * Step type (Given|When|Then|...)
+     *
+     * @var     string
+     */
     protected $type;
+    /**
+     * Definition regex to match.
+     *
+     * @var     string
+     */
     protected $regex;
+    /**
+     * Definition callback.
+     *
+     * @var     \Callback
+     */
     protected $callback;
+    /**
+     * Definition filename.
+     *
+     * @var     string
+     */
     protected $file;
+    /**
+     * Definition lineno.
+     *
+     * @var     integer
+     */
     protected $line;
+    /**
+     * Matched to definition regex text.
+     *
+     * @var     string
+     */
     protected $matchedText;
+    /**
+     * Step parameters for call.
+     *
+     * @var     array
+     */
     protected $values = array();
 
     /**
-     * Initialize new definition.
+     * Initialize definition.
      *
      * @param   string      $type       step type (Given/When/Then/And or localized one)
      * @param   string      $regex      step matching regular expression
@@ -50,7 +85,7 @@ class Definition
     }
 
     /**
-     * Return step type (Given/When/Then/And or localized one).
+     * Return step definition type (Given|When|Then|...).
      *
      * @return  string
      */
@@ -60,7 +95,7 @@ class Definition
     }
 
     /**
-     * Return step matching regular expression.
+     * Return definition regex to match.
      *
      * @return  string
      */
@@ -70,7 +105,7 @@ class Definition
     }
 
     /**
-     * Set step text from matched element.
+     * Set text from matched step.
      *
      * @param   string  $text   step text (description)
      */
@@ -80,7 +115,7 @@ class Definition
     }
 
     /**
-     * Return step text from matched element.
+     * Return text from matched step.
      *
      * @return  string
      */
@@ -90,7 +125,7 @@ class Definition
     }
 
     /**
-     * Return step definition file path.
+     * Return definition filename.
      *
      * @return  string
      */
@@ -100,7 +135,7 @@ class Definition
     }
 
     /**
-     * Return step definition line number.
+     * Return definition line number.
      *
      * @return  integer
      */
@@ -120,11 +155,11 @@ class Definition
     }
 
     /**
-     * Custom Error handler.
+     * Custom error handler.
      *
      * @see     set_error_handler
-     * 
-     * @throws  Behat\Behat\Exception\Error   that incapsulates error information
+     *
+     * @throws  \Behat\Behat\Exception\Error
      */
     public function errorHandler($code, $message, $file, $line)
     {
@@ -135,8 +170,8 @@ class Definition
      * Runs step definition.
      *
      * @param   EnvironmentInterface    $environment    runners shared environment
-     * 
-     * @throws  Behat\Behat\Exception\BehaviorException
+     *
+     * @throws  \Behat\Behat\Exception\BehaviorException
      */
     public function run(EnvironmentInterface $environment, $tokens = array())
     {

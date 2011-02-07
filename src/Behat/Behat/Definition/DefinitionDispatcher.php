@@ -1,15 +1,12 @@
 <?php
 
-namespace Behat\Behat\StepDefinition;
-
-use Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event;
+namespace Behat\Behat\Definition;
 
 use Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
-use Behat\Behat\StepDefinition\Loader\LoaderInterface,
+use Behat\Behat\Definition\Loader\LoaderInterface,
     Behat\Behat\Exception\Redundant,
     Behat\Behat\Exception\Ambiguous,
     Behat\Behat\Exception\Undefined;
@@ -23,31 +20,17 @@ use Behat\Behat\StepDefinition\Loader\LoaderInterface,
  */
 
 /**
- * Steps Definitions Container and Loader.
- * Loads & Initializates Step Definitions.
+ * Definition dispatcher.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionsContainer
+class DefinitionDispatcher
 {
-    protected $dispatcher;
-
     protected $resources        = array();
     protected $loaders          = array();
 
     protected $transformations  = array();
     protected $definitions      = array();
-
-    /**
-     * Create container.
-     *
-     * @param   EventDispatcher $dispatcher event dispatcher
-     */
-    public function __construct(EventDispatcher $dispatcher)
-    {
-        $this->dispatcher = $dispatcher;
-        $this->dispatcher->connect('step.run', array($this, 'runStep'));
-    }
 
     /**
      * Add a loader.
@@ -146,24 +129,11 @@ PHP
     }
 
     /**
-     * Listen to `step.run` and find/call proper step definition. 
-     * 
-     * @param   Event   $event  step event
-     *
-     * @throws  Behat\Behat\Exception\BehaviorException
-     */
-    public function runStep(Event $event)
-    {
-        $definition = $this->findDefinition($event->getSubject());
-        $definition->run($event->get('world'));
-    }
-
-    /**
      * Find step definition, that match specified step.
      *
      * @param   StepNode     $step       step
      * 
-     * @return  StepDefinition
+     * @return  Definition
      * 
      * @throws  Behat\Behat\Exception\Ambiguous  if step description is ambiguous
      * @throws  Behat\Behat\Exception\Undefined  if step definition not found

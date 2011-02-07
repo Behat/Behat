@@ -1,14 +1,12 @@
 <?php
 
-namespace Behat\Behat\StepDefinition\Loader;
-
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+namespace Behat\Behat\Definition\Loader;
 
 use Behat\Gherkin\Node\StepNode;
 
-use Behat\Behat\StepDefinition\Definition;
-use Behat\Behat\StepDefinition\Transformation;
+use Behat\Behat\Definition\DefinitionDispatcher,
+    Behat\Behat\Definition\Definition,
+    Behat\Behat\Definition\Transformation;
 
 /*
  * This file is part of the Behat.
@@ -19,30 +17,37 @@ use Behat\Behat\StepDefinition\Transformation;
  */
 
 /**
- * Plain PHP Files Steps Loader.
+ * PHP-files definitions loader.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PHPLoader implements LoaderInterface
+class PhpFileLoader implements LoaderInterface
 {
+    /**
+     * Definition dispatcher.
+     *
+     * @var     DefinitionDispatcher
+     */
     protected $dispatcher;
+    /**
+     * List of found objects (Definition's & Transformation's)
+     *
+     * @var     array
+     */
     protected $objects = array();
 
     /**
-     * Initialize loader. 
-     * 
-     * @param   EventDispatcher $dispatcher event dispatcher
+     * Initialize loader.
+     *
+     * @param   DefinitionDispatcher $dispatcher definition dispatcher
      */
-    public function __construct(EventDispatcher $dispatcher)
+    public function __construct(DefinitionDispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
 
     /**
-     * Load definitions from file. 
-     * 
-     * @param   string          $path       plain php file path
-     * @return  array                       array of Definitions & Transformations
+     * {@inheritdoc}
      */
     public function load($path)
     {
@@ -55,9 +60,9 @@ class PHPLoader implements LoaderInterface
     }
 
     /**
-     * Define argument transformation to container.
-     * 
-     * @param   string      $regex      regex to argument for transformation
+     * Define argument transformation.
+     *
+     * @param   string      $regex      transformation regex (to find specific argument)
      * @param   callback    $callback   transformation callback (returns transformed argument)
      */
     public function Transform($regex, $callback)
@@ -66,14 +71,14 @@ class PHPLoader implements LoaderInterface
     }
 
     /**
-     * Define a step with ->Given('/regex/', callback) or
-     * call a step with ->Given('I enter "12" in the field', $world) or
-     * even with arguments ->Given('I fill up fields', $world, $table).
+     * Define a step with ->Given|When|Then|...('/regex/', callback) or
+     * call a step with ->Given|When|Then|...('I enter "12" in the field', $world) or
+     * even with arguments ->Given|When|Then|...('I fill up fields', $world, $table).
      *
-     * @param   string  $type       step type (Given/When/Then/And or localized one)
+     * @param   string  $type       step type (Given|When|Then|...)
      * @param   string  $arguments  step regex & callback
-     * 
-     * @throws  Behat\Behat\Exception\Redundant  if step definition is already exists
+     *
+     * @throws  \Behat\Behat\Exception\Redundant  if step definition is already exists
      */
     public function __call($type, $arguments)
     {
@@ -91,7 +96,8 @@ class PHPLoader implements LoaderInterface
             $step   = new StepNode($type, $text);
             $step->setArguments($arguments);
 
-            $this->dispatcher->notify(new Event($step, 'step.run', array('world' => $world)));
+            $definition = $this->dispatcher->findDefinition($step);
+            $definition->run($world);
         }
 
         return $this;

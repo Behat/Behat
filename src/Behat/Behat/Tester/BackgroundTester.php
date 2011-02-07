@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container,
+use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
@@ -19,29 +19,44 @@ use Behat\Behat\Environment\EnvironmentInterface;
  */
 
 /**
- * Background Tester.
+ * Background tester.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BackgroundTester implements NodeVisitorInterface
 {
+    /**
+     * Service container.
+     *
+     * @var     ContainerInterface
+     */
     protected $container;
+    /**
+     * Event dispatcher.
+     *
+     * @var     EventDispatcher
+     */
     protected $dispatcher;
+    /**
+     * Environment.
+     *
+     * @var     EnvironmentInterface
+     */
     protected $environment;
 
     /**
      * Initialize tester.
      *
-     * @param   Container   $container  injection container
+     * @param   ContainerInterface  $container  service container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container    = $container;
         $this->dispatcher   = $container->get('behat.event_dispatcher');
     }
 
     /**
-     * Set run environment.
+     * Set running environment.
      *
      * @param   EnvironmentInterface    $environment    environment
      */
@@ -51,22 +66,22 @@ class BackgroundTester implements NodeVisitorInterface
     }
 
     /**
-     * Visit BackgroundNode & run tests against it.
+     * Visit BackgroundNode & it's steps.
      *
      * @param   AbstractNode    $background background node
-     * 
-     * @return  integer                     result
+     *
+     * @return  integer
      */
     public function visit(AbstractNode $background)
     {
-        $this->dispatcher->notify(new Event($background, 'background.run.before'));
+        $this->dispatcher->notify(new Event($background, 'background.before'));
 
         $result = 0;
         $skip   = false;
 
         // Visit & test steps
         foreach ($background->getSteps() as $step) {
-            $tester = $this->container->get('behat.step_tester');
+            $tester = $this->container->get('behat.tester.step');
             $tester->setEnvironment($this->environment);
             $tester->skip($skip);
 
@@ -78,7 +93,7 @@ class BackgroundTester implements NodeVisitorInterface
             $result = max($result, $stResult);
         }
 
-        $this->dispatcher->notify(new Event($background, 'background.run.after', array(
+        $this->dispatcher->notify(new Event($background, 'background.after', array(
             'result'    => $result
           , 'skipped'   => $skip
         )));

@@ -272,11 +272,4 @@ Feature: Statuses
       });
       """
     When I run "behat -TCf progress features/statuses.feature"
-    Then it should fail with:
-      """
-      [Behat\Behat\Exception\Redundant]
-        Step "/^I have entered (\d+)$/" is already defined in features/steps/steps.php:4
-
-        features/steps/steps.php:4
-        features/steps/steps.php:7
-      """
+    Then it should fail

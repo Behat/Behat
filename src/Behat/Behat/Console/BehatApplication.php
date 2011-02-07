@@ -2,12 +2,9 @@
 
 namespace Behat\Behat\Console;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Application,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Input\InputDefinition;
 
 use Behat\Behat\Console\Command\BehatCommand;
 
@@ -20,14 +17,14 @@ use Behat\Behat\Console\Command\BehatCommand;
  */
 
 /**
- * Behat main application.
+ * Behat console application.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BehatApplication extends Application
 {
     /**
-     * @see     Symfony\Component\Console\Application
+     * {@inheritdoc}
      */
     public function __construct()
     {
@@ -38,7 +35,7 @@ class BehatApplication extends Application
     }
 
     /**
-     * @see     Symfony\Component\Console\Application
+     * {@inheritdoc}
      */
     protected function getCommandName(InputInterface $input)
     {
@@ -46,7 +43,7 @@ class BehatApplication extends Application
     }
 
     /**
-     * @see     Symfony\Component\Console\Application 
+     * {@inheritdoc}
      */
     public function renderException($e, $output)
     {
@@ -55,4 +52,3 @@ class BehatApplication extends Application
         parent::renderException($e, $output);
     }
 }
-

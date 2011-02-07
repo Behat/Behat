@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Output\Formatter;
+namespace Behat\Behat\Hook\Loader;
 
 /*
  * This file is part of the Behat.
@@ -11,16 +11,17 @@ namespace Behat\Behat\Output\Formatter;
  */
 
 /**
- * Timable Formatter Interface.
+ * Hooks loader interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface TimableFormatterInterface
+interface LoaderInterface
 {
     /**
-     * Allow colors in output. 
+     * Load hooks from resource.
      * 
-     * @param   boolean $tiemr  show timer in output
+     * @param   string          $resource   resource path
+     * @return  array                       array of hooks
      */
-    public function showTimer($timer = true);
+    function load($resource);
 }

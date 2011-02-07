@@ -18,9 +18,9 @@ namespace Behat\Behat\Environment;
 interface EnvironmentInterface
 {
     /**
-     * Load environment configuration from env.php (or different env file).
-     * 
-     * @param     string  $file       file path to include initializations from
+     * Load environment resource (configuration).
+     *
+     * @param     string  $resource environment configuration resource path
      */
-    function loadEnvironmentFile($envFile);
+    function loadEnvironmentResource($resource);
 }

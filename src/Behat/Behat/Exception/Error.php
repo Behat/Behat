@@ -11,7 +11,7 @@ namespace Behat\Behat\Exception;
  */
 
 /**
- * Error handler Exception.
+ * Error handler exception.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */

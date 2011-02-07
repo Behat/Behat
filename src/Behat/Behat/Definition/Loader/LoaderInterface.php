@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Collector;
+namespace Behat\Behat\Definition\Loader;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -13,16 +13,17 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 
 /**
- * Collector interface.
+ * Definitions loader interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface CollectorInterface
+interface LoaderInterface
 {
     /**
-     * Registers custom listeners on event dispatcher.
+     * Load definitions from path.
      *
-     * @param   EventDispatcher $dispatcher event dispatcher
+     * @param   string          $path       definitions path
+     * @return  array                       array of Definitions & Transformations
      */
-    public function registerListeners(EventDispatcher $dispatcher);
+    public function load($path);
 }

@@ -19,42 +19,50 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EnvironmentBuilder
 {
+    /**
+     * Service container.
+     *
+     * @var     ContainerInterface
+     */
     protected $container;
-    protected $files = array();
+    /**
+     * Environment resources.
+     *
+     * @var     array
+     */
+    protected $resources = array();
 
     /**
      * Initialize builder.
-     * 
+     *
      * @param   ContainerInterface  $envClass   environment class
-     * @param   array               $files      array of enfironment files
      */
-    public function __construct(ContainerInterface $container, array $files = array())
+    public function __construct(ContainerInterface $container)
     {
-        $this->container    = $container;
-        $this->files        = $files;
+        $this->container = $container;
     }
 
     /**
-     * Add Environment Config to builder.
-     * 
+     * Add environment resource (config).
+     *
      * @param   string  $file   file path
      */
-    public function addEnvironmentFile($file)
+    public function addResource($file)
     {
-        $this->files[] = $file;
+        $this->resources[] = $file;
     }
 
     /**
-     * Build & Initialize new Environment.
-     * 
+     * Return new environment.
+     *
      * @return  EnvironmentInterface
      */
-    public function buildEnvironment()
+    public function build()
     {
         $environment = $this->container->get('behat.environment');
 
-        foreach ($this->files as $file) {
-            $environment->loadEnvironmentFile($file);
+        foreach ($this->resources as $resource) {
+            $environment->loadEnvironmentResource($resource);
         }
 
         return $environment;

@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
@@ -23,32 +23,47 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
  */
 class ScenarioTester implements NodeVisitorInterface
 {
+    /**
+     * Service container.
+     *
+     * @var     ContainerInterface
+     */
     protected $container;
+    /**
+     * Event dispatcher.
+     *
+     * @var     EventDispatcher
+     */
     protected $dispatcher;
+    /**
+     * Environment.
+     *
+     * @var     EnvironmentInterface
+     */
     protected $environment;
 
     /**
      * Initialize tester.
      *
-     * @param   Container   $container  injection container
+     * @param   ContainerInterface  $container  service container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container    = $container;
         $this->dispatcher   = $container->get('behat.event_dispatcher');
-        $this->environment  = $container->get('behat.environment_builder')->buildEnvironment();
+        $this->environment  = $container->get('behat.environment_builder')->build();
     }
 
     /**
-     * Visit ScenarioNode & run tests against it.
+     * Visit ScenarioNode & it's steps.
      *
      * @param   AbstractNode    $scenario       scenario node
-     * 
-     * @return  integer                         result
+     *
+     * @return  integer
      */
     public function visit(AbstractNode $scenario)
     {
-        $this->dispatcher->notify(new Event($scenario, 'scenario.run.before', array(
+        $this->dispatcher->notify(new Event($scenario, 'scenario.before', array(
             'environment'   => $this->environment
         )));
 
@@ -57,7 +72,7 @@ class ScenarioTester implements NodeVisitorInterface
 
         // Visit & test background if has one
         if ($scenario->getFeature()->hasBackground()) {
-            $tester = $this->container->get('behat.background_tester');
+            $tester = $this->container->get('behat.tester.background');
             $tester->setEnvironment($this->environment);
 
             $bgResult = $scenario->getFeature()->getBackground()->accept($tester);
@@ -70,7 +85,7 @@ class ScenarioTester implements NodeVisitorInterface
 
         // Visit & test steps
         foreach ($scenario->getSteps() as $step) {
-            $tester = $this->container->get('behat.step_tester');
+            $tester = $this->container->get('behat.tester.step');
             $tester->setEnvironment($this->environment);
             $tester->skip($skip);
 
@@ -82,7 +97,7 @@ class ScenarioTester implements NodeVisitorInterface
             $result = max($result, $stResult);
         }
 
-        $this->dispatcher->notify(new Event($scenario, 'scenario.run.after', array(
+        $this->dispatcher->notify(new Event($scenario, 'scenario.after', array(
             'result'        => $result
           , 'skipped'       => $skip
           , 'environment'   => $this->environment

@@ -54,20 +54,18 @@ Feature: Profiles
       """
     And a file named "pretty.yml" with:
       """
-      parameters:
-        behat.formatter.name: pretty
-      imports:
-        - { resource: behat.yml }
+      format:
+        name: pretty
       """
     And a file named "progress.yml" with:
       """
-      imports:
-        - { resource: behat.yml }
+      format:
+        name: progress
       """
     And a file named "behat.yml" with:
       """
-      parameters:
-        behat.formatter.name: progress
+      format:
+        name: progress
       """
 
   Scenario:
