@@ -49,12 +49,12 @@ class PhpFileLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load($path)
+    public function load($resource)
     {
         $this->objects  = array();
         $steps          = $this;
 
-        require_once($path);
+        require_once($resource);
 
         return $this->objects;
     }
