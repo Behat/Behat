@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container,
+use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
@@ -34,19 +34,49 @@ class StepTester implements NodeVisitorInterface
     const UNDEFINED = 3;
     const FAILED    = 4;
 
+    /**
+     * Service container.
+     *
+     * @var     ContainerInterface
+     */
     protected $container;
+    /**
+     * Event dispatcher.
+     *
+     * @var     EventDispatcher
+     */
     protected $dispatcher;
+    /**
+     * Definition dispatcher.
+     *
+     * @var     DefinitionDispatcher
+     */
     protected $definitions;
+    /**
+     * Environment.
+     *
+     * @var     EnvironmentInterface
+     */
     protected $environment;
+    /**
+     * Step replace tokens.
+     *
+     * @var     array
+     */
     protected $tokens = array();
+    /**
+     * Is step marked skipped.
+     *
+     * @var     boolean
+     */
     protected $skip = false;
 
     /**
      * Initialize tester.
      *
-     * @param   Container   $container  injection container
+     * @param   ContainerInterface  $container  service container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container    = $container;
         $this->dispatcher   = $container->get('behat.event_dispatcher');
@@ -64,7 +94,7 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
-     * Set step tokens.
+     * Set step replace tokens.
      *
      * @param   array   $tokens     step tokens
      */
@@ -74,7 +104,7 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
-     * Set test to skip.
+     * Mark test as skipped.
      *
      * @param   boolean $skip   skip test?
      */
@@ -84,11 +114,11 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
-     * Visit StepNode & run tests against it.
+     * Visit StepNode, find matched definition & run it.
      *
      * @param   AbstractNode    $step       step node
-     * 
-     * @return  integer                     result
+     *
+     * @return  integer
      */
     public function visit(AbstractNode $step)
     {

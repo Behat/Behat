@@ -11,17 +11,17 @@ namespace Behat\Behat\Hook\Loader;
  */
 
 /**
- * Hooks Loader Interface.
+ * Hooks loader interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface LoaderInterface
 {
     /**
-     * Load hooks from file. 
+     * Load hooks from resource.
      * 
-     * @param   string          $path       plain php file path
+     * @param   string          $resource   resource path
      * @return  array                       array of hooks
      */
-    function load($path);
+    function load($resource);
 }

@@ -20,8 +20,7 @@ use Behat\Behat\Definition\Loader\LoaderInterface,
  */
 
 /**
- * Steps Definitions Container and Loader.
- * Loads & Initializates Step Definitions.
+ * Definition dispatcher.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */

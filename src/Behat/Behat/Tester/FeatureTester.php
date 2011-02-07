@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container,
+use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
@@ -27,26 +27,36 @@ use Behat\Behat\Exception\BehaviorException;
  */
 class FeatureTester implements NodeVisitorInterface
 {
+    /**
+     * Service container.
+     *
+     * @var     ContainerInterface
+     */
     protected $container;
+    /**
+     * Event dispathcer.
+     *
+     * @var     EventDispatcher
+     */
     protected $dispatcher;
 
     /**
      * Initialize tester.
      *
-     * @param   Container   $container  injection container
+     * @param   ContainerInterface  $container  service container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container    = $container;
         $this->dispatcher   = $container->get('behat.event_dispatcher');
     }
 
     /**
-     * Visit FeatureNode & run tests against it.
+     * Visit FeatureNode & it's scenarios|outlines.
      *
      * @param   AbstractNode    $feature        feature node
-     * 
-     * @return  integer                         result
+     *
+     * @return  integer
      */
     public function visit(AbstractNode $feature)
     {
@@ -59,7 +69,7 @@ class FeatureTester implements NodeVisitorInterface
             foreach ($scenarios as $scenario) {
                 if ($scenario instanceof OutlineNode) {
                     $tester = $this->container->get('behat.tester.outline');
-                } elseif ($scenario instanceof ScenarioNode) {    
+                } elseif ($scenario instanceof ScenarioNode) {
                     $tester = $this->container->get('behat.tester.scenario');
                 } else {
                     throw new BehaviorException(

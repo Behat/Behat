@@ -11,7 +11,7 @@ namespace Behat\Behat\Exception;
  */
 
 /**
- * Abstract behat Exception.
+ * Abstract Behat exception.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -3,13 +3,12 @@
     <parameters>
         <!-- Path parameters -->
         <parameter key="gherkin.paths.lib">null</parameter>
-        <parameter key="behat.paths.workdir">null</parameter>
         <parameter key="behat.paths.lib">null</parameter>
 
         <parameter key="gherkin.paths.i18n">%gherkin.paths.lib%/i18n</parameter>
         <parameter key="behat.paths.i18n">%behat.paths.lib%/i18n</parameter>
 
-        <parameter key="behat.paths.base">%behat.paths.workdir%/features</parameter>
+        <parameter key="behat.paths.base">BEHAT_WORK_PATH/features</parameter>
         <parameter key="behat.paths.support">%behat.paths.base%/support</parameter>
         <parameter key="behat.paths.steps">%behat.paths.base%/steps</parameter>
 
@@ -29,21 +28,23 @@
         <parameter key="gherkin.filter.name">null</parameter>
         <parameter key="gherkin.filter.tags">null</parameter>
 
-        <!-- Step Definition -->
+        <!-- Gherkin Parser -->
+        <parameter key="gherkin.class">Behat\Gherkin\Gherkin</parameter>
+        <parameter key="gherkin.parser.class">Behat\Gherkin\Parser</parameter>
+        <parameter key="gherkin.lexer.class">Behat\Gherkin\Lexer</parameter>
+        <parameter key="gherkin.loader.gherkin.class">Behat\Gherkin\Loader\GherkinFileLoader</parameter>
+        <parameter key="gherkin.keywords.class">Behat\Gherkin\Keywords\SymfonyTranslationKeywords</parameter>
+        <parameter key="gherkin.keywords.path">%gherkin.paths.lib%/i18n</parameter>
+
+        <!-- Definition Dispathcer -->
         <parameter key="behat.definition_dispatcher.class">Behat\Behat\Definition\DefinitionDispatcher</parameter>
         <parameter key="behat.definition.loader.php.class">Behat\Behat\Definition\Loader\PhpFileLoader</parameter>
 
-        <!-- Event Dispatcher -->
-        <parameter key="behat.event_dispatcher.class">Behat\Behat\EventDispatcher\EventDispatcher</parameter>
-
-        <!-- Logger -->
-        <parameter key="behat.logger.class">Behat\Behat\DataCollector\LoggerDataCollector</parameter>
-
-        <!-- Hooks -->
+        <!-- Hook Dispatcher -->
         <parameter key="behat.hook_dispatcher.class">Behat\Behat\Hook\HookDispatcher</parameter>
         <parameter key="behat.hook.loader.php.class">Behat\Behat\Hook\Loader\PhpFileLoader</parameter>
 
-        <!-- Environment -->
+        <!-- Environment Builder -->
         <parameter key="behat.environment_builder.class">Behat\Behat\Environment\EnvironmentBuilder</parameter>
         <parameter key="behat.environment.class">Behat\Behat\Environment\Environment</parameter>
 
@@ -59,17 +60,15 @@
         <parameter key="behat.translator.message_selector.class">Symfony\Component\Translation\MessageSelector</parameter>
         <parameter key="behat.translator.xliff_loader.class">Symfony\Component\Translation\Loader\XliffFileLoader</parameter>
 
-        <!-- Gherkin Manager -->
-        <parameter key="gherkin.class">Behat\Gherkin\Gherkin</parameter>
-        <parameter key="gherkin.parser.class">Behat\Gherkin\Parser</parameter>
-        <parameter key="gherkin.lexer.class">Behat\Gherkin\Lexer</parameter>
-        <parameter key="gherkin.loader.gherkin.class">Behat\Gherkin\Loader\GherkinFileLoader</parameter>
-        <parameter key="gherkin.keywords.class">Behat\Gherkin\Keywords\SymfonyTranslationKeywords</parameter>
-        <parameter key="gherkin.keywords.path">%gherkin.paths.lib%/i18n</parameter>
+        <!-- Event Dispatcher -->
+        <parameter key="behat.event_dispatcher.class">Behat\Behat\EventDispatcher\EventDispatcher</parameter>
+
+        <!-- Logger -->
+        <parameter key="behat.logger.class">Behat\Behat\DataCollector\LoggerDataCollector</parameter>
 
     </parameters>
     <services>
-        <!-- Gherkin Manager -->
+        <!-- Gherkin Parser -->
         <service id="gherkin" class="%gherkin.class%">
             <call method="addLoader">
                 <argument type="service">
@@ -111,15 +110,10 @@
                     <service class="%behat.hook.loader.php.class%" />
                 </argument>
             </call>
+            <tag name="behat.events_listener" />
         </service>
 
-        <!-- Event Dispatcher -->
-        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" />
-
-        <!-- Logger -->
-        <service id="behat.logger" class="%behat.logger.class%" />
-
-        <!-- Environment -->
+        <!-- Environment Builder -->
         <service id="behat.environment" class="%behat.environment.class%" scope="prototype" />
         <service id="behat.environment_builder" class="%behat.environment_builder.class%">
             <argument type="service" id="service_container" />
@@ -180,6 +174,14 @@
                 <argument>%behat.paths.i18n%/ru.xliff</argument>
                 <argument>ru</argument>
             </call>
+        </service>
+
+        <!-- Event Dispatcher -->
+        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" />
+
+        <!-- Logger -->
+        <service id="behat.logger" class="%behat.logger.class%">
+            <tag name="behat.events_listener" />
         </service>
     </services>
 </container>

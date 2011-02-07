@@ -17,18 +17,28 @@ use Behat\Behat\Definition\DefinitionDispatcher,
  */
 
 /**
- * Plain PHP Files Steps Loader.
+ * PHP-files definitions loader.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PhpFileLoader implements LoaderInterface
 {
+    /**
+     * Definition dispatcher.
+     *
+     * @var     DefinitionDispatcher
+     */
     protected $dispatcher;
+    /**
+     * List of found objects (Definition's & Transformation's)
+     *
+     * @var     array
+     */
     protected $objects = array();
 
     /**
-     * Initialize loader. 
-     * 
+     * Initialize loader.
+     *
      * @param   DefinitionDispatcher $dispatcher definition dispatcher
      */
     public function __construct(DefinitionDispatcher $dispatcher)
@@ -37,10 +47,7 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Load definitions from file. 
-     * 
-     * @param   string          $path       plain php file path
-     * @return  array                       array of Definitions & Transformations
+     * {@inheritdoc}
      */
     public function load($path)
     {
@@ -53,9 +60,9 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Define argument transformation to container.
-     * 
-     * @param   string      $regex      regex to argument for transformation
+     * Define argument transformation.
+     *
+     * @param   string      $regex      transformation regex (to find specific argument)
      * @param   callback    $callback   transformation callback (returns transformed argument)
      */
     public function Transform($regex, $callback)
@@ -64,14 +71,14 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Define a step with ->Given('/regex/', callback) or
-     * call a step with ->Given('I enter "12" in the field', $world) or
-     * even with arguments ->Given('I fill up fields', $world, $table).
+     * Define a step with ->Given|When|Then|...('/regex/', callback) or
+     * call a step with ->Given|When|Then|...('I enter "12" in the field', $world) or
+     * even with arguments ->Given|When|Then|...('I fill up fields', $world, $table).
      *
-     * @param   string  $type       step type (Given/When/Then/And or localized one)
+     * @param   string  $type       step type (Given|When|Then|...)
      * @param   string  $arguments  step regex & callback
-     * 
-     * @throws  Behat\Behat\Exception\Redundant  if step definition is already exists
+     *
+     * @throws  \Behat\Behat\Exception\Redundant  if step definition is already exists
      */
     public function __call($type, $arguments)
     {

@@ -12,6 +12,8 @@ interface FormatterInterface
 
     function setParameter($name, $value);
 
+    function getParameter($name);
+
     function afterSuite(Event $event);
 
     function beforeSuite(Event $event);

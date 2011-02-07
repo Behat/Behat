@@ -1,3 +1,4 @@
-parameters:
-  behat.paths.base:     %behat.paths.lib%/tests/Behat/features
-  behat.formatter.name: progress
+paths:
+    base:   %behat.paths.lib%/tests/Behat/features
+format:
+    name:   progress

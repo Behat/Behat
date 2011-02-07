@@ -13,20 +13,30 @@ use Behat\Gherkin\Node\TableNode;
  */
 
 /**
- * Step Argument Transformation.
+ * Step transformation.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Transformation
 {
+    /**
+     * Transformation regex.
+     *
+     * @var     string
+     */
     protected $regex;
+    /**
+     * Transformation callback.
+     *
+     * @var     \Callback
+     */
     protected $callback;
 
     /**
-     * Initialize new definition.
+     * Initialize transformation.
      *
-     * @param   string      $regex      matching regular expression
-     * @param   callback    $callback   callback
+     * @param   string      $regex      transformation regex
+     * @param   callback    $callback   transformation callback
      */
     public function __construct($regex, $callback)
     {
@@ -35,7 +45,7 @@ class Transformation
     }
 
     /**
-     * Return step matching regular expression.
+     * Return transformation regex.
      *
      * @return  string
      */
@@ -45,8 +55,8 @@ class Transformation
     }
 
     /**
-     * Transform passed argument or return false if can't. 
-     * 
+     * Transform passed argument or return false if can't.
+     *
      * @param   mixed       $argument   step argument to transform
      *
      * @return  mixed|bool              transformed argument if regex matches or false

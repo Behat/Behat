@@ -4,6 +4,19 @@ namespace Behat\Behat\Console\Output;
 
 use Symfony\Component\Console\Output\StreamOutput;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Behat console output.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class ConsoleOutput extends StreamOutput
 {
     /**

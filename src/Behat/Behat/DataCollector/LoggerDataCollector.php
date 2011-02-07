@@ -2,7 +2,8 @@
 
 namespace Behat\Behat\DataCollector;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher,
+    Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Tester\StepTester;
 
@@ -15,64 +16,173 @@ use Behat\Behat\Tester\StepTester;
  */
 
 /**
- * Collects run statistics during testsuite lifetime.
+ * Behat run logger.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class LoggerDataCollector
 {
-    protected $paused               = false;
-    protected $suiteStartTime;
-    protected $suiteFinishTime;
-    protected $scenarioStartTime;
-    protected $scenarioFinishTime;
-
-    protected $isPassed             = true;
+    /**
+     * Suite start time.
+     *
+     * @var     float
+     */
+    protected $startTime;
+    /**
+     * Suite finish time.
+     *
+     * @var     float
+     */
+    protected $finishTime;
+    /**
+     * Step statuses with text notations.
+     *
+     * @see     collectScenarioResult
+     * @see     collectStepStats
+     *
+     * @var     array
+     */
     protected $statuses             = array(
-        StepTester::PASSED      => 'passed'
-      , StepTester::SKIPPED     => 'skipped'
-      , StepTester::PENDING     => 'pending'
-      , StepTester::UNDEFINED   => 'undefined'
-      , StepTester::FAILED      => 'failed'
+        StepTester::PASSED      => 'passed',
+        StepTester::SKIPPED     => 'skipped',
+        StepTester::PENDING     => 'pending',
+        StepTester::UNDEFINED   => 'undefined',
+        StepTester::FAILED      => 'failed'
     );
-
+    /**
+     * Overall steps count.
+     *
+     * @var     integer
+     */
     protected $stepsCount           = 0;
+    /**
+     * Overall scenarios count.
+     *
+     * @var     integer
+     */
     protected $scenariosCount       = 0;
-
+    /**
+     * All steps statuses count.
+     *
+     * @var     array
+     */
     protected $stepsStatuses        = array();
+    /**
+     * All scenarios statuses count.
+     *
+     * @var     array
+     */
     protected $scenariosStatuses    = array();
-
+    /**
+     * Missed definitions snippets.
+     *
+     * @var     array
+     */
     protected $definitionsSnippets  = array();
+    /**
+     * Events of failed steps.
+     *
+     * @var     array
+     */
     protected $failedStepsEvents    = array();
+    /**
+     * Events of pending steps.
+     *
+     * @var     array
+     */
     protected $pendingStepsEvents   = array();
 
     /**
-     * Initializes collector.
+     * Initialize logger.
      */
     public function __construct()
     {
         $this->stepsStatuses = array_combine(
-            array_values($this->statuses)
-          , array_fill(0, count($this->statuses), 0)
+            array_values($this->statuses),
+            array_fill(0, count($this->statuses), 0)
         );
         $this->scenariosStatuses = array_combine(
-            array_values($this->statuses)
-          , array_fill(0, count($this->statuses), 0)
+            array_values($this->statuses),
+            array_fill(0, count($this->statuses), 0)
         );
     }
 
     /**
-     * Return suite total execution time. 
-     * 
-     * @return  integer miliseconds
+     * Register logger event listeners.
+     *
+     * @param   EventDispatcher $dispatcher event dispatcher
+     */
+    public function registerListeners(EventDispatcher $dispatcher)
+    {
+        $dispatcher->connect('suite.before',            array($this, 'beforeSuite'),            0);
+        $dispatcher->connect('suite.after',             array($this, 'afterSuite'),             0);
+        $dispatcher->connect('scenario.after',          array($this, 'afterScenario'),          0);
+        $dispatcher->connect('outline.example.after',   array($this, 'afterOutlineExample'),    0);
+        $dispatcher->connect('step.after',              array($this, 'afterStep'),              0);
+    }
+
+    /**
+     * Listens to "suite.before" event.
+     *
+     * @param   Event   $event
+     */
+    public function beforeSuite(Event $event)
+    {
+        $this->startTimer();
+    }
+
+    /**
+     * Listens to "suite.after" event.
+     *
+     * @param   Event   $event
+     */
+    public function afterSuite(Event $event)
+    {
+        $this->finishTimer();
+    }
+
+    /**
+     * Listens to "scenario.after" event.
+     *
+     * @param   Event   $event
+     */
+    public function afterScenario(Event $event)
+    {
+        $this->collectScenarioResult($event->get('result'));
+    }
+
+    /**
+     * Listens to "outline.example.after" event.
+     *
+     * @param   Event   $event
+     */
+    public function afterOutlineExample(Event $event)
+    {
+        $this->collectScenarioResult($event->get('result'));
+    }
+
+    /**
+     * Listens to "step.after" event.
+     *
+     * @param   Event   $event
+     */
+    public function afterStep(Event $event)
+    {
+        $this->collectStepStats($event);
+    }
+
+    /**
+     * Return suite total execution time.
+     *
+     * @return  float   miliseconds
      */
     public function getTotalTime()
     {
-        return $this->suiteFinishTime - $this->suiteStartTime;
+        return $this->finishTime - $this->startTime;
     }
 
     /**
-     * Return total steps count.
+     * Return overall steps count.
      *
      * @return  integer
      */
@@ -82,7 +192,7 @@ class LoggerDataCollector
     }
 
     /**
-     * Return total scenarios count.
+     * Return overall scenarios count.
      *
      * @return  integer
      */
@@ -141,31 +251,27 @@ class LoggerDataCollector
         return $this->pendingStepsEvents;
     }
 
-    public function beforeSuite(Event $event)
+    /**
+     * Start suite timer.
+     */
+    protected function startTimer()
     {
-        $this->startTimer();
+        $this->startTime = microtime(true);
     }
 
-    public function afterSuite(Event $event)
+    /**
+     * Stop suite timer.
+     */
+    protected function finishTimer()
     {
-        $this->finishTimer();
+        $this->finishTime = microtime(true);
     }
 
-    public function afterScenario(Event $event)
-    {
-        $this->collectScenarioResult($event->get('result'));
-    }
-
-    public function afterOutlineExample(Event $event)
-    {
-        $this->collectScenarioResult($event->get('result'));
-    }
-
-    public function afterStep(Event $event)
-    {
-        $this->collectStepStats($event);
-    }
-
+    /**
+     * Collect scenario result status.
+     *
+     * @param   integer $result status code
+     */
     protected function collectScenarioResult($result)
     {
         ++$this->scenariosCount;
@@ -175,6 +281,11 @@ class LoggerDataCollector
         }
     }
 
+    /**
+     * Collect step statistics.
+     *
+     * @param   Event   $event  step event
+     */
     protected function collectStepStats(Event $event)
     {
         ++$this->stepsCount;
@@ -198,21 +309,5 @@ class LoggerDataCollector
         if (StepTester::PENDING === $event->get('result')) {
             $this->pendingStepsEvents[] = $event;
         }
-    }
-
-    /**
-     * Start suite timer.
-     */
-    protected function startTimer()
-    {
-        $this->suiteStartTime = microtime(true);
-    }
-
-    /**
-     * Stop suite timer.
-     */
-    protected function finishTimer()
-    {
-        $this->suiteFinishTime = microtime(true);
     }
 }

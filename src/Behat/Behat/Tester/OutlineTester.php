@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container,
+use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
@@ -23,26 +23,36 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
  */
 class OutlineTester implements NodeVisitorInterface
 {
+    /**
+     * Service container.
+     *
+     * @var     ContainerInterface
+     */
     protected $container;
+    /**
+     * Event dispathcer.
+     *
+     * @var     EventDispatcher
+     */
     protected $dispatcher;
 
     /**
      * Initialize tester.
      *
-     * @param   Container   $container  injection container
+     * @param   ContainerInterface  $container  service container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container    = $container;
         $this->dispatcher   = $container->get('behat.event_dispatcher');
     }
 
     /**
-     * Visit OutlineNode & run tests against it.
+     * Visit OutlineNode & it's steps.
      *
      * @param   AbstractNode    $outline        outline node
-     * 
-     * @return  integer                         result
+     *
+     * @return  integer
      */
     public function visit(AbstractNode $outline)
     {

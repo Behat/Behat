@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container,
+use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
@@ -19,29 +19,44 @@ use Behat\Behat\Environment\EnvironmentInterface;
  */
 
 /**
- * Background Tester.
+ * Background tester.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BackgroundTester implements NodeVisitorInterface
 {
+    /**
+     * Service container.
+     *
+     * @var     ContainerInterface
+     */
     protected $container;
+    /**
+     * Event dispatcher.
+     *
+     * @var     EventDispatcher
+     */
     protected $dispatcher;
+    /**
+     * Environment.
+     *
+     * @var     EnvironmentInterface
+     */
     protected $environment;
 
     /**
      * Initialize tester.
      *
-     * @param   Container   $container  injection container
+     * @param   ContainerInterface  $container  service container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container    = $container;
         $this->dispatcher   = $container->get('behat.event_dispatcher');
     }
 
     /**
-     * Set run environment.
+     * Set running environment.
      *
      * @param   EnvironmentInterface    $environment    environment
      */
@@ -51,11 +66,11 @@ class BackgroundTester implements NodeVisitorInterface
     }
 
     /**
-     * Visit BackgroundNode & run tests against it.
+     * Visit BackgroundNode & it's steps.
      *
      * @param   AbstractNode    $background background node
-     * 
-     * @return  integer                     result
+     *
+     * @return  integer
      */
     public function visit(AbstractNode $background)
     {

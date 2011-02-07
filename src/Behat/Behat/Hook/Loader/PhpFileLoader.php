@@ -11,42 +11,44 @@ namespace Behat\Behat\Hook\Loader;
  */
 
 /**
- * Plain PHP Files Hooks Loader.
+ * PHP-files hooks loader.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PhpFileLoader implements LoaderInterface
 {
+    /**
+     * Loaded hooks
+     *
+     * @var     array
+     */
     protected $hooks = array();
 
     /**
-     * Load hooks from file. 
-     * 
-     * @param   string          $path       plain php file path
-     * @return  array                       array of hooks
+     * {@inheritdoc}
      */
-    public function load($path)
+    public function load($resource)
     {
         $this->hooks = array(
-            'suite.before'      => array()
-          , 'suite.after'       => array()
-          , 'feature.before'    => array()
-          , 'feature.after'     => array()
-          , 'scenario.before'   => array()
-          , 'scenario.after'    => array()
-          , 'step.before'       => array()
-          , 'step.after'        => array()
+            'suite.before'      => array(),
+            'suite.after'       => array(),
+            'feature.before'    => array(),
+            'feature.after'     => array(),
+            'scenario.before'   => array(),
+            'scenario.after'    => array(),
+            'step.before'       => array(),
+            'step.after'        => array()
         );
         $hooks = $this;
 
-        require_once($path);
+        require_once $resource;
 
         return $this->hooks;
     }
 
     /**
-     * Hook Before Suite Run.
-     * 
+     * Hook into "suite.before".
+     *
      * @param   callback    $callback   hook callback
      */
     public function beforeSuite($callback)
@@ -55,8 +57,8 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook After Suite Run.
-     * 
+     * Hook into "suite.after".
+     *
      * @param   callback    $callback   hook callback
      */
     public function afterSuite($callback)
@@ -65,8 +67,8 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook Before Feature Run. 
-     * 
+     * Hook into "feature.before".
+     *
      * @param   string      $filter     filter string (tags or name)
      * @param   callback    $callback   hook callback
      */
@@ -76,8 +78,8 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook After Feature Run. 
-     * 
+     * Hook into "feature.after".
+     *
      * @param   string      $filter     filter string (tags or name)
      * @param   callback    $callback   hook callback
      */
@@ -87,8 +89,8 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook Before Scenario Run. 
-     * 
+     * Hook into "scenario.before" OR "outline.example.before".
+     *
      * @param   string      $filter     filter string (tags or name)
      * @param   callback    $callback   hook callback
      */
@@ -98,8 +100,8 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook After Scenario Run. 
-     * 
+     * Hook into "scenario.after" OR "outline.example.after".
+     *
      * @param   string      $filter     filter string (tags or name)
      * @param   callback    $callback   hook callback
      */
@@ -109,9 +111,9 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook Before Step Run. 
-     * 
-     * @param   mixed       $filter     filter string (tags or name)
+     * Hook into "step.before".
+     *
+     * @param   string      $filter     filter string (tags or name)
      * @param   callback    $callback   hook callback
      */
     public function beforeStep($filter, $callback)
@@ -120,9 +122,9 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook After Step Run.
+     * Hook into "step.after".
      *
-     * @param   mixed       $filter     filter string (tags or name)
+     * @param   string      $filter     filter string (tags or name)
      * @param   callback    $callback   hook callback
      */
     public function afterStep($filter, $callback)

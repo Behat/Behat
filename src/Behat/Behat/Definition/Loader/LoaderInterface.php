@@ -13,18 +13,17 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 
 /**
- * Definitions Loader Interface.
+ * Definitions loader interface.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface LoaderInterface
 {
     /**
-     * Load definitions from file. 
-     * 
-     * @param   string          $path       plain php file path
+     * Load definitions from path.
+     *
+     * @param   string          $path       definitions path
      * @return  array                       array of Definitions & Transformations
      */
     public function load($path);
 }
-

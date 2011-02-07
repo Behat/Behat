@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
@@ -23,16 +23,31 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
  */
 class ScenarioTester implements NodeVisitorInterface
 {
+    /**
+     * Service container.
+     *
+     * @var     ContainerInterface
+     */
     protected $container;
+    /**
+     * Event dispatcher.
+     *
+     * @var     EventDispatcher
+     */
     protected $dispatcher;
+    /**
+     * Environment.
+     *
+     * @var     EnvironmentInterface
+     */
     protected $environment;
 
     /**
      * Initialize tester.
      *
-     * @param   Container   $container  injection container
+     * @param   ContainerInterface  $container  service container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container    = $container;
         $this->dispatcher   = $container->get('behat.event_dispatcher');
@@ -40,11 +55,11 @@ class ScenarioTester implements NodeVisitorInterface
     }
 
     /**
-     * Visit ScenarioNode & run tests against it.
+     * Visit ScenarioNode & it's steps.
      *
      * @param   AbstractNode    $scenario       scenario node
-     * 
-     * @return  integer                         result
+     *
+     * @return  integer
      */
     public function visit(AbstractNode $scenario)
     {

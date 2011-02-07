@@ -13,15 +13,12 @@ use Behat\Behat\Definition\Definition;
  */
 
 /**
- * Redundant Exception.
+ * Redundant exception.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Redundant extends BehaviorException
 {
-    protected $step1;
-    protected $step2;
-
     /**
      * Initialize Exception.
      *
@@ -32,8 +29,6 @@ class Redundant extends BehaviorException
     {
         parent::__construct();
 
-        $this->step1 = $step1;
-        $this->step2 = $step2;
         $this->message = sprintf("Step \"%s\" is already defined in %s:%d\n\n%s:%d\n%s:%d",
             $this->step2->getRegex(),
             $this->step1->getFile(), $this->step1->getLine(),

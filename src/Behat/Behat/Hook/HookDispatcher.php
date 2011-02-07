@@ -2,8 +2,8 @@
 
 namespace Behat\Behat\Hook;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher,
+    Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Hook\Loader\LoaderInterface;
 
@@ -19,144 +19,157 @@ use Behat\Gherkin\Filter\TagFilter,
  */
 
 /**
- * Hooks Container and Loader.
- * Loads & Initializates Hooks.
+ * Hook dispatcher.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class HookDispatcher
 {
+    /**
+     * Hook resources.
+     *
+     * @var     array
+     */
     protected $resources    = array();
+    /**
+     * Hook loaders.
+     *
+     * @var     array
+     */
     protected $loaders      = array();
-
+    /**
+     * Loaded hooks.
+     *
+     * @var     array
+     */
     protected $hooks        = array();
 
     /**
-     * Handle Suite Events & Fire Associated Hooks. 
-     * 
-     * @param   Event   $event  event
+     * Register event listeners.
+     *
+     * @param   EventDispatcher $dispatcher
      */
-    public function fireSuiteHooks(Event $event)
+    public function registerListeners(EventDispatcher $dispatcher)
     {
-        switch ($event->getName()) {
-            case 'suite.before':
-                $hookName = 'suite.before';
-                break;
-            case 'suite.after':
-                $hookName = 'suite.after';
-                break;
-        }
-
-        $this->fireHooks($event, $hookName, function($hook) {return true;}, function($hook) {return true;});
+        $dispatcher->connect('suite.before',            array($this, 'beforeSuite'),            10);
+        $dispatcher->connect('suite.after',             array($this, 'afterSuite'),             10);
+        $dispatcher->connect('feature.before',          array($this, 'beforeFeature'),          10);
+        $dispatcher->connect('feature.after',           array($this, 'afterFeature'),           10);
+        $dispatcher->connect('scenario.before',         array($this, 'beforeScenario'),         10);
+        $dispatcher->connect('scenario.after',          array($this, 'afterScenario'),          10);
+        $dispatcher->connect('outline.example.before',  array($this, 'beforeOutlineExample'),   10);
+        $dispatcher->connect('outline.example.after',   array($this, 'afterOutlineExample'),    10);
+        $dispatcher->connect('step.before',             array($this, 'beforeStep'),             10);
+        $dispatcher->connect('step.after',              array($this, 'afterStep'),              10);
     }
 
     /**
-     * Handle Feature Events & Fire Associated Hooks. 
-     * 
-     * @param   Event   $event  event
+     * Listens to "suite.before" event.
+     *
+     * @param   Event   $event
      */
-    public function fireFeatureHooks(Event $event)
+    public function beforeSuite(Event $event)
     {
-        switch ($event->getName()) {
-            case 'feature.before':
-                $hookName = 'feature.before';
-                break;
-            case 'feature.after':
-                $hookName = 'feature.after';
-                break;
-        }
-
-        $feature = $event->getSubject();
-
-        $this->fireHooks($event, $hookName
-            , function($hook) use($feature) {
-                $tagsFilter = new TagFilter($hook[0]);
-
-                return $tagsFilter->isFeatureMatch($feature);
-            }
-            , function($hook) use($feature) {
-                $nameFilter = new NameFilter($hook[0]);
-
-                return $nameFilter->isFeatureMatch($feature);
-            }
-        );
+        $this->fireSuiteHooks($event->getName(), $event);
     }
 
     /**
-     * Handle Scenario Events & Fire Associated Hooks. 
-     * 
-     * @param   Event   $event  event
+     * Listens to "suite.after" event.
+     *
+     * @param   Event   $event
      */
-    public function fireScenarioHooks(Event $event)
+    public function afterSuite(Event $event)
     {
-        switch ($event->getName()) {
-            case 'scenario.before':
-            case 'outline.example.before':
-                $hookName = 'scenario.before';
-                break;
-            case 'scenario.after':
-            case 'outline.example.after':
-                $hookName = 'scenario.after';
-                break;
-        }
-
-        $scenario = $event->getSubject();
-
-        $this->fireHooks($event, $hookName
-            , function($hook) use($scenario) {
-                $tagsFilter = new TagFilter($hook[0]);
-
-                return $tagsFilter->isScenarioMatch($scenario);
-            }
-            , function($hook) use($scenario) {
-                $nameFilter = new NameFilter($hook[0]);
-
-                return $nameFilter->isScenarioMatch($scenario);
-            }
-        );
+        $this->fireSuiteHooks($event->getName(), $event);
     }
 
     /**
-     * Handle Step Events & Fire Associated Hooks. 
-     * 
-     * @param   Event   $event  event
+     * Listens to "feature.before" event.
+     *
+     * @param   Event   $event
      */
-    public function fireStepHooks(Event $event)
+    public function beforeFeature(Event $event)
     {
-        switch ($event->getName()) {
-            case 'step.before':
-                $hookName = 'step.before';
-                break;
-            case 'step.after':
-                $hookName = 'step.after';
-                break;
-        }
-
-        $step = $event->getSubject();
-
-        $this->fireHooks($event, $hookName
-            , function($hook) use($step) {
-                $tagsFilter = new TagFilter($hook[0]);
-
-                return $tagsFilter->isScenarioMatch($step->getParent());
-            }
-            , function($hook) use($step) {
-                $nameFilter = new NameFilter($hook[0]);
-
-                return $nameFilter->isScenarioMatch($step->getParent());
-            }
-        );
+        $this->fireFeatureHooks($event->getName(), $event);
     }
 
     /**
-     * Fire Hooks With Specified Name & Filter. 
-     * 
-     * @param   Event   $event      event to which hooks glued
+     * Listens to "feature.after" event.
+     *
+     * @param   Event   $event
+     */
+    public function afterFeature(Event $event)
+    {
+        $this->fireFeatureHooks($event->getName(), $event);
+    }
+
+    /**
+     * Listens to "scenario.before" event.
+     *
+     * @param   Event   $event
+     */
+    public function beforeScenario(Event $event)
+    {
+        $this->fireScenarioHooks($event->getName(), $event);
+    }
+
+    /**
+     * Listens to "scenario.after" event.
+     *
+     * @param   Event   $event
+     */
+    public function afterScenario(Event $event)
+    {
+        $this->fireScenarioHooks($event->getName(), $event);
+    }
+
+    /**
+     * Listens to "outline.example.before" event.
+     *
+     * @param   Event   $event
+     */
+    public function beforeOutlineExample(Event $event)
+    {
+        $this->fireScenarioHooks('scenario.before', $event);
+    }
+
+    /**
+     * Listens to "outline.example.after" event.
+     *
+     * @param   Event   $event
+     */
+    public function afterOutlineExample(Event $event)
+    {
+        $this->fireScenarioHooks('scenario.after', $event);
+    }
+
+    /**
+     * Listens to "step.before" event.
+     *
+     * @param   Event   $event
+     */
+    public function beforeStep(Event $event)
+    {
+        $this->fireStepHooks($event->getName(), $event);
+    }
+
+    /**
+     * Listens to "step.after" event.
+     *
+     * @param   Event   $event
+     */
+    public function afterStep(Event $event)
+    {
+        $this->fireStepHooks($event->getName(), $event);
+    }
+
+    /**
+     * Fire suite hooks with specified name.
+     *
      * @param   string  $name       hooks name
-     * @param   Closure $tagsFilter tags filtering closure
-     * @param   Closure $nameFilter name filtering closure
+     * @param   Event   $event      event to which hooks glued
      */
-    protected function fireHooks(Event $event, $name, \Closure $tagsFilter, \Closure $nameFilter)
+    protected function fireSuiteHooks($name, Event $event)
     {
         if (!count($this->hooks)) {
             $this->loadHooks();
@@ -167,12 +180,112 @@ class HookDispatcher
         foreach ($hooks as $hook) {
             if (is_callable($hook)) {
                 $hook($event);
+            } else {
+                $hook[1]($event);
+            }
+        }
+    }
+
+    /**
+     * Fire feature hooks with specified name.
+     *
+     * @param   string  $name       hooks name
+     * @param   Event   $event      event to which hooks glued
+     */
+    protected function fireFeatureHooks($name, Event $event)
+    {
+        if (!count($this->hooks)) {
+            $this->loadHooks();
+        }
+
+        $feature    = $event->getSubject();
+        $hooks      = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
+
+        foreach ($hooks as $hook) {
+            if (is_callable($hook)) {
+                $hook($event);
             } elseif (!empty($hook[0]) && '@' === $hook[0][0]) {
-                if ($tagsFilter($hook)) {
+                $filter = new TagFilter($hook[0]);
+
+                if ($filter->isFeatureMatch($feature)) {
                     $hook[1]($event);
                 }
             } elseif (!empty($hook[0])) {
-                if ($nameFilter($hook)) {
+                $filter = new NameFilter($hook[0]);
+
+                if ($filter->isFeatureMatch($feature)) {
+                    $hook[1]($event);
+                }
+            } else {
+                $hook[1]($event);
+            }
+        }
+    }
+
+    /**
+     * Fire scenario hooks with specified name.
+     *
+     * @param   string  $name       hooks name
+     * @param   Event   $event      event to which hooks glued
+     */
+    protected function fireScenarioHooks($name, Event $event)
+    {
+        if (!count($this->hooks)) {
+            $this->loadHooks();
+        }
+
+        $scenario   = $event->getSubject();
+        $hooks      = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
+
+        foreach ($hooks as $hook) {
+            if (is_callable($hook)) {
+                $hook($event);
+            } elseif (!empty($hook[0]) && '@' === $hook[0][0]) {
+                $filter = new TagFilter($hook[0]);
+
+                if ($filter->isScenarioMatch($scenario)) {
+                    $hook[1]($event);
+                }
+            } elseif (!empty($hook[0])) {
+                $filter = new NameFilter($hook[0]);
+
+                if ($filter->isScenarioMatch($scenario)) {
+                    $hook[1]($event);
+                }
+            } else {
+                $hook[1]($event);
+            }
+        }
+    }
+
+    /**
+     * Fire step hooks with specified name.
+     *
+     * @param   string  $name       hooks name
+     * @param   Event   $event      event to which hooks glued
+     */
+    protected function fireStepHooks($name, Event $event)
+    {
+        if (!count($this->hooks)) {
+            $this->loadHooks();
+        }
+
+        $scenario   = $event->getSubject()->getParent();
+        $hooks      = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
+
+        foreach ($hooks as $hook) {
+            if (is_callable($hook)) {
+                $hook($event);
+            } elseif (!empty($hook[0]) && '@' === $hook[0][0]) {
+                $filter = new TagFilter($hook[0]);
+
+                if ($filter->isScenarioMatch($scenario)) {
+                    $hook[1]($event);
+                }
+            } elseif (!empty($hook[0])) {
+                $filter = new NameFilter($hook[0]);
+
+                if ($filter->isScenarioMatch($scenario)) {
                     $hook[1]($event);
                 }
             } else {
@@ -204,7 +317,7 @@ class HookDispatcher
     }
 
     /**
-     * Parse step hooks with added loaders. 
+     * Parse hook resources with loaders.
      */
     protected function loadHooks()
     {

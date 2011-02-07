@@ -2,8 +2,10 @@
 
 namespace Behat\Behat\EventDispatcher;
 
-use Symfony\Component\EventDispatcher\EventDispatcher as BaseEventDispatcher;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher as BaseEventDispatcher,
+    Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Behat\Behat\Formatter\FormatterInterface;
 
 /*
  * This file is part of the Behat.
@@ -15,37 +17,29 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Event dispatcher.
- * Dispatches custom Behat events to hook with.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class EventDispatcher extends BaseEventDispatcher
 {
-    public function registerLogger($collector)
+    /**
+     * Run registerListeners on all container services with "behat.events_listener" tag.
+     *
+     * @param   ContainerInterface  $container  dependency container
+     */
+    public function bindContainerEventListeners(ContainerInterface $container)
     {
-        $this->connect('suite.before',              array($collector, 'beforeSuite'),               0);
-        $this->connect('suite.after',               array($collector, 'afterSuite'),                0);
-        $this->connect('scenario.after',            array($collector, 'afterScenario'),             0);
-        $this->connect('outline.example.after',     array($collector, 'afterOutlineExample'),       0);
-        $this->connect('step.after',                array($collector, 'afterStep'),                 0);
+        foreach ($container->findTaggedServiceIds('behat.events_listener') as $id => $tag) {
+            $container->get($id)->registerListeners($this);
+        }
     }
 
-    public function registerHookDispatcher($hooksContainer)
-    {
-        // TODO: optimize
-        $this->connect('suite.before',              array($hooksContainer, 'fireSuiteHooks'),       10);
-        $this->connect('suite.after',               array($hooksContainer, 'fireSuiteHooks'),       10);
-        $this->connect('feature.before',            array($hooksContainer, 'fireFeatureHooks'),     10);
-        $this->connect('feature.after',             array($hooksContainer, 'fireFeatureHooks'),     10);
-        $this->connect('scenario.before',           array($hooksContainer, 'fireScenarioHooks'),    10);
-        $this->connect('scenario.after',            array($hooksContainer, 'fireScenarioHooks'),    10);
-        $this->connect('outline.example.before',    array($hooksContainer, 'fireScenarioHooks'),    10);
-        $this->connect('outline.example.after',     array($hooksContainer, 'fireScenarioHooks'),    10);
-        $this->connect('step.before',               array($hooksContainer, 'fireStepHooks'),        10);
-        $this->connect('step.after',                array($hooksContainer, 'fireStepHooks'),        10);
-    }
-
-    public function registerFormatter($formatter)
+    /**
+     * Register formatter event listeners.
+     *
+     * @param   FormatterInterface  $formatter  Behat output formatter
+     */
+    public function bindFormatterEventListeners(FormatterInterface $formatter)
     {
         $this->connect('suite.before',              array($formatter, 'beforeSuite'),               -10);
         $this->connect('suite.after',               array($formatter, 'afterSuite'),                -10);

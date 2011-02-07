@@ -37,6 +37,11 @@ abstract class ConsoleFormatter implements FormatterInterface
         $this->parameters->set($name, $value);
     }
 
+    public function getParameter($name)
+    {
+        return $this->parameters->get($name);
+    }
+
     protected function getResultColorCode($result)
     {
         switch ($result) {
