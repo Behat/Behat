@@ -67,8 +67,8 @@ class OutlineTester implements NodeVisitorInterface
             $skip           = false;
 
             $this->dispatcher->notify(new Event($outline, 'outline.example.before', array(
-                'iteration'     => $iteration
-              , 'environment'   => $environment
+                'iteration'     => $iteration,
+                'environment'   => $environment
             )));
 
             // Visit & test background if has one
@@ -100,10 +100,10 @@ class OutlineTester implements NodeVisitorInterface
             }
 
             $this->dispatcher->notify(new Event($outline, 'outline.example.after', array(
-                'iteration'     => $iteration
-              , 'result'        => $itResult
-              , 'skipped'       => $skip
-              , 'environment'   => $environment
+                'iteration'     => $iteration,
+                'result'        => $itResult,
+                'skipped'       => $skip,
+                'environment'   => $environment
             )));
 
             $result = max($result, $itResult);

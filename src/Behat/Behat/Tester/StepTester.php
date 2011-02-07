@@ -167,11 +167,11 @@ class StepTester implements NodeVisitorInterface
         }
 
         $this->dispatcher->notify(new Event($step, 'step.after', array(
-            'result'        => $result
-          , 'exception'     => $exception
-          , 'definition'    => $definition
-          , 'snippet'       => $snippet
-          , 'environment'   => $this->environment
+            'result'        => $result,
+            'exception'     => $exception,
+            'definition'    => $definition,
+            'snippet'       => $snippet,
+            'environment'   => $this->environment
         )));
 
         return $result;

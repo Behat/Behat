@@ -94,8 +94,8 @@ class BackgroundTester implements NodeVisitorInterface
         }
 
         $this->dispatcher->notify(new Event($background, 'background.after', array(
-            'result'    => $result
-          , 'skipped'   => $skip
+            'result'    => $result,
+            'skipped'   => $skip
         )));
 
         return $result;

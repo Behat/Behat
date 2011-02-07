@@ -98,9 +98,9 @@ class ScenarioTester implements NodeVisitorInterface
         }
 
         $this->dispatcher->notify(new Event($scenario, 'scenario.after', array(
-            'result'        => $result
-          , 'skipped'       => $skip
-          , 'environment'   => $this->environment
+            'result'        => $result,
+            'skipped'       => $skip,
+            'environment'   => $this->environment
         )));
 
         return $result;

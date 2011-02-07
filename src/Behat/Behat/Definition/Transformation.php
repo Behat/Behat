@@ -72,8 +72,8 @@ class Transformation
         } elseif (is_string($argument) || $argument instanceof PyStringNode) {
             if (preg_match($this->regex, (string) $argument, $transformArguments)) {
                 return call_user_func(
-                    $this->callback
-                  , $transformArguments[1 === count($transformArguments) ? 0 : 1]
+                    $this->callback,
+                    $transformArguments[1 === count($transformArguments) ? 0 : 1]
                 );
             }
         }
