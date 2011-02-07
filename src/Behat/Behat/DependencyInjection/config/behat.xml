@@ -168,11 +168,13 @@
                 <argument>xliff</argument>
                 <argument>%behat.paths.i18n%/en.xliff</argument>
                 <argument>en</argument>
+                <argument>behat</argument>
             </call>
             <call method="addResource">
                 <argument>xliff</argument>
                 <argument>%behat.paths.i18n%/ru.xliff</argument>
                 <argument>ru</argument>
+                <argument>behat</argument>
             </call>
         </service>
 

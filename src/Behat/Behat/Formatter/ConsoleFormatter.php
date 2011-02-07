@@ -156,7 +156,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     protected function translate($message, array $parameters = array())
     {
         return $this->translator->trans(
-            $message, $parameters, 'messages', $this->parameters->get('language')
+            $message, $parameters, 'behat', $this->parameters->get('language')
         );
     }
 
@@ -172,7 +172,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     protected function translateChoice($message, $number, array $parameters = array())
     {
         return $this->translator->transChoice(
-            $message, $number, $parameters, 'messages', $this->parameters->get('language')
+            $message, $number, $parameters, 'behat', $this->parameters->get('language')
         );
     }
 }
