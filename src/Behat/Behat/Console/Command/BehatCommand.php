@@ -2,24 +2,17 @@
 
 namespace Behat\Behat\Console\Command;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\ContainerBuilder,
+    Symfony\Component\Yaml\Yaml,
+    Symfony\Component\Console\Command\Command,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputOption,
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\EventDispatcher\Event,
+    Symfony\Component\Finder\Finder;
 
-use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-
-use Symfony\Component\EventDispatcher\Event;
-
-use Symfony\Component\Finder\Finder;
-
-use Behat\Behat\Formatter\ProgressFormatter,
-    Behat\Behat\Formatter\PrettyFormatter;
+use Behat\Behat\DependencyInjection\BehatExtension;
 
 use Behat\Gherkin\Filter\NameFilter,
     Behat\Gherkin\Filter\TagFilter;
@@ -33,287 +26,373 @@ use Behat\Gherkin\Filter\NameFilter,
  */
 
 /**
- * Behat application test command.
+ * Behat console command.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BehatCommand extends Command
 {
     /**
-     * @see     Symfony\Component\Console\Command\Command
+     * Path tokens to replace.
+     *
+     * @var     array
+     */
+    protected $pathTokens = array(
+        'BEHAT_CONFIG_PATH' => '',
+        'BEHAT_WORK_PATH'   => '',
+        'BEHAT_BASE_PATH'   => ''
+    );
+
+    /**
+     * {@inheritdoc}
      */
     protected function configure()
     {
         $this->setName('behat');
-
-        // Set commands default parameters from container loaded ones
         $this->setDefinition(array(
-            new InputArgument('features'
-              , InputArgument::OPTIONAL
-              , 'Features path'
+            new InputArgument('features',
+                InputArgument::OPTIONAL,
+                'Features path'
             ),
-            new InputOption('--configuration',  '-c'
-              , InputOption::VALUE_REQUIRED
-              , 'Specify external configuration file to load (*.xml or *.yml).'
+            new InputOption('--config',         '-c',
+                InputOption::VALUE_REQUIRED,
+                'Specify external configuration file to load (*.xml or *.yml).'
             ),
-            new InputOption('--format',         '-f'
-              , InputOption::VALUE_REQUIRED
-              , 'How to format features (Default: pretty). Available formats is pretty, progress, html.'
+            new InputOption('--format',         '-f',
+                InputOption::VALUE_REQUIRED,
+                'How to format features (Default: pretty). Available formats is pretty, progress, html.'
             ),
-            new InputOption('--out',            '-o'
-              , InputOption::VALUE_REQUIRED
-              , 'Write output to a file/directory instead of STDOUT.'
+            new InputOption('--out',            null,
+                InputOption::VALUE_REQUIRED,
+                'Write output to a file/directory instead of STDOUT.'
             ),
-            new InputOption('--name',           '-n' 
-              , InputOption::VALUE_REQUIRED
-              , 'Only execute the feature elements (features or scenarios) which match part of the given name.'
+            new InputOption('--name',           '-n',
+                InputOption::VALUE_REQUIRED,
+                'Only execute the feature elements (features or scenarios) which match part of the given name.'
             ),
-            new InputOption('--tags',           '-t'
-              , InputOption::VALUE_REQUIRED
-              , 'Only execute the features or scenarios with tags matching expression.'
+            new InputOption('--tags',           '-t',
+                InputOption::VALUE_REQUIRED,
+                'Only execute the features or scenarios with tags matching expression.'
             ),
-            new InputOption('--lang',           '-l'
-              , InputOption::VALUE_REQUIRED
-              , 'Print formatters output in particular language.'
+            new InputOption('--lang',           null,
+                InputOption::VALUE_REQUIRED,
+                'Print formatters output in particular language.'
             ),
-            new InputOption('--verbose',        '-v'
-              , InputOption::VALUE_NONE
-              , 'Increase verbosity of fail messages.'
+            new InputOption('--verbose',        '-v',
+                InputOption::VALUE_NONE,
+                'Increase verbosity of fail messages.'
             ),
-            new InputOption('--no-colors',      '-C'
-              , InputOption::VALUE_NONE
-              , 'Do not use ANSI color in the output.'
+            new InputOption('--no-colors',      '-C',
+                InputOption::VALUE_NONE,
+                'Do not use ANSI color in the output.'
             ),
-            new InputOption('--no-time',        '-T'
-              , InputOption::VALUE_NONE
-              , 'Hide time in output.'
+            new InputOption('--no-time',        '-T',
+                InputOption::VALUE_NONE,
+                'Hide time in output.'
             ),
-            new InputOption('--help',           '-h'
-              , InputOption::VALUE_NONE
-              , 'Display this help message.'
+            new InputOption('--help',           '-h',
+                InputOption::VALUE_NONE,
+                'Display this help message.'
             ),
-            new InputOption('--version',        '-V'
-              , InputOption::VALUE_NONE
-              , 'Display this program version.'
+            new InputOption('--version',        '-V',
+                InputOption::VALUE_NONE,
+                'Display this program version.'
             ),
         ));
     }
 
     /**
-     * @see     Symfony\Component\Console\Command\Command
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Create container
-        $container = $this->createContainer($input->getOption('configuration'));
+        $container      = $this->configureContainer($input->getOption('config'));
+        $featuresPaths  = $this->locateFeaturesPaths($input, $container);
+        $formatter      = $this->configureFormatter($input, $container);
 
-        // Read command arguments & options into container
+        $this->configureGherkinParser($input, $container);
+        $this->configureDefinitionDispatcher($input, $container);
+        $this->configureHookDispatcher($input, $container);
+        $this->configureEnvironmentBuilder($input, $container);
+
+        $eventDispatcher = $container->get('behat.event_dispatcher');
+        $eventDispatcher->bindContainerEventListeners($container);
+        $eventDispatcher->bindFormatterEventListeners($formatter);
+
+        $result = $this->runFeatures($featuresPaths, $container);
+
+        return intval(0 < $result);
+    }
+
+    /**
+     * Configure service container.
+     *
+     * @param   string  $configFile configuration file (YAML)
+     *
+     * @return  \Symfony\Component\DependencyInjection\ContainerBuilder
+     */
+    protected function configureContainer($configFile = null)
+    {
+        $container  = new ContainerBuilder();
+        $extension  = new BehatExtension();
+        $config     = array();
+
+        $this->pathTokens['BEHAT_WORK_PATH'] = getcwd();
+
+        if (null === $configFile) {
+            if (is_file($this->pathTokens['BEHAT_WORK_PATH'] . '/behat.yml')) {
+                $configFile = $this->pathTokens['BEHAT_WORK_PATH'] . '/behat.yml';
+            } elseif (is_file($this->pathTokens['BEHAT_WORK_PATH'] . '/config/behat.yml')) {
+                $configFile = $this->pathTokens['BEHAT_WORK_PATH'] . '/config/behat.yml';
+            }
+        }
+
+        if (null !== $configFile) {
+            $this->pathTokens['BEHAT_CONFIG_PATH'] = dirname($configFile);
+
+            $config = Yaml::load($configFile);
+        }
+
+        $extension->configLoad($config, $container);
+        $container->compile();
+
+        return $container;
+    }
+
+    /**
+     * Locate features paths with provided input.
+     *
+     * @param   InputInterface      $input      input instance
+     * @param   ContainerBuilder    $container  service container
+     *
+     * @return  \Iterator
+     */
+    protected function locateFeaturesPaths(InputInterface $input, ContainerBuilder $container)
+    {
+        $basePath       = $container->getParameter('behat.paths.base');
+        $featuresPath   = $container->getParameter('behat.paths.features');
+
         if ($path = $input->getArgument('features')) {
             if (is_file(($path = realpath($path)))) {
-                $container->setParameter('behat.paths.base', dirname($path));
-                $container->setParameter('behat.paths.features', $path);
+                $basePath       = dirname($path);
+                $featuresPath   = $path;
             } elseif (is_dir($path)) {
-                $container->setParameter('behat.paths.base', $path);
-            } elseif (is_dir($path .= '/features')) {
-                $container->setParameter('behat.paths.base', $path);
+                $basePath       = $path;
+            } elseif (is_dir($path . '/features')) {
+                $basePath       = $path . '/features';
             } else {
                 throw new \InvalidArgumentException("Path $path not found");
             }
         }
+
+        $this->pathTokens['BEHAT_BASE_PATH'] = $this->replacePathTokens($basePath);
+        $featuresPath = $this->replacePathTokens($featuresPath);
+
+        if ('.feature' !== mb_substr($featuresPath, -8)) {
+            $finder         = new Finder();
+            $featuresPaths  = $finder->files()->name('*.feature')->in($featuresPath);
+        } else {
+            $featuresPaths  = (array) $featuresPath;
+        }
+
+        return $featuresPaths;
+    }
+
+    /**
+     * Configure Gherkin parser with provided input.
+     *
+     * @param   InputInterface      $input      input instance
+     * @param   ContainerBuilder    $container  service container
+     *
+     * @return  \Behat\Gherkin\Gherkin
+     */
+    protected function configureGherkinParser(InputInterface $input, ContainerBuilder $container)
+    {
+        $gherkinParser = $container->get('gherkin');
+
         if ($name = $input->getOption('name')) {
-            $container->setParameter('gherkin.filter.name', $name);
+            $gherkinParser->addFilter(new NameFilter($name));
+        } elseif ($name = $container->getParameter('gherkin.filter.name')) {
+            $gherkinParser->addFilter(new NameFilter($name));
         }
         if ($tags = $input->getOption('tags')) {
-            $container->setParameter('gherkin.filter.tags', $tags);
-        }
-        if ($format = $input->getOption('format')) {
-            $container->setParameter('behat.formatter.name', $format);
-        }
-        if ($out = $input->getOption('out')) {
-            $container->setParameter('behat.formatter.output_path', $out);
-        }
-        if ($noColors = $input->getOption('no-colors')) {
-            $container->setParameter('behat.formatter.decorated', !$noColors);
-        }
-        if ($noTime = $input->getOption('no-time')) {
-            $container->setParameter('behat.formatter.time', !$noTime);
-        }
-        if ($verbose = $input->getOption('verbose')) {
-            $container->setParameter('behat.formatter.verbose', $verbose);
-        }
-        if ($lang = $input->getOption('lang')) {
-            $container->setParameter('behat.formatter.language', $lang);
+            $gherkinParser->addFilter(new TagFilter($tags));
+        } elseif ($filter = $container->getParameter('gherkin.filter.tags')) {
+            $gherkinParser->addFilter(new TagFilter($tags));
         }
 
-        // Compile container
-        $container->compile();
+        return $gherkinParser;
+    }
 
-        $eventDispatcher        = $container->get('behat.event_dispatcher');
-        $translator             = $container->get('behat.translator');
-        $gherkin                = $container->get('gherkin');
-        $definitionDispatcher   = $container->get('behat.definition_dispatcher');
-        $hookDispatcher         = $container->get('behat.hook_dispatcher');
-        $logger                 = $container->get('behat.logger');
-        $environmentBuilder     = $container->get('behat.environment_builder');
+    /**
+     * Configure formatter with provided input.
+     *
+     * @param   InputInterface      $input      input instance
+     * @param   ContainerBuilder    $container  service container
+     *
+     * @return  \Behat\Behat\Formatter\FormatterInterface
+     */
+    protected function configureFormatter(InputInterface $input, ContainerBuilder $container)
+    {
+        $formatterName = $input->getOption('format') ?: $container->getParameter('behat.formatter.name');
 
-        // Configure Gherkin manager filters
-        if ($name = $container->getParameter('gherkin.filter.name')) {
-            $gherkin->addFilter(new NameFilter($name));
+        if (false !== mb_strpos($formatterName, '\\')) {
+            if (!class_exists($formatterName)) {
+                throw new \InvalidArgumentException("Class $formatterName doesn't exists");
+            }
+
+            $class = $formatterName;
+        } else {
+            switch ($formatterName) {
+                case 'progress':
+                    $class = 'Behat\Behat\Formatter\ProgressFormatter';
+                    break;
+                case 'pretty':
+                default:
+                    $class = 'Behat\Behat\Formatter\PrettyFormatter';
+            }
         }
-        if ($tags = $container->getParameter('gherkin.filter.tags')) {
-            $gherkin->addFilter(new TagFilter($tags));
+
+        $translator = $container->get('behat.translator');
+        $formatter  = new $class($translator);
+
+        $formatter->setParameter('base_path',
+            $this->pathTokens['BEHAT_BASE_PATH']
+        );
+        $formatter->setParameter('verbose',
+            $input->getOption('verbose') ?: $container->getParameter('behat.formatter.verbose')
+        );
+        $formatter->setParameter('language',
+            $input->getOption('lang') ?: $container->getParameter('behat.formatter.language')
+        );
+        $formatter->setParameter('decorated',
+            $input->getOption('no-colors') ? false : $container->getParameter('behat.formatter.decorated')
+        );
+        $formatter->setParameter('time',
+            $input->getOption('no-time') ? false : $container->getParameter('behat.formatter.time')
+        );
+
+        return $formatter;
+    }
+
+    /**
+     * Configure environment builder with provided input.
+     *
+     * @param   InputInterface      $input      input instance
+     * @param   ContainerBuilder    $container  service container
+     *
+     * @return  \Behat\Behat\Environment\EnvironmentBuilder
+     */
+    protected function configureEnvironmentBuilder(InputInterface $input, ContainerBuilder $container)
+    {
+        $builder = $container->get('behat.environment_builder');
+
+        foreach ((array) $container->getParameter('behat.paths.environment') as $path) {
+            $path = $this->replacePathTokens($path);
+
+            if (is_file($path)) {
+                $builder->addResource($path);
+            }
         }
 
-        // Add definitions files to container resources list
-        foreach ((array) $container->getParameter('behat.paths.steps') as $stepsPath) {
-            if (is_dir($stepsPath)) {
-                foreach ($this->findDefinitionResources($stepsPath) as $path) {
-                    $definitionDispatcher->addResource('php', $path);
+        return $builder;
+    }
+
+    /**
+     * Configure definition dispatcher with provided input.
+     *
+     * @param   InputInterface      $input      input instance
+     * @param   ContainerBuilder    $container  service container
+     *
+     * @return  \Behat\Behat\Definition\DefinitionDispatcher
+     */
+    protected function configureDefinitionDispatcher(InputInterface $input, ContainerBuilder $container)
+    {
+        $dispatcher = $container->get('behat.definition_dispatcher');
+
+        foreach ((array) $container->getParameter('behat.paths.steps') as $path) {
+            $path = $this->replacePathTokens($path);
+
+            if (is_dir($path)) {
+                $finder = new Finder();
+                $files  = $finder->files()->name('*.php')->in($path);
+
+                foreach ($files as $file) {
+                    $dispatcher->addResource('php', $file);
                 }
             }
         }
 
-        foreach ((array) $container->getParameter('behat.paths.environment') as $environmentPath) {
-            if (is_file($environmentPath)) {
-                $environmentBuilder->addResource($environmentPath);
-            }
-        }
+        return $dispatcher;
+    }
 
-        // Configure hooks container
+    /**
+     * Configure hook dispatcher with provided input.
+     *
+     * @param   InputInterface      $input      input instance
+     * @param   ContainerBuilder    $container  service container
+     *
+     * @return  \Behat\Behat\Hook\HookDispatcher
+     */
+    protected function configureHookDispatcher(InputInterface $input, ContainerBuilder $container)
+    {
+        $dispatcher = $container->get('behat.hook_dispatcher');
+
         foreach ((array) $container->getParameter('behat.paths.hooks') as $path) {
+            $path = $this->replacePathTokens($path);
+
             if (is_file($path)) {
-                $hookDispatcher->addResource('php', $path);
+                $dispatcher->addResource('php', $path);
             }
         }
-        $eventDispatcher->registerHookDispatcher($hookDispatcher);
 
-        // Configure formatter
-        switch ($container->getParameter('behat.formatter.name')) {
-            case 'progress':
-                $formatter = new ProgressFormatter($translator);
-                break;
-            case 'pretty':
-            default:
-                $formatter = new PrettyFormatter($translator);
-        }
-        $formatter->setParameter('verbose', $container->getParameter('behat.formatter.verbose'));
-        $formatter->setParameter('decorated', $container->getParameter('behat.formatter.decorated'));
-        $formatter->setParameter('language', $container->getParameter('behat.formatter.language'));
-        $formatter->setParameter('time', $container->getParameter('behat.formatter.time'));
-        $formatter->setParameter('base_path', $container->getParameter('behat.paths.base'));
-        $eventDispatcher->registerFormatter($formatter);
+        return $dispatcher;
+    }
 
-        // Register logger
-        $eventDispatcher->registerLogger($logger);
+    /**
+     * Run specified features.
+     *
+     * @param   \IteratorAggregate  $featuresPaths  features paths iterator
+     * @param   ContainerBuilder    $container      service container
+     *
+     * @return  integer
+     */
+    protected function runFeatures($featuresPaths, ContainerBuilder $container)
+    {
+        $result     = 0;
+        $gherkin    = $container->get('gherkin');
+        $dispatcher = $container->get('behat.event_dispatcher');
+        $logger     = $container->get('behat.logger');
 
-        // Find features paths
-        if (is_dir($container->getParameter('behat.paths.features'))) {
-            $featurePaths = $this->findFeatureResources($container->getParameter('behat.paths.features'));
-        } else {
-            $featurePaths = (array) $container->getParameter('behat.paths.features');
-        }
+        $dispatcher->notify(new Event($logger, 'suite.before'));
 
-        // Notify suite.before event
-        $eventDispatcher->notify(new Event($logger, 'suite.before'));
-
-        // Run features
-        $result = 0;
-        foreach ($featurePaths as $path) {
+        foreach ($featuresPaths as $path) {
             $features = $gherkin->load((string) $path);
+
             foreach ($features as $feature) {
                 $tester = $container->get('behat.tester.feature');
                 $result = max($result, $feature->accept($tester));
             }
         }
 
-        // Notify suite.after event
-        $eventDispatcher->notify(new Event($logger, 'suite.after'));
+        $dispatcher->notify(new Event($logger, 'suite.after'));
 
-        // Return exit code
-        return intval(0 < $result);
+        return $result;
     }
 
     /**
-     * Create Dependency Injection Container and import external configuration file into it. 
-     * 
-     * @param   string              $configurationFile  configuration file (may be YAML or XML)
+     * Replace specific path tokens with values.
      *
-     * @return  ContainerBuilder                        container instance
+     * @param   string  $path   input path
+     *
+     * @return  string
      */
-    protected function createContainer($configurationFile = null)
+    protected function replacePathTokens($path)
     {
-        $cwd        = getcwd();
-        $container  = new ContainerBuilder();
-        $xmlLoader  = new XmlFileLoader($container);
-        $xmlLoader->load(__DIR__ . '/../../DependencyInjection/config/behat.xml');
-
-        // Guess configuration file path
-        if (null !== $configurationFile) {
-            $container->setParameter('behat.configuration.path', dirname($configurationFile));
-        } elseif (is_file($cwd . '/behat.yml')) {
-            $configurationFile = $cwd . '/behat.yml';
-            $container->setParameter('behat.configuration.path', $cwd);
-        } elseif (is_file($cwd . '/config/behat.yml')) {
-            $configurationFile = $cwd . '/config/behat.yml';
-            $container->setParameter('behat.configuration.path', $cwd . '/config');
-        } elseif (is_file($cwd . '/behat.xml')) {
-            $configurationFile = $cwd . '/behat.yml';
-            $container->setParameter('behat.configuration.path', $cwd);
-        } elseif (is_file($cwd . '/config/behat.xml')) {
-            $configurationFile = $cwd . '/config/behat.yml';
-            $container->setParameter('behat.configuration.path', $cwd . '/config');
+        foreach ($this->pathTokens as $name => $value) {
+            $path = str_replace($name, $value, $path);
         }
 
-        // Load configuration file with proper loader
-        if (null !== $configurationFile) {
-            if (false !== mb_stripos($configurationFile, '.xml')) {
-                $loader = new XmlFileLoader($container);
-            } elseif (false !== mb_stripos($configurationFile, '.yml')) {
-                $loader = new YamlFileLoader($container);
-            }
-
-            if (!isset($loader)) {
-                throw new \InvalidArgumentException(sprintf('Unknown configuration file type given "%s"', $configurationFile));
-            }
-
-            $loader->import($configurationFile);
-        }
-
-        // Set initial container services & parameters
-        $container->setParameter('behat.paths.workdir', $cwd);
-        $container->setParameter('behat.paths.lib',  $behatPath = realpath(__DIR__ . '/../../../../../'));
-        $container->setParameter('gherkin.paths.lib',  realpath($behatPath . '/vendor/gherkin'));
-
-        return $container;
-    }
-
-    /**
-     * Find definitions files in specified path. 
-     * 
-     * @param   string  $stepsPath  steps files path
-     * 
-     * @return  mixed               files iterator
-     */
-    protected function findFeatureResources($featuresPath)
-    {
-        $finder = new Finder();
-        $paths  = $finder->files()->name('*.feature')->in($featuresPath);
-
-        return $paths;
-    }
-
-    /**
-     * Find definitions files in specified path. 
-     * 
-     * @param   string  $stepsPath  steps files path
-     * 
-     * @return  mixed               files iterator
-     */
-    protected function findDefinitionResources($stepsPath)
-    {
-        $finder = new Finder();
-        $paths  = $finder->files()->name('*.php')->in($stepsPath);
-
-        return $paths;
+        return $path;
     }
 }
