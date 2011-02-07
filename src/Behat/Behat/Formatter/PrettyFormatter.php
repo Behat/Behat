@@ -2,7 +2,8 @@
 
 namespace Behat\Behat\Formatter;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher,
+    Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Tester\StepTester,
     Behat\Behat\Definition\Definition,
@@ -18,24 +19,101 @@ use Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Pretty formatter.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class PrettyFormatter extends ProgressFormatter
 {
+    /**
+     * Maximum line length.
+     *
+     * @var     integer
+     */
     protected   $maxLineLength          = 0;
-
+    /**
+     * Are we in background.
+     *
+     * @var     boolean
+     */
     protected   $inBackground           = false;
+    /**
+     * Is background printed.
+     *
+     * @var     boolean
+     */
     protected   $isBackgroundPrinted    = false;
+    /**
+     * Are we in outline steps.
+     *
+     * @var     boolean
+     */
     protected   $inOutlineSteps         = false;
+    /**
+     * Are we in outline example.
+     *
+     * @var     boolean
+     */
     protected   $inOutlineExample       = false;
+    /**
+     * Is outline headline printed.
+     *
+     * @var     boolean
+     */
     protected   $isOutlineHeaderPrinted = false;
-
+    /**
+     * Delayed scenario event.
+     *
+     * @var     Event
+     */
     protected   $delayedScenarioEvent;
+    /**
+     * Delayed step events.
+     *
+     * @var     array
+     */
     protected   $delayedStepEvents      = array();
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultParameters()
     {
         return array();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function registerListeners(EventDispatcher $dispatcher)
+    {
+        $dispatcher->connect('suite.after',               array($this, 'afterSuite'),             -10);
+        $dispatcher->connect('feature.before',            array($this, 'beforeFeature'),          -10);
+        $dispatcher->connect('background.before',         array($this, 'beforeBackground'),       -10);
+        $dispatcher->connect('background.after',          array($this, 'afterBackground'),        -10);
+        $dispatcher->connect('outline.before',            array($this, 'beforeOutline'),          -10);
+        $dispatcher->connect('outline.example.before',    array($this, 'beforeOutlineExample'),   -10);
+        $dispatcher->connect('outline.example.after',     array($this, 'afterOutlineExample'),    -10);
+        $dispatcher->connect('outline.after',             array($this, 'afterOutline'),           -10);
+        $dispatcher->connect('scenario.before',           array($this, 'beforeScenario'),         -10);
+        $dispatcher->connect('scenario.after',            array($this, 'afterScenario'),          -10);
+        $dispatcher->connect('step.after',                array($this, 'afterStep'),              -10);
+    }
+
+    /**
+     * Listens to "suite.after" event.
+     *
+     * @param   Event   $event
+     */
     public function afterSuite(Event $event)
     {
         $logger = $event->getSubject();
@@ -44,6 +122,11 @@ class PrettyFormatter extends ProgressFormatter
         $this->printUndefinedStepsSnippets($logger);
     }
 
+    /**
+     * Listens to "feature.before" event.
+     *
+     * @param   Event   $event
+     */
     public function beforeFeature(Event $event)
     {
         $feature = $event->getSubject();
@@ -58,6 +141,11 @@ class PrettyFormatter extends ProgressFormatter
         $this->writeln();
     }
 
+    /**
+     * Listens to "background.before" event.
+     *
+     * @param   Event   $event
+     */
     public function beforeBackground(Event $event)
     {
         $this->inBackground = true;
@@ -74,6 +162,11 @@ class PrettyFormatter extends ProgressFormatter
         $this->printScenarioPath($background);
     }
 
+    /**
+     * Listens to "background.after" event.
+     *
+     * @param   Event   $event
+     */
     public function afterBackground(Event $event)
     {
         $this->inBackground = false;
@@ -93,6 +186,11 @@ class PrettyFormatter extends ProgressFormatter
         }
     }
 
+    /**
+     * Listens to "outline.before" event.
+     *
+     * @param   Event   $event
+     */
     public function beforeOutline(Event $event)
     {
         $outline = $event->getSubject();
@@ -111,12 +209,22 @@ class PrettyFormatter extends ProgressFormatter
         $this->printScenarioPath($outline);
     }
 
+    /**
+     * Listens to "outline.example.before" event.
+     *
+     * @param   Event   $event
+     */
     public function beforeOutlineExample(Event $event)
     {
         $this->inOutlineExample     = true;
         $this->delayedStepEvents    = array();
     }
 
+    /**
+     * Listens to "outline.example.after" event.
+     *
+     * @param   Event   $event
+     */
     public function afterOutlineExample(Event $event)
     {
         $this->inOutlineExample = false;
@@ -137,11 +245,21 @@ class PrettyFormatter extends ProgressFormatter
         );
     }
 
+    /**
+     * Listens to "outline.after" event.
+     *
+     * @param   Event   $event
+     */
     public function afterOutline(Event $event)
     {
         $this->writeln();
     }
 
+    /**
+     * Listens to "scenario.before" event.
+     *
+     * @param   Event   $event
+     */
     public function beforeScenario(Event $event)
     {
         $scenario = $event->getSubject();
@@ -159,11 +277,21 @@ class PrettyFormatter extends ProgressFormatter
         $this->printScenarioPath($scenario);
     }
 
+    /**
+     * Listens to "scenario.after" event.
+     *
+     * @param   Event   $event
+     */
     public function afterScenario(Event $event)
     {
         $this->writeln();
     }
 
+    /**
+     * Listens to "step.after" event.
+     *
+     * @param   Event   $event
+     */
     public function afterStep(Event $event)
     {
         if ($this->inBackground && $this->isBackgroundPrinted) {
@@ -187,6 +315,11 @@ class PrettyFormatter extends ProgressFormatter
         );
     }
 
+    /**
+     * Print node tags.
+     *
+     * @param   AbstractNode    $node
+     */
     protected function printFeatureOrScenarioTags(AbstractNode $node)
     {
         if (count($tags = $node->getTags())) {
@@ -204,11 +337,21 @@ class PrettyFormatter extends ProgressFormatter
         }
     }
 
+    /**
+     * Print feature keyword and name.
+     *
+     * @param   FeatureNode $feature
+     */
     protected function printFeatureName(FeatureNode $feature)
     {
         $this->writeln($this->getFeatureOrScenarioName($feature));
     }
 
+    /**
+     * Print feature description.
+     *
+     * @param   FeatureNode $feature
+     */
     protected function printFeatureDescription(FeatureNode $feature)
     {
         $lines = explode("\n", $feature->getDescription());
@@ -218,11 +361,21 @@ class PrettyFormatter extends ProgressFormatter
         }
     }
 
+    /**
+     * Print scenario keyword and name.
+     *
+     * @param   AbstractScenarioNode    $scenario
+     */
     protected function printScenarioName(AbstractScenarioNode $scenario)
     {
         $this->write($this->getFeatureOrScenarioName($scenario));
     }
 
+    /**
+     * Print scenario definition path.
+     *
+     * @param   AbstractScenarioNode    $scenario
+     */
     protected function printScenarioPath(AbstractScenarioNode $scenario)
     {
         $nameLength     = mb_strlen($this->getFeatureOrScenarioName($scenario));
@@ -231,6 +384,11 @@ class PrettyFormatter extends ProgressFormatter
         $this->printPathComment($scenario->getFile(), $scenario->getLine(), $indentCount);
     }
 
+    /**
+     * Print outline steps.
+     *
+     * @param   OutlineNode $outline
+     */
     protected function printOutlineSteps(OutlineNode $outline)
     {
         $this->inOutlineSteps = true;
@@ -247,6 +405,11 @@ class PrettyFormatter extends ProgressFormatter
         $this->writeln();
     }
 
+    /**
+     * Print outline examples header.
+     *
+     * @param   TableNode   $examples
+     */
     protected function printOutlineExamplesHeader(TableNode $examples)
     {
         $keyword = $examples->getKeyword();
@@ -260,6 +423,14 @@ class PrettyFormatter extends ProgressFormatter
         $this->writeln($header);
     }
 
+    /**
+     * Print outline example result.
+     *
+     * @param   TableNode   $examples   examples table
+     * @param   integer     $iteration  example row
+     * @param   integer     $result     result code
+     * @param   boolean     $isSkipped  is outline example skipped
+     */
     protected function printOutlineExampleResult(TableNode $examples, $iteration, $result, $isSkipped)
     {
         $color  = $this->getResultColorCode($result);
@@ -273,6 +444,11 @@ class PrettyFormatter extends ProgressFormatter
         $this->printOutlineExampleResultExceptions($this->delayedStepEvents);
     }
 
+    /**
+     * Print outline example exceptions.
+     *
+     * @param   array   $events failed steps events
+     */
     protected function printOutlineExampleResultExceptions(array $events)
     {
         foreach ($events as $event) {
@@ -293,6 +469,15 @@ class PrettyFormatter extends ProgressFormatter
         }
     }
 
+    /**
+     * Print step information.
+     *
+     * @param   StepNode    $step       step node
+     * @param   integer     $result     result code
+     * @param   Definition  $definition definition (if found one)
+     * @param   string      $snippet    snippet (if step is undefined)
+     * @param   Exception   $exception  exception (if step is failed)
+     */
     protected function printStep(StepNode $step, $result, Definition $definition = null,
                                  $snippet = null, \Exception $exception = null)
     {
@@ -315,6 +500,12 @@ class PrettyFormatter extends ProgressFormatter
         }
     }
 
+    /**
+     * Print step definition path.
+     *
+     * @param   StepNode    $step       step node
+     * @param   Definition  $definition definition (if found one)
+     */
     protected function printDefinitionPath(StepNode $step, Definition $definition)
     {
         $type           = $step->getType();
@@ -325,6 +516,12 @@ class PrettyFormatter extends ProgressFormatter
         $this->printPathComment($definition->getFile(), $definition->getLine(), $indentCount);
     }
 
+    /**
+     * Print step arguments.
+     *
+     * @param   array   $arguments  list of arguments
+     * @param   string  $color      color name
+     */
     protected function printStepArguments(array $arguments, $color)
     {
         foreach ($arguments as $argument) {
@@ -336,6 +533,12 @@ class PrettyFormatter extends ProgressFormatter
         }
     }
 
+    /**
+     * Print step exception.
+     *
+     * @param   \Exception  $exception  exception
+     * @param   string      $color      color name
+     */
     protected function printStepException(\Exception $exception, $color)
     {
         if ($this->parameters->get('verbose')) {
@@ -350,6 +553,12 @@ class PrettyFormatter extends ProgressFormatter
         );
     }
 
+    /**
+     * Print PyString argument.
+     *
+     * @param   PyStringNode    $pystring   pystring node
+     * @param   string          $color      color name
+     */
     protected function printPyString(PyStringNode $pystring, $color = null)
     {
         $string = strtr(
@@ -363,6 +572,12 @@ class PrettyFormatter extends ProgressFormatter
         }
     }
 
+    /**
+     * Print table argument.
+     *
+     * @param   TableNode       $table      table node
+     * @param   string          $color      color name
+     */
     protected function printTable(TableNode $table, $color = null)
     {
         $string = strtr('      ' . (string) $table, array("\n" => "\n      "));
@@ -374,6 +589,12 @@ class PrettyFormatter extends ProgressFormatter
         }
     }
 
+    /**
+     * Return feature or scenario name.
+     *
+     * @param   AbstractNode    $node               node name
+     * @param   boolean         $haveBaseIndent     is name have base indent
+     */
     protected function getFeatureOrScenarioName(AbstractNode $node, $haveBaseIndent = true)
     {
         $keyword    = $node->getKeyword();
@@ -400,8 +621,8 @@ class PrettyFormatter extends ProgressFormatter
      * Recalculate max descriptions size for section elements.
      *
      * @param   BackgroundNode $scenario   element for calculations
-     * 
-     * @return  integer                 description length
+     *
+     * @return  integer
      */
     protected function getMaxLineLength($max, AbstractScenarioNode $scenario)
     {

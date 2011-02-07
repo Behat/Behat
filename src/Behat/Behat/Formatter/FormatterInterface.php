@@ -2,43 +2,53 @@
 
 namespace Behat\Behat\Formatter;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher,
+    Symfony\Component\EventDispatcher\Event,
+    Symfony\Component\Translation\Translator;
 
-use Symfony\Component\Translation\Translator;
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
+/**
+ * Formatter interface.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 interface FormatterInterface
 {
+    /**
+     * Initialize formatter.
+     *
+     * @param   Translator  $translator
+     */
     function __construct(Translator $translator);
 
+    /**
+     * Set parameter value.
+     *
+     * @param   string  $name   parameter name
+     * @param   mixed   $value  parameter value
+     */
     function setParameter($name, $value);
 
+    /**
+     * Return parameter value.
+     *
+     * @param   string  $name   parameter name
+     * 
+     * @return  mixed
+     */
     function getParameter($name);
 
-    function afterSuite(Event $event);
-
-    function beforeSuite(Event $event);
-
-    function beforeFeature(Event $event);
-
-    function afterFeature(Event $event);
-
-    function beforeBackground(Event $event);
-
-    function afterBackground(Event $event);
-
-    function beforeOutline(Event $event);
-
-    function beforeOutlineExample(Event $event);
-
-    function afterOutlineExample(Event $event);
-
-    function afterOutline(Event $event);
-
-    function beforeScenario(Event $event);
-
-    function afterScenario(Event $event);
-
-    function beforeStep(Event $event);
-
-    function afterStep(Event $event);
+    /**
+     * Register event listeners.
+     *
+     * @param   EventDispatcher $dispatcher
+     */
+    function registerListeners(EventDispatcher $dispatcher);
 }

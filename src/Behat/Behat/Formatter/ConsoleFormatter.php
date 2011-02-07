@@ -10,12 +10,43 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag,
 use Behat\Behat\Console\Output\ConsoleOutput,
     Behat\Behat\Tester\StepTester;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Console formatter.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 abstract class ConsoleFormatter implements FormatterInterface
 {
-    protected   $parameters;
-    protected   $translator;
-    private     $console;
+    /**
+     * Formatter parameters.
+     *
+     * @var     ParameterBag
+     */
+    protected $parameters;
+    /**
+     * Translator.
+     *
+     * @var     Translator
+     */
+    protected $translator;
+    /**
+     * Console output.
+     *
+     * @var     ConsoleOutput
+     */
+    private $console;
 
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(Translator $translator)
     {
         $this->translator = $translator;
@@ -30,18 +61,36 @@ abstract class ConsoleFormatter implements FormatterInterface
         ), $this->getDefaultParameters()));
     }
 
+    /**
+     * Return default parameters to construct ParameterBag.
+     *
+     * @return  array
+     */
     abstract protected function getDefaultParameters();
 
+    /**
+     * {@inheritdoc}
+     */
     public function setParameter($name, $value)
     {
         $this->parameters->set($name, $value);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParameter($name)
     {
         return $this->parameters->get($name);
     }
 
+    /**
+     * Return color code by tester result status code.
+     *
+     * @param   integer $result result status code
+     *
+     * @return  string          passed|pending|skipped|undefined|failed
+     */
     protected function getResultColorCode($result)
     {
         switch ($result) {
@@ -58,16 +107,32 @@ abstract class ConsoleFormatter implements FormatterInterface
         }
     }
 
+    /**
+     * Write message(s) to output console.
+     *
+     * @param   string|array    $messages   message or array of messages
+     * @param   boolean         $newline    do we need to append newline after messages
+     */
     protected function write($messages, $newline = false)
     {
         $this->getWritingConsole()->write($messages, $newline);
     }
 
+    /**
+     * Write newlined message(s) to output console.
+     *
+     * @param   string|array    $messages   message or array of messages
+     */
     protected function writeln($messages = '')
     {
         $this->write($messages, true);
     }
 
+    /**
+     * Return console instance, prepared to write.
+     *
+     * @return  ConsoleOutput
+     */
     protected function getWritingConsole()
     {
         if (null === $this->console || $this->console->getStream() !== $this->parameters->get('stream')) {
@@ -80,6 +145,14 @@ abstract class ConsoleFormatter implements FormatterInterface
         return $this->console;
     }
 
+    /**
+     * Translate message to default formatter language.
+     *
+     * @param   string  $message        message to translate
+     * @param   array   $parameters     message parameters
+     *
+     * @return  string
+     */
     protected function translate($message, array $parameters = array())
     {
         return $this->translator->trans(
@@ -87,6 +160,15 @@ abstract class ConsoleFormatter implements FormatterInterface
         );
     }
 
+    /**
+     * Translate number choicer to default formatter language.
+     *
+     * @param   string  $message        message specification to translate
+     * @param   string  $number         choice number
+     * @param   array   $parameters     message parameters
+     *
+     * @return  string
+     */
     protected function translateChoice($message, $number, array $parameters = array())
     {
         return $this->translator->transChoice(

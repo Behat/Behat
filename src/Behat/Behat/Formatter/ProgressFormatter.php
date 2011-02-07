@@ -2,7 +2,8 @@
 
 namespace Behat\Behat\Formatter;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher,
+    Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Tester\StepTester,
     Behat\Behat\Definition\Definition,
@@ -12,15 +13,50 @@ use Behat\Behat\Tester\StepTester,
 use Behat\Gherkin\Node\BackgroundNode,
     Behat\Gherkin\Node\StepNode;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Progress formatter.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class ProgressFormatter extends ConsoleFormatter
 {
+    /**
+     * Maximum line length.
+     *
+     * @var     integer
+     */
     protected $maxLineLength = 0;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultParameters()
     {
         return array();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function registerListeners(EventDispatcher $dispatcher)
+    {
+        $dispatcher->connect('suite.after', array($this, 'afterSuite'), -10);
+        $dispatcher->connect('step.after',  array($this, 'afterStep'),  -10);
+    }
+
+    /**
+     * Listens to "suite.after" event.
+     *
+     * @param   Event   $event
+     */
     public function afterSuite(Event $event)
     {
         $logger = $event->getSubject();
@@ -32,42 +68,11 @@ class ProgressFormatter extends ConsoleFormatter
         $this->printUndefinedStepsSnippets($logger);
     }
 
-    public function beforeSuite(Event $event)
-    {}
-
-    public function beforeFeature(Event $event)
-    {}
-
-    public function afterFeature(Event $event)
-    {}
-
-    public function beforeBackground(Event $event)
-    {}
-
-    public function afterBackground(Event $event)
-    {}
-
-    public function beforeOutline(Event $event)
-    {}
-
-    public function beforeOutlineExample(Event $event)
-    {}
-
-    public function afterOutlineExample(Event $event)
-    {}
-
-    public function afterOutline(Event $event)
-    {}
-
-    public function beforeScenario(Event $event)
-    {}
-
-    public function afterScenario(Event $event)
-    {}
-
-    public function beforeStep(Event $event)
-    {}
-
+    /**
+     * Listens to "step.after" event.
+     *
+     * @param   Event   $event
+     */
     public function afterStep(Event $event)
     {
         $this->printStep(
@@ -79,6 +84,15 @@ class ProgressFormatter extends ConsoleFormatter
         );
     }
 
+    /**
+     * Print step.
+     *
+     * @param   StepNode    $step           step node
+     * @param   integer     $result         step result code
+     * @param   Definition  $definition     definition instance (if had one)
+     * @param   string      $snippet        snippet (if no definition found)
+     * @param   \Exception  $exception      exception (if step failed)
+     */
     protected function printStep(StepNode $step, $result, Definition $definition = null,
                                  $snippet = null, \Exception $exception = null)
     {
@@ -101,6 +115,11 @@ class ProgressFormatter extends ConsoleFormatter
         }
     }
 
+    /**
+     * Print all failed steps info.
+     *
+     * @param   LoggerDataCollector $logger suite logger
+     */
     protected function printFailedSteps(LoggerDataCollector $logger)
     {
         if (count($logger->getFailedStepsEvents())) {
@@ -110,6 +129,11 @@ class ProgressFormatter extends ConsoleFormatter
         }
     }
 
+    /**
+     * Print all pending steps info.
+     *
+     * @param   LoggerDataCollector $logger suite logger
+     */
     protected function printPendingSteps(LoggerDataCollector $logger)
     {
         if (count($logger->getPendingStepsEvents())) {
@@ -119,6 +143,11 @@ class ProgressFormatter extends ConsoleFormatter
         }
     }
 
+    /**
+     * Print all exceptions informations.
+     *
+     * @param   array   $events failed step events
+     */
     protected function printExceptionEvents(array $events)
     {
         foreach ($events as $number => $event) {
@@ -145,6 +174,13 @@ class ProgressFormatter extends ConsoleFormatter
         }
     }
 
+    /**
+     * Print path to step information.
+     *
+     * @param   StepNode    $step           step node
+     * @param   Definition  $definition     definition (if step defined)
+     * @param   Exception   $exception      exception (if step failed)
+     */
     protected function printStepPath(StepNode $step, Definition $definition = null,
                                      \Exception $exception = null)
     {
@@ -181,6 +217,11 @@ class ProgressFormatter extends ConsoleFormatter
         $this->writeln();
     }
 
+    /**
+     * Print summary suite information.
+     *
+     * @param   LoggerDataCollector $logger suite logger
+     */
     protected function printSummary(LoggerDataCollector $logger)
     {
         $this->printScenariosSummary($logger);
@@ -191,6 +232,11 @@ class ProgressFormatter extends ConsoleFormatter
         }
     }
 
+    /**
+     * Print scenarios summary information.
+     *
+     * @param   LoggerDataCollector $logger suite logger
+     */
     protected function printScenariosSummary(LoggerDataCollector $logger)
     {
         $count  = $logger->getScenariosCount();
@@ -201,6 +247,11 @@ class ProgressFormatter extends ConsoleFormatter
         $this->printStatusesSummary($logger->getScenariosStatuses());
     }
 
+    /**
+     * Print steps summary information.
+     *
+     * @param   LoggerDataCollector $logger suite logger
+     */
     protected function printStepsSummary(LoggerDataCollector $logger)
     {
         $count  = $logger->getStepsCount();
@@ -211,6 +262,11 @@ class ProgressFormatter extends ConsoleFormatter
         $this->printStatusesSummary($logger->getStepsStatuses());
     }
 
+    /**
+     * Print statuses summary.
+     *
+     * @param   LoggerDataCollector $logger suite logger
+     */
     protected function printStatusesSummary(array $statusesStatistics)
     {
         $statuses = array();
@@ -225,6 +281,11 @@ class ProgressFormatter extends ConsoleFormatter
         $this->writeln(count($statuses) ? ' ' . sprintf('(%s)', implode(', ', $statuses)) : '');
     }
 
+    /**
+     * Print time inforamtion.
+     *
+     * @param   LoggerDataCollector $logger suite logger
+     */
     protected function printTimeSummary(LoggerDataCollector $logger)
     {
         $time       = $logger->getTotalTime();
@@ -234,6 +295,11 @@ class ProgressFormatter extends ConsoleFormatter
         $this->writeln($minutes . 'm' . $seconds . 's');
     }
 
+    /**
+     * Print undefined steps snippets.
+     *
+     * @param   LoggerDataCollector $logger suite logger
+     */
     protected function printUndefinedStepsSnippets(LoggerDataCollector $logger)
     {
         if (count($logger->getDefinitionsSnippets())) {
@@ -248,6 +314,13 @@ class ProgressFormatter extends ConsoleFormatter
         }
     }
 
+    /**
+     * Print path comment.
+     *
+     * @param   string  $file           filename
+     * @param   integer $line           line number
+     * @param   integer $indentCount    indenation number
+     */
     protected function printPathComment($file, $line, $indentCount)
     {
         $indent = str_repeat(' ', $indentCount);
@@ -256,6 +329,13 @@ class ProgressFormatter extends ConsoleFormatter
         $this->writeln("$indent {+comment}# $file:$line{-comment}");
     }
 
+    /**
+     * Return string with relativized paths.
+     *
+     * @param   string  $string
+     *
+     * @return  string
+     */
     protected function relativizePathsInString($string)
     {
         if (null !== ($basePath = $this->parameters->get('base_path'))) {
