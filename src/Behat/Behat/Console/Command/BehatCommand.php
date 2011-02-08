@@ -12,7 +12,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\EventDispatcher\Event,
     Symfony\Component\Finder\Finder;
 
-use Behat\Behat\DependencyInjection\BehatExtension;
+use Behat\Behat\DependencyInjection\BehatExtension,
+    Behat\Behat\Formatter\FormatterInterface;
 
 use Behat\Gherkin\Filter\NameFilter,
     Behat\Gherkin\Filter\TagFilter;
@@ -114,10 +115,7 @@ class BehatCommand extends Command
         $this->configureDefinitionDispatcher($input, $container);
         $this->configureHookDispatcher($input, $container);
         $this->configureEnvironmentBuilder($input, $container);
-
-        $eventDispatcher = $container->get('behat.event_dispatcher');
-        $eventDispatcher->bindContainerEventListeners($container);
-        $eventDispatcher->bindFormatterEventListeners($formatter);
+        $this->configureEventDispathcer($formatter, $container);
 
         $result = $this->runFeatures($featuresPaths, $container);
 
@@ -345,6 +343,24 @@ class BehatCommand extends Command
                 $dispatcher->addResource('php', $path);
             }
         }
+
+        return $dispatcher;
+    }
+
+    /**
+     * Configure event dispatcher.
+     *
+     * @param   FormatterInterface  $formatter  configured formatter
+     * @param   ContainerBuilder    $container  service container
+     * 
+     * @return  \Behat\Behat\EventDispatcher\EventDispatcher
+     */
+    protected function configureEventDispathcer(FormatterInterface $formatter, ContainerBuilder $container)
+    {
+        $dispatcher = $container->get('behat.event_dispatcher');
+
+        $dispatcher->bindContainerEventListeners($container);
+        $dispatcher->bindFormatterEventListeners($formatter);
 
         return $dispatcher;
     }
