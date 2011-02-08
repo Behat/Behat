@@ -57,6 +57,8 @@ class FeatureTester implements NodeVisitorInterface
      * @param   Behat\Gherkin\Node\AbstractNode $feature
      *
      * @return  integer
+     *
+     * @throws  BehaviorException   if unknown scenario type (neither Outline or Scenario) found in feature
      */
     public function visit(AbstractNode $feature)
     {
