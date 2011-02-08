@@ -76,7 +76,7 @@ class OutlineTester extends ScenarioTester
     }
 
     /**
-     * Visits & tests OutlineNode examples.
+     * Visits & tests OutlineNode example.
      *
      * @param   Behat\Gherkin\Node\OutlineNode  $outline
      * @param   integer                         $row        row number
