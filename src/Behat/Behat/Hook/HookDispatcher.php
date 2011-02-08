@@ -45,9 +45,20 @@ class HookDispatcher
     protected $hooks        = array();
 
     /**
-     * Register event listeners.
+     * Registers event listeners.
      *
-     * @param   EventDispatcher $dispatcher
+     * @param   Behat\Behat\EventDispatcher\EventDispatcher $dispatcher
+     *
+     * @uses    beforeSuite()
+     * @uses    afterSuite()
+     * @uses    beforeFeature()
+     * @uses    afterFeature()
+     * @uses    beforeScenario()
+     * @uses    afterScenario()
+     * @uses    beforeOutlineExample()
+     * @uses    afterOutlineExample()
+     * @uses    beforeStep()
+     * @uses    afterStep()
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
@@ -66,7 +77,9 @@ class HookDispatcher
     /**
      * Listens to "suite.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     *
+     * @uses    fireSuiteHooks()
      */
     public function beforeSuite(Event $event)
     {
@@ -76,7 +89,9 @@ class HookDispatcher
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     *
+     * @uses    fireSuiteHooks()
      */
     public function afterSuite(Event $event)
     {
@@ -86,7 +101,9 @@ class HookDispatcher
     /**
      * Listens to "feature.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     *
+     * @uses    fireFeatureHooks()
      */
     public function beforeFeature(Event $event)
     {
@@ -96,7 +113,9 @@ class HookDispatcher
     /**
      * Listens to "feature.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     *
+     * @uses    fireFeatureHooks()
      */
     public function afterFeature(Event $event)
     {
@@ -106,7 +125,9 @@ class HookDispatcher
     /**
      * Listens to "scenario.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     *
+     * @uses    fireScenarioHooks()
      */
     public function beforeScenario(Event $event)
     {
@@ -116,7 +137,9 @@ class HookDispatcher
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     *
+     * @uses    fireScenarioHooks()
      */
     public function afterScenario(Event $event)
     {
@@ -126,7 +149,9 @@ class HookDispatcher
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     *
+     * @uses    fireScenarioHooks()
      */
     public function beforeOutlineExample(Event $event)
     {
@@ -136,7 +161,9 @@ class HookDispatcher
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     *
+     * @uses    fireScenarioHooks()
      */
     public function afterOutlineExample(Event $event)
     {
@@ -146,7 +173,9 @@ class HookDispatcher
     /**
      * Listens to "step.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     *
+     * @uses    fireStepHooks()
      */
     public function beforeStep(Event $event)
     {
@@ -156,7 +185,9 @@ class HookDispatcher
     /**
      * Listens to "step.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     *
+     * @uses    fireStepHooks()
      */
     public function afterStep(Event $event)
     {
@@ -164,10 +195,10 @@ class HookDispatcher
     }
 
     /**
-     * Fire suite hooks with specified name.
+     * Runs suite hooks with specified name.
      *
-     * @param   string  $name       hooks name
-     * @param   Event   $event      event to which hooks glued
+     * @param   string                                      $name   hooks name
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
      */
     protected function fireSuiteHooks($name, Event $event)
     {
@@ -187,10 +218,10 @@ class HookDispatcher
     }
 
     /**
-     * Fire feature hooks with specified name.
+     * Runs feature hooks with specified name.
      *
-     * @param   string  $name       hooks name
-     * @param   Event   $event      event to which hooks glued
+     * @param   string                                      $name   hooks name
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
      */
     protected function fireFeatureHooks($name, Event $event)
     {
@@ -223,10 +254,10 @@ class HookDispatcher
     }
 
     /**
-     * Fire scenario hooks with specified name.
+     * Runs scenario hooks with specified name.
      *
-     * @param   string  $name       hooks name
-     * @param   Event   $event      event to which hooks glued
+     * @param   string                                      $name   hooks name
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
      */
     protected function fireScenarioHooks($name, Event $event)
     {
@@ -259,10 +290,10 @@ class HookDispatcher
     }
 
     /**
-     * Fire step hooks with specified name.
+     * Runs step hooks with specified name.
      *
-     * @param   string  $name       hooks name
-     * @param   Event   $event      event to which hooks glued
+     * @param   string                                      $name   hooks name
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
      */
     protected function fireStepHooks($name, Event $event)
     {
@@ -295,10 +326,10 @@ class HookDispatcher
     }
 
     /**
-     * Add a loader.
+     * Adds a hook resource loader.
      *
-     * @param   string          $format     the name of the loader
-     * @param   LoaderInterface $loader     a LoaderInterface instance
+     * @param   string                                      $name   loader format name
+     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
      */
     public function addLoader($format, LoaderInterface $loader)
     {
@@ -306,9 +337,9 @@ class HookDispatcher
     }
 
     /**
-     * Add a resource.
+     * Adds a hook resource to load.
      *
-     * @param   string          $format     format of the loader
+     * @param   string          $format     loader format name
      * @param   mixed           $resource   the resource name
      */
     public function addResource($format, $resource)
@@ -317,7 +348,9 @@ class HookDispatcher
     }
 
     /**
-     * Parse hook resources with loaders.
+     * Loads all hook resources with loaders.
+     *
+     * @throws  RuntimeException    if loader for specified format is not registered
      */
     protected function loadHooks()
     {

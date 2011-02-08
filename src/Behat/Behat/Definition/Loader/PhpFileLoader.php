@@ -26,18 +26,18 @@ class PhpFileLoader implements LoaderInterface
     /**
      * Definition dispatcher.
      *
-     * @var     DefinitionDispatcher
+     * @var     Behat\Behat\Definition\DefinitionDispatcher
      */
     protected $dispatcher;
     /**
-     * List of found objects (Definition's & Transformation's)
+     * Found objects (Definition's & Transformation's)
      *
      * @var     array
      */
     protected $objects = array();
 
     /**
-     * Initialize loader.
+     * Initializes loader.
      *
      * @param   DefinitionDispatcher $dispatcher definition dispatcher
      */
@@ -60,10 +60,10 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Define argument transformation.
+     * Defines argument transformation.
      *
      * @param   string      $regex      transformation regex (to find specific argument)
-     * @param   callback    $callback   transformation callback (returns transformed argument)
+     * @param   Callback    $callback   transformation callback (must return transformed argument)
      */
     public function Transform($regex, $callback)
     {
@@ -71,14 +71,14 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Define a step with ->Given|When|Then|...('/regex/', callback) or
+     * Defines a step with ->Given|When|Then|...('/regex/', callback) or
      * call a step with ->Given|When|Then|...('I enter "12" in the field', $world) or
      * even with arguments ->Given|When|Then|...('I fill up fields', $world, $table).
      *
      * @param   string  $type       step type (Given|When|Then|...)
      * @param   string  $arguments  step regex & callback
      *
-     * @throws  \Behat\Behat\Exception\Redundant  if step definition is already exists
+     * @throws  Behat\Behat\Exception\Redundant     if step definition is already exists
      */
     public function __call($type, $arguments)
     {

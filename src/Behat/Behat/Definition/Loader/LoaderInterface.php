@@ -20,7 +20,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 interface LoaderInterface
 {
     /**
-     * Load definitions from resource.
+     * Loads definitions & transformations from resource.
      *
      * @param   string          $resource   resource path
      * @return  array                       array of Definitions & Transformations

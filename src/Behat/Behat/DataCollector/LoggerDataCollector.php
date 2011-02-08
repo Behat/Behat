@@ -23,24 +23,23 @@ use Behat\Behat\Tester\StepTester;
 class LoggerDataCollector
 {
     /**
-     * Suite start time.
+     * Suite run start time.
      *
      * @var     float
      */
     protected $startTime;
     /**
-     * Suite finish time.
+     * Suite run finish time.
      *
      * @var     float
      */
     protected $finishTime;
     /**
-     * Step statuses with text notations.
-     *
-     * @see     collectScenarioResult
-     * @see     collectStepStats
+     * Step statuses text notations.
      *
      * @var     array
+     *
+     * @uses    Behat\Behat\Tester\StepTester
      */
     protected $statuses             = array(
         StepTester::PASSED      => 'passed',
@@ -93,7 +92,7 @@ class LoggerDataCollector
     protected $pendingStepsEvents   = array();
 
     /**
-     * Initialize logger.
+     * Initializes logger.
      */
     public function __construct()
     {
@@ -108,9 +107,15 @@ class LoggerDataCollector
     }
 
     /**
-     * Register logger event listeners.
+     * Registers logger event listeners.
      *
-     * @param   EventDispatcher $dispatcher event dispatcher
+     * @param   Behat\Behat\EventDispatcher\EventDispatcher $dispatcher
+     *
+     * @uses    beforeSuite()
+     * @uses    afterSuite()
+     * @uses    afterScenario()
+     * @uses    afterOutlineExample()
+     * @uses    afterStep()
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
@@ -124,7 +129,9 @@ class LoggerDataCollector
     /**
      * Listens to "suite.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event $event
+     *
+     * @uses    startTimer()
      */
     public function beforeSuite(Event $event)
     {
@@ -134,7 +141,9 @@ class LoggerDataCollector
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event $event
+     *
+     * @uses    finishTimer()
      */
     public function afterSuite(Event $event)
     {
@@ -144,7 +153,9 @@ class LoggerDataCollector
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event $event
+     *
+     * @uses    collectScenarioResult()
      */
     public function afterScenario(Event $event)
     {
@@ -154,7 +165,9 @@ class LoggerDataCollector
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event $event
+     *
+     * @uses    collectScenarioResult()
      */
     public function afterOutlineExample(Event $event)
     {
@@ -164,7 +177,9 @@ class LoggerDataCollector
     /**
      * Listens to "step.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event $event
+     *
+     * @uses    collectStepStats()
      */
     public function afterStep(Event $event)
     {
@@ -172,7 +187,7 @@ class LoggerDataCollector
     }
 
     /**
-     * Return suite total execution time.
+     * Returns suite total execution time.
      *
      * @return  float   miliseconds
      */
@@ -182,7 +197,7 @@ class LoggerDataCollector
     }
 
     /**
-     * Return overall steps count.
+     * Returns overall steps count.
      *
      * @return  integer
      */
@@ -192,7 +207,7 @@ class LoggerDataCollector
     }
 
     /**
-     * Return overall scenarios count.
+     * Returns overall scenarios count.
      *
      * @return  integer
      */
@@ -202,9 +217,9 @@ class LoggerDataCollector
     }
 
     /**
-     * Return associative array of steps statuses count.
+     * Returns hash of steps statuses count.
      *
-     * @return  array       associative array (ex: passed => 10, failed => 2)
+     * @return  array       hash (ex: passed => 10, failed => 2)
      */
     public function getStepsStatuses()
     {
@@ -212,9 +227,9 @@ class LoggerDataCollector
     }
 
     /**
-     * Return associative array of scenarios statuses count.
+     * Returns hash of scenarios statuses count.
      *
-     * @return  array       associative array (ex: passed => 10, failed => 2)
+     * @return  array       hash (ex: passed => 10, failed => 2)
      */
     public function getScenariosStatuses()
     {
@@ -222,9 +237,9 @@ class LoggerDataCollector
     }
 
     /**
-     * Return array of definition snippets for undefined steps.
+     * Returns hash of definition snippets for undefined steps.
      *
-     * @return  array       associative array with md5 as key and snippet as value
+     * @return  array       hash with md5 as key and snippet as value
      */
     public function getDefinitionsSnippets()
     {
@@ -232,7 +247,7 @@ class LoggerDataCollector
     }
 
     /**
-     * Return array of failed steps events.
+     * Returns array of failed steps events.
      *
      * @return  array
      */
@@ -242,7 +257,7 @@ class LoggerDataCollector
     }
 
     /**
-     * Return array of pending steps events;
+     * Returns array of pending steps events;
      *
      * @return  array
      */
@@ -252,7 +267,7 @@ class LoggerDataCollector
     }
 
     /**
-     * Start suite timer.
+     * Starts suite timer.
      */
     protected function startTimer()
     {
@@ -260,7 +275,7 @@ class LoggerDataCollector
     }
 
     /**
-     * Stop suite timer.
+     * Stops suite timer.
      */
     protected function finishTimer()
     {
@@ -268,7 +283,7 @@ class LoggerDataCollector
     }
 
     /**
-     * Collect scenario result status.
+     * Collects scenario result status.
      *
      * @param   integer $result status code
      */
@@ -282,9 +297,9 @@ class LoggerDataCollector
     }
 
     /**
-     * Collect step statistics.
+     * Collects step statistics.
      *
-     * @param   Event   $event  step event
+     * @param   Symfony\Component\EventDispatcher\Event $event  step.after event
      */
     protected function collectStepStats(Event $event)
     {

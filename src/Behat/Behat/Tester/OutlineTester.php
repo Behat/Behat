@@ -17,7 +17,7 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
  */
 
 /**
- * Outline Tester.
+ * Outline tester.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -26,20 +26,20 @@ class OutlineTester implements NodeVisitorInterface
     /**
      * Service container.
      *
-     * @var     ContainerInterface
+     * @var     Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
     /**
-     * Event dispathcer.
+     * Event dispatcher.
      *
-     * @var     EventDispatcher
+     * @var     Behat\Behat\EventDispatcher\EventDispatcher
      */
     protected $dispatcher;
 
     /**
-     * Initialize tester.
+     * Initializes tester.
      *
-     * @param   ContainerInterface  $container  service container
+     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -48,9 +48,9 @@ class OutlineTester implements NodeVisitorInterface
     }
 
     /**
-     * Visit OutlineNode & it's steps.
+     * Visits & tests OutlineNode.
      *
-     * @param   AbstractNode    $outline        outline node
+     * @param   Behat\Gherkin\Node\AbstractNode $outline
      *
      * @return  integer
      */

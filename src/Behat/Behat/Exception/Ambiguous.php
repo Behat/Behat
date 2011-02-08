@@ -31,7 +31,7 @@ class Ambiguous extends BehaviorException
     protected $matches = array();
 
     /**
-     * Initialize exception.
+     * Initializes abmiguous exception.
      *
      * @param   string  $text       step description
      * @param   array   $matches    ambigious matches (array of Definition's)

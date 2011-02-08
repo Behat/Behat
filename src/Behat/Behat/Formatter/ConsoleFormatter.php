@@ -28,19 +28,19 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Formatter parameters.
      *
-     * @var     ParameterBag
+     * @var     Symfony\Component\DependencyInjection\ParameterBag\ParameterBag
      */
     protected $parameters;
     /**
      * Translator.
      *
-     * @var     Translator
+     * @var     Symfony\Component\Translation\Translator
      */
     protected $translator;
     /**
      * Console output.
      *
-     * @var     ConsoleOutput
+     * @var     Behat\Behat\Console\Output\ConsoleOutput
      */
     private $console;
 
@@ -62,7 +62,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Return default parameters to construct ParameterBag.
+     * Returns default parameters to construct ParameterBag.
      *
      * @return  array
      */
@@ -85,7 +85,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Return color code by tester result status code.
+     * Returns color code from tester result status code.
      *
      * @param   integer $result result status code
      *
@@ -108,7 +108,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Write message(s) to output console.
+     * Writes message(s) to output console.
      *
      * @param   string|array    $messages   message or array of messages
      * @param   boolean         $newline    do we need to append newline after messages
@@ -119,7 +119,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Write newlined message(s) to output console.
+     * Writes newlined message(s) to output console.
      *
      * @param   string|array    $messages   message or array of messages
      */
@@ -129,9 +129,9 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Return console instance, prepared to write.
+     * Returns console instance, prepared to write.
      *
-     * @return  ConsoleOutput
+     * @return  Behat\Behat\Console\Output\ConsoleOutput
      */
     protected function getWritingConsole()
     {
@@ -146,7 +146,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Translate message to default formatter language.
+     * Translates message to output language.
      *
      * @param   string  $message        message to translate
      * @param   array   $parameters     message parameters
@@ -161,7 +161,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Translate number choicer to default formatter language.
+     * Translates numbered message to output language.
      *
      * @param   string  $message        message specification to translate
      * @param   string  $number         choice number

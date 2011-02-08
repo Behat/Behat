@@ -20,7 +20,7 @@ class Undefined extends BehaviorException
     protected $text;
 
     /**
-     * Initialize Exception.
+     * Initialize undefined exception.
      *
      * @param   string  $text   step text
      */

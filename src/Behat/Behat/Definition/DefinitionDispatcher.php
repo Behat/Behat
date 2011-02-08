@@ -26,17 +26,36 @@ use Behat\Behat\Definition\Loader\LoaderInterface,
  */
 class DefinitionDispatcher
 {
+    /**
+     * Definition resources.
+     *
+     * @var     array
+     */
     protected $resources        = array();
+    /**
+     * Definition resource loaders.
+     *
+     * @var     array
+     */
     protected $loaders          = array();
-
+    /**
+     * Loaded transformations.
+     *
+     * @var     array
+     */
     protected $transformations  = array();
+    /**
+     * Loaded definitions.
+     *
+     * @var     array
+     */
     protected $definitions      = array();
 
     /**
-     * Add a loader.
+     * Adds a resource loader.
      *
-     * @param   string          $format     the name of the loader
-     * @param   LoaderInterface $loader     a LoaderInterface instance
+     * @param   string                                          $format     loader format name
+     * @param   Behat\Behat\Definition\Loader\LoaderInterface   $loader     loader instance
      */
     public function addLoader($format, LoaderInterface $loader)
     {
@@ -44,9 +63,9 @@ class DefinitionDispatcher
     }
 
     /**
-     * Add a resource.
+     * Adds a resource to load.
      *
-     * @param   string          $format     format of the loader
+     * @param   string          $format     loader format name
      * @param   mixed           $resource   the resource name
      */
     public function addResource($format, $resource)
@@ -55,42 +74,11 @@ class DefinitionDispatcher
     }
 
     /**
-     * Parse step definitions with added loaders. 
-     */
-    protected function loadDefinitions()
-    {
-        if (count($this->definitions)) {
-            return;
-        }
-
-        foreach ($this->resources as $resource) {
-            if (!isset($this->loaders[$resource[0]])) {
-                throw new \RuntimeException(
-                    sprintf('The "%s" step definition loader is not registered.', $resource[0])
-                );
-            }
-
-            $objects = $this->loaders[$resource[0]]->load($resource[1]);
-
-            foreach ($objects as $object) {
-                if ($object instanceof Definition) {
-                    if (isset($this->definitions[$object->getRegex()])) {
-                        throw new Redundant($object, $this->definitions[$object->getRegex()]);
-                    }
-                    $this->definitions[$object->getRegex()] = $object;
-                } elseif ($object instanceof Transformation) {
-                    $this->transformations[$object->getRegex()] = $object;
-                }
-            }
-        }
-    }
-
-    /**
-     * Propose step definition for step node.
+     * Returns step definition for step node.
      *
-     * @param   StepNode    $step   step node
-     * 
-     * @return  array               associative array of (md5_key => definition)
+     * @param   Behat\Gherkin\Node\StepNode     $step   step node
+     *
+     * @return  array   hash (md5_key => definition)
      */
     public function proposeDefinition(StepNode $step)
     {
@@ -129,12 +117,14 @@ PHP
     }
 
     /**
-     * Find step definition, that match specified step.
+     * Finds step definition, that match specified step.
      *
-     * @param   StepNode     $step       step
-     * 
-     * @return  Definition
-     * 
+     * @param   Behat\Gherkin\Node\StepNode     $step   found step
+     *
+     * @return  Behat\Behat\Definition\Definition
+     *
+     * @uses    loadDefinitions()
+     *
      * @throws  Behat\Behat\Exception\Ambiguous  if step description is ambiguous
      * @throws  Behat\Behat\Exception\Undefined  if step definition not found
      */
@@ -152,7 +142,7 @@ PHP
         foreach ($this->definitions as $regex => $definition) {
             if (preg_match($regex, $text, $arguments)) {
                 $arguments = array_merge(array_slice($arguments, 1), $args);
- 
+
                 // transform arguments
                 foreach ($this->transformations as $transformation) {
                     foreach ($arguments as $num => $argument) {
@@ -178,5 +168,39 @@ PHP
         }
 
         return $matches[0];
+    }
+
+    /**
+     * Parses step definitions with added loaders.
+     *
+     * @throws  RuntimeException                    if loader with specified format is not registered
+     * @throws  Behat\Behat\Exception\Redundant     if step definition is already exists
+     */
+    protected function loadDefinitions()
+    {
+        if (count($this->definitions)) {
+            return;
+        }
+
+        foreach ($this->resources as $resource) {
+            if (!isset($this->loaders[$resource[0]])) {
+                throw new \RuntimeException(
+                    sprintf('The "%s" step definition loader is not registered.', $resource[0])
+                );
+            }
+
+            $objects = $this->loaders[$resource[0]]->load($resource[1]);
+
+            foreach ($objects as $object) {
+                if ($object instanceof Definition) {
+                    if (isset($this->definitions[$object->getRegex()])) {
+                        throw new Redundant($object, $this->definitions[$object->getRegex()]);
+                    }
+                    $this->definitions[$object->getRegex()] = $object;
+                } elseif ($object instanceof Transformation) {
+                    $this->transformations[$object->getRegex()] = $object;
+                }
+            }
+        }
     }
 }

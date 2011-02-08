@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 
 /**
- * Environment Builder.
+ * Environment builder.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -33,7 +33,7 @@ class EnvironmentBuilder
     protected $resources = array();
 
     /**
-     * Initialize builder.
+     * Initializes builder.
      *
      * @param   ContainerInterface  $envClass   environment class
      */
@@ -43,19 +43,19 @@ class EnvironmentBuilder
     }
 
     /**
-     * Add environment resource (config).
+     * Adds environment resource (config).
      *
-     * @param   string  $file   file path
+     * @param   string  $file   resource path
      */
-    public function addResource($file)
+    public function addResource($resource)
     {
-        $this->resources[] = $file;
+        $this->resources[] = $resource;
     }
 
     /**
-     * Return new environment.
+     * Returns newly created & configured environment.
      *
-     * @return  EnvironmentInterface
+     * @return  Behat\Behat\Environment\EnvironmentInterface
      */
     public function build()
     {

@@ -15,17 +15,17 @@ use Symfony\Component\DependencyInjection\Extension\Extension,
  */
 
 /**
- * Behat service extension.
+ * Behat service container extension.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BehatExtension extends Extension
 {
     /**
-     * Load service configuration.
+     * Loads service configuration.
      *
-     * @param   array               $config     configuration parameters
-     * @param   ContainerBuilder    $container  service container
+     * @param   array                                                   $config     configuration parameters
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder  $container  service container
      */
     public function configLoad($config, ContainerBuilder $container)
     {

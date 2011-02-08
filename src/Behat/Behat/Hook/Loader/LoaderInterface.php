@@ -18,7 +18,7 @@ namespace Behat\Behat\Hook\Loader;
 interface LoaderInterface
 {
     /**
-     * Load hooks from resource.
+     * Loads hooks from resource.
      * 
      * @param   string          $resource   resource path
      * @return  array                       array of hooks

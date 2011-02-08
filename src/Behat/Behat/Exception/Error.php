@@ -18,7 +18,7 @@ namespace Behat\Behat\Exception;
 class Error extends BehaviorException
 {
     /**
-     * Initialize Error handler exception.
+     * Initializes error handler exception.
      *
      * @param   string  $code       error code
      * @param   string  $message    error message

@@ -38,7 +38,7 @@ class Definition
     /**
      * Definition callback.
      *
-     * @var     \Callback
+     * @var     Callback
      */
     protected $callback;
     /**
@@ -67,13 +67,13 @@ class Definition
     protected $values = array();
 
     /**
-     * Initialize definition.
+     * Initializes definition.
      *
      * @param   string      $type       step type (Given/When/Then/And or localized one)
      * @param   string      $regex      step matching regular expression
-     * @param   callback    $callback   step callback
-     * @param   string      $file       step definition file
-     * @param   integer     $line       step definition line
+     * @param   Callback    $callback   step callback
+     * @param   string      $file       step definition filename
+     * @param   integer     $line       step definition line number
      */
     public function __construct($type, $regex, $callback, $file = null, $line = null)
     {
@@ -85,7 +85,7 @@ class Definition
     }
 
     /**
-     * Return step definition type (Given|When|Then|...).
+     * Returns step definition type (Given|When|Then|...).
      *
      * @return  string
      */
@@ -95,7 +95,7 @@ class Definition
     }
 
     /**
-     * Return definition regex to match.
+     * Returns definition regex to match.
      *
      * @return  string
      */
@@ -105,7 +105,7 @@ class Definition
     }
 
     /**
-     * Set text from matched step.
+     * Saves matched step text to definition.
      *
      * @param   string  $text   step text (description)
      */
@@ -115,7 +115,7 @@ class Definition
     }
 
     /**
-     * Return text from matched step.
+     * Returns matched step text.
      *
      * @return  string
      */
@@ -125,7 +125,7 @@ class Definition
     }
 
     /**
-     * Return definition filename.
+     * Returns definition filename.
      *
      * @return  string
      */
@@ -135,7 +135,7 @@ class Definition
     }
 
     /**
-     * Return definition line number.
+     * Returns definition line number.
      *
      * @return  integer
      */
@@ -145,7 +145,7 @@ class Definition
     }
 
     /**
-     * Set step parameters for call.
+     * Sets step parameters for step run.
      *
      * @param   array   $values step parameters
      */
@@ -157,9 +157,11 @@ class Definition
     /**
      * Custom error handler.
      *
-     * @see     set_error_handler
+     * This method used as custom error handler when step is running.
      *
-     * @throws  \Behat\Behat\Exception\Error
+     * @see     set_error_handler()
+     *
+     * @throws  Behat\Behat\Exception\Error
      */
     public function errorHandler($code, $message, $file, $line)
     {
@@ -169,9 +171,9 @@ class Definition
     /**
      * Runs step definition.
      *
-     * @param   EnvironmentInterface    $environment    runners shared environment
+     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment    testers shared environment
      *
-     * @throws  \Behat\Behat\Exception\BehaviorException
+     * @throws  Behat\Behat\Exception\BehaviorException     if step test fails
      */
     public function run(EnvironmentInterface $environment, $tokens = array())
     {

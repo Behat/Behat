@@ -21,7 +21,7 @@ use Behat\Behat\Exception\BehaviorException;
  */
 
 /**
- * Feature Tester.
+ * Feature tester.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -30,20 +30,20 @@ class FeatureTester implements NodeVisitorInterface
     /**
      * Service container.
      *
-     * @var     ContainerInterface
+     * @var     Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
     /**
-     * Event dispathcer.
+     * Event dispatcher.
      *
-     * @var     EventDispatcher
+     * @var     Behat\Behat\EventDispatcher\EventDispatcher
      */
     protected $dispatcher;
 
     /**
-     * Initialize tester.
+     * Initializes tester.
      *
-     * @param   ContainerInterface  $container  service container
+     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -52,9 +52,9 @@ class FeatureTester implements NodeVisitorInterface
     }
 
     /**
-     * Visit FeatureNode & it's scenarios|outlines.
+     * Visits & tests FeatureNode.
      *
-     * @param   AbstractNode    $feature        feature node
+     * @param   Behat\Gherkin\Node\AbstractNode $feature
      *
      * @return  integer
      */

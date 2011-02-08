@@ -35,29 +35,23 @@ class StepTester implements NodeVisitorInterface
     const FAILED    = 4;
 
     /**
-     * Service container.
-     *
-     * @var     ContainerInterface
-     */
-    protected $container;
-    /**
      * Event dispatcher.
      *
-     * @var     EventDispatcher
+     * @var     Behat\Behat\EventDispatcher\EventDispatcher
      */
     protected $dispatcher;
     /**
-     * Definition dispatcher.
-     *
-     * @var     DefinitionDispatcher
-     */
-    protected $definitions;
-    /**
      * Environment.
      *
-     * @var     EnvironmentInterface
+     * @var     Behat\Behat\Environment\EnvironmentInterface
      */
     protected $environment;
+    /**
+     * Definition dispatcher.
+     *
+     * @var     Behat\Behat\Definition\DefinitionDispatcher
+     */
+    protected $definitions;
     /**
      * Step replace tokens.
      *
@@ -65,28 +59,27 @@ class StepTester implements NodeVisitorInterface
      */
     protected $tokens = array();
     /**
-     * Is step marked skipped.
+     * Is step marked as skipped.
      *
      * @var     boolean
      */
     protected $skip = false;
 
     /**
-     * Initialize tester.
+     * Initializes tester.
      *
-     * @param   ContainerInterface  $container  service container
+     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container    = $container;
         $this->dispatcher   = $container->get('behat.event_dispatcher');
         $this->definitions  = $container->get('behat.definition_dispatcher');
     }
 
     /**
-     * Set run environment.
+     * Sets run environment.
      *
-     * @param   EnvironmentInterface    $environment    environment
+     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
      */
     public function setEnvironment(EnvironmentInterface $environment)
     {
@@ -94,7 +87,7 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
-     * Set step replace tokens.
+     * Sets step replacements for tokens.
      *
      * @param   array   $tokens     step tokens
      */
@@ -104,7 +97,7 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
-     * Mark test as skipped.
+     * Marks test as skipped.
      *
      * @param   boolean $skip   skip test?
      */
@@ -114,9 +107,9 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
-     * Visit StepNode, find matched definition & run it.
+     * Visits & tests StepNode.
      *
-     * @param   AbstractNode    $step       step node
+     * @param   Behat\Gherkin\Node\AbstractNode $step
      *
      * @return  integer
      */

@@ -34,7 +34,7 @@ use Behat\Gherkin\Filter\NameFilter,
 class BehatCommand extends Command
 {
     /**
-     * Path tokens to replace.
+     * Path tokens replacements.
      *
      * @var     array
      */
@@ -104,6 +104,16 @@ class BehatCommand extends Command
 
     /**
      * {@inheritdoc}
+     *
+     * @uses    configureContainer()
+     * @uses    locateFeaturesPaths()
+     * @uses    configureFormatter()
+     * @uses    configureGherkinParser()
+     * @uses    configureDefinitionDispatcher()
+     * @uses    configureHookDispatcher()
+     * @uses    configureEnvironmentBuilder()
+     * @uses    configureEventDispathcer()
+     * @uses    runFeatures()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -123,11 +133,11 @@ class BehatCommand extends Command
     }
 
     /**
-     * Configure service container.
+     * Configures service container with or without provided configuration file.
      *
-     * @param   string  $configFile configuration file (YAML)
+     * @param   string  $configFile DependencyInjection extension config file path (in YAML)
      *
-     * @return  \Symfony\Component\DependencyInjection\ContainerBuilder
+     * @return  Symfony\Component\DependencyInjection\ContainerBuilder
      */
     protected function configureContainer($configFile = null)
     {
@@ -158,12 +168,14 @@ class BehatCommand extends Command
     }
 
     /**
-     * Locate features paths with provided input.
+     * Locates features paths with provided input.
      *
-     * @param   InputInterface      $input      input instance
-     * @param   ContainerBuilder    $container  service container
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      *
-     * @return  \Iterator
+     * @return  Iterator
+     *
+     * @throws  InvalidArgumentException    if provided in input path is not found
      */
     protected function locateFeaturesPaths(InputInterface $input, ContainerBuilder $container)
     {
@@ -197,12 +209,12 @@ class BehatCommand extends Command
     }
 
     /**
-     * Configure Gherkin parser with provided input.
+     * Configures Gherkin parser with provided input.
      *
-     * @param   InputInterface      $input      input instance
-     * @param   ContainerBuilder    $container  service container
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      *
-     * @return  \Behat\Gherkin\Gherkin
+     * @return  Behat\Gherkin\Gherkin
      */
     protected function configureGherkinParser(InputInterface $input, ContainerBuilder $container)
     {
@@ -223,12 +235,14 @@ class BehatCommand extends Command
     }
 
     /**
-     * Configure formatter with provided input.
+     * Configures formatter with provided input.
      *
-     * @param   InputInterface      $input      input instance
-     * @param   ContainerBuilder    $container  service container
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      *
-     * @return  \Behat\Behat\Formatter\FormatterInterface
+     * @return  Behat\Behat\Formatter\FormatterInterface
+     *
+     * @throws  InvalidArgumentException    if provided in input formatter name doesn't exists
      */
     protected function configureFormatter(InputInterface $input, ContainerBuilder $container)
     {
@@ -274,12 +288,12 @@ class BehatCommand extends Command
     }
 
     /**
-     * Configure environment builder with provided input.
+     * Configures environment builder with provided input.
      *
-     * @param   InputInterface      $input      input instance
-     * @param   ContainerBuilder    $container  service container
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      *
-     * @return  \Behat\Behat\Environment\EnvironmentBuilder
+     * @return  Behat\Behat\Environment\EnvironmentBuilder
      */
     protected function configureEnvironmentBuilder(InputInterface $input, ContainerBuilder $container)
     {
@@ -297,12 +311,12 @@ class BehatCommand extends Command
     }
 
     /**
-     * Configure definition dispatcher with provided input.
+     * Configures definition dispatcher with provided input.
      *
-     * @param   InputInterface      $input      input instance
-     * @param   ContainerBuilder    $container  service container
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      *
-     * @return  \Behat\Behat\Definition\DefinitionDispatcher
+     * @return  Behat\Behat\Definition\DefinitionDispatcher
      */
     protected function configureDefinitionDispatcher(InputInterface $input, ContainerBuilder $container)
     {
@@ -325,12 +339,12 @@ class BehatCommand extends Command
     }
 
     /**
-     * Configure hook dispatcher with provided input.
+     * Configures hook dispatcher with provided input.
      *
-     * @param   InputInterface      $input      input instance
-     * @param   ContainerBuilder    $container  service container
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      *
-     * @return  \Behat\Behat\Hook\HookDispatcher
+     * @return  Behat\Behat\Hook\HookDispatcher
      */
     protected function configureHookDispatcher(InputInterface $input, ContainerBuilder $container)
     {
@@ -348,12 +362,12 @@ class BehatCommand extends Command
     }
 
     /**
-     * Configure event dispatcher.
+     * Configures event dispatcher.
      *
-     * @param   FormatterInterface  $formatter  configured formatter
-     * @param   ContainerBuilder    $container  service container
-     * 
-     * @return  \Behat\Behat\EventDispatcher\EventDispatcher
+     * @param   Behat\Behat\Formatter\FormatterInterface                    $formatter  output formatter
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
+     *
+     * @return  Behat\Behat\EventDispatcher\EventDispatcher
      */
     protected function configureEventDispathcer(FormatterInterface $formatter, ContainerBuilder $container)
     {
@@ -366,10 +380,10 @@ class BehatCommand extends Command
     }
 
     /**
-     * Run specified features.
+     * Runs specified features.
      *
-     * @param   \IteratorAggregate  $featuresPaths  features paths iterator
-     * @param   ContainerBuilder    $container      service container
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      *
      * @return  integer
      */
@@ -397,9 +411,9 @@ class BehatCommand extends Command
     }
 
     /**
-     * Replace specific path tokens with values.
+     * Replaces path tokens with proper replacements in string.
      *
-     * @param   string  $path   input path
+     * @param   string  $path
      *
      * @return  string
      */

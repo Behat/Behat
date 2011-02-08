@@ -18,7 +18,7 @@ namespace Behat\Behat\Exception;
 class Pending extends BehaviorException
 {
     /**
-     * Initialize Exception.
+     * Initializes pending exception.
      *
      * @param   string  $text   TODO text
      */

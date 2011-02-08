@@ -23,9 +23,14 @@ use Behat\Behat\Formatter\FormatterInterface;
 class EventDispatcher extends BaseEventDispatcher
 {
     /**
-     * Run registerListeners on all container services with "behat.events_listener" tag.
+     * Registers event listeners on all container services with "behat.events_listener" tag.
      *
-     * @param   ContainerInterface  $container  dependency container
+     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
+     *
+     * @see     Symfony\Component\DependencyInjection\ContainerBuilder::findTaggedServiceIds()
+     *
+     * @uses    Behat\Behat\DataCollector\LoggerDataCollector::registerListeners()
+     * @uses    Behat\Behat\Hook\HookDispatcher::registerListeners()
      */
     public function bindContainerEventListeners(ContainerInterface $container)
     {
@@ -35,9 +40,11 @@ class EventDispatcher extends BaseEventDispatcher
     }
 
     /**
-     * Register formatter event listeners.
+     * Registers formatter event listeners.
      *
-     * @param   FormatterInterface  $formatter  Behat output formatter
+     * @param   Behat\Behat\Formatter\FormatterInterface    $formatter  Behat output formatter
+     *
+     * @uses    Behat\Behat\Formatter\FormatterInterface::registerListeners()
      */
     public function bindFormatterEventListeners(FormatterInterface $formatter)
     {

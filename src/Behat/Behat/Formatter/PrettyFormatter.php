@@ -73,7 +73,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Delayed scenario event.
      *
-     * @var     Event
+     * @var     Symfony\Component\EventDispatcher\Event
      */
     protected   $delayedScenarioEvent;
     /**
@@ -93,6 +93,18 @@ class PrettyFormatter extends ProgressFormatter
 
     /**
      * {@inheritdoc}
+     *
+     * @uses    afterSuite()
+     * @uses    beforeFeature()
+     * @uses    beforeBackground()
+     * @uses    afterBackground()
+     * @uses    beforeOutline()
+     * @uses    beforeOutlineExample()
+     * @uses    afterOutlineExample()
+     * @uses    afterOutline()
+     * @uses    beforeScenario()
+     * @uses    afterScenario()
+     * @uses    afterStep()
      */
     public function registerListeners(EventDispatcher $dispatcher)
     {
@@ -112,7 +124,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
+     *
+     * @uses    printSummary()
+     * @uses    printUndefinedStepsSnippets()
      */
     public function afterSuite(Event $event)
     {
@@ -125,7 +140,11 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "feature.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
+     *
+     * @uses    printFeatureOrScenarioTags()
+     * @uses    printFeatureName()
+     * @uses    printFeatureDescription()
      */
     public function beforeFeature(Event $event)
     {
@@ -144,7 +163,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "background.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
+     *
+     * @uses    printScenarioName()
+     * @uses    printScenarioPath()
      */
     public function beforeBackground(Event $event)
     {
@@ -165,7 +187,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "background.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
      */
     public function afterBackground(Event $event)
     {
@@ -189,7 +211,11 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
+     *
+     * @uses    printFeatureOrScenarioTags()
+     * @uses    printScenarioName()
+     * @uses    printScenarioPath()
      */
     public function beforeOutline(Event $event)
     {
@@ -212,7 +238,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
      */
     public function beforeOutlineExample(Event $event)
     {
@@ -223,7 +249,11 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
+     *
+     * @uses    printOutlineSteps()
+     * @uses    printOutlineExamplesHeader()
+     * @uses    printOutlineExampleResult()
      */
     public function afterOutlineExample(Event $event)
     {
@@ -248,7 +278,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
      */
     public function afterOutline(Event $event)
     {
@@ -258,7 +288,11 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "scenario.before" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
+     *
+     * @uses    printFeatureOrScenarioTags()
+     * @uses    printScenarioName()
+     * @uses    printScenarioPath()
      */
     public function beforeScenario(Event $event)
     {
@@ -280,7 +314,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
      */
     public function afterScenario(Event $event)
     {
@@ -290,7 +324,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "step.after" event.
      *
-     * @param   Event   $event
+     * @param   Symfony\Component\EventDispatcher\Event     $event
+     *
+     * @uses    printStep()
      */
     public function afterStep(Event $event)
     {
@@ -316,9 +352,9 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print node tags.
+     * Prints node tags.
      *
-     * @param   AbstractNode    $node
+     * @param   Behat\Gherkin\Node\AbstractNode     $node
      */
     protected function printFeatureOrScenarioTags(AbstractNode $node)
     {
@@ -338,9 +374,9 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print feature keyword and name.
+     * Prints feature keyword and name.
      *
-     * @param   FeatureNode $feature
+     * @param   Behat\Gherkin\Node\FeatureNode  $feature
      */
     protected function printFeatureName(FeatureNode $feature)
     {
@@ -348,9 +384,9 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print feature description.
+     * Prints feature description.
      *
-     * @param   FeatureNode $feature
+     * @param   Behat\Gherkin\Node\FeatureNode  $feature
      */
     protected function printFeatureDescription(FeatureNode $feature)
     {
@@ -362,9 +398,9 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print scenario keyword and name.
+     * Prints scenario keyword and name.
      *
-     * @param   AbstractScenarioNode    $scenario
+     * @param   Behat\Gherkin\Node\AbstractScenarioNode $scenario
      */
     protected function printScenarioName(AbstractScenarioNode $scenario)
     {
@@ -372,9 +408,9 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print scenario definition path.
+     * Prints scenario definition path.
      *
-     * @param   AbstractScenarioNode    $scenario
+     * @param   Behat\Gherkin\Node\AbstractScenarioNode $scenario
      */
     protected function printScenarioPath(AbstractScenarioNode $scenario)
     {
@@ -385,9 +421,9 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print outline steps.
+     * Prints outline steps.
      *
-     * @param   OutlineNode $outline
+     * @param   Behat\Gherkin\Node\OutlineNode  $outline
      */
     protected function printOutlineSteps(OutlineNode $outline)
     {
@@ -406,9 +442,9 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print outline examples header.
+     * Prints outline examples header.
      *
-     * @param   TableNode   $examples
+     * @param   Behat\Gherkin\Node\TableNode    $examples
      */
     protected function printOutlineExamplesHeader(TableNode $examples)
     {
@@ -424,12 +460,12 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print outline example result.
+     * Prints outline example result.
      *
-     * @param   TableNode   $examples   examples table
-     * @param   integer     $iteration  example row
-     * @param   integer     $result     result code
-     * @param   boolean     $isSkipped  is outline example skipped
+     * @param   Behat\Gherkin\Node\TableNode    $examples   examples table
+     * @param   integer                         $iteration  example row
+     * @param   integer                         $result     result code
+     * @param   boolean                         $isSkipped  is outline example skipped
      */
     protected function printOutlineExampleResult(TableNode $examples, $iteration, $result, $isSkipped)
     {
@@ -445,7 +481,7 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print outline example exceptions.
+     * Prints outline example exceptions.
      *
      * @param   array   $events failed steps events
      */
@@ -470,13 +506,13 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print step information.
+     * Prints step.
      *
-     * @param   StepNode    $step       step node
-     * @param   integer     $result     result code
-     * @param   Definition  $definition definition (if found one)
-     * @param   string      $snippet    snippet (if step is undefined)
-     * @param   Exception   $exception  exception (if step is failed)
+     * @param   Behat\Gherkin\Node\StepNode         $step       step node
+     * @param   integer                             $result     result code
+     * @param   Behat\Behat\Definition\Definition   $definition definition (if found one)
+     * @param   string                              $snippet    snippet (if step is undefined)
+     * @param   Exception                           $exception  exception (if step is failed)
      */
     protected function printStep(StepNode $step, $result, Definition $definition = null,
                                  $snippet = null, \Exception $exception = null)
@@ -501,10 +537,10 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print step definition path.
+     * Prints step definition path.
      *
-     * @param   StepNode    $step       step node
-     * @param   Definition  $definition definition (if found one)
+     * @param   Behat\Gherkin\Node\StepNode         $step       step node
+     * @param   Behat\Behat\Definition\Definition   $definition definition (if found one)
      */
     protected function printDefinitionPath(StepNode $step, Definition $definition)
     {
@@ -517,9 +553,9 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print step arguments.
+     * Prints step arguments.
      *
-     * @param   array   $arguments  list of arguments
+     * @param   array   $arguments  step arguments
      * @param   string  $color      color name
      */
     protected function printStepArguments(array $arguments, $color)
@@ -534,9 +570,9 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print step exception.
+     * Prints step exception.
      *
-     * @param   \Exception  $exception  exception
+     * @param   Exception   $exception  exception
      * @param   string      $color      color name
      */
     protected function printStepException(\Exception $exception, $color)
@@ -554,10 +590,10 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print PyString argument.
+     * Prints PyString argument.
      *
-     * @param   PyStringNode    $pystring   pystring node
-     * @param   string          $color      color name
+     * @param   Behat\Gherkin\Node\PyStringNode     $pystring   pystring node
+     * @param   string                              $color      color name
      */
     protected function printPyString(PyStringNode $pystring, $color = null)
     {
@@ -573,10 +609,10 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Print table argument.
+     * Prints table argument.
      *
-     * @param   TableNode       $table      table node
-     * @param   string          $color      color name
+     * @param   Behat\Gherkin\Node\TableNode        $table      table node
+     * @param   string                              $color      color name
      */
     protected function printTable(TableNode $table, $color = null)
     {
@@ -590,10 +626,10 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Return feature or scenario name.
+     * Returns feature or scenario name.
      *
-     * @param   AbstractNode    $node               node name
-     * @param   boolean         $haveBaseIndent     is name have base indent
+     * @param   Behat\Gherkin\Node\AbstractNode     $node               node name
+     * @param   boolean                             $haveBaseIndent     is name have base indent
      */
     protected function getFeatureOrScenarioName(AbstractNode $node, $haveBaseIndent = true)
     {
@@ -618,9 +654,9 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Recalculate max descriptions size for section elements.
+     * Returns max lines size for section elements.
      *
-     * @param   BackgroundNode $scenario   element for calculations
+     * @param   Behat\Gherkin\Node\BackgroundNode   $scenario   element for calculations
      *
      * @return  integer
      */

@@ -47,9 +47,9 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook into "suite.before".
+     * Hooks into "suite.before".
      *
-     * @param   callback    $callback   hook callback
+     * @param   Callback    $callback   hook callback
      */
     public function beforeSuite($callback)
     {
@@ -57,9 +57,9 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook into "suite.after".
+     * Hooks into "suite.after".
      *
-     * @param   callback    $callback   hook callback
+     * @param   Callback    $callback   hook callback
      */
     public function afterSuite($callback)
     {
@@ -67,10 +67,10 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook into "feature.before".
+     * Hooks into "feature.before".
      *
      * @param   string      $filter     filter string (tags or name)
-     * @param   callback    $callback   hook callback
+     * @param   Callback    $callback   hook callback
      */
     public function beforeFeature($filter, $callback)
     {
@@ -78,10 +78,10 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook into "feature.after".
+     * Hooks into "feature.after".
      *
      * @param   string      $filter     filter string (tags or name)
-     * @param   callback    $callback   hook callback
+     * @param   Callback    $callback   hook callback
      */
     public function afterFeature($filter, $callback)
     {
@@ -89,10 +89,10 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook into "scenario.before" OR "outline.example.before".
+     * Hooks into "scenario.before" OR "outline.example.before".
      *
      * @param   string      $filter     filter string (tags or name)
-     * @param   callback    $callback   hook callback
+     * @param   Callback    $callback   hook callback
      */
     public function beforeScenario($filter, $callback)
     {
@@ -100,10 +100,10 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook into "scenario.after" OR "outline.example.after".
+     * Hooks into "scenario.after" OR "outline.example.after".
      *
      * @param   string      $filter     filter string (tags or name)
-     * @param   callback    $callback   hook callback
+     * @param   Callback    $callback   hook callback
      */
     public function afterScenario($filter, $callback)
     {
@@ -111,10 +111,10 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook into "step.before".
+     * Hooks into "step.before".
      *
      * @param   string      $filter     filter string (tags or name)
-     * @param   callback    $callback   hook callback
+     * @param   Callback    $callback   hook callback
      */
     public function beforeStep($filter, $callback)
     {
@@ -122,10 +122,10 @@ class PhpFileLoader implements LoaderInterface
     }
 
     /**
-     * Hook into "step.after".
+     * Hooks into "step.after".
      *
      * @param   string      $filter     filter string (tags or name)
-     * @param   callback    $callback   hook callback
+     * @param   Callback    $callback   hook callback
      */
     public function afterStep($filter, $callback)
     {

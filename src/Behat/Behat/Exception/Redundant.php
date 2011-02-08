@@ -20,10 +20,10 @@ use Behat\Behat\Definition\Definition;
 class Redundant extends BehaviorException
 {
     /**
-     * Initialize Exception.
+     * Initializes redundant exception.
      *
-     * @param   Definition  $step2  duplicate step definition
-     * @param   Definition  $step1  firstly matched step definition
+     * @param   Behat\Behat\Definition\Definition   $step2    duplicate step definition
+     * @param   Behat\Behat\Definition\Definition   $step1    firstly matched step definition
      */
     public function __construct(Definition $step2, Definition $step1)
     {

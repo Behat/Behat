@@ -28,26 +28,26 @@ class BackgroundTester implements NodeVisitorInterface
     /**
      * Service container.
      *
-     * @var     ContainerInterface
+     * @var     Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
     /**
      * Event dispatcher.
      *
-     * @var     EventDispatcher
+     * @var     Behat\Behat\EventDispatcher\EventDispatcher
      */
     protected $dispatcher;
     /**
      * Environment.
      *
-     * @var     EnvironmentInterface
+     * @var     Behat\Behat\Environment\EnvironmentInterface
      */
     protected $environment;
 
     /**
-     * Initialize tester.
+     * Initializes tester.
      *
-     * @param   ContainerInterface  $container  service container
+     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -56,9 +56,9 @@ class BackgroundTester implements NodeVisitorInterface
     }
 
     /**
-     * Set running environment.
+     * Sets run environment.
      *
-     * @param   EnvironmentInterface    $environment    environment
+     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
      */
     public function setEnvironment(EnvironmentInterface $environment)
     {
@@ -66,9 +66,9 @@ class BackgroundTester implements NodeVisitorInterface
     }
 
     /**
-     * Visit BackgroundNode & it's steps.
+     * Visits & tests BackgroundNode.
      *
-     * @param   AbstractNode    $background background node
+     * @param   Behat\Gherkin\Node\AbstractNode $background
      *
      * @return  integer
      */

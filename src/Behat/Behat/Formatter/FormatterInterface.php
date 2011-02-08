@@ -22,14 +22,14 @@ use Symfony\Component\EventDispatcher\EventDispatcher,
 interface FormatterInterface
 {
     /**
-     * Initialize formatter.
+     * Initializes formatter.
      *
-     * @param   Translator  $translator
+     * @param   Symfony\Component\Translation\Translator    $translator
      */
     function __construct(Translator $translator);
 
     /**
-     * Set parameter value.
+     * Sets formatter parameter.
      *
      * @param   string  $name   parameter name
      * @param   mixed   $value  parameter value
@@ -37,18 +37,20 @@ interface FormatterInterface
     function setParameter($name, $value);
 
     /**
-     * Return parameter value.
+     * Returns parameter value.
      *
      * @param   string  $name   parameter name
-     * 
+     *
      * @return  mixed
      */
     function getParameter($name);
 
     /**
-     * Register event listeners.
+     * Registers event listeners.
      *
-     * @param   EventDispatcher $dispatcher
+     * WARNING: Always register listeners with lowes available priority (-10 as last argument to connect())
+     *
+     * @param   Behat\Behat\EventDispatcher\EventDispatcher $dispatcher
      */
     function registerListeners(EventDispatcher $dispatcher);
 }

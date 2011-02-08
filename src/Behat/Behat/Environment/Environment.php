@@ -36,7 +36,7 @@ class Environment implements EnvironmentInterface
     }
 
     /**
-     * Print beautified debug string.
+     * Prints beautified debug string.
      *
      * @param     string  $string     debug string
      */
@@ -46,7 +46,7 @@ class Environment implements EnvironmentInterface
     }
 
     /**
-     * Call previously saved closure.
+     * Calls previously saved closure.
      *
      * @param     string  $name       function name
      * @param     array   $args       closure arguments
@@ -69,7 +69,7 @@ class Environment implements EnvironmentInterface
     }
 
     /**
-     * Set a value in world.
+     * Sets a value in environment.
      *
      * @param     string  $key        The unique identifier for service
      * @param     object  $service    The object to call
@@ -80,7 +80,7 @@ class Environment implements EnvironmentInterface
     }
 
     /**
-     * Check if value is set in current world.
+     * Checks if value is set in current environment.
      *
      * @param     string  $key        The unique identifier for service
      *
@@ -92,7 +92,7 @@ class Environment implements EnvironmentInterface
     }
 
     /**
-     * Return value by key.
+     * Returns a value by key.
      *
      * @param     string  $key        The unique identifier for service
      *
