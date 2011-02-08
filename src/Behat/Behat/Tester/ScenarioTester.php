@@ -6,7 +6,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
-    Behat\Gherkin\Node\AbstractNode;
+    Behat\Gherkin\Node\AbstractNode,
+    Behat\Gherkin\Node\BackgroundNode,
+    Behat\Gherkin\Node\StepNode;
+
+use Behat\Behat\Environment\EnvironmentInterface;
 
 /*
  * This file is part of the Behat.
@@ -72,11 +76,7 @@ class ScenarioTester implements NodeVisitorInterface
 
         // Visit & test background if has one
         if ($scenario->getFeature()->hasBackground()) {
-            $tester = $this->container->get('behat.tester.background');
-            $tester->setEnvironment($this->environment);
-
-            $bgResult = $scenario->getFeature()->getBackground()->accept($tester);
-
+            $bgResult = $this->visitBackground($scenario->getFeature()->getBackground(), $this->environment);
             if (0 !== $bgResult) {
                 $skip = true;
             }
@@ -85,12 +85,7 @@ class ScenarioTester implements NodeVisitorInterface
 
         // Visit & test steps
         foreach ($scenario->getSteps() as $step) {
-            $tester = $this->container->get('behat.tester.step');
-            $tester->setEnvironment($this->environment);
-            $tester->skip($skip);
-
-            $stResult = $step->accept($tester);
-
+            $stResult = $this->visitStep($step, $this->environment, array(), $skip);
             if (0 !== $stResult) {
                 $skip = true;
             }
@@ -104,5 +99,46 @@ class ScenarioTester implements NodeVisitorInterface
         )));
 
         return $result;
+    }
+
+    /**
+     * Visits & tests BackgroundNode.
+     *
+     * @param   Behat\Gherkin\Node\BackgroundNode               $background
+     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
+     *
+     * @uses    Behat\Behat\Tester\BackgroundTester::visit()
+     *
+     * @return  integer
+     */
+    protected function visitBackground(BackgroundNode $background, EnvironmentInterface $environment)
+    {
+        $tester = $this->container->get('behat.tester.background');
+        $tester->setEnvironment($environment);
+
+        return $background->accept($tester);
+    }
+
+    /**
+     * Visits & tests StepNode.
+     *
+     * @param   Behat\Gherkin\Node\StepNode                     $step
+     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
+     * @param   array                                           $tokens         step replacements for tokens
+     * @param   boolean                                         $skip           mark step as skipped?
+     *
+     * @uses    Behat\Behat\Tester\StepTester::visit()
+     *
+     * @return  integer
+     */
+    protected function visitStep(StepNode $step, EnvironmentInterface $environment, array $tokens = array(), 
+                                 $skip = false)
+    {
+        $tester = $this->container->get('behat.tester.step');
+        $tester->setEnvironment($environment);
+        $tester->setTokens($tokens);
+        $tester->skip($skip);
+
+        return $step->accept($tester);
     }
 }

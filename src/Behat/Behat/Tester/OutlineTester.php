@@ -6,7 +6,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
-    Behat\Gherkin\Node\AbstractNode;
+    Behat\Gherkin\Node\AbstractNode,
+    Behat\Gherkin\Node\OutlineNode;
 
 /*
  * This file is part of the Behat.
@@ -21,7 +22,7 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineTester implements NodeVisitorInterface
+class OutlineTester extends ScenarioTester
 {
     /**
      * Service container.
@@ -60,51 +61,9 @@ class OutlineTester implements NodeVisitorInterface
 
         $result = 0;
 
-        // Run subscenarios of outline based on examples
+        // Run examples of outline
         foreach ($outline->getExamples()->getHash() as $iteration => $tokens) {
-            $environment    = $this->container->get('behat.environment_builder')->build();
-            $itResult       = 0;
-            $skip           = false;
-
-            $this->dispatcher->notify(new Event($outline, 'outline.example.before', array(
-                'iteration'     => $iteration,
-                'environment'   => $environment
-            )));
-
-            // Visit & test background if has one
-            if ($outline->getFeature()->hasBackground()) {
-                $tester = $this->container->get('behat.tester.background');
-                $tester->setEnvironment($environment);
-
-                $bgResult = $outline->getFeature()->getBackground()->accept($tester);
-
-                if (0 !== $bgResult) {
-                    $skip = true;
-                }
-                $itResult = max($itResult, $bgResult);
-            }
-
-            // Visit & test steps
-            foreach ($outline->getSteps() as $step) {
-                $tester = $this->container->get('behat.tester.step');
-                $tester->setEnvironment($environment);
-                $tester->setTokens($tokens);
-                $tester->skip($skip);
-
-                $stResult = $step->accept($tester);
-
-                if (0 !== $stResult) {
-                    $skip = true;
-                }
-                $itResult = max($itResult, $stResult);
-            }
-
-            $this->dispatcher->notify(new Event($outline, 'outline.example.after', array(
-                'iteration'     => $iteration,
-                'result'        => $itResult,
-                'skipped'       => $skip,
-                'environment'   => $environment
-            )));
+            $itResult = $this->visitOutlineExample($outline, $iteration, $tokens);
 
             $result = max($result, $itResult);
         }
@@ -114,5 +73,53 @@ class OutlineTester implements NodeVisitorInterface
         )));
 
         return $result;
+    }
+
+    /**
+     * Visits & tests OutlineNode examples.
+     *
+     * @param   Behat\Gherkin\Node\OutlineNode  $outline
+     * @param   integer                         $row        row number
+     * @param   array                           $tokens     step replacements for tokens
+     *
+     * @return  integer
+     */
+    protected function visitOutlineExample(OutlineNode $outline, $row, array $tokens = array())
+    {
+        $environment    = $this->container->get('behat.environment_builder')->build();
+        $itResult       = 0;
+        $skip           = false;
+
+        $this->dispatcher->notify(new Event($outline, 'outline.example.before', array(
+            'iteration'     => $row,
+            'environment'   => $environment
+        )));
+
+        // Visit & test background if has one
+        if ($outline->getFeature()->hasBackground()) {
+            $bgResult = $this->visitBackground($outline->getFeature()->getBackground(), $environment);
+            if (0 !== $bgResult) {
+                $skip = true;
+            }
+            $itResult = max($itResult, $bgResult);
+        }
+
+        // Visit & test steps
+        foreach ($outline->getSteps() as $step) {
+            $stResult = $this->visitStep($step, $environment, $tokens, $skip);
+            if (0 !== $stResult) {
+                $skip = true;
+            }
+            $itResult = max($itResult, $stResult);
+        }
+
+        $this->dispatcher->notify(new Event($outline, 'outline.example.after', array(
+            'iteration'     => $row,
+            'result'        => $itResult,
+            'skipped'       => $skip,
+            'environment'   => $environment
+        )));
+
+        return $itResult;
     }
 }
