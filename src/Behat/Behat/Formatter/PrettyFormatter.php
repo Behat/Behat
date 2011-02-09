@@ -521,6 +521,10 @@ class PrettyFormatter extends ProgressFormatter
         $text   = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
         $color  = $this->getResultColorCode($result);
 
+        if (null !== $definition) {
+            $text = $this->colorizeDefinitionArguments($text, $definition, $color);
+        }
+
         $this->write("    {+$color}$type $text{-$color}");
 
         if (null !== $definition) {
@@ -651,6 +655,38 @@ class PrettyFormatter extends ProgressFormatter
         }
 
         return "$baseIndent$keyword:";
+    }
+
+    /**
+     * Returns step text with colorized arguments.
+     *
+     * @param   string                              $text
+     * @param   Behat\Behat\Definition\Definition   $definition
+     * @param   string                              $color
+     *
+     * @return  string
+     */
+    protected function colorizeDefinitionArguments($text, Definition $definition, $color)
+    {
+        $regex      = $definition->getRegex();
+        $paramColor = $color . '_param';
+
+        // Find arguments with offsets
+        $matches = array();
+        preg_match($regex, $text, $matches, PREG_OFFSET_CAPTURE);
+        array_shift($matches);
+
+        // Replace arguments with colorized ones
+        foreach ($matches as $match) {
+            $offset = $match[1];
+            $value  = $match[0];
+            $begin  = substr($text, 0, $offset);
+            $end    = substr($text, $offset + strlen($value));
+
+            $text = "$begin{-$color}{+$paramColor}$value{-$paramColor}{+$color}$end";
+        }
+
+        return $text;
     }
 
     /**
