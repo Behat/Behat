@@ -291,9 +291,6 @@ class LoggerDataCollector
     {
         ++$this->scenariosCount;
         ++$this->scenariosStatuses[$this->statuses[$result]];
-        if (0 !== $result) {
-            $this->isPassed = false;
-        }
     }
 
     /**
@@ -305,24 +302,21 @@ class LoggerDataCollector
     {
         ++$this->stepsCount;
         ++$this->stepsStatuses[$this->statuses[$event->get('result')]];
-        if (0 !== $event->get('result')) {
-            $this->isPassed = false;
-        }
 
-        if (StepTester::UNDEFINED === $event->get('result')) {
-            foreach ($event->get('snippet') as $key => $snippet) {
-                if (!isset($this->definitionsSnippets[$key])) {
-                    $this->definitionsSnippets[$key] = $snippet;
+        switch ($event->get('result')) {
+            case StepTester::UNDEFINED:
+                foreach ($event->get('snippet') as $key => $snippet) {
+                    if (!isset($this->definitionsSnippets[$key])) {
+                        $this->definitionsSnippets[$key] = $snippet;
+                    }
                 }
-            }
-        }
-
-        if (StepTester::FAILED === $event->get('result')) {
-            $this->failedStepsEvents[] = $event;
-        }
-
-        if (StepTester::PENDING === $event->get('result')) {
-            $this->pendingStepsEvents[] = $event;
+                break;
+            case StepTester::FAILED:
+                $this->failedStepsEvents[] = $event;
+                break;
+            case StepTester::PENDING:
+                $this->pendingStepsEvents[] = $event;
+                break;
         }
     }
 }
