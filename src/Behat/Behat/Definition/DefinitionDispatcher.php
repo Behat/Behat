@@ -84,10 +84,17 @@ class DefinitionDispatcher
     {
         $text = $step->getText();
 
-        $regexp = preg_replace(
-            array('/\'([^\']*)\'/', '/\"([^\"]*)\"/', '/(\d+)/'),
-            array("\'([^\']*)\'", "\"([^\"]*)\"", "(\\d+)"),
-            $text, -1, $count
+        $regex = preg_replace('/([\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
+        $regex = preg_replace(
+            array(
+                '/\'([^\']*)\'/', '/\"([^\"]*)\"/',
+                '/(\d+)/'
+            ),
+            array(
+                "\'([^\']*)\'", "\"([^\"]*)\"",
+                "(\\d+)"
+            ),
+            $regex, -1, $count
         );
 
         $args = array("\$world");
@@ -108,7 +115,7 @@ class DefinitionDispatcher
     throw new \Behat\Behat\Exception\Pending();
 });
 PHP
-          , '%s', $regexp, implode(', ', $args)
+          , '%s', $regex, implode(', ', $args)
         );
 
         return array(
