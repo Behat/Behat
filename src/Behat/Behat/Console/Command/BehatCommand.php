@@ -278,11 +278,19 @@ class BehatCommand extends Command
             $input->getOption('lang') ?: $container->getParameter('behat.formatter.language')
         );
         $formatter->setParameter('decorated',
-            $input->getOption('no-colors') ? false : $container->getParameter('behat.formatter.decorated')
+            $input->getOption('no-colors') || $input->getOption('out')
+                ? false
+                : $container->getParameter('behat.formatter.decorated')
         );
         $formatter->setParameter('time',
             $input->getOption('no-time') ? false : $container->getParameter('behat.formatter.time')
         );
+        if ($out = $input->getOption('out')) {
+            if (false === mb_strpos($out, "/") && false === mb_strpos($out, "\\")) {
+                $out = getcwd() . '/' . $out;
+            }
+            $formatter->setParameter('output_path', $out);
+        }
 
         return $formatter;
     }

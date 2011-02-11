@@ -51,7 +51,6 @@ abstract class ConsoleFormatter implements FormatterInterface
     {
         $this->translator = $translator;
         $this->parameters = new ParameterBag(array_merge(array(
-            'stream'        => fopen('php://stdout', 'w'),
             'verbose'       => false,
             'decorated'     => true,
             'time'          => true,
@@ -135,14 +134,54 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     protected function getWritingConsole()
     {
-        if (null === $this->console || $this->console->getStream() !== $this->parameters->get('stream')) {
-            $this->console = new ConsoleOutput($this->parameters->get('stream'));
+        if (null === $this->console) {
+            $this->console = $this->createOutputConsole($stream);
         }
 
         $this->console->setVerbosity($this->parameters->get('verbose') ? 2 : 1);
         $this->console->setDecorated($this->parameters->get('decorated'));
 
         return $this->console;
+    }
+
+    /**
+     * Returns new output stream for console.
+     *
+     * @return  resource
+     */
+    protected function createOutputStream()
+    {
+        if (null === $this->parameters->get('output_path')) {
+            $stream = fopen('php://stdout', 'w');
+        } else {
+            $stream = fopen($this->parameters->get('output_path'), 'w');
+        }
+
+        return $stream;
+    }
+
+    /**
+     * Returns new output console.
+     *
+     * @return  Behat\Behat\Console\Output\ConsoleOutput
+     *
+     * @uses    createOutputStream()
+     */
+    protected function createOutputConsole()
+    {
+        $stream = $this->createOutputStream();
+
+        return new ConsoleOutput($stream);
+    }
+
+    /**
+     * Clear output console, so on next write formatter will need to init (create) it again.
+     *
+     * @see     createOutputConsole()
+     */
+    protected function flushOutputConsole()
+    {
+        $this->console = null;
     }
 
     /**
