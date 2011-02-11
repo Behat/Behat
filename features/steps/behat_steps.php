@@ -5,10 +5,6 @@ $steps->Given('/^a standard Behat project directory structure$/', function($worl
     mkdir($dir, 0777, true);
     chdir($dir);
 
-    if (is_dir('features')) {
-        exec('rm -rf features');
-    }
-
     mkdir('features');
     mkdir('features/steps');
     mkdir('features/support');
@@ -18,11 +14,10 @@ $steps->Given('/^a file named "([^"]*)" with:$/', function($world, $filename, $c
     file_put_contents($filename, strtr($content, array("'''" => '"""')));
 });
 
-$steps->When('/^I run "([^"]*)"$/', function($world, $command) {
+$steps->When('/^I run "behat ([^"]*)"$/', function($world, $command) {
     $world->command = $command;
-    exec($command, $world->output, $world->return);
+    exec(BEHAT_BIN_PATH . ' ' . $command, $world->output, $world->return);
 
-    // Remove formatting & time from output
     $world->output = trim(implode("\n", $world->output));
 });
 

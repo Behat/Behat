@@ -1,4 +1,2 @@
-paths:
-    base:   %behat.paths.lib%/tests/Behat/features
 format:
     name:   progress
