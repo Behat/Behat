@@ -107,6 +107,7 @@ class BehatCommand extends Command
      *
      * @uses    configureContainer()
      * @uses    locateFeaturesPaths()
+     * @uses    loadBootstraps()
      * @uses    configureFormatter()
      * @uses    configureGherkinParser()
      * @uses    configureDefinitionDispatcher()
@@ -119,7 +120,9 @@ class BehatCommand extends Command
     {
         $container      = $this->configureContainer($input->getOption('config'));
         $featuresPaths  = $this->locateFeaturesPaths($input, $container);
-        $formatter      = $this->configureFormatter($input, $container);
+
+        $this->loadBootstraps($container);
+        $formatter = $this->configureFormatter($input, $container);
 
         $this->configureGherkinParser($input, $container);
         $this->configureDefinitionDispatcher($input, $container);
@@ -209,6 +212,22 @@ class BehatCommand extends Command
     }
 
     /**
+     * Load bootstrap scripts (if they exists).
+     *
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
+     */
+    protected function loadBootstraps(ContainerBuilder $container)
+    {
+        foreach ((array) $container->getParameter('behat.paths.bootstrap') as $path) {
+            $path = $this->preparePath($path);
+
+            if (is_file($path)) {
+                require_once($path);
+            }
+        }
+    }
+
+    /**
      * Configures Gherkin parser with provided input.
      *
      * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
@@ -277,7 +296,7 @@ class BehatCommand extends Command
     }
 
     /**
-     * Initializes formatter with provided input.
+     * Initializes formatter parameters with provided input.
      *
      * @param   Behat\Behat\Formatter\FormatterInterface                    $formatter  formatter instance
      * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance

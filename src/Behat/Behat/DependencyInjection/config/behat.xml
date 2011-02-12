@@ -13,6 +13,7 @@
         <parameter key="behat.paths.steps">%behat.paths.base%/steps</parameter>
 
         <parameter key="behat.paths.features">%behat.paths.base%</parameter>
+        <parameter key="behat.paths.bootstrap">%behat.paths.support%/bootstrap.php</parameter>
         <parameter key="behat.paths.environment">%behat.paths.support%/env.php</parameter>
         <parameter key="behat.paths.hooks">%behat.paths.support%/hooks.php</parameter>
 
