@@ -176,7 +176,7 @@ class BehatCommand extends Command
      * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
      * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      *
-     * @return  Iterator
+     * @return  IteratorAggregate|array
      *
      * @throws  InvalidArgumentException    if provided in input path is not found
      */
