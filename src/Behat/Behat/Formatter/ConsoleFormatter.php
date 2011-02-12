@@ -65,7 +65,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function setTranslator(Translator $translator)
+    final public function setTranslator(Translator $translator)
     {
         $this->translator = $translator;
     }
