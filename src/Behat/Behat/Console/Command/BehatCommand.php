@@ -263,7 +263,7 @@ class BehatCommand extends Command
      *
      * @throws  InvalidArgumentException            if provided in input formatter name doesn't exists
      *
-     * @uses    initFormatterParameters()
+     * @uses    setupFormatter()
      */
     protected function configureFormatter(InputInterface $input, ContainerBuilder $container)
     {
