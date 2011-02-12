@@ -289,20 +289,20 @@ class BehatCommand extends Command
         }
 
         $formatter = new $class();
-        $this->initializeFormatter($formatter, $input, $container);
+        $this->setupFormatter($formatter, $input, $container);
 
         return $formatter;
     }
 
     /**
-     * Initializes formatter with provided input.
+     * Setup formatter with provided input.
      *
      * @param   Behat\Behat\Formatter\FormatterInterface                    $formatter  formatter instance
      * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
      * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      */
-    protected function initializeFormatter(FormatterInterface $formatter, InputInterface $input,
-                                           ContainerBuilder $container)
+    protected function setupFormatter(FormatterInterface $formatter, InputInterface $input,
+                                      ContainerBuilder $container)
     {
         $translator = $container->get('behat.translator');
         $formatter->setTranslator($translator);
