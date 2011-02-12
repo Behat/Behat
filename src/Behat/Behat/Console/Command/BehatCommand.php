@@ -144,20 +144,20 @@ class BehatCommand extends Command
         $container  = new ContainerBuilder();
         $extension  = new BehatExtension();
         $config     = array();
+        $cwd        = getcwd();
 
-        $this->pathTokens['BEHAT_WORK_PATH'] = getcwd();
+        $this->pathTokens['BEHAT_WORK_PATH'] = $cwd;
 
         if (null === $configFile) {
-            if (is_file($this->pathTokens['BEHAT_WORK_PATH'] . '/behat.yml')) {
-                $configFile = $this->pathTokens['BEHAT_WORK_PATH'] . '/behat.yml';
-            } elseif (is_file($this->pathTokens['BEHAT_WORK_PATH'] . '/config/behat.yml')) {
-                $configFile = $this->pathTokens['BEHAT_WORK_PATH'] . '/config/behat.yml';
+            if (is_file($cwd . DIRECTORY_SEPARATOR . 'behat.yml')) {
+                $configFile = $cwd . DIRECTORY_SEPARATOR . 'behat.yml';
+            } elseif (is_file($cwd . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'behat.yml')) {
+                $configFile = $cwd . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'behat.yml';
             }
         }
 
         if (null !== $configFile) {
             $this->pathTokens['BEHAT_CONFIG_PATH'] = dirname($configFile);
-
             $config = Yaml::load($configFile);
         }
 
@@ -184,19 +184,19 @@ class BehatCommand extends Command
 
         if ($path = $input->getArgument('features')) {
             if (is_file(($path = realpath($path)))) {
-                $basePath       = dirname($path);
-                $featuresPath   = $path;
+                $basePath = dirname($path);
+                $featuresPath = $path;
             } elseif (is_dir($path)) {
-                $basePath       = $path;
-            } elseif (is_dir($path . '/features')) {
-                $basePath       = $path . '/features';
+                $basePath = $path;
+            } elseif (is_dir($path . DIRECTORY_SEPARATOR . 'features')) {
+                $basePath = $path . DIRECTORY_SEPARATOR . 'features';
             } else {
                 throw new \InvalidArgumentException("Path $path not found");
             }
         }
 
-        $this->pathTokens['BEHAT_BASE_PATH'] = $this->replacePathTokens($basePath);
-        $featuresPath = $this->replacePathTokens($featuresPath);
+        $this->pathTokens['BEHAT_BASE_PATH'] = $this->preparePath($basePath);
+        $featuresPath = $this->preparePath($featuresPath);
 
         if ('.feature' !== mb_substr($featuresPath, -8)) {
             $finder         = new Finder();
@@ -242,7 +242,9 @@ class BehatCommand extends Command
      *
      * @return  Behat\Behat\Formatter\FormatterInterface
      *
-     * @throws  InvalidArgumentException    if provided in input formatter name doesn't exists
+     * @throws  InvalidArgumentException            if provided in input formatter name doesn't exists
+     *
+     * @uses    initFormatterParameters()
      */
     protected function configureFormatter(InputInterface $input, ContainerBuilder $container)
     {
@@ -260,14 +262,30 @@ class BehatCommand extends Command
                     $class = 'Behat\Behat\Formatter\ProgressFormatter';
                     break;
                 case 'pretty':
-                default:
                     $class = 'Behat\Behat\Formatter\PrettyFormatter';
+                    break;
+                default:
+                    throw new \InvalidArgumentException('Unknown formatter: ' . $formatterName);
             }
         }
 
         $translator = $container->get('behat.translator');
         $formatter  = new $class($translator);
+        $this->initFormatterParameters($formatter, $input, $container);
 
+        return $formatter;
+    }
+
+    /**
+     * Initializes formatter with provided input.
+     *
+     * @param   Behat\Behat\Formatter\FormatterInterface                    $formatter  formatter instance
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
+     */
+    protected function initFormatterParameters(FormatterInterface $formatter, InputInterface $input,
+                                               ContainerBuilder $container)
+    {
         $formatter->setParameter('base_path',
             $this->pathTokens['BEHAT_BASE_PATH']
         );
@@ -286,13 +304,8 @@ class BehatCommand extends Command
             $input->getOption('no-time') ? false : $container->getParameter('behat.formatter.time')
         );
         if ($out = $input->getOption('out')) {
-            if (false === mb_strpos($out, "/") && false === mb_strpos($out, "\\")) {
-                $out = getcwd() . '/' . $out;
-            }
-            $formatter->setParameter('output_path', $out);
+            $formatter->setParameter('output_path', $this->preparePath($out));
         }
-
-        return $formatter;
     }
 
     /**
@@ -308,7 +321,7 @@ class BehatCommand extends Command
         $builder = $container->get('behat.environment_builder');
 
         foreach ((array) $container->getParameter('behat.paths.environment') as $path) {
-            $path = $this->replacePathTokens($path);
+            $path = $this->preparePath($path);
 
             if (is_file($path)) {
                 $builder->addResource($path);
@@ -331,7 +344,7 @@ class BehatCommand extends Command
         $dispatcher = $container->get('behat.definition_dispatcher');
 
         foreach ((array) $container->getParameter('behat.paths.steps') as $path) {
-            $path = $this->replacePathTokens($path);
+            $path = $this->preparePath($path);
 
             if (is_dir($path)) {
                 $finder = new Finder();
@@ -359,7 +372,7 @@ class BehatCommand extends Command
         $dispatcher = $container->get('behat.hook_dispatcher');
 
         foreach ((array) $container->getParameter('behat.paths.hooks') as $path) {
-            $path = $this->replacePathTokens($path);
+            $path = $this->preparePath($path);
 
             if (is_file($path)) {
                 $dispatcher->addResource('php', $path);
@@ -419,17 +432,23 @@ class BehatCommand extends Command
     }
 
     /**
-     * Replaces path tokens with proper replacements in string.
+     * Prepare path to find/load methods.
      *
      * @param   string  $path
      *
      * @return  string
      */
-    protected function replacePathTokens($path)
+    protected function preparePath($path)
     {
+        if (false === mb_strpos($path, DIRECTORY_SEPARATOR)) {
+            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+        }
+
         foreach ($this->pathTokens as $name => $value) {
             $path = str_replace($name, $value, $path);
         }
+
+        $path = str_replace('/' === DIRECTORY_SEPARATOR ? '\\' : '/', DIRECTORY_SEPARATOR, $path);
 
         return $path;
     }
