@@ -57,7 +57,7 @@ interface FormatterInterface
     /**
      * Registers event listeners.
      *
-     * WARNING: Always register listeners with lowes available priority (-10 as last argument to connect())
+     * WARNING: Always register listeners with lowest available priority (-10 as last argument to connect())
      *
      * @param   Behat\Behat\EventDispatcher\EventDispatcher $dispatcher
      */
