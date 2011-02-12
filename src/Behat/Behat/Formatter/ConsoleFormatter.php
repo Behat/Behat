@@ -156,15 +156,14 @@ abstract class ConsoleFormatter implements FormatterInterface
      * @return  Behat\Behat\Console\Output\ConsoleOutput
      *
      * @uses    createOutputConsole()
+     * @uses    configureOutputConsole()
      */
-    protected function getWritingConsole()
+    final protected function getWritingConsole()
     {
         if (null === $this->console) {
             $this->console = $this->createOutputConsole();
         }
-
-        $this->console->setVerbosity($this->parameters->get('verbose') ? 2 : 1);
-        $this->console->setDecorated($this->parameters->get('decorated'));
+        $this->configureOutputConsole($this->console);
 
         return $this->console;
     }
@@ -210,11 +209,22 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
+     * Configure output console parameters.
+     *
+     * @param   Behat\Behat\Console\Output\ConsoleOutput    $console
+     */
+    protected function configureOutputConsole(ConsoleOutput $console)
+    {
+        $console->setVerbosity($this->parameters->get('verbose') ? 2 : 1);
+        $console->setDecorated($this->parameters->get('decorated'));
+    }
+
+    /**
      * Clear output console, so on next write formatter will need to init (create) it again.
      *
      * @see     createOutputConsole()
      */
-    protected function flushOutputConsole()
+    final protected function flushOutputConsole()
     {
         $this->console = null;
     }
