@@ -46,11 +46,12 @@ abstract class ConsoleFormatter implements FormatterInterface
     private $console;
 
     /**
-     * {@inheritdoc}
+     * Initialize formatter.
+     *
+     * @uses    getDefaultParameters()
      */
-    public function __construct(Translator $translator)
+    public function __construct()
     {
-        $this->translator = $translator;
         $this->parameters = new ParameterBag(array_merge(array(
             'verbose'       => false,
             'decorated'     => true,
@@ -59,6 +60,14 @@ abstract class ConsoleFormatter implements FormatterInterface
             'base_path'     => null,
             'output_path'   => null,
         ), $this->getDefaultParameters()));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
     }
 
     /**

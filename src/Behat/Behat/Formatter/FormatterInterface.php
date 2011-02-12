@@ -22,11 +22,11 @@ use Symfony\Component\EventDispatcher\EventDispatcher,
 interface FormatterInterface
 {
     /**
-     * Initializes formatter.
+     * Set formatter translator.
      *
      * @param   Symfony\Component\Translation\Translator    $translator
      */
-    function __construct(Translator $translator);
+    function setTranslator(Translator $translator);
 
     /**
      * Checks if current formatter has parameter.
