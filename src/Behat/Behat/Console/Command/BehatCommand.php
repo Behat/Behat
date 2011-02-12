@@ -453,9 +453,14 @@ class BehatCommand extends Command
     /**
      * Prepare path to find/load methods.
      *
+     * Fix directory separators, replace path tokens with configured ones,
+     * prepend single filenames with CWD path.
+     *
      * @param   string  $path
      *
      * @return  string
+     *
+     * @uses    pathTokens
      */
     protected function preparePath($path)
     {
