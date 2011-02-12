@@ -29,6 +29,15 @@ interface FormatterInterface
     function __construct(Translator $translator);
 
     /**
+     * Checks if current formatter has parameter.
+     *
+     * @param   string  $name
+     *
+     * @return  boolean
+     */
+    function hasParameter($name);
+
+    /**
      * Sets formatter parameter.
      *
      * @param   string  $name   parameter name

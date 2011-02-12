@@ -8,7 +8,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag,
     Symfony\Component\Translation\Translator;
 
 use Behat\Behat\Console\Output\ConsoleOutput,
-    Behat\Behat\Tester\StepTester;
+    Behat\Behat\Tester\StepTester,
+    Behat\Behat\Exception\FormatterException;
 
 /*
  * This file is part of the Behat.
@@ -36,7 +37,7 @@ abstract class ConsoleFormatter implements FormatterInterface
      *
      * @var     Symfony\Component\Translation\Translator
      */
-    protected $translator;
+    private $translator;
     /**
      * Console output.
      *
@@ -70,27 +71,47 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function setParameter($name, $value)
+    final public function hasParameter($name)
     {
+        return $this->parameters->has($name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    final public function setParameter($name, $value)
+    {
+        if (!$this->hasParameter($name)) {
+            throw new FormatterException(
+                sprintf('The %s doesn\'t support "%s" parameter', get_class($this), $name)
+            );
+        }
+
         $this->parameters->set($name, $value);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getParameter($name)
+    final public function getParameter($name)
     {
+        if (!$this->hasParameter($name)) {
+            throw new FormatterException(
+                sprintf('The %s doesn\'t support "%s" parameter', get_class($this), $name)
+            );
+        }
+
         return $this->parameters->get($name);
     }
 
     /**
      * Returns color code from tester result status code.
      *
-     * @param   integer $result result status code
+     * @param   integer $result tester result status code
      *
      * @return  string          passed|pending|skipped|undefined|failed
      */
-    protected function getResultColorCode($result)
+    final protected function getResultColorCode($result)
     {
         switch ($result) {
             case StepTester::PASSED:
@@ -111,8 +132,10 @@ abstract class ConsoleFormatter implements FormatterInterface
      *
      * @param   string|array    $messages   message or array of messages
      * @param   boolean         $newline    do we need to append newline after messages
+     *
+     * @uses    getWritingConsole()
      */
-    protected function write($messages, $newline = false)
+    final protected function write($messages, $newline = false)
     {
         $this->getWritingConsole()->write($messages, $newline);
     }
@@ -122,7 +145,7 @@ abstract class ConsoleFormatter implements FormatterInterface
      *
      * @param   string|array    $messages   message or array of messages
      */
-    protected function writeln($messages = '')
+    final protected function writeln($messages = '')
     {
         $this->write($messages, true);
     }
@@ -131,11 +154,13 @@ abstract class ConsoleFormatter implements FormatterInterface
      * Returns console instance, prepared to write.
      *
      * @return  Behat\Behat\Console\Output\ConsoleOutput
+     *
+     * @uses    createOutputConsole()
      */
     protected function getWritingConsole()
     {
         if (null === $this->console) {
-            $this->console = $this->createOutputConsole($stream);
+            $this->console = $this->createOutputConsole();
         }
 
         $this->console->setVerbosity($this->parameters->get('verbose') ? 2 : 1);
@@ -147,14 +172,24 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Returns new output stream for console.
      *
+     * Override this method & call flushOutputConsole() to write output in another stream
+     *
      * @return  resource
      */
     protected function createOutputStream()
     {
-        if (null === $this->parameters->get('output_path')) {
+        $outputPath = $this->parameters->get('output_path');
+
+        if (null === $outputPath) {
             $stream = fopen('php://stdout', 'w');
+        } elseif (!is_dir($outputPath)) {
+            $stream = fopen($outputPath, 'w');
         } else {
-            $stream = fopen($this->parameters->get('output_path'), 'w');
+            throw new FormatterException(sprintf(
+                'Filename expected as "output_path" parameter of %s, but got: %s',
+                get_class($this),
+                $outputPath
+            ));
         }
 
         return $stream;
@@ -192,7 +227,7 @@ abstract class ConsoleFormatter implements FormatterInterface
      *
      * @return  string
      */
-    protected function translate($message, array $parameters = array())
+    final protected function translate($message, array $parameters = array())
     {
         return $this->translator->trans(
             $message, $parameters, 'behat', $this->parameters->get('language')
@@ -208,7 +243,7 @@ abstract class ConsoleFormatter implements FormatterInterface
      *
      * @return  string
      */
-    protected function translateChoice($message, $number, array $parameters = array())
+    final protected function translateChoice($message, $number, array $parameters = array())
     {
         return $this->translator->transChoice(
             $message, $number, $parameters, 'behat', $this->parameters->get('language')
