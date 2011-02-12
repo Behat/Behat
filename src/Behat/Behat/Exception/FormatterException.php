@@ -11,10 +11,10 @@ namespace Behat\Behat\Exception;
  */
 
 /**
- * Abstract Behat exception.
+ * Behat Formatter exception.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class BehaviorException extends Exception
+class FormatterException extends Exception
 {
 }
