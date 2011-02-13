@@ -10,14 +10,6 @@ $steps->When('/^I run "behat ([^"]*)"$/', function($world, $command) {
     $world->output = trim(implode("\n", $world->output));
 });
 
-$steps->Then('/^display last command exit code$/', function($world) {
-    $world->printDebug("`" . $world->command . "`  =>  " . $world->return);
-});
-
-$steps->Then('/^display last command output$/', function($world) {
-    $world->printDebug("`" . $world->command . "`:\n" . $world->output);
-});
-
 $steps->Then('/^it should (fail|pass) with:$/', function($world, $success, $data) {
     if ('fail' === $success) {
         assertNotEquals(0, $world->return);
@@ -41,20 +33,28 @@ $steps->Then('/^it should (fail|pass)$/', function($world, $success) {
     }
 });
 
-$steps->Then('/^the output should contain$/', function($world, $text) {
+$steps->Then('/^the output should contain:$/', function($world, $text) {
     try {
-        assertContains($text, $world->output);
+        assertContains((string) $text, $world->output);
     } catch (Exception $e) {
         $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
         throw new Exception($diff, $e->getCode(), $e);
     }
 });
 
-$steps->Then('/^the output should not contain$/', function($world, $text) {
+$steps->Then('/^the output should not contain:$/', function($world, $text) {
     try {
-        assertNotContains($text, $world->output);
+        assertNotContains((string) $text, $world->output);
     } catch (Exception $e) {
         $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
         throw new Exception($diff, $e->getCode(), $e);
     }
+});
+
+$steps->Then('/^display last command exit code$/', function($world) {
+    $world->printDebug("`" . $world->command . "`  =>  " . $world->return);
+});
+
+$steps->Then('/^display last command output$/', function($world) {
+    $world->printDebug("`" . $world->command . "`:\n" . $world->output);
 });

@@ -7,10 +7,11 @@ $hooks->beforeSuite(function($event) {
 });
 
 $hooks->beforeScenario('', function($event) {
-    $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR . microtime() * rand(0, 10000);
+    $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR .
+           md5(microtime() * rand(0, 10000));
+
     mkdir($dir, 0777, true);
     chdir($dir);
-
     mkdir('features');
     mkdir('features/steps');
     mkdir('features/support');

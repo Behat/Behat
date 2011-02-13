@@ -30,10 +30,10 @@ class Redundant extends BehaviorException
         parent::__construct();
 
         $this->message = sprintf("Step \"%s\" is already defined in %s:%d\n\n%s:%d\n%s:%d",
-            $this->step2->getRegex(),
-            $this->step1->getFile(), $this->step1->getLine(),
-            $this->step1->getFile(), $this->step1->getLine(),
-            $this->step2->getFile(), $this->step2->getLine()
+            $step2->getRegex(),
+            $step1->getFile(), $step1->getLine(),
+            $step1->getFile(), $step1->getLine(),
+            $step2->getFile(), $step2->getLine()
         );
     }
 }
