@@ -4,7 +4,7 @@ Feature: Names
   I need to Behat support features & scenario/outline names filtering
 
   Background:
-    Given a file named "features/support/env.php" with:
+    Given a file named "features/support/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';

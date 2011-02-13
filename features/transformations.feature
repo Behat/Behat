@@ -6,7 +6,7 @@ Feature: Step Arguments Transformations
   into transformation functions
 
   Background:
-    Given a file named "features/support/env.php" with:
+    Given a file named "features/support/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';

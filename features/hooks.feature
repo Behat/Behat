@@ -4,7 +4,7 @@ Feature: hooks
   I need to be able to write hooks
 
   Background:
-    Given a file named "features/support/env.php" with:
+    Given a file named "features/support/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';

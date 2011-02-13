@@ -4,12 +4,15 @@ Feature: Step Arguments
   I need ability to specify Table & PyString arguments to steps
 
   Background:
-    Given a file named "features/support/env.php" with:
+    Given a file named "features/support/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
-
+      """
+    And a file named "features/support/env.php" with:
+      """
+      <?php
       $this->strings[1] = "hello,\n  w\n   o\nr\nl\n   d";
       $this->tables[1]  = array(
         array('item1' => 'super', 'item2' => 'mega', 'item3' => 'extra'),

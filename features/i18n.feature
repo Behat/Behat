@@ -4,7 +4,7 @@ Feature: I18n
   I need to have i18n support
 
   Background:
-    Given a file named "features/support/env.php" with:
+    Given a file named "features/support/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';

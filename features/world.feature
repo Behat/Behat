@@ -4,7 +4,7 @@ Feature: World consistency
   I want, that "World" flushes between scenarios
 
   Background:
-    Given a file named "features/support/env.php" with:
+    Given a file named "features/support/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';

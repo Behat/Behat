@@ -4,7 +4,7 @@ Feature: Scenario Outlines
   I want to write scenario outlines
 
   Background:
-    Given a file named "features/support/env.php" with:
+    Given a file named "features/support/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';

@@ -4,11 +4,15 @@ Feature: Call step in other step
   I need to be able to call other steps from step body
 
   Background:
-    Given a file named "features/support/env.php" with:
+    Given a file named "features/support/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
+      """
+    And a file named "features/support/env.php" with:
+      """
+      <?php
       $world->hash = array('username' => 'everzet', 'password' => 'qwerty');
       """
     And a file named "features/steps/calc_steps_en.php" with:
