@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-if (!class_exists('Behat\Behat\UniversalClassLoader')) {
-    require_once __DIR__.'/src/Behat/Behat/UniversalClassLoader.php';
+if (!class_exists('Behat\Behat\ClassLoader\UniversalClassLoader')) {
+    require_once __DIR__.'/src/Behat/Behat/ClassLoader/UniversalClassLoader.php';
 }
-use Behat\Behat\UniversalClassLoader;
+use Behat\Behat\ClassLoader\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
