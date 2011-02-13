@@ -184,8 +184,15 @@ class BehatCommand extends Command
     {
         $basePath       = $container->getParameter('behat.paths.base');
         $featuresPath   = $container->getParameter('behat.paths.features');
+        $lineFilter     = '';
 
         if ($path = $input->getArgument('features')) {
+            $matches = array();
+            if (preg_match('/^(.*)\:(\d+)$/', $path, $matches)) {
+                $path       = $matches[1];
+                $lineFilter = ':' . $matches[2];
+            }
+
             if (is_file(($path = realpath($path)))) {
                 $basePath = dirname($path);
                 $featuresPath = $path;
@@ -205,7 +212,7 @@ class BehatCommand extends Command
             $finder         = new Finder();
             $featuresPaths  = $finder->files()->name('*.feature')->in($featuresPath);
         } else {
-            $featuresPaths  = (array) $featuresPath;
+            $featuresPaths  = (array) ($featuresPath . $lineFilter);
         }
 
         return $featuresPaths;
