@@ -686,6 +686,9 @@ class PrettyFormatter extends ProgressFormatter
             $text = "$begin{-$color}{+$paramColor}$value{-$paramColor}{+$color}$end";
         }
 
+        // Replace "<", ">" with colorized ones
+        $text = preg_replace('/(<[^>]+>)/', "{-$color}{+$paramColor}\$1{-$paramColor}{+$color}", $text);
+
         return $text;
     }
 
