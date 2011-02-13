@@ -16,7 +16,8 @@ use Behat\Behat\DependencyInjection\BehatExtension,
     Behat\Behat\Formatter\FormatterInterface;
 
 use Behat\Gherkin\Filter\NameFilter,
-    Behat\Gherkin\Filter\TagFilter;
+    Behat\Gherkin\Filter\TagFilter,
+    Behat\Gherkin\Keywords\KeywordsDumper;
 
 /*
  * This file is part of the Behat.
@@ -99,6 +100,10 @@ class BehatCommand extends Command
                 InputOption::VALUE_NONE,
                 'Display this program version.'
             ),
+            new InputOption('--keywords',       null,
+                InputOption::VALUE_NONE,
+                'Print available Gherkin keywords for specified language.'
+            ),
         ));
     }
 
@@ -118,9 +123,19 @@ class BehatCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container      = $this->configureContainer($input->getOption('config'));
-        $featuresPaths  = $this->locateFeaturesPaths($input, $container);
+        $container = $this->configureContainer($input->getOption('config'));
 
+        if ($input->getOption('keywords')) {
+            $keywords   = $container->get('gherkin.keywords');
+            $dumper     = new KeywordsDumper($keywords);
+
+            $output->setDecorated(false);
+            $output->write($dumper->dump($input->getOption('lang') ?: 'en') . "\n\n");
+
+            return 0;
+        }
+
+        $featuresPaths = $this->locateFeaturesPaths($input, $container);
         $this->loadBootstraps($container);
         $formatter = $this->configureFormatter($input, $container);
 
