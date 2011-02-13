@@ -4,8 +4,7 @@ Feature: Call step in other step
   I need to be able to call other steps from step body
 
   Background:
-    Given a standard Behat project directory structure
-    And a file named "features/support/env.php" with:
+    Given a file named "features/support/env.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';

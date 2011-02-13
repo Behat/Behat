@@ -4,8 +4,7 @@ Feature: Statuses
   I need to Behat return proper status messages
 
   Background:
-    Given a standard Behat project directory structure
-    And a file named "features/support/env.php" with:
+    Given a file named "features/support/env.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';

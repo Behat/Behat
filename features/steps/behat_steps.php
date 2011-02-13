@@ -1,15 +1,5 @@
 <?php
 
-$steps->Given('/^a standard Behat project directory structure$/', function($world) {
-    $dir = sys_get_temp_dir() . '/behat/' . microtime() * rand(0, 10000);
-    mkdir($dir, 0777, true);
-    chdir($dir);
-
-    mkdir('features');
-    mkdir('features/steps');
-    mkdir('features/support');
-});
-
 $steps->Given('/^a file named "([^"]*)" with:$/', function($world, $filename, $content) {
     file_put_contents($filename, strtr($content, array("'''" => '"""')));
 });
@@ -35,7 +25,13 @@ $steps->Then('/^it should (fail|pass) with:$/', function($world, $success, $data
     } else {
         assertEquals(0, $world->return);
     }
-    assertEquals((string) $data, $world->output);
+
+    try {
+        assertEquals((string) $data, $world->output);
+    } catch (\Exception $e) {
+        $description = \PHPUnit_Framework_TestFailure::exceptionToString($e);
+        throw new \Exception($description);
+    }
 });
 
 $steps->Then('/^it should (fail|pass)$/', function($world, $success) {
@@ -47,9 +43,19 @@ $steps->Then('/^it should (fail|pass)$/', function($world, $success) {
 });
 
 $steps->Then('/^the output should contain$/', function($world, $text) {
-    assertContains($text, $world->output);
+    try {
+        assertContains($text, $world->output);
+    } catch (\Exception $e) {
+        $description = \PHPUnit_Framework_TestFailure::exceptionToString($e);
+        throw new \Exception($description);
+    }
 });
 
 $steps->Then('/^the output should not contain$/', function($world, $text) {
-    assertNotContains($text, $world->output);
+    try {
+        assertNotContains($text, $world->output);
+    } catch (\Exception $e) {
+        $description = \PHPUnit_Framework_TestFailure::exceptionToString($e);
+        throw new \Exception($description);
+    }
 });

@@ -4,8 +4,7 @@ Feature: World consistency
   I want, that "World" flushes between scenarios
 
   Background:
-    Given a standard Behat project directory structure
-    And a file named "features/support/env.php" with:
+    Given a file named "features/support/env.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';

@@ -4,8 +4,7 @@ Feature: Pretty Formatter
   I need to have pretty formatter
 
   Scenario: Complex
-    Given a standard Behat project directory structure
-    And a file named "features/support/env.php" with:
+    Given a file named "features/support/env.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';
