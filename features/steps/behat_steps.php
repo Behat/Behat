@@ -7,7 +7,6 @@ $steps->Given('/^a file named "([^"]*)" with:$/', function($world, $filename, $c
 $steps->When('/^I run "behat ([^"]*)"$/', function($world, $command) {
     $world->command = $command;
     exec(BEHAT_BIN_PATH . ' ' . $command, $world->output, $world->return);
-
     $world->output = trim(implode("\n", $world->output));
 });
 
@@ -28,9 +27,9 @@ $steps->Then('/^it should (fail|pass) with:$/', function($world, $success, $data
 
     try {
         assertEquals((string) $data, $world->output);
-    } catch (\Exception $e) {
-        $description = \PHPUnit_Framework_TestFailure::exceptionToString($e);
-        throw new \Exception($description);
+    } catch (Exception $e) {
+        $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
+        throw new Exception($diff, $e->getCode(), $e);
     }
 });
 
@@ -45,17 +44,17 @@ $steps->Then('/^it should (fail|pass)$/', function($world, $success) {
 $steps->Then('/^the output should contain$/', function($world, $text) {
     try {
         assertContains($text, $world->output);
-    } catch (\Exception $e) {
-        $description = \PHPUnit_Framework_TestFailure::exceptionToString($e);
-        throw new \Exception($description);
+    } catch (Exception $e) {
+        $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
+        throw new Exception($diff, $e->getCode(), $e);
     }
 });
 
 $steps->Then('/^the output should not contain$/', function($world, $text) {
     try {
         assertNotContains($text, $world->output);
-    } catch (\Exception $e) {
-        $description = \PHPUnit_Framework_TestFailure::exceptionToString($e);
-        throw new \Exception($description);
+    } catch (Exception $e) {
+        $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
+        throw new Exception($diff, $e->getCode(), $e);
     }
 });
