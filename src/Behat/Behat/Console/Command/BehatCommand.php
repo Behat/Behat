@@ -100,9 +100,9 @@ class BehatCommand extends Command
                 InputOption::VALUE_NONE,
                 'Display this program version.'
             ),
-            new InputOption('--keywords',       null,
+            new InputOption('--example',        null,
                 InputOption::VALUE_NONE,
-                'Print available Gherkin keywords for specified language.'
+                'Print Gherkin example in specified language (--lang).'
             ),
         ));
     }
@@ -125,12 +125,8 @@ class BehatCommand extends Command
     {
         $container = $this->configureContainer($input->getOption('config'));
 
-        if ($input->getOption('keywords')) {
-            $keywords   = $container->get('gherkin.keywords');
-            $dumper     = new KeywordsDumper($keywords);
-
-            $output->setDecorated(false);
-            $output->write($dumper->dump($input->getOption('lang') ?: 'en') . "\n\n");
+        if ($input->getOption('example')) {
+            $this->printUsageExample($input, $container, $output);
 
             return 0;
         }
@@ -183,6 +179,23 @@ class BehatCommand extends Command
         $container->compile();
 
         return $container;
+    }
+
+    /**
+     * Prints features usage example in specified language (--lang) to the console.
+     *
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
+     * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
+     */
+    public function printUsageExample(InputInterface $input, ContainerBuilder $container,
+                                      OutputInterface $output)
+    {
+        $keywords   = $container->get('gherkin.keywords');
+        $dumper     = new KeywordsDumper($keywords);
+
+        $output->setDecorated(false);
+        $output->write($dumper->dump($input->getOption('lang') ?: 'en') . "\n\n");
     }
 
     /**
