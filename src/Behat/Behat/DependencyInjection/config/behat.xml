@@ -41,6 +41,7 @@
         <!-- Definition Dispathcer -->
         <parameter key="behat.definition_dispatcher.class">Behat\Behat\Definition\DefinitionDispatcher</parameter>
         <parameter key="behat.definition.loader.php.class">Behat\Behat\Definition\Loader\PhpFileLoader</parameter>
+        <parameter key="behat.definition_dumper.class">Behat\Behat\Definition\DefinitionDumper</parameter>
 
         <!-- Hook Dispatcher -->
         <parameter key="behat.hook_dispatcher.class">Behat\Behat\Hook\HookDispatcher</parameter>
@@ -93,10 +94,7 @@
 
         <!-- Definition Dispatcher -->
         <service id="behat.definition_dispatcher" class="%behat.definition_dispatcher.class%">
-            <argument type="service" id="behat.event_dispatcher" />
-            <call method="setTranslator">
-                <argument type="service" id="behat.translator" />
-            </call>
+            <argument type="service" id="behat.translator" />
             <call method="addLoader">
                 <argument>php</argument>
                 <argument type="service">
@@ -105,6 +103,10 @@
                     </service>
                 </argument>
             </call>
+        </service>
+        <service id="behat.definition_dumper" class="%behat.definition_dumper.class%">
+            <argument type="service" id="behat.definition_dispatcher" />
+            <argument type="service" id="behat.translator" />
         </service>
 
         <!-- Hook Dispatcher -->

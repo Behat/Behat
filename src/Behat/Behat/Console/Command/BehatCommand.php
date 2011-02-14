@@ -104,6 +104,10 @@ class BehatCommand extends Command
                 InputOption::VALUE_NONE,
                 'Print Gherkin example in specified language (--lang).'
             ),
+            new InputOption('--steps',          null,
+                InputOption::VALUE_NONE,
+                'Print available steps in specified language (--lang).'
+            ),
         ));
     }
 
@@ -138,6 +142,13 @@ class BehatCommand extends Command
 
         $this->configureGherkinParser($input, $container);
         $this->configureDefinitionDispatcher($input, $container);
+
+        if ($input->getOption('steps')) {
+            $this->printAvailableSteps($input, $container, $output);
+
+            return 0;
+        }
+
         $this->configureHookDispatcher($input, $container);
         $this->configureEnvironmentBuilder($input, $container);
         $this->configureEventDispathcer($formatter, $container);
@@ -197,6 +208,22 @@ class BehatCommand extends Command
 
         $output->setDecorated(false);
         $output->write($dumper->dump($input->getOption('lang') ?: 'en') . "\n\n");
+    }
+
+    /**
+     * Prints available step definitions.
+     *
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
+     * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
+     */
+    public function printAvailableSteps(InputInterface $input, ContainerBuilder $container,
+                                        OutputInterface $output)
+    {
+        $dumper = $container->get('behat.definition_dumper');
+
+        $output->setDecorated(false);
+        $output->write($dumper->dump($input->getOption('lang') ?: 'en'));
     }
 
     /**

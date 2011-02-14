@@ -60,11 +60,11 @@ class DefinitionDispatcher
     protected $translator;
 
     /**
-     * Sets translator of the definitions.
+     * Initializes definition dispatcher.
      *
-     * @param   Symfony\Component\Translation\Translator    translator
+     * @param   Symfony\Component\Translation\Translator    $translator
      */
-    public function setTranslator(Translator $translator)
+    public function __construct(Translator $translator)
     {
         $this->translator = $translator;
     }
@@ -139,6 +139,20 @@ PHP
         return array(
             md5($description) => sprintf($description, str_replace(' ', '_', $step->getType()))
         );
+    }
+
+    /**
+     * Returns array of available definitions.
+     *
+     * @return  array   array of hashes => array(regex => definition)
+     */
+    public function getDefinitions()
+    {
+        if (!count($this->definitions)) {
+            $this->loadDefinitions();
+        }
+
+        return $this->definitions;
     }
 
     /**
