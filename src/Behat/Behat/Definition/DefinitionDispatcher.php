@@ -165,34 +165,24 @@ PHP
 
         // find step to match
         foreach ($this->definitions as $origRegex => $definition) {
-
-            // translate regex and use both of them to match
-            $regexs     = array($origRegex);
             $transRegex = $this->translateDefinitionRegex($origRegex, $step->getLanguage());
-            if ($origRegex !== $transRegex) {
-                $regexs[] = $transRegex;
-            }
 
-            foreach ($regexs as $regex) {
-                if (preg_match($regex, $text, $arguments)) {
-                    $arguments = array_merge(array_slice($arguments, 1), $args);
+            if (preg_match($origRegex, $text, $arguments) || preg_match($transRegex, $text, $arguments)) {
+                $arguments = array_merge(array_slice($arguments, 1), $args);
 
-                    // transform arguments
-                    foreach ($this->transformations as $transformation) {
-                        foreach ($arguments as $num => $argument) {
-                            if ($newArgument = $transformation->transform($argument)) {
-                                $arguments[$num] = $newArgument;
-                            }
+                // transform arguments
+                foreach ($this->transformations as $transformation) {
+                    foreach ($arguments as $num => $argument) {
+                        if ($newArgument = $transformation->transform($argument)) {
+                            $arguments[$num] = $newArgument;
                         }
                     }
-
-                    // set matched definition
-                    $definition->setMatchedText($text);
-                    $definition->setValues($arguments);
-                    $matches[] = $definition;
-
-                    break;
                 }
+
+                // set matched definition
+                $definition->setMatchedText($text);
+                $definition->setValues($arguments);
+                $matches[] = $definition;
             }
         }
 
