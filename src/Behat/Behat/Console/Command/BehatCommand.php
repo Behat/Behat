@@ -600,6 +600,8 @@ class BehatCommand extends Command
      */
     protected function preparePath($path)
     {
+        $path = str_replace('/' === DIRECTORY_SEPARATOR ? '\\' : '/', DIRECTORY_SEPARATOR, $path);
+
         if (false === mb_strpos($path, DIRECTORY_SEPARATOR)) {
             $path = getcwd() . DIRECTORY_SEPARATOR . $path;
         }
@@ -607,8 +609,6 @@ class BehatCommand extends Command
         foreach ($this->pathTokens as $name => $value) {
             $path = str_replace($name, $value, $path);
         }
-
-        $path = str_replace('/' === DIRECTORY_SEPARATOR ? '\\' : '/', DIRECTORY_SEPARATOR, $path);
 
         return $path;
     }
