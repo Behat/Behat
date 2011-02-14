@@ -32,6 +32,28 @@ Feature: Different result types
           Then I should have "pizza tea"
       """
     When I run "behat -TCf progress features/coffee.feature"
+    Then it should pass with:
+      """
+      UUUUUU
+      
+      2 scenarios (2 undefined)
+      6 steps (6 undefined)
+      
+      You can implement step definitions for undefined steps with these snippets:
+      
+      $steps->Given('/^I have magically created (\d+)\$$/', function($world, $arg1) {
+          throw new \Behat\Behat\Exception\Pending();
+      });
+      
+      $steps->When('/^I have chose "([^"]*)" in coffee machine$/', function($world, $arg1) {
+          throw new \Behat\Behat\Exception\Pending();
+      });
+      
+      $steps->Then('/^I should have "([^"]*)"$/', function($world, $arg1) {
+          throw new \Behat\Behat\Exception\Pending();
+      });
+      """
+    When I run "behat --strict -TCf progress features/coffee.feature"
     Then it should fail with:
       """
       UUUUUU
@@ -80,6 +102,26 @@ Feature: Different result types
       });
       """
     When I run "behat -TCf progress features/coffee.feature"
+    Then it should pass with:
+      """
+      P-U
+      
+      (::) pending steps (::)
+      
+      01. TODO: write pending definition
+          In step `Given human have ordered very very very hot "coffee"'. # features/steps/coffee_steps.php:4
+          From scenario background.                                       # features/coffee.feature:6
+      
+      1 scenario (1 undefined)
+      3 steps (1 skipped, 1 pending, 1 undefined)
+      
+      You can implement step definitions for undefined steps with these snippets:
+      
+      $steps->Then('/^I should say "([^"]*)"$/', function($world, $arg1) {
+          throw new \Behat\Behat\Exception\Pending();
+      });
+      """
+    When I run "behat --strict -TCf progress features/coffee.feature"
     Then it should fail with:
       """
       P-U

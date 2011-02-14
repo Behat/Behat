@@ -108,6 +108,10 @@ class BehatCommand extends Command
                 InputOption::VALUE_NONE,
                 'Print available steps in specified language (--lang).'
             ),
+            new InputOption('--strict',         null,
+                InputOption::VALUE_NONE,
+                'Fail if there are any undefined or pending steps.'
+            ),
         ));
     }
 
@@ -155,7 +159,11 @@ class BehatCommand extends Command
 
         $result = $this->runFeatures($featuresPaths, $container);
 
-        return intval(0 < $result);
+        if ($input->getOption('strict')) {
+            return intval(0 < $result);
+        } else {
+            return intval(4 === $result);
+        }
     }
 
     /**
