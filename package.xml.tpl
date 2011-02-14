@@ -34,6 +34,7 @@
             <file role="script" baseinstalldir="/" install-as="behat" name="bin/behat">
                 <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config"/>
             </file>
+            <file role="script" baseinstalldir="/" name="bin/behat.bat" />
 
             <file role="php" baseinstalldir="behat" name="autoload.php.dist" />
             <file role="php" baseinstalldir="behat" name="phpunit.xml.dist" />

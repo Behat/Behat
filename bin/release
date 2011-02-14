@@ -43,15 +43,15 @@ if (is_file('package.xml')) {
 copy(getcwd().'/package.xml.tpl', getcwd().'/package.xml');
 
 $dirs = array(
-    'src'
-  , 'tests'
-  , 'i18n'
-  , 'vendor/symfony/src/Symfony/Component/Console'
-  , 'vendor/symfony/src/Symfony/Component/Translation'
-  , 'vendor/symfony/src/Symfony/Component/DependencyInjection'
-  , 'vendor/symfony/src/Symfony/Component/EventDispatcher'
-  , 'vendor/symfony/src/Symfony/Component/Finder'
-  , 'vendor/symfony/src/Symfony/Component/Yaml'
+    'src',
+    'tests',
+    'i18n',
+    'vendor/symfony/src/Symfony/Component/Console',
+    'vendor/symfony/src/Symfony/Component/Translation',
+    'vendor/symfony/src/Symfony/Component/DependencyInjection',
+    'vendor/symfony/src/Symfony/Component/EventDispatcher',
+    'vendor/symfony/src/Symfony/Component/Finder',
+    'vendor/symfony/src/Symfony/Component/Yaml',
 );
 
 $xmlSourceFiles = '';
