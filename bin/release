@@ -44,7 +44,7 @@ copy(getcwd().'/package.xml.tpl', getcwd().'/package.xml');
 
 $dirs = array(
     'src',
-    'tests',
+    'features',
     'i18n',
     'vendor/symfony/src/Symfony/Component/Console',
     'vendor/symfony/src/Symfony/Component/Translation',
