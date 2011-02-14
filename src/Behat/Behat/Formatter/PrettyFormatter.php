@@ -94,6 +94,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * {@inheritdoc}
      *
+     * @uses    beforeSuite()
      * @uses    afterSuite()
      * @uses    beforeFeature()
      * @uses    afterFeature()

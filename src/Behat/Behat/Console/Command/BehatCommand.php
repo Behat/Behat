@@ -322,6 +322,9 @@ class BehatCommand extends Command
                 case 'html':
                     $class = 'Behat\Behat\Formatter\HtmlFormatter';
                     break;
+                case 'junit':
+                    $class = 'Behat\Behat\Formatter\JUnitFormatter';
+                    break;
                 default:
                     throw new \InvalidArgumentException('Unknown formatter: ' . $formatterName);
             }
