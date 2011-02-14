@@ -2,8 +2,6 @@
 
 namespace Behat\Behat\Definition;
 
-use Symfony\Component\Translation\Translator;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -25,23 +23,15 @@ class DefinitionDumper
      * @var     Behat\Behat\Definition\DefinitionDispatcher
      */
     protected $dispatcher;
-    /**
-     * Translator.
-     *
-     * @var     Symfony\Component\Translation\Translator
-     */
-    protected $translator;
 
     /**
      * Initializes definition dispatcher.
      *
      * @param   Behat\Behat\Definition\DefinitionDispatcher $dispatcher
-     * @param   Symfony\Component\Translation\Translator    $translator
      */
-    public function __construct(DefinitionDispatcher $dispatcher, Translator $translator)
+    public function __construct(DefinitionDispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
-        $this->translator = $translator;
     }
 
     /**
@@ -54,6 +44,8 @@ class DefinitionDumper
         $definitions = '';
 
         foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
+            $regex = $dispatcher->translateDefinitionRegex($regex, $language);
+
             $definitions .= "'$regex'\n\n";
         }
 

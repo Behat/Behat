@@ -213,6 +213,19 @@ PHP
     }
 
     /**
+     * Translates definition regex to provided language (if possible).
+     *
+     * @param   string  $regex      regex to translate
+     * @param   string  $language   language
+     * 
+     * @return  string
+     */
+    public function translateDefinitionRegex($regex, $language)
+    {
+        return $this->translator->trans($regex, array(), 'behat.definitions', $language);
+    }
+
+    /**
      * Parses step definitions with added loaders.
      *
      * @throws  RuntimeException                    if loader with specified format is not registered
@@ -244,18 +257,5 @@ PHP
                 }
             }
         }
-    }
-
-    /**
-     * Translates definition regex to provided language (if possible).
-     *
-     * @param   string  $regex      regex to translate
-     * @param   string  $language   language
-     * 
-     * @return  string
-     */
-    protected function translateDefinitionRegex($regex, $language)
-    {
-        return $this->translator->trans($regex, array(), 'behat.definitions', $language);
     }
 }

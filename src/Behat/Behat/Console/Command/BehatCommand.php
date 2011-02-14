@@ -58,15 +58,11 @@ class BehatCommand extends Command
             ),
             new InputOption('--config',         '-c',
                 InputOption::VALUE_REQUIRED,
-                'Specify external configuration file to load (*.xml or *.yml).'
-            ),
-            new InputOption('--format',         '-f',
-                InputOption::VALUE_REQUIRED,
-                'How to format features (Default: pretty). Available formats is pretty, progress, html.'
+                'Specify external configuration file to load (behat.yml & config/behat.yml will be used in other way).'
             ),
             new InputOption('--out',            null,
                 InputOption::VALUE_REQUIRED,
-                'Write output to a file/directory instead of STDOUT.'
+                'Write formatter output to a file/directory instead of STDOUT.'
             ),
             new InputOption('--name',           '-n',
                 InputOption::VALUE_REQUIRED,
@@ -76,13 +72,33 @@ class BehatCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'Only execute the features or scenarios with tags matching expression.'
             ),
-            new InputOption('--lang',           null,
-                InputOption::VALUE_REQUIRED,
-                'Print formatters output in particular language.'
-            ),
             new InputOption('--verbose',        '-v',
                 InputOption::VALUE_NONE,
                 'Increase verbosity of fail messages.'
+            ),
+            new InputOption('--strict',         null,
+                InputOption::VALUE_NONE,
+                'Fail if there are any undefined or pending steps.'
+            ),
+
+
+            new InputOption('--usage',          null,
+                InputOption::VALUE_NONE,
+                'Print *.feature example in specified language (--lang).'
+            ),
+            new InputOption('--steps',          null,
+                InputOption::VALUE_NONE,
+                'Print available steps in specified language (--lang).'
+            ),
+
+
+            new InputOption('--format',         '-f',
+                InputOption::VALUE_REQUIRED,
+                'How to format features (Default: pretty). Available formats is pretty, progress, html.'
+            ),
+            new InputOption('--colors',         null,
+                InputOption::VALUE_NONE,
+                'Force Behat to use ANSI color in the output.'
             ),
             new InputOption('--no-colors',      '-C',
                 InputOption::VALUE_NONE,
@@ -92,6 +108,16 @@ class BehatCommand extends Command
                 InputOption::VALUE_NONE,
                 'Hide time in output.'
             ),
+            new InputOption('--lang',           null,
+                InputOption::VALUE_REQUIRED,
+                'Print formatters output in particular language.'
+            ),
+            new InputOption('--no-multiline',   null,
+                InputOption::VALUE_NONE,
+                'No multiline arguments in output.'
+            ),
+
+
             new InputOption('--help',           '-h',
                 InputOption::VALUE_NONE,
                 'Display this help message.'
@@ -99,22 +125,6 @@ class BehatCommand extends Command
             new InputOption('--version',        '-V',
                 InputOption::VALUE_NONE,
                 'Display this program version.'
-            ),
-            new InputOption('--example',        null,
-                InputOption::VALUE_NONE,
-                'Print Gherkin example in specified language (--lang).'
-            ),
-            new InputOption('--steps',          null,
-                InputOption::VALUE_NONE,
-                'Print available steps in specified language (--lang).'
-            ),
-            new InputOption('--no-multiline',   null,
-                InputOption::VALUE_NONE,
-                'No multiline arguments in output.'
-            ),
-            new InputOption('--strict',         null,
-                InputOption::VALUE_NONE,
-                'Fail if there are any undefined or pending steps.'
             ),
         ));
     }
@@ -138,7 +148,7 @@ class BehatCommand extends Command
     {
         $container = $this->configureContainer($input->getOption('config'));
 
-        if ($input->getOption('example')) {
+        if ($input->getOption('usage')) {
             $this->printUsageExample($input, $container, $output);
 
             return 0;
@@ -396,6 +406,11 @@ class BehatCommand extends Command
         );
         $formatter->setParameter('language',
             $input->getOption('lang') ?: $container->getParameter('behat.formatter.language')
+        );
+        $formatter->setParameter('decorated',
+            $input->getOption('colors') && !$input->getOption('out')
+                ? true
+                : $container->getParameter('behat.formatter.decorated')
         );
         $formatter->setParameter('decorated',
             $input->getOption('no-colors') || $input->getOption('out')
