@@ -11,6 +11,7 @@
         <parameter key="behat.paths.base">BEHAT_WORK_PATH/features</parameter>
         <parameter key="behat.paths.support">%behat.paths.base%/support</parameter>
         <parameter key="behat.paths.steps">%behat.paths.base%/steps</parameter>
+        <parameter key="behat.paths.steps.i18n">%behat.paths.base%/steps/i18n</parameter>
 
         <parameter key="behat.paths.features">%behat.paths.base%</parameter>
         <parameter key="behat.paths.bootstrap">%behat.paths.support%/bootstrap.php</parameter>
@@ -93,6 +94,9 @@
         <!-- Definition Dispatcher -->
         <service id="behat.definition_dispatcher" class="%behat.definition_dispatcher.class%">
             <argument type="service" id="behat.event_dispatcher" />
+            <call method="setTranslator">
+                <argument type="service" id="behat.translator" />
+            </call>
             <call method="addLoader">
                 <argument>php</argument>
                 <argument type="service">

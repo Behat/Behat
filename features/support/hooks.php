@@ -14,6 +14,7 @@ $hooks->beforeScenario('', function($event) {
     chdir($dir);
     mkdir('features');
     mkdir('features/steps');
+    mkdir('features/steps/i18n');
     mkdir('features/support');
 });
 

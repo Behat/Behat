@@ -395,6 +395,8 @@ class BehatCommand extends Command
      * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      *
      * @return  Behat\Behat\Definition\DefinitionDispatcher
+     *
+     * @uses    configureDefinitionsTranslations()
      */
     protected function configureDefinitionDispatcher(InputInterface $input, ContainerBuilder $container)
     {
@@ -413,7 +415,37 @@ class BehatCommand extends Command
             }
         }
 
+        $this->configureDefinitionsTranslations($input, $container);
+
         return $dispatcher;
+    }
+
+    /**
+     * Configures definitions translations.
+     *
+     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
+     *
+     * @return  Symfony\Component\Translation\Translator
+     */
+    protected function configureDefinitionsTranslations(InputInterface $input, ContainerBuilder $container)
+    {
+        $translator = $container->get('behat.translator');
+
+        foreach ((array) $container->getParameter('behat.paths.steps.i18n') as $path) {
+            $path = $this->preparePath($path);
+
+            if (is_dir($path)) {
+                $finder = new Finder();
+                $files  = $finder->files()->name('*.xliff')->in($path);
+
+                foreach ($files as $file) {
+                    $translator->addResource('xliff', $file, basename($file, '.xliff'), 'behat.definitions');
+                }
+            }
+        }
+
+        return $translator;
     }
 
     /**

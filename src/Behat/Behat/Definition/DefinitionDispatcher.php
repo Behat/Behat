@@ -2,6 +2,8 @@
 
 namespace Behat\Behat\Definition;
 
+use Symfony\Component\Translation\Translator;
+
 use Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
@@ -50,6 +52,22 @@ class DefinitionDispatcher
      * @var     array
      */
     protected $definitions      = array();
+    /**
+     * Translator instance.
+     *
+     * @var     Symfony\Component\Translation\Translator
+     */
+    protected $translator;
+
+    /**
+     * Sets translator of the definitions.
+     *
+     * @param   Symfony\Component\Translation\Translator    translator
+     */
+    public function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
 
     /**
      * Adds a resource loader.
@@ -146,23 +164,35 @@ PHP
         $matches    = array();
 
         // find step to match
-        foreach ($this->definitions as $regex => $definition) {
-            if (preg_match($regex, $text, $arguments)) {
-                $arguments = array_merge(array_slice($arguments, 1), $args);
+        foreach ($this->definitions as $origRegex => $definition) {
 
-                // transform arguments
-                foreach ($this->transformations as $transformation) {
-                    foreach ($arguments as $num => $argument) {
-                        if ($newArgument = $transformation->transform($argument)) {
-                            $arguments[$num] = $newArgument;
+            // translate regex and use both of them to match
+            $regexs     = array($origRegex);
+            $transRegex = $this->translateDefinitionRegex($origRegex, $step->getLanguage());
+            if ($origRegex !== $transRegex) {
+                $regexs[] = $transRegex;
+            }
+
+            foreach ($regexs as $regex) {
+                if (preg_match($regex, $text, $arguments)) {
+                    $arguments = array_merge(array_slice($arguments, 1), $args);
+
+                    // transform arguments
+                    foreach ($this->transformations as $transformation) {
+                        foreach ($arguments as $num => $argument) {
+                            if ($newArgument = $transformation->transform($argument)) {
+                                $arguments[$num] = $newArgument;
+                            }
                         }
                     }
-                }
 
-                // set matched definition
-                $definition->setMatchedText($text);
-                $definition->setValues($arguments);
-                $matches[] = $definition;
+                    // set matched definition
+                    $definition->setMatchedText($text);
+                    $definition->setValues($arguments);
+                    $matches[] = $definition;
+
+                    break;
+                }
             }
         }
 
@@ -209,5 +239,18 @@ PHP
                 }
             }
         }
+    }
+
+    /**
+     * Translates definition regex to provided language (if possible).
+     *
+     * @param   string  $regex      regex to translate
+     * @param   string  $language   language
+     * 
+     * @return  string
+     */
+    protected function translateDefinitionRegex($regex, $language)
+    {
+        return $this->translator->trans($regex, array(), 'behat.definitions', $language);
     }
 }
