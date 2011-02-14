@@ -333,7 +333,7 @@ class ProgressFormatter extends ConsoleFormatter
      * @param   integer $line           line number
      * @param   integer $indentCount    indenation number
      */
-    protected function printPathComment($file, $line, $indentCount)
+    protected function printPathComment($file, $line, $indentCount = 0)
     {
         $indent = str_repeat(' ', $indentCount);
         $file = $this->relativizePathsInString($file);

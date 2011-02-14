@@ -319,6 +319,9 @@ class BehatCommand extends Command
                 case 'pretty':
                     $class = 'Behat\Behat\Formatter\PrettyFormatter';
                     break;
+                case 'html':
+                    $class = 'Behat\Behat\Formatter\HtmlFormatter';
+                    break;
                 default:
                     throw new \InvalidArgumentException('Unknown formatter: ' . $formatterName);
             }
