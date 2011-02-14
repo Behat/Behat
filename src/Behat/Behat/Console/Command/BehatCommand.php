@@ -108,6 +108,10 @@ class BehatCommand extends Command
                 InputOption::VALUE_NONE,
                 'Print available steps in specified language (--lang).'
             ),
+            new InputOption('--no-multiline',   null,
+                InputOption::VALUE_NONE,
+                'No multiline arguments in output.'
+            ),
             new InputOption('--strict',         null,
                 InputOption::VALUE_NONE,
                 'Fail if there are any undefined or pending steps.'
@@ -400,6 +404,9 @@ class BehatCommand extends Command
         );
         $formatter->setParameter('time',
             $input->getOption('no-time') ? false : $container->getParameter('behat.formatter.time')
+        );
+        $formatter->setParameter('multiline_arguments',
+            $input->getOption('no-multiline') ? false : $container->getParameter('behat.formatter.multiline_arguments')
         );
         if ($out = $input->getOption('out')) {
             $formatter->setParameter('output_path', $this->preparePath($out));

@@ -687,7 +687,10 @@ class PrettyFormatter extends ProgressFormatter
         $color = $this->getResultColorCode($result);
 
         $this->printStepBlock($step, $definition, $color);
-        $this->printStepArguments($step->getArguments(), $color);
+
+        if ($this->parameters->get('multiline_arguments')) {
+            $this->printStepArguments($step->getArguments(), $color);
+        }
         if (null !== $exception) {
             $this->printStepException($exception, $color);
         }

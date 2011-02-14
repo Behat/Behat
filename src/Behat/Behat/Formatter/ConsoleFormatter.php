@@ -53,12 +53,13 @@ abstract class ConsoleFormatter implements FormatterInterface
     public function __construct()
     {
         $this->parameters = new ParameterBag(array_merge(array(
-            'verbose'       => false,
-            'decorated'     => true,
-            'time'          => true,
-            'language'      => 'en',
-            'base_path'     => null,
-            'output_path'   => null,
+            'verbose'               => false,
+            'decorated'             => true,
+            'time'                  => true,
+            'language'              => 'en',
+            'base_path'             => null,
+            'output_path'           => null,
+            'multiline_arguments'   => true,
         ), $this->getDefaultParameters()));
     }
 
