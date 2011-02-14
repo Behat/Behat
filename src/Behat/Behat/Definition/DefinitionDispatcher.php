@@ -167,7 +167,8 @@ PHP
         foreach ($this->definitions as $origRegex => $definition) {
             $transRegex = $this->translateDefinitionRegex($origRegex, $step->getLanguage());
 
-            if (preg_match($origRegex, $text, $arguments) || preg_match($transRegex, $text, $arguments)) {
+            if (preg_match($origRegex, $text, $arguments)
+            || ($origRegex !== $transRegex && preg_match($transRegex, $text, $arguments))) {
                 $arguments = array_merge(array_slice($arguments, 1), $args);
 
                 // transform arguments
