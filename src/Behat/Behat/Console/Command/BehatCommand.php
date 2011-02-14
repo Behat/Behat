@@ -156,7 +156,7 @@ class BehatCommand extends Command
 
         $featuresPaths = $this->locateFeaturesPaths($input, $container);
         $this->loadBootstraps($container);
-        $formatter = $this->configureFormatter($input, $container);
+        $formatter = $this->configureFormatter($input, $container, $output->isDecorated());
 
         $this->configureGherkinParser($input, $container);
         $this->configureDefinitionDispatcher($input, $container);
@@ -341,8 +341,9 @@ class BehatCommand extends Command
     /**
      * Configures formatter with provided input.
      *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
+     * @param   Symfony\Component\Console\Input\InputInterface              $input          input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container      service container
+     * @param   boolean                                                     $isDecorated    is colorized
      *
      * @return  Behat\Behat\Formatter\FormatterInterface
      *
@@ -350,7 +351,7 @@ class BehatCommand extends Command
      *
      * @uses    setupFormatter()
      */
-    protected function configureFormatter(InputInterface $input, ContainerBuilder $container)
+    protected function configureFormatter(InputInterface $input, ContainerBuilder $container, $isDecorated)
     {
         $formatterName = $input->getOption('format') ?: $container->getParameter('behat.formatter.name');
 
@@ -380,7 +381,7 @@ class BehatCommand extends Command
         }
 
         $formatter = new $class();
-        $this->setupFormatter($formatter, $input, $container);
+        $this->setupFormatter($formatter, $input, $container, $isDecorated);
 
         return $formatter;
     }
@@ -388,12 +389,13 @@ class BehatCommand extends Command
     /**
      * Setup formatter with provided input.
      *
-     * @param   Behat\Behat\Formatter\FormatterInterface                    $formatter  formatter instance
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
+     * @param   Behat\Behat\Formatter\FormatterInterface                    $formatter      formatter instance
+     * @param   Symfony\Component\Console\Input\InputInterface              $input          input instance
+     * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container      service container
+     * @param   boolean                                                     $isDecorated    is colorized
      */
     protected function setupFormatter(FormatterInterface $formatter, InputInterface $input,
-                                      ContainerBuilder $container)
+                                      ContainerBuilder $container, $isDecorated)
     {
         $translator = $container->get('behat.translator');
         $formatter->setTranslator($translator);
@@ -407,16 +409,17 @@ class BehatCommand extends Command
         $formatter->setParameter('language',
             $input->getOption('lang') ?: $container->getParameter('behat.formatter.language')
         );
-        $formatter->setParameter('decorated',
-            $input->getOption('colors') && !$input->getOption('out')
-                ? true
-                : $container->getParameter('behat.formatter.decorated')
-        );
-        $formatter->setParameter('decorated',
-            $input->getOption('no-colors') || $input->getOption('out')
-                ? false
-                : $container->getParameter('behat.formatter.decorated')
-        );
+
+        if ($input->getOption('colors')) {
+            $formatter->setParameter('decorated', true);
+        } elseif ($input->getOption('no-colors')) {
+            $formatter->setParameter('decorated', false);
+        } elseif (null !== ($decorated = $container->getParameter('behat.formatter.decorated'))) {
+            $formatter->setParameter('decorated', $decorated);
+        } else {
+            $formatter->setParameter('decorated', $isDecorated);
+        }
+
         $formatter->setParameter('time',
             $input->getOption('no-time') ? false : $container->getParameter('behat.formatter.time')
         );

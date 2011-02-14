@@ -20,7 +20,7 @@
 
         <!-- Formatter parameters -->
         <parameter key="behat.formatter.name">pretty</parameter>
-        <parameter key="behat.formatter.decorated">true</parameter>
+        <parameter key="behat.formatter.decorated">null</parameter>
         <parameter key="behat.formatter.verbose">false</parameter>
         <parameter key="behat.formatter.time">true</parameter>
         <parameter key="behat.formatter.language">en</parameter>
