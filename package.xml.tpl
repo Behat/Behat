@@ -52,6 +52,11 @@
             <pearinstaller>
                 <min>1.4.0</min>
             </pearinstaller>
+            <package>
+                <name>gherkin</name>
+                <channel>pear.behat.org</channel>
+                <min>1.0.0RC1</min>
+            </package>
             <extension>
                 <name>pcre</name>
             </extension>
@@ -64,11 +69,6 @@
             <extension>
                 <name>mbstring</name>
             </extension>
-            <package>
-                <name>gherkin</name>
-                <channel>pear.behat.org</channel>
-                <min>1.0.0RC1</min>
-            </package>
         </required>
     </dependencies>
     <phprelease />
