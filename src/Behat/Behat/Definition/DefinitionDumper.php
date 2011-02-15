@@ -44,7 +44,7 @@ class DefinitionDumper
         $definitions = '';
 
         foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
-            $regex = $dispatcher->translateDefinitionRegex($regex, $language);
+            $regex = $this->dispatcher->translateDefinitionRegex($regex, $language);
 
             $definitions .= "'$regex'\n\n";
         }
