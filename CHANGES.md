@@ -1,3 +1,21 @@
+1.0.0RC1 / 2011-02-15
+=====================
+
+  * Gherkin DSL parser is standalone project
+  * Own Behat namespace for both Behat & Gherkin
+  * Fully rewritten formatters (much cleaner & beautifull API)
+  * Big refactoring of whole Behat code (clean code DRYing)
+  * Config file is now handled by standart-driven DIC extension (cleaner `behat.yml`)
+  * API documentation retouched
+  * New `--strict` option
+  * New `--no-multiline` option
+  * Feature examples in your language with `--usage`
+  * Available definitions listing with `--steps`
+  * Definition i18n
+  * Command refactoring (much cleaner API & actions)
+  * Event system refactoring
+  * 42 new languages with new Gherkin DSL parser
+
 0.3.6 / 2010-12-07
 ==================
 
