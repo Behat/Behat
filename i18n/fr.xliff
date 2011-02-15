@@ -1,0 +1,47 @@
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="global" source-language="en" target-language="fr" datatype="plaintext">
+    <header />
+    <body>
+      <trans-unit id="proposal-title">
+        <source>You can implement step definitions for undefined steps with these snippets:</source>
+        <target>Vous pouvez implémenter les définitions d'étapes pour les étapes non définies avec ces modèles :</target>
+      </trans-unit>
+      <trans-unit id="failed-steps-title">
+        <source>failed steps</source>
+        <target>étapes échouées</target>
+      </trans-unit>
+      <trans-unit id="pending-steps-title">
+        <source>pending steps</source>
+        <target>étapes en attente</target>
+      </trans-unit>
+      <trans-unit id="scenarios-count">
+        <source><![CDATA[{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios]]></source>
+        <target><![CDATA[{0} Aucun scénario|{1} 1 scénario|]1,Inf] %1% scénarios]]></target>
+      </trans-unit>
+      <trans-unit id="steps-count">
+        <source><![CDATA[{0} No steps|{1} 1 step|]1,Inf] %1% steps]]></source>
+        <target><![CDATA[{0} Aucune étape|{1} 1 étape|]1,Inf] %1% étapes]]></target>
+      </trans-unit>
+      <trans-unit id="passed-count">
+        <source><![CDATA[[1,Inf] %1% passed]]></source>
+        <target><![CDATA[[1,Inf] %1% succès]]></target>
+      </trans-unit>
+      <trans-unit id="failed-count">
+        <source><![CDATA[[1,Inf] %1% failed]]></source>
+        <target><![CDATA[[1,Inf] %1% échecs]]></target>
+      </trans-unit>
+      <trans-unit id="pending-count">
+        <source><![CDATA[[1,Inf] %1% pending]]></source>
+        <target><![CDATA[[1,Inf] %1% en attente]]></target>
+      </trans-unit>
+      <trans-unit id="undefined-count">
+        <source><![CDATA[[1,Inf] %1% undefined]]></source>
+        <target><![CDATA[[1,Inf] %1% non définies]]></target>
+      </trans-unit>
+      <trans-unit id="skipped-count">
+        <source><![CDATA[[1,Inf] %1% skipped]]></source>
+        <target><![CDATA[[1,Inf] %1% ignorées]]></target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

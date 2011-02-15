@@ -4,7 +4,7 @@
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
     <name>behat</name>
-    <channel>pear.everzet.com</channel>
+    <channel>pear.behat.org</channel>
     <summary>Behat is BDD framework for PHP</summary>
     <description>
         Behat is an open source behavior driven development framework for php 5.3.
@@ -18,7 +18,7 @@
     <date>##CURRENT_DATE##</date>
     <version>
         <release>##BEHAT_VERSION##</release>
-        <api>0.2.0</api>
+        <api>1.0.0</api>
     </version>
     <stability>
         <release>##STABILITY##</release>
@@ -36,7 +36,6 @@
             </file>
 
             <file role="php" baseinstalldir="behat" name="autoload.php.dist" />
-            <file role="php" baseinstalldir="behat" name="phpunit.xml.dist" />
             <file role="php" baseinstalldir="behat" name="behat.yml" />
 
             <file role="php" baseinstalldir="behat" name="CHANGES.md" />
@@ -53,6 +52,11 @@
             <pearinstaller>
                 <min>1.4.0</min>
             </pearinstaller>
+            <package>
+                <name>gherkin</name>
+                <channel>pear.behat.org</channel>
+                <min>1.0.0RC1</min>
+            </package>
             <extension>
                 <name>pcre</name>
             </extension>
@@ -61,6 +65,9 @@
             </extension>
             <extension>
                 <name>xml</name>
+            </extension>
+            <extension>
+                <name>mbstring</name>
             </extension>
         </required>
     </dependencies>

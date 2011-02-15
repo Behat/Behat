@@ -1,0 +1,47 @@
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="global" source-language="en" target-language="id" datatype="plaintext">
+    <header />
+    <body>
+      <trans-unit id="proposal-title">
+        <source>You can implement step definitions for undefined steps with these snippets:</source>
+        <target>Anda dapat membuat definisi untuk langkah yang tidak terdefinisikan menggunakan potongan kode ini:</target>
+      </trans-unit>
+      <trans-unit id="failed-steps-title">
+        <source>failed steps</source>
+        <target>langkah gagal</target>
+      </trans-unit>
+      <trans-unit id="pending-steps-title">
+        <source>pending steps</source>
+        <target>langkah ditunda</target>
+      </trans-unit>
+      <trans-unit id="scenarios-count">
+        <source><![CDATA[{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios]]></source>
+        <target><![CDATA[{0} Tidak ada skenario|{1} 1 skenario|]1,Inf] %1% skenario]]></target>
+      </trans-unit>
+      <trans-unit id="steps-count">
+        <source><![CDATA[{0} No steps|{1} 1 step|]1,Inf] %1% steps]]></source>
+        <target><![CDATA[{0} Tidak ada langkah|{1} 1 langkah|]1,Inf] %1% langkah]]></target>
+      </trans-unit>
+      <trans-unit id="passed-count">
+        <source><![CDATA[[1,Inf] %1% passed]]></source>
+        <target><![CDATA[[1,Inf] %1% sukses]]></target>
+      </trans-unit>
+      <trans-unit id="failed-count">
+        <source><![CDATA[[1,Inf] %1% failed]]></source>
+        <target><![CDATA[[1,Inf] %1% gagal]]></target>
+      </trans-unit>
+      <trans-unit id="pending-count">
+        <source><![CDATA[[1,Inf] %1% pending]]></source>
+        <target><![CDATA[[1,Inf] %1% ditunda]]></target>
+      </trans-unit>
+      <trans-unit id="undefined-count">
+        <source><![CDATA[[1,Inf] %1% undefined]]></source>
+        <target><![CDATA[[1,Inf] %1% tidak terdefinisikan]]></target>
+      </trans-unit>
+      <trans-unit id="skipped-count">
+        <source><![CDATA[[1,Inf] %1% skipped]]></source>
+        <target><![CDATA[[1,Inf] %1% dilewat]]></target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

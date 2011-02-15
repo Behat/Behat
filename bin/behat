@@ -2,12 +2,16 @@
 <?php
 
 /*
+ * Behat
+ *
  * This file is part of the Behat.
- * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+define('BEHAT_BIN_PATH', __FILE__);
 
 if (is_file(__DIR__ . '/../autoload.php')) {
     require_once __DIR__ . '/../autoload.php';
@@ -20,5 +24,5 @@ if (is_file(__DIR__ . '/../autoload.php')) {
 // Internal encoding to utf8
 mb_internal_encoding('utf8');
 
-$app = new Everzet\Behat\Console\BehatApplication();
+$app = new Behat\Behat\Console\BehatApplication();
 $app->run();

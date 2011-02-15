@@ -2,27 +2,33 @@
 
 /*
  * This file is part of the Behat.
- * (c) 2010 Konstantin Kudryashov <ever.zet@gmail.com>
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-if (!class_exists('Everzet\\Behat\\UniversalClassLoader')) {
-    require_once __DIR__.'/src/Everzet/Behat/UniversalClassLoader.php';
+if (!class_exists('Behat\Behat\ClassLoader\UniversalClassLoader')) {
+    require_once __DIR__ . '/src/Behat/Behat/ClassLoader/UniversalClassLoader.php';
 }
-use Everzet\Behat\UniversalClassLoader;
+use Behat\Behat\ClassLoader\UniversalClassLoader;
+
+$vendorDir  = __DIR__ . '/vendor';
+if (is_dir($vendorDir . '/gherkin')) {
+    $gherkinDir = $vendorDir . '/gherkin';
+} else {
+    $gherkinDir = require_once('gherkin/libpath.php');
+}
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony\Component\Console'             => __DIR__.'/vendor/symfony/src'
-  , 'Symfony\Component\DependencyInjection' => __DIR__.'/vendor/symfony/src'
-  , 'Symfony\Component\Translation'         => __DIR__.'/vendor/symfony/src'
-  , 'Symfony\Component\EventDispatcher'     => __DIR__.'/vendor/symfony/src'
-  , 'Symfony\Component\Finder'              => __DIR__.'/vendor/symfony/src'
-  , 'Symfony\Component\Yaml'                => __DIR__.'/vendor/symfony/src'
-  , 'Everzet\Gherkin'                       => __DIR__.'/src'
-  , 'Everzet\Behat'                         => __DIR__.'/src'
+    'Symfony\Component\Console'             => $vendorDir . '/symfony/src',
+    'Symfony\Component\DependencyInjection' => $vendorDir . '/symfony/src',
+    'Symfony\Component\Translation'         => $vendorDir . '/symfony/src',
+    'Symfony\Component\EventDispatcher'     => $vendorDir . '/symfony/src',
+    'Symfony\Component\Finder'              => $vendorDir . '/symfony/src',
+    'Symfony\Component\Yaml'                => $vendorDir . '/symfony/src',
+    'Behat\Behat'                           => __DIR__ . '/src',
+    'Behat\Gherkin'                         => $gherkinDir . '/src'
 ));
 $loader->register();
-

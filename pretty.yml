@@ -1,4 +1,0 @@
-parameters:
-  behat.formatter.name: pretty
-imports:
-  - { resource: behat.yml }
