@@ -118,7 +118,6 @@
                     <service class="%behat.hook.loader.php.class%" />
                 </argument>
             </call>
-            <tag name="behat.events_listener" />
         </service>
 
         <!-- Environment Builder -->
@@ -466,8 +465,6 @@
         <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" />
 
         <!-- Logger -->
-        <service id="behat.logger" class="%behat.logger.class%">
-            <tag name="behat.events_listener" />
-        </service>
+        <service id="behat.logger" class="%behat.logger.class%" />
     </services>
 </container>
