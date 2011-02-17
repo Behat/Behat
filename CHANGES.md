@@ -1,3 +1,16 @@
+1.0.0RC3 / 2011-02-18
+=====================
+
+  * Event dispatcher binding optimizations
+  * Command API optimizations for easier overloading
+  * Formatter path trimming bugfix
+  * BehatExtension config merging support
+
+1.0.0RC2 / 2011-02-15
+=====================
+
+  * Step printing option bugfix
+
 1.0.0RC1 / 2011-02-15
 =====================
 
