@@ -33,39 +33,41 @@ class BehatExtension extends Extension
             $this->loadDefaults($container);
         }
 
-        if (isset($config['paths'])) {
-            foreach ($config['paths'] as $key => $value) {
-                $parameterName = "behat.paths.$key";
+        foreach ($config as $envConfig) {
+            if (isset($envConfig['paths'])) {
+                foreach ($envConfig['paths'] as $key => $value) {
+                    $parameterName = "behat.paths.$key";
 
-                if (!$container->hasParameter($parameterName)) {
-                    throw new \InvalidArgumentException("Path parameter $key doesn't exists");
+                    if (!$container->hasParameter($parameterName)) {
+                        throw new \InvalidArgumentException("Path parameter $key doesn't exists");
+                    }
+
+                    $container->setParameter($parameterName, $value);
                 }
-
-                $container->setParameter($parameterName, $value);
             }
-        }
 
-        if (isset($config['format'])) {
-            foreach ($config['format'] as $key => $value) {
-                $parameterName = "behat.formatter.$key";
+            if (isset($envConfig['format'])) {
+                foreach ($envConfig['format'] as $key => $value) {
+                    $parameterName = "behat.formatter.$key";
 
-                if (!$container->hasParameter($parameterName)) {
-                throw new \InvalidArgumentException("Formatter parameter $key doesn't exists");
+                    if (!$container->hasParameter($parameterName)) {
+                    throw new \InvalidArgumentException("Formatter parameter $key doesn't exists");
+                    }
+
+                    $container->setParameter($parameterName, $value);
                 }
-
-                $container->setParameter($parameterName, $value);
             }
-        }
 
-        if (isset($config['filters'])) {
-            foreach ($config['filters'] as $key => $value) {
-                $parameterName = "gherkin.filter.$key";
+            if (isset($envConfig['filters'])) {
+                foreach ($envConfig['filters'] as $key => $value) {
+                    $parameterName = "gherkin.filter.$key";
 
-                if (!$container->hasParameter($parameterName)) {
-                    throw new \InvalidArgumentException("$key filter doesn't exists");
+                    if (!$container->hasParameter($parameterName)) {
+                        throw new \InvalidArgumentException("$key filter doesn't exists");
+                    }
+
+                    $container->setParameter($parameterName, $value);
                 }
-
-                $container->setParameter($parameterName, $value);
             }
         }
     }

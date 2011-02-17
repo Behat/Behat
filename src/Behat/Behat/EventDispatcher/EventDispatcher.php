@@ -2,10 +2,11 @@
 
 namespace Behat\Behat\EventDispatcher;
 
-use Symfony\Component\EventDispatcher\EventDispatcher as BaseEventDispatcher,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher as BaseEventDispatcher;
 
-use Behat\Behat\Formatter\FormatterInterface;
+use Behat\Behat\Formatter\FormatterInterface,
+    Behat\Behat\DataCollector\LoggerDataCollector,
+    Behat\Behat\Hook\HookDispatcher;
 
 /*
  * This file is part of the Behat.
@@ -23,20 +24,27 @@ use Behat\Behat\Formatter\FormatterInterface;
 class EventDispatcher extends BaseEventDispatcher
 {
     /**
-     * Registers event listeners on all container services with "behat.events_listener" tag.
+     * Registers HookDispatcher event listeners.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
+     * @param   Behat\Behat\Hook\HookDispatcher     $dispatcher
      *
-     * @see     Symfony\Component\DependencyInjection\ContainerBuilder::findTaggedServiceIds()
-     *
-     * @uses    Behat\Behat\DataCollector\LoggerDataCollector::registerListeners()
      * @uses    Behat\Behat\Hook\HookDispatcher::registerListeners()
      */
-    public function bindContainerEventListeners(ContainerInterface $container)
+    public function bindHookDispatcherEventListeners(HookDispatcher $dispatcher)
     {
-        foreach ($container->findTaggedServiceIds('behat.events_listener') as $id => $tag) {
-            $container->get($id)->registerListeners($this);
-        }
+        $dispatcher->registerListeners($this);
+    }
+
+    /**
+     * Registers DataLogger event listeners.
+     *
+     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger
+     *
+     * @uses    Behat\Behat\DataCollector\LoggerDataCollector::registerListeners()
+     */
+    public function bindLoggerEventListeners(LoggerDataCollector $logger)
+    {
+        $logger->registerListeners($this);
     }
 
     /**
