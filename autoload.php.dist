@@ -14,20 +14,20 @@ if (!class_exists('Behat\Behat\ClassLoader\UniversalClassLoader')) {
 use Behat\Behat\ClassLoader\UniversalClassLoader;
 
 $vendorDir  = __DIR__ . '/vendor';
-if (is_dir($vendorDir . '/gherkin')) {
-    $gherkinDir = $vendorDir . '/gherkin';
+if (is_dir($vendorDir . '/Gherkin')) {
+    $gherkinDir = $vendorDir . '/Gherkin';
 } else {
     $gherkinDir = require_once('gherkin/libpath.php');
 }
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony\Component\Console'             => $vendorDir . '/symfony/src',
-    'Symfony\Component\DependencyInjection' => $vendorDir . '/symfony/src',
-    'Symfony\Component\Translation'         => $vendorDir . '/symfony/src',
-    'Symfony\Component\EventDispatcher'     => $vendorDir . '/symfony/src',
-    'Symfony\Component\Finder'              => $vendorDir . '/symfony/src',
-    'Symfony\Component\Yaml'                => $vendorDir . '/symfony/src',
+    'Symfony\Component\Console'             => $vendorDir,
+    'Symfony\Component\DependencyInjection' => $vendorDir,
+    'Symfony\Component\Translation'         => $vendorDir,
+    'Symfony\Component\EventDispatcher'     => $vendorDir,
+    'Symfony\Component\Finder'              => $vendorDir,
+    'Symfony\Component\Yaml'                => $vendorDir,
     'Behat\Behat'                           => __DIR__ . '/src',
     'Behat\Gherkin'                         => $gherkinDir . '/src'
 ));
