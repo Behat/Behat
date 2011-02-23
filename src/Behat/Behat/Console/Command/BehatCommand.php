@@ -210,7 +210,7 @@ class BehatCommand extends Command
             $config = array(Yaml::load($configFile));
         }
 
-        $extension->configLoad($config, $container);
+        $extension->load($config, $container);
         $container->compile();
 
         return $container;
@@ -356,11 +356,7 @@ class BehatCommand extends Command
     {
         $formatterName = $input->getOption('format') ?: $container->getParameter('behat.formatter.name');
 
-        if (false !== mb_strpos($formatterName, '\\')) {
-            if (!class_exists($formatterName)) {
-                throw new \InvalidArgumentException("Class $formatterName doesn't exists");
-            }
-
+        if (class_exists($formatterName)) {
             $class = $formatterName;
         } else {
             switch ($formatterName) {
@@ -429,6 +425,10 @@ class BehatCommand extends Command
         );
         if ($out = $input->getOption('out')) {
             $formatter->setParameter('output_path', $this->preparePath($out));
+        }
+
+        foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
+            $formatter->setParameter($param, $value);
         }
     }
 

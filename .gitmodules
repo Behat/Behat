@@ -1,6 +1,24 @@
-[submodule "vendor/symfony"]
-	path = vendor/symfony
-	url = git://github.com/symfony/symfony.git
-[submodule "vendor/gherkin"]
-	path = vendor/gherkin
+[submodule "vendor/Gherkin"]
+	path = vendor/Gherkin
 	url = git://github.com/Behat/Gherkin.git
+[submodule "vendor/Symfony/Component/Console"]
+	path = vendor/Symfony/Component/Console
+	url = git://github.com/symfony/Console.git
+[submodule "vendor/Symfony/Component/DependencyInjection"]
+	path = vendor/Symfony/Component/DependencyInjection
+	url = git://github.com/symfony/DependencyInjection.git
+[submodule "vendor/Symfony/Component/Translation"]
+	path = vendor/Symfony/Component/Translation
+	url = git://github.com/symfony/Translation.git
+[submodule "vendor/Symfony/Component/EventDispatcher"]
+	path = vendor/Symfony/Component/EventDispatcher
+	url = git://github.com/symfony/EventDispatcher.git
+[submodule "vendor/Symfony/Component/Finder"]
+	path = vendor/Symfony/Component/Finder
+	url = git://github.com/symfony/Finder.git
+[submodule "vendor/Symfony/Component/Yaml"]
+	path = vendor/Symfony/Component/Yaml
+	url = git://github.com/symfony/Yaml.git
+[submodule "vendor/Symfony/Component/Config"]
+	path = vendor/Symfony/Component/Config
+	url = git://github.com/symfony/Config.git
