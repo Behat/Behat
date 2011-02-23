@@ -53,17 +53,17 @@ Feature: Profiles
       """
     And a file named "pretty.yml" with:
       """
-      format:
+      formatter:
         name: pretty
       """
     And a file named "progress.yml" with:
       """
-      format:
+      formatter:
         name: progress
       """
     And a file named "behat.yml" with:
       """
-      format:
+      formatter:
         name: progress
       """
 

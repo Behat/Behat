@@ -9,11 +9,11 @@
         <parameter key="behat.paths.i18n">%behat.paths.lib%/i18n</parameter>
 
         <parameter key="behat.paths.base">BEHAT_WORK_PATH/features</parameter>
-        <parameter key="behat.paths.support">%behat.paths.base%/support</parameter>
+        <parameter key="behat.paths.features">%behat.paths.base%</parameter>
         <parameter key="behat.paths.steps">%behat.paths.base%/steps</parameter>
         <parameter key="behat.paths.steps.i18n">%behat.paths.base%/steps/i18n</parameter>
 
-        <parameter key="behat.paths.features">%behat.paths.base%</parameter>
+        <parameter key="behat.paths.support">%behat.paths.base%/support</parameter>
         <parameter key="behat.paths.bootstrap">%behat.paths.support%/bootstrap.php</parameter>
         <parameter key="behat.paths.environment">%behat.paths.support%/env.php</parameter>
         <parameter key="behat.paths.hooks">%behat.paths.support%/hooks.php</parameter>
@@ -26,6 +26,7 @@
         <parameter key="behat.formatter.language">en</parameter>
         <parameter key="behat.formatter.output_path">null</parameter>
         <parameter key="behat.formatter.multiline_arguments">true</parameter>
+        <parameter key="behat.formatter.parameters" type="collection"></parameter>
 
         <!-- Gherkin loader parameters -->
         <parameter key="gherkin.filter.name">null</parameter>
