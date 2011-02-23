@@ -4,7 +4,9 @@ namespace Behat\Behat\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Extension\Extension,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
+    Symfony\Component\DependencyInjection\ContainerBuilder,
+    Symfony\Component\Config\Definition\Processor,
+    Symfony\Component\Config\FileLocator;
 
 /*
  * This file is part of the Behat.
@@ -22,52 +24,65 @@ use Symfony\Component\DependencyInjection\Extension\Extension,
 class BehatExtension extends Extension
 {
     /**
-     * Loads service configuration.
+     * Configuration processor.
      *
-     * @param   array                                                   $config     configuration parameters
-     * @param   Symfony\Component\DependencyInjection\ContainerBuilder  $container  service container
+     * @var     Symfony\Component\Config\Definition\Processor
      */
-    public function configLoad($config, ContainerBuilder $container)
+    private $processor;
+    /**
+     * Configuration holder.
+     *
+     * @var     Behat\Behat\DependencyInjection\Configuration
+     */
+    private $configuration;
+
+    /**
+     * Initializes configuration.
+     */
+    public function __construct()
     {
-        if (!$container->hasDefinition('behat.paths.lib')) {
-            $this->loadDefaults($container);
+        $this->processor        = new Processor();
+        $this->configuration    = new Configuration();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function load(array $configs, ContainerBuilder $container)
+    {
+        $this->loadDefaults($container);
+
+        // normalize and merge the actual configuration
+        $tree   = $this->configuration->getConfigTree();
+        $config = $this->processor->process($tree, $configs);
+
+        if (isset($config['paths'])) {
+            foreach ($config['paths'] as $key => $value) {
+                $parameterName = "behat.paths.$key";
+                $container->setParameter($parameterName, $value);
+            }
         }
 
-        foreach ($config as $envConfig) {
-            if (isset($envConfig['paths'])) {
-                foreach ($envConfig['paths'] as $key => $value) {
-                    $parameterName = "behat.paths.$key";
-
-                    if (!$container->hasParameter($parameterName)) {
-                        throw new \InvalidArgumentException("Path parameter $key doesn't exists");
-                    }
-
-                    $container->setParameter($parameterName, $value);
-                }
+        if (isset($config['formatter'])) {
+            foreach ($config['formatter'] as $key => $value) {
+                $parameterName = "behat.formatter.$key";
+                $container->setParameter($parameterName, $value);
             }
+        }
 
-            if (isset($envConfig['format'])) {
-                foreach ($envConfig['format'] as $key => $value) {
-                    $parameterName = "behat.formatter.$key";
-
-                    if (!$container->hasParameter($parameterName)) {
-                    throw new \InvalidArgumentException("Formatter parameter $key doesn't exists");
-                    }
-
-                    $container->setParameter($parameterName, $value);
-                }
+        if (isset($config['filters'])) {
+            foreach ($config['filters'] as $key => $value) {
+                $parameterName = "gherkin.filter.$key";
+                $container->setParameter($parameterName, $value);
             }
+        }
 
-            if (isset($envConfig['filters'])) {
-                foreach ($envConfig['filters'] as $key => $value) {
-                    $parameterName = "gherkin.filter.$key";
-
-                    if (!$container->hasParameter($parameterName)) {
-                        throw new \InvalidArgumentException("$key filter doesn't exists");
-                    }
-
-                    $container->setParameter($parameterName, $value);
-                }
+        if (isset($config['classes'])) {
+            if (isset($config['classes']['environment']) && $envClass = $config['classes']['environment']) {
+                $container->setParameter('behat.environment.class', $envClass);
+            }
+            if (isset($config['classes']['formatter']) && $formatterClass = $config['classes']['formatter']) {
+                $container->setParameter('behat.formatter.name', $formatterClass);
             }
         }
     }
@@ -101,7 +116,7 @@ class BehatExtension extends Extension
      */
     protected function loadDefaults($container)
     {
-        $loader = new XmlFileLoader($container, __DIR__ . '/config');
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/config'));
         $loader->load('behat.xml');
 
         $behatClassLoaderReflection = new \ReflectionClass('Behat\Behat\Console\BehatApplication');

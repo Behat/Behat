@@ -1,3 +1,13 @@
+1.0.0RC4 / 2011-02-23
+=====================
+
+  * Pretty formatter tag printing fix
+  * Custom formatter specification fix in `behat.yml`
+  * Symfony components updated
+  * Extension configuration manager (Symfony\Component\Config component)
+  * Cleaning of `behat.yml` configurator (thanks to Symfony\Component\Config)
+  * Additional formatter parameters support in `behat.yml`
+
 1.0.0RC3 / 2011-02-18
 =====================
 

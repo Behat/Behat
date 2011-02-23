@@ -24,6 +24,7 @@ $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
     'Symfony\Component\Console'             => $vendorDir,
     'Symfony\Component\DependencyInjection' => $vendorDir,
+    'Symfony\Component\Config'              => $vendorDir,
     'Symfony\Component\Translation'         => $vendorDir,
     'Symfony\Component\EventDispatcher'     => $vendorDir,
     'Symfony\Component\Finder'              => $vendorDir,
