@@ -46,12 +46,12 @@ $dirs = array(
     'src',
     'features',
     'i18n',
-    'vendor/symfony/src/Symfony/Component/Console',
-    'vendor/symfony/src/Symfony/Component/Translation',
-    'vendor/symfony/src/Symfony/Component/DependencyInjection',
-    'vendor/symfony/src/Symfony/Component/EventDispatcher',
-    'vendor/symfony/src/Symfony/Component/Finder',
-    'vendor/symfony/src/Symfony/Component/Yaml',
+    'vendor/Symfony/Component/Console',
+    'vendor/Symfony/Component/Translation',
+    'vendor/Symfony/Component/DependencyInjection',
+    'vendor/Symfony/Component/EventDispatcher',
+    'vendor/Symfony/Component/Finder',
+    'vendor/Symfony/Component/Yaml',
 );
 
 $xmlSourceFiles = '';
