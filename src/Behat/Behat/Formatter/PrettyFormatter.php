@@ -404,7 +404,7 @@ class PrettyFormatter extends ProgressFormatter
                 $indent = '  ';
             }
 
-            $this->writeln("$indent{+tags}$tags{-tags}");
+            $this->writeln("$indent{+tag}$tags{-tag}");
         }
     }
 
