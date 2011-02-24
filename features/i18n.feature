@@ -14,7 +14,7 @@ Feature: I18n
       """
       <?php
       $steps->Given('/Я ввел (\d+)/', function($world, $num) {
-          assertNull($world->value);
+          assertObjectNotHasAttribute('value', $world);
           $world->value = $num;
       });
 

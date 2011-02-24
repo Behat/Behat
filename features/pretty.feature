@@ -14,7 +14,7 @@ Feature: Pretty Formatter
       """
       <?php
       $steps->Given('/I have entered (\d+)/', function($world, $num) {
-          assertNull($world->value);
+          assertObjectNotHasAttribute('value', $world);
           $world->value = $num;
       });
 
