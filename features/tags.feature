@@ -104,7 +104,7 @@ Feature: Tags
       """
 
   Scenario: Single tag
-    When I run "behat -TCf pretty --tags @slow"
+    When I run "behat -TCf pretty --tags '@slow'"
     Then it should pass with:
       """
       @slow
@@ -150,7 +150,7 @@ Feature: Tags
       """
 
   Scenario: Or tags
-    When I run "behat -TCf pretty --tags @slow,@normal"
+    When I run "behat -TCf pretty --tags '@slow,@normal'"
     Then it should pass with:
       """
       @slow

@@ -2,7 +2,7 @@
 
 $hooks->beforeSuite(function($event) {
     if (is_dir($dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat')) {
-        rmdir_recursive($dir);
+        rmdirRecursive($dir);
     }
 });
 
@@ -13,18 +13,12 @@ $hooks->beforeScenario('', function($event) {
     mkdir($dir, 0777, true);
     chdir($dir);
     mkdir('features');
-    mkdir('features/steps');
-    mkdir('features/steps/i18n');
-    mkdir('features/support');
+    mkdir('features' . DIRECTORY_SEPARATOR . 'steps');
+    mkdir('features' . DIRECTORY_SEPARATOR . 'steps/i18n');
+    mkdir('features' . DIRECTORY_SEPARATOR . 'support');
 });
 
-$hooks->afterSuite(function($event) {
-    if (is_dir($dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat')) {
-        rmdir_recursive($dir);
-    }
-});
-
-function rmdir_recursive($dir) {
+function rmdirRecursive($dir) {
     $files = scandir($dir);
     array_shift($files);
     array_shift($files);
@@ -32,7 +26,7 @@ function rmdir_recursive($dir) {
     foreach ($files as $file) {
         $file = $dir . DIRECTORY_SEPARATOR . $file;
         if (is_dir($file)) {
-            rmdir_recursive($file);
+            rmdirRecursive($file);
         } else {
             unlink($file);
         }

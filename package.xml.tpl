@@ -31,8 +31,14 @@
 
             ##SOURCE_FILES##
 
-            <file role="script" baseinstalldir="/" install-as="behat" name="bin/behat">
+            <file role="script" baseinstalldir="/" name="bin/behat.php">
                 <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config"/>
+            </file>
+
+            <file role="script" baseinstalldir="/" name="bin/behat.bat">
+                <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+                <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
+                <tasks:replace from="@package_version@" to="version" type="package-info" />
             </file>
 
             <file role="php" baseinstalldir="behat" name="autoload.php.dist" />
@@ -55,7 +61,7 @@
             <package>
                 <name>gherkin</name>
                 <channel>pear.behat.org</channel>
-                <min>1.0.0RC1</min>
+                <min>1.0.0RC2</min>
             </package>
             <extension>
                 <name>pcre</name>
@@ -71,5 +77,21 @@
             </extension>
         </required>
     </dependencies>
-    <phprelease />
+    <phprelease>
+        <installconditions>
+            <os>
+                <name>windows</name>
+            </os>
+        </installconditions>
+        <filelist>
+            <install as="behat" name="bin/behat.php" />
+            <install as="behat.bat" name="bin/behat.bat" />
+        </filelist>
+    </phprelease>
+    <phprelease>
+        <filelist>
+            <install as="behat" name="bin/behat.php" />
+            <ignore name="bin/behat.bat" />
+        </filelist>
+     </phprelease>
 </package>
