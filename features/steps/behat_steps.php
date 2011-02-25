@@ -7,8 +7,12 @@ $steps->Given('/^a file named "([^"]*)" with:$/', function($world, $filename, $c
 });
 
 $steps->When('/^I run "behat ([^"]*)"$/', function($world, $command) {
+    $php     = 0 === mb_strpos(BEHAT_PHP_BIN_PATH, '/usr/bin/env')
+             ? BEHAT_PHP_BIN_PATH
+             : escapeshellarg(BEHAT_PHP_BIN_PATH);
     $command = strtr($command, array('\'' => '"'));
-    exec(BEHAT_PHP_BIN_PATH . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' ' . $command, $output, $return);
+
+    exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' ' . $command, $output, $return);
 
     $world->command = $command;
     $world->output  = trim(implode("\n", $output));
