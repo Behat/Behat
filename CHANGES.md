@@ -1,3 +1,9 @@
+1.0.0RC5 / 2011-02-25
+=====================
+
+  * Windows support
+  * Bundled features hooks optimizations
+
 1.0.0RC4 / 2011-02-23
 =====================
 
