@@ -84,14 +84,14 @@
             </os>
         </installconditions>
         <filelist>
-            <install as="behat" name="behat.php" />
-            <install as="behat.bat" name="behat.bat" />
+            <install as="behat" name="bin/behat.php" />
+            <install as="behat.bat" name="bin/behat.bat" />
         </filelist>
     </phprelease>
     <phprelease>
         <filelist>
-            <install as="behat" name="behat.php" />
-            <ignore name="behat.bat" />
+            <install as="behat" name="bin/behat.php" />
+            <ignore name="bin/behat.bat" />
         </filelist>
      </phprelease>
 </package>
