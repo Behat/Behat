@@ -602,12 +602,14 @@ class BehatCommand extends Command
      */
     protected function preparePath($path)
     {
-        if (false === mb_strpos($path, DIRECTORY_SEPARATOR)) {
-            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
-        }
-
         foreach ($this->pathTokens as $name => $value) {
             $path = str_replace($name, $value, $path);
+        }
+
+        $path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', '/', $path));
+
+        if (!is_dir($path) && !is_file($path)) {
+            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
         }
 
         return $path;
