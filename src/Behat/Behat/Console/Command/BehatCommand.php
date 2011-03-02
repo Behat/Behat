@@ -67,15 +67,11 @@ class BehatCommand extends Command
             ),
             new InputOption('--name',           '-n',
                 InputOption::VALUE_REQUIRED,
-                'Only execute the feature elements (features or scenarios) which match part of the given name.'
+                'Only execute the feature elements (features or scenarios) which match part of the given name or regex.'
             ),
             new InputOption('--tags',           '-t',
                 InputOption::VALUE_REQUIRED,
-                'Only execute the features or scenarios with tags matching expression.'
-            ),
-            new InputOption('--verbose',        '-v',
-                InputOption::VALUE_NONE,
-                'Increase verbosity of fail messages.'
+                'Only execute the features or scenarios with tags matching tag filter expression.'
             ),
             new InputOption('--strict',         null,
                 InputOption::VALUE_NONE,
@@ -83,6 +79,10 @@ class BehatCommand extends Command
             ),
 
 
+            new InputOption('--init',           null,
+                InputOption::VALUE_NONE,
+                'Create features/ directory structure'
+            ),
             new InputOption('--usage',          null,
                 InputOption::VALUE_NONE,
                 'Print *.feature example in specified language (--lang).'
@@ -91,15 +91,11 @@ class BehatCommand extends Command
                 InputOption::VALUE_NONE,
                 'Print available steps in specified language (--lang).'
             ),
-            new InputOption('--init',          null,
-                InputOption::VALUE_NONE,
-                'Create features/ directory structure'
-            ),
 
 
             new InputOption('--format',         '-f',
                 InputOption::VALUE_REQUIRED,
-                'How to format features (Default: pretty). Available formats is pretty, progress, html.'
+                'How to format features (Default: pretty). Available formats is pretty, progress, junit, html.'
             ),
             new InputOption('--colors',         null,
                 InputOption::VALUE_NONE,
@@ -115,21 +111,11 @@ class BehatCommand extends Command
             ),
             new InputOption('--lang',           null,
                 InputOption::VALUE_REQUIRED,
-                'Print formatters output in particular language.'
+                'Print formatter output in particular language.'
             ),
             new InputOption('--no-multiline',   null,
                 InputOption::VALUE_NONE,
                 'No multiline arguments in output.'
-            ),
-
-
-            new InputOption('--help',           '-h',
-                InputOption::VALUE_NONE,
-                'Display this help message.'
-            ),
-            new InputOption('--version',        '-V',
-                InputOption::VALUE_NONE,
-                'Display this program version.'
             ),
         ));
     }
