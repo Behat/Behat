@@ -55,11 +55,13 @@ class BehatCommand extends Command
         $this->setDefinition(array(
             new InputArgument('features',
                 InputArgument::OPTIONAL,
-                'Features path'
+                'Feature(s) to run. Could be <info>directory path</info>, <info>single feature path</info> ' .
+                'or scenario at specific feature line ("<info>*.feature:10</info>").'
             ),
             new InputOption('--config',         '-c',
                 InputOption::VALUE_REQUIRED,
-                'Specify external configuration file to load (behat.yml & config/behat.yml will be used in other way).'
+                'Specify external configuration file to load. ' .
+                '<info>behat.yml</info> or <info>config/behat.yml</info> will be used by default.'
             ),
             new InputOption('--out',            null,
                 InputOption::VALUE_REQUIRED,
@@ -95,7 +97,8 @@ class BehatCommand extends Command
 
             new InputOption('--format',         '-f',
                 InputOption::VALUE_REQUIRED,
-                'How to format features (Default: pretty). Available formats is pretty, progress, junit, html.'
+                'How to format features (Default: pretty). Available formats is ' .
+                '<info>pretty</info>, <info>progress</info>, <info>junit</info>, <info>html</info>.'
             ),
             new InputOption('--colors',         null,
                 InputOption::VALUE_NONE,
