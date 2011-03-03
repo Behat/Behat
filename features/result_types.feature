@@ -31,7 +31,7 @@ Feature: Different result types
           When I have chose "pizza tea" in coffee machine
           Then I should have "pizza tea"
       """
-    When I run "behat -TCf progress features/coffee.feature"
+    When I run "behat -f progress features/coffee.feature"
     Then it should pass with:
       """
       UUUUUU
@@ -53,7 +53,7 @@ Feature: Different result types
           throw new \Behat\Behat\Exception\Pending();
       });
       """
-    When I run "behat --strict -TCf progress features/coffee.feature"
+    When I run "behat --strict -f progress features/coffee.feature"
     Then it should fail with:
       """
       UUUUUU
@@ -101,7 +101,7 @@ Feature: Different result types
           throw new \Behat\Behat\Exception\Pending('Handle "Coffee Ready" action');
       });
       """
-    When I run "behat -TCf progress features/coffee.feature"
+    When I run "behat -f progress features/coffee.feature"
     Then it should pass with:
       """
       P-U
@@ -121,7 +121,7 @@ Feature: Different result types
           throw new \Behat\Behat\Exception\Pending();
       });
       """
-    When I run "behat --strict -TCf progress features/coffee.feature"
+    When I run "behat --strict -f progress features/coffee.feature"
     Then it should fail with:
       """
       P-U
@@ -171,7 +171,7 @@ Feature: Different result types
           assertEquals($money, $world->money);
       });
       """
-    When I run "behat -TCf progress features/coffee.feature"
+    When I run "behat -f progress features/coffee.feature"
     Then it should fail with:
       """
       .F..F-
@@ -228,7 +228,7 @@ Feature: Different result types
           throw new Exception('NO electricity in coffee machine!!!');
       });
       """
-    When I run "behat -TCf progress features/coffee.feature"
+    When I run "behat -f progress features/coffee.feature"
     Then it should fail with:
       """
       .F---..F--
@@ -272,7 +272,7 @@ Feature: Different result types
           throw new \Behat\Behat\Exception\Pending();
       });
       """
-    When I run "behat -TCf progress features/coffee.feature"
+    When I run "behat -f progress features/coffee.feature"
     Then it should fail with:
       """
       F-
@@ -311,7 +311,7 @@ Feature: Different result types
           // do something else
       });
       """
-    When I run "behat -TCf progress features/coffee.feature"
+    When I run "behat -f progress features/coffee.feature"
     Then it should fail
     And the output should contain:
       """

@@ -65,7 +65,7 @@ Feature: Pretty Formatter
             |  10   | 20     |
             |  23   | 32     |
       """
-    When I run "behat -TCf pretty"
+    When I run "behat -f pretty"
     Then it should fail with:
       """
       Feature: World consistency

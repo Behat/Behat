@@ -71,7 +71,7 @@ Feature: Call step in other step
           When I press +
           Then I should see "44" on the screen
       """
-    When I run "behat -TCf progress features/calc_en.feature"
+    When I run "behat -f progress features/calc_en.feature"
     Then it should pass with:
       """
       .....
@@ -89,7 +89,7 @@ Feature: Call step in other step
           When I press +
           Then I should see "8" on the screen
       """
-    When I run "behat -TCf progress features/calc_en.feature"
+    When I run "behat -f progress features/calc_en.feature"
     Then it should fail with:
       """
       ..F
@@ -116,7 +116,7 @@ Feature: Call step in other step
           То Я должен увидеть на экране "39"
           И Я создам себе passing таблицу
       """
-    When I run "behat -TCf progress features/calc_ru.feature"
+    When I run "behat -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       .....
@@ -138,7 +138,7 @@ Feature: Call step in other step
         Сценарий:
           Допустим Я создам себе failing таблицу
       """
-    When I run "behat -TCf progress features/calc_ru.feature"
+    When I run "behat -f progress features/calc_ru.feature"
     Then it should fail with:
       """
       ..FF

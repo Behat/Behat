@@ -71,7 +71,7 @@ Feature: hooks
         Scenario: 130
           Given I must have 130
       """
-    When I run "behat -TCf pretty"
+    When I run "behat -f pretty"
     Then it should pass with:
       """
       = do something before all suite run

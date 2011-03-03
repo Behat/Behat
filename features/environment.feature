@@ -57,7 +57,7 @@ Feature: Environment consistency
             | 0   | 5     | 8      |
             | 2   | 2     | 3      |
       """
-    When I run "behat -TCf progress features/apples.feature"
+    When I run "behat -f progress features/apples.feature"
     Then it should pass with:
       """
       ..................
@@ -96,7 +96,7 @@ Feature: Environment consistency
             | 0   | 5     | 8      |
             | 2   | 2     | 4      |
       """
-    When I run "behat -TCf progress features/apples.feature"
+    When I run "behat -f progress features/apples.feature"
     Then it should fail with:
       """
       ..F..F...F.......F
