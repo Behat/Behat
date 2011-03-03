@@ -118,7 +118,7 @@ class BehatCommand extends Command
             new InputOption('--format',         '-f',
                 InputOption::VALUE_REQUIRED,
                 '  ' .
-                'How to format features (Default: pretty). Available formats is ' .
+                'How to format features (Default: pretty). Available formats are ' .
                 implode(', ',
                     array_map(function($name) {
                         return "<info>$name</info>";
