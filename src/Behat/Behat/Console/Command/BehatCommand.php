@@ -47,6 +47,18 @@ class BehatCommand extends Command
     );
 
     /**
+     * Default Behat formatters.
+     *
+     * @var     array
+     */
+    protected $defaultFormatters = array(
+        'pretty'    => 'Behat\Behat\Formatter\PrettyFormatter',
+        'progress'  => 'Behat\Behat\Formatter\ProgressFormatter',
+        'html'      => 'Behat\Behat\Formatter\HtmlFormatter',
+        'junit'     => 'Behat\Behat\Formatter\JUnitFormatter'
+    );
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -107,7 +119,11 @@ class BehatCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 '  ' .
                 'How to format features (Default: pretty). Available formats is ' .
-                '<info>pretty</info>, <info>progress</info>, <info>junit</info>, <info>html</info>.'
+                implode(', ',
+                    array_map(function($name) {
+                        return "<info>$name</info>";
+                    }, array_keys($this->defaultFormatters))
+                )
             ),
             new InputOption('--colors',         null,
                 InputOption::VALUE_NONE,
@@ -388,7 +404,7 @@ ENVIRONMENT
      *
      * @return  IteratorAggregate|array
      *
-     * @throws  InvalidArgumentException    if provided in input path is not found
+     * @throws  RuntimeException    if provided in input path is not found
      */
     protected function locateFeaturesPaths(InputInterface $input, ContainerInterface $container)
     {
@@ -411,7 +427,7 @@ ENVIRONMENT
             } elseif (is_dir($path . DIRECTORY_SEPARATOR . 'features')) {
                 $basePath = $path . DIRECTORY_SEPARATOR . 'features';
             } else {
-                throw new \InvalidArgumentException("Path $path not found");
+                throw new \RuntimeException("Path $path not found");
             }
         }
 
@@ -479,7 +495,7 @@ ENVIRONMENT
      *
      * @return  Behat\Behat\Formatter\FormatterInterface
      *
-     * @throws  InvalidArgumentException            if provided in input formatter name doesn't exists
+     * @throws  RuntimeException            if provided in input formatter name doesn't exists
      *
      * @uses    setupFormatter()
      */
@@ -489,23 +505,12 @@ ENVIRONMENT
 
         if (class_exists($formatterName)) {
             $class = $formatterName;
+        } elseif (isset($this->defaultFormatters[$formatterName])) {
+            $class = $this->defaultFormatters[$formatterName];
         } else {
-            switch ($formatterName) {
-                case 'progress':
-                    $class = 'Behat\Behat\Formatter\ProgressFormatter';
-                    break;
-                case 'pretty':
-                    $class = 'Behat\Behat\Formatter\PrettyFormatter';
-                    break;
-                case 'html':
-                    $class = 'Behat\Behat\Formatter\HtmlFormatter';
-                    break;
-                case 'junit':
-                    $class = 'Behat\Behat\Formatter\JUnitFormatter';
-                    break;
-                default:
-                    throw new \InvalidArgumentException('Unknown formatter: ' . $formatterName);
-            }
+            throw new \RuntimeException("Unknown formatter: \"$formatterName\". " .
+                'Available formatters are: ' . implode(', ', array_keys($this->defaultFormatters))
+            );
         }
 
         $formatter = new $class();
