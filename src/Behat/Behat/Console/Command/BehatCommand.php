@@ -60,64 +60,78 @@ class BehatCommand extends Command
             ),
             new InputOption('--config',         '-c',
                 InputOption::VALUE_REQUIRED,
+                '  ' .
                 'Specify external configuration file to load. ' .
                 '<info>behat.yml</info> or <info>config/behat.yml</info> will be used by default.'
             ),
             new InputOption('--out',            null,
                 InputOption::VALUE_REQUIRED,
+                '          ' .
                 'Write formatter output to a file/directory instead of STDOUT.'
             ),
             new InputOption('--name',           '-n',
                 InputOption::VALUE_REQUIRED,
+                '    ' .
                 'Only execute the feature elements (features or scenarios) which match part of the given name or regex.'
             ),
             new InputOption('--tags',           '-t',
                 InputOption::VALUE_REQUIRED,
+                '    ' .
                 'Only execute the features or scenarios with tags matching tag filter expression.'
             ),
-            new InputOption('--strict',         null,
+            new InputOption('--strict',         '-s',
                 InputOption::VALUE_NONE,
+                '  ' .
                 'Fail if there are any undefined or pending steps.'
             ),
 
 
             new InputOption('--init',           null,
                 InputOption::VALUE_NONE,
+                '         ' .
                 'Create features/ directory structure'
             ),
             new InputOption('--usage',          null,
                 InputOption::VALUE_NONE,
+                '        ' .
                 'Print *.feature example in specified language (--lang).'
             ),
             new InputOption('--steps',          null,
                 InputOption::VALUE_NONE,
+                '        ' .
                 'Print available steps in specified language (--lang).'
             ),
 
 
             new InputOption('--format',         '-f',
                 InputOption::VALUE_REQUIRED,
+                '  ' .
                 'How to format features (Default: pretty). Available formats is ' .
                 '<info>pretty</info>, <info>progress</info>, <info>junit</info>, <info>html</info>.'
             ),
             new InputOption('--colors',         null,
                 InputOption::VALUE_NONE,
+                '       ' .
                 'Force Behat to use ANSI color in the output.'
             ),
-            new InputOption('--no-colors',      '-C',
+            new InputOption('--no-colors',      null,
                 InputOption::VALUE_NONE,
+                '    ' .
                 'Do not use ANSI color in the output.'
             ),
-            new InputOption('--no-time',        '-T',
+            new InputOption('--no-time',        null,
                 InputOption::VALUE_NONE,
+                '      ' .
                 'Hide time in output.'
             ),
             new InputOption('--lang',           null,
                 InputOption::VALUE_REQUIRED,
+                '         ' .
                 'Print formatter output in particular language.'
             ),
             new InputOption('--no-multiline',   null,
                 InputOption::VALUE_NONE,
+                ' ' .
                 'No multiline arguments in output.'
             ),
         ));
