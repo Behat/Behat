@@ -4,7 +4,8 @@ namespace Behat\Behat\Console;
 
 use Symfony\Component\Console\Application,
     Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputDefinition;
+    Symfony\Component\Console\Input\InputDefinition,
+    Symfony\Component\Console\Input\InputOption;
 
 use Behat\Behat\Console\Command\BehatCommand;
 
@@ -30,7 +31,11 @@ class BehatApplication extends Application
     {
         parent::__construct('Behat', 'DEV');
 
-        $this->definition = new InputDefinition();
+        $this->definition = new InputDefinition(array(
+            new InputOption('--help',       '-h', InputOption::VALUE_NONE, 'Display this help message.'),
+            new InputOption('--verbose',    '-v', InputOption::VALUE_NONE, 'Increase verbosity of exceptions.'),
+            new InputOption('--version',    '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
+        ));
         $this->addCommands(array(new BehatCommand()));
     }
 

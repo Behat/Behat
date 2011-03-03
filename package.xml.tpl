@@ -38,7 +38,6 @@
             <file role="script" baseinstalldir="/" name="bin/behat.bat">
                 <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
                 <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
-                <tasks:replace from="@package_version@" to="version" type="package-info" />
             </file>
 
             <file role="php" baseinstalldir="behat" name="autoload.php.dist" />

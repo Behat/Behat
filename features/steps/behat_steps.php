@@ -12,7 +12,7 @@ $steps->When('/^I run "behat ([^"]*)"$/', function($world, $command) {
              : escapeshellarg(BEHAT_PHP_BIN_PATH);
     $command = strtr($command, array('\'' => '"'));
 
-    exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' ' . $command, $output, $return);
+    exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --no-time --no-colors ' . $command, $output, $return);
 
     $world->command = $command;
     $world->output  = trim(implode("\n", $output));

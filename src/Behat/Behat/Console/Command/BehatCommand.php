@@ -55,77 +55,84 @@ class BehatCommand extends Command
         $this->setDefinition(array(
             new InputArgument('features',
                 InputArgument::OPTIONAL,
-                'Features path'
+                'Feature(s) to run. Could be <info>directory path</info>, <info>single feature path</info> ' .
+                'or scenario at specific feature line ("<info>*.feature:10</info>").'
             ),
             new InputOption('--config',         '-c',
                 InputOption::VALUE_REQUIRED,
-                'Specify external configuration file to load (behat.yml & config/behat.yml will be used in other way).'
+                '  ' .
+                'Specify external configuration file to load. ' .
+                '<info>behat.yml</info> or <info>config/behat.yml</info> will be used by default.'
             ),
             new InputOption('--out',            null,
                 InputOption::VALUE_REQUIRED,
+                '          ' .
                 'Write formatter output to a file/directory instead of STDOUT.'
             ),
             new InputOption('--name',           '-n',
                 InputOption::VALUE_REQUIRED,
-                'Only execute the feature elements (features or scenarios) which match part of the given name.'
+                '    ' .
+                'Only execute the feature elements (features or scenarios) which match part of the given name or regex.'
             ),
             new InputOption('--tags',           '-t',
                 InputOption::VALUE_REQUIRED,
-                'Only execute the features or scenarios with tags matching expression.'
+                '    ' .
+                'Only execute the features or scenarios with tags matching tag filter expression.'
             ),
-            new InputOption('--verbose',        '-v',
+            new InputOption('--strict',         '-s',
                 InputOption::VALUE_NONE,
-                'Increase verbosity of fail messages.'
-            ),
-            new InputOption('--strict',         null,
-                InputOption::VALUE_NONE,
+                '  ' .
                 'Fail if there are any undefined or pending steps.'
             ),
 
 
+            new InputOption('--init',           null,
+                InputOption::VALUE_NONE,
+                '         ' .
+                'Create features/ directory structure'
+            ),
             new InputOption('--usage',          null,
                 InputOption::VALUE_NONE,
+                '        ' .
                 'Print *.feature example in specified language (--lang).'
             ),
             new InputOption('--steps',          null,
                 InputOption::VALUE_NONE,
+                '        ' .
                 'Print available steps in specified language (--lang).'
             ),
 
 
             new InputOption('--format',         '-f',
                 InputOption::VALUE_REQUIRED,
-                'How to format features (Default: pretty). Available formats is pretty, progress, html.'
+                '  ' .
+                'How to format features (Default: pretty). Available formats is ' .
+                '<info>pretty</info>, <info>progress</info>, <info>junit</info>, <info>html</info>.'
             ),
             new InputOption('--colors',         null,
                 InputOption::VALUE_NONE,
+                '       ' .
                 'Force Behat to use ANSI color in the output.'
             ),
-            new InputOption('--no-colors',      '-C',
+            new InputOption('--no-colors',      null,
                 InputOption::VALUE_NONE,
+                '    ' .
                 'Do not use ANSI color in the output.'
             ),
-            new InputOption('--no-time',        '-T',
+            new InputOption('--no-time',        null,
                 InputOption::VALUE_NONE,
+                '      ' .
                 'Hide time in output.'
             ),
             new InputOption('--lang',           null,
                 InputOption::VALUE_REQUIRED,
-                'Print formatters output in particular language.'
+                '         ' .
+                'Print formatter output in particular language.'
             ),
             new InputOption('--no-multiline',   null,
                 InputOption::VALUE_NONE,
+                ' ' .
                 'No multiline arguments in output.'
-            ),
-
-
-            new InputOption('--help',           '-h',
-                InputOption::VALUE_NONE,
-                'Display this help message.'
-            ),
-            new InputOption('--version',        '-V',
-                InputOption::VALUE_NONE,
-                'Display this program version.'
             ),
         ));
     }
@@ -155,10 +162,15 @@ class BehatCommand extends Command
             return 0;
         }
 
+        if ($input->getOption('init')) {
+            $this->createFeaturesPath($container, $output);
+
+            return 0;
+        }
+
         $featuresPaths = $this->locateFeaturesPaths($input, $container);
         $this->loadBootstraps($container);
         $formatter = $this->configureFormatter($input, $container, $output->isDecorated());
-
         $this->configureGherkinParser($input, $container);
         $this->configureDefinitionDispatcher($input, $container);
 
@@ -223,14 +235,133 @@ class BehatCommand extends Command
      * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
      * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
      */
-    public function printUsageExample(InputInterface $input, ContainerInterface $container,
+    protected function printUsageExample(InputInterface $input, ContainerInterface $container,
                                       OutputInterface $output)
     {
         $keywords   = $container->get('gherkin.keywords');
         $dumper     = new KeywordsDumper($keywords);
+        $lang       = $input->getOption('lang') ?: 'en';
 
         $output->setDecorated(false);
-        $output->write($dumper->dump($input->getOption('lang') ?: 'en') . "\n\n");
+        $output->writeln($dumper->dump($lang) . "\n");
+    }
+
+    /**
+     * Creates features path structure (initializes behat tests structure).
+     *
+     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
+     * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
+     */
+    protected function createFeaturesPath(ContainerInterface $container, OutputInterface $output)
+    {
+        $basePath       = $this->pathTokens['BEHAT_WORK_PATH'] . DIRECTORY_SEPARATOR;
+        $featuresPath   = $this->preparePath($container->getParameter('behat.paths.features'), true);
+        $supportPath    = $this->preparePath($container->getParameter('behat.paths.support'), true);
+        $stepsPath      = $container->getParameter('behat.paths.steps');
+        if (is_array($stepsPath)) {
+            $stepsPath = $this->preparePath($stepsPath[0], true);
+        } else {
+            $stepsPath = $this->preparePath($stepsPath, true);
+        }
+        $envPath        = $container->getParameter('behat.paths.environment');
+        if (is_array($envPath)) {
+            $envPath = $this->preparePath($envPath[0], true);
+        } else {
+            $envPath = $this->preparePath($envPath, true);
+        }
+        $bootPath       = $container->getParameter('behat.paths.bootstrap');
+        if (is_array($bootPath)) {
+            $bootPath = $this->preparePath($bootPath[0], true);
+        } else {
+            $bootPath = $this->preparePath($bootPath, true);
+        }
+
+        if (!is_dir($featuresPath)) {
+            mkdir($featuresPath, 0777, true);
+            $output->writeln(
+                '<info>+d</info> ' .
+                str_replace($basePath, '', $featuresPath) .
+                ' <comment>⎯ place your *.feature files here</comment>'
+            );
+        }
+
+        if (!is_dir($stepsPath)) {
+            mkdir($stepsPath, 0777, true);
+            $output->writeln(
+                '<info>+d</info> ' .
+                str_replace($basePath, '', $stepsPath) .
+                ' <comment>⎯ place step definition files here</comment>'
+            );
+
+            file_put_contents($stepsPath . DIRECTORY_SEPARATOR . 'steps.php', <<<DEFINITIONS
+<?php
+
+/**
+ * Define your steps here with:
+ *
+ *     \$steps->Given('/REGEX/', function(\$world) {
+ *         // do something or throw exception
+ *     });
+ */
+
+
+DEFINITIONS
+            );
+            $output->writeln(
+                '<info>+f</info> ' .
+                str_replace($basePath, '', $stepsPath) . DIRECTORY_SEPARATOR . 'steps.php' .
+                ' <comment>⎯ place some step definitions in this file</comment>'
+            );
+        }
+
+        if (!is_dir($supportPath)) {
+            mkdir($supportPath, 0777, true);
+            $output->writeln(
+                '<info>+d</info> ' .
+                str_replace($basePath, '', $supportPath) .
+                ' <comment>⎯ place support scripts and static files here</comment>'
+            );
+
+            file_put_contents($bootPath, <<<BOOTSTRAP
+<?php
+
+/**
+ * Place bootstrap scripts here:
+ *
+ *     require_once 'PHPUnit/Autoload.php';
+ *     require_once 'PHPUnit/Framework/Assert/Functions.php';
+ */
+
+
+BOOTSTRAP
+            );
+            $output->writeln(
+                '<info>+f</info> ' .
+                str_replace($basePath, '', $bootPath) .
+                ' <comment>⎯ place bootstrap scripts in this file</comment>'
+            );
+
+            file_put_contents($envPath, <<<ENVIRONMENT
+<?php
+
+/**
+ * Place environment initialization scripts here:
+ *
+ *     \$world->initialSum = 231;
+ *     \$world->calc = function() {
+ *         // ...
+ *     };
+ */
+
+
+ENVIRONMENT
+            );
+            $output->writeln(
+                '<info>+f</info> ' .
+                str_replace($basePath, '', $envPath) .
+                ' <comment>⎯ place environment initialization scripts in this file</comment>'
+            );
+        }
     }
 
     /**
@@ -240,7 +371,7 @@ class BehatCommand extends Command
      * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
      * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
      */
-    public function printAvailableSteps(InputInterface $input, ContainerInterface $container,
+    protected function printAvailableSteps(InputInterface $input, ContainerInterface $container,
                                         OutputInterface $output)
     {
         $dumper = $container->get('behat.definition_dumper');
@@ -595,12 +726,13 @@ class BehatCommand extends Command
      * prepend single filenames with CWD path.
      *
      * @param   string  $path
+     * @param   boolean $allowRelativePaths     we allow relative paths?
      *
      * @return  string
      *
      * @uses    pathTokens
      */
-    protected function preparePath($path)
+    protected function preparePath($path, $allowRelativePaths = false)
     {
         foreach ($this->pathTokens as $name => $value) {
             $path = str_replace($name, $value, $path);
@@ -608,8 +740,10 @@ class BehatCommand extends Command
 
         $path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', '/', $path));
 
-        if (!is_dir($path) && !is_file($path)) {
-            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+        if (!$allowRelativePaths) {
+            if (!is_dir($path) && !is_file($path)) {
+                $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+            }
         }
 
         return $path;

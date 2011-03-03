@@ -1,3 +1,11 @@
+1.0.0RC6 / 2011-03-03
+=====================
+
+  * Cleaned command options
+  * Added --init option
+  * Multiple paths support in behat.yml
+  * Application options refactoring
+
 1.0.0RC5 / 2011-02-25
 =====================
 

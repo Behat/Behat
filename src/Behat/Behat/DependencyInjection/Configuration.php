@@ -41,22 +41,22 @@ class Configuration
                 scalarNode('features')->
                     defaultValue('%behat.paths.base%')->
                 end()->
-                scalarNode('steps')->
-                    defaultValue('%behat.paths.base%/steps')->
-                end()->
-                scalarNode('steps-i18n')->
-                    defaultValue('%behat.paths.base%/steps/i18n')->
-                end()->
                 scalarNode('support')->
                     defaultValue('%behat.paths.base%/support')->
                 end()->
-                scalarNode('bootstrap')->
+                variableNode('steps')->
+                    defaultValue('%behat.paths.base%/steps')->
+                end()->
+                variableNode('steps-i18n')->
+                    defaultValue('%behat.paths.base%/steps/i18n')->
+                end()->
+                variableNode('bootstrap')->
                     defaultValue('%behat.paths.support%/bootstrap.php')->
                 end()->
-                scalarNode('environment')->
+                variableNode('environment')->
                     defaultValue('%behat.paths.support%/env.php')->
                 end()->
-                scalarNode('hooks')->
+                variableNode('hooks')->
                     defaultValue('%behat.paths.support%/hooks.php')->
                 end()->
             end()->

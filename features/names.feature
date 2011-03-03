@@ -44,7 +44,7 @@ Feature: Names
       """
 
   Scenario: First Name
-    When I run "behat -TCf pretty --name First"
+    When I run "behat -f pretty --name First"
     Then it should pass with:
       """
       Feature: First Feature
@@ -73,7 +73,7 @@ Feature: Names
       """
 
   Scenario: Second Name
-    When I run "behat -TCf pretty --name 'Second Scenario'"
+    When I run "behat -f pretty --name 'Second Scenario'"
     Then it should pass with:
       """
       Feature: First Feature
@@ -89,7 +89,7 @@ Feature: Names
       """
 
   Scenario: RegEx
-    When I run "behat -TCf pretty --name '/nd Scenario$/'"
+    When I run "behat -f pretty --name '/nd Scenario$/'"
     Then it should pass with:
       """
       Feature: First Feature
