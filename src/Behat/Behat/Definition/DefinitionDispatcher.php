@@ -105,15 +105,16 @@ class DefinitionDispatcher
         $regex = preg_replace('/([\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
         $regex = preg_replace(
             array(
-                '/\'([^\']*)\'/', '/\"([^\"]*)\"/',
-                '/(\d+)/'
+                '/\'([^\']*)\'/', '/\"([^\"]*)\"/', // Quoted strings
+                '/(\d+)/',                          // Numbers
             ),
             array(
                 "\'([^\']*)\'", "\"([^\"]*)\"",
-                "(\\d+)"
+                "(\\d+)",
             ),
             $regex, -1, $count
         );
+        $regex = preg_replace('/\'.*(?<!\')/', '\\\\$0', $regex); // Single quotes without matching pair (escape in resulting regex)
 
         $args = array("\$world");
         for ($i = 0; $i < $count; $i++) {
