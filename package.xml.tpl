@@ -60,7 +60,7 @@
             <package>
                 <name>gherkin</name>
                 <channel>pear.behat.org</channel>
-                <min>1.0.0RC2</min>
+                <min>1.0.0</min>
             </package>
             <extension>
                 <name>pcre</name>
