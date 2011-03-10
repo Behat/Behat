@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="proposal-title">
         <source>You can implement step definitions for undefined steps with these snippets:</source>
-        <target>E' possibile implementare gli step ancora non definiti con questi snippets di codice:</target>
+        <target>E' possibile implementare gli step ancora non definiti con queste parti di codice:</target>
       </trans-unit>
       <trans-unit id="failed-steps-title">
         <source>failed steps</source>
@@ -16,7 +16,7 @@
       </trans-unit>
       <trans-unit id="scenarios-count">
         <source><![CDATA[{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios]]></source>
-        <target><![CDATA[{0} Nessuno scenarios|{1} 1 scenario|]1,Inf] %1% scenari]]></target>
+        <target><![CDATA[{0} Nessuno scenario|{1} 1 scenario|]1,Inf] %1% scenari]]></target>
       </trans-unit>
       <trans-unit id="steps-count">
         <source><![CDATA[{0} No steps|{1} 1 step|]1,Inf] %1% steps]]></source>
