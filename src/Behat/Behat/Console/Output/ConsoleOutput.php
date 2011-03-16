@@ -45,14 +45,16 @@ class ConsoleOutput extends StreamOutput
     /**
      * {@inheritdoc}
      */
-    protected function format($message)
+    protected function getBeginStyleRegex()
     {
-        $message = preg_replace_callback('#{\+([a-z][a-z0-9\-_=;]+)}#i',
-            array($this, 'replaceStartStyle'), $message
-        );
+        return '#{\+([a-z][a-z0-9\-_=;]+)}#i';
+    }
 
-        return preg_replace_callback('#{\-([a-z][a-z0-9\-_]*)?}#i',
-            array($this, 'replaceEndStyle'), $message
-        );
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEndStyleRegex()
+    {
+        return '#{\-([a-z][a-z0-9\-_]*)?}#i';
     }
 }
