@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\DependencyInjection;
 
-use Symfony\Component\HttpKernel\DependencyInjection\Extension,
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
     Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Config\Definition\Processor,
@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BehatExtension extends Extension
+class BehatExtension implements ExtensionInterface
 {
     /**
      * Configuration processor.
