@@ -226,8 +226,12 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     protected function configureOutputConsole(StreamOutput $console)
     {
-        $console->setVerbosity($this->parameters->get('verbose') ? 2 : 1);
-        $console->setDecorated($this->parameters->get('decorated'));
+        $console->setVerbosity(
+            $this->parameters->get('verbose') ? StreamOutput::VERBOSITY_VERBOSE : StreamOutput::VERBOSITY_NORMAL
+        );
+        $console->getFormatter()->setDecorated(
+            $this->parameters->get('decorated')
+        );
     }
 
     /**
