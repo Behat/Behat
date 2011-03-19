@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Extension\Extension,
+use Symfony\Component\HttpKernel\DependencyInjection\Extension,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
     Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Config\Definition\Processor,
