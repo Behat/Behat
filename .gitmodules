@@ -22,3 +22,6 @@
 [submodule "vendor/Symfony/Component/Config"]
 	path = vendor/Symfony/Component/Config
 	url = git://github.com/symfony/Config.git
+[submodule "vendor/Symfony/Component/HttpKernel"]
+	path = vendor/Symfony/Component/HttpKernel
+	url = git://github.com/symfony/HttpKernel.git
