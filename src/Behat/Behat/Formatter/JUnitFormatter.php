@@ -148,7 +148,7 @@ class JUnitFormatter extends ConsoleFormatter
         $scenario   = $event->getSubject();
         $time       = microtime(true) - $this->scenarioStartTime;
 
-        $this->printTestCase($scenario, $time);
+        $this->printTestCase($scenario, $time, $event);
     }
 
     /**
@@ -173,7 +173,7 @@ class JUnitFormatter extends ConsoleFormatter
         $scenario   = $event->getSubject();
         $time       = microtime(true) - $this->scenarioStartTime;
 
-        $this->printTestCase($scenario, $time);
+        $this->printTestCase($scenario, $time, $event);
     }
 
     /**
@@ -221,10 +221,11 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Prints testcase.
      *
-     * @param   Behat\Gherkin\Node\ScenarioNode $feature
-     * @param   float                           $time
+     * @param   Behat\Gherkin\Node\ScenarioNode         $feature
+     * @param   float                                   $time
+     * @param   Symfony\Component\EventDispatcher\Event $event
      */
-    protected function printTestCase(ScenarioNode $scenario, $time)
+    protected function printTestCase(ScenarioNode $scenario, $time, Event $event)
     {
         $className  = $scenario->getFeature()->getTitle() . '.' . $scenario->getTitle();
         $name       = $scenario->getTitle();
