@@ -194,6 +194,12 @@
                 <argument>de</argument>
                 <argument>behat</argument>
             </call>
+            <call method="addResource">
+                <argument>xliff</argument>
+                <argument>%behat.paths.i18n%/ja.xliff</argument>
+                <argument>ja</argument>
+                <argument>behat</argument>
+            </call>
 
             <!-- Gherkin translation resources -->
             <call method="addResource">
