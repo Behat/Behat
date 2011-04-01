@@ -2,8 +2,7 @@
 
 namespace Behat\Behat\Formatter;
 
-use Behat\Behat\Tester\StepTester,
-    Behat\Behat\Definition\Definition,
+use Behat\Behat\Definition\Definition,
     Behat\Behat\DataCollector\LoggerDataCollector;
 
 use Behat\Gherkin\Node\AbstractNode,

@@ -2,12 +2,17 @@
 
 namespace Behat\Behat\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
-use Behat\Behat\Tester\StepTester,
-    Behat\Behat\Definition\Definition,
-    Behat\Behat\DataCollector\LoggerDataCollector;
+use Behat\Behat\Definition\Definition,
+    Behat\Behat\DataCollector\LoggerDataCollector,
+    Behat\Behat\Event\SuiteEvent,
+    Behat\Behat\Event\FeatureEvent,
+    Behat\Behat\Event\ScenarioEvent,
+    Behat\Behat\Event\BackgroundEvent,
+    Behat\Behat\Event\OutlineEvent,
+    Behat\Behat\Event\OutlineExampleEvent,
+    Behat\Behat\Event\StepEvent;
 
 use Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\FeatureNode,
@@ -92,105 +97,74 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @uses    beforeSuite()
-     * @uses    afterSuite()
-     * @uses    beforeFeature()
-     * @uses    afterFeature()
-     * @uses    beforeBackground()
-     * @uses    afterBackground()
-     * @uses    beforeOutline()
-     * @uses    beforeOutlineExample()
-     * @uses    afterOutlineExample()
-     * @uses    afterOutline()
-     * @uses    beforeScenario()
-     * @uses    afterScenario()
-     * @uses    afterStep()
+     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
      */
-    public function registerListeners(EventDispatcher $dispatcher)
+    public static function getSubscribedEvents()
     {
-        $dispatcher->connect('suite.before',              array($this, 'beforeSuite'),            -10);
-        $dispatcher->connect('suite.after',               array($this, 'afterSuite'),             -10);
-        $dispatcher->connect('feature.before',            array($this, 'beforeFeature'),          -10);
-        $dispatcher->connect('feature.after',             array($this, 'afterFeature'),           -10);
-        $dispatcher->connect('background.before',         array($this, 'beforeBackground'),       -10);
-        $dispatcher->connect('background.after',          array($this, 'afterBackground'),        -10);
-        $dispatcher->connect('outline.before',            array($this, 'beforeOutline'),          -10);
-        $dispatcher->connect('outline.example.before',    array($this, 'beforeOutlineExample'),   -10);
-        $dispatcher->connect('outline.example.after',     array($this, 'afterOutlineExample'),    -10);
-        $dispatcher->connect('outline.after',             array($this, 'afterOutline'),           -10);
-        $dispatcher->connect('scenario.before',           array($this, 'beforeScenario'),         -10);
-        $dispatcher->connect('scenario.after',            array($this, 'afterScenario'),          -10);
-        $dispatcher->connect('step.after',                array($this, 'afterStep'),              -10);
+        return array(
+            'beforeSuite', 'afterSuite', 'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario',
+            'beforeBackground', 'afterBackground', 'beforeOutline', 'afterOutline',
+            'beforeOutlineExample', 'afterOutlineExample', 'afterStep'
+        );
     }
 
     /**
      * Listens to "suite.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\SuiteEvent    $event
      *
      * @uses    printSuiteHeader()
      */
-    public function beforeSuite(Event $event)
+    public function beforeSuite(SuiteEvent $event)
     {
-        $logger = $event->getSubject();
-
-        $this->printSuiteHeader($logger);
+        $this->printSuiteHeader($event->getLogger());
     }
 
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\SuiteEvent    $event
      *
      * @uses    printSuiteFooter()
      */
-    public function afterSuite(Event $event)
+    public function afterSuite(SuiteEvent $event)
     {
-        $logger = $event->getSubject();
-
-        $this->printSuiteFooter($logger);
+        $this->printSuiteFooter($event->getLogger());
     }
 
     /**
      * Listens to "feature.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\FeatureEvent  $event
      *
      * @uses    printFeatureHeader()
      */
-    public function beforeFeature(Event $event)
+    public function beforeFeature(FeatureEvent $event)
     {
-        $feature = $event->getSubject();
-
         $this->isBackgroundPrinted = false;
-
-        $this->printFeatureHeader($feature);
+        $this->printFeatureHeader($event->getFeature());
     }
 
     /**
      * Listens to "feature.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\FeatureEvent  $event
      *
      * @uses    printFeatureFooter()
      */
-    public function afterFeature(Event $event)
+    public function afterFeature(FeatureEvent $event)
     {
-        $feature = $event->getSubject();
-
-        $this->printFeatureFooter($feature);
+        $this->printFeatureFooter($event->getFeature());
     }
 
     /**
      * Listens to "background.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\BackgroundEvent  $event
      *
      * @uses    printBackgroundHeader()
      */
-    public function beforeBackground(Event $event)
+    public function beforeBackground(BackgroundEvent $event)
     {
         $this->inBackground = true;
 
@@ -198,19 +172,17 @@ class PrettyFormatter extends ProgressFormatter
             return;
         }
 
-        $background = $event->getSubject();
-
-        $this->printBackgroundHeader($background);
+        $this->printBackgroundHeader($event->getBackground());
     }
 
     /**
      * Listens to "background.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\BackgroundEvent  $event
      *
      * @uses    printBackgroundFooter()
      */
-    public function afterBackground(Event $event)
+    public function afterBackground(BackgroundEvent $event)
     {
         $this->inBackground = false;
 
@@ -219,9 +191,7 @@ class PrettyFormatter extends ProgressFormatter
         }
         $this->isBackgroundPrinted = true;
 
-        $background = $event->getSubject();
-
-        $this->printBackgroundFooter($background);
+        $this->printBackgroundFooter($event->getBackground());
 
         if (null !== $this->delayedScenarioEvent) {
             $method = $this->delayedScenarioEvent[0];
@@ -234,13 +204,13 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\OutlineEvent  $event
      *
      * @uses    printOutlineHeader()
      */
-    public function beforeOutline(Event $event)
+    public function beforeOutline(OutlineEvent $event)
     {
-        $outline = $event->getSubject();
+        $outline = $event->getOutline();
 
         if (!$this->isBackgroundPrinted && $outline->getFeature()->hasBackground()) {
             $this->delayedScenarioEvent = array(__FUNCTION__, $event);
@@ -256,62 +226,56 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\OutlineExampleEvent  $event
      *
      * @uses    printOutlineExampleHeader()
      */
-    public function beforeOutlineExample(Event $event)
+    public function beforeOutlineExample(OutlineExampleEvent $event)
     {
         $this->inOutlineExample     = true;
         $this->delayedStepEvents    = array();
 
-        $outline = $event->getSubject();
-
-        $this->printOutlineExampleHeader($outline, $event->get('iteration'));
+        $this->printOutlineExampleHeader($event->getOutline(), $event->getIteration());
     }
 
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\OutlineExampleEvent  $event
      *
      * @uses    printOutlineExampleFooter()
      */
-    public function afterOutlineExample(Event $event)
+    public function afterOutlineExample(OutlineExampleEvent $event)
     {
         $this->inOutlineExample = false;
 
-        $outline = $event->getSubject();
-
         $this->printOutlineExampleFooter(
-            $outline, $event->get('iteration'), $event->get('result'), $event->get('skipped')
+            $event->getOutline(), $event->getIteration(), $event->getResult(), $event->isSkipped()
         );
     }
 
     /**
      * Listens to "outline.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\OutlineEvent  $event
      *
      * @uses    printOutlineFooter()
      */
-    public function afterOutline(Event $event)
+    public function afterOutline(OutlineEvent $event)
     {
-        $outline = $event->getSubject();
-
-        $this->printOutlineFooter($outline);
+        $this->printOutlineFooter($event->getOutline());
     }
 
     /**
      * Listens to "scenario.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\ScenarioEvent $event
      *
      * @uses    printScenarioHeader()
      */
-    public function beforeScenario(Event $event)
+    public function beforeScenario(ScenarioEvent $event)
     {
-        $scenario = $event->getSubject();
+        $scenario = $event->getScenario();
 
         if (!$this->isBackgroundPrinted && $scenario->getFeature()->hasBackground()) {
             $this->delayedScenarioEvent = array(__FUNCTION__, $event);
@@ -325,25 +289,23 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\ScenarioEvent $event
      *
      * @uses    printScenarioFooter()
      */
-    public function afterScenario(Event $event)
+    public function afterScenario(ScenarioEvent $event)
     {
-        $scenario = $event->getSubject();
-
-        $this->printScenarioFooter($scenario);
+        $this->printScenarioFooter($event->getScenario());
     }
 
     /**
      * Listens to "step.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\StepEvent $event
      *
      * @uses    printStep()
      */
-    public function afterStep(Event $event)
+    public function afterStep(StepEvent $event)
     {
         if ($this->inBackground && $this->isBackgroundPrinted) {
             return;
@@ -355,14 +317,12 @@ class PrettyFormatter extends ProgressFormatter
             return;
         }
 
-        $step = $event->getSubject();
-
         $this->printStep(
-            $step,
-            $event->get('result'),
-            $event->get('definition'),
-            $event->get('snippet'),
-            $event->get('exception')
+            $event->getStep(),
+            $event->getResult(),
+            $event->getDefinition(),
+            $event->getSnippet(),
+            $event->getException()
         );
     }
 
@@ -568,10 +528,7 @@ class PrettyFormatter extends ProgressFormatter
         $this->inOutlineSteps = true;
 
         foreach ($this->delayedStepEvents as $event) {
-            $step       = $event->getSubject();
-            $definition = $event->get('definition');
-
-            $this->printStep($step, StepTester::SKIPPED, $definition);
+            $this->printStep($event->getStep(), StepEvent::SKIPPED, $event->getDefinition());
         }
 
         $this->inOutlineSteps = false;
@@ -622,8 +579,8 @@ class PrettyFormatter extends ProgressFormatter
     protected function printOutlineExampleResultExceptions(TableNode $examples, array $events)
     {
         foreach ($events as $event) {
-            if (null !== ($exception = $event->get('exception'))) {
-                $color = $this->getResultColorCode($event->get('result'));
+            if (null !== ($exception = $event->getException())) {
+                $color = $this->getResultColorCode($event->getResult());
 
                 if ($this->parameters->get('verbose')) {
                     $error = (string) $exception;

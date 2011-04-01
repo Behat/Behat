@@ -11,7 +11,8 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
 use Behat\Behat\Environment\EnvironmentInterface,
     Behat\Behat\Exception\Ambiguous,
     Behat\Behat\Exception\Undefined,
-    Behat\Behat\Exception\Pending;
+    Behat\Behat\Exception\Pending,
+    Behat\Behat\Event\StepEvent;
 
 /*
  * This file is part of the Behat.
@@ -28,12 +29,6 @@ use Behat\Behat\Environment\EnvironmentInterface,
  */
 class StepTester implements NodeVisitorInterface
 {
-    const PASSED    = 0;
-    const SKIPPED   = 1;
-    const PENDING   = 2;
-    const UNDEFINED = 3;
-    const FAILED    = 4;
-
     /**
      * Event dispatcher.
      *
@@ -117,9 +112,7 @@ class StepTester implements NodeVisitorInterface
     {
         $step->setTokens($this->tokens);
 
-        $this->dispatcher->notify(new Event($step, 'step.before', array(
-            'environment'   => $this->environment
-        )));
+        $this->dispatcher->dispatch('beforeStep', new StepEvent($step, $this->environment));
 
         $result     = 0;
         $definition = null;
@@ -131,11 +124,11 @@ class StepTester implements NodeVisitorInterface
             try {
                 $definition = $this->definitions->findDefinition($step);
             } catch (Ambiguous $e) {
-                $result    = self::FAILED;
+                $result    = StepEvent::FAILED;
                 $exception = $e;
             }
         } catch (Undefined $e) {
-            $result   = self::UNDEFINED;
+            $result   = StepEvent::UNDEFINED;
             $snippet  = $this->definitions->proposeDefinition($step);
         }
 
@@ -145,27 +138,23 @@ class StepTester implements NodeVisitorInterface
                 try {
                     try {
                         $definition->run($this->environment, $this->tokens);
-                        $result = self::PASSED;
+                        $result = StepEvent::PASSED;
                     } catch (Pending $e) {
-                        $result    = self::PENDING;
+                        $result    = StepEvent::PENDING;
                         $exception = $e;
                     }
                 } catch (\Exception $e) {
-                    $result    = self::FAILED;
+                    $result    = StepEvent::FAILED;
                     $exception = $e;
                 }
             } else {
-                $result = self::SKIPPED;
+                $result = StepEvent::SKIPPED;
             }
         }
 
-        $this->dispatcher->notify(new Event($step, 'step.after', array(
-            'result'        => $result,
-            'exception'     => $exception,
-            'definition'    => $definition,
-            'snippet'       => $snippet,
-            'environment'   => $this->environment
-        )));
+        $this->dispatcher->dispatch('afterStep', new StepEvent(
+            $step, $this->environment, $result, $definition, $exception, $snippet
+        ));
 
         return $result;
     }

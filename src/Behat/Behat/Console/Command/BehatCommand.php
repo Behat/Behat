@@ -14,7 +14,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Finder\Finder;
 
 use Behat\Behat\DependencyInjection\BehatExtension,
-    Behat\Behat\Formatter\FormatterInterface;
+    Behat\Behat\Formatter\FormatterInterface,
+    Behat\Behat\Event\SuiteEvent;
 
 use Behat\Gherkin\Filter\NameFilter,
     Behat\Gherkin\Filter\TagFilter,
@@ -686,9 +687,9 @@ ENVIRONMENT
     {
         $dispatcher = $container->get('behat.event_dispatcher');
 
-        $dispatcher->bindHookDispatcherEventListeners($container->get('behat.hook_dispatcher'));
-        $dispatcher->bindLoggerEventListeners($container->get('behat.logger'));
-        $dispatcher->bindFormatterEventListeners($formatter);
+        $dispatcher->addSubscriber($container->get('behat.hook_dispatcher'), 10);
+        $dispatcher->addSubscriber($container->get('behat.logger'), 0);
+        $dispatcher->addSubscriber($formatter, -10);
 
         return $dispatcher;
     }
@@ -708,7 +709,7 @@ ENVIRONMENT
         $dispatcher = $container->get('behat.event_dispatcher');
         $logger     = $container->get('behat.logger');
 
-        $dispatcher->notify(new Event($logger, 'suite.before'));
+        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger));
 
         foreach ($featuresPaths as $path) {
             $features = $gherkin->load((string) $path);
@@ -719,7 +720,7 @@ ENVIRONMENT
             }
         }
 
-        $dispatcher->notify(new Event($logger, 'suite.after'));
+        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger));
 
         return $result;
     }

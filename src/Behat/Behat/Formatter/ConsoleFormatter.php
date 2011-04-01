@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag,
     Symfony\Component\Translation\Translator,
     Symfony\Component\Console\Output\StreamOutput;
 
-use Behat\Behat\Tester\StepTester,
+use Behat\Behat\Event\StepEvent,
     Behat\Behat\Exception\FormatterException,
     Behat\Behat\Console\Formatter\OutputFormatter;
 
@@ -125,15 +125,15 @@ abstract class ConsoleFormatter implements FormatterInterface
     final protected function getResultColorCode($result)
     {
         switch ($result) {
-            case StepTester::PASSED:
+            case StepEvent::PASSED:
                 return 'passed';
-            case StepTester::SKIPPED:
+            case StepEvent::SKIPPED:
                 return 'skipped';
-            case StepTester::PENDING:
+            case StepEvent::PENDING:
                 return 'pending';
-            case StepTester::UNDEFINED:
+            case StepEvent::UNDEFINED:
                 return 'undefined';
-            case StepTester::FAILED:
+            case StepEvent::FAILED:
                 return 'failed';
         }
     }

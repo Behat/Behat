@@ -3,9 +3,13 @@
 namespace Behat\Behat\DataCollector;
 
 use Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event;
+    Symfony\Component\EventDispatcher\Event,
+    Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Behat\Behat\Tester\StepTester;
+use Behat\Behat\Event\SuiteEvent,
+    Behat\Behat\Event\ScenarioEvent,
+    Behat\Behat\Event\OutlineExampleEvent,
+    Behat\Behat\Event\StepEvent;
 
 /*
  * This file is part of the Behat.
@@ -20,7 +24,7 @@ use Behat\Behat\Tester\StepTester;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class LoggerDataCollector
+class LoggerDataCollector implements EventSubscriberInterface
 {
     /**
      * Suite run start time.
@@ -39,14 +43,14 @@ class LoggerDataCollector
      *
      * @var     array
      *
-     * @uses    Behat\Behat\Tester\StepTester
+     * @uses    Behat\Behat\Tester\StepEvent
      */
     protected $statuses             = array(
-        StepTester::PASSED      => 'passed',
-        StepTester::SKIPPED     => 'skipped',
-        StepTester::PENDING     => 'pending',
-        StepTester::UNDEFINED   => 'undefined',
-        StepTester::FAILED      => 'failed'
+        StepEvent::PASSED      => 'passed',
+        StepEvent::SKIPPED     => 'skipped',
+        StepEvent::PENDING     => 'pending',
+        StepEvent::UNDEFINED   => 'undefined',
+        StepEvent::FAILED      => 'failed'
     );
     /**
      * Overall steps count.
@@ -107,33 +111,21 @@ class LoggerDataCollector
     }
 
     /**
-     * Registers logger event listeners.
-     *
-     * @param   Behat\Behat\EventDispatcher\EventDispatcher $dispatcher
-     *
-     * @uses    beforeSuite()
-     * @uses    afterSuite()
-     * @uses    afterScenario()
-     * @uses    afterOutlineExample()
-     * @uses    afterStep()
+     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
      */
-    public function registerListeners(EventDispatcher $dispatcher)
+    public static function getSubscribedEvents()
     {
-        $dispatcher->connect('suite.before',            array($this, 'beforeSuite'),            0);
-        $dispatcher->connect('suite.after',             array($this, 'afterSuite'),             0);
-        $dispatcher->connect('scenario.after',          array($this, 'afterScenario'),          0);
-        $dispatcher->connect('outline.example.after',   array($this, 'afterOutlineExample'),    0);
-        $dispatcher->connect('step.after',              array($this, 'afterStep'),              0);
+        return array('beforeSuite', 'afterSuite', 'afterScenario', 'afterOutlineExample', 'afterStep');
     }
 
     /**
      * Listens to "suite.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event $event
+     * @param   Behat\Behat\Event\SuiteEvent    $event
      *
      * @uses    startTimer()
      */
-    public function beforeSuite(Event $event)
+    public function beforeSuite(SuiteEvent $event)
     {
         $this->startTimer();
     }
@@ -141,11 +133,11 @@ class LoggerDataCollector
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event $event
+     * @param   Behat\Behat\Event\SuiteEvent    $event
      *
      * @uses    finishTimer()
      */
-    public function afterSuite(Event $event)
+    public function afterSuite(SuiteEvent $event)
     {
         $this->finishTimer();
     }
@@ -153,35 +145,35 @@ class LoggerDataCollector
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event $event
+     * @param   Behat\Behat\Event\ScenarioEvent $event
      *
      * @uses    collectScenarioResult()
      */
-    public function afterScenario(Event $event)
+    public function afterScenario(ScenarioEvent $event)
     {
-        $this->collectScenarioResult($event->get('result'));
+        $this->collectScenarioResult($event->getResult());
     }
 
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event $event
+     * @param   Behat\Behat\Event\OutlineExampleEvent   $event
      *
      * @uses    collectScenarioResult()
      */
-    public function afterOutlineExample(Event $event)
+    public function afterOutlineExample(OutlineExampleEvent $event)
     {
-        $this->collectScenarioResult($event->get('result'));
+        $this->collectScenarioResult($event->getResult());
     }
 
     /**
      * Listens to "step.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event $event
+     * @param   Behat\Behat\Event\StepEvent $event
      *
      * @uses    collectStepStats()
      */
-    public function afterStep(Event $event)
+    public function afterStep(StepEvent $event)
     {
         $this->collectStepStats($event);
     }
@@ -296,25 +288,25 @@ class LoggerDataCollector
     /**
      * Collects step statistics.
      *
-     * @param   Symfony\Component\EventDispatcher\Event $event  step.after event
+     * @param   Behat\Behat\Event\StepEvent $event  step.after event
      */
-    protected function collectStepStats(Event $event)
+    protected function collectStepStats(StepEvent $event)
     {
         ++$this->stepsCount;
-        ++$this->stepsStatuses[$this->statuses[$event->get('result')]];
+        ++$this->stepsStatuses[$this->statuses[$event->getResult()]];
 
-        switch ($event->get('result')) {
-            case StepTester::UNDEFINED:
-                foreach ($event->get('snippet') as $key => $snippet) {
+        switch ($event->getResult()) {
+            case StepEvent::UNDEFINED:
+                foreach ($event->getSnippet() as $key => $snippet) {
                     if (!isset($this->definitionsSnippets[$key])) {
                         $this->definitionsSnippets[$key] = $snippet;
                     }
                 }
                 break;
-            case StepTester::FAILED:
+            case StepEvent::FAILED:
                 $this->failedStepsEvents[] = $event;
                 break;
-            case StepTester::PENDING:
+            case StepEvent::PENDING:
                 $this->pendingStepsEvents[] = $event;
                 break;
         }

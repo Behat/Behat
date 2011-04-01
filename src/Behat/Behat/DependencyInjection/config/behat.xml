@@ -66,7 +66,7 @@
         <parameter key="behat.translator.xliff_loader.class">Symfony\Component\Translation\Loader\XliffFileLoader</parameter>
 
         <!-- Event Dispatcher -->
-        <parameter key="behat.event_dispatcher.class">Behat\Behat\EventDispatcher\EventDispatcher</parameter>
+        <parameter key="behat.event_dispatcher.class">Symfony\Component\EventDispatcher\EventDispatcher</parameter>
 
         <!-- Logger -->
         <parameter key="behat.logger.class">Behat\Behat\DataCollector\LoggerDataCollector</parameter>

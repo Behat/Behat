@@ -10,7 +10,8 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\BackgroundNode,
     Behat\Gherkin\Node\StepNode;
 
-use Behat\Behat\Environment\EnvironmentInterface;
+use Behat\Behat\Environment\EnvironmentInterface,
+    Behat\Behat\Event\ScenarioEvent;
 
 /*
  * This file is part of the Behat.
@@ -67,9 +68,7 @@ class ScenarioTester implements NodeVisitorInterface
      */
     public function visit(AbstractNode $scenario)
     {
-        $this->dispatcher->notify(new Event($scenario, 'scenario.before', array(
-            'environment'   => $this->environment
-        )));
+        $this->dispatcher->dispatch('beforeScenario', new ScenarioEvent($scenario, $this->environment));
 
         $result = 0;
         $skip   = false;
@@ -92,11 +91,9 @@ class ScenarioTester implements NodeVisitorInterface
             $result = max($result, $stResult);
         }
 
-        $this->dispatcher->notify(new Event($scenario, 'scenario.after', array(
-            'result'        => $result,
-            'skipped'       => $skip,
-            'environment'   => $this->environment
-        )));
+        $this->dispatcher->dispatch('afterScenario', new ScenarioEvent(
+            $scenario, $this->environment, $result, $skip
+        ));
 
         return $result;
     }

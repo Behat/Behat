@@ -2,8 +2,13 @@
 
 namespace Behat\Behat\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+use Behat\Behat\Event\EventInterface,
+    Behat\Behat\Event\FeatureEvent,
+    Behat\Behat\Event\ScenarioEvent,
+    Behat\Behat\Event\OutlineExampleEvent,
+    Behat\Behat\Event\StepEvent;
 
 use Behat\Gherkin\Node\FeatureNode,
     Behat\Gherkin\Node\ScenarioNode,
@@ -71,34 +76,26 @@ class JUnitFormatter extends ConsoleFormatter
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @uses    afterFeature()
-     * @uses    afterScenario()
-     * @uses    afterOutlineExample()
-     * @uses    afterStep()
+     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
      */
-    public function registerListeners(EventDispatcher $dispatcher)
+    public static function getSubscribedEvents()
     {
-        $dispatcher->connect('feature.before',          array($this, 'beforeFeature'),          -10);
-        $dispatcher->connect('feature.after',           array($this, 'afterFeature'),           -10);
-        $dispatcher->connect('scenario.before',         array($this, 'beforeScenario'),         -10);
-        $dispatcher->connect('scenario.after',          array($this, 'afterScenario'),          -10);
-        $dispatcher->connect('outline.example.before',  array($this, 'beforeOutlineExample'),   -10);
-        $dispatcher->connect('outline.example.after',   array($this, 'afterOutlineExample'),    -10);
-        $dispatcher->connect('step.after',              array($this, 'afterStep'),              -10);
+        return array(
+            'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario', 'beforeOutlineExample',
+            'afterOutlineExample', 'afterStep'
+        );
     }
 
     /**
      * Listens to "feature.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\FeatureEvent  $event
      *
      * @uses    printTestSuiteHeader()
      */
-    public function beforeFeature(Event $event)
+    public function beforeFeature(FeatureEvent $event)
     {
-        $feature = $event->getSubject();
+        $feature = $event->getFeature();
         $this->filename = 'TEST-' . basename($feature->getFile(), '.feature') . '.xml';
 
         $this->printTestSuiteHeader($feature);
@@ -112,26 +109,23 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "feature.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\FeatureEvent  $event
      *
      * @uses    printTestSuiteFooter()
      * @uses    flushOutputConsole()
      */
-    public function afterFeature(Event $event)
+    public function afterFeature(FeatureEvent $event)
     {
-        $feature    = $event->getSubject();
-        $time       = microtime(true) - $this->featureStartTime;
-
-        $this->printTestSuiteFooter($feature, $time);
+        $this->printTestSuiteFooter($event->getFeature(), microtime(true) - $this->featureStartTime);
         $this->flushOutputConsole();
     }
 
     /**
      * Listens to "scenario.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\ScenarioEvent     $event
      */
-    public function beforeScenario(Event $event)
+    public function beforeScenario(ScenarioEvent $event)
     {
         $this->scenarioStartTime = microtime(true);
     }
@@ -139,24 +133,21 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\ScenarioEvent     $event
      *
      * @uses    printTestCase()
      */
-    public function afterScenario(Event $event)
+    public function afterScenario(ScenarioEvent $event)
     {
-        $scenario   = $event->getSubject();
-        $time       = microtime(true) - $this->scenarioStartTime;
-
-        $this->printTestCase($scenario, $time, $event);
+        $this->printTestCase($event->getScenario(), microtime(true) - $this->scenarioStartTime, $event);
     }
 
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\OutlineExampelEvent   $event
      */
-    public function beforeOutlineExample(Event $event)
+    public function beforeOutlineExample(OutlineExampelEvent $event)
     {
         $this->scenarioStartTime = microtime(true);
     }
@@ -164,27 +155,24 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\OutlineExampelEvent   $event
      *
      * @uses    printTestCase()
      */
-    public function afterOutlineExample(Event $event)
+    public function afterOutlineExample(OutlineExampelEvent $event)
     {
-        $scenario   = $event->getSubject();
-        $time       = microtime(true) - $this->scenarioStartTime;
-
-        $this->printTestCase($scenario, $time, $event);
+        $this->printTestCase($event->getOutline(), microtime(true) - $this->scenarioStartTime, $event);
     }
 
     /**
      * Listens to "step.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\StepEvent $event
      */
-    public function afterStep(Event $event)
+    public function afterStep(StepEvent $event)
     {
-        if (null !== $event->get('exception')) {
-            $this->exceptions[] = $event->get('exception');
+        if ($event->hasException()) {
+            $this->exceptions[] = $event->getException();
         }
 
         ++$this->stepsCount;
@@ -221,11 +209,11 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Prints testcase.
      *
-     * @param   Behat\Gherkin\Node\ScenarioNode         $feature
-     * @param   float                                   $time
-     * @param   Symfony\Component\EventDispatcher\Event $event
+     * @param   Behat\Gherkin\Node\ScenarioNode     $feature
+     * @param   float                               $time
+     * @param   Behat\Behat\Event\EventInterface    $event
      */
-    protected function printTestCase(ScenarioNode $scenario, $time, Event $event)
+    protected function printTestCase(ScenarioNode $scenario, $time, EventInterface $event)
     {
         $className  = $scenario->getFeature()->getTitle() . '.' . $scenario->getTitle();
         $name       = $scenario->getTitle();
@@ -239,7 +227,7 @@ class JUnitFormatter extends ConsoleFormatter
             $xml .= sprintf(
                 '        <failure message="%s" type="%s">' . "\n",
                 htmlspecialchars($exception->getMessage()),
-                $this->getResultColorCode($event->get('result'))
+                $this->getResultColorCode($event->getResult())
             );
             $xml .= "<![CDATA[\n$exception\n]]>";
             $xml .= "        </failure>\n";

@@ -4,6 +4,7 @@ namespace Behat\Behat\Formatter;
 
 use Symfony\Component\EventDispatcher\EventDispatcher,
     Symfony\Component\EventDispatcher\Event,
+    Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Component\Translation\Translator;
 
 /*
@@ -19,7 +20,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface FormatterInterface
+interface FormatterInterface extends EventSubscriberInterface
 {
     /**
      * Set formatter translator.
@@ -53,13 +54,4 @@ interface FormatterInterface
      * @return  mixed
      */
     function getParameter($name);
-
-    /**
-     * Registers event listeners.
-     *
-     * WARNING: Always register listeners with lowest available priority (-10 as last argument to connect())
-     *
-     * @param   Behat\Behat\EventDispatcher\EventDispatcher $dispatcher
-     */
-    function registerListeners(EventDispatcher $dispatcher);
 }

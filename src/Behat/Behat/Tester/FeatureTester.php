@@ -2,15 +2,15 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\ScenarioNode,
     Behat\Gherkin\Node\OutlineNode;
 
-use Behat\Behat\Exception\BehaviorException;
+use Behat\Behat\Exception\BehaviorException,
+    Behat\Behat\Event\FeatureEvent;
 
 /*
  * This file is part of the Behat.
@@ -66,7 +66,7 @@ class FeatureTester implements NodeVisitorInterface
 
         // If feature has scenario - run them
         if (count($scenarios = $feature->getScenarios())) {
-            $this->dispatcher->notify(new Event($feature, 'feature.before'));
+            $this->dispatcher->dispatch('beforeFeature', new FeatureEvent($feature));
 
             foreach ($scenarios as $scenario) {
                 if ($scenario instanceof OutlineNode) {
@@ -81,9 +81,7 @@ class FeatureTester implements NodeVisitorInterface
                 $result = max($result, $scenario->accept($tester));
             }
 
-            $this->dispatcher->notify(new Event($feature, 'feature.after', array(
-                'result' => $result
-            )));
+            $this->dispatcher->dispatch('afterFeature', new FeatureEvent($feature, $result));
         }
 
         return $result;

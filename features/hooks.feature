@@ -30,19 +30,19 @@ Feature: hooks
           echo "= do something after all suite run\n";
       });
       $hooks->beforeScenario('', function($event) {
-          $env = $event->get('environment');
+          $env = $event->getEnvironment();
           $env->number = 50;
       });
       $hooks->beforeScenario('130', function($event) {
-          $env = $event->get('environment');
+          $env = $event->getEnvironment();
           $env->number = 130;
       });
       $hooks->beforeScenario('@thirty', function($event) {
-          $env = $event->get('environment');
+          $env = $event->getEnvironment();
           $env->number = 30;
       });
       $hooks->afterStep('@100', function($event) {
-          $env = $event->get('environment');
+          $env = $event->getEnvironment();
           $env->number = 100;
       });
       """

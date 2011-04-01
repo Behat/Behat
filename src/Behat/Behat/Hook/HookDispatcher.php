@@ -3,9 +3,15 @@
 namespace Behat\Behat\Hook;
 
 use Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event;
+    Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Behat\Behat\Hook\Loader\LoaderInterface;
+use Behat\Behat\Hook\Loader\LoaderInterface,
+    Behat\Behat\Event\EventInterface,
+    Behat\Behat\Event\SuiteEvent,
+    Behat\Behat\Event\FeatureEvent,
+    Behat\Behat\Event\ScenarioEvent,
+    Behat\Behat\Event\OutlineExampleEvent,
+    Behat\Behat\Event\StepEvent;
 
 use Behat\Gherkin\Filter\TagFilter,
     Behat\Gherkin\Filter\NameFilter;
@@ -23,7 +29,7 @@ use Behat\Gherkin\Filter\TagFilter,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookDispatcher
+class HookDispatcher implements EventSubscriberInterface
 {
     /**
      * Hook resources.
@@ -45,115 +51,96 @@ class HookDispatcher
     protected $hooks        = array();
 
     /**
-     * Registers event listeners.
-     *
-     * @param   Behat\Behat\EventDispatcher\EventDispatcher $dispatcher
-     *
-     * @uses    beforeSuite()
-     * @uses    afterSuite()
-     * @uses    beforeFeature()
-     * @uses    afterFeature()
-     * @uses    beforeScenario()
-     * @uses    afterScenario()
-     * @uses    beforeOutlineExample()
-     * @uses    afterOutlineExample()
-     * @uses    beforeStep()
-     * @uses    afterStep()
+     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
      */
-    public function registerListeners(EventDispatcher $dispatcher)
+    public static function getSubscribedEvents()
     {
-        $dispatcher->connect('suite.before',            array($this, 'beforeSuite'),            10);
-        $dispatcher->connect('suite.after',             array($this, 'afterSuite'),             10);
-        $dispatcher->connect('feature.before',          array($this, 'beforeFeature'),          10);
-        $dispatcher->connect('feature.after',           array($this, 'afterFeature'),           10);
-        $dispatcher->connect('scenario.before',         array($this, 'beforeScenario'),         10);
-        $dispatcher->connect('scenario.after',          array($this, 'afterScenario'),          10);
-        $dispatcher->connect('outline.example.before',  array($this, 'beforeOutlineExample'),   10);
-        $dispatcher->connect('outline.example.after',   array($this, 'afterOutlineExample'),    10);
-        $dispatcher->connect('step.before',             array($this, 'beforeStep'),             10);
-        $dispatcher->connect('step.after',              array($this, 'afterStep'),              10);
+        return array(
+            'beforeSuite', 'afterSuite', 'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario',
+            'beforeOutlineExample', 'afterOutlineExample', 'beforeStep', 'afterStep'
+        );
     }
 
     /**
      * Listens to "suite.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   Behat\Behat\Event\SuiteEvent    $event  event to which hooks glued
      *
      * @uses    fireSuiteHooks()
      */
-    public function beforeSuite(Event $event)
+    public function beforeSuite(SuiteEvent $event)
     {
-        $this->fireSuiteHooks($event->getName(), $event);
+        $this->fireSuiteHooks('suite.before', $event);
     }
 
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   Behat\Behat\Event\SuiteEvent    $event  event to which hooks glued
      *
      * @uses    fireSuiteHooks()
      */
-    public function afterSuite(Event $event)
+    public function afterSuite(SuiteEvent $event)
     {
-        $this->fireSuiteHooks($event->getName(), $event);
+        $this->fireSuiteHooks('suite.after', $event);
     }
 
     /**
      * Listens to "feature.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   Behat\Behat\Event\FeatureEvent  $event  event to which hooks glued
      *
      * @uses    fireFeatureHooks()
      */
-    public function beforeFeature(Event $event)
+    public function beforeFeature(FeatureEvent $event)
     {
-        $this->fireFeatureHooks($event->getName(), $event);
+        $this->fireFeatureHooks('feature.before', $event);
     }
 
     /**
      * Listens to "feature.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   Behat\Behat\Event\FeatureEvent  $event  event to which hooks glued
      *
      * @uses    fireFeatureHooks()
      */
-    public function afterFeature(Event $event)
+    public function afterFeature(FeatureEvent $event)
     {
-        $this->fireFeatureHooks($event->getName(), $event);
+        $this->fireFeatureHooks('feature.after', $event);
     }
 
     /**
      * Listens to "scenario.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   Behat\Behat\Event\ScenarioEvent $event  event to which hooks glued
      *
      * @uses    fireScenarioHooks()
      */
-    public function beforeScenario(Event $event)
+    public function beforeScenario(ScenarioEvent $event)
     {
-        $this->fireScenarioHooks($event->getName(), $event);
+        $this->fireScenarioHooks('scenario.before', $event);
     }
 
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   Behat\Behat\Event\ScenarioEvent $event  event to which hooks glued
      *
      * @uses    fireScenarioHooks()
      */
-    public function afterScenario(Event $event)
+    public function afterScenario(ScenarioEvent $event)
     {
-        $this->fireScenarioHooks($event->getName(), $event);
+        $this->fireScenarioHooks('scenario.after', $event);
     }
 
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   Behat\Behat\Event\OutlineExampleEvent   $event  event to which hooks glued
      *
      * @uses    fireScenarioHooks()
      */
-    public function beforeOutlineExample(Event $event)
+    public function beforeOutlineExample(OutlineExampleEvent $event)
     {
         $this->fireScenarioHooks('scenario.before', $event);
     }
@@ -161,11 +148,11 @@ class HookDispatcher
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   Behat\Behat\Event\OutlineExampleEvent   $event  event to which hooks glued
      *
      * @uses    fireScenarioHooks()
      */
-    public function afterOutlineExample(Event $event)
+    public function afterOutlineExample(OutlineExampleEvent $event)
     {
         $this->fireScenarioHooks('scenario.after', $event);
     }
@@ -173,34 +160,34 @@ class HookDispatcher
     /**
      * Listens to "step.before" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   Behat\Behat\Event\StepEvent $event  event to which hooks glued
      *
      * @uses    fireStepHooks()
      */
-    public function beforeStep(Event $event)
+    public function beforeStep(StepEvent $event)
     {
-        $this->fireStepHooks($event->getName(), $event);
+        $this->fireStepHooks('step.before', $event);
     }
 
     /**
      * Listens to "step.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   Behat\Behat\Event\StepEvent $event  event to which hooks glued
      *
      * @uses    fireStepHooks()
      */
-    public function afterStep(Event $event)
+    public function afterStep(StepEvent $event)
     {
-        $this->fireStepHooks($event->getName(), $event);
+        $this->fireStepHooks('step.after', $event);
     }
 
     /**
      * Runs suite hooks with specified name.
      *
-     * @param   string                                      $name   hooks name
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   string                          $name   hooks name
+     * @param   Behat\Behat\Event\SuiteEvent    $event  event to which hooks glued
      */
-    protected function fireSuiteHooks($name, Event $event)
+    protected function fireSuiteHooks($name, SuiteEvent $event)
     {
         if (!count($this->hooks)) {
             $this->loadHooks();
@@ -220,16 +207,16 @@ class HookDispatcher
     /**
      * Runs feature hooks with specified name.
      *
-     * @param   string                                      $name   hooks name
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   string                          $name   hooks name
+     * @param   Behat\Behat\Event\FeatureEvent  $event  event to which hooks glued
      */
-    protected function fireFeatureHooks($name, Event $event)
+    protected function fireFeatureHooks($name, FeatureEvent $event)
     {
         if (!count($this->hooks)) {
             $this->loadHooks();
         }
 
-        $feature    = $event->getSubject();
+        $feature    = $event->getFeature();
         $hooks      = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
 
         foreach ($hooks as $hook) {
@@ -256,17 +243,21 @@ class HookDispatcher
     /**
      * Runs scenario hooks with specified name.
      *
-     * @param   string                                      $name   hooks name
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   string                              $name   hooks name
+     * @param   Behat\Behat\Event\EventInterface    $event  event to which hooks glued
      */
-    protected function fireScenarioHooks($name, Event $event)
+    protected function fireScenarioHooks($name, EventInterface $event)
     {
         if (!count($this->hooks)) {
             $this->loadHooks();
         }
 
-        $scenario   = $event->getSubject();
-        $hooks      = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
+        if ($event instanceof ScenarioEvent) {
+            $scenario = $event->getScenario();
+        } else {
+            $scenario = $event->getOutline();
+        }
+        $hooks = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
 
         foreach ($hooks as $hook) {
             if (is_callable($hook)) {
@@ -292,16 +283,16 @@ class HookDispatcher
     /**
      * Runs step hooks with specified name.
      *
-     * @param   string                                      $name   hooks name
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
+     * @param   string                      $name   hooks name
+     * @param   Behat\Behat\Event\StepEvent $event  event to which hooks glued
      */
-    protected function fireStepHooks($name, Event $event)
+    protected function fireStepHooks($name, StepEvent $event)
     {
         if (!count($this->hooks)) {
             $this->loadHooks();
         }
 
-        $scenario   = $event->getSubject()->getParent();
+        $scenario   = $event->getStep()->getParent();
         $hooks      = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
 
         foreach ($hooks as $hook) {
