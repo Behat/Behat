@@ -890,6 +890,10 @@ class PrettyFormatter extends ProgressFormatter
         // Replace arguments with colorized ones
         $shift = 0;
         foreach ($matches as $match) {
+            if (-1 === $match[1]) {
+                continue;
+            }
+
             $offset = $match[1] + $shift;
             $value  = $match[0];
             $begin  = substr($text, 0, $offset);
