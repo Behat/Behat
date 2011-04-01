@@ -931,11 +931,14 @@ class PrettyFormatter extends ProgressFormatter
         array_shift($matches);
 
         // Replace arguments with colorized ones
+        $shift = 0;
         foreach ($matches as $match) {
-            $offset = $match[1];
+            $offset = $match[1] + $shift;
             $value  = $match[0];
             $begin  = substr($text, 0, $offset);
             $end    = substr($text, $offset + strlen($value));
+            // Keep track of how many extra characters are added
+            $shift += 4 * strlen($color) + 24;
 
             $text = "$begin{-$color}{+$paramColor}$value{-$paramColor}{+$color}$end";
         }
