@@ -3,14 +3,16 @@ Feature: Pretty Formatter
   As a feature writer
   I need to have pretty formatter
 
-  Scenario: Complex
+  Background:
     Given a file named "features/support/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/steps/math.php" with:
+
+  Scenario: Complex
+    Given a file named "features/steps/math.php" with:
       """
       <?php
       $steps->Given('/I have entered (\d+)/', function($world, $num) {
@@ -113,4 +115,69 @@ Feature: Pretty Formatter
       $steps->And('/^Something new$/', function($world) {
           throw new \Behat\Behat\Exception\Pending();
       });
+      """
+
+  Scenario: Multiple parameters
+    Given a file named "features/steps/math.php" with:
+      """
+      <?php
+      $steps->Given('/I have entered (\d+)/', function($world, $num) {
+          assertObjectNotHasAttribute('value', $world);
+          $world->value = $num;
+      });
+
+      $steps->Then('/I must have (\d+)/', function($world, $num) {
+          assertEquals($num, $world->value);
+      });
+
+      $steps->When('/I (add|subtract) the value (\d+)/', function($world, $op, $num) {
+          if ($op == 'add')
+            $world->value += $num;
+          elseif ($op == 'subtract')
+            $world->value -= $num;
+      });
+      """
+    And a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background:
+          Given I have entered 10
+
+        Scenario: Adding
+          Then I must have 10
+          And I add the value 6
+          Then I must have 16
+
+        Scenario: Subtracting
+          Then I must have 10
+          And I subtract the value 6
+          Then I must have 4
+      """
+    When I run "behat -f pretty --colors"
+    Then it should pass with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background:               [30m# features/World.feature:6[0m
+          [32mGiven I have entered [0m[32;1m10[0m[32m[0m [30m# features/steps/math.php:5[0m
+
+        Scenario: Adding          [30m# features/World.feature:9[0m
+          [32mThen I must have [0m[32;1m10[0m[32m[0m     [30m# features/steps/math.php:9[0m
+          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m   [30m# features/steps/math.php:16[0m
+          [32mThen I must have [0m[32;1m16[0m[32m[0m     [30m# features/steps/math.php:9[0m
+
+        Scenario: Subtracting        [30m# features/World.feature:14[0m
+          [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# features/steps/math.php:9[0m
+          [32mAnd I [0m[32;1msubtract[0m[32m the value [0m[32;1m6[0m[32m[0m [30m# features/steps/math.php:16[0m
+          [32mThen I must have [0m[32;1m4[0m[32m[0m         [30m# features/steps/math.php:9[0m
+
+      2 scenarios ([32m2 passed[0m)
+      8 steps ([32m8 passed[0m)
       """
