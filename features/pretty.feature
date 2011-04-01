@@ -130,7 +130,7 @@ Feature: Pretty Formatter
           assertEquals($num, $world->value);
       });
 
-      $steps->When('/I (add|subtract) (\d+)/', function($world, $op, $num) {
+      $steps->When('/I (add|subtract) the value (\d+)/', function($world, $op, $num) {
           if ($op == 'add')
             $world->value += $num;
           elseif ($op == 'subtract')
@@ -149,15 +149,15 @@ Feature: Pretty Formatter
 
         Scenario: Adding
           Then I must have 10
-          And I add 6
+          And I add the value 6
           Then I must have 16
 
         Scenario: Subtracting
           Then I must have 10
-          And I subtract 6
+          And I subtract the value 6
           Then I must have 4
       """
-    When I run "behat -f pretty"
+    When I run "behat -f pretty --colors"
     Then it should pass with:
       """
       Feature: World consistency
@@ -165,19 +165,19 @@ Feature: Pretty Formatter
         As a features developer
         I want, that "World" flushes between scenarios
 
-        Background:               # features/World.feature:6
-          Given I have entered 10 # features/steps/math.php:5
+        Background:               [30m# features/World.feature:6[0m
+          [32mGiven I have entered [0m[32;1m10[0m[32m[0m [30m# features/steps/math.php:5[0m
 
-        Scenario: Adding          # features/World.feature:9
-          Then I must have 10     # features/steps/math.php:9
-          And I add 6             # features/steps/math.php:16
-          Then I must have 16     # features/steps/math.php:9
+        Scenario: Adding          [30m# features/World.feature:9[0m
+          [32mThen I must have [0m[32;1m10[0m[32m[0m     [30m# features/steps/math.php:9[0m
+          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m   [30m# features/steps/math.php:16[0m
+          [32mThen I must have [0m[32;1m16[0m[32m[0m     [30m# features/steps/math.php:9[0m
 
-        Scenario: Subtracting     # features/World.feature:14
-          Then I must have 10     # features/steps/math.php:9
-          And I subtract 6        # features/steps/math.php:16
-          Then I must have 4      # features/steps/math.php:9
+        Scenario: Subtracting        [30m# features/World.feature:14[0m
+          [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# features/steps/math.php:9[0m
+          [32mAnd I [0m[32;1msubtract[0m[32m the value [0m[32;1m6[0m[32m[0m [30m# features/steps/math.php:16[0m
+          [32mThen I must have [0m[32;1m4[0m[32m[0m         [30m# features/steps/math.php:9[0m
 
-      2 scenarios (2 passed)
-      8 steps (8 passed)
+      2 scenarios ([32m2 passed[0m)
+      8 steps ([32m8 passed[0m)
       """
