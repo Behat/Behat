@@ -895,9 +895,9 @@ class PrettyFormatter extends ProgressFormatter
             $begin  = substr($text, 0, $offset);
             $end    = substr($text, $offset + strlen($value));
             // Keep track of how many extra characters are added
-            $shift += 4 * strlen($color) + 24;
+            $shift += strlen($format = "{-$color}{+$paramColor}%s{-$paramColor}{+$color}") - 2;
 
-            $text = "$begin{-$color}{+$paramColor}$value{-$paramColor}{+$color}$end";
+            $text = sprintf('%s' . $format. '%s', $begin, $value, $end);
         }
 
         // Replace "<", ">" with colorized ones
