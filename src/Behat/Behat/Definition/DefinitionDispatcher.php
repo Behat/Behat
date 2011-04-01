@@ -187,8 +187,8 @@ PHP
                 $arguments = array_merge(array_slice($arguments, 1), $args);
 
                 // transform arguments
-                foreach ($this->transformations as $transformation) {
-                    foreach ($arguments as $num => $argument) {
+                foreach ($arguments as $num => $argument) {
+                    foreach ($this->transformations as $transformation) {
                         if ($newArgument = $transformation->transform($argument)) {
                             $arguments[$num] = $newArgument;
                         }
