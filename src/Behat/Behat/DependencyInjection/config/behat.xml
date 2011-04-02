@@ -27,6 +27,9 @@
         <parameter key="behat.formatter.multiline_arguments">true</parameter>
         <parameter key="behat.formatter.parameters" type="collection"></parameter>
 
+        <!-- Environment parameters -->
+        <parameter key="behat.environment.parameters" type="collection"></parameter>
+
         <!-- Gherkin loader parameters -->
         <parameter key="gherkin.filter.name">null</parameter>
         <parameter key="gherkin.filter.tags">null</parameter>

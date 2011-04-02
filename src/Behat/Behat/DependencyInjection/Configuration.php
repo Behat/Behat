@@ -105,13 +105,14 @@ class Configuration
                 end()->
             end()->
             children()->
-                arrayNode('classes')->
+                arrayNode('environment')->
                     children()->
-                        scalarNode('environment')->
+                        scalarNode('class')->
                             defaultValue('Behat\Behat\Environment\Environment')->
                         end()->
-                        scalarNode('formatter')->
-                            defaultNull()->
+                        arrayNode('parameters')->
+                            useAttributeAsKey(0)->
+                            prototype('scalar')->end()->
                         end()->
                     end()->
                 end()->
