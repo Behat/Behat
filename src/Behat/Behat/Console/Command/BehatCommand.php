@@ -270,13 +270,13 @@ class BehatCommand extends Command
 
         $resultConfig = isset($config['default']) ? $config['default'] : array();
         if ('default' !== $profile && isset($config[$profile])) {
-            $resultConfig = $this->arrayMergeRecursiveWithOverwrites($resultConfig, $config[$profile]);
+            $resultConfig = $this->configMergeRecursiveWithOverwrites($resultConfig, $config[$profile]);
         }
 
         if (isset($config['imports'])) {
             foreach ($config['imports'] as $importConfigFile) {
                 $importConfigFile = $this->preparePath($importConfigFile);
-                $resultConfig = $this->arrayMergeRecursiveWithOverwrites(
+                $resultConfig = $this->configMergeRecursiveWithOverwrites(
                     $resultConfig, $this->loadConfigurationFile($importConfigFile, $profile)
                 );
             }
@@ -811,11 +811,13 @@ ENVIRONMENT
      *
      * @return  array
      */
-    private function arrayMergeRecursiveWithOverwrites($array1, $array2)
+    private function configMergeRecursiveWithOverwrites($array1, $array2)
     {
         foreach($array2 as $key => $val) {
             if (array_key_exists($key, $array1) && is_array($val)) {
-                $array1[$key] = $this->arrayMergeRecursiveWithOverwrites($array1[$key], $val);
+                $array1[$key] = $this->configMergeRecursiveWithOverwrites($array1[$key], $val);
+            } elseif (is_numeric($key)) {
+                $array1[] = $val;
             } else {
                 $array1[$key] = $val;
             }
