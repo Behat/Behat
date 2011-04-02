@@ -133,3 +133,31 @@ Feature: Step Arguments
       1 scenario (1 passed)
       2 steps (2 passed)
       """
+
+  Scenario: Named arguments
+    Given a file named "features/steps/named_args_steps.php" with:
+      """
+      <?php
+      $steps->Given('/^I have number2 = (?P<number2>\d+) and number1 = (?P<number1>\d+)$/', function($world, $number1, $number2) {
+          assertEquals(13, $number1);
+          assertEquals(243, $number2);
+      });
+      """
+    And a file named "features/named_args.feature" with:
+      """
+      Feature: Named arguments
+        In order to maintain i18n for steps
+        As a step developer
+        I need to be able to declare regex with named parameters
+
+        Scenario:
+          Given I have number2 = 243 and number1 = 13
+      """
+    When I run "behat -f progress features/named_args.feature"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
