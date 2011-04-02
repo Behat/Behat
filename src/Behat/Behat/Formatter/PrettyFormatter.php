@@ -889,8 +889,8 @@ class PrettyFormatter extends ProgressFormatter
 
         // Replace arguments with colorized ones
         $shift = 0;
-        foreach ($matches as $match) {
-            if (-1 === $match[1]) {
+        foreach ($matches as $key => $match) {
+            if (!is_numeric($key) || -1 === $match[1]) {
                 continue;
             }
 
