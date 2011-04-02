@@ -44,11 +44,9 @@ class Environment extends \stdClass implements EnvironmentInterface
      */
     public function getParameter($name)
     {
-        if (!isset($this->parameters[$name])) {
-            return null;
+        if (isset($this->parameters[$name])) {
+            return $this->parameters[$name];
         }
-
-        return $this->parameters[$name];
     }
 
     /**
