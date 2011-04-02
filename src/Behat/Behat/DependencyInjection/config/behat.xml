@@ -9,13 +9,23 @@
         <parameter key="behat.paths.i18n">%behat.paths.lib%/i18n</parameter>
 
         <parameter key="behat.paths.features">BEHAT_BASE_PATH</parameter>
-        <parameter key="behat.paths.steps">%behat.paths.features%/steps</parameter>
-        <parameter key="behat.paths.steps.i18n">%behat.paths.features%/steps/i18n</parameter>
-
         <parameter key="behat.paths.support">%behat.paths.features%/support</parameter>
-        <parameter key="behat.paths.bootstrap">%behat.paths.support%/bootstrap.php</parameter>
-        <parameter key="behat.paths.environment">%behat.paths.support%/env.php</parameter>
-        <parameter key="behat.paths.hooks">%behat.paths.support%/hooks.php</parameter>
+
+        <parameter key="behat.paths.steps" type="collection">
+            <parameter>%behat.paths.features%/steps</parameter>
+        </parameter>
+        <parameter key="behat.paths.steps.i18n" type="collection">
+            <parameter>%behat.paths.features%/steps/i18n</parameter>
+        </parameter>
+        <parameter key="behat.paths.bootstrap" type="collection">
+            <parameter>%behat.paths.support%/bootstrap.php</parameter>
+        </parameter>
+        <parameter key="behat.paths.environment" type="collection">
+            <parameter>%behat.paths.support%/env.php</parameter>
+        </parameter>
+        <parameter key="behat.paths.hooks" type="collection">
+            <parameter>%behat.paths.support%/hooks.php</parameter>
+        </parameter>
 
         <!-- Formatter parameters -->
         <parameter key="behat.formatter.name">pretty</parameter>

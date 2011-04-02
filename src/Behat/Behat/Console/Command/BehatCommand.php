@@ -77,6 +77,12 @@ class BehatCommand extends Command
                 'Specify external configuration file to load. ' .
                 '<info>behat.yml</info> or <info>config/behat.yml</info> will be used by default.'
             ),
+            new InputOption('--profile',        null,
+                InputOption::VALUE_REQUIRED,
+                '      ' .
+                'Specify configuration profile name to use. ' .
+                'Define configuration profiles in <info>behat.yml</info>.'
+            ),
             new InputOption('--out',            null,
                 InputOption::VALUE_REQUIRED,
                 '          ' .
@@ -171,7 +177,7 @@ class BehatCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = $this->configureContainer($input->getOption('config'));
+        $container = $this->configureContainer($input->getOption('config'), $input->getOption('profile'));
 
         if ($input->getOption('usage')) {
             $this->printUsageExample($input, $container, $output);
@@ -217,7 +223,7 @@ class BehatCommand extends Command
      *
      * @return  Symfony\Component\DependencyInjection\ContainerInterface
      */
-    protected function configureContainer($configFile = null)
+    protected function configureContainer($configFile = null, $profile = null)
     {
         $container  = new ContainerBuilder();
         $extension  = new BehatExtension();
@@ -225,6 +231,10 @@ class BehatCommand extends Command
         $cwd        = getcwd();
 
         $this->pathTokens['BEHAT_WORK_PATH'] = $cwd;
+
+        if (null === $profile) {
+            $profile = 'default';
+        }
 
         if (null === $configFile) {
             if (is_file($cwd . DIRECTORY_SEPARATOR . 'behat.yml')) {
@@ -236,13 +246,42 @@ class BehatCommand extends Command
 
         if (null !== $configFile) {
             $this->pathTokens['BEHAT_CONFIG_PATH'] = dirname($configFile);
-            $config = array(Yaml::load($configFile));
+            $config = $this->loadConfigurationFile($configFile, $profile);
         }
 
-        $extension->load($config, $container);
+        $extension->load(array($config), $container);
         $container->compile();
 
         return $container;
+    }
+
+    /**
+     * Loads information from YAML configuration file.
+     *
+     * @param   string  $configFile     path to the config file
+     * @param   string  $profile        name of the config profile to use
+     *
+     * @return  array
+     */
+    protected function loadConfigurationFile($configFile, $profile = 'default')
+    {
+        $config = Yaml::load($configFile);
+
+        $resultConfig = isset($config['default']) ? $config['default'] : array();
+        if ('default' !== $profile && isset($config[$profile])) {
+            $resultConfig = $this->arrayMergeRecursiveWithOverwrites($resultConfig, $config[$profile]);
+        }
+
+        if (isset($config['imports'])) {
+            foreach ($config['imports'] as $importConfigFile) {
+                $importConfigFile = $this->preparePath($importConfigFile);
+                $resultConfig = $this->arrayMergeRecursiveWithOverwrites(
+                    $resultConfig, $this->loadConfigurationFile($importConfigFile, $profile)
+                );
+            }
+        }
+
+        return $resultConfig;
     }
 
     /**
@@ -753,5 +792,27 @@ ENVIRONMENT
         }
 
         return $path;
+    }
+
+    /**
+     * Merges two arrays into one with overwrite. It works the same as array_merge_recursive, but
+     * overwrites non-array values instead of turning them into arrays.
+     *
+     * @param   array  $array1  to
+     * @param   array  $array2  from
+     *
+     * @return  array
+     */
+    private function arrayMergeRecursiveWithOverwrites($array1, $array2)
+    {
+        foreach($array2 as $key => $val) {
+            if (array_key_exists($key, $array1) && is_array($val)) {
+                $array1[$key] = $this->arrayMergeRecursiveWithOverwrites($array1[$key], $val);
+            } else {
+                $array1[$key] = $val;
+            }
+        }
+
+        return $array1;
     }
 }

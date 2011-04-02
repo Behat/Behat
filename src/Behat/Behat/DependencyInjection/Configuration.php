@@ -42,20 +42,25 @@ class Configuration
                         scalarNode('support')->
                             defaultValue('%behat.paths.features%/support')->
                         end()->
-                        variableNode('steps')->
-                            defaultValue('%behat.paths.features%/steps')->
+                        arrayNode('steps')->
+                            prototype('scalar')->end()->
+                            defaultValue(array('%behat.paths.features%/steps'))->
                         end()->
-                        variableNode('steps-i18n')->
-                            defaultValue('%behat.paths.features%/steps/i18n')->
+                        arrayNode('steps-i18n')->
+                            prototype('scalar')->end()->
+                            defaultValue(array('%behat.paths.features%/steps/i18n'))->
                         end()->
-                        variableNode('bootstrap')->
-                            defaultValue('%behat.paths.support%/bootstrap.php')->
+                        arrayNode('bootstrap')->
+                            prototype('scalar')->end()->
+                            defaultValue(array('%behat.paths.support%/bootstrap.php'))->
                         end()->
-                        variableNode('environment')->
-                            defaultValue('%behat.paths.support%/env.php')->
+                        arrayNode('environment')->
+                            prototype('scalar')->end()->
+                            defaultValue(array('%behat.paths.support%/env.php'))->
                         end()->
-                        variableNode('hooks')->
-                            defaultValue('%behat.paths.support%/hooks.php')->
+                        arrayNode('hooks')->
+                            prototype('scalar')->end()->
+                            defaultValue(array('%behat.paths.support%/hooks.php'))->
                         end()->
                     end()->
                 end()->
@@ -63,12 +68,8 @@ class Configuration
             children()->
                 arrayNode('filters')->
                     children()->
-                        scalarNode('name')->
-                            defaultNull()->
-                        end()->
-                        scalarNode('tags')->
-                            defaultNull()->
-                        end()->
+                        scalarNode('name')->defaultNull()->end()->
+                        scalarNode('tags')->defaultNull()->end()->
                     end()->
                 end()->
             end()->
@@ -106,6 +107,7 @@ class Configuration
             end()->
             children()->
                 arrayNode('environment')->
+                    fixXmlConfig('parameter')->
                     children()->
                         scalarNode('class')->
                             defaultValue('Behat\Behat\Environment\Environment')->

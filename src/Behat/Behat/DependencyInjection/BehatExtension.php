@@ -56,6 +56,7 @@ class BehatExtension implements ExtensionInterface
         $tree   = $this->configuration->getConfigTree();
         $config = $this->processor->process($tree, $configs);
 
+        // load configs DIC
         foreach ($config as $ns => $subconfig) {
             foreach ($subconfig as $key => $value) {
                 $parameterName = "behat.$ns.$key";
