@@ -100,7 +100,7 @@ class Configuration
                         end()->
                         arrayNode('parameters')->
                             useAttributeAsKey(0)->
-                            prototype('scalar')->end()->
+                            prototype('variable')->end()->
                         end()->
                     end()->
                 end()->
@@ -114,7 +114,7 @@ class Configuration
                         end()->
                         arrayNode('parameters')->
                             useAttributeAsKey(0)->
-                            prototype('scalar')->end()->
+                            prototype('variable')->end()->
                         end()->
                     end()->
                 end()->
