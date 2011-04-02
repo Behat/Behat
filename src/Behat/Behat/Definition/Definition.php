@@ -105,6 +105,16 @@ class Definition
     }
 
     /**
+     * Returns callback reflection for definition matcher.
+     *
+     * @return  ReflectionFunction
+     */
+    public function getCallbackReflection()
+    {
+        return new \ReflectionFunction($this->callback);
+    }
+
+    /**
      * Saves matched step text to definition.
      *
      * @param   string  $text   step text (description)
