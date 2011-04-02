@@ -45,7 +45,7 @@ class Environment extends \stdClass implements EnvironmentInterface
     public function getParameter($name)
     {
         if (!isset($this->parameters[$name])) {
-            throw new \InvalidArgumentException('Parameter ' . $name . ' is not set');
+            return null;
         }
 
         return $this->parameters[$name];
