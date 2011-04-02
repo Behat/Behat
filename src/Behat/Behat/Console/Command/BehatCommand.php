@@ -220,6 +220,7 @@ class BehatCommand extends Command
      * Configures service container with or without provided configuration file.
      *
      * @param   string  $configFile DependencyInjection extension config file path (in YAML)
+     * @param   string  $profile    profile name
      *
      * @return  Symfony\Component\DependencyInjection\ContainerInterface
      */
