@@ -8,7 +8,7 @@
         <parameter key="gherkin.paths.i18n">%gherkin.paths.lib%/i18n</parameter>
         <parameter key="behat.paths.i18n">%behat.paths.lib%/i18n</parameter>
 
-        <parameter key="behat.paths.features">BEHAT_BASE_PATH</parameter>
+        <parameter key="behat.paths.features">%%BEHAT_BASE_PATH%%</parameter>
         <parameter key="behat.paths.support">%behat.paths.features%/support</parameter>
 
         <parameter key="behat.paths.steps" type="collection">

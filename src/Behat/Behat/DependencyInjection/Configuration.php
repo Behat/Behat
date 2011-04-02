@@ -37,7 +37,7 @@ class Configuration
                 arrayNode('paths')->
                     children()->
                         scalarNode('features')->
-                            defaultValue('%behat.paths.base%')->
+                            defaultValue('%%BEHAT_BASE_PATH%%')->
                         end()->
                         scalarNode('support')->
                             defaultValue('%behat.paths.features%/support')->

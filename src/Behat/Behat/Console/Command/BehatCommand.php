@@ -448,7 +448,7 @@ ENVIRONMENT
      */
     protected function locateFeaturesPaths(InputInterface $input, ContainerInterface $container)
     {
-        $basePath       = 'BEHAT_WORK_PATH' . DIRECTORY_SEPARATOR . 'features';
+        $basePath       = '%BEHAT_WORK_PATH%' . DIRECTORY_SEPARATOR . 'features';
         $featuresPath   = $container->getParameter('behat.paths.features');
         $lineFilter     = '';
 
@@ -779,9 +779,16 @@ ENVIRONMENT
      */
     protected function preparePath($path, $allowRelativePaths = false)
     {
-        foreach ($this->pathTokens as $name => $value) {
-            $path = str_replace($name, $value, $path);
-        }
+        $pathTokens = $this->pathTokens;
+        $path = preg_replace_callback('/%([^%]+)%/', function($matches) use($pathTokens) {
+            $name = $matches[1];
+            if (defined($name)) {
+                return constant($name);
+            } elseif (isset($pathTokens[$name])) {
+                return $pathTokens[$name];
+            }
+            return $matches[0];
+        }, $path);
 
         $path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', '/', $path));
 
