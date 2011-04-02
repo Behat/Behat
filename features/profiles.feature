@@ -53,21 +53,22 @@ Feature: Profiles
       """
     And a file named "pretty.yml" with:
       """
-      default:
+      pretty:
         formatter:
           name: pretty
-      """
-    And a file named "progress.yml" with:
-      """
-      default:
-        formatter:
-          name: progress
       """
     And a file named "behat.yml" with:
       """
       default:
         formatter:
           name: progress
+      progress:
+        formatter:
+          name: progress
+          parameters:
+            decorated: true
+      imports:
+        - pretty.yml
       """
 
   Scenario:
@@ -81,17 +82,17 @@ Feature: Profiles
       """
 
   Scenario:
-    Given I run "behat -c progress.yml"
+    Given I run "behat --profile progress"
     Then it should pass with:
       """
-      ...............
+      [32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m
       
-      3 scenarios (3 passed)
-      15 steps (15 passed)
+      3 scenarios ([32m3 passed[0m)
+      15 steps ([32m15 passed[0m)
       """
 
   Scenario:
-    Given I run "behat -c pretty.yml"
+    Given I run "behat --profile pretty"
     Then it should pass with:
       """
       Feature: Math
