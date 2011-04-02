@@ -46,13 +46,7 @@ $dirs = array(
     'src',
     'features',
     'i18n',
-    'vendor/Symfony/Component/Console',
-    'vendor/Symfony/Component/Translation',
-    'vendor/Symfony/Component/DependencyInjection',
-    'vendor/Symfony/Component/Config',
-    'vendor/Symfony/Component/EventDispatcher',
-    'vendor/Symfony/Component/Finder',
-    'vendor/Symfony/Component/Yaml',
+    'vendor/Symfony/Component',
 );
 
 $xmlSourceFiles = '';
