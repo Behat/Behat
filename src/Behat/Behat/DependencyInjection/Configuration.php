@@ -36,20 +36,17 @@ class Configuration
             children()->
                 arrayNode('paths')->
                     children()->
-                        scalarNode('base')->
-                            defaultValue('BEHAT_WORK_PATH/features')->
-                        end()->
                         scalarNode('features')->
                             defaultValue('%behat.paths.base%')->
                         end()->
                         scalarNode('support')->
-                            defaultValue('%behat.paths.base%/support')->
+                            defaultValue('%behat.paths.features%/support')->
                         end()->
                         variableNode('steps')->
-                            defaultValue('%behat.paths.base%/steps')->
+                            defaultValue('%behat.paths.features%/steps')->
                         end()->
                         variableNode('steps-i18n')->
-                            defaultValue('%behat.paths.base%/steps/i18n')->
+                            defaultValue('%behat.paths.features%/steps/i18n')->
                         end()->
                         variableNode('bootstrap')->
                             defaultValue('%behat.paths.support%/bootstrap.php')->

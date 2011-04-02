@@ -409,7 +409,7 @@ ENVIRONMENT
      */
     protected function locateFeaturesPaths(InputInterface $input, ContainerInterface $container)
     {
-        $basePath       = $container->getParameter('behat.paths.base');
+        $basePath       = 'BEHAT_WORK_PATH' . DIRECTORY_SEPARATOR . 'features';
         $featuresPath   = $container->getParameter('behat.paths.features');
         $lineFilter     = '';
 
@@ -420,13 +420,13 @@ ENVIRONMENT
                 $lineFilter = ':' . $matches[2];
             }
 
-            if (is_file(($path = realpath($path)))) {
-                $basePath = dirname($path);
+            if (is_file($path)) {
+                $basePath = dirname(realpath($path));
                 $featuresPath = $path;
-            } elseif (is_dir($path)) {
-                $basePath = $path;
             } elseif (is_dir($path . DIRECTORY_SEPARATOR . 'features')) {
-                $basePath = $path . DIRECTORY_SEPARATOR . 'features';
+                $basePath = realpath($path) . DIRECTORY_SEPARATOR . 'features';
+            } elseif (is_dir($path)) {
+                $basePath = realpath($path);
             } else {
                 throw new \RuntimeException("Path $path not found");
             }
@@ -747,7 +747,7 @@ ENVIRONMENT
         $path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', '/', $path));
 
         if (!$allowRelativePaths) {
-            if (!is_dir($path) && !is_file($path)) {
+            if (!file_exists($path) && file_exists(getcwd() . DIRECTORY_SEPARATOR . $path)) {
                 $path = getcwd() . DIRECTORY_SEPARATOR . $path;
             }
         }

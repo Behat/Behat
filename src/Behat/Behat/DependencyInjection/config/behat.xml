@@ -8,12 +8,11 @@
         <parameter key="gherkin.paths.i18n">%gherkin.paths.lib%/i18n</parameter>
         <parameter key="behat.paths.i18n">%behat.paths.lib%/i18n</parameter>
 
-        <parameter key="behat.paths.base">BEHAT_WORK_PATH/features</parameter>
-        <parameter key="behat.paths.features">%behat.paths.base%</parameter>
-        <parameter key="behat.paths.steps">%behat.paths.base%/steps</parameter>
-        <parameter key="behat.paths.steps.i18n">%behat.paths.base%/steps/i18n</parameter>
+        <parameter key="behat.paths.features">BEHAT_BASE_PATH</parameter>
+        <parameter key="behat.paths.steps">%behat.paths.features%/steps</parameter>
+        <parameter key="behat.paths.steps.i18n">%behat.paths.features%/steps/i18n</parameter>
 
-        <parameter key="behat.paths.support">%behat.paths.base%/support</parameter>
+        <parameter key="behat.paths.support">%behat.paths.features%/support</parameter>
         <parameter key="behat.paths.bootstrap">%behat.paths.support%/bootstrap.php</parameter>
         <parameter key="behat.paths.environment">%behat.paths.support%/env.php</parameter>
         <parameter key="behat.paths.hooks">%behat.paths.support%/hooks.php</parameter>
