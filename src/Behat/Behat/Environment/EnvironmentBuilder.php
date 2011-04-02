@@ -60,6 +60,11 @@ class EnvironmentBuilder
     public function build()
     {
         $environment = $this->container->get('behat.environment');
+        $parameters  = $this->container->getParameter('behat.environment.parameters');
+
+        foreach ($parameters as $name => $value) {
+            $environment->setParameter($name, $value);
+        }
 
         foreach ($this->resources as $resource) {
             $environment->loadEnvironmentResource($resource);

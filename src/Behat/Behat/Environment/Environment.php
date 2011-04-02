@@ -18,6 +18,40 @@ namespace Behat\Behat\Environment;
 class Environment extends \stdClass implements EnvironmentInterface
 {
     /**
+     * Environment parameters.
+     *
+     * @var     array
+     */
+    protected $parameters = array();
+
+    /**
+     * Sets environment parameter.
+     *
+     * @param   string  $name
+     * @param   mixed   $value
+     */
+    public function setParameter($name, $value)
+    {
+        $this->parameters[$name] = $value;
+    }
+
+    /**
+     * Returns environment parameter.
+     *
+     * @param   string  $name
+     *
+     * @return  mixed
+     */
+    public function getParameter($name)
+    {
+        if (!isset($this->parameters[$name])) {
+            throw new \InvalidArgumentException('Parameter ' . $name . ' is not set');
+        }
+
+        return $this->parameters[$name];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function loadEnvironmentResource($resource)
