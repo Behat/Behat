@@ -232,6 +232,7 @@ class BehatCommand extends Command
         $cwd        = getcwd();
 
         $this->pathTokens['BEHAT_WORK_PATH'] = $cwd;
+        $this->pathTokens['BEHAT_BASE_PATH'] = $cwd . DIRECTORY_SEPARATOR . 'features';
 
         if (null === $profile) {
             $profile = 'default';
@@ -311,27 +312,15 @@ class BehatCommand extends Command
      */
     protected function createFeaturesPath(ContainerInterface $container, OutputInterface $output)
     {
-        $basePath       = $this->pathTokens['BEHAT_WORK_PATH'] . DIRECTORY_SEPARATOR;
-        $featuresPath   = $this->preparePath($container->getParameter('behat.paths.features'), true);
-        $supportPath    = $this->preparePath($container->getParameter('behat.paths.support'), true);
+        $basePath       = $this->pathTokens['BEHAT_BASE_PATH'] . DIRECTORY_SEPARATOR;
+        $featuresPath   = $this->preparePath($container->getParameter('behat.paths.features'));
+        $supportPath    = $this->preparePath($container->getParameter('behat.paths.support'));
         $stepsPath      = $container->getParameter('behat.paths.steps');
-        if (is_array($stepsPath)) {
-            $stepsPath = $this->preparePath($stepsPath[0], true);
-        } else {
-            $stepsPath = $this->preparePath($stepsPath, true);
-        }
+        $stepsPath      = $this->preparePath($stepsPath[0]);
         $envPath        = $container->getParameter('behat.paths.environment');
-        if (is_array($envPath)) {
-            $envPath = $this->preparePath($envPath[0], true);
-        } else {
-            $envPath = $this->preparePath($envPath, true);
-        }
+        $envPath        = $this->preparePath($envPath[0]);
         $bootPath       = $container->getParameter('behat.paths.bootstrap');
-        if (is_array($bootPath)) {
-            $bootPath = $this->preparePath($bootPath[0], true);
-        } else {
-            $bootPath = $this->preparePath($bootPath, true);
-        }
+        $bootPath       = $this->preparePath($bootPath[0]);
 
         if (!is_dir($featuresPath)) {
             mkdir($featuresPath, 0777, true);
@@ -772,13 +761,12 @@ ENVIRONMENT
      * prepend single filenames with CWD path.
      *
      * @param   string  $path
-     * @param   boolean $allowRelativePaths     we allow relative paths?
      *
      * @return  string
      *
      * @uses    pathTokens
      */
-    protected function preparePath($path, $allowRelativePaths = false)
+    protected function preparePath($path)
     {
         $pathTokens = $this->pathTokens;
         $path = preg_replace_callback('/%([^%]+)%/', function($matches) use($pathTokens) {
@@ -793,10 +781,17 @@ ENVIRONMENT
 
         $path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', '/', $path));
 
-        if (!$allowRelativePaths) {
-            if (!file_exists($path) && file_exists(getcwd() . DIRECTORY_SEPARATOR . $path)) {
-                $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+        if (!file_exists($path)) {
+            foreach (explode(':', get_include_path()) as $libPath) {
+                if (file_exists($libPath . DIRECTORY_SEPARATOR . $path)) {
+                    $path = $libPath . DIRECTORY_SEPARATOR . $path;
+                    break;
+                }
             }
+        }
+
+        if (!file_exists($path) && file_exists(getcwd() . DIRECTORY_SEPARATOR . $path)) {
+            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
         }
 
         return $path;
