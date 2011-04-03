@@ -46,7 +46,7 @@ class Configuration
                             prototype('scalar')->end()->
                             defaultValue(array('%behat.paths.features%/steps'))->
                         end()->
-                        arrayNode('steps-i18n')->
+                        arrayNode('steps_i18n')->
                             prototype('scalar')->end()->
                             defaultValue(array('%behat.paths.features%/steps/i18n'))->
                         end()->

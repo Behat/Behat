@@ -14,7 +14,7 @@
         <parameter key="behat.paths.steps" type="collection">
             <parameter>%behat.paths.features%/steps</parameter>
         </parameter>
-        <parameter key="behat.paths.steps.i18n" type="collection">
+        <parameter key="behat.paths.steps_i18n" type="collection">
             <parameter>%behat.paths.features%/steps/i18n</parameter>
         </parameter>
         <parameter key="behat.paths.bootstrap" type="collection">

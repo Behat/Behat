@@ -672,7 +672,7 @@ ENVIRONMENT
     {
         $translator = $container->get('behat.translator');
 
-        foreach ((array) $container->getParameter('behat.paths.steps.i18n') as $path) {
+        foreach ((array) $container->getParameter('behat.paths.steps_i18n') as $path) {
             $path = $this->preparePath($path);
 
             if (is_dir($path)) {
