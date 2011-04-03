@@ -42,6 +42,12 @@ $steps->Then('/^it should (fail|pass) with:$/', function($world, $success, $text
         $text = preg_replace_callback('/ features\/[^\n ]+/', function($matches) {
             return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
         }, (string) $text);
+        $text = preg_replace_callback('/\<span class\="path"\>features\/[^\<]+/', function($matches) {
+            return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+        }, (string) $text);
+        $text = preg_replace_callback('/\+[fd] [^ ]+/', function($matches) {
+            return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+        }, (string) $text);
     }
 
     try {
@@ -64,6 +70,12 @@ $steps->Then('/^the output should contain:$/', function($world, $text) {
     // windows path fix
     if ('/' !== DIRECTORY_SEPARATOR) {
         $text = preg_replace_callback('/ features\/[^\n ]+/', function($matches) {
+            return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+        }, (string) $text);
+        $text = preg_replace_callback('/\<span class\="path"\>features\/[^\<]+/', function($matches) {
+            return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+        }, (string) $text);
+        $text = preg_replace_callback('/\+[fd] [^ ]+/', function($matches) {
             return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
         }, (string) $text);
     }

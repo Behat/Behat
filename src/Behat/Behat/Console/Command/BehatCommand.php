@@ -313,7 +313,7 @@ class BehatCommand extends Command
     protected function createFeaturesPath($featuresPath = null, ContainerInterface $container, OutputInterface $output)
     {
         $featuresPath = $featuresPath ?: getcwd();
-        if (DIRECTORY_SEPARATOR === substr($featuresPath, -1)) {
+        if ('\\' === substr($featuresPath, -1) || '/' === substr($featuresPath, -1)) {
             $featuresPath = dirname($featuresPath);
         }
         if ('features' == basename($featuresPath)) {
