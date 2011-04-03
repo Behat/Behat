@@ -186,7 +186,7 @@ class BehatCommand extends Command
         }
 
         if ($input->getOption('init')) {
-            $this->createFeaturesPath($container, $output);
+            $this->createFeaturesPath($input->getArgument('features'), $container, $output);
 
             return 0;
         }
@@ -232,7 +232,6 @@ class BehatCommand extends Command
         $cwd        = getcwd();
 
         $this->pathTokens['BEHAT_WORK_PATH'] = $cwd;
-        $this->pathTokens['BEHAT_BASE_PATH'] = $cwd . DIRECTORY_SEPARATOR . 'features';
 
         if (null === $profile) {
             $profile = 'default';
@@ -307,20 +306,28 @@ class BehatCommand extends Command
     /**
      * Creates features path structure (initializes behat tests structure).
      *
+     * @param   string                                                      $features   features path
      * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
      * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
      */
-    protected function createFeaturesPath(ContainerInterface $container, OutputInterface $output)
+    protected function createFeaturesPath($featuresPath = null, ContainerInterface $container, OutputInterface $output)
     {
-        $basePath       = $this->pathTokens['BEHAT_BASE_PATH'] . DIRECTORY_SEPARATOR;
+        $featuresPath = $featuresPath ?: getcwd();
+        if (DIRECTORY_SEPARATOR === substr($featuresPath, -1)) {
+            $featuresPath = dirname($featuresPath);
+        }
+        if ('features' == basename($featuresPath)) {
+            $this->pathTokens['BEHAT_BASE_PATH'] = $featuresPath;
+        } elseif ('%BEHAT_BASE_PATH%' === $container->getParameter('behat.paths.features')) {
+            $this->pathTokens['BEHAT_BASE_PATH'] = $featuresPath . DIRECTORY_SEPARATOR . 'features';
+        }
+        $basePath = getcwd() . DIRECTORY_SEPARATOR;
+
         $featuresPath   = $this->preparePath($container->getParameter('behat.paths.features'));
         $supportPath    = $this->preparePath($container->getParameter('behat.paths.support'));
-        $stepsPath      = $container->getParameter('behat.paths.steps');
-        $stepsPath      = $this->preparePath($stepsPath[0]);
-        $envPath        = $container->getParameter('behat.paths.environment');
-        $envPath        = $this->preparePath($envPath[0]);
-        $bootPath       = $container->getParameter('behat.paths.bootstrap');
-        $bootPath       = $this->preparePath($bootPath[0]);
+        $stepsPath      = $this->preparePath(current($container->getParameter('behat.paths.steps')));
+        $envPath        = $this->preparePath(current($container->getParameter('behat.paths.environment')));
+        $bootPath       = $this->preparePath(current($container->getParameter('behat.paths.bootstrap')));
 
         if (!is_dir($featuresPath)) {
             mkdir($featuresPath, 0777, true);

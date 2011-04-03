@@ -19,6 +19,17 @@ $steps->When('/^I run "behat ([^"]*)"$/', function($world, $command) {
     $world->return  = $return;
 });
 
+$steps->Given('/^I am in the "([^"]*)" path$/', function($world, $path) {
+    if (!file_exists($path)) {
+        mkdir($path, 0777, true);
+        chdir($path);
+    }
+});
+
+$steps->Then('/^file "([^"]*)" should exist$/', function($world, $path) {
+    assertFileExists(getcwd() . DIRECTORY_SEPARATOR . $path);
+});
+
 $steps->Then('/^it should (fail|pass) with:$/', function($world, $success, $text) {
     if ('fail' === $success) {
         assertNotEquals(0, $world->return);
