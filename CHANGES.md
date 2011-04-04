@@ -1,3 +1,16 @@
+1.1.0 / 2011-04-04
+==================
+
+  * New configuration system with profiles and imports support
+  * New event system
+  * Environment parameters support
+  * Named regex arguments support
+  * Japanese translation for formatters
+  * JUnit formatter bugfixes
+  * HTML and Pretty formatters multiple arguments print bugfix
+  * Step snippets (proposals) bugfixes
+  * Updated vendor libraries
+
 1.0.0 / 2011-03-08
 ==================
 
