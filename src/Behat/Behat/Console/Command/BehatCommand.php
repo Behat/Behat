@@ -300,7 +300,7 @@ class BehatCommand extends Command
         $lang       = $input->getOption('lang') ?: 'en';
 
         $output->setDecorated(false);
-        $output->writeln($dumper->dump($lang) . "\n");
+        $output->writeln($dumper->dump($lang) . "\n", OutputInterface::OUTPUT_RAW);
     }
 
     /**
@@ -430,7 +430,7 @@ ENVIRONMENT
         $dumper = $container->get('behat.definition_dumper');
 
         $output->setDecorated(false);
-        $output->write($dumper->dump($input->getOption('lang') ?: 'en'));
+        $output->write($dumper->dump($input->getOption('lang') ?: 'en'), false, OutputInterface::OUTPUT_RAW);
     }
 
     /**
