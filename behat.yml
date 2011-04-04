@@ -1,2 +1,8 @@
-formatter:
-    name:   progress
+default:
+  formatter:
+    name:                   progress
+pretty:
+  formatter:
+    name:                   pretty
+    parameters:
+      multiline_arguments:  false

@@ -105,15 +105,16 @@ class DefinitionDispatcher
         $regex = preg_replace('/([\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
         $regex = preg_replace(
             array(
-                '/\'([^\']*)\'/', '/\"([^\"]*)\"/',
-                '/(\d+)/'
+                '/\'([^\']*)\'/', '/\"([^\"]*)\"/', // Quoted strings
+                '/(\d+)/',                          // Numbers
             ),
             array(
                 "\'([^\']*)\'", "\"([^\"]*)\"",
-                "(\\d+)"
+                "(\\d+)",
             ),
             $regex, -1, $count
         );
+        $regex = preg_replace('/\'.*(?<!\')/', '\\\\$0', $regex); // Single quotes without matching pair (escape in resulting regex)
 
         $args = array("\$world");
         for ($i = 0; $i < $count; $i++) {
@@ -174,7 +175,7 @@ PHP
         }
 
         $text       = $step->getText();
-        $args       = $step->getArguments();
+        $multiline  = $step->getArguments();
         $matches    = array();
 
         // find step to match
@@ -183,11 +184,14 @@ PHP
 
             if (preg_match($origRegex, $text, $arguments)
             || ($origRegex !== $transRegex && preg_match($transRegex, $text, $arguments))) {
-                $arguments = array_merge(array_slice($arguments, 1), $args);
+                // prepare callback arguments
+                $arguments = $this->prepareCallbackArguments(
+                    $definition->getCallbackReflection(), array_slice($arguments, 1), $multiline
+                );
 
                 // transform arguments
-                foreach ($this->transformations as $transformation) {
-                    foreach ($arguments as $num => $argument) {
+                foreach ($arguments as $num => $argument) {
+                    foreach ($this->transformations as $transformation) {
                         if ($newArgument = $transformation->transform($argument)) {
                             $arguments[$num] = $newArgument;
                         }
@@ -257,5 +261,32 @@ PHP
                 }
             }
         }
+    }
+
+    /**
+     * Merges found arguments with multiliners and maps them to the function callback signature.
+     *
+     * @param   ReflectionFunction  $refl       callback reflection
+     * @param   array               $arguments  found arguments
+     * @param   array               $multiline  multiline arguments of the step
+     *
+     * @return  array
+     */
+    private function prepareCallbackArguments(\ReflectionFunction $refl, array $arguments, array $multiline)
+    {
+        $resulting = array();
+        foreach (array_slice($refl->getParameters(), 1) as $num => $parameterRefl) {
+            if (isset($arguments[$parameterRefl->getName()])) {
+                $resulting[] = $arguments[$parameterRefl->getName()];
+            } elseif (isset($arguments[$num])) {
+                $resulting[] = $arguments[$num];
+            }
+        }
+
+        foreach ($multiline as $argument) {
+            $resulting[] = $argument;
+        }
+
+        return $resulting;
     }
 }

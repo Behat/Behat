@@ -30,81 +30,96 @@ class Configuration
      */
     public function getConfigTree()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('behat', 'array');
+        $tree = new TreeBuilder();
 
-        $rootNode->
-            arrayNode('paths')->
-                scalarNode('base')->
-                    defaultValue('BEHAT_WORK_PATH/features')->
-                end()->
-                scalarNode('features')->
-                    defaultValue('%behat.paths.base%')->
-                end()->
-                scalarNode('support')->
-                    defaultValue('%behat.paths.base%/support')->
-                end()->
-                variableNode('steps')->
-                    defaultValue('%behat.paths.base%/steps')->
-                end()->
-                variableNode('steps-i18n')->
-                    defaultValue('%behat.paths.base%/steps/i18n')->
-                end()->
-                variableNode('bootstrap')->
-                    defaultValue('%behat.paths.support%/bootstrap.php')->
-                end()->
-                variableNode('environment')->
-                    defaultValue('%behat.paths.support%/env.php')->
-                end()->
-                variableNode('hooks')->
-                    defaultValue('%behat.paths.support%/hooks.php')->
-                end()->
-            end()->
-            arrayNode('filters')->
-                scalarNode('name')->
-                    defaultNull()->
-                end()->
-                scalarNode('tags')->
-                    defaultNull()->
+        $tree->root('behat')->
+            children()->
+                arrayNode('paths')->
+                    children()->
+                        scalarNode('features')->
+                            defaultValue('%%BEHAT_BASE_PATH%%')->
+                        end()->
+                        scalarNode('support')->
+                            defaultValue('%behat.paths.features%/support')->
+                        end()->
+                        arrayNode('steps')->
+                            prototype('scalar')->end()->
+                            defaultValue(array('%behat.paths.features%/steps'))->
+                        end()->
+                        arrayNode('steps_i18n')->
+                            prototype('scalar')->end()->
+                            defaultValue(array('%behat.paths.features%/steps/i18n'))->
+                        end()->
+                        arrayNode('bootstrap')->
+                            prototype('scalar')->end()->
+                            defaultValue(array('%behat.paths.support%/bootstrap.php'))->
+                        end()->
+                        arrayNode('environment')->
+                            prototype('scalar')->end()->
+                            defaultValue(array('%behat.paths.support%/env.php'))->
+                        end()->
+                        arrayNode('hooks')->
+                            prototype('scalar')->end()->
+                            defaultValue(array('%behat.paths.support%/hooks.php'))->
+                        end()->
+                    end()->
                 end()->
             end()->
-            arrayNode('formatter')->
-                scalarNode('name')->
-                    defaultValue('pretty')->
-                end()->
-                booleanNode('decorated')->
-                    defaultNull()->
-                end()->
-                booleanNode('verbose')->
-                    defaultFalse()->
-                end()->
-                booleanNode('time')->
-                    defaultTrue()->
-                end()->
-                scalarNode('language')->
-                    defaultValue('en')->
-                end()->
-                scalarNode('output_path')->
-                    defaultNull()->
-                end()->
-                booleanNode('multiline_arguments')->
-                    defaultTrue()->
-                end()->
-                fixXmlConfig('parameter', 'parameters')->
-                arrayNode('parameters')->
-                    useAttributeAsKey(0)->
-                    prototype('scalar')->end()->
+            children()->
+                arrayNode('filters')->
+                    children()->
+                        scalarNode('name')->defaultNull()->end()->
+                        scalarNode('tags')->defaultNull()->end()->
+                    end()->
                 end()->
             end()->
-            arrayNode('classes')->
-                scalarNode('environment')->
-                    defaultValue('Behat\Behat\Environment\Environment')->
+            children()->
+                arrayNode('formatter')->
+                    fixXmlConfig('parameter')->
+                    children()->
+                        scalarNode('name')->
+                            defaultValue('pretty')->
+                        end()->
+                        booleanNode('decorated')->
+                            defaultNull()->
+                        end()->
+                        booleanNode('verbose')->
+                            defaultFalse()->
+                        end()->
+                        booleanNode('time')->
+                            defaultTrue()->
+                        end()->
+                        scalarNode('language')->
+                            defaultValue('en')->
+                        end()->
+                        scalarNode('output_path')->
+                            defaultNull()->
+                        end()->
+                        booleanNode('multiline_arguments')->
+                            defaultTrue()->
+                        end()->
+                        arrayNode('parameters')->
+                            useAttributeAsKey(0)->
+                            prototype('variable')->end()->
+                        end()->
+                    end()->
                 end()->
-                scalarNode('formatter')->
-                    defaultNull()->
+            end()->
+            children()->
+                arrayNode('environment')->
+                    fixXmlConfig('parameter')->
+                    children()->
+                        scalarNode('class')->
+                            defaultValue('Behat\Behat\Environment\Environment')->
+                        end()->
+                        arrayNode('parameters')->
+                            useAttributeAsKey(0)->
+                            prototype('variable')->end()->
+                        end()->
+                    end()->
                 end()->
             end();
 
-        return $treeBuilder->buildTree();
+        return $tree->buildTree();
     }
 }

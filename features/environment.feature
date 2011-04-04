@@ -122,3 +122,46 @@ Feature: Environment consistency
       5 scenarios (1 passed, 4 failed)
       18 steps (14 passed, 4 failed)
       """
+
+  Scenario: Environment parameters
+    Given a file named "behat.yml" with:
+      """
+      default:
+        environment:
+          parameters:
+            parameter1: val_one
+            parameter2:
+              everzet: behat_admin
+              avalanche123: behat_admin
+      """
+    And a file named "features/steps/env_vars_steps.php" with:
+      """
+      <?php
+      $steps->Then('/^environment parameter "([^"]*)" should be equal to "([^"]*)"$/', function($world, $key, $val) {
+          assertEquals($val, $world->getParameter($key));
+      });
+      
+      $steps->And('/^environment parameter "([^"]*)" should be array with (\d+) elements$/', function($world, $key, $count) {
+          assertInternalType('array', $world->getParameter($key));
+          assertEquals(2, count($world->getParameter($key)));
+      });
+      """
+    And a file named "features/params.feature" with:
+      """
+      Feature: Environment parameters
+        In order to run a browser
+        As feature runner
+        I need to be able to configure behat environment
+
+        Scenario: I'm little hungry
+          Then environment parameter "parameter1" should be equal to "val_one"
+          And environment parameter "parameter2" should be array with 2 elements
+      """
+  When I run "behat -f progress features/params.feature"
+  Then it should pass with:
+    """
+    ..
+    
+    1 scenario (1 passed)
+    2 steps (2 passed)
+    """

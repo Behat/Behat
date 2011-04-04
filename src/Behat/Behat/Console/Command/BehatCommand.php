@@ -14,7 +14,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Finder\Finder;
 
 use Behat\Behat\DependencyInjection\BehatExtension,
-    Behat\Behat\Formatter\FormatterInterface;
+    Behat\Behat\Formatter\FormatterInterface,
+    Behat\Behat\Event\SuiteEvent;
 
 use Behat\Gherkin\Filter\NameFilter,
     Behat\Gherkin\Filter\TagFilter,
@@ -75,6 +76,12 @@ class BehatCommand extends Command
                 '  ' .
                 'Specify external configuration file to load. ' .
                 '<info>behat.yml</info> or <info>config/behat.yml</info> will be used by default.'
+            ),
+            new InputOption('--profile',        null,
+                InputOption::VALUE_REQUIRED,
+                '      ' .
+                'Specify configuration profile name to use. ' .
+                'Define configuration profiles in <info>behat.yml</info>.'
             ),
             new InputOption('--out',            null,
                 InputOption::VALUE_REQUIRED,
@@ -170,7 +177,7 @@ class BehatCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = $this->configureContainer($input->getOption('config'));
+        $container = $this->configureContainer($input->getOption('config'), $input->getOption('profile'));
 
         if ($input->getOption('usage')) {
             $this->printUsageExample($input, $container, $output);
@@ -179,7 +186,7 @@ class BehatCommand extends Command
         }
 
         if ($input->getOption('init')) {
-            $this->createFeaturesPath($container, $output);
+            $this->createFeaturesPath($input->getArgument('features'), $container, $output);
 
             return 0;
         }
@@ -213,10 +220,11 @@ class BehatCommand extends Command
      * Configures service container with or without provided configuration file.
      *
      * @param   string  $configFile DependencyInjection extension config file path (in YAML)
+     * @param   string  $profile    profile name
      *
      * @return  Symfony\Component\DependencyInjection\ContainerInterface
      */
-    protected function configureContainer($configFile = null)
+    protected function configureContainer($configFile = null, $profile = null)
     {
         $container  = new ContainerBuilder();
         $extension  = new BehatExtension();
@@ -224,6 +232,10 @@ class BehatCommand extends Command
         $cwd        = getcwd();
 
         $this->pathTokens['BEHAT_WORK_PATH'] = $cwd;
+
+        if (null === $profile) {
+            $profile = 'default';
+        }
 
         if (null === $configFile) {
             if (is_file($cwd . DIRECTORY_SEPARATOR . 'behat.yml')) {
@@ -235,13 +247,42 @@ class BehatCommand extends Command
 
         if (null !== $configFile) {
             $this->pathTokens['BEHAT_CONFIG_PATH'] = dirname($configFile);
-            $config = array(Yaml::load($configFile));
+            $config = $this->loadConfigurationFile($configFile, $profile);
         }
 
-        $extension->load($config, $container);
+        $extension->load(array($config), $container);
         $container->compile();
 
         return $container;
+    }
+
+    /**
+     * Loads information from YAML configuration file.
+     *
+     * @param   string  $configFile     path to the config file
+     * @param   string  $profile        name of the config profile to use
+     *
+     * @return  array
+     */
+    protected function loadConfigurationFile($configFile, $profile = 'default')
+    {
+        $config = Yaml::load($configFile);
+
+        $resultConfig = isset($config['default']) ? $config['default'] : array();
+        if ('default' !== $profile && isset($config[$profile])) {
+            $resultConfig = $this->configMergeRecursiveWithOverwrites($resultConfig, $config[$profile]);
+        }
+
+        if (isset($config['imports'])) {
+            foreach ($config['imports'] as $importConfigFile) {
+                $importConfigFile = $this->preparePath($importConfigFile);
+                $resultConfig = $this->configMergeRecursiveWithOverwrites(
+                    $resultConfig, $this->loadConfigurationFile($importConfigFile, $profile)
+                );
+            }
+        }
+
+        return $resultConfig;
     }
 
     /**
@@ -259,38 +300,34 @@ class BehatCommand extends Command
         $lang       = $input->getOption('lang') ?: 'en';
 
         $output->setDecorated(false);
-        $output->writeln($dumper->dump($lang) . "\n");
+        $output->writeln($dumper->dump($lang) . "\n", OutputInterface::OUTPUT_RAW);
     }
 
     /**
      * Creates features path structure (initializes behat tests structure).
      *
+     * @param   string                                                      $features   features path
      * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
      * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
      */
-    protected function createFeaturesPath(ContainerInterface $container, OutputInterface $output)
+    protected function createFeaturesPath($featuresPath = null, ContainerInterface $container, OutputInterface $output)
     {
-        $basePath       = $this->pathTokens['BEHAT_WORK_PATH'] . DIRECTORY_SEPARATOR;
-        $featuresPath   = $this->preparePath($container->getParameter('behat.paths.features'), true);
-        $supportPath    = $this->preparePath($container->getParameter('behat.paths.support'), true);
-        $stepsPath      = $container->getParameter('behat.paths.steps');
-        if (is_array($stepsPath)) {
-            $stepsPath = $this->preparePath($stepsPath[0], true);
-        } else {
-            $stepsPath = $this->preparePath($stepsPath, true);
+        $featuresPath = $featuresPath ?: getcwd();
+        if ('\\' === substr($featuresPath, -1) || '/' === substr($featuresPath, -1)) {
+            $featuresPath = dirname($featuresPath);
         }
-        $envPath        = $container->getParameter('behat.paths.environment');
-        if (is_array($envPath)) {
-            $envPath = $this->preparePath($envPath[0], true);
-        } else {
-            $envPath = $this->preparePath($envPath, true);
+        if ('features' == basename($featuresPath)) {
+            $this->pathTokens['BEHAT_BASE_PATH'] = $featuresPath;
+        } elseif ('%BEHAT_BASE_PATH%' === $container->getParameter('behat.paths.features')) {
+            $this->pathTokens['BEHAT_BASE_PATH'] = $featuresPath . DIRECTORY_SEPARATOR . 'features';
         }
-        $bootPath       = $container->getParameter('behat.paths.bootstrap');
-        if (is_array($bootPath)) {
-            $bootPath = $this->preparePath($bootPath[0], true);
-        } else {
-            $bootPath = $this->preparePath($bootPath, true);
-        }
+        $basePath = getcwd() . DIRECTORY_SEPARATOR;
+
+        $featuresPath   = $this->preparePath($container->getParameter('behat.paths.features'));
+        $supportPath    = $this->preparePath($container->getParameter('behat.paths.support'));
+        $stepsPath      = $this->preparePath(current($container->getParameter('behat.paths.steps')));
+        $envPath        = $this->preparePath(current($container->getParameter('behat.paths.environment')));
+        $bootPath       = $this->preparePath(current($container->getParameter('behat.paths.bootstrap')));
 
         if (!is_dir($featuresPath)) {
             mkdir($featuresPath, 0777, true);
@@ -393,7 +430,7 @@ ENVIRONMENT
         $dumper = $container->get('behat.definition_dumper');
 
         $output->setDecorated(false);
-        $output->write($dumper->dump($input->getOption('lang') ?: 'en'));
+        $output->write($dumper->dump($input->getOption('lang') ?: 'en'), false, OutputInterface::OUTPUT_RAW);
     }
 
     /**
@@ -408,7 +445,7 @@ ENVIRONMENT
      */
     protected function locateFeaturesPaths(InputInterface $input, ContainerInterface $container)
     {
-        $basePath       = $container->getParameter('behat.paths.base');
+        $basePath       = '%BEHAT_WORK_PATH%' . DIRECTORY_SEPARATOR . 'features';
         $featuresPath   = $container->getParameter('behat.paths.features');
         $lineFilter     = '';
 
@@ -419,13 +456,13 @@ ENVIRONMENT
                 $lineFilter = ':' . $matches[2];
             }
 
-            if (is_file(($path = realpath($path)))) {
-                $basePath = dirname($path);
+            if (is_file($path)) {
+                $basePath = dirname(realpath($path));
                 $featuresPath = $path;
-            } elseif (is_dir($path)) {
-                $basePath = $path;
             } elseif (is_dir($path . DIRECTORY_SEPARATOR . 'features')) {
-                $basePath = $path . DIRECTORY_SEPARATOR . 'features';
+                $basePath = realpath($path) . DIRECTORY_SEPARATOR . 'features';
+            } elseif (is_dir($path)) {
+                $basePath = realpath($path);
             } else {
                 throw new \RuntimeException("Path $path not found");
             }
@@ -635,7 +672,7 @@ ENVIRONMENT
     {
         $translator = $container->get('behat.translator');
 
-        foreach ((array) $container->getParameter('behat.paths.steps.i18n') as $path) {
+        foreach ((array) $container->getParameter('behat.paths.steps_i18n') as $path) {
             $path = $this->preparePath($path);
 
             if (is_dir($path)) {
@@ -686,9 +723,9 @@ ENVIRONMENT
     {
         $dispatcher = $container->get('behat.event_dispatcher');
 
-        $dispatcher->bindHookDispatcherEventListeners($container->get('behat.hook_dispatcher'));
-        $dispatcher->bindLoggerEventListeners($container->get('behat.logger'));
-        $dispatcher->bindFormatterEventListeners($formatter);
+        $dispatcher->addSubscriber($container->get('behat.hook_dispatcher'), 10);
+        $dispatcher->addSubscriber($container->get('behat.logger'), 0);
+        $dispatcher->addSubscriber($formatter, -10);
 
         return $dispatcher;
     }
@@ -708,7 +745,7 @@ ENVIRONMENT
         $dispatcher = $container->get('behat.event_dispatcher');
         $logger     = $container->get('behat.logger');
 
-        $dispatcher->notify(new Event($logger, 'suite.before'));
+        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger));
 
         foreach ($featuresPaths as $path) {
             $features = $gherkin->load((string) $path);
@@ -719,7 +756,7 @@ ENVIRONMENT
             }
         }
 
-        $dispatcher->notify(new Event($logger, 'suite.after'));
+        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger));
 
         return $result;
     }
@@ -731,26 +768,63 @@ ENVIRONMENT
      * prepend single filenames with CWD path.
      *
      * @param   string  $path
-     * @param   boolean $allowRelativePaths     we allow relative paths?
      *
      * @return  string
      *
      * @uses    pathTokens
      */
-    protected function preparePath($path, $allowRelativePaths = false)
+    protected function preparePath($path)
     {
-        foreach ($this->pathTokens as $name => $value) {
-            $path = str_replace($name, $value, $path);
-        }
+        $pathTokens = $this->pathTokens;
+        $path = preg_replace_callback('/%([^%]+)%/', function($matches) use($pathTokens) {
+            $name = $matches[1];
+            if (defined($name)) {
+                return constant($name);
+            } elseif (isset($pathTokens[$name])) {
+                return $pathTokens[$name];
+            }
+            return $matches[0];
+        }, $path);
 
         $path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', '/', $path));
 
-        if (!$allowRelativePaths) {
-            if (!is_dir($path) && !is_file($path)) {
-                $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+        if (!file_exists($path)) {
+            foreach (explode(':', get_include_path()) as $libPath) {
+                if (file_exists($libPath . DIRECTORY_SEPARATOR . $path)) {
+                    $path = $libPath . DIRECTORY_SEPARATOR . $path;
+                    break;
+                }
             }
         }
 
+        if (!file_exists($path) && file_exists(getcwd() . DIRECTORY_SEPARATOR . $path)) {
+            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+        }
+
         return $path;
+    }
+
+    /**
+     * Merges two arrays into one with overwrite. It works the same as array_merge_recursive, but
+     * overwrites non-array values instead of turning them into arrays.
+     *
+     * @param   array  $array1  to
+     * @param   array  $array2  from
+     *
+     * @return  array
+     */
+    private function configMergeRecursiveWithOverwrites($array1, $array2)
+    {
+        foreach($array2 as $key => $val) {
+            if (array_key_exists($key, $array1) && is_array($val)) {
+                $array1[$key] = $this->configMergeRecursiveWithOverwrites($array1[$key], $val);
+            } elseif (is_numeric($key)) {
+                $array1[] = $val;
+            } else {
+                $array1[$key] = $val;
+            }
+        }
+
+        return $array1;
     }
 }

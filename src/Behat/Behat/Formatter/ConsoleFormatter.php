@@ -5,11 +5,12 @@ namespace Behat\Behat\Formatter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag,
     Symfony\Component\EventDispatcher\EventDispatcher,
     Symfony\Component\EventDispatcher\Event,
-    Symfony\Component\Translation\Translator;
+    Symfony\Component\Translation\Translator,
+    Symfony\Component\Console\Output\StreamOutput;
 
-use Behat\Behat\Console\Output\ConsoleOutput,
-    Behat\Behat\Tester\StepTester,
-    Behat\Behat\Exception\FormatterException;
+use Behat\Behat\Event\StepEvent,
+    Behat\Behat\Exception\FormatterException,
+    Behat\Behat\Console\Formatter\OutputFormatter;
 
 /*
  * This file is part of the Behat.
@@ -41,7 +42,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Console output.
      *
-     * @var     Behat\Behat\Console\Output\ConsoleOutput
+     * @var     Symfony\Component\Console\Output\StreamOutput
      */
     private $console;
 
@@ -124,15 +125,15 @@ abstract class ConsoleFormatter implements FormatterInterface
     final protected function getResultColorCode($result)
     {
         switch ($result) {
-            case StepTester::PASSED:
+            case StepEvent::PASSED:
                 return 'passed';
-            case StepTester::SKIPPED:
+            case StepEvent::SKIPPED:
                 return 'skipped';
-            case StepTester::PENDING:
+            case StepEvent::PENDING:
                 return 'pending';
-            case StepTester::UNDEFINED:
+            case StepEvent::UNDEFINED:
                 return 'undefined';
-            case StepTester::FAILED:
+            case StepEvent::FAILED:
                 return 'failed';
         }
     }
@@ -163,7 +164,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Returns console instance, prepared to write.
      *
-     * @return  Behat\Behat\Console\Output\ConsoleOutput
+     * @return  Symfony\Component\Console\Output\StreamOutput
      *
      * @uses    createOutputConsole()
      * @uses    configureOutputConsole()
@@ -207,7 +208,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Returns new output console.
      *
-     * @return  Behat\Behat\Console\Output\ConsoleOutput
+     * @return  Symfony\Component\Console\Output\StreamOutput
      *
      * @uses    createOutputStream()
      */
@@ -215,18 +216,22 @@ abstract class ConsoleFormatter implements FormatterInterface
     {
         $stream = $this->createOutputStream();
 
-        return new ConsoleOutput($stream);
+        return new StreamOutput($stream, StreamOutput::VERBOSITY_NORMAL, null, new OutputFormatter());
     }
 
     /**
      * Configure output console parameters.
      *
-     * @param   Behat\Behat\Console\Output\ConsoleOutput    $console
+     * @param   Symfony\Component\Console\Output\StreamOutput    $console
      */
-    protected function configureOutputConsole(ConsoleOutput $console)
+    protected function configureOutputConsole(StreamOutput $console)
     {
-        $console->setVerbosity($this->parameters->get('verbose') ? 2 : 1);
-        $console->setDecorated($this->parameters->get('decorated'));
+        $console->setVerbosity(
+            $this->parameters->get('verbose') ? StreamOutput::VERBOSITY_VERBOSE : StreamOutput::VERBOSITY_NORMAL
+        );
+        $console->getFormatter()->setDecorated(
+            $this->parameters->get('decorated')
+        );
     }
 
     /**

@@ -5,10 +5,11 @@ namespace Behat\Behat\Formatter;
 use Symfony\Component\EventDispatcher\EventDispatcher,
     Symfony\Component\EventDispatcher\Event;
 
-use Behat\Behat\Tester\StepTester,
-    Behat\Behat\Definition\Definition,
+use Behat\Behat\Definition\Definition,
     Behat\Behat\DataCollector\LoggerDataCollector,
-    Behat\Behat\Exception\Pending;
+    Behat\Behat\Exception\Pending,
+    Behat\Behat\Event\SuiteEvent,
+    Behat\Behat\Event\StepEvent;
 
 use Behat\Gherkin\Node\BackgroundNode,
     Behat\Gherkin\Node\StepNode;
@@ -44,30 +45,26 @@ class ProgressFormatter extends ConsoleFormatter
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @uses    afterSuite()
-     * @uses    afterStep()
+     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
      */
-    public function registerListeners(EventDispatcher $dispatcher)
+    public static function getSubscribedEvents()
     {
-        $dispatcher->connect('suite.after', array($this, 'afterSuite'), -10);
-        $dispatcher->connect('step.after',  array($this, 'afterStep'),  -10);
+        return array('afterSuite', 'afterStep');
     }
 
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\SuiteEvent    $event
      *
      * @uses    printFailedSteps()
      * @uses    printPendingSteps()
      * @uses    printSummary()
      * @uses    printUndefinedStepsSnippets()
      */
-    public function afterSuite(Event $event)
+    public function afterSuite(SuiteEvent $event)
     {
-        $logger = $event->getSubject();
+        $logger = $event->getLogger();
 
         $this->writeln("\n");
         $this->printFailedSteps($logger);
@@ -79,18 +76,18 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Listens to "step.after" event.
      *
-     * @param   Symfony\Component\EventDispatcher\Event     $event
+     * @param   Behat\Behat\Event\StepEvent $event
      *
      * @uses    printStep()
      */
-    public function afterStep(Event $event)
+    public function afterStep(StepEvent $event)
     {
         $this->printStep(
-            $event->getSubject(),
-            $event->get('result'),
-            $event->get('definition'),
-            $event->get('snippet'),
-            $event->get('exception')
+            $event->getStep(),
+            $event->getResult(),
+            $event->getDefinition(),
+            $event->getSnippet(),
+            $event->getException()
         );
     }
 
@@ -109,19 +106,19 @@ class ProgressFormatter extends ConsoleFormatter
                                  $snippet = null, \Exception $exception = null)
     {
         switch ($result) {
-            case StepTester::PASSED:
+            case StepEvent::PASSED:
                 $this->write('{+passed}.{-passed}');
                 break;
-            case StepTester::SKIPPED:
+            case StepEvent::SKIPPED:
                 $this->write('{+skipped}-{-skipped}');
                 break;
-            case StepTester::PENDING:
+            case StepEvent::PENDING:
                 $this->write('{+pending}P{-pending}');
                 break;
-            case StepTester::UNDEFINED:
+            case StepEvent::UNDEFINED:
                 $this->write('{+undefined}U{-undefined}');
                 break;
-            case StepTester::FAILED:
+            case StepEvent::FAILED:
                 $this->write('{+failed}F{-failed}');
                 break;
         }
@@ -163,7 +160,7 @@ class ProgressFormatter extends ConsoleFormatter
     protected function printExceptionEvents(array $events)
     {
         foreach ($events as $number => $event) {
-            $exception = $event->get('exception');
+            $exception = $event->getException();
 
             if (null !== $exception) {
                 $color = $exception instanceof Pending ? 'pending' : 'failed';
@@ -182,7 +179,7 @@ class ProgressFormatter extends ConsoleFormatter
                 $this->writeln("{+$color}$error{-$color}");
             }
 
-            $this->printStepPath($event->getSubject(), $event->get('definition'), $exception);
+            $this->printStepPath($event->getStep(), $event->getDefinition(), $exception);
         }
     }
 

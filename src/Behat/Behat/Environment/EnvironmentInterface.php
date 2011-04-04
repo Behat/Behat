@@ -18,6 +18,23 @@ namespace Behat\Behat\Environment;
 interface EnvironmentInterface
 {
     /**
+     * Sets environment parameter.
+     *
+     * @param   string  $name
+     * @param   mixed   $value
+     */
+    function setParameter($name, $value);
+
+    /**
+     * Returns environment parameter.
+     *
+     * @param   string  $name
+     *
+     * @return  mixed
+     */
+    function getParameter($name);
+
+    /**
      * Loads environment resource (configuration).
      *
      * @param     string  $resource     resource path

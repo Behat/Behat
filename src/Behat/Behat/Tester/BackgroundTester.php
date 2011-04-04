@@ -2,13 +2,13 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\AbstractNode;
 
-use Behat\Behat\Environment\EnvironmentInterface;
+use Behat\Behat\Environment\EnvironmentInterface,
+    Behat\Behat\Event\BackgroundEvent;
 
 /*
  * This file is part of the Behat.
@@ -74,7 +74,7 @@ class BackgroundTester implements NodeVisitorInterface
      */
     public function visit(AbstractNode $background)
     {
-        $this->dispatcher->notify(new Event($background, 'background.before'));
+        $this->dispatcher->dispatch('beforeBackground', new BackgroundEvent($background));
 
         $result = 0;
         $skip   = false;
@@ -93,10 +93,7 @@ class BackgroundTester implements NodeVisitorInterface
             $result = max($result, $stResult);
         }
 
-        $this->dispatcher->notify(new Event($background, 'background.after', array(
-            'result'    => $result,
-            'skipped'   => $skip
-        )));
+        $this->dispatcher->dispatch('afterBackground', new BackgroundEvent($background, $result, $skip));
 
         return $result;
     }

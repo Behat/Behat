@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Extension\Extension,
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
     Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Config\Definition\Processor,
@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BehatExtension extends Extension
+class BehatExtension implements ExtensionInterface
 {
     /**
      * Configuration processor.
@@ -56,33 +56,11 @@ class BehatExtension extends Extension
         $tree   = $this->configuration->getConfigTree();
         $config = $this->processor->process($tree, $configs);
 
-        if (isset($config['paths'])) {
-            foreach ($config['paths'] as $key => $value) {
-                $parameterName = "behat.paths.$key";
+        // load configs DIC
+        foreach ($config as $ns => $subconfig) {
+            foreach ($subconfig as $key => $value) {
+                $parameterName = "behat.$ns.$key";
                 $container->setParameter($parameterName, $value);
-            }
-        }
-
-        if (isset($config['formatter'])) {
-            foreach ($config['formatter'] as $key => $value) {
-                $parameterName = "behat.formatter.$key";
-                $container->setParameter($parameterName, $value);
-            }
-        }
-
-        if (isset($config['filters'])) {
-            foreach ($config['filters'] as $key => $value) {
-                $parameterName = "gherkin.filter.$key";
-                $container->setParameter($parameterName, $value);
-            }
-        }
-
-        if (isset($config['classes'])) {
-            if (isset($config['classes']['environment']) && $envClass = $config['classes']['environment']) {
-                $container->setParameter('behat.environment.class', $envClass);
-            }
-            if (isset($config['classes']['formatter']) && $formatterClass = $config['classes']['formatter']) {
-                $container->setParameter('behat.formatter.name', $formatterClass);
             }
         }
     }

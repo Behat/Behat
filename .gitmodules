@@ -7,9 +7,6 @@
 [submodule "vendor/Symfony/Component/DependencyInjection"]
 	path = vendor/Symfony/Component/DependencyInjection
 	url = git://github.com/symfony/DependencyInjection.git
-[submodule "vendor/Symfony/Component/Translation"]
-	path = vendor/Symfony/Component/Translation
-	url = git://github.com/symfony/Translation.git
 [submodule "vendor/Symfony/Component/EventDispatcher"]
 	path = vendor/Symfony/Component/EventDispatcher
 	url = git://github.com/symfony/EventDispatcher.git
@@ -22,3 +19,6 @@
 [submodule "vendor/Symfony/Component/Config"]
 	path = vendor/Symfony/Component/Config
 	url = git://github.com/symfony/Config.git
+[submodule "vendor/Symfony/Component/Translation"]
+	path = vendor/Symfony/Component/Translation
+	url = git://github.com/symfony/Translation.git

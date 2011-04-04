@@ -8,15 +8,24 @@
         <parameter key="gherkin.paths.i18n">%gherkin.paths.lib%/i18n</parameter>
         <parameter key="behat.paths.i18n">%behat.paths.lib%/i18n</parameter>
 
-        <parameter key="behat.paths.base">BEHAT_WORK_PATH/features</parameter>
-        <parameter key="behat.paths.features">%behat.paths.base%</parameter>
-        <parameter key="behat.paths.steps">%behat.paths.base%/steps</parameter>
-        <parameter key="behat.paths.steps.i18n">%behat.paths.base%/steps/i18n</parameter>
+        <parameter key="behat.paths.features">%%BEHAT_BASE_PATH%%</parameter>
+        <parameter key="behat.paths.support">%behat.paths.features%/support</parameter>
 
-        <parameter key="behat.paths.support">%behat.paths.base%/support</parameter>
-        <parameter key="behat.paths.bootstrap">%behat.paths.support%/bootstrap.php</parameter>
-        <parameter key="behat.paths.environment">%behat.paths.support%/env.php</parameter>
-        <parameter key="behat.paths.hooks">%behat.paths.support%/hooks.php</parameter>
+        <parameter key="behat.paths.steps" type="collection">
+            <parameter>%behat.paths.features%/steps</parameter>
+        </parameter>
+        <parameter key="behat.paths.steps_i18n" type="collection">
+            <parameter>%behat.paths.features%/steps/i18n</parameter>
+        </parameter>
+        <parameter key="behat.paths.bootstrap" type="collection">
+            <parameter>%behat.paths.support%/bootstrap.php</parameter>
+        </parameter>
+        <parameter key="behat.paths.environment" type="collection">
+            <parameter>%behat.paths.support%/env.php</parameter>
+        </parameter>
+        <parameter key="behat.paths.hooks" type="collection">
+            <parameter>%behat.paths.support%/hooks.php</parameter>
+        </parameter>
 
         <!-- Formatter parameters -->
         <parameter key="behat.formatter.name">pretty</parameter>
@@ -27,6 +36,9 @@
         <parameter key="behat.formatter.output_path">null</parameter>
         <parameter key="behat.formatter.multiline_arguments">true</parameter>
         <parameter key="behat.formatter.parameters" type="collection"></parameter>
+
+        <!-- Environment parameters -->
+        <parameter key="behat.environment.parameters" type="collection"></parameter>
 
         <!-- Gherkin loader parameters -->
         <parameter key="gherkin.filter.name">null</parameter>
@@ -66,7 +78,7 @@
         <parameter key="behat.translator.xliff_loader.class">Symfony\Component\Translation\Loader\XliffFileLoader</parameter>
 
         <!-- Event Dispatcher -->
-        <parameter key="behat.event_dispatcher.class">Behat\Behat\EventDispatcher\EventDispatcher</parameter>
+        <parameter key="behat.event_dispatcher.class">Symfony\Component\EventDispatcher\EventDispatcher</parameter>
 
         <!-- Logger -->
         <parameter key="behat.logger.class">Behat\Behat\DataCollector\LoggerDataCollector</parameter>
@@ -192,6 +204,12 @@
                 <argument>xliff</argument>
                 <argument>%behat.paths.i18n%/de.xliff</argument>
                 <argument>de</argument>
+                <argument>behat</argument>
+            </call>
+            <call method="addResource">
+                <argument>xliff</argument>
+                <argument>%behat.paths.i18n%/ja.xliff</argument>
+                <argument>ja</argument>
                 <argument>behat</argument>
             </call>
 

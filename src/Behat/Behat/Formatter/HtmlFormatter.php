@@ -2,8 +2,7 @@
 
 namespace Behat\Behat\Formatter;
 
-use Behat\Behat\Tester\StepTester,
-    Behat\Behat\Definition\Definition,
+use Behat\Behat\Definition\Definition,
     Behat\Behat\DataCollector\LoggerDataCollector;
 
 use Behat\Gherkin\Node\AbstractNode,
@@ -349,17 +348,25 @@ class HtmlFormatter extends PrettyFormatter
         array_shift($matches);
 
         // Replace arguments with colorized ones
-        foreach ($matches as $match) {
-            $offset = $match[1];
+        $shift = 0;
+        foreach ($matches as $key => $match) {
+            if (!is_numeric($key) || -1 === $match[1]) {
+                continue;
+            }
+
+            $offset = $match[1] + $shift;
             $value  = $match[0];
             $begin  = substr($text, 0, $offset);
             $end    = substr($text, $offset + strlen($value));
+            // Keep track of how many extra characters are added
+            $shift += strlen($format = "{+strong class=\"$paramColor\"-}%s{+/strong-}") - 2;
 
-            $text = "$begin<strong class=\"$paramColor\">$value</strong>$end";
+            $text = sprintf('%s' . $format . '%s', $begin, $value, $end);
         }
 
         // Replace "<", ">" with colorized ones
         $text = preg_replace('/(<[^>]+>)/', "<strong class=\"$paramColor\">\$1</strong>", $text);
+        $text = strtr($text, array('{+' => '<', '-}' => '>'));
 
         return $text;
     }

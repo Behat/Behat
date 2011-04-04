@@ -9,6 +9,9 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\OutlineNode;
 
+use Behat\Behat\Event\OutlineEvent,
+    Behat\Behat\Event\OutlineExampleEvent;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -57,7 +60,7 @@ class OutlineTester extends ScenarioTester
      */
     public function visit(AbstractNode $outline)
     {
-        $this->dispatcher->notify(new Event($outline, 'outline.before'));
+        $this->dispatcher->dispatch('beforeOutline', new OutlineEvent($outline));
 
         $result = 0;
 
@@ -68,9 +71,7 @@ class OutlineTester extends ScenarioTester
             $result = max($result, $itResult);
         }
 
-        $this->dispatcher->notify(new Event($outline, 'outline.after', array(
-            'result' => $result
-        )));
+        $this->dispatcher->dispatch('afterOutline', new OutlineEvent($outline, $result));
 
         return $result;
     }
@@ -90,10 +91,9 @@ class OutlineTester extends ScenarioTester
         $itResult       = 0;
         $skip           = false;
 
-        $this->dispatcher->notify(new Event($outline, 'outline.example.before', array(
-            'iteration'     => $row,
-            'environment'   => $environment
-        )));
+        $this->dispatcher->dispatch('beforeOutlineExample', new OutlineExampleEvent(
+            $outline, $row, $environment
+        ));
 
         // Visit & test background if has one
         if ($outline->getFeature()->hasBackground()) {
@@ -113,12 +113,9 @@ class OutlineTester extends ScenarioTester
             $itResult = max($itResult, $stResult);
         }
 
-        $this->dispatcher->notify(new Event($outline, 'outline.example.after', array(
-            'iteration'     => $row,
-            'result'        => $itResult,
-            'skipped'       => $skip,
-            'environment'   => $environment
-        )));
+        $this->dispatcher->dispatch('afterOutlineExample', new OutlineExampleEvent(
+            $outline, $row, $environment, $itResult, $skip
+        ));
 
         return $itResult;
     }
