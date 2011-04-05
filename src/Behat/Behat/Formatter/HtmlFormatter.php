@@ -379,7 +379,7 @@ class HtmlFormatter extends PrettyFormatter
         $this->writeln('<tr class="' . $color . '">');
 
         foreach ($row as $column) {
-            $this->writeln('<td>' . $row . '</td>');
+            $this->writeln('<td>' . $column . '</td>');
         }
 
         $this->writeln('</tr>');
