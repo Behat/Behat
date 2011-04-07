@@ -15,7 +15,7 @@ namespace Behat\Behat\Environment;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Environment extends \stdClass implements EnvironmentInterface
+class Environment implements EnvironmentInterface
 {
     /**
      * Environment parameters.
