@@ -121,12 +121,10 @@ class StepTester implements NodeVisitorInterface
 
         // Find proper definition
         try {
-            try {
-                $definition = $this->definitions->findDefinition($step);
-            } catch (Ambiguous $e) {
-                $result    = StepEvent::FAILED;
-                $exception = $e;
-            }
+            $definition = $this->definitions->findDefinition($step);
+        } catch (Ambiguous $e) {
+            $result    = StepEvent::FAILED;
+            $exception = $e;
         } catch (Undefined $e) {
             $result   = StepEvent::UNDEFINED;
             $snippet  = $this->definitions->proposeDefinition($step);
@@ -136,13 +134,11 @@ class StepTester implements NodeVisitorInterface
         if (0 === $result) {
             if (!$this->skip) {
                 try {
-                    try {
-                        $definition->run($this->environment, $this->tokens);
-                        $result = StepEvent::PASSED;
-                    } catch (Pending $e) {
-                        $result    = StepEvent::PENDING;
-                        $exception = $e;
-                    }
+                    $definition->run($this->environment, $this->tokens);
+                    $result = StepEvent::PASSED;
+                } catch (Pending $e) {
+                    $result    = StepEvent::PENDING;
+                    $exception = $e;
                 } catch (\Exception $e) {
                     $result    = StepEvent::FAILED;
                     $exception = $e;
