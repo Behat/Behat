@@ -65,51 +65,107 @@ class BehatCommand extends Command
     protected function configure()
     {
         $this->setName('behat');
-        $this->setDefinition(array(
-            new InputArgument('features',
-                InputArgument::OPTIONAL,
-                'Feature(s) to run. Could be <info>directory path</info>, <info>single feature path</info> ' .
-                'or scenario at specific feature line ("<info>*.feature:10</info>").'
+        $this->setDefinition(array_merge(
+            array(
+                new InputArgument('features',
+                    InputArgument::OPTIONAL,
+                    'Feature(s) to run. Could be <info>directory path</info>, <info>single feature path</info> ' .
+                    'or scenario at specific feature line ("<info>*.feature:10</info>").'
+                ),
             ),
+            $this->getRunOptions(),
+            $this->getConfigurationOptions(),
+            $this->getFilterOptions(),
+            $this->getInitOptions(),
+            $this->getHelperOptions(),
+            $this->getFormatterOptions()
+        ));
+    }
+
+    /**
+     * Returns array of run options for command.
+     *
+     * @return  array
+     */
+    protected function getRunOptions()
+    {
+        return array(
+            new InputOption('--strict',         null,
+                InputOption::VALUE_NONE,
+                '       ' .
+                'Fail if there are any undefined or pending steps.'
+            ),
+        );
+    }
+
+    /**
+     * Returns array of configuration options for command.
+     *
+     * @return  array
+     */
+    protected function getConfigurationOptions()
+    {
+        return array(
             new InputOption('--config',         '-c',
                 InputOption::VALUE_REQUIRED,
                 '  ' .
                 'Specify external configuration file to load. ' .
                 '<info>behat.yml</info> or <info>config/behat.yml</info> will be used by default.'
             ),
-            new InputOption('--profile',        null,
+            new InputOption('--profile',        '-p',
                 InputOption::VALUE_REQUIRED,
-                '      ' .
+                ' ' .
                 'Specify configuration profile name to use. ' .
                 'Define configuration profiles in <info>behat.yml</info>.'
             ),
-            new InputOption('--out',            null,
+        );
+    }
+
+    /**
+     * Returns array of filter options for command.
+     *
+     * @return  array
+     */
+    protected function getFilterOptions()
+    {
+        return array(
+            new InputOption('--name',           null,
                 InputOption::VALUE_REQUIRED,
-                '          ' .
-                'Write formatter output to a file/directory instead of STDOUT.'
-            ),
-            new InputOption('--name',           '-n',
-                InputOption::VALUE_REQUIRED,
-                '    ' .
+                '         ' .
                 'Only execute the feature elements (features or scenarios) which match part of the given name or regex.'
             ),
-            new InputOption('--tags',           '-t',
+            new InputOption('--tags',           null,
                 InputOption::VALUE_REQUIRED,
-                '    ' .
+                '         ' .
                 'Only execute the features or scenarios with tags matching tag filter expression.'
             ),
-            new InputOption('--strict',         '-s',
-                InputOption::VALUE_NONE,
-                '  ' .
-                'Fail if there are any undefined or pending steps.'
-            ),
+        );
+    }
 
-
+    /**
+     * Returns array of init options.
+     *
+     * @return  array
+     */
+    protected function getInitOptions()
+    {
+        return array(
             new InputOption('--init',           null,
                 InputOption::VALUE_NONE,
                 '         ' .
                 'Create features/ directory structure'
             ),
+        );
+    }
+
+    /**
+     * Returns array of helper options for command
+     *
+     * @return  array
+     */
+    protected function getHelperOptions()
+    {
+        return array(
             new InputOption('--usage',          null,
                 InputOption::VALUE_NONE,
                 '        ' .
@@ -120,8 +176,17 @@ class BehatCommand extends Command
                 '        ' .
                 'Print available steps in specified language (--lang).'
             ),
+        );
+    }
 
-
+    /**
+     * Returns array of formatter options for command.
+     *
+     * @return  array
+     */
+    protected function getFormatterOptions()
+    {
+        return array(
             new InputOption('--format',         '-f',
                 InputOption::VALUE_REQUIRED,
                 '  ' .
@@ -131,6 +196,11 @@ class BehatCommand extends Command
                         return "<info>$name</info>";
                     }, array_keys($this->defaultFormatters))
                 )
+            ),
+            new InputOption('--out',            null,
+                InputOption::VALUE_REQUIRED,
+                '          ' .
+                'Write formatter output to a file/directory instead of STDOUT.'
             ),
             new InputOption('--colors',         null,
                 InputOption::VALUE_NONE,
@@ -157,7 +227,7 @@ class BehatCommand extends Command
                 ' ' .
                 'No multiline arguments in output.'
             ),
-        ));
+        );
     }
 
     /**
@@ -177,6 +247,8 @@ class BehatCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->pathTokens['BEHAT_WORK_PATH'] = getcwd();
+
         $container = $this->configureContainer($input->getOption('config'), $input->getOption('profile'));
 
         if ($input->getOption('usage')) {
@@ -230,8 +302,6 @@ class BehatCommand extends Command
         $extension  = new BehatExtension();
         $config     = array();
         $cwd        = getcwd();
-
-        $this->pathTokens['BEHAT_WORK_PATH'] = $cwd;
 
         if (null === $profile) {
             $profile = 'default';
