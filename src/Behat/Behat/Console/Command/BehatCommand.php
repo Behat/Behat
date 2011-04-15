@@ -4,22 +4,18 @@ namespace Behat\Behat\Console\Command;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Yaml\Yaml,
     Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\EventDispatcher\Event,
-    Symfony\Component\Finder\Finder;
+    Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\DependencyInjection\BehatExtension,
-    Behat\Behat\Formatter\FormatterInterface,
-    Behat\Behat\Event\SuiteEvent;
+    Behat\Behat\Event\SuiteEvent,
+    Behat\Behat\PathLocator;
 
 use Behat\Gherkin\Filter\NameFilter,
-    Behat\Gherkin\Filter\TagFilter,
-    Behat\Gherkin\Keywords\KeywordsDumper;
+    Behat\Gherkin\Filter\TagFilter;
 
 /*
  * This file is part of the Behat.
@@ -36,17 +32,6 @@ use Behat\Gherkin\Filter\NameFilter,
  */
 class BehatCommand extends Command
 {
-    /**
-     * Path tokens replacements.
-     *
-     * @var     array
-     */
-    protected $pathTokens = array(
-        'BEHAT_CONFIG_PATH' => '',
-        'BEHAT_WORK_PATH'   => '',
-        'BEHAT_BASE_PATH'   => ''
-    );
-
     /**
      * Default Behat formatters.
      *
@@ -233,54 +218,131 @@ class BehatCommand extends Command
     /**
      * {@inheritdoc}
      *
-     * @uses    configureContainer()
-     * @uses    printUsageExample()
-     * @uses    locateFeaturesPaths()
-     * @uses    loadBootstraps()
-     * @uses    configureFormatter()
-     * @uses    configureGherkinParser()
-     * @uses    configureDefinitionDispatcher()
-     * @uses    configureHookDispatcher()
-     * @uses    configureEnvironmentBuilder()
-     * @uses    configureEventDispathcer()
+     * @uses    createContainer()
+     * @uses    createFeaturesPath()
+     * @uses    demonstrateUsageExample()
+     * @uses    demonstrateAvailableSteps()
      * @uses    runFeatures()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->pathTokens['BEHAT_WORK_PATH'] = getcwd();
+        $container  = $this->createContainer($input->getOption('config'), $input->getOption('profile'));
+        $locator    = $container->get('behat.path_locator');
 
-        $container = $this->configureContainer($input->getOption('config'), $input->getOption('profile'));
+        // locate base path
+        $basePath = $locator->locateBasePath($input->getArgument('features'));
 
-        if ($input->getOption('usage')) {
-            $this->printUsageExample($input, $container, $output);
-
-            return 0;
+        // load bootstraps
+        foreach ($locator->locateBootstrapsPaths() as $path) {
+            require_once($path);
         }
 
+        // init features directory structure
         if ($input->getOption('init')) {
-            $this->createFeaturesPath($input->getArgument('features'), $container, $output);
-
+            $this->initFeaturesDirectoryStructure($locator, $output);
             return 0;
         }
 
-        $featuresPaths = $this->locateFeaturesPaths($input, $container);
-        $this->loadBootstraps($container);
-        $formatter = $this->configureFormatter($input, $container, $output->isDecorated());
-        $this->configureGherkinParser($input, $container);
-        $this->configureDefinitionDispatcher($input, $container);
+        // we don't want to init, so we check, that base path exists
+        if (!is_dir($basePath)) {
+            throw new \InvalidArgumentException("Path \"$basePath\" not found");
+        }
 
-        if ($input->getOption('steps')) {
-            $this->printAvailableSteps($input, $container, $output);
+        // locate definition translations
+        $translator = $container->get('behat.translator');
+        foreach ($locator->locateDefinitionsTranslationsPaths() as $path) {
+            $translator->addResource('xliff', $path, basename($path, '.xliff'), 'behat.definitions');
+        }
 
+        // create formatter
+        $formatter = $this->createFormatter(
+            $input->getOption('format') ?: $container->getParameter('behat.formatter.name')
+        );
+
+        // configure formatter
+        $formatter->setTranslator($translator);
+        $formatter->setParameter('base_path', $basePath);
+        $formatter->setParameter('verbose',
+            $input->getOption('verbose') ?: $container->getParameter('behat.formatter.verbose')
+        );
+        $formatter->setParameter('language',
+            $input->getOption('lang') ?: $container->getParameter('behat.formatter.language')
+        );
+        if ($input->getOption('colors')) {
+            $formatter->setParameter('decorated', true);
+        } elseif ($input->getOption('no-colors')) {
+            $formatter->setParameter('decorated', false);
+        } elseif (null !== ($decorated = $container->getParameter('behat.formatter.decorated'))) {
+            $formatter->setParameter('decorated', $decorated);
+        } else {
+            $formatter->setParameter('decorated', $output->isDecorated());
+        }
+        $formatter->setParameter('time',
+            $input->getOption('no-time') ? false : $container->getParameter('behat.formatter.time')
+        );
+        $formatter->setParameter('multiline_arguments',
+            $input->getOption('no-multiline')
+                ? false
+                : $container->getParameter('behat.formatter.multiline_arguments')
+        );
+        if ($out = $input->getOption('out')) {
+            $formatter->setParameter('output_path', $this->preparePath($out));
+        }
+        foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
+            $formatter->setParameter($param, $value);
+        }
+
+        // configure gherkin filters
+        $gherkinParser = $container->get('gherkin');
+        if ($name = ($input->getOption('name') ?: $container->getParameter('gherkin.filter.name'))) {
+            $gherkinParser->addFilter(new NameFilter($name));
+        }
+        if ($tags = ($input->getOption('tags') ?: $container->getParameter('gherkin.filter.tags'))) {
+            $gherkinParser->addFilter(new TagFilter($tags));
+        }
+
+        // locate step definitions
+        $definitionDispatcher = $container->get('behat.definition_dispatcher');
+        foreach ($locator->locateDefinitionsPaths() as $path) {
+            $definitionDispatcher->addResource('php', $path);
+        }
+
+        // locate environment configs
+        $environmentBuilder = $container->get('behat.environment_builder');
+        foreach ($locator->locateEnvironmentConfigsPaths() as $path) {
+            $environmentBuilder->addResource($path);
+        }
+
+        // locate hooks definitions
+        $hookDispatcher = $container->get('behat.hook_dispatcher');
+        foreach ($locator->locateHooksPaths() as $path) {
+            $hookDispatcher->addResource('php', $path);
+        }
+
+        // logger
+        $logger = $container->get('behat.logger');
+
+        // helpers
+        if ($input->hasOption('usage') && $input->getOption('usage')) {
+            $this->demonstrateUsageExample(
+                $container->get('gherkin.keywords_dumper'), $input->getOption('lang') ?: 'en', $output
+            );
+            return 0;
+        } elseif ($input->hasOption('steps') && $input->getOption('steps')) {
+            $this->demonstrateAvailableSteps(
+                $container->get('behat.definition_dumper'), $input->getOption('lang') ?: 'en', $output
+            );
             return 0;
         }
 
-        $this->configureHookDispatcher($input, $container);
-        $this->configureEnvironmentBuilder($input, $container);
-        $this->configureEventDispathcer($formatter, $container);
+        // subscribe event listeners
+        $dispatcher = $container->get('behat.event_dispatcher');
+        $dispatcher->addSubscriber($hookDispatcher, 10);
+        $dispatcher->addSubscriber($logger, 0);
+        $dispatcher->addSubscriber($formatter, -10);
 
-        $result = $this->runFeatures($featuresPaths, $container);
-
+        // run features
+        $result = $this->runFeatures($locator->locateFeaturesPaths(), $container);
         if ($input->getOption('strict')) {
             return intval(0 < $result);
         } else {
@@ -289,18 +351,17 @@ class BehatCommand extends Command
     }
 
     /**
-     * Configures service container with or without provided configuration file.
+     * Creates service container with or without provided configuration file.
      *
      * @param   string  $configFile DependencyInjection extension config file path (in YAML)
      * @param   string  $profile    profile name
      *
      * @return  Symfony\Component\DependencyInjection\ContainerInterface
      */
-    protected function configureContainer($configFile = null, $profile = null)
+    protected function createContainer($configFile = null, $profile = null)
     {
         $container  = new ContainerBuilder();
         $extension  = new BehatExtension();
-        $config     = array();
         $cwd        = getcwd();
 
         if (null === $profile) {
@@ -308,96 +369,106 @@ class BehatCommand extends Command
         }
 
         if (null === $configFile) {
-            if (is_file($cwd . DIRECTORY_SEPARATOR . 'behat.yml')) {
-                $configFile = $cwd . DIRECTORY_SEPARATOR . 'behat.yml';
-            } elseif (is_file($cwd . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'behat.yml')) {
-                $configFile = $cwd . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'behat.yml';
+            if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
+                $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml';
+            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml')) {
+                $configFile = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml';
             }
         }
 
         if (null !== $configFile) {
-            $this->pathTokens['BEHAT_CONFIG_PATH'] = dirname($configFile);
-            $config = $this->loadConfigurationFile($configFile, $profile);
+            $config = $extension->loadFromFile($configFile, $profile, $container);
+        } else {
+            $config = $extension->load(array(array()), $container);
         }
-
-        $extension->load(array($config), $container);
         $container->compile();
+
+        if (null !== $configFile) {
+            $container->get('behat.path_locator')->setConfigPath(dirname($configFile));
+        }
 
         return $container;
     }
 
     /**
-     * Loads information from YAML configuration file.
+     * Creates formatter with provided input.
      *
-     * @param   string  $configFile     path to the config file
-     * @param   string  $profile        name of the config profile to use
+     * @param   string  $formatterName  formatter name or class
      *
-     * @return  array
+     * @return  Behat\Behat\Formatter\FormatterInterface
+     *
+     * @throws  RuntimeException            if provided in input formatter name doesn't exists
+     *
+     * @uses    setupFormatter()
      */
-    protected function loadConfigurationFile($configFile, $profile = 'default')
+    protected function createFormatter($formatterName)
     {
-        $config = Yaml::load($configFile);
-
-        $resultConfig = isset($config['default']) ? $config['default'] : array();
-        if ('default' !== $profile && isset($config[$profile])) {
-            $resultConfig = $this->configMergeRecursiveWithOverwrites($resultConfig, $config[$profile]);
+        if (class_exists($formatterName)) {
+            $class = $formatterName;
+        } elseif (isset($this->defaultFormatters[$formatterName])) {
+            $class = $this->defaultFormatters[$formatterName];
+        } else {
+            throw new \RuntimeException("Unknown formatter: \"$formatterName\". " .
+                'Available formatters are: ' . implode(', ', array_keys($this->defaultFormatters))
+            );
         }
 
-        if (isset($config['imports'])) {
-            foreach ($config['imports'] as $importConfigFile) {
-                $importConfigFile = $this->preparePath($importConfigFile);
-                $resultConfig = $this->configMergeRecursiveWithOverwrites(
-                    $resultConfig, $this->loadConfigurationFile($importConfigFile, $profile)
-                );
-            }
+        $refClass = new \ReflectionClass($class);
+        if (!$refClass->implementsInterface('Behat\Behat\Formatter\FormatterInterface')) {
+            throw new \RuntimeException(sprintf(
+                'Cannot use "%s" as formatter as it doesn\'t implement Behat\Behat\Formatter\FormatterInterface',
+                $class
+            ));
         }
 
-        return $resultConfig;
+        return new $class();
     }
 
     /**
-     * Prints features usage example in specified language (--lang) to the console.
+     * Runs specified features.
      *
      * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
      * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
+     *
+     * @return  integer
      */
-    protected function printUsageExample(InputInterface $input, ContainerInterface $container,
-                                      OutputInterface $output)
+    protected function runFeatures($featuresPaths, ContainerInterface $container)
     {
-        $keywords   = $container->get('gherkin.keywords');
-        $dumper     = new KeywordsDumper($keywords);
-        $lang       = $input->getOption('lang') ?: 'en';
+        $result     = 0;
+        $gherkin    = $container->get('gherkin');
+        $dispatcher = $container->get('behat.event_dispatcher');
+        $logger     = $container->get('behat.logger');
 
-        $output->setDecorated(false);
-        $output->writeln($dumper->dump($lang) . "\n", OutputInterface::OUTPUT_RAW);
+        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger));
+
+        foreach ($featuresPaths as $path) {
+            $features = $gherkin->load((string) $path);
+
+            foreach ($features as $feature) {
+                $tester = $container->get('behat.tester.feature');
+                $result = max($result, $feature->accept($tester));
+            }
+        }
+
+        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger));
+
+        return $result;
     }
 
     /**
      * Creates features path structure (initializes behat tests structure).
      *
-     * @param   string                                                      $features   features path
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
+     * @param   Behat\Behat\PathLocator                             $locator    path locator
+     * @param   Symfony\Component\Console\Input\OutputInterface     $output     output console
      */
-    protected function createFeaturesPath($featuresPath = null, ContainerInterface $container, OutputInterface $output)
+    protected function initFeaturesDirectoryStructure(PathLocator $locator, OutputInterface $output)
     {
-        $featuresPath = $featuresPath ?: getcwd();
-        if ('\\' === substr($featuresPath, -1) || '/' === substr($featuresPath, -1)) {
-            $featuresPath = dirname($featuresPath);
-        }
-        if ('features' == basename($featuresPath)) {
-            $this->pathTokens['BEHAT_BASE_PATH'] = $featuresPath;
-        } elseif ('%BEHAT_BASE_PATH%' === $container->getParameter('behat.paths.features')) {
-            $this->pathTokens['BEHAT_BASE_PATH'] = $featuresPath . DIRECTORY_SEPARATOR . 'features';
-        }
-        $basePath = getcwd() . DIRECTORY_SEPARATOR;
-
-        $featuresPath   = $this->preparePath($container->getParameter('behat.paths.features'));
-        $supportPath    = $this->preparePath($container->getParameter('behat.paths.support'));
-        $stepsPath      = $this->preparePath(current($container->getParameter('behat.paths.steps')));
-        $envPath        = $this->preparePath(current($container->getParameter('behat.paths.environment')));
-        $bootPath       = $this->preparePath(current($container->getParameter('behat.paths.bootstrap')));
+        $basePath       = getcwd() . ('/' === DIRECTORY_SEPARATOR ? '/' : '');
+        $featuresPath   = $locator->getFeaturesPath();
+        $supportPath    = $locator->getSupportPath();
+        $stepsPath      = current($locator->locateDefinitionsPaths(false));
+        $envPath        = current($locator->locateEnvironmentConfigsPaths(false));
+        $bootPath       = current($locator->locateBootstrapsPaths(false));
 
         if (!is_dir($featuresPath)) {
             mkdir($featuresPath, 0777, true);
@@ -488,413 +559,28 @@ ENVIRONMENT
     }
 
     /**
+     * Prints features usage example in specified language (--lang) to the console.
+     *
+     * @param   Behat\Gherkin\Keywords\KeywordsDumper           $dumper     keywords dumper
+     * @param   string                                          $lang       locale name
+     * @param   Symfony\Component\Console\Input\OutputInterface $output     output console
+     */
+    protected function demonstrateUsageExample(KeywordsDumper $dumper, $lang, OutputInterface $output)
+    {
+        $output->setDecorated(false);
+        $output->writeln($dumper->dump($lang) . "\n", OutputInterface::OUTPUT_RAW);
+    }
+
+    /**
      * Prints available step definitions.
      *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     * @param   Symfony\Component\Console\Input\OutputInterface             $output     output console
+     * @param   Behat\Behat\Definition\Dumper                   $dumper     definitions dumper
+     * @param   string                                          $lang       locale name
+     * @param   Symfony\Component\Console\Input\OutputInterface $output     output console
      */
-    protected function printAvailableSteps(InputInterface $input, ContainerInterface $container,
-                                        OutputInterface $output)
+    protected function demonstrateAvailableSteps(DefinitionDumper $dumper, $lang, OutputInterface $output)
     {
-        $dumper = $container->get('behat.definition_dumper');
-
         $output->setDecorated(false);
-        $output->write($dumper->dump($input->getOption('lang') ?: 'en'), false, OutputInterface::OUTPUT_RAW);
-    }
-
-    /**
-     * Locates features paths with provided input.
-     *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     *
-     * @return  IteratorAggregate|array
-     *
-     * @throws  RuntimeException    if provided in input path is not found
-     */
-    protected function locateFeaturesPaths(InputInterface $input, ContainerInterface $container)
-    {
-        $basePath       = '%BEHAT_WORK_PATH%' . DIRECTORY_SEPARATOR . 'features';
-        $featuresPath   = $container->getParameter('behat.paths.features');
-        $lineFilter     = '';
-
-        if ($path = $input->getArgument('features')) {
-            $matches = array();
-            if (preg_match('/^(.*)\:(\d+)$/', $path, $matches)) {
-                $path       = $matches[1];
-                $lineFilter = ':' . $matches[2];
-            }
-
-            if (is_file($path)) {
-                $basePath = dirname(realpath($path));
-                $featuresPath = $path;
-            } elseif (is_dir($path . DIRECTORY_SEPARATOR . 'features')) {
-                $basePath = realpath($path) . DIRECTORY_SEPARATOR . 'features';
-            } elseif (is_dir($path)) {
-                $basePath = realpath($path);
-            } else {
-                throw new \RuntimeException("Path $path not found");
-            }
-        }
-
-        $this->pathTokens['BEHAT_BASE_PATH'] = $this->preparePath($basePath);
-        $featuresPath = $this->preparePath($featuresPath);
-
-        if ('.feature' !== mb_substr($featuresPath, -8)) {
-            $finder         = new Finder();
-            $featuresPaths  = $finder->files()->name('*.feature')->in($featuresPath);
-        } else {
-            $featuresPaths  = (array) ($featuresPath . $lineFilter);
-        }
-
-        return $featuresPaths;
-    }
-
-    /**
-     * Load bootstrap scripts (if they exists).
-     *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     */
-    protected function loadBootstraps(ContainerInterface $container)
-    {
-        foreach ((array) $container->getParameter('behat.paths.bootstrap') as $path) {
-            $path = $this->preparePath($path);
-
-            if (is_file($path)) {
-                require_once($path);
-            }
-        }
-    }
-
-    /**
-     * Configures Gherkin parser with provided input.
-     *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     *
-     * @return  Behat\Gherkin\Gherkin
-     */
-    protected function configureGherkinParser(InputInterface $input, ContainerInterface $container)
-    {
-        $gherkinParser = $container->get('gherkin');
-
-        if ($name = $input->getOption('name')) {
-            $gherkinParser->addFilter(new NameFilter($name));
-        } elseif ($name = $container->getParameter('gherkin.filter.name')) {
-            $gherkinParser->addFilter(new NameFilter($name));
-        }
-        if ($tags = $input->getOption('tags')) {
-            $gherkinParser->addFilter(new TagFilter($tags));
-        } elseif ($filter = $container->getParameter('gherkin.filter.tags')) {
-            $gherkinParser->addFilter(new TagFilter($tags));
-        }
-
-        return $gherkinParser;
-    }
-
-    /**
-     * Configures formatter with provided input.
-     *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input          input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container      service container
-     * @param   boolean                                                     $isDecorated    is colorized
-     *
-     * @return  Behat\Behat\Formatter\FormatterInterface
-     *
-     * @throws  RuntimeException            if provided in input formatter name doesn't exists
-     *
-     * @uses    setupFormatter()
-     */
-    protected function configureFormatter(InputInterface $input, ContainerInterface $container, $isDecorated)
-    {
-        $formatterName = $input->getOption('format') ?: $container->getParameter('behat.formatter.name');
-
-        if (class_exists($formatterName)) {
-            $class = $formatterName;
-        } elseif (isset($this->defaultFormatters[$formatterName])) {
-            $class = $this->defaultFormatters[$formatterName];
-        } else {
-            throw new \RuntimeException("Unknown formatter: \"$formatterName\". " .
-                'Available formatters are: ' . implode(', ', array_keys($this->defaultFormatters))
-            );
-        }
-
-        $formatter = new $class();
-        $this->setupFormatter($formatter, $input, $container, $isDecorated);
-
-        return $formatter;
-    }
-
-    /**
-     * Setup formatter with provided input.
-     *
-     * @param   Behat\Behat\Formatter\FormatterInterface                    $formatter      formatter instance
-     * @param   Symfony\Component\Console\Input\InputInterface              $input          input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container      service container
-     * @param   boolean                                                     $isDecorated    is colorized
-     */
-    protected function setupFormatter(FormatterInterface $formatter, InputInterface $input,
-                                      ContainerInterface $container, $isDecorated)
-    {
-        $translator = $container->get('behat.translator');
-        $formatter->setTranslator($translator);
-
-        $formatter->setParameter('base_path',
-            $this->pathTokens['BEHAT_BASE_PATH']
-        );
-        $formatter->setParameter('verbose',
-            $input->getOption('verbose') ?: $container->getParameter('behat.formatter.verbose')
-        );
-        $formatter->setParameter('language',
-            $input->getOption('lang') ?: $container->getParameter('behat.formatter.language')
-        );
-
-        if ($input->getOption('colors')) {
-            $formatter->setParameter('decorated', true);
-        } elseif ($input->getOption('no-colors')) {
-            $formatter->setParameter('decorated', false);
-        } elseif (null !== ($decorated = $container->getParameter('behat.formatter.decorated'))) {
-            $formatter->setParameter('decorated', $decorated);
-        } else {
-            $formatter->setParameter('decorated', $isDecorated);
-        }
-
-        $formatter->setParameter('time',
-            $input->getOption('no-time') ? false : $container->getParameter('behat.formatter.time')
-        );
-        $formatter->setParameter('multiline_arguments',
-            $input->getOption('no-multiline') ? false : $container->getParameter('behat.formatter.multiline_arguments')
-        );
-        if ($out = $input->getOption('out')) {
-            $formatter->setParameter('output_path', $this->preparePath($out));
-        }
-
-        foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
-            $formatter->setParameter($param, $value);
-        }
-    }
-
-    /**
-     * Configures environment builder with provided input.
-     *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     *
-     * @return  Behat\Behat\Environment\EnvironmentBuilder
-     */
-    protected function configureEnvironmentBuilder(InputInterface $input, ContainerInterface $container)
-    {
-        $builder = $container->get('behat.environment_builder');
-
-        foreach ((array) $container->getParameter('behat.paths.environment') as $path) {
-            $path = $this->preparePath($path);
-
-            if (is_file($path)) {
-                $builder->addResource($path);
-            }
-        }
-
-        return $builder;
-    }
-
-    /**
-     * Configures definition dispatcher with provided input.
-     *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     *
-     * @return  Behat\Behat\Definition\DefinitionDispatcher
-     *
-     * @uses    configureDefinitionsTranslations()
-     */
-    protected function configureDefinitionDispatcher(InputInterface $input, ContainerInterface $container)
-    {
-        $dispatcher = $container->get('behat.definition_dispatcher');
-
-        foreach ((array) $container->getParameter('behat.paths.steps') as $path) {
-            $path = $this->preparePath($path);
-
-            if (is_dir($path)) {
-                $finder = new Finder();
-                $files  = $finder->files()->name('*.php')->in($path);
-
-                foreach ($files as $file) {
-                    $dispatcher->addResource('php', $file);
-                }
-            }
-        }
-
-        $this->configureDefinitionsTranslations($input, $container);
-
-        return $dispatcher;
-    }
-
-    /**
-     * Configures definitions translations.
-     *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     *
-     * @return  Symfony\Component\Translation\Translator
-     */
-    protected function configureDefinitionsTranslations(InputInterface $input, ContainerInterface $container)
-    {
-        $translator = $container->get('behat.translator');
-
-        foreach ((array) $container->getParameter('behat.paths.steps_i18n') as $path) {
-            $path = $this->preparePath($path);
-
-            if (is_dir($path)) {
-                $finder = new Finder();
-                $files  = $finder->files()->name('*.xliff')->in($path);
-
-                foreach ($files as $file) {
-                    $translator->addResource('xliff', $file, basename($file, '.xliff'), 'behat.definitions');
-                }
-            }
-        }
-
-        return $translator;
-    }
-
-    /**
-     * Configures hook dispatcher with provided input.
-     *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     *
-     * @return  Behat\Behat\Hook\HookDispatcher
-     */
-    protected function configureHookDispatcher(InputInterface $input, ContainerInterface $container)
-    {
-        $dispatcher = $container->get('behat.hook_dispatcher');
-
-        foreach ((array) $container->getParameter('behat.paths.hooks') as $path) {
-            $path = $this->preparePath($path);
-
-            if (is_file($path)) {
-                $dispatcher->addResource('php', $path);
-            }
-        }
-
-        return $dispatcher;
-    }
-
-    /**
-     * Configures event dispatcher.
-     *
-     * @param   Behat\Behat\Formatter\FormatterInterface                    $formatter  output formatter
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     *
-     * @return  Behat\Behat\EventDispatcher\EventDispatcher
-     */
-    protected function configureEventDispathcer(FormatterInterface $formatter, ContainerInterface $container)
-    {
-        $dispatcher = $container->get('behat.event_dispatcher');
-
-        $dispatcher->addSubscriber($container->get('behat.hook_dispatcher'), 10);
-        $dispatcher->addSubscriber($container->get('behat.logger'), 0);
-        $dispatcher->addSubscriber($formatter, -10);
-
-        return $dispatcher;
-    }
-
-    /**
-     * Runs specified features.
-     *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     *
-     * @return  integer
-     */
-    protected function runFeatures($featuresPaths, ContainerInterface $container)
-    {
-        $result     = 0;
-        $gherkin    = $container->get('gherkin');
-        $dispatcher = $container->get('behat.event_dispatcher');
-        $logger     = $container->get('behat.logger');
-
-        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger));
-
-        foreach ($featuresPaths as $path) {
-            $features = $gherkin->load((string) $path);
-
-            foreach ($features as $feature) {
-                $tester = $container->get('behat.tester.feature');
-                $result = max($result, $feature->accept($tester));
-            }
-        }
-
-        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger));
-
-        return $result;
-    }
-
-    /**
-     * Prepare path to find/load methods.
-     *
-     * Fix directory separators, replace path tokens with configured ones,
-     * prepend single filenames with CWD path.
-     *
-     * @param   string  $path
-     *
-     * @return  string
-     *
-     * @uses    pathTokens
-     */
-    protected function preparePath($path)
-    {
-        $pathTokens = $this->pathTokens;
-        $path = preg_replace_callback('/%([^%]+)%/', function($matches) use($pathTokens) {
-            $name = $matches[1];
-            if (defined($name)) {
-                return constant($name);
-            } elseif (isset($pathTokens[$name])) {
-                return $pathTokens[$name];
-            }
-            return $matches[0];
-        }, $path);
-
-        $path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', '/', $path));
-
-        if (!file_exists($path)) {
-            foreach (explode(':', get_include_path()) as $libPath) {
-                if (file_exists($libPath . DIRECTORY_SEPARATOR . $path)) {
-                    $path = $libPath . DIRECTORY_SEPARATOR . $path;
-                    break;
-                }
-            }
-        }
-
-        if (!file_exists($path) && file_exists(getcwd() . DIRECTORY_SEPARATOR . $path)) {
-            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
-        }
-
-        return $path;
-    }
-
-    /**
-     * Merges two arrays into one with overwrite. It works the same as array_merge_recursive, but
-     * overwrites non-array values instead of turning them into arrays.
-     *
-     * @param   array  $array1  to
-     * @param   array  $array2  from
-     *
-     * @return  array
-     */
-    private function configMergeRecursiveWithOverwrites($array1, $array2)
-    {
-        foreach($array2 as $key => $val) {
-            if (array_key_exists($key, $array1) && is_array($val)) {
-                $array1[$key] = $this->configMergeRecursiveWithOverwrites($array1[$key], $val);
-            } elseif (is_numeric($key)) {
-                $array1[] = $val;
-            } else {
-                $array1[$key] = $val;
-            }
-        }
-
-        return $array1;
+        $output->write($dumper->dump($lang), false, OutputInterface::OUTPUT_RAW);
     }
 }
