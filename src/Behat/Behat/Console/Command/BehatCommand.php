@@ -294,10 +294,10 @@ class BehatCommand extends Command
 
         // configure gherkin filters
         $gherkinParser = $container->get('gherkin');
-        if ($name = ($input->getOption('name') ?: $container->getParameter('gherkin.filter.name'))) {
+        if ($name = ($input->getOption('name') ?: $container->getParameter('gherkin.filters.name'))) {
             $gherkinParser->addFilter(new NameFilter($name));
         }
-        if ($tags = ($input->getOption('tags') ?: $container->getParameter('gherkin.filter.tags'))) {
+        if ($tags = ($input->getOption('tags') ?: $container->getParameter('gherkin.filters.tags'))) {
             $gherkinParser->addFilter(new TagFilter($tags));
         }
 

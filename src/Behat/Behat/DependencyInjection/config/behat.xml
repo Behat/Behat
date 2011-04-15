@@ -41,8 +41,8 @@
         <parameter key="behat.environment.parameters" type="collection"></parameter>
 
         <!-- Gherkin loader parameters -->
-        <parameter key="gherkin.filter.name">null</parameter>
-        <parameter key="gherkin.filter.tags">null</parameter>
+        <parameter key="gherkin.filters.name">null</parameter>
+        <parameter key="gherkin.filters.tags">null</parameter>
 
         <!-- Gherkin Parser -->
         <parameter key="gherkin.class">Behat\Gherkin\Gherkin</parameter>
