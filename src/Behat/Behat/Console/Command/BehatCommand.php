@@ -226,11 +226,14 @@ class BehatCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container  = $this->createContainer($input->getOption('config'), $input->getOption('profile'));
-        $locator    = $container->get('behat.path_locator');
+        $container = $this->createContainer(
+            $input->hasOption('config')     ? $input->getOption('config')   : null,
+            $input->hasOption('profile')    ? $input->getOption('profile')  : null
+        );
+        $locator = $container->get('behat.path_locator');
 
         // locate base path
-        $basePath = $locator->locateBasePath($input->getArgument('features'));
+        $basePath = $this->locateBasePath($locator, $input);
 
         // load bootstraps
         foreach ($locator->locateBootstrapsPaths() as $path) {
@@ -238,7 +241,7 @@ class BehatCommand extends Command
         }
 
         // init features directory structure
-        if ($input->getOption('init')) {
+        if ($input->hasOption('init') && $input->getOption('init')) {
             $this->initFeaturesDirectoryStructure($locator, $output);
             return 0;
         }
@@ -343,7 +346,7 @@ class BehatCommand extends Command
 
         // run features
         $result = $this->runFeatures($locator->locateFeaturesPaths(), $container);
-        if ($input->getOption('strict')) {
+        if ($input->hasOption('strict') && $input->getOption('strict')) {
             return intval(0 < $result);
         } else {
             return intval(4 === $result);
@@ -422,6 +425,19 @@ class BehatCommand extends Command
         }
 
         return new $class();
+    }
+
+    /**
+     * Locates behat base path.
+     *
+     * @param   Behat\Behat\PathLocator                         $locator    path locator
+     * @param   Symfony\Component\Console\Input\InputInterface  $input      input
+     *
+     * @return  string
+     */
+    protected function locateBasePath(PathLocator $locator, InputInterface $input)
+    {
+        return $locator->locateBasePath($input->getArgument('features'));
     }
 
     /**
