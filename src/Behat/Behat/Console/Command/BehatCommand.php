@@ -11,11 +11,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\DependencyInjection\BehatExtension,
+    Behat\Behat\Definition\DefinitionDumper,
     Behat\Behat\Event\SuiteEvent,
     Behat\Behat\PathLocator;
 
 use Behat\Gherkin\Filter\NameFilter,
-    Behat\Gherkin\Filter\TagFilter;
+    Behat\Gherkin\Filter\TagFilter,
+    Behat\Gherkin\Keywords\KeywordsDumper;
 
 /*
  * This file is part of the Behat.
@@ -58,12 +60,12 @@ class BehatCommand extends Command
                     'or scenario at specific feature line ("<info>*.feature:10</info>").'
                 ),
             ),
-            $this->getRunOptions(),
+            $this->getInitOptions(),
+            $this->getDemonstrationOptions(),
             $this->getConfigurationOptions(),
             $this->getFilterOptions(),
-            $this->getInitOptions(),
-            $this->getHelperOptions(),
-            $this->getFormatterOptions()
+            $this->getFormatterOptions(),
+            $this->getRunOptions()
         ));
     }
 
@@ -79,6 +81,11 @@ class BehatCommand extends Command
                 InputOption::VALUE_NONE,
                 '       ' .
                 'Fail if there are any undefined or pending steps.'
+            ),
+            new InputOption('--rerun',          null,
+                InputOption::VALUE_REQUIRED,
+                '        ' .
+                'Save list of failed scenarios into file or use existing file to run only scenarios from it.'
             ),
         );
     }
@@ -144,11 +151,11 @@ class BehatCommand extends Command
     }
 
     /**
-     * Returns array of helper options for command
+     * Returns array of demonstration options for command
      *
      * @return  array
      */
-    protected function getHelperOptions()
+    protected function getDemonstrationOptions()
     {
         return array(
             new InputOption('--usage',          null,
@@ -219,18 +226,23 @@ class BehatCommand extends Command
      * {@inheritdoc}
      *
      * @uses    createContainer()
-     * @uses    createFeaturesPath()
+     * @uses    locateBasePath()
+     * @uses    createFormatter()
+     * @uses    initFeaturesDirectoryStructure()
      * @uses    demonstrateUsageExample()
      * @uses    demonstrateAvailableSteps()
      * @uses    runFeatures()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container  = $this->createContainer($input->getOption('config'), $input->getOption('profile'));
-        $locator    = $container->get('behat.path_locator');
+        $container = $this->createContainer(
+            $input->hasOption('config')     ? $input->getOption('config')   : null,
+            $input->hasOption('profile')    ? $input->getOption('profile')  : null
+        );
+        $locator = $container->get('behat.path_locator');
 
         // locate base path
-        $basePath = $locator->locateBasePath($input->getArgument('features'));
+        $basePath = $this->locateBasePath($locator, $input);
 
         // load bootstraps
         foreach ($locator->locateBootstrapsPaths() as $path) {
@@ -238,7 +250,7 @@ class BehatCommand extends Command
         }
 
         // init features directory structure
-        if ($input->getOption('init')) {
+        if ($input->hasOption('init') && $input->getOption('init')) {
             $this->initFeaturesDirectoryStructure($locator, $output);
             return 0;
         }
@@ -335,15 +347,27 @@ class BehatCommand extends Command
             return 0;
         }
 
+        // rerun data collector
+        $rerunDataCollector = $container->get('behat.rerun_data_collector');
+        if ($input->hasOption('rerun') && $input->getOption('rerun')) {
+            $rerunDataCollector->setRerunFile($input->getOption('rerun'));
+        }
+
         // subscribe event listeners
         $dispatcher = $container->get('behat.event_dispatcher');
         $dispatcher->addSubscriber($hookDispatcher, 10);
         $dispatcher->addSubscriber($logger, 0);
+        $dispatcher->addSubscriber($rerunDataCollector, 0);
         $dispatcher->addSubscriber($formatter, -10);
 
         // run features
-        $result = $this->runFeatures($locator->locateFeaturesPaths(), $container);
-        if ($input->getOption('strict')) {
+        $result = $this->runFeatures(
+            $rerunDataCollector->hasFailedScenarios()
+                ? $rerunDataCollector->getFailedScenariosPaths()
+                : $locator->locateFeaturesPaths(),
+            $container
+        );
+        if ($input->hasOption('strict') && $input->getOption('strict')) {
             return intval(0 < $result);
         } else {
             return intval(4 === $result);
@@ -384,7 +408,7 @@ class BehatCommand extends Command
         $container->compile();
 
         if (null !== $configFile) {
-            $container->get('behat.path_locator')->setConfigPath(dirname($configFile));
+            $container->get('behat.path_locator')->setPathConstant('BEHAT_CONFIG_PATH', dirname($configFile));
         }
 
         return $container;
@@ -422,6 +446,19 @@ class BehatCommand extends Command
         }
 
         return new $class();
+    }
+
+    /**
+     * Locates behat base path.
+     *
+     * @param   Behat\Behat\PathLocator                         $locator    path locator
+     * @param   Symfony\Component\Console\Input\InputInterface  $input      input
+     *
+     * @return  string
+     */
+    protected function locateBasePath(PathLocator $locator, InputInterface $input)
+    {
+        return $locator->locateBasePath($input->getArgument('features'));
     }
 
     /**
@@ -487,20 +524,7 @@ class BehatCommand extends Command
                 ' <comment>⎯ place step definition files here</comment>'
             );
 
-            file_put_contents($stepsPath . DIRECTORY_SEPARATOR . 'steps.php', <<<DEFINITIONS
-<?php
-
-/**
- * Define your steps here with:
- *
- *     \$steps->Given('/REGEX/', function(\$world) {
- *         // do something or throw exception
- *     });
- */
-
-
-DEFINITIONS
-            );
+            copy(__DIR__ . '/../../Skeleton/steps.php', $stepsPath . DIRECTORY_SEPARATOR . 'steps.php');
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', $stepsPath) . DIRECTORY_SEPARATOR . 'steps.php' .
@@ -515,41 +539,25 @@ DEFINITIONS
                 str_replace($basePath, '', $supportPath) .
                 ' <comment>⎯ place support scripts and static files here</comment>'
             );
+        }
 
-            file_put_contents($bootPath, <<<BOOTSTRAP
-<?php
-
-/**
- * Place bootstrap scripts here:
- *
- *     require_once 'PHPUnit/Autoload.php';
- *     require_once 'PHPUnit/Framework/Assert/Functions.php';
- */
-
-
-BOOTSTRAP
-            );
+        if (!file_exists($bootPath)) {
+            if (!is_dir(dirname($bootPath))) {
+                mkdir(dirname($bootPath), 0777, true);
+            }
+            copy(__DIR__ . '/../../Skeleton/bootstrap.php', $bootPath);
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', $bootPath) .
                 ' <comment>⎯ place bootstrap scripts in this file</comment>'
             );
+        }
 
-            file_put_contents($envPath, <<<ENVIRONMENT
-<?php
-
-/**
- * Place environment initialization scripts here:
- *
- *     \$world->initialSum = 231;
- *     \$world->calc = function() {
- *         // ...
- *     };
- */
-
-
-ENVIRONMENT
-            );
+        if (!file_exists($envPath)) {
+            if (!is_dir(dirname($envPath))) {
+                mkdir(dirname($envPath), 0777, true);
+            }
+            copy(__DIR__ . '/../../Skeleton/env.php', $envPath);
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', $envPath) .
