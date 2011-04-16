@@ -81,6 +81,24 @@ class BehatExtension implements ExtensionInterface
     {
         $config = $this->loadConfigurationFile($configFile, $profile);
 
+        // find path identifiers, started with "!" and remove all related to them paths from config
+        if (isset($config['paths'])) {
+            foreach ($config['paths'] as $ns => $paths) {
+                $pathsToRemove = array();
+                foreach ((array) $paths as $num => $path) {
+                    if ('!' === $path[0]) {
+                        $pathsToRemove[] = ltrim($path, '!');
+                        unset($config['paths'][$ns][$num]);
+                    }
+                }
+                foreach ($pathsToRemove as $pathToRemove) {
+                    if (false !== $pos = array_search($pathToRemove, $config['paths'][$ns])) {
+                        unset($config['paths'][$ns][$pos]);
+                    }
+                }
+            }
+        }
+
         $this->load(array($config), $container);
     }
 
