@@ -514,7 +514,7 @@ class BehatCommand extends Command
             $output->writeln(
                 '<info>+d</info> ' .
                 str_replace($basePath, '', $featuresPath) .
-                ' <comment>⎯ place your *.feature files here</comment>'
+                ' <comment>- place your *.feature files here</comment>'
             );
         }
 
@@ -523,14 +523,14 @@ class BehatCommand extends Command
             $output->writeln(
                 '<info>+d</info> ' .
                 str_replace($basePath, '', $stepsPath) .
-                ' <comment>⎯ place step definition files here</comment>'
+                ' <comment>- place step definition files here</comment>'
             );
 
             copy(__DIR__ . '/../../Skeleton/steps.php', $stepsPath . DIRECTORY_SEPARATOR . 'steps.php');
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', $stepsPath) . DIRECTORY_SEPARATOR . 'steps.php' .
-                ' <comment>⎯ place some step definitions in this file</comment>'
+                ' <comment>- place some step definitions in this file</comment>'
             );
         }
 
@@ -539,7 +539,7 @@ class BehatCommand extends Command
             $output->writeln(
                 '<info>+d</info> ' .
                 str_replace($basePath, '', $supportPath) .
-                ' <comment>⎯ place support scripts and static files here</comment>'
+                ' <comment>- place support scripts and static files here</comment>'
             );
         }
 
@@ -551,7 +551,7 @@ class BehatCommand extends Command
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', $bootPath) .
-                ' <comment>⎯ place bootstrap scripts in this file</comment>'
+                ' <comment>- place bootstrap scripts in this file</comment>'
             );
         }
 
@@ -563,7 +563,7 @@ class BehatCommand extends Command
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', $envPath) .
-                ' <comment>⎯ place environment initialization scripts in this file</comment>'
+                ' <comment>- place environment initialization scripts in this file</comment>'
             );
         }
     }
