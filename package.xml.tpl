@@ -33,6 +33,7 @@
 
             <file role="script" baseinstalldir="/" name="bin/behat.php">
                 <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config"/>
+                <tasks:replace from="DEV" to="##BEHAT_VERSION##" type="pear-config"/>
             </file>
 
             <file role="script" baseinstalldir="/" name="bin/behat.bat">

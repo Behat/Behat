@@ -27,9 +27,9 @@ class BehatApplication extends Application
     /**
      * {@inheritdoc}
      */
-    public function __construct()
+    public function __construct($version)
     {
-        parent::__construct('Behat', 'DEV');
+        parent::__construct('Behat', $version);
 
         $this->add(new BehatCommand());
     }
