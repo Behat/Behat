@@ -347,18 +347,18 @@ class BehatCommand extends Command
             return 0;
         }
 
-        // rerun data collector
-        $rerunDataCollector = $container->get('behat.rerun_data_collector');
-        if ($input->hasOption('rerun') && $input->getOption('rerun')) {
-            $rerunDataCollector->setRerunFile($input->getOption('rerun'));
-        }
-
         // subscribe event listeners
         $dispatcher = $container->get('behat.event_dispatcher');
         $dispatcher->addSubscriber($hookDispatcher, 10);
         $dispatcher->addSubscriber($logger, 0);
-        $dispatcher->addSubscriber($rerunDataCollector, 0);
         $dispatcher->addSubscriber($formatter, -10);
+
+        // rerun data collector
+        $rerunDataCollector = $container->get('behat.rerun_data_collector');
+        if ($input->hasOption('rerun') && $input->getOption('rerun')) {
+            $rerunDataCollector->setRerunFile($input->getOption('rerun'));
+            $dispatcher->addSubscriber($rerunDataCollector, 0);
+        }
 
         // run features
         $result = $this->runFeatures(
