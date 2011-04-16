@@ -355,8 +355,10 @@ class BehatCommand extends Command
 
         // rerun data collector
         $rerunDataCollector = $container->get('behat.rerun_data_collector');
-        if ($input->hasOption('rerun') && $input->getOption('rerun')) {
-            $rerunDataCollector->setRerunFile($input->getOption('rerun'));
+        if ($input->getOption('rerun') || $container->getParameter('behat.options.rerun')) {
+            $rerunDataCollector->setRerunFile(
+                $input->getOption('rerun') ?: $container->getParameter('behat.options.rerun')
+            );
             $dispatcher->addSubscriber($rerunDataCollector, 0);
         }
 
@@ -367,7 +369,7 @@ class BehatCommand extends Command
                 : $locator->locateFeaturesPaths(),
             $container
         );
-        if ($input->hasOption('strict') && $input->getOption('strict')) {
+        if ($input->getOption('strict') || $container->getParameter('behat.options.strict')) {
             return intval(0 < $result);
         } else {
             return intval(4 === $result);
