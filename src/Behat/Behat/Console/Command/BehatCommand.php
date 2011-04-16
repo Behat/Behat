@@ -219,7 +219,9 @@ class BehatCommand extends Command
      * {@inheritdoc}
      *
      * @uses    createContainer()
-     * @uses    createFeaturesPath()
+     * @uses    locateBasePath()
+     * @uses    createFormatter()
+     * @uses    initFeaturesDirectoryStructure()
      * @uses    demonstrateUsageExample()
      * @uses    demonstrateAvailableSteps()
      * @uses    runFeatures()
