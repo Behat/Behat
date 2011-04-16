@@ -55,13 +55,13 @@ class PathLocator
     }
 
     /**
-     * Sets configuration file path.
+     * Sets configuration path constant (token).
      *
      * @param   string  $configPath
      */
-    public function setConfigPath($configPath)
+    public function setPathConstant($name, $path)
     {
-        $this->pathTokens['BEHAT_CONFIG_PATH'] = $configPath;
+        $this->pathTokens[$name] = $path;
     }
 
     /**

@@ -389,7 +389,7 @@ class BehatCommand extends Command
         $container->compile();
 
         if (null !== $configFile) {
-            $container->get('behat.path_locator')->setConfigPath(dirname($configFile));
+            $container->get('behat.path_locator')->setPathConstant('BEHAT_CONFIG_PATH', dirname($configFile));
         }
 
         return $container;
