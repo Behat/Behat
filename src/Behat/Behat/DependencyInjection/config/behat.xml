@@ -81,8 +81,9 @@
         <!-- Event Dispatcher -->
         <parameter key="behat.event_dispatcher.class">Symfony\Component\EventDispatcher\EventDispatcher</parameter>
 
-        <!-- Logger -->
+        <!-- DataCollector -->
         <parameter key="behat.logger.class">Behat\Behat\DataCollector\LoggerDataCollector</parameter>
+        <parameter key="behat.rerun_data_collector.class">Behat\Behat\DataCollector\RerunDataCollector</parameter>
 
         <!-- PathLocator -->
         <parameter key="behat.path_locator.class">Behat\Behat\PathLocator</parameter>
@@ -166,6 +167,13 @@
         <service id="behat.path_locator" class="%behat.path_locator.class%">
             <argument type="service" id="service_container" />
         </service>
+
+        <!-- Event Dispatcher -->
+        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" />
+
+        <!-- DataCollector -->
+        <service id="behat.logger" class="%behat.logger.class%" />
+        <service id="behat.rerun_data_collector" class="%behat.rerun_data_collector.class%" />
 
         <!-- Translator -->
         <service id="behat.translator" class="%behat.translator.class%">
@@ -490,11 +498,5 @@
                 <argument>gherkin</argument>
             </call>
         </service>
-
-        <!-- Event Dispatcher -->
-        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" />
-
-        <!-- Logger -->
-        <service id="behat.logger" class="%behat.logger.class%" />
     </services>
 </container>
