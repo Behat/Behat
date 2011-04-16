@@ -93,7 +93,8 @@ class PathLocator
      */
     public function locateBasePath($inputPath = null)
     {
-        if (DIRECTORY_SEPARATOR === substr($inputPath, -1)) {
+        // remove trailing separator
+        if (in_array(substr($inputPath, -1), array('/', '\\'))) {
             $inputPath = substr($inputPath, 0, -1);
         }
         $this->inputPath = $inputPath;

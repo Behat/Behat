@@ -502,7 +502,7 @@ class BehatCommand extends Command
      */
     protected function initFeaturesDirectoryStructure(PathLocator $locator, OutputInterface $output)
     {
-        $basePath       = getcwd() . ('/' === DIRECTORY_SEPARATOR ? '/' : '');
+        $basePath       = getcwd() . DIRECTORY_SEPARATOR;
         $featuresPath   = $locator->getFeaturesPath();
         $supportPath    = $locator->getSupportPath();
         $stepsPath      = current($locator->locateDefinitionsPaths(false));
