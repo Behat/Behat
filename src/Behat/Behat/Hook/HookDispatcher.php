@@ -354,7 +354,9 @@ class HookDispatcher implements EventSubscriberInterface
                 throw new \RuntimeException(sprintf('The "%s" step hook loader is not registered.', $resource[0]));
             }
 
-            $this->hooks = array_merge($this->hooks, $this->loaders[$resource[0]]->load($resource[1]));
+            $this->hooks = array_merge_recursive(
+                $this->hooks, $this->loaders[$resource[0]]->load($resource[1])
+            );
         }
     }
 }
