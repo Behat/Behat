@@ -487,20 +487,7 @@ class BehatCommand extends Command
                 ' <comment>⎯ place step definition files here</comment>'
             );
 
-            file_put_contents($stepsPath . DIRECTORY_SEPARATOR . 'steps.php', <<<DEFINITIONS
-<?php
-
-/**
- * Define your steps here with:
- *
- *     \$steps->Given('/REGEX/', function(\$world) {
- *         // do something or throw exception
- *     });
- */
-
-
-DEFINITIONS
-            );
+            copy(__DIR__ . '/../../Skeleton/steps.php', $stepsPath . DIRECTORY_SEPARATOR . 'steps.php');
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', $stepsPath) . DIRECTORY_SEPARATOR . 'steps.php' .
@@ -515,41 +502,25 @@ DEFINITIONS
                 str_replace($basePath, '', $supportPath) .
                 ' <comment>⎯ place support scripts and static files here</comment>'
             );
+        }
 
-            file_put_contents($bootPath, <<<BOOTSTRAP
-<?php
-
-/**
- * Place bootstrap scripts here:
- *
- *     require_once 'PHPUnit/Autoload.php';
- *     require_once 'PHPUnit/Framework/Assert/Functions.php';
- */
-
-
-BOOTSTRAP
-            );
+        if (!file_exists($bootPath)) {
+            if (!is_dir(dirname($bootPath))) {
+                mkdir(dirname($bootPath), 0777, true);
+            }
+            copy(__DIR__ . '/../../Skeleton/bootstrap.php', $bootPath);
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', $bootPath) .
                 ' <comment>⎯ place bootstrap scripts in this file</comment>'
             );
+        }
 
-            file_put_contents($envPath, <<<ENVIRONMENT
-<?php
-
-/**
- * Place environment initialization scripts here:
- *
- *     \$world->initialSum = 231;
- *     \$world->calc = function() {
- *         // ...
- *     };
- */
-
-
-ENVIRONMENT
-            );
+        if (!file_exists($envPath)) {
+            if (!is_dir(dirname($envPath))) {
+                mkdir(dirname($envPath), 0777, true);
+            }
+            copy(__DIR__ . '/../../Skeleton/env.php', $envPath);
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', $envPath) .
