@@ -11,11 +11,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\DependencyInjection\BehatExtension,
+    Behat\Behat\Definition\DefinitionDumper,
     Behat\Behat\Event\SuiteEvent,
     Behat\Behat\PathLocator;
 
 use Behat\Gherkin\Filter\NameFilter,
-    Behat\Gherkin\Filter\TagFilter;
+    Behat\Gherkin\Filter\TagFilter,
+    Behat\Gherkin\Keywords\KeywordsDumper;
 
 /*
  * This file is part of the Behat.
@@ -58,12 +60,12 @@ class BehatCommand extends Command
                     'or scenario at specific feature line ("<info>*.feature:10</info>").'
                 ),
             ),
-            $this->getRunOptions(),
+            $this->getInitOptions(),
+            $this->getDemonstrationOptions(),
             $this->getConfigurationOptions(),
             $this->getFilterOptions(),
-            $this->getInitOptions(),
-            $this->getHelperOptions(),
-            $this->getFormatterOptions()
+            $this->getFormatterOptions(),
+            $this->getRunOptions()
         ));
     }
 
@@ -149,11 +151,11 @@ class BehatCommand extends Command
     }
 
     /**
-     * Returns array of helper options for command
+     * Returns array of demonstration options for command
      *
      * @return  array
      */
-    protected function getHelperOptions()
+    protected function getDemonstrationOptions()
     {
         return array(
             new InputOption('--usage',          null,
