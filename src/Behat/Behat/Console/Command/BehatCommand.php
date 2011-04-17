@@ -349,10 +349,10 @@ class BehatCommand extends Command
         }
 
         // subscribe event listeners
-        $dispatcher = $container->get('behat.event_dispatcher');
-        $dispatcher->addSubscriber($hookDispatcher, 10);
-        $dispatcher->addSubscriber($logger, 0);
-        $dispatcher->addSubscriber($formatter, -10);
+        $eventDispatcher = $container->get('behat.event_dispatcher');
+        $eventDispatcher->addSubscriber($hookDispatcher, 10);
+        $eventDispatcher->addSubscriber($logger, 0);
+        $eventDispatcher->addSubscriber($formatter, -10);
 
         // rerun data collector
         $rerunDataCollector = $container->get('behat.rerun_data_collector');
@@ -360,7 +360,7 @@ class BehatCommand extends Command
             $rerunDataCollector->setRerunFile(
                 $input->getOption('rerun') ?: $container->getParameter('behat.options.rerun')
             );
-            $dispatcher->addSubscriber($rerunDataCollector, 0);
+            $eventDispatcher->addSubscriber($rerunDataCollector, 0);
         }
 
         // run features
@@ -467,12 +467,12 @@ class BehatCommand extends Command
     /**
      * Runs specified features.
      *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
+     * @param   array                                                       $paths      features paths
      * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
      *
      * @return  integer
      */
-    protected function runFeatures($featuresPaths, ContainerInterface $container)
+    protected function runFeatures(array $paths, ContainerInterface $container)
     {
         $result     = 0;
         $gherkin    = $container->get('gherkin');
@@ -481,7 +481,7 @@ class BehatCommand extends Command
 
         $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger));
 
-        foreach ($featuresPaths as $path) {
+        foreach ($paths as $path) {
             $features = $gherkin->load((string) $path);
 
             foreach ($features as $feature) {
