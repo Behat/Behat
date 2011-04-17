@@ -56,8 +56,9 @@ class BehatCommand extends Command
             array(
                 new InputArgument('features',
                     InputArgument::OPTIONAL,
-                    'Feature(s) to run. Could be <info>directory path</info>, <info>single feature path</info> ' .
-                    'or scenario at specific feature line ("<info>*.feature:10</info>").'
+                    'Feature(s) to run. Could be dir (<comment>features/</comment>), ' .
+                    'feature (<comment>*.feature</comment>) or scenario at specific line ' .
+                    '(<comment>*.feature:10</comment>).'
                 ),
             ),
             $this->getInitOptions(),
@@ -102,13 +103,13 @@ class BehatCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 '  ' .
                 'Specify external configuration file to load. ' .
-                '<info>behat.yml</info> or <info>config/behat.yml</info> will be used by default.'
+                '<comment>behat.yml</comment> or <comment>config/behat.yml</comment> will be used by default.'
             ),
             new InputOption('--profile',        '-p',
                 InputOption::VALUE_REQUIRED,
                 ' ' .
                 'Specify configuration profile name to use. ' .
-                'Define configuration profiles in <info>behat.yml</info>.'
+                'Define configuration profiles in <comment>behat.yml</comment>.'
             ),
         );
     }
@@ -145,7 +146,7 @@ class BehatCommand extends Command
             new InputOption('--init',           null,
                 InputOption::VALUE_NONE,
                 '         ' .
-                'Create features/ directory structure'
+                'Create <comment>features</comment> directory structure.'
             ),
         );
     }
@@ -161,12 +162,12 @@ class BehatCommand extends Command
             new InputOption('--usage',          null,
                 InputOption::VALUE_NONE,
                 '        ' .
-                'Print *.feature example in specified language (--lang).'
+                'Print *.feature example in specified language (<info>--lang</info>).'
             ),
             new InputOption('--steps',          null,
                 InputOption::VALUE_NONE,
                 '        ' .
-                'Print available steps in specified language (--lang).'
+                'Print available steps in specified language (<info>--lang</info>).'
             ),
         );
     }
@@ -182,10 +183,10 @@ class BehatCommand extends Command
             new InputOption('--format',         '-f',
                 InputOption::VALUE_REQUIRED,
                 '  ' .
-                'How to format features (Default: pretty). Available formats are ' .
+                'How to format features. <comment>pretty</comment> is default. Available formats are ' .
                 implode(', ',
                     array_map(function($name) {
-                        return "<info>$name</info>";
+                        return "<comment>$name</comment>";
                     }, array_keys($this->defaultFormatters))
                 )
             ),
