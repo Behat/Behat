@@ -125,16 +125,11 @@ abstract class ConsoleFormatter implements FormatterInterface
     final protected function getResultColorCode($result)
     {
         switch ($result) {
-            case StepEvent::PASSED:
-                return 'passed';
-            case StepEvent::SKIPPED:
-                return 'skipped';
-            case StepEvent::PENDING:
-                return 'pending';
-            case StepEvent::UNDEFINED:
-                return 'undefined';
-            case StepEvent::FAILED:
-                return 'failed';
+            case StepEvent::PASSED:     return 'passed';
+            case StepEvent::SKIPPED:    return 'skipped';
+            case StepEvent::PENDING:    return 'pending';
+            case StepEvent::UNDEFINED:  return 'undefined';
+            case StepEvent::FAILED:     return 'failed';
         }
     }
 
