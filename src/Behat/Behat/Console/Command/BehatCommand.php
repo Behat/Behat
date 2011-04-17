@@ -109,7 +109,7 @@ class BehatCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 ' ' .
                 'Specify configuration profile name to use. ' .
-                'Define configuration profiles in <comment>behat.yml</comment>.'
+                'Define profiles in config file (<info>--config</info>).'
             ),
         );
     }
