@@ -108,7 +108,7 @@ class BehatCommand extends Command
             new InputOption('--profile',        '-p',
                 InputOption::VALUE_REQUIRED,
                 ' ' .
-                'Specify configuration profile name to use. ' .
+                'Specify configuration profile to use. ' .
                 'Define profiles in config file (<info>--config</info>).'
             ),
         );
