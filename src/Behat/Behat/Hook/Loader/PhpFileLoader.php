@@ -53,6 +53,10 @@ class PhpFileLoader implements LoaderInterface
      */
     public function beforeSuite($callback)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('You should provide valid callable as hook argument');
+        }
+
         $this->hooks['suite.before'][] = $callback;
     }
 
@@ -63,6 +67,10 @@ class PhpFileLoader implements LoaderInterface
      */
     public function afterSuite($callback)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('You should provide valid callable as hook argument');
+        }
+
         $this->hooks['suite.after'][] = $callback;
     }
 
@@ -74,6 +82,10 @@ class PhpFileLoader implements LoaderInterface
      */
     public function beforeFeature($filter, $callback)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('You should provide valid callable as hook argument');
+        }
+
         $this->hooks['feature.before'][] = array($filter, $callback);
     }
 
@@ -85,6 +97,10 @@ class PhpFileLoader implements LoaderInterface
      */
     public function afterFeature($filter, $callback)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('You should provide valid callable as hook argument');
+        }
+
         $this->hooks['feature.after'][] = array($filter, $callback);
     }
 
@@ -96,6 +112,10 @@ class PhpFileLoader implements LoaderInterface
      */
     public function beforeScenario($filter, $callback)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('You should provide valid callable as hook argument');
+        }
+
         $this->hooks['scenario.before'][] = array($filter, $callback);
     }
 
@@ -107,6 +127,10 @@ class PhpFileLoader implements LoaderInterface
      */
     public function afterScenario($filter, $callback)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('You should provide valid callable as hook argument');
+        }
+
         $this->hooks['scenario.after'][] = array($filter, $callback);
     }
 
@@ -118,6 +142,10 @@ class PhpFileLoader implements LoaderInterface
      */
     public function beforeStep($filter, $callback)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('You should provide valid callable as hook argument');
+        }
+
         $this->hooks['step.before'][] = array($filter, $callback);
     }
 
@@ -129,6 +157,10 @@ class PhpFileLoader implements LoaderInterface
      */
     public function afterStep($filter, $callback)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('You should provide valid callable as hook argument');
+        }
+
         $this->hooks['step.after'][] = array($filter, $callback);
     }
 }
