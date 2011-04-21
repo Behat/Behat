@@ -3,7 +3,6 @@
 namespace Behat\Behat\DataCollector;
 
 use Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event,
     Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Behat\Behat\Event\SuiteEvent,

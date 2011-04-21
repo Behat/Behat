@@ -1,3 +1,12 @@
+1.1.1 / 2011-04-21
+==================
+
+  * Fixed paths finding routines
+  * Totally refactored BehatCommand
+  * Added rerun functionality (`--rerun`)
+  * Ability to remove previously specified paths in `behat.yml`
+  * Bugfixes and little tweaks
+
 1.1.0 / 2011-04-04
 ==================
 

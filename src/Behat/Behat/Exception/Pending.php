@@ -24,7 +24,6 @@ class Pending extends BehaviorException
      */
     public function __construct($text = 'write pending definition')
     {
-        parent::__construct();
-        $this->message = sprintf('TODO: %s', $text);
+        parent::__construct(sprintf('TODO: %s', $text));
     }
 }

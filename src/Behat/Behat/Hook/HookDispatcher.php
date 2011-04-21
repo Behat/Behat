@@ -196,11 +196,7 @@ class HookDispatcher implements EventSubscriberInterface
         $hooks = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
 
         foreach ($hooks as $hook) {
-            if (is_callable($hook)) {
-                $hook($event);
-            } else {
-                $hook[1]($event);
-            }
+            call_user_func($hook, $event);
         }
     }
 
@@ -221,21 +217,21 @@ class HookDispatcher implements EventSubscriberInterface
 
         foreach ($hooks as $hook) {
             if (is_callable($hook)) {
-                $hook($event);
-            } elseif (!empty($hook[0]) && '@' === $hook[0][0]) {
+                call_user_func($hook, $event);
+            } elseif (!empty($hook[0]) && false !== strpos($hook[0], '@')) {
                 $filter = new TagFilter($hook[0]);
 
                 if ($filter->isFeatureMatch($feature)) {
-                    $hook[1]($event);
+                    call_user_func($hook[1], $event);
                 }
             } elseif (!empty($hook[0])) {
                 $filter = new NameFilter($hook[0]);
 
                 if ($filter->isFeatureMatch($feature)) {
-                    $hook[1]($event);
+                    call_user_func($hook[1], $event);
                 }
             } else {
-                $hook[1]($event);
+                call_user_func($hook[1], $event);
             }
         }
     }
@@ -261,21 +257,21 @@ class HookDispatcher implements EventSubscriberInterface
 
         foreach ($hooks as $hook) {
             if (is_callable($hook)) {
-                $hook($event);
-            } elseif (!empty($hook[0]) && '@' === $hook[0][0]) {
+                call_user_func($hook, $event);
+            } elseif (!empty($hook[0]) && false !== strpos($hook[0], '@')) {
                 $filter = new TagFilter($hook[0]);
 
                 if ($filter->isScenarioMatch($scenario)) {
-                    $hook[1]($event);
+                    call_user_func($hook[1], $event);
                 }
             } elseif (!empty($hook[0])) {
                 $filter = new NameFilter($hook[0]);
 
                 if ($filter->isScenarioMatch($scenario)) {
-                    $hook[1]($event);
+                    call_user_func($hook[1], $event);
                 }
             } else {
-                $hook[1]($event);
+                call_user_func($hook[1], $event);
             }
         }
     }
@@ -297,21 +293,21 @@ class HookDispatcher implements EventSubscriberInterface
 
         foreach ($hooks as $hook) {
             if (is_callable($hook)) {
-                $hook($event);
-            } elseif (!empty($hook[0]) && '@' === $hook[0][0]) {
+                call_user_func($hook, $event);
+            } elseif (!empty($hook[0]) && false !== strpos($hook[0], '@')) {
                 $filter = new TagFilter($hook[0]);
 
                 if ($filter->isScenarioMatch($scenario)) {
-                    $hook[1]($event);
+                    call_user_func($hook[1], $event);
                 }
             } elseif (!empty($hook[0])) {
                 $filter = new NameFilter($hook[0]);
 
                 if ($filter->isScenarioMatch($scenario)) {
-                    $hook[1]($event);
+                    call_user_func($hook[1], $event);
                 }
             } else {
-                $hook[1]($event);
+                call_user_func($hook[1], $event);
             }
         }
     }
@@ -354,7 +350,9 @@ class HookDispatcher implements EventSubscriberInterface
                 throw new \RuntimeException(sprintf('The "%s" step hook loader is not registered.', $resource[0]));
             }
 
-            $this->hooks = array_merge($this->hooks, $this->loaders[$resource[0]]->load($resource[1]));
+            $this->hooks = array_merge_recursive(
+                $this->hooks, $this->loaders[$resource[0]]->load($resource[1])
+            );
         }
     }
 }

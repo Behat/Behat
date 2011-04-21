@@ -27,13 +27,13 @@ class Redundant extends BehaviorException
      */
     public function __construct(Definition $step2, Definition $step1)
     {
-        parent::__construct();
-
-        $this->message = sprintf("Step \"%s\" is already defined in %s:%d\n\n%s:%d\n%s:%d",
+        $message = sprintf("Step \"%s\" is already defined in %s:%d\n\n%s:%d\n%s:%d",
             $step2->getRegex(),
             $step1->getFile(), $step1->getLine(),
             $step1->getFile(), $step1->getLine(),
             $step2->getFile(), $step2->getLine()
         );
+
+        parent::__construct($message);
     }
 }

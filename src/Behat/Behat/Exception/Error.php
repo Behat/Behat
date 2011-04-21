@@ -27,8 +27,6 @@ class Error extends BehaviorException
      */
     public function __construct($code, $message, $file, $line)
     {
-        parent::__construct();
-
         switch ($code) {
             case E_WARNING:
             case E_USER_WARNING:
@@ -51,8 +49,10 @@ class Error extends BehaviorException
         }
 
         $this->code = $code;
-        $this->message = $type . ': ' . $message;
         $this->file = $file;
         $this->line = $line;
+
+        parent::__construct($type . ': ' . $message);
+
     }
 }

@@ -26,8 +26,7 @@ class Undefined extends BehaviorException
      */
     public function __construct($text)
     {
-        parent::__construct();
         $this->text = $text;
-        $this->message = sprintf('Undefined step "%s"', $this->text);
+        parent::__construct(sprintf('Undefined step "%s"', $text));
     }
 }

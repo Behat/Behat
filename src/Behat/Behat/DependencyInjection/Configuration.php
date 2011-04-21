@@ -106,6 +106,19 @@ class Configuration
                 end()->
             end()->
             children()->
+                arrayNode('options')->
+                    fixXmlConfig('option')->
+                    children()->
+                        scalarNode('rerun')->
+                            defaultNull()->
+                        end()->
+                        booleanNode('strict')->
+                            defaultNull()->
+                        end()->
+                    end()->
+                end()->
+            end()->
+            children()->
                 arrayNode('environment')->
                     fixXmlConfig('parameter')->
                     children()->

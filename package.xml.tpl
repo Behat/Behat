@@ -32,7 +32,8 @@
             ##SOURCE_FILES##
 
             <file role="script" baseinstalldir="/" name="bin/behat.php">
-                <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config"/>
+                <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
+                <tasks:replace from="DEV" to="version" type="package-info" />
             </file>
 
             <file role="script" baseinstalldir="/" name="bin/behat.bat">
@@ -60,7 +61,7 @@
             <package>
                 <name>gherkin</name>
                 <channel>pear.behat.org</channel>
-                <min>1.0.0</min>
+                <min>1.0.3</min>
             </package>
             <extension>
                 <name>pcre</name>

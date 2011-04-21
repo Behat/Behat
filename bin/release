@@ -81,16 +81,8 @@ replaceTokens(getcwd().'/package.xml', '##', '##', array(
   , 'SOURCE_FILES'  => $xmlSourceFiles
   , 'STABILITY'     => $stability
 ));
-replaceTokens(getcwd().'/src/Behat/Behat/Console/BehatApplication.php', '\'', '\'', array(
-    'DEV'           => "'$version'"
-));
 
 system('pear package');
-
-replaceTokens(getcwd().'/src/Behat/Behat/Console/BehatApplication.php', '\'', '\'', array(
-    $version        => "'DEV'" 
-));
-
 unlink(getcwd().'/package.xml');
 
 exit(0);

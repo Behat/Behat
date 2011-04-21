@@ -37,12 +37,16 @@
         <parameter key="behat.formatter.multiline_arguments">true</parameter>
         <parameter key="behat.formatter.parameters" type="collection"></parameter>
 
+        <!-- Options -->
+        <parameter key="behat.options.rerun">null</parameter>
+        <parameter key="behat.options.strict">null</parameter>
+
         <!-- Environment parameters -->
         <parameter key="behat.environment.parameters" type="collection"></parameter>
 
         <!-- Gherkin loader parameters -->
-        <parameter key="gherkin.filter.name">null</parameter>
-        <parameter key="gherkin.filter.tags">null</parameter>
+        <parameter key="gherkin.filters.name">null</parameter>
+        <parameter key="gherkin.filters.tags">null</parameter>
 
         <!-- Gherkin Parser -->
         <parameter key="gherkin.class">Behat\Gherkin\Gherkin</parameter>
@@ -50,6 +54,7 @@
         <parameter key="gherkin.lexer.class">Behat\Gherkin\Lexer</parameter>
         <parameter key="gherkin.loader.gherkin.class">Behat\Gherkin\Loader\GherkinFileLoader</parameter>
         <parameter key="gherkin.keywords.class">Behat\Gherkin\Keywords\SymfonyTranslationKeywords</parameter>
+        <parameter key="gherkin.keywords_dumper.class">Behat\Gherkin\Keywords\KeywordsDumper</parameter>
         <parameter key="gherkin.keywords.path">%gherkin.paths.lib%/i18n</parameter>
 
         <!-- Definition Dispathcer -->
@@ -80,9 +85,12 @@
         <!-- Event Dispatcher -->
         <parameter key="behat.event_dispatcher.class">Symfony\Component\EventDispatcher\EventDispatcher</parameter>
 
-        <!-- Logger -->
+        <!-- DataCollector -->
         <parameter key="behat.logger.class">Behat\Behat\DataCollector\LoggerDataCollector</parameter>
+        <parameter key="behat.rerun_data_collector.class">Behat\Behat\DataCollector\RerunDataCollector</parameter>
 
+        <!-- PathLocator -->
+        <parameter key="behat.path_locator.class">Behat\Behat\PathLocator</parameter>
     </parameters>
     <services>
         <!-- Gherkin Parser -->
@@ -104,6 +112,9 @@
         </service>
         <service id="gherkin.keywords" class="%gherkin.keywords.class%">
             <argument type="service" id="behat.translator" />
+        </service>
+        <service id="gherkin.keywords_dumper" class="%gherkin.keywords_dumper.class%">
+            <argument type="service" id="gherkin.keywords" />
         </service>
 
         <!-- Definition Dispatcher -->
@@ -155,6 +166,18 @@
         <service id="behat.tester.step" class="%behat.tester.step.class%" scope="prototype">
             <argument type="service" id="service_container" />
         </service>
+
+        <!-- PathLocator -->
+        <service id="behat.path_locator" class="%behat.path_locator.class%">
+            <argument type="service" id="service_container" />
+        </service>
+
+        <!-- Event Dispatcher -->
+        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" />
+
+        <!-- DataCollector -->
+        <service id="behat.logger" class="%behat.logger.class%" />
+        <service id="behat.rerun_data_collector" class="%behat.rerun_data_collector.class%" />
 
         <!-- Translator -->
         <service id="behat.translator" class="%behat.translator.class%">
@@ -479,11 +502,5 @@
                 <argument>gherkin</argument>
             </call>
         </service>
-
-        <!-- Event Dispatcher -->
-        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" />
-
-        <!-- Logger -->
-        <service id="behat.logger" class="%behat.logger.class%" />
     </services>
 </container>
