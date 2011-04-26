@@ -256,9 +256,9 @@ class BehatCommand extends Command
             return 0;
         }
 
-        // we don't want to init, so we check, that base path exists
-        if (!is_dir($basePath)) {
-            throw new \InvalidArgumentException("Path \"$basePath\" not found");
+        // we don't want to init, so we check, that features path exists
+        if (!is_dir($featuresPath = $locator->getFeaturesPath())) {
+            throw new \InvalidArgumentException("Path \"$featuresPath\" not found");
         }
 
         // locate definition translations
