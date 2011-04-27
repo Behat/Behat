@@ -315,6 +315,6 @@ class PathLocator
             }
         }
 
-        return realpath($path) ? realpath($path) : $path;
+        return realpath($path) ?: $path;
     }
 }
