@@ -397,14 +397,13 @@ class HtmlFormatter extends PrettyFormatter
 
     /**
      * Get HTML template.
-     * 
+     *
      * @return  string
      */
     protected function getHtmlTemplate()
     {
         $templatePath = $this->parameters->get('template_path')
-                     ?: $this->parameters->get('base_path') . DIRECTORY_SEPARATOR . 'support' . 
-                        DIRECTORY_SEPARATOR . 'html.tpl';
+                     ?: $this->parameters->get('support_path') . DIRECTORY_SEPARATOR . 'html.tpl';
 
         if (file_exists($templatePath)) {
             return file_get_contents($templatePath);
@@ -415,7 +414,7 @@ class HtmlFormatter extends PrettyFormatter
 <html xmlns ="http://www.w3.org/1999/xhtml">
 <head>
     <meta content="text/html;charset=utf-8"/>
-    <title>Behat Test Suite</title> 
+    <title>Behat Test Suite</title>
     <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         body {

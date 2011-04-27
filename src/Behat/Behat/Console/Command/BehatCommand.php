@@ -275,6 +275,7 @@ class BehatCommand extends Command
         // configure formatter
         $formatter->setTranslator($translator);
         $formatter->setParameter('base_path', getcwd());
+        $formatter->setParameter('support_path', $locator->getSupportPath());
         $formatter->setParameter('verbose',
             $input->getOption('verbose') ?: $container->getParameter('behat.formatter.verbose')
         );
