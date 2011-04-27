@@ -348,7 +348,7 @@ class ProgressFormatter extends ConsoleFormatter
     protected function relativizePathsInString($string)
     {
         if ($basePath = $this->parameters->get('base_path')) {
-            $basePath = dirname(realpath($basePath)) . DIRECTORY_SEPARATOR;
+            $basePath = realpath($basePath) . DIRECTORY_SEPARATOR;
             $string = str_replace($basePath, '', $string);
         }
 
