@@ -145,9 +145,9 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param   Behat\Behat\Event\OutlineExampelEvent   $event
+     * @param   Behat\Behat\Event\OutlineExampleEvent   $event
      */
-    public function beforeOutlineExample(OutlineExampelEvent $event)
+    public function beforeOutlineExample(OutlineExampleEvent $event)
     {
         $this->scenarioStartTime = microtime(true);
     }
@@ -155,11 +155,11 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Behat\Behat\Event\OutlineExampelEvent   $event
+     * @param   Behat\Behat\Event\OutlineExampleEvent   $event
      *
      * @uses    printTestCase()
      */
-    public function afterOutlineExample(OutlineExampelEvent $event)
+    public function afterOutlineExample(OutlineExampleEvent $event)
     {
         $this->printTestCase($event->getOutline(), microtime(true) - $this->scenarioStartTime, $event);
     }
