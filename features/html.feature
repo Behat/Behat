@@ -171,6 +171,9 @@ Feature: HTML Formatter
               #behat .scenario > ol li table.argument {
                   border:1px solid #d2d2d2;
               }
+              #behat .scenario > ol li table.argument thead td {
+                  font-weight: bold;
+              }
               #behat .scenario > ol li table.argument td {
                   padding:5px 10px;
                   background:#f3f3f3;

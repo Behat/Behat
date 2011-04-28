@@ -303,13 +303,18 @@ class HtmlFormatter extends PrettyFormatter
     protected function printStepTableArgument(TableNode $table, $color = null)
     {
         $this->writeln('<table class="argument">');
-        $this->writeln('<tbody>');
 
+        $this->writeln('<thead>');
+        $headers = $table->getRow(0);
+        $this->printColorizedTableRow($headers, 'row');
+        $this->writeln('</thead>');
+
+        $this->writeln('<tbody>');
         foreach ($table->getHash() as $row) {
             $this->printColorizedTableRow($row, 'row');
         }
-
         $this->writeln('</tbody>');
+
         $this->writeln('</table>');
     }
 
@@ -397,14 +402,13 @@ class HtmlFormatter extends PrettyFormatter
 
     /**
      * Get HTML template.
-     * 
+     *
      * @return  string
      */
     protected function getHtmlTemplate()
     {
         $templatePath = $this->parameters->get('template_path')
-                     ?: $this->parameters->get('base_path') . DIRECTORY_SEPARATOR . 'support' . 
-                        DIRECTORY_SEPARATOR . 'html.tpl';
+                     ?: $this->parameters->get('support_path') . DIRECTORY_SEPARATOR . 'html.tpl';
 
         if (file_exists($templatePath)) {
             return file_get_contents($templatePath);
@@ -415,7 +419,7 @@ class HtmlFormatter extends PrettyFormatter
 <html xmlns ="http://www.w3.org/1999/xhtml">
 <head>
     <meta content="text/html;charset=utf-8"/>
-    <title>Behat Test Suite</title> 
+    <title>Behat Test Suite</title>
     <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         body {
@@ -527,6 +531,9 @@ class HtmlFormatter extends PrettyFormatter
         }
         #behat .scenario > ol li table.argument {
             border:1px solid #d2d2d2;
+        }
+        #behat .scenario > ol li table.argument thead td {
+            font-weight: bold;
         }
         #behat .scenario > ol li table.argument td {
             padding:5px 10px;

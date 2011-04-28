@@ -1,3 +1,11 @@
+1.1.3 / 2011-04-28
+==================
+
+  * JUnit formatter fix
+  * Formatters basePath fix. Now formatters uses CWD as path trimmer
+  * Relative paths locator bug fix
+  * Show table argument header in HTML formatter
+
 1.1.2 / 2011-04-27
 ==================
 

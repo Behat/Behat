@@ -243,7 +243,7 @@ class BehatCommand extends Command
         $locator = $container->get('behat.path_locator');
 
         // locate base path
-        $basePath = $this->locateBasePath($locator, $input);
+        $this->locateBasePath($locator, $input);
 
         // load bootstraps
         foreach ($locator->locateBootstrapsPaths() as $path) {
@@ -274,7 +274,8 @@ class BehatCommand extends Command
 
         // configure formatter
         $formatter->setTranslator($translator);
-        $formatter->setParameter('base_path', $basePath);
+        $formatter->setParameter('base_path', getcwd());
+        $formatter->setParameter('support_path', $locator->getSupportPath());
         $formatter->setParameter('verbose',
             $input->getOption('verbose') ?: $container->getParameter('behat.formatter.verbose')
         );
