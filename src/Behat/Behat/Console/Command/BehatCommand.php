@@ -300,7 +300,7 @@ class BehatCommand extends Command
                 : $container->getParameter('behat.formatter.multiline_arguments')
         );
         if ($out = $input->getOption('out')) {
-            $formatter->setParameter('output_path', $this->preparePath($out));
+            $formatter->setParameter('output_path', $locator->preparePath($out));
         }
         foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
             $formatter->setParameter($param, $value);

@@ -288,7 +288,7 @@ class PathLocator
      *
      * @uses    pathTokens
      */
-    private function preparePath($path)
+    public function preparePath($path)
     {
         $pathTokens = $this->pathTokens;
         $path = preg_replace_callback('/%([^%]+)%/', function($matches) use($pathTokens) {
