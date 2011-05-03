@@ -71,7 +71,11 @@ class PathLocator
      */
     public function getFeaturesPath()
     {
-        return $this->preparePath($this->container->getParameter('behat.paths.features'));
+        if ($path = $this->container->getParameter('behat.paths.features')) {
+            return $this->preparePath($path);
+        }
+
+        return null;
     }
 
     /**
@@ -81,7 +85,25 @@ class PathLocator
      */
     public function getSupportPath()
     {
-        return $this->preparePath($this->container->getParameter('behat.paths.support'));
+        if ($path = $this->container->getParameter('behat.paths.support')) {
+            return $this->preparePath($path);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns configured output path.
+     *
+     * @return string|null
+     */
+    public function getOutputPath()
+    {
+        if ($path = $this->container->getParameter('behat.formatter.output_path')) {
+            return $this->preparePath($path);
+        }
+
+        return null;
     }
 
     /**
