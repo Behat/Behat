@@ -193,7 +193,7 @@ class BehatCommand extends Command
             new InputOption('--out',            null,
                 InputOption::VALUE_REQUIRED,
                 '          ' .
-                'Write formatter output to a file/directory instead of STDOUT.'
+                'Write formatter output to a file/directory instead of STDOUT (<comment>output_path</comment>).'
             ),
             new InputOption('--colors',         null,
                 InputOption::VALUE_NONE,
@@ -299,8 +299,17 @@ class BehatCommand extends Command
                 ? false
                 : $container->getParameter('behat.formatter.multiline_arguments')
         );
-        if ($out = $input->getOption('out')) {
-            $formatter->setParameter('output_path', $this->preparePath($out));
+        if ($out = $input->getOption('out') ?: $locator->getOutputPath()) {
+            // get realpath
+            if (!file_exists($out)) {
+                touch($out);
+                $out = realpath($out);
+                unlink($out);
+            } else {
+                $out = realpath($out);
+            }
+            $formatter->setParameter('output_path', $out);
+            $formatter->setParameter('decorated', (Boolean) $input->getOption('colors'));
         }
         foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
             $formatter->setParameter($param, $value);

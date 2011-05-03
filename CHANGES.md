@@ -1,3 +1,9 @@
+1.1.4 / 2011-05-03
+==================
+
+  * Fixed `--out` option usage critical bug
+  * Added ability to specify `output_path` from config file
+
 1.1.3 / 2011-04-28
 ==================
 
