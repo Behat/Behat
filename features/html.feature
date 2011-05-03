@@ -238,11 +238,17 @@ Feature: HTML Formatter
                   border-color:cyan !important;
                   color:#000;
               }
+              #behat .summary {
+                  margin: 15px;
+                  padding: 10px;
+                  border-width: 2px;
+                  border-style: solid;
+              }
           </style>
       </head>
       <body>
           <div id="behat">
-      
+
       <div class="feature">
       <h2>
       <span class="keyword">Feature: </span>
@@ -253,7 +259,7 @@ Feature: HTML Formatter
       As a features developer<br />
       I want, that &quot;World&quot; flushes between scenarios<br />
       </p>
-      
+
       <div class="scenario background">
       <h3>
       <span class="keyword">Background: </span>
@@ -330,7 +336,15 @@ Feature: HTML Formatter
       </ol>
       </div>
       </div>
-      
+      <div class="summary passed">
+      <p class="scenarios">
+      2 scenarios (<strong class="passed">2 passed</strong>)
+      </p>
+      <p class="steps">
+      8 steps (<strong class="passed">8 passed</strong>)
+      </p>
+      </div>
+
           </div>
       </body>
       </html>
