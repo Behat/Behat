@@ -193,7 +193,7 @@ class BehatCommand extends Command
             new InputOption('--out',            null,
                 InputOption::VALUE_REQUIRED,
                 '          ' .
-                'Write formatter output to a file/directory instead of STDOUT.'
+                'Write formatter output to a file/directory instead of STDOUT (<comment>output_path</comment>).'
             ),
             new InputOption('--colors',         null,
                 InputOption::VALUE_NONE,
