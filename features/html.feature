@@ -372,7 +372,7 @@ Feature: HTML Formatter
             | 10 | 21    |
       """
     When I run "behat -f html"
-    And the output should contain:
+    Then the output should contain:
       """
       <div class="scenario outline">
       <h3>
