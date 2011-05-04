@@ -196,6 +196,15 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
+    protected function printOutlineSteps(OutlineNode $outline)
+    {
+        parent::printOutlineSteps($outline);
+        $this->writeln('</ol>');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function printOutlineExamplesSectionHeader(TableNode $examples)
     {
         $this->writeln('<div class="examples">');
@@ -212,12 +221,26 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
+    protected function printOutlineExampleResult(TableNode $examples, $iteration, $result, $isSkipped)
+    {
+        $color  = $this->getResultColorCode($result);
+
+        $this->printColorizedTableRow($examples->getRow($iteration + 1), $color);
+        $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function printOutlineExampleResultExceptions(TableNode $examples, array $events)
     {
         $colCount = count($examples->getRow(0));
 
         foreach ($events as $event) {
-            $error = $this->relativizePathsInString($event->get('exception')->getMessage());
+            if (!($exception = $event->getException()))
+                continue;
+
+            $error = $this->relativizePathsInString($exception->getMessage());
 
             $this->writeln('<tr class="failed exception">');
             $this->writeln('<td colspan="' . $colCount . '">');
