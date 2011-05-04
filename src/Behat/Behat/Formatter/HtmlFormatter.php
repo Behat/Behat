@@ -66,6 +66,7 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printSuiteFooter(LoggerDataCollector $logger)
     {
+        $this->printSummary($logger);
         $this->writeln($this->footer);
     }
 
@@ -195,6 +196,15 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
+    protected function printOutlineSteps(OutlineNode $outline)
+    {
+        parent::printOutlineSteps($outline);
+        $this->writeln('</ol>');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function printOutlineExamplesSectionHeader(TableNode $examples)
     {
         $this->writeln('<div class="examples">');
@@ -211,12 +221,26 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
+    protected function printOutlineExampleResult(TableNode $examples, $iteration, $result, $isSkipped)
+    {
+        $color  = $this->getResultColorCode($result);
+
+        $this->printColorizedTableRow($examples->getRow($iteration + 1), $color);
+        $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function printOutlineExampleResultExceptions(TableNode $examples, array $events)
     {
         $colCount = count($examples->getRow(0));
 
         foreach ($events as $event) {
-            $error = $this->relativizePathsInString($event->get('exception')->getMessage());
+            if (!($exception = $event->getException()))
+                continue;
+
+            $error = $this->relativizePathsInString($exception->getMessage());
 
             $this->writeln('<tr class="failed exception">');
             $this->writeln('<td colspan="' . $colCount . '">');
@@ -398,6 +422,64 @@ class HtmlFormatter extends PrettyFormatter
         $file = $this->relativizePathsInString($file);
 
         $this->writeln('<span class="path">' . $file . ':' . $line . '</span>');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function printSummary(LoggerDataCollector $logger) {
+        $results = $logger->getScenariosStatuses();
+        $result = $results['failed'] > 0 ? 'failed' : 'passed';
+        $this->writeln('<div class="summary '.$result.'">');
+        parent::printSummary($logger);
+        $this->writeln('</div>');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function printScenariosSummary(LoggerDataCollector $logger) {
+        $this->writeln('<p class="scenarios">');
+        parent::printScenariosSummary($logger);
+        $this->writeln('</p>');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function printStepsSummary(LoggerDataCollector $logger) {
+        $this->writeln('<p class="steps">');
+        parent::printStepsSummary($logger);
+        $this->writeln('</p>');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function printTimeSummary(LoggerDataCollector $logger)
+    {
+        $this->writeln('<p class="time">');
+        parent::printTimeSummary($logger);
+        $this->writeln('</p>');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function printStatusesSummary(array $statusesStatistics) {
+        $statuses = array();
+        $status_tpl = '<strong class="%s">%s</strong>';
+        foreach ($statusesStatistics as $status => $count) {
+            if ($count) {
+                $transStatus = $this->translateChoice(
+                    "[1,Inf] %1% $status", $count, array('%1%' => $count)
+                );
+                $statuses[] = sprintf($status_tpl, $status, $transStatus);
+            }
+        }
+        if (count($statuses)) {
+            $this->writeln(' ('.implode(', ', $statuses).')');
+        }
     }
 
     /**
@@ -598,6 +680,12 @@ class HtmlFormatter extends PrettyFormatter
             background:lightCyan;
             border-color:cyan !important;
             color:#000;
+        }
+        #behat .summary {
+            margin: 15px;
+            padding: 10px;
+            border-width: 2px;
+            border-style: solid;
         }
     </style>
 </head>

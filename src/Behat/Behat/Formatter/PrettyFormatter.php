@@ -532,8 +532,6 @@ class PrettyFormatter extends ProgressFormatter
         }
 
         $this->inOutlineSteps = false;
-
-        $this->writeln();
     }
 
     /**
@@ -545,6 +543,7 @@ class PrettyFormatter extends ProgressFormatter
      */
     protected function printOutlineExamplesSectionHeader(TableNode $examples)
     {
+        $this->writeln();
         $keyword = $examples->getKeyword();
         $this->writeln("    $keyword:");
 
