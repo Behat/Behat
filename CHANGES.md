@@ -1,3 +1,9 @@
+1.1.5 / 2011-05-17
+==================
+
+  * Fixed CWD path finding
+  * Fixed HTML formatter (thanks @glenjamin)
+
 1.1.4 / 2011-05-03
 ==================
 
