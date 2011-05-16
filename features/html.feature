@@ -10,9 +10,7 @@ Feature: HTML Formatter
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-
-  Scenario: Multiple parameters
-    Given a file named "features/steps/math.php" with:
+    And a file named "features/steps/math.php" with:
       """
       <?php
       $steps->Given('/I have entered (\d+)/', function($world, $num) {
@@ -31,7 +29,9 @@ Feature: HTML Formatter
             $world->value -= $num;
       });
       """
-    And a file named "features/World.feature" with:
+
+  Scenario: Multiple parameters
+    Given a file named "features/World.feature" with:
       """
       Feature: World consistency
         In order to maintain stable behaviors
@@ -238,11 +238,17 @@ Feature: HTML Formatter
                   border-color:cyan !important;
                   color:#000;
               }
+              #behat .summary {
+                  margin: 15px;
+                  padding: 10px;
+                  border-width: 2px;
+                  border-style: solid;
+              }
           </style>
       </head>
       <body>
           <div id="behat">
-      
+
       <div class="feature">
       <h2>
       <span class="keyword">Feature: </span>
@@ -253,7 +259,7 @@ Feature: HTML Formatter
       As a features developer<br />
       I want, that &quot;World&quot; flushes between scenarios<br />
       </p>
-      
+
       <div class="scenario background">
       <h3>
       <span class="keyword">Background: </span>
@@ -330,8 +336,98 @@ Feature: HTML Formatter
       </ol>
       </div>
       </div>
-      
+      <div class="summary passed">
+      <p class="scenarios">
+      2 scenarios (<strong class="passed">2 passed</strong>)
+      </p>
+      <p class="steps">
+      8 steps (<strong class="passed">8 passed</strong>)
+      </p>
+      </div>
+
           </div>
       </body>
       </html>
+      """
+
+  Scenario: Scenario outline examples table
+    Given a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background:
+          Given I have entered 10
+
+        Scenario Outline: Adding
+          Then I must have 10
+          And I add the value <n>
+          Then I must have <total>
+
+          Examples:
+            | n  | total |
+            | 5  | 15    |
+            | 10 | 21    |
+      """
+    When I run "behat -f html"
+    Then the output should contain:
+      """
+      <div class="scenario outline">
+      <h3>
+      <span class="keyword">Scenario Outline: </span>
+      <span class="title">Adding</span>
+      <span class="path">features/World.feature:9</span>
+      </h3>
+      <ol>
+      <li class="skipped">
+      <div class="step">
+      <span class="keyword">Then </span>
+      <span class="text">I must have <strong class="skipped_param">10</strong></span>
+      <span class="path">features/steps/math.php:9</span>
+      </div>
+      </li>
+      <li class="skipped">
+      <div class="step">
+      <span class="keyword">And </span>
+      <span class="text">I add the value <strong class="skipped_param"><n></strong></span>
+      <span class="path">features/steps/math.php:16</span>
+      </div>
+      </li>
+      <li class="skipped">
+      <div class="step">
+      <span class="keyword">Then </span>
+      <span class="text">I must have <strong class="skipped_param"><total></strong></span>
+      <span class="path">features/steps/math.php:9</span>
+      </div>
+      </li>
+      </ol>
+      <div class="examples">
+      <h4>Examples</h4>
+      <table>
+      <thead>
+      <tr class="skipped">
+      <td>n</td>
+      <td>total</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="passed">
+      <td>5</td>
+      <td>15</td>
+      </tr>
+      <tr class="failed">
+      <td>10</td>
+      <td>21</td>
+      </tr>
+      <tr class="failed exception">
+      <td colspan="2">
+      <pre class="backtrace">Failed asserting that &lt;integer:20&gt; is equal to &lt;string:21&gt;.</pre>
+      </td>
+      </tr>
+      </tbody>
+      </table>
+      </div>
+      </div>
       """
