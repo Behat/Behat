@@ -330,6 +330,7 @@ class PathLocator
     private function preparePath($path)
     {
         $pathTokens = $this->pathTokens;
+
         $path = preg_replace_callback('/%([^%]+)%/', function($matches) use($pathTokens) {
             $name = $matches[1];
             if (defined($name)) {
@@ -338,7 +339,7 @@ class PathLocator
                 return $pathTokens[$name];
             }
             return $matches[0];
-        }, $path);
+        }, str_replace('%%', '%', $path));
 
         $path = str_replace('/', DIRECTORY_SEPARATOR, str_replace('\\', '/', $path));
 

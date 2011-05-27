@@ -41,18 +41,40 @@ class OutputFormatter extends BaseOutputFormatter
     }
 
     /**
-     * {@inheritdoc}
+     * Formats a message according to the given styles.
+     *
+     * @param  string $message The message to style
+     *
+     * @return string The styled message
+     *
+     * @api
      */
-    protected function getBeginStyleRegex()
+    public function format($message)
     {
-        return '#{\+([a-z][a-z0-9\-_=;]+)}#i';
+        return preg_replace_callback(
+            '/{\+([a-z-_]+)}(.*?){\-\\1}/si', array($this, 'replaceStyle'), $message
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * Replaces style of the output.
+     *
+     * @param array $match
+     *
+     * @return string The replaced style
      */
-    protected function getEndStyleRegex()
+    private function replaceStyle($match)
     {
-        return '#{\-([a-z][a-z0-9\-_]*)?}#i';
+        if (!$this->isDecorated()) {
+            return $match[2];
+        }
+
+        if ($this->hasStyle($match[1])) {
+            $style = $this->getStyle($match[1]);
+        } else {
+            return $match[0];
+        }
+
+        return $style->apply($match[2]);
     }
 }

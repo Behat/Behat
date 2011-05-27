@@ -1,3 +1,9 @@
+1.1.6 / 2011-05-27
+==================
+
+  * Updated Symfony vendors
+  * Refactored console formatters
+
 1.1.5 / 2011-05-17
 ==================
 
