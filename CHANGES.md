@@ -1,3 +1,9 @@
+1.1.7 / 2011-06-03
+==================
+
+  * Fixed steps colorization bug in outline
+  * Additional checks in config import routine
+
 1.1.6 / 2011-05-27
 ==================
 
