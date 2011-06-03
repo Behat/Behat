@@ -136,6 +136,10 @@ class BehatExtension implements ExtensionInterface
      */
     protected function loadConfigurationFile($configFile, $profile = 'default')
     {
+        if (!is_file($configFile) || !is_readable($configFile)) {
+            throw new \InvalidArgumentException("Config file $configFile not found");
+        }
+
         $config = Yaml::load($configFile);
 
         $resultConfig = isset($config['default']) ? $config['default'] : array();
@@ -143,7 +147,7 @@ class BehatExtension implements ExtensionInterface
             $resultConfig = $this->configMergeRecursiveWithOverwrites($resultConfig, $config[$profile]);
         }
 
-        if (isset($config['imports'])) {
+        if (isset($config['imports']) && is_array($config['imports'])) {
             foreach ($config['imports'] as $path) {
                 if (!file_exists($path) && file_exists(getcwd().DIRECTORY_SEPARATOR.$path)) {
                     $path = getcwd().DIRECTORY_SEPARATOR.$path;
