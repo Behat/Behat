@@ -56,8 +56,16 @@ class HookDispatcher implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'beforeSuite', 'afterSuite', 'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario',
-            'beforeOutlineExample', 'afterOutlineExample', 'beforeStep', 'afterStep'
+            'beforeSuite' => 'beforeSuite',
+            'afterSuite' => 'afterSuite',
+            'beforeFeature' => 'beforeFeature',
+            'afterFeature' => 'afterFeature',
+            'beforeScenario' => 'beforeScenario',
+            'afterScenario' => 'afterScenario',
+            'beforeOutlineExample' => 'beforeOutlineExample',
+            'afterOutlineExample' => 'afterOutlineExample',
+            'beforeStep' => 'beforeStep',
+            'afterStep' => 'afterStep'
         );
     }
 

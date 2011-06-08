@@ -102,9 +102,19 @@ class PrettyFormatter extends ProgressFormatter
     public static function getSubscribedEvents()
     {
         return array(
-            'beforeSuite', 'afterSuite', 'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario',
-            'beforeBackground', 'afterBackground', 'beforeOutline', 'afterOutline',
-            'beforeOutlineExample', 'afterOutlineExample', 'afterStep'
+            'beforeSuite' => 'beforeSuite',
+            'afterSuite' => 'afterSuite',
+            'beforeFeature' => 'beforeFeature',
+            'afterFeature' => 'afterFeature',
+            'beforeScenario' => 'beforeScenario',
+            'afterScenario' => 'afterScenario',
+            'beforeBackground' => 'beforeBackground',
+            'afterBackground' => 'afterBackground',
+            'beforeOutline' => 'beforeOutline',
+            'afterOutline' => 'afterOutline',
+            'beforeOutlineExample' => 'beforeOutlineExample',
+            'afterOutlineExample' => 'afterOutlineExample',
+            'afterStep' => 'afterStep'
         );
     }
 
