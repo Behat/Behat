@@ -90,7 +90,9 @@ class RerunDataCollector implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array('afterScenario', 'afterOutline');
+        $events = array('afterScenario', 'afterOutline');
+
+        return array_combine($events, $events);
     }
 
     /**

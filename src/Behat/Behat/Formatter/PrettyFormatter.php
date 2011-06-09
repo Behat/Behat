@@ -101,11 +101,13 @@ class PrettyFormatter extends ProgressFormatter
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            'beforeSuite', 'afterSuite', 'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario',
-            'beforeBackground', 'afterBackground', 'beforeOutline', 'afterOutline',
+        $events = array(
+            'beforeSuite', 'afterSuite', 'beforeFeature', 'afterFeature', 'beforeScenario',
+            'afterScenario', 'beforeBackground', 'afterBackground', 'beforeOutline', 'afterOutline',
             'beforeOutlineExample', 'afterOutlineExample', 'afterStep'
         );
+
+        return array_combine($events, $events);
     }
 
     /**
