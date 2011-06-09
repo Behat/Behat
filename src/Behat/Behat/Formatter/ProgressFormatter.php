@@ -49,7 +49,7 @@ class ProgressFormatter extends ConsoleFormatter
      */
     public static function getSubscribedEvents()
     {
-        return array('afterSuite', 'afterStep');
+        return array('afterSuite' => 'afterSuite', 'afterStep' => 'afterStep');
     }
 
     /**

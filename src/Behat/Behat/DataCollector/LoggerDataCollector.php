@@ -114,7 +114,13 @@ class LoggerDataCollector implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array('beforeSuite', 'afterSuite', 'afterScenario', 'afterOutlineExample', 'afterStep');
+        return array(
+            'beforeSuite' => 'beforeSuite',
+            'afterSuite' => 'afterSuite',
+            'afterScenario' => 'afterScenario',
+            'afterOutlineExample' => 'afterOutlineExample',
+            'afterStep' => 'afterStep'
+        );
     }
 
     /**
