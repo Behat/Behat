@@ -1,3 +1,9 @@
+1.1.8 / 2011-06-09
+==================
+
+  * Fixed empty match printing in Pretty and HTML formatters
+  * Updated to latest Symfony components
+
 1.1.7 / 2011-06-03
 ==================
 
