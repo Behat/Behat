@@ -55,10 +55,12 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            'beforeSuite', 'afterSuite', 'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario',
-            'beforeOutlineExample', 'afterOutlineExample', 'beforeStep', 'afterStep'
+        $events = array(
+            'beforeSuite', 'afterSuite', 'beforeFeature', 'afterFeature', 'beforeScenario',
+            'afterScenario', 'beforeOutlineExample', 'afterOutlineExample', 'beforeStep', 'afterStep'
         );
+
+        return array_combine($events, $events);
     }
 
     /**

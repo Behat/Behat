@@ -80,10 +80,12 @@ class JUnitFormatter extends ConsoleFormatter
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario', 'beforeOutlineExample',
-            'afterOutlineExample', 'afterStep'
+        $events = array(
+            'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario',
+            'beforeOutlineExample', 'afterOutlineExample', 'afterStep'
         );
+
+        return array_combine($events, $events);
     }
 
     /**

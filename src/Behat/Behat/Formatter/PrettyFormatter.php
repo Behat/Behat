@@ -101,11 +101,13 @@ class PrettyFormatter extends ProgressFormatter
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            'beforeSuite', 'afterSuite', 'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario',
-            'beforeBackground', 'afterBackground', 'beforeOutline', 'afterOutline',
+        $events = array(
+            'beforeSuite', 'afterSuite', 'beforeFeature', 'afterFeature', 'beforeScenario',
+            'afterScenario', 'beforeBackground', 'afterBackground', 'beforeOutline', 'afterOutline',
             'beforeOutlineExample', 'afterOutlineExample', 'afterStep'
         );
+
+        return array_combine($events, $events);
     }
 
     /**
@@ -889,7 +891,7 @@ class PrettyFormatter extends ProgressFormatter
         // Replace arguments with colorized ones
         $shift = 0;
         foreach ($matches as $key => $match) {
-            if (!is_numeric($key) || -1 === $match[1] || '<' === $match[0][0]) {
+            if (!is_numeric($key) || -1 === $match[1] || '<' === substr($match[0], 0, 1)) {
                 continue;
             }
 
