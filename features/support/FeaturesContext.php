@@ -14,7 +14,7 @@ class FeaturesContext extends BehatContext
     /**
      * @BeforeSuite
      */
-    public function cleanTestFolders()
+    public static function cleanTestFolders()
     {
         if (is_dir($dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat')) {
             $this->rmdirRecursive($dir);
