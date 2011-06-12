@@ -23,20 +23,45 @@ Feature: Definitions translations
           И Я нажал "+"
           То Я должен увидеть на экране 14
       """
-    And a file named "features/steps/calc_steps.php" with:
+    And a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/^I have entered (\d+) into calculator$/', function($world, $number) {
-          $world->numbers[] = intval($number);
-      });
-      $steps->Given('/^I have clicked "+"$/', function($world) {
-          $world->result = array_sum($world->numbers);
-      });
-      $steps->Then('/^I should see (\d+) on the screen$/', function($world, $result) {
-          assertEquals(intval($result), $world->result);
-      });
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext
+      {
+          private $numbers = array();
+          private $result = 0;
+
+          /**
+           * @Given /^I have entered (\d+) into calculator$/
+           */
+          public function iHaveEnteredIntoCalculator($number) {
+              $this->numbers[] = intval($number);
+          }
+
+          /**
+           * @Given /^I have clicked "+"$/
+           */
+          public function iHaveClickedPlus() {
+              $this->result = array_sum($this->numbers);
+          }
+
+          /**
+           * @Then /^I should see (\d+) on the screen$/
+           */
+          public function iShouldSeeOnTheScreen($result) {
+              assertEquals(intval($result), $this->result);
+          }
+
+          public function getI18nResources() {
+              return array(__DIR__ . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR . 'ru.xliff');
+          }
+      }
       """
-    And a file named "features/steps/i18n/ru.xliff" with:
+    And a file named "features/support/i18n/ru.xliff" with:
       """
       <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
         <file original="global" source-language="en" target-language="ru" datatype="plaintext">
