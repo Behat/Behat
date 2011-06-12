@@ -17,7 +17,7 @@ class FeaturesContext extends BehatContext
     public static function cleanTestFolders()
     {
         if (is_dir($dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat')) {
-            $this->rmdirRecursive($dir);
+            static::rmdirRecursive($dir);
         }
     }
 
@@ -174,7 +174,7 @@ class FeaturesContext extends BehatContext
         throw new Pending();
     }
 
-    private function rmdirRecursive($dir) {
+    private static function rmdirRecursive($dir) {
         $files = scandir($dir);
         array_shift($files);
         array_shift($files);
@@ -182,7 +182,7 @@ class FeaturesContext extends BehatContext
         foreach ($files as $file) {
             $file = $dir . DIRECTORY_SEPARATOR . $file;
             if (is_dir($file)) {
-                $this->rmdirRecursive($file);
+                static::rmdirRecursive($file);
             } else {
                 unlink($file);
             }
