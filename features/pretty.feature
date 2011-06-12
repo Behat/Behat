@@ -12,25 +12,45 @@ Feature: Pretty Formatter
       """
 
   Scenario: Complex
-    Given a file named "features/steps/math.php" with:
+    Given a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/I have entered (\d+)/', function($world, $num) {
-          assertObjectNotHasAttribute('value', $world);
-          $world->value = $num;
-      });
 
-      $steps->Then('/I must have (\d+)/', function($world, $num) {
-          assertEquals($num, $world->value);
-      });
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      $steps->When('/I add (\d+)/', function($world, $num) {
-          $world->value += $num;
-      });
+      class FeaturesContext extends BehatContext
+      {
+          private $value;
 
-      $steps->And('/^Something not done yet$/', function($world) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+          /**
+           * @Given /I have entered (\d+)/
+           */
+          public function iHaveEntered($num) {
+              $this->value = $num;
+          }
+
+          /**
+           * @Then /I must have (\d+)/
+           */
+          public function iMustHave($num) {
+              assertEquals($num, $this->value);
+          }
+
+          /**
+           * @When /I add (\d+)/
+           */
+          public function iAdd($num) {
+              $this->value += $num;
+          }
+
+          /**
+           * @When /^Something not done yet$/
+           */
+          public function somethingNotDoneYet() {
+              throw new Pending();
+          }
+      }
       """
     And a file named "features/World.feature" with:
       """
@@ -76,28 +96,28 @@ Feature: Pretty Formatter
         I want, that "World" flushes between scenarios
 
         Background:               # features/World.feature:6
-          Given I have entered 10 # features/steps/math.php:5
+          Given I have entered 10 # FeaturesContext::iHaveEntered()
 
         Scenario: Undefined       # features/World.feature:9
-          Then I must have 10     # features/steps/math.php:9
+          Then I must have 10     # FeaturesContext::iMustHave()
           And Something new
-          Then I must have 10     # features/steps/math.php:9
+          Then I must have 10     # FeaturesContext::iMustHave()
 
         Scenario: Pending            # features/World.feature:14
-          Then I must have 10        # features/steps/math.php:9
-          And Something not done yet # features/steps/math.php:17
+          Then I must have 10        # FeaturesContext::iMustHave()
+          And Something not done yet # FeaturesContext::somethingNotDoneYet()
             TODO: write pending definition
-          Then I must have 10        # features/steps/math.php:9
+          Then I must have 10        # FeaturesContext::iMustHave()
 
         Scenario: Failed             # features/World.feature:19
-          When I add 4               # features/steps/math.php:13
-          Then I must have 13        # features/steps/math.php:9
+          When I add 4               # FeaturesContext::iAdd()
+          Then I must have 13        # FeaturesContext::iMustHave()
             Failed asserting that <integer:14> is equal to <string:13>.
 
         Scenario Outline: Passed & Failed # features/World.feature:23
-          Given I must have 10            # features/steps/math.php:9
-          When I add <value>              # features/steps/math.php:13
-          Then I must have <result>       # features/steps/math.php:9
+          Given I must have 10            # FeaturesContext::iMustHave()
+          When I add <value>              # FeaturesContext::iAdd()
+          Then I must have <result>       # FeaturesContext::iMustHave()
 
           Examples:
             | value | result |
@@ -112,30 +132,51 @@ Feature: Pretty Formatter
 
       You can implement step definitions for undefined steps with these snippets:
 
-      $steps->And('/^Something new$/', function($world) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+          /**
+           * @Given /^Something new$/
+           */
+          public function somethingNew()
+          {
+              throw new Pending();
+          }
       """
 
   Scenario: Multiple parameters
-    Given a file named "features/steps/math.php" with:
+    Given a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/I have entered (\d+)/', function($world, $num) {
-          assertObjectNotHasAttribute('value', $world);
-          $world->value = $num;
-      });
 
-      $steps->Then('/I must have (\d+)/', function($world, $num) {
-          assertEquals($num, $world->value);
-      });
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      $steps->When('/I (add|subtract) the value (\d+)/', function($world, $op, $num) {
-          if ($op == 'add')
-            $world->value += $num;
-          elseif ($op == 'subtract')
-            $world->value -= $num;
-      });
+      class FeaturesContext extends BehatContext
+      {
+          private $value;
+
+          /**
+           * @Given /I have entered (\d+)/
+           */
+          public function iHaveEntered($num) {
+              $this->value = $num;
+          }
+
+          /**
+           * @Then /I must have (\d+)/
+           */
+          public function iMustHave($num) {
+              assertEquals($num, $this->value);
+          }
+
+          /**
+           * @When /I (add|subtract) the value (\d+)/
+           */
+          public function iAddOrSubstact($op, $num) {
+              if ($op == 'add')
+                $this->value += $num;
+              elseif ($op == 'subtract')
+                $this->value -= $num;
+          }
+      }
       """
     And a file named "features/World.feature" with:
       """
@@ -166,17 +207,17 @@ Feature: Pretty Formatter
         I want, that "World" flushes between scenarios
 
         Background:               [30m# features/World.feature:6[0m
-          [32mGiven I have entered [0m[32;1m10[0m[32m[0m [30m# features/steps/math.php:5[0m
+          [32mGiven I have entered [0m[32;1m10[0m[32m[0m [30m# FeaturesContext::iHaveEntered()[0m
 
         Scenario: Adding          [30m# features/World.feature:9[0m
-          [32mThen I must have [0m[32;1m10[0m[32m[0m     [30m# features/steps/math.php:9[0m
-          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m   [30m# features/steps/math.php:16[0m
-          [32mThen I must have [0m[32;1m16[0m[32m[0m     [30m# features/steps/math.php:9[0m
+          [32mThen I must have [0m[32;1m10[0m[32m[0m     [30m# FeaturesContext::iMustHave()[0m
+          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m   [30m# FeaturesContext::iAddOrSubstact()[0m
+          [32mThen I must have [0m[32;1m16[0m[32m[0m     [30m# FeaturesContext::iMustHave()[0m
 
         Scenario: Subtracting        [30m# features/World.feature:14[0m
-          [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# features/steps/math.php:9[0m
-          [32mAnd I [0m[32;1msubtract[0m[32m the value [0m[32;1m6[0m[32m[0m [30m# features/steps/math.php:16[0m
-          [32mThen I must have [0m[32;1m4[0m[32m[0m         [30m# features/steps/math.php:9[0m
+          [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# FeaturesContext::iMustHave()[0m
+          [32mAnd I [0m[32;1msubtract[0m[32m the value [0m[32;1m6[0m[32m[0m [30m# FeaturesContext::iAddOrSubstact()[0m
+          [32mThen I must have [0m[32;1m4[0m[32m[0m         [30m# FeaturesContext::iMustHave()[0m
 
       2 scenarios ([32m2 passed[0m)
       8 steps ([32m8 passed[0m)
