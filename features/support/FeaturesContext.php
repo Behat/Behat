@@ -33,6 +33,7 @@ class FeaturesContext extends BehatContext
         chdir($dir);
         mkdir('features');
         mkdir('features' . DIRECTORY_SEPARATOR . 'support');
+        mkdir('features' . DIRECTORY_SEPARATOR . 'support' . DIRECTORY_SEPARATOR . 'i18n');
     }
 
     /**
@@ -120,7 +121,7 @@ class FeaturesContext extends BehatContext
         }
 
         try {
-            assertContains((string) $text, $world->output);
+            assertContains((string) $text, $this->output);
         } catch (Exception $e) {
             $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
             throw new Exception($diff, $e->getCode(), $e);
@@ -152,9 +153,9 @@ class FeaturesContext extends BehatContext
     public function itShouldFail($success)
     {
         if ('fail' === $success) {
-            assertNotEquals(0, $world->return);
+            assertNotEquals(0, $this->return);
         } else {
-            assertEquals(0, $world->return);
+            assertEquals(0, $this->return);
         }
     }
 
