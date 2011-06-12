@@ -10,24 +10,45 @@ Feature: HTML Formatter
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/steps/math.php" with:
+    And a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/I have entered (\d+)/', function($world, $num) {
-          assertObjectNotHasAttribute('value', $world);
-          $world->value = $num;
-      });
 
-      $steps->Then('/I must have (\d+)/', function($world, $num) {
-          assertEquals($num, $world->value);
-      });
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      $steps->When('/I (add|subtract) the value (\d+)/', function($world, $op, $num) {
-          if ($op == 'add')
-            $world->value += $num;
-          elseif ($op == 'subtract')
-            $world->value -= $num;
-      });
+      class FeaturesContext extends BehatContext
+      {
+          private $value = 0;
+
+          /**
+           * @Given /I have entered (\d+)/
+           */
+          public function iHaveEntered($number) {
+              $this->value = $number;
+          }
+
+          /**
+           * @Then /I must have (\d+)/
+           */
+          public function iMustHave($number) {
+              assertEquals($number, $this->value);
+          }
+
+          /**
+           * @When /I (add|subtract) the value (\d+)/
+           */
+          public function iAddOrSubstractValue($operation, $number) {
+              switch ($operation) {
+                  case 'add':
+                      $this->value += $number;
+                      break;
+                  case 'subtract':
+                      $this->value -= $number;
+                      break;
+              }
+          }
+      }
       """
 
   Scenario: Multiple parameters
@@ -270,7 +291,7 @@ Feature: HTML Formatter
       <div class="step">
       <span class="keyword">Given </span>
       <span class="text">I have entered <strong class="passed_param">10</strong></span>
-      <span class="path">features/steps/math.php:5</span>
+      <span class="path">FeaturesContext::iHaveEntered()</span>
       </div>
       </li>
       </ol>
@@ -286,21 +307,21 @@ Feature: HTML Formatter
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="passed_param">10</strong></span>
-      <span class="path">features/steps/math.php:9</span>
+      <span class="path">FeaturesContext::iMustHave()</span>
       </div>
       </li>
       <li class="passed">
       <div class="step">
       <span class="keyword">And </span>
       <span class="text">I <strong class="passed_param">add</strong> the value <strong class="passed_param">6</strong></span>
-      <span class="path">features/steps/math.php:16</span>
+      <span class="path">FeaturesContext::iAddOrSubstractValue()</span>
       </div>
       </li>
       <li class="passed">
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="passed_param">16</strong></span>
-      <span class="path">features/steps/math.php:9</span>
+      <span class="path">FeaturesContext::iMustHave()</span>
       </div>
       </li>
       </ol>
@@ -316,21 +337,21 @@ Feature: HTML Formatter
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="passed_param">10</strong></span>
-      <span class="path">features/steps/math.php:9</span>
+      <span class="path">FeaturesContext::iMustHave()</span>
       </div>
       </li>
       <li class="passed">
       <div class="step">
       <span class="keyword">And </span>
       <span class="text">I <strong class="passed_param">subtract</strong> the value <strong class="passed_param">6</strong></span>
-      <span class="path">features/steps/math.php:16</span>
+      <span class="path">FeaturesContext::iAddOrSubstractValue()</span>
       </div>
       </li>
       <li class="passed">
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="passed_param">4</strong></span>
-      <span class="path">features/steps/math.php:9</span>
+      <span class="path">FeaturesContext::iMustHave()</span>
       </div>
       </li>
       </ol>
@@ -385,21 +406,21 @@ Feature: HTML Formatter
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="skipped_param">10</strong></span>
-      <span class="path">features/steps/math.php:9</span>
+      <span class="path">FeaturesContext::iMustHave()</span>
       </div>
       </li>
       <li class="skipped">
       <div class="step">
       <span class="keyword">And </span>
       <span class="text">I add the value <strong class="skipped_param"><n></strong></span>
-      <span class="path">features/steps/math.php:16</span>
+      <span class="path">FeaturesContext::iAddOrSubstractValue()</span>
       </div>
       </li>
       <li class="skipped">
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="skipped_param"><total></strong></span>
-      <span class="path">features/steps/math.php:9</span>
+      <span class="path">FeaturesContext::iMustHave()</span>
       </div>
       </li>
       </ol>
