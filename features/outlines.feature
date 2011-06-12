@@ -10,46 +10,83 @@ Feature: Scenario Outlines
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/steps/math.php" with:
+    And a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/^I have basic calculator$/', function($world) {
-          $world->result  = 0;
-          $world->numbers = array();
-      });
-      $steps->Given('/^I have entered (\d+)$/', function($world, $number) {
-          $world->numbers[] = intval($number);
-      });
-      $steps->When('/^I add$/', function($world) {
-          foreach ($world->numbers as $number) {
-              $world->result += $number;
-          }
-          $world->numbers = array();
-      });
-      $steps->When('/^I sub$/', function($world) {
-          $world->result = array_shift($world->numbers);
-          foreach ($world->numbers as $number) {
-              $world->result -= $number;
-          }
-          $world->numbers = array();
-      });
-      $steps->When('/^I multiply$/', function($world) {
-          $world->result = array_shift($world->numbers);
-          foreach ($world->numbers as $number) {
-              $world->result *= $number;
-          }
-          $world->numbers = array();
-      });
-      $steps->When('/^I div$/', function($world) {
-          $world->result = array_shift($world->numbers);
-          foreach ($world->numbers as $number) {
-              $world->result /= $number;
-          }
-          $world->numbers = array();
-      });
-      $steps->Then('/^The result should be (\d+)$/', function($world, $result) {
-          assertEquals($result, $world->result);
-      });
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext
+      {
+          private $result;
+          private $numbers;
+
+          /**
+           * @Given /^I have basic calculator$/
+           */
+           public function iHaveBasicCalculator() {
+              $this->result = 0;
+              $this->numbers = array();
+           }
+
+           /**
+            * @Given /^I have entered (\d+)$/
+            */
+           public function iHaveEntered($number) {
+              $this->numbers[] = intval($number);
+           }
+
+           /**
+            * @When /^I add$/
+            */
+           public function iAdd() {
+               foreach ($this->numbers as $number) {
+                   $this->result += $number;
+               }
+               $this->numbers = array();
+           }
+
+           /**
+            * @When /^I sub$/
+            */
+           public function iSub() {
+               $this->result = array_shift($this->numbers);
+               foreach ($this->numbers as $number) {
+                   $this->result -= $number;
+               }
+               $this->numbers = array();
+           }
+
+           /**
+            * @When /^I multiply$/
+            */
+           public function iMultiply() {
+               $this->result = array_shift($this->numbers);
+               foreach ($this->numbers as $number) {
+                   $this->result *= $number;
+               }
+               $this->numbers = array();
+           }
+
+           /**
+            * @When /^I div$/
+            */
+           public function iDiv() {
+               $this->result = array_shift($this->numbers);
+               foreach ($this->numbers as $number) {
+                   $this->result /= $number;
+               }
+               $this->numbers = array();
+           }
+
+           /**
+            * @Then /^The result should be (\d+)$/
+            */
+           public function theResultShouldBe($result) {
+              assertEquals(intval($result), $this->result);
+           }
+      }
       """
 
   Scenario: Basic scenario outline
@@ -166,16 +203,16 @@ Feature: Scenario Outlines
 
       (::) failed steps (::)
 
-      01. Failed asserting that <integer:20> is equal to <string:15>.
-          In step `Then The result should be 15'. # features/steps/math.php:38
+      01. Failed asserting that <integer:20> is equal to <integer:15>.
+          In step `Then The result should be 15'. # FeaturesContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:5
 
-      02. Failed asserting that <integer:6> is equal to <string:7>.
-          In step `Then The result should be 7'.  # features/steps/math.php:38
+      02. Failed asserting that <integer:6> is equal to <integer:7>.
+          In step `Then The result should be 7'.  # FeaturesContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:16
 
-      03. Failed asserting that <integer:5> is equal to <string:2>.
-          In step `Then The result should be 2'.  # features/steps/math.php:38
+      03. Failed asserting that <integer:5> is equal to <integer:2>.
+          In step `Then The result should be 2'.  # FeaturesContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:22
 
       5 scenarios (2 passed, 3 failed)
