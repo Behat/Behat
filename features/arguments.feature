@@ -10,30 +10,63 @@ Feature: Step Arguments
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/support/env.php" with:
+    And a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $this->strings[1] = "hello,\n  w\n   o\nr\nl\n   d";
-      $this->tables[1]  = array(
-        array('item1' => 'super', 'item2' => 'mega', 'item3' => 'extra'),
-        array('item1' => 'hyper', 'item2' => 'mini', 'item3' => 'XXL'),
-      );
-      """
-    And a file named "features/steps/arguments.php" with:
-      """
-      <?php
-      $steps->Given('/^a pystring:$/', function($world, $string) {
-          $world->input = $string;
-      });
-      $steps->Given('/^a table:$/', function($world, $table) {
-          $world->input = $table;
-      });
-      $steps->Then('/^it must be equals to string (\d+)$/', function($world, $arg1) {
-          assertEquals($world->strings[intval($arg1)], (string) $world->input);
-      });
-      $steps->Then('/^it must be equals to table (\d+)$/', function($world, $arg1) {
-          assertEquals($world->tables[intval($arg1)], $world->input->getHash());
-      });
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext
+      {
+          private $input;
+          private $strings = array();
+          private $tables = array();
+
+          public function __construct(array $parameters) {
+              $this->strings[1] = "hello,\n  w\n   o\nr\nl\n   d";
+              $this->tables[1]  = array(
+                array('item1' => 'super', 'item2' => 'mega', 'item3' => 'extra'),
+                array('item1' => 'hyper', 'item2' => 'mini', 'item3' => 'XXL'),
+              );
+          }
+
+          /**
+           * @Given /^a pystring:$/
+           */
+          public function aPystring(PyStringNode $string) {
+              $this->input = $string;
+          }
+
+          /**
+           * @Given /^a table:$/
+           */
+          public function aTable(TableNode $table) {
+              $this->input = $table;
+          }
+
+          /**
+           * @Then /^it must be equals to string (\d+)$/
+           */
+          public function itMustBeEqualsToString($number) {
+              assertEquals($this->strings[intval($number)], (string) $this->input);
+          }
+
+          /**
+           * @Then /^it must be equals to table (\d+)$/
+           */
+          public function itMustBeEqualsToTable($number) {
+              assertEquals($this->tables[intval($number)], $this->input->getHash());
+          }
+
+          /**
+           * @Given /^I have number2 = (?P<number2>\d+) and number1 = (?P<number1>\d+)$/
+           */
+          public function iHaveNumberAndNumber($number1, $number2) {
+              assertEquals(13, intval($number1));
+              assertEquals(243, intval($number2));
+          }
+      }
       """
 
   Scenario: PyStrings
@@ -135,15 +168,7 @@ Feature: Step Arguments
       """
 
   Scenario: Named arguments
-    Given a file named "features/steps/named_args_steps.php" with:
-      """
-      <?php
-      $steps->Given('/^I have number2 = (?P<number2>\d+) and number1 = (?P<number1>\d+)$/', function($world, $number1, $number2) {
-          assertEquals(13, $number1);
-          assertEquals(243, $number2);
-      });
-      """
-    And a file named "features/named_args.feature" with:
+    Given a file named "features/named_args.feature" with:
       """
       Feature: Named arguments
         In order to maintain i18n for steps
