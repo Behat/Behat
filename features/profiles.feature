@@ -10,28 +10,57 @@ Feature: Profiles
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/steps/math.php" with:
+    And a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/^I have basic calculator$/', function($world) {
-          $world->result  = 0;
-          $world->numbers = array();
-      });
-      $steps->Given('/^I have entered (\d+)$/', function($world, $number) {
-          $world->numbers[] = intval($number);
-      });
-      $steps->When('/^I add$/', function($world) {
-          $world->result  = array_sum($world->numbers);
-          $world->numbers = array();
-      });
-      $steps->When('/^I sub$/', function($world) {
-          $world->result  = array_shift($world->numbers);
-          $world->result -= array_sum($world->numbers);
-          $world->numbers = array();
-      });
-      $steps->Then('/^The result should be (\d+)$/', function($world, $result) {
-          assertEquals($result, $world->result);
-      });
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext
+      {
+          private $result;
+          private $numbers;
+
+          /**
+           * @Given /I have basic calculator/
+           */
+          public function iHaveBasicCalculator() {
+              $this->result  = 0;
+              $this->numbers = array();
+          }
+
+          /**
+           * @Given /I have entered (\d+)/
+           */
+          public function iHaveEntered($number) {
+              $this->numbers[] = intval($number);
+          }
+
+          /**
+           * @When /I add/
+           */
+          public function iAdd() {
+              $this->result  = array_sum($this->numbers);
+              $this->numbers = array();
+          }
+
+          /**
+           * @When /I sub/
+           */
+          public function iSub() {
+              $this->result  = array_shift($this->numbers);
+              $this->result -= array_sum($this->numbers);
+              $this->numbers = array();
+          }
+
+          /**
+           * @Then /The result should be (\d+)/
+           */
+          public function theResultShouldBe($result) {
+              assertEquals($result, $this->result);
+          }
+      }
       """
     And a file named "features/math.feature" with:
       """
@@ -98,13 +127,13 @@ Feature: Profiles
       Feature: Math
       
         Background:                     # features/math.feature:2
-          Given I have basic calculator # features/steps/math.php:5
+          Given I have basic calculator # FeaturesContext::iHaveBasicCalculator()
       
         Scenario Outline:                    # features/math.feature:5
-          Given I have entered <number1>     # features/steps/math.php:8
-          And I have entered <number2>       # features/steps/math.php:8
-          When I add                         # features/steps/math.php:12
-          Then The result should be <result> # features/steps/math.php:20
+          Given I have entered <number1>     # FeaturesContext::iHaveEntered()
+          And I have entered <number2>       # FeaturesContext::iHaveEntered()
+          When I add                         # FeaturesContext::iAdd()
+          Then The result should be <result> # FeaturesContext::theResultShouldBe()
       
           Examples:
             | number1 | number2 | result |
