@@ -9,30 +9,24 @@ Feature: Init
     Then it should pass with:
       """
       +d features - place your *.feature files here
-      +d features/steps - place step definition files here
-      +f features/steps/steps.php - place some step definitions in this file
       +d features/support - place support scripts and static files here
-      +f features/support/bootstrap.php - place bootstrap scripts in this file
-      +f features/support/env.php - place environment initialization scripts in this file
+      +f features/support/bootstrap.php - place your bootstrap code here
+      +f features/support/FeaturesContext.php - place your feature code here
       """
-    And file "features/steps/steps.php" should exist
     And file "features/support/bootstrap.php" should exist
-    And file "features/support/env.php" should exist
+    And file "features/support/FeaturesContext.php" should exist
 
   Scenario: In features path init
     Given I am in the "init_test/features" path
     When I run "behat --init"
     Then it should pass with:
       """
-      +d steps - place step definition files here
-      +f steps/steps.php - place some step definitions in this file
       +d support - place support scripts and static files here
-      +f support/bootstrap.php - place bootstrap scripts in this file
-      +f support/env.php - place environment initialization scripts in this file
+      +f support/bootstrap.php - place your bootstrap code here
+      +f support/FeaturesContext.php - place your feature code here
       """
-    And file "steps/steps.php" should exist
     And file "support/bootstrap.php" should exist
-    And file "support/env.php" should exist
+    And file "support/FeaturesContext.php" should exist
 
   Scenario: In features path init
     Given I am in the "init_test" path
@@ -40,15 +34,12 @@ Feature: Init
     Then it should pass with:
       """
       +d public/behat/features - place your *.feature files here
-      +d public/behat/features/steps - place step definition files here
-      +f public/behat/features/steps/steps.php - place some step definitions in this file
       +d public/behat/features/support - place support scripts and static files here
-      +f public/behat/features/support/bootstrap.php - place bootstrap scripts in this file
-      +f public/behat/features/support/env.php - place environment initialization scripts in this file
+      +f public/behat/features/support/bootstrap.php - place your bootstrap code here
+      +f public/behat/features/support/FeaturesContext.php - place your feature code here
       """
-    And file "public/behat/features/steps/steps.php" should exist
     And file "public/behat/features/support/bootstrap.php" should exist
-    And file "public/behat/features/support/env.php" should exist
+    And file "public/behat/features/support/FeaturesContext.php" should exist
 
   Scenario: Custom paths
     Given I am in the "init_test2" path
@@ -57,20 +48,15 @@ Feature: Init
       default:
         paths:
           features: scenarios
-          support:  support
-          steps:
-            - definitions
+          support:  supp
       """
     When I run "behat --init"
     Then it should pass with:
       """
       +d scenarios - place your *.feature files here
-      +d definitions - place step definition files here
-      +f definitions/steps.php - place some step definitions in this file
-      +d support - place support scripts and static files here
-      +f support/bootstrap.php - place bootstrap scripts in this file
-      +f support/env.php - place environment initialization scripts in this file
+      +d supp - place support scripts and static files here
+      +f supp/bootstrap.php - place your bootstrap code here
+      +f supp/FeaturesContext.php - place your feature code here
       """
-    And file "definitions/steps.php" should exist
-    And file "support/bootstrap.php" should exist
-    And file "support/env.php" should exist
+    And file "supp/bootstrap.php" should exist
+    And file "supp/FeaturesContext.php" should exist
