@@ -4,8 +4,8 @@ namespace Behat\Behat\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-use Behat\Behat\Environment\EnvironmentInterface,
-    Behat\Behat\Definition\Definition;
+use Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Definition\DefinitionInterface;
 
 use Behat\Gherkin\Node\StepNode;
 
@@ -31,7 +31,7 @@ class StepEvent extends Event implements EventInterface
     const FAILED    = 4;
 
     private $step;
-    private $environment;
+    private $context;
     private $result;
     private $definition;
     private $exception;
@@ -40,22 +40,23 @@ class StepEvent extends Event implements EventInterface
     /**
      * Initializes step event.
      *
-     * @param   Behat\Gherkin\Node\StepNode                     $step
-     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
-     * @param   integer                                         $result
-     * @param   Behat\Behat\Definition\Definition               $definition
-     * @param   Exception                                       $exception
-     * @param   mixed                                           $snippet
+     * @param   Behat\Gherkin\Node\StepNode                 $step
+     * @param   Behat\Behat\Context\ContextInterface        $context
+     * @param   integer                                     $result
+     * @param   Behat\Behat\Definition\DefinitionInterface  $definition
+     * @param   Exception                                   $exception
+     * @param   mixed                                       $snippet
      */
-    public function __construct(StepNode $step, EnvironmentInterface $environment, $result = null,
-                                Definition $definition = null, \Exception $exception = null, $snippet = null)
+    public function __construct(StepNode $step, ContextInterface $context, $result = null,
+                                DefinitionInterface $definition = null, \Exception $exception = null,
+                                $snippet = null)
     {
-        $this->step         = $step;
-        $this->environment  = $environment;
-        $this->result       = $result;
-        $this->definition   = $definition;
-        $this->exception    = $exception;
-        $this->snippet      = $snippet;
+        $this->step       = $step;
+        $this->context    = $context;
+        $this->result     = $result;
+        $this->definition = $definition;
+        $this->exception  = $exception;
+        $this->snippet    = $snippet;
     }
 
     /**
@@ -69,13 +70,13 @@ class StepEvent extends Event implements EventInterface
     }
 
     /**
-     * Returns environment object.
+     * Returns context object.
      *
-     * @return  Behat\Behat\Environment\EnvironmentInterface
+     * @return  Behat\Behat\Context\ContextInterface
      */
-    public function getEnvironment()
+    public function getContext()
     {
-        return $this->environment;
+        return $this->context;
     }
 
     /**
