@@ -42,26 +42,6 @@ class Configuration
                         scalarNode('support')->
                             defaultValue('%behat.paths.features%/support')->
                         end()->
-                        arrayNode('steps')->
-                            prototype('scalar')->end()->
-                            defaultValue(array('%behat.paths.features%/steps'))->
-                        end()->
-                        arrayNode('steps_i18n')->
-                            prototype('scalar')->end()->
-                            defaultValue(array('%behat.paths.features%/steps/i18n'))->
-                        end()->
-                        arrayNode('bootstrap')->
-                            prototype('scalar')->end()->
-                            defaultValue(array('%behat.paths.support%/bootstrap.php'))->
-                        end()->
-                        arrayNode('environment')->
-                            prototype('scalar')->end()->
-                            defaultValue(array('%behat.paths.support%/env.php'))->
-                        end()->
-                        arrayNode('hooks')->
-                            prototype('scalar')->end()->
-                            defaultValue(array('%behat.paths.support%/hooks.php'))->
-                        end()->
                     end()->
                 end()->
             end()->
@@ -119,11 +99,11 @@ class Configuration
                 end()->
             end()->
             children()->
-                arrayNode('environment')->
+                arrayNode('context')->
                     fixXmlConfig('parameter')->
                     children()->
                         scalarNode('class')->
-                            defaultValue('Behat\Behat\Environment\Environment')->
+                            defaultValue('FeaturesContext')->
                         end()->
                         arrayNode('parameters')->
                             useAttributeAsKey(0)->

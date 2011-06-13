@@ -11,22 +11,6 @@
         <parameter key="behat.paths.features">%%BEHAT_BASE_PATH%%</parameter>
         <parameter key="behat.paths.support">%behat.paths.features%/support</parameter>
 
-        <parameter key="behat.paths.steps" type="collection">
-            <parameter>%behat.paths.features%/steps</parameter>
-        </parameter>
-        <parameter key="behat.paths.steps_i18n" type="collection">
-            <parameter>%behat.paths.features%/steps/i18n</parameter>
-        </parameter>
-        <parameter key="behat.paths.bootstrap" type="collection">
-            <parameter>%behat.paths.support%/bootstrap.php</parameter>
-        </parameter>
-        <parameter key="behat.paths.environment" type="collection">
-            <parameter>%behat.paths.support%/env.php</parameter>
-        </parameter>
-        <parameter key="behat.paths.hooks" type="collection">
-            <parameter>%behat.paths.support%/hooks.php</parameter>
-        </parameter>
-
         <!-- Formatter parameters -->
         <parameter key="behat.formatter.name">pretty</parameter>
         <parameter key="behat.formatter.decorated">null</parameter>
@@ -42,7 +26,7 @@
         <parameter key="behat.options.strict">null</parameter>
 
         <!-- Environment parameters -->
-        <parameter key="behat.environment.parameters" type="collection"></parameter>
+        <parameter key="behat.context.parameters" type="collection"></parameter>
 
         <!-- Gherkin loader parameters -->
         <parameter key="gherkin.filters.name">null</parameter>
@@ -57,18 +41,17 @@
         <parameter key="gherkin.keywords_dumper.class">Behat\Gherkin\Keywords\KeywordsDumper</parameter>
         <parameter key="gherkin.keywords.path">%gherkin.paths.lib%/i18n</parameter>
 
+        <!-- Context -->
+        <parameter key="behat.context.class">FeaturesContext</parameter>
+        <parameter key="behat.context_dispatcher.class">Behat\Behat\Context\ContextDispatcher</parameter>
+        <parameter key="behat.context_reader.class">Behat\Behat\Context\ContextReader</parameter>
+
         <!-- Definition Dispathcer -->
         <parameter key="behat.definition_dispatcher.class">Behat\Behat\Definition\DefinitionDispatcher</parameter>
-        <parameter key="behat.definition.loader.php.class">Behat\Behat\Definition\Loader\PhpFileLoader</parameter>
         <parameter key="behat.definition_dumper.class">Behat\Behat\Definition\DefinitionDumper</parameter>
 
         <!-- Hook Dispatcher -->
         <parameter key="behat.hook_dispatcher.class">Behat\Behat\Hook\HookDispatcher</parameter>
-        <parameter key="behat.hook.loader.php.class">Behat\Behat\Hook\Loader\PhpFileLoader</parameter>
-
-        <!-- Environment Builder -->
-        <parameter key="behat.environment_builder.class">Behat\Behat\Environment\EnvironmentBuilder</parameter>
-        <parameter key="behat.environment.class">Behat\Behat\Environment\Environment</parameter>
 
         <!-- Tester -->
         <parameter key="behat.tester.feature.class">Behat\Behat\Tester\FeatureTester</parameter>
@@ -117,17 +100,22 @@
             <argument type="service" id="gherkin.keywords" />
         </service>
 
+        <!-- Context -->
+        <service id="behat.context_reader" class="%behat.context_reader.class%">
+            <argument>%behat.context.class%</argument>
+            <argument>%behat.context.parameters%</argument>
+            <argument type="service" id="behat.definition_dispatcher" />
+            <argument type="service" id="behat.hook_dispatcher" />
+            <argument type="service" id="behat.translator" />
+        </service>
+        <service id="behat.context_dispatcher" class="%behat.context_dispatcher.class%">
+            <argument>%behat.context.class%</argument>
+            <argument>%behat.context.parameters%</argument>
+        </service>
+
         <!-- Definition Dispatcher -->
         <service id="behat.definition_dispatcher" class="%behat.definition_dispatcher.class%">
             <argument type="service" id="behat.translator" />
-            <call method="addLoader">
-                <argument>php</argument>
-                <argument type="service">
-                    <service class="%behat.definition.loader.php.class%">
-                        <argument type="service" id="behat.definition_dispatcher" />
-                    </service>
-                </argument>
-            </call>
         </service>
         <service id="behat.definition_dumper" class="%behat.definition_dumper.class%">
             <argument type="service" id="behat.definition_dispatcher" />
@@ -135,20 +123,7 @@
         </service>
 
         <!-- Hook Dispatcher -->
-        <service id="behat.hook_dispatcher" class="%behat.hook_dispatcher.class%">
-            <call method="addLoader">
-                <argument>php</argument>
-                <argument type="service">
-                    <service class="%behat.hook.loader.php.class%" />
-                </argument>
-            </call>
-        </service>
-
-        <!-- Environment Builder -->
-        <service id="behat.environment" class="%behat.environment.class%" scope="prototype" />
-        <service id="behat.environment_builder" class="%behat.environment_builder.class%">
-            <argument type="service" id="service_container" />
-        </service>
+        <service id="behat.hook_dispatcher" class="%behat.hook_dispatcher.class%" />
 
         <!-- Tester -->
         <service id="behat.tester.feature" class="%behat.tester.feature.class%" scope="prototype">
