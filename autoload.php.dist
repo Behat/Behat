@@ -29,7 +29,6 @@ $loader->registerNamespaces(array(
     'Symfony\Component\EventDispatcher'     => $vendorDir,
     'Symfony\Component\Finder'              => $vendorDir,
     'Symfony\Component\Yaml'                => $vendorDir,
-    'Doctrine\Common'                       => $vendorDir . '/DoctrineCommon/lib',
     'Behat\Behat'                           => __DIR__ . '/src',
     'Behat\Gherkin'                         => $gherkinDir . '/src'
 ));
