@@ -15,7 +15,7 @@ Feature: Step Arguments Transformations
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/steps/user.php" with:
+    And a file named "features/support/User.php" with:
       """
       <?php
       class User
@@ -23,40 +23,62 @@ Feature: Step Arguments Transformations
           private $username;
           private $age;
 
-          public function __construct($username, $age = 20) { $this->username = $username; $this->age = $age; }
+          public function __construct($username, $age = 20) {
+              $this->username = $username;
+              $this->age = $age;
+          }
           public function getUsername() { return $this->username; }
           public function getAge() { return $this->age; }
       }
-
-      $steps->Transform('/"([^"]+)" user/', function($username) {
-          return new User($username);
-      });
-
-      $steps->Transform('/^table:username,age$/', function($table) {
-          $hash     = $table->getHash();
-          $username = $hash[0]['username'];
-          $age      = $hash[0]['age'];
-
-          return new User($username, $age);
-      });
-
-      $steps->Given('/I am ("\w+" user)/', function($world, $user) {
-          assertInstanceOf('User', $user);
-          $world->user = $user;
-      });
-
-      $steps->Given('/I am user:/', function($world, $user) {
-          $world->user = $user;
-      });
-
-      $steps->Then('/Username must be "([^"]+)"/', function($world, $username) {
-          assertEquals($username, $world->user->getUsername());
-      });
-
-      $steps->Then('/Age must be (\d+)/', function($world, $age) {
-          assertEquals($age, $world->user->getAge());
-      });
       """
+    And a file named "features/support/FeaturesContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext
+      {
+          private $user;
+
+          /** @Transform /"([^"]+)" user/ */
+          public function createUserFromUsername($username) {
+              return new User($username);
+          }
+
+          /** @Transform /^table:username,age$/ */
+          public function createUserFromTable(TableNode $table) {
+              $hash     = $table->getHash();
+              $username = $hash[0]['username'];
+              $age      = $hash[0]['age'];
+
+              return new User($username, $age);
+          }
+
+          /**
+           * @Given /I am ("\w+" user)/
+           * @Given /I am user:/
+           */
+          public function iAmUser(User $user) {
+              $this->user = $user;
+          }
+
+          /**
+           * @Then /Username must be "([^"]+)"/
+           */
+          public function usernameMustBe($username) {
+              assertEquals($username, $this->user->getUsername());
+          }
+
+          /**
+           * @Then /Age must be (\d+)/
+           */
+          public function ageMustBe($age) {
+              assertEquals($age, $this->user->getAge());
+          }
+      }
+    """
 
   Scenario: Simple Arguments Transformations
     Given a file named "features/step_arguments.feature" with:
