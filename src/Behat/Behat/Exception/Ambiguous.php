@@ -43,8 +43,8 @@ class Ambiguous extends BehaviorException
 
         $message = sprintf("Ambiguous match of \"%s\":", $text);
         foreach ($matches as $definition){
-            $message .= sprintf("\n%s:%d:in `%s`",
-                $definition->getFile(), $definition->getLine(), $definition->getRegex()
+            $message .= sprintf("\nto `%s` from %s::%s()",
+                $definition->getRegex(), $definition->getClass(), $definition->getMethod()
             );
         }
 
