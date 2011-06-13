@@ -201,118 +201,23 @@ class PathLocator
     }
 
     /**
-     * Locates bootstraps paths.
-     *
-     * @param   Boolean $checkExistense
+     * Locates support files paths.
      *
      * @return  array
      */
-    public function locateBootstrapsPaths($checkExistense = true)
+    public function locateSupportFilesPaths()
     {
-        return $this->locateFilesInPath(
-            $this->container->getParameter('behat.paths.bootstrap'), $checkExistense
-        );
-    }
+        $supportPath = $this->getSupportPath();
 
-    /**
-     * Locates environment configuration files.
-     *
-     * @param   Boolean $checkExistense
-     *
-     * @return  array
-     */
-    public function locateEnvironmentConfigsPaths($checkExistense = true)
-    {
-        return $this->locateFilesInPath(
-            $this->container->getParameter('behat.paths.environment'), $checkExistense
-        );
-    }
-
-    /**
-     * Locates definitions files.
-     *
-     * @param   Boolean $checkExistense
-     *
-     * @return  array
-     */
-    public function locateDefinitionsPaths($checkExistense = true)
-    {
-        $paths = array();
-        foreach ($this->container->getParameter('behat.paths.steps') as $stepsPath) {
-            $stepsPath = $this->preparePath($stepsPath);
-
-            if (is_dir($stepsPath)) {
-                $finder = new Finder();
-                foreach ($finder->files()->name('*.php')->in($stepsPath) as $stepsFile) {
-                    $paths[] = $stepsFile;
-                }
-            } elseif (!$checkExistense || is_file($stepsPath)) {
-                $paths[] = $stepsPath;
+        $files = array();
+        if (is_dir($this->getSupportPath())) {
+            $finder = new Finder();
+            foreach ($finder->files()->name('*.php')->in($supportPath) as $file) {
+                $files[] = (string) $file;
             }
         }
 
-        return $paths;
-    }
-
-    /**
-     * Locates definitions translations files.
-     *
-     * @param   Boolean $checkExistense
-     *
-     * @return  array
-     */
-    public function locateDefinitionsTranslationsPaths($checkExistense = true)
-    {
-        $paths = array();
-        foreach ($this->container->getParameter('behat.paths.steps') as $translationsPath) {
-            $translationsPath = $this->preparePath($translationsPath);
-
-            if (is_dir($translationsPath)) {
-                $finder = new Finder();
-                foreach ($finder->files()->name('*.xliff')->in($translationsPath) as $translationFile) {
-                    $paths[] = $translationFile;
-                }
-            } elseif (!$checkExistense || is_file($translationsPath)) {
-                $paths[] = $translationsPath;
-            }
-        }
-
-        return $paths;
-    }
-
-    /**
-     * Locates hooks files.
-     *
-     * @param   Boolean $checkExistense
-     *
-     * @return  array
-     */
-    public function locateHooksPaths($checkExistense = true)
-    {
-        return $this->locateFilesInPath(
-            $this->container->getParameter('behat.paths.hooks'), $checkExistense
-        );
-    }
-
-    /**
-     * Locates all files in specified paths.
-     *
-     * @param   array   $filesPath
-     * @param   string  $checkExistense
-     *
-     * @return  array
-     */
-    private function locateFilesInPath(array $filesPath, $checkExistense = true)
-    {
-        $paths = array();
-        foreach ($filesPath as $path) {
-            $path = $this->preparePath($path);
-            if (!$checkExistense || is_file($path)) {
-                $paths[] = $path;
-            }
-        }
-
-        return $paths;
+        return $files;
     }
 
     /**

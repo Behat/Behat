@@ -245,8 +245,8 @@ class BehatCommand extends Command
         // locate base path
         $this->locateBasePath($locator, $input);
 
-        // load bootstraps
-        foreach ($locator->locateBootstrapsPaths() as $path) {
+        // load support files
+        foreach ($locator->locateSupportFilesPaths() as $path) {
             require_once($path);
         }
 
@@ -261,11 +261,8 @@ class BehatCommand extends Command
             throw new \InvalidArgumentException("Path \"$featuresPath\" not found");
         }
 
-        // locate definition translations
+        // init translator
         $translator = $container->get('behat.translator');
-        foreach ($locator->locateDefinitionsTranslationsPaths() as $path) {
-            $translator->addResource('xliff', $path, basename($path, '.xliff'), 'behat.definitions');
-        }
 
         // create formatter
         $formatter = $this->createFormatter(
@@ -324,23 +321,13 @@ class BehatCommand extends Command
             $gherkinParser->addFilter(new TagFilter($tags));
         }
 
-        // locate step definitions
-        $definitionDispatcher = $container->get('behat.definition_dispatcher');
-        foreach ($locator->locateDefinitionsPaths() as $path) {
-            $definitionDispatcher->addResource('php', $path);
-        }
+        // read main dispatchers
+        $contextReader          = $container->get('behat.context_reader');
+        $definitionDispatcher   = $container->get('behat.definition_dispatcher');
+        $hookDispatcher         = $container->get('behat.hook_dispatcher');
 
-        // locate environment configs
-        $environmentBuilder = $container->get('behat.environment_builder');
-        foreach ($locator->locateEnvironmentConfigsPaths() as $path) {
-            $environmentBuilder->addResource($path);
-        }
-
-        // locate hooks definitions
-        $hookDispatcher = $container->get('behat.hook_dispatcher');
-        foreach ($locator->locateHooksPaths() as $path) {
-            $hookDispatcher->addResource('php', $path);
-        }
+        // read annotations
+        $contextReader->read();
 
         // logger
         $logger = $container->get('behat.logger');
@@ -516,9 +503,6 @@ class BehatCommand extends Command
         $basePath       = $locator->getWorkPath() . DIRECTORY_SEPARATOR;
         $featuresPath   = $locator->getFeaturesPath();
         $supportPath    = $locator->getSupportPath();
-        $stepsPath      = current($locator->locateDefinitionsPaths(false));
-        $envPath        = current($locator->locateEnvironmentConfigsPaths(false));
-        $bootPath       = current($locator->locateBootstrapsPaths(false));
 
         if (!is_dir($featuresPath)) {
             mkdir($featuresPath, 0777, true);
@@ -529,22 +513,6 @@ class BehatCommand extends Command
             );
         }
 
-        if (!is_dir($stepsPath)) {
-            mkdir($stepsPath, 0777, true);
-            $output->writeln(
-                '<info>+d</info> ' .
-                str_replace($basePath, '', $stepsPath) .
-                ' <comment>- place step definition files here</comment>'
-            );
-
-            copy(__DIR__ . '/../../Skeleton/steps.php', $stepsPath . DIRECTORY_SEPARATOR . 'steps.php');
-            $output->writeln(
-                '<info>+f</info> ' .
-                str_replace($basePath, '', $stepsPath) . DIRECTORY_SEPARATOR . 'steps.php' .
-                ' <comment>- place some step definitions in this file</comment>'
-            );
-        }
-
         if (!is_dir($supportPath)) {
             mkdir($supportPath, 0777, true);
             $output->writeln(
@@ -552,29 +520,19 @@ class BehatCommand extends Command
                 str_replace($basePath, '', $supportPath) .
                 ' <comment>- place support scripts and static files here</comment>'
             );
-        }
 
-        if (!file_exists($bootPath)) {
-            if (!is_dir(dirname($bootPath))) {
-                mkdir(dirname($bootPath), 0777, true);
-            }
-            copy(__DIR__ . '/../../Skeleton/bootstrap.php', $bootPath);
+            copy(__DIR__ . '/../../Skeleton/bootstrap.php', $supportPath . DIRECTORY_SEPARATOR . 'bootstrap.php');
             $output->writeln(
                 '<info>+f</info> ' .
-                str_replace($basePath, '', $bootPath) .
-                ' <comment>- place bootstrap scripts in this file</comment>'
+                str_replace($basePath, '', $supportPath) . DIRECTORY_SEPARATOR . 'bootstrap.php' .
+                ' <comment>- place your bootstrap code here</comment>'
             );
-        }
 
-        if (!file_exists($envPath)) {
-            if (!is_dir(dirname($envPath))) {
-                mkdir(dirname($envPath), 0777, true);
-            }
-            copy(__DIR__ . '/../../Skeleton/env.php', $envPath);
+            copy(__DIR__ . '/../../Skeleton/FeaturesContext.php', $supportPath . DIRECTORY_SEPARATOR . 'FeaturesContext.php');
             $output->writeln(
                 '<info>+f</info> ' .
-                str_replace($basePath, '', $envPath) .
-                ' <comment>- place environment initialization scripts in this file</comment>'
+                str_replace($basePath, '', $supportPath) . DIRECTORY_SEPARATOR . 'FeaturesContext.php' .
+                ' <comment>- place your feature code here</comment>'
             );
         }
     }
