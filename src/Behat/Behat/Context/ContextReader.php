@@ -156,6 +156,13 @@ class ContextReader
         $docBlock = $method->getDocComment();
         $annotations = array();
 
+        // read parent annotations
+        try {
+            $prototype = $method->getPrototype();
+            $annotations = array_merge($annotations, $this->readMethodAnnotations($className, $prototype));
+        } catch (\ReflectionException $e) {}
+
+        // read method annotations
         if ($docBlock) {
             foreach (explode("\n", $docBlock) as $docLine) {
                 $docLine = preg_replace('/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$/', '', trim($docLine));
