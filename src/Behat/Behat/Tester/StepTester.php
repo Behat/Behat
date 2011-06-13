@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\AbstractNode;
 
-use Behat\Behat\Environment\EnvironmentInterface,
+use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Exception\Ambiguous,
     Behat\Behat\Exception\Undefined,
     Behat\Behat\Exception\Pending,
@@ -36,11 +36,11 @@ class StepTester implements NodeVisitorInterface
      */
     protected $dispatcher;
     /**
-     * Environment.
+     * Context.
      *
-     * @var     Behat\Behat\Environment\EnvironmentInterface
+     * @var     Behat\Behat\Context\ContextInterface
      */
-    protected $environment;
+    protected $context;
     /**
      * Definition dispatcher.
      *
@@ -72,13 +72,13 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
-     * Sets run environment.
+     * Sets run context.
      *
-     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
+     * @param   Behat\Behat\Context\ContextInterface    $context
      */
-    public function setEnvironment(EnvironmentInterface $environment)
+    public function setContext(ContextInterface $context)
     {
-        $this->environment = $environment;
+        $this->context = $context;
     }
 
     /**
@@ -112,7 +112,7 @@ class StepTester implements NodeVisitorInterface
     {
         $step->setTokens($this->tokens);
 
-        $this->dispatcher->dispatch('beforeStep', new StepEvent($step, $this->environment));
+        $this->dispatcher->dispatch('beforeStep', new StepEvent($step, $this->context));
 
         $result     = 0;
         $definition = null;
@@ -121,7 +121,7 @@ class StepTester implements NodeVisitorInterface
 
         // Find proper definition
         try {
-            $definition = $this->definitions->findDefinition($step);
+            $definition = $this->definitions->findDefinition($this->context, $step);
         } catch (Ambiguous $e) {
             $result    = StepEvent::FAILED;
             $exception = $e;
@@ -134,7 +134,7 @@ class StepTester implements NodeVisitorInterface
         if (0 === $result) {
             if (!$this->skip) {
                 try {
-                    $definition->run($this->environment, $this->tokens);
+                    $definition->run($this->context, $this->tokens);
                     $result = StepEvent::PASSED;
                 } catch (Pending $e) {
                     $result    = StepEvent::PENDING;
@@ -149,7 +149,7 @@ class StepTester implements NodeVisitorInterface
         }
 
         $this->dispatcher->dispatch('afterStep', new StepEvent(
-            $step, $this->environment, $result, $definition, $exception, $snippet
+            $step, $this->context, $result, $definition, $exception, $snippet
         ));
 
         return $result;

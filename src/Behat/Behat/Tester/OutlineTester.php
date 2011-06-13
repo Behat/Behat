@@ -87,17 +87,17 @@ class OutlineTester extends ScenarioTester
      */
     protected function visitOutlineExample(OutlineNode $outline, $row, array $tokens = array())
     {
-        $environment    = $this->container->get('behat.environment_builder')->build();
-        $itResult       = 0;
-        $skip           = false;
+        $context  = $this->container->get('behat.context_dispatcher')->createContext();
+        $itResult = 0;
+        $skip     = false;
 
         $this->dispatcher->dispatch('beforeOutlineExample', new OutlineExampleEvent(
-            $outline, $row, $environment
+            $outline, $row, $context
         ));
 
         // Visit & test background if has one
         if ($outline->getFeature()->hasBackground()) {
-            $bgResult = $this->visitBackground($outline->getFeature()->getBackground(), $environment);
+            $bgResult = $this->visitBackground($outline->getFeature()->getBackground(), $context);
             if (0 !== $bgResult) {
                 $skip = true;
             }
@@ -106,7 +106,7 @@ class OutlineTester extends ScenarioTester
 
         // Visit & test steps
         foreach ($outline->getSteps() as $step) {
-            $stResult = $this->visitStep($step, $environment, $tokens, $skip);
+            $stResult = $this->visitStep($step, $context, $tokens, $skip);
             if (0 !== $stResult) {
                 $skip = true;
             }
@@ -114,7 +114,7 @@ class OutlineTester extends ScenarioTester
         }
 
         $this->dispatcher->dispatch('afterOutlineExample', new OutlineExampleEvent(
-            $outline, $row, $environment, $itResult, $skip
+            $outline, $row, $context, $itResult, $skip
         ));
 
         return $itResult;
