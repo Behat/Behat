@@ -45,7 +45,7 @@ class BehatContext implements ContextInterface
      */
     public function getContextByClassName($className)
     {
-        if (get_called_class($this) === $className) {
+        if (get_class($this) === $className) {
             return $this;
         }
 

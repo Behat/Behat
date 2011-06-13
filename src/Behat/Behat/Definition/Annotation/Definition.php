@@ -127,7 +127,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
     public function run(ContextInterface $context, $tokens = array())
     {
         $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
-        $callback   = array($context, $this->getMethod());
+        $callback   = array($context->getContextByClassName($this->getClass()), $this->getMethod());
         $values     = $this->getValues();
 
         if (count($tokens)) {
