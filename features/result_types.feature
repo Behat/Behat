@@ -31,6 +31,15 @@ Feature: Different result types
           When I have chose "pizza tea" in coffee machine
           Then I should have "pizza tea"
       """
+    And a file named "features/support/FeaturesContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext {}
+      """
     When I run "behat -f progress features/coffee.feature"
     Then it should pass with:
       """
@@ -41,17 +50,29 @@ Feature: Different result types
       
       You can implement step definitions for undefined steps with these snippets:
       
-      $steps->Given('/^I have magically created (\d+)\$$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+          /**
+           * @Given /^I have magically created (\d+)\$$/
+           */
+          public function iHaveMagicallyCreated($argument1)
+          {
+              throw new Pending();
+          }
       
-      $steps->When('/^I have chose "([^"]*)" in coffee machine$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+          /**
+           * @When /^I have chose "([^"]*)" in coffee machine$/
+           */
+          public function iHaveChoseInCoffeeMachine($argument1)
+          {
+              throw new Pending();
+          }
       
-      $steps->Then('/^I should have "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+          /**
+           * @Then /^I should have "([^"]*)"$/
+           */
+          public function iShouldHave($argument1)
+          {
+              throw new Pending();
+          }
       """
     When I run "behat --strict -f progress features/coffee.feature"
     Then it should fail with:
@@ -63,17 +84,29 @@ Feature: Different result types
       
       You can implement step definitions for undefined steps with these snippets:
       
-      $steps->Given('/^I have magically created (\d+)\$$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+          /**
+           * @Given /^I have magically created (\d+)\$$/
+           */
+          public function iHaveMagicallyCreated($argument1)
+          {
+              throw new Pending();
+          }
       
-      $steps->When('/^I have chose "([^"]*)" in coffee machine$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+          /**
+           * @When /^I have chose "([^"]*)" in coffee machine$/
+           */
+          public function iHaveChoseInCoffeeMachine($argument1)
+          {
+              throw new Pending();
+          }
       
-      $steps->Then('/^I should have "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+          /**
+           * @Then /^I should have "([^"]*)"$/
+           */
+          public function iShouldHave($argument1)
+          {
+              throw new Pending();
+          }
       """
 
   Scenario: Pending steps
@@ -91,15 +124,29 @@ Feature: Different result types
           When the coffee will be ready
           Then I should say "Take your cup!"
       """
-    And a file named "features/steps/coffee_steps.php" with:
+    And a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/^human have ordered very very very hot "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
-      $steps->When('/^the coffee will be ready$/', function($world) {
-          throw new \Behat\Behat\Exception\Pending('Handle "Coffee Ready" action');
-      });
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext
+      {
+          /**
+           * @Given /^human have ordered very very very hot "([^"]*)"$/
+           */
+          public function humanOrdered($argument1) {
+              throw new Pending;
+          }
+
+          /**
+           * @When /^the coffee will be ready$/
+           */
+          public function theCoffeeWillBeReady() {
+              throw new Pending;
+          }
+      }
       """
     When I run "behat -f progress features/coffee.feature"
     Then it should pass with:
@@ -109,7 +156,7 @@ Feature: Different result types
       (::) pending steps (::)
       
       01. TODO: write pending definition
-          In step `Given human have ordered very very very hot "coffee"'. # features/steps/coffee_steps.php:4
+          In step `Given human have ordered very very very hot "coffee"'. # FeaturesContext::humanOrdered()
           From scenario background.                                       # features/coffee.feature:6
       
       1 scenario (1 undefined)
@@ -117,9 +164,13 @@ Feature: Different result types
       
       You can implement step definitions for undefined steps with these snippets:
       
-      $steps->Then('/^I should say "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+          /**
+           * @Then /^I should say "([^"]*)"$/
+           */
+          public function iShouldSay($argument1)
+          {
+              throw new Pending();
+          }
       """
     When I run "behat --strict -f progress features/coffee.feature"
     Then it should fail with:
@@ -129,7 +180,7 @@ Feature: Different result types
       (::) pending steps (::)
       
       01. TODO: write pending definition
-          In step `Given human have ordered very very very hot "coffee"'. # features/steps/coffee_steps.php:4
+          In step `Given human have ordered very very very hot "coffee"'. # FeaturesContext::humanOrdered()
           From scenario background.                                       # features/coffee.feature:6
       
       1 scenario (1 undefined)
@@ -137,9 +188,13 @@ Feature: Different result types
       
       You can implement step definitions for undefined steps with these snippets:
       
-      $steps->Then('/^I should say "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+          /**
+           * @Then /^I should say "([^"]*)"$/
+           */
+          public function iShouldSay($argument1)
+          {
+              throw new Pending();
+          }
       """
 
   Scenario: Failed steps
@@ -161,15 +216,31 @@ Feature: Different result types
           Then I should see 31$ on the screen
           And I should see 33$ on the screen
       """
-    And a file named "features/steps/coffee_steps.php" with:
+    And a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/^I have throwed (\d+)\$ into machine$/', function($world, $money) {
-          $world->money += $money;
-      });
-      $steps->Then('/^I should see (\d+)\$ on the screen$/', function($world, $money) {
-          assertEquals($money, $world->money);
-      });
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext
+      {
+          private $money = 0;
+
+          /**
+           * @Given /^I have throwed (\d+)\$ into machine$/
+           */
+          public function pay($money) {
+              $this->money += $money;
+          }
+
+          /**
+           * @Then /^I should see (\d+)\$ on the screen$/
+           */
+          public function iShouldSee($money) {
+              assertEquals($money, $this->money);
+          }
+      }
       """
     When I run "behat -f progress features/coffee.feature"
     Then it should fail with:
@@ -179,11 +250,11 @@ Feature: Different result types
       (::) failed steps (::)
       
       01. Failed asserting that <integer:10> is equal to <string:12>.
-          In step `Then I should see 12$ on the screen'. # features/steps/coffee_steps.php:7
+          In step `Then I should see 12$ on the screen'. # FeaturesContext::iShouldSee()
           From scenario `Check throwed amount'.          # features/coffee.feature:9
       
       02. Failed asserting that <integer:30> is equal to <string:31>.
-          In step `Then I should see 31$ on the screen'. # features/steps/coffee_steps.php:7
+          In step `Then I should see 31$ on the screen'. # FeaturesContext::iShouldSee()
           From scenario `Additional throws'.             # features/coffee.feature:12
       
       2 scenarios (2 failed)
@@ -213,20 +284,49 @@ Feature: Different result types
           When I boil water
           Then the coffee should be almost done
       """
-    And a file named "features/steps/coffee_steps.php" with:
+    And a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/^human bought coffee$/', function($world) {});
-      $steps->Given('/^I have no water$/', function($world) {
-          throw new Exception('NO water in coffee machine!!!');
-      });
-      $steps->And('/^I have electricity$/', function($world) {});
-      $steps->When('/^I boil water$/', function($world) {});
-      $steps->Then('/^the coffee should be almost done$/', function($world) {});
-      $steps->Given('/^I have water$/', function($world) {});
-      $steps->And('/^I have no electricity$/', function($world) {
-          throw new Exception('NO electricity in coffee machine!!!');
-      });
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext
+      {
+          private $money = 0;
+
+          /** @Given /^human bought coffee$/ */
+          public function humanBoughtCoffee() {}
+
+          /** @Given /^I have water$/ */
+          public function water() {}
+
+          /** @Given /^I have no water$/ */
+          public function noWater() {
+              throw new Exception('NO water in coffee machine!!!');
+          }
+
+          /** @Given /^I have electricity$/ */
+          public function haveElectricity() {}
+
+          /** @Given /^I have no electricity$/ */
+          public function haveNoElectricity() {
+              throw new Exception('NO electricity in coffee machine!!!');
+          }
+
+          /** @When /^I boil water$/ */
+          public function boilWater() {}
+
+          /** @Then /^the coffee should be almost done$/ */
+          public function coffeeAlmostDone() {}
+
+          /**
+           * @Then /^I should see (\d+)\$ on the screen$/
+           */
+          public function iShouldSee($money) {
+              assertEquals($money, $this->money);
+          }
+      }
       """
     When I run "behat -f progress features/coffee.feature"
     Then it should fail with:
@@ -236,11 +336,11 @@ Feature: Different result types
       (::) failed steps (::)
       
       01. NO water in coffee machine!!!
-          In step `Given I have no water'. # features/steps/coffee_steps.php:5
+          In step `Given I have no water'. # FeaturesContext::noWater()
           From scenario `I have no water'. # features/coffee.feature:9
       
       02. NO electricity in coffee machine!!!
-          In step `And I have no electricity'.   # features/steps/coffee_steps.php:12
+          In step `And I have no electricity'.   # FeaturesContext::haveNoElectricity()
           From scenario `I have no electricity'. # features/coffee.feature:15
       
       2 scenarios (2 failed)
@@ -259,18 +359,32 @@ Feature: Different result types
           Given human have chosen "Latte"
           Then I should make him "Latte"
       """
-    And a file named "features/steps/coffee_steps.php" with:
+    And a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/^human have chosen "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
-      $steps->Given('/^human have chosen "Latte"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
-      $steps->Then('/^I should make him "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
-      });
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext
+      {
+          /** @Given /^human have chosen "([^"]*)"$/ */
+          public function chosen($argument1) {
+              throw new Pending;
+          }
+
+          /** @Given /^human have chosen "Latte"$/ */
+          public function chosenLatte() {
+              throw new Pending;
+          }
+
+          /**
+           * @Then /^I should make him "([^"]*)"$/
+           */
+          public function iShouldSee($money) {
+              throw new Pending;
+          }
+      }
       """
     When I run "behat -f progress features/coffee.feature"
     Then it should fail with:
@@ -280,8 +394,8 @@ Feature: Different result types
       (::) failed steps (::)
       
       01. Ambiguous match of "human have chosen "Latte"":
-          features/steps/coffee_steps.php:4:in `/^human have chosen "([^"]*)"$/`
-          features/steps/coffee_steps.php:7:in `/^human have chosen "Latte"$/`
+          to `/^human have chosen "([^"]*)"$/` from FeaturesContext::chosen()
+          to `/^human have chosen "Latte"$/` from FeaturesContext::chosenLatte()
           In step `Given human have chosen "Latte"'.
           From scenario `Ambigious coffee type'.     # features/coffee.feature:6
       
@@ -301,19 +415,29 @@ Feature: Different result types
           Given customer bought coffee
           And customer bought another one coffee
       """
-    And a file named "features/steps/coffee_steps.php" with:
+    And a file named "features/support/FeaturesContext.php" with:
       """
       <?php
-      $steps->Given('/^customer bought coffee$/', function($world) {
-          // do something
-      });
-      $steps->Given('/^customer bought coffee$/', function($world) {
-          // do something else
-      });
+
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+
+      class FeaturesContext extends BehatContext
+      {
+          /** @Given /^customer bought coffee$/ */
+          public function chosen($argument1) {
+              // do something
+          }
+
+          /** @Given /^customer bought coffee$/ */
+          public function chosenLatte() {
+              // do something else
+          }
+      }
       """
     When I run "behat -f progress features/coffee.feature"
     Then it should fail
     And the output should contain:
       """
-      Step "/^customer bought coffee$/" is already defined in 
+      Step "/^customer bought coffee$/" is already defined in FeaturesContext::chosen()
       """
