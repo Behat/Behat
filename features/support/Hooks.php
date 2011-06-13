@@ -32,14 +32,6 @@ class Hooks extends BehatContext
         mkdir('features' . DIRECTORY_SEPARATOR . 'support' . DIRECTORY_SEPARATOR . 'i18n');
     }
 
-    /**
-     * @Given /^I have entered (\d+)$/
-     */
-    public function iHaveEntered($argument1)
-    {
-        throw new Pending();
-    }
-
     private static function rmdirRecursive($dir) {
         $files = scandir($dir);
         array_shift($files);
