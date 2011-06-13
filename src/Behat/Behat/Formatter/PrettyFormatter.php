@@ -4,7 +4,7 @@ namespace Behat\Behat\Formatter;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-use Behat\Behat\Definition\Definition,
+use Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\DataCollector\LoggerDataCollector,
     Behat\Behat\Event\SuiteEvent,
     Behat\Behat\Event\FeatureEvent,
@@ -430,7 +430,9 @@ class PrettyFormatter extends ProgressFormatter
         $nameLength     = mb_strlen($this->getFeatureOrScenarioName($scenario));
         $indentCount    = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
 
-        $this->printPathComment($scenario->getFile(), $scenario->getLine(), $indentCount);
+        $this->printPathComment(
+            $this->relativizePathsInString($scenario->getFile()) . ':' . $scenario->getLine(), $indentCount
+        );
     }
 
     /**
@@ -628,18 +630,18 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step.
      *
-     * @param   Behat\Gherkin\Node\StepNode         $step       step node
-     * @param   integer                             $result     result code
-     * @param   Behat\Behat\Definition\Definition   $definition definition (if found one)
-     * @param   string                              $snippet    snippet (if step is undefined)
-     * @param   Exception                           $exception  exception (if step is failed)
+     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
+     * @param   integer                                     $result     result code
+     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition (if found one)
+     * @param   string                                      $snippet    snippet (if step is undefined)
+     * @param   Exception                                   $exception  exception (if step is failed)
      *
      * @uses    printStepBlock()
      * @uses    printStepArguments()
      * @uses    printStepException()
      * @uses    printStepSnippet()
      */
-    protected function printStep(StepNode $step, $result, Definition $definition = null,
+    protected function printStep(StepNode $step, $result, DefinitionInterface $definition = null,
                                  $snippet = null, \Exception $exception = null)
     {
         $color = $this->getResultColorCode($result);
@@ -660,14 +662,14 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step block (name & definition path).
      *
-     * @param   Behat\Gherkin\Node\StepNode         $step       step node
-     * @param   Behat\Behat\Definition\Definition   $definition definition (if found one)
-     * @param   string                              $color      color code
+     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
+     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition (if found one)
+     * @param   string                                      $color      color code
      *
      * @uses    printStepName()
      * @uses    printStepDefinitionPath()
      */
-    protected function printStepBlock(StepNode $step, Definition $definition = null, $color)
+    protected function printStepBlock(StepNode $step, DefinitionInterface $definition = null, $color)
     {
         $this->printStepName($step, $definition, $color);
         if (null !== $definition) {
@@ -680,13 +682,13 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step name.
      *
-     * @param   Behat\Gherkin\Node\StepNode         $step       step node
-     * @param   Behat\Behat\Definition\Definition   $definition definition (if found one)
-     * @param   string                              $color      color code
+     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
+     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition (if found one)
+     * @param   string                                      $color      color code
      *
      * @uses    colorizeDefinitionArguments()
      */
-    protected function printStepName(StepNode $step, Definition $definition = null, $color)
+    protected function printStepName(StepNode $step, DefinitionInterface $definition = null, $color)
     {
         $type   = $step->getType();
         $text   = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
@@ -701,19 +703,21 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step definition path.
      *
-     * @param   Behat\Gherkin\Node\StepNode         $step       step node
-     * @param   Behat\Behat\Definition\Definition   $definition definition (if found one)
+     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
+     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition (if found one)
      *
      * @uses    printPathComment()
      */
-    protected function printStepDefinitionPath(StepNode $step, Definition $definition)
+    protected function printStepDefinitionPath(StepNode $step, DefinitionInterface $definition)
     {
         $type           = $step->getType();
         $text           = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
         $nameLength     = mb_strlen("    $type $text");
         $indentCount    = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
 
-        $this->printPathComment($definition->getFile(), $definition->getLine(), $indentCount);
+        $this->printPathComment(
+            $definition->getClass() . '::' . $definition->getMethod() . '()', $indentCount
+        );
     }
 
     /**
@@ -872,13 +876,13 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Returns step text with colorized arguments.
      *
-     * @param   string                              $text
-     * @param   Behat\Behat\Definition\Definition   $definition
-     * @param   string                              $color
+     * @param   string                                      $text
+     * @param   Behat\Behat\Definition\DefinitionInterface  $definition
+     * @param   string                                      $color
      *
      * @return  string
      */
-    protected function colorizeDefinitionArguments($text, Definition $definition, $color)
+    protected function colorizeDefinitionArguments($text, DefinitionInterface $definition, $color)
     {
         $regex      = $definition->getRegex();
         $paramColor = $color . '_param';

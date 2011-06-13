@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Formatter;
 
-use Behat\Behat\Definition\Definition,
+use Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\DataCollector\LoggerDataCollector;
 
 use Behat\Gherkin\Node\AbstractNode,
@@ -264,7 +264,7 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printStep(StepNode $step, $result, Definition $definition = null,
+    protected function printStep(StepNode $step, $result, DefinitionInterface $definition = null,
                                  $snippet = null, \Exception $exception = null)
     {
         $this->writeln('<li class="' . $this->getResultColorCode($result) . '">');
@@ -277,7 +277,7 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printStepBlock(StepNode $step, Definition $definition = null, $color)
+    protected function printStepBlock(StepNode $step, DefinitionInterface $definition = null, $color)
     {
         $this->writeln('<div class="step">');
 
@@ -292,7 +292,7 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printStepName(StepNode $step, Definition $definition = null, $color)
+    protected function printStepName(StepNode $step, DefinitionInterface $definition = null, $color)
     {
         $type   = $step->getType();
         $text   = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
@@ -308,9 +308,9 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printStepDefinitionPath(StepNode $step, Definition $definition)
+    protected function printStepDefinitionPath(StepNode $step, DefinitionInterface $definition)
     {
-        $this->printPathComment($definition->getFile(), $definition->getLine());
+        $this->printPathComment($definition->getClass() . '::' . $definition->getMethod() . '()');
     }
 
     /**
@@ -366,7 +366,7 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function colorizeDefinitionArguments($text, Definition $definition, $color)
+    protected function colorizeDefinitionArguments($text, DefinitionInterface $definition, $color)
     {
         $regex      = $definition->getRegex();
         $paramColor = $color . '_param';
@@ -417,11 +417,9 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printPathComment($file, $line, $indentCount = 0)
+    protected function printPathComment($path, $indentCount = 0)
     {
-        $file = $this->relativizePathsInString($file);
-
-        $this->writeln('<span class="path">' . $file . ':' . $line . '</span>');
+        $this->writeln('<span class="path">' . $path . '</span>');
     }
 
     /**
