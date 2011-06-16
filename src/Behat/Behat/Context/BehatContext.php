@@ -57,14 +57,6 @@ class BehatContext implements ContextInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\ContextInterface::getI18nResources()
-     */
-    public function getI18nResources()
-    {
-        return array();
-    }
-
-    /**
      * Prints beautified debug string.
      *
      * @param     string  $string     debug string
@@ -72,5 +64,13 @@ class BehatContext implements ContextInterface
     public function printDebug($string)
     {
         echo "\n\033[36m|  " . strtr($string, array("\n" => "\n|  ")) . "\033[0m\n\n";
+    }
+
+    /**
+     * @see     Behat\Behat\Context\ContextInterface::getI18nResources()
+     */
+    public function getI18nResources()
+    {
+        return array();
     }
 }

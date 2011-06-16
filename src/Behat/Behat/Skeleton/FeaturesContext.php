@@ -1,6 +1,7 @@
 <?php
 
-use Behat\Behat\Context\BehatContext,
+use Behat\Behat\Context\AnnotatedContextInterface,
+    Behat\Behat\Context\BehatContext,
     Behat\Behat\Exception\Pending;
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
@@ -8,7 +9,7 @@ use Behat\Gherkin\Node\PyStringNode,
 /**
  * Features context.
  */
-class FeaturesContext extends BehatContext
+class FeaturesContext extends BehatContext implements AnnotatedContextInterface
 {
     /**
      * Initializes context.

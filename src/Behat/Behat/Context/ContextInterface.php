@@ -20,7 +20,7 @@ interface ContextInterface
     /**
      * Adds subcontext to current context.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $subcontext
+     * @param   Behat\Behat\Context\ContextInterface        $subcontext
      */
     function addSubcontext(ContextInterface $subcontext);
 
@@ -39,7 +39,7 @@ interface ContextInterface
     function getContextByClassName($className);
 
     /**
-     * Returns array of paths to XLIFF translation resources.
+     * Returns array of i18n XLIFF files paths.
      *
      * @return  array
      */

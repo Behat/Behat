@@ -45,6 +45,7 @@
         <parameter key="behat.context.class">FeaturesContext</parameter>
         <parameter key="behat.context_dispatcher.class">Behat\Behat\Context\ContextDispatcher</parameter>
         <parameter key="behat.context_reader.class">Behat\Behat\Context\ContextReader</parameter>
+        <parameter key="behat.context_loader.annotated.class">Behat\Behat\Context\Loader\AnnotatedContextLoader</parameter>
 
         <!-- Definition Dispathcer -->
         <parameter key="behat.definition_dispatcher.class">Behat\Behat\Definition\DefinitionDispatcher</parameter>
@@ -101,12 +102,17 @@
         </service>
 
         <!-- Context -->
-        <service id="behat.context_reader" class="%behat.context_reader.class%">
-            <argument>%behat.context.class%</argument>
-            <argument>%behat.context.parameters%</argument>
+        <service id="behat.context_loader.annotated" class="%behat.context_loader.annotated.class%">
             <argument type="service" id="behat.definition_dispatcher" />
             <argument type="service" id="behat.hook_dispatcher" />
             <argument type="service" id="behat.translator" />
+        </service>
+        <service id="behat.context_reader" class="%behat.context_reader.class%">
+            <argument>%behat.context.class%</argument>
+            <argument>%behat.context.parameters%</argument>
+            <call method="addLoader">
+                <argument type="service" id="behat.context_loader.annotated" />
+            </call>
         </service>
         <service id="behat.context_dispatcher" class="%behat.context_dispatcher.class%">
             <argument>%behat.context.class%</argument>
