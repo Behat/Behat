@@ -135,7 +135,7 @@ class DefinitionDispatcher
             || ($origRegex !== $transRegex && preg_match($transRegex, $text, $arguments))) {
                 // prepare callback arguments
                 $arguments = $this->prepareCallbackArguments(
-                    $definition->getCallbackReflection(), array_slice($arguments, 1), $multiline
+                    $context, $definition->getCallbackReflection(), array_slice($arguments, 1), $multiline
                 );
 
                 // transform arguments
@@ -248,16 +248,24 @@ PHP
     /**
      * Merges found arguments with multiliners and maps them to the function callback signature.
      *
-     * @param   ReflectionMethod    $refl       callback reflection
-     * @param   array               $arguments  found arguments
-     * @param   array               $multiline  multiline arguments of the step
+     * @param   Behat\Behat\Context\ContextInterface    $context    context instance
+     * @param   ReflectionFunctionAbstract              $refl       callback reflection
+     * @param   array                                   $arguments  found arguments
+     * @param   array                                   $multiline  multiline arguments of the step
      *
      * @return  array
      */
-    private function prepareCallbackArguments(\ReflectionMethod $refl, array $arguments, array $multiline)
+    private function prepareCallbackArguments(ContextInterface $context, \ReflectionFunctionAbstract $refl, 
+                                              array $arguments, array $multiline)
     {
+        $parametersRefl = $refl->getParameters();
+
+        if ($refl->isClosure()) {
+            array_shift($parametersRefl);
+        }
+
         $resulting = array();
-        foreach ($refl->getParameters() as $num => $parameterRefl) {
+        foreach ($parametersRefl as $num => $parameterRefl) {
             if (isset($arguments[$parameterRefl->getName()])) {
                 $resulting[] = $arguments[$parameterRefl->getName()];
             } elseif (isset($arguments[$num])) {
@@ -267,6 +275,10 @@ PHP
 
         foreach ($multiline as $argument) {
             $resulting[] = $argument;
+        }
+
+        if ($refl->isClosure()) {
+            array_unshift($resulting, $context);
         }
 
         return $resulting;
