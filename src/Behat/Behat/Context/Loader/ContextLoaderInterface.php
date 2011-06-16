@@ -19,6 +19,17 @@ use Behat\Behat\Context\ContextInterface;
  */
 interface ContextLoaderInterface
 {
+    /**
+     * Checks if loader supports provided context.
+     *
+     * @param   Behat\Behat\Context\ContextInterface    $context
+     */
     function supports(ContextInterface $context);
+
+    /**
+     * Loads definitions and translations from provided context.
+     *
+     * @param   Behat\Behat\Context\ContextInterface    $context
+     */
     function load(ContextInterface $context);
 }
