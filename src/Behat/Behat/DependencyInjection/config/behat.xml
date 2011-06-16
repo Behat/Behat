@@ -46,13 +46,16 @@
         <parameter key="behat.context_dispatcher.class">Behat\Behat\Context\ContextDispatcher</parameter>
         <parameter key="behat.context_reader.class">Behat\Behat\Context\ContextReader</parameter>
         <parameter key="behat.context_loader.annotated.class">Behat\Behat\Context\Loader\AnnotatedContextLoader</parameter>
+        <parameter key="behat.context_loader.closured.class">Behat\Behat\Context\Loader\ClosuredContextLoader</parameter>
 
         <!-- Definition Dispathcer -->
         <parameter key="behat.definition_dispatcher.class">Behat\Behat\Definition\DefinitionDispatcher</parameter>
         <parameter key="behat.definition_dumper.class">Behat\Behat\Definition\DefinitionDumper</parameter>
+        <parameter key="behat.definition_loader.closured.class">Behat\Behat\Definition\Loader\ClosuredDefinitionLoader</parameter>
 
         <!-- Hook Dispatcher -->
         <parameter key="behat.hook_dispatcher.class">Behat\Behat\Hook\HookDispatcher</parameter>
+        <parameter key="behat.hook_loader.closured.class">Behat\Behat\Hook\Loader\ClosuredHookLoader</parameter>
 
         <!-- Tester -->
         <parameter key="behat.tester.feature.class">Behat\Behat\Tester\FeatureTester</parameter>
@@ -102,16 +105,34 @@
         </service>
 
         <!-- Context -->
-        <service id="behat.context_loader.annotated" class="%behat.context_loader.annotated.class%">
-            <argument type="service" id="behat.definition_dispatcher" />
-            <argument type="service" id="behat.hook_dispatcher" />
-            <argument type="service" id="behat.translator" />
-        </service>
         <service id="behat.context_reader" class="%behat.context_reader.class%">
             <argument>%behat.context.class%</argument>
             <argument>%behat.context.parameters%</argument>
             <call method="addLoader">
-                <argument type="service" id="behat.context_loader.annotated" />
+                <argument type="service">
+                    <service class="%behat.context_loader.annotated.class%">
+                        <argument type="service" id="behat.definition_dispatcher" />
+                        <argument type="service" id="behat.hook_dispatcher" />
+                        <argument type="service" id="behat.translator" />
+                    </service>
+                </argument>
+            </call>
+            <call method="addLoader">
+                <argument type="service">
+                    <service class="%behat.context_loader.closured.class%">
+                        <argument type="service">
+                            <service class="%behat.definition_loader.closured.class%">
+                                <argument type="service" id="behat.definition_dispatcher" />
+                            </service>
+                        </argument>
+                        <argument type="service">
+                            <service class="%behat.hook_loader.closured.class%">
+                                <argument type="service" id="behat.hook_dispatcher" />
+                            </service>
+                        </argument>
+                        <argument type="service" id="behat.translator" />
+                    </service>
+                </argument>
             </call>
         </service>
         <service id="behat.context_dispatcher" class="%behat.context_dispatcher.class%">
