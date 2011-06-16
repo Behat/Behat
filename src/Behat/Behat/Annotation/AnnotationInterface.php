@@ -18,6 +18,13 @@ namespace Behat\Behat\Annotation;
 interface AnnotationInterface
 {
     /**
+     * Returns path string for callback.
+     *
+     * @return  string
+     */
+    function getPath();
+
+    /**
      * Returns callback.
      *
      * @param   Callback
@@ -25,21 +32,7 @@ interface AnnotationInterface
     function getCallback();
 
     /**
-     * Returns definition class name.
-     *
-     * @return  string
-     */
-    function getClass();
-
-    /**
-     * Returns definition method name.
-     *
-     * @return  string
-     */
-    function getMethod();
-
-    /**
-     * Returns callback reflection for definition matcher.
+     * Returns callback reflection.
      *
      * @return  ReflectionFunction
      */

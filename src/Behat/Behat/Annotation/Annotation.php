@@ -17,24 +17,50 @@ namespace Behat\Behat\Annotation;
  */
 abstract class Annotation implements AnnotationInterface
 {
+    /**
+     * Annotation callback.
+     *
+     * @var     callback
+     */
     private $callback;
+    /**
+     * Definition path.
+     *
+     * @var     string
+     */
+    private $path;
 
     /**
      * Constructs annotation.
      *
-     * @param   array   $callback
+     * @param   callback    $callback
      */
-    public function __construct(array $callback)
+    public function __construct($callback)
     {
         if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Callback should be valid callable');
+            throw new \InvalidArgumentException('Callback should be a valid callable');
+        }
+
+        if (is_array($callback)) {
+            $this->path = $callback[0] . '::' . $callback[1] . '()';
+        } elseif ($callback instanceof \Closure) {
+            $reflection = new \ReflectionFunction($callback);
+            $this->path = $reflection->getFileName() . ':' . $reflection->getStartLine();
         }
 
         $this->callback = $callback;
     }
 
     /**
-     * @see Behat\Behat\Annotation\AnnotationInterface::getCallback
+     * @see Behat\Behat\Annotation\AnnotationInterface::getPath()
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @see Behat\Behat\Annotation\AnnotationInterface::getCallback()
      */
     public function getCallback()
     {
@@ -42,26 +68,14 @@ abstract class Annotation implements AnnotationInterface
     }
 
     /**
-     * @see Behat\Behat\Annotation\AnnotationInterface::getClass
-     */
-    public function getClass()
-    {
-        return $this->callback[0];
-    }
-
-    /**
-     * @see Behat\Behat\Annotation\AnnotationInterface::getMethod
-     */
-    public function getMethod()
-    {
-        return $this->callback[1];
-    }
-
-    /**
-     * @see Behat\Behat\Annotation\AnnotationInterface::getCallbackReflection
+     * @see Behat\Behat\Annotation\AnnotationInterface::getCallbackReflection()
      */
     public function getCallbackReflection()
     {
-        return new \ReflectionMethod($this->getClass(), $this->getMethod());
+        if (is_array($this->callback)) {
+            return new \ReflectionMethod($this->callback[0], $this->callback[1]);
+        } else {
+            return new \ReflectionFunction($this->callback);
+        }
     }
 }
