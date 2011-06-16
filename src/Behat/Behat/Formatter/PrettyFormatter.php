@@ -716,7 +716,7 @@ class PrettyFormatter extends ProgressFormatter
         $indentCount    = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
 
         $this->printPathComment(
-            $definition->getClass() . '::' . $definition->getMethod() . '()', $indentCount
+            $this->relativizePathsInString($definition->getPath()), $indentCount
         );
     }
 

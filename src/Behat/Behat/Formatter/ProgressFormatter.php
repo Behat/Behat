@@ -218,7 +218,7 @@ class ProgressFormatter extends ConsoleFormatter
         if (null !== $definition) {
             $indentCount = $this->maxLineLength - $stepPathLn;
             $this->printPathComment(
-                $definition->getClass() . '::' . $definition->getMethod() . '()', $indentCount
+                $this->relativizePathsInString($definition->getPath()), $indentCount
             );
         } else {
             $this->writeln();
