@@ -43,9 +43,7 @@ class Ambiguous extends BehaviorException
 
         $message = sprintf("Ambiguous match of \"%s\":", $text);
         foreach ($matches as $definition){
-            $message .= sprintf("\nto `%s` from %s::%s()",
-                $definition->getRegex(), $definition->getClass(), $definition->getMethod()
-            );
+            $message .= sprintf("\nto `%s` from %s", $definition->getRegex(), $definition->getPath());
         }
 
         parent::__construct($message);

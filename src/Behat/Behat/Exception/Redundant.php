@@ -27,11 +27,8 @@ class Redundant extends BehaviorException
      */
     public function __construct(DefinitionInterface $step2, DefinitionInterface $step1)
     {
-        $message = sprintf("Step \"%s\" is already defined in %s::%s()\n\n%s::%s()\n%s::%s()",
-            $step2->getRegex(),
-            $step1->getClass(), $step1->getMethod(),
-            $step1->getClass(), $step1->getMethod(),
-            $step2->getClass(), $step2->getMethod()
+        $message = sprintf("Step \"%s\" is already defined in %s\n\n%s\n%s",
+            $step2->getRegex(), $step1->getPath(), $step1->getPath(), $step2->getPath()
         );
 
         parent::__construct($message);
