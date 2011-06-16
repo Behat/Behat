@@ -29,13 +29,14 @@ abstract class FilterableHook extends Hook
     /**
      * Initializes hook.
      *
-     * @param   string  $filter hook filter
+     * @param   callback    $callback       callback
+     * @param   string      $filterString   hook filter
      */
-    public function __construct(array $callback, $filter = null)
+    public function __construct($callback, $filterString = null)
     {
         parent::__construct($callback);
 
-        $this->filter = $filter;
+        $this->filter = $filterString;
     }
 
     /**

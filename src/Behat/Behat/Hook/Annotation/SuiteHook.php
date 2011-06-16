@@ -18,18 +18,20 @@ namespace Behat\Behat\Hook\Annotation;
 abstract class SuiteHook extends Hook
 {
     /**
-     * @see Behat\Behat\Annotation\Annotation::__construct
+     * {@inheritdoc}
      */
-    public function __construct(array $callback)
+    public function __construct($callback)
     {
-        $methodRefl = new \ReflectionMethod($callback[0], $callback[1]);
+        if (is_array($callback)) {
+            $methodRefl = new \ReflectionMethod($callback[0], $callback[1]);
 
-        if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Callback should be valid callable');
-        }
+            if (!is_callable($callback)) {
+                throw new \InvalidArgumentException('Callback should be valid callable');
+            }
 
-        if (!$methodRefl->isStatic()) {
-            throw new \InvalidArgumentException('Suite hook callbacks should be static methods');
+            if (!$methodRefl->isStatic()) {
+                throw new \InvalidArgumentException('Suite hook callbacks should be static methods');
+            }
         }
 
         parent::__construct($callback);
