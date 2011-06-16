@@ -17,7 +17,7 @@ Feature: hooks
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface
       {
           private $number;
 

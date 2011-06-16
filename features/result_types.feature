@@ -38,7 +38,7 @@ Feature: Different result types
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext {}
+      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface {}
       """
     When I run "behat -f progress features/coffee.feature"
     Then it should pass with:
@@ -131,7 +131,7 @@ Feature: Different result types
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface
       {
           /**
            * @Given /^human have ordered very very very hot "([^"]*)"$/
@@ -223,7 +223,7 @@ Feature: Different result types
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface
       {
           private $money = 0;
 
@@ -291,7 +291,7 @@ Feature: Different result types
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface
       {
           private $money = 0;
 
@@ -366,7 +366,7 @@ Feature: Different result types
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface
       {
           /** @Given /^human have chosen "([^"]*)"$/ */
           public function chosen($argument1) {
@@ -422,7 +422,7 @@ Feature: Different result types
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface
       {
           /** @Given /^customer bought coffee$/ */
           public function chosen($argument1) {

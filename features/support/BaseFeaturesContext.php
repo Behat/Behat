@@ -1,11 +1,12 @@
 <?php
 
-use Behat\Behat\Context\BehatContext,
+use Behat\Behat\Context\AnnotatedContextInterface,
+    Behat\Behat\Context\BehatContext,
     Behat\Behat\Exception\Pending;
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
-class BaseFeaturesContext extends BehatContext
+class BaseFeaturesContext extends BehatContext implements AnnotatedContextInterface
 {
     /**
      * @Given /^a file named "([^"]*)" with:$/
