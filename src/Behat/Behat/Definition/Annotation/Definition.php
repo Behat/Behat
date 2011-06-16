@@ -30,27 +30,27 @@ abstract class Definition extends Annotation implements DefinitionInterface
      *
      * @var     string
      */
-    protected $regex;
+    private $regex;
     /**
      * Matched to definition regex text.
      *
      * @var     string
      */
-    protected $matchedText;
+    private $matchedText;
     /**
      * Step parameters for call.
      *
      * @var     array
      */
-    protected $values = array();
+    private $values = array();
 
     /**
      * Initializes definition.
      *
-     * @param   array   $callback   definition callback
-     * @param   string  $regex      definition regular expression
+     * @param   callback    $callback   definition callback
+     * @param   string      $regex      definition regular expression
      */
-    public function __construct(array $callback, $regex)
+    public function __construct($callback, $regex)
     {
         parent::__construct($callback);
 
@@ -127,9 +127,9 @@ abstract class Definition extends Annotation implements DefinitionInterface
     public function run(ContextInterface $context, $tokens = array())
     {
         $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
-        $callback   = array($context->getContextByClassName($this->getClass()), $this->getMethod());
-        $values     = $this->getValues();
+        $callback   = $this->getCallback();
 
+        $values = $this->getValues();
         if (count($tokens)) {
             foreach ($values as $i => $value) {
                 if ($value instanceof TableNode || $value instanceof PyStringNode) {
@@ -139,7 +139,11 @@ abstract class Definition extends Annotation implements DefinitionInterface
             }
         }
 
-        call_user_func_array($callback, $values);
+        if (is_array($callback)) {
+            call_user_func_array(array($context->getContextByClassName($callback[0]), $callback[1]), $values);
+        } else {
+            call_user_func_array($callback, array_unshift($values, $context));
+        }
 
         if (null !== $oldHandler) {
             set_error_handler($oldHandler);

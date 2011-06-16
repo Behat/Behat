@@ -28,17 +28,17 @@ class Transformation extends Annotation implements TransformationInterface
      *
      * @var     string
      */
-    protected $regex;
+    private $regex;
 
     /**
      * Initializes transformation.
      *
-     * @param   array   $callback   transformation callback
-     * @param   string  $regex      transformation regular expression
+     * @param   callback    $callback   definition callback
+     * @param   string      $regex      definition regular expression
      */
-    public function __construct(array $callback, $regex)
+    public function __construct($callback, $regex)
     {
-        parent::__construct($callback);
+        if (is_array($callback)) {
             $methodRefl = new \ReflectionMethod($callback[0], $callback[1]);
 
             if (!is_callable($callback)) {
@@ -48,7 +48,9 @@ class Transformation extends Annotation implements TransformationInterface
             if (!$methodRefl->isStatic()) {
                 throw new \InvalidArgumentException('Transformation callbacks should be static methods');
             }
+        }
 
+        parent::__construct($callback);
         $this->regex = $regex;
     }
 
@@ -67,7 +69,10 @@ class Transformation extends Annotation implements TransformationInterface
      */
     public function transform(ContextInterface $context, $argument)
     {
-        $callback = array($context, $this->getMethod());
+        $callback = $this->getCallback();
+        if (is_array($callback)) {
+            $callback = array($context->getContextByClassName($callback[0]), $callback[1]);
+        }
 
         if ($argument instanceof TableNode) {
             $tableMatching = 'table:' . implode(',', $argument->getRow(0));
