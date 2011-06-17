@@ -68,7 +68,7 @@ class Transformation extends Annotation implements TransformationInterface
     /**
      * @see     Behat\Behat\Definition\TransformationInterface::transform()
      */
-    function transform($translatedRegex, ContextInterface $context, $argument)
+    public function transform($translatedRegex, ContextInterface $context, $argument)
     {
         $callback = $this->getCallback();
         if (!$this->isClosure()) {
