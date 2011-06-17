@@ -1,7 +1,7 @@
 default:
   paths:
     features:               %%BEHAT_CONFIG_PATH%%/features/annotations
-    support:                %%BEHAT_CONFIG_PATH%%/features/support
+    bootstrap:              %%BEHAT_CONFIG_PATH%%/features/bootstrap
   formatter:
     name:                   progress
 

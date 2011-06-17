@@ -245,8 +245,8 @@ class BehatCommand extends Command
         // locate base path
         $this->locateBasePath($locator, $input);
 
-        // load support files
-        foreach ($locator->locateSupportFilesPaths() as $path) {
+        // load bootstrap files
+        foreach ($locator->locateBootstrapFilesPaths() as $path) {
             require_once($path);
         }
 
@@ -272,7 +272,7 @@ class BehatCommand extends Command
         // configure formatter
         $formatter->setTranslator($translator);
         $formatter->setParameter('base_path', $locator->getWorkPath());
-        $formatter->setParameter('support_path', $locator->getSupportPath());
+        $formatter->setParameter('support_path', $locator->getBootstrapPath());
         $formatter->setParameter('verbose',
             $input->getOption('verbose') ?: $container->getParameter('behat.formatter.verbose')
         );
@@ -502,7 +502,7 @@ class BehatCommand extends Command
     {
         $basePath       = $locator->getWorkPath() . DIRECTORY_SEPARATOR;
         $featuresPath   = $locator->getFeaturesPath();
-        $supportPath    = $locator->getSupportPath();
+        $bootstrapPath  = $locator->getBootstrapPath();
 
         if (!is_dir($featuresPath)) {
             mkdir($featuresPath, 0777, true);
@@ -513,25 +513,25 @@ class BehatCommand extends Command
             );
         }
 
-        if (!is_dir($supportPath)) {
-            mkdir($supportPath, 0777, true);
+        if (!is_dir($bootstrapPath)) {
+            mkdir($bootstrapPath, 0777, true);
             $output->writeln(
                 '<info>+d</info> ' .
-                str_replace($basePath, '', $supportPath) .
-                ' <comment>- place support scripts and static files here</comment>'
+                str_replace($basePath, '', $bootstrapPath) .
+                ' <comment>- place bootstrap scripts and static files here</comment>'
             );
 
-            copy(__DIR__ . '/../../Skeleton/bootstrap.php', $supportPath . DIRECTORY_SEPARATOR . 'bootstrap.php');
+            copy(__DIR__ . '/../../Skeleton/bootstrap.php', $bootstrapPath . DIRECTORY_SEPARATOR . 'bootstrap.php');
             $output->writeln(
                 '<info>+f</info> ' .
-                str_replace($basePath, '', $supportPath) . DIRECTORY_SEPARATOR . 'bootstrap.php' .
+                str_replace($basePath, '', $bootstrapPath) . DIRECTORY_SEPARATOR . 'bootstrap.php' .
                 ' <comment>- place your bootstrap code here</comment>'
             );
 
-            copy(__DIR__ . '/../../Skeleton/FeaturesContext.php', $supportPath . DIRECTORY_SEPARATOR . 'FeaturesContext.php');
+            copy(__DIR__ . '/../../Skeleton/FeaturesContext.php', $bootstrapPath . DIRECTORY_SEPARATOR . 'FeaturesContext.php');
             $output->writeln(
                 '<info>+f</info> ' .
-                str_replace($basePath, '', $supportPath) . DIRECTORY_SEPARATOR . 'FeaturesContext.php' .
+                str_replace($basePath, '', $bootstrapPath) . DIRECTORY_SEPARATOR . 'FeaturesContext.php' .
                 ' <comment>- place your feature code here</comment>'
             );
         }

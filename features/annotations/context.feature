@@ -4,15 +4,12 @@ Feature: Context consistency
   I need a separate context for every scenario/outline
 
   Background:
-    Given a file named "features/support/bootstrap.php" with:
+    Given a file named "features/bootstrap/FeaturesContext.php" with:
       """
       <?php
+
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
-      """
-    And a file named "features/support/FeaturesContext.php" with:
-      """
-      <?php
 
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;

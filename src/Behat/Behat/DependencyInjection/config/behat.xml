@@ -9,7 +9,7 @@
         <parameter key="behat.paths.i18n">%behat.paths.lib%/i18n</parameter>
 
         <parameter key="behat.paths.features">%%BEHAT_BASE_PATH%%</parameter>
-        <parameter key="behat.paths.support">%behat.paths.features%/support</parameter>
+        <parameter key="behat.paths.bootstrap">%behat.paths.features%/bootstrap</parameter>
 
         <!-- Formatter parameters -->
         <parameter key="behat.formatter.name">pretty</parameter>

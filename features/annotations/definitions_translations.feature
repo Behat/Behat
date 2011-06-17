@@ -3,14 +3,6 @@ Feature: Definitions translations
   As a step definitions developer
   I need to be able to write definition translations
 
-  Background:
-    Given a file named "features/support/bootstrap.php" with:
-      """
-      <?php
-      require_once 'PHPUnit/Autoload.php';
-      require_once 'PHPUnit/Framework/Assert/Functions.php';
-      """
-
   Scenario: In place translations
     Given a file named "features/calc_ru.feature" with:
       """
@@ -23,9 +15,12 @@ Feature: Definitions translations
           И Я нажал "+"
           То Я должен увидеть на экране 14
       """
-    And a file named "features/support/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeaturesContext.php" with:
       """
       <?php
+
+      require_once 'PHPUnit/Autoload.php';
+      require_once 'PHPUnit/Framework/Assert/Functions.php';
 
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
@@ -61,7 +56,7 @@ Feature: Definitions translations
           }
       }
       """
-    And a file named "features/support/i18n/ru.xliff" with:
+    And a file named "features/bootstrap/i18n/ru.xliff" with:
       """
       <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
         <file original="global" source-language="en" target-language="ru" datatype="plaintext">

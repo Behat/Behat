@@ -39,8 +39,8 @@ class Configuration
                         scalarNode('features')->
                             defaultValue('%%BEHAT_BASE_PATH%%')->
                         end()->
-                        scalarNode('support')->
-                            defaultValue('%behat.paths.features%/support')->
+                        scalarNode('bootstrap')->
+                            defaultValue('%behat.paths.features%/bootstrap')->
                         end()->
                     end()->
                 end()->

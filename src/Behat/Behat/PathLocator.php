@@ -96,13 +96,13 @@ class PathLocator
     }
 
     /**
-     * Returns configured support path.
+     * Returns configured bootstrap path.
      *
      * @return  string
      */
-    public function getSupportPath()
+    public function getBootstrapPath()
     {
-        if ($path = $this->container->getParameter('behat.paths.support')) {
+        if ($path = $this->container->getParameter('behat.paths.bootstrap')) {
             return $this->preparePath($path);
         }
 
@@ -201,18 +201,18 @@ class PathLocator
     }
 
     /**
-     * Locates support files paths.
+     * Locates bootstrap files paths.
      *
      * @return  array
      */
-    public function locateSupportFilesPaths()
+    public function locateBootstrapFilesPaths()
     {
-        $supportPath = $this->getSupportPath();
+        $bootstrapPath = $this->getBootstrapPath();
 
         $files = array();
-        if (is_dir($this->getSupportPath())) {
+        if (is_dir($this->getBootstrapPath())) {
             $finder = new Finder();
-            foreach ($finder->files()->name('*.php')->in($supportPath) as $file) {
+            foreach ($finder->files()->name('*.php')->in($bootstrapPath) as $file) {
                 $files[] = (string) $file;
             }
         }

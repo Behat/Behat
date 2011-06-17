@@ -28,9 +28,14 @@ class Hooks extends BehatContext implements AnnotatedContextInterface
 
         mkdir($dir, 0777, true);
         chdir($dir);
+
         mkdir('features');
+        mkdir('features' . DIRECTORY_SEPARATOR . 'bootstrap');
+        mkdir('features' . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR . 'i18n');
+
         mkdir('features' . DIRECTORY_SEPARATOR . 'support');
-        mkdir('features' . DIRECTORY_SEPARATOR . 'support' . DIRECTORY_SEPARATOR . 'i18n');
+        mkdir('features' . DIRECTORY_SEPARATOR . 'steps');
+        mkdir('features' . DIRECTORY_SEPARATOR . 'steps' . DIRECTORY_SEPARATOR . 'i18n');
     }
 
     private static function rmdirRecursive($dir) {

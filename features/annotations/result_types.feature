@@ -4,7 +4,7 @@ Feature: Different result types
   I need to be able to see different types of test results
 
   Background:
-    Given a file named "features/support/bootstrap.php" with:
+    Given a file named "features/bootstrap/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';
@@ -31,7 +31,7 @@ Feature: Different result types
           When I have chose "pizza tea" in coffee machine
           Then I should have "pizza tea"
       """
-    And a file named "features/support/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeaturesContext.php" with:
       """
       <?php
 
@@ -124,7 +124,7 @@ Feature: Different result types
           When the coffee will be ready
           Then I should say "Take your cup!"
       """
-    And a file named "features/support/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeaturesContext.php" with:
       """
       <?php
 
@@ -216,7 +216,7 @@ Feature: Different result types
           Then I should see 31$ on the screen
           And I should see 33$ on the screen
       """
-    And a file named "features/support/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeaturesContext.php" with:
       """
       <?php
 
@@ -284,7 +284,7 @@ Feature: Different result types
           When I boil water
           Then the coffee should be almost done
       """
-    And a file named "features/support/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeaturesContext.php" with:
       """
       <?php
 
@@ -359,7 +359,7 @@ Feature: Different result types
           Given human have chosen "Latte"
           Then I should make him "Latte"
       """
-    And a file named "features/support/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeaturesContext.php" with:
       """
       <?php
 
@@ -415,7 +415,7 @@ Feature: Different result types
           Given customer bought coffee
           And customer bought another one coffee
       """
-    And a file named "features/support/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeaturesContext.php" with:
       """
       <?php
 
