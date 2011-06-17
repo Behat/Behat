@@ -139,7 +139,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
             }
         }
 
-        if (is_array($callback)) {
+        if (!$this->isClosure()) {
             call_user_func_array(array($context->getContextByClassName($callback[0]), $callback[1]), $values);
         } else {
             array_unshift($values, $context);

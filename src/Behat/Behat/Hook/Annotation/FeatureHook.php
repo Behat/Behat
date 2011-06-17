@@ -25,6 +25,26 @@ abstract class FeatureHook extends FilterableHook
     /**
      * {@inheritdoc}
      */
+    public function __construct($callback)
+    {
+        parent::__construct($callback);
+
+        if (!$this->isClosure()) {
+            $methodRefl = new \ReflectionMethod($callback[0], $callback[1]);
+
+            if (!is_callable($callback)) {
+                throw new \InvalidArgumentException('Callback should be valid callable');
+            }
+
+            if (!$methodRefl->isStatic()) {
+                throw new \InvalidArgumentException('Suite hook callbacks should be static methods');
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function filterMatches(EventInterface $event)
     {
         if (null === ($filterString = $this->getFilter())) {

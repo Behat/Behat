@@ -18,6 +18,12 @@ namespace Behat\Behat\Annotation;
 abstract class Annotation implements AnnotationInterface
 {
     /**
+     * Is callback a closure.
+     *
+     * @var     Boolean
+     */
+    private $closure;
+    /**
      * Annotation callback.
      *
      * @var     callback
@@ -40,10 +46,11 @@ abstract class Annotation implements AnnotationInterface
         if (!is_callable($callback)) {
             throw new \InvalidArgumentException('Callback should be a valid callable');
         }
+        $this->closure = !is_array($callback);
 
-        if (is_array($callback)) {
+        if (!$this->isClosure()) {
             $this->path = $callback[0] . '::' . $callback[1] . '()';
-        } elseif ($callback instanceof \Closure) {
+        } else {
             $reflection = new \ReflectionFunction($callback);
             $this->path = $reflection->getFileName() . ':' . $reflection->getStartLine();
         }
@@ -60,6 +67,14 @@ abstract class Annotation implements AnnotationInterface
     }
 
     /**
+     * @see Behat\Behat\Annotation\AnnotationInterface::isClosure()
+     */
+    public function isClosure()
+    {
+        return $this->closure;
+    }
+
+    /**
      * @see Behat\Behat\Annotation\AnnotationInterface::getCallback()
      */
     public function getCallback()
@@ -72,7 +87,7 @@ abstract class Annotation implements AnnotationInterface
      */
     public function getCallbackReflection()
     {
-        if (is_array($this->callback)) {
+        if (!$this->isClosure()) {
             return new \ReflectionMethod($this->callback[0], $this->callback[1]);
         } else {
             return new \ReflectionFunction($this->callback);

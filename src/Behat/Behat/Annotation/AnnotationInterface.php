@@ -25,6 +25,13 @@ interface AnnotationInterface
     function getPath();
 
     /**
+     * Checks whether callback is closure.
+     *
+     * @return  Boolean
+     */
+    function isClosure();
+
+    /**
      * Returns callback.
      *
      * @param   Callback

@@ -22,7 +22,9 @@ abstract class SuiteHook extends Hook
      */
     public function __construct($callback)
     {
-        if (is_array($callback)) {
+        parent::__construct($callback);
+
+        if (!$this->isClosure()) {
             $methodRefl = new \ReflectionMethod($callback[0], $callback[1]);
 
             if (!is_callable($callback)) {
@@ -33,7 +35,5 @@ abstract class SuiteHook extends Hook
                 throw new \InvalidArgumentException('Suite hook callbacks should be static methods');
             }
         }
-
-        parent::__construct($callback);
     }
 }

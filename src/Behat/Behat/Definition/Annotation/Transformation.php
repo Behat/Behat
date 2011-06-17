@@ -38,7 +38,9 @@ class Transformation extends Annotation implements TransformationInterface
      */
     public function __construct($callback, $regex)
     {
-        if (is_array($callback)) {
+        parent::__construct($callback);
+
+        if (!$this->isClosure()) {
             $methodRefl = new \ReflectionMethod($callback[0], $callback[1]);
 
             if (!is_callable($callback)) {
@@ -50,7 +52,6 @@ class Transformation extends Annotation implements TransformationInterface
             }
         }
 
-        parent::__construct($callback);
         $this->regex = $regex;
     }
 
@@ -70,7 +71,7 @@ class Transformation extends Annotation implements TransformationInterface
     public function transform(ContextInterface $context, $argument)
     {
         $callback = $this->getCallback();
-        if (is_array($callback)) {
+        if (!$this->isClosure()) {
             $callback = array($context->getContextByClassName($callback[0]), $callback[1]);
         }
 
