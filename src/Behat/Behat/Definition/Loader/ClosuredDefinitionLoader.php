@@ -47,7 +47,7 @@ class ClosuredDefinitionLoader implements DefinitionLoaderInterface
      */
     public function load($resource)
     {
-        $hooks = $this;
+        $steps = $this;
 
         require($resource);
     }
