@@ -2,6 +2,9 @@
 
 namespace Behat\Behat\Definition;
 
+use Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Console\Formatter\OutputFormatterStyle;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -15,7 +18,7 @@ namespace Behat\Behat\Definition;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionDumper
+class DefinitionPrinter
 {
     /**
      * Definition dispatcher.
@@ -35,19 +38,39 @@ class DefinitionDumper
     }
 
     /**
-     * Dump available definitions into string.
+     * Prints step definitions into console.
+     *
+     * @param   Symfony\Component\Console\Output\OutputInterface    $output
+     * @param   string                                              $language
+     */
+    public function printDefinitions(OutputInterface $output, $language = 'en')
+    {
+        $output->getFormatter()->setStyle(
+            'capture', new OutputFormatterStyle('yellow', null, array('bold'))
+        );
+
+        $output->write($this->getDefinitionsForPrint($language));
+    }
+
+    /**
+     * Returns available definitions in string.
      *
      * @param   string  $language   default definitions language
+     *
+     * @return  string
      */
-    public function dump($language = 'en')
+    private function getDefinitionsForPrint($language = 'en')
     {
         $definitions = '';
 
         foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
             $regex = $this->dispatcher->translateDefinitionRegex($regex, $language);
+            $regex = preg_replace_callback('/\([^\)]*\)/', function($capture) {
+                return "</comment><capture>{$capture[0]}</capture><comment>";
+            }, $regex);
             $type  = str_pad($definition->getType(), 5, ' ', STR_PAD_LEFT);
 
-            $definitions .= "$type $regex\n";
+            $definitions .= "<info>$type</info> <comment>$regex</comment>\n";
         }
 
         return $definitions;

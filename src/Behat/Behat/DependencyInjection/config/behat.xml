@@ -50,7 +50,7 @@
 
         <!-- Definition Dispathcer -->
         <parameter key="behat.definition_dispatcher.class">Behat\Behat\Definition\DefinitionDispatcher</parameter>
-        <parameter key="behat.definition_dumper.class">Behat\Behat\Definition\DefinitionDumper</parameter>
+        <parameter key="behat.definition_printer.class">Behat\Behat\Definition\DefinitionPrinter</parameter>
         <parameter key="behat.definition_loader.closured.class">Behat\Behat\Definition\Loader\ClosuredDefinitionLoader</parameter>
         <parameter key="behat.definition_proposal_dispatcher.class">Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher</parameter>
         <parameter key="behat.definition_proposal.closured.class">Behat\Behat\Definition\Proposal\ClosuredDefinitionProposal</parameter>
@@ -161,7 +161,7 @@
             </argument>
             <argument type="service" id="behat.translator" />
         </service>
-        <service id="behat.definition_dumper" class="%behat.definition_dumper.class%">
+        <service id="behat.definition_printer" class="%behat.definition_printer.class%">
             <argument type="service" id="behat.definition_dispatcher" />
             <argument type="service" id="behat.translator" />
         </service>

@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\DependencyInjection\BehatExtension,
-    Behat\Behat\Definition\DefinitionDumper,
+    Behat\Behat\Definition\DefinitionPrinter,
     Behat\Behat\Event\SuiteEvent,
     Behat\Behat\PathLocator;
 
@@ -231,7 +231,6 @@ class BehatCommand extends Command
      * @uses    createFormatter()
      * @uses    initFeaturesDirectoryStructure()
      * @uses    demonstrateUsageExample()
-     * @uses    demonstrateAvailableSteps()
      * @uses    runFeatures()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -339,8 +338,8 @@ class BehatCommand extends Command
             );
             return 0;
         } elseif ($input->hasOption('steps') && $input->getOption('steps')) {
-            $this->demonstrateAvailableSteps(
-                $container->get('behat.definition_dumper'), $input->getOption('lang') ?: 'en', $output
+            $container->get('behat.definition_printer')->printDefinitions(
+                $output, $input->getOption('lang') ?: 'en'
             );
             return 0;
         }
@@ -548,18 +547,5 @@ class BehatCommand extends Command
     {
         $output->setDecorated(false);
         $output->writeln($dumper->dump($lang) . "\n", OutputInterface::OUTPUT_RAW);
-    }
-
-    /**
-     * Prints available step definitions.
-     *
-     * @param   Behat\Behat\Definition\Dumper                   $dumper     definitions dumper
-     * @param   string                                          $lang       locale name
-     * @param   Symfony\Component\Console\Input\OutputInterface $output     output console
-     */
-    protected function demonstrateAvailableSteps(DefinitionDumper $dumper, $lang, OutputInterface $output)
-    {
-        $output->setDecorated(false);
-        $output->write($dumper->dump($lang), false, OutputInterface::OUTPUT_RAW);
     }
 }
