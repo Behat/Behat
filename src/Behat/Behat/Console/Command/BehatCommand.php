@@ -279,10 +279,13 @@ class BehatCommand extends Command
             $input->getOption('lang') ?: $container->getParameter('behat.formatter.language')
         );
         if ($input->getOption('colors')) {
+            $output->setDecorated(true);
             $formatter->setParameter('decorated', true);
         } elseif ($input->getOption('no-colors')) {
+            $output->setDecorated(false);
             $formatter->setParameter('decorated', false);
         } elseif (null !== ($decorated = $container->getParameter('behat.formatter.decorated'))) {
+            $output->setDecorated($decorated);
             $formatter->setParameter('decorated', $decorated);
         } else {
             $formatter->setParameter('decorated', $output->isDecorated());
