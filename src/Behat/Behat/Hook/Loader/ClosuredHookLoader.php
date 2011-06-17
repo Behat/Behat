@@ -82,7 +82,7 @@ class ClosuredHookLoader implements HookLoaderInterface
      */
     public function beforeFeature($filter, $callback)
     {
-        $this->dispatcher->addHook(new BeforeFeature($callback, $filter));
+        $this->dispatcher->addHook(new BeforeFeature($callback, '' !== $filter ? $filter : null));
     }
 
     /**
@@ -93,7 +93,7 @@ class ClosuredHookLoader implements HookLoaderInterface
      */
     public function afterFeature($filter, $callback)
     {
-        $this->dispatcher->addHook(new AfterFeature($callback, $filter));
+        $this->dispatcher->addHook(new AfterFeature($callback, '' !== $filter ? $filter : null));
     }
 
     /**
@@ -104,7 +104,7 @@ class ClosuredHookLoader implements HookLoaderInterface
      */
     public function beforeScenario($filter, $callback)
     {
-        $this->dispatcher->addHook(new BeforeScenario($callback, $filter));
+        $this->dispatcher->addHook(new BeforeScenario($callback, '' !== $filter ? $filter : null));
     }
 
     /**
@@ -115,7 +115,7 @@ class ClosuredHookLoader implements HookLoaderInterface
      */
     public function afterScenario($filter, $callback)
     {
-        $this->dispatcher->addHook(new AfterScenario($callback, $filter));
+        $this->dispatcher->addHook(new AfterScenario($callback, '' !== $filter ? $filter : null));
     }
 
     /**
@@ -126,7 +126,7 @@ class ClosuredHookLoader implements HookLoaderInterface
      */
     public function beforeStep($filter, $callback)
     {
-        $this->dispatcher->addHook(new BeforeStep($callback, $filter));
+        $this->dispatcher->addHook(new BeforeStep($callback, '' !== $filter ? $filter : null));
     }
 
     /**
@@ -137,6 +137,6 @@ class ClosuredHookLoader implements HookLoaderInterface
      */
     public function afterStep($filter, $callback)
     {
-        $this->dispatcher->addHook(new AfterStep($callback, $filter));
+        $this->dispatcher->addHook(new AfterStep($callback, '' !== $filter ? $filter : null));
     }
 }
