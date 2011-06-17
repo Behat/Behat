@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Definition;
 
-use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\PyStringNode,
@@ -58,9 +58,9 @@ class DefinitionDispatcher
      * Initializes definition dispatcher.
      *
      * @param   Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher    $proposalDispatcher
-     * @param   Symfony\Component\Translation\Translator                        $translator
+     * @param   Symfony\Component\Translation\TranslatorInterface               $translator
      */
-    public function __construct(DefinitionProposalDispatcher $proposalDispatcher, Translator $translator)
+    public function __construct(DefinitionProposalDispatcher $proposalDispatcher, TranslatorInterface $translator)
     {
         $this->proposalDispatcher   = $proposalDispatcher;
         $this->translator           = $translator;
