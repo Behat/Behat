@@ -520,18 +520,11 @@ class BehatCommand extends Command
                 ' <comment>- place bootstrap scripts and static files here</comment>'
             );
 
-            copy(__DIR__ . '/../../Skeleton/bootstrap.php', $bootstrapPath . DIRECTORY_SEPARATOR . 'bootstrap.php');
-            $output->writeln(
-                '<info>+f</info> ' .
-                str_replace($basePath, '', $bootstrapPath) . DIRECTORY_SEPARATOR . 'bootstrap.php' .
-                ' <comment>- place your bootstrap code here</comment>'
-            );
-
             copy(__DIR__ . '/../../Skeleton/FeaturesContext.php', $bootstrapPath . DIRECTORY_SEPARATOR . 'FeaturesContext.php');
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', $bootstrapPath) . DIRECTORY_SEPARATOR . 'FeaturesContext.php' .
-                ' <comment>- place your feature code here</comment>'
+                ' <comment>- place your features related code here</comment>'
             );
         }
     }
