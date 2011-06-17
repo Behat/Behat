@@ -47,6 +47,7 @@ class ContextDispatcher
             ));
         }
 
+        $contextClassRefl = new \ReflectionClass($contextClassName);
         if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\AnnotatedContextInterface')
          && !$contextClassRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {
             throw new \InvalidArgumentException(sprintf(
