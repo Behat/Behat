@@ -55,14 +55,6 @@ class ContextReader
             ));
         }
 
-        $contextClassRefl = new \ReflectionClass($this->contextClassName);
-        if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\ContextInterface')) {
-            throw new \InvalidArgumentException(sprintf(
-                'Cannot use class "%s" as context, as it doesn\'t implement ContextInterface',
-                $this->contextClassName
-            ));
-        }
-
         if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\AnnotatedContextInterface')
          && !$contextClassRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {
             throw new \InvalidArgumentException(sprintf(
