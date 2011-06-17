@@ -52,6 +52,9 @@
         <parameter key="behat.definition_dispatcher.class">Behat\Behat\Definition\DefinitionDispatcher</parameter>
         <parameter key="behat.definition_dumper.class">Behat\Behat\Definition\DefinitionDumper</parameter>
         <parameter key="behat.definition_loader.closured.class">Behat\Behat\Definition\Loader\ClosuredDefinitionLoader</parameter>
+        <parameter key="behat.definition_proposal_dispatcher.class">Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher</parameter>
+        <parameter key="behat.definition_proposal.closured.class">Behat\Behat\Definition\Proposal\ClosuredDefinitionProposal</parameter>
+        <parameter key="behat.definition_proposal.annotated.class">Behat\Behat\Definition\Proposal\AnnotatedDefinitionProposal</parameter>
 
         <!-- Hook Dispatcher -->
         <parameter key="behat.hook_dispatcher.class">Behat\Behat\Hook\HookDispatcher</parameter>
@@ -142,6 +145,20 @@
 
         <!-- Definition Dispatcher -->
         <service id="behat.definition_dispatcher" class="%behat.definition_dispatcher.class%">
+            <argument type="service">
+                <service class="%behat.definition_proposal_dispatcher.class%">
+                    <call method="addProposal">
+                        <argument type="service">
+                            <service class="%behat.definition_proposal.closured.class%" />
+                        </argument>
+                    </call>
+                    <call method="addProposal">
+                        <argument type="service">
+                            <service class="%behat.definition_proposal.annotated.class%" />
+                        </argument>
+                    </call>
+                </service>
+            </argument>
             <argument type="service" id="behat.translator" />
         </service>
         <service id="behat.definition_dumper" class="%behat.definition_dumper.class%">

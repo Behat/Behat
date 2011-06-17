@@ -127,7 +127,7 @@ class StepTester implements NodeVisitorInterface
             $exception = $e;
         } catch (Undefined $e) {
             $result   = StepEvent::UNDEFINED;
-            $snippet  = $this->definitions->proposeDefinition($step);
+            $snippet  = $this->definitions->proposeDefinition($this->context, $step);
         }
 
         // Run test
