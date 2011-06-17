@@ -25,7 +25,7 @@ class DefinitionPrinter
      *
      * @var     Behat\Behat\Definition\DefinitionDispatcher
      */
-    protected $dispatcher;
+    private $dispatcher;
 
     /**
      * Initializes definition dispatcher.
