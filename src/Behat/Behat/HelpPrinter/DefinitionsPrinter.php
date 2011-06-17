@@ -1,6 +1,8 @@
 <?php
 
-namespace Behat\Behat\Definition;
+namespace Behat\Behat\HelpPrinter;
+
+use Behat\Behat\Definition\DefinitionDispatcher;
 
 use Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Console\Formatter\OutputFormatterStyle;
@@ -14,11 +16,11 @@ use Symfony\Component\Console\Output\OutputInterface,
  */
 
 /**
- * Definition dumper.
+ * Definitions printer.
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionPrinter
+class DefinitionsPrinter
 {
     /**
      * Definition dispatcher.

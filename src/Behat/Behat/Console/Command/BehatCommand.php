@@ -159,15 +159,15 @@ class BehatCommand extends Command
     protected function getDemonstrationOptions()
     {
         return array(
-            new InputOption('--usage',          null,
+            new InputOption('--story-syntax',    null,
                 InputOption::VALUE_NONE,
-                '        ' .
+                ' ' .
                 'Print *.feature example in specified language (<info>--lang</info>).'
             ),
-            new InputOption('--steps',          null,
+            new InputOption('--definitions',    null,
                 InputOption::VALUE_NONE,
-                '        ' .
-                'Print available steps in specified language (<info>--lang</info>).'
+                '  ' .
+                'Print available step definitions in specified language (<info>--lang</info>).'
             ),
         );
     }
@@ -230,7 +230,6 @@ class BehatCommand extends Command
      * @uses    locateBasePath()
      * @uses    createFormatter()
      * @uses    initFeaturesDirectoryStructure()
-     * @uses    demonstrateUsageExample()
      * @uses    runFeatures()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -335,15 +334,17 @@ class BehatCommand extends Command
         $logger = $container->get('behat.logger');
 
         // helpers
-        if ($input->hasOption('usage') && $input->getOption('usage')) {
-            $this->demonstrateUsageExample(
-                $container->get('gherkin.keywords_dumper'), $input->getOption('lang') ?: 'en', $output
-            );
-            return 0;
-        } elseif ($input->hasOption('steps') && $input->getOption('steps')) {
-            $container->get('behat.definition_printer')->printDefinitions(
+        if ($input->hasOption('story-syntax') && $input->getOption('story-syntax')) {
+            $container->get('behat.help_printer.story_syntax')->printSyntax(
                 $output, $input->getOption('lang') ?: 'en'
             );
+
+            return 0;
+        } elseif ($input->hasOption('definitions') && $input->getOption('definitions')) {
+            $container->get('behat.help_printer.definitions')->printDefinitions(
+                $output, $input->getOption('lang') ?: 'en'
+            );
+
             return 0;
         }
 
@@ -530,18 +531,5 @@ class BehatCommand extends Command
                 ' <comment>- place your features related code here</comment>'
             );
         }
-    }
-
-    /**
-     * Prints features usage example in specified language (--lang) to the console.
-     *
-     * @param   Behat\Gherkin\Keywords\KeywordsDumper           $dumper     keywords dumper
-     * @param   string                                          $lang       locale name
-     * @param   Symfony\Component\Console\Input\OutputInterface $output     output console
-     */
-    protected function demonstrateUsageExample(KeywordsDumper $dumper, $lang, OutputInterface $output)
-    {
-        $output->setDecorated(false);
-        $output->writeln($dumper->dump($lang) . "\n", OutputInterface::OUTPUT_RAW);
     }
 }

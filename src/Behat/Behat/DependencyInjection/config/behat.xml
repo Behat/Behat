@@ -50,7 +50,6 @@
 
         <!-- Definition Dispathcer -->
         <parameter key="behat.definition_dispatcher.class">Behat\Behat\Definition\DefinitionDispatcher</parameter>
-        <parameter key="behat.definition_printer.class">Behat\Behat\Definition\DefinitionPrinter</parameter>
         <parameter key="behat.definition_loader.closured.class">Behat\Behat\Definition\Loader\ClosuredDefinitionLoader</parameter>
         <parameter key="behat.definition_proposal_dispatcher.class">Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher</parameter>
         <parameter key="behat.definition_proposal.closured.class">Behat\Behat\Definition\Proposal\ClosuredDefinitionProposal</parameter>
@@ -81,6 +80,10 @@
 
         <!-- PathLocator -->
         <parameter key="behat.path_locator.class">Behat\Behat\PathLocator</parameter>
+
+        <!-- HelpPrinter -->
+        <parameter key="behat.help_printer.definitions.class">Behat\Behat\HelpPrinter\DefinitionsPrinter</parameter>
+        <parameter key="behat.help_printer.story_syntax.class">Behat\Behat\HelpPrinter\StorySyntaxPrinter</parameter>
     </parameters>
     <services>
         <!-- Gherkin Parser -->
@@ -102,9 +105,6 @@
         </service>
         <service id="gherkin.keywords" class="%gherkin.keywords.class%">
             <argument type="service" id="behat.translator" />
-        </service>
-        <service id="gherkin.keywords_dumper" class="%gherkin.keywords_dumper.class%">
-            <argument type="service" id="gherkin.keywords" />
         </service>
 
         <!-- Context -->
@@ -161,10 +161,6 @@
             </argument>
             <argument type="service" id="behat.translator" />
         </service>
-        <service id="behat.definition_printer" class="%behat.definition_printer.class%">
-            <argument type="service" id="behat.definition_dispatcher" />
-            <argument type="service" id="behat.translator" />
-        </service>
 
         <!-- Hook Dispatcher -->
         <service id="behat.hook_dispatcher" class="%behat.hook_dispatcher.class%" />
@@ -197,6 +193,19 @@
         <!-- DataCollector -->
         <service id="behat.logger" class="%behat.logger.class%" />
         <service id="behat.rerun_data_collector" class="%behat.rerun_data_collector.class%" />
+
+        <!-- HelpPrinter -->
+        <service id="behat.help_printer.definitions" class="%behat.help_printer.definitions.class%">
+            <argument type="service" id="behat.definition_dispatcher" />
+            <argument type="service" id="behat.translator" />
+        </service>
+        <service id="behat.help_printer.story_syntax" class="%behat.help_printer.story_syntax.class%">
+            <argument type="service">
+                <service class="%gherkin.keywords_dumper.class%">
+                    <argument type="service" id="gherkin.keywords" />
+                </service>
+            </argument>
+        </service>
 
         <!-- Translator -->
         <service id="behat.translator" class="%behat.translator.class%">
