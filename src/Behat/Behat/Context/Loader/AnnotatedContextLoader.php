@@ -65,6 +65,12 @@ class AnnotatedContextLoader implements ContextLoaderInterface
         'beforestep'     => 'Behat\Behat\Hook\Annotation\BeforeStep',
         'afterstep'      => 'Behat\Behat\Hook\Annotation\AfterStep'
     );
+    /**
+     * String with all available annotations, splitted with "|".
+     *
+     * @var     string
+     */
+    private $availableAnnotations;
 
     /**
      * Initializes context loader.
@@ -79,6 +85,7 @@ class AnnotatedContextLoader implements ContextLoaderInterface
         $this->definitionDispatcher = $definitionDispatcher;
         $this->hookDispatcher       = $hookDispatcher;
         $this->translator           = $translator;
+        $this->availableAnnotations = implode("|", array_keys($this->annotationClasses));
     }
 
     /**
@@ -153,18 +160,14 @@ class AnnotatedContextLoader implements ContextLoaderInterface
             foreach (explode("\n", $docBlock) as $docLine) {
                 $docLine = preg_replace('/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$/', '', trim($docLine));
 
-                if (preg_match('/^\@([a-zA-Z_][a-zA-Z_0-9]*)\s*(?:(.*))?$/', $docLine, $matches)) {
-                    $annotationName = strtolower(isset($matches[1]) ? $matches[1] : 'unknown');
+                if (preg_match('/^\@('.$this->availableAnnotations.')\s*(?:(.*))?$/i', $docLine, $matches)) {
+                    $class    = $this->annotationClasses[strtolower($matches[1])];
+                    $callback = array($className, $method->getName());
 
-                    if (isset($this->annotationClasses[$annotationName])) {
-                        $class    = $this->annotationClasses[$annotationName];
-                        $callback = array($className, $method->getName());
-
-                        if (isset($matches[2]) && !empty($matches[2])) {
-                            $annotations[] = new $class($callback, $matches[2]);
-                        } else {
-                            $annotations[] = new $class($callback);
-                        }
+                    if (isset($matches[2]) && !empty($matches[2])) {
+                        $annotations[] = new $class($callback, $matches[2]);
+                    } else {
+                        $annotations[] = new $class($callback);
                     }
                 }
             }
