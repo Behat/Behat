@@ -45,8 +45,9 @@ class DefinitionDumper
 
         foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
             $regex = $this->dispatcher->translateDefinitionRegex($regex, $language);
+            $type  = str_pad($definition->getType(), 5, ' ', STR_PAD_LEFT);
 
-            $definitions .= $definition->getType() . " $regex\n\n";
+            $definitions .= "$type $regex\n";
         }
 
         return $definitions;

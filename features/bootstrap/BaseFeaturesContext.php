@@ -14,7 +14,7 @@ class BaseFeaturesContext extends BehatContext implements AnnotatedContextInterf
     public function aFileNamedWith($filename, PyStringNode $content) {}
 
     /**
-     * @When /^I run "behat ([^"]*)"$/
+     * @Given /^I am in the "([^"]*)" path$/
      */
-    public function iRunBehat($command) {}
+    public function iAmInThePath($path) {}
 }

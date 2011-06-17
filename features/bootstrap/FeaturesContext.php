@@ -16,12 +16,37 @@ class FeaturesContext extends BaseFeaturesContext
         $this->addSubcontext(new Hooks());
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function aFileNamedWith($filename, PyStringNode $content)
     {
         $content = strtr((string) $content, array("'''" => '"""'));
         file_put_contents($filename, $content);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function iAmInThePath($path)
+    {
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+            chdir($path);
+        }
+    }
+
+    /**
+     * @Given /^file "([^"]*)" should exist$/
+     */
+    public function fileShouldExist($path)
+    {
+        assertFileExists(getcwd() . DIRECTORY_SEPARATOR . $path);
+    }
+
+    /**
+     * @When /^I run "behat ([^"]*)"$/
+     */
     public function iRunBehat($command)
     {
         $php     = 0 === mb_strpos(BEHAT_PHP_BIN_PATH, '/usr/bin/env')
@@ -100,25 +125,6 @@ class FeaturesContext extends BaseFeaturesContext
             $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
             throw new Exception($diff, $e->getCode(), $e);
         }
-    }
-
-    /**
-     * @Given /^I am in the "([^"]*)" path$/
-     */
-    public function iAmInThePath($path)
-    {
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-            chdir($path);
-        }
-    }
-
-    /**
-     * @Given /^file "([^"]*)" should exist$/
-     */
-    public function fileShouldExist($path)
-    {
-        assertFileExists(getcwd() . DIRECTORY_SEPARATOR . $path);
     }
 
     /**
