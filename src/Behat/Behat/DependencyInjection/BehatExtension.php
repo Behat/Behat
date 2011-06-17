@@ -140,7 +140,7 @@ class BehatExtension implements ExtensionInterface
             throw new \InvalidArgumentException("Config file $configFile not found");
         }
 
-        $config = Yaml::load($configFile);
+        $config = Yaml::parse($configFile);
 
         $resultConfig = isset($config['default']) ? $config['default'] : array();
         if ('default' !== $profile && isset($config[$profile])) {
