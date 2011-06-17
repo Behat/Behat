@@ -48,6 +48,28 @@ class ContextReader
     {
         $this->contextClassName = $contextClassName;
         $this->parameters       = $parameters;
+
+        if (!class_exists($this->contextClassName)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Class "%s" not found', $this->contextClassName
+            ));
+        }
+
+        $contextClassRefl = new \ReflectionClass($this->contextClassName);
+        if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\ContextInterface')) {
+            throw new \InvalidArgumentException(sprintf(
+                'Cannot use class "%s" as context, as it doesn\'t implement ContextInterface',
+                $this->contextClassName
+            ));
+        }
+
+        if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\AnnotatedContextInterface')
+         && !$contextClassRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {
+            throw new \InvalidArgumentException(sprintf(
+                'Context class "%s" should implement either AnnotatedContextInterface or ClosuredContextInterface (or both). Otherwise Behat will not be able to find your definitions',
+                $this->contextClassName
+            ));
+        }
     }
 
     /**
