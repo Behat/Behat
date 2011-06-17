@@ -4,7 +4,73 @@ Feature: Different result types
   I need to be able to see different types of test results
 
   Background:
-    Given a file named "features/support/bootstrap.php" with:
+    Given a file named "features/bootstrap/FeaturesContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\ClosuredContextInterface,
+          Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
+      use Symfony\Component\Finder\Finder;
+
+      if (file_exists(__DIR__ . '/../support/bootstrap.php')) {
+          require_once __DIR__ . '/../support/bootstrap.php';
+      }
+
+      class FeaturesContext extends BehatContext implements ClosuredContextInterface
+      {
+          public $parameters = array();
+
+          public function __construct(array $parameters) {
+              $this->parameters = $parameters;
+
+              if (file_exists(__DIR__ . '/../support/env.php')) {
+                  $world = $this;
+                  require(__DIR__ . '/../support/env.php');
+              }
+          }
+
+          public function getStepDefinitionResources() {
+              if (file_exists(__DIR__ . '/../steps')) {
+                  $finder = new Finder();
+                  return $finder->files()->name('*.php')->in(__DIR__ . '/../steps');
+              }
+              return array();
+          }
+
+          public function getHookDefinitionResources() {
+              if (file_exists(__DIR__ . '/../support/hooks.php')) {
+                  return array(__DIR__ . '/../support/hooks.php');
+              }
+              return array();
+          }
+
+          public function getI18nResources() {
+              if (file_exists(__DIR__ . '/../steps/i18n')) {
+                  $finder = new Finder();
+                  return $finder->files()->name('*.xliff')->in(__DIR__ . '/../steps/i18n');
+              }
+              return array();
+          }
+
+          public function __call($name, array $args) {
+              if (isset($this->$name) && is_callable($this->$name)) {
+                  return call_user_func_array($this->$name, $args);
+              } else {
+                  $trace = debug_backtrace();
+                  trigger_error(
+                      'Call to undefined method ' . get_class($this) . '::' . $name .
+                      ' in ' . $trace[0]['file'] .
+                      ' on line ' . $trace[0]['line'],
+                      E_USER_ERROR
+                  );
+              }
+          }
+      }
+      """
+    And a file named "features/support/bootstrap.php" with:
       """
       <?php
       require_once 'PHPUnit/Autoload.php';
@@ -109,7 +175,7 @@ Feature: Different result types
       (::) pending steps (::)
       
       01. TODO: write pending definition
-          In step `Given human have ordered very very very hot "coffee"'. # features/steps/coffee_steps.php:4
+          In step `Given human have ordered very very very hot "coffee"'. # features/steps/coffee_steps.php:2
           From scenario background.                                       # features/coffee.feature:6
       
       1 scenario (1 undefined)
@@ -129,7 +195,7 @@ Feature: Different result types
       (::) pending steps (::)
       
       01. TODO: write pending definition
-          In step `Given human have ordered very very very hot "coffee"'. # features/steps/coffee_steps.php:4
+          In step `Given human have ordered very very very hot "coffee"'. # features/steps/coffee_steps.php:2
           From scenario background.                                       # features/coffee.feature:6
       
       1 scenario (1 undefined)
@@ -179,11 +245,11 @@ Feature: Different result types
       (::) failed steps (::)
       
       01. Failed asserting that <integer:10> is equal to <string:12>.
-          In step `Then I should see 12$ on the screen'. # features/steps/coffee_steps.php:7
+          In step `Then I should see 12$ on the screen'. # features/steps/coffee_steps.php:5
           From scenario `Check throwed amount'.          # features/coffee.feature:9
       
       02. Failed asserting that <integer:30> is equal to <string:31>.
-          In step `Then I should see 31$ on the screen'. # features/steps/coffee_steps.php:7
+          In step `Then I should see 31$ on the screen'. # features/steps/coffee_steps.php:5
           From scenario `Additional throws'.             # features/coffee.feature:12
       
       2 scenarios (2 failed)
@@ -236,11 +302,11 @@ Feature: Different result types
       (::) failed steps (::)
       
       01. NO water in coffee machine!!!
-          In step `Given I have no water'. # features/steps/coffee_steps.php:5
+          In step `Given I have no water'. # features/steps/coffee_steps.php:3
           From scenario `I have no water'. # features/coffee.feature:9
       
       02. NO electricity in coffee machine!!!
-          In step `And I have no electricity'.   # features/steps/coffee_steps.php:12
+          In step `And I have no electricity'.   # features/steps/coffee_steps.php:10
           From scenario `I have no electricity'. # features/coffee.feature:15
       
       2 scenarios (2 failed)
@@ -280,8 +346,8 @@ Feature: Different result types
       (::) failed steps (::)
       
       01. Ambiguous match of "human have chosen "Latte"":
-          features/steps/coffee_steps.php:4:in `/^human have chosen "([^"]*)"$/`
-          features/steps/coffee_steps.php:7:in `/^human have chosen "Latte"$/`
+          to `/^human have chosen "([^"]*)"$/` from features/steps/coffee_steps.php:2
+          to `/^human have chosen "Latte"$/` from features/steps/coffee_steps.php:5
           In step `Given human have chosen "Latte"'.
           From scenario `Ambigious coffee type'.     # features/coffee.feature:6
       
