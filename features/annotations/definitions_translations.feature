@@ -14,6 +14,7 @@ Feature: Definitions translations
           И Я набрал число 4 на калькуляторе
           И Я нажал "+"
           То Я должен увидеть на экране 14
+          И пользователь "everzet" должен иметь имя "everzet"
       """
     And a file named "features/bootstrap/FeaturesContext.php" with:
       """
@@ -51,6 +52,18 @@ Feature: Definitions translations
               assertEquals(intval($result), $this->result);
           }
 
+          /** @Transform /"([^"]+)" user/ */
+          public static function createUserFromUsername($username) {
+              return (Object) array('name' => $username);
+          }
+
+          /**
+           * @Then /^the ("[^"]+" user) name should be "([^"]*)"$/
+           */
+          public function theUserUsername($user, $username) {
+              assertEquals($username, $user->name);
+          }
+
           public function getI18nResources() {
               return array(__DIR__ . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR . 'ru.xliff');
           }
@@ -74,6 +87,14 @@ Feature: Definitions translations
               <source>/^I should see (\d+) on the screen$/</source>
               <target>/^Я должен увидеть на экране (\d+)$/</target>
             </trans-unit>
+            <trans-unit id="the-user">
+              <source>/"([^"]+)" user/</source>
+              <target>/пользователь "([^"]+)"/</target>
+            </trans-unit>
+            <trans-unit id="the-user-name-should-be">
+              <source>/^the ("[^"]+" user) name should be "([^"]*)"$/</source>
+              <target>/^(пользователь "[^"]+") должен иметь имя "([^"]*)"$/</target>
+            </trans-unit>
           </body>
         </file>
       </xliff>
@@ -81,8 +102,8 @@ Feature: Definitions translations
     When I run "behat -f progress features/calc_ru.feature"
     Then it should pass with:
       """
-      ....
+      .....
       
       1 scenario (1 passed)
-      4 steps (4 passed)
+      5 steps (5 passed)
       """
