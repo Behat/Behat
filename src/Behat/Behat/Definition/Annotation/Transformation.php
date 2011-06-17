@@ -68,7 +68,7 @@ class Transformation extends Annotation implements TransformationInterface
     /**
      * @see     Behat\Behat\Definition\TransformationInterface::transform()
      */
-    public function transform(ContextInterface $context, $argument)
+    function transform($translatedRegex, ContextInterface $context, $argument)
     {
         $callback = $this->getCallback();
         if (!$this->isClosure()) {
@@ -78,13 +78,15 @@ class Transformation extends Annotation implements TransformationInterface
         if ($argument instanceof TableNode) {
             $tableMatching = 'table:' . implode(',', $argument->getRow(0));
 
-            if (preg_match($this->regex, $tableMatching)) {
+            if (preg_match($translatedRegex, $tableMatching)
+             || preg_match($this->regex, $tableMatching)) {
                 return call_user_func($callback, $argument);
             }
         } elseif (is_string($argument) || $argument instanceof PyStringNode) {
-            if (preg_match($this->regex, (string) $argument, $transformArguments)) {
+            if (preg_match($translatedRegex, (string) $argument, $transformArguments)
+             || preg_match($this->regex, (string) $argument, $transformArguments)) {
                 return call_user_func(
-                    $callback, $transformArguments[1 === count($transformArguments) ? 0 : 1]
+                    $callback, $transformArguments[count($transformArguments) - 1]
                 );
             }
         }

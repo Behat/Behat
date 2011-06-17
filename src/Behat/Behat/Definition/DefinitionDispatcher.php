@@ -144,7 +144,11 @@ class DefinitionDispatcher
                 // transform arguments
                 foreach ($arguments as $num => $argument) {
                     foreach ($this->getTransformations() as $transformation) {
-                        if ($newArgument = $transformation->transform($context, $argument)) {
+                        $translRegex = $this->translateDefinitionRegex(
+                            $transformation->getRegex(), $step->getLanguage()
+                        );
+
+                        if ($newArgument = $transformation->transform($translRegex, $context, $argument)) {
                             $arguments[$num] = $newArgument;
                         }
                     }

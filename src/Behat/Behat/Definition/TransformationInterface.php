@@ -22,8 +22,9 @@ interface TransformationInterface
     /**
      * Transforms provided argument.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context
-     * @param   mixed                                   $argument
+     * @param   string                                      $translatedRegex
+     * @param   Behat\Behat\Context\ContextInterface        $context
+     * @param   mixed                                       $argument
      */
-    function transform(ContextInterface $context, $argument);
+    function transform($translatedRegex, ContextInterface $context, $argument);
 }
