@@ -1,10 +1,14 @@
 default:
   paths:
-    features:               %%BEHAT_CONFIG_PATH%%/features
+    features:               %%BEHAT_CONFIG_PATH%%/features/annotations
+    support:                %%BEHAT_CONFIG_PATH%%/features/support
   formatter:
     name:                   progress
-pretty:
-  formatter:
-    name:                   pretty
-    parameters:
-      multiline_arguments:  false
+
+annotations:
+  paths:
+    features:               %%BEHAT_CONFIG_PATH%%/features/annotations
+
+closures:
+  paths:
+    features:               %%BEHAT_CONFIG_PATH%%/features/closures
