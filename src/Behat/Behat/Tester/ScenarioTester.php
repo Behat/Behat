@@ -45,7 +45,7 @@ class ScenarioTester implements NodeVisitorInterface
      *
      * @var     Behat\Behat\Context\ContextInterface
      */
-    protected $context;
+    private $context;
 
     /**
      * Initializes tester.

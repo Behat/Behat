@@ -28,19 +28,6 @@ use Behat\Behat\Event\OutlineEvent,
 class OutlineTester extends ScenarioTester
 {
     /**
-     * Service container.
-     *
-     * @var     Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
-    /**
-     * Event dispatcher.
-     *
-     * @var     Behat\Behat\EventDispatcher\EventDispatcher
-     */
-    protected $dispatcher;
-
-    /**
      * Initializes tester.
      *
      * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
@@ -85,7 +72,7 @@ class OutlineTester extends ScenarioTester
      *
      * @return  integer
      */
-    protected function visitOutlineExample(OutlineNode $outline, $row, array $tokens = array())
+    private function visitOutlineExample(OutlineNode $outline, $row, array $tokens = array())
     {
         $context  = $this->container->get('behat.context_dispatcher')->createContext();
         $itResult = 0;

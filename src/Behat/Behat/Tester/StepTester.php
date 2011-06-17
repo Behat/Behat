@@ -34,31 +34,31 @@ class StepTester implements NodeVisitorInterface
      *
      * @var     Behat\Behat\EventDispatcher\EventDispatcher
      */
-    protected $dispatcher;
+    private $dispatcher;
     /**
      * Context.
      *
      * @var     Behat\Behat\Context\ContextInterface
      */
-    protected $context;
+    private $context;
     /**
      * Definition dispatcher.
      *
      * @var     Behat\Behat\Definition\DefinitionDispatcher
      */
-    protected $definitions;
+    private $definitions;
     /**
      * Step replace tokens.
      *
      * @var     array
      */
-    protected $tokens = array();
+    private $tokens = array();
     /**
      * Is step marked as skipped.
      *
      * @var     boolean
      */
-    protected $skip = false;
+    private $skip = false;
 
     /**
      * Initializes tester.

@@ -30,19 +30,19 @@ class BackgroundTester implements NodeVisitorInterface
      *
      * @var     Symfony\Component\DependencyInjection\ContainerInterface
      */
-    protected $container;
+    private $container;
     /**
      * Event dispatcher.
      *
      * @var     Behat\Behat\EventDispatcher\EventDispatcher
      */
-    protected $dispatcher;
+    private $dispatcher;
     /**
      * Context.
      *
      * @var     Behat\Behat\Context\ContextInterface
      */
-    protected $context;
+    private $context;
 
     /**
      * Initializes tester.
