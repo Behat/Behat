@@ -23,6 +23,11 @@ class DefinitionProposalDispatcher
 {
     private $proposals = array();
 
+    /**
+     * Adds proposal object to the dispatcher.
+     *
+     * @param   Behat\Behat\Definition\Proposal\DefinitionProposalInterface $proposal
+     */
     public function addProposal(DefinitionProposalInterface $proposal)
     {
         $this->proposals[] = $proposal;
