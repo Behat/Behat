@@ -6,10 +6,25 @@ use Behat\Behat\Context\AnnotatedContextInterface,
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Behat test suite hooks.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class Hooks extends BehatContext implements AnnotatedContextInterface
 {
     /**
      * @BeforeSuite
+     *
+     * Cleans test folders in the temporary directory.
      */
     public static function cleanTestFolders()
     {
@@ -20,6 +35,8 @@ class Hooks extends BehatContext implements AnnotatedContextInterface
 
     /**
      * @BeforeScenario
+     *
+     * Prepares test folders in the temporary directory.
      */
     public function prepareTestFolders()
     {
@@ -38,13 +55,18 @@ class Hooks extends BehatContext implements AnnotatedContextInterface
         mkdir('features' . DIRECTORY_SEPARATOR . 'steps' . DIRECTORY_SEPARATOR . 'i18n');
     }
 
-    private static function rmdirRecursive($dir) {
-        $files = scandir($dir);
+    /**
+     * Removes files and folders recursively at provided path.
+     *
+     * @param   string  $path
+     */
+    private static function rmdirRecursive($path) {
+        $files = scandir($path);
         array_shift($files);
         array_shift($files);
 
         foreach ($files as $file) {
-            $file = $dir . DIRECTORY_SEPARATOR . $file;
+            $file = $path . DIRECTORY_SEPARATOR . $file;
             if (is_dir($file)) {
                 static::rmdirRecursive($file);
             } else {
@@ -52,6 +74,6 @@ class Hooks extends BehatContext implements AnnotatedContextInterface
             }
         }
 
-        rmdir($dir);
+        rmdir($path);
     }
 }

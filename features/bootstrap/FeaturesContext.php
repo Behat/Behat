@@ -5,13 +5,49 @@ use Behat\Behat\Context\BehatContext,
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
+require_once 'PHPUnit/Autoload.php';
+require_once 'PHPUnit/Framework/Assert/Functions.php';
+
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Behat test suite context.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class FeaturesContext extends BaseFeaturesContext
 {
+    /**
+     * Last runned command name.
+     *
+     * @var     string
+     */
     private $command;
+    /**
+     * Last runned command output.
+     *
+     * @var     string
+     */
     private $output;
+    /**
+     * Last runned command return code.
+     *
+     * @var     integer
+     */
     private $return;
 
-    public function __construct()
+    /**
+     * Initializes context.
+     *
+     * @param   array   $parameters
+     */
+    public function __construct(array $parameters = array())
     {
         $this->addSubcontext(new Hooks());
     }
@@ -38,6 +74,10 @@ class FeaturesContext extends BaseFeaturesContext
 
     /**
      * @Given /^file "([^"]*)" should exist$/
+     *
+     * Checks whether a file at provided path exists.
+     *
+     * @param   string  $path
      */
     public function fileShouldExist($path)
     {
@@ -46,23 +86,32 @@ class FeaturesContext extends BaseFeaturesContext
 
     /**
      * @When /^I run "behat ([^"]*)"$/
+     *
+     * Runs behat command with provided parameters
+     *
+     * @param   string  $argumentsString
      */
-    public function iRunBehat($command)
+    public function iRunBehat($argumentsString)
     {
-        $php     = 0 === mb_strpos(BEHAT_PHP_BIN_PATH, '/usr/bin/env')
-                 ? BEHAT_PHP_BIN_PATH
-                 : escapeshellarg(BEHAT_PHP_BIN_PATH);
-        $command = strtr($command, array('\'' => '"'));
+        $php = 0 === mb_strpos(BEHAT_PHP_BIN_PATH, '/usr/bin/env')
+             ? BEHAT_PHP_BIN_PATH
+             : escapeshellarg(BEHAT_PHP_BIN_PATH);
+        $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
-        exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --no-time --no-colors ' . $command, $output, $return);
+        exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --no-time --no-colors ' . $argumentsString, $output, $return);
 
-        $this->command = $command;
+        $this->command = 'behat ' . $argumentsString;
         $this->output  = trim(implode("\n", $output));
         $this->return  = $return;
     }
 
     /**
      * @Then /^it should (fail|pass) with:$/
+     *
+     * Checks whether previously runned command passes|failes with provided output.
+     *
+     * @param   string                          $success    "fail" or "pass"
+     * @param   Behat\Gherkin\Node\PyStringNode $text       PyString text instance
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
@@ -95,6 +144,8 @@ class FeaturesContext extends BaseFeaturesContext
 
     /**
      * @Then /^display last command output$/
+     *
+     * Prints last command output string.
      */
     public function displayLastCommandOutput()
     {
@@ -103,6 +154,10 @@ class FeaturesContext extends BaseFeaturesContext
 
     /**
      * @Then /^the output should contain:$/
+     *
+     * Checks whether last command output contains provided string.
+     *
+     * @param   Behat\Gherkin\Node\PyStringNode $text   PyString text instance
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
@@ -129,6 +184,10 @@ class FeaturesContext extends BaseFeaturesContext
 
     /**
      * @Then /^it should (fail|pass)$/
+     *
+     * Checks whether previously runned command failed|passed.
+     *
+     * @param   string  $success    "fail" or "pass"
      */
     public function itShouldFail($success)
     {
@@ -137,13 +196,5 @@ class FeaturesContext extends BaseFeaturesContext
         } else {
             assertEquals(0, $this->return);
         }
-    }
-
-    /**
-     * @Then /^I must have (\d+)$/
-     */
-    public function iMustHave($argument1)
-    {
-        throw new Pending();
     }
 }
