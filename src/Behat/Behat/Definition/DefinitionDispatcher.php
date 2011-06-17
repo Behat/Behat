@@ -277,10 +277,6 @@ PHP
             $resulting[] = $argument;
         }
 
-        if ($refl->isClosure()) {
-            array_unshift($resulting, $context);
-        }
-
         return $resulting;
     }
 }
