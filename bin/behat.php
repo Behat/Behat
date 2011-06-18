@@ -18,7 +18,7 @@ if (is_file(__DIR__ . '/../autoload.php')) {
 } elseif (is_file(__DIR__ . '/../autoload.php.dist')) {
     require_once __DIR__ . '/../autoload.php.dist';
 } else {
-    require_once 'behat/autoload.php.dist';
+    require_once 'behat/autoload.php';
 }
 
 // internal encoding to utf8
