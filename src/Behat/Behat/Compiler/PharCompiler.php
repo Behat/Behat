@@ -114,7 +114,7 @@ class PharCompiler
  * file that was distributed with this source code.
  */
 
-define('BEHAT_PHP_BIN_PATH',    '/usr/bin/env php');
+define('BEHAT_PHP_BIN_PATH',    'php');
 define('BEHAT_BIN_PATH',        __FILE__);
 define('BEHAT_VERSION',         '%s');
 
