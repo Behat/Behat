@@ -65,12 +65,4 @@ class BehatContext implements ContextInterface
     {
         echo "\n\033[36m|  " . strtr($string, array("\n" => "\n|  ")) . "\033[0m\n\n";
     }
-
-    /**
-     * @see     Behat\Behat\Context\ContextInterface::getI18nResources()
-     */
-    public function getI18nResources()
-    {
-        return array();
-    }
 }

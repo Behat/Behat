@@ -37,11 +37,4 @@ interface ContextInterface
      * @return  Behat\Behat\Context\ContextInterface
      */
     function getContextByClassName($className);
-
-    /**
-     * Returns array of i18n XLIFF files paths.
-     *
-     * @return  array
-     */
-    function getI18nResources();
 }
