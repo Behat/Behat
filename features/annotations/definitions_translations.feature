@@ -23,10 +23,14 @@ Feature: Definitions translations
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
 
-      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
-      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\AnnotatedContextInterface as Annotated,
+          Behat\Behat\Context\TranslatedContextInterface as Translated,
+          Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface
+      class FeaturesContext extends BehatContext implements Annotated, Translated
       {
           private $numbers = array();
           private $result = 0;
@@ -64,7 +68,7 @@ Feature: Definitions translations
               assertEquals($username, $user->name);
           }
 
-          public function getI18nResources() {
+          public function getTranslationResources() {
               return array(__DIR__ . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR . 'ru.xliff');
           }
       }

@@ -14,10 +14,13 @@ Feature: Scenario Outlines
       """
       <?php
 
-      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
-      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\AnnotatedContextInterface as Annotated,
+          Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\Pending;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface
+      class FeaturesContext extends BehatContext implements Annotated
       {
           private $result;
           private $numbers;

@@ -8,7 +8,8 @@ Feature: Definitions translations
       """
       <?php
 
-      use Behat\Behat\Context\ClosuredContextInterface,
+      use Behat\Behat\Context\ClosuredContextInterface as Closured,
+          Behat\Behat\Context\TranslatedContextInterface as Translated,
           Behat\Behat\Context\BehatContext,
           Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,
@@ -19,7 +20,7 @@ Feature: Definitions translations
           require_once __DIR__ . '/../support/bootstrap.php';
       }
 
-      class FeaturesContext extends BehatContext implements ClosuredContextInterface
+      class FeaturesContext extends BehatContext implements Closured, Translated
       {
           public $parameters = array();
 
@@ -47,7 +48,7 @@ Feature: Definitions translations
               return array();
           }
 
-          public function getI18nResources() {
+          public function getTranslationResources() {
               if (file_exists(__DIR__ . '/../steps/i18n')) {
                   $finder = new Finder();
                   return $finder->files()->name('*.xliff')->in(__DIR__ . '/../steps/i18n');
