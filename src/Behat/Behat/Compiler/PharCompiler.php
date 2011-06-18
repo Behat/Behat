@@ -73,7 +73,8 @@ class PharCompiler
 
         // license and autoloading
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/LICENSE'), $phar);
-        $this->addFileToPhar(new \SplFileInfo($this->libPath . '/autoload.php.dist'), $phar);
+        $this->addFileToPhar(new \SplFileInfo($this->libPath . '/autoload.php'), $phar);
+        $this->addFileToPhar(new \SplFileInfo($this->libPath . '/autoload_map.php'), $phar);
 
         // stub
         $phar->setStub($this->getStub($version));
@@ -119,7 +120,7 @@ define('BEHAT_BIN_PATH',        __FILE__);
 define('BEHAT_VERSION',         '%s');
 
 Phar::mapPhar('behat.phar');
-require_once 'phar://behat.phar/autoload.php.dist';
+require_once 'phar://behat.phar/autoload.php';
 
 // internal encoding to utf8
 mb_internal_encoding('utf8');

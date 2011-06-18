@@ -152,7 +152,8 @@ class PearCompiler
                 <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
             </file>
 
-            <file role="php" baseinstalldir="behat" name="autoload.php.dist" />
+            <file role="php" baseinstalldir="behat" name="autoload.php" />
+            <file role="php" baseinstalldir="behat" name="autoload_map.php" />
             <file role="php" baseinstalldir="behat" name="behat.yml" />
             <file role="php" baseinstalldir="behat" name="CHANGES.md" />
             <file role="php" baseinstalldir="behat" name="README.md" />
