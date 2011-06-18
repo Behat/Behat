@@ -94,7 +94,7 @@ Feature: Pretty Formatter
           $world->value += $num;
       });
 
-      $steps->And('/^Something not done yet$/', function($world) {
+      $steps->Given('/^Something not done yet$/', function($world) {
           throw new \Behat\Behat\Exception\Pending();
       });
       """
@@ -178,7 +178,7 @@ Feature: Pretty Formatter
 
       You can implement step definitions for undefined steps with these snippets:
 
-      $steps->And('/^Something new$/', function($world) {
+      $steps->Given('/^Something new$/', function($world) {
           throw new \Behat\Behat\Exception\Pending();
       });
       """

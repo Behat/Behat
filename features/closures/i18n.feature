@@ -92,7 +92,7 @@ Feature: I18n
           $world->value += $num;
       });
 
-      $steps->And('/^Что-то еще не сделано$/', function($world) {
+      $steps->Given('/^Что-то еще не сделано$/', function($world) {
           throw new \Behat\Behat\Exception\Pending();
       });
       """
@@ -179,7 +179,7 @@ Feature: I18n
       
       Вы можете реализовать определения для новых шагов с помощью этих шаблонов:
       
-      $steps->И('/^Что-то новое$/', function($world) {
+      $steps->Given('/^Что-то новое$/', function($world) {
           throw new \Behat\Behat\Exception\Pending();
       });
       """
@@ -215,7 +215,7 @@ Feature: I18n
       
       Вы можете реализовать определения для новых шагов с помощью этих шаблонов:
       
-      $steps->И('/^Что-то новое$/', function($world) {
+      $steps->Given('/^Что-то новое$/', function($world) {
           throw new \Behat\Behat\Exception\Pending();
       });
       """

@@ -71,9 +71,10 @@ class ClosuredDefinitionProposal implements DefinitionProposalInterface
 PHP
           , '%s', $regex, implode(', ', $args)
         );
+        $type  = in_array($step->getType(), array('Given', 'When', 'Then')) ? $step->getType() : 'Given';
 
         return array(
-            md5($description) => sprintf($description, str_replace(' ', '_', $step->getType()))
+            md5($description) => sprintf($description, str_replace(' ', '_', $type))
         );
     }
 }
