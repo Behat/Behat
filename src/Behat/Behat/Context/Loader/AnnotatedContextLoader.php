@@ -11,8 +11,6 @@ use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Hook\HookInterface,
     Behat\Behat\Annotation\AnnotationInterface;
 
-use Symfony\Component\Translation\TranslatorInterface;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -40,12 +38,6 @@ class AnnotatedContextLoader implements ContextLoaderInterface
      * @var     Behat\Behat\Hook\HookDispatcher
      */
     private $hookDispatcher;
-    /**
-     * Translator.
-     *
-     * @var     Symfony\Component\Translation\TranslatorInterface
-     */
-    private $translator;
     /**
      * List of available annotations.
      *
@@ -77,14 +69,11 @@ class AnnotatedContextLoader implements ContextLoaderInterface
      *
      * @param   Behat\Behat\Definition\DefinitionDispatcher         $definitionDispatcher   definitions
      * @param   Behat\Behat\Hook\HookDispatcher                     $hookDispatcher         hooks
-     * @param   Symfony\Component\Translation\TranslatorInterface   $translator             translator
      */
-    public function __construct(DefinitionDispatcher $definitionDispatcher, HookDispatcher $hookDispatcher, 
-                                TranslatorInterface $translator)
+    public function __construct(DefinitionDispatcher $definitionDispatcher, HookDispatcher $hookDispatcher)
     {
         $this->definitionDispatcher = $definitionDispatcher;
         $this->hookDispatcher       = $hookDispatcher;
-        $this->translator           = $translator;
         $this->availableAnnotations = implode("|", array_keys($this->annotationClasses));
     }
 
@@ -101,17 +90,6 @@ class AnnotatedContextLoader implements ContextLoaderInterface
      */
     public function load(ContextInterface $context)
     {
-        $this->readDefinitions($context);
-        $this->readTranslations($context);
-    }
-
-    /**
-     * Reads annotated context annotations.
-     *
-     * @param   Behat\Behat\Context\AnnotatedContextInterface   $context
-     */
-    private function readDefinitions(AnnotatedContextInterface $context)
-    {
         $reflection = new \ReflectionObject($context);
 
         foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $methodRefl) {
@@ -124,18 +102,6 @@ class AnnotatedContextLoader implements ContextLoaderInterface
                     $this->hookDispatcher->addHook($annotation);
                 }
             }
-        }
-    }
-
-    /**
-     * Reads annotated context translations.
-     *
-     * @param   Behat\Behat\Context\AnnotatedContextInterface   $context
-     */
-    private function readTranslations(AnnotatedContextInterface $context)
-    {
-        foreach ($context->getI18nResources() as $path) {
-            $this->translator->addResource('xliff', $path, basename($path, '.xliff'), 'behat.definitions');
         }
     }
 
