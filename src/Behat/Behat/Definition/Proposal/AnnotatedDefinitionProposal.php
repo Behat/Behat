@@ -60,9 +60,9 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
         );
         $regex = preg_replace('/\'.*(?<!\')/', '\\\\$0', $regex); // Single quotes without matching pair (escape in resulting regex)
 
-        $methodName     = preg_replace($replacePatterns, '', $text);
-        $methodName     = preg_replace('/[^a-zA-Z\_\ ]/', '', $methodName);
-        $methodName     = str_replace(' ', '', ucwords($methodName));
+        $methodName = preg_replace($replacePatterns, '', $text);
+        $methodName = preg_replace('/[^a-zA-Z\_\ ]/', '', $methodName);
+        $methodName = str_replace(' ', '', ucwords($methodName));
 
         if (0 !== strlen($methodName)) {
             $methodName[0] = strtolower($methodName[0]);
