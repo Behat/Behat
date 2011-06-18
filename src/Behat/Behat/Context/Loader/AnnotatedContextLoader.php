@@ -158,7 +158,7 @@ class AnnotatedContextLoader implements ContextLoaderInterface
         // read method annotations
         if ($docBlock = $method->getDocComment()) {
             foreach (explode("\n", $docBlock) as $docLine) {
-                $docLine = preg_replace('/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$/', '', trim($docLine));
+                $docLine = preg_replace('/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/', '', $docLine);
 
                 if (preg_match('/^\@('.$this->availableAnnotations.')\s*(?:(.*))?$/i', $docLine, $matches)) {
                     $class    = $this->annotationClasses[strtolower($matches[1])];
