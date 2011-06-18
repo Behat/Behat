@@ -181,8 +181,8 @@ class BehatExtension implements ExtensionInterface
         $behatClassLoaderReflection = new \ReflectionClass('Behat\Behat\Console\BehatApplication');
         $gherkinParserReflection    = new \ReflectionClass('Behat\Gherkin\Parser');
 
-        $behatLibPath   = realpath(dirname($behatClassLoaderReflection->getFilename()) . '/../../../../');
-        $gherkinLibPath = realpath(dirname($gherkinParserReflection->getFilename()) . '/../../../');
+        $behatLibPath   = dirname($behatClassLoaderReflection->getFilename()) . '/../../../../';
+        $gherkinLibPath = dirname($gherkinParserReflection->getFilename()) . '/../../../';
 
         $container->setParameter('gherkin.paths.lib', $gherkinLibPath);
         $container->setParameter('behat.paths.lib', $behatLibPath);
