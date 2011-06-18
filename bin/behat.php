@@ -2,8 +2,6 @@
 <?php
 
 /*
- * Behat
- *
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
@@ -23,7 +21,7 @@ if (is_file(__DIR__ . '/../autoload.php')) {
     require_once 'behat/autoload.php.dist';
 }
 
-// Internal encoding to utf8
+// internal encoding to utf8
 mb_internal_encoding('utf8');
 
 $app = new Behat\Behat\Console\BehatApplication(BEHAT_VERSION);
