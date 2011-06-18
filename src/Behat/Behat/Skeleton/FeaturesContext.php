@@ -1,6 +1,7 @@
 <?php
 
-use Behat\Behat\Context\AnnotatedContextInterface,
+use Behat\Behat\Context\TranslatedContextInterface,
+    Behat\Behat\Context\AnnotatedContextInterface,
     Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\BehatContext,
     Behat\Behat\Exception\Pending;
