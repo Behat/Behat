@@ -17,72 +17,26 @@
  * @author     Konstantin Kudryashov <ever.zet@gmail.com>
  */
 
-if (is_file(__DIR__ . '/../autoload.php')) {
-  require_once __DIR__ . '/../autoload.php';
-} else {
-  require_once __DIR__ . '/../autoload.php.dist';
-}
+require_once __DIR__ . '/../autoload.php.dist';
+
+use Behat\Behat\Compiler;
 
 if (!isset($argv[1])) {
-  throw new Exception('You must provide version.');
+  throw new RuntimeException('You must provide version.');
 }
+$version = $argv[1];
 
 if (!isset($argv[2])) {
-  throw new Exception('You must provide stability status (alpha/beta/stable).');
+  throw new RuntimeException('You must provide stability status (alpha/beta/stable).');
 }
-
-$version = $argv[1];
 $stability = $argv[2];
 
-print sprintf("Releasing behat version \"%s\".\n", $version);
+$pear = new Compiler\PearCompiler();
+$pear->compile($version, $stability);
+echo "PEAR package compiled: behat-$version.tgz\n";
 
-if (is_file('package.xml')) {
-    unlink(getcwd().'/package.xml');
-}
-
-copy(getcwd().'/package.xml.tpl', getcwd().'/package.xml');
-
-$dirs = array(
-    'src',
-    'features',
-    'i18n',
-    'vendor/Symfony/Component',
-);
-
-$xmlSourceFiles = '';
-foreach ($dirs as $dir) {
-    $finder = new Symfony\Component\Finder\Finder();
-    $sourceFiles = $finder->files()->in($dir);
-
-    foreach ($sourceFiles as $file) {
-        $xmlSourceFiles .= '<file role="php" baseinstalldir="behat" install-as="'.$file->getPathName().'" name="'.$file->getPathName().'" />'."\n";
-    }
-}
-
-function replaceTokens($files, $beginToken, $endToken, $tokens)
-{
-    if (!is_array($files)) {
-        $files = array($files);
-    }
-
-    foreach ($files as $file) {
-        $content = file_get_contents($file);
-        foreach ($tokens as $key => $value) {
-            $content = str_replace($beginToken.$key.$endToken, $value, $content, $count);
-        }
-
-        file_put_contents($file, $content);
-    }
-}
-
-replaceTokens(getcwd().'/package.xml', '##', '##', array(
-    'BEHAT_VERSION' => $version
-  , 'CURRENT_DATE'  => date('Y-m-d')
-  , 'SOURCE_FILES'  => $xmlSourceFiles
-  , 'STABILITY'     => $stability
-));
-
-system('pear package');
-unlink(getcwd().'/package.xml');
+$phar = new Compiler\PharCompiler();
+$phar->compile($version);
+echo "PHAR package compiled: behat-$version.phar\n";
 
 exit(0);
