@@ -38,7 +38,7 @@ Feature: Different result types
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface {}
+      class FeaturesContext extends BehatContext {}
       """
     When I run "behat -f progress features/coffee.feature"
     Then it should pass with:
@@ -131,7 +131,7 @@ Feature: Different result types
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements Behat\Behat\Context\AnnotatedContextInterface
+      class FeaturesContext extends BehatContext
       {
           /**
            * @Given /^human have ordered very very very hot "([^"]*)"$/
@@ -220,13 +220,12 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\AnnotatedContextInterface as Annotated,
-          Behat\Behat\Context\BehatContext,
+      use Behat\Behat\Context\BehatContext,
           Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements Annotated
+      class FeaturesContext extends BehatContext
       {
           private $money = 0;
 
@@ -291,13 +290,12 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\AnnotatedContextInterface as Annotated,
-          Behat\Behat\Context\BehatContext,
+      use Behat\Behat\Context\BehatContext,
           Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements Annotated
+      class FeaturesContext extends BehatContext
       {
           private $money = 0;
 
@@ -369,13 +367,12 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\AnnotatedContextInterface as Annotated,
-          Behat\Behat\Context\BehatContext,
+      use Behat\Behat\Context\BehatContext,
           Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements Annotated
+      class FeaturesContext extends BehatContext
       {
           /** @Given /^human have chosen "([^"]*)"$/ */
           public function chosen($argument1) {
@@ -428,13 +425,12 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\AnnotatedContextInterface as Annotated,
-          Behat\Behat\Context\BehatContext,
+      use Behat\Behat\Context\BehatContext,
           Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements Annotated
+      class FeaturesContext extends BehatContext
       {
           /** @Given /^customer bought coffee$/ */
           public function chosen($argument1) {

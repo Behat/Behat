@@ -23,14 +23,13 @@ Feature: Definitions translations
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
 
-      use Behat\Behat\Context\AnnotatedContextInterface as Annotated,
-          Behat\Behat\Context\TranslatedContextInterface as Translated,
+      use Behat\Behat\Context\TranslatedContextInterface,
           Behat\Behat\Context\BehatContext,
           Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements Annotated, Translated
+      class FeaturesContext extends BehatContext implements TranslatedContextInterface
       {
           private $numbers = array();
           private $result = 0;

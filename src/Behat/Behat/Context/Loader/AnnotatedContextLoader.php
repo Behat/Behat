@@ -3,7 +3,6 @@
 namespace Behat\Behat\Context\Loader;
 
 use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Context\AnnotatedContextInterface,
     Behat\Behat\Definition\DefinitionDispatcher,
     Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\Definition\TransformationInterface,
@@ -82,7 +81,7 @@ class AnnotatedContextLoader implements ContextLoaderInterface
      */
     public function supports(ContextInterface $context)
     {
-        return $context instanceof AnnotatedContextInterface;
+        return true;
     }
 
     /**

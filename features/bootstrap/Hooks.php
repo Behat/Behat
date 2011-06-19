@@ -1,7 +1,6 @@
 <?php
 
-use Behat\Behat\Context\AnnotatedContextInterface,
-    Behat\Behat\Context\BehatContext,
+use Behat\Behat\Context\BehatContext,
     Behat\Behat\Exception\Pending;
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
@@ -19,7 +18,7 @@ use Behat\Gherkin\Node\PyStringNode,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Hooks extends BehatContext implements AnnotatedContextInterface
+class Hooks extends BehatContext
 {
     /**
      * @BeforeSuite

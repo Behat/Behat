@@ -1,8 +1,7 @@
 <?php
 
-use Behat\Behat\Context\TranslatedContextInterface,
-    Behat\Behat\Context\AnnotatedContextInterface,
-    Behat\Behat\Context\ClosuredContextInterface,
+use Behat\Behat\Context\ClosuredContextInterface,
+    Behat\Behat\Context\TranslatedContextInterface,
     Behat\Behat\Context\BehatContext,
     Behat\Behat\Exception\Pending;
 use Behat\Gherkin\Node\PyStringNode,
@@ -18,7 +17,7 @@ use Behat\Gherkin\Node\PyStringNode,
 /**
  * Features context.
  */
-class FeaturesContext extends BehatContext implements AnnotatedContextInterface
+class FeaturesContext extends BehatContext
 {
     /**
      * Initializes context.

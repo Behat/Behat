@@ -14,13 +14,12 @@ Feature: HTML Formatter
       """
       <?php
 
-      use Behat\Behat\Context\AnnotatedContextInterface as Annotated,
-          Behat\Behat\Context\BehatContext,
+      use Behat\Behat\Context\BehatContext,
           Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements Annotated
+      class FeaturesContext extends BehatContext
       {
           private $value = 0;
 

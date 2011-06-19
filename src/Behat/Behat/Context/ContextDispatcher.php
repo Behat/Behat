@@ -48,11 +48,9 @@ class ContextDispatcher
         }
 
         $contextClassRefl = new \ReflectionClass($contextClassName);
-        if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\AnnotatedContextInterface')
-         && !$contextClassRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {
+        if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\ContextInterface')) {
             throw new \InvalidArgumentException(sprintf(
-                'Context class "%s" should implement either AnnotatedContextInterface or ClosuredContextInterface (or both). Otherwise Behat will not be able to find your definitions',
-                $this->contextClassName
+                'Context class "%s" should implement ContextInterface', $this->contextClassName
             ));
         }
     }

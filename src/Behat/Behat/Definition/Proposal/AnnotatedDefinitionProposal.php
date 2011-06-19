@@ -4,8 +4,7 @@ namespace Behat\Behat\Definition\Proposal;
 
 use Behat\Gherkin\Node\StepNode;
 
-use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Context\AnnotatedContextInterface;
+use Behat\Behat\Context\ContextInterface;
 
 /*
  * This file is part of the Behat.
@@ -34,7 +33,7 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
      */
     public function supports(ContextInterface $context)
     {
-        return $context instanceof AnnotatedContextInterface;
+        return true;
     }
 
     /**
