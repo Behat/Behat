@@ -286,42 +286,40 @@ class BehatCommand extends Command
         $formatter->setTranslator($translator);
         $formatter->setParameter('base_path', $locator->getWorkPath());
         $formatter->setParameter('support_path', $locator->getBootstrapPath());
-        $formatter->setParameter('verbose',
-            $input->getOption('verbose') ?: $container->getParameter('behat.formatter.verbose')
-        );
-        $formatter->setParameter('language',
-            $input->getOption('lang') ?: $container->getParameter('behat.formatter.language')
-        );
+        $formatter->setParameter('decorated', $output->isDecorated());
+        foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
+            $formatter->setParameter($param, $value);
+        }
+        if ($input->getOption('verbose')) {
+            $formatter->setParameter('verbose', true);
+        }
+        if ($input->getOption('lang')) {
+            $formatter->setParameter('language', $input->getOption('lang'));
+        }
         if ($input->getOption('colors')) {
             $output->setDecorated(true);
             $formatter->setParameter('decorated', true);
         } elseif ($input->getOption('no-colors')) {
             $output->setDecorated(false);
             $formatter->setParameter('decorated', false);
-        } elseif (null !== ($decorated = $container->getParameter('behat.formatter.decorated'))) {
-            $output->setDecorated($decorated);
-            $formatter->setParameter('decorated', $decorated);
-        } else {
-            $formatter->setParameter('decorated', $output->isDecorated());
         }
-        $formatter->setParameter('time',
-            $input->getOption('no-time') ? false : $container->getParameter('behat.formatter.time')
-        );
-        $formatter->setParameter('snippets',
-            $input->getOption('no-snippets') ? false : $container->getParameter('behat.formatter.snippets')
-        );
-        $formatter->setParameter('paths',
-            $input->getOption('no-paths') ? false : $container->getParameter('behat.formatter.paths')
-        );
-        $formatter->setParameter('expand',
-            $input->getOption('expand') ? true : $container->getParameter('behat.formatter.expand')
-        );
-        $formatter->setParameter('multiline_arguments',
-            $input->getOption('no-multiline')
-                ? false
-                : $container->getParameter('behat.formatter.multiline_arguments')
-        );
-        if ($out = $input->getOption('out') ?: $locator->getOutputPath()) {
+        if ($input->getOption('no-time')) {
+            $formatter->setParameter('time', false);
+        }
+        if ($input->getOption('no-snippets')) {
+            $formatter->setParameter('snippets', false);
+        }
+        if ($input->getOption('no-paths')) {
+            $formatter->setParameter('path', false);
+        }
+        if ($input->getOption('expand')) {
+            $formatter->setParameter('expand', true);
+        }
+        if ($input->getOption('no-multiline')) {
+            $formatter->setParameter('multiline_arguments', false);
+        }
+        if ($out = $input->getOption('out')
+         ?: $locator->getOutputPath($formatter->getParameter('output_path'))) {
             // get realpath
             if (!file_exists($out)) {
                 touch($out);
@@ -332,9 +330,6 @@ class BehatCommand extends Command
             }
             $formatter->setParameter('output_path', $out);
             $formatter->setParameter('decorated', (Boolean) $input->getOption('colors'));
-        }
-        foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
-            $formatter->setParameter($param, $value);
         }
 
         // configure gherkin filters

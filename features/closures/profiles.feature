@@ -120,11 +120,11 @@ Feature: Profiles
       default:
         formatter:
           name: progress
-      progress:
+      pretty_without_paths:
         formatter:
-          name: progress
+          name: pretty
           parameters:
-            decorated: true
+            paths: false
       imports:
         - pretty.yml
       """
@@ -140,13 +140,28 @@ Feature: Profiles
       """
 
   Scenario:
-    Given I run "behat --profile progress"
+    Given I run "behat --profile pretty_without_paths"
     Then it should pass with:
       """
-      [32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m
-      
-      3 scenarios ([32m3 passed[0m)
-      15 steps ([32m15 passed[0m)
+      Feature: Math
+
+        Background:
+          Given I have basic calculator
+
+        Scenario Outline:
+          Given I have entered <number1>
+          And I have entered <number2>
+          When I add
+          Then The result should be <result>
+
+          Examples:
+            | number1 | number2 | result |
+            | 10      | 12      | 22     |
+            | 5       | 3       | 8      |
+            | 5       | 5       | 10     |
+
+      3 scenarios (3 passed)
+      15 steps (15 passed)
       """
 
   Scenario:

@@ -13,15 +13,6 @@
 
         <!-- Formatter parameters -->
         <parameter key="behat.formatter.name">pretty</parameter>
-        <parameter key="behat.formatter.decorated">null</parameter>
-        <parameter key="behat.formatter.verbose">false</parameter>
-        <parameter key="behat.formatter.time">true</parameter>
-        <parameter key="behat.formatter.language">en</parameter>
-        <parameter key="behat.formatter.output_path">null</parameter>
-        <parameter key="behat.formatter.multiline_arguments">true</parameter>
-        <parameter key="behat.formatter.snippets">true</parameter>
-        <parameter key="behat.formatter.paths">true</parameter>
-        <parameter key="behat.formatter.expand">false</parameter>
         <parameter key="behat.formatter.parameters" type="collection"></parameter>
 
         <!-- Options -->

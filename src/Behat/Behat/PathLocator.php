@@ -112,12 +112,14 @@ class PathLocator
     /**
      * Returns configured output path.
      *
+     * @param   string  $outputPath specified output path
+     *
      * @return string|null
      */
-    public function getOutputPath()
+    public function getOutputPath($outputPath = null)
     {
-        if ($path = $this->container->getParameter('behat.formatter.output_path')) {
-            return $this->preparePath($path);
+        if ($outputPath) {
+            return $this->preparePath($outputPath);
         }
 
         return null;

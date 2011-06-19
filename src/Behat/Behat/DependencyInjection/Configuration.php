@@ -60,33 +60,6 @@ class Configuration
                         scalarNode('name')->
                             defaultValue('pretty')->
                         end()->
-                        booleanNode('decorated')->
-                            defaultNull()->
-                        end()->
-                        booleanNode('verbose')->
-                            defaultFalse()->
-                        end()->
-                        booleanNode('time')->
-                            defaultTrue()->
-                        end()->
-                        scalarNode('language')->
-                            defaultValue('en')->
-                        end()->
-                        scalarNode('output_path')->
-                            defaultNull()->
-                        end()->
-                        booleanNode('multiline_arguments')->
-                            defaultTrue()->
-                        end()->
-                        booleanNode('snippets')->
-                            defaultTrue()->
-                        end()->
-                        booleanNode('paths')->
-                            defaultTrue()->
-                        end()->
-                        booleanNode('expand')->
-                            defaultFalse()->
-                        end()->
                         arrayNode('parameters')->
                             useAttributeAsKey(0)->
                             prototype('variable')->end()->
