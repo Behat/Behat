@@ -533,7 +533,7 @@ class BehatCommand extends Command
      */
     protected function initFeaturesDirectoryStructure(PathLocator $locator, OutputInterface $output)
     {
-        $basePath       = $locator->getWorkPath() . DIRECTORY_SEPARATOR;
+        $basePath       = realpath($locator->getWorkPath()) . DIRECTORY_SEPARATOR;
         $featuresPath   = $locator->getFeaturesPath();
         $bootstrapPath  = $locator->getBootstrapPath();
 
@@ -541,7 +541,7 @@ class BehatCommand extends Command
             mkdir($featuresPath, 0777, true);
             $output->writeln(
                 '<info>+d</info> ' .
-                str_replace($basePath, '', $featuresPath) .
+                str_replace($basePath, '', realpath($featuresPath)) .
                 ' <comment>- place your *.feature files here</comment>'
             );
         }
@@ -550,15 +550,19 @@ class BehatCommand extends Command
             mkdir($bootstrapPath, 0777, true);
             $output->writeln(
                 '<info>+d</info> ' .
-                str_replace($basePath, '', $bootstrapPath) .
+                str_replace($basePath, '', realpath($bootstrapPath)) .
                 ' <comment>- place bootstrap scripts and static files here</comment>'
             );
 
-            copy(__DIR__ . '/../../Skeleton/FeaturesContext.php', $bootstrapPath . DIRECTORY_SEPARATOR . 'FeaturesContext.php');
+            copy(
+                __DIR__ . '/../../Skeleton/FeaturesContext.php',
+                $bootstrapPath . DIRECTORY_SEPARATOR . 'FeaturesContext.php'
+            );
+
             $output->writeln(
                 '<info>+f</info> ' .
-                str_replace($basePath, '', $bootstrapPath) . DIRECTORY_SEPARATOR . 'FeaturesContext.php' .
-                ' <comment>- place your features related code here</comment>'
+                str_replace($basePath, '', realpath($bootstrapPath)) . DIRECTORY_SEPARATOR .
+                'FeaturesContext.php <comment>- place your features related code here</comment>'
             );
         }
     }
