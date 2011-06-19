@@ -223,7 +223,7 @@ class BehatCommand extends Command
             new InputOption('--no-snippets',    null,
                 InputOption::VALUE_NONE,
                 '  ' .
-                'Do not print snippets for pending steps.'
+                'Do not print snippets for undefined steps.'
             ),
             new InputOption('--no-multiline',   null,
                 InputOption::VALUE_NONE,
