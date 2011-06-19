@@ -22,15 +22,18 @@ use Behat\Behat\DataCollector\LoggerDataCollector;
 class SuiteEvent extends Event implements EventInterface
 {
     private $logger;
+    private $completed;
 
     /**
      * Initializes suite event.
      *
      * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger
+     * @param   Boolean                                         $completed
      */
-    public function __construct(LoggerDataCollector $logger)
+    public function __construct(LoggerDataCollector $logger, $completed)
     {
-        $this->logger = $logger;
+        $this->logger    = $logger;
+        $this->completed = (Boolean) $completed;
     }
 
     /**
@@ -41,5 +44,15 @@ class SuiteEvent extends Event implements EventInterface
     public function getLogger()
     {
         return $this->logger;
+    }
+
+    /**
+     * Checks whether test suite was completed entirely.
+     *
+     * @return  Boolean
+     */
+    public function isCompleted()
+    {
+        return $this->completed;
     }
 }

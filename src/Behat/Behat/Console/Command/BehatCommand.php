@@ -479,18 +479,29 @@ class BehatCommand extends Command
         $dispatcher = $container->get('behat.event_dispatcher');
         $logger     = $container->get('behat.logger');
 
-        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger));
+        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, false));
 
+        // catch app interruption
+        if (function_exists('pcntl_signal')) {
+            declare(ticks = 1);
+            pcntl_signal(SIGINT, function() use($dispatcher, $logger) {
+                $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, false));
+                exit(0);
+            });
+        }
+
+        // read features from paths
         foreach ($paths as $path) {
             $features = $gherkin->load((string) $path);
 
+            // and run them in FeatureTester
             foreach ($features as $feature) {
                 $tester = $container->get('behat.tester.feature');
                 $result = max($result, $feature->accept($tester));
             }
         }
 
-        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger));
+        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, true));
 
         return $result;
     }
