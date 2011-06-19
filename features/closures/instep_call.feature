@@ -47,14 +47,6 @@ Feature: Call step in other step
               return array();
           }
 
-          public function getI18nResources() {
-              if (file_exists(__DIR__ . '/../steps/i18n')) {
-                  $finder = new Finder();
-                  return $finder->files()->name('*.xliff')->in(__DIR__ . '/../steps/i18n');
-              }
-              return array();
-          }
-
           public function __call($name, array $args) {
               if (isset($this->$name) && is_callable($this->$name)) {
                   return call_user_func_array($this->$name, $args);
