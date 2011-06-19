@@ -310,7 +310,7 @@ class BehatCommand extends Command
             $formatter->setParameter('snippets', false);
         }
         if ($input->getOption('no-paths')) {
-            $formatter->setParameter('path', false);
+            $formatter->setParameter('paths', false);
         }
         if ($input->getOption('expand')) {
             $formatter->setParameter('expand', true);
