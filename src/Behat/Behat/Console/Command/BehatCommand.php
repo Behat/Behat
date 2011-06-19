@@ -109,7 +109,7 @@ class BehatCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 ' ' .
                 'Specify configuration profile to use. ' .
-                'Define profiles in config file (<info>--config</info>).'
+                'Define profiles in config file (<info>--config</info>).'."\n"
             ),
         );
     }
@@ -130,7 +130,7 @@ class BehatCommand extends Command
             new InputOption('--tags',           null,
                 InputOption::VALUE_REQUIRED,
                 '         ' .
-                'Only execute the features or scenarios with tags matching tag filter expression.'
+                'Only execute the features or scenarios with tags matching tag filter expression.'."\n"
             ),
         );
     }
@@ -167,7 +167,7 @@ class BehatCommand extends Command
             new InputOption('--definitions',    null,
                 InputOption::VALUE_NONE,
                 '  ' .
-                'Print available step definitions in specified language (<info>--lang</info>).'
+                'Print available step definitions in specified language (<info>--lang</info>).'."\n"
             ),
         );
     }
