@@ -21,7 +21,7 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeaturesContext extends BaseFeaturesContext
+class FeatureContext extends BaseFeaturesContext
 {
     /**
      * Last runned command name.

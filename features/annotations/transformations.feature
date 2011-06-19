@@ -31,7 +31,7 @@ Feature: Step Arguments Transformations
           public function getAge() { return $this->age; }
       }
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -40,7 +40,7 @@ Feature: Step Arguments Transformations
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $user;
 

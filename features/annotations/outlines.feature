@@ -10,7 +10,7 @@ Feature: Scenario Outlines
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -19,7 +19,7 @@ Feature: Scenario Outlines
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $result;
           private $numbers;
@@ -206,15 +206,15 @@ Feature: Scenario Outlines
       (::) failed steps (::)
 
       01. Failed asserting that <integer:20> is equal to <integer:15>.
-          In step `Then The result should be 15'. # FeaturesContext::theResultShouldBe()
+          In step `Then The result should be 15'. # FeatureContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:5
 
       02. Failed asserting that <integer:6> is equal to <integer:7>.
-          In step `Then The result should be 7'.  # FeaturesContext::theResultShouldBe()
+          In step `Then The result should be 7'.  # FeatureContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:16
 
       03. Failed asserting that <integer:5> is equal to <integer:2>.
-          In step `Then The result should be 2'.  # FeaturesContext::theResultShouldBe()
+          In step `Then The result should be 2'.  # FeatureContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:22
 
       5 scenarios (2 passed, 3 failed)

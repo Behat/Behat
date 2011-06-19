@@ -10,7 +10,7 @@ Feature: HTML Formatter
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -19,7 +19,7 @@ Feature: HTML Formatter
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $value = 0;
 
@@ -293,7 +293,7 @@ Feature: HTML Formatter
       <div class="step">
       <span class="keyword">Given </span>
       <span class="text">I have entered <strong class="passed_param">10</strong></span>
-      <span class="path">FeaturesContext::iHaveEntered()</span>
+      <span class="path">FeatureContext::iHaveEntered()</span>
       </div>
       </li>
       </ol>
@@ -309,21 +309,21 @@ Feature: HTML Formatter
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="passed_param">10</strong></span>
-      <span class="path">FeaturesContext::iMustHave()</span>
+      <span class="path">FeatureContext::iMustHave()</span>
       </div>
       </li>
       <li class="passed">
       <div class="step">
       <span class="keyword">And </span>
       <span class="text">I <strong class="passed_param">add</strong> the value <strong class="passed_param">6</strong></span>
-      <span class="path">FeaturesContext::iAddOrSubstractValue()</span>
+      <span class="path">FeatureContext::iAddOrSubstractValue()</span>
       </div>
       </li>
       <li class="passed">
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="passed_param">16</strong></span>
-      <span class="path">FeaturesContext::iMustHave()</span>
+      <span class="path">FeatureContext::iMustHave()</span>
       </div>
       </li>
       </ol>
@@ -339,21 +339,21 @@ Feature: HTML Formatter
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="passed_param">10</strong></span>
-      <span class="path">FeaturesContext::iMustHave()</span>
+      <span class="path">FeatureContext::iMustHave()</span>
       </div>
       </li>
       <li class="passed">
       <div class="step">
       <span class="keyword">And </span>
       <span class="text">I <strong class="passed_param">subtract</strong> the value <strong class="passed_param">6</strong></span>
-      <span class="path">FeaturesContext::iAddOrSubstractValue()</span>
+      <span class="path">FeatureContext::iAddOrSubstractValue()</span>
       </div>
       </li>
       <li class="passed">
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="passed_param">4</strong></span>
-      <span class="path">FeaturesContext::iMustHave()</span>
+      <span class="path">FeatureContext::iMustHave()</span>
       </div>
       </li>
       </ol>
@@ -408,21 +408,21 @@ Feature: HTML Formatter
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="skipped_param">10</strong></span>
-      <span class="path">FeaturesContext::iMustHave()</span>
+      <span class="path">FeatureContext::iMustHave()</span>
       </div>
       </li>
       <li class="skipped">
       <div class="step">
       <span class="keyword">And </span>
       <span class="text">I add the value <strong class="skipped_param"><n></strong></span>
-      <span class="path">FeaturesContext::iAddOrSubstractValue()</span>
+      <span class="path">FeatureContext::iAddOrSubstractValue()</span>
       </div>
       </li>
       <li class="skipped">
       <div class="step">
       <span class="keyword">Then </span>
       <span class="text">I must have <strong class="skipped_param"><total></strong></span>
-      <span class="path">FeaturesContext::iMustHave()</span>
+      <span class="path">FeatureContext::iMustHave()</span>
       </div>
       </li>
       </ol>

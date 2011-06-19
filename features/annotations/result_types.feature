@@ -31,14 +31,14 @@ Feature: Different result types
           When I have chose "pizza tea" in coffee machine
           Then I should have "pizza tea"
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext {}
+      class FeatureContext extends BehatContext {}
       """
     When I run "behat -f progress features/coffee.feature"
     Then it should pass with:
@@ -124,14 +124,14 @@ Feature: Different result types
           When the coffee will be ready
           Then I should say "Take your cup!"
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           /**
            * @Given /^human have ordered very very very hot "([^"]*)"$/
@@ -156,7 +156,7 @@ Feature: Different result types
       (::) pending steps (::)
       
       01. TODO: write pending definition
-          In step `Given human have ordered very very very hot "coffee"'. # FeaturesContext::humanOrdered()
+          In step `Given human have ordered very very very hot "coffee"'. # FeatureContext::humanOrdered()
           From scenario background.                                       # features/coffee.feature:6
       
       1 scenario (1 undefined)
@@ -180,7 +180,7 @@ Feature: Different result types
       (::) pending steps (::)
       
       01. TODO: write pending definition
-          In step `Given human have ordered very very very hot "coffee"'. # FeaturesContext::humanOrdered()
+          In step `Given human have ordered very very very hot "coffee"'. # FeatureContext::humanOrdered()
           From scenario background.                                       # features/coffee.feature:6
       
       1 scenario (1 undefined)
@@ -216,7 +216,7 @@ Feature: Different result types
           Then I should see 31$ on the screen
           And I should see 33$ on the screen
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -225,7 +225,7 @@ Feature: Different result types
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $money = 0;
 
@@ -252,11 +252,11 @@ Feature: Different result types
       (::) failed steps (::)
       
       01. Failed asserting that <integer:10> is equal to <string:12>.
-          In step `Then I should see 12$ on the screen'. # FeaturesContext::iShouldSee()
+          In step `Then I should see 12$ on the screen'. # FeatureContext::iShouldSee()
           From scenario `Check throwed amount'.          # features/coffee.feature:9
       
       02. Failed asserting that <integer:30> is equal to <string:31>.
-          In step `Then I should see 31$ on the screen'. # FeaturesContext::iShouldSee()
+          In step `Then I should see 31$ on the screen'. # FeatureContext::iShouldSee()
           From scenario `Additional throws'.             # features/coffee.feature:12
       
       2 scenarios (2 failed)
@@ -286,7 +286,7 @@ Feature: Different result types
           When I boil water
           Then the coffee should be almost done
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -295,7 +295,7 @@ Feature: Different result types
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $money = 0;
 
@@ -340,11 +340,11 @@ Feature: Different result types
       (::) failed steps (::)
       
       01. NO water in coffee machine!!!
-          In step `Given I have no water'. # FeaturesContext::noWater()
+          In step `Given I have no water'. # FeatureContext::noWater()
           From scenario `I have no water'. # features/coffee.feature:9
       
       02. NO electricity in coffee machine!!!
-          In step `And I have no electricity'.   # FeaturesContext::haveNoElectricity()
+          In step `And I have no electricity'.   # FeatureContext::haveNoElectricity()
           From scenario `I have no electricity'. # features/coffee.feature:15
       
       2 scenarios (2 failed)
@@ -363,7 +363,7 @@ Feature: Different result types
           Given human have chosen "Latte"
           Then I should make him "Latte"
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -372,7 +372,7 @@ Feature: Different result types
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           /** @Given /^human have chosen "([^"]*)"$/ */
           public function chosen($argument1) {
@@ -400,8 +400,8 @@ Feature: Different result types
       (::) failed steps (::)
       
       01. Ambiguous match of "human have chosen "Latte"":
-          to `/^human have chosen "([^"]*)"$/` from FeaturesContext::chosen()
-          to `/^human have chosen "Latte"$/` from FeaturesContext::chosenLatte()
+          to `/^human have chosen "([^"]*)"$/` from FeatureContext::chosen()
+          to `/^human have chosen "Latte"$/` from FeatureContext::chosenLatte()
           In step `Given human have chosen "Latte"'.
           From scenario `Ambigious coffee type'.     # features/coffee.feature:6
       
@@ -421,7 +421,7 @@ Feature: Different result types
           Given customer bought coffee
           And customer bought another one coffee
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -430,7 +430,7 @@ Feature: Different result types
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           /** @Given /^customer bought coffee$/ */
           public function chosen($argument1) {
@@ -447,5 +447,5 @@ Feature: Different result types
     Then it should fail
     And the output should contain:
       """
-      Step "/^customer bought coffee$/" is already defined in FeaturesContext::chosen()
+      Step "/^customer bought coffee$/" is already defined in FeatureContext::chosen()
       """

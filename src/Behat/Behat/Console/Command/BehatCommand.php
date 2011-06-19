@@ -555,14 +555,14 @@ class BehatCommand extends Command
             );
 
             copy(
-                __DIR__ . '/../../Skeleton/FeaturesContext.php',
-                $bootstrapPath . DIRECTORY_SEPARATOR . 'FeaturesContext.php'
+                __DIR__ . '/../../Skeleton/FeatureContext.php',
+                $bootstrapPath . DIRECTORY_SEPARATOR . 'FeatureContext.php'
             );
 
             $output->writeln(
                 '<info>+f</info> ' .
                 str_replace($basePath, '', realpath($bootstrapPath)) . DIRECTORY_SEPARATOR .
-                'FeaturesContext.php <comment>- place your features related code here</comment>'
+                'FeatureContext.php <comment>- place your feature related code here</comment>'
             );
         }
     }

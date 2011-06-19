@@ -16,7 +16,7 @@ Feature: Definitions translations
           То Я должен увидеть на экране 14
           И пользователь "everzet" должен иметь имя "everzet"
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -29,7 +29,7 @@ Feature: Definitions translations
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext implements TranslatedContextInterface
+      class FeatureContext extends BehatContext implements TranslatedContextInterface
       {
           private $numbers = array();
           private $result = 0;

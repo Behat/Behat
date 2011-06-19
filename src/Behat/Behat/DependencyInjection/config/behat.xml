@@ -36,7 +36,7 @@
         <parameter key="gherkin.keywords.path">%gherkin.paths.lib%/i18n</parameter>
 
         <!-- Context -->
-        <parameter key="behat.context.class">FeaturesContext</parameter>
+        <parameter key="behat.context.class">FeatureContext</parameter>
         <parameter key="behat.context_dispatcher.class">Behat\Behat\Context\ContextDispatcher</parameter>
         <parameter key="behat.context_reader.class">Behat\Behat\Context\ContextReader</parameter>
         <parameter key="behat.context_loader.translated.class">Behat\Behat\Context\Loader\TranslatedContextLoader</parameter>

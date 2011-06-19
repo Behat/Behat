@@ -12,7 +12,7 @@ Feature: Pretty Formatter
       """
 
   Scenario: Complex
-    Given a file named "features/bootstrap/FeaturesContext.php" with:
+    Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -21,7 +21,7 @@ Feature: Pretty Formatter
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $value;
 
@@ -98,28 +98,28 @@ Feature: Pretty Formatter
         I want, that "World" flushes between scenarios
 
         Background:               # features/World.feature:6
-          Given I have entered 10 # FeaturesContext::iHaveEntered()
+          Given I have entered 10 # FeatureContext::iHaveEntered()
 
         Scenario: Undefined       # features/World.feature:9
-          Then I must have 10     # FeaturesContext::iMustHave()
+          Then I must have 10     # FeatureContext::iMustHave()
           And Something new
-          Then I must have 10     # FeaturesContext::iMustHave()
+          Then I must have 10     # FeatureContext::iMustHave()
 
         Scenario: Pending            # features/World.feature:14
-          Then I must have 10        # FeaturesContext::iMustHave()
-          And Something not done yet # FeaturesContext::somethingNotDoneYet()
+          Then I must have 10        # FeatureContext::iMustHave()
+          And Something not done yet # FeatureContext::somethingNotDoneYet()
             TODO: write pending definition
-          Then I must have 10        # FeaturesContext::iMustHave()
+          Then I must have 10        # FeatureContext::iMustHave()
 
         Scenario: Failed             # features/World.feature:19
-          When I add 4               # FeaturesContext::iAdd()
-          Then I must have 13        # FeaturesContext::iMustHave()
+          When I add 4               # FeatureContext::iAdd()
+          Then I must have 13        # FeatureContext::iMustHave()
             Failed asserting that <integer:14> is equal to <string:13>.
 
         Scenario Outline: Passed & Failed # features/World.feature:23
-          Given I must have 10            # FeaturesContext::iMustHave()
-          When I add <value>              # FeaturesContext::iAdd()
-          Then I must have <result>       # FeaturesContext::iMustHave()
+          Given I must have 10            # FeatureContext::iMustHave()
+          When I add <value>              # FeatureContext::iAdd()
+          Then I must have <result>       # FeatureContext::iMustHave()
 
           Examples:
             | value | result |
@@ -144,14 +144,14 @@ Feature: Pretty Formatter
       """
 
   Scenario: Multiple parameters
-    Given a file named "features/bootstrap/FeaturesContext.php" with:
+    Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
       use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $value;
 
@@ -209,17 +209,17 @@ Feature: Pretty Formatter
         I want, that "World" flushes between scenarios
 
         Background:               [30m# features/World.feature:6[0m
-          [32mGiven I have entered [0m[32;1m10[0m[32m[0m [30m# FeaturesContext::iHaveEntered()[0m
+          [32mGiven I have entered [0m[32;1m10[0m[32m[0m [30m# FeatureContext::iHaveEntered()[0m
 
         Scenario: Adding          [30m# features/World.feature:9[0m
-          [32mThen I must have [0m[32;1m10[0m[32m[0m     [30m# FeaturesContext::iMustHave()[0m
-          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m   [30m# FeaturesContext::iAddOrSubstact()[0m
-          [32mThen I must have [0m[32;1m16[0m[32m[0m     [30m# FeaturesContext::iMustHave()[0m
+          [32mThen I must have [0m[32;1m10[0m[32m[0m     [30m# FeatureContext::iMustHave()[0m
+          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m   [30m# FeatureContext::iAddOrSubstact()[0m
+          [32mThen I must have [0m[32;1m16[0m[32m[0m     [30m# FeatureContext::iMustHave()[0m
 
         Scenario: Subtracting        [30m# features/World.feature:14[0m
-          [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# FeaturesContext::iMustHave()[0m
-          [32mAnd I [0m[32;1msubtract[0m[32m the value [0m[32;1m6[0m[32m[0m [30m# FeaturesContext::iAddOrSubstact()[0m
-          [32mThen I must have [0m[32;1m4[0m[32m[0m         [30m# FeaturesContext::iMustHave()[0m
+          [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# FeatureContext::iMustHave()[0m
+          [32mAnd I [0m[32;1msubtract[0m[32m the value [0m[32;1m6[0m[32m[0m [30m# FeatureContext::iAddOrSubstact()[0m
+          [32mThen I must have [0m[32;1m4[0m[32m[0m         [30m# FeatureContext::iMustHave()[0m
 
       2 scenarios ([32m2 passed[0m)
       8 steps ([32m8 passed[0m)

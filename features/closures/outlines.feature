@@ -4,7 +4,7 @@ Feature: Scenario Outlines
   I want to write scenario outlines
 
   Background:
-    Given a file named "features/bootstrap/FeaturesContext.php" with:
+    Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -19,7 +19,7 @@ Feature: Scenario Outlines
           require_once __DIR__ . '/../support/bootstrap.php';
       }
 
-      class FeaturesContext extends BehatContext implements ClosuredContextInterface
+      class FeatureContext extends BehatContext implements ClosuredContextInterface
       {
           public $parameters = array();
 

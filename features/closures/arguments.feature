@@ -4,7 +4,7 @@ Feature: Step Arguments
   I need ability to specify Table & PyString arguments to steps
 
   Background:
-    Given a file named "features/bootstrap/FeaturesContext.php" with:
+    Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -19,7 +19,7 @@ Feature: Step Arguments
           require_once __DIR__ . '/../support/bootstrap.php';
       }
 
-      class FeaturesContext extends BehatContext implements ClosuredContextInterface
+      class FeatureContext extends BehatContext implements ClosuredContextInterface
       {
           public $parameters = array();
 

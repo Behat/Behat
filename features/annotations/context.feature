@@ -4,7 +4,7 @@ Feature: Context consistency
   I need a separate context for every scenario/outline
 
   Background:
-    Given a file named "features/bootstrap/FeaturesContext.php" with:
+    Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -16,7 +16,7 @@ Feature: Context consistency
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $apples = 0;
           private $parameters;
@@ -147,19 +147,19 @@ Feature: Context consistency
       (::) failed steps (::)
       
       01. Failed asserting that <integer:2> is equal to <integer:5>.
-          In step `Then I should have 5 apples'. # FeaturesContext::iShouldHaveApples()
+          In step `Then I should have 5 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
       
       02. Failed asserting that <integer:13> is equal to <integer:10>.
-          In step `Then I should have 10 apples'. # FeaturesContext::iShouldHaveApples()
+          In step `Then I should have 10 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Found more apples'.      # features/apples.feature:13
       
       03. Failed asserting that <integer:1> is equal to <integer:3>.
-          In step `Then I should have 4 apples'.  # FeaturesContext::iShouldHaveApples()
+          In step `Then I should have 4 apples'.  # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.       # features/apples.feature:17
       
       04. Failed asserting that <integer:3> is equal to <integer:4>.
-          In step `Then I should have 4 apples'.  # FeaturesContext::iShouldHaveApples()
+          In step `Then I should have 4 apples'.  # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.       # features/apples.feature:17
       
       5 scenarios (1 passed, 4 failed)

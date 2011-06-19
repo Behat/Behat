@@ -10,7 +10,7 @@ Feature: Tags
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -19,7 +19,7 @@ Feature: Tags
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           /**
            * @Given /^Some slow step N(\d+)$/
@@ -131,34 +131,34 @@ Feature: Tags
       Feature: Feature N1
       
         Background:                # features/feature1.feature:4
-          Given Some slow step N11 # FeaturesContext::someSlowStepN()
+          Given Some slow step N11 # FeatureContext::someSlowStepN()
       
         Scenario:                  # features/feature1.feature:7
-          Given Some slow step N12 # FeaturesContext::someSlowStepN()
-          And Some normal step N13 # FeaturesContext::someNormalStepN()
+          Given Some slow step N12 # FeatureContext::someSlowStepN()
+          And Some normal step N13 # FeatureContext::someNormalStepN()
       
         @fast
         Scenario:                  # features/feature1.feature:12
-          Given Some fast step N14 # FeaturesContext::someFastStepN()
+          Given Some fast step N14 # FeatureContext::someFastStepN()
       
       Feature: Feature N2
       
         Background:                  # features/feature2.feature:3
-          Given Some normal step N21 # FeaturesContext::someNormalStepN()
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
       
         @slow @fast
         Scenario:                    # features/feature2.feature:7
-          Given Some slow step N22   # FeaturesContext::someSlowStepN()
-          And Some fast step N23     # FeaturesContext::someFastStepN()
+          Given Some slow step N22   # FeatureContext::someSlowStepN()
+          And Some fast step N23     # FeatureContext::someFastStepN()
       
       Feature: Feature N3
       
         Background:                  # features/feature3.feature:3
-          Given Some normal step N21 # FeaturesContext::someNormalStepN()
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
       
         @slow
         Scenario Outline:             # features/feature3.feature:7
-          Given Some slow step N<num> # FeaturesContext::someSlowStepN()
+          Given Some slow step N<num> # FeatureContext::someSlowStepN()
       
           Examples:
             | num |
@@ -177,34 +177,34 @@ Feature: Tags
       Feature: Feature N1
       
         Background:                # features/feature1.feature:4
-          Given Some slow step N11 # FeaturesContext::someSlowStepN()
+          Given Some slow step N11 # FeatureContext::someSlowStepN()
       
         Scenario:                  # features/feature1.feature:7
-          Given Some slow step N12 # FeaturesContext::someSlowStepN()
-          And Some normal step N13 # FeaturesContext::someNormalStepN()
+          Given Some slow step N12 # FeatureContext::someSlowStepN()
+          And Some normal step N13 # FeatureContext::someNormalStepN()
       
         @fast
         Scenario:                  # features/feature1.feature:12
-          Given Some fast step N14 # FeaturesContext::someFastStepN()
+          Given Some fast step N14 # FeatureContext::someFastStepN()
       
       Feature: Feature N2
       
         Background:                  # features/feature2.feature:3
-          Given Some normal step N21 # FeaturesContext::someNormalStepN()
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
       
         @slow @fast
         Scenario:                    # features/feature2.feature:7
-          Given Some slow step N22   # FeaturesContext::someSlowStepN()
-          And Some fast step N23     # FeaturesContext::someFastStepN()
+          Given Some slow step N22   # FeatureContext::someSlowStepN()
+          And Some fast step N23     # FeatureContext::someFastStepN()
       
       Feature: Feature N3
       
         Background:                  # features/feature3.feature:3
-          Given Some normal step N21 # FeaturesContext::someNormalStepN()
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
       
         @slow
         Scenario Outline:             # features/feature3.feature:7
-          Given Some slow step N<num> # FeaturesContext::someSlowStepN()
+          Given Some slow step N<num> # FeatureContext::someSlowStepN()
       
           Examples:
             | num |
@@ -213,12 +213,12 @@ Feature: Tags
       
         @normal
         Scenario:                     # features/feature3.feature:16
-          Given Some normal step N38  # FeaturesContext::someNormalStepN()
+          Given Some normal step N38  # FeatureContext::someNormalStepN()
       
         @normal @fast
         Scenario Outline:               # features/feature3.feature:29
-          Given Some normal step N<num> # FeaturesContext::someNormalStepN()
-          And Some fast step N37        # FeaturesContext::someFastStepN()
+          Given Some normal step N<num> # FeatureContext::someNormalStepN()
+          And Some fast step N37        # FeatureContext::someFastStepN()
       
           Examples:
             | num |
@@ -229,8 +229,8 @@ Feature: Tags
       
         @normal
         Scenario:                       # features/feature4.feature:4
-          Given Some normal step N41    # FeaturesContext::someNormalStepN()
-          And Some fast step N42        # FeaturesContext::someFastStepN()
+          Given Some normal step N41    # FeatureContext::someNormalStepN()
+          And Some fast step N42        # FeatureContext::someFastStepN()
       
       9 scenarios (9 passed)
       22 steps (22 passed)
@@ -244,31 +244,31 @@ Feature: Tags
       Feature: Feature N1
       
         Background:                # features/feature1.feature:4
-          Given Some slow step N11 # FeaturesContext::someSlowStepN()
+          Given Some slow step N11 # FeatureContext::someSlowStepN()
       
         @fast
         Scenario:                  # features/feature1.feature:12
-          Given Some fast step N14 # FeaturesContext::someFastStepN()
+          Given Some fast step N14 # FeatureContext::someFastStepN()
       
       Feature: Feature N2
       
         Background:                  # features/feature2.feature:3
-          Given Some normal step N21 # FeaturesContext::someNormalStepN()
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
       
         @slow @fast
         Scenario:                    # features/feature2.feature:7
-          Given Some slow step N22   # FeaturesContext::someSlowStepN()
-          And Some fast step N23     # FeaturesContext::someFastStepN()
+          Given Some slow step N22   # FeatureContext::someSlowStepN()
+          And Some fast step N23     # FeatureContext::someFastStepN()
       
       Feature: Feature N3
       
         Background:                  # features/feature3.feature:3
-          Given Some normal step N21 # FeaturesContext::someNormalStepN()
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
       
         @normal @fast
         Scenario Outline:               # features/feature3.feature:29
-          Given Some normal step N<num> # FeaturesContext::someNormalStepN()
-          And Some fast step N37        # FeaturesContext::someFastStepN()
+          Given Some normal step N<num> # FeatureContext::someNormalStepN()
+          And Some fast step N37        # FeatureContext::someFastStepN()
       
           Examples:
             | num |
@@ -286,18 +286,18 @@ Feature: Tags
       Feature: Feature N3
       
         Background:                  # features/feature3.feature:3
-          Given Some normal step N21 # FeaturesContext::someNormalStepN()
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
       
         @normal
         Scenario:                    # features/feature3.feature:16
-          Given Some normal step N38 # FeaturesContext::someNormalStepN()
+          Given Some normal step N38 # FeatureContext::someNormalStepN()
       
       Feature: Feature N4
       
         @normal
         Scenario:                    # features/feature4.feature:4
-          Given Some normal step N41 # FeaturesContext::someNormalStepN()
-          And Some fast step N42     # FeaturesContext::someFastStepN()
+          Given Some normal step N41 # FeatureContext::someNormalStepN()
+          And Some fast step N42     # FeatureContext::someFastStepN()
       
       2 scenarios (2 passed)
       4 steps (4 passed)

@@ -4,7 +4,7 @@ Feature: Definitions translations
   I need to be able to write definition translations
 
   Background:
-    Given a file named "features/bootstrap/FeaturesContext.php" with:
+    Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -20,7 +20,7 @@ Feature: Definitions translations
           require_once __DIR__ . '/../support/bootstrap.php';
       }
 
-      class FeaturesContext extends BehatContext implements Closured, Translated
+      class FeatureContext extends BehatContext implements Closured, Translated
       {
           public $parameters = array();
 

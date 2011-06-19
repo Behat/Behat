@@ -4,7 +4,7 @@ Feature: Step Arguments
   I need ability to specify Table & PyString arguments to steps
 
   Background:
-    Given a file named "features/bootstrap/FeaturesContext.php" with:
+    Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -16,7 +16,7 @@ Feature: Step Arguments
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $input;
           private $strings = array();

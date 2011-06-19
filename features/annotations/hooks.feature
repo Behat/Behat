@@ -10,7 +10,7 @@ Feature: hooks
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -19,7 +19,7 @@ Feature: hooks
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $number;
 
@@ -112,26 +112,26 @@ Feature: hooks
       Feature:
       
         Scenario:             # features/test.feature:2
-          Then I must have 50 # FeaturesContext::iMustHave()
+          Then I must have 50 # FeatureContext::iMustHave()
       
         Scenario:                 # features/test.feature:4
-          Given I have entered 12 # FeaturesContext::iHaveEntered()
-          Then I must have 12     # FeaturesContext::iMustHave()
+          Given I have entered 12 # FeatureContext::iHaveEntered()
+          Then I must have 12     # FeatureContext::iMustHave()
       
         @thirty
         Scenario:                 # features/test.feature:9
-          Given I must have 30    # FeaturesContext::iMustHave()
-          When I have entered 23  # FeaturesContext::iHaveEntered()
-          Then I must have 23     # FeaturesContext::iMustHave()
+          Given I must have 30    # FeatureContext::iMustHave()
+          When I have entered 23  # FeatureContext::iHaveEntered()
+          Then I must have 23     # FeatureContext::iMustHave()
       
         @100 @thirty
         Scenario:                 # features/test.feature:14
-          Given I must have 30    # FeaturesContext::iMustHave()
-          When I have entered 1   # FeaturesContext::iHaveEntered()
-          Then I must have 100    # FeaturesContext::iMustHave()
+          Given I must have 30    # FeatureContext::iMustHave()
+          When I have entered 1   # FeatureContext::iHaveEntered()
+          Then I must have 100    # FeatureContext::iMustHave()
       
         Scenario: 130             # features/test.feature:19
-          Given I must have 130   # FeaturesContext::iMustHave()
+          Given I must have 130   # FeatureContext::iMustHave()
       
       = do something after all suite run
       5 scenarios (5 passed)

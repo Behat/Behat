@@ -10,7 +10,7 @@ Feature: Names
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -19,7 +19,7 @@ Feature: Names
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           /**
            * @Given /^Some slow step N(\d+)$/
@@ -70,23 +70,23 @@ Feature: Names
       Feature: First Feature
       
         Background:                # features/feature1.feature:3
-          Given Some slow step N11 # FeaturesContext::someSlowStepN()
+          Given Some slow step N11 # FeatureContext::someSlowStepN()
       
         Scenario: First Scenario   # features/feature1.feature:6
-          Given Some slow step N12 # FeaturesContext::someSlowStepN()
-          And Some normal step N13 # FeaturesContext::someNormalStepN()
+          Given Some slow step N12 # FeatureContext::someSlowStepN()
+          And Some normal step N13 # FeatureContext::someNormalStepN()
       
         Scenario: Second Scenario  # features/feature1.feature:10
-          Given Some fast step N14 # FeaturesContext::someFastStepN()
+          Given Some fast step N14 # FeatureContext::someFastStepN()
       
       Feature: Second Feature
       
         Background:                  # features/feature2.feature:3
-          Given Some normal step N21 # FeaturesContext::someNormalStepN()
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
       
         Scenario: First Scenario     # features/feature2.feature:6
-          Given Some slow step N22   # FeaturesContext::someSlowStepN()
-          And Some fast step N23     # FeaturesContext::someFastStepN()
+          Given Some slow step N22   # FeatureContext::someSlowStepN()
+          And Some fast step N23     # FeatureContext::someFastStepN()
       
       3 scenarios (3 passed)
       8 steps (8 passed)
@@ -99,10 +99,10 @@ Feature: Names
       Feature: First Feature
       
         Background:                # features/feature1.feature:3
-          Given Some slow step N11 # FeaturesContext::someSlowStepN()
+          Given Some slow step N11 # FeatureContext::someSlowStepN()
       
         Scenario: Second Scenario  # features/feature1.feature:10
-          Given Some fast step N14 # FeaturesContext::someFastStepN()
+          Given Some fast step N14 # FeatureContext::someFastStepN()
       
       1 scenario (1 passed)
       2 steps (2 passed)
@@ -115,10 +115,10 @@ Feature: Names
       Feature: First Feature
       
         Background:                # features/feature1.feature:3
-          Given Some slow step N11 # FeaturesContext::someSlowStepN()
+          Given Some slow step N11 # FeatureContext::someSlowStepN()
       
         Scenario: Second Scenario  # features/feature1.feature:10
-          Given Some fast step N14 # FeaturesContext::someFastStepN()
+          Given Some fast step N14 # FeatureContext::someFastStepN()
       
       1 scenario (1 passed)
       2 steps (2 passed)

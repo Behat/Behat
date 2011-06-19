@@ -10,7 +10,7 @@ Feature: Profiles
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
-    And a file named "features/bootstrap/FeaturesContext.php" with:
+    And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
@@ -19,7 +19,7 @@ Feature: Profiles
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeaturesContext extends BehatContext
+      class FeatureContext extends BehatContext
       {
           private $result;
           private $numbers;
@@ -144,13 +144,13 @@ Feature: Profiles
       Feature: Math
       
         Background:                     # features/math.feature:2
-          Given I have basic calculator # FeaturesContext::iHaveBasicCalculator()
+          Given I have basic calculator # FeatureContext::iHaveBasicCalculator()
       
         Scenario Outline:                    # features/math.feature:5
-          Given I have entered <number1>     # FeaturesContext::iHaveEntered()
-          And I have entered <number2>       # FeaturesContext::iHaveEntered()
-          When I add                         # FeaturesContext::iAdd()
-          Then The result should be <result> # FeaturesContext::theResultShouldBe()
+          Given I have entered <number1>     # FeatureContext::iHaveEntered()
+          And I have entered <number2>       # FeatureContext::iHaveEntered()
+          When I add                         # FeatureContext::iAdd()
+          Then The result should be <result> # FeatureContext::theResultShouldBe()
       
           Examples:
             | number1 | number2 | result |
