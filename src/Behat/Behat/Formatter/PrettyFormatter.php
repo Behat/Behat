@@ -427,12 +427,16 @@ class PrettyFormatter extends ProgressFormatter
      */
     protected function printScenarioPath(AbstractScenarioNode $scenario)
     {
-        $nameLength     = mb_strlen($this->getFeatureOrScenarioName($scenario));
-        $indentCount    = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
+        if ($this->getParameter('paths')) {
+            $nameLength     = mb_strlen($this->getFeatureOrScenarioName($scenario));
+            $indentCount    = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
 
-        $this->printPathComment(
-            $this->relativizePathsInString($scenario->getFile()) . ':' . $scenario->getLine(), $indentCount
-        );
+            $this->printPathComment(
+                $this->relativizePathsInString($scenario->getFile()).':'.$scenario->getLine(), $indentCount
+            );
+        } else {
+            $this->writeln();
+        }
     }
 
     /**
@@ -710,14 +714,18 @@ class PrettyFormatter extends ProgressFormatter
      */
     protected function printStepDefinitionPath(StepNode $step, DefinitionInterface $definition)
     {
-        $type           = $step->getType();
-        $text           = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
-        $nameLength     = mb_strlen("    $type $text");
-        $indentCount    = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
+        if ($this->getParameter('paths')) {
+            $type           = $step->getType();
+            $text           = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
+            $nameLength     = mb_strlen("    $type $text");
+            $indentCount    = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
 
-        $this->printPathComment(
-            $this->relativizePathsInString($definition->getPath()), $indentCount
-        );
+            $this->printPathComment(
+                $this->relativizePathsInString($definition->getPath()), $indentCount
+            );
+        } else {
+            $this->writeln();
+        }
     }
 
     /**

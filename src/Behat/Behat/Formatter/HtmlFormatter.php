@@ -310,7 +310,9 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printStepDefinitionPath(StepNode $step, DefinitionInterface $definition)
     {
-        $this->printPathComment($this->relativizePathsInString($definition->getPath()));
+        if ($this->getParameter('paths')) {
+            $this->printPathComment($this->relativizePathsInString($definition->getPath()));
+        }
     }
 
     /**

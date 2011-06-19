@@ -317,7 +317,7 @@ class ProgressFormatter extends ConsoleFormatter
      */
     protected function printUndefinedStepsSnippets(LoggerDataCollector $logger)
     {
-        if (count($logger->getDefinitionsSnippets())) {
+        if ($this->getParameter('snippets') && count($logger->getDefinitionsSnippets())) {
             $header = $this->translate(
                 'You can implement step definitions for undefined steps with these snippets:'
             );

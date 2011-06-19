@@ -78,6 +78,12 @@ class Configuration
                         booleanNode('multiline_arguments')->
                             defaultTrue()->
                         end()->
+                        booleanNode('snippets')->
+                            defaultTrue()->
+                        end()->
+                        booleanNode('paths')->
+                            defaultTrue()->
+                        end()->
                         arrayNode('parameters')->
                             useAttributeAsKey(0)->
                             prototype('variable')->end()->

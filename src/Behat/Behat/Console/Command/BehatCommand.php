@@ -215,6 +215,16 @@ class BehatCommand extends Command
                 '         ' .
                 'Print formatter output in particular language.'
             ),
+            new InputOption('--no-paths',       null,
+                InputOption::VALUE_NONE,
+                '     ' .
+                'Do not print the definition path with the steps.'
+            ),
+            new InputOption('--no-snippets',    null,
+                InputOption::VALUE_NONE,
+                '  ' .
+                'Do not print snippets for pending steps.'
+            ),
             new InputOption('--no-multiline',   null,
                 InputOption::VALUE_NONE,
                 ' ' .
@@ -291,6 +301,12 @@ class BehatCommand extends Command
         }
         $formatter->setParameter('time',
             $input->getOption('no-time') ? false : $container->getParameter('behat.formatter.time')
+        );
+        $formatter->setParameter('snippets',
+            $input->getOption('no-snippets') ? false : $container->getParameter('behat.formatter.snippets')
+        );
+        $formatter->setParameter('paths',
+            $input->getOption('no-paths') ? false : $container->getParameter('behat.formatter.paths')
         );
         $formatter->setParameter('multiline_arguments',
             $input->getOption('no-multiline')
