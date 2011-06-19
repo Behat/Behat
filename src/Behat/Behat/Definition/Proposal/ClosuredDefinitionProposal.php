@@ -47,9 +47,11 @@ class ClosuredDefinitionProposal implements DefinitionProposalInterface
                 "\'([^\']*)\'", "\"([^\"]*)\"",
                 "(\\d+)",
             ),
-            $regex, -1, $count
+            $regex
         );
         $regex = preg_replace('/\'.*(?<!\')/', '\\\\$0', $regex); // Single quotes without matching pair (escape in resulting regex)
+        preg_match('/' . $regex . '/', $text, $matches);
+        $count = count($matches) - 1;
 
         $args = array("\$world");
         for ($i = 0; $i < $count; $i++) {
