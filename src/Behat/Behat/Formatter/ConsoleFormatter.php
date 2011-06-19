@@ -63,6 +63,7 @@ abstract class ConsoleFormatter implements FormatterInterface
             'output_path'           => null,
             'snippets'              => true,
             'paths'                 => true,
+            'expand'                => false,
             'multiline_arguments'   => true,
         ), $this->getDefaultParameters()));
     }

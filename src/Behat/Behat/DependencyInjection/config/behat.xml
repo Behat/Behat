@@ -21,6 +21,7 @@
         <parameter key="behat.formatter.multiline_arguments">true</parameter>
         <parameter key="behat.formatter.snippets">true</parameter>
         <parameter key="behat.formatter.paths">true</parameter>
+        <parameter key="behat.formatter.expand">false</parameter>
         <parameter key="behat.formatter.parameters" type="collection"></parameter>
 
         <!-- Options -->

@@ -230,6 +230,11 @@ class BehatCommand extends Command
                 ' ' .
                 'No multiline arguments in output.'
             ),
+            new InputOption('--expand',         null,
+                InputOption::VALUE_NONE,
+                '       ' .
+                'Expand Scenario Outline Tables in output.'."\n"
+            ),
         );
     }
 
@@ -307,6 +312,9 @@ class BehatCommand extends Command
         );
         $formatter->setParameter('paths',
             $input->getOption('no-paths') ? false : $container->getParameter('behat.formatter.paths')
+        );
+        $formatter->setParameter('expand',
+            $input->getOption('expand') ? true : $container->getParameter('behat.formatter.expand')
         );
         $formatter->setParameter('multiline_arguments',
             $input->getOption('no-multiline')

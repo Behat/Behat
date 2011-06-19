@@ -87,6 +87,12 @@ class PrettyFormatter extends ProgressFormatter
      * @var     array
      */
     protected   $delayedStepEvents      = array();
+    /**
+     * Current step indentation.
+     *
+     * @var     integer
+     */
+    protected   $stepIndent             = '    ';
 
     /**
      * {@inheritdoc}
@@ -553,9 +559,11 @@ class PrettyFormatter extends ProgressFormatter
     {
         $this->writeln();
         $keyword = $examples->getKeyword();
-        $this->writeln("    $keyword:");
 
-        $this->printColorizedTableRow($examples->getRowAsString(0), 'skipped');
+        if (!$this->getParameter('expand')) {
+            $this->writeln("    $keyword:");
+            $this->printColorizedTableRow($examples->getRowAsString(0), 'skipped');
+        }
     }
 
     /**
@@ -571,10 +579,31 @@ class PrettyFormatter extends ProgressFormatter
      */
     protected function printOutlineExampleResult(TableNode $examples, $iteration, $result, $isSkipped)
     {
-        $color  = $this->getResultColorCode($result);
+        if (!$this->getParameter('expand')) {
+            $color = $this->getResultColorCode($result);
 
-        $this->printColorizedTableRow($examples->getRowAsString($iteration + 1), $color);
-        $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
+            $this->printColorizedTableRow($examples->getRowAsString($iteration + 1), $color);
+            $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
+        } else {
+            $this->write('      ' . $examples->getKeyword() . ': ');
+            $this->writeln('| ' . implode(' | ', $examples->getRow($iteration + 1)) . ' |');
+
+            $this->stepIndent = '        ';
+            foreach ($this->delayedStepEvents as $event) {
+                $this->printStep(
+                    $event->getStep(),
+                    $event->getResult(),
+                    $event->getDefinition(),
+                    $event->getSnippet(),
+                    $event->getException()
+                );
+            }
+            $this->stepIndent = '    ';
+
+            if ($iteration < count($examples->getRows()) - 2) {
+                $this->writeln();
+            }
+        }
     }
 
     /**
@@ -696,12 +725,13 @@ class PrettyFormatter extends ProgressFormatter
     {
         $type   = $step->getType();
         $text   = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
+        $indent = $this->stepIndent;
 
         if (null !== $definition) {
             $text = $this->colorizeDefinitionArguments($text, $definition, $color);
         }
 
-        $this->write("    {+$color}$type $text{-$color}");
+        $this->write("$indent{+$color}$type $text{-$color}");
     }
 
     /**
@@ -717,12 +747,17 @@ class PrettyFormatter extends ProgressFormatter
         if ($this->getParameter('paths')) {
             $type           = $step->getType();
             $text           = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
-            $nameLength     = mb_strlen("    $type $text");
+            $indent         = $this->stepIndent;
+            $nameLength     = mb_strlen("$indent$type $text");
             $indentCount    = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
 
             $this->printPathComment(
                 $this->relativizePathsInString($definition->getPath()), $indentCount
             );
+
+            if ($this->getParameter('expand')) {
+                $this->maxLineLength = max($this->maxLineLength, $nameLength);
+            }
         } else {
             $this->writeln();
         }
@@ -756,6 +791,8 @@ class PrettyFormatter extends ProgressFormatter
      */
     protected function printStepException(\Exception $exception, $color)
     {
+        $indent = $this->stepIndent;
+
         if ($this->parameters->get('verbose')) {
             $error = (string) $exception;
         } else {
@@ -764,7 +801,7 @@ class PrettyFormatter extends ProgressFormatter
         $error = $this->relativizePathsInString($error);
 
         $this->writeln(
-            "      {+$color}" . strtr($error, array("\n" => "\n      ")) . "{-$color}"
+            "$indent  {+$color}" . strtr($error, array("\n" => "\n$indent  ")) . "{-$color}"
         );
     }
 
@@ -785,8 +822,9 @@ class PrettyFormatter extends ProgressFormatter
      */
     protected function printStepPyStringArgument(PyStringNode $pystring, $color = null)
     {
+        $indent = $this->stepIndent;
         $string = strtr(
-            sprintf("      \"\"\"\n%s\n\"\"\"", (string) $pystring), array("\n" => "\n      ")
+            sprintf("$indent  \"\"\"\n%s\n\"\"\"", (string) $pystring), array("\n" => "\n$indent  ")
         );
 
         if (null !== $color) {
@@ -804,7 +842,8 @@ class PrettyFormatter extends ProgressFormatter
      */
     protected function printStepTableArgument(TableNode $table, $color = null)
     {
-        $string = strtr('      ' . (string) $table, array("\n" => "\n      "));
+        $indent = $this->stepIndent;
+        $string = strtr("$indent  " . (string) $table, array("\n" => "\n$indent  "));
 
         if (null !== $color) {
             $this->writeln("{+$color}$string{-$color}");

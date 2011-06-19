@@ -84,6 +84,9 @@ class Configuration
                         booleanNode('paths')->
                             defaultTrue()->
                         end()->
+                        booleanNode('expand')->
+                            defaultFalse()->
+                        end()->
                         arrayNode('parameters')->
                             useAttributeAsKey(0)->
                             prototype('variable')->end()->
