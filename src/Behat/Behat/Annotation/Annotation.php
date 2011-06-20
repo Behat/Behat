@@ -44,7 +44,10 @@ abstract class Annotation implements AnnotationInterface
     public function __construct($callback)
     {
         if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Callback should be a valid callable');
+            throw new \InvalidArgumentException(sprintf(
+                'Annotation callback should be a valid callable, but %s given',
+                gettype($callback)
+            ));
         }
         $this->closure = !is_array($callback);
 

@@ -52,6 +52,12 @@ abstract class Definition extends Annotation implements DefinitionInterface
      */
     public function __construct($callback, $regex)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException(sprintf(
+                '"%s" definition callback should be a valid callable, but %s given',
+                basename(str_replace('\\', '/', get_class($this))), gettype($callback)
+            ));
+        }
         parent::__construct($callback);
 
         $this->regex = $regex;

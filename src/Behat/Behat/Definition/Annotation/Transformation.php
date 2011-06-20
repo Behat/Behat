@@ -38,17 +38,22 @@ class Transformation extends Annotation implements TransformationInterface
      */
     public function __construct($callback, $regex)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Transformation callback should be a valid callable, but %s given',
+                gettype($callback)
+            ));
+        }
         parent::__construct($callback);
 
         if (!$this->isClosure()) {
             $methodRefl = new \ReflectionMethod($callback[0], $callback[1]);
 
-            if (!is_callable($callback)) {
-                throw new \InvalidArgumentException('Callback should be valid callable');
-            }
-
             if (!$methodRefl->isStatic()) {
-                throw new \InvalidArgumentException('Transformation callbacks should be static methods');
+                throw new \InvalidArgumentException(sprintf(
+                    'Transformation callback: %s::%s() must be a static method',
+                    $callback[0], $callback[1]
+                ));
             }
         }
 

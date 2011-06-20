@@ -137,7 +137,7 @@ class BehatExtension implements ExtensionInterface
     protected function loadConfigurationFile($configFile, $profile = 'default')
     {
         if (!is_file($configFile) || !is_readable($configFile)) {
-            throw new \InvalidArgumentException("Config file $configFile not found");
+            throw new \InvalidArgumentException("Config file \"$configFile\" not found");
         }
 
         $config = Yaml::parse($configFile);

@@ -51,7 +51,7 @@ class ContextReader
 
         if (!class_exists($this->contextClassName)) {
             throw new \InvalidArgumentException(sprintf(
-                'Class "%s" not found', $this->contextClassName
+                'Context class "%s" not found', $this->contextClassName
             ));
         }
 

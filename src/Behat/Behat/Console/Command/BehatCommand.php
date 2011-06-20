@@ -56,8 +56,8 @@ class BehatCommand extends Command
             array(
                 new InputArgument('features',
                     InputArgument::OPTIONAL,
-                    'Feature(s) to run. Could be dir (<comment>features/</comment>), ' .
-                    'feature (<comment>*.feature</comment>) or scenario at specific line ' .
+                    'Feature(s) to run. Could be a dir (<comment>features/</comment>), ' .
+                    'a feature (<comment>*.feature</comment>) or a scenario at specific line ' .
                     '(<comment>*.feature:10</comment>).'
                 ),
             ),
@@ -271,7 +271,7 @@ class BehatCommand extends Command
 
         // we don't want to init, so we check, that features path exists
         if (!is_dir($featuresPath = $locator->getFeaturesPath())) {
-            throw new \InvalidArgumentException("Path \"$featuresPath\" not found");
+            throw new \InvalidArgumentException("Features path \"$featuresPath\" does not exist");
         }
 
         // init translator
@@ -462,8 +462,7 @@ class BehatCommand extends Command
         $refClass = new \ReflectionClass($class);
         if (!$refClass->implementsInterface('Behat\Behat\Formatter\FormatterInterface')) {
             throw new \RuntimeException(sprintf(
-                'Cannot use "%s" as formatter as it doesn\'t implement Behat\Behat\Formatter\FormatterInterface',
-                $class
+                'Formatter class "%s" should implement FormatterInterface', $class
             ));
         }
 

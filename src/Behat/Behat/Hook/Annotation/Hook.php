@@ -23,6 +23,22 @@ use Behat\Behat\Context\ContextInterface,
 abstract class Hook extends Annotation implements HookInterface
 {
     /**
+     * Constructs annotation.
+     *
+     * @param   callback    $callback
+     */
+    public function __construct($callback)
+    {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException(sprintf(
+                '"%s" hook callback should be a valid callable, but %s given',
+                basename(str_replace('\\', '/', get_class($this))), gettype($callback)
+            ));
+        }
+        parent::__construct($callback);
+    }
+
+    /**
      * @see     Behat\Behat\Hook\HookInterface::run()
      */
     public function run(EventInterface $event)

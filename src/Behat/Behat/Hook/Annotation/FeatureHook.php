@@ -32,12 +32,11 @@ abstract class FeatureHook extends FilterableHook
         if (!$this->isClosure()) {
             $methodRefl = new \ReflectionMethod($callback[0], $callback[1]);
 
-            if (!is_callable($callback)) {
-                throw new \InvalidArgumentException('Callback should be valid callable');
-            }
-
             if (!$methodRefl->isStatic()) {
-                throw new \InvalidArgumentException('Suite hook callbacks should be static methods');
+                throw new \InvalidArgumentException(sprintf(
+                    '"%s" hook callback: %s::%s() must be a static method',
+                    basename(str_replace('\\', '/', get_class($this))), $callback[0], $callback[1]
+                ));
             }
         }
     }
