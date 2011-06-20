@@ -153,7 +153,7 @@ class BehatExtension implements ExtensionInterface
                     $path = getcwd().DIRECTORY_SEPARATOR.$path;
                 }
                 if (!file_exists($path)) {
-                    foreach (explode(':', get_include_path()) as $libPath) {
+                    foreach (explode(PATH_SEPARATOR, get_include_path()) as $libPath) {
                         if (file_exists($libPath.DIRECTORY_SEPARATOR.$path)) {
                             $path = $libPath.DIRECTORY_SEPARATOR.$path;
                             break;
