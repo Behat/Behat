@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\DependencyInjection\BehatExtension,
-    Behat\Behat\Definition\DefinitionDumper,
+    Behat\Behat\Definition\DefinitionPrinter,
     Behat\Behat\Event\SuiteEvent,
     Behat\Behat\PathLocator;
 
@@ -56,8 +56,8 @@ class BehatCommand extends Command
             array(
                 new InputArgument('features',
                     InputArgument::OPTIONAL,
-                    'Feature(s) to run. Could be dir (<comment>features/</comment>), ' .
-                    'feature (<comment>*.feature</comment>) or scenario at specific line ' .
+                    'Feature(s) to run. Could be a dir (<comment>features/</comment>), ' .
+                    'a feature (<comment>*.feature</comment>) or a scenario at specific line ' .
                     '(<comment>*.feature:10</comment>).'
                 ),
             ),
@@ -109,7 +109,7 @@ class BehatCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 ' ' .
                 'Specify configuration profile to use. ' .
-                'Define profiles in config file (<info>--config</info>).'
+                'Define profiles in config file (<info>--config</info>).'."\n"
             ),
         );
     }
@@ -130,7 +130,7 @@ class BehatCommand extends Command
             new InputOption('--tags',           null,
                 InputOption::VALUE_REQUIRED,
                 '         ' .
-                'Only execute the features or scenarios with tags matching tag filter expression.'
+                'Only execute the features or scenarios with tags matching tag filter expression.'."\n"
             ),
         );
     }
@@ -159,15 +159,15 @@ class BehatCommand extends Command
     protected function getDemonstrationOptions()
     {
         return array(
-            new InputOption('--usage',          null,
+            new InputOption('--story-syntax',    null,
                 InputOption::VALUE_NONE,
-                '        ' .
+                ' ' .
                 'Print *.feature example in specified language (<info>--lang</info>).'
             ),
-            new InputOption('--steps',          null,
+            new InputOption('--definitions',    null,
                 InputOption::VALUE_NONE,
-                '        ' .
-                'Print available steps in specified language (<info>--lang</info>).'
+                '  ' .
+                'Print available step definitions in specified language (<info>--lang</info>).'."\n"
             ),
         );
     }
@@ -215,10 +215,25 @@ class BehatCommand extends Command
                 '         ' .
                 'Print formatter output in particular language.'
             ),
+            new InputOption('--no-paths',       null,
+                InputOption::VALUE_NONE,
+                '     ' .
+                'Do not print the definition path with the steps.'
+            ),
+            new InputOption('--no-snippets',    null,
+                InputOption::VALUE_NONE,
+                '  ' .
+                'Do not print snippets for undefined steps.'
+            ),
             new InputOption('--no-multiline',   null,
                 InputOption::VALUE_NONE,
                 ' ' .
                 'No multiline arguments in output.'
+            ),
+            new InputOption('--expand',         null,
+                InputOption::VALUE_NONE,
+                '       ' .
+                'Expand Scenario Outline Tables in output.'."\n"
             ),
         );
     }
@@ -230,8 +245,6 @@ class BehatCommand extends Command
      * @uses    locateBasePath()
      * @uses    createFormatter()
      * @uses    initFeaturesDirectoryStructure()
-     * @uses    demonstrateUsageExample()
-     * @uses    demonstrateAvailableSteps()
      * @uses    runFeatures()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -245,8 +258,8 @@ class BehatCommand extends Command
         // locate base path
         $this->locateBasePath($locator, $input);
 
-        // load bootstraps
-        foreach ($locator->locateBootstrapsPaths() as $path) {
+        // load bootstrap files
+        foreach ($locator->locateBootstrapFilesPaths() as $path) {
             require_once($path);
         }
 
@@ -258,14 +271,11 @@ class BehatCommand extends Command
 
         // we don't want to init, so we check, that features path exists
         if (!is_dir($featuresPath = $locator->getFeaturesPath())) {
-            throw new \InvalidArgumentException("Path \"$featuresPath\" not found");
+            throw new \InvalidArgumentException("Features path \"$featuresPath\" does not exist");
         }
 
-        // locate definition translations
+        // init translator
         $translator = $container->get('behat.translator');
-        foreach ($locator->locateDefinitionsTranslationsPaths() as $path) {
-            $translator->addResource('xliff', $path, basename($path, '.xliff'), 'behat.definitions');
-        }
 
         // create formatter
         $formatter = $this->createFormatter(
@@ -275,31 +285,41 @@ class BehatCommand extends Command
         // configure formatter
         $formatter->setTranslator($translator);
         $formatter->setParameter('base_path', $locator->getWorkPath());
-        $formatter->setParameter('support_path', $locator->getSupportPath());
-        $formatter->setParameter('verbose',
-            $input->getOption('verbose') ?: $container->getParameter('behat.formatter.verbose')
-        );
-        $formatter->setParameter('language',
-            $input->getOption('lang') ?: $container->getParameter('behat.formatter.language')
-        );
+        $formatter->setParameter('support_path', $locator->getBootstrapPath());
+        $formatter->setParameter('decorated', $output->isDecorated());
+        foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
+            $formatter->setParameter($param, $value);
+        }
+        if ($input->getOption('verbose')) {
+            $formatter->setParameter('verbose', true);
+        }
+        if ($input->getOption('lang')) {
+            $formatter->setParameter('language', $input->getOption('lang'));
+        }
         if ($input->getOption('colors')) {
+            $output->setDecorated(true);
             $formatter->setParameter('decorated', true);
         } elseif ($input->getOption('no-colors')) {
+            $output->setDecorated(false);
             $formatter->setParameter('decorated', false);
-        } elseif (null !== ($decorated = $container->getParameter('behat.formatter.decorated'))) {
-            $formatter->setParameter('decorated', $decorated);
-        } else {
-            $formatter->setParameter('decorated', $output->isDecorated());
         }
-        $formatter->setParameter('time',
-            $input->getOption('no-time') ? false : $container->getParameter('behat.formatter.time')
-        );
-        $formatter->setParameter('multiline_arguments',
-            $input->getOption('no-multiline')
-                ? false
-                : $container->getParameter('behat.formatter.multiline_arguments')
-        );
-        if ($out = $input->getOption('out') ?: $locator->getOutputPath()) {
+        if ($input->getOption('no-time')) {
+            $formatter->setParameter('time', false);
+        }
+        if ($input->getOption('no-snippets')) {
+            $formatter->setParameter('snippets', false);
+        }
+        if ($input->getOption('no-paths')) {
+            $formatter->setParameter('paths', false);
+        }
+        if ($input->getOption('expand')) {
+            $formatter->setParameter('expand', true);
+        }
+        if ($input->getOption('no-multiline')) {
+            $formatter->setParameter('multiline_arguments', false);
+        }
+        if ($out = $input->getOption('out')
+         ?: $locator->getOutputPath($formatter->getParameter('output_path'))) {
             // get realpath
             if (!file_exists($out)) {
                 touch($out);
@@ -311,9 +331,6 @@ class BehatCommand extends Command
             $formatter->setParameter('output_path', $out);
             $formatter->setParameter('decorated', (Boolean) $input->getOption('colors'));
         }
-        foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
-            $formatter->setParameter($param, $value);
-        }
 
         // configure gherkin filters
         $gherkinParser = $container->get('gherkin');
@@ -324,37 +341,29 @@ class BehatCommand extends Command
             $gherkinParser->addFilter(new TagFilter($tags));
         }
 
-        // locate step definitions
-        $definitionDispatcher = $container->get('behat.definition_dispatcher');
-        foreach ($locator->locateDefinitionsPaths() as $path) {
-            $definitionDispatcher->addResource('php', $path);
-        }
+        // read main dispatchers
+        $contextReader          = $container->get('behat.context_reader');
+        $definitionDispatcher   = $container->get('behat.definition_dispatcher');
+        $hookDispatcher         = $container->get('behat.hook_dispatcher');
 
-        // locate environment configs
-        $environmentBuilder = $container->get('behat.environment_builder');
-        foreach ($locator->locateEnvironmentConfigsPaths() as $path) {
-            $environmentBuilder->addResource($path);
-        }
-
-        // locate hooks definitions
-        $hookDispatcher = $container->get('behat.hook_dispatcher');
-        foreach ($locator->locateHooksPaths() as $path) {
-            $hookDispatcher->addResource('php', $path);
-        }
+        // read annotations
+        $contextReader->read();
 
         // logger
         $logger = $container->get('behat.logger');
 
         // helpers
-        if ($input->hasOption('usage') && $input->getOption('usage')) {
-            $this->demonstrateUsageExample(
-                $container->get('gherkin.keywords_dumper'), $input->getOption('lang') ?: 'en', $output
+        if ($input->hasOption('story-syntax') && $input->getOption('story-syntax')) {
+            $container->get('behat.help_printer.story_syntax')->printSyntax(
+                $output, $input->getOption('lang') ?: 'en'
             );
+
             return 0;
-        } elseif ($input->hasOption('steps') && $input->getOption('steps')) {
-            $this->demonstrateAvailableSteps(
-                $container->get('behat.definition_dumper'), $input->getOption('lang') ?: 'en', $output
+        } elseif ($input->hasOption('definitions') && $input->getOption('definitions')) {
+            $container->get('behat.help_printer.definitions')->printDefinitions(
+                $output, $input->getOption('lang') ?: 'en'
             );
+
             return 0;
         }
 
@@ -453,8 +462,7 @@ class BehatCommand extends Command
         $refClass = new \ReflectionClass($class);
         if (!$refClass->implementsInterface('Behat\Behat\Formatter\FormatterInterface')) {
             throw new \RuntimeException(sprintf(
-                'Cannot use "%s" as formatter as it doesn\'t implement Behat\Behat\Formatter\FormatterInterface',
-                $class
+                'Formatter class "%s" should implement FormatterInterface', $class
             ));
         }
 
@@ -489,18 +497,29 @@ class BehatCommand extends Command
         $dispatcher = $container->get('behat.event_dispatcher');
         $logger     = $container->get('behat.logger');
 
-        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger));
+        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, false));
 
+        // catch app interruption
+        if (function_exists('pcntl_signal')) {
+            declare(ticks = 1);
+            pcntl_signal(SIGINT, function() use($dispatcher, $logger) {
+                $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, false));
+                exit(0);
+            });
+        }
+
+        // read features from paths
         foreach ($paths as $path) {
             $features = $gherkin->load((string) $path);
 
+            // and run them in FeatureTester
             foreach ($features as $feature) {
                 $tester = $container->get('behat.tester.feature');
                 $result = max($result, $feature->accept($tester));
             }
         }
 
-        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger));
+        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, true));
 
         return $result;
     }
@@ -513,95 +532,37 @@ class BehatCommand extends Command
      */
     protected function initFeaturesDirectoryStructure(PathLocator $locator, OutputInterface $output)
     {
-        $basePath       = $locator->getWorkPath() . DIRECTORY_SEPARATOR;
+        $basePath       = realpath($locator->getWorkPath()) . DIRECTORY_SEPARATOR;
         $featuresPath   = $locator->getFeaturesPath();
-        $supportPath    = $locator->getSupportPath();
-        $stepsPath      = current($locator->locateDefinitionsPaths(false));
-        $envPath        = current($locator->locateEnvironmentConfigsPaths(false));
-        $bootPath       = current($locator->locateBootstrapsPaths(false));
+        $bootstrapPath  = $locator->getBootstrapPath();
 
         if (!is_dir($featuresPath)) {
             mkdir($featuresPath, 0777, true);
             $output->writeln(
                 '<info>+d</info> ' .
-                str_replace($basePath, '', $featuresPath) .
+                str_replace($basePath, '', realpath($featuresPath)) .
                 ' <comment>- place your *.feature files here</comment>'
             );
         }
 
-        if (!is_dir($stepsPath)) {
-            mkdir($stepsPath, 0777, true);
+        if (!is_dir($bootstrapPath)) {
+            mkdir($bootstrapPath, 0777, true);
             $output->writeln(
                 '<info>+d</info> ' .
-                str_replace($basePath, '', $stepsPath) .
-                ' <comment>- place step definition files here</comment>'
+                str_replace($basePath, '', realpath($bootstrapPath)) .
+                ' <comment>- place bootstrap scripts and static files here</comment>'
             );
 
-            copy(__DIR__ . '/../../Skeleton/steps.php', $stepsPath . DIRECTORY_SEPARATOR . 'steps.php');
+            copy(
+                __DIR__ . '/../../Skeleton/FeatureContext.php',
+                $bootstrapPath . DIRECTORY_SEPARATOR . 'FeatureContext.php'
+            );
+
             $output->writeln(
                 '<info>+f</info> ' .
-                str_replace($basePath, '', $stepsPath) . DIRECTORY_SEPARATOR . 'steps.php' .
-                ' <comment>- place some step definitions in this file</comment>'
+                str_replace($basePath, '', realpath($bootstrapPath)) . DIRECTORY_SEPARATOR .
+                'FeatureContext.php <comment>- place your feature related code here</comment>'
             );
         }
-
-        if (!is_dir($supportPath)) {
-            mkdir($supportPath, 0777, true);
-            $output->writeln(
-                '<info>+d</info> ' .
-                str_replace($basePath, '', $supportPath) .
-                ' <comment>- place support scripts and static files here</comment>'
-            );
-        }
-
-        if (!file_exists($bootPath)) {
-            if (!is_dir(dirname($bootPath))) {
-                mkdir(dirname($bootPath), 0777, true);
-            }
-            copy(__DIR__ . '/../../Skeleton/bootstrap.php', $bootPath);
-            $output->writeln(
-                '<info>+f</info> ' .
-                str_replace($basePath, '', $bootPath) .
-                ' <comment>- place bootstrap scripts in this file</comment>'
-            );
-        }
-
-        if (!file_exists($envPath)) {
-            if (!is_dir(dirname($envPath))) {
-                mkdir(dirname($envPath), 0777, true);
-            }
-            copy(__DIR__ . '/../../Skeleton/env.php', $envPath);
-            $output->writeln(
-                '<info>+f</info> ' .
-                str_replace($basePath, '', $envPath) .
-                ' <comment>- place environment initialization scripts in this file</comment>'
-            );
-        }
-    }
-
-    /**
-     * Prints features usage example in specified language (--lang) to the console.
-     *
-     * @param   Behat\Gherkin\Keywords\KeywordsDumper           $dumper     keywords dumper
-     * @param   string                                          $lang       locale name
-     * @param   Symfony\Component\Console\Input\OutputInterface $output     output console
-     */
-    protected function demonstrateUsageExample(KeywordsDumper $dumper, $lang, OutputInterface $output)
-    {
-        $output->setDecorated(false);
-        $output->writeln($dumper->dump($lang) . "\n", OutputInterface::OUTPUT_RAW);
-    }
-
-    /**
-     * Prints available step definitions.
-     *
-     * @param   Behat\Behat\Definition\Dumper                   $dumper     definitions dumper
-     * @param   string                                          $lang       locale name
-     * @param   Symfony\Component\Console\Input\OutputInterface $output     output console
-     */
-    protected function demonstrateAvailableSteps(DefinitionDumper $dumper, $lang, OutputInterface $output)
-    {
-        $output->setDecorated(false);
-        $output->write($dumper->dump($lang), false, OutputInterface::OUTPUT_RAW);
     }
 }

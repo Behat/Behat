@@ -30,13 +30,13 @@ class LoggerDataCollector implements EventSubscriberInterface
      *
      * @var     float
      */
-    protected $startTime;
+    private $startTime;
     /**
      * Suite run finish time.
      *
      * @var     float
      */
-    protected $finishTime;
+    private $finishTime;
     /**
      * Step statuses text notations.
      *
@@ -44,7 +44,7 @@ class LoggerDataCollector implements EventSubscriberInterface
      *
      * @uses    Behat\Behat\Tester\StepEvent
      */
-    protected $statuses             = array(
+    private $statuses             = array(
         StepEvent::PASSED      => 'passed',
         StepEvent::SKIPPED     => 'skipped',
         StepEvent::PENDING     => 'pending',
@@ -56,43 +56,43 @@ class LoggerDataCollector implements EventSubscriberInterface
      *
      * @var     integer
      */
-    protected $stepsCount           = 0;
+    private $stepsCount           = 0;
     /**
      * Overall scenarios count.
      *
      * @var     integer
      */
-    protected $scenariosCount       = 0;
+    private $scenariosCount       = 0;
     /**
      * All steps statuses count.
      *
      * @var     array
      */
-    protected $stepsStatuses        = array();
+    private $stepsStatuses        = array();
     /**
      * All scenarios statuses count.
      *
      * @var     array
      */
-    protected $scenariosStatuses    = array();
+    private $scenariosStatuses    = array();
     /**
      * Missed definitions snippets.
      *
      * @var     array
      */
-    protected $definitionsSnippets  = array();
+    private $definitionsSnippets  = array();
     /**
      * Events of failed steps.
      *
      * @var     array
      */
-    protected $failedStepsEvents    = array();
+    private $failedStepsEvents    = array();
     /**
      * Events of pending steps.
      *
      * @var     array
      */
-    protected $pendingStepsEvents   = array();
+    private $pendingStepsEvents   = array();
 
     /**
      * Initializes logger.
@@ -264,7 +264,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Starts suite timer.
      */
-    protected function startTimer()
+    private function startTimer()
     {
         $this->startTime = microtime(true);
     }
@@ -272,7 +272,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Stops suite timer.
      */
-    protected function finishTimer()
+    private function finishTimer()
     {
         $this->finishTime = microtime(true);
     }
@@ -282,7 +282,7 @@ class LoggerDataCollector implements EventSubscriberInterface
      *
      * @param   integer $result status code
      */
-    protected function collectScenarioResult($result)
+    private function collectScenarioResult($result)
     {
         ++$this->scenariosCount;
         ++$this->scenariosStatuses[$this->statuses[$result]];
@@ -293,7 +293,7 @@ class LoggerDataCollector implements EventSubscriberInterface
      *
      * @param   Behat\Behat\Event\StepEvent $event  step.after event
      */
-    protected function collectStepStats(StepEvent $event)
+    private function collectStepStats(StepEvent $event)
     {
         ++$this->stepsCount;
         ++$this->stepsStatuses[$this->statuses[$event->getResult()]];

@@ -5,16 +5,13 @@ namespace Behat\Behat\Hook;
 use Symfony\Component\EventDispatcher\EventDispatcher,
     Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Behat\Behat\Hook\Loader\LoaderInterface,
-    Behat\Behat\Event\EventInterface,
+use Behat\Behat\Event\EventInterface,
     Behat\Behat\Event\SuiteEvent,
     Behat\Behat\Event\FeatureEvent,
     Behat\Behat\Event\ScenarioEvent,
     Behat\Behat\Event\OutlineExampleEvent,
-    Behat\Behat\Event\StepEvent;
-
-use Behat\Gherkin\Filter\TagFilter,
-    Behat\Gherkin\Filter\NameFilter;
+    Behat\Behat\Event\StepEvent,
+    Behat\Behat\Hook\Annotation\FilterableHook;
 
 /*
  * This file is part of the Behat.
@@ -32,23 +29,11 @@ use Behat\Gherkin\Filter\TagFilter,
 class HookDispatcher implements EventSubscriberInterface
 {
     /**
-     * Hook resources.
-     *
-     * @var     array
-     */
-    protected $resources    = array();
-    /**
-     * Hook loaders.
-     *
-     * @var     array
-     */
-    protected $loaders      = array();
-    /**
      * Loaded hooks.
      *
      * @var     array
      */
-    protected $hooks        = array();
+    private $hooks = array();
 
     /**
      * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
@@ -64,6 +49,30 @@ class HookDispatcher implements EventSubscriberInterface
     }
 
     /**
+     * Adds hook into dispatcher.
+     *
+     * @param   Behat\Behat\Hook\HookInterface  $hook   hook instance
+     */
+    public function addHook(HookInterface $hook)
+    {
+        if (!isset($this->hooks[$hook->getEventName()])) {
+            $this->hooks[$hook->getEventName()] = array();
+        }
+
+        $this->hooks[$hook->getEventName()][] = $hook;
+    }
+
+    /**
+     * Returns all available hooks.
+     *
+     * @return  array
+     */
+    public function getHooks()
+    {
+        return $this->hooks;
+    }
+
+    /**
      * Listens to "suite.before" event.
      *
      * @param   Behat\Behat\Event\SuiteEvent    $event  event to which hooks glued
@@ -72,7 +81,7 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function beforeSuite(SuiteEvent $event)
     {
-        $this->fireSuiteHooks('suite.before', $event);
+        $this->fireHooks(__FUNCTION__, $event);
     }
 
     /**
@@ -84,7 +93,7 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function afterSuite(SuiteEvent $event)
     {
-        $this->fireSuiteHooks('suite.after', $event);
+        $this->fireHooks(__FUNCTION__, $event);
     }
 
     /**
@@ -96,7 +105,7 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function beforeFeature(FeatureEvent $event)
     {
-        $this->fireFeatureHooks('feature.before', $event);
+        $this->fireHooks(__FUNCTION__, $event);
     }
 
     /**
@@ -108,7 +117,7 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function afterFeature(FeatureEvent $event)
     {
-        $this->fireFeatureHooks('feature.after', $event);
+        $this->fireHooks(__FUNCTION__, $event);
     }
 
     /**
@@ -120,7 +129,7 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function beforeScenario(ScenarioEvent $event)
     {
-        $this->fireScenarioHooks('scenario.before', $event);
+        $this->fireHooks(__FUNCTION__, $event);
     }
 
     /**
@@ -132,7 +141,7 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function afterScenario(ScenarioEvent $event)
     {
-        $this->fireScenarioHooks('scenario.after', $event);
+        $this->fireHooks(__FUNCTION__, $event);
     }
 
     /**
@@ -144,7 +153,7 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function beforeOutlineExample(OutlineExampleEvent $event)
     {
-        $this->fireScenarioHooks('scenario.before', $event);
+        $this->fireHooks('beforeScenario', $event);
     }
 
     /**
@@ -156,7 +165,7 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function afterOutlineExample(OutlineExampleEvent $event)
     {
-        $this->fireScenarioHooks('scenario.after', $event);
+        $this->fireHooks('afterScenario', $event);
     }
 
     /**
@@ -168,7 +177,7 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function beforeStep(StepEvent $event)
     {
-        $this->fireStepHooks('step.before', $event);
+        $this->fireHooks(__FUNCTION__, $event);
     }
 
     /**
@@ -180,181 +189,27 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function afterStep(StepEvent $event)
     {
-        $this->fireStepHooks('step.after', $event);
+        $this->fireHooks(__FUNCTION__, $event);
     }
 
     /**
-     * Runs suite hooks with specified name.
+     * Runs hooks with specified name.
      *
      * @param   string                          $name   hooks name
      * @param   Behat\Behat\Event\SuiteEvent    $event  event to which hooks glued
      */
-    protected function fireSuiteHooks($name, SuiteEvent $event)
+    protected function fireHooks($name, EventInterface $event)
     {
-        if (!count($this->hooks)) {
-            $this->loadHooks();
-        }
-
         $hooks = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
 
         foreach ($hooks as $hook) {
-            call_user_func($hook, $event);
-        }
-    }
-
-    /**
-     * Runs feature hooks with specified name.
-     *
-     * @param   string                          $name   hooks name
-     * @param   Behat\Behat\Event\FeatureEvent  $event  event to which hooks glued
-     */
-    protected function fireFeatureHooks($name, FeatureEvent $event)
-    {
-        if (!count($this->hooks)) {
-            $this->loadHooks();
-        }
-
-        $feature    = $event->getFeature();
-        $hooks      = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
-
-        foreach ($hooks as $hook) {
-            if (is_callable($hook)) {
-                call_user_func($hook, $event);
-            } elseif (!empty($hook[0]) && false !== strpos($hook[0], '@')) {
-                $filter = new TagFilter($hook[0]);
-
-                if ($filter->isFeatureMatch($feature)) {
-                    call_user_func($hook[1], $event);
-                }
-            } elseif (!empty($hook[0])) {
-                $filter = new NameFilter($hook[0]);
-
-                if ($filter->isFeatureMatch($feature)) {
-                    call_user_func($hook[1], $event);
+            if ($hook instanceof FilterableHook) {
+                if ($hook->filterMatches($event)) {
+                    $hook->run($event);
                 }
             } else {
-                call_user_func($hook[1], $event);
+                $hook->run($event);
             }
-        }
-    }
-
-    /**
-     * Runs scenario hooks with specified name.
-     *
-     * @param   string                              $name   hooks name
-     * @param   Behat\Behat\Event\EventInterface    $event  event to which hooks glued
-     */
-    protected function fireScenarioHooks($name, EventInterface $event)
-    {
-        if (!count($this->hooks)) {
-            $this->loadHooks();
-        }
-
-        if ($event instanceof ScenarioEvent) {
-            $scenario = $event->getScenario();
-        } else {
-            $scenario = $event->getOutline();
-        }
-        $hooks = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
-
-        foreach ($hooks as $hook) {
-            if (is_callable($hook)) {
-                call_user_func($hook, $event);
-            } elseif (!empty($hook[0]) && false !== strpos($hook[0], '@')) {
-                $filter = new TagFilter($hook[0]);
-
-                if ($filter->isScenarioMatch($scenario)) {
-                    call_user_func($hook[1], $event);
-                }
-            } elseif (!empty($hook[0])) {
-                $filter = new NameFilter($hook[0]);
-
-                if ($filter->isScenarioMatch($scenario)) {
-                    call_user_func($hook[1], $event);
-                }
-            } else {
-                call_user_func($hook[1], $event);
-            }
-        }
-    }
-
-    /**
-     * Runs step hooks with specified name.
-     *
-     * @param   string                      $name   hooks name
-     * @param   Behat\Behat\Event\StepEvent $event  event to which hooks glued
-     */
-    protected function fireStepHooks($name, StepEvent $event)
-    {
-        if (!count($this->hooks)) {
-            $this->loadHooks();
-        }
-
-        $scenario   = $event->getStep()->getParent();
-        $hooks      = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
-
-        foreach ($hooks as $hook) {
-            if (is_callable($hook)) {
-                call_user_func($hook, $event);
-            } elseif (!empty($hook[0]) && false !== strpos($hook[0], '@')) {
-                $filter = new TagFilter($hook[0]);
-
-                if ($filter->isScenarioMatch($scenario)) {
-                    call_user_func($hook[1], $event);
-                }
-            } elseif (!empty($hook[0])) {
-                $filter = new NameFilter($hook[0]);
-
-                if ($filter->isScenarioMatch($scenario)) {
-                    call_user_func($hook[1], $event);
-                }
-            } else {
-                call_user_func($hook[1], $event);
-            }
-        }
-    }
-
-    /**
-     * Adds a hook resource loader.
-     *
-     * @param   string                                      $name   loader format name
-     * @param   Symfony\Component\EventDispatcher\Event     $event  event to which hooks glued
-     */
-    public function addLoader($format, LoaderInterface $loader)
-    {
-        $this->loaders[$format] = $loader;
-    }
-
-    /**
-     * Adds a hook resource to load.
-     *
-     * @param   string          $format     loader format name
-     * @param   mixed           $resource   the resource name
-     */
-    public function addResource($format, $resource)
-    {
-        $this->resources[] = array($format, $resource);
-    }
-
-    /**
-     * Loads all hook resources with loaders.
-     *
-     * @throws  RuntimeException    if loader for specified format is not registered
-     */
-    protected function loadHooks()
-    {
-        if (count($this->hooks)) {
-            return;
-        }
-
-        foreach ($this->resources as $resource) {
-            if (!isset($this->loaders[$resource[0]])) {
-                throw new \RuntimeException(sprintf('The "%s" step hook loader is not registered.', $resource[0]));
-            }
-
-            $this->hooks = array_merge_recursive(
-                $this->hooks, $this->loaders[$resource[0]]->load($resource[1])
-            );
         }
     }
 }

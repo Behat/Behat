@@ -4,7 +4,7 @@ namespace Behat\Behat\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-use Behat\Behat\Environment\EnvironmentInterface;
+use Behat\Behat\Context\ContextInterface;
 
 use Behat\Gherkin\Node\ScenarioNode;
 
@@ -24,25 +24,25 @@ use Behat\Gherkin\Node\ScenarioNode;
 class ScenarioEvent extends Event implements EventInterface
 {
     private $scenario;
-    private $environment;
+    private $context;
     private $result;
     private $skipped;
 
     /**
      * Initializes scenario event.
      *
-     * @param   Behat\Gherkin\Node\ScenarioNode                 $scenario
-     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
-     * @param   integer                                         $result
-     * @param   Boolean                                         $skipped
+     * @param   Behat\Gherkin\Node\ScenarioNode         $scenario
+     * @param   Behat\Behat\Context\ContextInterface    $context
+     * @param   integer                                 $result
+     * @param   Boolean                                 $skipped
      */
-    public function __construct(ScenarioNode $scenario, EnvironmentInterface $environment, $result = null,
+    public function __construct(ScenarioNode $scenario, ContextInterface $context, $result = null,
                                 $skipped = false)
     {
-        $this->scenario     = $scenario;
-        $this->environment  = $environment;
-        $this->result       = $result;
-        $this->skipped      = $skipped;
+        $this->scenario = $scenario;
+        $this->context  = $context;
+        $this->result   = $result;
+        $this->skipped  = $skipped;
     }
 
     /**
@@ -56,13 +56,13 @@ class ScenarioEvent extends Event implements EventInterface
     }
 
     /**
-     * Returns environment object.
+     * Returns context object.
      *
-     * @return  Behat\Behat\Environment\EnvironmentInterface
+     * @return  Behat\Behat\Context\ContextInterface
      */
-    public function getEnvironment()
+    public function getContext()
     {
-        return $this->environment;
+        return $this->context;
     }
 
     /**

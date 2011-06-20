@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Exception;
 
-use Behat\Behat\Definition\Definition;
+use Behat\Behat\Definition\DefinitionInterface;
 
 /*
  * This file is part of the Behat.
@@ -22,16 +22,13 @@ class Redundant extends BehaviorException
     /**
      * Initializes redundant exception.
      *
-     * @param   Behat\Behat\Definition\Definition   $step2    duplicate step definition
-     * @param   Behat\Behat\Definition\Definition   $step1    firstly matched step definition
+     * @param   Behat\Behat\Definition\DefinitionInterface  $step2    duplicate step definition
+     * @param   Behat\Behat\Definition\DefinitionInterface  $step1    firstly matched step definition
      */
-    public function __construct(Definition $step2, Definition $step1)
+    public function __construct(DefinitionInterface $step2, DefinitionInterface $step1)
     {
-        $message = sprintf("Step \"%s\" is already defined in %s:%d\n\n%s:%d\n%s:%d",
-            $step2->getRegex(),
-            $step1->getFile(), $step1->getLine(),
-            $step1->getFile(), $step1->getLine(),
-            $step2->getFile(), $step2->getLine()
+        $message = sprintf("Step \"%s\" is already defined in %s\n\n%s\n%s",
+            $step2->getRegex(), $step1->getPath(), $step1->getPath(), $step2->getPath()
         );
 
         parent::__construct($message);

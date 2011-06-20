@@ -5,7 +5,7 @@ namespace Behat\Behat\Formatter;
 use Symfony\Component\EventDispatcher\EventDispatcher,
     Symfony\Component\EventDispatcher\Event;
 
-use Behat\Behat\Definition\Definition,
+use Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\DataCollector\LoggerDataCollector,
     Behat\Behat\Exception\Pending,
     Behat\Behat\Event\SuiteEvent,
@@ -96,15 +96,15 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints step.
      *
-     * @param   Behat\Gherkin\Node\StepNode         $step           step node
-     * @param   integer                             $result         step result code
-     * @param   Behat\Behat\Definition\Definition   $definition     definition instance (if step defined)
-     * @param   string                              $snippet        snippet (if step is undefined)
-     * @param   Exception                           $exception      exception (if step is failed)
+     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
+     * @param   integer                                     $result     step result code
+     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition instance (if step defined)
+     * @param   string                                      $snippet    snippet (if step is undefined)
+     * @param   Exception                                   $exception  exception (if step is failed)
      *
      * @uses    Behat\Behat\Tester\StepTester
      */
-    protected function printStep(StepNode $step, $result, Definition $definition = null,
+    protected function printStep(StepNode $step, $result, DefinitionInterface $definition = null,
                                  $snippet = null, \Exception $exception = null)
     {
         switch ($result) {
@@ -188,11 +188,11 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints path to step.
      *
-     * @param   Behat\Gherkin\Node\StepNode         $step           step node
-     * @param   Behat\Behat\Definition\Definition   $definition     definition (if step defined)
-     * @param   Exception                           $exception      exception (if step failed)
+     * @param   Behat\Gherkin\Node\StepNode                 $step           step node
+     * @param   Behat\Behat\Definition\DefinitionInterface  $definition     definition (if step defined)
+     * @param   Exception                                   $exception      exception (if step failed)
      */
-    protected function printStepPath(StepNode $step, Definition $definition = null,
+    protected function printStepPath(StepNode $step, DefinitionInterface $definition = null,
                                      \Exception $exception = null)
     {
         $color      = $exception instanceof Pending ? 'pending' : 'failed';
@@ -217,14 +217,18 @@ class ProgressFormatter extends ConsoleFormatter
         $this->write("    {+$color}$stepPath{-$color}");
         if (null !== $definition) {
             $indentCount = $this->maxLineLength - $stepPathLn;
-            $this->printPathComment($definition->getFile(), $definition->getLine(), $indentCount);
+            $this->printPathComment(
+                $this->relativizePathsInString($definition->getPath()), $indentCount
+            );
         } else {
             $this->writeln();
         }
 
         $this->write("    {+$color}$scenarioPath{-$color}");
         $indentCount = $this->maxLineLength - $scenarioPathLn;
-        $this->printPathComment($node->getFile(), $node->getLine(), $indentCount);
+        $this->printPathComment(
+            $this->relativizePathsInString($node->getFile()) . ':' . $node->getLine(), $indentCount
+        );
         $this->writeln();
     }
 
@@ -313,7 +317,7 @@ class ProgressFormatter extends ConsoleFormatter
      */
     protected function printUndefinedStepsSnippets(LoggerDataCollector $logger)
     {
-        if (count($logger->getDefinitionsSnippets())) {
+        if ($this->getParameter('snippets') && count($logger->getDefinitionsSnippets())) {
             $header = $this->translate(
                 'You can implement step definitions for undefined steps with these snippets:'
             );
@@ -328,16 +332,13 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints path comment.
      *
-     * @param   string  $file           filename
-     * @param   integer $line           line number
+     * @param   string  $path           item path
      * @param   integer $indentCount    indenation number
      */
-    protected function printPathComment($file, $line, $indentCount = 0)
+    protected function printPathComment($path, $indentCount = 0)
     {
         $indent = str_repeat(' ', $indentCount);
-        $file = $this->relativizePathsInString($file);
-
-        $this->writeln("$indent {+comment}# $file:$line{-comment}");
+        $this->writeln("$indent {+comment}# $path{-comment}");
     }
 
     /**

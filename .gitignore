@@ -1,2 +1,3 @@
 behat*.tgz
+behat*.phar
 src/api

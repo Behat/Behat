@@ -10,7 +10,7 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\BackgroundNode,
     Behat\Gherkin\Node\StepNode;
 
-use Behat\Behat\Environment\EnvironmentInterface,
+use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Event\ScenarioEvent;
 
 /*
@@ -41,11 +41,11 @@ class ScenarioTester implements NodeVisitorInterface
      */
     protected $dispatcher;
     /**
-     * Environment.
+     * Context.
      *
-     * @var     Behat\Behat\Environment\EnvironmentInterface
+     * @var     Behat\Behat\Context\ContextInterface
      */
-    protected $environment;
+    private $context;
 
     /**
      * Initializes tester.
@@ -54,9 +54,9 @@ class ScenarioTester implements NodeVisitorInterface
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container    = $container;
-        $this->dispatcher   = $container->get('behat.event_dispatcher');
-        $this->environment  = $container->get('behat.environment_builder')->build();
+        $this->container  = $container;
+        $this->dispatcher = $container->get('behat.event_dispatcher');
+        $this->context    = $container->get('behat.context_dispatcher')->createContext();
     }
 
     /**
@@ -68,14 +68,14 @@ class ScenarioTester implements NodeVisitorInterface
      */
     public function visit(AbstractNode $scenario)
     {
-        $this->dispatcher->dispatch('beforeScenario', new ScenarioEvent($scenario, $this->environment));
+        $this->dispatcher->dispatch('beforeScenario', new ScenarioEvent($scenario, $this->context));
 
         $result = 0;
         $skip   = false;
 
         // Visit & test background if has one
         if ($scenario->getFeature()->hasBackground()) {
-            $bgResult = $this->visitBackground($scenario->getFeature()->getBackground(), $this->environment);
+            $bgResult = $this->visitBackground($scenario->getFeature()->getBackground(), $this->context);
             if (0 !== $bgResult) {
                 $skip = true;
             }
@@ -84,7 +84,7 @@ class ScenarioTester implements NodeVisitorInterface
 
         // Visit & test steps
         foreach ($scenario->getSteps() as $step) {
-            $stResult = $this->visitStep($step, $this->environment, array(), $skip);
+            $stResult = $this->visitStep($step, $this->context, array(), $skip);
             if (0 !== $stResult) {
                 $skip = true;
             }
@@ -92,7 +92,7 @@ class ScenarioTester implements NodeVisitorInterface
         }
 
         $this->dispatcher->dispatch('afterScenario', new ScenarioEvent(
-            $scenario, $this->environment, $result, $skip
+            $scenario, $this->context, $result, $skip
         ));
 
         return $result;
@@ -102,16 +102,16 @@ class ScenarioTester implements NodeVisitorInterface
      * Visits & tests BackgroundNode.
      *
      * @param   Behat\Gherkin\Node\BackgroundNode               $background
-     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
+     * @param   Behat\Behat\Context\ContextInterface    $context
      *
      * @uses    Behat\Behat\Tester\BackgroundTester::visit()
      *
      * @return  integer
      */
-    protected function visitBackground(BackgroundNode $background, EnvironmentInterface $environment)
+    protected function visitBackground(BackgroundNode $background, ContextInterface $context)
     {
         $tester = $this->container->get('behat.tester.background');
-        $tester->setEnvironment($environment);
+        $tester->setContext($context);
 
         return $background->accept($tester);
     }
@@ -120,7 +120,7 @@ class ScenarioTester implements NodeVisitorInterface
      * Visits & tests StepNode.
      *
      * @param   Behat\Gherkin\Node\StepNode                     $step
-     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
+     * @param   Behat\Behat\Context\ContextInterface    $context
      * @param   array                                           $tokens         step replacements for tokens
      * @param   boolean                                         $skip           mark step as skipped?
      *
@@ -128,11 +128,11 @@ class ScenarioTester implements NodeVisitorInterface
      *
      * @return  integer
      */
-    protected function visitStep(StepNode $step, EnvironmentInterface $environment, array $tokens = array(), 
+    protected function visitStep(StepNode $step, ContextInterface $context, array $tokens = array(), 
                                  $skip = false)
     {
         $tester = $this->container->get('behat.tester.step');
-        $tester->setEnvironment($environment);
+        $tester->setContext($context);
         $tester->setTokens($tokens);
         $tester->skip($skip);
 

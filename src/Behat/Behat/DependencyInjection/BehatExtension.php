@@ -137,7 +137,7 @@ class BehatExtension implements ExtensionInterface
     protected function loadConfigurationFile($configFile, $profile = 'default')
     {
         if (!is_file($configFile) || !is_readable($configFile)) {
-            throw new \InvalidArgumentException("Config file $configFile not found");
+            throw new \InvalidArgumentException("Config file \"$configFile\" not found");
         }
 
         $config = Yaml::parse($configFile);
@@ -153,7 +153,7 @@ class BehatExtension implements ExtensionInterface
                     $path = getcwd().DIRECTORY_SEPARATOR.$path;
                 }
                 if (!file_exists($path)) {
-                    foreach (explode(':', get_include_path()) as $libPath) {
+                    foreach (explode(PATH_SEPARATOR, get_include_path()) as $libPath) {
                         if (file_exists($libPath.DIRECTORY_SEPARATOR.$path)) {
                             $path = $libPath.DIRECTORY_SEPARATOR.$path;
                             break;
@@ -181,8 +181,8 @@ class BehatExtension implements ExtensionInterface
         $behatClassLoaderReflection = new \ReflectionClass('Behat\Behat\Console\BehatApplication');
         $gherkinParserReflection    = new \ReflectionClass('Behat\Gherkin\Parser');
 
-        $behatLibPath   = realpath(dirname($behatClassLoaderReflection->getFilename()) . '/../../../../');
-        $gherkinLibPath = realpath(dirname($gherkinParserReflection->getFilename()) . '/../../../');
+        $behatLibPath   = dirname($behatClassLoaderReflection->getFilename()) . '/../../../../';
+        $gherkinLibPath = dirname($gherkinParserReflection->getFilename()) . '/../../../';
 
         $container->setParameter('gherkin.paths.lib', $gherkinLibPath);
         $container->setParameter('behat.paths.lib', $behatLibPath);
