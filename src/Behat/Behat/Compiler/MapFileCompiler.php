@@ -53,19 +53,24 @@ class MapFileCompiler
         }
 
         foreach ($this->findPhpFile()->in($this->libPath . '/vendor/Gherkin/src') as $file) {
-            $path   = str_replace($this->libPath . '/vendor/Gherkin/src/', '', $file->getRealPath());
-            $class  = str_replace(array('/', '.php'), array('\\', ''), $path);
-            $mappings .= "    '$class' => __DIR__ . '/vendor/Gherkin/src/$path',\n";
+            $path  = str_replace($this->libPath . '/vendor/Gherkin/src/', '', $file->getRealPath());
+            $class = str_replace(array('/', '.php'), array('\\', ''), $path);
+            $mappings .= "    '$class' => \$gherkinDir . '/src/$path',\n";
         }
 
         foreach ($this->findPhpFile()->in($this->libPath . '/vendor/Symfony') as $file) {
-            $path   = str_replace($this->libPath . '/vendor/', '', $file->getRealPath());
-            $class  = str_replace(array('/', '.php'), array('\\', ''), $path);
+            $path  = str_replace($this->libPath . '/vendor/', '', $file->getRealPath());
+            $class = str_replace(array('/', '.php'), array('\\', ''), $path);
             $mappings .= "    '$class' => __DIR__ . '/vendor/$path',\n";
         }
 
         $mapContent = <<<MAP_FILE
 <?php
+
+if (!is_dir(\$gherkinDir = __DIR__ . '/vendor/Gherkin')) {
+    \$gherkinDir = require_once('gherkin/libpath.php');
+}
+
 return array(
 $mappings
 );
