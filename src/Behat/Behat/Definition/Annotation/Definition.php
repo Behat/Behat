@@ -132,7 +132,13 @@ abstract class Definition extends Annotation implements DefinitionInterface
      */
     public function run(ContextInterface $context, $tokens = array())
     {
-        $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
+        if (defined('BEHAT_ERROR_REPORTING')) {
+            $errorLevel = BEHAT_ERROR_REPORTING;
+        } else {
+            $errorLevel = E_ALL ^ E_WARNING;
+        }
+
+        $oldHandler = set_error_handler(array($this, 'errorHandler'), $errorLevel);
         $callback   = $this->getCallback();
 
         $values = $this->getValues();
