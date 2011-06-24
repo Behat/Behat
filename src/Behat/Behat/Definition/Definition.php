@@ -175,6 +175,9 @@ class Definition
      */
     public function errorHandler($code, $message, $file, $line)
     {
+        if ((error_reporting() & $code) == 0) {
+            return;
+        }
         throw new Error($code, $message, $file, $line);
     }
 
