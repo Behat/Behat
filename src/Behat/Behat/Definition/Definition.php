@@ -187,7 +187,7 @@ class Definition
      */
     public function run(EnvironmentInterface $environment, $tokens = array())
     {
-        $oldHandler = set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_WARNING);
+        $oldHandler = set_error_handler(array($this, 'errorHandler'), error_reporting());
         $values     = $this->values;
 
         if (count($tokens)) {
