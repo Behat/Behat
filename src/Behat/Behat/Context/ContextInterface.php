@@ -18,13 +18,6 @@ namespace Behat\Behat\Context;
 interface ContextInterface
 {
     /**
-     * Adds subcontext to current context.
-     *
-     * @param   Behat\Behat\Context\ContextInterface        $subcontext
-     */
-    function addSubcontext(ContextInterface $subcontext);
-
-    /**
      * Returns all added subcontexts.
      *
      * @return  array
