@@ -49,7 +49,7 @@ class FeatureContext extends BaseFeaturesContext
      */
     public function __construct(array $parameters = array())
     {
-        $this->addSubcontext(new Hooks());
+        $this->useContext(new Hooks());
     }
 
     /**

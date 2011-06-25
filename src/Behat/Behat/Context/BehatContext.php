@@ -25,9 +25,11 @@ class BehatContext implements ContextInterface
     private $subcontexts = array();
 
     /**
-     * @see     Behat\Behat\Context\ContextInterface::addSubcontext()
+     * Adds subcontext to current context.
+     *
+     * @param   Behat\Behat\Context\ContextInterface    $context
      */
-    public function addSubcontext(ContextInterface $context)
+    public function useContext(ContextInterface $context)
     {
         $this->subcontexts[] = $context;
     }
