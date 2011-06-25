@@ -59,7 +59,6 @@ class PearCompiler
             ->notName('PearCompiler.php')
             ->in($this->libPath . '/src')
             ->in($this->libPath . '/i18n')
-            ->in($this->libPath . '/vendor/Symfony')
             ->in($this->libPath . '/features');
 
         $xmlSourceFiles = '';
@@ -172,6 +171,41 @@ class PearCompiler
                 <name>gherkin</name>
                 <channel>pear.behat.org</channel>
                 <min>1.0.6</min>
+            </package>
+            <package>
+                <name>Config</name>
+                <channel>pear.symfony.com</channel>
+                <recommended>2.0.0RC1</recommended>
+            </package>
+            <package>
+                <name>Console</name>
+                <channel>pear.symfony.com</channel>
+                <recommended>2.0.0RC1</recommended>
+            </package>
+            <package>
+                <name>DependencyInjection</name>
+                <channel>pear.symfony.com</channel>
+                <recommended>2.0.0RC1</recommended>
+            </package>
+            <package>
+                <name>EventDispatcher</name>
+                <channel>pear.symfony.com</channel>
+                <recommended>2.0.0RC1</recommended>
+            </package>
+            <package>
+                <name>Finder</name>
+                <channel>pear.symfony.com</channel>
+                <recommended>2.0.0RC1</recommended>
+            </package>
+            <package>
+                <name>Translation</name>
+                <channel>pear.symfony.com</channel>
+                <recommended>2.0.0RC1</recommended>
+            </package>
+            <package>
+                <name>Yaml</name>
+                <channel>pear.symfony.com</channel>
+                <recommended>2.0.0RC1</recommended>
             </package>
             <extension>
                 <name>pcre</name>
