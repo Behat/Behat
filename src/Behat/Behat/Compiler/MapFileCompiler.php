@@ -49,31 +49,39 @@ class MapFileCompiler
         foreach ($this->findPhpFile()->in($this->libPath . '/src') as $file) {
             $path   = str_replace($this->libPath . '/src/', '', $file->getRealPath());
             $class  = str_replace(array('/', '.php'), array('\\', ''), $path);
-            $mappings .= "    '$class' => __DIR__ . '/src/$path',\n";
+            $mappings .= "\$mappings['$class'] = \$behatDir . 'src/$path';\n";
         }
 
         foreach ($this->findPhpFile()->in($this->libPath . '/vendor/Gherkin/src') as $file) {
             $path  = str_replace($this->libPath . '/vendor/Gherkin/src/', '', $file->getRealPath());
             $class = str_replace(array('/', '.php'), array('\\', ''), $path);
-            $mappings .= "    '$class' => \$gherkinDir . '/src/$path',\n";
+            $mappings .= "\$mappings['$class'] = \$gherkinDir . 'src/$path';\n";
         }
 
+        $mappings .= "\nif (!defined('BEHAT_AUTOLOAD_SF2') || false === BEHAT_AUTOLOAD_SF2) {\n";
         foreach ($this->findPhpFile()->in($this->libPath . '/vendor/Symfony') as $file) {
             $path  = str_replace($this->libPath . '/vendor/', '', $file->getRealPath());
             $class = str_replace(array('/', '.php'), array('\\', ''), $path);
-            $mappings .= "    '$class' => __DIR__ . '/vendor/$path',\n";
+            $mappings .= "    \$mappings['$class'] = \$symfonyDir . '$path';\n";
         }
+        $mappings .= "}\n";
 
         $mapContent = <<<MAP_FILE
 <?php
 
-if (!is_dir(\$gherkinDir = __DIR__ . '/vendor/Gherkin')) {
-    \$gherkinDir = require_once('gherkin/libpath.php');
+\$behatDir = __DIR__ . '/';
+if (is_dir(__DIR__ . '/vendor/Symfony/')) {
+    \$symfonyDir = __DIR__ . '/vendor/';
+} else {
+    \$symfonyDir = '';
+}
+if (!is_dir(\$gherkinDir = __DIR__ . '/vendor/Gherkin/')) {
+    \$gherkinDir = 'gherkin/';
 }
 
-return array(
+\$mappings = array();
 $mappings
-);
+return \$mappings;
 MAP_FILE;
 
         file_put_contents($mapFilename, $mapContent);
