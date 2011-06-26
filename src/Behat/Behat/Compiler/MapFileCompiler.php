@@ -58,7 +58,7 @@ class MapFileCompiler
             $mappings .= "\$mappings['$class'] = \$gherkinDir . 'src/$path';\n";
         }
 
-        $mappings .= "\nif (!defined('BEHAT_AUTOLOAD_SF2') || false === BEHAT_AUTOLOAD_SF2) {\n";
+        $mappings .= "\nif (!defined('BEHAT_AUTOLOAD_SF2') || true === BEHAT_AUTOLOAD_SF2) {\n";
         foreach ($this->findPhpFile()->in($this->libPath . '/vendor/Symfony') as $file) {
             $path  = str_replace($this->libPath . '/vendor/', '', $file->getRealPath());
             $class = str_replace(array('/', '.php'), array('\\', ''), $path);
