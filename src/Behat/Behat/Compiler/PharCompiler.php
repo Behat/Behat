@@ -125,15 +125,17 @@ require_once 'phar://behat.phar/autoload.php';
 // internal encoding to utf8
 mb_internal_encoding('utf8');
 
-// check, that we are in CLI
-if ('cli' === php_sapi_name()) {
-    $app = new Behat\Behat\Console\BehatApplication(BEHAT_VERSION);
-    $app->run();
-} else {
-    throw new RuntimeException('Behat can be runned only as CLI utility');
+if (!defined('BEHAT_PHAR_CLI') || true === BEHAT_PHAR_CLI) {
+    // check, that we are in CLI
+    if ('cli' === php_sapi_name()) {
+        $app = new Behat\Behat\Console\BehatApplication(BEHAT_VERSION);
+        $app->run();
+    } else {
+        throw new RuntimeException('Behat can be runned only as CLI utility');
+    }
+    exit(0);
 }
 
-exit(0);
 __HALT_COMPILER();
 EOF
         , $version);
