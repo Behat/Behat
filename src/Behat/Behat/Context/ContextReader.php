@@ -20,17 +20,11 @@ use Behat\Behat\Context\Loader\ContextLoaderInterface;
 class ContextReader
 {
     /**
-     * Context class name.
+     * Context dispatcher.
      *
-     * @var     string
+     * @var     Behat\Behat\Context\ContextDispatcher
      */
-    private $contextClassName;
-    /**
-     * Context initialization parameters.
-     *
-     * @var     array
-     */
-    private $parameters = array();
+    private $dispatcher;
     /**
      * Context loaders.
      *
@@ -41,26 +35,11 @@ class ContextReader
     /**
      * Initializes context reader.
      *
-     * @param   string  $contextClassName   context class
-     * @param   array   $parameters         context params
+     * @param   Behat\Behat\Context\ContextDispatcher   $dispatcher context dispatcher
      */
-    public function __construct($contextClassName, array $parameters = array())
+    public function __construct(ContextDispatcher $dispatcher)
     {
-        $this->contextClassName = $contextClassName;
-        $this->parameters       = $parameters;
-
-        if (!class_exists($this->contextClassName)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Context class "%s" not found', $this->contextClassName
-            ));
-        }
-
-        $contextClassRefl = new \ReflectionClass($contextClassName);
-        if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\ContextInterface')) {
-            throw new \InvalidArgumentException(sprintf(
-                'Context class "%s" should implement ContextInterface', $this->contextClassName
-            ));
-        }
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -78,7 +57,7 @@ class ContextReader
      */
     public function read()
     {
-        $this->readFromContext(new $this->contextClassName($this->parameters));
+        $this->readFromContext($this->dispatcher->createContext());
     }
 
     /**

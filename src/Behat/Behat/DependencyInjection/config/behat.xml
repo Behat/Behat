@@ -104,8 +104,7 @@
 
         <!-- Context -->
         <service id="behat.context_reader" class="%behat.context_reader.class%">
-            <argument>%behat.context.class%</argument>
-            <argument>%behat.context.parameters%</argument>
+            <argument type="service" id="behat.context_dispatcher" />
             <call method="addLoader">
                 <argument type="service">
                     <service class="%behat.context_loader.translated.class%">
