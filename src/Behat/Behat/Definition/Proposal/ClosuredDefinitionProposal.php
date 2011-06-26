@@ -37,7 +37,7 @@ class ClosuredDefinitionProposal implements DefinitionProposalInterface
     {
         $text = $step->getText();
 
-        $regex = preg_replace('/([\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
+        $regex = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
         $regex = preg_replace(
             array(
                 '/\'([^\']*)\'/', '/\"([^\"]*)\"/', // Quoted strings

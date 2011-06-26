@@ -48,7 +48,8 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
         );
 
         $type  = in_array($step->getType(), array('Given', 'When', 'Then')) ? $step->getType() : 'Given';
-        $regex = preg_replace('/([\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
+        $regex = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
+        var_dump($regex);
         $regex = preg_replace(
             $replacePatterns,
             array(
