@@ -2,7 +2,9 @@
 
 namespace Behat\Behat\Definition\Proposal;
 
-use Behat\Gherkin\Node\StepNode;
+use Behat\Gherkin\Node\StepNode,
+    Behat\Gherkin\Node\PyStringNode,
+    Behat\Gherkin\Node\TableNode;
 
 use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Context\ClosuredContextInterface;
