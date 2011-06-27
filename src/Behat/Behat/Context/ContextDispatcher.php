@@ -33,12 +33,10 @@ class ContextDispatcher
     /**
      * Initialize dispatcher.
      *
-     * @param   string  $className  context class name
      * @param   array   $parameters context parameters
      */
-    public function __construct($className, array $parameters = array())
+    public function __construct(array $parameters = array())
     {
-        $this->setContextClass($className);
         $this->parameters = $parameters;
     }
 
@@ -80,6 +78,10 @@ class ContextDispatcher
      */
     public function createContext()
     {
+        if (null === $this->contextClass) {
+            throw new \RuntimeException('Specify context class to use for ContextDispatcher');
+        }
+
         return new $this->contextClass($this->parameters);
     }
 }

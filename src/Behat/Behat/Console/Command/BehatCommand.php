@@ -243,6 +243,7 @@ class BehatCommand extends Command
      *
      * @uses    createContainer()
      * @uses    locateBasePath()
+     * @uses    getContextClass()
      * @uses    createFormatter()
      * @uses    initFeaturesDirectoryStructure()
      * @uses    runFeatures()
@@ -258,16 +259,19 @@ class BehatCommand extends Command
         // locate base path
         $this->locateBasePath($locator, $input);
 
-        // load bootstrap files
-        foreach ($locator->locateBootstrapFilesPaths() as $path) {
-            require_once($path);
-        }
-
         // init features directory structure
         if ($input->hasOption('init') && $input->getOption('init')) {
             $this->initFeaturesDirectoryStructure($locator, $output);
             return 0;
         }
+
+        // load bootstrap files
+        foreach ($locator->locateBootstrapFilesPaths() as $path) {
+            require_once($path);
+        }
+
+        // guess and set context class
+        $container->get('behat.context_dispatcher')->setContextClass($this->getContextClass($container));
 
         // we don't want to init, so we check, that features path exists
         if (!is_dir($featuresPath = $locator->getFeaturesPath())) {
@@ -480,6 +484,18 @@ class BehatCommand extends Command
     protected function locateBasePath(PathLocator $locator, InputInterface $input)
     {
         return $locator->locateBasePath($input->getArgument('features'));
+    }
+
+    /**
+     * Guesses and returns feature context class.
+     *
+     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
+     *
+     * @return  string
+     */
+    protected function getContextClass(ContainerInterface $container)
+    {
+        return $container->getParameter('behat.context.class');
     }
 
     /**

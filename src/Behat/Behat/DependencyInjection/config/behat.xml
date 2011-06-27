@@ -138,7 +138,6 @@
             </call>
         </service>
         <service id="behat.context_dispatcher" class="%behat.context_dispatcher.class%">
-            <argument>%behat.context.class%</argument>
             <argument>%behat.context.parameters%</argument>
         </service>
 
