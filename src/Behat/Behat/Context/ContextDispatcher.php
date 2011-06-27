@@ -22,7 +22,7 @@ class ContextDispatcher
      *
      * @var     string
      */
-    private $contextClassName;
+    private $contextClass;
     /**
      * Context initialization parameters.
      *
@@ -33,26 +33,44 @@ class ContextDispatcher
     /**
      * Initialize dispatcher.
      *
-     * @param   string  $contextClassName   context class name
-     * @param   array   $parameters         context parameters
+     * @param   string  $className  context class name
+     * @param   array   $parameters context parameters
      */
-    public function __construct($contextClassName, array $parameters = array())
+    public function __construct($className, array $parameters = array())
     {
-        $this->contextClassName = $contextClassName;
-        $this->parameters       = $parameters;
+        $this->setContextClass($className);
+        $this->parameters = $parameters;
+    }
 
-        if (!class_exists($this->contextClassName)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Context class "%s" not found', $this->contextClassName
-            ));
+    /**
+     * Sets context class name.
+     *
+     * @param   string  $className      context class name
+     */
+    public function setContextClass($className)
+    {
+        if (!class_exists($className)) {
+            throw new \InvalidArgumentException(sprintf('Context class "%s" not found', $className));
         }
 
-        $contextClassRefl = new \ReflectionClass($contextClassName);
+        $contextClassRefl = new \ReflectionClass($className);
         if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\ContextInterface')) {
             throw new \InvalidArgumentException(sprintf(
-                'Context class "%s" should implement ContextInterface', $this->contextClassName
+                'Context class "%s" should implement ContextInterface', $className
             ));
         }
+
+        $this->contextClass = $className;
+    }
+
+    /**
+     * Returns context class name.
+     *
+     * @return  string
+     */
+    public function getContextClass()
+    {
+        return $this->contextClass;
     }
 
     /**
@@ -62,6 +80,6 @@ class ContextDispatcher
      */
     public function createContext()
     {
-        return new $this->contextClassName($this->parameters);
+        return new $this->contextClass($this->parameters);
     }
 }
