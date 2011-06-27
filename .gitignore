@@ -1,4 +1,2 @@
-behat*.tgz
-behat*.phar
-src/api
-BehatBundle
+*.tgz
+*.phar
