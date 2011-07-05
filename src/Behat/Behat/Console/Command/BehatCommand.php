@@ -15,11 +15,10 @@ use Behat\Behat\DependencyInjection\BehatExtension,
     Behat\Behat\Event\SuiteEvent,
     Behat\Behat\PathLocator;
 
-use Behat\Gherkin\Filter\NameFilter,
-    Behat\Gherkin\Filter\TagFilter,
-    Behat\Gherkin\Keywords\KeywordsDumper;
+use Behat\Gherkin\Keywords\KeywordsDumper;
 
-use Behat\Behat\Console\Processor\FormatProcessor;
+use Behat\Behat\Console\Processor\FormatProcessor,
+    Behat\Behat\Console\Processor\GherkinProcessor;
 
 /*
  * This file is part of the Behat.
@@ -37,6 +36,7 @@ use Behat\Behat\Console\Processor\FormatProcessor;
 class BehatCommand extends Command
 {
     private $formatProcessor;
+    private $gherkinProcessor;
 
     /**
      * {@inheritdoc}
@@ -44,6 +44,7 @@ class BehatCommand extends Command
     protected function configure()
     {
         $this->formatProcessor = new FormatProcessor();
+        $this->gherkinProcessor = new GherkinProcessor();
 
         $this->setName('behat');
         $this->setDefinition(array_merge(
@@ -58,7 +59,7 @@ class BehatCommand extends Command
             $this->getInitOptions(),
             $this->getDemonstrationOptions(),
             $this->getConfigurationOptions(),
-            $this->getFilterOptions(),
+            $this->gherkinProcessor->getInputOptions(),
             $this->formatProcessor->getInputOptions(),
             $this->getRunOptions()
         ));
@@ -104,27 +105,6 @@ class BehatCommand extends Command
                 ' ' .
                 'Specify configuration profile to use. ' .
                 'Define profiles in config file (<info>--config</info>).'."\n"
-            ),
-        );
-    }
-
-    /**
-     * Returns array of filter options for command.
-     *
-     * @return  array
-     */
-    protected function getFilterOptions()
-    {
-        return array(
-            new InputOption('--name',           null,
-                InputOption::VALUE_REQUIRED,
-                '         ' .
-                'Only execute the feature elements (features or scenarios) which match part of the given name or regex.'
-            ),
-            new InputOption('--tags',           null,
-                InputOption::VALUE_REQUIRED,
-                '         ' .
-                'Only execute the features or scenarios with tags matching tag filter expression.'."\n"
             ),
         );
     }
@@ -209,15 +189,7 @@ class BehatCommand extends Command
         }
 
         $this->formatProcessor->process($container, $input, $output);
-
-        // configure gherkin filters
-        $gherkinParser = $container->get('gherkin');
-        if ($name = ($input->getOption('name') ?: $container->getParameter('gherkin.filters.name'))) {
-            $gherkinParser->addFilter(new NameFilter($name));
-        }
-        if ($tags = ($input->getOption('tags') ?: $container->getParameter('gherkin.filters.tags'))) {
-            $gherkinParser->addFilter(new TagFilter($tags));
-        }
+        $this->gherkinProcessor->process($container, $input, $output);
 
         // read main dispatchers
         $contextReader          = $container->get('behat.context_reader');
