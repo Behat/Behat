@@ -10,19 +10,15 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Definition\DefinitionPrinter,
-    Behat\Behat\Event\SuiteEvent,
-    Behat\Behat\PathLocator;
-
-use Behat\Gherkin\Keywords\KeywordsDumper;
-
-use Behat\Behat\Console\Processor\FormatProcessor,
+use Behat\Behat\Event\SuiteEvent,
+    Behat\Behat\Console\Processor\FormatProcessor,
     Behat\Behat\Console\Processor\GherkinProcessor,
     Behat\Behat\Console\Processor\ContextProcessor,
     Behat\Behat\Console\Processor\LocatorProcessor,
     Behat\Behat\Console\Processor\InitProcessor,
     Behat\Behat\Console\Processor\ContainerProcessor,
-    Behat\Behat\Console\Processor\HelpProcessor;
+    Behat\Behat\Console\Processor\HelpProcessor,
+    Behat\Behat\Console\Processor\RerunProcessor;
 
 /*
  * This file is part of the Behat.
@@ -51,6 +47,7 @@ class BehatCommand extends Command
         $this->initProcessor = new InitProcessor();
         $this->containerProcessor = new ContainerProcessor();
         $this->helpProcessor = new HelpProcessor();
+        $this->rerunProcessor = new RerunProcessor();
 
         $this->setName('behat');
         $this->setDefinition(array_merge(
@@ -61,6 +58,11 @@ class BehatCommand extends Command
                     'a feature (<comment>*.feature</comment>) or a scenario at specific line ' .
                     '(<comment>*.feature:10</comment>).'
                 ),
+                new InputOption('--strict',         null,
+                    InputOption::VALUE_NONE,
+                    '       ' .
+                    'Fail if there are any undefined or pending steps.'
+                ),
             ),
             $this->initProcessor->getInputOptions(),
             $this->helpProcessor->getInputOptions(),
@@ -69,29 +71,8 @@ class BehatCommand extends Command
             $this->gherkinProcessor->getInputOptions(),
             $this->formatProcessor->getInputOptions(),
 //            $this->contextProcessor->getInputOptions(),
-            $this->getRunOptions()
+            $this->rerunProcessor->getInputOptions()
         ));
-    }
-
-    /**
-     * Returns array of run options for command.
-     *
-     * @return  array
-     */
-    protected function getRunOptions()
-    {
-        return array(
-            new InputOption('--strict',         null,
-                InputOption::VALUE_NONE,
-                '       ' .
-                'Fail if there are any undefined or pending steps.'
-            ),
-            new InputOption('--rerun',          null,
-                InputOption::VALUE_REQUIRED,
-                '        ' .
-                'Save list of failed scenarios into file or use existing file to run only scenarios from it.'
-            ),
-        );
     }
 
     /**
@@ -115,46 +96,13 @@ class BehatCommand extends Command
         $this->formatProcessor->process($container, $input, $output);
         $this->helpProcessor->process($container, $input, $output);
         $this->gherkinProcessor->process($container, $input, $output);
+        $this->rerunProcessor->process($container, $input, $output);
 
-        $locator = $container->get('behat.path_locator');
-
-        // rerun data collector
-        $rerunDataCollector = $container->get('behat.rerun_data_collector');
-        if ($input->getOption('rerun') || $container->getParameter('behat.options.rerun')) {
-            $rerunDataCollector->setRerunFile(
-                $input->getOption('rerun') ?: $container->getParameter('behat.options.rerun')
-            );
-            $eventDispatcher->addSubscriber($rerunDataCollector, 0);
-        }
-
-        // run features
-        $result = $this->runFeatures(
-            $rerunDataCollector->hasFailedScenarios()
-                ? $rerunDataCollector->getFailedScenariosPaths()
-                : $locator->locateFeaturesPaths(),
-            $container
-        );
-        if ($input->getOption('strict') || $container->getParameter('behat.options.strict')) {
-            return intval(0 < $result);
-        } else {
-            return intval(4 === $result);
-        }
-    }
-
-    /**
-     * Runs specified features.
-     *
-     * @param   array                                                       $paths      features paths
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     *
-     * @return  integer
-     */
-    protected function runFeatures(array $paths, ContainerInterface $container)
-    {
         $result     = 0;
         $gherkin    = $container->get('gherkin');
         $dispatcher = $container->get('behat.event_dispatcher');
         $logger     = $container->get('behat.logger');
+        $paths      = $this->getFeaturesPaths($container);
 
         $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, false));
 
@@ -180,6 +128,20 @@ class BehatCommand extends Command
 
         $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, true));
 
-        return $result;
+        if ($input->getOption('strict') || $container->getParameter('behat.options.strict')) {
+            return intval(0 < $result);
+        } else {
+            return intval(4 === $result);
+        }
+    }
+
+    private function getFeaturesPaths(ContainerInterface $container)
+    {
+        $rerun = $container->get('behat.rerun_data_collector');
+        if ($rerun->hasFailedScenarios()) {
+            return $return->getFailedScenariosPaths();
+        }
+
+        return $container->get('behat.path_locator')->locateFeaturesPaths();
     }
 }
