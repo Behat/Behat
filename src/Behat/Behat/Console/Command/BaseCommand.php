@@ -2,7 +2,9 @@
 
 namespace Behat\Behat\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\Console\Processor\ProcessorInterface;
 
@@ -21,8 +23,18 @@ use Behat\Behat\Console\Processor\ProcessorInterface;
  */
 abstract class BaseCommand extends Command
 {
+    /**
+     * List of command processors.
+     *
+     * @var     array
+     */
     private $processors = array();
 
+    /**
+     * Sets command processors.
+     *
+     * @param   array   $processors
+     */
     protected function setProcessors(array $processors)
     {
         $this->processors = array();
@@ -31,11 +43,21 @@ abstract class BaseCommand extends Command
         }
     }
 
+    /**
+     * Adds single processor to the list.
+     *
+     * @param   Behat\Behat\Console\Processor\ProcessorInterface    $processor
+     */
     protected function addProcessor(ProcessorInterface $processor)
     {
         $this->processors[] = $processor;
     }
 
+    /**
+     * Returns list of processors input options.
+     *
+     * @return  array
+     */
     protected function getProcessorsInputOptions()
     {
         $options = array();
@@ -47,8 +69,32 @@ abstract class BaseCommand extends Command
         return $options;
     }
 
+    /**
+     * Returns list of processors.
+     *
+     * @return  array
+     */
     protected function getProcessors()
     {
         return $this->processors;
+    }
+
+    /**
+     * Returns service container instance.
+     *
+     * @return  Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    abstract protected function getContainer();
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $container = $this->getContainer();
+
+        foreach ($this->getProcessors() as $processor) {
+            $processor->process($container, $input, $output);
+        }
     }
 }

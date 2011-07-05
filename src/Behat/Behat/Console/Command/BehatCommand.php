@@ -10,14 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\Event\SuiteEvent,
-    Behat\Behat\Console\Processor\FormatProcessor,
-    Behat\Behat\Console\Processor\GherkinProcessor,
-    Behat\Behat\Console\Processor\ContextProcessor,
-    Behat\Behat\Console\Processor\LocatorProcessor,
-    Behat\Behat\Console\Processor\InitProcessor,
-    Behat\Behat\Console\Processor\ContainerProcessor,
-    Behat\Behat\Console\Processor\HelpProcessor,
-    Behat\Behat\Console\Processor\RerunProcessor;
+    Behat\Behat\Console\Processor;
 
 /*
  * This file is part of the Behat.
@@ -34,6 +27,11 @@ use Behat\Behat\Event\SuiteEvent,
  */
 class BehatCommand extends BaseCommand
 {
+    /**
+     * Service container.
+     *
+     * @var     Symfony\Component\DependencyInjection\ContainerBuilder
+     */
     private $container;
 
     /**
@@ -44,14 +42,14 @@ class BehatCommand extends BaseCommand
         $this->container = new ContainerBuilder();
 
         $this->setProcessors(array(
-            new ContainerProcessor(),
-            new LocatorProcessor(),
-            new InitProcessor(),
-            new ContextProcessor(),
-            new FormatProcessor(),
-            new HelpProcessor(),
-            new GherkinProcessor(),
-            new RerunProcessor(),
+            new Processor\ContainerProcessor(),
+            new Processor\LocatorProcessor(),
+            new Processor\InitProcessor(),
+            new Processor\ContextProcessor(),
+            new Processor\FormatProcessor(),
+            new Processor\HelpProcessor(),
+            new Processor\GherkinProcessor(),
+            new Processor\RerunProcessor(),
         ));
 
         $this->setName('behat');
@@ -75,21 +73,12 @@ class BehatCommand extends BaseCommand
         ));
     }
 
-    protected function getContainer()
-    {
-        return $this->container;
-    }
-
     /**
      * {@inheritdoc}
      */
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    protected function getContainer()
     {
-        $container = $this->getContainer();
-
-        foreach ($this->getProcessors() as $processor) {
-            $processor->process($container, $input, $output);
-        }
+        return $this->container;
     }
 
     /**
@@ -136,6 +125,11 @@ class BehatCommand extends BaseCommand
         }
     }
 
+    /**
+     * Returns features paths to test.
+     *
+     * @return  array
+     */
     private function getFeaturesPaths()
     {
         $rerun = $this->getContainer()->get('behat.rerun_data_collector');
