@@ -18,7 +18,8 @@ use Behat\Behat\DependencyInjection\BehatExtension,
 use Behat\Gherkin\Keywords\KeywordsDumper;
 
 use Behat\Behat\Console\Processor\FormatProcessor,
-    Behat\Behat\Console\Processor\GherkinProcessor;
+    Behat\Behat\Console\Processor\GherkinProcessor,
+    Behat\Behat\Console\Processor\ContextProcessor;
 
 /*
  * This file is part of the Behat.
@@ -45,6 +46,7 @@ class BehatCommand extends Command
     {
         $this->formatProcessor = new FormatProcessor();
         $this->gherkinProcessor = new GherkinProcessor();
+        $this->contextProcessor = new ContextProcessor();
 
         $this->setName('behat');
         $this->setDefinition(array_merge(
@@ -61,6 +63,7 @@ class BehatCommand extends Command
             $this->getConfigurationOptions(),
             $this->gherkinProcessor->getInputOptions(),
             $this->formatProcessor->getInputOptions(),
+            $this->contextProcessor->getInputOptions(),
             $this->getRunOptions()
         ));
     }
@@ -178,11 +181,6 @@ class BehatCommand extends Command
             require_once($path);
         }
 
-        // guess and set context class
-        $container->get('behat.context_dispatcher')->setContextClass(
-            $this->getContextClass($input, $container)
-        );
-
         // we don't want to init, so we check, that features path exists
         if (!is_dir($featuresPath = $locator->getFeaturesPath())) {
             throw new \InvalidArgumentException("Features path \"$featuresPath\" does not exist");
@@ -190,17 +188,7 @@ class BehatCommand extends Command
 
         $this->formatProcessor->process($container, $input, $output);
         $this->gherkinProcessor->process($container, $input, $output);
-
-        // read main dispatchers
-        $contextReader          = $container->get('behat.context_reader');
-        $definitionDispatcher   = $container->get('behat.definition_dispatcher');
-        $hookDispatcher         = $container->get('behat.hook_dispatcher');
-
-        // read annotations
-        $contextReader->read();
-
-        // logger
-        $logger = $container->get('behat.logger');
+        $this->contextProcessor->process($container, $input, $output);
 
         // helpers
         if ($input->hasOption('story-syntax') && $input->getOption('story-syntax')) {
@@ -291,19 +279,6 @@ class BehatCommand extends Command
     protected function locateBasePath(PathLocator $locator, InputInterface $input)
     {
         return $locator->locateBasePath($input->getArgument('features'));
-    }
-
-    /**
-     * Guesses and returns feature context class.
-     *
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      input instance
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     *
-     * @return  string
-     */
-    protected function getContextClass(InputInterface $input, ContainerInterface $container)
-    {
-        return $container->getParameter('behat.context.class');
     }
 
     /**

@@ -13,18 +13,6 @@ use Behat\Gherkin\Filter\NameFilter,
 class GherkinProcessor implements ProcessorInterface
 {
     /**
-     * Default Behat formatters.
-     *
-     * @var     array
-     */
-    private $defaultFormatters = array(
-        'pretty'    => 'Behat\Behat\Formatter\PrettyFormatter',
-        'progress'  => 'Behat\Behat\Formatter\ProgressFormatter',
-        'html'      => 'Behat\Behat\Formatter\HtmlFormatter',
-        'junit'     => 'Behat\Behat\Formatter\JUnitFormatter'
-    );
-
-    /**
      * @see     Behat\Behat\Console\Configuration\ProcessorInterface::getInputOptions()
      */
     public function getInputOptions()
