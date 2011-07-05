@@ -21,7 +21,8 @@ use Behat\Behat\Console\Processor\FormatProcessor,
     Behat\Behat\Console\Processor\ContextProcessor,
     Behat\Behat\Console\Processor\LocatorProcessor,
     Behat\Behat\Console\Processor\InitProcessor,
-    Behat\Behat\Console\Processor\ContainerProcessor;
+    Behat\Behat\Console\Processor\ContainerProcessor,
+    Behat\Behat\Console\Processor\HelpProcessor;
 
 /*
  * This file is part of the Behat.
@@ -38,13 +39,6 @@ use Behat\Behat\Console\Processor\FormatProcessor,
  */
 class BehatCommand extends Command
 {
-    private $locatorProcessor;
-    private $formatProcessor;
-    private $gherkinProcessor;
-    private $initProcessor;
-    private $contextProcessor;
-    private $containerProcessor;
-
     /**
      * {@inheritdoc}
      */
@@ -56,6 +50,7 @@ class BehatCommand extends Command
         $this->locatorProcessor = new LocatorProcessor();
         $this->initProcessor = new InitProcessor();
         $this->containerProcessor = new ContainerProcessor();
+        $this->helpProcessor = new HelpProcessor();
 
         $this->setName('behat');
         $this->setDefinition(array_merge(
@@ -68,7 +63,7 @@ class BehatCommand extends Command
                 ),
             ),
             $this->initProcessor->getInputOptions(),
-            $this->getDemonstrationOptions(),
+            $this->helpProcessor->getInputOptions(),
             $this->containerProcessor->getInputOptions(),
 //            $this->locatorProcessor->getInputOptions(),
             $this->gherkinProcessor->getInputOptions(),
@@ -100,27 +95,6 @@ class BehatCommand extends Command
     }
 
     /**
-     * Returns array of demonstration options for command
-     *
-     * @return  array
-     */
-    protected function getDemonstrationOptions()
-    {
-        return array(
-            new InputOption('--story-syntax',    null,
-                InputOption::VALUE_NONE,
-                ' ' .
-                'Print *.feature example in specified language (<info>--lang</info>).'
-            ),
-            new InputOption('--definitions',    null,
-                InputOption::VALUE_NONE,
-                '  ' .
-                'Print available step definitions in specified language (<info>--lang</info>).'."\n"
-            ),
-        );
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @uses    createContainer()
@@ -138,24 +112,9 @@ class BehatCommand extends Command
         $this->locatorProcessor->process($container, $input, $output);
         $this->initProcessor->process($container, $input, $output);
         $this->contextProcessor->process($container, $input, $output);
-
         $this->formatProcessor->process($container, $input, $output);
+        $this->helpProcessor->process($container, $input, $output);
         $this->gherkinProcessor->process($container, $input, $output);
-
-        // helpers
-        if ($input->hasOption('story-syntax') && $input->getOption('story-syntax')) {
-            $container->get('behat.help_printer.story_syntax')->printSyntax(
-                $output, $input->getOption('lang') ?: 'en'
-            );
-
-            return 0;
-        } elseif ($input->hasOption('definitions') && $input->getOption('definitions')) {
-            $container->get('behat.help_printer.definitions')->printDefinitions(
-                $output, $input->getOption('lang') ?: 'en'
-            );
-
-            return 0;
-        }
 
         $locator = $container->get('behat.path_locator');
 
