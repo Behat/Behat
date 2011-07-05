@@ -9,6 +9,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 
 use Behat\Behat\PathLocator;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Init operation processor.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class InitProcessor implements ProcessorInterface
 {
     /**
@@ -30,10 +43,9 @@ class InitProcessor implements ProcessorInterface
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
-        $locator = $container->get('behat.path_locator');
-
         if ($input->hasOption('init') && $input->getOption('init')) {
-            $this->initFeaturesDirectoryStructure($locator, $output);
+            $this->initFeaturesDirectoryStructure($container->get('behat.path_locator'), $output);
+
             exit(0);
         }
     }

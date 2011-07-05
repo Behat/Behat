@@ -7,6 +7,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Rerun suite processor.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class RerunProcessor implements ProcessorInterface
 {
     /**
@@ -28,13 +41,12 @@ class RerunProcessor implements ProcessorInterface
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
-        $rerunDataCollector = $container->get('behat.rerun_data_collector');
-        $eventDispatcher = $container->get('behat.event_dispatcher');
         if ($input->getOption('rerun') || $container->getParameter('behat.options.rerun')) {
+            $rerunDataCollector = $container->get('behat.rerun_data_collector');
             $rerunDataCollector->setRerunFile(
                 $input->getOption('rerun') ?: $container->getParameter('behat.options.rerun')
             );
-            $eventDispatcher->addSubscriber($rerunDataCollector, 0);
+            $container->get('behat.event_dispatcher')->addSubscriber($rerunDataCollector, 0);
         }
     }
 }

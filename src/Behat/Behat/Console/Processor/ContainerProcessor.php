@@ -9,6 +9,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 
 use Behat\Behat\DependencyInjection\BehatExtension;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Service container processor.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class ContainerProcessor implements ProcessorInterface
 {
     /**
@@ -40,11 +53,7 @@ class ContainerProcessor implements ProcessorInterface
         $extension  = new BehatExtension();
         $cwd        = getcwd();
         $configFile = $input->hasOption('config')  ? $input->getOption('config')  : null;
-        $profile    = $input->hasOption('profile') ? $input->getOption('profile') : null;
-
-        if (null === $profile) {
-            $profile = 'default';
-        }
+        $profile    = $input->hasOption('profile') ? $input->getOption('profile') : 'default';
 
         if (null === $configFile) {
             if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
@@ -54,14 +63,14 @@ class ContainerProcessor implements ProcessorInterface
             }
         }
 
-        if (null !== $configFile) {
+        if (file_exists($configFile)) {
             $config = $extension->loadFromFile($configFile, $profile, $container);
         } else {
             $config = $extension->load(array(array()), $container);
         }
         $container->compile();
 
-        if (null !== $configFile) {
+        if (file_exists($configFile)) {
             $container->get('behat.path_locator')->setPathConstant('BEHAT_CONFIG_PATH', dirname($configFile));
         }
     }

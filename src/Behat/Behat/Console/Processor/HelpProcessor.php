@@ -7,6 +7,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Help (story-syntax and definition printers) processor.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class HelpProcessor implements ProcessorInterface
 {
     /**
@@ -39,7 +52,9 @@ class HelpProcessor implements ProcessorInterface
             );
 
             exit(0);
-        } elseif ($input->hasOption('definitions') && $input->getOption('definitions')) {
+        }
+
+        if ($input->hasOption('definitions') && $input->getOption('definitions')) {
             $container->get('behat.help_printer.definitions')->printDefinitions(
                 $output, $input->getOption('lang') ?: 'en'
             );

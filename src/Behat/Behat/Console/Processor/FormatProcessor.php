@@ -7,6 +7,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Format processor.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class FormatProcessor implements ProcessorInterface
 {
     /**
@@ -90,28 +103,30 @@ class FormatProcessor implements ProcessorInterface
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
-        $locator = $container->get('behat.path_locator');
-        $translator = $container->get('behat.translator');
-        $eventDispatcher = $container->get('behat.event_dispatcher');
-
         $formatter = $this->createFormatter(
             $input->getOption('format') ?: $container->getParameter('behat.formatter.name')
         );
 
-        // configure formatter
+        $translator = $container->get('behat.translator');
+        $locator    = $container->get('behat.path_locator');
+
         $formatter->setTranslator($translator);
         $formatter->setParameter('base_path', $locator->getWorkPath());
         $formatter->setParameter('support_path', $locator->getBootstrapPath());
         $formatter->setParameter('decorated', $output->isDecorated());
+
         foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
             $formatter->setParameter($param, $value);
         }
+
         if ($input->getOption('verbose')) {
             $formatter->setParameter('verbose', true);
         }
+
         if ($input->getOption('lang')) {
             $formatter->setParameter('language', $input->getOption('lang'));
         }
+
         if ($input->getOption('colors')) {
             $output->setDecorated(true);
             $formatter->setParameter('decorated', true);
@@ -119,21 +134,27 @@ class FormatProcessor implements ProcessorInterface
             $output->setDecorated(false);
             $formatter->setParameter('decorated', false);
         }
+
         if ($input->getOption('no-time')) {
             $formatter->setParameter('time', false);
         }
+
         if ($input->getOption('no-snippets')) {
             $formatter->setParameter('snippets', false);
         }
+
         if ($input->getOption('no-paths')) {
             $formatter->setParameter('paths', false);
         }
+
         if ($input->getOption('expand')) {
             $formatter->setParameter('expand', true);
         }
+
         if ($input->getOption('no-multiline')) {
             $formatter->setParameter('multiline_arguments', false);
         }
+
         if ($out = $input->getOption('out')
          ?: $locator->getOutputPath($formatter->getParameter('output_path'))) {
             // get realpath
@@ -148,7 +169,7 @@ class FormatProcessor implements ProcessorInterface
             $formatter->setParameter('decorated', (Boolean) $input->getOption('colors'));
         }
 
-        $eventDispatcher->addSubscriber($formatter, -10);
+        $container->get('behat.event_dispatcher')->addSubscriber($formatter, -10);
     }
 
     /**

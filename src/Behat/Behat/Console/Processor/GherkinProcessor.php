@@ -10,6 +10,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 use Behat\Gherkin\Filter\NameFilter,
     Behat\Gherkin\Filter\TagFilter;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Gherkin processor.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class GherkinProcessor implements ProcessorInterface
 {
     /**
@@ -37,9 +50,11 @@ class GherkinProcessor implements ProcessorInterface
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
         $gherkinParser = $container->get('gherkin');
+
         if ($name = ($input->getOption('name') ?: $container->getParameter('gherkin.filters.name'))) {
             $gherkinParser->addFilter(new NameFilter($name));
         }
+
         if ($tags = ($input->getOption('tags') ?: $container->getParameter('gherkin.filters.tags'))) {
             $gherkinParser->addFilter(new TagFilter($tags));
         }

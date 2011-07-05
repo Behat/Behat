@@ -4,9 +4,21 @@ namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Path locator processor.
+ *
+ * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ */
 class LocatorProcessor implements ProcessorInterface
 {
     /**
@@ -24,15 +36,12 @@ class LocatorProcessor implements ProcessorInterface
     {
         $locator = $container->get('behat.path_locator');
 
-        // locate base path
         $locator->locateBasePath($input->getArgument('features'));
 
-        // load bootstrap files
         foreach ($locator->locateBootstrapFilesPaths() as $path) {
             require_once($path);
         }
 
-        // we don't want to init, so we check, that features path exists
         if (!($input->hasOption('init') && $input->getOption('init'))
          && !is_dir($featuresPath = $locator->getFeaturesPath())) {
             throw new \InvalidArgumentException("Features path \"$featuresPath\" does not exist");
