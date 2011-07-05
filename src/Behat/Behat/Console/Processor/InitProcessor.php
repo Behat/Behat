@@ -34,7 +34,7 @@ class InitProcessor implements ProcessorInterface
 
         if ($input->hasOption('init') && $input->getOption('init')) {
             $this->initFeaturesDirectoryStructure($locator, $output);
-            return 0;
+            exit(0);
         }
     }
 

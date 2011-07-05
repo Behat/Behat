@@ -10,8 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\DependencyInjection\BehatExtension,
-    Behat\Behat\Definition\DefinitionPrinter,
+use Behat\Behat\Definition\DefinitionPrinter,
     Behat\Behat\Event\SuiteEvent,
     Behat\Behat\PathLocator;
 
@@ -21,7 +20,8 @@ use Behat\Behat\Console\Processor\FormatProcessor,
     Behat\Behat\Console\Processor\GherkinProcessor,
     Behat\Behat\Console\Processor\ContextProcessor,
     Behat\Behat\Console\Processor\LocatorProcessor,
-    Behat\Behat\Console\Processor\InitProcessor;
+    Behat\Behat\Console\Processor\InitProcessor,
+    Behat\Behat\Console\Processor\ContainerProcessor;
 
 /*
  * This file is part of the Behat.
@@ -43,6 +43,7 @@ class BehatCommand extends Command
     private $gherkinProcessor;
     private $initProcessor;
     private $contextProcessor;
+    private $containerProcessor;
 
     /**
      * {@inheritdoc}
@@ -54,6 +55,7 @@ class BehatCommand extends Command
         $this->contextProcessor = new ContextProcessor();
         $this->locatorProcessor = new LocatorProcessor();
         $this->initProcessor = new InitProcessor();
+        $this->containerProcessor = new ContainerProcessor();
 
         $this->setName('behat');
         $this->setDefinition(array_merge(
@@ -67,7 +69,7 @@ class BehatCommand extends Command
             ),
             $this->initProcessor->getInputOptions(),
             $this->getDemonstrationOptions(),
-            $this->getConfigurationOptions(),
+            $this->containerProcessor->getInputOptions(),
 //            $this->locatorProcessor->getInputOptions(),
             $this->gherkinProcessor->getInputOptions(),
             $this->formatProcessor->getInputOptions(),
@@ -93,29 +95,6 @@ class BehatCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 '        ' .
                 'Save list of failed scenarios into file or use existing file to run only scenarios from it.'
-            ),
-        );
-    }
-
-    /**
-     * Returns array of configuration options for command.
-     *
-     * @return  array
-     */
-    protected function getConfigurationOptions()
-    {
-        return array(
-            new InputOption('--config',         '-c',
-                InputOption::VALUE_REQUIRED,
-                '  ' .
-                'Specify external configuration file to load. ' .
-                '<comment>behat.yml</comment> or <comment>config/behat.yml</comment> will be used by default.'
-            ),
-            new InputOption('--profile',        '-p',
-                InputOption::VALUE_REQUIRED,
-                ' ' .
-                'Specify configuration profile to use. ' .
-                'Define profiles in config file (<info>--config</info>).'."\n"
             ),
         );
     }
@@ -153,16 +132,15 @@ class BehatCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = $this->createContainer(
-            $input->hasOption('config')     ? $input->getOption('config')   : null,
-            $input->hasOption('profile')    ? $input->getOption('profile')  : null
-        );
+        $container = new ContainerBuilder();
 
+        $this->containerProcessor->process($container, $input, $output);
         $this->locatorProcessor->process($container, $input, $output);
-        if (null !== $code = $this->initProcessor->process($container, $input, $output)) return $code;
+        $this->initProcessor->process($container, $input, $output);
+        $this->contextProcessor->process($container, $input, $output);
+
         $this->formatProcessor->process($container, $input, $output);
         $this->gherkinProcessor->process($container, $input, $output);
-        $this->contextProcessor->process($container, $input, $output);
 
         // helpers
         if ($input->hasOption('story-syntax') && $input->getOption('story-syntax')) {
@@ -202,46 +180,6 @@ class BehatCommand extends Command
         } else {
             return intval(4 === $result);
         }
-    }
-
-    /**
-     * Creates service container with or without provided configuration file.
-     *
-     * @param   string  $configFile DependencyInjection extension config file path (in YAML)
-     * @param   string  $profile    profile name
-     *
-     * @return  Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected function createContainer($configFile = null, $profile = null)
-    {
-        $container  = new ContainerBuilder();
-        $extension  = new BehatExtension();
-        $cwd        = getcwd();
-
-        if (null === $profile) {
-            $profile = 'default';
-        }
-
-        if (null === $configFile) {
-            if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
-                $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml';
-            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml')) {
-                $configFile = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml';
-            }
-        }
-
-        if (null !== $configFile) {
-            $config = $extension->loadFromFile($configFile, $profile, $container);
-        } else {
-            $config = $extension->load(array(array()), $container);
-        }
-        $container->compile();
-
-        if (null !== $configFile) {
-            $container->get('behat.path_locator')->setPathConstant('BEHAT_CONFIG_PATH', dirname($configFile));
-        }
-
-        return $container;
     }
 
     /**
