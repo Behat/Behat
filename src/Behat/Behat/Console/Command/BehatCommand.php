@@ -3,7 +3,6 @@
 namespace Behat\Behat\Console\Command;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputArgument,
@@ -35,11 +34,15 @@ use Behat\Behat\Event\SuiteEvent,
  */
 class BehatCommand extends Command
 {
+    private $container;
+
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        $this->container = new ContainerBuilder();
+
         $this->formatProcessor = new FormatProcessor();
         $this->gherkinProcessor = new GherkinProcessor();
         $this->contextProcessor = new ContextProcessor();
@@ -75,6 +78,23 @@ class BehatCommand extends Command
         ));
     }
 
+    protected function getContainer()
+    {
+        return $this->container;
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $this->containerProcessor->process($this->getContainer(), $input, $output);
+        $this->locatorProcessor->process($this->getContainer(), $input, $output);
+        $this->initProcessor->process($this->getContainer(), $input, $output);
+        $this->contextProcessor->process($this->getContainer(), $input, $output);
+        $this->formatProcessor->process($this->getContainer(), $input, $output);
+        $this->helpProcessor->process($this->getContainer(), $input, $output);
+        $this->gherkinProcessor->process($this->getContainer(), $input, $output);
+        $this->rerunProcessor->process($this->getContainer(), $input, $output);
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -87,22 +107,11 @@ class BehatCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = new ContainerBuilder();
-
-        $this->containerProcessor->process($container, $input, $output);
-        $this->locatorProcessor->process($container, $input, $output);
-        $this->initProcessor->process($container, $input, $output);
-        $this->contextProcessor->process($container, $input, $output);
-        $this->formatProcessor->process($container, $input, $output);
-        $this->helpProcessor->process($container, $input, $output);
-        $this->gherkinProcessor->process($container, $input, $output);
-        $this->rerunProcessor->process($container, $input, $output);
-
         $result     = 0;
-        $gherkin    = $container->get('gherkin');
-        $dispatcher = $container->get('behat.event_dispatcher');
-        $logger     = $container->get('behat.logger');
-        $paths      = $this->getFeaturesPaths($container);
+        $gherkin    = $this->getContainer()->get('gherkin');
+        $dispatcher = $this->getContainer()->get('behat.event_dispatcher');
+        $logger     = $this->getContainer()->get('behat.logger');
+        $paths      = $this->getFeaturesPaths();
 
         $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, false));
 
@@ -121,27 +130,27 @@ class BehatCommand extends Command
 
             // and run them in FeatureTester
             foreach ($features as $feature) {
-                $tester = $container->get('behat.tester.feature');
+                $tester = $this->getContainer()->get('behat.tester.feature');
                 $result = max($result, $feature->accept($tester));
             }
         }
 
         $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, true));
 
-        if ($input->getOption('strict') || $container->getParameter('behat.options.strict')) {
+        if ($input->getOption('strict') || $this->getContainer()->getParameter('behat.options.strict')) {
             return intval(0 < $result);
         } else {
             return intval(4 === $result);
         }
     }
 
-    private function getFeaturesPaths(ContainerInterface $container)
+    private function getFeaturesPaths()
     {
-        $rerun = $container->get('behat.rerun_data_collector');
+        $rerun = $this->getContainer()->get('behat.rerun_data_collector');
         if ($rerun->hasFailedScenarios()) {
             return $return->getFailedScenariosPaths();
         }
 
-        return $container->get('behat.path_locator')->locateFeaturesPaths();
+        return $this->getContainer()->get('behat.path_locator')->locateFeaturesPaths();
     }
 }
