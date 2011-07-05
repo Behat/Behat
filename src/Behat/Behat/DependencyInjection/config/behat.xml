@@ -186,7 +186,16 @@
         </service>
 
         <!-- Event Dispatcher -->
-        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" />
+        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%">
+            <call method="addSubscriber">
+                <argument type="service" id="behat.hook_dispatcher" />
+                <argument>10</argument>
+            </call>
+            <call method="addSubscriber">
+                <argument type="service" id="behat.logger" />
+                <argument>0</argument>
+            </call>
+        </service>
 
         <!-- DataCollector -->
         <service id="behat.logger" class="%behat.logger.class%" />
