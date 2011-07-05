@@ -375,8 +375,6 @@ class BehatCommand extends Command
 
         // subscribe event listeners
         $eventDispatcher = $container->get('behat.event_dispatcher');
-        $eventDispatcher->addSubscriber($hookDispatcher, 10);
-        $eventDispatcher->addSubscriber($logger, 0);
         $eventDispatcher->addSubscriber($formatter, -10);
 
         // rerun data collector
