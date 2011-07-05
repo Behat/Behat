@@ -101,7 +101,7 @@ class BehatCommand extends BaseCommand
             declare(ticks = 1);
             pcntl_signal(SIGINT, function() use($dispatcher, $logger) {
                 $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, false));
-                exit(0);
+                exit(1);
             });
         }
 
