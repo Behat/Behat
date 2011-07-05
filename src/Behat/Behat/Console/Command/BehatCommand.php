@@ -20,7 +20,8 @@ use Behat\Gherkin\Keywords\KeywordsDumper;
 use Behat\Behat\Console\Processor\FormatProcessor,
     Behat\Behat\Console\Processor\GherkinProcessor,
     Behat\Behat\Console\Processor\ContextProcessor,
-    Behat\Behat\Console\Processor\LocatorProcessor;
+    Behat\Behat\Console\Processor\LocatorProcessor,
+    Behat\Behat\Console\Processor\InitProcessor;
 
 /*
  * This file is part of the Behat.
@@ -40,6 +41,8 @@ class BehatCommand extends Command
     private $locatorProcessor;
     private $formatProcessor;
     private $gherkinProcessor;
+    private $initProcessor;
+    private $contextProcessor;
 
     /**
      * {@inheritdoc}
@@ -50,6 +53,7 @@ class BehatCommand extends Command
         $this->gherkinProcessor = new GherkinProcessor();
         $this->contextProcessor = new ContextProcessor();
         $this->locatorProcessor = new LocatorProcessor();
+        $this->initProcessor = new InitProcessor();
 
         $this->setName('behat');
         $this->setDefinition(array_merge(
@@ -61,7 +65,7 @@ class BehatCommand extends Command
                     '(<comment>*.feature:10</comment>).'
                 ),
             ),
-            $this->getInitOptions(),
+            $this->initProcessor->getInputOptions(),
             $this->getDemonstrationOptions(),
             $this->getConfigurationOptions(),
 //            $this->locatorProcessor->getInputOptions(),
@@ -117,22 +121,6 @@ class BehatCommand extends Command
     }
 
     /**
-     * Returns array of init options.
-     *
-     * @return  array
-     */
-    protected function getInitOptions()
-    {
-        return array(
-            new InputOption('--init',           null,
-                InputOption::VALUE_NONE,
-                '         ' .
-                'Create <comment>features</comment> directory structure.'
-            ),
-        );
-    }
-
-    /**
      * Returns array of demonstration options for command
      *
      * @return  array
@@ -171,14 +159,7 @@ class BehatCommand extends Command
         );
 
         $this->locatorProcessor->process($container, $input, $output);
-
-        $locator = $container->get('behat.path_locator');
-
-        if ($input->hasOption('init') && $input->getOption('init')) {
-            $this->initFeaturesDirectoryStructure($locator, $output);
-            return 0;
-        }
-
+        if (null !== $code = $this->initProcessor->process($container, $input, $output)) return $code;
         $this->formatProcessor->process($container, $input, $output);
         $this->gherkinProcessor->process($container, $input, $output);
         $this->contextProcessor->process($container, $input, $output);
@@ -197,6 +178,8 @@ class BehatCommand extends Command
 
             return 0;
         }
+
+        $locator = $container->get('behat.path_locator');
 
         // rerun data collector
         $rerunDataCollector = $container->get('behat.rerun_data_collector');
@@ -301,103 +284,5 @@ class BehatCommand extends Command
         $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, true));
 
         return $result;
-    }
-
-    /**
-     * Creates features path structure (initializes behat tests structure).
-     *
-     * @param   Behat\Behat\PathLocator                             $locator    path locator
-     * @param   Symfony\Component\Console\Input\OutputInterface     $output     output console
-     */
-    protected function initFeaturesDirectoryStructure(PathLocator $locator, OutputInterface $output)
-    {
-        $basePath       = realpath($locator->getWorkPath()) . DIRECTORY_SEPARATOR;
-        $featuresPath   = $locator->getFeaturesPath();
-        $bootstrapPath  = $locator->getBootstrapPath();
-
-        if (!is_dir($featuresPath)) {
-            mkdir($featuresPath, 0777, true);
-            $output->writeln(
-                '<info>+d</info> ' .
-                str_replace($basePath, '', realpath($featuresPath)) .
-                ' <comment>- place your *.feature files here</comment>'
-            );
-        }
-
-        if (!is_dir($bootstrapPath)) {
-            mkdir($bootstrapPath, 0777, true);
-            $output->writeln(
-                '<info>+d</info> ' .
-                str_replace($basePath, '', realpath($bootstrapPath)) .
-                ' <comment>- place bootstrap scripts and static files here</comment>'
-            );
-
-            file_put_contents(
-                $bootstrapPath . DIRECTORY_SEPARATOR . 'FeatureContext.php',
-                $this->getFeatureContextSkelet()
-            );
-
-            $output->writeln(
-                '<info>+f</info> ' .
-                str_replace($basePath, '', realpath($bootstrapPath)) . DIRECTORY_SEPARATOR .
-                'FeatureContext.php <comment>- place your feature related code here</comment>'
-            );
-        }
-    }
-
-    /**
-     * Returns feature context skelet.
-     *
-     * @return  string
-     */
-    protected function getFeatureContextSkelet()
-    {
-return <<<'PHP'
-<?php
-
-use Behat\Behat\Context\ClosuredContextInterface,
-    Behat\Behat\Context\TranslatedContextInterface,
-    Behat\Behat\Context\BehatContext,
-    Behat\Behat\Exception\Pending;
-use Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode;
-
-//
-// Require 3rd-party libraries here:
-//
-//   require_once 'PHPUnit/Autoload.php';
-//   require_once 'PHPUnit/Framework/Assert/Functions.php';
-//
-
-/**
- * Features context.
- */
-class FeatureContext extends BehatContext
-{
-    /**
-     * Initializes context.
-     * Every scenario gets it's own context object.
-     *
-     * @param   array   $parameters     context parameters (set them up through behat.yml)
-     */
-    public function __construct(array $parameters)
-    {
-        // Initialize your context here
-    }
-
-//
-// Place your definition and hook methods here:
-//
-//    /**
-//     * @Given /^I have done something with "([^"]*)"$/
-//     */
-//    public function iHaveDoneSomethingWith($argument)
-//    {
-//        doSomethingWith($argument);
-//    }
-//
-}
-
-PHP;
     }
 }
