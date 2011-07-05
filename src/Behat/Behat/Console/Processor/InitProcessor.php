@@ -20,7 +20,7 @@ class InitProcessor implements ProcessorInterface
             new InputOption('--init',           null,
                 InputOption::VALUE_NONE,
                 '         ' .
-                'Create <comment>features</comment> directory structure.'
+                'Create <comment>features</comment> directory structure.'."\n"
             ),
         );
     }

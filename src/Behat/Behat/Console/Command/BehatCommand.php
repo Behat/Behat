@@ -32,7 +32,7 @@ use Behat\Behat\Event\SuiteEvent,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BehatCommand extends Command
+class BehatCommand extends BaseCommand
 {
     private $container;
 
@@ -43,14 +43,16 @@ class BehatCommand extends Command
     {
         $this->container = new ContainerBuilder();
 
-        $this->formatProcessor = new FormatProcessor();
-        $this->gherkinProcessor = new GherkinProcessor();
-        $this->contextProcessor = new ContextProcessor();
-        $this->locatorProcessor = new LocatorProcessor();
-        $this->initProcessor = new InitProcessor();
-        $this->containerProcessor = new ContainerProcessor();
-        $this->helpProcessor = new HelpProcessor();
-        $this->rerunProcessor = new RerunProcessor();
+        $this->setProcessors(array(
+            new ContainerProcessor(),
+            new LocatorProcessor(),
+            new InitProcessor(),
+            new ContextProcessor(),
+            new FormatProcessor(),
+            new HelpProcessor(),
+            new GherkinProcessor(),
+            new RerunProcessor(),
+        ));
 
         $this->setName('behat');
         $this->setDefinition(array_merge(
@@ -60,21 +62,16 @@ class BehatCommand extends Command
                     'Feature(s) to run. Could be a dir (<comment>features/</comment>), ' .
                     'a feature (<comment>*.feature</comment>) or a scenario at specific line ' .
                     '(<comment>*.feature:10</comment>).'
-                ),
+                )
+            ),
+            $this->getProcessorsInputOptions(),
+            array(
                 new InputOption('--strict',         null,
                     InputOption::VALUE_NONE,
                     '       ' .
                     'Fail if there are any undefined or pending steps.'
-                ),
-            ),
-            $this->initProcessor->getInputOptions(),
-            $this->helpProcessor->getInputOptions(),
-            $this->containerProcessor->getInputOptions(),
-//            $this->locatorProcessor->getInputOptions(),
-            $this->gherkinProcessor->getInputOptions(),
-            $this->formatProcessor->getInputOptions(),
-//            $this->contextProcessor->getInputOptions(),
-            $this->rerunProcessor->getInputOptions()
+                )
+            )
         ));
     }
 
@@ -83,27 +80,22 @@ class BehatCommand extends Command
         return $this->container;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $this->containerProcessor->process($this->getContainer(), $input, $output);
-        $this->locatorProcessor->process($this->getContainer(), $input, $output);
-        $this->initProcessor->process($this->getContainer(), $input, $output);
-        $this->contextProcessor->process($this->getContainer(), $input, $output);
-        $this->formatProcessor->process($this->getContainer(), $input, $output);
-        $this->helpProcessor->process($this->getContainer(), $input, $output);
-        $this->gherkinProcessor->process($this->getContainer(), $input, $output);
-        $this->rerunProcessor->process($this->getContainer(), $input, $output);
+        $container = $this->getContainer();
+
+        foreach ($this->getProcessors() as $processor) {
+            $processor->process($container, $input, $output);
+        }
     }
 
     /**
      * {@inheritdoc}
      *
-     * @uses    createContainer()
-     * @uses    locateBasePath()
-     * @uses    getContextClass()
-     * @uses    createFormatter()
-     * @uses    initFeaturesDirectoryStructure()
-     * @uses    runFeatures()
+     * @uses    getFeaturesPaths()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

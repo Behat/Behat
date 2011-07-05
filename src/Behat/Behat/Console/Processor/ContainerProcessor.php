@@ -27,7 +27,7 @@ class ContainerProcessor implements ProcessorInterface
                 InputOption::VALUE_REQUIRED,
                 ' ' .
                 'Specify configuration profile to use. ' .
-                'Define profiles in config file (<info>--config</info>).'."\n"
+                'Define profiles in config file (<info>--config</info>).'
             ),
         );
     }
