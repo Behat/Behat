@@ -19,7 +19,8 @@ use Behat\Gherkin\Keywords\KeywordsDumper;
 
 use Behat\Behat\Console\Processor\FormatProcessor,
     Behat\Behat\Console\Processor\GherkinProcessor,
-    Behat\Behat\Console\Processor\ContextProcessor;
+    Behat\Behat\Console\Processor\ContextProcessor,
+    Behat\Behat\Console\Processor\LocatorProcessor;
 
 /*
  * This file is part of the Behat.
@@ -36,6 +37,7 @@ use Behat\Behat\Console\Processor\FormatProcessor,
  */
 class BehatCommand extends Command
 {
+    private $locatorProcessor;
     private $formatProcessor;
     private $gherkinProcessor;
 
@@ -47,6 +49,7 @@ class BehatCommand extends Command
         $this->formatProcessor = new FormatProcessor();
         $this->gherkinProcessor = new GherkinProcessor();
         $this->contextProcessor = new ContextProcessor();
+        $this->locatorProcessor = new LocatorProcessor();
 
         $this->setName('behat');
         $this->setDefinition(array_merge(
@@ -61,9 +64,10 @@ class BehatCommand extends Command
             $this->getInitOptions(),
             $this->getDemonstrationOptions(),
             $this->getConfigurationOptions(),
+//            $this->locatorProcessor->getInputOptions(),
             $this->gherkinProcessor->getInputOptions(),
             $this->formatProcessor->getInputOptions(),
-            $this->contextProcessor->getInputOptions(),
+//            $this->contextProcessor->getInputOptions(),
             $this->getRunOptions()
         ));
     }
@@ -165,25 +169,14 @@ class BehatCommand extends Command
             $input->hasOption('config')     ? $input->getOption('config')   : null,
             $input->hasOption('profile')    ? $input->getOption('profile')  : null
         );
+
+        $this->locatorProcessor->process($container, $input, $output);
+
         $locator = $container->get('behat.path_locator');
 
-        // locate base path
-        $this->locateBasePath($locator, $input);
-
-        // init features directory structure
         if ($input->hasOption('init') && $input->getOption('init')) {
             $this->initFeaturesDirectoryStructure($locator, $output);
             return 0;
-        }
-
-        // load bootstrap files
-        foreach ($locator->locateBootstrapFilesPaths() as $path) {
-            require_once($path);
-        }
-
-        // we don't want to init, so we check, that features path exists
-        if (!is_dir($featuresPath = $locator->getFeaturesPath())) {
-            throw new \InvalidArgumentException("Features path \"$featuresPath\" does not exist");
         }
 
         $this->formatProcessor->process($container, $input, $output);
@@ -266,19 +259,6 @@ class BehatCommand extends Command
         }
 
         return $container;
-    }
-
-    /**
-     * Locates behat base path.
-     *
-     * @param   Behat\Behat\PathLocator                         $locator    path locator
-     * @param   Symfony\Component\Console\Input\InputInterface  $input      input
-     *
-     * @return  string
-     */
-    protected function locateBasePath(PathLocator $locator, InputInterface $input)
-    {
-        return $locator->locateBasePath($input->getArgument('features'));
     }
 
     /**
