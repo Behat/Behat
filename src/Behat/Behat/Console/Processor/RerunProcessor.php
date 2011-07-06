@@ -29,7 +29,6 @@ class RerunProcessor implements ProcessorInterface
     public function configure(Command $command)
     {
         $command->addOption('--rerun', null, InputOption::VALUE_REQUIRED,
-            '        ' .
             'Save list of failed scenarios into file or use existing file to run only scenarios from it.'
         );
     }

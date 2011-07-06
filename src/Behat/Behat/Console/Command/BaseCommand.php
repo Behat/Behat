@@ -34,6 +34,8 @@ abstract class BaseCommand extends Command
      * Sets command processors.
      *
      * @param   array   $processors
+     *
+     * @return  Symfony\Component\Console\Command\Command
      */
     protected function setProcessors(array $processors)
     {
@@ -41,26 +43,22 @@ abstract class BaseCommand extends Command
         foreach ($processors as $processor) {
             $this->addProcessor($processor);
         }
+
+        return $this;
     }
 
     /**
      * Adds single processor to the list.
      *
      * @param   Behat\Behat\Console\Processor\ProcessorInterface    $processor
+     *
+     * @return  Symfony\Component\Console\Command\Command
      */
     protected function addProcessor(ProcessorInterface $processor)
     {
         $this->processors[] = $processor;
-    }
 
-    /**
-     * Configures processors with current command.
-     */
-    protected function configureProcessors()
-    {
-        foreach ($this->processors as $processor) {
-            $processor->configure($this);
-        }
+        return $this;
     }
 
     /**
@@ -81,14 +79,40 @@ abstract class BaseCommand extends Command
     abstract protected function getContainer();
 
     /**
-     * {@inheritdoc}
+     * Configures processors with current command.
+     *
+     * @return  Symfony\Component\Console\Command\Command
      */
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    protected function configureProcessors()
+    {
+        foreach ($this->processors as $processor) {
+            $processor->configure($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Processes processors with current input.
+     *
+     * @return  Symfony\Component\Console\Command\Command
+     */
+    protected function processProcessors(InputInterface $input, OutputInterface $output)
     {
         $container = $this->getContainer();
 
         foreach ($this->getProcessors() as $processor) {
             $processor->process($container, $input, $output);
         }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $this->processProcessors($input, $output);
     }
 }

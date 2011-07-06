@@ -30,11 +30,9 @@ class HelpProcessor implements ProcessorInterface
     {
         $command
             ->addOption('--story-syntax', null, InputOption::VALUE_NONE,
-                ' ' .
                 'Print *.feature example in specified language (<info>--lang</info>).'
             )
             ->addOption('--definitions', null, InputOption::VALUE_NONE,
-                '  ' .
                 'Print available step definitions in specified language (<info>--lang</info>).'."\n"
             )
         ;

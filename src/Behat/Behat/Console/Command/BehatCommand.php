@@ -9,8 +9,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Event\SuiteEvent,
-    Behat\Behat\Console\Processor;
+use Behat\Behat\Console\Processor,
+    Behat\Behat\Event\SuiteEvent;
 
 /*
  * This file is part of the Behat.
@@ -41,28 +41,28 @@ class BehatCommand extends BaseCommand
     {
         $this->container = new ContainerBuilder();
 
-        $this->setName('behat');
-        $this->setProcessors(array(
-            new Processor\ContainerProcessor(),
-            new Processor\LocatorProcessor(),
-            new Processor\InitProcessor(),
-            new Processor\ContextProcessor(),
-            new Processor\FormatProcessor(),
-            new Processor\HelpProcessor(),
-            new Processor\GherkinProcessor(),
-            new Processor\RerunProcessor(),
-        ));
-
-        $this->addArgument('features', InputArgument::OPTIONAL,
-            'Feature(s) to run. Could be a dir (<comment>features/</comment>), ' .
-            'a feature (<comment>*.feature</comment>) or a scenario at specific line ' .
-            '(<comment>*.feature:10</comment>).'
-        );
-        $this->configureProcessors();
-        $this->addOption('--strict', null, InputOption::VALUE_NONE,
-            '       ' .
-            'Fail if there are any undefined or pending steps.'
-        );
+        $this
+            ->setName('behat')
+            ->setProcessors(array(
+                new Processor\ContainerProcessor(),
+                new Processor\LocatorProcessor(),
+                new Processor\InitProcessor(),
+                new Processor\ContextProcessor(),
+                new Processor\FormatProcessor(),
+                new Processor\HelpProcessor(),
+                new Processor\GherkinProcessor(),
+                new Processor\RerunProcessor(),
+            ))
+            ->addArgument('features', InputArgument::OPTIONAL,
+                'Feature(s) to run. Could be a dir (<comment>features/</comment>), ' .
+                'a feature (<comment>*.feature</comment>) or a scenario at specific line ' .
+                '(<comment>*.feature:10</comment>).'
+            )
+            ->configureProcessors()
+            ->addOption('--strict', null, InputOption::VALUE_NONE,
+                'Fail if there are any undefined or pending steps.'
+            )
+        ;
     }
 
     /**

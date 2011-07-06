@@ -42,7 +42,6 @@ class FormatProcessor implements ProcessorInterface
     {
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
-                '  ' .
                 'How to format features. <comment>pretty</comment> is default. Available formats are ' .
                 implode(', ',
                     array_map(function($name) {
@@ -51,40 +50,31 @@ class FormatProcessor implements ProcessorInterface
                 )
             )
             ->addOption('--out', null, InputOption::VALUE_REQUIRED,
-                '          ' .
                 'Write formatter output to a file/directory instead of STDOUT ' .
                 '(<comment>output_path</comment>).'
             )
             ->addOption('--colors', null, InputOption::VALUE_NONE,
-                '       ' .
                 'Force Behat to use ANSI color in the output.'
             )
             ->addOption('--no-colors', null, InputOption::VALUE_NONE,
-                '    ' .
                 'Do not use ANSI color in the output.'
             )
             ->addOption('--no-time', null, InputOption::VALUE_NONE,
-                '      ' .
                 'Hide time in output.'
             )
             ->addOption('--lang', null, InputOption::VALUE_REQUIRED,
-                '         ' .
                 'Print formatter output in particular language.'
             )
             ->addOption('--no-paths', null, InputOption::VALUE_NONE,
-                '     ' .
                 'Do not print the definition path with the steps.'
             )
             ->addOption('--no-snippets', null, InputOption::VALUE_NONE,
-                '  ' .
                 'Do not print snippets for undefined steps.'
             )
             ->addOption('--no-multiline', null, InputOption::VALUE_NONE,
-                ' ' .
-                'No multiline arguments in output.'
+                "No multiline arguments in output."
             )
             ->addOption('--expand', null, InputOption::VALUE_NONE,
-                '       ' .
                 'Expand Scenario Outline Tables in output.'."\n"
             )
         ;

@@ -31,7 +31,6 @@ class InitProcessor implements ProcessorInterface
     public function configure(Command $command)
     {
         $command->addOption('--init', null, InputOption::VALUE_NONE,
-            '         ' .
             'Create <comment>features</comment> directory structure.'."\n"
         );
     }
