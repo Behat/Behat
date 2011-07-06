@@ -3,6 +3,7 @@
 namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
@@ -23,16 +24,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 class RerunProcessor implements ProcessorInterface
 {
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::getInputOptions()
+     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::configure()
      */
-    public function getInputOptions()
+    public function configure(Command $command)
     {
-        return array(
-            new InputOption('--rerun',          null,
-                InputOption::VALUE_REQUIRED,
-                '        ' .
-                'Save list of failed scenarios into file or use existing file to run only scenarios from it.'
-            ),
+        $command->addOption('--rerun', null, InputOption::VALUE_REQUIRED,
+            '        ' .
+            'Save list of failed scenarios into file or use existing file to run only scenarios from it.'
         );
     }
 

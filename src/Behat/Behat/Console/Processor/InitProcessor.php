@@ -3,6 +3,7 @@
 namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
@@ -25,16 +26,13 @@ use Behat\Behat\PathLocator;
 class InitProcessor implements ProcessorInterface
 {
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::getInputOptions()
+     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::confiugre()
      */
-    public function getInputOptions()
+    public function configure(Command $command)
     {
-        return array(
-            new InputOption('--init',           null,
-                InputOption::VALUE_NONE,
-                '         ' .
-                'Create <comment>features</comment> directory structure.'."\n"
-            ),
+        $command->addOption('--init', null, InputOption::VALUE_NONE,
+            '         ' .
+            'Create <comment>features</comment> directory structure.'."\n"
         );
     }
 

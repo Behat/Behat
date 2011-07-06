@@ -41,6 +41,7 @@ class BehatCommand extends BaseCommand
     {
         $this->container = new ContainerBuilder();
 
+        $this->setName('behat');
         $this->setProcessors(array(
             new Processor\ContainerProcessor(),
             new Processor\LocatorProcessor(),
@@ -52,25 +53,16 @@ class BehatCommand extends BaseCommand
             new Processor\RerunProcessor(),
         ));
 
-        $this->setName('behat');
-        $this->setDefinition(array_merge(
-            array(
-                new InputArgument('features',
-                    InputArgument::OPTIONAL,
-                    'Feature(s) to run. Could be a dir (<comment>features/</comment>), ' .
-                    'a feature (<comment>*.feature</comment>) or a scenario at specific line ' .
-                    '(<comment>*.feature:10</comment>).'
-                )
-            ),
-            $this->getProcessorsInputOptions(),
-            array(
-                new InputOption('--strict',         null,
-                    InputOption::VALUE_NONE,
-                    '       ' .
-                    'Fail if there are any undefined or pending steps.'
-                )
-            )
-        ));
+        $this->addArgument('features', InputArgument::OPTIONAL,
+            'Feature(s) to run. Could be a dir (<comment>features/</comment>), ' .
+            'a feature (<comment>*.feature</comment>) or a scenario at specific line ' .
+            '(<comment>*.feature:10</comment>).'
+        );
+        $this->configureProcessors();
+        $this->addOption('--strict', null, InputOption::VALUE_NONE,
+            '       ' .
+            'Fail if there are any undefined or pending steps.'
+        );
     }
 
     /**

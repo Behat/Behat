@@ -3,6 +3,7 @@
 namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
@@ -26,22 +27,21 @@ use Behat\Gherkin\Filter\NameFilter,
 class GherkinProcessor implements ProcessorInterface
 {
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::getInputOptions()
+     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::confiugre()
      */
-    public function getInputOptions()
+    public function configure(Command $command)
     {
-        return array(
-            new InputOption('--name',           null,
-                InputOption::VALUE_REQUIRED,
+        $command
+            ->addOption('--name', null, InputOption::VALUE_REQUIRED,
                 '         ' .
-                'Only execute the feature elements (features or scenarios) which match part of the given name or regex.'
-            ),
-            new InputOption('--tags',           null,
-                InputOption::VALUE_REQUIRED,
+                'Only execute the feature elements (features or scenarios) which match part ' .
+                'of the given name or regex.'
+            )
+            ->addOption('--tags', null, InputOption::VALUE_REQUIRED,
                 '         ' .
                 'Only execute the features or scenarios with tags matching tag filter expression.'."\n"
-            ),
-        );
+            )
+        ;
     }
 
     /**

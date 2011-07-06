@@ -3,6 +3,7 @@
 namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface;
 
@@ -22,11 +23,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 interface ProcessorInterface
 {
     /**
-     * Returns list of input options.
+     * Configures command to be able to process it later.
      *
-     * @return  array
+     * @param   Symfony\Component\Console\Command\Command   $command    command instance to configure
      */
-    function getInputOptions();
+    function configure(Command $command);
 
     /**
      * Processes data from container and console input.

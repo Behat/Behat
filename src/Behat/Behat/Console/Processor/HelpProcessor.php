@@ -3,6 +3,7 @@
 namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
@@ -23,22 +24,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 class HelpProcessor implements ProcessorInterface
 {
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::getInputOptions()
+     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::confiugre()
      */
-    public function getInputOptions()
+    public function configure(Command $command)
     {
-        return array(
-            new InputOption('--story-syntax',    null,
-                InputOption::VALUE_NONE,
+        $command
+            ->addOption('--story-syntax', null, InputOption::VALUE_NONE,
                 ' ' .
                 'Print *.feature example in specified language (<info>--lang</info>).'
-            ),
-            new InputOption('--definitions',    null,
-                InputOption::VALUE_NONE,
+            )
+            ->addOption('--definitions', null, InputOption::VALUE_NONE,
                 '  ' .
                 'Print available step definitions in specified language (<info>--lang</info>).'."\n"
-            ),
-        );
+            )
+        ;
     }
 
     /**

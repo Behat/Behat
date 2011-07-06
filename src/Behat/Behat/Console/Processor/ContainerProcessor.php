@@ -3,6 +3,7 @@
 namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
@@ -25,24 +26,22 @@ use Behat\Behat\DependencyInjection\BehatExtension;
 class ContainerProcessor implements ProcessorInterface
 {
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::getInputOptions()
+     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::configure()
      */
-    public function getInputOptions()
+    public function configure(Command $command)
     {
-        return array(
-            new InputOption('--config',         '-c',
-                InputOption::VALUE_REQUIRED,
+        $command
+            ->addOption('--config', '-c', InputOption::VALUE_REQUIRED,
                 '  ' .
                 'Specify external configuration file to load. ' .
                 '<comment>behat.yml</comment> or <comment>config/behat.yml</comment> will be used by default.'
-            ),
-            new InputOption('--profile',        '-p',
-                InputOption::VALUE_REQUIRED,
+            )
+            ->addOption('--profile', '-p', InputOption::VALUE_REQUIRED,
                 ' ' .
                 'Specify configuration profile to use. ' .
                 'Define profiles in config file (<info>--config</info>).'
-            ),
-        );
+            )
+        ;
     }
 
     /**

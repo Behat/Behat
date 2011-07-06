@@ -54,19 +54,13 @@ abstract class BaseCommand extends Command
     }
 
     /**
-     * Returns list of processors input options.
-     *
-     * @return  array
+     * Configures processors with current command.
      */
-    protected function getProcessorsInputOptions()
+    protected function configureProcessors()
     {
-        $options = array();
-
         foreach ($this->processors as $processor) {
-            $options = array_merge($options, $processor->getInputOptions());
+            $processor->configure($this);
         }
-
-        return $options;
     }
 
     /**

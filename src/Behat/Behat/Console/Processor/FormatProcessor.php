@@ -3,6 +3,7 @@
 namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
@@ -35,13 +36,12 @@ class FormatProcessor implements ProcessorInterface
     );
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::getInputOptions()
+     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::configure()
      */
-    public function getInputOptions()
+    public function configure(Command $command)
     {
-        return array(
-            new InputOption('--format',         '-f',
-                InputOption::VALUE_REQUIRED,
+        $command
+            ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
                 '  ' .
                 'How to format features. <comment>pretty</comment> is default. Available formats are ' .
                 implode(', ',
@@ -49,53 +49,45 @@ class FormatProcessor implements ProcessorInterface
                         return "<comment>$name</comment>";
                     }, array_keys($this->defaultFormatters))
                 )
-            ),
-            new InputOption('--out',            null,
-                InputOption::VALUE_REQUIRED,
+            )
+            ->addOption('--out', null, InputOption::VALUE_REQUIRED,
                 '          ' .
-                'Write formatter output to a file/directory instead of STDOUT (<comment>output_path</comment>).'
-            ),
-            new InputOption('--colors',         null,
-                InputOption::VALUE_NONE,
+                'Write formatter output to a file/directory instead of STDOUT ' .
+                '(<comment>output_path</comment>).'
+            )
+            ->addOption('--colors', null, InputOption::VALUE_NONE,
                 '       ' .
                 'Force Behat to use ANSI color in the output.'
-            ),
-            new InputOption('--no-colors',      null,
-                InputOption::VALUE_NONE,
+            )
+            ->addOption('--no-colors', null, InputOption::VALUE_NONE,
                 '    ' .
                 'Do not use ANSI color in the output.'
-            ),
-            new InputOption('--no-time',        null,
-                InputOption::VALUE_NONE,
+            )
+            ->addOption('--no-time', null, InputOption::VALUE_NONE,
                 '      ' .
                 'Hide time in output.'
-            ),
-            new InputOption('--lang',           null,
-                InputOption::VALUE_REQUIRED,
+            )
+            ->addOption('--lang', null, InputOption::VALUE_REQUIRED,
                 '         ' .
                 'Print formatter output in particular language.'
-            ),
-            new InputOption('--no-paths',       null,
-                InputOption::VALUE_NONE,
+            )
+            ->addOption('--no-paths', null, InputOption::VALUE_NONE,
                 '     ' .
                 'Do not print the definition path with the steps.'
-            ),
-            new InputOption('--no-snippets',    null,
-                InputOption::VALUE_NONE,
+            )
+            ->addOption('--no-snippets', null, InputOption::VALUE_NONE,
                 '  ' .
                 'Do not print snippets for undefined steps.'
-            ),
-            new InputOption('--no-multiline',   null,
-                InputOption::VALUE_NONE,
+            )
+            ->addOption('--no-multiline', null, InputOption::VALUE_NONE,
                 ' ' .
                 'No multiline arguments in output.'
-            ),
-            new InputOption('--expand',         null,
-                InputOption::VALUE_NONE,
+            )
+            ->addOption('--expand', null, InputOption::VALUE_NONE,
                 '       ' .
                 'Expand Scenario Outline Tables in output.'."\n"
-            ),
-        );
+            )
+        ;
     }
 
     /**
