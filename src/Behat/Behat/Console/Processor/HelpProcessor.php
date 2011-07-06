@@ -43,7 +43,7 @@ class HelpProcessor implements ProcessorInterface
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
-        if ($input->hasOption('story-syntax') && $input->getOption('story-syntax')) {
+        if ($input->getOption('story-syntax')) {
             $container->get('behat.help_printer.story_syntax')->printSyntax(
                 $output, $input->getOption('lang') ?: 'en'
             );
@@ -51,7 +51,7 @@ class HelpProcessor implements ProcessorInterface
             exit(0);
         }
 
-        if ($input->hasOption('definitions') && $input->getOption('definitions')) {
+        if ($input->getOption('definitions')) {
             $container->get('behat.help_printer.definitions')->printDefinitions(
                 $output, $input->getOption('lang') ?: 'en'
             );

@@ -40,7 +40,7 @@ class InitProcessor implements ProcessorInterface
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
-        if ($input->hasOption('init') && $input->getOption('init')) {
+        if ($input->getOption('init')) {
             $this->initFeaturesDirectoryStructure($container->get('behat.path_locator'), $output);
 
             exit(0);

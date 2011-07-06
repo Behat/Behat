@@ -49,8 +49,8 @@ class ContainerProcessor implements ProcessorInterface
     {
         $extension  = new BehatExtension();
         $cwd        = getcwd();
-        $configFile = $input->hasOption('config')  ? $input->getOption('config')  : null;
-        $profile    = $input->hasOption('profile') ? $input->getOption('profile') : 'default';
+        $configFile = $input->getOption('config');
+        $profile    = $input->getOption('profile') ?: 'default';
 
         if (null === $configFile) {
             if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
