@@ -92,7 +92,7 @@ class BehatCommand extends BaseCommand
         $gherkin    = $this->getContainer()->get('gherkin');
         $dispatcher = $this->getContainer()->get('behat.event_dispatcher');
         $logger     = $this->getContainer()->get('behat.logger');
-        $paths      = $this->getFeaturesPaths();
+        $paths      = $this->getContainer()->get('behat.rerun_data_collector')->locateFeaturesPaths();
 
         $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, false));
 
@@ -123,20 +123,5 @@ class BehatCommand extends BaseCommand
         } else {
             return intval(4 === $result);
         }
-    }
-
-    /**
-     * Returns features paths to test.
-     *
-     * @return  array
-     */
-    private function getFeaturesPaths()
-    {
-        $rerun = $this->getContainer()->get('behat.rerun_data_collector');
-        if ($rerun->hasFailedScenarios()) {
-            return $return->getFailedScenariosPaths();
-        }
-
-        return $this->getContainer()->get('behat.path_locator')->locateFeaturesPaths();
     }
 }

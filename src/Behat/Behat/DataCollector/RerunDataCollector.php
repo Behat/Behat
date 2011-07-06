@@ -5,7 +5,8 @@ namespace Behat\Behat\DataCollector;
 use Symfony\Component\EventDispatcher\EventDispatcher,
     Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Behat\Behat\Event\ScenarioEvent,
+use Behat\Behat\PathLocator,
+    Behat\Behat\Event\ScenarioEvent,
     Behat\Behat\Event\OutlineEvent,
     Behat\Behat\Event\StepEvent;
 
@@ -36,6 +37,22 @@ class RerunDataCollector implements EventSubscriberInterface
      * @var     array
      */
     private $scenarios = array();
+    /**
+     * Path locator.
+     *
+     * @var     Behat\Behat\PathLocator
+     */
+    private $locator;
+
+    /**
+     * Path locator.
+     *
+     * @param   Behat\Behat\PathLocator $locator
+     */
+    public function __construct(PathLocator $locator)
+    {
+        $this->locator = $locator;
+    }
 
     /**
      * Sets rerun file path.
@@ -73,6 +90,16 @@ class RerunDataCollector implements EventSubscriberInterface
         }
 
         return explode("\n", $contents);
+    }
+
+    /**
+     * Locates previously failed scenarios paths OR all scenarios paths if none was failed.
+     *
+     * @return  array
+     */
+    public function locateFeaturesPaths()
+    {
+        return $this->hasFailedScenarios() ? $this->getFailedScenariosPaths() : $this->locator->locateFeaturesPaths();
     }
 
     /**

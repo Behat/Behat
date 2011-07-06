@@ -199,7 +199,9 @@
 
         <!-- DataCollector -->
         <service id="behat.logger" class="%behat.logger.class%" />
-        <service id="behat.rerun_data_collector" class="%behat.rerun_data_collector.class%" />
+        <service id="behat.rerun_data_collector" class="%behat.rerun_data_collector.class%">
+            <argument type="service" id="behat.path_locator" />
+        </service>
 
         <!-- HelpPrinter -->
         <service id="behat.help_printer.definitions" class="%behat.help_printer.definitions.class%">
