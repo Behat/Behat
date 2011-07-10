@@ -152,14 +152,17 @@ abstract class Definition extends Annotation implements DefinitionInterface
         }
 
         if (!$this->isClosure()) {
-            call_user_func_array(array($context->getContextByClassName($callback[0]), $callback[1]), $values);
+            $callback = array($context->getContextByClassName($callback[0]), $callback[1]);
         } else {
             array_unshift($values, $context);
-            call_user_func_array($callback, $values);
         }
+
+        $return = call_user_func_array($callback, $values);
 
         if (null !== $oldHandler) {
             set_error_handler($oldHandler);
         }
+
+        return $return;
     }
 }

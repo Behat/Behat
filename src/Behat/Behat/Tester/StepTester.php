@@ -6,9 +6,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
-    Behat\Gherkin\Node\AbstractNode;
+    Behat\Gherkin\Node\AbstractNode,
+    Behat\Gherkin\Node\StepNode;
 
 use Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Context\Step\SubstepInterface,
+    Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\Exception\Ambiguous,
     Behat\Behat\Exception\Undefined,
     Behat\Behat\Exception\Pending,
@@ -113,8 +116,22 @@ class StepTester implements NodeVisitorInterface
         $step->setTokens($this->tokens);
 
         $this->dispatcher->dispatch('beforeStep', new StepEvent($step, $this->context));
+        $afterEvent = $this->executeStep($step);
+        $this->dispatcher->dispatch('afterStep', $afterEvent);
 
-        $result     = 0;
+        return $afterEvent->getResult();
+    }
+
+    /**
+     * Searches and runs provided step with DefinitionDispatcher.
+     *
+     * @param   Behat\Gherkin\Node\StepNode $step   step node
+     *
+     * @return  Behat\Behat\Event\StepEvent
+     */
+    protected function executeStep(StepNode $step)
+    {
+        $result     = null;
         $definition = null;
         $exception  = null;
         $snippet    = null;
@@ -126,15 +143,16 @@ class StepTester implements NodeVisitorInterface
             $result    = StepEvent::FAILED;
             $exception = $e;
         } catch (Undefined $e) {
-            $result   = StepEvent::UNDEFINED;
-            $snippet  = $this->definitions->proposeDefinition($this->context, $step);
+            $result    = StepEvent::UNDEFINED;
+            $snippet   = $this->definitions->proposeDefinition($this->context, $step);
+            $exception = $e;
         }
 
         // Run test
-        if (0 === $result) {
+        if (null === $result) {
             if (!$this->skip) {
                 try {
-                    $definition->run($this->context, $this->tokens);
+                    $this->runStepDefinition($definition);
                     $result = StepEvent::PASSED;
                 } catch (Pending $e) {
                     $result    = StepEvent::PENDING;
@@ -148,10 +166,24 @@ class StepTester implements NodeVisitorInterface
             }
         }
 
-        $this->dispatcher->dispatch('afterStep', new StepEvent(
-            $step, $this->context, $result, $definition, $exception, $snippet
-        ));
+        return new StepEvent($step, $this->context, $result, $definition, $exception, $snippet);
+    }
 
-        return $result;
+    /**
+     * Runs provided step definition.
+     *
+     * @param   Behat\Behat\Definition\DefinitionInterface  $definition step definition
+     */
+    protected function runStepDefinition(DefinitionInterface $definition)
+    {
+        $definitionReturn = $definition->run($this->context, $this->tokens);
+
+        if ($definitionReturn instanceof SubstepInterface) {
+            $substepEvent = $this->executeStep($definitionReturn->getStepNode());
+
+            if (StepEvent::PASSED !== $substepEvent->getResult()) {
+                throw $substepEvent->getException();
+            }
+        }
     }
 }
