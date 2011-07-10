@@ -25,9 +25,9 @@ interface ContextInterface
     function getSubcontexts();
 
     /**
-     * Finds context by it's name (searches in main and sub contexts).
+     * Finds subcontext by it's name.
      *
      * @return  Behat\Behat\Context\ContextInterface
      */
-    function getContextByClassName($className);
+    function getSubcontextByClassName($className);
 }

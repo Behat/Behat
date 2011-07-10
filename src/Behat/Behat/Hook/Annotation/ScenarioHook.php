@@ -64,9 +64,13 @@ abstract class ScenarioHook extends FilterableHook
         $callback = $this->getCallback();
 
         if (!$this->isClosure()) {
-            call_user_func(array($context->getContextByClassName($callback[0]), $callback[1]), $event);
-        } else {
-            call_user_func($callback, $event);
+            if ($callback[0] === get_class($context)) {
+                $callback = array($context, $callback[1]);
+            } else {
+                $callback = array($context->getSubcontextByClassName($callback[0]), $callback[1]);
+            }
         }
+
+        call_user_func($callback, $event);
     }
 }

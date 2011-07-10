@@ -77,7 +77,11 @@ class Transformation extends Annotation implements TransformationInterface
     {
         $callback = $this->getCallback();
         if (!$this->isClosure()) {
-            $callback = array($context->getContextByClassName($callback[0]), $callback[1]);
+            if ($callback[0] === get_class($context)) {
+                $callback = array($context, $callback[1]);
+            } else {
+                $callback = array($context->getSubcontextByClassName($callback[0]), $callback[1]);
+            }
         }
 
         if ($argument instanceof TableNode) {
