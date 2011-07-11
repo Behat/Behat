@@ -40,18 +40,22 @@ class FormatProcessor implements ProcessorInterface
      */
     public function configure(Command $command)
     {
+        $defaultFormatters = $this->defaultFormatters;
+
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
-                'How to format features. <comment>pretty</comment> is default. Available formats are ' .
-                implode(', ',
-                    array_map(function($name) {
-                        return "<comment>$name</comment>";
-                    }, array_keys($this->defaultFormatters))
+                "How to format features. <comment>pretty</comment> is default.\n" .
+                "Available formats are:\n" .
+                implode("\n",
+                    array_map(function($name) use($defaultFormatters) {
+                        $class = $defaultFormatters[$name];
+                        return "- <comment>$name</comment>: " . $class::getDescription();
+                    }, array_keys($defaultFormatters))
                 )
             )
             ->addOption('--out', null, InputOption::VALUE_REQUIRED,
-                'Write formatter output to a file/directory instead of STDOUT ' .
-                '(<comment>output_path</comment>).'
+                "Write formatter output to a file/directory\n" .
+                "instead of STDOUT (<comment>output_path</comment>)."
             )
             ->addOption('--colors', null, InputOption::VALUE_NONE,
                 'Force Behat to use ANSI color in the output.'
@@ -75,7 +79,7 @@ class FormatProcessor implements ProcessorInterface
                 "No multiline arguments in output."
             )
             ->addOption('--expand', null, InputOption::VALUE_NONE,
-                'Expand Scenario Outline Tables in output.'."\n"
+                "Expand Scenario Outline Tables in output.\n"
             )
         ;
     }

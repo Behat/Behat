@@ -70,6 +70,14 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * {@inheritdoc}
      */
+    public static function getDescription()
+    {
+        return "Generates a report similar to Ant+JUnit.";
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultParameters()
     {
         return array();

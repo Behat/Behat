@@ -32,12 +32,12 @@ class ContainerProcessor implements ProcessorInterface
     {
         $command
             ->addOption('--config', '-c', InputOption::VALUE_REQUIRED,
-                'Specify external configuration file to load. ' .
-                '<comment>behat.yml</comment> or <comment>config/behat.yml</comment> will be used by default.'
+                "Specify external configuration file to load.\n" .
+                "<comment>behat.yml</comment> or <comment>config/behat.yml</comment> will be used by default."
             )
             ->addOption('--profile', '-p', InputOption::VALUE_REQUIRED,
-                'Specify configuration profile to use. ' .
-                'Define profiles in config file (<info>--config</info>).'
+                "Specify configuration profile to use.\n" .
+                "Define profiles in config file (<info>--config</info>)."
             )
         ;
     }

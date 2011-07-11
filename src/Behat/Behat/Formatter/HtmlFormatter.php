@@ -40,6 +40,14 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
+    public static function getDescription()
+    {
+        return "Generates a nice looking HTML report.";
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultParameters()
     {
         return array(

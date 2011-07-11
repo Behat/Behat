@@ -33,11 +33,12 @@ class GherkinProcessor implements ProcessorInterface
     {
         $command
             ->addOption('--name', null, InputOption::VALUE_REQUIRED,
-                'Only execute the feature elements (features or scenarios) which match part ' .
-                'of the given name or regex.'
+                "Only execute the feature elements which match\n" .
+                "part of the given name or regex."
             )
             ->addOption('--tags', null, InputOption::VALUE_REQUIRED,
-                'Only execute the features or scenarios with tags matching tag filter expression.'."\n"
+                "Only execute the features or scenarios with tags\n" .
+                "matching tag filter expression.\n"
             )
         ;
     }
