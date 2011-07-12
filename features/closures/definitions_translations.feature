@@ -11,7 +11,7 @@ Feature: Definitions translations
       use Behat\Behat\Context\ClosuredContextInterface as Closured,
           Behat\Behat\Context\TranslatedContextInterface as Translated,
           Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
       use Symfony\Component\Finder\Finder;

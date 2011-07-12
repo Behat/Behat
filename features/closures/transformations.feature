@@ -12,7 +12,7 @@ Feature: Step Arguments Transformations
 
       use Behat\Behat\Context\ClosuredContextInterface,
           Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
       use Symfony\Component\Finder\Finder;

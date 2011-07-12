@@ -15,7 +15,7 @@ namespace Behat\Behat\Exception;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Undefined extends BehaviorException
+class UndefinedException extends BehaviorException
 {
     protected $text;
 

@@ -15,7 +15,7 @@ namespace Behat\Behat\Exception;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Pending extends BehaviorException
+class PendingException extends BehaviorException
 {
     /**
      * Initializes pending exception.

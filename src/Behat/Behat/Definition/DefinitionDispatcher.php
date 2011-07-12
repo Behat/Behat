@@ -9,9 +9,9 @@ use Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\TableNode;
 
 use Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher,
-    Behat\Behat\Exception\Redundant,
-    Behat\Behat\Exception\Ambiguous,
-    Behat\Behat\Exception\Undefined,
+    Behat\Behat\Exception\RedundantException,
+    Behat\Behat\Exception\AmbiguousException,
+    Behat\Behat\Exception\UndefinedException,
     Behat\Behat\Context\ContextInterface;
 
 /*
@@ -76,7 +76,7 @@ class DefinitionDispatcher
         $regex = $definition->getRegex();
 
         if (isset($this->definitions[$regex])) {
-            throw new Redundant($definition, $this->definitions[$regex]);
+            throw new RedundantException($definition, $this->definitions[$regex]);
         }
 
         $this->definitions[$regex] = $definition;
@@ -122,8 +122,8 @@ class DefinitionDispatcher
      *
      * @uses    loadDefinitions()
      *
-     * @throws  Behat\Behat\Exception\Ambiguous  if step description is ambiguous
-     * @throws  Behat\Behat\Exception\Undefined  if step definition not found
+     * @throws  Behat\Behat\Exception\AmbiguousException    if step description is ambiguous
+     * @throws  Behat\Behat\Exception\UndefinedException    if step definition not found
      */
     public function findDefinition(ContextInterface $context, StepNode $step)
     {
@@ -162,11 +162,11 @@ class DefinitionDispatcher
         }
 
         if (count($matches) > 1) {
-            throw new Ambiguous($text, $matches);
+            throw new AmbiguousException($text, $matches);
         }
 
         if (0 === count($matches)) {
-            throw new Undefined($text);
+            throw new UndefinedException($text);
         }
 
         return $matches[0];

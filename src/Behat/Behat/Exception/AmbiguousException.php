@@ -15,7 +15,7 @@ namespace Behat\Behat\Exception;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Ambiguous extends BehaviorException
+class AmbiguousException extends BehaviorException
 {
     /**
      * Step description.

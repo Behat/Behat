@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher,
 
 use Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\DataCollector\LoggerDataCollector,
-    Behat\Behat\Exception\Pending,
+    Behat\Behat\Exception\PendingException,
     Behat\Behat\Event\SuiteEvent,
     Behat\Behat\Event\StepEvent;
 
@@ -173,7 +173,7 @@ class ProgressFormatter extends ConsoleFormatter
             $exception = $event->getException();
 
             if (null !== $exception) {
-                $color = $exception instanceof Pending ? 'pending' : 'failed';
+                $color = $exception instanceof PendingException ? 'pending' : 'failed';
 
                 if ($this->parameters->get('verbose')) {
                     $error = (string) $exception;
@@ -203,7 +203,7 @@ class ProgressFormatter extends ConsoleFormatter
     protected function printStepPath(StepNode $step, DefinitionInterface $definition = null,
                                      \Exception $exception = null)
     {
-        $color      = $exception instanceof Pending ? 'pending' : 'failed';
+        $color      = $exception instanceof PendingException ? 'pending' : 'failed';
         $type       = $step->getType();
         $text       = $step->getText();
         $stepPath   = "In step `$type $text'.";

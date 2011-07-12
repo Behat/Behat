@@ -13,7 +13,7 @@ use Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\Event\OutlineEvent,
     Behat\Behat\Event\OutlineExampleEvent,
     Behat\Behat\Event\StepEvent,
-    Behat\Behat\Exception\Undefined;
+    Behat\Behat\Exception\UndefinedException;
 
 use Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\FeatureNode,
@@ -693,7 +693,7 @@ class PrettyFormatter extends ProgressFormatter
         if ($this->parameters->get('multiline_arguments')) {
             $this->printStepArguments($step->getArguments(), $color);
         }
-        if (null !== $exception && !$exception instanceof Undefined) {
+        if (null !== $exception && !$exception instanceof UndefinedException) {
             $this->printStepException($exception, $color);
         }
         if (null !== $snippet) {

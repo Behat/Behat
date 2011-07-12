@@ -70,7 +70,7 @@ class ClosuredDefinitionProposal implements DefinitionProposalInterface
 
         $description = sprintf(<<<PHP
 \$steps->%s('/^%s$/', function(%s) {
-    throw new \Behat\Behat\Exception\Pending();
+    throw new \Behat\Behat\Exception\PendingException();
 });
 PHP
           , '%s', $regex, implode(', ', $args)

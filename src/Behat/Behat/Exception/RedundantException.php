@@ -17,7 +17,7 @@ use Behat\Behat\Definition\DefinitionInterface;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Redundant extends BehaviorException
+class RedundantException extends BehaviorException
 {
     /**
      * Initializes redundant exception.

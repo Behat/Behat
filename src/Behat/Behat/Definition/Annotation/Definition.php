@@ -6,7 +6,7 @@ use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
 use Behat\Behat\Definition\DefinitionInterface,
-    Behat\Behat\Exception\Error,
+    Behat\Behat\Exception\ErrorException,
     Behat\Behat\Context\ContextInterface,
     Behat\Behat\Annotation\Annotation;
 
@@ -120,11 +120,11 @@ abstract class Definition extends Annotation implements DefinitionInterface
      *
      * @see     set_error_handler()
      *
-     * @throws  Behat\Behat\Exception\Error
+     * @throws  Behat\Behat\Exception\ErrorException
      */
     public function errorHandler($code, $message, $file, $line)
     {
-        throw new Error($code, $message, $file, $line);
+        throw new ErrorException($code, $message, $file, $line);
     }
 
     /**

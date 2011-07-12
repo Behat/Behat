@@ -92,7 +92,7 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
      */
     public function %s(%s)
     {
-        throw new Pending();
+        throw new PendingException();
     }
 PHP
           , '%s', $regex, $methodName, implode(', ', $args)

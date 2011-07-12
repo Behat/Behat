@@ -17,7 +17,7 @@ Feature: Pretty Formatter
       <?php
 
       use Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
@@ -50,7 +50,7 @@ Feature: Pretty Formatter
            * @When /^Something not done yet$/
            */
           public function somethingNotDoneYet() {
-              throw new Pending();
+              throw new PendingException();
           }
       }
       """
@@ -139,7 +139,7 @@ Feature: Pretty Formatter
            */
           public function somethingNew()
           {
-              throw new Pending();
+              throw new PendingException();
           }
       """
 
@@ -148,7 +148,7 @@ Feature: Pretty Formatter
       """
       <?php
 
-      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
       class FeatureContext extends BehatContext

@@ -10,7 +10,7 @@ Feature: I18n
 
       use Behat\Behat\Context\ClosuredContextInterface,
           Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
       use Symfony\Component\Finder\Finder;
@@ -85,7 +85,7 @@ Feature: I18n
       });
 
       $steps->Given('/^Что-то еще не сделано$/', function($world) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       """
     And a file named "features/World.feature" with:
@@ -172,7 +172,7 @@ Feature: I18n
       Вы можете реализовать определения для новых шагов с помощью этих шаблонов:
       
       $steps->Given('/^Что-то новое$/', function($world) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       """
 
@@ -208,6 +208,6 @@ Feature: I18n
       Вы можете реализовать определения для новых шагов с помощью этих шаблонов:
       
       $steps->Given('/^Что-то новое$/', function($world) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       """

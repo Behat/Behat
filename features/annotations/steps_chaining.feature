@@ -9,7 +9,7 @@ Feature: Call step in other step
       <?php
 
       use Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending,
+          Behat\Behat\Exception\PendingException,
           Behat\Behat\Context\Step;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;

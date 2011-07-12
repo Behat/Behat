@@ -12,9 +12,9 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
 use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Context\Step\SubstepInterface,
     Behat\Behat\Definition\DefinitionInterface,
-    Behat\Behat\Exception\Ambiguous,
-    Behat\Behat\Exception\Undefined,
-    Behat\Behat\Exception\Pending,
+    Behat\Behat\Exception\AmbiguousException,
+    Behat\Behat\Exception\UndefinedException,
+    Behat\Behat\Exception\PendingException,
     Behat\Behat\Event\StepEvent;
 
 /*
@@ -139,10 +139,10 @@ class StepTester implements NodeVisitorInterface
         // Find proper definition
         try {
             $definition = $this->definitions->findDefinition($this->context, $step);
-        } catch (Ambiguous $e) {
+        } catch (AmbiguousException $e) {
             $result    = StepEvent::FAILED;
             $exception = $e;
-        } catch (Undefined $e) {
+        } catch (UndefinedException $e) {
             $result    = StepEvent::UNDEFINED;
             $snippet   = $this->definitions->proposeDefinition($this->context, $step);
             $exception = $e;
@@ -154,7 +154,7 @@ class StepTester implements NodeVisitorInterface
                 try {
                     $this->runStepDefinition($definition);
                     $result = StepEvent::PASSED;
-                } catch (Pending $e) {
+                } catch (PendingException $e) {
                     $result    = StepEvent::PENDING;
                     $exception = $e;
                 } catch (\Exception $e) {

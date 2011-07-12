@@ -15,7 +15,7 @@ namespace Behat\Behat\Exception;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Error extends BehaviorException
+class ErrorException extends BehaviorException
 {
     /**
      * Initializes error handler exception.
