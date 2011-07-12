@@ -35,6 +35,12 @@ abstract class Annotation implements AnnotationInterface
      * @var     string
      */
     private $path;
+    /**
+     * Description string (first docBlock string).
+     *
+     * @var     string
+     */
+    private $description;
 
     /**
      * Constructs annotation.
@@ -59,6 +65,26 @@ abstract class Annotation implements AnnotationInterface
         }
 
         $this->callback = $callback;
+    }
+
+    /**
+     * Sets annotation description.
+     *
+     * @param   string  $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Returns description.
+     *
+     * @return  string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**

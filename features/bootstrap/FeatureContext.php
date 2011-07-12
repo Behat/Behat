@@ -73,9 +73,9 @@ class FeatureContext extends BaseFeaturesContext
     }
 
     /**
-     * @Given /^file "([^"]*)" should exist$/
-     *
      * Checks whether a file at provided path exists.
+     *
+     * @Given /^file "([^"]*)" should exist$/
      *
      * @param   string  $path
      */
@@ -85,9 +85,9 @@ class FeatureContext extends BaseFeaturesContext
     }
 
     /**
-     * @When /^I run "behat ([^"]*)"$/
-     *
      * Runs behat command with provided parameters
+     *
+     * @When /^I run "behat ([^"]*)"$/
      *
      * @param   string  $argumentsString
      */
@@ -106,9 +106,9 @@ class FeatureContext extends BaseFeaturesContext
     }
 
     /**
-     * @Then /^it should (fail|pass) with:$/
-     *
      * Checks whether previously runned command passes|failes with provided output.
+     *
+     * @Then /^it should (fail|pass) with:$/
      *
      * @param   string                          $success    "fail" or "pass"
      * @param   Behat\Gherkin\Node\PyStringNode $text       PyString text instance
@@ -143,9 +143,9 @@ class FeatureContext extends BaseFeaturesContext
     }
 
     /**
-     * @Then /^display last command output$/
-     *
      * Prints last command output string.
+     *
+     * @Then /^display last command output$/
      */
     public function displayLastCommandOutput()
     {
@@ -153,9 +153,9 @@ class FeatureContext extends BaseFeaturesContext
     }
 
     /**
-     * @Then /^the output should contain:$/
-     *
      * Checks whether last command output contains provided string.
+     *
+     * @Then /^the output should contain:$/
      *
      * @param   Behat\Gherkin\Node\PyStringNode $text   PyString text instance
      */
@@ -183,9 +183,9 @@ class FeatureContext extends BaseFeaturesContext
     }
 
     /**
-     * @Then /^it should (fail|pass)$/
-     *
      * Checks whether previously runned command failed|passed.
+     *
+     * @Then /^it should (fail|pass)$/
      *
      * @param   string  $success    "fail" or "pass"
      */

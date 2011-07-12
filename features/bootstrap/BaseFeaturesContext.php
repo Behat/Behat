@@ -22,9 +22,9 @@ use Behat\Gherkin\Node\PyStringNode,
 class BaseFeaturesContext extends BehatContext
 {
     /**
-     * @Given /^a file named "([^"]*)" with:$/
-     *
      * Creates a file with specified name and context in current workdir.
+     *
+     * @Given /^a file named "([^"]*)" with:$/
      *
      * @param   string                          $filename   name of the file (relative path)
      * @param   Behat\Gherkin\Node\PyStringNode $content    PyString string instance
@@ -32,9 +32,9 @@ class BaseFeaturesContext extends BehatContext
     public function aFileNamedWith($filename, PyStringNode $content) {}
 
     /**
-     * @Given /^I am in the "([^"]*)" path$/
-     *
      * Moves user to the specified path.
+     *
+     * @Given /^I am in the "([^"]*)" path$/
      *
      * @param   string  $path
      */

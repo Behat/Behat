@@ -51,7 +51,7 @@ class DefinitionsPrinter
             'capture', new OutputFormatterStyle('yellow', null, array('bold'))
         );
 
-        $output->write($this->getDefinitionsForPrint($language));
+        $output->writeln($this->getDefinitionsForPrint($language));
     }
 
     /**
@@ -63,18 +63,28 @@ class DefinitionsPrinter
      */
     private function getDefinitionsForPrint($language = 'en')
     {
-        $definitions = '';
+        $lineLength = 0;
+        foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
+            $lineLength = max($lineLength, mb_strlen($regex));
+        }
 
+        $definitions = array();
         foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
             $regex = $this->dispatcher->translateDefinitionRegex($regex, $language);
+            $space = $lineLength - mb_strlen($regex);
             $regex = preg_replace_callback('/\([^\)]*\)/', function($capture) {
                 return "</comment><capture>{$capture[0]}</capture><comment>";
             }, $regex);
             $type  = str_pad($definition->getType(), 5, ' ', STR_PAD_LEFT);
 
-            $definitions .= "<info>$type</info> <comment>$regex</comment>\n";
+            $definitions[] = sprintf("%s %s%-${space}s%s",
+                "<info>$type</info>",
+                "<comment>$regex</comment>",
+                '',
+                $definition->getDescription() ? ' - ' . $definition->getDescription() : ''
+            );
         }
 
-        return $definitions;
+        return implode("\n", $definitions);
     }
 }

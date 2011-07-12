@@ -122,6 +122,8 @@ class AnnotatedContextLoader implements ContextLoaderInterface
 
         // read method annotations
         if ($docBlock = $method->getDocComment()) {
+            $description = null;
+
             foreach (explode("\n", $docBlock) as $docLine) {
                 $docLine = preg_replace('/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/', '', $docLine);
 
@@ -130,10 +132,18 @@ class AnnotatedContextLoader implements ContextLoaderInterface
                     $callback = array($className, $method->getName());
 
                     if (isset($matches[2]) && !empty($matches[2])) {
-                        $annotations[] = new $class($callback, $matches[2]);
+                        $annotation = new $class($callback, $matches[2]);
                     } else {
-                        $annotations[] = new $class($callback);
+                        $annotation = new $class($callback);
                     }
+
+                    if (null !== $description) {
+                        $annotation->setDescription($description);
+                    }
+
+                    $annotations[] = $annotation;
+                } elseif (null === $description && '' !== $docLine && false === strpos($docLine, '@')) {
+                    $description = $docLine;
                 }
             }
         }
