@@ -123,7 +123,7 @@ class DefinitionDispatcher
      * @uses    loadDefinitions()
      *
      * @throws  Behat\Behat\Exception\AmbiguousException    if step description is ambiguous
-     * @throws  Behat\Behat\Exception\UndefinedExceptionException    if step definition not found
+     * @throws  Behat\Behat\Exception\UndefinedException    if step definition not found
      */
     public function findDefinition(ContextInterface $context, StepNode $step)
     {
