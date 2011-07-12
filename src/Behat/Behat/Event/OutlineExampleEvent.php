@@ -4,7 +4,7 @@ namespace Behat\Behat\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-use Behat\Behat\Environment\EnvironmentInterface;
+use Behat\Behat\Context\ContextInterface;
 
 use Behat\Gherkin\Node\OutlineNode;
 
@@ -24,26 +24,26 @@ use Behat\Gherkin\Node\OutlineNode;
 class OutlineExampleEvent extends OutlineEvent implements EventInterface
 {
     private $iteration;
-    private $environment;
+    private $context;
     private $skipped;
 
     /**
      * Initializes outline example event.
      *
-     * @param   Behat\Gherkin\Node\OutlineNode                  $outline
-     * @param   integer                                         $iteration  number of iteration
-     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
-     * @param   integer                                         $result
-     * @param   Boolean                                         $skipped
+     * @param   Behat\Gherkin\Node\OutlineNode          $outline
+     * @param   integer                                 $iteration  number of iteration
+     * @param   Behat\Behat\Context\ContextInterface    $context
+     * @param   integer                                 $result
+     * @param   Boolean                                 $skipped
      */
-    public function __construct(OutlineNode $outline, $iteration, EnvironmentInterface $environment,
+    public function __construct(OutlineNode $outline, $iteration, ContextInterface $context,
                                 $result = null, $skipped = false)
     {
         parent::__construct($outline, $result);
 
-        $this->iteration    = $iteration;
-        $this->environment  = $environment;
-        $this->skipped      = $skipped;
+        $this->iteration = $iteration;
+        $this->context   = $context;
+        $this->skipped   = $skipped;
     }
 
     /**
@@ -57,13 +57,13 @@ class OutlineExampleEvent extends OutlineEvent implements EventInterface
     }
 
     /**
-     * Returns environment object.
+     * Returns context object.
      *
-     * @return  Behat\Behat\Environment\EnvironmentInterface
+     * @return  Behat\Behat\Context\ContextInterface
      */
-    public function getEnvironment()
+    public function getContext()
     {
-        return $this->environment;
+        return $this->context;
     }
 
     /**

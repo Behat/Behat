@@ -2,16 +2,17 @@
 
 namespace Behat\Behat\Definition;
 
-use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
-use Behat\Behat\Definition\Loader\LoaderInterface,
+use Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher,
     Behat\Behat\Exception\Redundant,
     Behat\Behat\Exception\Ambiguous,
-    Behat\Behat\Exception\Undefined;
+    Behat\Behat\Exception\Undefined,
+    Behat\Behat\Context\ContextInterface;
 
 /*
  * This file is part of the Behat.
@@ -29,117 +30,56 @@ use Behat\Behat\Definition\Loader\LoaderInterface,
 class DefinitionDispatcher
 {
     /**
-     * Definition resources.
+     * Added transformations.
      *
      * @var     array
      */
-    protected $resources        = array();
+    private $transformations = array();
     /**
-     * Definition resource loaders.
+     * Added definitions.
      *
      * @var     array
      */
-    protected $loaders          = array();
+    private $definitions     = array();
     /**
-     * Loaded transformations.
+     * Proposals dispatcher
      *
-     * @var     array
+     * @var     Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher
      */
-    protected $transformations  = array();
-    /**
-     * Loaded definitions.
-     *
-     * @var     array
-     */
-    protected $definitions      = array();
+    private $proposalDispatcher;
     /**
      * Translator instance.
      *
      * @var     Symfony\Component\Translation\Translator
      */
-    protected $translator;
+    private $translator;
 
     /**
      * Initializes definition dispatcher.
      *
-     * @param   Symfony\Component\Translation\Translator    $translator
+     * @param   Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher    $proposalDispatcher
+     * @param   Symfony\Component\Translation\TranslatorInterface               $translator
      */
-    public function __construct(Translator $translator)
+    public function __construct(DefinitionProposalDispatcher $proposalDispatcher, TranslatorInterface $translator)
     {
-        $this->translator = $translator;
+        $this->proposalDispatcher   = $proposalDispatcher;
+        $this->translator           = $translator;
     }
 
     /**
-     * Adds a resource loader.
+     * Adds definition to dispatcher.
      *
-     * @param   string                                          $format     loader format name
-     * @param   Behat\Behat\Definition\Loader\LoaderInterface   $loader     loader instance
+     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition instance
      */
-    public function addLoader($format, LoaderInterface $loader)
+    public function addDefinition(DefinitionInterface $definition)
     {
-        $this->loaders[$format] = $loader;
-    }
+        $regex = $definition->getRegex();
 
-    /**
-     * Adds a resource to load.
-     *
-     * @param   string          $format     loader format name
-     * @param   mixed           $resource   the resource name
-     */
-    public function addResource($format, $resource)
-    {
-        $this->resources[] = array($format, $resource);
-    }
-
-    /**
-     * Returns step definition for step node.
-     *
-     * @param   Behat\Gherkin\Node\StepNode     $step   step node
-     *
-     * @return  array   hash (md5_key => definition)
-     */
-    public function proposeDefinition(StepNode $step)
-    {
-        $text = $step->getText();
-
-        $regex = preg_replace('/([\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
-        $regex = preg_replace(
-            array(
-                '/\'([^\']*)\'/', '/\"([^\"]*)\"/', // Quoted strings
-                '/(\d+)/',                          // Numbers
-            ),
-            array(
-                "\'([^\']*)\'", "\"([^\"]*)\"",
-                "(\\d+)",
-            ),
-            $regex, -1, $count
-        );
-        $regex = preg_replace('/\'.*(?<!\')/', '\\\\$0', $regex); // Single quotes without matching pair (escape in resulting regex)
-
-        $args = array("\$world");
-        for ($i = 0; $i < $count; $i++) {
-            $args[] = "\$arg".($i + 1);
+        if (isset($this->definitions[$regex])) {
+            throw new Redundant($definition, $this->definitions[$regex]);
         }
 
-        foreach ($step->getArguments() as $argument) {
-            if ($argument instanceof PyStringNode) {
-                $args[] = "\$string";
-            } elseif ($argument instanceof TableNode) {
-                $args[] = "\$table";
-            }
-        }
-
-        $description = sprintf(<<<PHP
-\$steps->%s('/^%s$/', function(%s) {
-    throw new \Behat\Behat\Exception\Pending();
-});
-PHP
-          , '%s', $regex, implode(', ', $args)
-        );
-
-        return array(
-            md5($description) => sprintf($description, str_replace(' ', '_', $step->getType()))
-        );
+        $this->definitions[$regex] = $definition;
     }
 
     /**
@@ -149,17 +89,34 @@ PHP
      */
     public function getDefinitions()
     {
-        if (!count($this->definitions)) {
-            $this->loadDefinitions();
-        }
-
         return $this->definitions;
+    }
+
+    /**
+     * Adds transformation to dispatcher.
+     *
+     * @param   Behat\Behat\Definition\TransformationInterface  $transformation definitions transformation
+     */
+    public function addTransformation(TransformationInterface $transformation)
+    {
+        $this->transformations[] = $transformation;
+    }
+
+    /**
+     * Returns array of available transformations.
+     *
+     * @return  array   array of argument transformers
+     */
+    public function getTransformations()
+    {
+        return $this->transformations;
     }
 
     /**
      * Finds step definition, that match specified step.
      *
-     * @param   Behat\Gherkin\Node\StepNode     $step   found step
+     * @param   Behat\Behat\Context\ContextInterface    $context    context instance
+     * @param   Behat\Gherkin\Node\StepNode             $step       found step
      *
      * @return  Behat\Behat\Definition\Definition
      *
@@ -168,31 +125,30 @@ PHP
      * @throws  Behat\Behat\Exception\Ambiguous  if step description is ambiguous
      * @throws  Behat\Behat\Exception\Undefined  if step definition not found
      */
-    public function findDefinition(StepNode $step)
+    public function findDefinition(ContextInterface $context, StepNode $step)
     {
-        if (!count($this->definitions)) {
-            $this->loadDefinitions();
-        }
-
         $text       = $step->getText();
         $multiline  = $step->getArguments();
         $matches    = array();
 
         // find step to match
-        foreach ($this->definitions as $origRegex => $definition) {
+        foreach ($this->getDefinitions() as $origRegex => $definition) {
             $transRegex = $this->translateDefinitionRegex($origRegex, $step->getLanguage());
-
             if (preg_match($origRegex, $text, $arguments)
             || ($origRegex !== $transRegex && preg_match($transRegex, $text, $arguments))) {
                 // prepare callback arguments
                 $arguments = $this->prepareCallbackArguments(
-                    $definition->getCallbackReflection(), array_slice($arguments, 1), $multiline
+                    $context, $definition->getCallbackReflection(), array_slice($arguments, 1), $multiline
                 );
 
                 // transform arguments
                 foreach ($arguments as $num => $argument) {
-                    foreach ($this->transformations as $transformation) {
-                        if ($newArgument = $transformation->transform($argument)) {
+                    foreach ($this->getTransformations() as $transformation) {
+                        $translRegex = $this->translateDefinitionRegex(
+                            $transformation->getRegex(), $step->getLanguage()
+                        );
+
+                        if ($newArgument = $transformation->transform($translRegex, $context, $argument)) {
                             $arguments[$num] = $newArgument;
                         }
                     }
@@ -217,11 +173,24 @@ PHP
     }
 
     /**
+     * Returns step definition for step node.
+     *
+     * @param   Behat\Behat\Context\ContextInterface    $context    context instance
+     * @param   Behat\Gherkin\Node\StepNode             $step       step node
+     *
+     * @return  array   hash (md5_key => definition)
+     */
+    public function proposeDefinition(ContextInterface $context, StepNode $step)
+    {
+        return $this->proposalDispatcher->propose($context, $step);
+    }
+
+    /**
      * Translates definition regex to provided language (if possible).
      *
      * @param   string  $regex      regex to translate
      * @param   string  $language   language
-     * 
+     *
      * @return  string
      */
     public function translateDefinitionRegex($regex, $language)
@@ -230,52 +199,26 @@ PHP
     }
 
     /**
-     * Parses step definitions with added loaders.
-     *
-     * @throws  RuntimeException                    if loader with specified format is not registered
-     * @throws  Behat\Behat\Exception\Redundant     if step definition is already exists
-     */
-    protected function loadDefinitions()
-    {
-        if (count($this->definitions)) {
-            return;
-        }
-
-        foreach ($this->resources as $resource) {
-            if (!isset($this->loaders[$resource[0]])) {
-                throw new \RuntimeException(
-                    sprintf('The "%s" step definition loader is not registered.', $resource[0])
-                );
-            }
-
-            $objects = $this->loaders[$resource[0]]->load($resource[1]);
-
-            foreach ($objects as $object) {
-                if ($object instanceof Definition) {
-                    if (isset($this->definitions[$object->getRegex()])) {
-                        throw new Redundant($object, $this->definitions[$object->getRegex()]);
-                    }
-                    $this->definitions[$object->getRegex()] = $object;
-                } elseif ($object instanceof Transformation) {
-                    $this->transformations[$object->getRegex()] = $object;
-                }
-            }
-        }
-    }
-
-    /**
      * Merges found arguments with multiliners and maps them to the function callback signature.
      *
-     * @param   ReflectionFunction  $refl       callback reflection
-     * @param   array               $arguments  found arguments
-     * @param   array               $multiline  multiline arguments of the step
+     * @param   Behat\Behat\Context\ContextInterface    $context    context instance
+     * @param   ReflectionFunctionAbstract              $refl       callback reflection
+     * @param   array                                   $arguments  found arguments
+     * @param   array                                   $multiline  multiline arguments of the step
      *
      * @return  array
      */
-    private function prepareCallbackArguments(\ReflectionFunction $refl, array $arguments, array $multiline)
+    private function prepareCallbackArguments(ContextInterface $context, \ReflectionFunctionAbstract $refl, 
+                                              array $arguments, array $multiline)
     {
+        $parametersRefl = $refl->getParameters();
+
+        if ($refl->isClosure()) {
+            array_shift($parametersRefl);
+        }
+
         $resulting = array();
-        foreach (array_slice($refl->getParameters(), 1) as $num => $parameterRefl) {
+        foreach ($parametersRefl as $num => $parameterRefl) {
             if (isset($arguments[$parameterRefl->getName()])) {
                 $resulting[] = $arguments[$parameterRefl->getName()];
             } elseif (isset($arguments[$num])) {

@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\AbstractNode;
 
-use Behat\Behat\Environment\EnvironmentInterface,
+use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Event\BackgroundEvent;
 
 /*
@@ -30,19 +30,19 @@ class BackgroundTester implements NodeVisitorInterface
      *
      * @var     Symfony\Component\DependencyInjection\ContainerInterface
      */
-    protected $container;
+    private $container;
     /**
      * Event dispatcher.
      *
      * @var     Behat\Behat\EventDispatcher\EventDispatcher
      */
-    protected $dispatcher;
+    private $dispatcher;
     /**
-     * Environment.
+     * Context.
      *
-     * @var     Behat\Behat\Environment\EnvironmentInterface
+     * @var     Behat\Behat\Context\ContextInterface
      */
-    protected $environment;
+    private $context;
 
     /**
      * Initializes tester.
@@ -56,13 +56,13 @@ class BackgroundTester implements NodeVisitorInterface
     }
 
     /**
-     * Sets run environment.
+     * Sets run context.
      *
-     * @param   Behat\Behat\Environment\EnvironmentInterface    $environment
+     * @param   Behat\Behat\Context\ContextInterface    $context
      */
-    public function setEnvironment(EnvironmentInterface $environment)
+    public function setContext(ContextInterface $context)
     {
-        $this->environment = $environment;
+        $this->context = $context;
     }
 
     /**
@@ -82,7 +82,7 @@ class BackgroundTester implements NodeVisitorInterface
         // Visit & test steps
         foreach ($background->getSteps() as $step) {
             $tester = $this->container->get('behat.tester.step');
-            $tester->setEnvironment($this->environment);
+            $tester->setContext($this->context);
             $tester->skip($skip);
 
             $stResult = $step->accept($tester);
