@@ -1,3 +1,9 @@
+2.0.1 / 2011-07-12
+==================
+
+  * Exception prefix added to statuses. Now you should throw `PendingException` instead of just
+    `Pending`
+
 2.0.0 / 2011-07-12
 ==================
 
