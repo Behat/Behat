@@ -10,7 +10,7 @@ Feature: Different result types
 
       use Behat\Behat\Context\ClosuredContextInterface,
           Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
       use Symfony\Component\Finder\Finder;
@@ -100,15 +100,15 @@ Feature: Different result types
       You can implement step definitions for undefined steps with these snippets:
       
       $steps->Given('/^I have magically created (\d+)\$$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       
       $steps->When('/^I have chose "([^"]*)" in coffee machine$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       
       $steps->Then('/^I should have "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       """
     When I run "behat --strict -f progress features/coffee.feature"
@@ -122,15 +122,15 @@ Feature: Different result types
       You can implement step definitions for undefined steps with these snippets:
       
       $steps->Given('/^I have magically created (\d+)\$$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       
       $steps->When('/^I have chose "([^"]*)" in coffee machine$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       
       $steps->Then('/^I should have "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       """
 
@@ -153,10 +153,10 @@ Feature: Different result types
       """
       <?php
       $steps->Given('/^human have ordered very very very hot "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       $steps->When('/^the coffee will be ready$/', function($world) {
-          throw new \Behat\Behat\Exception\Pending('Handle "Coffee Ready" action');
+          throw new \Behat\Behat\Exception\PendingException('Handle "Coffee Ready" action');
       });
       """
     When I run "behat -f progress features/coffee.feature"
@@ -176,7 +176,7 @@ Feature: Different result types
       You can implement step definitions for undefined steps with these snippets:
       
       $steps->Then('/^I should say "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       """
     When I run "behat --strict -f progress features/coffee.feature"
@@ -196,7 +196,7 @@ Feature: Different result types
       You can implement step definitions for undefined steps with these snippets:
       
       $steps->Then('/^I should say "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       """
 
@@ -321,13 +321,13 @@ Feature: Different result types
       """
       <?php
       $steps->Given('/^human have chosen "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       $steps->Given('/^human have chosen "Latte"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       $steps->Then('/^I should make him "([^"]*)"$/', function($world, $arg1) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       """
     When I run "behat -f progress features/coffee.feature"

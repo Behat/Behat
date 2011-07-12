@@ -12,7 +12,7 @@ Feature: Step Arguments
       require_once 'PHPUnit/Framework/Assert/Functions.php';
 
       use Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingExceptionException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 

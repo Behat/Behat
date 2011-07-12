@@ -15,7 +15,7 @@ Feature: Tags
       <?php
 
       use Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 

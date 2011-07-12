@@ -15,7 +15,7 @@ Feature: I18n
       <?php
 
       use Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
@@ -48,7 +48,7 @@ Feature: I18n
            * @When /^Что-то еще не сделано$/
            */
           public function somethingNotDone() {
-              throw new Pending();
+              throw new PendingException();
           }
       }
       """
@@ -140,7 +140,7 @@ Feature: I18n
            */
           public function stepDefinition1()
           {
-              throw new Pending();
+              throw new PendingException();
           }
       """
 
@@ -180,6 +180,6 @@ Feature: I18n
            */
           public function stepDefinition1()
           {
-              throw new Pending();
+              throw new PendingException();
           }
       """

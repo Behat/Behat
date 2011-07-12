@@ -35,7 +35,7 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
       class FeatureContext extends BehatContext {}
@@ -55,7 +55,7 @@ Feature: Different result types
            */
           public function iHaveMagicallyCreated($argument1)
           {
-              throw new Pending();
+              throw new PendingException();
           }
       
           /**
@@ -63,7 +63,7 @@ Feature: Different result types
            */
           public function iHaveChoseInCoffeeMachine($argument1)
           {
-              throw new Pending();
+              throw new PendingException();
           }
       
           /**
@@ -71,7 +71,7 @@ Feature: Different result types
            */
           public function iShouldHave($argument1)
           {
-              throw new Pending();
+              throw new PendingException();
           }
       """
     When I run "behat --strict -f progress features/coffee.feature"
@@ -89,7 +89,7 @@ Feature: Different result types
            */
           public function iHaveMagicallyCreated($argument1)
           {
-              throw new Pending();
+              throw new PendingException();
           }
       
           /**
@@ -97,7 +97,7 @@ Feature: Different result types
            */
           public function iHaveChoseInCoffeeMachine($argument1)
           {
-              throw new Pending();
+              throw new PendingException();
           }
       
           /**
@@ -105,7 +105,7 @@ Feature: Different result types
            */
           public function iShouldHave($argument1)
           {
-              throw new Pending();
+              throw new PendingException();
           }
       """
 
@@ -128,7 +128,7 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\Pending;
+      use Behat\Behat\Context\BehatContext, Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
 
       class FeatureContext extends BehatContext
@@ -137,14 +137,14 @@ Feature: Different result types
            * @Given /^human have ordered very very very hot "([^"]*)"$/
            */
           public function humanOrdered($argument1) {
-              throw new Pending;
+              throw new PendingException;
           }
 
           /**
            * @When /^the coffee will be ready$/
            */
           public function theCoffeeWillBeReady() {
-              throw new Pending;
+              throw new PendingException;
           }
       }
       """
@@ -169,7 +169,7 @@ Feature: Different result types
            */
           public function iShouldSay($argument1)
           {
-              throw new Pending();
+              throw new PendingException();
           }
       """
     When I run "behat --strict -f progress features/coffee.feature"
@@ -193,7 +193,7 @@ Feature: Different result types
            */
           public function iShouldSay($argument1)
           {
-              throw new Pending();
+              throw new PendingException();
           }
       """
 
@@ -221,7 +221,7 @@ Feature: Different result types
       <?php
 
       use Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
@@ -291,7 +291,7 @@ Feature: Different result types
       <?php
 
       use Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
@@ -368,7 +368,7 @@ Feature: Different result types
       <?php
 
       use Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
@@ -376,19 +376,19 @@ Feature: Different result types
       {
           /** @Given /^human have chosen "([^"]*)"$/ */
           public function chosen($argument1) {
-              throw new Pending;
+              throw new PendingException;
           }
 
           /** @Given /^human have chosen "Latte"$/ */
           public function chosenLatte() {
-              throw new Pending;
+              throw new PendingException;
           }
 
           /**
            * @Then /^I should make him "([^"]*)"$/
            */
           public function iShouldSee($money) {
-              throw new Pending;
+              throw new PendingException;
           }
       }
       """
@@ -426,7 +426,7 @@ Feature: Different result types
       <?php
 
       use Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 

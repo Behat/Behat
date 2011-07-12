@@ -71,7 +71,7 @@ class ClosuredDefinitionLoader implements DefinitionLoaderInterface
      * @param   string  $type       step type (Given|When|Then|...)
      * @param   string  $arguments  step regex & callback
      *
-     * @throws  Behat\Behat\Exception\Redundant     if step definition is already exists
+     * @throws  Behat\Behat\Exception\RedundantException     if step definition is already exists
      */
     public function __call($type, $arguments)
     {

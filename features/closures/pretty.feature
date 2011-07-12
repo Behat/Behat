@@ -10,7 +10,7 @@ Feature: Pretty Formatter
 
       use Behat\Behat\Context\ClosuredContextInterface,
           Behat\Behat\Context\BehatContext,
-          Behat\Behat\Exception\Pending;
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
       use Symfony\Component\Finder\Finder;
@@ -87,7 +87,7 @@ Feature: Pretty Formatter
       });
 
       $steps->Given('/^Something not done yet$/', function($world) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       """
     And a file named "features/World.feature" with:
@@ -171,7 +171,7 @@ Feature: Pretty Formatter
       You can implement step definitions for undefined steps with these snippets:
 
       $steps->Given('/^Something new$/', function($world) {
-          throw new \Behat\Behat\Exception\Pending();
+          throw new \Behat\Behat\Exception\PendingException();
       });
       """
 
