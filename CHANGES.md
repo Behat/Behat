@@ -1,3 +1,20 @@
+2.0.0 / 2011-07-12
+==================
+
+  * Brand new Context-oriented architecture
+  * Refactored --definitions (--steps) to print more useful info
+  * Rafactored --story-syntax (--usage) to print more useful info
+  * Refactored Command to use separate processors
+  * Added --no-paths option
+  * Added --no-snippets option
+  * Added --expand option to expand outlines
+  * phar package
+  * Faster autoloader
+  * Steps chaining added
+  * Added BEHAT_ERROR_REPORTING constant to change error_repoting level
+  * Fixed some Gherkin bugs
+  * Fixed lots of bugs in Behat itself
+
 1.1.9 / 2011-06-17
 ==================
 
