@@ -65,6 +65,7 @@ class DefinitionsPrinter
     {
         $lineLength = 0;
         foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
+            $regex = $this->dispatcher->translateDefinitionRegex($regex, $language);
             $lineLength = max($lineLength, mb_strlen($regex));
         }
 
