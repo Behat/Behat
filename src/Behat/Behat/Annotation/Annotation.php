@@ -120,7 +120,7 @@ abstract class Annotation implements AnnotationInterface
      *
      * @return  mixed                                               context callback
      */
-    protected function getCallbackForContext(ContextInterface $context)
+    public function getCallbackForContext(ContextInterface $context)
     {
         $callback = $this->getCallback();
 
