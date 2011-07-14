@@ -139,7 +139,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
         }
 
         $oldHandler = set_error_handler(array($this, 'errorHandler'), $errorLevel);
-        $callback   = $this->mapCallbackToContextInstance($this->getCallback(), $context);
+        $callback   = $this->getCallbackForContext($context);
 
         $values = $this->getValues();
         if (count($tokens)) {

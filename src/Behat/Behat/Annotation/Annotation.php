@@ -114,27 +114,16 @@ abstract class Annotation implements AnnotationInterface
     }
 
     /**
-     * @see Behat\Behat\Annotation\AnnotationInterface::getCallbackReflection()
-     */
-    public function getCallbackReflection()
-    {
-        if (!$this->isClosure()) {
-            return new \ReflectionMethod($this->callback[0], $this->callback[1]);
-        } else {
-            return new \ReflectionFunction($this->callback);
-        }
-    }
-
-    /**
-     * Maps provided callback to specific context (or it's subcontext) instance.
+     * Returns callback, mapped to specific context (or it's subcontext) instance.
      *
-     * @param   mixed                                   $callback   callback
      * @param   Behat\Behat\Context\ContextInterface    $context    context instance
      *
-     * @return  mixed                                               instance callback
+     * @return  mixed                                               context callback
      */
-    protected function mapCallbackToContextInstance($callback, ContextInterface $context)
+    protected function getCallbackForContext(ContextInterface $context)
     {
+        $callback = $this->getCallback();
+
         if (!$this->isClosure()) {
             if ($callback[0] === get_class($context)) {
                 $callback = array($context, $callback[1]);
@@ -163,5 +152,17 @@ abstract class Annotation implements AnnotationInterface
         }
 
         return $callback;
+    }
+
+    /**
+     * @see Behat\Behat\Annotation\AnnotationInterface::getCallbackReflection()
+     */
+    public function getCallbackReflection()
+    {
+        if (!$this->isClosure()) {
+            return new \ReflectionMethod($this->callback[0], $this->callback[1]);
+        } else {
+            return new \ReflectionFunction($this->callback);
+        }
     }
 }

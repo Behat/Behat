@@ -55,10 +55,6 @@ abstract class StepHook extends FilterableHook
      */
     public function run(EventInterface $event)
     {
-        $callback = $this->mapCallbackToContextInstance(
-            $this->getCallback(), $event->getContext()
-        );
-
-        call_user_func($callback, $event);
+        call_user_func($this->getCallbackForContext($event->getContext()), $event);
     }
 }

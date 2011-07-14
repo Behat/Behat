@@ -75,7 +75,7 @@ class Transformation extends Annotation implements TransformationInterface
      */
     public function transform($translatedRegex, ContextInterface $context, $argument)
     {
-        $callback = $this->mapCallbackToContextInstance($this->getCallback(), $context);
+        $callback = $this->getCallbackForContext($context);
 
         if ($argument instanceof TableNode) {
             $tableMatching = 'table:' . implode(',', $argument->getRow(0));
