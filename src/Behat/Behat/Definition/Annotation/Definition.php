@@ -139,7 +139,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
         }
 
         $oldHandler = set_error_handler(array($this, 'errorHandler'), $errorLevel);
-        $callback   = $this->getCallback();
+        $callback   = $this->mapCallbackToContextInstance($this->getCallback(), $context);
 
         $values = $this->getValues();
         if (count($tokens)) {
@@ -150,14 +150,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
                 }
             }
         }
-
-        if (!$this->isClosure()) {
-            if ($callback[0] === get_class($context)) {
-                $callback = array($context, $callback[1]);
-            } else {
-                $callback = array($context->getSubcontextByClassName($callback[0]), $callback[1]);
-            }
-        } else {
+        if ($this->isClosure()) {
             array_unshift($values, $context);
         }
 

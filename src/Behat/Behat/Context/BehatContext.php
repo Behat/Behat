@@ -47,11 +47,10 @@ class BehatContext implements ContextInterface
      */
     public function getSubcontextByClassName($className)
     {
-        if (get_class($this) === $className) {
-            return $this;
-        }
-
         foreach ($this->getSubcontexts() as $subcontext) {
+            if (get_class($subcontext) === $className) {
+                return $subcontext;
+            }
             if ($context = $subcontext->getSubcontextByClassName($className)) {
                 return $context;
             }
