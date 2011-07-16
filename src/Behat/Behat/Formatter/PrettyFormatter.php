@@ -370,7 +370,7 @@ class PrettyFormatter extends ProgressFormatter
      */
     protected function printFeatureOrScenarioTags(AbstractNode $node)
     {
-        if (count($tags = $node->getTags())) {
+        if (count($tags = $node->getOwnTags())) {
             $tags = implode(' ', array_map(function($tag){
                 return '@' . $tag;
             }, $tags));
