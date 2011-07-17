@@ -1,3 +1,10 @@
+2.0.2 / 2011-07-17
+==================
+
+  * Added extra checks to context instance mapper
+  * Fixed i18n support in definitions printer
+  * Refactored Gherkin tags inheritance
+
 2.0.1 / 2011-07-12
 ==================
 
