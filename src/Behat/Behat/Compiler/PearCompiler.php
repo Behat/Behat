@@ -170,7 +170,7 @@ class PearCompiler
             <package>
                 <name>gherkin</name>
                 <channel>pear.behat.org</channel>
-                <min>1.0.8</min>
+                <min>1.1.0</min>
             </package>
             <package>
                 <name>Config</name>

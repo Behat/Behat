@@ -93,7 +93,7 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printFeatureOrScenarioTags(AbstractNode $node)
     {
-        if (count($tags = $node->getTags())) {
+        if (count($tags = $node->getOwnTags())) {
             $this->writeln('<ul class="tags">');
             foreach ($tags as $tag) {
                 $this->writeln("<li>@$tag</li>");

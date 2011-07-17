@@ -2,6 +2,8 @@
 
 namespace Behat\Behat\Annotation;
 
+use Behat\Behat\Context\ContextInterface;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -109,6 +111,47 @@ abstract class Annotation implements AnnotationInterface
     public function getCallback()
     {
         return $this->callback;
+    }
+
+    /**
+     * Returns callback, mapped to specific context (or it's subcontext) instance.
+     *
+     * @param   Behat\Behat\Context\ContextInterface    $context    context instance
+     *
+     * @return  mixed                                               context callback
+     */
+    public function getCallbackForContext(ContextInterface $context)
+    {
+        $callback = $this->getCallback();
+
+        if (!$this->isClosure()) {
+            if ($callback[0] === get_class($context)) {
+                $callback = array($context, $callback[1]);
+            } else {
+                $subcontext = $context->getSubcontextByClassName($callback[0]);
+
+                if (null === $subcontext) {
+                    throw new \RuntimeException(sprintf(
+                        '"%s" subcontext instance not found in context "%s".'."\n".
+                        'Looks like something is wrong with getSubcontextByClassName() method in one of your contexts',
+                        $callback[0], get_class($context)
+                    ));
+                }
+
+                $reflection = new \ReflectionClass($subcontext);
+                if (!$reflection->hasMethod($callback[1])) {
+                    throw new \RuntimeException(sprintf(
+                        'Subcontext "%s" does not have "%s()" method.'."\n".
+                        'Looks like something is wrong with getSubcontextByClassName() method in one of your contexts',
+                        get_class($subcontext), $callback[1]
+                    ));
+                }
+
+                $callback = array($subcontext, $callback[1]);
+            }
+        }
+
+        return $callback;
     }
 
     /**
