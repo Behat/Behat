@@ -49,6 +49,12 @@ class JUnitFormatter extends ConsoleFormatter
      */
     protected $stepsCount = 0;
     /**
+     * Total exceptions count.
+     *
+     * @var     integer
+     */
+    protected $exceptionsCount = 0;
+    /**
      * Step exceptions.
      *
      * @var     array
@@ -112,7 +118,7 @@ class JUnitFormatter extends ConsoleFormatter
 
         $this->stepsCount       = 0;
         $this->testcases        = array();
-        $this->exceptions       = array();
+        $this->exceptionsCount  = 0;
         $this->featureStartTime = microtime(true);
     }
 
@@ -183,6 +189,7 @@ class JUnitFormatter extends ConsoleFormatter
     {
         if ($event->hasException()) {
             $this->exceptions[] = $event->getException();
+            $this->exceptionsCount++;
         }
 
         ++$this->stepsCount;
@@ -207,8 +214,12 @@ class JUnitFormatter extends ConsoleFormatter
     protected function printTestSuiteFooter(FeatureNode $feature, $time)
     {
         $suiteStats = sprintf(
-            'errors="0" failures="%d" name="%s" tests="%d" time="%f"',
-            count($this->exceptions), $feature->getTitle(), $this->stepsCount, $time
+            'errors="0" failures="%d" name="%s" file="%s" tests="%d" time="%f"',
+            $this->exceptionsCount,
+            $feature->getTitle(),
+            $feature->getFile(),
+            $this->stepsCount,
+            $time
         );
 
         $this->writeln("<testsuite $suiteStats>");
@@ -225,7 +236,7 @@ class JUnitFormatter extends ConsoleFormatter
      */
     protected function printTestCase(ScenarioNode $scenario, $time, EventInterface $event)
     {
-        $className  = $scenario->getFeature()->getTitle() . '.' . $scenario->getTitle();
+        $className  = $scenario->getFeature()->getTitle();
         $name       = $scenario->getTitle();
         $caseStats  = sprintf(
             'classname="%s" name="%s" time="%f"', htmlspecialchars($className), htmlspecialchars($name), htmlspecialchars($time)
@@ -235,13 +246,14 @@ class JUnitFormatter extends ConsoleFormatter
 
         foreach ($this->exceptions as $exception) {
             $xml .= sprintf(
-                '        <failure message="%s" type="%s">' . "\n",
+                '        <failure message="%s" type="%s">',
                 htmlspecialchars($exception->getMessage()),
                 $this->getResultColorCode($event->getResult())
             );
-            $xml .= "<![CDATA[\n$exception\n]]>";
-            $xml .= "        </failure>\n";
+            $exception = str_replace(array('<![CDATA[', ']]>'), '', (string) $exception);
+            $xml .= "<![CDATA[\n$exception\n]]></failure>\n";
         }
+        $this->exceptions = array();
 
         $xml .= "    </testcase>";
 
