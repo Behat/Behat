@@ -175,37 +175,37 @@ class PearCompiler
             <package>
                 <name>Config</name>
                 <channel>pear.symfony.com</channel>
-                <recommended>2.0.0RC1</recommended>
+                <recommended>2.0.0RC5</recommended>
             </package>
             <package>
                 <name>Console</name>
                 <channel>pear.symfony.com</channel>
-                <recommended>2.0.0RC1</recommended>
+                <recommended>2.0.0RC5</recommended>
             </package>
             <package>
                 <name>DependencyInjection</name>
                 <channel>pear.symfony.com</channel>
-                <recommended>2.0.0RC1</recommended>
+                <recommended>2.0.0RC5</recommended>
             </package>
             <package>
                 <name>EventDispatcher</name>
                 <channel>pear.symfony.com</channel>
-                <recommended>2.0.0RC1</recommended>
+                <recommended>2.0.0RC5</recommended>
             </package>
             <package>
                 <name>Finder</name>
                 <channel>pear.symfony.com</channel>
-                <recommended>2.0.0RC1</recommended>
+                <recommended>2.0.0RC5</recommended>
             </package>
             <package>
                 <name>Translation</name>
                 <channel>pear.symfony.com</channel>
-                <recommended>2.0.0RC1</recommended>
+                <recommended>2.0.0RC5</recommended>
             </package>
             <package>
                 <name>Yaml</name>
                 <channel>pear.symfony.com</channel>
-                <recommended>2.0.0RC1</recommended>
+                <recommended>2.0.0RC5</recommended>
             </package>
             <extension>
                 <name>pcre</name>
