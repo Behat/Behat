@@ -93,6 +93,14 @@ class DefinitionDispatcher
     }
 
     /**
+     * Removes all registered definitions.
+     */
+    public function removeDefinitions()
+    {
+        $this->definitions = array();
+    }
+
+    /**
      * Adds transformation to dispatcher.
      *
      * @param   Behat\Behat\Definition\TransformationInterface  $transformation definitions transformation
@@ -110,6 +118,14 @@ class DefinitionDispatcher
     public function getTransformations()
     {
         return $this->transformations;
+    }
+
+    /**
+     * Remove all registered transformations.
+     */
+    public function removeTransformations()
+    {
+        $this->transformations = array();
     }
 
     /**
@@ -208,7 +224,7 @@ class DefinitionDispatcher
      *
      * @return  array
      */
-    private function prepareCallbackArguments(ContextInterface $context, \ReflectionFunctionAbstract $refl, 
+    private function prepareCallbackArguments(ContextInterface $context, \ReflectionFunctionAbstract $refl,
                                               array $arguments, array $multiline)
     {
         $parametersRefl = $refl->getParameters();
