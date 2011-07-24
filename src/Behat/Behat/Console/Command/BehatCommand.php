@@ -86,14 +86,15 @@ class BehatCommand extends BaseCommand
         $dispatcher = $this->getContainer()->get('behat.event_dispatcher');
         $logger     = $this->getContainer()->get('behat.logger');
         $paths      = $this->getContainer()->get('behat.rerun_data_collector')->locateFeaturesPaths();
+        $parameters = $this->getContainer()->getParameter('behat.context.parameters');
 
-        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, false));
+        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, $parameters, false));
 
         // catch app interruption
         if (function_exists('pcntl_signal')) {
             declare(ticks = 1);
             pcntl_signal(SIGINT, function() use($dispatcher, $logger) {
-                $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, false));
+                $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, $parameters, false));
                 exit(1);
             });
         }
@@ -109,7 +110,7 @@ class BehatCommand extends BaseCommand
             }
         }
 
-        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, true));
+        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, $parameters, true));
 
         if ($input->getOption('strict') || $this->getContainer()->getParameter('behat.options.strict')) {
             return intval(0 < $result);

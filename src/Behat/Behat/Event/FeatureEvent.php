@@ -23,17 +23,20 @@ class FeatureEvent extends Event implements EventInterface
 {
     private $feature;
     private $result;
+    private $parameters = array();
 
     /**
      * Initializes feature event.
      *
-     * @param   Behat\Gherkin\Node\FeatureNode  $feature
-     * @param   integer                         $result
+     * @param   Behat\Gherkin\Node\FeatureNode  $feature    feature instance
+     * @param   array                           $parameters context parameters
+     * @param   integer                         $result     result code
      */
-    public function __construct(FeatureNode $feature, $result = null)
+    public function __construct(FeatureNode $feature, array $parameters, $result = null)
     {
-        $this->feature  = $feature;
-        $this->result   = $result;
+        $this->feature    = $feature;
+        $this->parameters = $parameters;
+        $this->result     = $result;
     }
 
     /**
@@ -44,6 +47,16 @@ class FeatureEvent extends Event implements EventInterface
     public function getFeature()
     {
         return $this->feature;
+    }
+
+    /**
+     * Returns context parameters.
+     *
+     * @return  array
+     */
+    public function getContextParameters()
+    {
+        return $this->parameters;
     }
 
     /**

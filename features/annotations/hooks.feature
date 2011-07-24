@@ -10,6 +10,16 @@ Feature: hooks
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
       """
+    And a file named "behat.yml" with:
+      """
+      default:
+        context:
+          parameters:
+            before_suite:   BEFORE ANY SUITE
+            after_suite:    AFTER ANY SUITE
+            before_feature: BEFORE EVERY FEATURE
+            after_feature:  AFTER EVERY FEATURE
+      """
     And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
@@ -27,14 +37,32 @@ Feature: hooks
            * @BeforeSuite
            */
           static public function doSomethingBeforeSuite($event) {
-              echo "= do something before all suite run\n";
+              $params = $event->getContextParameters();
+              echo "= do something ".$params['before_suite']."\n";
+          }
+
+          /**
+           * @BeforeFeature
+           */
+          static public function doSomethingBeforeFeature($event) {
+              $params = $event->getContextParameters();
+              echo "= do something ".$params['before_feature']."\n";
+          }
+
+          /**
+           * @AfterFeature
+           */
+          static public function doSomethingAfterFeature($event) {
+              $params = $event->getContextParameters();
+              echo "= do something ".$params['after_feature']."\n";
           }
 
           /**
            * @AfterSuite
            */
           static public function doSomethingAfterSuite($event) {
-              echo "= do something after all suite run\n";
+              $params = $event->getContextParameters();
+              echo "= do something ".$params['after_suite']."\n";
           }
 
           /**
@@ -108,32 +136,34 @@ Feature: hooks
     When I run "behat -f pretty"
     Then it should pass with:
       """
-      = do something before all suite run
+      = do something BEFORE ANY SUITE
+      = do something BEFORE EVERY FEATURE
       Feature:
-      
+
         Scenario:             # features/test.feature:2
           Then I must have 50 # FeatureContext::iMustHave()
-      
+
         Scenario:                 # features/test.feature:4
           Given I have entered 12 # FeatureContext::iHaveEntered()
           Then I must have 12     # FeatureContext::iMustHave()
-      
+
         @thirty
         Scenario:                 # features/test.feature:9
           Given I must have 30    # FeatureContext::iMustHave()
           When I have entered 23  # FeatureContext::iHaveEntered()
           Then I must have 23     # FeatureContext::iMustHave()
-      
+
         @100 @thirty
         Scenario:                 # features/test.feature:14
           Given I must have 30    # FeatureContext::iMustHave()
           When I have entered 1   # FeatureContext::iHaveEntered()
           Then I must have 100    # FeatureContext::iMustHave()
-      
+
         Scenario: 130             # features/test.feature:19
           Given I must have 130   # FeatureContext::iMustHave()
-      
-      = do something after all suite run
+
+      = do something AFTER EVERY FEATURE
+      = do something AFTER ANY SUITE
       5 scenarios (5 passed)
       10 steps (10 passed)
       """
