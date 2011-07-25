@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="proposal-title">
         <source>You can implement step definitions for undefined steps with these snippets:</source>
-        <target>Puedes implementer definition de pasos para pasos no definidos con estos c—digos:</target>
+        <target>Puedes implementer definition de pasos para pasos no definidos con estos codigos:</target>
       </trans-unit>
       <trans-unit id="failed-steps-title">
         <source>failed steps</source>
