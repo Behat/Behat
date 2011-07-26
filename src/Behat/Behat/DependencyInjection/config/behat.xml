@@ -278,6 +278,12 @@
                 <argument>ja</argument>
                 <argument>behat</argument>
             </call>
+            <call method="addResource">
+                <argument>xliff</argument>
+                <argument>%behat.paths.i18n%/nl.xliff</argument>
+                <argument>nl</argument>
+                <argument>behat</argument>
+            </call>
 
             <!-- Gherkin translation resources -->
             <call method="addResource">
