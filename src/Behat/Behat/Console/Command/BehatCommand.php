@@ -93,7 +93,7 @@ class BehatCommand extends BaseCommand
         // catch app interruption
         if (function_exists('pcntl_signal')) {
             declare(ticks = 1);
-            pcntl_signal(SIGINT, function() use($dispatcher, $logger) {
+            pcntl_signal(SIGINT, function() use($dispatcher, $parameters, $logger) {
                 $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, $parameters, false));
                 exit(1);
             });
