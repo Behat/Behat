@@ -21,8 +21,6 @@ interface ExtendedContextInterface extends ContextInterface
      * Sets parent context of current context.
      *
      * @param   Behat\Behat\Context\ExtendedContextInterface    $parentContext  parent context
-     *
-     * @see     useContext()
      */
     public function setParentContext(ExtendedContextInterface $parentContext);
 

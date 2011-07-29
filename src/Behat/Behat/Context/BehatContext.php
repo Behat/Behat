@@ -44,6 +44,7 @@ class BehatContext implements ExtendedContextInterface
 
     /**
      * @see     Behat\Behat\Context\ExtendedContextInterface::setParentContext()
+     * @see     Behat\Behat\Context\BehatContext::useContext()
      */
     public function setParentContext(ExtendedContextInterface $parentContext)
     {
