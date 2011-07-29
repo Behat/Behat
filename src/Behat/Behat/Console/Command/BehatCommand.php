@@ -9,8 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Console\Input\InputDefinition,
-    Behat\Behat\Console\Processor,
+use Behat\Behat\Console\Processor,
     Behat\Behat\Event\SuiteEvent;
 
 /*
@@ -44,7 +43,6 @@ class BehatCommand extends BaseCommand
 
         $this
             ->setName('behat')
-            ->setDefinition(new InputDefinition())
             ->setProcessors(array(
                 new Processor\ContainerProcessor(),
                 new Processor\LocatorProcessor(),
