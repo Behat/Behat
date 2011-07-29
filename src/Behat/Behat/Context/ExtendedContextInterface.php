@@ -27,7 +27,7 @@ interface ExtendedContextInterface extends ContextInterface
     /**
      * Returns main context.
      *
-     * @return  Behat\Behat\Context\BehatContext
+     * @return  Behat\Behat\Context\ExtendedContextInterface
      */
     public function getMainContext();
 
@@ -36,7 +36,7 @@ interface ExtendedContextInterface extends ContextInterface
      *
      * @param   string  $alias  subcontext alias name
      *
-     * @return  Behat\Behat\Context\BehatContext
+     * @return  Behat\Behat\Context\ExtendedContextInterface
      */
     public function getSubcontext($alias);
 }
