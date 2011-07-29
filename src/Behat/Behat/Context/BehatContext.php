@@ -23,15 +23,71 @@ class BehatContext implements ContextInterface
      * @var     array
      */
     private $subcontexts = array();
+    /**
+     * Parent context of subcontext.
+     *
+     * @var     Behat\Behat\Context\ContextInterface
+     */
+    private $parentContext;
 
     /**
      * Adds subcontext to current context.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context
+     * @param   string                              $alias      subcontext alias name
+     * @param   Behat\Behat\Context\BehatContext    $context    subcontext instance
      */
-    public function useContext(ContextInterface $context)
+    public function useContext($alias, BehatContext $context)
     {
-        $this->subcontexts[] = $context;
+        $context->setParentContext($this);
+        $this->subcontexts[$alias] = $context;
+    }
+
+    /**
+     * Returns main context.
+     *
+     * @return  Behat\Behat\Context\BehatContext
+     */
+    public function getMainContext()
+    {
+        if (null !== $this->parentContext) {
+            return $this->parentContext->getMainContext();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Find current context's subcontext by alias name.
+     *
+     * @param   string  $alias  subcontext alias name
+     *
+     * @return  Behat\Behat\Context\BehatContext
+     */
+    public function getSubcontext($alias)
+    {
+        // search in current context subcontexts
+        if (isset($this->subcontexts[$alias])) {
+            return $this->subcontexts[$alias];
+        }
+
+        // search in subcontexts childs contexts
+        foreach ($this->subcontexts as $subcontext) {
+            if (null !== $context = $subcontext->getContext($alias)) {
+                return $context;
+            }
+        }
+    }
+
+    /**
+     * Sets parent context of current context.
+     *
+     * @param   Behat\Behat\Context\BehatContext    $parentContext  parent context
+     *
+     * @see     useContext()
+     */
+    public function setParentContext(BehatContext $parentContext)
+    {
+        $this->parentContext = $parentContext;
     }
 
     /**

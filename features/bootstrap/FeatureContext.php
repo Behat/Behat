@@ -49,7 +49,8 @@ class FeatureContext extends BaseFeaturesContext
      */
     public function __construct(array $parameters = array())
     {
-        $this->useContext(new Hooks());
+        $this->useContext('hooks', new Hooks());
+        $this->useContext('support', new Support());
     }
 
     /**
@@ -58,7 +59,9 @@ class FeatureContext extends BaseFeaturesContext
     public function aFileNamedWith($filename, PyStringNode $content)
     {
         $content = strtr((string) $content, array("'''" => '"""'));
-        file_put_contents($filename, $content);
+
+        // call method of one of subcontexts
+        $this->getSubcontext('support')->createFile($filename, $content);
     }
 
     /**
@@ -66,10 +69,8 @@ class FeatureContext extends BaseFeaturesContext
      */
     public function iAmInThePath($path)
     {
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-            chdir($path);
-        }
+        // call method of one of subcontexts
+        $this->getSubcontext('support')->moveToNewPath($path);
     }
 
     /**

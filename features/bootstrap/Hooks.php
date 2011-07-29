@@ -5,6 +5,9 @@ use Behat\Behat\Context\BehatContext,
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
+require_once 'PHPUnit/Autoload.php';
+require_once 'PHPUnit/Framework/Assert/Functions.php';
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -21,6 +24,17 @@ use Behat\Gherkin\Node\PyStringNode,
 class Hooks extends BehatContext
 {
     /**
+     * @BeforeScenario
+     *
+     * Checks that we have access to main context (FeatureContext).
+     */
+    public function checkThatWeHaveMainContext()
+    {
+        assertInstanceOf('FeatureContext', $this->getMainContext());
+        assertEquals('Hello, zet', $this->getMainContext()->getSubcontext('support')->hello('zet'));
+    }
+
+    /**
      * @BeforeSuite
      *
      * Cleans test folders in the temporary directory.
@@ -28,7 +42,7 @@ class Hooks extends BehatContext
     public static function cleanTestFolders()
     {
         if (is_dir($dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat')) {
-            static::rmdirRecursive($dir);
+            self::rmdirRecursive($dir);
         }
     }
 
@@ -67,7 +81,7 @@ class Hooks extends BehatContext
         foreach ($files as $file) {
             $file = $path . DIRECTORY_SEPARATOR . $file;
             if (is_dir($file)) {
-                static::rmdirRecursive($file);
+                self::rmdirRecursive($file);
             } else {
                 unlink($file);
             }
