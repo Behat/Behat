@@ -15,7 +15,7 @@ namespace Behat\Behat\Context;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BehatContext implements ContextInterface
+class BehatContext implements ExtendedContextInterface
 {
     /**
      * List of subcontexts.
@@ -33,19 +33,25 @@ class BehatContext implements ContextInterface
     /**
      * Adds subcontext to current context.
      *
-     * @param   string                              $alias      subcontext alias name
-     * @param   Behat\Behat\Context\BehatContext    $context    subcontext instance
+     * @param   string                                          $alias      subcontext alias name
+     * @param   Behat\Behat\Context\ExtendedContextInterface    $context    subcontext instance
      */
-    public function useContext($alias, BehatContext $context)
+    public function useContext($alias, ExtendedContextInterface $context)
     {
         $context->setParentContext($this);
         $this->subcontexts[$alias] = $context;
     }
 
     /**
-     * Returns main context.
-     *
-     * @return  Behat\Behat\Context\BehatContext
+     * @see     Behat\Behat\Context\ExtendedContextInterface::setParentContext()
+     */
+    public function setParentContext(ExtendedContextInterface $parentContext)
+    {
+        $this->parentContext = $parentContext;
+    }
+
+    /**
+     * @see     Behat\Behat\Context\ExtendedContextInterface::getMainContext()
      */
     public function getMainContext()
     {
@@ -57,11 +63,7 @@ class BehatContext implements ContextInterface
     }
 
     /**
-     * Find current context's subcontext by alias name.
-     *
-     * @param   string  $alias  subcontext alias name
-     *
-     * @return  Behat\Behat\Context\BehatContext
+     * @see     Behat\Behat\Context\ExtendedContextInterface::getSubcontext()
      */
     public function getSubcontext($alias)
     {
@@ -72,22 +74,10 @@ class BehatContext implements ContextInterface
 
         // search in subcontexts childs contexts
         foreach ($this->subcontexts as $subcontext) {
-            if (null !== $context = $subcontext->getContext($alias)) {
+            if (null !== $context = $subcontext->getSubcontext($alias)) {
                 return $context;
             }
         }
-    }
-
-    /**
-     * Sets parent context of current context.
-     *
-     * @param   Behat\Behat\Context\BehatContext    $parentContext  parent context
-     *
-     * @see     useContext()
-     */
-    public function setParentContext(BehatContext $parentContext)
-    {
-        $this->parentContext = $parentContext;
     }
 
     /**
