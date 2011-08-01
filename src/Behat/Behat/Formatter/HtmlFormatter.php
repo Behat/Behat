@@ -3,7 +3,8 @@
 namespace Behat\Behat\Formatter;
 
 use Behat\Behat\Definition\DefinitionInterface,
-    Behat\Behat\DataCollector\LoggerDataCollector;
+    Behat\Behat\DataCollector\LoggerDataCollector,
+    Behat\Behat\Definition\DefinitionSnippet;
 
 use Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\FeatureNode,
@@ -365,11 +366,8 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printStepSnippet(array $snippet)
+    protected function printStepSnippet(DefinitionSnippet $snippet)
     {
-        $snippets   = array_values($snippet);
-        $snippet    = $snippets[0];
-
         $this->writeln('<div class="snippet"><pre>' . htmlspecialchars($snippet) . '</pre></div>');
     }
 
