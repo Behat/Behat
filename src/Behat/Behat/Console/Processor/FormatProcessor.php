@@ -76,7 +76,7 @@ class FormatProcessor implements ProcessorInterface
                 'Do not print snippets for undefined steps.'
             )
             ->addOption('--snippets-paths', null, InputOption::VALUE_NONE,
-                'Print snippet details about steps interested in snippet.'
+                'Print snippets details about steps interested in them.'
             )
             ->addOption('--no-multiline', null, InputOption::VALUE_NONE,
                 "No multiline arguments in output."
