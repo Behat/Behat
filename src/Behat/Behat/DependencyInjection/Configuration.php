@@ -43,7 +43,7 @@ class Configuration
      *
      * @return  Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
      */
-    public function appendConfigChildrens(TreeBuilder $tree)
+    protected function appendConfigChildrens(TreeBuilder $tree)
     {
         return $tree->root('behat')->
             children()->
