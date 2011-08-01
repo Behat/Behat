@@ -332,7 +332,29 @@ class ProgressFormatter extends ConsoleFormatter
             $this->writeln("\n{+undefined}$header{-undefined}\n");
 
             foreach ($logger->getDefinitionsSnippets() as $snippet) {
-                $this->writeln("{+undefined}$snippet{-undefined}\n");
+                $snippetText = $snippet->getSnippet();
+
+                if ($this->getParameter('snippets_paths')) {
+                    $indent = str_pad(
+                        '', mb_strlen($snippetText) - mb_strlen(ltrim($snippetText)), ' '
+                    );
+                    $this->writeln("{+undefined}$indent/**{-undefined}");
+                    foreach ($snippet->getSteps() as $step) {
+                        $this->writeln(sprintf(
+                            '{+undefined}%s * %s %s # %s:%d{-undefined}', $indent,
+                            $step->getType(), $step->getText(),
+                            $this->relativizePathsInString($step->getFile()), $step->getLine()
+                        ));
+                    }
+
+                    if (false !== mb_strpos($snippetText, '/**')) {
+                        $snippetText = str_replace('/**', ' *', $snippetText);
+                    } else {
+                        $this->writeln("{+undefined}$indent */{-undefined}");
+                    }
+                }
+
+                $this->writeln("{+undefined}$snippetText{-undefined}\n");
             }
         }
     }
