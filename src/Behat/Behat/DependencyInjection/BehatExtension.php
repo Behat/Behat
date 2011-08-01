@@ -60,7 +60,9 @@ class BehatExtension implements ExtensionInterface
         // load configs DIC
         foreach ($config as $ns => $subconfig) {
             foreach ($subconfig as $key => $value) {
-                if ('filters' === $ns) {
+                if (is_integer($key)) {
+                    $parameterName = "behat.$ns";
+                } elseif ('filters' === $ns) {
                     $parameterName = "gherkin.$ns.$key";
                 } else {
                     $parameterName = "behat.$ns.$key";
