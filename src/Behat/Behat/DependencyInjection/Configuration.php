@@ -31,8 +31,19 @@ class Configuration
     public function getConfigTree()
     {
         $tree = new TreeBuilder();
+        $this->appendConfigChildrens($tree);
 
-        $tree->root('behat')->
+        return $tree->buildTree();
+    }
+
+    /**
+     * Appends config childrens to configuration tree.
+     *
+     * @return Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     */
+    public function appendConfigChildrens(TreeBuilder $tree)
+    {
+        return $tree->root('behat')->
             children()->
                 arrayNode('paths')->
                     children()->
@@ -94,7 +105,5 @@ class Configuration
                     end()->
                 end()->
             end();
-
-        return $tree->buildTree();
     }
 }
