@@ -379,10 +379,11 @@ class LoggerDataCollector implements EventSubscriberInterface
 
         switch ($event->getResult()) {
             case StepEvent::UNDEFINED:
-                foreach ($event->getSnippet() as $key => $snippet) {
-                    if (!isset($this->definitionsSnippets[$key])) {
-                        $this->definitionsSnippets[$key] = $snippet;
-                    }
+                $hash = $event->getSnippet()->getHash();
+                if (!isset($this->definitionsSnippets[$hash])) {
+                    $this->definitionsSnippets[$hash] = $event->getSnippet();
+                } else {
+                    $this->definitionsSnippets[$hash]->addStep($event->getSnippet()->getLastStep());
                 }
                 break;
             case StepEvent::FAILED:

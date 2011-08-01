@@ -7,7 +7,8 @@ use Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\TableNode;
 
 use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Context\ClosuredContextInterface;
+    Behat\Behat\Context\ClosuredContextInterface,
+    Behat\Behat\Definition\DefinitionSnippet;
 
 /*
  * This file is part of the Behat.
@@ -37,8 +38,7 @@ class ClosuredDefinitionProposal implements DefinitionProposalInterface
      */
     public function propose(StepNode $step)
     {
-        $text = $step->getText();
-
+        $text  = $step->getText();
         $regex = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
         $regex = preg_replace(
             array(
@@ -75,10 +75,7 @@ class ClosuredDefinitionProposal implements DefinitionProposalInterface
 PHP
           , '%s', $regex, implode(', ', $args)
         );
-        $type  = in_array($step->getType(), array('Given', 'When', 'Then')) ? $step->getType() : 'Given';
 
-        return array(
-            md5($description) => sprintf($description, str_replace(' ', '_', $type))
-        );
+        return new DefinitionSnippet($step, $description);
     }
 }

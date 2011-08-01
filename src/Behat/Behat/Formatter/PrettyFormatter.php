@@ -5,6 +5,7 @@ namespace Behat\Behat\Formatter;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use Behat\Behat\Definition\DefinitionInterface,
+    Behat\Behat\Definition\DefinitionSnippet,
     Behat\Behat\DataCollector\LoggerDataCollector,
     Behat\Behat\Event\SuiteEvent,
     Behat\Behat\Event\FeatureEvent,
@@ -817,9 +818,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step snippet
      *
-     * @param   array   $snippet    snippet (for undefined steps)
+     * @param   Behat\Behat\Definition\DefinitionSnippet    $snippet    snippet (for undefined steps)
      */
-    protected function printStepSnippet(array $snippet)
+    protected function printStepSnippet(DefinitionSnippet $snippet)
     {
     }
 

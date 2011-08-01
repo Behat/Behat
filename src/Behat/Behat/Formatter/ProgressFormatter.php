@@ -331,7 +331,7 @@ class ProgressFormatter extends ConsoleFormatter
             );
             $this->writeln("\n{+undefined}$header{-undefined}\n");
 
-            foreach ($logger->getDefinitionsSnippets() as $key => $snippet) {
+            foreach ($logger->getDefinitionsSnippets() as $snippet) {
                 $this->writeln("{+undefined}$snippet{-undefined}\n");
             }
         }
