@@ -15,7 +15,7 @@ namespace Behat\Behat\Context;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BehatContext implements ContextInterface
+class BehatContext implements ExtendedContextInterface
 {
     /**
      * List of subcontexts.
@@ -23,15 +23,62 @@ class BehatContext implements ContextInterface
      * @var     array
      */
     private $subcontexts = array();
+    /**
+     * Parent context of subcontext.
+     *
+     * @var     Behat\Behat\Context\ContextInterface
+     */
+    private $parentContext;
 
     /**
      * Adds subcontext to current context.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context
+     * @param   string                                          $alias      subcontext alias name
+     * @param   Behat\Behat\Context\ExtendedContextInterface    $context    subcontext instance
      */
-    public function useContext(ContextInterface $context)
+    public function useContext($alias, ExtendedContextInterface $context)
     {
-        $this->subcontexts[] = $context;
+        $context->setParentContext($this);
+        $this->subcontexts[$alias] = $context;
+    }
+
+    /**
+     * @see     Behat\Behat\Context\ExtendedContextInterface::setParentContext()
+     * @see     Behat\Behat\Context\BehatContext::useContext()
+     */
+    public function setParentContext(ExtendedContextInterface $parentContext)
+    {
+        $this->parentContext = $parentContext;
+    }
+
+    /**
+     * @see     Behat\Behat\Context\ExtendedContextInterface::getMainContext()
+     */
+    public function getMainContext()
+    {
+        if (null !== $this->parentContext) {
+            return $this->parentContext->getMainContext();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @see     Behat\Behat\Context\ExtendedContextInterface::getSubcontext()
+     */
+    public function getSubcontext($alias)
+    {
+        // search in current context subcontexts
+        if (isset($this->subcontexts[$alias])) {
+            return $this->subcontexts[$alias];
+        }
+
+        // search in subcontexts childs contexts
+        foreach ($this->subcontexts as $subcontext) {
+            if (null !== $context = $subcontext->getSubcontext($alias)) {
+                return $context;
+            }
+        }
     }
 
     /**
