@@ -29,13 +29,13 @@ class BehatExtension implements ExtensionInterface
      *
      * @var     Symfony\Component\Config\Definition\Processor
      */
-    private $processor;
+    protected $processor;
     /**
      * Configuration holder.
      *
      * @var     Behat\Behat\DependencyInjection\Configuration
      */
-    private $configuration;
+    protected $configuration;
 
     /**
      * Initializes configuration.
