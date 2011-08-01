@@ -26,7 +26,7 @@ class Configuration
     /**
      * Generates the configuration tree.
      *
-     * @return Symfony\Component\Config\Definition\NodeInterface
+     * @return  Symfony\Component\Config\Definition\NodeInterface
      */
     public function getConfigTree()
     {
@@ -39,7 +39,9 @@ class Configuration
     /**
      * Appends config childrens to configuration tree.
      *
-     * @return Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     * @param   Symfony\Component\Config\Definition\Builder\TreeBuilder $tree   tree builder
+     *
+     * @return  Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
      */
     public function appendConfigChildrens(TreeBuilder $tree)
     {
