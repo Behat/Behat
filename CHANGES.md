@@ -1,3 +1,14 @@
+2.0.4 / 2011-08-02
+==================
+
+  * Subcontexts aliasing and retrieving
+  * Multiple steps chaining
+  * `--snippets-paths` option to show steps alongside the snippets
+  * getContextParameters() method in SuiteEvent and FeatureEvent
+  * Updated to Symfony2 stable components
+  * Spanish translation
+  * Dutch translation
+
 2.0.3 / 2011-07-20
 ==================
 
