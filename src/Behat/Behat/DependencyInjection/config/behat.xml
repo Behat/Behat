@@ -478,6 +478,12 @@
                 <argument>pt</argument>
                 <argument>gherkin</argument>
             </call>
+			<call method="addResource">
+                <argument>xliff</argument>
+                <argument>%gherkin.paths.i18n%/pt_PT.xliff</argument>
+                <argument>pt_PT</argument>
+                <argument>gherkin</argument>
+            </call>
             <call method="addResource">
                 <argument>xliff</argument>
                 <argument>%gherkin.paths.i18n%/ro.xliff</argument>
