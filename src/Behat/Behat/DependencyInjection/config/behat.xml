@@ -478,7 +478,7 @@
                 <argument>pt</argument>
                 <argument>gherkin</argument>
             </call>
-			<call method="addResource">
+            <call method="addResource">
                 <argument>xliff</argument>
                 <argument>%gherkin.paths.i18n%/pt-PT.xliff</argument>
                 <argument>pt-PT</argument>
