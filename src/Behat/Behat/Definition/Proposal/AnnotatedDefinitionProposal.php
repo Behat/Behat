@@ -6,7 +6,8 @@ use Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
-use Behat\Behat\Context\ContextInterface;
+use Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Definition\DefinitionSnippet;
 
 /*
  * This file is part of the Behat.
@@ -49,7 +50,6 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
             '/(\d+)/',                          // Numbers
         );
 
-        $type  = in_array($step->getType(), array('Given', 'When', 'Then')) ? $step->getType() : 'Given';
         $regex = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
         $regex = preg_replace(
             $replacePatterns,
@@ -98,8 +98,6 @@ PHP
           , '%s', $regex, $methodName, implode(', ', $args)
         );
 
-        return array(
-            md5($description) => sprintf($description, str_replace(' ', '_', $type))
-        );
+        return new DefinitionSnippet($step, $description);
     }
 }

@@ -5,7 +5,8 @@ namespace Behat\Behat\DataCollector;
 use Symfony\Component\EventDispatcher\EventDispatcher,
     Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Behat\Behat\Event\SuiteEvent,
+use Behat\Behat\Event\FeatureEvent,
+    Behat\Behat\Event\SuiteEvent,
     Behat\Behat\Event\ScenarioEvent,
     Behat\Behat\Event\OutlineExampleEvent,
     Behat\Behat\Event\StepEvent;
@@ -52,11 +53,23 @@ class LoggerDataCollector implements EventSubscriberInterface
         StepEvent::FAILED      => 'failed'
     );
     /**
-     * Overall steps count.
+     * Overall suite result.
      *
      * @var     integer
      */
-    private $stepsCount           = 0;
+    private $suiteResult          = 0;
+    /**
+     * Overall features count.
+     *
+     * @var     integer
+     */
+    private $featuresCount        = 0;
+    /**
+     * All features statuses count.
+     *
+     * @var     array
+     */
+    private $featuresStatuses     = array();
     /**
      * Overall scenarios count.
      *
@@ -64,17 +77,23 @@ class LoggerDataCollector implements EventSubscriberInterface
      */
     private $scenariosCount       = 0;
     /**
-     * All steps statuses count.
-     *
-     * @var     array
-     */
-    private $stepsStatuses        = array();
-    /**
      * All scenarios statuses count.
      *
      * @var     array
      */
     private $scenariosStatuses    = array();
+    /**
+     * Overall steps count.
+     *
+     * @var     integer
+     */
+    private $stepsCount           = 0;
+    /**
+     * All steps statuses count.
+     *
+     * @var     array
+     */
+    private $stepsStatuses        = array();
     /**
      * Missed definitions snippets.
      *
@@ -99,11 +118,15 @@ class LoggerDataCollector implements EventSubscriberInterface
      */
     public function __construct()
     {
-        $this->stepsStatuses = array_combine(
+        $this->featuresStatuses = array_combine(
             array_values($this->statuses),
             array_fill(0, count($this->statuses), 0)
         );
         $this->scenariosStatuses = array_combine(
+            array_values($this->statuses),
+            array_fill(0, count($this->statuses), 0)
+        );
+        $this->stepsStatuses = array_combine(
             array_values($this->statuses),
             array_fill(0, count($this->statuses), 0)
         );
@@ -115,7 +138,8 @@ class LoggerDataCollector implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         $events = array(
-            'beforeSuite', 'afterSuite', 'afterScenario', 'afterOutlineExample', 'afterStep'
+            'beforeSuite', 'afterSuite', 'afterFeature', 'afterScenario', 'afterOutlineExample',
+            'afterStep'
         );
 
         return array_combine($events, $events);
@@ -143,6 +167,18 @@ class LoggerDataCollector implements EventSubscriberInterface
     public function afterSuite(SuiteEvent $event)
     {
         $this->finishTimer();
+    }
+
+    /**
+     * Listens to "feature.after" event.
+     *
+     * @param   Behat\Behat\Event\FeatureEvent  $event
+     *
+     * @uses    collectFeatureResult()
+     */
+    public function afterFeature(FeatureEvent $event)
+    {
+        $this->collectFeatureResult($event->getResult());
     }
 
     /**
@@ -192,13 +228,33 @@ class LoggerDataCollector implements EventSubscriberInterface
     }
 
     /**
-     * Returns overall steps count.
+     * Returns overall suites result.
      *
      * @return  integer
      */
-    public function getStepsCount()
+    public function getSuiteResult()
     {
-        return $this->stepsCount;
+        return $this->suiteResult;
+    }
+
+    /**
+     * Returns overall features count.
+     *
+     * @return  integer
+     */
+    public function getFeaturesCount()
+    {
+        return $this->featuresCount;
+    }
+
+    /**
+     * Returns hash of features statuses count.
+     *
+     * @return  array       hash (ex: passed => 10, failed => 2)
+     */
+    public function getFeaturesStatuses()
+    {
+        return $this->featuresStatuses;
     }
 
     /**
@@ -212,16 +268,6 @@ class LoggerDataCollector implements EventSubscriberInterface
     }
 
     /**
-     * Returns hash of steps statuses count.
-     *
-     * @return  array       hash (ex: passed => 10, failed => 2)
-     */
-    public function getStepsStatuses()
-    {
-        return $this->stepsStatuses;
-    }
-
-    /**
      * Returns hash of scenarios statuses count.
      *
      * @return  array       hash (ex: passed => 10, failed => 2)
@@ -229,6 +275,26 @@ class LoggerDataCollector implements EventSubscriberInterface
     public function getScenariosStatuses()
     {
         return $this->scenariosStatuses;
+    }
+
+    /**
+     * Returns overall steps count.
+     *
+     * @return  integer
+     */
+    public function getStepsCount()
+    {
+        return $this->stepsCount;
+    }
+
+    /**
+     * Returns hash of steps statuses count.
+     *
+     * @return  array       hash (ex: passed => 10, failed => 2)
+     */
+    public function getStepsStatuses()
+    {
+        return $this->stepsStatuses;
     }
 
     /**
@@ -278,6 +344,19 @@ class LoggerDataCollector implements EventSubscriberInterface
     }
 
     /**
+     * Collects feature result status.
+     *
+     * @param   integer $result status code
+     */
+    private function collectFeatureResult($result)
+    {
+        ++$this->featuresCount;
+        ++$this->featuresStatuses[$this->statuses[$result]];
+
+        $this->suiteResult = max($this->suiteResult, $result);
+    }
+
+    /**
      * Collects scenario result status.
      *
      * @param   integer $result status code
@@ -300,10 +379,11 @@ class LoggerDataCollector implements EventSubscriberInterface
 
         switch ($event->getResult()) {
             case StepEvent::UNDEFINED:
-                foreach ($event->getSnippet() as $key => $snippet) {
-                    if (!isset($this->definitionsSnippets[$key])) {
-                        $this->definitionsSnippets[$key] = $snippet;
-                    }
+                $hash = $event->getSnippet()->getHash();
+                if (!isset($this->definitionsSnippets[$hash])) {
+                    $this->definitionsSnippets[$hash] = $event->getSnippet();
+                } else {
+                    $this->definitionsSnippets[$hash]->addStep($event->getSnippet()->getLastStep());
                 }
                 break;
             case StepEvent::FAILED:

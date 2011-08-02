@@ -87,6 +87,18 @@ Feature: Call step in other step
           }
 
           /**
+           * @Given /I entered "([^"]*)" and expect "([^"]*)"/
+           */
+          public function complexStep($number, $result)
+          {
+              return array(
+                  new Step\Given("I have entered \"$number\""),
+                  new Step\When("I press +"),
+                  new Step\Then("I should see \"$result\" on the screen")
+              );
+          }
+
+          /**
            * @Then /Я создам себе failing таблицу/
            */
           public function assertFailingTableRu()
@@ -130,15 +142,29 @@ Feature: Call step in other step
           And I have entered "5"
           When I press +
           Then I should see "44" on the screen
+
+        Scenario:
+          Given I have entered "23"
+          Then I entered "10" and expect "33"
+
+        Scenario:
+          Given I have entered "3"
+          Then I entered "5" and expect "10"
       """
     When I run "behat -f progress features/calc_en.feature"
-    Then it should pass with:
+    Then it should fail with:
       """
-      .....
-      
-      1 scenario (1 passed)
-      5 steps (5 passed)
-      """      
+      ........F
+
+      (::) failed steps (::)
+
+      01. Failed asserting that <integer:8> is equal to <string:10>.
+          In step `Then I entered "5" and expect "10"'. # FeatureContext::complexStep()
+          From scenario ***.                            # features/calc_en.feature:13
+
+      3 scenarios (2 passed, 1 failed)
+      9 steps (8 passed, 1 failed)
+      """
 
   Scenario:
     Given a file named "features/calc_en.feature" with:
@@ -153,13 +179,13 @@ Feature: Call step in other step
     Then it should fail with:
       """
       ..F
-      
+
       (::) failed steps (::)
-      
+
       01. Failed asserting that <integer:7> is equal to <string:8>.
           In step `Then I should see "8" on the screen'. # FeatureContext::iShouldSeeEn()
           From scenario ***.                             # features/calc_en.feature:2
-      
+
       1 scenario (1 failed)
       3 steps (2 passed, 1 failed)
       """
@@ -181,13 +207,13 @@ Feature: Call step in other step
     Then it should fail with:
       """
       .....F
-      
+
       (::) failed steps (::)
-      
+
       01. Undefined step "non-existent step"
           In step `И Вызовем несуществующий шаг'. # FeatureContext::assertUnexistentStepRu()
           From scenario ***.                      # features/calc_ru.feature:3
-      
+
       1 scenario (1 failed)
       6 steps (5 passed, 1 failed)
       """
@@ -209,13 +235,13 @@ Feature: Call step in other step
     Then it should fail with:
       """
       ..FF
-      
+
       (::) failed steps (::)
-      
+
       01. Failed asserting that <integer:7> is equal to <string:8>.
           In step `То Я должен увидеть на экране "8"'. # FeatureContext::iShouldSeeRu()
           From scenario ***.                           # features/calc_ru.feature:3
-      
+
       02. Failed asserting that
           Array
           (
@@ -231,7 +257,7 @@ Feature: Call step in other step
           .
           In step `Допустим Я создам себе failing таблицу'. # FeatureContext::assertFailingTableRu()
           From scenario ***.                                # features/calc_ru.feature:8
-      
+
       2 scenarios (2 failed)
       4 steps (2 passed, 2 failed)
       """

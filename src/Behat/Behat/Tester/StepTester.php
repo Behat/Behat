@@ -176,13 +176,19 @@ class StepTester implements NodeVisitorInterface
      */
     protected function runStepDefinition(DefinitionInterface $definition)
     {
-        $definitionReturn = $definition->run($this->context, $this->tokens);
+        $returnValue = $definition->run($this->context, $this->tokens);
+        if (null === $returnValue) {
+            return;
+        }
 
-        if ($definitionReturn instanceof SubstepInterface) {
-            $substepEvent = $this->executeStep($definitionReturn->getStepNode());
+        $returnValues = is_array($returnValue) ? $returnValue : array($returnValue);
+        foreach ($returnValues as $value) {
+            if ($value instanceof SubstepInterface) {
+                $substepEvent = $this->executeStep($value->getStepNode());
 
-            if (StepEvent::PASSED !== $substepEvent->getResult()) {
-                throw $substepEvent->getException();
+                if (StepEvent::PASSED !== $substepEvent->getResult()) {
+                    throw $substepEvent->getException();
+                }
             }
         }
     }

@@ -73,6 +73,14 @@ class HookDispatcher implements EventSubscriberInterface
     }
 
     /**
+     * Removes all registered hooks.
+     */
+    public function removeHooks()
+    {
+        $this->hooks = array();
+    }
+
+    /**
      * Listens to "suite.before" event.
      *
      * @param   Behat\Behat\Event\SuiteEvent    $event  event to which hooks glued

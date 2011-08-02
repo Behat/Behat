@@ -39,6 +39,12 @@ class FeatureTester implements NodeVisitorInterface
      * @var     Behat\Behat\EventDispatcher\EventDispatcher
      */
     private $dispatcher;
+    /**
+     * Context parameters.
+     *
+     * @var     array
+     */
+    private $parameters = array();
 
     /**
      * Initializes tester.
@@ -47,8 +53,9 @@ class FeatureTester implements NodeVisitorInterface
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container    = $container;
-        $this->dispatcher   = $container->get('behat.event_dispatcher');
+        $this->container  = $container;
+        $this->dispatcher = $container->get('behat.event_dispatcher');
+        $this->parameters = $container->getParameter('behat.context.parameters');
     }
 
     /**
@@ -66,7 +73,9 @@ class FeatureTester implements NodeVisitorInterface
 
         // If feature has scenario - run them
         if (count($scenarios = $feature->getScenarios())) {
-            $this->dispatcher->dispatch('beforeFeature', new FeatureEvent($feature));
+            $this->dispatcher->dispatch(
+                'beforeFeature', new FeatureEvent($feature, $this->parameters)
+            );
 
             foreach ($scenarios as $scenario) {
                 if ($scenario instanceof OutlineNode) {
@@ -81,7 +90,9 @@ class FeatureTester implements NodeVisitorInterface
                 $result = max($result, $scenario->accept($tester));
             }
 
-            $this->dispatcher->dispatch('afterFeature', new FeatureEvent($feature, $result));
+            $this->dispatcher->dispatch(
+                'afterFeature', new FeatureEvent($feature, $this->parameters, $result)
+            );
         }
 
         return $result;

@@ -75,6 +75,9 @@ class FormatProcessor implements ProcessorInterface
             ->addOption('--no-snippets', null, InputOption::VALUE_NONE,
                 'Do not print snippets for undefined steps.'
             )
+            ->addOption('--snippets-paths', null, InputOption::VALUE_NONE,
+                'Print snippets details about steps interested in them.'
+            )
             ->addOption('--no-multiline', null, InputOption::VALUE_NONE,
                 "No multiline arguments in output."
             )
@@ -127,6 +130,10 @@ class FormatProcessor implements ProcessorInterface
 
         if ($input->getOption('no-snippets')) {
             $formatter->setParameter('snippets', false);
+        }
+
+        if ($input->getOption('snippets-paths')) {
+            $formatter->setParameter('snippets_paths', true);
         }
 
         if ($input->getOption('no-paths')) {

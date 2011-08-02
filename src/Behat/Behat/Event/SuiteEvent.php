@@ -23,17 +23,20 @@ class SuiteEvent extends Event implements EventInterface
 {
     private $logger;
     private $completed;
+    private $parameters = array();
 
     /**
      * Initializes suite event.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger
-     * @param   Boolean                                         $completed
+     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger     logger instance
+     * @param   array                                           $parameters context parameters
+     * @param   Boolean                                         $completed  is suite completed
      */
-    public function __construct(LoggerDataCollector $logger, $completed)
+    public function __construct(LoggerDataCollector $logger, array $parameters, $completed)
     {
-        $this->logger    = $logger;
-        $this->completed = (Boolean) $completed;
+        $this->logger     = $logger;
+        $this->parameters = $parameters;
+        $this->completed  = (Boolean) $completed;
     }
 
     /**
@@ -44,6 +47,16 @@ class SuiteEvent extends Event implements EventInterface
     public function getLogger()
     {
         return $this->logger;
+    }
+
+    /**
+     * Returns context parameters.
+     *
+     * @return  array
+     */
+    public function getContextParameters()
+    {
+        return $this->parameters;
     }
 
     /**

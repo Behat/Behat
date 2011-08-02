@@ -62,6 +62,7 @@ abstract class ConsoleFormatter implements FormatterInterface
             'support_path'          => null,
             'output_path'           => null,
             'snippets'              => true,
+            'snippets_paths'        => false,
             'paths'                 => true,
             'expand'                => false,
             'multiline_arguments'   => true,

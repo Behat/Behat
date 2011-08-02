@@ -26,13 +26,26 @@ class Configuration
     /**
      * Generates the configuration tree.
      *
-     * @return Symfony\Component\Config\Definition\NodeInterface
+     * @return  Symfony\Component\Config\Definition\NodeInterface
      */
     public function getConfigTree()
     {
         $tree = new TreeBuilder();
+        $this->appendConfigChildrens($tree);
 
-        $tree->root('behat')->
+        return $tree->buildTree();
+    }
+
+    /**
+     * Appends config childrens to configuration tree.
+     *
+     * @param   Symfony\Component\Config\Definition\Builder\TreeBuilder $tree   tree builder
+     *
+     * @return  Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     */
+    protected function appendConfigChildrens(TreeBuilder $tree)
+    {
+        return $tree->root('behat')->
             children()->
                 arrayNode('paths')->
                     children()->
@@ -94,7 +107,5 @@ class Configuration
                     end()->
                 end()->
             end();
-
-        return $tree->buildTree();
     }
 }

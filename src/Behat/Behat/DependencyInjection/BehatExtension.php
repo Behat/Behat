@@ -29,13 +29,13 @@ class BehatExtension implements ExtensionInterface
      *
      * @var     Symfony\Component\Config\Definition\Processor
      */
-    private $processor;
+    protected $processor;
     /**
      * Configuration holder.
      *
      * @var     Behat\Behat\DependencyInjection\Configuration
      */
-    private $configuration;
+    protected $configuration;
 
     /**
      * Initializes configuration.
@@ -60,7 +60,9 @@ class BehatExtension implements ExtensionInterface
         // load configs DIC
         foreach ($config as $ns => $subconfig) {
             foreach ($subconfig as $key => $value) {
-                if ('filters' === $ns) {
+                if (is_integer($key)) {
+                    $parameterName = "behat.$ns";
+                } elseif ('filters' === $ns) {
                     $parameterName = "gherkin.$ns.$key";
                 } else {
                     $parameterName = "behat.$ns.$key";
