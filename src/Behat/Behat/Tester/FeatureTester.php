@@ -42,9 +42,9 @@ class FeatureTester implements NodeVisitorInterface
     /**
      * Context parameters.
      *
-     * @var     array
+     * @var     mixed
      */
-    private $parameters = array();
+    private $parameters;
 
     /**
      * Initializes tester.
@@ -55,7 +55,7 @@ class FeatureTester implements NodeVisitorInterface
     {
         $this->container  = $container;
         $this->dispatcher = $container->get('behat.event_dispatcher');
-        $this->parameters = $container->getParameter('behat.context.parameters');
+        $this->parameters = $container->get('behat.context_dispatcher')->getContextParameters();
     }
 
     /**
