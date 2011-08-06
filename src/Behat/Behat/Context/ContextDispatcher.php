@@ -92,6 +92,6 @@ class ContextDispatcher
             throw new \RuntimeException('Specify context class to use for ContextDispatcher');
         }
 
-        return new $this->contextClass($this->parameters);
+        return new $this->contextClass($this->getContextParameters());
     }
 }
