@@ -1,3 +1,9 @@
+2.0.5 / 2011-08-07
+==================
+
+  * Cleaned ContextDispatcher extension points
+  * Cleaned context-parameters passing behavior
+
 2.0.4 / 2011-08-02
 ==================
 

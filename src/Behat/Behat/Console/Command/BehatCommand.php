@@ -105,7 +105,7 @@ class BehatCommand extends BaseCommand
     {
         $dispatcher = $this->getContainer()->get('behat.event_dispatcher');
         $logger     = $this->getContainer()->get('behat.logger');
-        $parameters = $this->getContainer()->getParameter('behat.context.parameters');
+        $parameters = $this->getContainer()->get('behat.context_dispatcher')->getContextParameters();
 
         $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, $parameters, false));
 
@@ -117,7 +117,6 @@ class BehatCommand extends BaseCommand
                 exit(1);
             });
         }
-
     }
 
     /**
@@ -129,7 +128,7 @@ class BehatCommand extends BaseCommand
     {
         $dispatcher = $this->getContainer()->get('behat.event_dispatcher');
         $logger     = $this->getContainer()->get('behat.logger');
-        $parameters = $this->getContainer()->getParameter('behat.context.parameters');
+        $parameters = $this->getContainer()->get('behat.context_dispatcher')->getContextParameters();
 
         $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, $parameters, true));
 
@@ -138,6 +137,5 @@ class BehatCommand extends BaseCommand
         } else {
             return intval(4 === $logger->getSuiteResult());
         }
-
     }
 }

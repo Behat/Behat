@@ -72,6 +72,16 @@ class ContextDispatcher
     }
 
     /**
+     * Returns context parameters.
+     *
+     * @return  array
+     */
+    public function getContextParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
      * Create new context instance.
      *
      * @return  Behat\Behat\Context\ContextInterface
@@ -82,6 +92,6 @@ class ContextDispatcher
             throw new \RuntimeException('Specify context class to use for ContextDispatcher');
         }
 
-        return new $this->contextClass($this->parameters);
+        return new $this->contextClass($this->getContextParameters());
     }
 }
