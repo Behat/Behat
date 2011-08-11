@@ -150,6 +150,13 @@ class DefinitionDispatcher
         // find step to match
         foreach ($this->getDefinitions() as $origRegex => $definition) {
             $transRegex = $this->translateDefinitionRegex($origRegex, $step->getLanguage());
+
+            // if not regex really (string) - transform into it
+            if (0 !== mb_strpos($origRegex, '/')) {
+                $origRegex  = '/^'.preg_quote($origRegex, '/').'$/';
+                $transRegex = '/^'.preg_quote($transRegex, '/').'$/';
+            }
+
             if (preg_match($origRegex, $text, $arguments)
             || ($origRegex !== $transRegex && preg_match($transRegex, $text, $arguments))) {
                 // prepare callback arguments

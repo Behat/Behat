@@ -146,7 +146,7 @@ class FeatureContext extends BaseFeaturesContext
     /**
      * Prints last command output string.
      *
-     * @Then /^display last command output$/
+     * @Then display last command output
      */
     public function displayLastCommandOutput()
     {
@@ -156,7 +156,7 @@ class FeatureContext extends BaseFeaturesContext
     /**
      * Checks whether last command output contains provided string.
      *
-     * @Then /^the output should contain:$/
+     * @Then the output should contain:
      *
      * @param   Behat\Gherkin\Node\PyStringNode $text   PyString text instance
      */
