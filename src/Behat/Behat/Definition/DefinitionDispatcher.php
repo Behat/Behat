@@ -152,7 +152,7 @@ class DefinitionDispatcher
             $transRegex = $this->translateDefinitionRegex($origRegex, $step->getLanguage());
 
             // if not regex really (string) - transform into it
-            if (0 !== mb_strpos($origRegex, '/')) {
+            if (0 !== strpos($origRegex, '/')) {
                 $origRegex  = '/^'.preg_quote($origRegex, '/').'$/';
                 $transRegex = '/^'.preg_quote($transRegex, '/').'$/';
             }
