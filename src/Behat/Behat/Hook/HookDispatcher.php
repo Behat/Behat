@@ -211,10 +211,7 @@ class HookDispatcher implements EventSubscriberInterface
         $hooks = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
 
         foreach ($hooks as $hook) {
-            $runable = true;
-            if ($hook instanceof FilterableHook) {
-                $runable = $hook->filterMatches($event);
-            }
+            $runable = $hook instanceof FilterableHook ? $hook->filterMatches($event) : true;
 
             if ($runable) {
                 $hook->run($event);
