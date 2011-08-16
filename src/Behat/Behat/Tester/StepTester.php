@@ -35,7 +35,7 @@ class StepTester implements NodeVisitorInterface
     /**
      * Event dispatcher.
      *
-     * @var     Behat\Behat\EventDispatcher\EventDispatcher
+     * @var     Symfony\Component\EventDispatcher\EventDispatcher
      */
     private $dispatcher;
     /**
