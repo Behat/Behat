@@ -33,7 +33,7 @@ class HelpProcessor implements ProcessorInterface
                 "Print <comment>*.feature</comment> example.\n" .
                 "Use <info>--lang</info> to see specific language."
             )
-            ->addOption('--definitions', null, InputOption::VALUE_NONE,
+            ->addOption('--definitions', 'd', InputOption::VALUE_NONE,
                 "Print available step definitions.\n" .
                 "Use <info>--lang</info> to see specific language.\n"
             )
