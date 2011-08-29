@@ -69,8 +69,8 @@ class FormatProcessor implements ProcessorInterface
             ->addOption('--lang', null, InputOption::VALUE_REQUIRED,
                 'Print formatter output in particular language.'
             )
-            ->addOption('--no-paths', null, InputOption::VALUE_NONE,
-                'Do not print the definition path with the steps.'
+            ->addOption('--paths', null, InputOption::VALUE_NONE,
+                'Print the definition path with the steps.'
             )
             ->addOption('--no-snippets', null, InputOption::VALUE_NONE,
                 'Do not print snippets for undefined steps.'
@@ -136,9 +136,7 @@ class FormatProcessor implements ProcessorInterface
             $formatter->setParameter('snippets_paths', true);
         }
 
-        if ($input->getOption('no-paths')) {
-            $formatter->setParameter('paths', false);
-        }
+        $formatter->setParameter('paths', $input->getOption('paths'));
 
         if ($input->getOption('expand')) {
             $formatter->setParameter('expand', true);
