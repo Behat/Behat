@@ -1,6 +1,3 @@
-# TRANSFORMERS
-
-
 Feature: Step Arguments Transformations
   In order to follow DRY
   As a feature writer
@@ -100,7 +97,7 @@ Feature: Step Arguments Transformations
     Then it should pass with:
       """
       ......
-      
+
       2 scenarios (2 passed)
       6 steps (6 passed)
       """
@@ -127,7 +124,7 @@ Feature: Step Arguments Transformations
     Then it should pass with:
       """
       ......
-      
+
       2 scenarios (2 passed)
       6 steps (6 passed)
       """
