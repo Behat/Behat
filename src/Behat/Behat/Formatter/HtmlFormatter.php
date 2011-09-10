@@ -379,6 +379,11 @@ class HtmlFormatter extends PrettyFormatter
         $regex      = $definition->getRegex();
         $paramColor = $color . '_param';
 
+        // If it's just a string - skip
+        if ('/' !== substr($regex, 0, 1)) {
+            return $text;
+        }
+
         // Find arguments with offsets
         $matches = array();
         preg_match($regex, $text, $matches, PREG_OFFSET_CAPTURE);
@@ -520,6 +525,7 @@ class HtmlFormatter extends PrettyFormatter
             font-family: Georgia, serif;
             font-size:18px;
             line-height:26px;
+            width:100%;
         }
         #behat .statistics {
             float:left;
@@ -593,7 +599,7 @@ class HtmlFormatter extends PrettyFormatter
         }
         #behat .scenario {
             margin-left:20px;
-            margin-bottom:40px;
+            margin-bottom:20px;
         }
         #behat .scenario > ol {
             margin:0px;
@@ -616,6 +622,7 @@ class HtmlFormatter extends PrettyFormatter
         #behat .scenario > ol li .argument {
             margin:10px 20px;
             font-size:16px;
+            overflow:hidden;
         }
         #behat .scenario > ol li table.argument {
             border:1px solid #d2d2d2;
@@ -693,6 +700,21 @@ class HtmlFormatter extends PrettyFormatter
             border-width: 2px;
             border-style: solid;
         }
+        #behat .summary p {
+            margin:0px;
+            margin-bottom:10px;
+        }
+        #behat .jq-toggle {
+            cursor:pointer;
+        }
+        #behat .jq-toggle:after {
+            content:' |+';
+            font-weight:bold;
+        }
+        #behat .jq-toggle-opened:after {
+            content:' |-';
+            font-weight:bold;
+        }
     </style>
     <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
 </head>
@@ -702,19 +724,21 @@ class HtmlFormatter extends PrettyFormatter
     </div>
     <script>
       $(document).ready(function(){
-        $('.scenario').hide();
-        $('.scenario').find('ol').hide();
-        
-        $('.feature h2, .scenario h3').hover(function(){
-          $(this).css('cursor', 'pointer');
-        });
-        
+        $('.scenario')
+          .hide()
+          .find('ol').hide();
+
         $('.feature h2').click(function(){
-            $(this).parent().find('.scenario').toggle();
-        });
-        $('.scenario').click(function(){
-            $(this).find('ol').toggle();
-        });
+          var \$el = $(this);
+          \$el.toggleClass('jq-toggle-opened');
+          \$el.parent().find('.scenario').toggle();
+        }).addClass('jq-toggle');
+
+        $('.scenario h3').click(function(){
+          var \$el = $(this);
+          \$el.toggleClass('jq-toggle-opened');
+          \$el.parent().find('ol').toggle();
+        }).addClass('jq-toggle');
       });
     </script>
 </body>

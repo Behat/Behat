@@ -944,6 +944,11 @@ class PrettyFormatter extends ProgressFormatter
         $regex      = $definition->getRegex();
         $paramColor = $color . '_param';
 
+        // If it's just a string - skip
+        if ('/' !== substr($regex, 0, 1)) {
+            return $text;
+        }
+
         // Find arguments with offsets
         $matches = array();
         preg_match($regex, $text, $matches, PREG_OFFSET_CAPTURE);

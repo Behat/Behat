@@ -151,7 +151,7 @@ Feature: Call step in other step
           Given I have entered "3"
           Then I entered "5" and expect "10"
       """
-    When I run "behat -f progress features/calc_en.feature"
+    When I run "behat -f progress features/scalc_en.feature"
     Then it should fail with:
       """
       ........F
