@@ -694,11 +694,29 @@ class HtmlFormatter extends PrettyFormatter
             border-style: solid;
         }
     </style>
+    <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
 </head>
 <body>
     <div id="behat">
         {{content}}
     </div>
+    <script>
+      $(document).ready(function(){
+        $('.scenario').hide();
+        $('.scenario').find('ol').hide();
+        
+        $('.feature h2, .scenario h3').hover(function(){
+          $(this).css('cursor', 'pointer');
+        });
+        
+        $('.feature h2').click(function(){
+            $(this).parent().find('.scenario').toggle();
+        });
+        $('.scenario').click(function(){
+            $(this).find('ol').toggle();
+        });
+      });
+    </script>
 </body>
 </html>
 HTMLTPL;
