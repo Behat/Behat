@@ -175,7 +175,7 @@ Feature: Syntax helpers
         </file>
       </xliff>
       """
-    When I run "behat --definitions --lang=ru"
+    When I run "behat -d --lang=ru"
     Then the output should contain:
       """
       Given /^у меня (\d+) яблоко?$/
