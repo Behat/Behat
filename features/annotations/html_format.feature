@@ -165,14 +165,6 @@ Feature: HTML Formatter
       </ol>
       </div>
       </div>
-      <div class="summary passed">
-      <p class="scenarios">
-      2 scenarios (<strong class="passed">2 passed</strong>)
-      </p>
-      <p class="steps">
-      8 steps (<strong class="passed">8 passed</strong>)
-      </p>
-      </div>
       """
 
   Scenario: Scenario outline examples table
