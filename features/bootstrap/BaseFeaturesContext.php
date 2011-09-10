@@ -24,7 +24,7 @@ class BaseFeaturesContext extends BehatContext
     /**
      * Creates a file with specified name and context in current workdir.
      *
-     * @Given /^a file named "([^"]*)" with:$/
+     * @Given /^(?:there is )?a file named "([^"]*)" with:$/
      *
      * @param   string                          $filename   name of the file (relative path)
      * @param   Behat\Gherkin\Node\PyStringNode $content    PyString string instance

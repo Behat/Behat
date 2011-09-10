@@ -146,7 +146,7 @@ Feature: Rerun
 
   Scenario: Fixing scenario removes it from the rerun log
     Given I run "behat -f progress features/apples.feature --rerun re.log"
-    And a file named "features/apples.feature" with:
+    And there is a file named "features/apples.feature" with:
       """
       Feature: Apples story
         In order to eat apple
