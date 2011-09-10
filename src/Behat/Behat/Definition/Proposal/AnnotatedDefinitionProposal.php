@@ -7,7 +7,8 @@ use Behat\Gherkin\Node\StepNode,
     Behat\Gherkin\Node\TableNode;
 
 use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Definition\DefinitionSnippet;
+    Behat\Behat\Definition\DefinitionSnippet,
+    Behat\Behat\Util\Transliterator;
 
 /*
  * This file is part of the Behat.
@@ -64,6 +65,7 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
         $count = count($matches) - 1;
 
         $methodName = preg_replace($replacePatterns, '', $text);
+        $methodName = Transliterator::transliterate($methodName, ' ');
         $methodName = preg_replace('/[^a-zA-Z\_\ ]/', '', $methodName);
         $methodName = str_replace(' ', '', ucwords($methodName));
 
