@@ -97,7 +97,7 @@ class FeatureContext extends BaseFeaturesContext
         $php = 0 === mb_strpos(BEHAT_PHP_BIN_PATH, '/usr/bin/env')
              ? BEHAT_PHP_BIN_PATH
              : escapeshellarg(BEHAT_PHP_BIN_PATH);
-        $argumentsString = strtr($argumentsString, array('\'' => '"'));
+        $argumentsString = strtr($argumentsString, array('\'\'\'' => '"""'));
 
         exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --no-time --no-colors ' . $argumentsString, $output, $return);
 
@@ -121,6 +121,8 @@ class FeatureContext extends BaseFeaturesContext
         } else {
             assertEquals(0, $this->return);
         }
+
+        $text = strtr($text, array('\'\'\'' => '"""'));
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
