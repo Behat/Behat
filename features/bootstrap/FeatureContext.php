@@ -8,6 +8,10 @@ use Behat\Gherkin\Node\PyStringNode,
 require_once 'PHPUnit/Autoload.php';
 require_once 'PHPUnit/Framework/Assert/Functions.php';
 
+// order of autoloading is undefined, so we should
+// require parent class explicitly here
+require_once 'BaseFeaturesContext.php';
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -97,7 +101,7 @@ class FeatureContext extends BaseFeaturesContext
         $php = 0 === mb_strpos(BEHAT_PHP_BIN_PATH, '/usr/bin/env')
              ? BEHAT_PHP_BIN_PATH
              : escapeshellarg(BEHAT_PHP_BIN_PATH);
-        $argumentsString = strtr($argumentsString, array('\'\'\'' => '"""'));
+        $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
         exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --no-time --no-colors ' . $argumentsString, $output, $return);
 

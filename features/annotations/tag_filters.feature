@@ -124,181 +124,209 @@ Feature: Tags
       """
 
   Scenario: Single tag
-    When I run "behat -f pretty --tags '@slow'"
-    Then it should pass with:
+    When I run "behat -f pretty --tags '@slow' --no-paths"
+    Then it should pass
+    And the output should contain:
       """
       @slow
       Feature: Feature N1
-      
-        Background:                # features/feature1.feature:4
-          Given Some slow step N11 # FeatureContext::someSlowStepN()
-      
-        Scenario:                  # features/feature1.feature:7
-          Given Some slow step N12 # FeatureContext::someSlowStepN()
-          And Some normal step N13 # FeatureContext::someNormalStepN()
-      
+
+        Background:
+          Given Some slow step N11
+
+        Scenario:
+          Given Some slow step N12
+          And Some normal step N13
+
         @fast
-        Scenario:                  # features/feature1.feature:12
-          Given Some fast step N14 # FeatureContext::someFastStepN()
-      
+        Scenario:
+          Given Some fast step N14
+      """
+    And the output should contain:
+      """
       Feature: Feature N2
-      
-        Background:                  # features/feature2.feature:3
-          Given Some normal step N21 # FeatureContext::someNormalStepN()
-      
+
+        Background:
+          Given Some normal step N21
+
         @slow @fast
-        Scenario:                    # features/feature2.feature:7
-          Given Some slow step N22   # FeatureContext::someSlowStepN()
-          And Some fast step N23     # FeatureContext::someFastStepN()
-      
+        Scenario:
+          Given Some slow step N22
+          And Some fast step N23
+      """
+    And the output should contain:
+      """
       Feature: Feature N3
-      
-        Background:                  # features/feature3.feature:3
-          Given Some normal step N21 # FeatureContext::someNormalStepN()
-      
+
+        Background:
+          Given Some normal step N21
+
         @slow
-        Scenario Outline:             # features/feature3.feature:7
-          Given Some slow step N<num> # FeatureContext::someSlowStepN()
-      
+        Scenario Outline:
+          Given Some slow step N<num>
+
           Examples:
             | num |
             | 31  |
             | 32  |
-      
+      """
+    And the output should contain:
+      """
       5 scenarios (5 passed)
       12 steps (12 passed)
       """
 
   Scenario: Or tags
-    When I run "behat -f pretty --tags '@slow,@normal'"
-    Then it should pass with:
+    When I run "behat -f pretty --tags '@slow,@normal' --no-paths"
+    Then it should pass
+    And the output should contain:
       """
       @slow
       Feature: Feature N1
-      
-        Background:                # features/feature1.feature:4
-          Given Some slow step N11 # FeatureContext::someSlowStepN()
-      
-        Scenario:                  # features/feature1.feature:7
-          Given Some slow step N12 # FeatureContext::someSlowStepN()
-          And Some normal step N13 # FeatureContext::someNormalStepN()
-      
+
+        Background:
+          Given Some slow step N11
+
+        Scenario:
+          Given Some slow step N12
+          And Some normal step N13
+
         @fast
-        Scenario:                  # features/feature1.feature:12
-          Given Some fast step N14 # FeatureContext::someFastStepN()
-      
+        Scenario:
+          Given Some fast step N14
+      """
+    And the output should contain:
+      """
       Feature: Feature N2
-      
-        Background:                  # features/feature2.feature:3
-          Given Some normal step N21 # FeatureContext::someNormalStepN()
-      
+
+        Background:
+          Given Some normal step N21
+
         @slow @fast
-        Scenario:                    # features/feature2.feature:7
-          Given Some slow step N22   # FeatureContext::someSlowStepN()
-          And Some fast step N23     # FeatureContext::someFastStepN()
-      
+        Scenario:
+          Given Some slow step N22
+          And Some fast step N23
+      """
+    And the output should contain:
+      """
       Feature: Feature N3
-      
-        Background:                  # features/feature3.feature:3
-          Given Some normal step N21 # FeatureContext::someNormalStepN()
-      
+
+        Background:
+          Given Some normal step N21
+
         @slow
-        Scenario Outline:             # features/feature3.feature:7
-          Given Some slow step N<num> # FeatureContext::someSlowStepN()
-      
+        Scenario Outline:
+          Given Some slow step N<num>
+
           Examples:
             | num |
             | 31  |
             | 32  |
-      
+
         @normal
-        Scenario:                     # features/feature3.feature:16
-          Given Some normal step N38  # FeatureContext::someNormalStepN()
-      
+        Scenario:
+          Given Some normal step N38
+
         @normal @fast
-        Scenario Outline:               # features/feature3.feature:29
-          Given Some normal step N<num> # FeatureContext::someNormalStepN()
-          And Some fast step N37        # FeatureContext::someFastStepN()
-      
+        Scenario Outline:
+          Given Some normal step N<num>
+          And Some fast step N37
+
           Examples:
             | num |
             | 35  |
             | 36  |
-      
+      """
+    And the output should contain:
+      """
       Feature: Feature N4
-      
+
         @normal
-        Scenario:                       # features/feature4.feature:4
-          Given Some normal step N41    # FeatureContext::someNormalStepN()
-          And Some fast step N42        # FeatureContext::someFastStepN()
-      
+        Scenario:
+          Given Some normal step N41
+          And Some fast step N42
+      """
+    And the output should contain:
+      """
       9 scenarios (9 passed)
       22 steps (22 passed)
       """
 
   Scenario: And tags
-    When I run "behat -f pretty --tags '@slow,@normal&&@fast'"
-    Then it should pass with:
+    When I run "behat -f pretty --tags '@slow,@normal&&@fast' --no-paths"
+    Then it should pass
+    And the output should contain:
       """
       @slow
       Feature: Feature N1
-      
-        Background:                # features/feature1.feature:4
-          Given Some slow step N11 # FeatureContext::someSlowStepN()
-      
+
+        Background:
+          Given Some slow step N11
+
         @fast
-        Scenario:                  # features/feature1.feature:12
-          Given Some fast step N14 # FeatureContext::someFastStepN()
-      
+        Scenario:
+          Given Some fast step N14
+      """
+    And the output should contain:
+      """
       Feature: Feature N2
-      
-        Background:                  # features/feature2.feature:3
-          Given Some normal step N21 # FeatureContext::someNormalStepN()
-      
+
+        Background:
+          Given Some normal step N21
+
         @slow @fast
-        Scenario:                    # features/feature2.feature:7
-          Given Some slow step N22   # FeatureContext::someSlowStepN()
-          And Some fast step N23     # FeatureContext::someFastStepN()
-      
+        Scenario:
+          Given Some slow step N22
+          And Some fast step N23
+      """
+    And the output should contain:
+      """
       Feature: Feature N3
-      
-        Background:                  # features/feature3.feature:3
-          Given Some normal step N21 # FeatureContext::someNormalStepN()
-      
+
+        Background:
+          Given Some normal step N21
+
         @normal @fast
-        Scenario Outline:               # features/feature3.feature:29
-          Given Some normal step N<num> # FeatureContext::someNormalStepN()
-          And Some fast step N37        # FeatureContext::someFastStepN()
-      
+        Scenario Outline:
+          Given Some normal step N<num>
+          And Some fast step N37
+
           Examples:
             | num |
             | 35  |
             | 36  |
-      
+      """
+    And the output should contain:
+      """
       4 scenarios (4 passed)
       11 steps (11 passed)
       """
 
   Scenario: Not tags
-    When I run "behat -f pretty --tags '~@slow&&~@fast'"
-    Then it should pass with:
+    When I run "behat -f pretty --tags '~@slow&&~@fast' --no-paths"
+    Then it should pass
+    And the output should contain:
       """
       Feature: Feature N3
-      
-        Background:                  # features/feature3.feature:3
-          Given Some normal step N21 # FeatureContext::someNormalStepN()
-      
+
+        Background:
+          Given Some normal step N21
+
         @normal
-        Scenario:                    # features/feature3.feature:16
-          Given Some normal step N38 # FeatureContext::someNormalStepN()
-      
+        Scenario:
+          Given Some normal step N38
+      """
+    And the output should contain:
+      """
       Feature: Feature N4
-      
+
         @normal
-        Scenario:                    # features/feature4.feature:4
-          Given Some normal step N41 # FeatureContext::someNormalStepN()
-          And Some fast step N42     # FeatureContext::someFastStepN()
-      
+        Scenario:
+          Given Some normal step N41
+          And Some fast step N42
+      """
+    And the output should contain:
+      """
       2 scenarios (2 passed)
       4 steps (4 passed)
       """
