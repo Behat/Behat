@@ -8,6 +8,10 @@ use Behat\Gherkin\Node\PyStringNode,
 require_once 'PHPUnit/Autoload.php';
 require_once 'PHPUnit/Framework/Assert/Functions.php';
 
+// order of autoloading is undefined, so we should
+// require parent class explicitly here
+require_once 'BaseFeaturesContext.php';
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -122,6 +126,8 @@ class FeatureContext extends BaseFeaturesContext
             assertEquals(0, $this->return);
         }
 
+        $text = strtr($text, array('\'\'\'' => '"""'));
+
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback('/ features\/[^\n ]+/', function($matches) {
@@ -146,7 +152,7 @@ class FeatureContext extends BaseFeaturesContext
     /**
      * Prints last command output string.
      *
-     * @Then /^display last command output$/
+     * @Then display last command output
      */
     public function displayLastCommandOutput()
     {
@@ -156,7 +162,7 @@ class FeatureContext extends BaseFeaturesContext
     /**
      * Checks whether last command output contains provided string.
      *
-     * @Then /^the output should contain:$/
+     * @Then the output should contain:
      *
      * @param   Behat\Gherkin\Node\PyStringNode $text   PyString text instance
      */

@@ -44,12 +44,12 @@ Feature: Different result types
     Then it should pass with:
       """
       UUUUUU
-      
+
       2 scenarios (2 undefined)
       6 steps (6 undefined)
-      
+
       You can implement step definitions for undefined steps with these snippets:
-      
+
           /**
            * @Given /^I have magically created (\d+)\$$/
            */
@@ -57,7 +57,7 @@ Feature: Different result types
           {
               throw new PendingException();
           }
-      
+
           /**
            * @When /^I have chose "([^"]*)" in coffee machine$/
            */
@@ -65,7 +65,7 @@ Feature: Different result types
           {
               throw new PendingException();
           }
-      
+
           /**
            * @Then /^I should have "([^"]*)"$/
            */
@@ -78,12 +78,12 @@ Feature: Different result types
     Then it should fail with:
       """
       UUUUUU
-      
+
       2 scenarios (2 undefined)
       6 steps (6 undefined)
-      
+
       You can implement step definitions for undefined steps with these snippets:
-      
+
           /**
            * @Given /^I have magically created (\d+)\$$/
            */
@@ -91,7 +91,7 @@ Feature: Different result types
           {
               throw new PendingException();
           }
-      
+
           /**
            * @When /^I have chose "([^"]*)" in coffee machine$/
            */
@@ -99,7 +99,7 @@ Feature: Different result types
           {
               throw new PendingException();
           }
-      
+
           /**
            * @Then /^I should have "([^"]*)"$/
            */
@@ -141,7 +141,7 @@ Feature: Different result types
           }
 
           /**
-           * @When /^the coffee will be ready$/
+           * @When the coffee will be ready
            */
           public function theCoffeeWillBeReady() {
               throw new PendingException;
@@ -152,18 +152,18 @@ Feature: Different result types
     Then it should pass with:
       """
       P-U
-      
+
       (::) pending steps (::)
-      
+
       01. TODO: write pending definition
           In step `Given human have ordered very very very hot "coffee"'. # FeatureContext::humanOrdered()
           From scenario background.                                       # features/coffee.feature:6
-      
+
       1 scenario (1 undefined)
       3 steps (1 skipped, 1 pending, 1 undefined)
-      
+
       You can implement step definitions for undefined steps with these snippets:
-      
+
           /**
            * @Then /^I should say "([^"]*)"$/
            */
@@ -176,18 +176,18 @@ Feature: Different result types
     Then it should fail with:
       """
       P-U
-      
+
       (::) pending steps (::)
-      
+
       01. TODO: write pending definition
           In step `Given human have ordered very very very hot "coffee"'. # FeatureContext::humanOrdered()
           From scenario background.                                       # features/coffee.feature:6
-      
+
       1 scenario (1 undefined)
       3 steps (1 skipped, 1 pending, 1 undefined)
-      
+
       You can implement step definitions for undefined steps with these snippets:
-      
+
           /**
            * @Then /^I should say "([^"]*)"$/
            */
@@ -248,17 +248,17 @@ Feature: Different result types
     Then it should fail with:
       """
       .F..F-
-      
+
       (::) failed steps (::)
-      
+
       01. Failed asserting that <integer:10> is equal to <string:12>.
           In step `Then I should see 12$ on the screen'. # FeatureContext::iShouldSee()
           From scenario `Check throwed amount'.          # features/coffee.feature:9
-      
+
       02. Failed asserting that <integer:30> is equal to <string:31>.
           In step `Then I should see 31$ on the screen'. # FeatureContext::iShouldSee()
           From scenario `Additional throws'.             # features/coffee.feature:12
-      
+
       2 scenarios (2 failed)
       6 steps (3 passed, 1 skipped, 2 failed)
       """
@@ -336,17 +336,17 @@ Feature: Different result types
     Then it should fail with:
       """
       .F---..F--
-      
+
       (::) failed steps (::)
-      
+
       01. NO water in coffee machine!!!
           In step `Given I have no water'. # FeatureContext::noWater()
           From scenario `I have no water'. # features/coffee.feature:9
-      
+
       02. NO electricity in coffee machine!!!
           In step `And I have no electricity'.   # FeatureContext::haveNoElectricity()
           From scenario `I have no electricity'. # features/coffee.feature:15
-      
+
       2 scenarios (2 failed)
       10 steps (3 passed, 5 skipped, 2 failed)
       """
@@ -396,15 +396,15 @@ Feature: Different result types
     Then it should fail with:
       """
       F-
-      
+
       (::) failed steps (::)
-      
+
       01. Ambiguous match of "human have chosen "Latte"":
           to `/^human have chosen "([^"]*)"$/` from FeatureContext::chosen()
           to `/^human have chosen "Latte"$/` from FeatureContext::chosenLatte()
           In step `Given human have chosen "Latte"'.
           From scenario `Ambigious coffee type'.     # features/coffee.feature:6
-      
+
       1 scenario (1 failed)
       2 steps (1 skipped, 1 failed)
       """

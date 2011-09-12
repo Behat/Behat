@@ -379,6 +379,11 @@ class HtmlFormatter extends PrettyFormatter
         $regex      = $definition->getRegex();
         $paramColor = $color . '_param';
 
+        // If it's just a string - skip
+        if ('/' !== substr($regex, 0, 1)) {
+            return $text;
+        }
+
         // Find arguments with offsets
         $matches = array();
         preg_match($regex, $text, $matches, PREG_OFFSET_CAPTURE);
@@ -437,7 +442,19 @@ class HtmlFormatter extends PrettyFormatter
         $results = $logger->getScenariosStatuses();
         $result = $results['failed'] > 0 ? 'failed' : 'passed';
         $this->writeln('<div class="summary '.$result.'">');
+
+        $this->writeln('<div class="counters">');
         parent::printSummary($logger);
+        $this->writeln('</div>');
+
+        $this->writeln(<<<'HTML'
+<div class="switchers">
+    <a href="javascript:void(0)" id="behat_show_all">[+] all</a>
+    <a href="javascript:void(0)" id="behat_hide_all">[-] all</a>
+</div>
+HTML
+);
+
         $this->writeln('</div>');
     }
 
@@ -502,7 +519,7 @@ class HtmlFormatter extends PrettyFormatter
             return file_get_contents($templatePath);
         }
 
-        return <<<HTMLTPL
+        return <<<'HTMLTPL'
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns ="http://www.w3.org/1999/xhtml">
 <head>
@@ -514,12 +531,14 @@ class HtmlFormatter extends PrettyFormatter
             margin:0px;
             padding:0px;
             position:relative;
+            padding-top:75px;
         }
         #behat {
             float:left;
             font-family: Georgia, serif;
             font-size:18px;
             line-height:26px;
+            width:100%;
         }
         #behat .statistics {
             float:left;
@@ -593,7 +612,7 @@ class HtmlFormatter extends PrettyFormatter
         }
         #behat .scenario {
             margin-left:20px;
-            margin-bottom:40px;
+            margin-bottom:20px;
         }
         #behat .scenario > ol {
             margin:0px;
@@ -616,6 +635,7 @@ class HtmlFormatter extends PrettyFormatter
         #behat .scenario > ol li .argument {
             margin:10px 20px;
             font-size:16px;
+            overflow:hidden;
         }
         #behat .scenario > ol li table.argument {
             border:1px solid #d2d2d2;
@@ -663,9 +683,14 @@ class HtmlFormatter extends PrettyFormatter
         }
         .backtrace {
             font-size:12px;
-            color:#C20000;
+            line-height:18px;
+            color:#000;
             overflow:hidden;
             margin-left:20px;
+            padding:15px;
+            border-left:2px solid #C20000;
+            background: #fff;
+            margin-right:15px;
         }
         #behat .passed {
             background:#DBFFB4;
@@ -688,10 +713,64 @@ class HtmlFormatter extends PrettyFormatter
             color:#000;
         }
         #behat .summary {
-            margin: 15px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width:100%;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 18px;
+        }
+        #behat .summary .counters {
             padding: 10px;
-            border-width: 2px;
+            border-top: 0px;
+            border-bottom: 0px;
+            border-right: 0px;
+            border-left: 5px;
             border-style: solid;
+            height: 52px;
+            overflow: hidden;
+        }
+        #behat .summary .switchers {
+            position: absolute;
+            right: 15px;
+            top: 25px;
+        }
+        #behat .summary .switcher {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        #behat .summary .switchers a {
+            margin-left: 10px;
+            color: #000;
+        }
+        #behat .summary .switchers a:hover {
+            text-decoration:none;
+        }
+        #behat .summary p {
+            margin:0px;
+        }
+        #behat .jq-toggle > .scenario,
+        #behat .jq-toggle > ol {
+            display:none;
+        }
+        #behat .jq-toggle-opened > .scenario,
+        #behat .jq-toggle-opened > ol {
+            display:block;
+        }
+        #behat .jq-toggle > h2,
+        #behat .jq-toggle > h3 {
+            cursor:pointer;
+        }
+        #behat .jq-toggle > h2:after,
+        #behat .jq-toggle > h3:after {
+            content:' |+';
+            font-weight:bold;
+        }
+        #behat .jq-toggle-opened > h2:after,
+        #behat .jq-toggle-opened > h3:after {
+            content:' |-';
+            font-weight:bold;
         }
     </style>
 </head>
@@ -699,6 +778,88 @@ class HtmlFormatter extends PrettyFormatter
     <div id="behat">
         {{content}}
     </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#behat .feature h2').click(function(){
+                $(this).parent().toggleClass('jq-toggle-opened');
+            }).parent().addClass('jq-toggle');
+
+            $('#behat .scenario h3').click(function(){
+                $(this).parent().toggleClass('jq-toggle-opened');
+            }).parent().addClass('jq-toggle');
+
+            $('#behat_show_all').click(function(){
+                $('#behat .feature').addClass('jq-toggle-opened');
+                $('#behat .scenario').addClass('jq-toggle-opened');
+            });
+
+            $('#behat_hide_all').click(function(){
+                $('#behat .feature').removeClass('jq-toggle-opened');
+                $('#behat .scenario').removeClass('jq-toggle-opened');
+            });
+
+            $('#behat .summary .counters .scenarios .passed')
+                .addClass('switcher')
+                .click(function(){
+                    var $scenario = $('.feature .scenario:not(:has(li.failed, li.pending))');
+                    var $feature  = $scenario.parent();
+
+                    $('#behat_hide_all').click();
+
+                    $scenario.addClass('jq-toggle-opened');
+                    $feature.addClass('jq-toggle-opened');
+                });
+
+            $('#behat .summary .counters .steps .passed')
+                .addClass('switcher')
+                .click(function(){
+                    var $scenario = $('.feature .scenario:has(li.passed)');
+                    var $feature  = $scenario.parent();
+
+                    $('#behat_hide_all').click();
+
+                    $scenario.addClass('jq-toggle-opened');
+                    $feature.addClass('jq-toggle-opened');
+                });
+
+            $('#behat .summary .counters .failed')
+                .addClass('switcher')
+                .click(function(){
+                    var $scenario = $('.feature .scenario:has(li.failed)');
+                    var $feature = $scenario.parent();
+
+                    $('#behat_hide_all').click();
+
+                    $scenario.addClass('jq-toggle-opened');
+                    $feature.addClass('jq-toggle-opened');
+                });
+
+            $('#behat .summary .counters .skipped')
+                .addClass('switcher')
+                .click(function(){
+                    var $scenario = $('.feature .scenario:has(li.skipped)');
+                    var $feature = $scenario.parent();
+
+                    $('#behat_hide_all').click();
+
+                    $scenario.addClass('jq-toggle-opened');
+                    $feature.addClass('jq-toggle-opened');
+                });
+
+            $('#behat .summary .counters .pending')
+                .addClass('switcher')
+                .click(function(){
+                    var $scenario = $('.feature .scenario:has(li.pending)');
+                    var $feature = $scenario.parent();
+
+                    $('#behat_hide_all').click();
+
+                    $scenario.addClass('jq-toggle-opened');
+                    $feature.addClass('jq-toggle-opened');
+                });
+        });
+    </script>
 </body>
 </html>
 HTMLTPL;

@@ -127,7 +127,7 @@ class AnnotatedContextLoader implements ContextLoaderInterface
             foreach (explode("\n", $docBlock) as $docLine) {
                 $docLine = preg_replace('/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/', '', $docLine);
 
-                if (preg_match('/^\@('.$this->availableAnnotations.')\s*(?:(.*))?$/i', $docLine, $matches)) {
+                if (preg_match('/^\@('.$this->availableAnnotations.')\s*(.*)?$/i', $docLine, $matches)) {
                     $class    = $this->annotationClasses[strtolower($matches[1])];
                     $callback = array($className, $method->getName());
 

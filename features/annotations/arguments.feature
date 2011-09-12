@@ -1,7 +1,7 @@
 Feature: Step Arguments
   In order to write extended steps
   As a feature writer
-  I need ability to specify Table & PyString arguments to steps
+  I need an ability to specify Table & PyString arguments to steps
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -88,12 +88,12 @@ Feature: Step Arguments
     Then it should pass with:
       """
       ..
-      
+
       1 scenario (1 passed)
       2 steps (2 passed)
       """
 
-  Scenario: PyStrings tokens
+  Scenario: PyString tokens
     Given a file named "features/pystring_tokens.feature" with:
       """
       Feature: PyStrings
@@ -117,7 +117,7 @@ Feature: Step Arguments
     Then it should pass with:
       """
       ..
-      
+
       1 scenario (1 passed)
       2 steps (2 passed)
       """

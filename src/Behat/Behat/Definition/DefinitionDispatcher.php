@@ -150,6 +150,13 @@ class DefinitionDispatcher
         // find step to match
         foreach ($this->getDefinitions() as $origRegex => $definition) {
             $transRegex = $this->translateDefinitionRegex($origRegex, $step->getLanguage());
+
+            // if not regex really (string) - transform into it
+            if (0 !== strpos($origRegex, '/')) {
+                $origRegex  = '/^'.preg_quote($origRegex, '/').'$/';
+                $transRegex = '/^'.preg_quote($transRegex, '/').'$/';
+            }
+
             if (preg_match($origRegex, $text, $arguments)
             || ($origRegex !== $transRegex && preg_match($transRegex, $text, $arguments))) {
                 // prepare callback arguments
@@ -160,11 +167,11 @@ class DefinitionDispatcher
                 // transform arguments
                 foreach ($arguments as $num => $argument) {
                     foreach ($this->getTransformations() as $transformation) {
-                        $translRegex = $this->translateDefinitionRegex(
+                        $transRegex = $this->translateDefinitionRegex(
                             $transformation->getRegex(), $step->getLanguage()
                         );
 
-                        if ($newArgument = $transformation->transform($translRegex, $context, $argument)) {
+                        if ($newArgument = $transformation->transform($transRegex, $context, $argument)) {
                             $arguments[$num] = $newArgument;
                         }
                     }

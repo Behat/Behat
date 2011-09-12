@@ -5,7 +5,8 @@ namespace Behat\Behat\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Definition\DefinitionInterface;
+    Behat\Behat\Definition\DefinitionInterface,
+    Behat\Behat\Definition\DefinitionSnippet;
 
 use Behat\Gherkin\Node\StepNode;
 
@@ -45,11 +46,11 @@ class StepEvent extends Event implements EventInterface
      * @param   integer                                     $result
      * @param   Behat\Behat\Definition\DefinitionInterface  $definition
      * @param   Exception                                   $exception
-     * @param   mixed                                       $snippet
+     * @param   Behat\Behat\Definition\DefinitionSnippet    $snippet
      */
     public function __construct(StepNode $step, ContextInterface $context, $result = null,
                                 DefinitionInterface $definition = null, \Exception $exception = null,
-                                $snippet = null)
+                                DefinitionSnippet $snippet = null)
     {
         $this->step       = $step;
         $this->context    = $context;
@@ -132,7 +133,7 @@ class StepEvent extends Event implements EventInterface
     /**
      * Returns step snippet.
      *
-     * @return  mixed
+     * @return  Behat\Behat\Definition\DefinitionSnippet
      */
     public function getSnippet()
     {

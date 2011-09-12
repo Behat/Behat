@@ -1,3 +1,11 @@
+2.1.0 / 2011-09-12
+==================
+
+  * Totally revamped HTML formatter template
+  * Added transliteration support to definition snippets (for most langs)
+  * Written missed features and fixed some bugs
+  * Stabilization fixes for 3 major OS: MacOS/Ubuntu/Windows
+
 2.0.5 / 2011-08-07
 ==================
 

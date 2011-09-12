@@ -11,7 +11,8 @@ use Behat\Behat\Event\EventInterface,
     Behat\Behat\Event\ScenarioEvent,
     Behat\Behat\Event\OutlineExampleEvent,
     Behat\Behat\Event\StepEvent,
-    Behat\Behat\Hook\Annotation\FilterableHook;
+    Behat\Behat\Hook\Annotation\FilterableHook,
+    Behat\Behat\Exception\ErrorException;
 
 /*
  * This file is part of the Behat.
@@ -201,6 +202,20 @@ class HookDispatcher implements EventSubscriberInterface
     }
 
     /**
+     * Custom error handler.
+     *
+     * This method used as custom error handler when step is running.
+     *
+     * @see     set_error_handler()
+     *
+     * @throws  Behat\Behat\Exception\ErrorException
+     */
+    public function errorHandler($code, $message, $file, $line)
+    {
+        throw new ErrorException($code, $message, $file, $line);
+    }
+
+    /**
      * Runs hooks with specified name.
      *
      * @param   string                          $name   hooks name
@@ -211,13 +226,48 @@ class HookDispatcher implements EventSubscriberInterface
         $hooks = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
 
         foreach ($hooks as $hook) {
-            if ($hook instanceof FilterableHook) {
-                if ($hook->filterMatches($event)) {
-                    $hook->run($event);
+            $runable = $hook instanceof FilterableHook ? $hook->filterMatches($event) : true;
+
+            if ($runable) {
+                if (defined('BEHAT_ERROR_REPORTING')) {
+                    $errorLevel = BEHAT_ERROR_REPORTING;
+                } else {
+                    $errorLevel = E_ALL ^ E_WARNING;
                 }
-            } else {
-                $hook->run($event);
+
+                $oldHandler = set_error_handler(array($this, 'errorHandler'), $errorLevel);
+
+                try {
+                    $hook->run($event);
+                } catch (\Exception $e) {
+                    $this->addHookInformationToException($hook, $e);
+                    throw $e;
+                }
+
+                if (null !== $oldHandler) {
+                    set_error_handler($oldHandler);
+                }
             }
         }
+    }
+
+    /**
+     * Adds hook information to exception thrown from it.
+     *
+     * @param   Behat\Behat\Hook\HookInterface  $hook       hook instance
+     * @param   Exception                       $exception  exception
+     */
+    private function addHookInformationToException(HookInterface $hook, \Exception $exception)
+    {
+        $refl    = new \ReflectionObject($exception);
+        $message = $refl->getProperty('message');
+
+        $message->setAccessible(true);
+        $message->setValue($exception, sprintf(
+            'Exception has been thrown in "%s" hook, defined in %s'."\n\n%s",
+            $hook->getEventName(),
+            $hook->getPath(),
+            $exception->getMessage()
+        ));
     }
 }

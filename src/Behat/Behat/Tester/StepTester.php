@@ -35,7 +35,7 @@ class StepTester implements NodeVisitorInterface
     /**
      * Event dispatcher.
      *
-     * @var     Behat\Behat\EventDispatcher\EventDispatcher
+     * @var     Symfony\Component\EventDispatcher\EventDispatcher
      */
     private $dispatcher;
     /**
@@ -131,42 +131,39 @@ class StepTester implements NodeVisitorInterface
      */
     protected function executeStep(StepNode $step)
     {
+        $context    = $this->context;
         $result     = null;
         $definition = null;
         $exception  = null;
         $snippet    = null;
 
-        // Find proper definition
         try {
             $definition = $this->definitions->findDefinition($this->context, $step);
-        } catch (AmbiguousException $e) {
-            $result    = StepEvent::FAILED;
-            $exception = $e;
+
+            if ($this->skip) {
+                return new StepEvent($step, $context, StepEvent::SKIPPED, $definition);
+            }
+
+            try {
+                $this->runStepDefinition($definition);
+                $result = StepEvent::PASSED;
+            } catch (PendingException $e) {
+                $result    = StepEvent::PENDING;
+                $exception = $e;
+            } catch (\Exception $e) {
+                $result    = StepEvent::FAILED;
+                $exception = $e;
+            }
         } catch (UndefinedException $e) {
             $result    = StepEvent::UNDEFINED;
             $snippet   = $this->definitions->proposeDefinition($this->context, $step);
             $exception = $e;
+        } catch (\Exception $e) {
+            $result    = StepEvent::FAILED;
+            $exception = $e;
         }
 
-        // Run test
-        if (null === $result) {
-            if (!$this->skip) {
-                try {
-                    $this->runStepDefinition($definition);
-                    $result = StepEvent::PASSED;
-                } catch (PendingException $e) {
-                    $result    = StepEvent::PENDING;
-                    $exception = $e;
-                } catch (\Exception $e) {
-                    $result    = StepEvent::FAILED;
-                    $exception = $e;
-                }
-            } else {
-                $result = StepEvent::SKIPPED;
-            }
-        }
-
-        return new StepEvent($step, $this->context, $result, $definition, $exception, $snippet);
+        return new StepEvent($step, $context, $result, $definition, $exception, $snippet);
     }
 
     /**
