@@ -958,7 +958,7 @@ class PrettyFormatter extends ProgressFormatter
         // Replace arguments with colorized ones
         $shift = 0;
         foreach ($matches as $key => $match) {
-            if (!is_numeric($key) || -1 === $match[1] || '<' === substr($match[0], 0, 1)) {
+            if (!is_numeric($key) || -1 === $match[1] || false !== strpos($match[0], '<')) {
                 continue;
             }
 
@@ -966,14 +966,18 @@ class PrettyFormatter extends ProgressFormatter
             $value  = $match[0];
             $begin  = substr($text, 0, $offset);
             $end    = substr($text, $offset + strlen($value));
-            // Keep track of how many extra characters are added
-            $shift += strlen($format = "{-$color}{+$paramColor}%s{-$paramColor}{+$color}") - 2;
+            $format = "{-$color}{+$paramColor}%s{-$paramColor}{+$color}";
+            $text   = sprintf("%s{$format}%s", $begin, $value, $end);
 
-            $text = sprintf('%s' . $format. '%s', $begin, $value, $end);
+            // Keep track of how many extra characters are added
+            $shift += strlen($format) - 2;
         }
 
         // Replace "<", ">" with colorized ones
-        $text = preg_replace('/(<[^>]+>)/', "{-$color}{+$paramColor}\$1{-$paramColor}{+$color}", $text);
+        $text = preg_replace('/(<[^>]+>)/',
+            "{-$color}{+$paramColor}\$1{-$paramColor}{+$color}",
+            $text
+        );
 
         return $text;
     }
