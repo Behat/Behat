@@ -392,7 +392,7 @@ class HtmlFormatter extends PrettyFormatter
         // Replace arguments with colorized ones
         $shift = 0;
         foreach ($matches as $key => $match) {
-            if (!is_numeric($key) || -1 === $match[1] || '<' === substr($match[0], 0, 1)) {
+            if (!is_numeric($key) || -1 === $match[1] || false !== strpos($match[0], '<')) {
                 continue;
             }
 
