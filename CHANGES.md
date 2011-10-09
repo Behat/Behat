@@ -1,3 +1,9 @@
+2.1.1 / 2011-10-09
+==================
+
+  * Fixed multiline titles printing bug
+  * Fixed outline parameter inside step argument printing bug
+
 2.1.0 / 2011-09-12
 ==================
 
