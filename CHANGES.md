@@ -1,3 +1,9 @@
+2.1.2 / 2011-10-12
+==================
+
+  * Fixed filtered feature hooks
+  * Fixed JUnit formatter time output in some locales
+
 2.1.1 / 2011-10-09
 ==================
 
