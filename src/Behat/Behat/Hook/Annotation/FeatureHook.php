@@ -25,9 +25,9 @@ abstract class FeatureHook extends FilterableHook
     /**
      * {@inheritdoc}
      */
-    public function __construct($callback)
+    public function __construct($callback, $filterString = null)
     {
-        parent::__construct($callback);
+        parent::__construct($callback, $filterString);
 
         if (!$this->isClosure()) {
             $methodRefl = new \ReflectionMethod($callback[0], $callback[1]);

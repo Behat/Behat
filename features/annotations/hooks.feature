@@ -58,6 +58,20 @@ Feature: hooks
           }
 
           /**
+           * @BeforeFeature @someFeature
+           */
+          static public function doSomethingBeforeSomeFeature($event) {
+              echo "= do something before SOME feature\n";
+          }
+
+          /**
+           * @AfterFeature @someFeature
+           */
+          static public function doSomethingAfterSomeFeature($event) {
+              echo "= do something after SOME feature\n";
+          }
+
+          /**
            * @AfterSuite
            */
           static public function doSomethingAfterSuite($event) {
@@ -166,4 +180,58 @@ Feature: hooks
       = do something AFTER ANY SUITE
       5 scenarios (5 passed)
       10 steps (10 passed)
+      """
+
+  Scenario: Filter features
+    Given a file named "features/1.feature" with:
+      """
+      Feature:
+        Scenario:
+          Then I must have 50
+
+        Scenario:
+          Given I have entered 12
+          Then I must have 12
+
+        Scenario: 130
+          Given I must have 130
+      """
+    Given a file named "features/2.feature" with:
+      """
+      @someFeature
+      Feature:
+        Scenario: 130
+          Given I must have 130
+      """
+    When I run "behat -f pretty"
+    Then it should pass with:
+      """
+      = do something BEFORE ANY SUITE
+      = do something BEFORE EVERY FEATURE
+      Feature:
+
+        Scenario:             # features/1.feature:2
+          Then I must have 50 # FeatureContext::iMustHave()
+
+        Scenario:                 # features/1.feature:5
+          Given I have entered 12 # FeatureContext::iHaveEntered()
+          Then I must have 12     # FeatureContext::iMustHave()
+
+        Scenario: 130             # features/1.feature:9
+          Given I must have 130   # FeatureContext::iMustHave()
+
+      = do something AFTER EVERY FEATURE
+      = do something BEFORE EVERY FEATURE
+      = do something before SOME feature
+      @someFeature
+      Feature:
+
+        Scenario: 130             # features/2.feature:3
+          Given I must have 130   # FeatureContext::iMustHave()
+
+      = do something AFTER EVERY FEATURE
+      = do something after SOME feature
+      = do something AFTER ANY SUITE
+      4 scenarios (4 passed)
+      5 steps (5 passed)
       """
