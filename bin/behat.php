@@ -21,8 +21,5 @@ if (is_file(__DIR__ . '/../autoload.php')) {
     require_once 'behat/autoload.php';
 }
 
-// internal encoding to utf8
-mb_internal_encoding('utf8');
-
 $app = new Behat\Behat\Console\BehatApplication(BEHAT_VERSION);
 $app->run();

@@ -53,6 +53,11 @@ class BehatExtension implements ExtensionInterface
     {
         $this->loadDefaults($container);
 
+        // set internal encoding to UTF-8
+        if ('UTF-8' !== mb_internal_encoding()) {
+            mb_internal_encoding('UTF-8');
+        }
+
         // normalize and merge the actual configuration
         $tree   = $this->configuration->getConfigTree();
         $config = $this->processor->process($tree, $configs);
