@@ -59,8 +59,6 @@ class BehatApplication extends Application
      */
     public function renderException($e, $output)
     {
-        $this->runningCommand = null;
-
         parent::renderException($e, $output);
     }
 }
