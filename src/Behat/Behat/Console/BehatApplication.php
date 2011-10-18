@@ -53,12 +53,4 @@ class BehatApplication extends Application
     {
         return 'behat';
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function renderException($e, $output)
-    {
-        parent::renderException($e, $output);
-    }
 }
