@@ -87,9 +87,10 @@ class Transformation extends Annotation implements TransformationInterface
         } elseif (is_string($argument) || $argument instanceof PyStringNode) {
             if (preg_match($translatedRegex, (string) $argument, $transformArguments)
              || preg_match($this->regex, (string) $argument, $transformArguments)) {
-                return call_user_func(
-                    $callback, $transformArguments[count($transformArguments) - 1]
-                );
+    			array_shift($transformArguments);
+                return call_user_func_array(
+                    $callback, $transformArguments
+                );;
             }
         }
 
