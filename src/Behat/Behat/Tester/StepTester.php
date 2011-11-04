@@ -145,7 +145,7 @@ class StepTester implements NodeVisitorInterface
             }
 
             try {
-                $this->runStepDefinition($definition);
+                $this->runStepDefinition($step, $definition);
                 $result = StepEvent::PASSED;
             } catch (PendingException $e) {
                 $result    = StepEvent::PENDING;
@@ -169,9 +169,10 @@ class StepTester implements NodeVisitorInterface
     /**
      * Runs provided step definition.
      *
+     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
      * @param   Behat\Behat\Definition\DefinitionInterface  $definition step definition
      */
-    protected function runStepDefinition(DefinitionInterface $definition)
+    protected function runStepDefinition(StepNode $step, DefinitionInterface $definition)
     {
         $returnValue = $definition->run($this->context, $this->tokens);
         if (null === $returnValue) {
@@ -180,8 +181,10 @@ class StepTester implements NodeVisitorInterface
 
         $returnValues = is_array($returnValue) ? $returnValue : array($returnValue);
         foreach ($returnValues as $value) {
-            if ($value instanceof SubstepInterface) {
-                $substepEvent = $this->executeStep($value->getStepNode());
+            if (($substep = $value) instanceof SubstepInterface) {
+                $substepNode = $substep->getStepNode();
+                $substepNode->setParent($step->getParent());
+                $substepEvent = $this->executeStep($substepNode);
 
                 if (StepEvent::PASSED !== $substepEvent->getResult()) {
                     throw $substepEvent->getException();
