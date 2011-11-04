@@ -41,9 +41,9 @@ Feature: Step Arguments Transformations
       {
           private $user;
 
-          /** @Transform /"([^"]+)" user/ */
-          public static function createUserFromUsername($username) {
-              return new User($username);
+          /** @Transform /"([^\ "]+)(?: - (\d+))?" user/ */
+          public static function createUserFromUsername($username, $age = 20) {
+              return new User($username, $age);
           }
 
           /** @Transform /^table:username,age$/ */
@@ -56,7 +56,7 @@ Feature: Step Arguments Transformations
           }
 
           /**
-           * @Given /I am ("\w+" user)/
+           * @Given /I am (".*" user)/
            * @Given /I am user:/
            */
           public function iAmUser(User $user) {
@@ -89,9 +89,9 @@ Feature: Step Arguments Transformations
           And Age must be 20
 
         Scenario:
-          Given I am "antono" user
+          Given I am "antono - 29" user
           Then Username must be "antono"
-          And Age must be 20
+          And Age must be 29
       """
     When I run "behat -f progress"
     Then it should pass with:
