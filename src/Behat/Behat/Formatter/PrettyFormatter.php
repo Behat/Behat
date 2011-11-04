@@ -695,7 +695,8 @@ class PrettyFormatter extends ProgressFormatter
         if ($this->parameters->get('multiline_arguments')) {
             $this->printStepArguments($step->getArguments(), $color);
         }
-        if (null !== $exception && !$exception instanceof UndefinedException) {
+        if (null !== $exception &&
+            (!$exception instanceof UndefinedException || null === $snippet)) {
             $this->printStepException($exception, $color);
         }
         if (null !== $snippet) {

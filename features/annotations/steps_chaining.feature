@@ -218,6 +218,37 @@ Feature: Call step in other step
       6 steps (5 passed, 1 failed)
       """
 
+  Scenario: Undefined substep in pretty format
+    Given a file named "features/calc_ru.feature" with:
+      """
+      # language: ru
+      Функционал: Стандартный калькулятор
+        Сценарий:
+          Допустим Я ввел "12"
+          И Я ввел "27"
+          Если Я нажму +
+          То Я должен увидеть на экране "39"
+          И Я создам себе passing таблицу
+          И Вызовем несуществующий шаг
+      """
+    When I run "behat --no-paths features/calc_ru.feature"
+    Then it should fail with:
+      """
+      Функционал: Стандартный калькулятор
+
+        Сценарий:
+          Допустим Я ввел "12"
+          И Я ввел "27"
+          Если Я нажму +
+          То Я должен увидеть на экране "39"
+          И Я создам себе passing таблицу
+          И Вызовем несуществующий шаг
+            Undefined step "non-existent step"
+
+      1 scenario (1 failed)
+      6 steps (5 passed, 1 failed)
+      """
+
   Scenario:
     Given a file named "features/calc_ru.feature" with:
       """
