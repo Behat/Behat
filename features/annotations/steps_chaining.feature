@@ -8,7 +8,8 @@ Feature: Call step in other step
       """
       <?php
 
-      use Behat\Behat\Context\BehatContext,
+      use Behat\Behat\Context\TranslatedContextInterface,
+          Behat\Behat\Context\BehatContext,
           Behat\Behat\Exception\PendingException,
           Behat\Behat\Context\Step;
       use Behat\Gherkin\Node\PyStringNode,
@@ -18,7 +19,7 @@ Feature: Call step in other step
       require_once 'PHPUnit/Autoload.php';
       require_once 'PHPUnit/Framework/Assert/Functions.php';
 
-      class FeatureContext extends BehatContext
+      class FeatureContext extends BehatContext implements TranslatedContextInterface
       {
           private $result = 0;
           private $numbers = array();
@@ -99,6 +100,18 @@ Feature: Call step in other step
           }
 
           /**
+           * @Given /I calculate "([^"]*)" and "([^"]*)"/
+           */
+          public function calcNumbers($number1, $number2)
+          {
+              return array(
+                  new Step\Given("Ввожу \"$number1\""),
+                  new Step\Given("Ввожу \"$number2\""),
+                  new Step\When("Нажимаю плюс"),
+              );
+          }
+
+          /**
            * @Then /Я создам себе failing таблицу/
            */
           public function assertFailingTableRu()
@@ -129,7 +142,33 @@ Feature: Call step in other step
           {
               return new Step\Then('non-existent step');
           }
+
+          public function getTranslationResources() {
+              return array(__DIR__ . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR . 'ru.xliff');
+          }
       }
+      """
+    And a file named "features/bootstrap/i18n/ru.xliff" with:
+      """
+      <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+        <file original="global" source-language="en" target-language="ru" datatype="plaintext">
+          <header />
+          <body>
+            <trans-unit id="i-calculate">
+              <source>/I calculate "([^"]*)" and "([^"]*)"/</source>
+              <target>/Я сложу числа "([^"]*)" и "([^"]*)"/</target>
+            </trans-unit>
+            <trans-unit id="i-have-entered">
+              <source>/I have entered "([^"]*)"/</source>
+              <target>/Ввожу "([^"]*)"/</target>
+            </trans-unit>
+            <trans-unit id="i-press-plus">
+              <source>/I press +/</source>
+              <target>/Нажимаю плюс/</target>
+            </trans-unit>
+          </body>
+        </file>
+      </xliff>
       """
 
   Scenario:
@@ -216,6 +255,24 @@ Feature: Call step in other step
 
       1 scenario (1 failed)
       6 steps (5 passed, 1 failed)
+      """
+
+  Scenario: Substeps i18n
+    Given a file named "features/calc_ru.feature" with:
+      """
+      # language: ru
+      Функционал: Стандартный калькулятор
+        Сценарий:
+          Если Я сложу числа "12" и "27"
+          То Я должен увидеть на экране "39"
+      """
+    When I run "behat -f progress features/calc_ru.feature"
+    Then it should pass with:
+      """
+      ..
+
+      1 scenario (1 passed)
+      2 steps (2 passed)
       """
 
   Scenario: Undefined substep in pretty format
