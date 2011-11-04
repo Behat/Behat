@@ -1,3 +1,11 @@
+2.1.3 / 2011-11-04
+==================
+
+  * Substep translations support
+  * Correctly print undefined substeps in pretty printer
+  * @Transform callback now gets all provided matches
+  * Always set proper encoding (UTF8)
+
 2.1.2 / 2011-10-12
 ==================
 
