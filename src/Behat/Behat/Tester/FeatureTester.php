@@ -71,13 +71,13 @@ class FeatureTester implements NodeVisitorInterface
     {
         $result = 0;
 
-        // If feature has scenario - run them
-        if (count($scenarios = $feature->getScenarios())) {
+        // If feature has scenarios - run them
+        if ($feature->hasScenarios()) {
             $this->dispatcher->dispatch(
                 'beforeFeature', new FeatureEvent($feature, $this->parameters)
             );
 
-            foreach ($scenarios as $scenario) {
+            foreach ($feature->getScenarios() as $scenario) {
                 if ($scenario instanceof OutlineNode) {
                     $tester = $this->container->get('behat.tester.outline');
                 } elseif ($scenario instanceof ScenarioNode) {
