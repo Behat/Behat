@@ -183,7 +183,7 @@ Feature: hooks
       """
 
   Scenario: Filter features
-    Given a file named "features/1.feature" with:
+    Given a file named "features/1-one.feature" with:
       """
       Feature:
         Scenario:
@@ -196,7 +196,7 @@ Feature: hooks
         Scenario: 130
           Given I must have 130
       """
-    Given a file named "features/2.feature" with:
+    Given a file named "features/2-two.feature" with:
       """
       @someFeature
       Feature:
@@ -210,14 +210,14 @@ Feature: hooks
       = do something BEFORE EVERY FEATURE
       Feature:
 
-        Scenario:             # features/1.feature:2
+        Scenario:             # features/1-one.feature:2
           Then I must have 50 # FeatureContext::iMustHave()
 
-        Scenario:                 # features/1.feature:5
+        Scenario:                 # features/1-one.feature:5
           Given I have entered 12 # FeatureContext::iHaveEntered()
           Then I must have 12     # FeatureContext::iMustHave()
 
-        Scenario: 130             # features/1.feature:9
+        Scenario: 130             # features/1-one.feature:9
           Given I must have 130   # FeatureContext::iMustHave()
 
       = do something AFTER EVERY FEATURE
@@ -226,7 +226,7 @@ Feature: hooks
       @someFeature
       Feature:
 
-        Scenario: 130             # features/2.feature:3
+        Scenario: 130             # features/2-two.feature:3
           Given I must have 130   # FeatureContext::iMustHave()
 
       = do something AFTER EVERY FEATURE
