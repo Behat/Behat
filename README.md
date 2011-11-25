@@ -1,6 +1,8 @@
 Behat
 =====
 
+[![Build Status](https://secure.travis-ci.org/Behat/Behat.png)](http://travis-ci.org/Behat/Behat)
+
 * The main website with documentation is at [http://behat.org](http://behat.org)
 * Official Google Group is at [http://groups.google.com/group/behat](http://groups.google.com/group/behat)
 
