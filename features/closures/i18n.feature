@@ -151,7 +151,7 @@ Feature: I18n
         Сценарий: Провален        # features/World.feature:20
           Если Я добавлю 4        # features/steps/math.php:11
           То Я должен иметь 13    # features/steps/math.php:7
-            Failed asserting that <integer:14> is equal to <string:13>.
+            Failed asserting that 14 matches expected '13'.
       
         Структура сценария: Пройдено и Провалено # features/World.feature:24
           Допустим Я должен иметь 10             # features/steps/math.php:7
@@ -161,10 +161,10 @@ Feature: I18n
           Значения:
             | значение | результат |
             | 5        | 16        |
-              Failed asserting that <integer:15> is equal to <string:16>.
+              Failed asserting that 15 matches expected '16'.
             | 10       | 20        |
             | 23       | 32        |
-              Failed asserting that <integer:33> is equal to <string:32>.
+              Failed asserting that 33 matches expected '32'.
       
       6 сценариев (1 пройден, 1 в ожидании, 1 не определен, 3 провалено)
       23 шага (16 пройдено, 2 пропущено, 1 в ожидании, 1 не определен, 3 провалено)
@@ -184,15 +184,15 @@ Feature: I18n
       
       (::) проваленные шаги (::)
       
-      01. Failed asserting that <integer:14> is equal to <string:13>.
+      01. Failed asserting that 14 matches expected '13'.
           In step `То Я должен иметь 13'. # features/steps/math.php:7
           From scenario `Провален'.       # features/World.feature:20
       
-      02. Failed asserting that <integer:15> is equal to <string:16>.
+      02. Failed asserting that 15 matches expected '16'.
           In step `То Я должен иметь 32'.       # features/steps/math.php:7
           From scenario `Пройдено и Провалено'. # features/World.feature:24
       
-      03. Failed asserting that <integer:33> is equal to <string:32>.
+      03. Failed asserting that 33 matches expected '32'.
           In step `То Я должен иметь 32'.       # features/steps/math.php:7
           From scenario `Пройдено и Провалено'. # features/World.feature:24
       

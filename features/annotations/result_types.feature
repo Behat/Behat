@@ -251,11 +251,11 @@ Feature: Different result types
 
       (::) failed steps (::)
 
-      01. Failed asserting that <integer:10> is equal to <string:12>.
+      01. Failed asserting that 10 matches expected '12'.
           In step `Then I should see 12$ on the screen'. # FeatureContext::iShouldSee()
           From scenario `Check throwed amount'.          # features/coffee.feature:9
 
-      02. Failed asserting that <integer:30> is equal to <string:31>.
+      02. Failed asserting that 30 matches expected '31'.
           In step `Then I should see 31$ on the screen'. # FeatureContext::iShouldSee()
           From scenario `Additional throws'.             # features/coffee.feature:12
 

@@ -114,7 +114,7 @@ Feature: Pretty Formatter
         Scenario: Failed             # features/World.feature:19
           When I add 4               # FeatureContext::iAdd()
           Then I must have 13        # FeatureContext::iMustHave()
-            Failed asserting that <integer:14> is equal to <string:13>.
+            Failed asserting that 14 matches expected '13'.
 
         Scenario Outline: Passed & Failed # features/World.feature:23
           Given I must have 10            # FeatureContext::iMustHave()
@@ -124,10 +124,10 @@ Feature: Pretty Formatter
           Examples:
             | value | result |
             | 5     | 16     |
-              Failed asserting that <integer:15> is equal to <string:16>.
+              Failed asserting that 15 matches expected '16'.
             | 10    | 20     |
             | 23    | 32     |
-              Failed asserting that <integer:33> is equal to <string:32>.
+              Failed asserting that 33 matches expected '32'.
 
       6 scenarios (1 passed, 1 pending, 1 undefined, 3 failed)
       23 steps (16 passed, 2 skipped, 1 pending, 1 undefined, 3 failed)

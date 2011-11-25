@@ -128,7 +128,7 @@ Feature: Format options
         Scenario: I'm little hungry   [30m# features/apples.feature:9[0m
           [32mWhen I ate [0m[32;1m1[0m[32m apple[0m          [30m# FeatureContext::iAteApples()[0m
           [31mThen I should have [0m[31;1m3[0m[31m apples[0m [30m# FeatureContext::iShouldHaveApples()[0m
-            [31mFailed asserting that <integer:2> is equal to <integer:3>.[0m
+            [31mFailed asserting that 2 matches expected 3.[0m
 
         Scenario: Found more apples   [30m# features/apples.feature:13[0m
           [32mWhen I found [0m[32;1m5[0m[32m apples[0m       [30m# FeatureContext::iFoundApples()[0m
@@ -148,7 +148,7 @@ Feature: Format options
       [36m[0m[36m      [0m[36m[0m|[36m[0m[36m ate [0m[36m[0m|[36m[0m[36m found [0m[36m[0m|[36m[0m[36m result [0m[36m[0m|[36m[0m
       [32m[0m[32m      [0m[32m[0m|[32m[0m[32m 3   [0m[32m[0m|[32m[0m[32m 1     [0m[32m[0m|[32m[0m[32m 1      [0m[32m[0m|[32m[0m
       [31m[0m[31m      [0m[31m[0m|[31m[0m[31m 0   [0m[31m[0m|[31m[0m[31m 4     [0m[31m[0m|[31m[0m[31m 8      [0m[31m[0m|[31m[0m
-              [31mFailed asserting that <integer:7> is equal to <integer:8>.[0m
+              [31mFailed asserting that 7 matches expected 8.[0m
       [32m[0m[32m      [0m[32m[0m|[32m[0m[32m 2   [0m[32m[0m|[32m[0m[32m 2     [0m[32m[0m|[32m[0m[32m 3      [0m[32m[0m|[32m[0m
 
         Scenario: Multilines                 [30m# features/apples.feature:33[0m
@@ -205,7 +205,7 @@ Feature: Format options
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
           Then I should have 3 apples # FeatureContext::iShouldHaveApples()
-            Failed asserting that <integer:2> is equal to <integer:3>.
+            Failed asserting that 2 matches expected 3.
 
         Scenario: Found more apples   # features/apples.feature:13
           When I found 5 apples       # FeatureContext::iFoundApples()
@@ -225,7 +225,7 @@ Feature: Format options
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
-              Failed asserting that <integer:7> is equal to <integer:8>.
+              Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
         Scenario: Multilines                 # features/apples.feature:33
@@ -282,7 +282,7 @@ Feature: Format options
         Scenario: I'm little hungry
           When I ate 1 apple
           Then I should have 3 apples
-            Failed asserting that <integer:2> is equal to <integer:3>.
+            Failed asserting that 2 matches expected 3.
 
         Scenario: Found more apples
           When I found 5 apples
@@ -302,7 +302,7 @@ Feature: Format options
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
-              Failed asserting that <integer:7> is equal to <integer:8>.
+              Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
         Scenario: Multilines
@@ -359,7 +359,7 @@ Feature: Format options
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
           Then I should have 3 apples # FeatureContext::iShouldHaveApples()
-            Failed asserting that <integer:2> is equal to <integer:3>.
+            Failed asserting that 2 matches expected 3.
 
         Scenario: Found more apples   # features/apples.feature:13
           When I found 5 apples       # FeatureContext::iFoundApples()
@@ -379,7 +379,7 @@ Feature: Format options
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
-              Failed asserting that <integer:7> is equal to <integer:8>.
+              Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
         Scenario: Multilines                 # features/apples.feature:33
@@ -410,7 +410,7 @@ Feature: Format options
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
           Then I should have 3 apples # FeatureContext::iShouldHaveApples()
-            Failed asserting that <integer:2> is equal to <integer:3>.
+            Failed asserting that 2 matches expected 3.
 
         Scenario: Found more apples   # features/apples.feature:13
           When I found 5 apples       # FeatureContext::iFoundApples()
@@ -430,7 +430,7 @@ Feature: Format options
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
-              Failed asserting that <integer:7> is equal to <integer:8>.
+              Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
         Scenario: Multilines                 # features/apples.feature:33
@@ -493,7 +493,7 @@ Feature: Format options
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
           Then I should have 3 apples # FeatureContext::iShouldHaveApples()
-            Failed asserting that <integer:2> is equal to <integer:3>.
+            Failed asserting that 2 matches expected 3.
 
         Scenario: Found more apples   # features/apples.feature:13
           When I found 5 apples       # FeatureContext::iFoundApples()
@@ -518,7 +518,7 @@ Feature: Format options
               When I ate 0 apples            # FeatureContext::iAteApples()
               And I found 4 apples           # FeatureContext::iFoundApples()
               Then I should have 8 apples    # FeatureContext::iShouldHaveApples()
-                Failed asserting that <integer:7> is equal to <integer:8>.
+                Failed asserting that 7 matches expected 8.
 
             Examples: | 2 | 2 | 3 |
               When I ate 2 apples            # FeatureContext::iAteApples()
@@ -579,7 +579,7 @@ Feature: Format options
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
           Then I should have 3 apples # FeatureContext::iShouldHaveApples()
-            Failed asserting that <integer:2> is equal to <integer:3>.
+            Failed asserting that 2 matches expected 3.
 
         Scenario: Found more apples   # features/apples.feature:13
           When I found 5 apples       # FeatureContext::iFoundApples()
@@ -599,7 +599,7 @@ Feature: Format options
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
-              Failed asserting that <integer:7> is equal to <integer:8>.
+              Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
         Scenario: Multilines                 # features/apples.feature:33

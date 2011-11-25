@@ -133,10 +133,10 @@ Feature: Call step in other step
     Then it should pass with:
       """
       .....
-      
+
       1 scenario (1 passed)
       5 steps (5 passed)
-      """      
+      """
 
   Scenario:
     Given a file named "features/calc_en.feature" with:
@@ -151,13 +151,13 @@ Feature: Call step in other step
     Then it should fail with:
       """
       ..F
-      
+
       (::) failed steps (::)
-      
-      01. Failed asserting that <integer:7> is equal to <string:8>.
+
+      01. Failed asserting that 7 matches expected '8'.
           In step `Then I should see "8" on the screen'. # features/steps/calc_steps_en.php:9
           From scenario ***.                             # features/calc_en.feature:2
-      
+
       1 scenario (1 failed)
       3 steps (2 passed, 1 failed)
       """
@@ -178,10 +178,10 @@ Feature: Call step in other step
     Then it should pass with:
       """
       .....
-      
+
       1 scenario (1 passed)
       5 steps (5 passed)
-      """      
+      """
 
   Scenario:
     Given a file named "features/calc_ru.feature" with:
@@ -200,29 +200,17 @@ Feature: Call step in other step
     Then it should fail with:
       """
       ..FF
-      
+
       (::) failed steps (::)
-      
-      01. Failed asserting that <integer:7> is equal to <string:8>.
+
+      01. Failed asserting that 7 matches expected '8'.
           In step `То Я должен увидеть на экране "8"'. # features/steps/calc_steps_ru.php:8
           From scenario ***.                           # features/calc_ru.feature:3
-      
-      02. Failed asserting that
-          Array
-          (
-              [username] => antono
-              [password] => 123
-          )
-           is equal to
-          Array
-          (
-              [username] => everzet
-              [password] => qwerty
-          )
-          .
+
+      02. Failed asserting that two arrays are equal.
           In step `Допустим Я создам себе failing таблицу'. # features/steps/calc_steps_ru.php:11
           From scenario ***.                                # features/calc_ru.feature:8
-      
+
       2 scenarios (2 failed)
       4 steps (2 passed, 2 failed)
       """
