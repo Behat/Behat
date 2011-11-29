@@ -4,15 +4,15 @@
     <body>
       <trans-unit id="proposal-title">
         <source>You can implement step definitions for undefined steps with these snippets:</source>
-        <target>Puedes implementer definition de pasos para pasos no definidos con estos codigos:</target>
+        <target>Puedes implementar la definición de pasos de los pasos sin definir con el siguiente código:</target>
       </trans-unit>
       <trans-unit id="failed-steps-title">
         <source>failed steps</source>
-        <target>Pasos que fallaron.</target>
+        <target>Pasos fallidos</target>
       </trans-unit>
       <trans-unit id="pending-steps-title">
         <source>pending steps</source>
-        <target>Pasos pendientes.</target>
+        <target>Pasos pendientes</target>
       </trans-unit>
       <trans-unit id="scenarios-count">
         <source><![CDATA[{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios]]></source>
@@ -24,7 +24,7 @@
       </trans-unit>
       <trans-unit id="passed-count">
         <source><![CDATA[[1,Inf] %1% passed]]></source>
-        <target><![CDATA[[1,Inf] %1% correctos]]></target>
+        <target><![CDATA[[1,Inf] %1% exitosos]]></target>
       </trans-unit>
       <trans-unit id="failed-count">
         <source><![CDATA[[1,Inf] %1% failed]]></source>
@@ -36,7 +36,7 @@
       </trans-unit>
       <trans-unit id="undefined-count">
         <source><![CDATA[[1,Inf] %1% undefined]]></source>
-        <target><![CDATA[[1,Inf] %1% undefinidos]]></target>
+        <target><![CDATA[[1,Inf] %1% sin definir]]></target>
       </trans-unit>
       <trans-unit id="skipped-count">
         <source><![CDATA[[1,Inf] %1% skipped]]></source>
