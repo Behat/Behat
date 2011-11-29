@@ -284,6 +284,12 @@
                 <argument>nl</argument>
                 <argument>behat</argument>
             </call>
+            <call method="addResource">
+                <argument>xliff</argument>
+                <argument>%behat.paths.i18n%/pl.xliff</argument>
+                <argument>pl</argument>
+                <argument>behat</argument>
+            </call>
 
             <!-- Gherkin translation resources -->
             <call method="addResource">
