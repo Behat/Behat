@@ -18,10 +18,16 @@ Note on Patches/Pull Requests
    bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request.
 
+Installing Dependencies
+-----------------------
+
+    wget -nc http://getcomposer.org/composer.phar
+    php composer.phar update
+
 Running tests
 -------------
 
-	behat
+	php bin/behat.php
 
 If you get errors about missing dependencies - just run
 
