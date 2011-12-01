@@ -41,6 +41,10 @@ class FormatProcessor implements ProcessorInterface
     public function configure(Command $command)
     {
         $defaultFormatters = $this->defaultFormatters;
+        $defaultLanguage   = null;
+        if (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
+            $defaultLanguage = $matches[1];
+        }
 
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
@@ -67,7 +71,8 @@ class FormatProcessor implements ProcessorInterface
                 'Hide time in output.'
             )
             ->addOption('--lang', null, InputOption::VALUE_REQUIRED,
-                'Print formatter output in particular language.'
+                'Print formatter output in particular language.',
+                $defaultLanguage
             )
             ->addOption('--no-paths', null, InputOption::VALUE_NONE,
                 'Do not print the definition path with the steps.'
@@ -114,8 +119,6 @@ class FormatProcessor implements ProcessorInterface
 
         if ($input->getOption('lang')) {
             $formatter->setParameter('language', $input->getOption('lang'));
-        } elseif (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
-            $formatter->setParameter('language', $matches[1]);
         }
 
         if ($input->getOption('colors')) {
