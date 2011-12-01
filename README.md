@@ -29,10 +29,6 @@ Running tests
 
 	php bin/behat.php
 
-If you get errors about missing dependencies - just run
-
-	git submodule update --init
-
 Copyright
 ---------
 
