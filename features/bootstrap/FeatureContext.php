@@ -103,7 +103,7 @@ class FeatureContext extends BaseFeaturesContext
              : escapeshellarg(BEHAT_PHP_BIN_PATH);
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
-        exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --no-time --no-colors ' . $argumentsString, $output, $return);
+        exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --lang=en --no-time --no-colors ' . $argumentsString, $output, $return);
 
         $this->command = 'behat ' . $argumentsString;
         $this->output  = trim(implode("\n", $output));
