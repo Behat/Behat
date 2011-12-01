@@ -17,7 +17,7 @@ use Symfony\Component\Finder\Finder;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class MapFileCompiler
+class PearMapFileCompiler
 {
     /**
      * Behat lib directory.
@@ -46,39 +46,31 @@ class MapFileCompiler
         }
         $mappings = '';
 
-        foreach ($this->findPhpFile()->in($this->libPath . '/src') as $file) {
-            $path   = str_replace($this->libPath . '/src/', '', $file->getRealPath());
-            $class  = str_replace(array('/', '.php'), array('\\', ''), $path);
-            $mappings .= "\$mappings['$class'] = \$behatDir . 'src/$path';\n";
-        }
-
-        foreach ($this->findPhpFile()->in($this->libPath . '/vendor/Gherkin/src') as $file) {
-            $path  = str_replace($this->libPath . '/vendor/Gherkin/src/', '', $file->getRealPath());
-            $class = str_replace(array('/', '.php'), array('\\', ''), $path);
-            $mappings .= "\$mappings['$class'] = \$gherkinDir . 'src/$path';\n";
-        }
+        $mappings .= $this->generateMappingFor(
+            $this->libPath.'/src',
+            "__DIR__ . '/src/'"
+        );
+        $mappings .= $this->generateMappingFor(
+            $this->libPath.'/vendor/behat/gherkin/src',
+            "'gherkin/src/'"
+        );
 
         $mappings .= "\nif (!defined('BEHAT_AUTOLOAD_SF2') || true === BEHAT_AUTOLOAD_SF2) {\n";
-        foreach ($this->findPhpFile()->in($this->libPath . '/vendor/Symfony') as $file) {
-            $path  = str_replace($this->libPath . '/vendor/', '', $file->getRealPath());
-            $class = str_replace(array('/', '.php'), array('\\', ''), $path);
-            $mappings .= "    \$mappings['$class'] = \$symfonyDir . '$path';\n";
-        }
+        $mappings .= $this->generateMappingFor(
+            array(
+                $this->libPath.'/vendor/symfony/config',
+                $this->libPath.'/vendor/symfony/console',
+                $this->libPath.'/vendor/symfony/dependency-injection',
+                $this->libPath.'/vendor/symfony/event-dispatcher',
+                $this->libPath.'/vendor/symfony/finder',
+                $this->libPath.'/vendor/symfony/translation',
+                $this->libPath.'/vendor/symfony/yaml',
+            )
+        );
         $mappings .= "}\n";
 
         $mapContent = <<<MAP_FILE
 <?php
-
-\$behatDir = __DIR__ . '/';
-if (is_dir(__DIR__ . '/vendor/Symfony/')) {
-    \$symfonyDir = __DIR__ . '/vendor/';
-} else {
-    \$symfonyDir = '';
-}
-if (!is_dir(\$gherkinDir = __DIR__ . '/vendor/Gherkin/')) {
-    \$gherkinDir = 'gherkin/';
-}
-
 \$mappings = array();
 $mappings
 return \$mappings;
@@ -86,6 +78,35 @@ MAP_FILE;
 
         file_put_contents($mapFilename, $mapContent);
         file_put_contents($autoloaderFilename, $this->getAutoloadScript($mapFilename));
+    }
+
+    /**
+     * Generates mapping for specific path(s).
+     *
+     * @param   mixed       $paths      single path or array of paths
+     * @param   string|null $prefixCode path prefix code
+     *
+     * @return  strings
+     */
+    protected function generateMappingFor($paths, $prefixCode = null)
+    {
+        $mappings = '';
+
+        foreach ((array) $paths as $path) {
+            $trim = $path.'/';
+            foreach ($this->findPhpFile()->in($path) as $file) {
+                $path  = str_replace($trim, '', $file->getRealPath());
+                $class = str_replace(array('/', '.php'), array('\\', ''), $path);
+
+                if (null !== $prefixCode) {
+                    $mappings .= "\$mappings['{$class}'] = {$prefixCode} . '{$path}';\n";
+                } else {
+                    $mappings .= "\$mappings['{$class}'] = '{$path}';\n";
+                }
+            }
+        }
+
+        return $mappings;
     }
 
     /**

@@ -1,0 +1,29 @@
+{
+    "name":         "behat/behat",
+    "description":  "Scenario-oriented BDD framework for PHP 5.3",
+    "keywords":     ["BDD", "Behat", "Symfony2"],
+    "homepage":     "http://behat.org/",
+    "type":         "library",
+    "license":      "MIT",
+    "authors":      [
+        {
+            "name":      "Konstantin Kudryashov",
+            "email":     "ever.zet@gmail.com",
+            "homepage":  "http://everzet.com"
+        }
+    ],
+    "require": {
+        "php":                           ">=5.3.1",
+        "behat/gherkin":                 ">=1.1.2,<2.0",
+        "symfony/console":               ">=2.0,<2.2-dev",
+        "symfony/dependency-injection":  ">=2.0,<2.2-dev",
+        "symfony/event-dispatcher":      ">=2.0,<2.2-dev",
+        "symfony/translation":           ">=2.0,<2.2-dev",
+        "symfony/finder":                ">=2.0,<2.2-dev"
+    },
+    "autoload": {
+        "psr-0": {
+            "Behat\\Behat": "src/"
+        }
+    }
+}
