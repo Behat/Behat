@@ -114,6 +114,8 @@ class FormatProcessor implements ProcessorInterface
 
         if ($input->getOption('lang')) {
             $formatter->setParameter('language', $input->getOption('lang'));
+        } elseif (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
+            $formatter->setParameter('language', $matches[1]);
         }
 
         if ($input->getOption('colors')) {
