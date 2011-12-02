@@ -6,7 +6,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag,
     Symfony\Component\EventDispatcher\EventDispatcher,
     Symfony\Component\EventDispatcher\Event,
     Symfony\Component\Translation\Translator,
-    Symfony\Component\Console\Output\StreamOutput;
+    Symfony\Component\Console\Output\StreamOutput,
+    Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 use Behat\Behat\Event\StepEvent,
     Behat\Behat\Exception\FormatterException,
@@ -61,6 +62,7 @@ abstract class ConsoleFormatter implements FormatterInterface
             'base_path'             => null,
             'support_path'          => null,
             'output_path'           => null,
+            'output_styles'         => array(),
             'snippets'              => true,
             'snippets_paths'        => false,
             'paths'                 => true,
@@ -216,8 +218,26 @@ abstract class ConsoleFormatter implements FormatterInterface
     protected function createOutputConsole()
     {
         $stream = $this->createOutputStream();
+        $format = new OutputFormatter();
 
-        return new StreamOutput($stream, StreamOutput::VERBOSITY_NORMAL, null, new OutputFormatter());
+        // set user-defined styles
+        foreach ($this->parameters->get('output_styles') as $name => $options) {
+            $style = new OutputFormatterStyle();
+
+            if (isset($options[0]) && null !== $options[0]) {
+                $style->setForeground($options[0]);
+            }
+            if (isset($options[1]) && null !== $options[1]) {
+                $style->setBackground($options[1]);
+            }
+            if (isset($options[2]) && is_array($options[2])) {
+                $style->setOptions($options[2]);
+            }
+
+            $format->setStyle($name, $style);
+        }
+
+        return new StreamOutput($stream, StreamOutput::VERBOSITY_NORMAL, null, $format);
     }
 
     /**
