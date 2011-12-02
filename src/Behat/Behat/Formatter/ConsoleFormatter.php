@@ -224,13 +224,13 @@ abstract class ConsoleFormatter implements FormatterInterface
         foreach ($this->parameters->get('output_styles') as $name => $options) {
             $style = new OutputFormatterStyle();
 
-            if (isset($options[0]) && null !== $options[0]) {
+            if (isset($options[0])) {
                 $style->setForeground($options[0]);
             }
-            if (isset($options[1]) && null !== $options[1]) {
+            if (isset($options[1])) {
                 $style->setBackground($options[1]);
             }
-            if (isset($options[2]) && is_array($options[2])) {
+            if (isset($options[2])) {
                 $style->setOptions($options[2]);
             }
 
