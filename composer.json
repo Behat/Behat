@@ -25,5 +25,8 @@
         "psr-0": {
             "Behat\\Behat": "src/"
         }
-    }
+    },
+    "bin": [
+        "bin/behat"
+    ]
 }

@@ -142,7 +142,7 @@ class PearCompiler
         <dir name="/">
             ##SOURCE_FILES##
 
-            <file role="script" baseinstalldir="/" name="bin/behat.php">
+            <file role="script" baseinstalldir="/" name="bin/behat">
                 <tasks:replace from="/usr/bin/env php" to="php_bin" type="pear-config" />
                 <tasks:replace from="DEV" to="version" type="package-info" />
             </file>
@@ -221,13 +221,13 @@ class PearCompiler
             </os>
         </installconditions>
         <filelist>
-            <install as="behat" name="bin/behat.php" />
+            <install as="behat" name="bin/behat" />
             <install as="behat.bat" name="bin/behat.bat" />
         </filelist>
     </phprelease>
     <phprelease>
         <filelist>
-            <install as="behat" name="bin/behat.php" />
+            <install as="behat" name="bin/behat" />
             <ignore name="bin/behat.bat" />
         </filelist>
      </phprelease>
