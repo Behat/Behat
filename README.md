@@ -27,7 +27,7 @@ Installing Dependencies
 Running tests
 -------------
 
-	php bin/behat
+	bin/behat
 
 Copyright
 ---------
