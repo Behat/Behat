@@ -26,7 +26,5 @@
             "Behat\\Behat": "src/"
         }
     },
-    "bin": [
-        "bin/behat"
-    ]
+    "bin": ["bin/behat"]
 }
