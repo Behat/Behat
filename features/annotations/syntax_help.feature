@@ -183,3 +183,51 @@ Feature: Syntax helpers
        When /^Я нашел (\d+) яблоко?$/
        Then /^I should have (\d+) apples$/
       """
+
+  Scenario: Print available definitions with functions associated
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\PendingException;
+
+      class FeatureContext extends BehatContext
+      {
+          /**
+           * @Given /^I have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^I ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^I found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then /^I should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              throw new PendingException();
+          }
+      }
+      """
+    When I run "behat --definitions-source"
+    Then the output should contain:
+      """
+      Given /^I have (\d+) apples?$/       # FeatureContext::iHaveApples()
+       When /^I ate (\d+) apples?$/        # FeatureContext::iAteApples()
+       When /^I found (\d+) apples?$/      # FeatureContext::iFoundApples()
+       Then /^I should have (\d+) apples$/ # FeatureContext::iShouldHaveApples()
+      """
