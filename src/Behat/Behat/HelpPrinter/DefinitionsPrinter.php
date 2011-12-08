@@ -97,8 +97,7 @@ class DefinitionsPrinter
             if ('description' === $helpTextType) {
                 $helpText = $definition->getDescription() ? ' - ' . $definition->getDescription() : '';
             } elseif ('function' === $helpTextType) {
-                $callback = $definition->getCallback();
-                $helpText = sprintf(' # %s::%s', $callback[0], $callback[1]);
+                $helpText = ' # ' . $definition->getPath();
             }
 
             $definitions[] = sprintf("%s %s%-${space}s%s",

@@ -226,8 +226,8 @@ Feature: Syntax helpers
     When I run "behat --definitions-functions"
     Then the output should contain:
       """
-      Given /^I have (\d+) apples?$/       # FeatureContext::iHaveApples
-       When /^I ate (\d+) apples?$/        # FeatureContext::iAteApples
-       When /^I found (\d+) apples?$/      # FeatureContext::iFoundApples
-       Then /^I should have (\d+) apples$/ # FeatureContext::iShouldHaveApples
+      Given /^I have (\d+) apples?$/       # FeatureContext::iHaveApples()
+       When /^I ate (\d+) apples?$/        # FeatureContext::iAteApples()
+       When /^I found (\d+) apples?$/      # FeatureContext::iFoundApples()
+       Then /^I should have (\d+) apples$/ # FeatureContext::iShouldHaveApples()
       """
