@@ -37,7 +37,7 @@ class HelpProcessor implements ProcessorInterface
                 "Print available step definitions and their descriptions (if any).\n" .
                 "Use <info>--lang</info> to see specific language.\n"
             )
-            ->addOption('--definitions-functions', null, InputOption::VALUE_NONE,
+            ->addOption('--definitions-source', null, InputOption::VALUE_NONE,
                 "Print available step definitions and their matching functions.\n" .
                 "Use <info>--lang</info> to see specific language.\n"
             )
@@ -65,7 +65,7 @@ class HelpProcessor implements ProcessorInterface
             exit(0);
         }
 
-        if ($input->getOption('definitions-functions')) {
+        if ($input->getOption('definitions-source')) {
             $container->get('behat.help_printer.definitions')->printDefinitionsFunctions(
                 $output, $input->getOption('lang') ?: 'en'
             );

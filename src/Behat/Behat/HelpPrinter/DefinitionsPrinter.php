@@ -66,7 +66,7 @@ class DefinitionsPrinter
             'capture', new OutputFormatterStyle('yellow', null, array('bold'))
         );
 
-        $output->writeln($this->getDefinitionsForPrint($language, 'function'));
+        $output->writeln($this->getDefinitionsForPrint($language, 'source'));
     }
 
     /**
@@ -96,7 +96,7 @@ class DefinitionsPrinter
             $helpText = '';
             if ('description' === $helpTextType) {
                 $helpText = $definition->getDescription() ? ' - ' . $definition->getDescription() : '';
-            } elseif ('function' === $helpTextType) {
+            } elseif ('source' === $helpTextType) {
                 $helpText = ' # ' . $definition->getPath();
             }
 

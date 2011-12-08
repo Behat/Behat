@@ -223,7 +223,7 @@ Feature: Syntax helpers
           }
       }
       """
-    When I run "behat --definitions-functions"
+    When I run "behat --definitions-source"
     Then the output should contain:
       """
       Given /^I have (\d+) apples?$/       # FeatureContext::iHaveApples()
