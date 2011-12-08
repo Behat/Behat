@@ -51,7 +51,22 @@ class DefinitionsPrinter
             'capture', new OutputFormatterStyle('yellow', null, array('bold'))
         );
 
-        $output->writeln($this->getDefinitionsForPrint($language));
+        $output->writeln($this->getDefinitionsForPrint($language, 'description'));
+    }
+
+    /**
+     * Prints step definitions and their associated functions into console.
+     *
+     * @param   Symfony\Component\Console\Output\OutputInterface    $output
+     * @param   string                                              $language
+     */
+    public function printDefinitionsFunctions(OutputInterface $output, $language = 'en')
+    {
+        $output->getFormatter()->setStyle(
+            'capture', new OutputFormatterStyle('yellow', null, array('bold'))
+        );
+
+        $output->writeln($this->getDefinitionsForPrint($language, 'function'));
     }
 
     /**
@@ -61,7 +76,7 @@ class DefinitionsPrinter
      *
      * @return  string
      */
-    private function getDefinitionsForPrint($language = 'en')
+    private function getDefinitionsForPrint($language = 'en', $helpTextType)
     {
         $lineLength = 0;
         foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
@@ -78,11 +93,19 @@ class DefinitionsPrinter
             }, $regex);
             $type  = str_pad($definition->getType(), 5, ' ', STR_PAD_LEFT);
 
+            $helpText = '';
+            if ('description' === $helpTextType) {
+                $helpText = $definition->getDescription() ? ' - ' . $definition->getDescription() : '';
+            } elseif ('function' === $helpTextType) {
+                $callback = $definition->getCallback();
+                $helpText = sprintf(' # %s::%s', $callback[0], $callback[1]);
+            }
+
             $definitions[] = sprintf("%s %s%-${space}s%s",
                 "<info>$type</info>",
                 "<comment>$regex</comment>",
                 '',
-                $definition->getDescription() ? ' - ' . $definition->getDescription() : ''
+                $helpText
             );
         }
 
