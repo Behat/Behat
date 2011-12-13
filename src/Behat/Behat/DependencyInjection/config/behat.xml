@@ -35,6 +35,9 @@
         <parameter key="gherkin.keywords_dumper.class">Behat\Gherkin\Keywords\KeywordsDumper</parameter>
         <parameter key="gherkin.keywords.path">%gherkin.paths.lib%/i18n</parameter>
 
+        <!-- Core -->
+        <parameter key="behat.runner.class">Behat\Behat\Runner</parameter>
+
         <!-- Context -->
         <parameter key="behat.context.class">FeatureContext</parameter>
         <parameter key="behat.context_dispatcher.class">Behat\Behat\Context\ContextDispatcher</parameter>
@@ -100,6 +103,11 @@
         </service>
         <service id="gherkin.keywords" class="%gherkin.keywords.class%">
             <argument type="service" id="behat.translator" />
+        </service>
+
+        <!-- Core -->
+        <service id="behat.runner" class="%behat.runner.class%">
+            <argument type="service" id="service_container" />
         </service>
 
         <!-- Context -->
