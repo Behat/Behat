@@ -55,9 +55,9 @@ class BehatCommand extends BaseCommand
             ))
             ->addArgument('features', InputArgument::OPTIONAL,
                 "Feature(s) to run. Could be:\n" .
-                "- a dir (<comment>features/</comment>)\n" .
-                "- a feature (<comment>*.feature</comment>)\n" .
-                "- a scenario at specific line (<comment>*.feature:10</comment>)."
+                "- a dir <comment>(features/)</comment>\n" .
+                "- a feature <comment>(*.feature)</comment>\n" .
+                "- a scenario at specific line <comment>(*.feature:10)</comment>."
             )
             ->configureProcessors()
         ;
