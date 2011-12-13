@@ -131,7 +131,7 @@ class FormatManager
 
         $formatter = new $class();
         $formatter->setTranslator($this->translator);
-        $this->dispatcher->addSubscriber($formatter, -10);
+        $this->dispatcher->addSubscriber($formatter, -5);
 
         return $this->formatters[] = $formatter;
     }

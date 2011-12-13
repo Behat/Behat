@@ -64,6 +64,7 @@ abstract class ConsoleFormatter implements FormatterInterface
             'output'                => null,
             'output_path'           => null,
             'output_styles'         => array(),
+            'output_decorate'       => null,
             'snippets'              => true,
             'snippets_paths'        => false,
             'paths'                 => true,
@@ -228,7 +229,9 @@ abstract class ConsoleFormatter implements FormatterInterface
             $format->setStyle($name, $style);
         }
 
-        return new StreamOutput($stream, StreamOutput::VERBOSITY_NORMAL, null, $format);
+        return new StreamOutput(
+            $stream, StreamOutput::VERBOSITY_NORMAL, $this->parameters->get('output_decorate'), $format
+        );
     }
 
     /**
