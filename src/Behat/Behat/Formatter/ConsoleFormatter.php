@@ -99,13 +99,6 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     final public function setParameter($name, $value)
     {
-        if (!$this->hasParameter($name)) {
-            throw new FormatterException(sprintf(
-                'The "%s" formatter does not support "%s" parameter',
-                basename(str_replace('\\', '/', get_class($this))), $name
-            ));
-        }
-
         $this->parameters->set($name, $value);
     }
 
@@ -114,13 +107,6 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     final public function getParameter($name)
     {
-        if (!$this->hasParameter($name)) {
-            throw new FormatterException(sprintf(
-                'The "%s" formatter does not support "%s" parameter',
-                basename(str_replace('\\', '/', get_class($this))), $name
-            ));
-        }
-
         return $this->parameters->get($name);
     }
 
@@ -200,7 +186,7 @@ abstract class ConsoleFormatter implements FormatterInterface
             $stream = fopen($outputPath, 'w');
         } else {
             throw new FormatterException(sprintf(
-                'Filename expected as "output_path" parameter of "%s" formatter, but got: \"%s\"',
+                'Filename expected as "output_path" parameter of "%s" formatter, but got: "%s"',
                 basename(str_replace('\\', '/', get_class($this))), $outputPath
             ));
         }
