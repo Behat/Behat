@@ -11,9 +11,10 @@
         <parameter key="behat.paths.features">%%BEHAT_BASE_PATH%%</parameter>
         <parameter key="behat.paths.bootstrap">%behat.paths.features%/bootstrap</parameter>
 
-        <!-- Formatter parameters -->
+        <!-- Format parameters -->
         <parameter key="behat.formatter.name">pretty</parameter>
         <parameter key="behat.formatter.parameters" type="collection"></parameter>
+        <parameter key="behat.format_manager.class">Behat\Behat\Formatter\FormatManager</parameter>
 
         <!-- Options -->
         <parameter key="behat.options.rerun">null</parameter>
@@ -187,6 +188,12 @@
         </service>
         <service id="behat.tester.step" class="%behat.tester.step.class%" scope="prototype">
             <argument type="service" id="service_container" />
+        </service>
+
+        <!-- Format -->
+        <service id="behat.format_manager" class="%behat.format_manager.class%">
+            <argument type="service" id="behat.translator" />
+            <argument type="service" id="behat.event_dispatcher" />
         </service>
 
         <!-- PathLocator -->
