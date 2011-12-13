@@ -94,18 +94,27 @@ class FormatProcessor implements ProcessorInterface
             $input->getOption('format') ?: $container->getParameter('behat.formatter.name')
         ));
 
+        // add user-defined formatter classes to manager
+        foreach ($container->getParameter('behat.formatter.classes') as $name => $class) {
+            $manager->setFormatterClass($name, $class);
+        }
+
+        // init specified for run formatters
         foreach ($formats as $format) {
             $manager->initFormatter($format);
+        }
+
+        // set formatter options from behat.yml
+        foreach (($parameters = $container->getParameter('behat.formatter.parameters')) as $name => $value) {
+            if ('output_path' === $name) {
+                continue;
+            }
+            $manager->setFormattersParameter($name, $value);
         }
 
         $manager->setFormattersParameter('base_path', $locator->getWorkPath());
         $manager->setFormattersParameter('support_path', $locator->getBootstrapPath());
         $manager->setFormattersParameter('decorated', $output->isDecorated());
-
-        $parameters = $container->getParameter('behat.formatter.parameters');
-        foreach ($parameters as $param => $value) {
-            $manager->setFormattersParameter($param, $value);
-        }
 
         if ($input->getOption('verbose')) {
             $manager->setFormattersParameter('verbose', true);

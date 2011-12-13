@@ -73,6 +73,10 @@ class Configuration
                         scalarNode('name')->
                             defaultValue('pretty')->
                         end()->
+                        arrayNode('classes')->
+                            useAttributeAsKey(0)->
+                            prototype('variable')->end()->
+                        end()->
                         arrayNode('parameters')->
                             useAttributeAsKey(0)->
                             prototype('variable')->end()->

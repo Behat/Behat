@@ -14,6 +14,7 @@
         <!-- Format parameters -->
         <parameter key="behat.formatter.name">pretty</parameter>
         <parameter key="behat.formatter.parameters" type="collection"></parameter>
+        <parameter key="behat.formatter.classes" type="collection"></parameter>
         <parameter key="behat.format_manager.class">Behat\Behat\Formatter\FormatManager</parameter>
 
         <!-- Options -->
