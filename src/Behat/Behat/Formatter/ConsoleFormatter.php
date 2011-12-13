@@ -61,6 +61,7 @@ abstract class ConsoleFormatter implements FormatterInterface
             'language'              => 'en',
             'base_path'             => null,
             'support_path'          => null,
+            'output'                => null,
             'output_path'           => null,
             'output_styles'         => array(),
             'snippets'              => true,
@@ -178,6 +179,10 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     protected function createOutputStream()
     {
+        if (is_resource($stream = $this->parameters->get('output'))) {
+            return $stream;
+        }
+
         $outputPath = $this->parameters->get('output_path');
 
         if (null === $outputPath) {
