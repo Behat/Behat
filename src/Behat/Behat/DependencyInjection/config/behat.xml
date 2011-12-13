@@ -18,6 +18,7 @@
         <!-- Options -->
         <parameter key="behat.options.rerun">null</parameter>
         <parameter key="behat.options.strict">null</parameter>
+        <parameter key="behat.options.dry_run">null</parameter>
 
         <!-- Environment parameters -->
         <parameter key="behat.context.parameters" type="collection"></parameter>

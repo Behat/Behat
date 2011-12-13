@@ -34,7 +34,13 @@ class HookDispatcher implements EventSubscriberInterface
      *
      * @var     array
      */
-    private $hooks = array();
+    private $hooks  = array();
+    /**
+     * Dry run of hooks.
+     *
+     * @var     Boolean
+     */
+    private $dryRun = false;
 
     /**
      * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
@@ -47,6 +53,16 @@ class HookDispatcher implements EventSubscriberInterface
         );
 
         return array_combine($events, $events);
+    }
+
+    /**
+     * Sets hook dispatcher to dry-run mode.
+     *
+     * @param   Boolean $dryRun
+     */
+    public function setDryRun($dryRun = true)
+    {
+        $this->dryRun = (bool) $dryRun;
     }
 
     /**
@@ -223,6 +239,10 @@ class HookDispatcher implements EventSubscriberInterface
      */
     protected function fireHooks($name, EventInterface $event)
     {
+        if ($this->dryRun) {
+            return;
+        }
+
         $hooks = isset($this->hooks[$name]) ? $this->hooks[$name] : array();
 
         foreach ($hooks as $hook) {

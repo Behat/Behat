@@ -84,10 +84,13 @@ class Configuration
                 arrayNode('options')->
                     fixXmlConfig('option')->
                     children()->
-                        scalarNode('rerun')->
+                        booleanNode('strict')->
                             defaultNull()->
                         end()->
-                        booleanNode('strict')->
+                        booleanNode('dry_run')->
+                            defaultNull()->
+                        end()->
+                        scalarNode('rerun')->
                             defaultNull()->
                         end()->
                     end()->

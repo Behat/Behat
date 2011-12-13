@@ -45,6 +45,12 @@ class FeatureTester implements NodeVisitorInterface
      * @var     mixed
      */
     private $parameters;
+    /**
+     * Dry run of tester.
+     *
+     * @var     Boolean
+     */
+    private $dryRun = false;
 
     /**
      * Initializes tester.
@@ -56,6 +62,16 @@ class FeatureTester implements NodeVisitorInterface
         $this->container  = $container;
         $this->dispatcher = $container->get('behat.event_dispatcher');
         $this->parameters = $container->get('behat.context_dispatcher')->getContextParameters();
+    }
+
+    /**
+     * Sets tester to dry-run mode.
+     *
+     * @param   Boolean $dryRun
+     */
+    public function setDryRun($dryRun = true)
+    {
+        $this->dryRun = (bool) $dryRun;
     }
 
     /**
@@ -87,6 +103,8 @@ class FeatureTester implements NodeVisitorInterface
                         'Unknown scenario type found: ' . get_class($scenario)
                     );
                 }
+
+                $tester->setDryRun($this->dryRun);
                 $result = max($result, $scenario->accept($tester));
             }
 

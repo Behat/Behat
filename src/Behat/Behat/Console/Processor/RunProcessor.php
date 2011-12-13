@@ -32,6 +32,9 @@ class RunProcessor implements ProcessorInterface
             ->addOption('--strict', null, InputOption::VALUE_NONE,
                 'Fail if there are any undefined or pending steps.'
             )
+            ->addOption('--dry-run', null, InputOption::VALUE_NONE,
+                'Invokes formatters without executing the steps & hooks.'
+            )
         ;
     }
 
@@ -44,6 +47,14 @@ class RunProcessor implements ProcessorInterface
             $container->get('behat.runner')->setStrict(true);
         } else {
             $container->get('behat.runner')->setStrict(false);
+        }
+
+        if ($input->getOption('dry-run') || $container->getParameter('behat.options.dry_run')) {
+            $container->get('behat.runner')->setDryRun(true);
+            $container->get('behat.hook_dispatcher')->setDryRun(true);
+        } else {
+            $container->get('behat.runner')->setDryRun(false);
+            $container->get('behat.hook_dispatcher')->setDryRun(false);
         }
     }
 }

@@ -24,6 +24,7 @@ class Runner
     private $container;
 
     private $strict = true;
+    private $dryRun = false;
 
     /**
      * Initializes runner.
@@ -55,6 +56,16 @@ class Runner
         return $this->strict;
     }
 
+    public function setDryRun($dryRun = true)
+    {
+        $this->dryRun = $dryRun;
+    }
+
+    public function isDryRun()
+    {
+        return $this->dryRun;
+    }
+
     /**
      * Runs feature suite.
      *
@@ -71,10 +82,12 @@ class Runner
         foreach ($paths as $path) {
             // parse every feature with Gherkin
             $features = $gherkin->load((string) $path);
-            $tester   = $this->container->get('behat.tester.feature');
 
             // and run it in FeatureTester
             foreach ($features as $feature) {
+                $tester = $this->container->get('behat.tester.feature');
+                $tester->setDryRun($this->isDryRun());
+
                 $feature->accept($tester);
             }
         }
