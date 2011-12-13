@@ -35,6 +35,10 @@ class RunProcessor implements ProcessorInterface
             ->addOption('--dry-run', null, InputOption::VALUE_NONE,
                 'Invokes formatters without executing the steps & hooks.'
             )
+            ->addOption('--rerun', null, InputOption::VALUE_REQUIRED,
+                "Save list of failed scenarios into new file\n" .
+                "or use existing file to run only scenarios from it."
+            )
         ;
     }
 
@@ -55,6 +59,14 @@ class RunProcessor implements ProcessorInterface
         } else {
             $container->get('behat.runner')->setDryRun(false);
             $container->get('behat.hook_dispatcher')->setDryRun(false);
+        }
+
+        if ($input->getOption('rerun') || $container->getParameter('behat.options.rerun')) {
+            $rerunDataCollector = $container->get('behat.rerun_data_collector');
+            $rerunDataCollector->setRerunFile(
+                $input->getOption('rerun') ?: $container->getParameter('behat.options.rerun')
+            );
+            $container->get('behat.event_dispatcher')->addSubscriber($rerunDataCollector, 0);
         }
     }
 }

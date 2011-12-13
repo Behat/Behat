@@ -51,7 +51,6 @@ class BehatCommand extends BaseCommand
                 new Processor\HelpProcessor(),
                 new Processor\GherkinProcessor(),
                 new Processor\RunProcessor(),
-                new Processor\RerunProcessor(),
             ))
             ->addArgument('features', InputArgument::OPTIONAL,
                 "Feature(s) to run. Could be:\n" .
