@@ -126,7 +126,7 @@ class FeatureContext extends BaseFeaturesContext
             assertEquals(0, $this->return);
         }
 
-        $text = strtr($text, array('\'\'\'' => '"""'));
+        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
@@ -187,6 +187,8 @@ class FeatureContext extends BaseFeaturesContext
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
+        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
+
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback('/ features\/[^\n ]+/', function($matches) {
