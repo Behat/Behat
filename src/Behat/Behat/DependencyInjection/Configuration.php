@@ -97,6 +97,9 @@ class Configuration
                         scalarNode('rerun')->
                             defaultNull()->
                         end()->
+                        scalarNode('append_snippets')->
+                            defaultNull()->
+                        end()->
                     end()->
                 end()->
             end()->

@@ -39,6 +39,9 @@ class RunProcessor implements ProcessorInterface
                 "Save list of failed scenarios into new file\n" .
                 "or use existing file to run only scenarios from it."
             )
+            ->addOption('--append-snippets', null, InputOption::VALUE_NONE,
+                "Appends snippets for undefined steps into main context."
+            )
         ;
     }
 
@@ -68,6 +71,32 @@ class RunProcessor implements ProcessorInterface
             $container->get('behat.format_manager')
                 ->initFormatter('failed')
                 ->setParameter('output_path', $file);
+        }
+
+        if ($file = $input->getOption('append-snippets') ?: $container->getParameter('behat.options.append_snippets')) {
+            $formatManager = $container->get('behat.format_manager');
+            $formatManager->setFormattersParameter('snippets', false);
+
+            $formatter = $formatManager->initFormatter('snippets');
+            $formatter->setParameter('decorated', false);
+            $formatter->setParameter('output_decorate', false);
+            $formatter->setParameter('output', $snippets = fopen('php://memory', 'rw'));
+
+            $contextRefl = new \ReflectionClass(
+                $container->get('behat.context_dispatcher')->getContextClass()
+            );
+            $container->get('behat.event_dispatcher')
+                ->addListener('afterSuite', function() use($contextRefl, $snippets) {
+                    rewind($snippets);
+                    $snippets = stream_get_contents($snippets);
+
+                    if (trim($snippets)) {
+                        $context = file_get_contents($contextRefl->getFileName());
+                        $context = preg_replace('/}[ \n]*$/', rtrim($snippets)."\n}\n", $context);
+
+                        file_put_contents($contextRefl->getFileName(), $context);
+                    }
+                }, -5);
         }
     }
 }
