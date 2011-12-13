@@ -45,7 +45,8 @@ class FormatManager
         'pretty'   => 'Behat\Behat\Formatter\PrettyFormatter',
         'progress' => 'Behat\Behat\Formatter\ProgressFormatter',
         'html'     => 'Behat\Behat\Formatter\HtmlFormatter',
-        'junit'    => 'Behat\Behat\Formatter\JUnitFormatter'
+        'junit'    => 'Behat\Behat\Formatter\JUnitFormatter',
+        'failed'   => 'Behat\Behat\Formatter\FailedScenariosFormatter'
     );
     /**
      * Formatter classes.
