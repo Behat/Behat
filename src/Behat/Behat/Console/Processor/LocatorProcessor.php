@@ -46,5 +46,7 @@ class LocatorProcessor implements ProcessorInterface
          && !is_dir($featuresPath = $locator->getFeaturesPath())) {
             throw new \InvalidArgumentException("Features path \"$featuresPath\" does not exist");
         }
+
+        $container->get('behat.runner')->setFeaturesPaths($locator->locateFeaturesPaths());
     }
 }

@@ -47,26 +47,27 @@ class RunProcessor implements ProcessorInterface
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('strict') || $container->getParameter('behat.options.strict')) {
-            $container->get('behat.runner')->setStrict(true);
-        } else {
-            $container->get('behat.runner')->setStrict(false);
-        }
+        $runner         = $container->get('behat.runner');
+        $hookDispatcher = $container->get('behat.hook_dispatcher');
 
-        if ($input->getOption('dry-run') || $container->getParameter('behat.options.dry_run')) {
-            $container->get('behat.runner')->setDryRun(true);
-            $container->get('behat.hook_dispatcher')->setDryRun(true);
-        } else {
-            $container->get('behat.runner')->setDryRun(false);
-            $container->get('behat.hook_dispatcher')->setDryRun(false);
-        }
+        $runner->setStrict(
+            $input->getOption('strict') || $container->getParameter('behat.options.strict')
+        );
+        $runner->setDryRun(
+            $input->getOption('dry-run') || $container->getParameter('behat.options.dry_run')
+        );
+        $hookDispatcher->setDryRun(
+            $input->getOption('dry-run') || $container->getParameter('behat.options.dry_run')
+        );
 
-        if ($input->getOption('rerun') || $container->getParameter('behat.options.rerun')) {
-            $rerunDataCollector = $container->get('behat.rerun_data_collector');
-            $rerunDataCollector->setRerunFile(
-                $input->getOption('rerun') ?: $container->getParameter('behat.options.rerun')
-            );
-            $container->get('behat.event_dispatcher')->addSubscriber($rerunDataCollector, 0);
+        if ($file = $input->getOption('rerun') ?: $container->getParameter('behat.options.rerun')) {
+            if (file_exists($file)) {
+                $runner->setFeaturesPaths(explode("\n", trim(file_get_contents($file))));
+            }
+
+            $container->get('behat.format_manager')
+                ->initFormatter('failed')
+                ->setParameter('output_path', $file);
         }
     }
 }

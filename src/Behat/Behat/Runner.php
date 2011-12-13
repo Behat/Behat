@@ -22,6 +22,7 @@ use Behat\Behat\Event\SuiteEvent;
 class Runner
 {
     private $container;
+    private $featuresPaths = array();
 
     private $strict = true;
     private $dryRun = false;
@@ -34,6 +35,16 @@ class Runner
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+    }
+
+    /**
+     * Sets features/scenarios paths to run.
+     *
+     * @param   array   $paths
+     */
+    public function setFeaturesPaths(array $paths)
+    {
+        $this->featuresPaths = $paths;
     }
 
     /**
@@ -73,13 +84,12 @@ class Runner
      */
     public function run()
     {
-        $paths   = $this->container->get('behat.rerun_data_collector')->locateFeaturesPaths();
         $gherkin = $this->container->get('gherkin');
 
         $this->beforeSuite();
 
         // read all features from their paths
-        foreach ($paths as $path) {
+        foreach ($this->featuresPaths as $path) {
             // parse every feature with Gherkin
             $features = $gherkin->load((string) $path);
 
