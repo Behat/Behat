@@ -150,6 +150,25 @@ class FeatureContext extends BaseFeaturesContext
     }
 
     /**
+     * Checks whether specified file exists and contains specified string.
+     *
+     * @Given /^"([^"]*)" file should contain:$/
+     *
+     * @param   string                          $path   file path
+     * @param   Behat\Gherkin\Node\PyStringNode $text   file content
+     */
+    public function fileShouldContain($path, PyStringNode $text)
+    {
+        try {
+            assertFileExists($path);
+            assertEquals((string) $text, trim(file_get_contents($path)));
+        } catch (Exception $e) {
+            $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
+            throw new Exception($diff, $e->getCode(), $e);
+        }
+    }
+
+    /**
      * Prints last command output string.
      *
      * @Then display last command output
