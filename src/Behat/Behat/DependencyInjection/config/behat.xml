@@ -88,24 +88,19 @@
     </parameters>
     <services>
         <!-- Gherkin Parser -->
-        <service id="gherkin" class="%gherkin.class%">
-            <call method="addLoader">
-                <argument type="service">
-                    <service class="%gherkin.loader.gherkin.class%">
-                        <argument type="service" id="gherkin.parser" />
-                    </service>
-                </argument>
-            </call>
-        </service>
+        <service id="gherkin" class="%gherkin.class%" />
         <service id="gherkin.parser" class="%gherkin.parser.class%">
-            <argument type="service">
-                <service class="%gherkin.lexer.class%">
-                    <argument type="service" id="gherkin.keywords" />
-                </service>
-            </argument>
+            <argument type="service" id="gherkin.lexer" />
+        </service>
+        <service id="gherkin.lexer" class="%gherkin.lexer.class%">
+            <argument type="service" id="gherkin.keywords" />
         </service>
         <service id="gherkin.keywords" class="%gherkin.keywords.class%">
             <argument type="service" id="behat.translator" />
+        </service>
+        <service id="gherkin.loader.gherkin" class="%gherkin.loader.gherkin.class%">
+            <argument type="service" id="gherkin.parser" />
+            <tag name="gherkin.loader" />
         </service>
 
         <!-- Core -->
@@ -116,40 +111,31 @@
         <!-- Context -->
         <service id="behat.context_reader" class="%behat.context_reader.class%">
             <argument type="service" id="behat.context_dispatcher" />
-            <call method="addLoader">
-                <argument type="service">
-                    <service class="%behat.context_loader.translated.class%">
-                        <argument type="service" id="behat.translator" />
-                    </service>
-                </argument>
-            </call>
-            <call method="addLoader">
-                <argument type="service">
-                    <service class="%behat.context_loader.annotated.class%">
-                        <argument type="service" id="behat.definition_dispatcher" />
-                        <argument type="service" id="behat.hook_dispatcher" />
-                    </service>
-                </argument>
-            </call>
-            <call method="addLoader">
-                <argument type="service">
-                    <service class="%behat.context_loader.closured.class%">
-                        <argument type="service">
-                            <service class="%behat.definition_loader.closured.class%">
-                                <argument type="service" id="behat.definition_dispatcher" />
-                            </service>
-                        </argument>
-                        <argument type="service">
-                            <service class="%behat.hook_loader.closured.class%">
-                                <argument type="service" id="behat.hook_dispatcher" />
-                            </service>
-                        </argument>
-                    </service>
-                </argument>
-            </call>
         </service>
         <service id="behat.context_dispatcher" class="%behat.context_dispatcher.class%">
             <argument>%behat.context.parameters%</argument>
+        </service>
+        <service id="behat.context_loader.translated" class="%behat.context_loader.translated.class%">
+            <argument type="service" id="behat.translator" />
+            <tag name="behat.context_loader" />
+        </service>
+        <service id="behat.context_loader.annotated" class="%behat.context_loader.annotated.class%">
+            <argument type="service" id="behat.definition_dispatcher" />
+            <argument type="service" id="behat.hook_dispatcher" />
+            <tag name="behat.context_loader" />
+        </service>
+        <service id="behat.context_loader.closured" class="%behat.context_loader.closured.class%">
+            <argument type="service">
+                <service class="%behat.definition_loader.closured.class%">
+                    <argument type="service" id="behat.definition_dispatcher" />
+                </service>
+            </argument>
+            <argument type="service">
+                <service class="%behat.hook_loader.closured.class%">
+                    <argument type="service" id="behat.hook_dispatcher" />
+                </service>
+            </argument>
+            <tag name="behat.context_loader" />
         </service>
 
         <!-- Definition Dispatcher -->
@@ -170,9 +156,6 @@
             </argument>
             <argument type="service" id="behat.translator" />
         </service>
-
-        <!-- Hook Dispatcher -->
-        <service id="behat.hook_dispatcher" class="%behat.hook_dispatcher.class%" />
 
         <!-- Tester -->
         <service id="behat.tester.feature" class="%behat.tester.feature.class%" scope="prototype">
@@ -203,19 +186,17 @@
         </service>
 
         <!-- Event Dispatcher -->
-        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%">
-            <call method="addSubscriber">
-                <argument type="service" id="behat.hook_dispatcher" />
-                <argument>10</argument>
-            </call>
-            <call method="addSubscriber">
-                <argument type="service" id="behat.logger" />
-                <argument>0</argument>
-            </call>
+        <service id="behat.event_dispatcher" class="%behat.event_dispatcher.class%" />
+
+        <!-- Hook Dispatcher -->
+        <service id="behat.hook_dispatcher" class="%behat.hook_dispatcher.class%">
+            <tag name="behat.event_subscriber" priority="10" />
         </service>
 
         <!-- DataCollector -->
-        <service id="behat.logger" class="%behat.logger.class%" />
+        <service id="behat.logger" class="%behat.logger.class%">
+            <tag name="behat.event_subscriber" priority="0" />
+        </service>
 
         <!-- HelpPrinter -->
         <service id="behat.help_printer.definitions" class="%behat.help_printer.definitions.class%">
