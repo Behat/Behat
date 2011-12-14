@@ -1,3 +1,19 @@
+2.2.0 / 2011-12-14
+==================
+
+  * Multiple formats and outputs support
+  * New `snippets` formatter
+  * New `failed` formatter
+  * Updated output of `-d` option
+  * Search abilities added to `-d` option
+  * New `--dry-run` option
+  * New `--append-snippets` option
+  * Rerun functionality refactored to use `failed` formatter internally
+  * Overall code refactoring and cleaning
+  * Polish translation added (Joseph Bielawski)
+  * Spanish translation updated (Andrés Botero)
+  * Locale autodetect
+
 2.1.3 / 2011-11-04
 ==================
 
