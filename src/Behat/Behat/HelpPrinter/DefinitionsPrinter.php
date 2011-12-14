@@ -43,69 +43,60 @@ class DefinitionsPrinter
      * Prints step definitions into console.
      *
      * @param   Symfony\Component\Console\Output\OutputInterface    $output
+     * @param   string                                              $search
      * @param   string                                              $language
+     * @param   Boolean                                             $shortNotation
      */
-    public function printDefinitions(OutputInterface $output, $language = 'en')
+    public function printDefinitions(OutputInterface $output, $search = null, $language = 'en', $shortNotation = true)
     {
         $output->getFormatter()->setStyle(
             'capture', new OutputFormatterStyle('yellow', null, array('bold'))
         );
-
-        $output->writeln($this->getDefinitionsForPrint($language, 'description'));
-    }
-
-    /**
-     * Prints step definitions and their associated functions into console.
-     *
-     * @param   Symfony\Component\Console\Output\OutputInterface    $output
-     * @param   string                                              $language
-     */
-    public function printDefinitionsFunctions(OutputInterface $output, $language = 'en')
-    {
         $output->getFormatter()->setStyle(
-            'capture', new OutputFormatterStyle('yellow', null, array('bold'))
+            'path', new OutputFormatterStyle('black')
         );
 
-        $output->writeln($this->getDefinitionsForPrint($language, 'source'));
+        $output->writeln($this->getDefinitionsForPrint($search, $language, $shortNotation));
     }
 
     /**
      * Returns available definitions in string.
      *
-     * @param   string  $language   default definitions language
+     * @param   string  $search         search string
+     * @param   string  $language       default definitions language
+     * @param   Boolean $shortNotation  show short notation instead of full one
      *
      * @return  string
      */
-    private function getDefinitionsForPrint($language = 'en', $helpTextType)
+    private function getDefinitionsForPrint($search = null, $language = 'en', $shortNotation = true)
     {
-        $lineLength = 0;
-        foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
-            $regex = $this->dispatcher->translateDefinitionRegex($regex, $language);
-            $lineLength = max($lineLength, mb_strlen($regex));
+        if ($shortNotation) {
+            $template = '<info>{type}</info> <comment>{regex}</comment>';
+        } else {
+            $template = <<<TPL
+<info>{type}</info> <comment>{regex}</comment>
+    {description}<path># {path}</path>
+
+TPL;
         }
 
         $definitions = array();
         foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
+            if ($search && !preg_match('/'.str_replace(' ', '.*', preg_quote($search, '/').'/'), $regex)) {
+                continue;
+            }
+
             $regex = $this->dispatcher->translateDefinitionRegex($regex, $language);
-            $space = $lineLength - mb_strlen($regex);
             $regex = preg_replace_callback('/\([^\)]*\)/', function($capture) {
                 return "</comment><capture>{$capture[0]}</capture><comment>";
             }, $regex);
-            $type  = str_pad($definition->getType(), 5, ' ', STR_PAD_LEFT);
 
-            $helpText = '';
-            if ('description' === $helpTextType) {
-                $helpText = $definition->getDescription() ? ' - ' . $definition->getDescription() : '';
-            } elseif ('source' === $helpTextType) {
-                $helpText = ' # ' . $definition->getPath();
-            }
-
-            $definitions[] = sprintf("%s %s%-${space}s%s",
-                "<info>$type</info>",
-                "<comment>$regex</comment>",
-                '',
-                $helpText
-            );
+            $definitions[] = strtr($template, array(
+                '{regex}'       => $regex,
+                '{type}'        => str_pad($definition->getType(), 5, ' ', STR_PAD_LEFT),
+                '{description}' => $definition->getDescription() ? '- '.$definition->getDescription()."\n    " : '',
+                '{path}'        => $definition->getPath()
+            ));
         }
 
         return implode("\n", $definitions);
