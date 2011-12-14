@@ -330,32 +330,41 @@ class ProgressFormatter extends ConsoleFormatter
                 'You can implement step definitions for undefined steps with these snippets:'
             );
             $this->writeln("\n{+undefined}$header{-undefined}\n");
+            $this->printSnippets($logger);
+        }
+    }
 
-            foreach ($logger->getDefinitionsSnippets() as $snippet) {
-                $snippetText = $snippet->getSnippet();
+    /**
+     * Prints steps snippets.
+     *
+     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     */
+    protected function printSnippets(LoggerDataCollector $logger)
+    {
+        foreach ($logger->getDefinitionsSnippets() as $snippet) {
+            $snippetText = $snippet->getSnippet();
 
-                if ($this->getParameter('snippets_paths')) {
-                    $indent = str_pad(
-                        '', mb_strlen($snippetText) - mb_strlen(ltrim($snippetText)), ' '
-                    );
-                    $this->writeln("{+undefined}$indent/**{-undefined}");
-                    foreach ($snippet->getSteps() as $step) {
-                        $this->writeln(sprintf(
-                            '{+undefined}%s * %s %s # %s:%d{-undefined}', $indent,
-                            $step->getType(), $step->getText(),
-                            $this->relativizePathsInString($step->getFile()), $step->getLine()
-                        ));
-                    }
-
-                    if (false !== mb_strpos($snippetText, '/**')) {
-                        $snippetText = str_replace('/**', ' *', $snippetText);
-                    } else {
-                        $this->writeln("{+undefined}$indent */{-undefined}");
-                    }
+            if ($this->getParameter('snippets_paths')) {
+                $indent = str_pad(
+                    '', mb_strlen($snippetText) - mb_strlen(ltrim($snippetText)), ' '
+                );
+                $this->writeln("{+undefined}$indent/**{-undefined}");
+                foreach ($snippet->getSteps() as $step) {
+                    $this->writeln(sprintf(
+                        '{+undefined}%s * %s %s # %s:%d{-undefined}', $indent,
+                        $step->getType(), $step->getText(),
+                        $this->relativizePathsInString($step->getFile()), $step->getLine()
+                    ));
                 }
 
-                $this->writeln("{+undefined}$snippetText{-undefined}\n");
+                if (false !== mb_strpos($snippetText, '/**')) {
+                    $snippetText = str_replace('/**', ' *', $snippetText);
+                } else {
+                    $this->writeln("{+undefined}$indent */{-undefined}");
+                }
             }
+
+            $this->writeln("{+undefined}$snippetText{-undefined}\n");
         }
     }
 

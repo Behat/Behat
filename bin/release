@@ -17,7 +17,10 @@
  * @author     Konstantin Kudryashov <ever.zet@gmail.com>
  */
 
-require_once __DIR__ . '/../autoload.php.dist';
+system('wget -nc http://getcomposer.org/composer.phar');
+system('php composer.phar update');
+
+require_once __DIR__ . '/../vendor/.composer/autoload.php';
 
 use Behat\Behat\Compiler;
 
@@ -31,7 +34,7 @@ if (!isset($argv[2])) {
 }
 $stability = $argv[2];
 
-$ldr = new Compiler\MapFileCompiler($autoloaderFilename = 'autoload.php', $mapFilename = 'autoload_map.php');
+$ldr = new Compiler\PearMapFileCompiler($autoloaderFilename = 'autoload.php', $mapFilename = 'autoload_map.php');
 $ldr->compile();
 echo "Autoloader compiled\n";
 
@@ -39,11 +42,11 @@ $pear = new Compiler\PearCompiler();
 $pear->compile($version, $stability);
 echo "PEAR package compiled: behat-$version.tgz\n";
 
+unlink($autoloaderFilename);
+unlink($mapFilename);
+
 $phar = new Compiler\PharCompiler();
 $phar->compile($version);
 echo "PHAR package compiled: behat-$version.phar\n";
-
-unlink($autoloaderFilename);
-unlink($mapFilename);
 
 exit(0);

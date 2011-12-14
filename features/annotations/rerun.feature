@@ -111,11 +111,11 @@ Feature: Rerun
 
       (::) failed steps (::)
 
-      01. Failed asserting that <integer:2> is equal to <integer:3>.
+      01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
 
-      02. Failed asserting that <integer:7> is equal to <integer:8>.
+      02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:21
 
@@ -132,11 +132,11 @@ Feature: Rerun
 
     (::) failed steps (::)
 
-    01. Failed asserting that <integer:2> is equal to <integer:3>.
+    01. Failed asserting that 2 matches expected 3.
         In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
         From scenario `I'm little hungry'.     # features/apples.feature:9
 
-    02. Failed asserting that <integer:7> is equal to <integer:8>.
+    02. Failed asserting that 7 matches expected 8.
         In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
         From scenario `Other situations'.      # features/apples.feature:21
 
@@ -187,7 +187,7 @@ Feature: Rerun
 
     (::) failed steps (::)
 
-    01. Failed asserting that <integer:2> is equal to <integer:3>.
+    01. Failed asserting that 2 matches expected 3.
         In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
         From scenario `I'm little hungry'.     # features/apples.feature:9
 

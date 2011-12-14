@@ -8,7 +8,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\DependencyInjection\BehatExtension;
+use Behat\Behat\DependencyInjection\BehatExtension,
+    Behat\Behat\DependencyInjection\Compiler\GherkinPass,
+    Behat\Behat\DependencyInjection\Compiler\ContextReaderPass,
+    Behat\Behat\DependencyInjection\Compiler\EventDispatcherPass;
 
 /*
  * This file is part of the Behat.
@@ -65,6 +68,10 @@ class ContainerProcessor implements ProcessorInterface
         } else {
             $config = $extension->load(array(array()), $container);
         }
+
+        $container->addCompilerPass(new GherkinPass());
+        $container->addCompilerPass(new ContextReaderPass());
+        $container->addCompilerPass(new EventDispatcherPass());
         $container->compile();
 
         if (file_exists($configFile)) {

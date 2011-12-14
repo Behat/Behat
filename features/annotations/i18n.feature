@@ -115,7 +115,7 @@ Feature: I18n
         Сценарий: Провален              # features/World.feature:20
           Если Я добавлю 4              # FeatureContext::iAdd()
           То Я должен иметь 13          # FeatureContext::iShouldHave()
-            Failed asserting that <integer:14> is equal to <integer:13>.
+            Failed asserting that 14 matches expected 13.
 
         Структура сценария: Пройдено и Провалено # features/World.feature:24
           Допустим Я должен иметь 10             # FeatureContext::iShouldHave()
@@ -125,10 +125,10 @@ Feature: I18n
           Значения:
             | значение | результат |
             | 5        | 16        |
-              Failed asserting that <integer:15> is equal to <integer:16>.
+              Failed asserting that 15 matches expected 16.
             | 10       | 20        |
             | 23       | 32        |
-              Failed asserting that <integer:33> is equal to <integer:32>.
+              Failed asserting that 33 matches expected 32.
 
       6 сценариев (1 пройден, 1 в ожидании, 1 не определен, 3 провалено)
       23 шага (16 пройдено, 2 пропущено, 1 в ожидании, 1 не определен, 3 провалено)
@@ -152,15 +152,15 @@ Feature: I18n
 
       (::) проваленные шаги (::)
 
-      01. Failed asserting that <integer:14> is equal to <integer:13>.
+      01. Failed asserting that 14 matches expected 13.
           In step `То Я должен иметь 13'. # FeatureContext::iShouldHave()
           From scenario `Провален'.       # features/World.feature:20
 
-      02. Failed asserting that <integer:15> is equal to <integer:16>.
+      02. Failed asserting that 15 matches expected 16.
           In step `То Я должен иметь 32'.       # FeatureContext::iShouldHave()
           From scenario `Пройдено и Провалено'. # features/World.feature:24
 
-      03. Failed asserting that <integer:33> is equal to <integer:32>.
+      03. Failed asserting that 33 matches expected 32.
           In step `То Я должен иметь 32'.       # FeatureContext::iShouldHave()
           From scenario `Пройдено и Провалено'. # features/World.feature:24
 

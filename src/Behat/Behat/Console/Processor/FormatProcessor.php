@@ -8,6 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
+use Behat\Behat\Formatter\FormatManager;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -24,38 +26,31 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 class FormatProcessor implements ProcessorInterface
 {
     /**
-     * Default Behat formatters.
-     *
-     * @var     array
-     */
-    private $defaultFormatters = array(
-        'pretty'    => 'Behat\Behat\Formatter\PrettyFormatter',
-        'progress'  => 'Behat\Behat\Formatter\ProgressFormatter',
-        'html'      => 'Behat\Behat\Formatter\HtmlFormatter',
-        'junit'     => 'Behat\Behat\Formatter\JUnitFormatter'
-    );
-
-    /**
      * @see     Behat\Behat\Console\Configuration\ProcessorInterface::configure()
      */
     public function configure(Command $command)
     {
-        $defaultFormatters = $this->defaultFormatters;
+        $defaultFormatters = FormatManager::getDefaultFormatterClasses();
+        $defaultLanguage   = null;
+        if (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
+            $defaultLanguage = $matches[1];
+        }
 
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
                 "How to format features. <comment>pretty</comment> is default.\n" .
-                "Available formats are:\n" .
+                "Default formatters are:\n" .
                 implode("\n",
                     array_map(function($name) use($defaultFormatters) {
                         $class = $defaultFormatters[$name];
                         return "- <comment>$name</comment>: " . $class::getDescription();
                     }, array_keys($defaultFormatters))
-                )
+                ) . "\n" .
+                "Can use multiple formats at once (splitted with \"<comment>,</comment>\")"
             )
             ->addOption('--out', null, InputOption::VALUE_REQUIRED,
                 "Write formatter output to a file/directory\n" .
-                "instead of STDOUT (<comment>output_path</comment>)."
+                "instead of STDOUT <comment>(output_path)</comment>."
             )
             ->addOption('--colors', null, InputOption::VALUE_NONE,
                 'Force Behat to use ANSI color in the output.'
@@ -67,7 +62,8 @@ class FormatProcessor implements ProcessorInterface
                 'Hide time in output.'
             )
             ->addOption('--lang', null, InputOption::VALUE_REQUIRED,
-                'Print formatter output in particular language.'
+                'Print formatter output in particular language.',
+                $defaultLanguage
             )
             ->addOption('--no-paths', null, InputOption::VALUE_NONE,
                 'Do not print the definition path with the steps.'
@@ -92,64 +88,85 @@ class FormatProcessor implements ProcessorInterface
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
-        $formatter = $this->createFormatter(
+        $manager = $container->get('behat.format_manager');
+        $locator = $container->get('behat.path_locator');
+        $formats = array_map('trim', explode(',',
             $input->getOption('format') ?: $container->getParameter('behat.formatter.name')
-        );
+        ));
 
-        $translator = $container->get('behat.translator');
-        $locator    = $container->get('behat.path_locator');
-
-        $formatter->setTranslator($translator);
-        $formatter->setParameter('base_path', $locator->getWorkPath());
-        $formatter->setParameter('support_path', $locator->getBootstrapPath());
-        $formatter->setParameter('decorated', $output->isDecorated());
-
-        foreach ($container->getParameter('behat.formatter.parameters') as $param => $value) {
-            $formatter->setParameter($param, $value);
+        // add user-defined formatter classes to manager
+        foreach ($container->getParameter('behat.formatter.classes') as $name => $class) {
+            $manager->setFormatterClass($name, $class);
         }
 
+        // init specified for run formatters
+        foreach ($formats as $format) {
+            $manager->initFormatter($format);
+        }
+
+        // set formatter options from behat.yml
+        foreach (($parameters = $container->getParameter('behat.formatter.parameters')) as $name => $value) {
+            if ('output_path' === $name) {
+                continue;
+            }
+            $manager->setFormattersParameter($name, $value);
+        }
+
+        $manager->setFormattersParameter('base_path', $locator->getWorkPath());
+        $manager->setFormattersParameter('support_path', $locator->getBootstrapPath());
+        $manager->setFormattersParameter('decorated', $output->isDecorated());
+
         if ($input->getOption('verbose')) {
-            $formatter->setParameter('verbose', true);
+            $manager->setFormattersParameter('verbose', true);
         }
 
         if ($input->getOption('lang')) {
-            $formatter->setParameter('language', $input->getOption('lang'));
+            $manager->setFormattersParameter('language', $input->getOption('lang'));
         }
 
         if ($input->getOption('colors')) {
             $output->setDecorated(true);
-            $formatter->setParameter('decorated', true);
+            $manager->setFormattersParameter('decorated', true);
         } elseif ($input->getOption('no-colors')) {
             $output->setDecorated(false);
-            $formatter->setParameter('decorated', false);
+            $manager->setFormattersParameter('decorated', false);
         }
 
         if ($input->getOption('no-time')) {
-            $formatter->setParameter('time', false);
+            $manager->setFormattersParameter('time', false);
         }
 
         if ($input->getOption('no-snippets')) {
-            $formatter->setParameter('snippets', false);
+            $manager->setFormattersParameter('snippets', false);
         }
 
         if ($input->getOption('snippets-paths')) {
-            $formatter->setParameter('snippets_paths', true);
+            $manager->setFormattersParameter('snippets_paths', true);
         }
 
         if ($input->getOption('no-paths')) {
-            $formatter->setParameter('paths', false);
+            $manager->setFormattersParameter('paths', false);
         }
 
         if ($input->getOption('expand')) {
-            $formatter->setParameter('expand', true);
+            $manager->setFormattersParameter('expand', true);
         }
 
         if ($input->getOption('no-multiline')) {
-            $formatter->setParameter('multiline_arguments', false);
+            $manager->setFormattersParameter('multiline_arguments', false);
         }
 
-        if ($out = $input->getOption('out')
-         ?: $locator->getOutputPath($formatter->getParameter('output_path'))) {
+        if ($input->getOption('out')) {
+            $outputs = $input->getOption('out');
+        } elseif (isset($parameters['output_path'])) {
+            $outputs = $parameters['output_path'];
+        } else {
+            return;
+        }
+
+        if (false === strpos($outputs, ',')) {
+            $out = $locator->getOutputPath($outputs);
+
             // get realpath
             if (!file_exists($out)) {
                 touch($out);
@@ -158,41 +175,32 @@ class FormatProcessor implements ProcessorInterface
             } else {
                 $out = realpath($out);
             }
-            $formatter->setParameter('output_path', $out);
-            $formatter->setParameter('decorated', (Boolean) $input->getOption('colors'));
-        }
 
-        $container->get('behat.event_dispatcher')->addSubscriber($formatter, -10);
-    }
-
-    /**
-     * Creates formatter with provided input.
-     *
-     * @param   string  $formatterName  formatter name or class
-     *
-     * @return  Behat\Behat\Formatter\FormatterInterface
-     *
-     * @throws  RuntimeException            if provided in input formatter name doesn't exists
-     */
-    private function createFormatter($formatterName)
-    {
-        if (class_exists($formatterName)) {
-            $class = $formatterName;
-        } elseif (isset($this->defaultFormatters[$formatterName])) {
-            $class = $this->defaultFormatters[$formatterName];
+            $manager->setFormattersParameter('output_path', $out);
+            $manager->setFormattersParameter('decorated', (bool) $input->getOption('colors'));
         } else {
-            throw new \RuntimeException("Unknown formatter: \"$formatterName\". " .
-                'Available formatters are: ' . implode(', ', array_keys($this->defaultFormatters))
-            );
-        }
+            foreach (array_map('trim', explode(',', $outputs)) as $i => $out) {
+                if (!$out || 'null' === $out || 'false' === $out) {
+                    continue;
+                }
 
-        $refClass = new \ReflectionClass($class);
-        if (!$refClass->implementsInterface('Behat\Behat\Formatter\FormatterInterface')) {
-            throw new \RuntimeException(sprintf(
-                'Formatter class "%s" should implement FormatterInterface', $class
-            ));
-        }
+                $out = $locator->getOutputPath($out);
 
-        return new $class();
+                // get realpath
+                if (!file_exists($out)) {
+                    touch($out);
+                    $out = realpath($out);
+                    unlink($out);
+                } else {
+                    $out = realpath($out);
+                }
+
+                $formatters = $manager->getFormatters();
+                if (isset($formatters[$i])) {
+                    $formatters[$i]->setParameter('output_path', $out);
+                    $formatters[$i]->setParameter('decorated', (bool) $input->getOption('colors'));
+                }
+            }
+        }
     }
 }

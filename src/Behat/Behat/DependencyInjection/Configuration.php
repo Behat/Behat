@@ -73,6 +73,10 @@ class Configuration
                         scalarNode('name')->
                             defaultValue('pretty')->
                         end()->
+                        arrayNode('classes')->
+                            useAttributeAsKey(0)->
+                            prototype('variable')->end()->
+                        end()->
                         arrayNode('parameters')->
                             useAttributeAsKey(0)->
                             prototype('variable')->end()->
@@ -84,10 +88,16 @@ class Configuration
                 arrayNode('options')->
                     fixXmlConfig('option')->
                     children()->
+                        booleanNode('strict')->
+                            defaultNull()->
+                        end()->
+                        booleanNode('dry_run')->
+                            defaultNull()->
+                        end()->
                         scalarNode('rerun')->
                             defaultNull()->
                         end()->
-                        booleanNode('strict')->
+                        scalarNode('append_snippets')->
                             defaultNull()->
                         end()->
                     end()->

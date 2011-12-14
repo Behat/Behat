@@ -192,7 +192,7 @@ class PathLocator
         $features       = array();
         if (is_dir($featuresPath)) {
             $finder = new Finder();
-            foreach ($finder->files()->name('*.feature')->in($featuresPath) as $feature) {
+            foreach ($finder->files()->name('*.feature')->sortByName()->in($featuresPath) as $feature) {
                 $features[] = (string) $feature;
             }
         } elseif (is_file($featuresPath)) {

@@ -104,7 +104,7 @@ Feature: Syntax helpers
           }
       }
       """
-    When I run "behat --definitions"
+    When I run "behat -dl"
     Then the output should contain:
       """
       Given /^I have (\d+) apples?$/
@@ -175,11 +175,117 @@ Feature: Syntax helpers
         </file>
       </xliff>
       """
-    When I run "behat -d --lang=ru"
+    When I run "behat -dl --lang=ru"
     Then the output should contain:
       """
       Given /^у меня (\d+) яблоко?$/
        When /^I ate (\d+) apples?$/
        When /^Я нашел (\d+) яблоко?$/
        Then /^I should have (\d+) apples$/
+      """
+
+  Scenario: Print extended definitions info
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\PendingException;
+
+      class FeatureContext extends BehatContext
+      {
+          /**
+           * @Given /^I have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * Eating apples
+           *
+           * @When /^I ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^I found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then /^I should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              throw new PendingException();
+          }
+      }
+      """
+    When I run "behat -di"
+    Then the output should contain:
+      """
+      Given /^I have (\d+) apples?$/
+          # FeatureContext::iHaveApples()
+
+       When /^I ate (\d+) apples?$/
+          - Eating apples
+          # FeatureContext::iAteApples()
+
+       When /^I found (\d+) apples?$/
+          # FeatureContext::iFoundApples()
+
+       Then /^I should have (\d+) apples$/
+          # FeatureContext::iShouldHaveApples()
+      """
+
+  Scenario: Search definition
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\PendingException;
+
+      class FeatureContext extends BehatContext
+      {
+          /**
+           * @Given /^I have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * Eating apples
+           *
+           * @When /^I ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^I found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then /^I should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              throw new PendingException();
+          }
+      }
+      """
+    When I run "behat -d 'found apples'"
+    Then the output should contain:
+      """
+      When /^I found (\d+) apples?$/
+          # FeatureContext::iFoundApples()
       """

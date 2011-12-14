@@ -43,6 +43,12 @@ class BackgroundTester implements NodeVisitorInterface
      * @var     Behat\Behat\Context\ContextInterface
      */
     private $context;
+    /**
+     * Dry run of background.
+     *
+     * @var     Boolean
+     */
+    private $dryRun = false;
 
     /**
      * Initializes tester.
@@ -51,8 +57,8 @@ class BackgroundTester implements NodeVisitorInterface
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container    = $container;
-        $this->dispatcher   = $container->get('behat.event_dispatcher');
+        $this->container  = $container;
+        $this->dispatcher = $container->get('behat.event_dispatcher');
     }
 
     /**
@@ -63,6 +69,16 @@ class BackgroundTester implements NodeVisitorInterface
     public function setContext(ContextInterface $context)
     {
         $this->context = $context;
+    }
+
+    /**
+     * Sets tester to dry-run mode.
+     *
+     * @param   Boolean $dryRun
+     */
+    public function setDryRun($dryRun = true)
+    {
+        $this->dryRun = (bool) $dryRun;
     }
 
     /**
@@ -83,7 +99,7 @@ class BackgroundTester implements NodeVisitorInterface
         foreach ($background->getSteps() as $step) {
             $tester = $this->container->get('behat.tester.step');
             $tester->setContext($this->context);
-            $tester->skip($skip);
+            $tester->skip($skip || $this->dryRun);
 
             $stResult = $step->accept($tester);
 

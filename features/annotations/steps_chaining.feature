@@ -197,7 +197,7 @@ Feature: Call step in other step
 
       (::) failed steps (::)
 
-      01. Failed asserting that <integer:8> is equal to <string:10>.
+      01. Failed asserting that 8 matches expected '10'.
           In step `Then I entered "5" and expect "10"'. # FeatureContext::complexStep()
           From scenario ***.                            # features/calc_en.feature:13
 
@@ -221,7 +221,7 @@ Feature: Call step in other step
 
       (::) failed steps (::)
 
-      01. Failed asserting that <integer:7> is equal to <string:8>.
+      01. Failed asserting that 7 matches expected '8'.
           In step `Then I should see "8" on the screen'. # FeatureContext::iShouldSeeEn()
           From scenario ***.                             # features/calc_en.feature:2
 
@@ -326,23 +326,11 @@ Feature: Call step in other step
 
       (::) failed steps (::)
 
-      01. Failed asserting that <integer:7> is equal to <string:8>.
+      01. Failed asserting that 7 matches expected '8'.
           In step `То Я должен увидеть на экране "8"'. # FeatureContext::iShouldSeeRu()
           From scenario ***.                           # features/calc_ru.feature:3
 
-      02. Failed asserting that
-          Array
-          (
-              [username] => antono
-              [password] => 123
-          )
-           is equal to
-          Array
-          (
-              [username] => everzet
-              [password] => qwerty
-          )
-          .
+      02. Failed asserting that two arrays are equal.
           In step `Допустим Я создам себе failing таблицу'. # FeatureContext::assertFailingTableRu()
           From scenario ***.                                # features/calc_ru.feature:8
 

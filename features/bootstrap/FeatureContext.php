@@ -103,7 +103,7 @@ class FeatureContext extends BaseFeaturesContext
              : escapeshellarg(BEHAT_PHP_BIN_PATH);
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
-        exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --no-time --no-colors ' . $argumentsString, $output, $return);
+        exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --lang=en --no-time --no-colors ' . $argumentsString, $output, $return);
 
         $this->command = 'behat ' . $argumentsString;
         $this->output  = trim(implode("\n", $output));
@@ -126,7 +126,7 @@ class FeatureContext extends BaseFeaturesContext
             assertEquals(0, $this->return);
         }
 
-        $text = strtr($text, array('\'\'\'' => '"""'));
+        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
@@ -143,6 +143,25 @@ class FeatureContext extends BaseFeaturesContext
 
         try {
             assertEquals((string) $text, $this->output);
+        } catch (Exception $e) {
+            $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
+            throw new Exception($diff, $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Checks whether specified file exists and contains specified string.
+     *
+     * @Given /^"([^"]*)" file should contain:$/
+     *
+     * @param   string                          $path   file path
+     * @param   Behat\Gherkin\Node\PyStringNode $text   file content
+     */
+    public function fileShouldContain($path, PyStringNode $text)
+    {
+        try {
+            assertFileExists($path);
+            assertEquals((string) $text, trim(file_get_contents($path)));
         } catch (Exception $e) {
             $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
             throw new Exception($diff, $e->getCode(), $e);
@@ -168,6 +187,8 @@ class FeatureContext extends BaseFeaturesContext
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
+        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
+
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback('/ features\/[^\n ]+/', function($matches) {

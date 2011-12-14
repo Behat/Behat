@@ -6,7 +6,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag,
     Symfony\Component\EventDispatcher\EventDispatcher,
     Symfony\Component\EventDispatcher\Event,
     Symfony\Component\Translation\Translator,
-    Symfony\Component\Console\Output\StreamOutput;
+    Symfony\Component\Console\Output\StreamOutput,
+    Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 use Behat\Behat\Event\StepEvent,
     Behat\Behat\Exception\FormatterException,
@@ -60,7 +61,10 @@ abstract class ConsoleFormatter implements FormatterInterface
             'language'              => 'en',
             'base_path'             => null,
             'support_path'          => null,
+            'output'                => null,
             'output_path'           => null,
+            'output_styles'         => array(),
+            'output_decorate'       => null,
             'snippets'              => true,
             'snippets_paths'        => false,
             'paths'                 => true,
@@ -97,13 +101,6 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     final public function setParameter($name, $value)
     {
-        if (!$this->hasParameter($name)) {
-            throw new FormatterException(sprintf(
-                'The "%s" formatter does not support "%s" parameter',
-                basename(str_replace('\\', '/', get_class($this))), $name
-            ));
-        }
-
         $this->parameters->set($name, $value);
     }
 
@@ -112,13 +109,6 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     final public function getParameter($name)
     {
-        if (!$this->hasParameter($name)) {
-            throw new FormatterException(sprintf(
-                'The "%s" formatter does not support "%s" parameter',
-                basename(str_replace('\\', '/', get_class($this))), $name
-            ));
-        }
-
         return $this->parameters->get($name);
     }
 
@@ -190,6 +180,10 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     protected function createOutputStream()
     {
+        if (is_resource($stream = $this->parameters->get('output'))) {
+            return $stream;
+        }
+
         $outputPath = $this->parameters->get('output_path');
 
         if (null === $outputPath) {
@@ -198,7 +192,7 @@ abstract class ConsoleFormatter implements FormatterInterface
             $stream = fopen($outputPath, 'w');
         } else {
             throw new FormatterException(sprintf(
-                'Filename expected as "output_path" parameter of "%s" formatter, but got: \"%s\"',
+                'Filename expected as "output_path" parameter of "%s" formatter, but got: "%s"',
                 basename(str_replace('\\', '/', get_class($this))), $outputPath
             ));
         }
@@ -216,8 +210,28 @@ abstract class ConsoleFormatter implements FormatterInterface
     protected function createOutputConsole()
     {
         $stream = $this->createOutputStream();
+        $format = new OutputFormatter();
 
-        return new StreamOutput($stream, StreamOutput::VERBOSITY_NORMAL, null, new OutputFormatter());
+        // set user-defined styles
+        foreach ($this->parameters->get('output_styles') as $name => $options) {
+            $style = new OutputFormatterStyle();
+
+            if (isset($options[0])) {
+                $style->setForeground($options[0]);
+            }
+            if (isset($options[1])) {
+                $style->setBackground($options[1]);
+            }
+            if (isset($options[2])) {
+                $style->setOptions($options[2]);
+            }
+
+            $format->setStyle($name, $style);
+        }
+
+        return new StreamOutput(
+            $stream, StreamOutput::VERBOSITY_NORMAL, $this->parameters->get('output_decorate'), $format
+        );
     }
 
     /**

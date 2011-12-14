@@ -33,9 +33,12 @@ class HelpProcessor implements ProcessorInterface
                 "Print <comment>*.feature</comment> example.\n" .
                 "Use <info>--lang</info> to see specific language."
             )
-            ->addOption('--definitions', '-d', InputOption::VALUE_NONE,
-                "Print available step definitions.\n" .
-                "Use <info>--lang</info> to see specific language.\n"
+            ->addOption('--definitions', '-d', InputOption::VALUE_REQUIRED,
+                "Print all available step definitions:\n" .
+                "- use <info>-dl</info> to just list definition expressions.\n" .
+                "- use <info>-di</info> to show definitions with extended info.\n" .
+                "- use <info>-d 'needle'</info> to find specific definitions.\n" .
+                "Use <info>--lang</info> to see definitions in specific language.\n"
             )
         ;
     }
@@ -53,9 +56,20 @@ class HelpProcessor implements ProcessorInterface
             exit(0);
         }
 
-        if ($input->getOption('definitions')) {
+        if ($type = $input->getOption('definitions')) {
+            if ('l' === $type) {
+                $short  = true;
+                $search = null;
+            } elseif ('i' === $type) {
+                $short  = false;
+                $search = null;
+            } else {
+                $short  = false;
+                $search = $type;
+            }
+
             $container->get('behat.help_printer.definitions')->printDefinitions(
-                $output, $input->getOption('lang') ?: 'en'
+                $output, $search, $input->getOption('lang') ?: 'en', $short
             );
 
             exit(0);

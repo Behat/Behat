@@ -46,6 +46,12 @@ class ScenarioTester implements NodeVisitorInterface
      * @var     Behat\Behat\Context\ContextInterface
      */
     private $context;
+    /**
+     * Dry run of scenario.
+     *
+     * @var     Boolean
+     */
+    private $dryRun = false;
 
     /**
      * Initializes tester.
@@ -57,6 +63,16 @@ class ScenarioTester implements NodeVisitorInterface
         $this->container  = $container;
         $this->dispatcher = $container->get('behat.event_dispatcher');
         $this->context    = $container->get('behat.context_dispatcher')->createContext();
+    }
+
+    /**
+     * Sets tester to dry-run mode.
+     *
+     * @param   Boolean $dryRun
+     */
+    public function setDryRun($dryRun = true)
+    {
+        $this->dryRun = (bool) $dryRun;
     }
 
     /**
@@ -101,7 +117,7 @@ class ScenarioTester implements NodeVisitorInterface
     /**
      * Visits & tests BackgroundNode.
      *
-     * @param   Behat\Gherkin\Node\BackgroundNode               $background
+     * @param   Behat\Gherkin\Node\BackgroundNode       $background
      * @param   Behat\Behat\Context\ContextInterface    $context
      *
      * @uses    Behat\Behat\Tester\BackgroundTester::visit()
@@ -112,6 +128,7 @@ class ScenarioTester implements NodeVisitorInterface
     {
         $tester = $this->container->get('behat.tester.background');
         $tester->setContext($context);
+        $tester->setDryRun($this->dryRun);
 
         return $background->accept($tester);
     }
@@ -119,22 +136,22 @@ class ScenarioTester implements NodeVisitorInterface
     /**
      * Visits & tests StepNode.
      *
-     * @param   Behat\Gherkin\Node\StepNode                     $step
+     * @param   Behat\Gherkin\Node\StepNode             $step
      * @param   Behat\Behat\Context\ContextInterface    $context
-     * @param   array                                           $tokens         step replacements for tokens
-     * @param   boolean                                         $skip           mark step as skipped?
+     * @param   array                                   $tokens         step replacements for tokens
+     * @param   boolean                                 $skip           mark step as skipped?
      *
      * @uses    Behat\Behat\Tester\StepTester::visit()
      *
      * @return  integer
      */
-    protected function visitStep(StepNode $step, ContextInterface $context, array $tokens = array(), 
+    protected function visitStep(StepNode $step, ContextInterface $context, array $tokens = array(),
                                  $skip = false)
     {
         $tester = $this->container->get('behat.tester.step');
         $tester->setContext($context);
         $tester->setTokens($tokens);
-        $tester->skip($skip);
+        $tester->skip($skip || $this->dryRun);
 
         return $step->accept($tester);
     }

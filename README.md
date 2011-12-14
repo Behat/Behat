@@ -1,6 +1,8 @@
 Behat
 =====
 
+[![Build Status](https://secure.travis-ci.org/Behat/Behat.png)](http://travis-ci.org/Behat/Behat)
+
 * The main website with documentation is at [http://behat.org](http://behat.org)
 * Official Google Group is at [http://groups.google.com/group/behat](http://groups.google.com/group/behat)
 
@@ -16,14 +18,16 @@ Note on Patches/Pull Requests
    bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request.
 
+Installing Dependencies
+-----------------------
+
+    wget -nc http://getcomposer.org/composer.phar
+    php composer.phar update
+
 Running tests
 -------------
 
-	behat
-
-If you get errors about missing dependencies - just run
-
-	git submodule update --init
+	bin/behat
 
 Copyright
 ---------

@@ -1,2 +1,5 @@
 *.tgz
 *.phar
+vendor
+composer.lock
+composer.phar

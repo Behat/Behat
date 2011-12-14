@@ -9,8 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Console\Processor,
-    Behat\Behat\Event\SuiteEvent;
+use Behat\Behat\Console\Processor;
 
 /*
  * This file is part of the Behat.
@@ -51,18 +50,15 @@ class BehatCommand extends BaseCommand
                 new Processor\FormatProcessor(),
                 new Processor\HelpProcessor(),
                 new Processor\GherkinProcessor(),
-                new Processor\RerunProcessor(),
+                new Processor\RunProcessor(),
             ))
             ->addArgument('features', InputArgument::OPTIONAL,
                 "Feature(s) to run. Could be:\n" .
-                "- a dir (<comment>features/</comment>)\n" .
-                "- a feature (<comment>*.feature</comment>)\n" .
-                "- a scenario at specific line (<comment>*.feature:10</comment>)."
+                "- a dir <comment>(features/)</comment>\n" .
+                "- a feature <comment>(*.feature)</comment>\n" .
+                "- a scenario at specific line <comment>(*.feature:10)</comment>."
             )
             ->configureProcessors()
-            ->addOption('--strict', null, InputOption::VALUE_NONE,
-                'Fail if there are any undefined or pending steps.'
-            )
         ;
     }
 
@@ -79,63 +75,6 @@ class BehatCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $paths   = $this->getContainer()->get('behat.rerun_data_collector')->locateFeaturesPaths();
-        $gherkin = $this->getContainer()->get('gherkin');
-
-        $this->startSuite();
-
-        // read all features from their paths
-        foreach ($paths as $path) {
-            // parse every feature with Gherkin
-            $features = $gherkin->load((string) $path);
-
-            // and run it in FeatureTester
-            foreach ($features as $feature) {
-                $feature->accept($this->getContainer()->get('behat.tester.feature'));
-            }
-        }
-
-        return $this->finishSuite($input);
-    }
-
-    /**
-     * Starts suite.
-     */
-    protected function startSuite()
-    {
-        $dispatcher = $this->getContainer()->get('behat.event_dispatcher');
-        $logger     = $this->getContainer()->get('behat.logger');
-        $parameters = $this->getContainer()->get('behat.context_dispatcher')->getContextParameters();
-
-        $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, $parameters, false));
-
-        // catch app interruption
-        if (function_exists('pcntl_signal')) {
-            declare(ticks = 1);
-            pcntl_signal(SIGINT, function() use($dispatcher, $parameters, $logger) {
-                $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, $parameters, false));
-                exit(1);
-            });
-        }
-    }
-
-    /**
-     * Finishes suite and returns suite run result.
-     *
-     * @return  integer result code
-     */
-    protected function finishSuite($input)
-    {
-        $dispatcher = $this->getContainer()->get('behat.event_dispatcher');
-        $logger     = $this->getContainer()->get('behat.logger');
-        $parameters = $this->getContainer()->get('behat.context_dispatcher')->getContextParameters();
-
-        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, $parameters, true));
-
-        if ($input->getOption('strict') || $this->getContainer()->getParameter('behat.options.strict')) {
-            return intval(0 < $logger->getSuiteResult());
-        } else {
-            return intval(4 === $logger->getSuiteResult());
-        }
+        return $this->getContainer()->get('behat.runner')->run();
     }
 }
