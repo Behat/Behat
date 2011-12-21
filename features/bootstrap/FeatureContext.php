@@ -103,7 +103,7 @@ class FeatureContext extends BaseFeaturesContext
              : escapeshellarg(BEHAT_PHP_BIN_PATH);
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
-        if (false === strpos(strtolower(php_uname('u')), 'win')) {
+        if ('/' === DIRECTORY_SEPARATOR) {
             $argumentsString .= ' 2>&1';
         }
 
