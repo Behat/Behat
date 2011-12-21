@@ -103,6 +103,10 @@ class FeatureContext extends BaseFeaturesContext
              : escapeshellarg(BEHAT_PHP_BIN_PATH);
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
+        if ('/' === DIRECTORY_SEPARATOR) {
+            $argumentsString .= ' 2>&1';
+        }
+
         exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --lang=en --no-time --no-colors ' . $argumentsString, $output, $return);
 
         $this->command = 'behat ' . $argumentsString;
