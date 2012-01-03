@@ -91,8 +91,9 @@ class RunProcessor implements ProcessorInterface
                     $snippets = stream_get_contents($snippets);
 
                     if (trim($snippets)) {
-                        $context = file_get_contents($contextRefl->getFileName());
-                        $context = preg_replace('/}[ \n]*$/', rtrim($snippets)."\n}\n", $context);
+                        $snippets = strtr($snippets, array('\\' => '\\\\', '$' => '\\$'));
+                        $context  = file_get_contents($contextRefl->getFileName());
+                        $context  = preg_replace('/}[ \n]*$/', rtrim($snippets)."\n}\n", $context);
 
                         file_put_contents($contextRefl->getFileName(), $context);
                     }
