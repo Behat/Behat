@@ -1,3 +1,8 @@
+2.2.4 / 2012-01-04
+==================
+
+  * Prevent method name duplication with definition snippets
+
 2.2.3 / 2012-01-04
 ==================
 
