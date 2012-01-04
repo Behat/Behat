@@ -73,7 +73,17 @@ class RunProcessor implements ProcessorInterface
                 ->setParameter('output_path', $file);
         }
 
-        if ($file = $input->getOption('append-snippets') ?: $container->getParameter('behat.options.append_snippets')) {
+        if ($input->getOption('append-snippets') || $container->getParameter('behat.options.append_snippets')) {
+            $contextRefl = new \ReflectionClass(
+                $container->get('behat.context_dispatcher')->getContextClass()
+            );
+
+            if ($contextRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {
+                throw new \RuntimeException(
+                    '--append-snippets doesn\'t support closured contexts'
+                );
+            }
+
             $formatManager = $container->get('behat.format_manager');
             $formatManager->setFormattersParameter('snippets', false);
 
@@ -82,9 +92,6 @@ class RunProcessor implements ProcessorInterface
             $formatter->setParameter('output_decorate', false);
             $formatter->setParameter('output', $snippets = fopen('php://memory', 'rw'));
 
-            $contextRefl = new \ReflectionClass(
-                $container->get('behat.context_dispatcher')->getContextClass()
-            );
             $container->get('behat.event_dispatcher')
                 ->addListener('afterSuite', function() use($contextRefl, $snippets) {
                     rewind($snippets);
