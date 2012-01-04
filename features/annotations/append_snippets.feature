@@ -90,12 +90,13 @@ Feature: Append snippets option
         Scenario: Found more apples
           When I found 2 apples
           Then I should have 5 apples
-          And do something undefined
+          And do something undefined with $
 
         Scenario Outline: Other situations
           When I ate <ate> apples
           And I found <found> apples
           Then I should have <result> apples
+          And do something undefined with \1
 
           Examples:
             | ate | found | result |
@@ -180,9 +181,17 @@ Feature: Append snippets option
           }
 
           /**
-           * @Given /^do something undefined$/
+           * @Given /^do something undefined with \$$/
            */
-          public function doSomethingUndefined()
+          public function doSomethingUndefinedWith()
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^do something undefined with \\(\d+)$/
+           */
+          public function doSomethingUndefinedWith($argument1)
           {
               throw new PendingException();
           }
