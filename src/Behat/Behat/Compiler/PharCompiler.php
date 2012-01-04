@@ -71,6 +71,10 @@ class PharCompiler
             }
         }
 
+        $this->replaceTokens('vendor/.composer/autoload.php', '', '', array(
+            'Composer\\Autoload' => 'Behat\\Autoload'
+        ));
+
         // license and autoloading
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/LICENSE'), $phar);
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/vendor/.composer/autoload.php'), $phar);
@@ -81,6 +85,10 @@ class PharCompiler
         $phar->stopBuffering();
 
         unset($phar);
+
+        $this->replaceTokens('vendor/.composer/autoload.php', '', '', array(
+            'Behat\\Autoload' => 'Composer\\Autoload'
+        ));
     }
 
     /**
@@ -93,6 +101,29 @@ class PharCompiler
     {
         $path = str_replace($this->libPath . '/', '', $file->getRealPath());
         $phar->addFromString($path, file_get_contents($file));
+    }
+
+    /**
+     * Replaces tokens in specified path.
+     *
+     * @param   string|array    $files          files array or single file
+     * @param   string          $tokenStart     token start symbol
+     * @param   string          $tokenFinish    token finish symbol
+     * @param   array           $tokens         replace tokens array
+     */
+    protected function replaceTokens($files, $tokenStart, $tokenFinish, array $tokens)
+    {
+        if (!is_array($files)) {
+            $files = array($files);
+        }
+
+        foreach ($files as $file) {
+            $content = file_get_contents($file);
+            foreach ($tokens as $key => $value) {
+                $content = str_replace($tokenStart . $key . $tokenFinish, $value, $content, $count);
+            }
+            file_put_contents($file, $content);
+        }
     }
 
     /**
