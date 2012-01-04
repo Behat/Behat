@@ -45,7 +45,7 @@ class DefinitionProposalDispatcher
     {
         foreach ($this->proposals as $proposal) {
             if ($proposal->supports($context)) {
-                return $proposal->propose($step);
+                return $proposal->propose($context, $step);
             }
         }
     }

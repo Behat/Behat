@@ -31,7 +31,8 @@ interface DefinitionProposalInterface
     /**
      * Loads definitions and translations from provided context.
      *
+     * @param   Behat\Behat\Context\ContextInterface    $context
      * @param   Behat\Gherkin\Node\StepNode             $step
      */
-    function propose(StepNode $step);
+    public function propose(ContextInterface $context, StepNode $step);
 }
