@@ -67,6 +67,8 @@ Feature: Append snippets option
               assertInternalType('array', $this->parameters[$key]);
               assertEquals(2, count($this->parameters[$key]));
           }
+
+          private function doSomethingUndefinedWith() {}
       }
       """
     And a file named "features/apples.feature" with:
@@ -108,6 +110,10 @@ Feature: Append snippets option
           Given pystring:
             '''
             some pystring
+            '''
+          And pystring 5:
+            '''
+            other pystring
             '''
           And table:
             | col1 | col2 |
@@ -180,10 +186,12 @@ Feature: Append snippets option
               assertEquals(2, count($this->parameters[$key]));
           }
 
+          private function doSomethingUndefinedWith() {}
+
           /**
            * @Given /^do something undefined with \$$/
            */
-          public function doSomethingUndefinedWith()
+          public function doSomethingUndefinedWith2()
           {
               throw new PendingException();
           }
@@ -191,7 +199,7 @@ Feature: Append snippets option
           /**
            * @Given /^do something undefined with \\(\d+)$/
            */
-          public function doSomethingUndefinedWith($argument1)
+          public function doSomethingUndefinedWith3($argument1)
           {
               throw new PendingException();
           }
@@ -200,6 +208,14 @@ Feature: Append snippets option
            * @Given /^pystring:$/
            */
           public function pystring(PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^pystring (\d+):$/
+           */
+          public function pystring2($argument1, PyStringNode $string)
           {
               throw new PendingException();
           }

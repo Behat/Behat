@@ -36,7 +36,7 @@ class ClosuredDefinitionProposal implements DefinitionProposalInterface
     /**
      * @see     Behat\Behat\Definition\Proposal\DefinitionProposalInterface::propose()
      */
-    public function propose(StepNode $step)
+    public function propose(ContextInterface $context, StepNode $step)
     {
         $text  = $step->getText();
         $regex = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);

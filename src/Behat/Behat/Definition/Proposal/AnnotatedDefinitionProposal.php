@@ -26,11 +26,11 @@ use Behat\Behat\Context\ContextInterface,
 class AnnotatedDefinitionProposal implements DefinitionProposalInterface
 {
     /**
-     * Total count of proposed methods.
+     * Proposed method names.
      *
-     * @var     integer
+     * @var     array
      */
-    private static $proposedMethodsCount = 0;
+    private static $proposedMethods = array();
 
     /**
      * @see     Behat\Behat\Definition\Proposal\DefinitionProposalInterface::supports()
@@ -43,8 +43,11 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
     /**
      * @see     Behat\Behat\Definition\Proposal\DefinitionProposalInterface::propose()
      */
-    public function propose(StepNode $step)
+    public function propose(ContextInterface $context, StepNode $step)
     {
+        $contextRefl  = new \ReflectionObject($context);
+        $contextClass = $contextRefl->getName();
+
         $text = $step->getText();
         $replacePatterns = array(
             '/\'([^\']*)\'/', '/\"([^\"]*)\"/', // Quoted strings
@@ -60,7 +63,8 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
             ),
             $regex
         );
-        $regex = preg_replace('/\'.*(?<!\')/', '\\\\$0', $regex); // Single quotes without matching pair (escape in resulting regex)
+        // Single quotes without matching pair (escape in resulting regex):
+        $regex = preg_replace('/\'.*(?<!\')/', '\\\\$0', $regex);
         preg_match('/' . $regex . '/', $text, $matches);
         $count = count($matches) - 1;
 
@@ -72,8 +76,33 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
         if (0 !== strlen($methodName)) {
             $methodName[0] = strtolower($methodName[0]);
         } else {
-            $methodName = 'stepDefinition' . ++static::$proposedMethodsCount;
+            $methodName = 'stepDefinition1';
         }
+
+        // get method number from method name
+        $methodNumber = 2;
+        if (preg_match('/(\d+)$/', $methodName, $matches)) {
+            $methodNumber = intval($matches[1]);
+        }
+
+        // check that proposed method name isn't arelady defined in context
+        while ($contextRefl->hasMethod($methodName)) {
+            $methodName  = preg_replace('/\d+$/', '', $methodName);
+            $methodName .= $methodNumber++;
+        }
+
+        // check that proposed method name haven't been proposed earlier
+        if (isset(self::$proposedMethods[$contextClass])) {
+            foreach (self::$proposedMethods[$contextClass] as $proposedRegex => $proposedMethod) {
+                if ($proposedRegex !== $regex) {
+                    while ($proposedMethod === $methodName) {
+                        $methodName  = preg_replace('/\d+$/', '', $methodName);
+                        $methodName .= $methodNumber++;
+                    }
+                }
+            }
+        }
+        self::$proposedMethods[$contextClass][$regex] = $methodName;
 
         $args = array();
         for ($i = 0; $i < $count; $i++) {
