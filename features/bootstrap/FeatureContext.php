@@ -28,6 +28,12 @@ require_once 'BaseFeaturesContext.php';
 class FeatureContext extends BaseFeaturesContext
 {
     /**
+     * Environment variable
+     *
+     * @var     string
+     */
+    private $env = 'formatter[parameters][language]=en&formatter[parameters][time]=false&formatter[parameters][output_decorate]=false';
+    /**
      * Last runned command name.
      *
      * @var     string
@@ -90,13 +96,25 @@ class FeatureContext extends BaseFeaturesContext
     }
 
     /**
+     * Sets specified ENV variable
+     *
+     * @When /^"BEHAT_PARAMS" environment variable is set to:$/
+     *
+     * @param   PyStringNode  $value
+     */
+    public function iSetEnvironmentVariable(PyStringNode $value)
+    {
+        $this->env = (string) $value;
+    }
+
+    /**
      * Runs behat command with provided parameters
      *
-     * @When /^I run "behat ([^"]*)"$/
+     * @When /^I run "behat(?: ([^"]*))?"$/
      *
      * @param   string  $argumentsString
      */
-    public function iRunBehat($argumentsString)
+    public function iRunBehat($argumentsString = '')
     {
         $php = 0 === mb_strpos(BEHAT_PHP_BIN_PATH, '/usr/bin/env')
              ? BEHAT_PHP_BIN_PATH
@@ -107,7 +125,9 @@ class FeatureContext extends BaseFeaturesContext
             $argumentsString .= ' 2>&1';
         }
 
-        exec($php . ' ' . escapeshellarg(BEHAT_BIN_PATH) . ' --lang=en --no-time --no-colors ' . $argumentsString, $output, $return);
+        exec($command = sprintf('BEHAT_PARAMS="%s" %s %s %s',
+            $this->env, $php, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
+        ), $output, $return);
 
         $this->command = 'behat ' . $argumentsString;
         $this->output  = trim(implode("\n", $output));
