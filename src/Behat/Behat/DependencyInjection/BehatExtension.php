@@ -89,7 +89,7 @@ class BehatExtension implements ExtensionInterface
      * @param   string                                                      $profile    profile name
      * @param   Symfony\Component\DependencyInjection\ContainerBuilder      $container  service container
      */
-    public function loadFromFile($configFile, $profile = 'default', ContainerBuilder $container)
+    public function readConfigurationFile($configFile, $profile = 'default', ContainerBuilder $container)
     {
         $config = $this->loadConfigurationFile($configFile, $profile, $container);
 
@@ -111,7 +111,7 @@ class BehatExtension implements ExtensionInterface
             }
         }
 
-        $this->load(array($config), $container);
+        return $config;
     }
 
     /**
