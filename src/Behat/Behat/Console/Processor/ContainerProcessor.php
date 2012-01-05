@@ -99,26 +99,28 @@ class ContainerProcessor implements ProcessorInterface
      */
     private function normalizeRawConfiguration(array $config)
     {
+        $normalize = function($value) {
+            if ('true' === $value || 'false' === $value) {
+                return 'true' === $value;
+            }
+
+            if (is_numeric($value)) {
+                return ctype_digit($value) ? intval($value) : floatval($value);
+            }
+
+            return $value;
+        };
+
         if (isset($config['formatter']['parameters'])) {
-            $config['formatter']['parameters'] = array_map(function($value) {
-                if ('true' === $value || 'false' === $value) {
-                    return 'true' === $value;
-                } elseif (is_numeric($value)) {
-                    return ctype_digit($value) ? intval($value) : floatval($value);
-                }
-                return $value;
-            }, $config['formatter']['parameters']);
+            $config['formatter']['parameters'] = array_map(
+                $normalize, $config['formatter']['parameters']
+            );
         }
 
         if (isset($config['context']['parameters'])) {
-            $config['context']['parameters'] = array_map(function($value) {
-                if ('true' === $value || 'false' === $value) {
-                    return 'true' === $value;
-                } elseif (is_numeric($value)) {
-                    return ctype_digit($value) ? intval($value) : floatval($value);
-                }
-                return $value;
-            }, $config['context']['parameters']);
+            $config['context']['parameters'] = array_map(
+                $normalize, $config['context']['parameters']
+            );
         }
 
         return $config;
