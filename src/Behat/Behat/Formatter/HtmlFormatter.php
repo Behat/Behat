@@ -773,6 +773,53 @@ HTML
             font-weight:bold;
         }
     </style>
+
+    <style type="text/css" media="print">
+        body {
+            padding:0px;
+        }
+
+        #behat {
+            font-size:11px;
+        }
+
+        #behat .jq-toggle > .scenario,
+        #behat .jq-toggle > ol {
+            display:block;
+        }
+
+        #behat div.summary {
+            position:relative;
+        }
+
+        #behat .summary .counters {
+            border:none;
+        }
+
+        #behat .summary .switchers {
+            display:none;
+        }
+
+        #behat div.feature div.scenario ol li div.step span.path {
+            display:none;
+        }
+
+        #behat .jq-toggle > h2:after,
+        #behat .jq-toggle > h3:after {
+            content:'';
+            font-weight:bold;
+        }
+
+        #behat .jq-toggle-opened > h2:after,
+        #behat .jq-toggle-opened > h3:after {
+            content:'';
+            font-weight:bold;
+        }
+
+        #behat .scenario > ol li {
+            border-left:none;
+        }
+    </style>
 </head>
 <body>
     <div id="behat">
