@@ -9,8 +9,11 @@ branches:
     - master
     - develop
 
+env:
+  - BEHAT_PARAMS="formatter[name]=progress"
+
 before_script:
   - wget -nc http://getcomposer.org/composer.phar
-  - php composer.phar update
+  - php composer.phar install
 
 script: bin/behat

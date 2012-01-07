@@ -525,7 +525,6 @@ HTML
 <head>
     <meta content="text/html;charset=utf-8"/>
     <title>Behat Test Suite</title>
-    <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         body {
             margin:0px;
@@ -544,16 +543,6 @@ HTML
             float:left;
             width:100%;
             margin-bottom:15px;
-        }
-        #behat .statistics:before {
-            content:'Behat';
-            position:absolute;
-            color: #1C4B20 !important;
-            text-shadow: white 1px 1px 1px;
-            font-size:48px !important;
-            font-family: Lobster, Tahoma;
-            top:22px;
-            left:20px;
         }
         #behat .statistics p {
             text-align:right;
@@ -771,6 +760,53 @@ HTML
         #behat .jq-toggle-opened > h3:after {
             content:' |-';
             font-weight:bold;
+        }
+    </style>
+
+    <style type="text/css" media="print">
+        body {
+            padding:0px;
+        }
+
+        #behat {
+            font-size:11px;
+        }
+
+        #behat .jq-toggle > .scenario,
+        #behat .jq-toggle > ol {
+            display:block;
+        }
+
+        #behat .summary {
+            position:relative;
+        }
+
+        #behat .summary .counters {
+            border:none;
+        }
+
+        #behat .summary .switchers {
+            display:none;
+        }
+
+        #behat .step .path {
+            display:none;
+        }
+
+        #behat .jq-toggle > h2:after,
+        #behat .jq-toggle > h3:after {
+            content:'';
+            font-weight:bold;
+        }
+
+        #behat .jq-toggle-opened > h2:after,
+        #behat .jq-toggle-opened > h3:after {
+            content:'';
+            font-weight:bold;
+        }
+
+        #behat .scenario > ol li {
+            border-left:none;
         }
     </style>
 </head>

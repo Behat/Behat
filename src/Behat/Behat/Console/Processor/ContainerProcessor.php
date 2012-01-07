@@ -54,6 +54,7 @@ class ContainerProcessor implements ProcessorInterface
         $cwd        = getcwd();
         $configFile = $input->getOption('config');
         $profile    = $input->getOption('profile') ?: 'default';
+        $configs    = array();
 
         if (null === $configFile) {
             if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
@@ -63,11 +64,19 @@ class ContainerProcessor implements ProcessorInterface
             }
         }
 
-        if (file_exists($configFile)) {
-            $config = $extension->loadFromFile($configFile, $profile, $container);
-        } else {
-            $config = $extension->load(array(array()), $container);
+        // read and normalize raw parameters string from env
+        if ($config = getenv('BEHAT_PARAMS')) {
+            parse_str($config, $config);
+            $configs[] = $this->normalizeRawConfiguration($config);
         }
+
+        // read configuration file
+        if (file_exists($configFile)) {
+            $configs[] = $extension->readConfigurationFile($configFile, $profile, $container);
+        }
+
+        // configure container
+        $extension->load($configs, $container);
 
         $container->addCompilerPass(new GherkinPass());
         $container->addCompilerPass(new ContextReaderPass());
@@ -75,7 +84,45 @@ class ContainerProcessor implements ProcessorInterface
         $container->compile();
 
         if (file_exists($configFile)) {
-            $container->get('behat.path_locator')->setPathConstant('BEHAT_CONFIG_PATH', dirname($configFile));
+            $container->get('behat.path_locator')->setPathConstant(
+                'BEHAT_CONFIG_PATH', dirname($configFile)
+            );
         }
+    }
+
+    /**
+     * Normalizes provided raw configuration.
+     *
+     * @param array $config raw configuration
+     *
+     * @return array
+     */
+    private function normalizeRawConfiguration(array $config)
+    {
+        $normalize = function($value) {
+            if ('true' === $value || 'false' === $value) {
+                return 'true' === $value;
+            }
+
+            if (is_numeric($value)) {
+                return ctype_digit($value) ? intval($value) : floatval($value);
+            }
+
+            return $value;
+        };
+
+        if (isset($config['formatter']['parameters'])) {
+            $config['formatter']['parameters'] = array_map(
+                $normalize, $config['formatter']['parameters']
+            );
+        }
+
+        if (isset($config['context']['parameters'])) {
+            $config['context']['parameters'] = array_map(
+                $normalize, $config['context']['parameters']
+            );
+        }
+
+        return $config;
     }
 }
