@@ -525,7 +525,6 @@ HTML
 <head>
     <meta content="text/html;charset=utf-8"/>
     <title>Behat Test Suite</title>
-    <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         body {
             margin:0px;
@@ -544,16 +543,6 @@ HTML
             float:left;
             width:100%;
             margin-bottom:15px;
-        }
-        #behat .statistics:before {
-            content:'Behat';
-            position:absolute;
-            color: #1C4B20 !important;
-            text-shadow: white 1px 1px 1px;
-            font-size:48px !important;
-            font-family: Lobster, Tahoma;
-            top:22px;
-            left:20px;
         }
         #behat .statistics p {
             text-align:right;
