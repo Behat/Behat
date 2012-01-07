@@ -1,3 +1,9 @@
+2.2.5 / 2012-01-07
+==================
+
+  * `BEHAT_PARAMS` env variable support (083092e)
+  * HTML formatter print styles optimization (@davedevelopment)
+
 2.2.4 / 2012-01-04
 ==================
 
