@@ -788,7 +788,7 @@ HTML
             display:block;
         }
 
-        #behat div.summary {
+        #behat .summary {
             position:relative;
         }
 
@@ -800,7 +800,7 @@ HTML
             display:none;
         }
 
-        #behat div.feature div.scenario ol li div.step span.path {
+        #behat .step .path {
             display:none;
         }
 
