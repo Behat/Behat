@@ -1,9 +1,6 @@
 Behat
 =====
 
-Branches
---------
-
 - [master](https://github.com/Behat/Behat) ([![Master Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=master)](http://travis-ci.org/Behat/Behat)) - staging branch. Last stable version.
 - [develop](https://github.com/Behat/Behat/tree/develop) ([![Develop Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=develop)](http://travis-ci.org/Behat/Behat)) - development branch. Development happens here and you should send your PRs here too.
 
