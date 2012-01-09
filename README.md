@@ -1,9 +1,9 @@
 Behat
 =====
 
-`[master](https://github.com/Behat/Behat)` branch: [![Master Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=master)](http://travis-ci.org/Behat/Behat)
+[master](https://github.com/Behat/Behat) branch: [![Master Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=master)](http://travis-ci.org/Behat/Behat)
 
-`[develop](https://github.com/Behat/Behat/tree/develop)` branch: [![Develop Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=develop)](http://travis-ci.org/Behat/Behat)
+[develop](https://github.com/Behat/Behat/tree/develop) branch: [![Develop Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=develop)](http://travis-ci.org/Behat/Behat)
 
 * The main website with documentation is at [http://behat.org](http://behat.org)
 * Official Google Group is at [http://groups.google.com/group/behat](http://groups.google.com/group/behat)
