@@ -1,3 +1,8 @@
+2.2.6 / 2012-01-09
+==================
+
+  * Fixed pretty and html formatters printing of undefined steps in outlines
+
 2.2.5 / 2012-01-07
 ==================
 
