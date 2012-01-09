@@ -2,6 +2,7 @@ Behat
 =====
 
 `master` branch: [![Master Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=master)](http://travis-ci.org/Behat/Behat)
+
 `develop` branch: [![Develop Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=develop)](http://travis-ci.org/Behat/Behat)
 
 * The main website with documentation is at [http://behat.org](http://behat.org)
