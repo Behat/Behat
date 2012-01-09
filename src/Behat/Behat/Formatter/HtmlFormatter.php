@@ -4,7 +4,8 @@ namespace Behat\Behat\Formatter;
 
 use Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\DataCollector\LoggerDataCollector,
-    Behat\Behat\Definition\DefinitionSnippet;
+    Behat\Behat\Definition\DefinitionSnippet,
+    Behat\Behat\Exception\UndefinedException;
 
 use Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\FeatureNode,
@@ -246,16 +247,16 @@ class HtmlFormatter extends PrettyFormatter
         $colCount = count($examples->getRow(0));
 
         foreach ($events as $event) {
-            if (!($exception = $event->getException()))
-                continue;
+            $exception = $event->getException();
+            if ($exception && !$exception instanceof UndefinedException) {
+                $error = $this->relativizePathsInString($exception->getMessage());
 
-            $error = $this->relativizePathsInString($exception->getMessage());
-
-            $this->writeln('<tr class="failed exception">');
-            $this->writeln('<td colspan="' . $colCount . '">');
-            $this->writeln('<pre class="backtrace">' . htmlspecialchars($error) . '</pre>');
-            $this->writeln('</td>');
-            $this->writeln('</tr>');
+                $this->writeln('<tr class="failed exception">');
+                $this->writeln('<td colspan="' . $colCount . '">');
+                $this->writeln('<pre class="backtrace">' . htmlspecialchars($error) . '</pre>');
+                $this->writeln('</td>');
+                $this->writeln('</tr>');
+            }
         }
     }
 

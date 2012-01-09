@@ -626,7 +626,8 @@ class PrettyFormatter extends ProgressFormatter
     protected function printOutlineExampleResultExceptions(TableNode $examples, array $events)
     {
         foreach ($events as $event) {
-            if (null !== ($exception = $event->getException())) {
+            $exception = $event->getException();
+            if ($exception && !$exception instanceof UndefinedException) {
                 $color = $this->getResultColorCode($event->getResult());
 
                 if ($this->parameters->get('verbose')) {

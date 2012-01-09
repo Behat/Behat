@@ -380,3 +380,103 @@ Feature: Pretty Formatter
       3 scenarios ([32m3 passed[0m)
       6 steps ([32m6 passed[0m)
       """
+
+    Scenario: Don't print undefined exceptions in outline
+      Given a file named "features/bootstrap/FeatureContext.php" with:
+        """
+        <?php
+
+        use Behat\Behat\Context\BehatContext,
+            Behat\Behat\Exception\PendingException;
+        use Behat\Gherkin\Node\PyStringNode,
+            Behat\Gherkin\Node\TableNode;
+
+        class FeatureContext extends BehatContext
+        {
+            private $value = 10;
+
+            /**
+             * @Then /I must have "([^"]+)"/
+             */
+            public function iMustHave($num) {
+                assertEquals(intval(preg_replace('/[^\d]+/', '', $num)), $this->value);
+            }
+
+            /**
+             * @When /I add "([^"]+)"/
+             */
+            public function iAdd($num) {
+                $this->value += intval(preg_replace('/[^\d]+/', '', $num));
+            }
+        }
+        """
+      And a file named "features/ls.feature" with:
+        """
+        Feature: ls
+          In order to see the directory structure
+          As a UNIX user
+          I need to be able to list the current directory's contents
+
+          Background:
+            Given I have a file named "foo"
+
+          Scenario: List 2 files in a directory
+            Given I have a file named "bar"
+            When I run "ls"
+            Then I should see "bar" in output
+            And I should see "foo" in output
+
+          Scenario: List 1 file and 1 dir
+            Given I have a directory named "dir"
+            When I run "ls"
+            Then I should see "dir" in output
+            And I should see "foo" in output
+
+          Scenario Outline:
+            Given I have a <object> named "<name>"
+            When I run "ls"
+            Then I should see "<name>" in output
+            And I should see "foo" in output
+
+            Examples:
+              | object    | name |
+              | file      | bar  |
+              | directory | dir  |
+        """
+      When I run "behat features/ls.feature --no-snippets"
+      Then it should pass with:
+        """
+        Feature: ls
+          In order to see the directory structure
+          As a UNIX user
+          I need to be able to list the current directory's contents
+
+          Background:                       # features/ls.feature:6
+            Given I have a file named "foo"
+
+          Scenario: List 2 files in a directory # features/ls.feature:9
+            Given I have a file named "bar"
+            When I run "ls"
+            Then I should see "bar" in output
+            And I should see "foo" in output
+
+          Scenario: List 1 file and 1 dir        # features/ls.feature:15
+            Given I have a directory named "dir"
+            When I run "ls"
+            Then I should see "dir" in output
+            And I should see "foo" in output
+
+          Scenario Outline:                        # features/ls.feature:21
+            Given I have a <object> named "<name>"
+            When I run "ls"
+            Then I should see "<name>" in output
+            And I should see "foo" in output
+
+            Examples:
+              | object    | name |
+              | file      | bar  |
+              | directory | dir  |
+
+        4 scenarios (4 undefined)
+        20 steps (20 undefined)
+        """
