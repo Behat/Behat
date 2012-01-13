@@ -202,7 +202,7 @@ Feature: Scenario Outlines
     When I run "behat -f progress features/math.feature"
     Then it should fail with:
       """
-      .........F....F.........F
+      .........F....F.........F....F
 
       (::) failed steps (::)
 
