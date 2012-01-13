@@ -112,7 +112,6 @@ class FormatManager
         $name = strtolower($name);
 
         if (class_exists($name)) {
-            $this->checkFormatterClass($class);
             $class = $name;
         } elseif (isset($this->formatterClasses[$name])) {
             $class = $this->formatterClasses[$name];

@@ -82,11 +82,11 @@ TPL;
 
         $definitions = array();
         foreach ($this->dispatcher->getDefinitions() as $regex => $definition) {
+            $regex = $this->dispatcher->translateDefinitionRegex($regex, $language);
             if ($search && !preg_match('/'.str_replace(' ', '.*', preg_quote($search, '/').'/'), $regex)) {
                 continue;
             }
 
-            $regex = $this->dispatcher->translateDefinitionRegex($regex, $language);
             $regex = preg_replace_callback('/\([^\)]*\)/', function($capture) {
                 return "</comment><capture>{$capture[0]}</capture><comment>";
             }, $regex);

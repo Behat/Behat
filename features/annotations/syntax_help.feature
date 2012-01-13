@@ -289,3 +289,72 @@ Feature: Syntax helpers
       When /^I found (\d+) apples?$/
           # FeatureContext::iFoundApples()
       """
+
+  Scenario: Search definition
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\PendingException,
+          Behat\Behat\Context\TranslatedContextInterface;
+
+      class FeatureContext extends BehatContext implements TranslatedContextInterface
+      {
+          /**
+           * @Given /^I have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^I ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^I found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then /^I should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              throw new PendingException();
+          }
+
+          public function getTranslationResources() {
+              return array(__DIR__ . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR . 'ru.xliff');
+          }
+      }
+      """
+    And a file named "features/bootstrap/i18n/ru.xliff" with:
+      """
+      <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+        <file original="global" source-language="en" target-language="ru" datatype="plaintext">
+          <header />
+          <body>
+            <trans-unit id="i-have-apples">
+              <source>/^I have (\d+) apples?$/</source>
+              <target>/^у меня (\d+) яблоко?$/</target>
+            </trans-unit>
+            <trans-unit id="i-found">
+              <source>/^I found (\d+) apples?$/</source>
+              <target>/^Я нашел (\d+) яблоко?$/</target>
+            </trans-unit>
+          </body>
+        </file>
+      </xliff>
+      """
+    When I run "behat --lang=ru -d 'нашел'"
+    Then the output should contain:
+      """
+      When /^Я нашел (\d+) яблоко?$/
+          # FeatureContext::iFoundApples()
+      """
