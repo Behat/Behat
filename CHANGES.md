@@ -1,3 +1,9 @@
+2.2.7 / 2012-01-13
+==================
+
+  * Added ability to search translated definitions with `--definitions`
+  * Fixed custom formatters use bug
+
 2.2.6 / 2012-01-09
 ==================
 
