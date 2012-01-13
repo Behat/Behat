@@ -93,7 +93,7 @@ class OutlineTester extends ScenarioTester
 
         // Visit & test steps
         foreach ($outline->getSteps() as $step) {
-            $stResult = $this->visitStep($step, $context, $tokens, $skip);
+            $stResult = $this->visitStep($step, $context, $tokens, $skip, true);
             if (0 !== $stResult) {
                 $skip = true;
             }
