@@ -193,7 +193,7 @@ Feature: Multiple formats
           From scenario `I'm little hungry'.     # features/apples.feature:9
 
       02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
+          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
@@ -306,7 +306,7 @@ Feature: Multiple formats
           From scenario `I'm little hungry'.     # features/apples.feature:9
 
       02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
+          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
@@ -352,7 +352,7 @@ Feature: Multiple formats
           From scenario `I'm little hungry'.     # features/apples.feature:9
 
       02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
+          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
@@ -536,7 +536,7 @@ Feature: Multiple formats
           From scenario `I'm little hungry'.     # features/apples.feature:9
 
       02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
+          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
@@ -654,7 +654,7 @@ Feature: Multiple formats
           From scenario `I'm little hungry'.     # features/apples.feature:9
 
       02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
+          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
 
       7 scenarios (3 passed, 2 undefined, 2 failed)

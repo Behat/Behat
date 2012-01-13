@@ -104,7 +104,7 @@ Feature: Context consistency
     Then it should pass with:
       """
       ..................
-      
+
       5 scenarios (5 passed)
       18 steps (18 passed)
       """
@@ -143,25 +143,25 @@ Feature: Context consistency
     Then it should fail with:
       """
       ..F..F...F.......F
-      
+
       (::) failed steps (::)
-      
+
       01. Failed asserting that 2 matches expected 5.
           In step `Then I should have 5 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
-      
+
       02. Failed asserting that 13 matches expected 10.
           In step `Then I should have 10 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Found more apples'.      # features/apples.feature:13
-      
+
       03. Failed asserting that 1 matches expected 3.
-          In step `Then I should have 4 apples'.  # FeatureContext::iShouldHaveApples()
+          In step `Then I should have 3 apples'.  # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.       # features/apples.feature:17
-      
+
       04. Failed asserting that 3 matches expected 4.
           In step `Then I should have 4 apples'.  # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.       # features/apples.feature:17
-      
+
       5 scenarios (1 passed, 4 failed)
       18 steps (14 passed, 4 failed)
       """
@@ -192,7 +192,7 @@ Feature: Context consistency
   Then it should pass with:
     """
     ..
-    
+
     1 scenario (1 passed)
     2 steps (2 passed)
     """
