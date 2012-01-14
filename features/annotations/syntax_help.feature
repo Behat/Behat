@@ -27,7 +27,7 @@ Feature: Syntax helpers
           Then there should be agent J
           But there should not be agent K
 
-        [Scenario Outline, Scenario Template]: Erasing other agents memory
+        [Scenario Outline, Scenario Template]: Erasing other agents' memory
           Given there is agent <agent1>
           And there is agent <agent2>
           When I erase agent <agent2>'s memory
@@ -64,10 +64,10 @@ Feature: Syntax helpers
           [То, Тогда] there should be agent J
           [Но, А] there should not be agent K
 
-        Структура сценария: Erasing other agents memory
+        Структура сценария: Erasing other agents' memory
           [Допустим, Дано, Пусть] there is agent <agent1>
-          [И, К тому же] there is agent <agent2>'s
-          [Если, Когда] I erase agent <agent2> memory
+          [И, К тому же] there is agent <agent2>
+          [Если, Когда] I erase agent <agent2>'s memory
           [То, Тогда] there should be agent <agent1>
           [Но, А] there should not be agent <agent2>
 
