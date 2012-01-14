@@ -16,6 +16,7 @@
         "php":                           ">=5.3.1",
         "behat/gherkin":                 ">=1.2.0-dev,<1.3.0-dev",
         "symfony/console":               ">=2.0.0,<2.2.0-dev",
+        "symfony/config":                ">=2.0.0,<2.2.0-dev",
         "symfony/dependency-injection":  ">=2.0.0,<2.2.0-dev",
         "symfony/event-dispatcher":      ">=2.0.0,<2.2.0-dev",
         "symfony/translation":           ">=2.0.0,<2.2.0-dev",
@@ -27,5 +28,37 @@
             "Behat\\Behat": "src/"
         }
     },
-    "bin": ["bin/behat"]
+    "bin": ["bin/behat"],
+
+    "repositories": {
+        "behat/gherkin": {
+            "package": {
+                "name":         "behat/gherkin",
+                "version":      "1.2.0-dev",
+                "dist": {
+                    "url":  "https:\/\/github.com\/Behat\/Gherkin\/zipball\/i18n-refactoring",
+                    "type": "zip"
+                },
+                "source": {
+                    "url":       "git:\/\/github.com\/Behat\/Gherkin.git",
+                    "type":      "git",
+                    "reference": "i18n-refactoring"
+                },
+                "require": {
+                    "php":             ">=5.3.1",
+                    "symfony/finder":  ">=2.0,<2.2-dev"
+                },
+                "recommend": {
+                    "symfony/yaml":         ">=2.0,<2.2-dev",
+                    "symfony/translation":  ">=2.0,<2.2-dev",
+                    "symfony/config":       ">=2.0,<2.2-dev"
+                },
+                "autoload": {
+                    "psr-0": {
+                        "Behat\\Gherkin":   "src/"
+                    }
+                }
+            }
+        }
+    }
 }
