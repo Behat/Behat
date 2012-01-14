@@ -11,27 +11,32 @@ Feature: Syntax helpers
     When I run "behat --story-syntax"
     Then the output should contain:
       """
-      # language: en
-      Feature: feature title
-        In order to ...
-        As a ...
-        I need to ...
+      Feature: Internal operations
+        In order to stay secret
+        As a secret organization
+        We need to be able to erase past agents' memory
 
         Background:
-          [Given, Then, When, But, And] step 1
-          [Given, Then, When, But, And] step 2
+          Given there is agent A
+          And there is agent B
 
-        Scenario: scenario title
-          [Given, Then, When, But, And] step 1
-          [Given, Then, When, But, And] step 2
+        Scenario: Erasing agent memory
+          Given there is agent J
+          And there is agent K
+          When I erase agent K's memory
+          Then there should be agent J
+          But there should not be agent K
 
-        [Scenario Outline, Scenario Template]: outline title
-          [Given, Then, When, But, And] step <val1>
-          [Given, Then, When, But, And] step <val2>
+        [Scenario Outline, Scenario Template]: Erasing other agents memory
+          Given there is agent <agent1>
+          And there is agent <agent2>
+          When I erase agent <agent2>'s memory
+          Then there should be agent <agent1>
+          But there should not be agent <agent2>
 
           [Examples, Scenarios]:
-            | val1 | val2 |
-            | 23   | 122  |
+            | agent1 | agent2 |
+            | D      | M      |
       """
 
   Scenario: Print story syntax in native language
@@ -43,26 +48,32 @@ Feature: Syntax helpers
     Then the output should contain:
       """
       # language: ru
-      [Функционал, Фича]: feature title
-        In order to ...
-        As a ...
-        I need to ...
+      [Функция, Функционал, Свойство]: Internal operations
+        In order to stay secret
+        As a secret organization
+        We need to be able to erase past agents' memory
 
-        Предыстория:
-          [К тому же, Допустим, Когда, Пусть, Тогда, Если, Дано, Но, То, А, И] step 1
-          [К тому же, Допустим, Когда, Пусть, Тогда, Если, Дано, Но, То, А, И] step 2
+        [Предыстория, Контекст]:
+          [Допустим, Дано, Пусть] there is agent A
+          [И, К тому же] there is agent B
 
-        Сценарий: scenario title
-          [К тому же, Допустим, Когда, Пусть, Тогда, Если, Дано, Но, То, А, И] step 1
-          [К тому же, Допустим, Когда, Пусть, Тогда, Если, Дано, Но, То, А, И] step 2
+        Сценарий: Erasing agent memory
+          [Допустим, Дано, Пусть] there is agent J
+          [И, К тому же] there is agent K
+          [Если, Когда] I erase agent K's memory
+          [То, Тогда] there should be agent J
+          [Но, А] there should not be agent K
 
-        Структура сценария: outline title
-          [К тому же, Допустим, Когда, Пусть, Тогда, Если, Дано, Но, То, А, И] step <val1>
-          [К тому же, Допустим, Когда, Пусть, Тогда, Если, Дано, Но, То, А, И] step <val2>
+        Структура сценария: Erasing other agents memory
+          [Допустим, Дано, Пусть] there is agent <agent1>
+          [И, К тому же] there is agent <agent2>'s
+          [Если, Когда] I erase agent <agent2> memory
+          [То, Тогда] there should be agent <agent1>
+          [Но, А] there should not be agent <agent2>
 
-          Значения:
-            | val1 | val2 |
-            | 23   | 122  |
+          Примеры:
+            | agent1 | agent2 |
+            | D      | M      |
       """
 
   Scenario: Print available definitions
