@@ -35,7 +35,7 @@
         <parameter key="gherkin.parser.class">Behat\Gherkin\Parser</parameter>
         <parameter key="gherkin.lexer.class">Behat\Gherkin\Lexer</parameter>
         <parameter key="gherkin.loader.gherkin.class">Behat\Gherkin\Loader\GherkinFileLoader</parameter>
-        <parameter key="gherkin.keywords.class">Behat\Gherkin\Keywords\CucumberKeywords</parameter>
+        <parameter key="gherkin.keywords.class">Behat\Gherkin\Keywords\CachedArrayKeywords</parameter>
         <parameter key="gherkin.keywords_dumper.class">Behat\Gherkin\Keywords\KeywordsDumper</parameter>
         <parameter key="gherkin.keywords.path">%gherkin.paths.lib%/i18n</parameter>
 
@@ -96,7 +96,7 @@
             <argument type="service" id="gherkin.keywords" />
         </service>
         <service id="gherkin.keywords" class="%gherkin.keywords.class%">
-            <argument>%gherkin.paths.lib%/i18n.yml</argument>
+            <argument>%gherkin.paths.lib%/i18n/i18n.php</argument>
         </service>
         <service id="gherkin.loader.gherkin" class="%gherkin.loader.gherkin.class%">
             <argument type="service" id="gherkin.parser" />
