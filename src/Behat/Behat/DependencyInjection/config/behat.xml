@@ -72,6 +72,7 @@
         <parameter key="behat.translator.class">Symfony\Component\Translation\Translator</parameter>
         <parameter key="behat.translator.message_selector.class">Symfony\Component\Translation\MessageSelector</parameter>
         <parameter key="behat.translator.xliff_loader.class">Symfony\Component\Translation\Loader\XliffFileLoader</parameter>
+        <parameter key="behat.translator.yaml_loader.class">Symfony\Component\Translation\Loader\YamlFileLoader</parameter>
 
         <!-- Event Dispatcher -->
         <parameter key="behat.event_dispatcher.class">Symfony\Component\EventDispatcher\EventDispatcher</parameter>
@@ -217,10 +218,18 @@
             <argument type="service">
                 <service class="%behat.translator.message_selector.class%" />
             </argument>
+
+            <!-- Translation loaders -->
             <call method="addLoader">
                 <argument>xliff</argument>
                 <argument type="service">
                     <service class="%behat.translator.xliff_loader.class%" />
+                </argument>
+            </call>
+            <call method="addLoader">
+                <argument>yaml</argument>
+                <argument type="service">
+                    <service class="%behat.translator.yaml_loader.class%" />
                 </argument>
             </call>
 

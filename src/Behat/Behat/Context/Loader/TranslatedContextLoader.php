@@ -53,7 +53,17 @@ class TranslatedContextLoader implements ContextLoaderInterface
     public function load(ContextInterface $context)
     {
         foreach ($context->getTranslationResources() as $path) {
-            $this->translator->addResource('xliff', $path, basename($path, '.xliff'), 'behat.definitions');
+            $extension = pathinfo($path, PATHINFO_EXTENSION);
+
+            if ('yml' === $extension) {
+                $this->translator->addResource(
+                    'yaml', $path, basename($path, '.yml'), 'behat.definitions'
+                );
+            } elseif ('xliff' === $extension) {
+                $this->translator->addResource(
+                    'xliff', $path, basename($path, '.xliff'), 'behat.definitions'
+                );
+            }
         }
     }
 }
