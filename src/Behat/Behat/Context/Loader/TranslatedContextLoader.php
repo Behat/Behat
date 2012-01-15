@@ -63,6 +63,15 @@ class TranslatedContextLoader implements ContextLoaderInterface
                 $this->translator->addResource(
                     'xliff', $path, basename($path, '.xliff'), 'behat.definitions'
                 );
+            } elseif ('php' === $extension) {
+                $this->translator->addResource(
+                    'php', $path, basename($path, '.php'), 'behat.definitions'
+                );
+            } else {
+                throw new \InvalidArgumentException(sprintf(
+                    'Can not read definitions translations from file "%s". File is not supported',
+                    $path
+                ));
             }
         }
     }
