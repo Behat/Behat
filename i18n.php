@@ -86,7 +86,7 @@
         'steps_count'         => '{0} Nessuno step|{1} 1 step|]1,Inf] %1% step',
         'passed_count'        => '[1,Inf] %1% passato',
         'failed_count'        => '[1,Inf] %1% fallito',
-        'pending_count'       => '[1,Inf] %1% pendente',
+        'pending_count'       => '[1,Inf] %1% in attesa',
         'undefined_count'     => '[1,Inf] %1% non definito',
         'skipped_count'       => '[1,Inf] %1% saltato',
     ),
