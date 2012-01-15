@@ -96,7 +96,7 @@
             <argument type="service" id="gherkin.keywords" />
         </service>
         <service id="gherkin.keywords" class="%gherkin.keywords.class%">
-            <argument>%gherkin.paths.lib%/i18n/i18n.php</argument>
+            <argument>%gherkin.paths.lib%/i18n.php</argument>
         </service>
         <service id="gherkin.loader.gherkin" class="%gherkin.loader.gherkin.class%">
             <argument type="service" id="gherkin.parser" />
