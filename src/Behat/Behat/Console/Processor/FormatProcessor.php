@@ -88,11 +88,17 @@ class FormatProcessor implements ProcessorInterface
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
-        $manager = $container->get('behat.format_manager');
-        $locator = $container->get('behat.path_locator');
-        $formats = array_map('trim', explode(',',
+        $translator = $container->get('behat.translator');
+        $manager    = $container->get('behat.format_manager');
+        $locator    = $container->get('behat.path_locator');
+        $formats    = array_map('trim', explode(',',
             $input->getOption('format') ?: $container->getParameter('behat.formatter.name')
         ));
+
+        // load formatters translations
+        foreach (require($container->getParameter('behat.paths.i18n')) as $lang => $messages) {
+            $translator->addResource('array', $messages, $lang, 'behat');
+        }
 
         // add user-defined formatter classes to manager
         foreach ($container->getParameter('behat.formatter.classes') as $name => $class) {

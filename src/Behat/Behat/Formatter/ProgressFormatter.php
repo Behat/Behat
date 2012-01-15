@@ -142,7 +142,7 @@ class ProgressFormatter extends ConsoleFormatter
     protected function printFailedSteps(LoggerDataCollector $logger)
     {
         if (count($logger->getFailedStepsEvents())) {
-            $header = $this->translate('failed steps');
+            $header = $this->translate('failed_steps_title');
             $this->writeln("{+failed}(::) $header (::){-failed}\n");
             $this->printExceptionEvents($logger->getFailedStepsEvents());
         }
@@ -156,7 +156,7 @@ class ProgressFormatter extends ConsoleFormatter
     protected function printPendingSteps(LoggerDataCollector $logger)
     {
         if (count($logger->getPendingStepsEvents())) {
-            $header = $this->translate('pending steps');
+            $header = $this->translate('pending_steps_title');
             $this->writeln("{+pending}(::) $header (::){-pending}\n");
             $this->printExceptionEvents($logger->getPendingStepsEvents());
         }
@@ -263,9 +263,7 @@ class ProgressFormatter extends ConsoleFormatter
     protected function printScenariosSummary(LoggerDataCollector $logger)
     {
         $count  = $logger->getScenariosCount();
-        $header = $this->translateChoice(
-            '{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios', $count, array('%1%' => $count)
-        );
+        $header = $this->translateChoice('scenarios_count', $count, array('%1%' => $count));
         $this->write($header);
         $this->printStatusesSummary($logger->getScenariosStatuses());
     }
@@ -278,9 +276,7 @@ class ProgressFormatter extends ConsoleFormatter
     protected function printStepsSummary(LoggerDataCollector $logger)
     {
         $count  = $logger->getStepsCount();
-        $header = $this->translateChoice(
-            '{0} No steps|{1} 1 step|]1,Inf] %1% steps', $count, array('%1%' => $count)
-        );
+        $header = $this->translateChoice('steps_count', $count, array('%1%' => $count));
         $this->write($header);
         $this->printStatusesSummary($logger->getStepsStatuses());
     }
@@ -296,7 +292,7 @@ class ProgressFormatter extends ConsoleFormatter
         foreach ($statusesStatistics as $status => $count) {
             if ($count) {
                 $transStatus = $this->translateChoice(
-                    "[1,Inf] %1% $status", $count, array('%1%' => $count)
+                    "{$status}_count", $count, array('%1%' => $count)
                 );
                 $statuses[] = "{+$status}$transStatus{-$status}";
             }
@@ -326,9 +322,7 @@ class ProgressFormatter extends ConsoleFormatter
     protected function printUndefinedStepsSnippets(LoggerDataCollector $logger)
     {
         if ($this->getParameter('snippets') && count($logger->getDefinitionsSnippets())) {
-            $header = $this->translate(
-                'You can implement step definitions for undefined steps with these snippets:'
-            );
+            $header = $this->translate('proposal_title');
             $this->writeln("\n{+undefined}$header{-undefined}\n");
             $this->printSnippets($logger);
         }

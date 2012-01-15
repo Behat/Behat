@@ -492,13 +492,13 @@ HTML
      */
     protected function printStatusesSummary(array $statusesStatistics) {
         $statuses = array();
-        $status_tpl = '<strong class="%s">%s</strong>';
+        $statusTpl = '<strong class="%s">%s</strong>';
         foreach ($statusesStatistics as $status => $count) {
             if ($count) {
                 $transStatus = $this->translateChoice(
-                    "[1,Inf] %1% $status", $count, array('%1%' => $count)
+                    "{$status}_count", $count, array('%1%' => $count)
                 );
-                $statuses[] = sprintf($status_tpl, $status, $transStatus);
+                $statuses[] = sprintf($statusTpl, $status, $transStatus);
             }
         }
         if (count($statuses)) {
