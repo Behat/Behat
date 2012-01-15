@@ -33,12 +33,12 @@ Running Tests
 
 	bin/behat -f progress
 
-Contributing to Formatter Transaltions
+Contributing to Formatter Translations
 --------------------------------------
 
-Almost any output message (except exceptions and custom output), printed by Behat
+Almost any output message (except exceptions and custom output) printed by Behat
 formatters could be translated into your language with `--lang` option. In order
-to fix/add translation, edit apropriate section under `i18n.php` file.
+to fix/add translation, edit the appropriate section of the `i18n.php` file.
 
 Copyright
 ---------
