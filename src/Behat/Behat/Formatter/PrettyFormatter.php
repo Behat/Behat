@@ -921,9 +921,8 @@ class PrettyFormatter extends ProgressFormatter
             $title = array_shift($lines);
 
             if (count($lines)) {
-                $indent = $baseIndent . str_repeat(' ', mb_strlen("$keyword: "));
                 foreach ($lines as $line) {
-                    $title .= "\n" . $indent . $line;
+                    $title .= "\n" . $baseIndent.'  '.$line;
                 }
             }
 
