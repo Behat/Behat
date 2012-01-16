@@ -916,20 +916,16 @@ class PrettyFormatter extends ProgressFormatter
         $keyword    = $node->getKeyword();
         $baseIndent = ($node instanceof FeatureNode) || !$haveBaseIndent ? '' : '  ';
 
-        if (!$node instanceof BackgroundNode) {
-            $lines = explode("\n", $node->getTitle());
-            $title = array_shift($lines);
+        $lines = explode("\n", $node->getTitle());
+        $title = array_shift($lines);
 
-            if (count($lines)) {
-                foreach ($lines as $line) {
-                    $title .= "\n" . $baseIndent.'  '.$line;
-                }
+        if (count($lines)) {
+            foreach ($lines as $line) {
+                $title .= "\n" . $baseIndent.'  '.$line;
             }
-
-            return "$baseIndent$keyword:" . ($title ? ' ' . $title : '');
         }
 
-        return "$baseIndent$keyword:";
+        return "$baseIndent$keyword:" . ($title ? ' ' . $title : '');
     }
 
     /**

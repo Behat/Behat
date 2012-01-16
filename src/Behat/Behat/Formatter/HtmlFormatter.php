@@ -174,7 +174,7 @@ class HtmlFormatter extends PrettyFormatter
     {
         $this->writeln('<h3>');
         $this->writeln('<span class="keyword">' . $scenario->getKeyword() . ': </span>');
-        if (!$scenario instanceof BackgroundNode) {
+        if ($scenario->getTitle()) {
             $this->writeln('<span class="title">' . $scenario->getTitle() . '</span>');
         }
         $this->printScenarioPath($scenario);
