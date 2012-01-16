@@ -27,14 +27,14 @@ Feature: Syntax helpers
           Then there should be agent J
           But there should not be agent K
 
-        [Scenario Outline, Scenario Template]: Erasing other agents' memory
+        [Scenario Outline|Scenario Template]: Erasing other agents' memory
           Given there is agent <agent1>
           And there is agent <agent2>
           When I erase agent <agent2>'s memory
           Then there should be agent <agent1>
           But there should not be agent <agent2>
 
-          [Examples, Scenarios]:
+          [Examples|Scenarios]:
             | agent1 | agent2 |
             | D      | M      |
       """
@@ -48,28 +48,28 @@ Feature: Syntax helpers
     Then the output should contain:
       """
       # language: ru
-      [Функция, Функционал, Свойство]: Internal operations
+      [Функция|Функционал|Свойство]: Internal operations
         In order to stay secret
         As a secret organization
         We need to be able to erase past agents' memory
 
-        [Предыстория, Контекст]:
-          [Допустим, Дано, Пусть] there is agent A
-          [И, К тому же] there is agent B
+        [Предыстория|Контекст]:
+          [Допустим|Дано|Пусть] there is agent A
+          [И|К тому же] there is agent B
 
         Сценарий: Erasing agent memory
-          [Допустим, Дано, Пусть] there is agent J
-          [И, К тому же] there is agent K
-          [Если, Когда] I erase agent K's memory
-          [То, Тогда] there should be agent J
-          [Но, А] there should not be agent K
+          [Допустим|Дано|Пусть] there is agent J
+          [И|К тому же] there is agent K
+          [Если|Когда] I erase agent K's memory
+          [То|Тогда] there should be agent J
+          [Но|А] there should not be agent K
 
         Структура сценария: Erasing other agents' memory
-          [Допустим, Дано, Пусть] there is agent <agent1>
-          [И, К тому же] there is agent <agent2>
-          [Если, Когда] I erase agent <agent2>'s memory
-          [То, Тогда] there should be agent <agent1>
-          [Но, А] there should not be agent <agent2>
+          [Допустим|Дано|Пусть] there is agent <agent1>
+          [И|К тому же] there is agent <agent2>
+          [Если|Когда] I erase agent <agent2>'s memory
+          [То|Тогда] there should be agent <agent1>
+          [Но|А] there should not be agent <agent2>
 
           Примеры:
             | agent1 | agent2 |

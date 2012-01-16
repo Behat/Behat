@@ -36,6 +36,7 @@ class StorySyntaxPrinter
      */
     public function __construct(KeywordsDumper $dumper)
     {
+        $dumper->setKeywordsDumperFunction(array($this, 'dumpKeywords'));
         $this->dumper = $dumper;
     }
 
@@ -52,35 +53,27 @@ class StorySyntaxPrinter
             'keyword', new OutputFormatterStyle('green', null, array('bold'))
         );
 
-        $story = explode("\n", $this->dumper->dump($language));
+        $story = $this->dumper->dump($language);
+        $story = preg_replace('/^\#.*/', '<comment>$0</comment>', $story);
 
-        foreach ($story as $num => $line) {
-            $line = preg_replace('/^\#.*/', '<comment>$0</comment>', $line);
-            $line = preg_replace('/^(\s*[^\#\(]*)\:/', '<keyword>$1</keyword>:', $line);
-            $line = preg_replace_callback('/^(\s*)\(([^\)]*)\)\:/', function($match) {
-                $indent     = $match[1];
-                $keywords   = explode('|', $match[2]);
+        $output->writeln($story);
+    }
 
-                foreach ($keywords as $num => $keyword) {
-                    $keywords[$num] = "<keyword>$keyword</keyword>";
-                }
+    /**
+     * Keywords dumper.
+     *
+     * @param   array   $keywords keywords list
+     *
+     * @return  string
+     */
+    public function dumpKeywords(array $keywords)
+    {
+        $dump = '<keyword>'.implode('</keyword>|<keyword>', $keywords).'</keyword>';
 
-                return "{$indent}[" . implode(', ', $keywords) . ']:';
-            }, $line);
-            $line = preg_replace_callback('/^(\s*)\(([^\)]*)\)\s/', function($match) {
-                $indent     = $match[1];
-                $keywords   = explode('|', $match[2]);
-
-                foreach ($keywords as $num => $keyword) {
-                    $keywords[$num] = "<keyword>$keyword</keyword>";
-                }
-
-                return "{$indent}[" . implode(', ', $keywords) . '] ';
-            }, $line);
-
-            $story[$num] = $line;
+        if (1 < count($keywords)) {
+            return '['.$dump.']';
         }
 
-        $output->writeln(implode("\n", $story));
+        return $dump;
     }
 }
