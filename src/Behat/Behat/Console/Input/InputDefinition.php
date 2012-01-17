@@ -72,4 +72,28 @@ class InputDefinition extends BaseDefinition
 
         return false;
     }
+
+    /**
+     * Gets the synopsis.
+     *
+     * @return string The synopsis
+     */
+    public function getSynopsis()
+    {
+        $elements = array();
+        foreach ($this->getOptions() as $option) {
+            $shortcut = $option->getShortcut() ? sprintf('-%s|', $option->getShortcut()) : '';
+            $elements[] = sprintf('['.($option->isValueRequired() ? '%s--%s="..."' : (!($option instanceof InputSwitch) && $option->isValueOptional() ? '%s--%s[="..."]' : '%s--%s')).']', $shortcut, $option->getName());
+        }
+
+        foreach ($this->getArguments() as $argument) {
+            $elements[] = sprintf($argument->isRequired() ? '%s' : '[%s]', $argument->getName().($argument->isArray() ? '1' : ''));
+
+            if ($argument->isArray()) {
+                $elements[] = sprintf('... [%sN]', $argument->getName());
+            }
+        }
+
+        return implode(' ', $elements);
+    }
 }
