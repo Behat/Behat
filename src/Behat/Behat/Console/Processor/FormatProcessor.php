@@ -8,7 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Formatter\FormatManager;
+use Behat\Behat\Formatter\FormatManager,
+    Behat\Behat\Console\Input\InputSwitch;
 
 /*
  * This file is part of the Behat.
@@ -52,35 +53,38 @@ class FormatProcessor implements ProcessorInterface
                 "Write formatter output to a file/directory\n" .
                 "instead of STDOUT <comment>(output_path)</comment>."
             )
-            ->addOption('--colors', null, InputOption::VALUE_NONE,
-                'Force Behat to use ANSI color in the output.'
-            )
-            ->addOption('--no-colors', null, InputOption::VALUE_NONE,
-                'Do not use ANSI color in the output.'
-            )
-            ->addOption('--no-time', null, InputOption::VALUE_NONE,
-                'Hide time in output.'
-            )
             ->addOption('--lang', null, InputOption::VALUE_REQUIRED,
                 'Print formatter output in particular language.',
                 $defaultLanguage
             )
-            ->addOption('--no-paths', null, InputOption::VALUE_NONE,
-                'Do not print the definition path with the steps.'
-            )
-            ->addOption('--no-snippets', null, InputOption::VALUE_NONE,
-                'Do not print snippets for undefined steps.'
-            )
-            ->addOption('--snippets-paths', null, InputOption::VALUE_NONE,
-                'Print snippets details about steps interested in them.'
-            )
-            ->addOption('--no-multiline', null, InputOption::VALUE_NONE,
-                "No multiline arguments in output."
-            )
-            ->addOption('--expand', null, InputOption::VALUE_NONE,
-                "Expand Scenario Outline Tables in output.\n"
-            )
         ;
+
+        $definition = $command->getDefinition();
+
+        $definition->addOption(new InputSwitch('--[no-]colors',
+            "Whether or not to use ANSI color in the output.\n".
+            "Behat decides based on your platform and the output\n".
+            "destination if not specified."
+        ));
+        $definition->addOption(new InputSwitch('--[no-]time',
+            "Whether or not to show timer in output."
+        ));
+        $definition->addOption(new InputSwitch('--[no-]paths',
+            "Whether or not to show timer in output."
+        ));
+        $definition->addOption(new InputSwitch('--[no-]snippets',
+            "Whether or not to print snippets for undefined steps."
+        ));
+        $definition->addOption(new InputSwitch('--[no-]snippets-paths',
+            "Whether or not to print details about undefined steps\n".
+            "their in snippets."
+        ));
+        $definition->addOption(new InputSwitch('--[no-]multiline',
+            "Whether or not to use multiline arguments after steps."
+        ));
+        $definition->addOption(new InputSwitch('--[no-]expand',
+            "Whether or not to expand scenario outlines.\n"
+        ));
     }
 
     /**
@@ -130,36 +134,27 @@ class FormatProcessor implements ProcessorInterface
             $manager->setFormattersParameter('language', $input->getOption('lang'));
         }
 
-        if ($input->getOption('colors')) {
-            $output->setDecorated(true);
-            $manager->setFormattersParameter('decorated', true);
-        } elseif ($input->getOption('no-colors')) {
-            $output->setDecorated(false);
-            $manager->setFormattersParameter('decorated', false);
+        if (null !== $colors = $input->getOption('[no-]colors')) {
+            $output->setDecorated($colors);
+            $manager->setFormattersParameter('decorated', $colors);
         }
-
-        if ($input->getOption('no-time')) {
-            $manager->setFormattersParameter('time', false);
+        if (null !== $time = $input->getOption('[no-]time')) {
+            $manager->setFormattersParameter('time', $time);
         }
-
-        if ($input->getOption('no-snippets')) {
-            $manager->setFormattersParameter('snippets', false);
+        if (null !== $snippets = $input->getOption('[no-]snippets')) {
+            $manager->setFormattersParameter('snippets', $snippets);
         }
-
-        if ($input->getOption('snippets-paths')) {
-            $manager->setFormattersParameter('snippets_paths', true);
+        if (null !== $snippetsPaths = $input->getOption('[no-]snippets-paths')) {
+            $manager->setFormattersParameter('snippets_paths', $snippetsPaths);
         }
-
-        if ($input->getOption('no-paths')) {
-            $manager->setFormattersParameter('paths', false);
+        if (null !== $paths = $input->getOption('[no-]paths')) {
+            $manager->setFormattersParameter('paths', $paths);
         }
-
-        if ($input->getOption('expand')) {
-            $manager->setFormattersParameter('expand', true);
+        if (null !== $expand = $input->getOption('[no-]expand')) {
+            $manager->setFormattersParameter('expand', $expand);
         }
-
-        if ($input->getOption('no-multiline')) {
-            $manager->setFormattersParameter('multiline_arguments', false);
+        if (null !== $multiline = $input->getOption('[no-]multiline')) {
+            $manager->setFormattersParameter('multiline_arguments', $multiline);
         }
 
         if ($input->getOption('out')) {
@@ -183,7 +178,7 @@ class FormatProcessor implements ProcessorInterface
             }
 
             $manager->setFormattersParameter('output_path', $out);
-            $manager->setFormattersParameter('decorated', (bool) $input->getOption('colors'));
+            $manager->setFormattersParameter('decorated', (bool) $input->getOption('[no-]colors'));
         } else {
             foreach (array_map('trim', explode(',', $outputs)) as $i => $out) {
                 if (!$out || 'null' === $out || 'false' === $out) {
@@ -204,7 +199,7 @@ class FormatProcessor implements ProcessorInterface
                 $formatters = $manager->getFormatters();
                 if (isset($formatters[$i])) {
                     $formatters[$i]->setParameter('output_path', $out);
-                    $formatters[$i]->setParameter('decorated', (bool) $input->getOption('colors'));
+                    $formatters[$i]->setParameter('decorated', (bool) $input->getOption('[no-]colors'));
                 }
             }
         }

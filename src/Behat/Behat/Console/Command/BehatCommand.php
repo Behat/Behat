@@ -3,13 +3,12 @@
 namespace Behat\Behat\Console\Command;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Console\Processor;
+use Behat\Behat\Console\Processor,
+    Behat\Behat\Console\Input\InputDefinition;
 
 /*
  * This file is part of the Behat.
@@ -42,6 +41,7 @@ class BehatCommand extends BaseCommand
 
         $this
             ->setName('behat')
+            ->setDefinition(new InputDefinition)
             ->setProcessors(array(
                 new Processor\ContainerProcessor(),
                 new Processor\LocatorProcessor(),
