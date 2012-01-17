@@ -70,20 +70,21 @@ class FormatProcessor implements ProcessorInterface
             "Whether or not to show timer in output."
         ));
         $definition->addOption(new InputSwitch('--[no-]paths',
-            "Whether or not to show timer in output."
+            "Whether or not to print sources paths."
         ));
         $definition->addOption(new InputSwitch('--[no-]snippets',
             "Whether or not to print snippets for undefined steps."
         ));
         $definition->addOption(new InputSwitch('--[no-]snippets-paths',
             "Whether or not to print details about undefined steps\n".
-            "their in snippets."
+            "in their snippets."
         ));
         $definition->addOption(new InputSwitch('--[no-]multiline',
-            "Whether or not to use multiline arguments after steps."
+            "Whether or not to print multiline arguments for steps."
         ));
         $definition->addOption(new InputSwitch('--[no-]expand',
-            "Whether or not to expand scenario outlines.\n"
+            "Whether or not to expand scenario outline examples\n".
+            "tables.\n"
         ));
     }
 
