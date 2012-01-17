@@ -35,7 +35,9 @@ class InputDefinition extends BaseDefinition
             $switch->setDefault(false);
 
             return $switch;
-        } elseif (parent::hasOption('[no-]'.$name)) {
+        }
+
+        if (parent::hasOption('[no-]'.$name)) {
             $switch = parent::getOption('[no-]'.$name);
             $switch->setDefault(true);
 
@@ -58,9 +60,13 @@ class InputDefinition extends BaseDefinition
     {
         if (parent::hasOption($name)) {
             return true;
-        } elseif ('no-' === substr($name, 0, 3) && parent::hasOption('[no-]'.substr($name, 3))) {
+        }
+
+        if ('no-' === substr($name, 0, 3) && parent::hasOption('[no-]'.substr($name, 3))) {
             return true;
-        } elseif (parent::hasOption('[no-]'.$name)) {
+        }
+
+        if (parent::hasOption('[no-]'.$name)) {
             return true;
         }
 
