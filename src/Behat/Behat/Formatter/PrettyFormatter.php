@@ -427,10 +427,18 @@ class PrettyFormatter extends ProgressFormatter
      * @param   Behat\Gherkin\Node\AbstractScenarioNode $scenario
      *
      * @uses    getFeatureOrScenarioName()
+     * @uses    printScenarioPath()
      */
     protected function printScenarioName(AbstractScenarioNode $scenario)
     {
-        $this->write($this->getFeatureOrScenarioName($scenario));
+        $title = explode("\n", $this->getFeatureOrScenarioName($scenario));
+
+        $this->write(array_shift($title));
+        $this->printScenarioPath($scenario);
+
+        if (count($title)) {
+            $this->writeln(implode("\n", $title));
+        }
     }
 
     /**
@@ -445,7 +453,7 @@ class PrettyFormatter extends ProgressFormatter
     {
         if ($this->getParameter('paths')) {
             $lines       = explode("\n", $this->getFeatureOrScenarioName($scenario));
-            $nameLength  = mb_strlen(end($lines));
+            $nameLength  = mb_strlen(current($lines));
             $indentCount = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
 
             $this->printPathComment(
@@ -469,7 +477,6 @@ class PrettyFormatter extends ProgressFormatter
         $this->maxLineLength = $this->getMaxLineLength($this->maxLineLength, $background);
 
         $this->printScenarioName($background);
-        $this->printScenarioPath($background);
     }
 
     /**
@@ -489,7 +496,6 @@ class PrettyFormatter extends ProgressFormatter
      *
      * @uses    printFeatureOrScenarioTags()
      * @uses    printScenarioName()
-     * @uses    printScenarioPath()
      */
     protected function printOutlineHeader(OutlineNode $outline)
     {
@@ -497,7 +503,6 @@ class PrettyFormatter extends ProgressFormatter
 
         $this->printFeatureOrScenarioTags($outline);
         $this->printScenarioName($outline);
-        $this->printScenarioPath($outline);
     }
 
     /**
@@ -651,7 +656,6 @@ class PrettyFormatter extends ProgressFormatter
      *
      * @uses    printFeatureOrScenarioTags()
      * @uses    printScenarioName()
-     * @uses    printScenarioPath()
      */
     protected function printScenarioHeader(ScenarioNode $scenario)
     {
@@ -659,7 +663,6 @@ class PrettyFormatter extends ProgressFormatter
 
         $this->printFeatureOrScenarioTags($scenario);
         $this->printScenarioName($scenario);
-        $this->printScenarioPath($scenario);
     }
 
     /**
@@ -989,7 +992,7 @@ class PrettyFormatter extends ProgressFormatter
     protected function getMaxLineLength($max, AbstractScenarioNode $scenario)
     {
         $lines = explode("\n", $this->getFeatureOrScenarioName($scenario, false));
-        $max   = max($max, mb_strlen(end($lines)) + 2);
+        $max   = max($max, mb_strlen(current($lines)) + 2);
 
         foreach ($scenario->getSteps() as $step) {
             $stepDescription = $step->getType() . ' ' . $step->getCleanText();

@@ -296,18 +296,18 @@ Feature: Pretty Formatter
         Background:               # features/World.feature:6
           Given I have entered 10 # FeatureContext::iHaveEntered()
 
-        Scenario: Adding some interesting
-                  value           # features/World.feature:9
-          Then I must have 10     # FeatureContext::iMustHave()
-          And I add the value 6   # FeatureContext::iAddOrSubstact()
-          Then I must have 16     # FeatureContext::iMustHave()
+        Scenario: Adding some interesting # features/World.feature:9
+                  value
+          Then I must have 10             # FeatureContext::iMustHave()
+          And I add the value 6           # FeatureContext::iAddOrSubstact()
+          Then I must have 16             # FeatureContext::iMustHave()
 
-        Scenario: Subtracting
+        Scenario: Subtracting             # features/World.feature:15
                   some
-                  value              # features/World.feature:15
-          Then I must have 10        # FeatureContext::iMustHave()
-          And I subtract the value 6 # FeatureContext::iAddOrSubstact()
-          Then I must have 4         # FeatureContext::iMustHave()
+                  value
+          Then I must have 10             # FeatureContext::iMustHave()
+          And I subtract the value 6      # FeatureContext::iAddOrSubstact()
+          Then I must have 4              # FeatureContext::iMustHave()
 
       2 scenarios (2 passed)
       8 steps (8 passed)
@@ -480,3 +480,89 @@ Feature: Pretty Formatter
         4 scenarios (4 undefined)
         20 steps (20 undefined)
         """
+
+  Scenario: Multiline titles
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\PendingException;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
+
+      class FeatureContext extends BehatContext
+      {}
+      """
+    And a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background: Some background
+          title
+            with
+        multiple lines
+
+          Given I have entered 10
+
+        Scenario: Undefined
+                  scenario or
+                  whatever
+          Then I must have 10
+          And Something new
+          Then I must have 10
+
+      Scenario Outline: Passed & Failed
+      steps and other interesting stuff
+        he-he-he
+
+          Given I must have 10
+          When I add <value>
+          Then I must have <result>
+
+          Examples:
+            | value | result |
+            |  5    | 16     |
+            |  10   | 20     |
+            |  23   | 32     |
+      """
+    When I run "behat -f pretty --no-snippets"
+    Then it should pass with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background: Some background # features/World.feature:6
+          title
+            with
+          multiple lines
+          Given I have entered 10
+
+        Scenario: Undefined         # features/World.feature:13
+                  scenario or
+                  whatever
+          Then I must have 10
+          And Something new
+          Then I must have 10
+
+        Scenario Outline: Passed & Failed # features/World.feature:20
+          steps and other interesting stuff
+          he-he-he
+          Given I must have 10
+          When I add <value>
+          Then I must have <result>
+
+          Examples:
+            | value | result |
+            | 5     | 16     |
+            | 10    | 20     |
+            | 23    | 32     |
+
+      4 scenarios (4 undefined)
+      16 steps (16 undefined)
+      """
