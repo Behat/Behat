@@ -82,11 +82,21 @@ class Runner
         return $this->strict;
     }
 
+    /**
+     * Sets suite to dry-run mode (skip all steps).
+     *
+     * @param   Boolean $dryRun
+     */
     public function setDryRun($dryRun = true)
     {
-        $this->dryRun = $dryRun;
+        $this->dryRun = (bool) $dryRun;
     }
 
+    /**
+     * Checks whether runner is in dry-run mode.
+     *
+     * @return  Boolean
+     */
     public function isDryRun()
     {
         return $this->dryRun;
