@@ -39,6 +39,16 @@ class Runner
     }
 
     /**
+     * Returns container associated with this runner.
+     *
+     * @return  Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
      * Sets main context class.
      *
      * @param   string  $class
