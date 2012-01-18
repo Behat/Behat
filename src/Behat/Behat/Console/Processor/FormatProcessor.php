@@ -61,7 +61,7 @@ class FormatProcessor implements ProcessorInterface
 
         $definition = $command->getDefinition();
 
-        $definition->addOption(new InputSwitch('--[no-]colors',
+        $definition->addOption(new InputSwitch('--[no-]ansi',
             "Whether or not to use ANSI color in the output.\n".
             "Behat decides based on your platform and the output\n".
             "destination if not specified."
@@ -135,9 +135,9 @@ class FormatProcessor implements ProcessorInterface
             $manager->setFormattersParameter('language', $input->getOption('lang'));
         }
 
-        if (null !== $colors = $input->getOption('[no-]colors')) {
-            $output->setDecorated($colors);
-            $manager->setFormattersParameter('decorated', $colors);
+        if (null !== $ansi = $input->getOption('[no-]ansi')) {
+            $output->setDecorated($ansi);
+            $manager->setFormattersParameter('decorated', $ansi);
         }
         if (null !== $time = $input->getOption('[no-]time')) {
             $manager->setFormattersParameter('time', $time);
@@ -179,7 +179,7 @@ class FormatProcessor implements ProcessorInterface
             }
 
             $manager->setFormattersParameter('output_path', $out);
-            $manager->setFormattersParameter('decorated', (bool) $input->getOption('[no-]colors'));
+            $manager->setFormattersParameter('decorated', (bool) $input->getOption('[no-]ansi'));
         } else {
             foreach (array_map('trim', explode(',', $outputs)) as $i => $out) {
                 if (!$out || 'null' === $out || 'false' === $out) {
@@ -200,7 +200,7 @@ class FormatProcessor implements ProcessorInterface
                 $formatters = $manager->getFormatters();
                 if (isset($formatters[$i])) {
                     $formatters[$i]->setParameter('output_path', $out);
-                    $formatters[$i]->setParameter('decorated', (bool) $input->getOption('[no-]colors'));
+                    $formatters[$i]->setParameter('decorated', (bool) $input->getOption('[no-]ansi'));
                 }
             }
         }

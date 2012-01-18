@@ -113,8 +113,8 @@ Feature: Format options
             | val1 | val2 |
       """
 
-  Scenario: --colors option
-    When I run "behat --colors"
+  Scenario: --ansi option
+    When I run "behat --ansi"
     Then it should fail with:
       """
       Feature: Apples story
@@ -190,8 +190,8 @@ Feature: Format options
           }[0m
       """
 
-  Scenario: --no-colors option
-    When I run "behat --no-colors"
+  Scenario: --no-ansi option
+    When I run "behat --no-ansi"
     Then it should fail with:
       """
       Feature: Apples story

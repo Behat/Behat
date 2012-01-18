@@ -200,7 +200,7 @@ Feature: Pretty Formatter
           And I subtract the value 6
           Then I must have 4
       """
-    When I run "behat -f pretty --colors"
+    When I run "behat -f pretty --ansi"
     Then it should pass with:
       """
       Feature: World consistency
@@ -359,7 +359,7 @@ Feature: Pretty Formatter
             |  10   | 20     |
             |  23   | 33     |
       """
-    When I run "behat -f pretty --colors"
+    When I run "behat -f pretty --ansi"
     Then it should pass with:
       """
       Feature: World consistency
