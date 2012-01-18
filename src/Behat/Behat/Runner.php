@@ -24,8 +24,7 @@ use Behat\Gherkin\Gherkin;
 class Runner
 {
     private $container;
-    private $featuresPaths = array();
-
+    private $featuresPaths;
     private $strict = true;
     private $dryRun = false;
 
@@ -55,6 +54,16 @@ class Runner
     }
 
     /**
+     * Sets path locator base path.
+     *
+     * @param   string  $path
+     */
+    public function setLocatorBasePath($path)
+    {
+        $this->container->get('behat.path_locator')->locateBasePath($path);
+    }
+
+    /**
      * Sets features/scenarios paths to run.
      *
      * @param   array   $paths
@@ -62,6 +71,17 @@ class Runner
     public function setFeaturesPaths(array $paths)
     {
         $this->featuresPaths = $paths;
+    }
+
+    /**
+     * Returns paths to the features of current suite (basepath).
+     *
+     * @return  array
+     */
+    public function getFeaturesPaths()
+    {
+        return $this->featuresPaths
+            ?: $this->container->get('behat.path_locator')->locateFeaturesPaths();
     }
 
     /**
@@ -113,7 +133,7 @@ class Runner
     {
         $this->beforeSuite();
         $this->runFeatures(
-            $this->container->get('gherkin'), $this->featuresPaths
+            $this->container->get('gherkin'), $this->getFeaturesPaths()
         );
         $this->afterSuite();
 
@@ -128,7 +148,7 @@ class Runner
      */
     protected function runFeatures(Gherkin $gherkin, $features)
     {
-        foreach ($this->featuresPaths as $path) {
+        foreach ($features as $path) {
             // parse every feature with Gherkin
             $features = $gherkin->load((string) $path);
 

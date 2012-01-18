@@ -34,9 +34,8 @@ class LocatorProcessor implements ProcessorInterface
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
+        $container->get('behat.runner')->setLocatorBasePath($input->getArgument('features'));
         $locator = $container->get('behat.path_locator');
-
-        $locator->locateBasePath($input->getArgument('features'));
 
         foreach ($locator->locateBootstrapFilesPaths() as $path) {
             require_once($path);
@@ -46,7 +45,5 @@ class LocatorProcessor implements ProcessorInterface
          && !is_dir($featuresPath = $locator->getFeaturesPath())) {
             throw new \InvalidArgumentException("Features path \"$featuresPath\" does not exist");
         }
-
-        $container->get('behat.runner')->setFeaturesPaths($locator->locateFeaturesPaths());
     }
 }
