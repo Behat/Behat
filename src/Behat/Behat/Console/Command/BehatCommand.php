@@ -75,6 +75,6 @@ class BehatCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        return $this->getContainer()->get('behat.runner')->run();
+        return $this->getContainer()->get('behat.runner')->runSuite();
     }
 }

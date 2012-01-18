@@ -129,7 +129,7 @@ class Runner
      *
      * @return  integer CLI return code
      */
-    public function run()
+    public function runSuite()
     {
         $this->beforeSuite();
         $this->runFeatures(
