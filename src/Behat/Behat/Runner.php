@@ -131,10 +131,10 @@ class Runner
      */
     public function runSuite()
     {
+        $gherkin = $this->container->get('gherkin');
+
         $this->beforeSuite();
-        $this->runFeatures(
-            $this->container->get('gherkin'), $this->getFeaturesPaths()
-        );
+        $this->runFeatures($gherkin, $this->getFeaturesPaths());
         $this->afterSuite();
 
         return $this->getCliReturnCode();
