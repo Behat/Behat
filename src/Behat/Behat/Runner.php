@@ -6,6 +6,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Behat\Behat\Event\SuiteEvent;
 
+use Behat\Gherkin\Gherkin;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -109,11 +111,23 @@ class Runner
      */
     public function run()
     {
-        $gherkin = $this->container->get('gherkin');
-
         $this->beforeSuite();
+        $this->runFeatures(
+            $this->container->get('gherkin'), $this->featuresPaths
+        );
+        $this->afterSuite();
 
-        // read all features from their paths
+        return $this->getCliReturnCode();
+    }
+
+    /**
+     * Parses and runs provided features.
+     *
+     * @param   Behat\Gherkin\Gherkin   $gherkin    gherkin parser/loader
+     * @param   array                   $features   list of feature files
+     */
+    protected function runFeatures(Gherkin $gherkin, $features)
+    {
         foreach ($this->featuresPaths as $path) {
             // parse every feature with Gherkin
             $features = $gherkin->load((string) $path);
@@ -126,10 +140,6 @@ class Runner
                 $feature->accept($tester);
             }
         }
-
-        $this->afterSuite();
-
-        return $this->getCliReturnCode();
     }
 
     /**
