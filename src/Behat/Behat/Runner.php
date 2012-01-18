@@ -38,6 +38,21 @@ class Runner
     }
 
     /**
+     * Sets main context class.
+     *
+     * @param   string  $class
+     */
+    public function setMainContextClass($class)
+    {
+        $this->container->get('behat.definition_dispatcher')->removeDefinitions();
+        $this->container->get('behat.definition_dispatcher')->removeTransformations();
+        $this->container->get('behat.hook_dispatcher')->removeHooks();
+
+        $this->container->get('behat.context_dispatcher')->setContextClass($class);
+        $this->container->get('behat.context_reader')->read();
+    }
+
+    /**
      * Sets features/scenarios paths to run.
      *
      * @param   array   $paths
