@@ -1,3 +1,16 @@
+2.3.0 / 2012-01-19
+==================
+
+  * Switch to the Behat\Gherkin 2.0 usage
+  * Migration to the single-file translation
+  * Support for callables inside steps chains
+  * Support for `*.yml` and `*.php` as definition translations
+  * Added opposite options to option switchers (`--[no-]colors`, `--[no-]multiline`, etc.)
+  * Redesigned `--story-syntax`
+  * Refactored Runner
+  * Performance improvements
+  * Bugfixes
+
 2.2.7 / 2012-01-13
 ==================
 
