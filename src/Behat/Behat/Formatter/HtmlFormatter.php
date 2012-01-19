@@ -392,6 +392,7 @@ class HtmlFormatter extends PrettyFormatter
 
         // Replace arguments with colorized ones
         $shift = 0;
+        $lastReplacementPosition = 0;
         foreach ($matches as $key => $match) {
             if (!is_numeric($key) || -1 === $match[1] || false !== strpos($match[0], '<')) {
                 continue;
@@ -399,12 +400,21 @@ class HtmlFormatter extends PrettyFormatter
 
             $offset = $match[1] + $shift;
             $value  = $match[0];
+
+            // Skip inner matches
+            if ($lastReplacementPosition > $offset) {
+                continue;
+            }
+            $lastReplacementPosition = $offset + strlen($value);
+
             $begin  = substr($text, 0, $offset);
             $end    = substr($text, $offset + strlen($value));
-            // Keep track of how many extra characters are added
-            $shift += strlen($format = "{+strong class=\"$paramColor\"-}%s{+/strong-}") - 2;
+            $format = "{+strong class=\"$paramColor\"-}%s{+/strong-}";
+            $text   = sprintf('%s'.$format.'%s', $begin, $value, $end);
 
-            $text = sprintf('%s' . $format . '%s', $begin, $value, $end);
+            // Keep track of how many extra characters are added
+            $shift += strlen($format) - 2;
+            $lastReplacementPosition += strlen($format) - 2;
         }
 
         // Replace "<", ">" with colorized ones

@@ -178,6 +178,11 @@ Feature: Pretty Formatter
               elseif ($op == 'subtract')
                 $this->value -= $num;
           }
+
+          /**
+           * @When /^regex (?P<pattern>\/([^\/]|\\\/)*\/)$/
+           */
+          public function somethingNotDoneYet($pattern) {}
       }
       """
     And a file named "features/World.feature" with:
@@ -194,6 +199,7 @@ Feature: Pretty Formatter
           Then I must have 10
           And I add the value 6
           Then I must have 16
+          And regex /some\/regex_ha/
 
         Scenario: Subtracting
           Then I must have 10
@@ -211,18 +217,19 @@ Feature: Pretty Formatter
         Background:               [30m# features/World.feature:6[0m
           [32mGiven I have entered [0m[32;1m10[0m[32m[0m [30m# FeatureContext::iHaveEntered()[0m
 
-        Scenario: Adding          [30m# features/World.feature:9[0m
-          [32mThen I must have [0m[32;1m10[0m[32m[0m     [30m# FeatureContext::iMustHave()[0m
-          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m   [30m# FeatureContext::iAddOrSubstact()[0m
-          [32mThen I must have [0m[32;1m16[0m[32m[0m     [30m# FeatureContext::iMustHave()[0m
+        Scenario: Adding             [30m# features/World.feature:9[0m
+          [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# FeatureContext::iMustHave()[0m
+          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m      [30m# FeatureContext::iAddOrSubstact()[0m
+          [32mThen I must have [0m[32;1m16[0m[32m[0m        [30m# FeatureContext::iMustHave()[0m
+          [32mAnd regex [0m[32;1m/some\/regex_ha/[0m[32m[0m [30m# FeatureContext::somethingNotDoneYet()[0m
 
-        Scenario: Subtracting        [30m# features/World.feature:14[0m
+        Scenario: Subtracting        [30m# features/World.feature:15[0m
           [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# FeatureContext::iMustHave()[0m
           [32mAnd I [0m[32;1msubtract[0m[32m the value [0m[32;1m6[0m[32m[0m [30m# FeatureContext::iAddOrSubstact()[0m
           [32mThen I must have [0m[32;1m4[0m[32m[0m         [30m# FeatureContext::iMustHave()[0m
 
       2 scenarios ([32m2 passed[0m)
-      8 steps ([32m8 passed[0m)
+      9 steps ([32m9 passed[0m)
       """
 
   Scenario: Multiline titles
