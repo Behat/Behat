@@ -118,7 +118,7 @@ Feature: I18n
           Если Я добавлю <значение>
           То Я должен иметь <результат>
 
-          Значения:
+          Примеры:
             | значение | результат |
             |  5       | 16        |
             |  10      | 20        |
@@ -133,44 +133,44 @@ Feature: I18n
         Чтобы поддерживать стабильными тесты
         Как разработчик функционала
         Я хочу чтобы Мир сбрасывался между сценариями
-      
+
         Предыстория:     # features/World.feature:7
           Если Я ввел 10 # features/steps/math.php:2
-      
+
         Сценарий: Неопределен  # features/World.feature:10
           То Я должен иметь 10 # features/steps/math.php:7
           И Что-то новое
           То Я должен иметь 10 # features/steps/math.php:7
-      
+
         Сценарий: В ожидании      # features/World.feature:15
           То Я должен иметь 10    # features/steps/math.php:7
           И Что-то еще не сделано # features/steps/math.php:15
             TODO: write pending definition
           То Я должен иметь 10    # features/steps/math.php:7
-      
+
         Сценарий: Провален        # features/World.feature:20
           Если Я добавлю 4        # features/steps/math.php:11
           То Я должен иметь 13    # features/steps/math.php:7
             Failed asserting that 14 matches expected '13'.
-      
+
         Структура сценария: Пройдено и Провалено # features/World.feature:24
           Допустим Я должен иметь 10             # features/steps/math.php:7
           Если Я добавлю <значение>              # features/steps/math.php:11
           То Я должен иметь <результат>          # features/steps/math.php:7
-      
-          Значения:
+
+          Примеры:
             | значение | результат |
             | 5        | 16        |
               Failed asserting that 15 matches expected '16'.
             | 10       | 20        |
             | 23       | 32        |
               Failed asserting that 33 matches expected '32'.
-      
+
       6 сценариев (1 пройден, 1 в ожидании, 1 не определен, 3 провалено)
       23 шага (16 пройдено, 2 пропущено, 1 в ожидании, 1 не определен, 3 провалено)
-      
+
       Вы можете реализовать определения для новых шагов с помощью этих шаблонов:
-      
+
       $steps->Given('/^Что-то новое$/', function($world) {
           throw new \Behat\Behat\Exception\PendingException();
       });
@@ -181,32 +181,32 @@ Feature: I18n
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
-      
+
       (::) проваленные шаги (::)
-      
+
       01. Failed asserting that 14 matches expected '13'.
           In step `То Я должен иметь 13'. # features/steps/math.php:7
           From scenario `Провален'.       # features/World.feature:20
-      
+
       02. Failed asserting that 15 matches expected '16'.
-          In step `То Я должен иметь 32'.       # features/steps/math.php:7
+          In step `То Я должен иметь 16'.       # features/steps/math.php:7
           From scenario `Пройдено и Провалено'. # features/World.feature:24
-      
+
       03. Failed asserting that 33 matches expected '32'.
           In step `То Я должен иметь 32'.       # features/steps/math.php:7
           From scenario `Пройдено и Провалено'. # features/World.feature:24
-      
+
       (::) шаги в ожидании (::)
-      
+
       01. TODO: write pending definition
           In step `И Что-то еще не сделано'.    # features/steps/math.php:15
           From scenario `В ожидании'.           # features/World.feature:15
-      
+
       6 сценариев (1 пройден, 1 в ожидании, 1 не определен, 3 провалено)
       23 шага (16 пройдено, 2 пропущено, 1 в ожидании, 1 не определен, 3 провалено)
-      
+
       Вы можете реализовать определения для новых шагов с помощью этих шаблонов:
-      
+
       $steps->Given('/^Что-то новое$/', function($world) {
           throw new \Behat\Behat\Exception\PendingException();
       });

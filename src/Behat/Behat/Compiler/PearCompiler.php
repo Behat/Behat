@@ -52,14 +52,10 @@ class PearCompiler
             ->name('*.php')
             ->name('*.xsd')
             ->name('*.xml')
-            ->name('*.xliff')
-            ->name('*.feature')
             ->name('LICENSE')
             ->notName('PharCompiler.php')
             ->notName('PearCompiler.php')
-            ->in($this->libPath . '/src')
-            ->in($this->libPath . '/i18n')
-            ->in($this->libPath . '/features');
+            ->in($this->libPath . '/src');
 
         $xmlSourceFiles = '';
         foreach ($finder as $file) {
@@ -151,6 +147,7 @@ class PearCompiler
                 <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
             </file>
 
+            <file role="php" baseinstalldir="behat" name="i18n.php" />
             <file role="php" baseinstalldir="behat" name="autoload.php" />
             <file role="php" baseinstalldir="behat" name="autoload_map.php" />
             <file role="php" baseinstalldir="behat" name="behat.yml" />
@@ -170,7 +167,7 @@ class PearCompiler
             <package>
                 <name>gherkin</name>
                 <channel>pear.behat.org</channel>
-                <min>1.1.0</min>
+                <min>2.0.0</min>
             </package>
             <package>
                 <name>Config</name>

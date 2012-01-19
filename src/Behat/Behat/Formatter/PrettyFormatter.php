@@ -427,10 +427,18 @@ class PrettyFormatter extends ProgressFormatter
      * @param   Behat\Gherkin\Node\AbstractScenarioNode $scenario
      *
      * @uses    getFeatureOrScenarioName()
+     * @uses    printScenarioPath()
      */
     protected function printScenarioName(AbstractScenarioNode $scenario)
     {
-        $this->write($this->getFeatureOrScenarioName($scenario));
+        $title = explode("\n", $this->getFeatureOrScenarioName($scenario));
+
+        $this->write(array_shift($title));
+        $this->printScenarioPath($scenario);
+
+        if (count($title)) {
+            $this->writeln(implode("\n", $title));
+        }
     }
 
     /**
@@ -445,7 +453,7 @@ class PrettyFormatter extends ProgressFormatter
     {
         if ($this->getParameter('paths')) {
             $lines       = explode("\n", $this->getFeatureOrScenarioName($scenario));
-            $nameLength  = mb_strlen(end($lines));
+            $nameLength  = mb_strlen(current($lines));
             $indentCount = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
 
             $this->printPathComment(
@@ -469,7 +477,6 @@ class PrettyFormatter extends ProgressFormatter
         $this->maxLineLength = $this->getMaxLineLength($this->maxLineLength, $background);
 
         $this->printScenarioName($background);
-        $this->printScenarioPath($background);
     }
 
     /**
@@ -489,7 +496,6 @@ class PrettyFormatter extends ProgressFormatter
      *
      * @uses    printFeatureOrScenarioTags()
      * @uses    printScenarioName()
-     * @uses    printScenarioPath()
      */
     protected function printOutlineHeader(OutlineNode $outline)
     {
@@ -497,7 +503,6 @@ class PrettyFormatter extends ProgressFormatter
 
         $this->printFeatureOrScenarioTags($outline);
         $this->printScenarioName($outline);
-        $this->printScenarioPath($outline);
     }
 
     /**
@@ -651,7 +656,6 @@ class PrettyFormatter extends ProgressFormatter
      *
      * @uses    printFeatureOrScenarioTags()
      * @uses    printScenarioName()
-     * @uses    printScenarioPath()
      */
     protected function printScenarioHeader(ScenarioNode $scenario)
     {
@@ -659,7 +663,6 @@ class PrettyFormatter extends ProgressFormatter
 
         $this->printFeatureOrScenarioTags($scenario);
         $this->printScenarioName($scenario);
-        $this->printScenarioPath($scenario);
     }
 
     /**
@@ -916,21 +919,16 @@ class PrettyFormatter extends ProgressFormatter
         $keyword    = $node->getKeyword();
         $baseIndent = ($node instanceof FeatureNode) || !$haveBaseIndent ? '' : '  ';
 
-        if (!$node instanceof BackgroundNode) {
-            $lines = explode("\n", $node->getTitle());
-            $title = array_shift($lines);
+        $lines = explode("\n", $node->getTitle());
+        $title = array_shift($lines);
 
-            if (count($lines)) {
-                $indent = $baseIndent . str_repeat(' ', mb_strlen("$keyword: "));
-                foreach ($lines as $line) {
-                    $title .= "\n" . $indent . $line;
-                }
+        if (count($lines)) {
+            foreach ($lines as $line) {
+                $title .= "\n" . $baseIndent.'  '.$line;
             }
-
-            return "$baseIndent$keyword:" . ($title ? ' ' . $title : '');
         }
 
-        return "$baseIndent$keyword:";
+        return "$baseIndent$keyword:" . ($title ? ' ' . $title : '');
     }
 
     /**
@@ -959,6 +957,7 @@ class PrettyFormatter extends ProgressFormatter
 
         // Replace arguments with colorized ones
         $shift = 0;
+        $lastReplacementPosition = 0;
         foreach ($matches as $key => $match) {
             if (!is_numeric($key) || -1 === $match[1] || false !== strpos($match[0], '<')) {
                 continue;
@@ -966,13 +965,21 @@ class PrettyFormatter extends ProgressFormatter
 
             $offset = $match[1] + $shift;
             $value  = $match[0];
+
+            // Skip inner matches
+            if ($lastReplacementPosition > $offset) {
+                continue;
+            }
+            $lastReplacementPosition = $offset + strlen($value);
+
             $begin  = substr($text, 0, $offset);
-            $end    = substr($text, $offset + strlen($value));
+            $end    = substr($text, $lastReplacementPosition);
             $format = "{-$color}{+$paramColor}%s{-$paramColor}{+$color}";
             $text   = sprintf("%s{$format}%s", $begin, $value, $end);
 
             // Keep track of how many extra characters are added
             $shift += strlen($format) - 2;
+            $lastReplacementPosition += strlen($format) - 2;
         }
 
         // Replace "<", ">" with colorized ones
@@ -994,7 +1001,7 @@ class PrettyFormatter extends ProgressFormatter
     protected function getMaxLineLength($max, AbstractScenarioNode $scenario)
     {
         $lines = explode("\n", $this->getFeatureOrScenarioName($scenario, false));
-        $max   = max($max, mb_strlen(end($lines)) + 2);
+        $max   = max($max, mb_strlen(current($lines)) + 2);
 
         foreach ($scenario->getSteps() as $step) {
             $stepDescription = $step->getType() . ' ' . $step->getCleanText();

@@ -56,12 +56,10 @@ class PharCompiler
             ->name('*.php')
             ->name('*.xsd')
             ->name('*.xml')
-            ->name('*.xliff')
             ->name('LICENSE')
             ->notName('PharCompiler.php')
             ->notName('PearCompiler.php')
             ->in($this->libPath . '/src')
-            ->in($this->libPath . '/i18n')
             ->in($this->libPath . '/vendor');
 
         foreach ($finder as $file) {
@@ -79,6 +77,7 @@ class PharCompiler
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/LICENSE'), $phar);
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/vendor/.composer/autoload.php'), $phar);
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/vendor/.composer/autoload_namespaces.php'), $phar);
+        $this->addFileToPhar(new \SplFileInfo($this->libPath . '/i18n.php'), $phar);
 
         // stub
         $phar->setStub($this->getStub($version));

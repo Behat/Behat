@@ -178,6 +178,11 @@ Feature: Pretty Formatter
               elseif ($op == 'subtract')
                 $this->value -= $num;
           }
+
+          /**
+           * @When /^regex (?P<pattern>\/([^\/]|\\\/)*\/)$/
+           */
+          public function somethingNotDoneYet($pattern) {}
       }
       """
     And a file named "features/World.feature" with:
@@ -194,13 +199,14 @@ Feature: Pretty Formatter
           Then I must have 10
           And I add the value 6
           Then I must have 16
+          And regex /some\/regex_ha/
 
         Scenario: Subtracting
           Then I must have 10
           And I subtract the value 6
           Then I must have 4
       """
-    When I run "behat -f pretty --colors"
+    When I run "behat -f pretty --ansi"
     Then it should pass with:
       """
       Feature: World consistency
@@ -211,18 +217,19 @@ Feature: Pretty Formatter
         Background:               [30m# features/World.feature:6[0m
           [32mGiven I have entered [0m[32;1m10[0m[32m[0m [30m# FeatureContext::iHaveEntered()[0m
 
-        Scenario: Adding          [30m# features/World.feature:9[0m
-          [32mThen I must have [0m[32;1m10[0m[32m[0m     [30m# FeatureContext::iMustHave()[0m
-          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m   [30m# FeatureContext::iAddOrSubstact()[0m
-          [32mThen I must have [0m[32;1m16[0m[32m[0m     [30m# FeatureContext::iMustHave()[0m
+        Scenario: Adding             [30m# features/World.feature:9[0m
+          [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# FeatureContext::iMustHave()[0m
+          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m      [30m# FeatureContext::iAddOrSubstact()[0m
+          [32mThen I must have [0m[32;1m16[0m[32m[0m        [30m# FeatureContext::iMustHave()[0m
+          [32mAnd regex [0m[32;1m/some\/regex_ha/[0m[32m[0m [30m# FeatureContext::somethingNotDoneYet()[0m
 
-        Scenario: Subtracting        [30m# features/World.feature:14[0m
+        Scenario: Subtracting        [30m# features/World.feature:15[0m
           [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# FeatureContext::iMustHave()[0m
           [32mAnd I [0m[32;1msubtract[0m[32m the value [0m[32;1m6[0m[32m[0m [30m# FeatureContext::iAddOrSubstact()[0m
           [32mThen I must have [0m[32;1m4[0m[32m[0m         [30m# FeatureContext::iMustHave()[0m
 
       2 scenarios ([32m2 passed[0m)
-      8 steps ([32m8 passed[0m)
+      9 steps ([32m9 passed[0m)
       """
 
   Scenario: Multiline titles
@@ -296,18 +303,18 @@ Feature: Pretty Formatter
         Background:               # features/World.feature:6
           Given I have entered 10 # FeatureContext::iHaveEntered()
 
-        Scenario: Adding some interesting
-                  value           # features/World.feature:9
-          Then I must have 10     # FeatureContext::iMustHave()
-          And I add the value 6   # FeatureContext::iAddOrSubstact()
-          Then I must have 16     # FeatureContext::iMustHave()
+        Scenario: Adding some interesting # features/World.feature:9
+                  value
+          Then I must have 10             # FeatureContext::iMustHave()
+          And I add the value 6           # FeatureContext::iAddOrSubstact()
+          Then I must have 16             # FeatureContext::iMustHave()
 
-        Scenario: Subtracting
+        Scenario: Subtracting             # features/World.feature:15
                   some
-                  value              # features/World.feature:15
-          Then I must have 10        # FeatureContext::iMustHave()
-          And I subtract the value 6 # FeatureContext::iAddOrSubstact()
-          Then I must have 4         # FeatureContext::iMustHave()
+                  value
+          Then I must have 10             # FeatureContext::iMustHave()
+          And I subtract the value 6      # FeatureContext::iAddOrSubstact()
+          Then I must have 4              # FeatureContext::iMustHave()
 
       2 scenarios (2 passed)
       8 steps (8 passed)
@@ -359,7 +366,7 @@ Feature: Pretty Formatter
             |  10   | 20     |
             |  23   | 33     |
       """
-    When I run "behat -f pretty --colors"
+    When I run "behat -f pretty --ansi"
     Then it should pass with:
       """
       Feature: World consistency
@@ -480,3 +487,89 @@ Feature: Pretty Formatter
         4 scenarios (4 undefined)
         20 steps (20 undefined)
         """
+
+  Scenario: Multiline titles
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\PendingException;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
+
+      class FeatureContext extends BehatContext
+      {}
+      """
+    And a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background: Some background
+          title
+            with
+        multiple lines
+
+          Given I have entered 10
+
+        Scenario: Undefined
+                  scenario or
+                  whatever
+          Then I must have 10
+          And Something new
+          Then I must have 10
+
+      Scenario Outline: Passed & Failed
+      steps and other interesting stuff
+        he-he-he
+
+          Given I must have 10
+          When I add <value>
+          Then I must have <result>
+
+          Examples:
+            | value | result |
+            |  5    | 16     |
+            |  10   | 20     |
+            |  23   | 32     |
+      """
+    When I run "behat -f pretty --no-snippets"
+    Then it should pass with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background: Some background # features/World.feature:6
+          title
+            with
+          multiple lines
+          Given I have entered 10
+
+        Scenario: Undefined         # features/World.feature:13
+                  scenario or
+                  whatever
+          Then I must have 10
+          And Something new
+          Then I must have 10
+
+        Scenario Outline: Passed & Failed # features/World.feature:20
+          steps and other interesting stuff
+          he-he-he
+          Given I must have 10
+          When I add <value>
+          Then I must have <result>
+
+          Examples:
+            | value | result |
+            | 5     | 16     |
+            | 10    | 20     |
+            | 23    | 32     |
+
+      4 scenarios (4 undefined)
+      16 steps (16 undefined)
+      """

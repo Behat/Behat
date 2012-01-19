@@ -107,9 +107,7 @@ class Configuration
                 arrayNode('context')->
                     fixXmlConfig('parameter')->
                     children()->
-                        scalarNode('class')->
-                            defaultValue('FeatureContext')->
-                        end()->
+                        scalarNode('class')->end()->
                         arrayNode('parameters')->
                             useAttributeAsKey(0)->
                             prototype('variable')->end()->

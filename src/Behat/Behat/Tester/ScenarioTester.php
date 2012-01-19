@@ -140,14 +140,17 @@ class ScenarioTester implements NodeVisitorInterface
      * @param   Behat\Behat\Context\ContextInterface    $context
      * @param   array                                   $tokens         step replacements for tokens
      * @param   boolean                                 $skip           mark step as skipped?
+     * @param   boolean                                 $clone          clone step before running?
      *
      * @uses    Behat\Behat\Tester\StepTester::visit()
      *
      * @return  integer
      */
     protected function visitStep(StepNode $step, ContextInterface $context, array $tokens = array(),
-                                 $skip = false)
+                                 $skip = false, $clone = false)
     {
+        $step = $clone ? clone $step : $step;
+
         $tester = $this->container->get('behat.tester.step');
         $tester->setContext($context);
         $tester->setTokens($tokens);

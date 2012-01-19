@@ -34,10 +34,7 @@ class ContextProcessor implements ProcessorInterface
      */
     public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
     {
-        $contextDispatcher = $container->get('behat.context_dispatcher');
-        $contextDispatcher->setContextClass($container->getParameter('behat.context.class'));
-
-        $contextReader = $container->get('behat.context_reader');
-        $contextReader->read();
+        $contextClass = $container->getParameter('behat.context.class');
+        $container->get('behat.runner')->setMainContextClass($contextClass);
     }
 }

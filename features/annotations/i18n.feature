@@ -82,7 +82,7 @@ Feature: I18n
           Если Я добавлю <значение>
           То Я должен иметь <результат>
 
-          Значения:
+          Примеры:
             | значение | результат |
             |  5       | 16        |
             |  10      | 20        |
@@ -122,7 +122,7 @@ Feature: I18n
           Если Я добавлю <значение>              # FeatureContext::iAdd()
           То Я должен иметь <результат>          # FeatureContext::iShouldHave()
 
-          Значения:
+          Примеры:
             | значение | результат |
             | 5        | 16        |
               Failed asserting that 15 matches expected 16.
@@ -157,7 +157,7 @@ Feature: I18n
           From scenario `Провален'.       # features/World.feature:20
 
       02. Failed asserting that 15 matches expected 16.
-          In step `То Я должен иметь 32'.       # FeatureContext::iShouldHave()
+          In step `То Я должен иметь 16'.       # FeatureContext::iShouldHave()
           From scenario `Пройдено и Провалено'. # features/World.feature:24
 
       03. Failed asserting that 33 matches expected 32.

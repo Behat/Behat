@@ -6,6 +6,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Behat\Behat\Event\SuiteEvent;
 
+use Behat\Gherkin\Gherkin;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -22,8 +24,7 @@ use Behat\Behat\Event\SuiteEvent;
 class Runner
 {
     private $container;
-    private $featuresPaths = array();
-
+    private $featuresPaths;
     private $strict = true;
     private $dryRun = false;
 
@@ -38,6 +39,41 @@ class Runner
     }
 
     /**
+     * Returns container associated with this runner.
+     *
+     * @return  Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * Sets main context class.
+     *
+     * @param   string  $class
+     */
+    public function setMainContextClass($class)
+    {
+        $this->container->get('behat.definition_dispatcher')->removeDefinitions();
+        $this->container->get('behat.definition_dispatcher')->removeTransformations();
+        $this->container->get('behat.hook_dispatcher')->removeHooks();
+
+        $this->container->get('behat.context_dispatcher')->setContextClass($class);
+        $this->container->get('behat.context_reader')->read();
+    }
+
+    /**
+     * Sets path locator base path.
+     *
+     * @param   string  $path
+     */
+    public function setLocatorBasePath($path)
+    {
+        $this->container->get('behat.path_locator')->locateBasePath($path);
+    }
+
+    /**
      * Sets features/scenarios paths to run.
      *
      * @param   array   $paths
@@ -45,6 +81,17 @@ class Runner
     public function setFeaturesPaths(array $paths)
     {
         $this->featuresPaths = $paths;
+    }
+
+    /**
+     * Returns paths to the features of current suite (basepath).
+     *
+     * @return  array
+     */
+    public function getFeaturesPaths()
+    {
+        return $this->featuresPaths
+            ?: $this->container->get('behat.path_locator')->locateFeaturesPaths();
     }
 
     /**
@@ -67,11 +114,21 @@ class Runner
         return $this->strict;
     }
 
+    /**
+     * Sets suite to dry-run mode (skip all steps).
+     *
+     * @param   Boolean $dryRun
+     */
     public function setDryRun($dryRun = true)
     {
-        $this->dryRun = $dryRun;
+        $this->dryRun = (bool) $dryRun;
     }
 
+    /**
+     * Checks whether runner is in dry-run mode.
+     *
+     * @return  Boolean
+     */
     public function isDryRun()
     {
         return $this->dryRun;
@@ -82,14 +139,26 @@ class Runner
      *
      * @return  integer CLI return code
      */
-    public function run()
+    public function runSuite()
     {
         $gherkin = $this->container->get('gherkin');
 
         $this->beforeSuite();
+        $this->runFeatures($gherkin, $this->getFeaturesPaths());
+        $this->afterSuite();
 
-        // read all features from their paths
-        foreach ($this->featuresPaths as $path) {
+        return $this->getCliReturnCode();
+    }
+
+    /**
+     * Parses and runs provided features.
+     *
+     * @param   Behat\Gherkin\Gherkin   $gherkin    gherkin parser/loader
+     * @param   array                   $features   list of feature files
+     */
+    protected function runFeatures(Gherkin $gherkin, $features)
+    {
+        foreach ($features as $path) {
             // parse every feature with Gherkin
             $features = $gherkin->load((string) $path);
 
@@ -101,10 +170,6 @@ class Runner
                 $feature->accept($tester);
             }
         }
-
-        $this->afterSuite();
-
-        return $this->getCliReturnCode();
     }
 
     /**

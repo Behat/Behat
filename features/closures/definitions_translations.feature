@@ -82,7 +82,7 @@ Feature: Definitions translations
     Given a file named "features/calc_ru.feature" with:
       """
       # language: ru
-      Фича: Базовая калькуляция
+      Функция: Базовая калькуляция
 
         Сценарий:
           Допустим Я набрал число 10 на калькуляторе
@@ -129,7 +129,7 @@ Feature: Definitions translations
     Then it should pass with:
       """
       ....
-      
+
       1 scenario (1 passed)
       4 steps (4 passed)
       """

@@ -28,10 +28,17 @@ Installing Dependencies
     wget -nc http://getcomposer.org/composer.phar
     php composer.phar update
 
-Running tests
+Running Tests
 -------------
 
-	bin/behat
+	bin/behat -f progress
+
+Contributing to Formatter Translations
+--------------------------------------
+
+Almost any output message (except exceptions and custom output) printed by Behat
+formatters could be translated into your language with `--lang` option. In order
+to fix/add translation, edit the appropriate section of the `i18n.php` file.
 
 Copyright
 ---------

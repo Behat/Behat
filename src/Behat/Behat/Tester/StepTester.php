@@ -145,7 +145,7 @@ class StepTester implements NodeVisitorInterface
             }
 
             try {
-                $this->runStepDefinition($step, $definition);
+                $this->executeStepDefinition($step, $definition);
                 $result = StepEvent::PASSED;
             } catch (PendingException $e) {
                 $result    = StepEvent::PENDING;
@@ -167,28 +167,42 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
-     * Runs provided step definition.
+     * Executes provided step definition.
      *
      * @param   Behat\Gherkin\Node\StepNode                 $step       step node
      * @param   Behat\Behat\Definition\DefinitionInterface  $definition step definition
      */
-    protected function runStepDefinition(StepNode $step, DefinitionInterface $definition)
+    protected function executeStepDefinition(StepNode $step, DefinitionInterface $definition)
     {
-        $returnValue = $definition->run($this->context, $this->tokens);
-        if (null === $returnValue) {
+        $this->executeStepsChain(
+            $step, $definition->run($this->context, $this->tokens)
+        );
+    }
+
+    /**
+     * Executes steps chain (if there's one).
+     *
+     * @param   Behat\Gherkin\Node\StepNode $step  step node
+     * @param   mixed                       $chain chain
+     */
+    private function executeStepsChain(StepNode $step, $chain = null)
+    {
+        if (null === $chain) {
             return;
         }
 
-        $returnValues = is_array($returnValue) ? $returnValue : array($returnValue);
-        foreach ($returnValues as $value) {
-            if (($substep = $value) instanceof SubstepInterface) {
-                $substepNode = $substep->getStepNode();
+        $chain = is_array($chain) ? $chain : array($chain);
+        foreach ($chain as $chainItem) {
+            if ($chainItem instanceof SubstepInterface) {
+                $substepNode = $chainItem->getStepNode();
                 $substepNode->setParent($step->getParent());
                 $substepEvent = $this->executeStep($substepNode);
 
                 if (StepEvent::PASSED !== $substepEvent->getResult()) {
                     throw $substepEvent->getException();
                 }
+            } elseif (is_callable($chainItem)) {
+                $this->executeStepsChain($step, call_user_func($chainItem));
             }
         }
     }

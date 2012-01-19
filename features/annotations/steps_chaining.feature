@@ -105,8 +105,13 @@ Feature: Call step in other step
           public function calcNumbers($number1, $number2)
           {
               return array(
-                  new Step\Given("Ввожу \"$number1\""),
-                  new Step\Given("Ввожу \"$number2\""),
+                  function() use($number1, $number2) {
+                      return array(
+                        new Step\Given("Ввожу \"$number1\""),
+                        function() use($number2) { return new Step\Given("Ввожу \"$number2\""); }
+                      );
+
+                  },
                   new Step\When("Нажимаю плюс"),
               );
           }

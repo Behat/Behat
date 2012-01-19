@@ -197,11 +197,12 @@ Feature: Scenario Outlines
             | number1 | number2 | result |
             | 10      | 2       | 5      |
             | 50      | 10      | 2      |
+            | 50      | 10      | 4      |
       """
     When I run "behat -f progress features/math.feature"
     Then it should fail with:
       """
-      .........F....F.........F
+      .........F....F.........F....F
 
       (::) failed steps (::)
 
@@ -217,6 +218,10 @@ Feature: Scenario Outlines
           In step `Then The result should be 2'.  # FeatureContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:22
 
-      5 scenarios (2 passed, 3 failed)
-      25 steps (22 passed, 3 failed)
+      04. Failed asserting that 5 matches expected 4.
+          In step `Then The result should be 4'.  # FeatureContext::theResultShouldBe()
+          From scenario ***.                      # features/math.feature:22
+
+      6 scenarios (2 passed, 4 failed)
+      30 steps (26 passed, 4 failed)
       """
