@@ -124,6 +124,9 @@ abstract class Definition extends Annotation implements DefinitionInterface
      */
     public function errorHandler($code, $message, $file, $line)
     {
+        if (0 === error_reporting()) {
+            return; // error reporting turned off or more likely suppressed with @
+        }
         throw new ErrorException($code, $message, $file, $line);
     }
 
