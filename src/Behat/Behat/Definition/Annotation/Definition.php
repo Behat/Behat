@@ -122,12 +122,14 @@ abstract class Definition extends Annotation implements DefinitionInterface
      *
      * @throws  Behat\Behat\Exception\ErrorException
      */
-    public function errorHandler($code, $message, $file, $line)
+    public function errorHandler($level, $message, $file, $line)
     {
-        if (0 === error_reporting()) {
-            return; // error reporting turned off or more likely suppressed with @
+        if (0 !== error_reporting()) {
+            throw new ErrorException($level, $message, $file, $line);
         }
-        throw new ErrorException($code, $message, $file, $line);
+
+        // error reporting turned off or more likely suppressed with @
+        return false;
     }
 
     /**
