@@ -14,7 +14,7 @@
     ],
     "require": {
         "php":                           ">=5.3.1",
-        "behat/gherkin":                 ">=2.0.0,<2.1.0-dev",
+        "behat/gherkin":                 ">=2.0.1,<2.1.0-dev",
         "symfony/console":               ">=2.0.0,<2.2.0-dev",
         "symfony/config":                ">=2.0.0,<2.2.0-dev",
         "symfony/dependency-injection":  ">=2.0.0,<2.2.0-dev",
