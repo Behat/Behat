@@ -1,3 +1,10 @@
+2.3.1 / 2012-01-26
+==================
+
+  * Updated error handler to avoid suppressed exceptions
+  * Autoload bootstrap scripts in their name order
+  * Updated Gherkin dependency to v2.0.1
+
 2.3.0 / 2012-01-19
 ==================
 
