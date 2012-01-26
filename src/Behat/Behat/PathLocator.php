@@ -214,7 +214,7 @@ class PathLocator
         $files = array();
         if (is_dir($this->getBootstrapPath())) {
             $finder = new Finder();
-            foreach ($finder->files()->name('*.php')->in($bootstrapPath) as $file) {
+            foreach ($finder->files()->name('*.php')->sortByName()->in($bootstrapPath) as $file) {
                 $files[] = (string) $file;
             }
         }

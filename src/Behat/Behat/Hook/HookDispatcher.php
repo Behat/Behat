@@ -228,6 +228,9 @@ class HookDispatcher implements EventSubscriberInterface
      */
     public function errorHandler($code, $message, $file, $line)
     {
+        if (0 === error_reporting()) {
+            return; // error reporting turned off or more likely suppresed with @
+        }
         throw new ErrorException($code, $message, $file, $line);
     }
 

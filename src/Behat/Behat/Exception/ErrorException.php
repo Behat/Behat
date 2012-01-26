@@ -17,42 +17,31 @@ namespace Behat\Behat\Exception;
  */
 class ErrorException extends BehaviorException
 {
+    private $levels = array(
+        E_WARNING           => 'Warning',
+        E_NOTICE            => 'Notice',
+        E_USER_ERROR        => 'User Error',
+        E_USER_WARNING      => 'User Warning',
+        E_USER_NOTICE       => 'User Notice',
+        E_STRICT            => 'Runtime Notice',
+        E_RECOVERABLE_ERROR => 'Catchable Fatal Error',
+    );
+
     /**
      * Initializes error handler exception.
      *
-     * @param   string  $code       error code
+     * @param   string  $level      error level
      * @param   string  $message    error message
      * @param   string  $file       error file
      * @param   string  $line       error line
      */
-    public function __construct($code, $message, $file, $line)
+    public function __construct($level, $message, $file, $line)
     {
-        switch ($code) {
-            case E_WARNING:
-            case E_USER_WARNING:
-                $type = 'Warning';
-                break;
-            case E_NOTICE:
-            case E_USER_NOTICE:
-                $type = 'Notice';
-                break;
-            case E_STRICT:
-                $type = 'Strict';
-                break;
-            case E_DEPRECATED:
-                $type = 'Deprecated';
-                break;
-            case E_ERROR:
-            case E_USER_ERROR:
-            default:
-                $type = 'Error';
-        }
-
-        $this->code = $code;
-        $this->file = $file;
-        $this->line = $line;
-
-        parent::__construct($type . ': ' . $message);
-
+        parent::__construct(sprintf('%s: %s in %s line %d',
+            isset($this->levels[$level]) ? $this->levels[$level] : $level,
+            $message,
+            $file,
+            $line
+        );
     }
 }
