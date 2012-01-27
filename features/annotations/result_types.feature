@@ -449,3 +449,53 @@ Feature: Different result types
       """
       Step "/^customer bought coffee$/" is already defined in FeatureContext::chosen()
       """
+
+  Scenario: Error-containing steps
+    Given a file named "features/coffee.feature" with:
+      """
+      Feature: Redundant actions
+        In order to be able to know about errors in definitions as soon as possible
+        As a coffee machine mechanic
+        I need to be able to know about redundant menu definitions
+
+        Scenario: Redundant menu
+          Given customer bought coffee
+          And customer bought another one coffee
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\PendingException;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
+
+      class FeatureContext extends BehatContext
+      {
+          /** @Given /^customer bought coffee$/ */
+          public function chosen() {
+              trigger_error("some error", E_USER_ERROR);
+          }
+
+          /** @Given /^customer bought another one coffee$/ */
+          public function chosenLatte() {
+              // do something else
+          }
+      }
+      """
+    When I run "behat -f progress features/coffee.feature"
+    Then it should fail
+    And the output should contain:
+      """
+      F-
+
+      (::) failed steps (::)
+
+      01. User Error: some error in features/bootstrap/FeatureContext.php line 12
+          In step `Given customer bought coffee'. # FeatureContext::chosen()
+          From scenario `Redundant menu'.         # features/coffee.feature:6
+
+      1 scenario (1 failed)
+      2 steps (1 skipped, 1 failed)
+      """
