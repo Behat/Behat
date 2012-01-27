@@ -42,6 +42,6 @@ class ErrorException extends BehaviorException
             $message,
             $file,
             $line
-        );
+        ));
     }
 }
