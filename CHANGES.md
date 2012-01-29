@@ -1,3 +1,8 @@
+2.3.2 / 2012-01-29
+==================
+
+  * Fixed bug in `ErrorException`, that caused wrong exceptions on warnings and notices
+
 2.3.1 / 2012-01-26
 ==================
 
