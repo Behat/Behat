@@ -69,10 +69,6 @@ class PharCompiler
             }
         }
 
-        $this->replaceTokens('vendor/.composer/autoload.php', '', '', array(
-            'Composer\\Autoload' => 'Behat\\Autoload'
-        ));
-
         // license and autoloading
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/LICENSE'), $phar);
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/vendor/.composer/autoload.php'), $phar);
@@ -84,10 +80,6 @@ class PharCompiler
         $phar->stopBuffering();
 
         unset($phar);
-
-        $this->replaceTokens('vendor/.composer/autoload.php', '', '', array(
-            'Behat\\Autoload' => 'Composer\\Autoload'
-        ));
     }
 
     /**
