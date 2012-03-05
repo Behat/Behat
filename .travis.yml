@@ -17,4 +17,3 @@ before_script:
   - php composer.phar install
 
 script: bin/behat `php -r 'echo -1 === version_compare(PHP_VERSION, "5.4.0") ? "--tags ~@php540" : "";'`
-
