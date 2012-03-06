@@ -56,7 +56,9 @@ class BehatCommand extends BaseCommand
                 "Feature(s) to run. Could be:\n" .
                 "- a dir <comment>(features/)</comment>\n" .
                 "- a feature <comment>(*.feature)</comment>\n" .
-                "- a scenario at specific line <comment>(*.feature:10)</comment>."
+                "- a scenario at specific line <comment>(*.feature:10)</comment>.\n" .
+                "- all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.\n" .
+                "- all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>."
             )
             ->configureProcessors()
         ;
