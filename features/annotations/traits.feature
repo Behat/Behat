@@ -2,7 +2,7 @@
 Feature: Support php 5.4 traits
   In order to have much cleaner horizontal reusability
   As a context developer
-  I need ot be able to use definition traits in my context
+  I need to be able to use definition traits in my context
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:
