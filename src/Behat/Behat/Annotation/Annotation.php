@@ -2,7 +2,8 @@
 
 namespace Behat\Behat\Annotation;
 
-use Behat\Behat\Context\ContextInterface;
+use Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Context\SubcontextableContextInterface;
 
 /*
  * This file is part of the Behat.
@@ -127,7 +128,7 @@ abstract class Annotation implements AnnotationInterface
         if (!$this->isClosure()) {
             if ($callback[0] === get_class($context)) {
                 $callback = array($context, $callback[1]);
-            } else {
+            } elseif ($context instanceof SubcontextableContextInterface) {
                 $subcontext = $context->getSubcontextByClassName($callback[0]);
 
                 if (null === $subcontext) {

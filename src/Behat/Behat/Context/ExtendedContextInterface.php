@@ -15,7 +15,7 @@ namespace Behat\Behat\Context;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ExtendedContextInterface extends ContextInterface
+interface ExtendedContextInterface extends SubcontextableContextInterface
 {
     /**
      * Sets parent context of current context.
