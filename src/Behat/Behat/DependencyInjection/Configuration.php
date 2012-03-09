@@ -88,6 +88,9 @@ class Configuration
                 arrayNode('options')->
                     fixXmlConfig('option')->
                     children()->
+                        scalarNode('cache')->
+                            defaultNull()->
+                        end()->
                         booleanNode('strict')->
                             defaultNull()->
                         end()->
