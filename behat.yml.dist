@@ -2,8 +2,6 @@ default:
   paths:
     features:   %%BEHAT_CONFIG_PATH%%/features
     bootstrap:  %%BEHAT_CONFIG_PATH%%/features/bootstrap
-  options:
-    cache:      /tmp/behat/behat
 
 annotations:
   paths:
