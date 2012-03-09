@@ -1,3 +1,10 @@
+2.3.3 / 2012-03-09
+==================
+
+  * Implemented Gherkin caching support ([--cache](https://github.com/Behat/Behat/commit/753c4f6e392a873a640543306191d92e6dc91099))
+  * Minor bug fixes
+  * Updated Gherkin
+
 2.3.2 / 2012-01-29
 ==================
 
