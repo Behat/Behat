@@ -9,7 +9,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Gherkin\Filter\NameFilter,
-    Behat\Gherkin\Filter\TagFilter;
+    Behat\Gherkin\Filter\TagFilter,
+    Behat\Gherkin\Cache\FileCache;
 
 /*
  * This file is part of the Behat.
@@ -40,6 +41,9 @@ class GherkinProcessor implements ProcessorInterface
                 "Only execute the features or scenarios with tags\n" .
                 "matching tag filter expression.\n"
             )
+            ->addOption('--cache', null, InputOption::VALUE_REQUIRED,
+                "Cache parsed features into specified path."
+            )
         ;
     }
 
@@ -56,6 +60,11 @@ class GherkinProcessor implements ProcessorInterface
 
         if ($tags = ($input->getOption('tags') ?: $container->getParameter('gherkin.filters.tags'))) {
             $gherkinParser->addFilter(new TagFilter($tags));
+        }
+
+        if ($path = ($input->getOption('cache') ?: $container->getParameter('behat.options.cache'))) {
+            $cache = new FileCache($path);
+            $container->get('gherkin.loader.gherkin')->setCache($cache);
         }
     }
 }

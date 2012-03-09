@@ -18,6 +18,7 @@
         <parameter key="behat.format_manager.class">Behat\Behat\Formatter\FormatManager</parameter>
 
         <!-- Options -->
+        <parameter key="behat.options.cache">null</parameter>
         <parameter key="behat.options.rerun">null</parameter>
         <parameter key="behat.options.strict">null</parameter>
         <parameter key="behat.options.dry_run">null</parameter>

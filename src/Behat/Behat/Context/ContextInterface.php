@@ -17,17 +17,4 @@ namespace Behat\Behat\Context;
  */
 interface ContextInterface
 {
-    /**
-     * Returns all added subcontexts.
-     *
-     * @return  array
-     */
-    function getSubcontexts();
-
-    /**
-     * Finds subcontext by it's name.
-     *
-     * @return  Behat\Behat\Context\ContextInterface
-     */
-    function getSubcontextByClassName($className);
 }

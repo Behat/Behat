@@ -143,7 +143,7 @@ class PathLocator
         $basePath = '%BEHAT_WORK_PATH%'.DIRECTORY_SEPARATOR.'features';
         if (null !== $inputPath) {
             $matches = array();
-            if (preg_match('/^(.*)\:(\d+)$/', $inputPath, $matches)) {
+            if (preg_match('/^(.*)\:(\d+)(-(\d+|\*))?$/', $inputPath, $matches)) {
                 $inputPath = $matches[1];
             }
 
@@ -176,7 +176,7 @@ class PathLocator
 
         if (null !== $inputPath) {
             $matches = array();
-            if (preg_match('/^(.*)\:(\d+)$/', $inputPath, $matches)) {
+            if (preg_match('/^(.*)\:(\d+(-(\d+|\*))?)$/', $inputPath, $matches)) {
                 $featuresPath   = $matches[1];
                 $lineFilter     = ':' . $matches[2];
 

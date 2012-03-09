@@ -73,8 +73,10 @@ class ContextReader
             }
         }
 
-        foreach ($context->getSubcontexts() as $subcontext) {
-            $this->readFromContext($subcontext);
+        if ($context instanceof SubcontextableContextInterface) {
+            foreach ($context->getSubcontexts() as $subcontext) {
+                $this->readFromContext($subcontext);
+            }
         }
     }
 }
