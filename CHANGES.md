@@ -2,6 +2,8 @@
 ==================
 
   * Implemented Gherkin caching support ([--cache](https://github.com/Behat/Behat/commit/753c4f6e392a873a640543306191d92e6dc91099))
+  * Line ranges filtering support (`behat features/some.feature:12-19`. Thanks @headrevision)
+  * `behat.yml.dist` configs support out of the box
   * Minor bug fixes
   * Updated Gherkin
 
