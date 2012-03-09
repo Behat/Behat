@@ -59,8 +59,12 @@ class ContainerProcessor implements ProcessorInterface
         if (null === $configFile) {
             if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
                 $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml';
+            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml.dist')) {
+                $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml.dist';
             } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml')) {
                 $configFile = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml';
+            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml.dist')) {
+                $configFile = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml.dist';
             }
         }
 
