@@ -4,7 +4,8 @@ namespace Behat\Behat;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Behat\Behat\Event\SuiteEvent;
+use Behat\Behat\Event\SuiteEvent,
+    Behat\Behat\Event\StepEvent;
 
 use Behat\Gherkin\Gherkin;
 
@@ -27,6 +28,7 @@ class Runner
     private $featuresPaths;
     private $strict = true;
     private $dryRun = false;
+    private $retryScenario = 0;
 
     /**
      * Initializes runner.
@@ -148,6 +150,26 @@ class Runner
     }
 
     /**
+     * Set count of retry attempts after failure.
+     *
+     * @param   integer $count
+     */
+    public function setRetryScenario($count)
+    {
+        $this->retryScenario = $count;
+    }
+
+    /**
+     * Return count of retry attempts after failure.
+     *
+     * @return  integer Retry count
+     */
+    public function getRetryScenario()
+    {
+        return $this->retryScenario;
+    }
+
+    /**
      * Runs feature suite.
      *
      * @return  integer CLI return code
@@ -179,6 +201,7 @@ class Runner
             foreach ($features as $feature) {
                 $tester = $this->container->get('behat.tester.feature');
                 $tester->setDryRun($this->isDryRun());
+                $tester->setAllowedRetryAttempts($this->getRetryScenario());
 
                 $feature->accept($tester);
             }
@@ -195,10 +218,10 @@ class Runner
         $logger = $this->container->get('behat.logger');
 
         if ($this->isStrict()) {
-            return intval(0 < $logger->getSuiteResult());
+            return intval(StepEvent::UNSTABLE < $logger->getSuiteResult());
         }
 
-        return intval(4 === $logger->getSuiteResult());
+        return intval(StepEvent::FAILED === $logger->getSuiteResult());
     }
 
     /**

@@ -10,7 +10,8 @@ use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\OutlineNode;
 
 use Behat\Behat\Event\OutlineEvent,
-    Behat\Behat\Event\OutlineExampleEvent;
+    Behat\Behat\Event\OutlineExampleEvent,
+    Behat\Behat\Event\StepEvent;
 
 /*
  * This file is part of the Behat.
@@ -85,8 +86,11 @@ class OutlineTester extends ScenarioTester
         // Visit & test background if has one
         if ($outline->getFeature()->hasBackground()) {
             $bgResult = $this->visitBackground($outline->getFeature()->getBackground(), $context);
-            if (0 !== $bgResult) {
+            if (StepEvent::UNSTABLE < $bgResult) {
                 $skip = true;
+            }
+            If (StepEvent::UNSTABLE === $bgResult) {
+                $this->unstable();
             }
             $itResult = max($itResult, $bgResult);
         }
@@ -94,8 +98,11 @@ class OutlineTester extends ScenarioTester
         // Visit & test steps
         foreach ($outline->getSteps() as $step) {
             $stResult = $this->visitStep($step, $context, $tokens, $skip, true);
-            if (0 !== $stResult) {
+            if (StepEvent::UNSTABLE < $stResult) {
                 $skip = true;
+            }
+            if (StepEvent::UNSTABLE === $stResult) {
+                $this->unstable();
             }
             $itResult = max($itResult, $stResult);
         }

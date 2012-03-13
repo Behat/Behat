@@ -131,6 +131,8 @@ class ProgressFormatter extends ConsoleFormatter
             case StepEvent::FAILED:
                 $this->write('{+failed}F{-failed}');
                 break;
+            case StepEvent::UNSTABLE:
+                $this->write('{+unstable}*{-unstable}');
         }
     }
 

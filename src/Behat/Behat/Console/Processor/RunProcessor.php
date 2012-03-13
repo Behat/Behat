@@ -42,6 +42,9 @@ class RunProcessor implements ProcessorInterface
             ->addOption('--append-snippets', null, InputOption::VALUE_NONE,
                 "Appends snippets for undefined steps into main context."
             )
+            ->addOption('--retry-scenario', null, InputOption::VALUE_REQUIRED,
+                "Attempt to retry a scenario a given ammount of times after  a step fails."
+            )
         ;
     }
 
@@ -62,6 +65,10 @@ class RunProcessor implements ProcessorInterface
         $hookDispatcher->setDryRun(
             $input->getOption('dry-run') || $container->getParameter('behat.options.dry_run')
         );
+
+        if ($retry = $input->getOption('retry-scenario') ?: $container->getParameter('behat.options.retry_scenario')) {
+            $runner->setRetryScenario($retry);
+        }
 
         if ($file = $input->getOption('rerun') ?: $container->getParameter('behat.options.rerun')) {
             if (file_exists($file)) {

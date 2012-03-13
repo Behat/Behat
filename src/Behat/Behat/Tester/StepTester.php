@@ -62,6 +62,18 @@ class StepTester implements NodeVisitorInterface
      * @var     boolean
      */
     private $skip = false;
+    /**
+     * Allow step instability instead of immidiate fail.
+     *
+     * @var     boolean
+     */
+    private $allowInstability = false;
+    /**
+     * Is step marked as unstable.
+     *
+     * @var     boolean
+     */
+    private $unstable = false;
 
     /**
      * Initializes tester.
@@ -95,6 +107,17 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
+     * Set wheter the step will allow instability instead of
+     * immidiate failure.
+     *
+     * @param   boolean $allowInstability
+     */
+    public function setAllowInstability($allowInstability)
+    {
+        $this->allowInstability = $allowInstability;
+    }
+
+    /**
      * Marks test as skipped.
      *
      * @param   boolean $skip   skip test?
@@ -102,6 +125,16 @@ class StepTester implements NodeVisitorInterface
     public function skip($skip = true)
     {
         $this->skip = $skip;
+    }
+
+    /**
+     * Mark test as unstable.
+     *
+     * @param   boolean $unstable
+     */
+    public function unstable($unstable = true)
+    {
+        $this->unstable = $unstable;
     }
 
     /**
@@ -131,14 +164,18 @@ class StepTester implements NodeVisitorInterface
      */
     protected function executeStep(StepNode $step)
     {
-        $context    = $this->context;
-        $result     = null;
-        $definition = null;
-        $exception  = null;
-        $snippet    = null;
+        $context      = $this->context;
+        $result       = null;
+        $definition   = null;
+        $exception    = null;
+        $snippet      = null;
 
         try {
             $definition = $this->definitions->findDefinition($this->context, $step);
+
+            if ($this->unstable) {
+                return new StepEvent($step, $context, StepEvent::UNSTABLE, $definition);
+            }
 
             if ($this->skip) {
                 return new StepEvent($step, $context, StepEvent::SKIPPED, $definition);
@@ -151,7 +188,9 @@ class StepTester implements NodeVisitorInterface
                 $result    = StepEvent::PENDING;
                 $exception = $e;
             } catch (\Exception $e) {
-                $result    = StepEvent::FAILED;
+                $result    = $this->allowInstability
+                           ? StepEvent::UNSTABLE
+                           : StepEvent::FAILED;
                 $exception = $e;
             }
         } catch (UndefinedException $e) {
