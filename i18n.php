@@ -11,6 +11,7 @@
         'pending_count'       => '[1,Inf] %1% pending',
         'undefined_count'     => '[1,Inf] %1% undefined',
         'skipped_count'       => '[1,Inf] %1% skipped',
+        'unstable_count'      => '[1,Inf] %1% unstable',
     ),
     'cs' =>
     array (
@@ -37,6 +38,7 @@
         'pending_count'       => '[1,Inf] %1% ausbleibend',
         'undefined_count'     => '[1,Inf] %1% undefiniert',
         'skipped_count'       => '[1,Inf] %1% übersprungen',
+        'unstable_count'      => '[1,Inf] %1% instabil',
     ),
     'es' =>
     array (
@@ -50,6 +52,7 @@
         'pending_count'       => '[1,Inf] %1% pendientes',
         'undefined_count'     => '[1,Inf] %1% sin definir',
         'skipped_count'       => '[1,Inf] %1% omitidos',
+        'unstable_count'      => '[1,Inf] %1% inestable',
     ),
     'fr' =>
     array (
@@ -63,6 +66,7 @@
         'pending_count'       => '[1,Inf] %1% en attente',
         'undefined_count'     => '[1,Inf] %1% non définies',
         'skipped_count'       => '[1,Inf] %1% ignorées',
+        'unstable_count'      => '[1,Inf] %1% instable',
     ),
     'id' =>
     array (
@@ -89,6 +93,7 @@
         'pending_count'       => '[1,Inf] %1% in attesa',
         'undefined_count'     => '[1,Inf] %1% non definito',
         'skipped_count'       => '[1,Inf] %1% saltato',
+        'unstable_count'      => '[1,Inf] %1% instabile',
     ),
     'ja' =>
     array (
@@ -115,6 +120,7 @@
         'pending_count'       => '[1,Inf] %1% wachtend',
         'undefined_count'     => '[1,Inf] %1% ongedefinieerd',
         'skipped_count'       => '[1,Inf] %1% overgeslagen',
+        'unstable_count'      => '[1,Inf] %1% onstabiele',
     ),
     'pl' =>
     array (

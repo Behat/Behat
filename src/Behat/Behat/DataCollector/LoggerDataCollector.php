@@ -50,7 +50,8 @@ class LoggerDataCollector implements EventSubscriberInterface
         StepEvent::SKIPPED     => 'skipped',
         StepEvent::PENDING     => 'pending',
         StepEvent::UNDEFINED   => 'undefined',
-        StepEvent::FAILED      => 'failed'
+        StepEvent::FAILED      => 'failed',
+        StepEvent::UNSTABLE    => 'unstable'
     );
     /**
      * Overall suite result.
@@ -318,7 +319,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     }
 
     /**
-     * Returns array of pending steps events;
+     * Returns array of pending steps events.
      *
      * @return  array
      */

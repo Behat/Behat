@@ -36,7 +36,9 @@ class OutputFormatter extends BaseOutputFormatter
             'skipped'       => new OutputFormatterStyle('cyan'),
             'skipped_param' => new OutputFormatterStyle('cyan', null, array('bold')),
             'comment'       => new OutputFormatterStyle('black'),
-            'tag'           => new OutputFormatterStyle('cyan')
+            'tag'           => new OutputFormatterStyle('cyan'),
+            'unstable'      => new OutputFormatterStyle('magenta'),
+            'unstable_param'=> new OutputFormatterStyle('magenta', null, array('bold'))
         ), $styles));
     }
 

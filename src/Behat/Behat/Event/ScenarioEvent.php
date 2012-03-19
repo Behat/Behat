@@ -27,6 +27,7 @@ class ScenarioEvent extends Event implements EventInterface
     private $context;
     private $result;
     private $skipped;
+    private $attempts;
 
     /**
      * Initializes scenario event.
@@ -35,14 +36,16 @@ class ScenarioEvent extends Event implements EventInterface
      * @param   Behat\Behat\Context\ContextInterface    $context
      * @param   integer                                 $result
      * @param   Boolean                                 $skipped
+     * @param   integer                                 $attepmts
      */
     public function __construct(ScenarioNode $scenario, ContextInterface $context, $result = null,
-                                $skipped = false)
+                                $skipped = false, $attempts = null)
     {
         $this->scenario = $scenario;
         $this->context  = $context;
         $this->result   = $result;
         $this->skipped  = $skipped;
+        $this->attempts = $attempts;
     }
 
     /**
@@ -83,5 +86,36 @@ class ScenarioEvent extends Event implements EventInterface
     public function isSkipped()
     {
         return $this->skipped;
+    }
+
+    /**
+     * Get count on scenario attempts.
+     *
+     * @return integer|null
+     */
+    public function getAttempts()
+    {
+        return $this->attempts;
+    }
+
+    /**
+     * Checks wheter scenario has attempts.
+     *
+     * @return bool
+     */
+    public function hasAttempts()
+    {
+        return null !== $this->getAttempts();
+    }
+
+    /**
+     * Checks wheter scenario has been completet after
+     * more then one attempt and is consideret as unstable.
+     *
+     * @return Boolean
+     */
+    public function isUnstable()
+    {
+        return 1 < intval($this->getAttempts());
     }
 }

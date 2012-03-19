@@ -127,6 +127,7 @@ abstract class ConsoleFormatter implements FormatterInterface
             case StepEvent::PENDING:    return 'pending';
             case StepEvent::UNDEFINED:  return 'undefined';
             case StepEvent::FAILED:     return 'failed';
+            case StepEvent::UNSTABLE:   return 'unstable';
         }
     }
 

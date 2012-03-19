@@ -26,10 +26,11 @@ use Behat\Gherkin\Node\StepNode;
 class StepEvent extends Event implements EventInterface
 {
     const PASSED    = 0;
-    const SKIPPED   = 1;
-    const PENDING   = 2;
-    const UNDEFINED = 3;
-    const FAILED    = 4;
+    const UNSTABLE  = 1;
+    const SKIPPED   = 2;
+    const PENDING   = 3;
+    const UNDEFINED = 4;
+    const FAILED    = 5;
 
     private $step;
     private $context;
@@ -52,12 +53,12 @@ class StepEvent extends Event implements EventInterface
                                 DefinitionInterface $definition = null, \Exception $exception = null,
                                 DefinitionSnippet $snippet = null)
     {
-        $this->step       = $step;
-        $this->context    = $context;
-        $this->result     = $result;
-        $this->definition = $definition;
-        $this->exception  = $exception;
-        $this->snippet    = $snippet;
+        $this->step          = $step;
+        $this->context       = $context;
+        $this->result        = $result;
+        $this->definition    = $definition;
+        $this->exception     = $exception;
+        $this->snippet       = $snippet;
     }
 
     /**
