@@ -84,7 +84,9 @@ class OutlineTester extends ScenarioTester
 
         // Visit & test background if has one
         if ($outline->getFeature()->hasBackground()) {
-            $bgResult = $this->visitBackground($outline->getFeature()->getBackground(), $context);
+            $bgResult = $this->visitBackground(
+                $outline->getFeature()->getBackground(), $outline, $context
+            );
             if (0 !== $bgResult) {
                 $skip = true;
             }
@@ -93,7 +95,7 @@ class OutlineTester extends ScenarioTester
 
         // Visit & test steps
         foreach ($outline->getSteps() as $step) {
-            $stResult = $this->visitStep($step, $context, $tokens, $skip, true);
+            $stResult = $this->visitStep($step, $outline, $context, $tokens, $skip, true);
             if (0 !== $stResult) {
                 $skip = true;
             }

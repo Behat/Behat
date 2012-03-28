@@ -8,6 +8,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\BackgroundNode,
+    Behat\Gherkin\Node\ScenarioNode,
     Behat\Gherkin\Node\StepNode;
 
 use Behat\Behat\Context\ContextInterface,
@@ -91,7 +92,9 @@ class ScenarioTester implements NodeVisitorInterface
 
         // Visit & test background if has one
         if ($scenario->getFeature()->hasBackground()) {
-            $bgResult = $this->visitBackground($scenario->getFeature()->getBackground(), $this->context);
+            $bgResult = $this->visitBackground(
+                $scenario->getFeature()->getBackground(), $scenario, $this->context
+            );
             if (0 !== $bgResult) {
                 $skip = true;
             }
@@ -100,7 +103,7 @@ class ScenarioTester implements NodeVisitorInterface
 
         // Visit & test steps
         foreach ($scenario->getSteps() as $step) {
-            $stResult = $this->visitStep($step, $this->context, array(), $skip);
+            $stResult = $this->visitStep($step, $scenario, $this->context, array(), $skip);
             if (0 !== $stResult) {
                 $skip = true;
             }
@@ -118,15 +121,18 @@ class ScenarioTester implements NodeVisitorInterface
      * Visits & tests BackgroundNode.
      *
      * @param   Behat\Gherkin\Node\BackgroundNode       $background
+     * @param   Behat\Gherkin\Node\ScenarioNode         $logicalParent
      * @param   Behat\Behat\Context\ContextInterface    $context
      *
      * @uses    Behat\Behat\Tester\BackgroundTester::visit()
      *
      * @return  integer
      */
-    protected function visitBackground(BackgroundNode $background, ContextInterface $context)
+    protected function visitBackground(BackgroundNode $background, ScenarioNode $logicalParent,
+                                       ContextInterface $context)
     {
         $tester = $this->container->get('behat.tester.background');
+        $tester->setLogicalParent($logicalParent);
         $tester->setContext($context);
         $tester->setDryRun($this->dryRun);
 
@@ -137,6 +143,7 @@ class ScenarioTester implements NodeVisitorInterface
      * Visits & tests StepNode.
      *
      * @param   Behat\Gherkin\Node\StepNode             $step
+     * @param   Behat\Gherkin\Node\ScenarioNode         $logicalParent
      * @param   Behat\Behat\Context\ContextInterface    $context
      * @param   array                                   $tokens         step replacements for tokens
      * @param   boolean                                 $skip           mark step as skipped?
@@ -146,12 +153,14 @@ class ScenarioTester implements NodeVisitorInterface
      *
      * @return  integer
      */
-    protected function visitStep(StepNode $step, ContextInterface $context, array $tokens = array(),
+    protected function visitStep(StepNode $step, ScenarioNode $logicalParent,
+                                 ContextInterface $context, array $tokens = array(),
                                  $skip = false, $clone = false)
     {
         $step = $clone ? clone $step : $step;
 
         $tester = $this->container->get('behat.tester.step');
+        $tester->setLogicalParent($logicalParent);
         $tester->setContext($context);
         $tester->setTokens($tokens);
         $tester->skip($skip || $this->dryRun);

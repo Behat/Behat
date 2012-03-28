@@ -7,7 +7,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\AbstractNode,
-    Behat\Gherkin\Node\StepNode;
+    Behat\Gherkin\Node\StepNode,
+    Behat\Gherkin\Node\ScenarioNode;
 
 use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Context\Step\SubstepInterface,
@@ -32,6 +33,12 @@ use Behat\Behat\Context\ContextInterface,
  */
 class StepTester implements NodeVisitorInterface
 {
+    /**
+     * Logical parent of the step.
+     *
+     * @var     Behat\Gherkin\Node\ScenarioNode
+     */
+    private $logicalParent;
     /**
      * Event dispatcher.
      *
@@ -75,6 +82,16 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
+     * Sets logical parent of the step, which is always a ScenarioNode.
+     *
+     * @param Behat\Gherkin\Node\ScenarioNode $parent
+     */
+    public function setLogicalParent(ScenarioNode $parent)
+    {
+        $this->logicalParent = $parent;
+    }
+
+    /**
      * Sets run context.
      *
      * @param   Behat\Behat\Context\ContextInterface    $context
@@ -115,7 +132,9 @@ class StepTester implements NodeVisitorInterface
     {
         $step->setTokens($this->tokens);
 
-        $this->dispatcher->dispatch('beforeStep', new StepEvent($step, $this->context));
+        $this->dispatcher->dispatch('beforeStep', new StepEvent(
+            $step, $this->logicalParent, $this->context
+        ));
         $afterEvent = $this->executeStep($step);
         $this->dispatcher->dispatch('afterStep', $afterEvent);
 
@@ -141,7 +160,9 @@ class StepTester implements NodeVisitorInterface
             $definition = $this->definitions->findDefinition($this->context, $step);
 
             if ($this->skip) {
-                return new StepEvent($step, $context, StepEvent::SKIPPED, $definition);
+                return new StepEvent(
+                    $step, $this->logicalParent, $context, StepEvent::SKIPPED, $definition
+                );
             }
 
             try {
@@ -163,7 +184,9 @@ class StepTester implements NodeVisitorInterface
             $exception = $e;
         }
 
-        return new StepEvent($step, $context, $result, $definition, $exception, $snippet);
+        return new StepEvent(
+            $step, $this->logicalParent, $context, $result, $definition, $exception, $snippet
+        );
     }
 
     /**
