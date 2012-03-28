@@ -5,7 +5,8 @@ namespace Behat\Behat\Tester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Behat\Gherkin\Node\NodeVisitorInterface,
-    Behat\Gherkin\Node\AbstractNode;
+    Behat\Gherkin\Node\AbstractNode,
+    Behat\Gherkin\Node\ScenarioNode;
 
 use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Event\BackgroundEvent;
@@ -25,6 +26,12 @@ use Behat\Behat\Context\ContextInterface,
  */
 class BackgroundTester implements NodeVisitorInterface
 {
+    /**
+     * Logical parent of the step.
+     *
+     * @var     Behat\Gherkin\Node\ScenarioNode
+     */
+    private $logicalParent;
     /**
      * Service container.
      *
@@ -59,6 +66,16 @@ class BackgroundTester implements NodeVisitorInterface
     {
         $this->container  = $container;
         $this->dispatcher = $container->get('behat.event_dispatcher');
+    }
+
+    /**
+     * Sets logical parent of the step, which is always a ScenarioNode.
+     *
+     * @param Behat\Gherkin\Node\ScenarioNode $parent
+     */
+    public function setLogicalParent(ScenarioNode $parent)
+    {
+        $this->logicalParent = $parent;
     }
 
     /**
@@ -98,6 +115,7 @@ class BackgroundTester implements NodeVisitorInterface
         // Visit & test steps
         foreach ($background->getSteps() as $step) {
             $tester = $this->container->get('behat.tester.step');
+            $tester->setLogicalParent($this->logicalParent);
             $tester->setContext($this->context);
             $tester->skip($skip || $this->dryRun);
 

@@ -8,7 +8,8 @@ use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\Definition\DefinitionSnippet;
 
-use Behat\Gherkin\Node\StepNode;
+use Behat\Gherkin\Node\StepNode,
+    Behat\Gherkin\Node\ScenarioNode;
 
 /*
  * This file is part of the Behat.
@@ -32,6 +33,7 @@ class StepEvent extends Event implements EventInterface
     const FAILED    = 4;
 
     private $step;
+    private $parent;
     private $context;
     private $result;
     private $definition;
@@ -42,17 +44,19 @@ class StepEvent extends Event implements EventInterface
      * Initializes step event.
      *
      * @param   Behat\Gherkin\Node\StepNode                 $step
+     * @param   Behat\Gherkin\Node\ScenarioNode             $parent
      * @param   Behat\Behat\Context\ContextInterface        $context
      * @param   integer                                     $result
      * @param   Behat\Behat\Definition\DefinitionInterface  $definition
      * @param   Exception                                   $exception
      * @param   Behat\Behat\Definition\DefinitionSnippet    $snippet
      */
-    public function __construct(StepNode $step, ContextInterface $context, $result = null,
-                                DefinitionInterface $definition = null, \Exception $exception = null,
-                                DefinitionSnippet $snippet = null)
+    public function __construct(StepNode $step, ScenarioNode $parent, ContextInterface $context,
+                                $result = null, DefinitionInterface $definition = null,
+                                \Exception $exception = null, DefinitionSnippet $snippet = null)
     {
         $this->step       = $step;
+        $this->parent     = $parent;
         $this->context    = $context;
         $this->result     = $result;
         $this->definition = $definition;
@@ -68,6 +72,16 @@ class StepEvent extends Event implements EventInterface
     public function getStep()
     {
         return $this->step;
+    }
+
+    /**
+     * Returns logical parent to the step, which is always a ScenarioNode.
+     *
+     * @return Behat\Gherkin\Node\ScenarioNode
+     */
+    public function getLogicalParent()
+    {
+        return $this->parent;
     }
 
     /**

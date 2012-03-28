@@ -5,7 +5,8 @@ namespace Behat\Behat\Hook\Annotation;
 use Behat\Behat\Event\EventInterface;
 
 use Behat\Gherkin\Filter\TagFilter,
-    Behat\Gherkin\Filter\NameFilter;
+    Behat\Gherkin\Filter\NameFilter,
+    Behat\Gherkin\Node\BackgroundNode;
 
 /*
  * This file is part of the Behat.
@@ -31,7 +32,7 @@ abstract class StepHook extends FilterableHook
             return true;
         }
 
-        $scenario = $event->getStep()->getParent();
+        $scenario = $event->getLogicalParent();
 
         if (false !== strpos($filterString, '@')) {
             $filter = new TagFilter($filterString);
