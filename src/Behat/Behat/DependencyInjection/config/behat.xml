@@ -222,6 +222,10 @@
                 <service class="%behat.translator.message_selector.class%" />
             </argument>
 
+            <call method="setFallbackLocale">
+                <argument>en</argument>
+            </call>
+
             <!-- Translation loaders -->
             <call method="addLoader">
                 <argument>xliff</argument>
