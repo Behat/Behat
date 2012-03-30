@@ -183,3 +183,43 @@ Feature: I18n
               throw new PendingException();
           }
       """
+
+  Scenario: Progress with unexisting locale
+    When I run "behat -f progress --lang=xx"
+    Then it should fail with:
+      """
+      ..U-..P-..F...F.......F
+
+      (::) failed steps (::)
+
+      01. Failed asserting that 14 matches expected 13.
+          In step `То Я должен иметь 13'. # FeatureContext::iShouldHave()
+          From scenario `Провален'.       # features/World.feature:20
+
+      02. Failed asserting that 15 matches expected 16.
+          In step `То Я должен иметь 16'.       # FeatureContext::iShouldHave()
+          From scenario `Пройдено и Провалено'. # features/World.feature:24
+
+      03. Failed asserting that 33 matches expected 32.
+          In step `То Я должен иметь 32'.       # FeatureContext::iShouldHave()
+          From scenario `Пройдено и Провалено'. # features/World.feature:24
+
+      (::) pending steps (::)
+
+      01. TODO: write pending definition
+          In step `И Что-то еще не сделано'.    # FeatureContext::somethingNotDone()
+          From scenario `В ожидании'.           # features/World.feature:15
+
+      6 scenarios (1 passed, 1 pending, 1 undefined, 3 failed)
+      23 steps (16 passed, 2 skipped, 1 pending, 1 undefined, 3 failed)
+
+      You can implement step definitions for undefined steps with these snippets:
+
+          /**
+           * @Given /^Добавить "([^"]*)" число$/
+           */
+          public function dobavitChislo($argument1)
+          {
+              throw new PendingException();
+          }
+      """

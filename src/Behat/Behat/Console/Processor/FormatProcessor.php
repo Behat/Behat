@@ -32,10 +32,6 @@ class FormatProcessor implements ProcessorInterface
     public function configure(Command $command)
     {
         $defaultFormatters = FormatManager::getDefaultFormatterClasses();
-        $defaultLanguage   = null;
-        if (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
-            $defaultLanguage = $matches[1];
-        }
 
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
@@ -54,8 +50,7 @@ class FormatProcessor implements ProcessorInterface
                 "instead of STDOUT <comment>(output_path)</comment>."
             )
             ->addOption('--lang', null, InputOption::VALUE_REQUIRED,
-                'Print formatter output in particular language.',
-                $defaultLanguage
+                'Print formatter output in particular language.'
             )
         ;
 
