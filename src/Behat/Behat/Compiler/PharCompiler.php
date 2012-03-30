@@ -64,7 +64,7 @@ class PharCompiler
 
         foreach ($finder as $file) {
             // don't compile test suites
-            if (!preg_match('/\/tests\/|\/test\//', $file->getRealPath())) {
+            if (!preg_match('/\/tests\/|\/test\//i', $file->getRealPath())) {
                 $this->addFileToPhar($file, $phar);
             }
         }
