@@ -1,3 +1,8 @@
+2.3.5 / 2012-03-30
+==================
+
+  * Fixed formatter language configuration and locale guesser
+
 2.3.4 / 2012-03-28
 ==================
 
