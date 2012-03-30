@@ -54,11 +54,16 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     public function __construct()
     {
+        $defaultLanguage = null;
+        if (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
+            $defaultLanguage = $matches[1];
+        }
+
         $this->parameters = new ParameterBag(array_merge(array(
+            'language'              => $defaultLanguage,
             'verbose'               => false,
             'decorated'             => true,
             'time'                  => true,
-            'language'              => 'en',
             'base_path'             => null,
             'support_path'          => null,
             'output'                => null,
