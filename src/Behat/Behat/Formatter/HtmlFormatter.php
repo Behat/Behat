@@ -530,13 +530,40 @@ HTML
             return file_get_contents($templatePath);
         }
 
-        return <<<'HTMLTPL'
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        return
+'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns ="http://www.w3.org/1999/xhtml">
 <head>
     <meta content="text/html;charset=utf-8"/>
     <title>Behat Test Suite</title>
     <style type="text/css">
+' . $this->getHtmlTemplateStyle() . '
+    </style>
+
+    <style type="text/css" media="print">
+' . $this->getHtmlTemplatePrintStyle() . '
+    </style>
+</head>
+<body>
+    <div id="behat">
+        {{content}}
+    </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+    <script type="text/javascript">
+' . $this->getHtmlTemplateScript() . '
+    </script>
+</body>
+</html>';
+    }
+
+    /**
+     * Get HTML template style.
+     *
+     * @return  string
+     */
+    protected function getHtmlTemplateStyle()
+    {
+        return <<<'HTMLTPL'
         body {
             margin:0px;
             padding:0px;
@@ -772,9 +799,17 @@ HTML
             content:' |-';
             font-weight:bold;
         }
-    </style>
+HTMLTPL;
+    }
 
-    <style type="text/css" media="print">
+    /**
+     * Get HTML template style.
+     *
+     * @return  string
+     */
+    protected function getHtmlTemplatePrintStyle()
+    {
+        return <<<'HTMLTPL'
         body {
             padding:0px;
         }
@@ -819,14 +854,17 @@ HTML
         #behat .scenario > ol li {
             border-left:none;
         }
-    </style>
-</head>
-<body>
-    <div id="behat">
-        {{content}}
-    </div>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
-    <script type="text/javascript">
+HTMLTPL;
+    }
+
+    /**
+     * Get HTML template script.
+     *
+     * @return  string
+     */
+    protected function getHtmlTemplateScript()
+    {
+        return <<<'HTMLTPL'
         $(document).ready(function(){
             $('#behat .feature h2').click(function(){
                 $(this).parent().toggleClass('jq-toggle-opened');
@@ -906,9 +944,6 @@ HTML
                     $feature.addClass('jq-toggle-opened');
                 });
         });
-    </script>
-</body>
-</html>
 HTMLTPL;
     }
 }
