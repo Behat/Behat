@@ -321,7 +321,11 @@ class HtmlFormatter extends PrettyFormatter
     protected function printStepDefinitionPath(StepNode $step, DefinitionInterface $definition)
     {
         if ($this->getParameter('paths')) {
-            $this->printPathComment($this->relativizePathsInString($definition->getPath()));
+            if ($this->hasParameter('paths_base_url')) {
+                $this->printPathLink($definition);
+            } else {
+                $this->printPathComment($this->relativizePathsInString($definition->getPath()));
+            }
         }
     }
 
@@ -436,6 +440,19 @@ class HtmlFormatter extends PrettyFormatter
         }
 
         $this->writeln('</tr>');
+    }
+
+    /**
+     * Prints path link, which links to the source containing the step definition.
+     *
+     * @param DefinitionInterface $definition
+     */
+    protected function printPathLink(DefinitionInterface $definition)
+    {
+        $url = $this->getParameter('paths_base_url') 
+            . $this->relativizePathsInString($definition->getCallbackReflection()->getFileName());
+        $path = $this->relativizePathsInString($definition->getPath());
+        $this->writeln('<span class="path"><a href="' . $url . '">' . $path . '</a></span>');
     }
 
     /**
@@ -585,6 +602,15 @@ HTML
             color:#999;
             padding:0px 5px;
             float:right;
+        }
+        #behat .path a:link,
+        #behat .path a:visited {
+            color:#999;
+        }
+        #behat .path a:hover,
+        #behat .path a:active {
+            background-color:#000;
+            color:#fff;
         }
         #behat h3 .path {
             margin-right:4%;
