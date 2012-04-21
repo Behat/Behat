@@ -111,6 +111,14 @@ Feature: Snippets format
           And table:
             | col1 | col2 |
             | val1 | val2 |
+
+        Scenario: Worded quote
+          When que j'utilise behat en français'
+          Then j'utilise un apostrophe et j'obtiens une erreur
+          And some 'properly escaped' string
+          And 'another escaped' string
+          And one 'more string'
+          And one "more string"
       """
 
   Scenario: Run feature with failing scenarios
@@ -140,4 +148,52 @@ Feature: Snippets format
           {
               throw new PendingException();
           }
-      """
+
+          /**
+           * @When /^que j\'utilise behat en français\'$/
+           */
+          public function queJUtiliseBehatEnFrancais()
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then /^j\'utilise un apostrophe et j\'obtiens une erreur$/
+           */
+          public function jUtiliseUnApostropheEtJObtiensUneErreur()
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^some \'([^\']*)\' string$/
+           */
+          public function someString($argument1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^\'([^\']*)\' string$/
+           */
+          public function string($argument1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^one \'([^\']*)\'$/
+           */
+          public function one($argument1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^one "([^"]*)"$/
+           */
+          public function one2($argument1)
+          {
+              throw new PendingException();
+          }
+        """
