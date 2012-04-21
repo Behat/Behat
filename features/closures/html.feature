@@ -243,14 +243,14 @@ Feature: HTML Formatter
       <li class="skipped">
       <div class="step">
       <span class="keyword">And </span>
-      <span class="text">I add the value <strong class="skipped_param"><n></strong></span>
+      <span class="text">I add the value <strong class="skipped_param">&lt;n&gt;</strong></span>
       <span class="path">features/steps/math.php:11</span>
       </div>
       </li>
       <li class="skipped">
       <div class="step">
       <span class="keyword">Then </span>
-      <span class="text">I must have <strong class="skipped_param"><total></strong></span>
+      <span class="text">I must have <strong class="skipped_param">&lt;total&gt;</strong></span>
       <span class="path">features/steps/math.php:7</span>
       </div>
       </li>

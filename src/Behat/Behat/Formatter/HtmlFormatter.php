@@ -418,7 +418,8 @@ class HtmlFormatter extends PrettyFormatter
         }
 
         // Replace "<", ">" with colorized ones
-        $text = preg_replace('/(<[^>]+>)/', "<strong class=\"$paramColor\">\$1</strong>", $text);
+        $text = preg_replace('/(<[^>]+>)/', "{+strong class=\"$paramColor\"-}\$1{+/strong-}", $text);
+        $text = htmlspecialchars($text, ENT_NOQUOTES | ENT_HTML5);
         $text = strtr($text, array('{+' => '<', '-}' => '>'));
 
         return $text;
