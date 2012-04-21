@@ -237,6 +237,9 @@ class JUnitFormatter extends ConsoleFormatter
     {
         $className  = $scenario->getFeature()->getTitle();
         $name       = $scenario->getTitle();
+        $name      .= $event instanceof OutlineExampleEvent
+                    ? ', Ex #' . ($event->getIteration() + 1)
+                    : '';
         $caseStats  = sprintf('classname="%s" name="%s" time="%F"',
             htmlspecialchars($className),
             htmlspecialchars($name),
