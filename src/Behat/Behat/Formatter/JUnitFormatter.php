@@ -213,7 +213,7 @@ class JUnitFormatter extends ConsoleFormatter
      */
     protected function printTestSuiteFooter(FeatureNode $feature, $time)
     {
-        $suiteStats = sprintf('errors="0" failures="%d" name="%s" file="%s" tests="%d" time="%F"',
+        $suiteStats = sprintf('classname="behat.features" errors="0" failures="%d" name="%s" file="%s" tests="%d" time="%F"',
             $this->exceptionsCount,
             htmlspecialchars($feature->getTitle()),
             htmlspecialchars($feature->getFile()),
