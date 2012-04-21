@@ -64,6 +64,7 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
             ),
             $text
         );
+
         preg_match('/' . $regex . '/', $step->getText(), $matches);
         $count = count($matches) - 1;
 
@@ -105,7 +106,7 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
 
         $args = array();
         for ($i = 0; $i < $count; $i++) {
-            $args[] = "\$argument" . ($i + 1);
+            $args[] = "\$arg" . ($i + 1);
         }
 
         foreach ($step->getArguments() as $argument) {

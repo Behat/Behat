@@ -199,7 +199,7 @@ Feature: Append snippets option
           /**
            * @Given /^do something undefined with \\(\d+)$/
            */
-          public function doSomethingUndefinedWith3($argument1)
+          public function doSomethingUndefinedWith3($arg1)
           {
               throw new PendingException();
           }
@@ -215,7 +215,7 @@ Feature: Append snippets option
           /**
            * @Given /^pystring (\d+):$/
            */
-          public function pystring2($argument1, PyStringNode $string)
+          public function pystring2($arg1, PyStringNode $string)
           {
               throw new PendingException();
           }

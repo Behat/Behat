@@ -168,7 +168,7 @@ Feature: Snippets format
           /**
            * @Given /^some \'([^\']*)\' string$/
            */
-          public function someString($argument1)
+          public function someString($arg1)
           {
               throw new PendingException();
           }
@@ -176,7 +176,7 @@ Feature: Snippets format
           /**
            * @Given /^\'([^\']*)\' string$/
            */
-          public function string($argument1)
+          public function string($arg1)
           {
               throw new PendingException();
           }
@@ -184,7 +184,7 @@ Feature: Snippets format
           /**
            * @Given /^one \'([^\']*)\'$/
            */
-          public function one($argument1)
+          public function one($arg1)
           {
               throw new PendingException();
           }
@@ -192,7 +192,7 @@ Feature: Snippets format
           /**
            * @Given /^one "([^"]*)"$/
            */
-          public function one2($argument1)
+          public function one2($arg1)
           {
               throw new PendingException();
           }
