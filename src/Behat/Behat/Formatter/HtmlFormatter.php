@@ -779,11 +779,13 @@ HTML
             margin:0px;
         }
         #behat .jq-toggle > .scenario,
-        #behat .jq-toggle > ol {
+        #behat .jq-toggle > ol,
+        #behat .jq-toggle > .examples {
             display:none;
         }
         #behat .jq-toggle-opened > .scenario,
-        #behat .jq-toggle-opened > ol {
+        #behat .jq-toggle-opened > ol,
+        #behat .jq-toggle-opened > .examples {
             display:block;
         }
         #behat .jq-toggle > h2,
