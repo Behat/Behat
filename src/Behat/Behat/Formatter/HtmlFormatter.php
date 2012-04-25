@@ -822,6 +822,7 @@ HTMLTPL;
         }
 
         #behat .jq-toggle > .scenario,
+        #behat .jq-toggle > .scenario .examples,
         #behat .jq-toggle > ol {
             display:block;
         }
