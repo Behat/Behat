@@ -11,7 +11,7 @@ branches:
     - develop
 
 before_script:
-  - wget -nc http://getcomposer.org/composer.phar
-  - php composer.phar install
+  - curl http://getcomposer.org/installer | php
+  - php composer.phar install --dev
 
 script: bin/behat -fprogress --tags ~@php540

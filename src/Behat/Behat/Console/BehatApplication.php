@@ -53,4 +53,12 @@ class BehatApplication extends Application
     {
         return 'behat';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTerminalWidth()
+    {
+        return PHP_INT_MAX;
+    }
 }
