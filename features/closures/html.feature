@@ -275,7 +275,7 @@ Feature: HTML Formatter
       </tr>
       <tr class="failed exception">
       <td colspan="2">
-      <pre class="backtrace">Failed asserting that &lt;integer:20&gt; is equal to &lt;string:21&gt;.</pre>
+      <pre class="backtrace">Failed asserting that 20 matches expected '21'.</pre>
       </td>
       </tr>
       </tbody>
@@ -392,7 +392,7 @@ Feature: HTML Formatter
       <span class="text">I must have <strong class="failed_param">21</strong></span>
       <span class="path">features/steps/math.php:7</span>
       </div>
-      <pre class="backtrace">Failed asserting that &lt;integer:20&gt; is equal to &lt;string:21&gt;.</pre>
+      <pre class="backtrace">Failed asserting that 20 matches expected '21'.</pre>
       </li>
       </ol>
       </div>
