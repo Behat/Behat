@@ -933,7 +933,7 @@ HTMLTPL;
             $('#behat .summary .counters .scenarios .passed')
                 .addClass('switcher')
                 .click(function(){
-                    var $scenario = $('.feature .scenario:not(:has(li.failed, li.pending))');
+                    var $scenario = $('.feature .scenario:not(:has(.failed, .pending))');
                     var $feature  = $scenario.parent();
 
                     $('#behat_hide_all').click();
@@ -945,7 +945,7 @@ HTMLTPL;
             $('#behat .summary .counters .steps .passed')
                 .addClass('switcher')
                 .click(function(){
-                    var $scenario = $('.feature .scenario:has(li.passed)');
+                    var $scenario = $('.feature .scenario:has(.passed)');
                     var $feature  = $scenario.parent();
 
                     $('#behat_hide_all').click();
@@ -957,7 +957,7 @@ HTMLTPL;
             $('#behat .summary .counters .failed')
                 .addClass('switcher')
                 .click(function(){
-                    var $scenario = $('.feature .scenario:has(li.failed)');
+                    var $scenario = $('.feature .scenario:has(.failed)');
                     var $feature = $scenario.parent();
 
                     $('#behat_hide_all').click();
@@ -969,7 +969,7 @@ HTMLTPL;
             $('#behat .summary .counters .skipped')
                 .addClass('switcher')
                 .click(function(){
-                    var $scenario = $('.feature .scenario:has(li.skipped)');
+                    var $scenario = $('.feature .scenario:has(.skipped)');
                     var $feature = $scenario.parent();
 
                     $('#behat_hide_all').click();
@@ -981,7 +981,7 @@ HTMLTPL;
             $('#behat .summary .counters .pending')
                 .addClass('switcher')
                 .click(function(){
-                    var $scenario = $('.feature .scenario:has(li.pending)');
+                    var $scenario = $('.feature .scenario:has(.pending)');
                     var $feature = $scenario.parent();
 
                     $('#behat_hide_all').click();
