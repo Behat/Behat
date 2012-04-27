@@ -218,14 +218,15 @@ class HtmlFormatter extends PrettyFormatter
     protected function printOutlineExamplesSectionHeader(TableNode $examples)
     {
         $this->writeln('<div class="examples">');
-        $this->writeln('<h4>' . $examples->getKeyword() . '</h4>');
 
-        $this->writeln('<table>');
-        $this->writeln('<thead>');
-        $this->printColorizedTableRow($examples->getRow(0), 'skipped');
-        $this->writeln('</thead>');
-
-        $this->writeln('<tbody>');
+        if (!$this->getParameter('expand')) {
+            $this->writeln('<h4>' . $examples->getKeyword() . '</h4>');
+            $this->writeln('<table>');
+            $this->writeln('<thead>');
+            $this->printColorizedTableRow($examples->getRow(0), 'skipped');
+            $this->writeln('</thead>');
+            $this->writeln('<tbody>');
+        }
     }
 
     /**
@@ -233,10 +234,30 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printOutlineExampleResult(TableNode $examples, $iteration, $result, $isSkipped)
     {
-        $color  = $this->getResultColorCode($result);
+        if (!$this->getParameter('expand')) {
+            $color  = $this->getResultColorCode($result);
 
-        $this->printColorizedTableRow($examples->getRow($iteration + 1), $color);
-        $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
+            $this->printColorizedTableRow($examples->getRow($iteration + 1), $color);
+            $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
+        } else {
+            $this->write('<h4>' . $examples->getKeyword() . ': ');
+            foreach ($examples->getRow($iteration + 1) as $value) {
+                $this->write('<span>' . $value . '</span>');
+            }
+            $this->writeln('</h4>');
+
+            foreach ($this->delayedStepEvents as $event) {
+                $this->writeln('<ol>');
+                $this->printStep(
+                    $event->getStep(),
+                    $event->getResult(),
+                    $event->getDefinition(),
+                    $event->getSnippet(),
+                    $event->getException()
+                );
+                $this->writeln('</ol>');
+            }
+        }
     }
 
     /**
@@ -265,8 +286,10 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printOutlineFooter(OutlineNode $outline)
     {
-        $this->writeln('</tbody>');
-        $this->writeln('</table>');
+        if (!$this->getParameter('expand')) {
+            $this->writeln('</tbody>');
+            $this->writeln('</table>');
+        }
         $this->writeln('</div>');
         $this->writeln('</div>');
     }
@@ -642,48 +665,66 @@ HTML
             margin-left:20px;
             margin-bottom:20px;
         }
-        #behat .scenario > ol {
+        #behat .scenario > ol,
+        #behat .scenario .examples > ol {
             margin:0px;
             list-style:none;
-            margin-left:20px;
             padding:0px;
         }
-        #behat .scenario > ol:after {
+        #behat .scenario > ol {
+            margin-left:20px;
+        }
+        #behat .scenario > ol:after,
+        #behat .scenario .examples > ol:after {
             content:'';
             display:block;
             clear:both;
         }
-        #behat .scenario > ol li {
+        #behat .scenario > ol li,
+        #behat .scenario .examples > ol li {
             float:left;
             width:95%;
             padding-left:5px;
             border-left:5px solid;
             margin-bottom:4px;
         }
-        #behat .scenario > ol li .argument {
+        #behat .scenario > ol li .argument,
+        #behat .scenario .examples > ol li .argument {
             margin:10px 20px;
             font-size:16px;
             overflow:hidden;
         }
-        #behat .scenario > ol li table.argument {
+        #behat .scenario > ol li table.argument,
+        #behat .scenario .examples > ol li table.argument {
             border:1px solid #d2d2d2;
         }
-        #behat .scenario > ol li table.argument thead td {
+        #behat .scenario > ol li table.argument thead td,
+        #behat .scenario .examples > ol li table.argument thead td {
             font-weight: bold;
         }
-        #behat .scenario > ol li table.argument td {
+        #behat .scenario > ol li table.argument td,
+        #behat .scenario .examples > ol li table.argument td {
             padding:5px 10px;
             background:#f3f3f3;
         }
-        #behat .scenario > ol li .keyword {
+        #behat .scenario > ol li .keyword,
+        #behat .scenario .examples > ol li .keyword {
             font-weight:bold;
         }
-        #behat .scenario > ol li .path {
+        #behat .scenario > ol li .path,
+        #behat .scenario .examples > ol li .path {
             float:right;
         }
         #behat .scenario .examples {
             margin-top:20px;
             margin-left:40px;
+        }
+        #behat .scenario .examples h4 span {
+            font-weight:normal;
+            background:#f3f3f3;
+            color:#999;
+            padding:0 5px;
+            margin-left:10px;
         }
         #behat .scenario .examples table {
             margin-left:20px;
@@ -855,7 +896,8 @@ HTMLTPL;
             font-weight:bold;
         }
 
-        #behat .scenario > ol li {
+        #behat .scenario > ol li,
+        #behat .scenario .examples > ol li {
             border-left:none;
         }
 HTMLTPL;
