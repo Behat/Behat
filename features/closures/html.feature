@@ -275,7 +275,7 @@ Feature: HTML Formatter
       </tr>
       <tr class="failed exception">
       <td colspan="2">
-      <pre class="backtrace">Failed asserting that 20 matches expected '21'.</pre>
+      <pre class="backtrace">Failed asserting that &lt;integer:20&gt; is equal to &lt;string:21&gt;.</pre>
       </td>
       </tr>
       </tbody>
@@ -396,5 +396,48 @@ Feature: HTML Formatter
       </li>
       </ol>
       </div>
+      </div>
+      """
+
+  Scenario: Links to step definitions relative to a remote base
+    Given a file named "behat.yml" with:
+      """
+      default:
+        paths:
+          features:               %%BEHAT_CONFIG_PATH%%/features
+          bootstrap:              %%BEHAT_CONFIG_PATH%%/features/bootstrap
+        formatter:
+          name:                   'html'
+          parameters:
+            paths_base_url:        'http://localhost/'
+      """
+    And a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Scenario: Nothing
+          Given I have entered 10
+      """
+    When I run "behat -c behat.yml -f html"
+    Then the output should contain:
+      """
+      <div class="scenario">
+      <h3>
+      <span class="keyword">Scenario: </span>
+      <span class="title">Nothing</span>
+      <span class="path">features/World.feature:6</span>
+      </h3>
+      <ol>
+      <li class="passed">
+      <div class="step">
+      <span class="keyword">Given </span>
+      <span class="text">I have entered <strong class="passed_param">10</strong></span>
+      <span class="path"><a href="http://localhost/features/steps/math.php">features/steps/math.php:2</a></span>
+      </div>
+      </li>
+      </ol>
       </div>
       """
