@@ -135,6 +135,7 @@ class BehatApplication extends Application
 
         // configure container
         $extension->load($configs, $container);
+        $container->addObjectResource($extension);
 
         if (file_exists($configFile)) {
             $pathLocator = $container->getDefinition('behat.path_locator');
