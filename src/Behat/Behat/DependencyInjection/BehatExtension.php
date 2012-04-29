@@ -160,12 +160,6 @@ class BehatExtension implements ExtensionInterface
             $resultConfig = $this->configMergeRecursiveWithOverwrites($resultConfig, $config[$profile]);
         }
 
-        if (isset($config['services']) && is_array($config['services'])) {
-            foreach ($config['services'] as $id => $service) {
-                $this->parseDefinition($id, $service, $configFile, $container);
-            }
-        }
-
         if (isset($config['imports']) && is_array($config['imports'])) {
             foreach ($config['imports'] as $path) {
                 $resultConfig = $this->configMergeRecursiveWithOverwrites(
@@ -196,110 +190,6 @@ class BehatExtension implements ExtensionInterface
     }
 
     /**
-     * Parses a definition.
-     *
-     * @param   string  $id
-     * @param   array   $service
-     * @param   string  $file
-     */
-    private function parseDefinition($id, $service, $file, ContainerBuilder $container)
-    {
-        if (is_string($service) && 0 === strpos($service, '@')) {
-            $container->setAlias($id, substr($service, 1));
-
-            return;
-        } else if (isset($service['alias'])) {
-            $public = !array_key_exists('public', $service) || (Boolean) $service['public'];
-            $container->setAlias($id, new Alias($service['alias'], $public));
-
-            return;
-        }
-
-        if (isset($service['parent'])) {
-            $definition = new DefinitionDecorator($service['parent']);
-        } else {
-            $definition = new Definition();
-        }
-
-        if (isset($service['class'])) {
-            $definition->setClass($service['class']);
-        }
-
-        if (isset($service['scope'])) {
-            $definition->setScope($service['scope']);
-        }
-
-        if (isset($service['synthetic'])) {
-            $definition->setSynthetic($service['synthetic']);
-        }
-
-        if (isset($service['public'])) {
-            $definition->setPublic($service['public']);
-        }
-
-        if (isset($service['abstract'])) {
-            $definition->setAbstract($service['abstract']);
-        }
-
-        if (isset($service['factory_class'])) {
-            $definition->setFactoryClass($service['factory_class']);
-        }
-
-        if (isset($service['factory_method'])) {
-            $definition->setFactoryMethod($service['factory_method']);
-        }
-
-        if (isset($service['factory_service'])) {
-            $definition->setFactoryService($service['factory_service']);
-        }
-
-        if (isset($service['file'])) {
-            $definition->setFile($service['file']);
-        }
-
-        if (isset($service['arguments'])) {
-            $definition->setArguments($this->resolveServices($service['arguments']));
-        }
-
-        if (isset($service['properties'])) {
-            $definition->setProperties($this->resolveServices($service['properties']));
-        }
-
-        if (isset($service['configurator'])) {
-            if (is_string($service['configurator'])) {
-                $definition->setConfigurator($service['configurator']);
-            } else {
-                $definition->setConfigurator(array($this->resolveServices($service['configurator'][0]), $service['configurator'][1]));
-            }
-        }
-
-        if (isset($service['calls'])) {
-            foreach ($service['calls'] as $call) {
-                $definition->addMethodCall($call[0], $this->resolveServices($call[1]));
-            }
-        }
-
-        if (isset($service['tags'])) {
-            if (!is_array($service['tags'])) {
-                throw new InvalidArgumentException(sprintf('Parameter "tags" must be an array for service "%s" in %s.', $id, $file));
-            }
-
-            foreach ($service['tags'] as $tag) {
-                if (!isset($tag['name'])) {
-                    throw new InvalidArgumentException(sprintf('A "tags" entry is missing a "name" key for service "%s" in %s.', $id, $file));
-                }
-
-                $name = $tag['name'];
-                unset($tag['name']);
-
-                $definition->addTag($name, $tag);
-            }
-        }
-
-        $container->setDefinition($id, $definition);
-    }
-
-    /**
      * Parses imports section.
      *
      * @param   string  $path
@@ -324,39 +214,6 @@ class BehatExtension implements ExtensionInterface
         }
 
         return $this->loadConfigurationFile($path, $profile, $container);
-    }
-
-    /**
-     * Resolves services.
-     *
-     * @param string $value
-     *
-     * @return Reference
-     */
-    private function resolveServices($value)
-    {
-        if (is_array($value)) {
-            $value = array_map(array($this, 'resolveServices'), $value);
-        } else if (is_string($value) &&  0 === strpos($value, '@')) {
-            if (0 === strpos($value, '@?')) {
-                $value = substr($value, 2);
-                $invalidBehavior = ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
-            } else {
-                $value = substr($value, 1);
-                $invalidBehavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
-            }
-
-            if ('=' === substr($value, -1)) {
-                $value = substr($value, 0, -1);
-                $strict = false;
-            } else {
-                $strict = true;
-            }
-
-            $value = new Reference($value, $invalidBehavior, $strict);
-        }
-
-        return $value;
     }
 
     /**
