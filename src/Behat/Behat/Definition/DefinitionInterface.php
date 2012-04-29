@@ -30,9 +30,8 @@ interface DefinitionInterface
      * Runs definition callback.
      *
      * @param   Behat\Behat\Context\ContextInterface    $context    context object
-     * @param   array                                   $tokens     array of definition tokens (outline)
      *
      * @throws  Behat\Behat\Exception\BehaviorException             if step test fails
      */
-    function run(ContextInterface $context, $tokens = array());
+    function run(ContextInterface $context);
 }

@@ -135,7 +135,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
     /**
      * @see     Behat\Behat\Definition\DefinitionInterface::run()
      */
-    public function run(ContextInterface $context, $tokens = array())
+    public function run(ContextInterface $context)
     {
         if (defined('BEHAT_ERROR_REPORTING')) {
             $errorLevel = BEHAT_ERROR_REPORTING;
@@ -147,14 +147,6 @@ abstract class Definition extends Annotation implements DefinitionInterface
         $callback   = $this->getCallbackForContext($context);
 
         $values = $this->getValues();
-        if (count($tokens)) {
-            foreach ($values as $i => $value) {
-                if ($value instanceof TableNode || $value instanceof PyStringNode) {
-                    $values[$i] = clone $value;
-                    $values[$i]->replaceTokens($tokens);
-                }
-            }
-        }
         if ($this->isClosure()) {
             array_unshift($values, $context);
         }

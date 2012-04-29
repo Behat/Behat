@@ -23,6 +23,7 @@ use Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\OutlineNode,
     Behat\Gherkin\Node\ScenarioNode,
     Behat\Gherkin\Node\StepNode,
+    Behat\Gherkin\Node\ExampleStepNode,
     Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
@@ -1004,7 +1005,8 @@ class PrettyFormatter extends ProgressFormatter
         $max   = max($max, mb_strlen(current($lines)) + 2);
 
         foreach ($scenario->getSteps() as $step) {
-            $stepDescription = $step->getType() . ' ' . $step->getCleanText();
+            $text = $step instanceof ExampleStepNode ? $step->getCleanText() : $step->getText();
+            $stepDescription = $step->getType() . ' ' . $text;
             $max = max($max, mb_strlen($stepDescription) + 4);
         }
 

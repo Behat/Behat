@@ -8,6 +8,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Behat\Gherkin\Node\NodeVisitorInterface,
     Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\BackgroundNode,
+    Behat\Gherkin\Node\OutlineNode,
     Behat\Gherkin\Node\ScenarioNode,
     Behat\Gherkin\Node\StepNode;
 
@@ -147,22 +148,21 @@ class ScenarioTester implements NodeVisitorInterface
      * @param   Behat\Behat\Context\ContextInterface    $context
      * @param   array                                   $tokens         step replacements for tokens
      * @param   boolean                                 $skip           mark step as skipped?
-     * @param   boolean                                 $clone          clone step before running?
      *
      * @uses    Behat\Behat\Tester\StepTester::visit()
      *
      * @return  integer
      */
     protected function visitStep(StepNode $step, ScenarioNode $logicalParent,
-                                 ContextInterface $context, array $tokens = array(),
-                                 $skip = false, $clone = false)
+                                 ContextInterface $context, array $tokens = array(), $skip = false)
     {
-        $step = $clone ? clone $step : $step;
+        if ($logicalParent instanceof OutlineNode) {
+            $step = $step->createExampleRowStep($tokens);
+        }
 
         $tester = $this->container->get('behat.tester.step');
         $tester->setLogicalParent($logicalParent);
         $tester->setContext($context);
-        $tester->setTokens($tokens);
         $tester->skip($skip || $this->dryRun);
 
         return $step->accept($tester);

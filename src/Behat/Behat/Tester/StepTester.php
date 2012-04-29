@@ -58,12 +58,6 @@ class StepTester implements NodeVisitorInterface
      */
     private $definitions;
     /**
-     * Step replace tokens.
-     *
-     * @var     array
-     */
-    private $tokens = array();
-    /**
      * Is step marked as skipped.
      *
      * @var     boolean
@@ -102,16 +96,6 @@ class StepTester implements NodeVisitorInterface
     }
 
     /**
-     * Sets step replacements for tokens.
-     *
-     * @param   array   $tokens     step tokens
-     */
-    public function setTokens(array $tokens)
-    {
-        $this->tokens = $tokens;
-    }
-
-    /**
      * Marks test as skipped.
      *
      * @param   boolean $skip   skip test?
@@ -130,8 +114,6 @@ class StepTester implements NodeVisitorInterface
      */
     public function visit(AbstractNode $step)
     {
-        $step->setTokens($this->tokens);
-
         $this->dispatcher->dispatch('beforeStep', new StepEvent(
             $step, $this->logicalParent, $this->context
         ));
@@ -197,9 +179,7 @@ class StepTester implements NodeVisitorInterface
      */
     protected function executeStepDefinition(StepNode $step, DefinitionInterface $definition)
     {
-        $this->executeStepsChain(
-            $step, $definition->run($this->context, $this->tokens)
-        );
+        $this->executeStepsChain($step, $definition->run($this->context));
     }
 
     /**
