@@ -117,6 +117,14 @@ class Configuration
                         end()->
                     end()->
                 end()->
-            end();
+            end()->
+            fixXmlConfig('extension')->
+            children()->
+                arrayNode('extensions')->
+                    useAttributeAsKey(0)->
+                    prototype('variable')->end()->
+                end()->
+            end()
+        ;
     }
 }

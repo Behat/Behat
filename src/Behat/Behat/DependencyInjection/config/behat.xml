@@ -51,6 +51,7 @@
         <parameter key="behat.processor.gherkin.class">Behat\Behat\Console\Processor\GherkinProcessor</parameter>
         <parameter key="behat.processor.run.class">Behat\Behat\Console\Processor\RunProcessor</parameter>
         <parameter key="behat.command.processors" type="collection"></parameter>
+        <parameter key="behat.extensions" type="collection"></parameter>
 
         <!-- Context -->
         <parameter key="behat.context.class">FeatureContext</parameter>

@@ -140,11 +140,39 @@ class BehatApplication extends Application
             ));
         }
 
+        // load extensions
+        foreach ($container->getParameter('behat.extensions') as $id => $config) {
+            $extension = null;
+            if (class_exists($id)) {
+                $extension = new $id;
+            } elseif (file_exists($id)) {
+                $extension = require $id;
+            } elseif (file_exists($configFile)
+                   && file_exists($path = dirname($configFile).DIRECTORY_SEPARATOR.$id)) {
+                $extension = require $path;
+            } else {
+                foreach (explode(':', get_include_path()) as $libPath) {
+                    if (file_exists($libPath.DIRECTORY_SEPARATOR.$id)) {
+                        $extension = require $libPath.DIRECTORY_SEPARATOR.$id;
+                        break;
+                    }
+                }
+            }
+
+            if (null === $extension) {
+                throw new \InvalidArgumentException(sprintf(
+                    '"%s" extension could not be initialized.', $id
+                ));
+            }
+
+            $extension->load($config, $container);
+        }
+
         // add compiler passes
         $container->addCompilerPass(new GherkinPass());
         $container->addCompilerPass(new ContextReaderPass());
-        $container->addCompilerPass(new EventDispatcherPass());
         $container->addCompilerPass(new CommandPass());
+        $container->addCompilerPass(new EventDispatcherPass());
     }
 
     /**
