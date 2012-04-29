@@ -2,7 +2,8 @@
 
 namespace Behat\Behat\Console\Command;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder,
+use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\DependencyInjection\ContainerAwareInterface,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +24,7 @@ use Behat\Behat\Console\Processor,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BehatCommand extends BaseCommand
+class BehatCommand extends BaseCommand implements ContainerAwareInterface
 {
     /**
      * Service container.
@@ -37,13 +38,10 @@ class BehatCommand extends BaseCommand
      */
     protected function configure()
     {
-        $this->container = new ContainerBuilder();
-
         $this
             ->setName('behat')
             ->setDefinition(new InputDefinition)
             ->setProcessors(array(
-                new Processor\ContainerProcessor(),
                 new Processor\LocatorProcessor(),
                 new Processor\InitProcessor(),
                 new Processor\ContextProcessor(),
@@ -65,7 +63,15 @@ class BehatCommand extends BaseCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @see ContainerAwareInterface::setContainer()
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @return ContainerInterface
      */
     protected function getContainer()
     {

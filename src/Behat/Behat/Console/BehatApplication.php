@@ -2,12 +2,19 @@
 
 namespace Behat\Behat\Console;
 
-use Symfony\Component\Console\Application,
+use Symfony\Component\DependencyInjection\ContainerBuilder,
+    Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Console\Application,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputDefinition,
-    Symfony\Component\Console\Input\InputOption;
+    Symfony\Component\Console\Input\InputOption,
+    Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Console\Command\BehatCommand;
+use Behat\Behat\Console\Command\BehatCommand,
+    Behat\Behat\DependencyInjection\BehatExtension,
+    Behat\Behat\DependencyInjection\Compiler\GherkinPass,
+    Behat\Behat\DependencyInjection\Compiler\ContextReaderPass,
+    Behat\Behat\DependencyInjection\Compiler\EventDispatcherPass;
 
 /*
  * This file is part of the Behat.
@@ -30,8 +37,6 @@ class BehatApplication extends Application
     public function __construct($version)
     {
         parent::__construct('Behat', $version);
-
-        $this->add(new BehatCommand());
     }
 
     /**
@@ -40,10 +45,36 @@ class BehatApplication extends Application
     public function getDefaultInputDefinition()
     {
         return new InputDefinition(array(
-            new InputOption('--help',       '-h', InputOption::VALUE_NONE, 'Display this help message.'),
-            new InputOption('--verbose',    '-v', InputOption::VALUE_NONE, 'Increase verbosity of exceptions.'),
-            new InputOption('--version',    '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
+            new InputOption('--help',    '-h', InputOption::VALUE_NONE, 'Display this help message.'),
+            new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of exceptions.'),
+            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
+            new InputOption('--config',  '-c', InputOption::VALUE_REQUIRED, 'Specify config file to use.'),
+            new InputOption('--profile', '-p', InputOption::VALUE_REQUIRED, 'Specify config profile to use.')
         ));
+    }
+
+    /**
+     * Runs the current application.
+     *
+     * @param InputInterface  $input  An Input instance
+     * @param OutputInterface $output An Output instance
+     *
+     * @return integer 0 if everything went fine, or an error code
+     */
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        // construct container
+        $container = new ContainerBuilder();
+        $this->configureContainer($container, $input);
+
+        // create command
+        $command = new BehatCommand();
+        $command->setContainer($container);
+
+        // setup command into application
+        $this->add($command);
+
+        return parent::doRun($input, $output);
     }
 
     /**
@@ -60,5 +91,93 @@ class BehatApplication extends Application
     protected function getTerminalWidth()
     {
         return PHP_INT_MAX;
+    }
+
+    /**
+     * Configures container based on providen config file and profile.
+     *
+     * @param ContainerInterface $container container instance
+     * @param InputInterface     $input     console input
+     */
+    protected function configureContainer(ContainerInterface $container, InputInterface $input)
+    {
+        $extension  = new BehatExtension();
+        $cwd        = getcwd();
+        $configFile = $input->getParameterOption(array('--config', '-c'));
+        $profile    = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
+        $configs    = array();
+
+        if (!$configFile) {
+            if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
+                $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml';
+            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml.dist')) {
+                $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml.dist';
+            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml')) {
+                $configFile = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml';
+            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml.dist')) {
+                $configFile = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml.dist';
+            }
+        }
+
+        // read and normalize raw parameters string from env
+        if ($config = getenv('BEHAT_PARAMS')) {
+            parse_str($config, $config);
+            $configs[] = $this->normalizeRawConfiguration($config);
+        }
+
+        // read configuration file
+        if (file_exists($configFile)) {
+            $configs[] = $extension->readConfigurationFile($configFile, $profile, $container);
+        }
+
+        // configure container
+        $extension->load($configs, $container);
+
+        $container->addCompilerPass(new GherkinPass());
+        $container->addCompilerPass(new ContextReaderPass());
+        $container->addCompilerPass(new EventDispatcherPass());
+        $container->compile();
+
+        if (file_exists($configFile)) {
+            $container->get('behat.path_locator')->setPathConstant(
+                'BEHAT_CONFIG_PATH', dirname($configFile)
+            );
+        }
+    }
+
+    /**
+     * Normalizes provided raw configuration.
+     *
+     * @param array $config raw configuration
+     *
+     * @return array
+     */
+    private function normalizeRawConfiguration(array $config)
+    {
+        $normalize = function($value) {
+            if ('true' === $value || 'false' === $value) {
+                return 'true' === $value;
+            }
+
+            if (is_numeric($value)) {
+                return ctype_digit($value) ? intval($value) : floatval($value);
+            }
+
+            return $value;
+        };
+
+        if (isset($config['formatter']['parameters'])) {
+            $config['formatter']['parameters'] = array_map(
+                $normalize, $config['formatter']['parameters']
+            );
+        }
+
+        if (isset($config['context']['parameters'])) {
+            $config['context']['parameters'] = array_map(
+                $normalize, $config['context']['parameters']
+            );
+        }
+
+        return $config;
     }
 }
