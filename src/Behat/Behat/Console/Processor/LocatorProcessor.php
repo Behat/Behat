@@ -26,7 +26,7 @@ class LocatorProcessor implements ProcessorInterface
     /**
      * @see     Behat\Behat\Console\Configuration\ProcessorInterface::command()
      */
-    public function configure(Command $command)
+    public function configure(ContainerInterface $container, Command $command)
     {
         $command->addArgument('features', InputArgument::OPTIONAL,
             "Feature(s) to run. Could be:\n" .

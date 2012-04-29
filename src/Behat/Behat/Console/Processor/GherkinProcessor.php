@@ -30,7 +30,7 @@ class GherkinProcessor implements ProcessorInterface
     /**
      * @see     Behat\Behat\Console\Configuration\ProcessorInterface::confiugre()
      */
-    public function configure(Command $command)
+    public function configure(ContainerInterface $container, Command $command)
     {
         $command
             ->addOption('--name', null, InputOption::VALUE_REQUIRED,

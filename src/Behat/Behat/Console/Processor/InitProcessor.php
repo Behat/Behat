@@ -28,7 +28,7 @@ class InitProcessor implements ProcessorInterface
     /**
      * @see     Behat\Behat\Console\Configuration\ProcessorInterface::confiugre()
      */
-    public function configure(Command $command)
+    public function configure(ContainerInterface $container, Command $command)
     {
         $command->addOption('--init', null, InputOption::VALUE_NONE,
             "Create <comment>features</comment> directory structure.\n"

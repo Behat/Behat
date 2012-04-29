@@ -71,16 +71,6 @@ class FormatManager
     }
 
     /**
-     * Returns default formatter names and their classes.
-     *
-     * @return  array
-     */
-    public static function getDefaultFormatterClasses()
-    {
-        return self::$defaultFormatterClasses;
-    }
-
-    /**
      * Returns all currently available formats with their classes.
      *
      * @return  array

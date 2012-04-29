@@ -25,7 +25,7 @@ class ContextProcessor implements ProcessorInterface
     /**
      * @see     Behat\Behat\Console\Configuration\ProcessorInterface::configure()
      */
-    public function configure(Command $command)
+    public function configure(ContainerInterface $container, Command $command)
     {
     }
 

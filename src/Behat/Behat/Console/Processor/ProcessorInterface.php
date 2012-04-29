@@ -25,9 +25,10 @@ interface ProcessorInterface
     /**
      * Configures command to be able to process it later.
      *
-     * @param   Symfony\Component\Console\Command\Command   $command    command instance to configure
+     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
+     * @param   Symfony\Component\Console\Command\Command                   $command    command instance to configure
      */
-    function configure(Command $command);
+    function configure(ContainerInterface $container, Command $command);
 
     /**
      * Processes data from container and console input.

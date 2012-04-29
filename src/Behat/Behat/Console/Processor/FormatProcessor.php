@@ -28,9 +28,9 @@ class FormatProcessor implements ProcessorInterface
     /**
      * @see     Behat\Behat\Console\Configuration\ProcessorInterface::configure()
      */
-    public function configure(Command $command)
+    public function configure(ContainerInterface $container, Command $command)
     {
-        $defaultFormatters = FormatManager::getDefaultFormatterClasses();
+        $defaultFormatters = $container->get('behat.format_manager')->getFormatterClasses();
 
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
