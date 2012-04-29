@@ -67,6 +67,9 @@ class BehatApplication extends Application
         $container = new ContainerBuilder();
         $this->configureContainer($container, $input);
 
+        // compile and freeze container
+        $container->compile();
+
         // create command
         $command = new BehatCommand();
         $command->setContainer($container);
@@ -133,16 +136,17 @@ class BehatApplication extends Application
         // configure container
         $extension->load($configs, $container);
 
+        if (file_exists($configFile)) {
+            $pathLocator = $container->getDefinition('behat.path_locator');
+            $pathLocator->addMethodCall('setPathConstant', array(
+                'BEHAT_CONFIG_PATH', dirname($configFile)
+            ));
+        }
+
+        // add compiler passes
         $container->addCompilerPass(new GherkinPass());
         $container->addCompilerPass(new ContextReaderPass());
         $container->addCompilerPass(new EventDispatcherPass());
-        $container->compile();
-
-        if (file_exists($configFile)) {
-            $container->get('behat.path_locator')->setPathConstant(
-                'BEHAT_CONFIG_PATH', dirname($configFile)
-            );
-        }
     }
 
     /**
