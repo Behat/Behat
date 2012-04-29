@@ -46,17 +46,6 @@ class Transformation extends Annotation implements TransformationInterface
         }
         parent::__construct($callback);
 
-        if (!$this->isClosure()) {
-            $methodRefl = new \ReflectionMethod($callback[0], $callback[1]);
-
-            if (!$methodRefl->isStatic()) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Transformation callback: %s::%s() must be a static method',
-                    $callback[0], $callback[1]
-                ));
-            }
-        }
-
         $this->regex = $regex;
     }
 
