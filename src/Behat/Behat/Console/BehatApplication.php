@@ -13,7 +13,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
 use Behat\Behat\DependencyInjection\BehatExtension,
     Behat\Behat\DependencyInjection\Compiler\GherkinPass,
     Behat\Behat\DependencyInjection\Compiler\ContextReaderPass,
-    Behat\Behat\DependencyInjection\Compiler\EventDispatcherPass;
+    Behat\Behat\DependencyInjection\Compiler\EventDispatcherPass,
+    Behat\Behat\DependencyInjection\Compiler\CommandPass;
 
 /*
  * This file is part of the Behat.
@@ -143,6 +144,7 @@ class BehatApplication extends Application
         $container->addCompilerPass(new GherkinPass());
         $container->addCompilerPass(new ContextReaderPass());
         $container->addCompilerPass(new EventDispatcherPass());
+        $container->addCompilerPass(new CommandPass());
     }
 
     /**

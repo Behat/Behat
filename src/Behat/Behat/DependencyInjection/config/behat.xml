@@ -50,6 +50,7 @@
         <parameter key="behat.processor.help.class">Behat\Behat\Console\Processor\HelpProcessor</parameter>
         <parameter key="behat.processor.gherkin.class">Behat\Behat\Console\Processor\GherkinProcessor</parameter>
         <parameter key="behat.processor.run.class">Behat\Behat\Console\Processor\RunProcessor</parameter>
+        <parameter key="behat.command.processors" type="collection"></parameter>
 
         <!-- Context -->
         <parameter key="behat.context.class">FeatureContext</parameter>
@@ -118,18 +119,33 @@
         <!-- Core -->
         <service id="behat.command" class="%behat.command.class%">
             <argument type="service" id="service_container" />
-            <argument type="collection">
-                <argument type="service"><service class="%behat.processor.locator.class%" /></argument>
-                <argument type="service"><service class="%behat.processor.init.class%" /></argument>
-                <argument type="service"><service class="%behat.processor.context.class%" /></argument>
-                <argument type="service"><service class="%behat.processor.format.class%" /></argument>
-                <argument type="service"><service class="%behat.processor.help.class%" /></argument>
-                <argument type="service"><service class="%behat.processor.gherkin.class%" /></argument>
-                <argument type="service"><service class="%behat.processor.run.class%" /></argument>
-            </argument>
+            <argument>%behat.command.processors%</argument>
         </service>
         <service id="behat.runner" class="%behat.runner.class%">
             <argument type="service" id="service_container" />
+        </service>
+
+        <!-- Processors -->
+        <service id="behat.processor.locator" class="%behat.processor.locator.class%">
+            <tag name="behat.processor" />
+        </service>
+        <service id="behat.processor.init" class="%behat.processor.init.class%">
+            <tag name="behat.processor" />
+        </service>
+        <service id="behat.processor.context" class="%behat.processor.context.class%">
+            <tag name="behat.processor" />
+        </service>
+        <service id="behat.processor.format" class="%behat.processor.format.class%">
+            <tag name="behat.processor" />
+        </service>
+        <service id="behat.processor.help" class="%behat.processor.help.class%">
+            <tag name="behat.processor" />
+        </service>
+        <service id="behat.processor.gherkin" class="%behat.processor.gherkin.class%">
+            <tag name="behat.processor" />
+        </service>
+        <service id="behat.processor.run" class="%behat.processor.run.class%">
+            <tag name="behat.processor" />
         </service>
 
         <!-- Context -->
