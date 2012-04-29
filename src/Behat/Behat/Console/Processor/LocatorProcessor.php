@@ -4,6 +4,7 @@ namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Command\Command,
+    Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface;
 
@@ -27,6 +28,14 @@ class LocatorProcessor implements ProcessorInterface
      */
     public function configure(Command $command)
     {
+        $command->addArgument('features', InputArgument::OPTIONAL,
+            "Feature(s) to run. Could be:\n" .
+            "- a dir <comment>(features/)</comment>\n" .
+            "- a feature <comment>(*.feature)</comment>\n" .
+            "- a scenario at specific line <comment>(*.feature:10)</comment>.\n" .
+            "- all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.\n" .
+            "- all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>."
+        );
     }
 
     /**

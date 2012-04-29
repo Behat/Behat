@@ -10,8 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Console\Command\BehatCommand,
-    Behat\Behat\DependencyInjection\BehatExtension,
+use Behat\Behat\DependencyInjection\BehatExtension,
     Behat\Behat\DependencyInjection\Compiler\GherkinPass,
     Behat\Behat\DependencyInjection\Compiler\ContextReaderPass,
     Behat\Behat\DependencyInjection\Compiler\EventDispatcherPass;
@@ -70,12 +69,8 @@ class BehatApplication extends Application
         // compile and freeze container
         $container->compile();
 
-        // create command
-        $command = new BehatCommand();
-        $command->setContainer($container);
-
         // setup command into application
-        $this->add($command);
+        $this->add($container->get('behat.command'));
 
         return parent::doRun($input, $output);
     }

@@ -3,13 +3,10 @@
 namespace Behat\Behat\Console\Command;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\DependencyInjection\ContainerAwareInterface,
     Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Console\Processor,
-    Behat\Behat\Console\Input\InputDefinition;
+use Behat\Behat\Console\Input\InputDefinition;
 
 /*
  * This file is part of the Behat.
@@ -24,7 +21,7 @@ use Behat\Behat\Console\Processor,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BehatCommand extends BaseCommand implements ContainerAwareInterface
+class BehatCommand extends BaseCommand
 {
     /**
      * Service container.
@@ -33,49 +30,14 @@ class BehatCommand extends BaseCommand implements ContainerAwareInterface
      */
     private $container;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    public function __construct(ContainerInterface $container, array $processors)
     {
-        $this
-            ->setName('behat')
-            ->setDefinition(new InputDefinition)
-            ->setProcessors(array(
-                new Processor\LocatorProcessor(),
-                new Processor\InitProcessor(),
-                new Processor\ContextProcessor(),
-                new Processor\FormatProcessor(),
-                new Processor\HelpProcessor(),
-                new Processor\GherkinProcessor(),
-                new Processor\RunProcessor(),
-            ))
-            ->addArgument('features', InputArgument::OPTIONAL,
-                "Feature(s) to run. Could be:\n" .
-                "- a dir <comment>(features/)</comment>\n" .
-                "- a feature <comment>(*.feature)</comment>\n" .
-                "- a scenario at specific line <comment>(*.feature:10)</comment>.\n" .
-                "- all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.\n" .
-                "- all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>."
-            )
-            ->configureProcessors()
-        ;
-    }
+        parent::__construct('behat');
 
-    /**
-     * @see ContainerAwareInterface::setContainer()
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
         $this->container = $container;
-    }
-
-    /**
-     * @return ContainerInterface
-     */
-    protected function getContainer()
-    {
-        return $this->container;
+        $this->setDefinition(new InputDefinition);
+        $this->setProcessors($processors);
+        $this->configureProcessors();
     }
 
     /**
@@ -84,5 +46,15 @@ class BehatCommand extends BaseCommand implements ContainerAwareInterface
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         return $this->getContainer()->get('behat.runner')->runSuite();
+    }
+
+    /**
+     * Returns container instance.
+     *
+     * @return ContainerInterface
+     */
+    protected function getContainer()
+    {
+        return $this->container;
     }
 }
