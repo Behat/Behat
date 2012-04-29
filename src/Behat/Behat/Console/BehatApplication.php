@@ -37,7 +37,7 @@ class BehatApplication extends Application
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    public function getDefaultInputDefinition()
     {
         return new InputDefinition(array(
             new InputOption('--help',       '-h', InputOption::VALUE_NONE, 'Display this help message.'),
