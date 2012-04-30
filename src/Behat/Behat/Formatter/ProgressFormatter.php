@@ -39,14 +39,6 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * {@inheritdoc}
      */
-    public static function getDescription()
-    {
-        return "Prints one character per step.";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultParameters()
     {
         return array();

@@ -42,14 +42,6 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    public static function getDescription()
-    {
-        return "Generates a nice looking HTML report.";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultParameters()
     {
         return array(
@@ -473,7 +465,7 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printPathLink(DefinitionInterface $definition)
     {
-        $url = $this->getParameter('paths_base_url') 
+        $url = $this->getParameter('paths_base_url')
             . $this->relativizePathsInString($definition->getCallbackReflection()->getFileName());
         $path = $this->relativizePathsInString($definition->getPath());
         $this->writeln('<span class="path"><a href="' . $url . '">' . $path . '</a></span>');

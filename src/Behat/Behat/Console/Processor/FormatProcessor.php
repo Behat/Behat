@@ -8,6 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
+use Behat\Behat\Formatter\FormatterDispatcher;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -40,17 +42,16 @@ class FormatProcessor extends Processor
      */
     public function configure(Command $command)
     {
-        $defaultFormatters = $this->container->get('behat.format_manager')->getFormatterClasses();
+        $formatDispatchers = $this->container->get('behat.format_manager')->getDispatchers();
 
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
                 "How to format features. <comment>pretty</comment> is default.\n" .
                 "Default formatters are:\n" .
                 implode("\n",
-                    array_map(function($name) use($defaultFormatters) {
-                        $class = $defaultFormatters[$name];
-                        return "- <comment>$name</comment>: " . $class::getDescription();
-                    }, array_keys($defaultFormatters))
+                    array_map(function($dispatcher) {
+                        return '- <comment>'.$dispatcher->getName().'</comment>: '.$dispatcher->getDescription();
+                    }, $formatDispatchers)
                 ) . "\n" .
                 "Can use multiple formats at once (splitted with \"<comment>,</comment>\")"
             )
@@ -129,7 +130,7 @@ class FormatProcessor extends Processor
 
         // add user-defined formatter classes to manager
         foreach ($this->container->getParameter('behat.formatter.classes') as $name => $class) {
-            $manager->setFormatterClass($name, $class);
+            $manager->addDispatcher(new FormatterDispatcher($name, $class));
         }
 
         // init specified for run formatters

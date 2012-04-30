@@ -15,6 +15,7 @@
         <parameter key="behat.formatter.name">pretty</parameter>
         <parameter key="behat.formatter.parameters" type="collection"></parameter>
         <parameter key="behat.formatter.classes" type="collection"></parameter>
+        <parameter key="behat.formatter_dispatcher.class">Behat\Behat\Formatter\FormatterDispatcher</parameter>
         <parameter key="behat.format_manager.class">Behat\Behat\Formatter\FormatManager</parameter>
 
         <!-- Options -->
@@ -227,6 +228,42 @@
         <service id="behat.format_manager" class="%behat.format_manager.class%">
             <argument type="service" id="behat.translator" />
             <argument type="service" id="behat.event_dispatcher" />
+        </service>
+        <service id="behat.formatter_dispatcher.pretty" class="%behat.formatter_dispatcher.class%">
+            <argument>Behat\Behat\Formatter\PrettyFormatter</argument>
+            <argument>pretty</argument>
+            <argument>Prints the feature as is.</argument>
+            <tag name="behat.formatter_dispatcher" />
+        </service>
+        <service id="behat.formatter_dispatcher.progress" class="%behat.formatter_dispatcher.class%">
+            <argument>Behat\Behat\Formatter\ProgressFormatter</argument>
+            <argument>progress</argument>
+            <argument>Prints one character per step.</argument>
+            <tag name="behat.formatter_dispatcher" />
+        </service>
+        <service id="behat.formatter_dispatcher.html" class="%behat.formatter_dispatcher.class%">
+            <argument>Behat\Behat\Formatter\HtmlFormatter</argument>
+            <argument>html</argument>
+            <argument>Generates a nice looking HTML report.</argument>
+            <tag name="behat.formatter_dispatcher" />
+        </service>
+        <service id="behat.formatter_dispatcher.junit" class="%behat.formatter_dispatcher.class%">
+            <argument>Behat\Behat\Formatter\JUnitFormatter</argument>
+            <argument>junit</argument>
+            <argument>Generates a report similar to Ant+JUnit.</argument>
+            <tag name="behat.formatter_dispatcher" />
+        </service>
+        <service id="behat.formatter_dispatcher.failed" class="%behat.formatter_dispatcher.class%">
+            <argument>Behat\Behat\Formatter\FailedScenariosFormatter</argument>
+            <argument>failed</argument>
+            <argument>Prints list of failed scenarios.</argument>
+            <tag name="behat.formatter_dispatcher" />
+        </service>
+        <service id="behat.formatter_dispatcher.snippets" class="%behat.formatter_dispatcher.class%">
+            <argument>Behat\Behat\Formatter\SnippetsFormatter</argument>
+            <argument>snippets</argument>
+            <argument>Prints only snippets for undefined steps.</argument>
+            <tag name="behat.formatter_dispatcher" />
         </service>
 
         <!-- PathLocator -->

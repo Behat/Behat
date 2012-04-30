@@ -100,14 +100,6 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * {@inheritdoc}
      */
-    public static function getDescription()
-    {
-        return 'Prints the feature as is.';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultParameters()
     {
         return array();

@@ -24,14 +24,6 @@ class SnippetsFormatter extends ProgressFormatter
     /**
      * {@inheritdoc}
      */
-    public static function getDescription()
-    {
-        return "Prints only snippets for undefined steps.";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultParameters()
     {
         return array();

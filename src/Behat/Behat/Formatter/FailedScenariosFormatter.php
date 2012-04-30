@@ -26,14 +26,6 @@ class FailedScenariosFormatter extends ConsoleFormatter
     /**
      * {@inheritdoc}
      */
-    public static function getDescription()
-    {
-        return "Prints list of failed scenarios.";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultParameters()
     {
         return array();

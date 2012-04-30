@@ -23,13 +23,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher,
 interface FormatterInterface extends EventSubscriberInterface
 {
     /**
-     * Returns formatter description (printed in Behat help).
-     *
-     * @return  string
-     */
-    static function getDescription();
-
-    /**
      * Set formatter translator.
      *
      * @param   Symfony\Component\Translation\Translator    $translator
