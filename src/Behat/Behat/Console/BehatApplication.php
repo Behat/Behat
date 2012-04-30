@@ -14,7 +14,8 @@ use Behat\Behat\DependencyInjection\BehatExtension,
     Behat\Behat\DependencyInjection\Compiler\GherkinPass,
     Behat\Behat\DependencyInjection\Compiler\ContextReaderPass,
     Behat\Behat\DependencyInjection\Compiler\EventDispatcherPass,
-    Behat\Behat\DependencyInjection\Compiler\CommandPass;
+    Behat\Behat\DependencyInjection\Compiler\CommandPass,
+    Behat\Behat\Extension\ExtensionInterface;
 
 /*
  * This file is part of the Behat.
@@ -31,6 +32,8 @@ use Behat\Behat\DependencyInjection\BehatExtension,
  */
 class BehatApplication extends Application
 {
+    private $configPath;
+
     /**
      * {@inheritdoc}
      */
@@ -66,6 +69,7 @@ class BehatApplication extends Application
         // construct container
         $container = new ContainerBuilder();
         $this->configureContainer($container, $input);
+        $this->loadExtensions($container);
 
         // compile and freeze container
         $container->compile();
@@ -134,26 +138,43 @@ class BehatApplication extends Application
         $container->addObjectResource($extension);
 
         if (file_exists($configFile)) {
+            $this->configPath  = dirname($configFile);
             $pathLocator = $container->getDefinition('behat.path_locator');
             $pathLocator->addMethodCall('setPathConstant', array(
                 'BEHAT_CONFIG_PATH', dirname($configFile)
             ));
         }
 
-        // load extensions
+        // add compiler passes
+        $container->addCompilerPass(new GherkinPass());
+        $container->addCompilerPass(new ContextReaderPass());
+        $container->addCompilerPass(new CommandPass());
+        $container->addCompilerPass(new EventDispatcherPass());
+    }
+
+    /**
+     * Loads Behat extensions.
+     *
+     * @param ContainerBuilder $container
+     */
+    public function loadExtensions(ContainerBuilder $container)
+    {
         foreach ($container->getParameter('behat.extensions') as $id => $config) {
+            if ($this->configPath) {
+                $id = str_replace('%%BEHAT_CONFIG_PATH%%', $this->configPath, $id);
+            }
+
             $extension = null;
             if (class_exists($id)) {
                 $extension = new $id;
             } elseif (file_exists($id)) {
-                $extension = require $id;
-            } elseif (file_exists($configFile)
-                   && file_exists($path = dirname($configFile).DIRECTORY_SEPARATOR.$id)) {
-                $extension = require $path;
+                $extension = require($id);
+            } elseif ($this->configPath && file_exists($this->configPath.DIRECTORY_SEPARATOR.$id)) {
+                $extension = require($this->configPath.DIRECTORY_SEPARATOR.$id);
             } else {
                 foreach (explode(':', get_include_path()) as $libPath) {
                     if (file_exists($libPath.DIRECTORY_SEPARATOR.$id)) {
-                        $extension = require $libPath.DIRECTORY_SEPARATOR.$id;
+                        $extension = require($libPath.DIRECTORY_SEPARATOR.$id);
                         break;
                     }
                 }
@@ -164,15 +185,14 @@ class BehatApplication extends Application
                     '"%s" extension could not be initialized.', $id
                 ));
             }
+            if (!$extension instanceof ExtensionInterface) {
+                throw new \InvalidArgumentException(sprintf(
+                    '"%s" extension should implement ExtensionInterface.', $id
+                ));
+            }
 
             $extension->load($config, $container);
         }
-
-        // add compiler passes
-        $container->addCompilerPass(new GherkinPass());
-        $container->addCompilerPass(new ContextReaderPass());
-        $container->addCompilerPass(new CommandPass());
-        $container->addCompilerPass(new EventDispatcherPass());
     }
 
     /**
