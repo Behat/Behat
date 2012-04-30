@@ -89,22 +89,6 @@ class BehatApplication extends Application
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getCommandName(InputInterface $input)
-    {
-        return 'behat';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTerminalWidth()
-    {
-        return PHP_INT_MAX;
-    }
-
-    /**
      * Configures container based on providen config file and profile.
      *
      * @param ContainerInterface $container container instance
@@ -159,7 +143,7 @@ class BehatApplication extends Application
      *
      * @param ContainerBuilder $container
      */
-    public function loadExtensions(ContainerBuilder $container)
+    protected function loadExtensions(ContainerBuilder $container)
     {
         foreach ($container->getParameter('behat.extensions') as $id => $config) {
             if ($this->configPath) {
@@ -195,6 +179,22 @@ class BehatApplication extends Application
 
             $extension->load($config, $container);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCommandName(InputInterface $input)
+    {
+        return 'behat';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTerminalWidth()
+    {
+        return PHP_INT_MAX;
     }
 
     /**
