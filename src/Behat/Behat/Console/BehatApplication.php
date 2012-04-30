@@ -16,6 +16,7 @@ use Behat\Behat\DependencyInjection\BehatExtension,
     Behat\Behat\DependencyInjection\Compiler\ContextReaderPass,
     Behat\Behat\DependencyInjection\Compiler\EventDispatcherPass,
     Behat\Behat\DependencyInjection\Compiler\CommandProcessorsPass,
+    Behat\Behat\DependencyInjection\Compiler\DefinitionProposalsPass,
     Behat\Behat\Extension\ExtensionInterface;
 
 /*
@@ -78,6 +79,7 @@ class BehatApplication extends Application
         $container->addCompilerPass(new FormattersPass());
         $container->addCompilerPass(new ContextReaderPass());
         $container->addCompilerPass(new EventDispatcherPass());
+        $container->addCompilerPass(new DefinitionProposalsPass());
 
         // compile and freeze container
         $container->compile();

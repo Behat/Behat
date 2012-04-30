@@ -190,21 +190,15 @@
 
         <!-- Definition Dispatcher -->
         <service id="behat.definition_dispatcher" class="%behat.definition_dispatcher.class%">
-            <argument type="service">
-                <service class="%behat.definition_proposal_dispatcher.class%">
-                    <call method="addProposal">
-                        <argument type="service">
-                            <service class="%behat.definition_proposal.closured.class%" />
-                        </argument>
-                    </call>
-                    <call method="addProposal">
-                        <argument type="service">
-                            <service class="%behat.definition_proposal.annotated.class%" />
-                        </argument>
-                    </call>
-                </service>
-            </argument>
+            <argument type="service" id="behat.definition_proposal_dispatcher" />
             <argument type="service" id="behat.translator" />
+        </service>
+        <service id="behat.definition_proposal_dispatcher" class="%behat.definition_proposal_dispatcher.class%" />
+        <service id="behat.definition_proposal.closured" class="%behat.definition_proposal.closured.class%">
+            <tag name="behat.definition_proposal" />
+        </service>
+        <service id="behat.definition_proposal.annotated" class="%behat.definition_proposal.annotated.class%">
+            <tag name="behat.definition_proposal" />
         </service>
 
         <!-- Tester -->
