@@ -85,10 +85,8 @@ abstract class BaseCommand extends Command
      */
     protected function configureProcessors()
     {
-        $container = $this->getContainer();
-
         foreach ($this->processors as $processor) {
-            $processor->configure($container, $this);
+            $processor->configure($this);
         }
 
         return $this;
@@ -101,10 +99,8 @@ abstract class BaseCommand extends Command
      */
     protected function processProcessors(InputInterface $input, OutputInterface $output)
     {
-        $container = $this->getContainer();
-
         foreach ($this->getProcessors() as $processor) {
-            $processor->process($container, $input, $output);
+            $processor->process($input, $output);
         }
 
         return $this;

@@ -8,8 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Formatter\FormatManager;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -23,14 +21,26 @@ use Behat\Behat\Formatter\FormatManager;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FormatProcessor implements ProcessorInterface
+class FormatProcessor extends Processor
 {
+    private $container;
+
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::configure()
+     * Constructs processor.
+     *
+     * @param ContainerInterface $container Container instance
      */
-    public function configure(ContainerInterface $container, Command $command)
+    public function __construct(ContainerInterface $container)
     {
-        $defaultFormatters = $container->get('behat.format_manager')->getFormatterClasses();
+        $this->container = $container;
+    }
+
+    /**
+     * @see ProcessorInterface::configure()
+     */
+    public function configure(Command $command)
+    {
+        $defaultFormatters = $this->container->get('behat.format_manager')->getFormatterClasses();
 
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
@@ -101,24 +111,24 @@ class FormatProcessor implements ProcessorInterface
     }
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::process()
+     * @see ProcessorInterface::process()
      */
-    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input, OutputInterface $output)
     {
-        $translator = $container->get('behat.translator');
-        $manager    = $container->get('behat.format_manager');
-        $locator    = $container->get('behat.path_locator');
+        $translator = $this->container->get('behat.translator');
+        $manager    = $this->container->get('behat.format_manager');
+        $locator    = $this->container->get('behat.path_locator');
         $formats    = array_map('trim', explode(',',
-            $input->getOption('format') ?: $container->getParameter('behat.formatter.name')
+            $input->getOption('format') ?: $this->container->getParameter('behat.formatter.name')
         ));
 
         // load formatters translations
-        foreach (require($container->getParameter('behat.paths.i18n')) as $lang => $messages) {
+        foreach (require($this->container->getParameter('behat.paths.i18n')) as $lang => $messages) {
             $translator->addResource('array', $messages, $lang, 'behat');
         }
 
         // add user-defined formatter classes to manager
-        foreach ($container->getParameter('behat.formatter.classes') as $name => $class) {
+        foreach ($this->container->getParameter('behat.formatter.classes') as $name => $class) {
             $manager->setFormatterClass($name, $class);
         }
 
@@ -128,7 +138,7 @@ class FormatProcessor implements ProcessorInterface
         }
 
         // set formatter options from behat.yml
-        foreach (($parameters = $container->getParameter('behat.formatter.parameters')) as $name => $value) {
+        foreach (($parameters = $this->container->getParameter('behat.formatter.parameters')) as $name => $value) {
             if ('output_path' === $name) {
                 continue;
             }

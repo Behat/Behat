@@ -23,12 +23,24 @@ use Behat\Behat\PathLocator;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class InitProcessor implements ProcessorInterface
+class InitProcessor extends Processor
 {
+    private $container;
+
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::confiugre()
+     * Constructs processor.
+     *
+     * @param ContainerInterface $container Container instance
      */
-    public function configure(ContainerInterface $container, Command $command)
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @see ProcessorInterface::confiugre()
+     */
+    public function configure(Command $command)
     {
         $command->addOption('--init', null, InputOption::VALUE_NONE,
             "Create <comment>features</comment> directory structure.\n"
@@ -36,12 +48,12 @@ class InitProcessor implements ProcessorInterface
     }
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::process()
+     * @see ProcessorInterface::process()
      */
-    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input, OutputInterface $output)
     {
         if ($input->getOption('init')) {
-            $this->initFeaturesDirectoryStructure($container->get('behat.path_locator'), $output);
+            $this->initFeaturesDirectoryStructure($this->container->get('behat.path_locator'), $output);
 
             exit(0);
         }

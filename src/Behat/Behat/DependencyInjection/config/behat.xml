@@ -128,24 +128,31 @@
 
         <!-- Processors -->
         <service id="behat.processor.locator" class="%behat.processor.locator.class%">
+            <argument type="service" id="service_container" />
             <tag name="behat.processor" />
         </service>
         <service id="behat.processor.init" class="%behat.processor.init.class%">
+            <argument type="service" id="service_container" />
             <tag name="behat.processor" />
         </service>
         <service id="behat.processor.context" class="%behat.processor.context.class%">
+            <argument type="service" id="service_container" />
             <tag name="behat.processor" />
         </service>
         <service id="behat.processor.format" class="%behat.processor.format.class%">
+            <argument type="service" id="service_container" />
             <tag name="behat.processor" />
         </service>
         <service id="behat.processor.help" class="%behat.processor.help.class%">
+            <argument type="service" id="service_container" />
             <tag name="behat.processor" />
         </service>
         <service id="behat.processor.gherkin" class="%behat.processor.gherkin.class%">
+            <argument type="service" id="service_container" />
             <tag name="behat.processor" />
         </service>
         <service id="behat.processor.run" class="%behat.processor.run.class%">
+            <argument type="service" id="service_container" />
             <tag name="behat.processor" />
         </service>
 

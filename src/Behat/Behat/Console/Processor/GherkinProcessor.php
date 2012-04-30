@@ -25,12 +25,24 @@ use Behat\Gherkin\Filter\NameFilter,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GherkinProcessor implements ProcessorInterface
+class GherkinProcessor extends Processor
 {
+    private $container;
+
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::confiugre()
+     * Constructs processor.
+     *
+     * @param ContainerInterface $container Container instance
      */
-    public function configure(ContainerInterface $container, Command $command)
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @see ProcessorInterface::confiugre()
+     */
+    public function configure(Command $command)
     {
         $command
             ->addOption('--name', null, InputOption::VALUE_REQUIRED,
@@ -48,23 +60,23 @@ class GherkinProcessor implements ProcessorInterface
     }
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::process()
+     * @see ProcessorInterface::process()
      */
-    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input, OutputInterface $output)
     {
-        $gherkinParser = $container->get('gherkin');
+        $gherkinParser = $this->container->get('gherkin');
 
-        if ($name = ($input->getOption('name') ?: $container->getParameter('gherkin.filters.name'))) {
+        if ($name = ($input->getOption('name') ?: $this->container->getParameter('gherkin.filters.name'))) {
             $gherkinParser->addFilter(new NameFilter($name));
         }
 
-        if ($tags = ($input->getOption('tags') ?: $container->getParameter('gherkin.filters.tags'))) {
+        if ($tags = ($input->getOption('tags') ?: $this->container->getParameter('gherkin.filters.tags'))) {
             $gherkinParser->addFilter(new TagFilter($tags));
         }
 
-        if ($path = ($input->getOption('cache') ?: $container->getParameter('behat.options.cache'))) {
+        if ($path = ($input->getOption('cache') ?: $this->container->getParameter('behat.options.cache'))) {
             $cache = new FileCache($path);
-            $container->get('gherkin.loader.gherkin')->setCache($cache);
+            $this->container->get('gherkin.loader.gherkin')->setCache($cache);
         }
     }
 }

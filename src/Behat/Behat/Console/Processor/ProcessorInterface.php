@@ -2,8 +2,7 @@
 
 namespace Behat\Behat\Console\Processor;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Console\Command\Command,
+use Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface;
 
@@ -25,17 +24,15 @@ interface ProcessorInterface
     /**
      * Configures command to be able to process it later.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     * @param   Symfony\Component\Console\Command\Command                   $command    command instance to configure
+     * @param Command $command Command instance to configure
      */
-    function configure(ContainerInterface $container, Command $command);
+    function configure(Command $command);
 
     /**
      * Processes data from container and console input.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
-     * @param   Symfony\Component\Console\Input\InputInterface              $input      console input
-     * @param   Symfony\Component\Console\Output\OutputInterface            $output     console output
+     * @param InputInterface  $input  Console input
+     * @param OutputInterface $output Console output
      */
-    function process(ContainerInterface $container, InputInterface $input, OutputInterface $output);
+    function process(InputInterface $input, OutputInterface $output);
 }

@@ -21,12 +21,24 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class LocatorProcessor implements ProcessorInterface
+class LocatorProcessor extends Processor
 {
+    private $container;
+
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::command()
+     * Constructs processor.
+     *
+     * @param ContainerInterface $container Container instance
      */
-    public function configure(ContainerInterface $container, Command $command)
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @see ProcessorInterface::command()
+     */
+    public function configure(Command $command)
     {
         $command->addArgument('features', InputArgument::OPTIONAL,
             "Feature(s) to run. Could be:\n" .
@@ -39,12 +51,12 @@ class LocatorProcessor implements ProcessorInterface
     }
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::process()
+     * @see ProcessorInterface::process()
      */
-    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input, OutputInterface $output)
     {
-        $container->get('behat.runner')->setLocatorBasePath($input->getArgument('features'));
-        $locator = $container->get('behat.path_locator');
+        $this->container->get('behat.runner')->setLocatorBasePath($input->getArgument('features'));
+        $locator = $this->container->get('behat.path_locator');
 
         foreach ($locator->locateBootstrapFilesPaths() as $path) {
             require_once($path);

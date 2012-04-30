@@ -20,21 +20,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextProcessor implements ProcessorInterface
+class ContextProcessor extends Processor
 {
+    private $container;
+
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::configure()
+     * Constructs processor.
+     *
+     * @param ContainerInterface $container Container instance
      */
-    public function configure(ContainerInterface $container, Command $command)
+    public function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
     }
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::process()
+     * @see ProcessorInterface::process()
      */
-    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input, OutputInterface $output)
     {
-        $contextClass = $container->getParameter('behat.context.class');
-        $container->get('behat.runner')->setMainContextClass($contextClass);
+        $contextClass = $this->container->getParameter('behat.context.class');
+        $this->container->get('behat.runner')->setMainContextClass($contextClass);
     }
 }
