@@ -6,7 +6,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Console\Input\InputDefinition;
+use Behat\Behat\Console\Input\InputDefinition,
+    Behat\Behat\Console\Processor\ProcessorInterface;
 
 /*
  * This file is part of the Behat.
@@ -30,14 +31,13 @@ class BehatCommand extends BaseCommand
      */
     private $container;
 
-    public function __construct(ContainerInterface $container, array $processors)
+    public function __construct(ContainerInterface $container, ProcessorInterface $processor)
     {
         parent::__construct('behat');
 
         $this->container = $container;
         $this->setDefinition(new InputDefinition);
-        $this->setProcessors($processors);
-        $this->configureProcessors();
+        $this->setProcessor($processor);
     }
 
     /**

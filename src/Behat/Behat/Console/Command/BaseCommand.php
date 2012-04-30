@@ -23,53 +23,7 @@ use Behat\Behat\Console\Processor\ProcessorInterface;
  */
 abstract class BaseCommand extends Command
 {
-    /**
-     * List of command processors.
-     *
-     * @var     array
-     */
-    private $processors = array();
-
-    /**
-     * Sets command processors.
-     *
-     * @param   array   $processors
-     *
-     * @return  Symfony\Component\Console\Command\Command
-     */
-    protected function setProcessors(array $processors)
-    {
-        $this->processors = array();
-        foreach ($processors as $processor) {
-            $this->addProcessor($processor);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds single processor to the list.
-     *
-     * @param   Behat\Behat\Console\Processor\ProcessorInterface    $processor
-     *
-     * @return  Symfony\Component\Console\Command\Command
-     */
-    protected function addProcessor(ProcessorInterface $processor)
-    {
-        $this->processors[] = $processor;
-
-        return $this;
-    }
-
-    /**
-     * Returns list of processors.
-     *
-     * @return  array
-     */
-    protected function getProcessors()
-    {
-        return $this->processors;
-    }
+    private $processor;
 
     /**
      * Returns service container instance.
@@ -79,29 +33,16 @@ abstract class BaseCommand extends Command
     abstract protected function getContainer();
 
     /**
-     * Configures processors with current command.
+     * Sets command processor.
+     *
+     * @param   Behat\Behat\Console\Processor\ProcessorInterface    $processor
      *
      * @return  Symfony\Component\Console\Command\Command
      */
-    protected function configureProcessors()
+    protected function setProcessor(ProcessorInterface $processor)
     {
-        foreach ($this->processors as $processor) {
-            $processor->configure($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Processes processors with current input.
-     *
-     * @return  Symfony\Component\Console\Command\Command
-     */
-    protected function processProcessors(InputInterface $input, OutputInterface $output)
-    {
-        foreach ($this->getProcessors() as $processor) {
-            $processor->process($input, $output);
-        }
+        $this->processor = $processor;
+        $this->processor->configure($this);
 
         return $this;
     }
@@ -111,6 +52,6 @@ abstract class BaseCommand extends Command
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $this->processProcessors($input, $output);
+        $this->processor->process($input, $output);
     }
 }

@@ -14,7 +14,7 @@ use Behat\Behat\DependencyInjection\BehatExtension,
     Behat\Behat\DependencyInjection\Compiler\GherkinPass,
     Behat\Behat\DependencyInjection\Compiler\ContextReaderPass,
     Behat\Behat\DependencyInjection\Compiler\EventDispatcherPass,
-    Behat\Behat\DependencyInjection\Compiler\CommandPass,
+    Behat\Behat\DependencyInjection\Compiler\CommandProcessorsPass,
     Behat\Behat\Extension\ExtensionInterface;
 
 /*
@@ -148,7 +148,7 @@ class BehatApplication extends Application
         // add compiler passes
         $container->addCompilerPass(new GherkinPass());
         $container->addCompilerPass(new ContextReaderPass());
-        $container->addCompilerPass(new CommandPass());
+        $container->addCompilerPass(new CommandProcessorsPass());
         $container->addCompilerPass(new EventDispatcherPass());
     }
 
