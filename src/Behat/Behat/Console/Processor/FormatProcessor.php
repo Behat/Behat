@@ -50,7 +50,15 @@ class FormatProcessor extends Processor
                 "Default formatters are:\n" .
                 implode("\n",
                     array_map(function($dispatcher) {
-                        return '- <comment>'.$dispatcher->getName().'</comment>: '.$dispatcher->getDescription();
+                        $comment = '- <comment>'.$dispatcher->getName().'</comment>: ';
+
+                        if ($dispatcher->getDescription()) {
+                            $comment .= $dispatcher->getDescription();
+                        } else {
+                            $comment .= $dispatcher->getClass();
+                        }
+
+                        return $comment;
                     }, $formatDispatchers)
                 ) . "\n" .
                 "Can use multiple formats at once (splitted with \"<comment>,</comment>\")"
