@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\DependencyInjection;
+namespace Behat\Behat\DependencyInjection\Configuration;
 
 use Symfony\Component\Yaml\Yaml;
 
@@ -17,7 +17,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author      Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConfigurationReader
+class Loader
 {
     private $configFile;
     private $profile;

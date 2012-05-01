@@ -32,7 +32,7 @@ class BehatExtension implements ExtensionInterface
     public function __construct()
     {
         $this->processor     = new Processor();
-        $this->configuration = new Configuration();
+        $this->configuration = new Configuration\Configuration();
     }
 
     /**

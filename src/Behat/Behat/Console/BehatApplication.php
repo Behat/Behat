@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\DependencyInjection\BehatExtension,
-    Behat\Behat\DependencyInjection\ConfigurationReader,
+    Behat\Behat\DependencyInjection\Configuration\Loader,
     Behat\Behat\DependencyInjection\Compiler\GherkinPass,
     Behat\Behat\DependencyInjection\Compiler\FormattersPass,
     Behat\Behat\DependencyInjection\Compiler\ContextReaderPass,
@@ -69,7 +69,7 @@ class BehatApplication extends Application
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        // construct container
+        // construct container and load extensions
         $container = new ContainerBuilder();
         $this->configureContainer($container, $input);
         $this->loadExtensions($container);
@@ -115,8 +115,8 @@ class BehatApplication extends Application
         }
 
         // read configuration
-        $configReader = new ConfigurationReader($configFile);
-        $configs      = $configReader->loadConfiguration($profile);
+        $loader  = new Loader($configFile);
+        $configs = $loader->loadConfiguration($profile);
 
         // configure container
         $extension->load($configs, $container);

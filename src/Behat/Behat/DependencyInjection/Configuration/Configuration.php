@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\DependencyInjection;
+namespace Behat\Behat\DependencyInjection\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\NodeBuilder,
     Symfony\Component\Config\Definition\Builder\TreeBuilder;
