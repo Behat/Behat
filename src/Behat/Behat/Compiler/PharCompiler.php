@@ -142,7 +142,7 @@ define('BEHAT_BIN_PATH',     __FILE__);
 define('BEHAT_VERSION',      '%s');
 
 Phar::mapPhar('behat.phar');
-require_once 'phar://behat.phar/vendor/.composer/autoload.php';
+require_once 'phar://behat.phar/vendor/autoload.php';
 
 // internal encoding to utf8
 mb_internal_encoding('utf8');
