@@ -162,7 +162,7 @@ class BehatApplication extends Application
 
             if (null === $extension) {
                 throw new \InvalidArgumentException(sprintf(
-                    '"%s" extension could not be initialized.', $id
+                    '"%s" extension could not be found.', $id
                 ));
             }
             if (!$extension instanceof ExtensionInterface) {
