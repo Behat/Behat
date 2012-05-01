@@ -118,9 +118,13 @@ class BehatApplication extends Application
         $loader  = new Loader($configFile);
         $configs = $loader->loadConfiguration($profile);
 
-        // configure container
-        $extension->load($configs, $container);
-        $container->addObjectResource($extension);
+        // load core extension into temp container
+        $tempContainer = new ContainerBuilder();
+        $extension->load($configs, $tempContainer);
+        $tempContainer->addObjectResource($extension);
+
+        // merge temp container into main
+        $container->merge($tempContainer);
 
         // set PathLocator path constant
         if (file_exists($configFile)) {
@@ -171,7 +175,13 @@ class BehatApplication extends Application
                 ));
             }
 
-            $extension->load($config, $container);
+            // load extension into temp container
+            $tempContainer = new ContainerBuilder();
+            $extension->load(array($config), $tempContainer);
+            $tempContainer->addObjectResource($extension);
+
+            // merge temp container into main
+            $container->merge($tempContainer);
         }
     }
 
