@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\DependencyInjection\BehatExtension,
+    Behat\Behat\DependencyInjection\ConfigurationReader,
     Behat\Behat\DependencyInjection\Compiler\GherkinPass,
     Behat\Behat\DependencyInjection\Compiler\FormattersPass,
     Behat\Behat\DependencyInjection\Compiler\ContextReaderPass,
@@ -116,16 +117,9 @@ class BehatApplication extends Application
             }
         }
 
-        // read and normalize raw parameters string from env
-        if ($config = getenv('BEHAT_PARAMS')) {
-            parse_str($config, $config);
-            $configs[] = $this->normalizeRawConfiguration($config);
-        }
-
-        // read configuration file
-        if (file_exists($configFile)) {
-            $configs[] = $extension->readConfigurationFile($configFile, $profile, $container);
-        }
+        // read configuration
+        $configReader = new ConfigurationReader($configFile);
+        $configs      = $configReader->loadConfiguration($profile);
 
         // configure container
         $extension->load($configs, $container);
@@ -197,41 +191,5 @@ class BehatApplication extends Application
     protected function getTerminalWidth()
     {
         return PHP_INT_MAX;
-    }
-
-    /**
-     * Normalizes provided raw configuration.
-     *
-     * @param array $config raw configuration
-     *
-     * @return array
-     */
-    private function normalizeRawConfiguration(array $config)
-    {
-        $normalize = function($value) {
-            if ('true' === $value || 'false' === $value) {
-                return 'true' === $value;
-            }
-
-            if (is_numeric($value)) {
-                return ctype_digit($value) ? intval($value) : floatval($value);
-            }
-
-            return $value;
-        };
-
-        if (isset($config['formatter']['parameters'])) {
-            $config['formatter']['parameters'] = array_map(
-                $normalize, $config['formatter']['parameters']
-            );
-        }
-
-        if (isset($config['context']['parameters'])) {
-            $config['context']['parameters'] = array_map(
-                $normalize, $config['context']['parameters']
-            );
-        }
-
-        return $config;
     }
 }
