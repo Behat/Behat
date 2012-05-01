@@ -22,12 +22,17 @@ interface ExtensionInterface
     /**
      * Loads a specific configuration.
      *
-     * @param array            $config    An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
+     * @param array            $config    Configuration hash
+     * @param ContainerBuilder $container ContainerBuilder instance
      *
      * @throws InvalidArgumentException When provided tag is not defined in this extension
-     *
-     * @api
      */
     function load(array $config, ContainerBuilder $container);
+
+    /**
+     * Returns compiler passes used by this extension.
+     *
+     * @return array
+     */
+    function getCompilerPasses();
 }

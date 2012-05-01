@@ -173,11 +173,16 @@ class BehatApplication extends Application
 
             // load extension into temp container
             $tempContainer = new ContainerBuilder();
-            $extension->load(array($config), $tempContainer);
+            $extension->load($config, $tempContainer);
             $tempContainer->addObjectResource($extension);
 
             // merge temp container into main
             $container->merge($tempContainer);
+
+            // add extension compiler passes
+            foreach ($extension->getCompilerPasses() as $pass) {
+                $container->addCompilerPass($pass);
+            }
         }
     }
 
