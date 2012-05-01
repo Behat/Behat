@@ -105,15 +105,12 @@ class BehatApplication extends Application
         $profile    = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
         $configs    = array();
 
+        // check for config file in FS if no provided
         if (!$configFile) {
             if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
                 $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml';
             } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml.dist')) {
                 $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml.dist';
-            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml')) {
-                $configFile = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml';
-            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml.dist')) {
-                $configFile = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml.dist';
             }
         }
 
@@ -125,8 +122,9 @@ class BehatApplication extends Application
         $extension->load($configs, $container);
         $container->addObjectResource($extension);
 
+        // set PathLocator path constant
         if (file_exists($configFile)) {
-            $this->configPath  = dirname($configFile);
+            $this->configPath = dirname($configFile);
             $pathLocator = $container->getDefinition('behat.path_locator');
             $pathLocator->addMethodCall('setPathConstant', array(
                 'BEHAT_CONFIG_PATH', dirname($configFile)
