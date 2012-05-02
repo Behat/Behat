@@ -60,7 +60,11 @@ class FormatManager
     /**
      * Inits specific formatter class by format name.
      *
-     * @param   string  $name
+     * @param string $name
+     *
+     * @return array
+     *
+     * @throws \RuntimeException
      */
     public function initFormatter($name)
     {
@@ -86,8 +90,8 @@ class FormatManager
     /**
      * Sets specific parameter in all initialized formatters.
      *
-     * @param   string  $param  parameter name
-     * @param   mixed   $value  parameter value
+     * @param string $param
+     * @param mixed  $value
      */
     public function setFormattersParameter($param, $value)
     {
@@ -99,7 +103,7 @@ class FormatManager
     /**
      * Returns all initialized formatters.
      *
-     * @return  array
+     * @return array
      */
     public function getFormatters()
     {

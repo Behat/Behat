@@ -30,6 +30,8 @@ class FormatterDispatcher
      * @param string $class       Formatter class
      * @param string $name        Name of the formatter
      * @param string $description Formatter description
+     *
+     * @throws \RuntimeException
      */
     public function __construct($class, $name = null, $description = null)
     {

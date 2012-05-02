@@ -2,9 +2,7 @@
 
 namespace Behat\Behat\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface,
+use Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Component\Translation\Translator;
 
 /*
@@ -25,33 +23,33 @@ interface FormatterInterface extends EventSubscriberInterface
     /**
      * Set formatter translator.
      *
-     * @param   Symfony\Component\Translation\Translator    $translator
+     * @param Translator $translator
      */
     function setTranslator(Translator $translator);
 
     /**
      * Checks if current formatter has parameter.
      *
-     * @param   string  $name
+     * @param string $name
      *
-     * @return  boolean
+     * @return Boolean
      */
     function hasParameter($name);
 
     /**
      * Sets formatter parameter.
      *
-     * @param   string  $name   parameter name
-     * @param   mixed   $value  parameter value
+     * @param string $name
+     * @param mixed  $value
      */
     function setParameter($name, $value);
 
     /**
      * Returns parameter value.
      *
-     * @param   string  $name   parameter name
+     * @param string $name
      *
-     * @return  mixed
+     * @return mixed
      */
     function getParameter($name);
 }

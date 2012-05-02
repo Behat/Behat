@@ -32,7 +32,22 @@ class FailedScenariosFormatter extends ConsoleFormatter
     }
 
     /**
-     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+     *
+     * @return array The event names to listen to
      */
     public static function getSubscribedEvents()
     {
@@ -44,7 +59,7 @@ class FailedScenariosFormatter extends ConsoleFormatter
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Behat\Behat\Event\ScenarioEvent     $event
+     * @param ScenarioEvent $event
      */
     public function afterScenario(ScenarioEvent $event)
     {
@@ -57,7 +72,7 @@ class FailedScenariosFormatter extends ConsoleFormatter
     /**
      * Listens to "outline.after" event.
      *
-     * @param   Behat\Behat\Event\ScenarioEvent     $event
+     * @param OutlineEvent $event
      */
     public function afterOutline(OutlineEvent $event)
     {

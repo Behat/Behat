@@ -35,7 +35,7 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * Deffered footer template part.
      *
-     * @var     string
+     * @var string
      */
     protected $footer;
 
@@ -552,7 +552,7 @@ HTML
     /**
      * Get HTML template.
      *
-     * @return  string
+     * @return string
      */
     protected function getHtmlTemplate()
     {
@@ -592,7 +592,7 @@ HTML
     /**
      * Get HTML template style.
      *
-     * @return  string
+     * @return string
      */
     protected function getHtmlTemplateStyle()
     {
@@ -867,7 +867,7 @@ HTMLTPL;
     /**
      * Get HTML template style.
      *
-     * @return  string
+     * @return string
      */
     protected function getHtmlTemplatePrintStyle()
     {
@@ -924,7 +924,7 @@ HTMLTPL;
     /**
      * Get HTML template script.
      *
-     * @return  string
+     * @return string
      */
     protected function getHtmlTemplateScript()
     {
