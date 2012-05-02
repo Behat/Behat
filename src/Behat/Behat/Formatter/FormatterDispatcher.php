@@ -16,7 +16,7 @@ use Symfony\Component\Translation\Translator,
 /**
  * Formatter dispatcher.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FormatterDispatcher
 {

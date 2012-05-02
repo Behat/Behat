@@ -15,15 +15,15 @@ use Behat\Behat\Definition\DefinitionInterface;
 /**
  * Redundant exception.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class RedundantException extends BehaviorException
 {
     /**
      * Initializes redundant exception.
      *
-     * @param   Behat\Behat\Definition\DefinitionInterface  $step2    duplicate step definition
-     * @param   Behat\Behat\Definition\DefinitionInterface  $step1    firstly matched step definition
+     * @param DefinitionInterface $step2 duplicate step definition
+     * @param DefinitionInterface $step1 firstly matched step definition
      */
     public function __construct(DefinitionInterface $step2, DefinitionInterface $step1)
     {

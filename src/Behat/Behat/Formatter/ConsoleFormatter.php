@@ -24,7 +24,7 @@ use Behat\Behat\Event\StepEvent,
 /**
  * Console formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class ConsoleFormatter implements FormatterInterface
 {

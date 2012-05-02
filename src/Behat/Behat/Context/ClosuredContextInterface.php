@@ -13,7 +13,7 @@ namespace Behat\Behat\Context;
 /**
  * Closured context interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface ClosuredContextInterface extends ContextInterface
 {

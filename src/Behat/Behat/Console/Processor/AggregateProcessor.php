@@ -17,7 +17,7 @@ use Symfony\Component\Console\Command\Command,
 /**
  * Processors manager.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class AggregateProcessor implements ProcessorInterface
 {
@@ -34,7 +34,9 @@ class AggregateProcessor implements ProcessorInterface
     }
 
     /**
-     * @see ProcessorInterface::configure()
+     * Configures command to be able to process it later.
+     *
+     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -44,7 +46,10 @@ class AggregateProcessor implements ProcessorInterface
     }
 
     /**
-     * @see ProcessorInterface::process()
+     * Processes data from container and console input.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
     public function process(InputInterface $input, OutputInterface $output)
     {

@@ -21,7 +21,7 @@ use Behat\Behat\Formatter\FormatterDispatcher;
 /**
  * Format processor.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FormatProcessor extends Processor
 {
@@ -38,7 +38,9 @@ class FormatProcessor extends Processor
     }
 
     /**
-     * @see ProcessorInterface::configure()
+     * Configures command to be able to process it later.
+     *
+     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -120,7 +122,10 @@ class FormatProcessor extends Processor
     }
 
     /**
-     * @see ProcessorInterface::process()
+     * Processes data from container and console input.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
@@ -235,24 +240,5 @@ class FormatProcessor extends Processor
                 }
             }
         }
-    }
-
-    /**
-     * Returns correct value for input switch.
-     *
-     * @param InputInterface $input
-     * @param string         $name
-     *
-     * return Boolean|null
-     */
-    protected function getSwitchValue(InputInterface $input, $name)
-    {
-        if ($input->getOption($name)) {
-            return true;
-        } elseif ($input->getOption('no-'.$name)) {
-            return false;
-        }
-
-        return null;
     }
 }

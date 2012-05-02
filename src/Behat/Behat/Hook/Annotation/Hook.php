@@ -18,14 +18,16 @@ use Behat\Behat\Context\ContextInterface,
 /**
  * Base hook class.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class Hook extends Annotation implements HookInterface
 {
     /**
      * Constructs annotation.
      *
-     * @param   callback    $callback
+     * @param callback $callback
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct($callback)
     {
@@ -39,7 +41,9 @@ abstract class Hook extends Annotation implements HookInterface
     }
 
     /**
-     * @see     Behat\Behat\Hook\HookInterface::run()
+     * Runs hook callback.
+     *
+     * @param EventInterface $event
      */
     public function run(EventInterface $event)
     {

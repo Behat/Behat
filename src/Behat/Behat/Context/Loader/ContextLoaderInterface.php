@@ -15,21 +15,23 @@ use Behat\Behat\Context\ContextInterface;
 /**
  * Context loader interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface ContextLoaderInterface
 {
     /**
      * Checks if loader supports provided context.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context
+     * @param ContextInterface $context
+     *
+     * @return Boolean
      */
     function supports(ContextInterface $context);
 
     /**
      * Loads definitions and translations from provided context.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context
+     * @param ContextInterface $context
      */
     function load(ContextInterface $context);
 }

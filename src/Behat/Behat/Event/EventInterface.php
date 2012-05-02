@@ -13,7 +13,7 @@ namespace Behat\Behat\Event;
 /**
  * Behat event interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface EventInterface
 {

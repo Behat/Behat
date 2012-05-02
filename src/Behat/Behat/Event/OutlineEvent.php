@@ -17,7 +17,7 @@ use Behat\Gherkin\Node\OutlineNode;
 /**
  * Outline event.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class OutlineEvent extends Event implements EventInterface
 {
@@ -27,8 +27,8 @@ class OutlineEvent extends Event implements EventInterface
     /**
      * Initializes outline event.
      *
-     * @param   Behat\Gherkin\Node\OutlineNode  $outline
-     * @param   integer                         $result
+     * @param OutlineNode $outline
+     * @param integer     $result
      */
     public function __construct(OutlineNode $outline, $result = null)
     {
@@ -39,7 +39,7 @@ class OutlineEvent extends Event implements EventInterface
     /**
      * Returns outline node.
      *
-     * @return  Behat\Gherkin\Node\OutlineNode
+     * @return OutlineNode
      */
     public function getOutline()
     {
@@ -49,7 +49,7 @@ class OutlineEvent extends Event implements EventInterface
     /**
      * Returns outline tester result code.
      *
-     * @return  integer
+     * @return integer
      */
     public function getResult()
     {

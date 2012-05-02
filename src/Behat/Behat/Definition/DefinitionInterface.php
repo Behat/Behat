@@ -2,7 +2,8 @@
 
 namespace Behat\Behat\Definition;
 
-use Behat\Behat\Context\ContextInterface;
+use Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Exception\BehaviorException;
 
 /*
  * This file is part of the Behat.
@@ -15,23 +16,25 @@ use Behat\Behat\Context\ContextInterface;
 /**
  * Step definition.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface DefinitionInterface
 {
     /**
      * Returns definition type (Given|When|Then).
      *
-     * @return  string
+     * @return string
      */
     function getType();
 
     /**
      * Runs definition callback.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context    context object
+     * @param ContextInterface $context
      *
-     * @throws  Behat\Behat\Exception\BehaviorException             if step test fails
+     * @return mixed
+     *
+     * @throws BehaviorException
      */
     function run(ContextInterface $context);
 }

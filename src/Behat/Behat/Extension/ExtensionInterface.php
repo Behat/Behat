@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Behat extension interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface ExtensionInterface
 {
@@ -25,7 +25,7 @@ interface ExtensionInterface
      * @param array            $config    Configuration hash
      * @param ContainerBuilder $container ContainerBuilder instance
      *
-     * @throws InvalidArgumentException When provided tag is not defined in this extension
+     * @throws \InvalidArgumentException When provided tag is not defined in this extension
      */
     function load(array $config, ContainerBuilder $container);
 

@@ -13,7 +13,7 @@ namespace Behat\Behat\Exception;
 /**
  * Error handler exception.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ErrorException extends BehaviorException
 {
@@ -30,10 +30,10 @@ class ErrorException extends BehaviorException
     /**
      * Initializes error handler exception.
      *
-     * @param   string  $level      error level
-     * @param   string  $message    error message
-     * @param   string  $file       error file
-     * @param   string  $line       error line
+     * @param string $level   error level
+     * @param string $message error message
+     * @param string $file    error file
+     * @param string $line    error line
      */
     public function __construct($level, $message, $file, $line)
     {

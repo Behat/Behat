@@ -13,14 +13,14 @@ namespace Behat\Behat\Hook\Loader;
 /**
  * Hook loader interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface HookLoaderInterface
 {
     /**
      * Loads definitions from provided resource.
      *
-     * @param   mixed   $resource
+     * @param mixed $resource
      */
     function load($resource);
 }

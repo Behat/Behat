@@ -21,27 +21,12 @@ use Behat\Behat\Context\ContextInterface,
 /**
  * Annotated contexts reader.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class AnnotatedContextLoader implements ContextLoaderInterface
 {
-    /**
-     * Step definitions dispatcher.
-     *
-     * @var     Behat\Behat\Definition\DefinitionDispatcher
-     */
     private $definitionDispatcher;
-    /**
-     * Hooks dispatcher.
-     *
-     * @var     Behat\Behat\Hook\HookDispatcher
-     */
     private $hookDispatcher;
-    /**
-     * List of available annotations.
-     *
-     * @var     array
-     */
     private $annotationClasses = array(
         'given'          => 'Behat\Behat\Definition\Annotation\Given',
         'when'           => 'Behat\Behat\Definition\Annotation\When',
@@ -56,18 +41,13 @@ class AnnotatedContextLoader implements ContextLoaderInterface
         'beforestep'     => 'Behat\Behat\Hook\Annotation\BeforeStep',
         'afterstep'      => 'Behat\Behat\Hook\Annotation\AfterStep'
     );
-    /**
-     * String with all available annotations, splitted with "|".
-     *
-     * @var     string
-     */
     private $availableAnnotations;
 
     /**
      * Initializes context loader.
      *
-     * @param   Behat\Behat\Definition\DefinitionDispatcher         $definitionDispatcher   definitions
-     * @param   Behat\Behat\Hook\HookDispatcher                     $hookDispatcher         hooks
+     * @param DefinitionDispatcher $definitionDispatcher
+     * @param HookDispatcher       $hookDispatcher
      */
     public function __construct(DefinitionDispatcher $definitionDispatcher, HookDispatcher $hookDispatcher)
     {
@@ -77,7 +57,11 @@ class AnnotatedContextLoader implements ContextLoaderInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\Loader\ContextLoaderInterface::supports()
+     * Checks if loader supports provided context.
+     *
+     * @param ContextInterface $context
+     *
+     * @return Boolean
      */
     public function supports(ContextInterface $context)
     {
@@ -85,7 +69,9 @@ class AnnotatedContextLoader implements ContextLoaderInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\Loader\ContextLoaderInterface::load()
+     * Loads definitions and translations from provided context.
+     *
+     * @param ContextInterface $context
      */
     public function load(ContextInterface $context)
     {
@@ -107,8 +93,10 @@ class AnnotatedContextLoader implements ContextLoaderInterface
     /**
      * Reads all supported method annotations.
      *
-     * @param   stirng              $className  method class name
-     * @param   ReflectionMethod    $method     method reflection
+     * @param stirng            $className
+     * @param \ReflectionMethod $method
+     *
+     * @return array
      */
     private function readMethodAnnotations($className, \ReflectionMethod $method)
     {

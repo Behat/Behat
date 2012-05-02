@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface,
 /**
  * Behat service container extension.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BehatExtension implements ExtensionInterface
 {

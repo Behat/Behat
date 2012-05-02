@@ -19,7 +19,7 @@ use Behat\Behat\Console\Processor\ProcessorInterface;
 /**
  * Base behat console command.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class BaseCommand extends Command
 {
@@ -28,16 +28,16 @@ abstract class BaseCommand extends Command
     /**
      * Returns service container instance.
      *
-     * @return  Symfony\Component\DependencyInjection\ContainerInterface
+     * @return ContainerInterface
      */
     abstract protected function getContainer();
 
     /**
      * Sets command processor.
      *
-     * @param   Behat\Behat\Console\Processor\ProcessorInterface    $processor
+     * @param ProcessorInterface $processor
      *
-     * @return  Symfony\Component\Console\Command\Command
+     * @return Command
      */
     protected function setProcessor(ProcessorInterface $processor)
     {

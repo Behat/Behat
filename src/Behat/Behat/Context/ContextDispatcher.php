@@ -13,27 +13,17 @@ namespace Behat\Behat\Context;
 /**
  * Context dispatcher.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ContextDispatcher
 {
-    /**
-     * Context class name.
-     *
-     * @var     string
-     */
     private $contextClass;
-    /**
-     * Context initialization parameters.
-     *
-     * @var     array
-     */
     private $parameters = array();
 
     /**
      * Initialize dispatcher.
      *
-     * @param   array   $parameters context parameters
+     * @param array $parameters context parameters
      */
     public function __construct(array $parameters = array())
     {
@@ -43,7 +33,9 @@ class ContextDispatcher
     /**
      * Sets context class name.
      *
-     * @param   string  $className      context class name
+     * @param string $className
+     *
+     * @throws \InvalidArgumentException
      */
     public function setContextClass($className)
     {
@@ -82,9 +74,11 @@ class ContextDispatcher
     }
 
     /**
-     * Create new context instance.
+     * Creates new context instance.
      *
-     * @return  Behat\Behat\Context\ContextInterface
+     * @return ContextInterface
+     *
+     * @throws \RuntimeException
      */
     public function createContext()
     {

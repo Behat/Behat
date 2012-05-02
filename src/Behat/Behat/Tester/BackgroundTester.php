@@ -22,45 +22,20 @@ use Behat\Behat\Context\ContextInterface,
 /**
  * Background tester.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BackgroundTester implements NodeVisitorInterface
 {
-    /**
-     * Logical parent of the step.
-     *
-     * @var     Behat\Gherkin\Node\ScenarioNode
-     */
     private $logicalParent;
-    /**
-     * Service container.
-     *
-     * @var     Symfony\Component\DependencyInjection\ContainerInterface
-     */
     private $container;
-    /**
-     * Event dispatcher.
-     *
-     * @var     Behat\Behat\EventDispatcher\EventDispatcher
-     */
     private $dispatcher;
-    /**
-     * Context.
-     *
-     * @var     Behat\Behat\Context\ContextInterface
-     */
     private $context;
-    /**
-     * Dry run of background.
-     *
-     * @var     Boolean
-     */
     private $dryRun = false;
 
     /**
      * Initializes tester.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -71,7 +46,7 @@ class BackgroundTester implements NodeVisitorInterface
     /**
      * Sets logical parent of the step, which is always a ScenarioNode.
      *
-     * @param Behat\Gherkin\Node\ScenarioNode $parent
+     * @param ScenarioNode $parent
      */
     public function setLogicalParent(ScenarioNode $parent)
     {
@@ -81,7 +56,7 @@ class BackgroundTester implements NodeVisitorInterface
     /**
      * Sets run context.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context
+     * @param ContextInterface $context
      */
     public function setContext(ContextInterface $context)
     {
@@ -91,7 +66,7 @@ class BackgroundTester implements NodeVisitorInterface
     /**
      * Sets tester to dry-run mode.
      *
-     * @param   Boolean $dryRun
+     * @param Boolean $dryRun
      */
     public function setDryRun($dryRun = true)
     {
@@ -101,9 +76,9 @@ class BackgroundTester implements NodeVisitorInterface
     /**
      * Visits & tests BackgroundNode.
      *
-     * @param   Behat\Gherkin\Node\AbstractNode $background
+     * @param AbstractNode $background
      *
-     * @return  integer
+     * @return integer
      */
     public function visit(AbstractNode $background)
     {

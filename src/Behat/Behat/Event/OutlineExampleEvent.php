@@ -19,7 +19,7 @@ use Behat\Gherkin\Node\OutlineNode;
 /**
  * Outline example event.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class OutlineExampleEvent extends OutlineEvent implements EventInterface
 {
@@ -30,11 +30,11 @@ class OutlineExampleEvent extends OutlineEvent implements EventInterface
     /**
      * Initializes outline example event.
      *
-     * @param   Behat\Gherkin\Node\OutlineNode          $outline
-     * @param   integer                                 $iteration  number of iteration
-     * @param   Behat\Behat\Context\ContextInterface    $context
-     * @param   integer                                 $result
-     * @param   Boolean                                 $skipped
+     * @param OutlineNode      $outline
+     * @param integer          $iteration iteration number
+     * @param ContextInterface $context
+     * @param integer          $result
+     * @param Boolean          $skipped
      */
     public function __construct(OutlineNode $outline, $iteration, ContextInterface $context,
                                 $result = null, $skipped = false)
@@ -49,7 +49,7 @@ class OutlineExampleEvent extends OutlineEvent implements EventInterface
     /**
      * Returns example number on which event occurs.
      *
-     * @return  integer
+     * @return integer
      */
     public function getIteration()
     {
@@ -59,7 +59,7 @@ class OutlineExampleEvent extends OutlineEvent implements EventInterface
     /**
      * Returns context object.
      *
-     * @return  Behat\Behat\Context\ContextInterface
+     * @return ContextInterface
      */
     public function getContext()
     {
@@ -69,7 +69,7 @@ class OutlineExampleEvent extends OutlineEvent implements EventInterface
     /**
      * Checks whether outline example were skipped.
      *
-     * @return  Boolean
+     * @return Boolean
      */
     public function isSkipped()
     {

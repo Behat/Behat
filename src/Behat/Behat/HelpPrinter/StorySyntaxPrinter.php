@@ -18,21 +18,16 @@ use Symfony\Component\Console\Output\OutputInterface,
 /**
  * Story syntax printer.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class StorySyntaxPrinter
 {
-    /**
-     * Keywords dumper.
-     *
-     * @var     Behat\Gherkin\Keywords\KeywordsDumper
-     */
     private $dumper;
 
     /**
      * Initializes definition dispatcher.
      *
-     * @param   Behat\Gherkin\Keywords\KeywordsDumper   $dumper
+     * @param KeywordsDumper $dumper
      */
     public function __construct(KeywordsDumper $dumper)
     {
@@ -43,8 +38,8 @@ class StorySyntaxPrinter
     /**
      * Prints example story syntax into console.
      *
-     * @param   Symfony\Component\Console\Output\OutputInterface    $output
-     * @param   string                                              $language
+     * @param OutputInterface $output
+     * @param string          $language
      */
     public function printSyntax(OutputInterface $output, $language = 'en')
     {
@@ -62,9 +57,9 @@ class StorySyntaxPrinter
     /**
      * Keywords dumper.
      *
-     * @param   array   $keywords keywords list
+     * @param array $keywords keywords list
      *
-     * @return  string
+     * @return string
      */
     public function dumpKeywords(array $keywords)
     {

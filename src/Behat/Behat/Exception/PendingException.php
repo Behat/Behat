@@ -13,14 +13,14 @@ namespace Behat\Behat\Exception;
 /**
  * Pending exception (throw this to mark step as "pending").
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PendingException extends BehaviorException
 {
     /**
      * Initializes pending exception.
      *
-     * @param   string  $text   TODO text
+     * @param string $text TODO text
      */
     public function __construct($text = 'write pending definition')
     {

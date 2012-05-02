@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 /**
  * Context processor.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ContextProcessor extends Processor
 {
@@ -35,7 +35,10 @@ class ContextProcessor extends Processor
     }
 
     /**
-     * @see ProcessorInterface::process()
+     * Processes data from container and console input.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
     public function process(InputInterface $input, OutputInterface $output)
     {

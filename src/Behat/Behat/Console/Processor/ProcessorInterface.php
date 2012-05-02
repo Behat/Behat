@@ -17,22 +17,22 @@ use Symfony\Component\Console\Command\Command,
 /**
  * Behat console processor interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface ProcessorInterface
 {
     /**
      * Configures command to be able to process it later.
      *
-     * @param Command $command Command instance to configure
+     * @param Command $command
      */
     function configure(Command $command);
 
     /**
      * Processes data from container and console input.
      *
-     * @param InputInterface  $input  Console input
-     * @param OutputInterface $output Console output
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
     function process(InputInterface $input, OutputInterface $output);
 }

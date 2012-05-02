@@ -13,7 +13,7 @@ namespace Behat\Behat\Exception;
 /**
  * Behat Formatter exception.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FormatterException extends Exception
 {

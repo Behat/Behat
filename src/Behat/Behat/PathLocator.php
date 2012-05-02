@@ -16,43 +16,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 /**
  * Behat path locator.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PathLocator
 {
-    /**
-     * Container object.
-     *
-     * @var     Symfony\Component\DependencyInjection\ContainerInterface
-     */
     private $container;
-    /**
-     * Provided in input features path.
-     *
-     * @var     string
-     */
     private $inputPath;
-    /**
-     * Path tokens.
-     *
-     * @var     array
-     */
     private $pathTokens = array(
         'BEHAT_WORK_PATH'   => '',  // working directory
         'BEHAT_CONFIG_PATH' => '',  // config file path
         'BEHAT_BASE_PATH'   => ''   // base path
     );
-    /**
-     * Work dir.
-     *
-     * @var     string
-     */
     private $workPath;
 
     /**
      * Initializes path locator.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -64,7 +44,8 @@ class PathLocator
     /**
      * Sets configuration path constant (token).
      *
-     * @param   string  $configPath
+     * @param string $name
+     * @param string $path
      */
     public function setPathConstant($name, $path)
     {
@@ -74,7 +55,7 @@ class PathLocator
     /**
      * Returns current work path.
      *
-     * @return  string
+     * @return string
      */
     public function getWorkPath()
     {
@@ -84,7 +65,7 @@ class PathLocator
     /**
      * Returns configured features path.
      *
-     * @return  string
+     * @return string
      */
     public function getFeaturesPath()
     {
@@ -98,7 +79,7 @@ class PathLocator
     /**
      * Returns configured bootstrap path.
      *
-     * @return  string
+     * @return string
      */
     public function getBootstrapPath()
     {
@@ -112,7 +93,7 @@ class PathLocator
     /**
      * Returns configured output path.
      *
-     * @param   string  $outputPath specified output path
+     * @param string $outputPath specified output path
      *
      * @return string|null
      */
@@ -128,9 +109,9 @@ class PathLocator
     /**
      * Locates base behat path.
      *
-     * @param   string  $inputPath
+     * @param string $inputPath
      *
-     * @return  string
+     * @return string
      */
     public function locateBasePath($inputPath = null)
     {
@@ -166,7 +147,9 @@ class PathLocator
     /**
      * Locates features paths.
      *
-     * @return  array
+     * @return array
+     *
+     * @throws \RuntimeException
      */
     public function locateFeaturesPaths()
     {
@@ -205,7 +188,7 @@ class PathLocator
     /**
      * Locates bootstrap files paths.
      *
-     * @return  array
+     * @return array
      */
     public function locateBootstrapFilesPaths()
     {
@@ -228,11 +211,9 @@ class PathLocator
      * Fix directory separators, replace path tokens with configured ones,
      * prepend single filenames with CWD path.
      *
-     * @param   string  $path
+     * @param string $path
      *
-     * @return  string
-     *
-     * @uses    pathTokens
+     * @return string
      */
     private function preparePath($path)
     {

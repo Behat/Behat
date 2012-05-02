@@ -19,7 +19,7 @@ use Behat\Behat\Event\ScenarioEvent,
 /**
  * Failed scenarios formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FailedScenariosFormatter extends ConsoleFormatter
 {

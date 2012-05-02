@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 /**
  * Help (story-syntax and definition printers) processor.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class HelpProcessor extends Processor
 {
@@ -36,7 +36,9 @@ class HelpProcessor extends Processor
     }
 
     /**
-     * @see ProcessorInterface::confiugre()
+     * Configures command to be able to process it later.
+     *
+     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -56,7 +58,10 @@ class HelpProcessor extends Processor
     }
 
     /**
-     * @see ProcessorInterface::process()
+     * Processes data from container and console input.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
     public function process(InputInterface $input, OutputInterface $output)
     {

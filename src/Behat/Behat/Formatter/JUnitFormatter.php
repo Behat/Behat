@@ -26,7 +26,7 @@ use Behat\Gherkin\Node\FeatureNode,
 /**
  * Progress formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class JUnitFormatter extends ConsoleFormatter
 {

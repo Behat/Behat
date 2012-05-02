@@ -15,7 +15,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Behat configuration reader.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Loader
 {
@@ -36,6 +36,8 @@ class Loader
      * Reads configuration sequense for specific profile.
      *
      * @param string $profile Profile name
+     *
+     * @return array
      */
     public function loadConfiguration($profile = 'default')
     {
@@ -81,6 +83,8 @@ class Loader
      * @param string $profile    Profile name
      *
      * @return array
+     *
+     * @throws \InvalidArgumentException
      */
     protected function loadFileConfiguration($configFile, $profile)
     {
@@ -109,14 +113,6 @@ class Loader
         return $configs;
     }
 
-    /**
-     * Parses imports section.
-     *
-     * @param string $configFile Config file path
-     * @param string $profile    Profile name
-     *
-     * @return  array
-     */
     private function parseImport($path, $profile)
     {
         if (!file_exists($path) && file_exists(getcwd().DIRECTORY_SEPARATOR.$path)) {
@@ -135,13 +131,6 @@ class Loader
         return $this->loadFileConfiguration($path, $profile);
     }
 
-    /**
-     * Normalizes provided raw configuration.
-     *
-     * @param array $config raw configuration
-     *
-     * @return array
-     */
     private function normalizeRawConfiguration(array $config)
     {
         $normalize = function($value) {

@@ -31,7 +31,7 @@ use Behat\Behat\DependencyInjection\BehatExtension,
 /**
  * Behat console application.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BehatApplication extends Application
 {
@@ -62,8 +62,8 @@ class BehatApplication extends Application
     /**
      * Runs the current application.
      *
-     * @param InputInterface  $input  An Input instance
-     * @param OutputInterface $output An Output instance
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      *
      * @return integer 0 if everything went fine, or an error code
      */
@@ -94,8 +94,8 @@ class BehatApplication extends Application
     /**
      * Configures container based on providen config file and profile.
      *
-     * @param ContainerInterface $container container instance
-     * @param InputInterface     $input     console input
+     * @param ContainerInterface $container
+     * @param InputInterface     $input
      */
     protected function configureContainer(ContainerInterface $container, InputInterface $input)
     {
@@ -136,6 +136,8 @@ class BehatApplication extends Application
      * Loads Behat extensions.
      *
      * @param ContainerBuilder $container
+     *
+     * @throws \InvalidArgumentException
      */
     protected function loadExtensions(ContainerBuilder $container)
     {

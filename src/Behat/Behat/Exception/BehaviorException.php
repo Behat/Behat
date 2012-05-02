@@ -13,8 +13,8 @@ namespace Behat\Behat\Exception;
 /**
  * Abstract Behat exception.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class BehaviorException extends Exception
+class BehaviorException extends Exception
 {
 }

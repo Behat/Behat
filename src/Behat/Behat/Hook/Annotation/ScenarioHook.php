@@ -19,7 +19,7 @@ use Behat\Gherkin\Filter\TagFilter,
 /**
  * ScenarioHook hook class.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class ScenarioHook extends FilterableHook
 {
@@ -56,7 +56,9 @@ abstract class ScenarioHook extends FilterableHook
     }
 
     /**
-     * @see     Behat\Behat\Hook\HookInterface::run()
+     * Runs hook callback.
+     *
+     * @param EventInterface $event
      */
     public function run(EventInterface $event)
     {

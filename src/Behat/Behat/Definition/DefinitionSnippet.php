@@ -15,34 +15,19 @@ use Behat\Gherkin\Node\StepNode;
 /**
  * Definition snippet.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class DefinitionSnippet
 {
-    /**
-     * Definition type.
-     *
-     * @var     string
-     */
     private $type;
-    /**
-     * Definition snippet template.
-     *
-     * @var     string
-     */
     private $template;
-    /**
-     * Steps interested in this snippet.
-     *
-     * @var     array
-     */
     private $steps = array();
 
     /**
      * Initializes definition snippet.
      *
-     * @param   Behat\Gherkin\Node\StepNode $step       step interested in snippet
-     * @param   string                      $template   definition snippet template
+     * @param StepNode $step     Step interested in snippet
+     * @param string   $template Definition snippet template
      */
     public function __construct(StepNode $step, $template)
     {
@@ -55,7 +40,7 @@ class DefinitionSnippet
     /**
      * Adds step interested in this snippet.
      *
-     * @param   Behat\Gherkin\Node\StepNode $step   step interested in snippet
+     * @param StepNode $step Step interested in snippet
      */
     public function addStep(StepNode $step)
     {
@@ -65,7 +50,7 @@ class DefinitionSnippet
     /**
      * Returns last step in list of steps.
      *
-     * @return  Behat\Gherkin\Node\StepNode
+     * @return StepNode
      */
     public function getLastStep()
     {
@@ -75,7 +60,7 @@ class DefinitionSnippet
     /**
      * Returns list of steps interested in this snippet.
      *
-     * @return  array
+     * @return array
      */
     public function getSteps()
     {
@@ -85,7 +70,7 @@ class DefinitionSnippet
     /**
      * Returns snippet unique hash (ignoring step type).
      *
-     * @return  string
+     * @return string
      */
     public function getHash()
     {
@@ -95,7 +80,7 @@ class DefinitionSnippet
     /**
      * Returns definition snippet text.
      *
-     * @return  string
+     * @return string
      */
     public function getSnippet()
     {
@@ -105,7 +90,7 @@ class DefinitionSnippet
     /**
      * Returns definition snippet text.
      *
-     * @return  string
+     * @return string
      */
     public function __toString()
     {

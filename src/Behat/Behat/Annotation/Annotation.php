@@ -16,39 +16,21 @@ use Behat\Behat\Context\ContextInterface,
 /**
  * Behat annotation class.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class Annotation implements AnnotationInterface
 {
-    /**
-     * Is callback a closure.
-     *
-     * @var     Boolean
-     */
     private $closure;
-    /**
-     * Annotation callback.
-     *
-     * @var     callback
-     */
     private $callback;
-    /**
-     * Definition path.
-     *
-     * @var     string
-     */
     private $path;
-    /**
-     * Description string (first docBlock string).
-     *
-     * @var     string
-     */
     private $description;
 
     /**
      * Constructs annotation.
      *
-     * @param   callback    $callback
+     * @param callback $callback
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct($callback)
     {
@@ -73,7 +55,7 @@ abstract class Annotation implements AnnotationInterface
     /**
      * Sets annotation description.
      *
-     * @param   string  $description
+     * @param string $description
      */
     public function setDescription($description)
     {
@@ -83,7 +65,7 @@ abstract class Annotation implements AnnotationInterface
     /**
      * Returns description.
      *
-     * @return  string
+     * @return string
      */
     public function getDescription()
     {
@@ -91,7 +73,9 @@ abstract class Annotation implements AnnotationInterface
     }
 
     /**
-     * @see Behat\Behat\Annotation\AnnotationInterface::getPath()
+     * Returns path string for callback.
+     *
+     * @return string
      */
     public function getPath()
     {
@@ -99,7 +83,9 @@ abstract class Annotation implements AnnotationInterface
     }
 
     /**
-     * @see Behat\Behat\Annotation\AnnotationInterface::isClosure()
+     * Checks whether callback is closure.
+     *
+     * @return Boolean
      */
     public function isClosure()
     {
@@ -107,7 +93,9 @@ abstract class Annotation implements AnnotationInterface
     }
 
     /**
-     * @see Behat\Behat\Annotation\AnnotationInterface::getCallback()
+     * Returns callback.
+     *
+     * @return callback
      */
     public function getCallback()
     {
@@ -117,9 +105,11 @@ abstract class Annotation implements AnnotationInterface
     /**
      * Returns callback, mapped to specific context (or it's subcontext) instance.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context    context instance
+     * @param ContextInterface $context
      *
-     * @return  mixed                                               context callback
+     * @return callback
+     *
+     * @throws \RuntimeException
      */
     public function getCallbackForContext(ContextInterface $context)
     {
@@ -156,7 +146,9 @@ abstract class Annotation implements AnnotationInterface
     }
 
     /**
-     * @see Behat\Behat\Annotation\AnnotationInterface::getCallbackReflection()
+     * Returns callback reflection.
+     *
+     * @return \ReflectionFunction
      */
     public function getCallbackReflection()
     {

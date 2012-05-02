@@ -20,17 +20,18 @@ use Behat\Behat\Console\Input\InputDefinition,
 /**
  * Behat console command.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BehatCommand extends BaseCommand
 {
-    /**
-     * Service container.
-     *
-     * @var     Symfony\Component\DependencyInjection\ContainerBuilder
-     */
     private $container;
 
+    /**
+     * Initializes command.
+     *
+     * @param ContainerInterface $container
+     * @param ProcessorInterface $processor
+     */
     public function __construct(ContainerInterface $container, ProcessorInterface $processor)
     {
         parent::__construct('behat');

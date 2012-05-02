@@ -23,21 +23,16 @@ use Behat\Behat\Hook\HookDispatcher,
 /**
  * Closured hook definitions loader.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ClosuredHookLoader implements HookLoaderInterface
 {
-    /**
-     * Hook dispatcher.
-     *
-     * @var     Behat\Behat\Hook\HookDispatcher
-     */
     private $dispatcher;
 
     /**
      * Initializes loader.
      *
-     * @param   Behat\Behat\Hook\HookDispatcher $dispatcher definition dispatcher
+     * @param HookDispatcher $dispatcher
      */
     public function __construct(HookDispatcher $dispatcher)
     {
@@ -45,7 +40,9 @@ class ClosuredHookLoader implements HookLoaderInterface
     }
 
     /**
-     * @see     Behat\Behat\Hook\Loader\HookLoaderInterface::load()
+     * Loads definitions from provided resource.
+     *
+     * @param mixed $resource
      */
     public function load($resource)
     {
@@ -57,7 +54,7 @@ class ClosuredHookLoader implements HookLoaderInterface
     /**
      * Hooks into "suite.before".
      *
-     * @param   Callback    $callback   hook callback
+     * @param callback $callback hook callback
      */
     public function beforeSuite($callback)
     {
@@ -67,7 +64,7 @@ class ClosuredHookLoader implements HookLoaderInterface
     /**
      * Hooks into "suite.after".
      *
-     * @param   Callback    $callback   hook callback
+     * @param callback $callback hook callback
      */
     public function afterSuite($callback)
     {
@@ -77,8 +74,8 @@ class ClosuredHookLoader implements HookLoaderInterface
     /**
      * Hooks into "feature.before".
      *
-     * @param   string      $filter     filter string (tags or name)
-     * @param   Callback    $callback   hook callback
+     * @param string   $filter   filter string (tags or name)
+     * @param callback $callback hook callback
      */
     public function beforeFeature($filter, $callback)
     {
@@ -88,8 +85,8 @@ class ClosuredHookLoader implements HookLoaderInterface
     /**
      * Hooks into "feature.after".
      *
-     * @param   string      $filter     filter string (tags or name)
-     * @param   Callback    $callback   hook callback
+     * @param string    $filter   filter string (tags or name)
+     * @param callback  $callback hook callback
      */
     public function afterFeature($filter, $callback)
     {
@@ -99,8 +96,8 @@ class ClosuredHookLoader implements HookLoaderInterface
     /**
      * Hooks into "scenario.before" OR "outline.example.before".
      *
-     * @param   string      $filter     filter string (tags or name)
-     * @param   Callback    $callback   hook callback
+     * @param string   $filter   filter string (tags or name)
+     * @param callback $callback hook callback
      */
     public function beforeScenario($filter, $callback)
     {
@@ -110,8 +107,8 @@ class ClosuredHookLoader implements HookLoaderInterface
     /**
      * Hooks into "scenario.after" OR "outline.example.after".
      *
-     * @param   string      $filter     filter string (tags or name)
-     * @param   Callback    $callback   hook callback
+     * @param string   $filter   filter string (tags or name)
+     * @param callback $callback hook callback
      */
     public function afterScenario($filter, $callback)
     {
@@ -121,8 +118,8 @@ class ClosuredHookLoader implements HookLoaderInterface
     /**
      * Hooks into "step.before".
      *
-     * @param   string      $filter     filter string (tags or name)
-     * @param   Callback    $callback   hook callback
+     * @param string   $filter   filter string (tags or name)
+     * @param callback $callback hook callback
      */
     public function beforeStep($filter, $callback)
     {
@@ -132,8 +129,8 @@ class ClosuredHookLoader implements HookLoaderInterface
     /**
      * Hooks into "step.after".
      *
-     * @param   string      $filter     filter string (tags or name)
-     * @param   Callback    $callback   hook callback
+     * @param string   $filter   filter string (tags or name)
+     * @param callback $callback hook callback
      */
     public function afterStep($filter, $callback)
     {

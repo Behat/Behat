@@ -21,12 +21,16 @@ use Behat\Behat\Context\ContextInterface,
 /**
  * Closured definitions proposal.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ClosuredDefinitionProposal implements DefinitionProposalInterface
 {
     /**
-     * @see     Behat\Behat\Definition\Proposal\DefinitionProposalInterface::supports()
+     * Checks if loader supports provided context.
+     *
+     * @param ContextInterface $context
+     *
+     * @return Boolean
      */
     public function supports(ContextInterface $context)
     {
@@ -34,7 +38,12 @@ class ClosuredDefinitionProposal implements DefinitionProposalInterface
     }
 
     /**
-     * @see     Behat\Behat\Definition\Proposal\DefinitionProposalInterface::propose()
+     * Loads definitions and translations from provided context.
+     *
+     * @param ContextInterface $context
+     * @param StepNode         $step
+     *
+     * @return DefinitionSnippet
      */
     public function propose(ContextInterface $context, StepNode $step)
     {

@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputDefinition as BaseDefinition;
 /**
  * Extended InputDefinition, which supports switchers.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class InputDefinition extends BaseDefinition
 {
@@ -89,7 +89,7 @@ class InputDefinition extends BaseDefinition
             $text[] = '<comment>Arguments:</comment>';
             foreach ($this->getArguments() as $argument) {
                 if (null !== $argument->getDefault() && (!is_array($argument->getDefault()) || count($argument->getDefault()))) {
-                    $default = sprintf('<comment> (default: %s)</comment>', $this->formatDefaultValue($argument->getDefault()));
+                    $default = sprintf('<comment> (default: %s)</comment>', $this->subformatDefaultValue($argument->getDefault()));
                 } else {
                     $default = '';
                 }
@@ -114,7 +114,7 @@ class InputDefinition extends BaseDefinition
                 }
 
                 if ($option->acceptValue() && null !== $option->getDefault() && (!is_array($option->getDefault()) || count($option->getDefault()))) {
-                    $default = sprintf('<comment> (default: %s)</comment>', $this->formatDefaultValue($option->getDefault()));
+                    $default = sprintf('<comment> (default: %s)</comment>', $this->subformatDefaultValue($option->getDefault()));
                 } else {
                     $default = '';
                 }
@@ -145,5 +145,14 @@ class InputDefinition extends BaseDefinition
         }
 
         return implode("\n", $text);
+    }
+
+    private function subformatDefaultValue($default)
+    {
+        if (is_array($default) && $default === array_values($default)) {
+            return sprintf("array('%s')", implode("', '", $default));
+        }
+
+        return str_replace("\n", '', var_export($default, true));
     }
 }

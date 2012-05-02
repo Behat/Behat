@@ -17,7 +17,7 @@ use Behat\Gherkin\Node\BackgroundNode;
 /**
  * Background event.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BackgroundEvent extends Event implements EventInterface
 {
@@ -28,9 +28,9 @@ class BackgroundEvent extends Event implements EventInterface
     /**
      * Initializes background event.
      *
-     * @param   Behat\Gherkin\Node\BackgroundNode   $background
-     * @param   integer                             $result
-     * @param   Boolean                             $skipped
+     * @param BackgroundNode $background
+     * @param integer        $result
+     * @param Boolean        $skipped
      */
     public function __construct(BackgroundNode $background, $result = null, $skipped = false)
     {
@@ -42,7 +42,7 @@ class BackgroundEvent extends Event implements EventInterface
     /**
      * Returns background node.
      *
-     * @return  Behat\Gherkin\Node\BackgroundNode
+     * @return BackgroundNode
      */
     public function getBackground()
     {
@@ -52,7 +52,7 @@ class BackgroundEvent extends Event implements EventInterface
     /**
      * Return background tester result code.
      *
-     * @return  integer
+     * @return integer
      */
     public function getResult()
     {
@@ -62,7 +62,7 @@ class BackgroundEvent extends Event implements EventInterface
     /**
      * Checks whether background were skipped.
      *
-     * @return  Boolean
+     * @return Boolean
      */
     public function isSkipped()
     {

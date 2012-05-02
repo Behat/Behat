@@ -18,21 +18,16 @@ use Symfony\Component\Console\Output\OutputInterface,
 /**
  * Definitions printer.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class DefinitionsPrinter
 {
-    /**
-     * Definition dispatcher.
-     *
-     * @var     Behat\Behat\Definition\DefinitionDispatcher
-     */
     private $dispatcher;
 
     /**
      * Initializes definition dispatcher.
      *
-     * @param   Behat\Behat\Definition\DefinitionDispatcher $dispatcher
+     * @param DefinitionDispatcher $dispatcher
      */
     public function __construct(DefinitionDispatcher $dispatcher)
     {
@@ -42,10 +37,10 @@ class DefinitionsPrinter
     /**
      * Prints step definitions into console.
      *
-     * @param   Symfony\Component\Console\Output\OutputInterface    $output
-     * @param   string                                              $search
-     * @param   string                                              $language
-     * @param   Boolean                                             $shortNotation
+     * @param OutputInterface $output
+     * @param string          $search
+     * @param string          $language
+     * @param Boolean         $shortNotation
      */
     public function printDefinitions(OutputInterface $output, $search = null, $language = 'en', $shortNotation = true)
     {
@@ -62,11 +57,11 @@ class DefinitionsPrinter
     /**
      * Returns available definitions in string.
      *
-     * @param   string  $search         search string
-     * @param   string  $language       default definitions language
-     * @param   Boolean $shortNotation  show short notation instead of full one
+     * @param string  $search        search string
+     * @param string  $language      default definitions language
+     * @param Boolean $shortNotation show short notation instead of full one
      *
-     * @return  string
+     * @return string
      */
     private function getDefinitionsForPrint($search = null, $language = 'en', $shortNotation = true)
     {

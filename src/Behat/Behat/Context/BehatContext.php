@@ -13,28 +13,18 @@ namespace Behat\Behat\Context;
 /**
  * Behat basic context implementation.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BehatContext implements ExtendedContextInterface
 {
-    /**
-     * List of subcontexts.
-     *
-     * @var     array
-     */
     private $subcontexts = array();
-    /**
-     * Parent context of subcontext.
-     *
-     * @var     Behat\Behat\Context\ContextInterface
-     */
     private $parentContext;
 
     /**
      * Adds subcontext to current context.
      *
-     * @param   string                                          $alias      subcontext alias name
-     * @param   Behat\Behat\Context\ExtendedContextInterface    $context    subcontext instance
+     * @param   string                   $alias
+     * @param   ExtendedContextInterface $context
      */
     public function useContext($alias, ExtendedContextInterface $context)
     {
@@ -43,8 +33,9 @@ class BehatContext implements ExtendedContextInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\ExtendedContextInterface::setParentContext()
-     * @see     Behat\Behat\Context\BehatContext::useContext()
+     * Sets parent context of current context.
+     *
+     * @param ExtendedContextInterface $parentContext
      */
     public function setParentContext(ExtendedContextInterface $parentContext)
     {
@@ -52,7 +43,9 @@ class BehatContext implements ExtendedContextInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\ExtendedContextInterface::getMainContext()
+     * Returns main context.
+     *
+     * @return ExtendedContextInterface
      */
     public function getMainContext()
     {
@@ -64,7 +57,11 @@ class BehatContext implements ExtendedContextInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\ExtendedContextInterface::getSubcontext()
+     * Find current context's subcontext by alias name.
+     *
+     * @param string $alias
+     *
+     * @return ExtendedContextInterface
      */
     public function getSubcontext($alias)
     {
@@ -82,7 +79,9 @@ class BehatContext implements ExtendedContextInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\ContextInterface::getSubcontexts()
+     * Returns all added subcontexts.
+     *
+     * @return array
      */
     public function getSubcontexts()
     {
@@ -90,7 +89,11 @@ class BehatContext implements ExtendedContextInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\ContextInterface::getSubcontextByClassName()
+     * Finds subcontext by it's name.
+     *
+     * @param string $className
+     *
+     * @return ContextInterface
      */
     public function getSubcontextByClassName($className)
     {

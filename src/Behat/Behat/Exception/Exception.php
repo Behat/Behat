@@ -13,8 +13,8 @@ namespace Behat\Behat\Exception;
 /**
  * Behat exception.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Exception extends \Exception
+abstract class Exception extends \Exception
 {
 }

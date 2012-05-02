@@ -12,7 +12,8 @@ use Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher,
     Behat\Behat\Exception\RedundantException,
     Behat\Behat\Exception\AmbiguousException,
     Behat\Behat\Exception\UndefinedException,
-    Behat\Behat\Context\ContextInterface;
+    Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Definition\DefinitionSnippet;
 
 /*
  * This file is part of the Behat.
@@ -25,40 +26,20 @@ use Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher,
 /**
  * Definition dispatcher.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class DefinitionDispatcher
 {
-    /**
-     * Added transformations.
-     *
-     * @var     array
-     */
     private $transformations = array();
-    /**
-     * Added definitions.
-     *
-     * @var     array
-     */
     private $definitions     = array();
-    /**
-     * Proposals dispatcher
-     *
-     * @var     Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher
-     */
     private $proposalDispatcher;
-    /**
-     * Translator instance.
-     *
-     * @var     Symfony\Component\Translation\Translator
-     */
     private $translator;
 
     /**
      * Initializes definition dispatcher.
      *
-     * @param   Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher    $proposalDispatcher
-     * @param   Symfony\Component\Translation\TranslatorInterface               $translator
+     * @param DefinitionProposalDispatcher $proposalDispatcher
+     * @param TranslatorInterface          $translator
      */
     public function __construct(DefinitionProposalDispatcher $proposalDispatcher, TranslatorInterface $translator)
     {
@@ -69,7 +50,9 @@ class DefinitionDispatcher
     /**
      * Adds definition to dispatcher.
      *
-     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition instance
+     * @param DefinitionInterface $definition
+     *
+     * @throws RedundantException
      */
     public function addDefinition(DefinitionInterface $definition)
     {
@@ -85,7 +68,7 @@ class DefinitionDispatcher
     /**
      * Returns array of available definitions.
      *
-     * @return  array   array of hashes => array(regex => definition)
+     * @return array array of hashes => array(regex => definition)
      */
     public function getDefinitions()
     {
@@ -103,7 +86,7 @@ class DefinitionDispatcher
     /**
      * Adds transformation to dispatcher.
      *
-     * @param   Behat\Behat\Definition\TransformationInterface  $transformation definitions transformation
+     * @param TransformationInterface $transformation
      */
     public function addTransformation(TransformationInterface $transformation)
     {
@@ -113,7 +96,7 @@ class DefinitionDispatcher
     /**
      * Returns array of available transformations.
      *
-     * @return  array   array of argument transformers
+     * @return array array of argument transformers
      */
     public function getTransformations()
     {
@@ -131,15 +114,15 @@ class DefinitionDispatcher
     /**
      * Finds step definition, that match specified step.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context    context instance
-     * @param   Behat\Gherkin\Node\StepNode             $step       found step
+     * @param ContextInterface $context
+     * @param StepNode         $step
      *
-     * @return  Behat\Behat\Definition\Definition
+     * @return Definition
      *
-     * @uses    loadDefinitions()
+     * @uses loadDefinitions()
      *
-     * @throws  Behat\Behat\Exception\AmbiguousException    if step description is ambiguous
-     * @throws  Behat\Behat\Exception\UndefinedException    if step definition not found
+     * @throws AmbiguousException if step description is ambiguous
+     * @throws UndefinedException if step definition not found
      */
     public function findDefinition(ContextInterface $context, StepNode $step)
     {
@@ -198,10 +181,10 @@ class DefinitionDispatcher
     /**
      * Returns step definition for step node.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context    context instance
-     * @param   Behat\Gherkin\Node\StepNode             $step       step node
+     * @param ContextInterface $context
+     * @param StepNode         $step
      *
-     * @return  array   hash (md5_key => definition)
+     * @return DefinitionSnippet
      */
     public function proposeDefinition(ContextInterface $context, StepNode $step)
     {
@@ -211,10 +194,10 @@ class DefinitionDispatcher
     /**
      * Translates definition regex to provided language (if possible).
      *
-     * @param   string  $regex      regex to translate
-     * @param   string  $language   language
+     * @param string $regex    regex to translate
+     * @param string $language language
      *
-     * @return  string
+     * @return string
      */
     public function translateDefinitionRegex($regex, $language)
     {
@@ -224,12 +207,12 @@ class DefinitionDispatcher
     /**
      * Merges found arguments with multiliners and maps them to the function callback signature.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context    context instance
-     * @param   ReflectionFunctionAbstract              $refl       callback reflection
-     * @param   array                                   $arguments  found arguments
-     * @param   array                                   $multiline  multiline arguments of the step
+     * @param ContextInterface            $context   context instance
+     * @param \ReflectionFunctionAbstract $refl      callback reflection
+     * @param array                       $arguments found arguments
+     * @param array                       $multiline multiline arguments of the step
      *
-     * @return  array
+     * @return array
      */
     private function prepareCallbackArguments(ContextInterface $context, \ReflectionFunctionAbstract $refl,
                                               array $arguments, array $multiline)

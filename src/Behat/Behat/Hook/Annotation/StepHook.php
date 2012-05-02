@@ -19,7 +19,7 @@ use Behat\Gherkin\Filter\TagFilter,
 /**
  * StepHook hook class.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class StepHook extends FilterableHook
 {
@@ -52,7 +52,9 @@ abstract class StepHook extends FilterableHook
     }
 
     /**
-     * @see     Behat\Behat\Hook\HookInterface::run()
+     * Runs hook callback.
+     *
+     * @param EventInterface $event
      */
     public function run(EventInterface $event)
     {

@@ -28,7 +28,7 @@ use Behat\Gherkin\Node\AbstractNode,
 /**
  * HTML formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class HtmlFormatter extends PrettyFormatter
 {

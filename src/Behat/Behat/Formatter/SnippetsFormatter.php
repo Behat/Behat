@@ -17,7 +17,7 @@ use Behat\Behat\Event\SuiteEvent;
 /**
  * Snippets formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class SnippetsFormatter extends ProgressFormatter
 {

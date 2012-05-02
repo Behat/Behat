@@ -19,22 +19,19 @@ use Behat\Behat\Definition\TransformationInterface,
 /**
  * Step arguments transformation.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Transformation extends Annotation implements TransformationInterface
 {
-    /**
-     * Transformation regex.
-     *
-     * @var     string
-     */
     private $regex;
 
     /**
      * Initializes transformation.
      *
-     * @param   callback    $callback   definition callback
-     * @param   string      $regex      definition regular expression
+     * @param callback $callback definition callback
+     * @param string   $regex    definition regular expression
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct($callback, $regex)
     {
@@ -52,7 +49,7 @@ class Transformation extends Annotation implements TransformationInterface
     /**
      * Returns transformation regex.
      *
-     * @return  string
+     * @return string
      */
     public function getRegex()
     {
@@ -60,7 +57,13 @@ class Transformation extends Annotation implements TransformationInterface
     }
 
     /**
-     * @see     Behat\Behat\Definition\TransformationInterface::transform()
+     * Transforms provided argument.
+     *
+     * @param string           $translatedRegex
+     * @param ContextInterface $context
+     * @param mixed            $argument
+     *
+     * @return mixed
      */
     public function transform($translatedRegex, ContextInterface $context, $argument)
     {

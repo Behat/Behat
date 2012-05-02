@@ -15,7 +15,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * Pear package compiler.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PearCompiler
 {

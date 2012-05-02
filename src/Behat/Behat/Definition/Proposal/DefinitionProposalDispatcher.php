@@ -4,7 +4,8 @@ namespace Behat\Behat\Definition\Proposal;
 
 use Behat\Gherkin\Node\StepNode;
 
-use Behat\Behat\Context\ContextInterface;
+use Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Definition\DefinitionSnippet;
 
 /*
  * This file is part of the Behat.
@@ -17,7 +18,7 @@ use Behat\Behat\Context\ContextInterface;
 /**
  * Definition proposals dispatcher.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class DefinitionProposalDispatcher
 {
@@ -26,7 +27,7 @@ class DefinitionProposalDispatcher
     /**
      * Adds proposal object to the dispatcher.
      *
-     * @param   Behat\Behat\Definition\Proposal\DefinitionProposalInterface $proposal
+     * @param DefinitionProposalInterface $proposal
      */
     public function addProposal(DefinitionProposalInterface $proposal)
     {
@@ -36,10 +37,10 @@ class DefinitionProposalDispatcher
     /**
      * Returns step definition for step node.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context    context instance
-     * @param   Behat\Gherkin\Node\StepNode             $step       step node
+     * @param ContextInterface $context
+     * @param StepNode         $step
      *
-     * @return  array   hash (md5_key => definition)
+     * @return DefinitionSnippet
      */
     public function propose(ContextInterface $context, StepNode $step)
     {

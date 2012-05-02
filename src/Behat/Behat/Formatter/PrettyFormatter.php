@@ -38,7 +38,7 @@ use Behat\Gherkin\Node\AbstractNode,
 /**
  * Pretty formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PrettyFormatter extends ProgressFormatter
 {

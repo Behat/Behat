@@ -25,7 +25,7 @@ use Behat\Gherkin\Node\BackgroundNode,
 /**
  * Progress formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ProgressFormatter extends ConsoleFormatter
 {

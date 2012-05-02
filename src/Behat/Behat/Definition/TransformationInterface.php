@@ -15,16 +15,18 @@ use Behat\Behat\Context\ContextInterface;
 /**
  * Step transformation.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface TransformationInterface
 {
     /**
      * Transforms provided argument.
      *
-     * @param   string                                      $translatedRegex
-     * @param   Behat\Behat\Context\ContextInterface        $context
-     * @param   mixed                                       $argument
+     * @param string           $translatedRegex
+     * @param ContextInterface $context
+     * @param mixed            $argument
+     *
+     * @return mixed
      */
     function transform($translatedRegex, ContextInterface $context, $argument);
 }

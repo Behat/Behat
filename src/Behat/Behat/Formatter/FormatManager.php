@@ -16,7 +16,7 @@ use Symfony\Component\Translation\Translator,
 /**
  * Format manager.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FormatManager
 {

@@ -13,14 +13,14 @@ namespace Behat\Behat\Context;
 /**
  * Translated context interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface TranslatedContextInterface extends ContextInterface
 {
     /**
      * Returns array of i18n XLIFF files paths.
      *
-     * @return  array
+     * @return array
      */
     function getTranslationResources();
 }

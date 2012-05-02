@@ -2,7 +2,8 @@
 
 namespace Behat\Behat\Console\Processor;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command,
+    Symfony\Component\Console\Input\InputInterface;
 
 /*
  * This file is part of the Behat.
@@ -15,14 +16,35 @@ use Symfony\Component\Console\Command\Command;
 /**
  * Abstract base processor.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class Processor implements ProcessorInterface
 {
     /**
-     * @see ProcessorInterface::configure()
+     * Configures command to be able to process it later.
+     *
+     * @param Command $command
      */
     public function configure(Command $command)
     {
+    }
+
+    /**
+     * Returns correct value for input switch.
+     *
+     * @param InputInterface $input
+     * @param string         $name
+     *
+     * @return Boolean|null
+     */
+    protected function getSwitchValue(InputInterface $input, $name)
+    {
+        if ($input->getOption($name)) {
+            return true;
+        } elseif ($input->getOption('no-'.$name)) {
+            return false;
+        }
+
+        return null;
     }
 }
