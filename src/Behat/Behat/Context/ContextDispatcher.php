@@ -18,7 +18,8 @@ namespace Behat\Behat\Context;
 class ContextDispatcher
 {
     private $contextClass;
-    private $parameters = array();
+    private $initializers = array();
+    private $parameters   = array();
 
     /**
      * Initialize dispatcher.
@@ -74,6 +75,16 @@ class ContextDispatcher
     }
 
     /**
+     * Adds initializer to the dispatcher.
+     *
+     * @param ContextInitializerInterface $initializer
+     */
+    public function addInitializer(ContextInitializerInterface $initializer)
+    {
+        $this->initializers[] = $initializer;
+    }
+
+    /**
      * Creates new context instance.
      *
      * @return ContextInterface
@@ -86,6 +97,13 @@ class ContextDispatcher
             throw new \RuntimeException('Specify context class to use for ContextDispatcher');
         }
 
-        return new $this->contextClass($this->getContextParameters());
+        $context = new $this->contextClass($this->getContextParameters());
+        foreach ($this->initializers as $initializer) {
+            if ($initializer->supports($context)) {
+                $initializer->initialize($context);
+            }
+        }
+
+        return $context;
     }
 }
