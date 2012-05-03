@@ -42,14 +42,6 @@ class BehatCommand extends BaseCommand
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        return $this->getContainer()->get('behat.runner')->runSuite();
-    }
-
-    /**
      * Returns container instance.
      *
      * @return ContainerInterface

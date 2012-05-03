@@ -54,4 +54,12 @@ abstract class BaseCommand extends Command
     {
         $this->processor->process($input, $output);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        return $this->getContainer()->get('behat.runner')->runSuite();
+    }
 }
