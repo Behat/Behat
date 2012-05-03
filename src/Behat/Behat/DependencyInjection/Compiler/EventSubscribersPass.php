@@ -16,11 +16,11 @@ use Symfony\Component\DependencyInjection\Reference,
  */
 
 /**
- * Gherkin pass - registers all available Gherkin loaders.
+ * Event subscribers pass - registers all available event subscribers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GherkinPass implements CompilerPassInterface
+class EventSubscribersPass implements CompilerPassInterface
 {
     /**
      * Processes container.
@@ -29,13 +29,19 @@ class GherkinPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('gherkin')) {
+        if (!$container->hasDefinition('behat.event_dispatcher')) {
             return;
         }
-        $gherkinDefinition = $container->getDefinition('gherkin');
+        $dispatcherDefinition = $container->getDefinition('behat.event_dispatcher');
 
-        foreach ($container->findTaggedServiceIds('gherkin.loader') as $id => $attributes) {
-            $gherkinDefinition->addMethodCall('addLoader', array(new Reference($id)));
+        foreach ($container->findTaggedServiceIds('behat.event_subscriber') as $id => $attributes) {
+            foreach ($attributes as $attribute) {
+                if (isset($attribute['priority'])) {
+                    $dispatcherDefinition->addMethodCall(
+                        'addSubscriber', array(new Reference($id), $attribute['priority'])
+                    );
+                }
+            }
         }
     }
 }

@@ -16,11 +16,11 @@ use Symfony\Component\DependencyInjection\Reference,
  */
 
 /**
- * ContextReader pass - registers all available context loaders.
+ * Gherkin loaders pass - registers all available Gherkin loaders.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextReaderPass implements CompilerPassInterface
+class GherkinLoadersPass implements CompilerPassInterface
 {
     /**
      * Processes container.
@@ -29,13 +29,13 @@ class ContextReaderPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.context_reader')) {
+        if (!$container->hasDefinition('gherkin')) {
             return;
         }
-        $readerDefinition = $container->getDefinition('behat.context_reader');
+        $gherkinDefinition = $container->getDefinition('gherkin');
 
-        foreach ($container->findTaggedServiceIds('behat.context_loader') as $id => $attributes) {
-            $readerDefinition->addMethodCall('addLoader', array(new Reference($id)));
+        foreach ($container->findTaggedServiceIds('gherkin.loader') as $id => $attributes) {
+            $gherkinDefinition->addMethodCall('addLoader', array(new Reference($id)));
         }
     }
 }

@@ -12,10 +12,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
 
 use Behat\Behat\DependencyInjection\BehatExtension,
     Behat\Behat\DependencyInjection\Configuration\Loader,
-    Behat\Behat\DependencyInjection\Compiler\GherkinPass,
+    Behat\Behat\DependencyInjection\Compiler\GherkinLoadersPass,
     Behat\Behat\DependencyInjection\Compiler\FormattersPass,
-    Behat\Behat\DependencyInjection\Compiler\ContextReaderPass,
-    Behat\Behat\DependencyInjection\Compiler\EventDispatcherPass,
+    Behat\Behat\DependencyInjection\Compiler\ContextLoadersPass,
+    Behat\Behat\DependencyInjection\Compiler\EventSubscribersPass,
     Behat\Behat\DependencyInjection\Compiler\CommandProcessorsPass,
     Behat\Behat\DependencyInjection\Compiler\DefinitionProposalsPass,
     Behat\Behat\DependencyInjection\Compiler\ContextInitializersPass,
@@ -76,13 +76,13 @@ class BehatApplication extends Application
         $this->loadExtensions($container);
 
         // add core compiler passes
-        $container->addCompilerPass(new GherkinPass());
         $container->addCompilerPass(new CommandProcessorsPass());
-        $container->addCompilerPass(new FormattersPass());
-        $container->addCompilerPass(new ContextReaderPass());
-        $container->addCompilerPass(new EventDispatcherPass());
-        $container->addCompilerPass(new DefinitionProposalsPass());
+        $container->addCompilerPass(new GherkinLoadersPass());
+        $container->addCompilerPass(new ContextLoadersPass());
         $container->addCompilerPass(new ContextInitializersPass());
+        $container->addCompilerPass(new DefinitionProposalsPass());
+        $container->addCompilerPass(new FormattersPass());
+        $container->addCompilerPass(new EventSubscribersPass());
 
         // compile and freeze container
         $container->compile();

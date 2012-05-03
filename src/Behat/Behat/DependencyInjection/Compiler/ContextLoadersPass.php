@@ -16,11 +16,11 @@ use Symfony\Component\DependencyInjection\Reference,
  */
 
 /**
- * EventDispatcher pass - registers all available event subscribers.
+ * Context loaders pass - registers all available context loaders.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatcherPass implements CompilerPassInterface
+class ContextLoadersPass implements CompilerPassInterface
 {
     /**
      * Processes container.
@@ -29,19 +29,13 @@ class EventDispatcherPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.event_dispatcher')) {
+        if (!$container->hasDefinition('behat.context_reader')) {
             return;
         }
-        $dispatcherDefinition = $container->getDefinition('behat.event_dispatcher');
+        $readerDefinition = $container->getDefinition('behat.context_reader');
 
-        foreach ($container->findTaggedServiceIds('behat.event_subscriber') as $id => $attributes) {
-            foreach ($attributes as $attribute) {
-                if (isset($attribute['priority'])) {
-                    $dispatcherDefinition->addMethodCall(
-                        'addSubscriber', array(new Reference($id), $attribute['priority'])
-                    );
-                }
-            }
+        foreach ($container->findTaggedServiceIds('behat.context_loader') as $id => $attributes) {
+            $readerDefinition->addMethodCall('addLoader', array(new Reference($id)));
         }
     }
 }
