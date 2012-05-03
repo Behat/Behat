@@ -21,12 +21,16 @@ use Behat\Behat\Context\ContextInterface,
 /**
  * Closured definitions proposal.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ClosuredDefinitionProposal implements DefinitionProposalInterface
 {
     /**
-     * @see     Behat\Behat\Definition\Proposal\DefinitionProposalInterface::supports()
+     * Checks if loader supports provided context.
+     *
+     * @param ContextInterface $context
+     *
+     * @return Boolean
      */
     public function supports(ContextInterface $context)
     {
@@ -34,24 +38,31 @@ class ClosuredDefinitionProposal implements DefinitionProposalInterface
     }
 
     /**
-     * @see     Behat\Behat\Definition\Proposal\DefinitionProposalInterface::propose()
+     * Loads definitions and translations from provided context.
+     *
+     * @param ContextInterface $context
+     * @param StepNode         $step
+     *
+     * @return DefinitionSnippet
      */
     public function propose(ContextInterface $context, StepNode $step)
     {
         $text  = $step->getText();
-        $regex = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
+        $regex = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+\'])/', '\\\\$1', $text);
         $regex = preg_replace(
             array(
-                '/\'([^\']*)\'/', '/\"([^\"]*)\"/', // Quoted strings
-                '/(\d+)/',                          // Numbers
+                "/(?<= |^)\\\'(?:((?!\\').)*)\\\'(?= |$)/", // Single quoted strings
+                '/(?<= |^)\"(?:[^\"]*)\"(?= |$)/',          // Double quoted strings
+                '/(\d+)/',                                  // Numbers
             ),
             array(
-                "\'([^\']*)\'", "\"([^\"]*)\"",
+                "\\'([^\']*)\\'",
+                "\"([^\"]*)\"",
                 "(\\d+)",
             ),
             $regex
         );
-        $regex = preg_replace('/\'.*(?<!\')/', '\\\\$0', $regex); // Single quotes without matching pair (escape in resulting regex)
+
         preg_match('/' . $regex . '/', $text, $matches);
         $count = count($matches) - 1;
 

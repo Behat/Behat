@@ -2,6 +2,8 @@
 
 namespace Behat\Behat\Context\Step;
 
+use Behat\Gherkin\Node\StepNode;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -13,14 +15,14 @@ namespace Behat\Behat\Context\Step;
 /**
  * Substep interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface SubstepInterface
 {
     /**
      * Returns substep node.
      *
-     * @return  Behat\Gherkin\Node\StepNode
+     * @return StepNode
      */
     function getStepNode();
 }

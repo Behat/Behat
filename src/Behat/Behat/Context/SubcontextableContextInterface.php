@@ -13,21 +13,23 @@ namespace Behat\Behat\Context;
 /**
  * Context interface with subcontexts support.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface SubcontextableContextInterface extends ContextInterface
 {
     /**
      * Returns all added subcontexts.
      *
-     * @return  array
+     * @return array
      */
     function getSubcontexts();
 
     /**
      * Finds subcontext by it's name.
      *
-     * @return  Behat\Behat\Context\ContextInterface
+     * @param string $className
+     *
+     * @return ContextInterface
      */
     function getSubcontextByClassName($className);
 }

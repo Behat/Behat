@@ -13,7 +13,7 @@ namespace Behat\Behat\Context;
 /**
  * Context interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface ContextInterface
 {

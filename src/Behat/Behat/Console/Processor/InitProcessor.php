@@ -21,12 +21,26 @@ use Behat\Behat\PathLocator;
 /**
  * Init operation processor.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class InitProcessor implements ProcessorInterface
+class InitProcessor extends Processor
 {
+    private $container;
+
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::confiugre()
+     * Constructs processor.
+     *
+     * @param ContainerInterface $container Container instance
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Configures command to be able to process it later.
+     *
+     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -36,12 +50,15 @@ class InitProcessor implements ProcessorInterface
     }
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::process()
+     * Processes data from container and console input.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
-    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input, OutputInterface $output)
     {
         if ($input->getOption('init')) {
-            $this->initFeaturesDirectoryStructure($container->get('behat.path_locator'), $output);
+            $this->initFeaturesDirectoryStructure($this->container->get('behat.path_locator'), $output);
 
             exit(0);
         }

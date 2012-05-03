@@ -18,21 +18,16 @@ use Symfony\Component\Translation\TranslatorInterface;
 /**
  * Translated contexts reader.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class TranslatedContextLoader implements ContextLoaderInterface
 {
-    /**
-     * Translator.
-     *
-     * @var     Symfony\Component\Translation\TranslatorInterface
-     */
     private $translator;
 
     /**
      * Initializes context loader.
      *
-     * @param   Symfony\Component\Translation\TranslatorInterface   $translator             translator
+     * @param TranslatorInterface $translator
      */
     public function __construct(TranslatorInterface $translator)
     {
@@ -40,7 +35,11 @@ class TranslatedContextLoader implements ContextLoaderInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\Loader\ContextLoaderInterface::supports()
+     * Checks if loader supports provided context.
+     *
+     * @param ContextInterface $context
+     *
+     * @return Boolean
      */
     public function supports(ContextInterface $context)
     {
@@ -48,7 +47,11 @@ class TranslatedContextLoader implements ContextLoaderInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\Loader\ContextLoaderInterface::load()
+     * Loads definitions and translations from provided context.
+     *
+     * @param ContextInterface $context
+     *
+     * @throws \InvalidArgumentException
      */
     public function load(ContextInterface $context)
     {

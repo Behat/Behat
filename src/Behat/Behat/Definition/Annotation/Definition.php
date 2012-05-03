@@ -21,34 +21,21 @@ use Behat\Behat\Definition\DefinitionInterface,
 /**
  * Step definition.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class Definition extends Annotation implements DefinitionInterface
 {
-    /**
-     * Definition regex to match.
-     *
-     * @var     string
-     */
     private $regex;
-    /**
-     * Matched to definition regex text.
-     *
-     * @var     string
-     */
     private $matchedText;
-    /**
-     * Step parameters for call.
-     *
-     * @var     array
-     */
     private $values = array();
 
     /**
      * Initializes definition.
      *
-     * @param   callback    $callback   definition callback
-     * @param   string      $regex      definition regular expression
+     * @param callback $callback definition callback
+     * @param string   $regex    definition regular expression
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct($callback, $regex)
     {
@@ -66,7 +53,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
     /**
      * Returns definition regex to match.
      *
-     * @return  string
+     * @return string
      */
     public function getRegex()
     {
@@ -76,7 +63,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
     /**
      * Saves matched step text to definition.
      *
-     * @param   string  $text   step text (description)
+     * @param string $text
      */
     public function setMatchedText($text)
     {
@@ -86,7 +73,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
     /**
      * Returns matched step text.
      *
-     * @return  string
+     * @return string
      */
     public function getMatchedText()
     {
@@ -96,7 +83,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
     /**
      * Sets step parameters for step run.
      *
-     * @param   array   $values step parameters
+     * @param array $values
      */
     public function setValues(array $values)
     {
@@ -106,7 +93,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
     /**
      * Returns step parameters for step run.
      *
-     * @return  array
+     * @return array
      */
     public function getValues()
     {
@@ -118,9 +105,16 @@ abstract class Definition extends Annotation implements DefinitionInterface
      *
      * This method used as custom error handler when step is running.
      *
-     * @see     set_error_handler()
+     * @see set_error_handler()
      *
-     * @throws  Behat\Behat\Exception\ErrorException
+     * @param integer $level
+     * @param string  $message
+     * @param string  $file
+     * @param integer $line
+     *
+     * @return Boolean
+     *
+     * @throws ErrorException
      */
     public function errorHandler($level, $message, $file, $line)
     {
@@ -133,9 +127,15 @@ abstract class Definition extends Annotation implements DefinitionInterface
     }
 
     /**
-     * @see     Behat\Behat\Definition\DefinitionInterface::run()
+     * Runs definition callback.
+     *
+     * @param ContextInterface $context
+     *
+     * @return mixed
+     *
+     * @throws BehaviorException
      */
-    public function run(ContextInterface $context, $tokens = array())
+    public function run(ContextInterface $context)
     {
         if (defined('BEHAT_ERROR_REPORTING')) {
             $errorLevel = BEHAT_ERROR_REPORTING;
@@ -147,14 +147,6 @@ abstract class Definition extends Annotation implements DefinitionInterface
         $callback   = $this->getCallbackForContext($context);
 
         $values = $this->getValues();
-        if (count($tokens)) {
-            foreach ($values as $i => $value) {
-                if ($value instanceof TableNode || $value instanceof PyStringNode) {
-                    $values[$i] = clone $value;
-                    $values[$i]->replaceTokens($tokens);
-                }
-            }
-        }
         if ($this->isClosure()) {
             array_unshift($values, $context);
         }

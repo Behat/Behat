@@ -13,7 +13,7 @@ namespace Behat\Behat\Hook\Annotation;
 /**
  * AfterSuite hook class.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class AfterSuite extends SuiteHook
 {

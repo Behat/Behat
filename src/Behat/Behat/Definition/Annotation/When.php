@@ -13,12 +13,14 @@ namespace Behat\Behat\Definition\Annotation;
 /**
  * When type step definition.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class When extends Definition
 {
     /**
-     * @see     Behat\Behat\Definition\DefinitionInterface::getType()
+     * Returns definition type (Given|When|Then).
+     *
+     * @return string
      */
     public function getType()
     {

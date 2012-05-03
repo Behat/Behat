@@ -15,22 +15,17 @@ use Behat\Behat\Event\EventInterface;
 /**
  * Base filterable hook class.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class FilterableHook extends Hook
 {
-    /**
-     * Hook filter string.
-     *
-     * @var     string
-     */
     private $filter;
 
     /**
      * Initializes hook.
      *
-     * @param   callback    $callback       callback
-     * @param   string      $filterString   hook filter
+     * @param callback $callback     callback
+     * @param string   $filterString hook filter
      */
     public function __construct($callback, $filterString = null)
     {
@@ -42,7 +37,7 @@ abstract class FilterableHook extends Hook
     /**
      * Returns filter string.
      *
-     * @return  stirng
+     * @return stirng
      */
     public function getFilter()
     {
@@ -52,9 +47,9 @@ abstract class FilterableHook extends Hook
     /**
      * Checks that current hook matches provided event object.
      *
-     * @param   EventInterface  $event
+     * @param EventInterface $event
      *
-     * @return  Boolean
+     * @return Boolean
      */
     abstract public function filterMatches(EventInterface $event);
 }

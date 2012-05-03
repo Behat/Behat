@@ -17,7 +17,7 @@ use Behat\Behat\DataCollector\LoggerDataCollector;
 /**
  * Suite event.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class SuiteEvent extends Event implements EventInterface
 {
@@ -28,9 +28,9 @@ class SuiteEvent extends Event implements EventInterface
     /**
      * Initializes suite event.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger     logger instance
-     * @param   mixed                                           $parameters context parameters
-     * @param   Boolean                                         $completed  is suite completed
+     * @param LoggerDataCollector $logger     suite logger
+     * @param mixed               $parameters context parameters
+     * @param Boolean             $completed  is suite completed
      */
     public function __construct(LoggerDataCollector $logger, $parameters, $completed)
     {
@@ -42,7 +42,7 @@ class SuiteEvent extends Event implements EventInterface
     /**
      * Returns suite logger.
      *
-     * @return  Behat\Behat\DataCollector\LoggerDataCollector
+     * @return LoggerDataCollector
      */
     public function getLogger()
     {
@@ -52,7 +52,7 @@ class SuiteEvent extends Event implements EventInterface
     /**
      * Returns context parameters.
      *
-     * @return  mixed
+     * @return mixed
      */
     public function getContextParameters()
     {
@@ -62,7 +62,7 @@ class SuiteEvent extends Event implements EventInterface
     /**
      * Checks whether test suite was completed entirely.
      *
-     * @return  Boolean
+     * @return Boolean
      */
     public function isCompleted()
     {

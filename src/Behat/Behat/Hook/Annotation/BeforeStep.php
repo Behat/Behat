@@ -13,7 +13,7 @@ namespace Behat\Behat\Hook\Annotation;
 /**
  * BeforeStep hook class.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class BeforeStep extends StepHook
 {

@@ -17,21 +17,21 @@ use Behat\Behat\Context\ContextInterface,
 /**
  * Hook interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface HookInterface
 {
     /**
      * Returns hooked event type.
      *
-     * @return  string
+     * @return string
      */
     function getEventName();
 
     /**
      * Runs hook callback.
      *
-     * @param   Behat\Behat\Event\EventInterface    $event
+     * @param EventInterface $event
      */
     function run(EventInterface $event);
 }

@@ -51,7 +51,7 @@ class Hooks extends BehatContext
      *
      * Prepares test folders in the temporary directory.
      */
-    public function prepareTestFolders()
+    public function prepareTestFolders($event)
     {
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR .
                md5(microtime() * rand(0, 10000));

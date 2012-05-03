@@ -42,12 +42,12 @@ Feature: Step Arguments Transformations
           private $user;
 
           /** @Transform /"([^\ "]+)(?: - (\d+))?" user/ */
-          public static function createUserFromUsername($username, $age = 20) {
+          public function createUserFromUsername($username, $age = 20) {
               return new User($username, $age);
           }
 
           /** @Transform /^table:username,age$/ */
-          public static function createUserFromTable(TableNode $table) {
+          public function createUserFromTable(TableNode $table) {
               $hash     = $table->getHash();
               $username = $hash[0]['username'];
               $age      = $hash[0]['age'];

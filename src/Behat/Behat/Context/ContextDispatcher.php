@@ -13,27 +13,18 @@ namespace Behat\Behat\Context;
 /**
  * Context dispatcher.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ContextDispatcher
 {
-    /**
-     * Context class name.
-     *
-     * @var     string
-     */
     private $contextClass;
-    /**
-     * Context initialization parameters.
-     *
-     * @var     array
-     */
-    private $parameters = array();
+    private $initializers = array();
+    private $parameters   = array();
 
     /**
      * Initialize dispatcher.
      *
-     * @param   array   $parameters context parameters
+     * @param array $parameters context parameters
      */
     public function __construct(array $parameters = array())
     {
@@ -43,7 +34,9 @@ class ContextDispatcher
     /**
      * Sets context class name.
      *
-     * @param   string  $className      context class name
+     * @param string $className
+     *
+     * @throws \InvalidArgumentException
      */
     public function setContextClass($className)
     {
@@ -82,9 +75,21 @@ class ContextDispatcher
     }
 
     /**
-     * Create new context instance.
+     * Adds initializer to the dispatcher.
      *
-     * @return  Behat\Behat\Context\ContextInterface
+     * @param ContextInitializerInterface $initializer
+     */
+    public function addInitializer(ContextInitializerInterface $initializer)
+    {
+        $this->initializers[] = $initializer;
+    }
+
+    /**
+     * Creates new context instance.
+     *
+     * @return ContextInterface
+     *
+     * @throws \RuntimeException
      */
     public function createContext()
     {
@@ -92,6 +97,13 @@ class ContextDispatcher
             throw new \RuntimeException('Specify context class to use for ContextDispatcher');
         }
 
-        return new $this->contextClass($this->getContextParameters());
+        $context = new $this->contextClass($this->getContextParameters());
+        foreach ($this->initializers as $initializer) {
+            if ($initializer->supports($context)) {
+                $initializer->initialize($context);
+            }
+        }
+
+        return $context;
     }
 }

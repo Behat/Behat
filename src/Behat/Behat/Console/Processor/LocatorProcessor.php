@@ -4,6 +4,7 @@ namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Command\Command,
+    Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,24 +19,51 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 /**
  * Path locator processor.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class LocatorProcessor implements ProcessorInterface
+class LocatorProcessor extends Processor
 {
+    private $container;
+
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::command()
+     * Constructs processor.
+     *
+     * @param ContainerInterface $container Container instance
      */
-    public function configure(Command $command)
+    public function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
     }
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::process()
+     * Configures command to be able to process it later.
+     *
+     * @param Command $command
      */
-    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
+    public function configure(Command $command)
     {
-        $container->get('behat.runner')->setLocatorBasePath($input->getArgument('features'));
-        $locator = $container->get('behat.path_locator');
+        $command->addArgument('features', InputArgument::OPTIONAL,
+            "Feature(s) to run. Could be:\n" .
+            "- a dir <comment>(features/)</comment>\n" .
+            "- a feature <comment>(*.feature)</comment>\n" .
+            "- a scenario at specific line <comment>(*.feature:10)</comment>.\n" .
+            "- all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.\n" .
+            "- all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>."
+        );
+    }
+
+    /**
+     * Processes data from container and console input.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function process(InputInterface $input, OutputInterface $output)
+    {
+        $this->container->get('behat.runner')->setLocatorBasePath($input->getArgument('features'));
+        $locator = $this->container->get('behat.path_locator');
 
         foreach ($locator->locateBootstrapFilesPaths() as $path) {
             require_once($path);

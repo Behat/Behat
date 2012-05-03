@@ -13,7 +13,7 @@ namespace Behat\Behat\Hook\Annotation;
 /**
  * AfterFeature hook class.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class AfterFeature extends FeatureHook
 {

@@ -28,24 +28,16 @@ use Behat\Gherkin\Node\AbstractNode,
 /**
  * HTML formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class HtmlFormatter extends PrettyFormatter
 {
     /**
      * Deffered footer template part.
      *
-     * @var     string
+     * @var string
      */
     protected $footer;
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDescription()
-    {
-        return "Generates a nice looking HTML report.";
-    }
 
     /**
      * {@inheritdoc}
@@ -218,14 +210,15 @@ class HtmlFormatter extends PrettyFormatter
     protected function printOutlineExamplesSectionHeader(TableNode $examples)
     {
         $this->writeln('<div class="examples">');
-        $this->writeln('<h4>' . $examples->getKeyword() . '</h4>');
 
-        $this->writeln('<table>');
-        $this->writeln('<thead>');
-        $this->printColorizedTableRow($examples->getRow(0), 'skipped');
-        $this->writeln('</thead>');
-
-        $this->writeln('<tbody>');
+        if (!$this->getParameter('expand')) {
+            $this->writeln('<h4>' . $examples->getKeyword() . '</h4>');
+            $this->writeln('<table>');
+            $this->writeln('<thead>');
+            $this->printColorizedTableRow($examples->getRow(0), 'skipped');
+            $this->writeln('</thead>');
+            $this->writeln('<tbody>');
+        }
     }
 
     /**
@@ -233,10 +226,30 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printOutlineExampleResult(TableNode $examples, $iteration, $result, $isSkipped)
     {
-        $color  = $this->getResultColorCode($result);
+        if (!$this->getParameter('expand')) {
+            $color  = $this->getResultColorCode($result);
 
-        $this->printColorizedTableRow($examples->getRow($iteration + 1), $color);
-        $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
+            $this->printColorizedTableRow($examples->getRow($iteration + 1), $color);
+            $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
+        } else {
+            $this->write('<h4>' . $examples->getKeyword() . ': ');
+            foreach ($examples->getRow($iteration + 1) as $value) {
+                $this->write('<span>' . $value . '</span>');
+            }
+            $this->writeln('</h4>');
+
+            foreach ($this->delayedStepEvents as $event) {
+                $this->writeln('<ol>');
+                $this->printStep(
+                    $event->getStep(),
+                    $event->getResult(),
+                    $event->getDefinition(),
+                    $event->getSnippet(),
+                    $event->getException()
+                );
+                $this->writeln('</ol>');
+            }
+        }
     }
 
     /**
@@ -265,8 +278,10 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printOutlineFooter(OutlineNode $outline)
     {
-        $this->writeln('</tbody>');
-        $this->writeln('</table>');
+        if (!$this->getParameter('expand')) {
+            $this->writeln('</tbody>');
+            $this->writeln('</table>');
+        }
         $this->writeln('</div>');
         $this->writeln('</div>');
     }
@@ -321,7 +336,11 @@ class HtmlFormatter extends PrettyFormatter
     protected function printStepDefinitionPath(StepNode $step, DefinitionInterface $definition)
     {
         if ($this->getParameter('paths')) {
-            $this->printPathComment($this->relativizePathsInString($definition->getPath()));
+            if ($this->hasParameter('paths_base_url')) {
+                $this->printPathLink($definition);
+            } else {
+                $this->printPathComment($this->relativizePathsInString($definition->getPath()));
+            }
         }
     }
 
@@ -418,7 +437,8 @@ class HtmlFormatter extends PrettyFormatter
         }
 
         // Replace "<", ">" with colorized ones
-        $text = preg_replace('/(<[^>]+>)/', "<strong class=\"$paramColor\">\$1</strong>", $text);
+        $text = preg_replace('/(<[^>]+>)/', "{+strong class=\"$paramColor\"-}\$1{+/strong-}", $text);
+        $text = htmlspecialchars($text, ENT_NOQUOTES);
         $text = strtr($text, array('{+' => '<', '-}' => '>'));
 
         return $text;
@@ -436,6 +456,19 @@ class HtmlFormatter extends PrettyFormatter
         }
 
         $this->writeln('</tr>');
+    }
+
+    /**
+     * Prints path link, which links to the source containing the step definition.
+     *
+     * @param DefinitionInterface $definition
+     */
+    protected function printPathLink(DefinitionInterface $definition)
+    {
+        $url = $this->getParameter('paths_base_url')
+            . $this->relativizePathsInString($definition->getCallbackReflection()->getFileName());
+        $path = $this->relativizePathsInString($definition->getPath());
+        $this->writeln('<span class="path"><a href="' . $url . '">' . $path . '</a></span>');
     }
 
     /**
@@ -519,7 +552,7 @@ HTML
     /**
      * Get HTML template.
      *
-     * @return  string
+     * @return string
      */
     protected function getHtmlTemplate()
     {
@@ -530,13 +563,40 @@ HTML
             return file_get_contents($templatePath);
         }
 
-        return <<<'HTMLTPL'
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        return
+'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns ="http://www.w3.org/1999/xhtml">
 <head>
     <meta content="text/html;charset=utf-8"/>
     <title>Behat Test Suite</title>
     <style type="text/css">
+' . $this->getHtmlTemplateStyle() . '
+    </style>
+
+    <style type="text/css" media="print">
+' . $this->getHtmlTemplatePrintStyle() . '
+    </style>
+</head>
+<body>
+    <div id="behat">
+        {{content}}
+    </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+    <script type="text/javascript">
+' . $this->getHtmlTemplateScript() . '
+    </script>
+</body>
+</html>';
+    }
+
+    /**
+     * Get HTML template style.
+     *
+     * @return string
+     */
+    protected function getHtmlTemplateStyle()
+    {
+        return <<<'HTMLTPL'
         body {
             margin:0px;
             padding:0px;
@@ -586,6 +646,15 @@ HTML
             padding:0px 5px;
             float:right;
         }
+        #behat .path a:link,
+        #behat .path a:visited {
+            color:#999;
+        }
+        #behat .path a:hover,
+        #behat .path a:active {
+            background-color:#000;
+            color:#fff;
+        }
         #behat h3 .path {
             margin-right:4%;
         }
@@ -614,48 +683,66 @@ HTML
             margin-left:20px;
             margin-bottom:20px;
         }
-        #behat .scenario > ol {
+        #behat .scenario > ol,
+        #behat .scenario .examples > ol {
             margin:0px;
             list-style:none;
-            margin-left:20px;
             padding:0px;
         }
-        #behat .scenario > ol:after {
+        #behat .scenario > ol {
+            margin-left:20px;
+        }
+        #behat .scenario > ol:after,
+        #behat .scenario .examples > ol:after {
             content:'';
             display:block;
             clear:both;
         }
-        #behat .scenario > ol li {
+        #behat .scenario > ol li,
+        #behat .scenario .examples > ol li {
             float:left;
             width:95%;
             padding-left:5px;
             border-left:5px solid;
             margin-bottom:4px;
         }
-        #behat .scenario > ol li .argument {
+        #behat .scenario > ol li .argument,
+        #behat .scenario .examples > ol li .argument {
             margin:10px 20px;
             font-size:16px;
             overflow:hidden;
         }
-        #behat .scenario > ol li table.argument {
+        #behat .scenario > ol li table.argument,
+        #behat .scenario .examples > ol li table.argument {
             border:1px solid #d2d2d2;
         }
-        #behat .scenario > ol li table.argument thead td {
+        #behat .scenario > ol li table.argument thead td,
+        #behat .scenario .examples > ol li table.argument thead td {
             font-weight: bold;
         }
-        #behat .scenario > ol li table.argument td {
+        #behat .scenario > ol li table.argument td,
+        #behat .scenario .examples > ol li table.argument td {
             padding:5px 10px;
             background:#f3f3f3;
         }
-        #behat .scenario > ol li .keyword {
+        #behat .scenario > ol li .keyword,
+        #behat .scenario .examples > ol li .keyword {
             font-weight:bold;
         }
-        #behat .scenario > ol li .path {
+        #behat .scenario > ol li .path,
+        #behat .scenario .examples > ol li .path {
             float:right;
         }
         #behat .scenario .examples {
             margin-top:20px;
             margin-left:40px;
+        }
+        #behat .scenario .examples h4 span {
+            font-weight:normal;
+            background:#f3f3f3;
+            color:#999;
+            padding:0 5px;
+            margin-left:10px;
         }
         #behat .scenario .examples table {
             margin-left:20px;
@@ -751,11 +838,13 @@ HTML
             margin:0px;
         }
         #behat .jq-toggle > .scenario,
-        #behat .jq-toggle > ol {
+        #behat .jq-toggle > ol,
+        #behat .jq-toggle > .examples {
             display:none;
         }
         #behat .jq-toggle-opened > .scenario,
-        #behat .jq-toggle-opened > ol {
+        #behat .jq-toggle-opened > ol,
+        #behat .jq-toggle-opened > .examples {
             display:block;
         }
         #behat .jq-toggle > h2,
@@ -772,9 +861,17 @@ HTML
             content:' |-';
             font-weight:bold;
         }
-    </style>
+HTMLTPL;
+    }
 
-    <style type="text/css" media="print">
+    /**
+     * Get HTML template style.
+     *
+     * @return string
+     */
+    protected function getHtmlTemplatePrintStyle()
+    {
+        return <<<'HTMLTPL'
         body {
             padding:0px;
         }
@@ -784,6 +881,7 @@ HTML
         }
 
         #behat .jq-toggle > .scenario,
+        #behat .jq-toggle > .scenario .examples,
         #behat .jq-toggle > ol {
             display:block;
         }
@@ -816,17 +914,21 @@ HTML
             font-weight:bold;
         }
 
-        #behat .scenario > ol li {
+        #behat .scenario > ol li,
+        #behat .scenario .examples > ol li {
             border-left:none;
         }
-    </style>
-</head>
-<body>
-    <div id="behat">
-        {{content}}
-    </div>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
-    <script type="text/javascript">
+HTMLTPL;
+    }
+
+    /**
+     * Get HTML template script.
+     *
+     * @return string
+     */
+    protected function getHtmlTemplateScript()
+    {
+        return <<<'HTMLTPL'
         $(document).ready(function(){
             $('#behat .feature h2').click(function(){
                 $(this).parent().toggleClass('jq-toggle-opened');
@@ -849,7 +951,7 @@ HTML
             $('#behat .summary .counters .scenarios .passed')
                 .addClass('switcher')
                 .click(function(){
-                    var $scenario = $('.feature .scenario:not(:has(li.failed, li.pending))');
+                    var $scenario = $('.feature .scenario:not(:has(.failed, .pending))');
                     var $feature  = $scenario.parent();
 
                     $('#behat_hide_all').click();
@@ -861,7 +963,7 @@ HTML
             $('#behat .summary .counters .steps .passed')
                 .addClass('switcher')
                 .click(function(){
-                    var $scenario = $('.feature .scenario:has(li.passed)');
+                    var $scenario = $('.feature .scenario:has(.passed)');
                     var $feature  = $scenario.parent();
 
                     $('#behat_hide_all').click();
@@ -873,7 +975,7 @@ HTML
             $('#behat .summary .counters .failed')
                 .addClass('switcher')
                 .click(function(){
-                    var $scenario = $('.feature .scenario:has(li.failed)');
+                    var $scenario = $('.feature .scenario:has(.failed)');
                     var $feature = $scenario.parent();
 
                     $('#behat_hide_all').click();
@@ -885,7 +987,7 @@ HTML
             $('#behat .summary .counters .skipped')
                 .addClass('switcher')
                 .click(function(){
-                    var $scenario = $('.feature .scenario:has(li.skipped)');
+                    var $scenario = $('.feature .scenario:has(.skipped)');
                     var $feature = $scenario.parent();
 
                     $('#behat_hide_all').click();
@@ -897,7 +999,7 @@ HTML
             $('#behat .summary .counters .pending')
                 .addClass('switcher')
                 .click(function(){
-                    var $scenario = $('.feature .scenario:has(li.pending)');
+                    var $scenario = $('.feature .scenario:has(.pending)');
                     var $feature = $scenario.parent();
 
                     $('#behat_hide_all').click();
@@ -906,9 +1008,6 @@ HTML
                     $feature.addClass('jq-toggle-opened');
                 });
         });
-    </script>
-</body>
-</html>
 HTMLTPL;
     }
 }

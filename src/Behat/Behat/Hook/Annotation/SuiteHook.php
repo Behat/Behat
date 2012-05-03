@@ -13,7 +13,7 @@ namespace Behat\Behat\Hook\Annotation;
 /**
  * SuiteHook hook class.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class SuiteHook extends Hook
 {

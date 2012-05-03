@@ -16,26 +16,26 @@ use Symfony\Component\DependencyInjection\Reference,
  */
 
 /**
- * ContextReader pass - registers all available context loaders.
+ * Command pass - registers all available command processors.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextReaderPass implements CompilerPassInterface
+class CommandProcessorsPass implements CompilerPassInterface
 {
     /**
      * Processes container.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerBuilder  $container
+     * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.context_reader')) {
+        if (!$container->hasDefinition('behat.processor.aggregate')) {
             return;
         }
-        $readerDefinition = $container->getDefinition('behat.context_reader');
+        $aggregator = $container->getDefinition('behat.processor.aggregate');
 
-        foreach ($container->findTaggedServiceIds('behat.context_loader') as $id => $attributes) {
-            $readerDefinition->addMethodCall('addLoader', array(new Reference($id)));
+        foreach ($container->findTaggedServiceIds('behat.processor') as $id => $attributes) {
+            $aggregator->addMethodCall('addProcessor', array(new Reference($id)));
         }
     }
 }

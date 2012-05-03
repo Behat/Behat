@@ -15,7 +15,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * behat.phar package compiler.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PharCompiler
 {
@@ -64,7 +64,7 @@ class PharCompiler
 
         foreach ($finder as $file) {
             // don't compile test suites
-            if (!preg_match('/\/tests\/|\/test\//', $file->getRealPath())) {
+            if (!preg_match('/\/tests\/|\/test\//i', $file->getRealPath())) {
                 $this->addFileToPhar($file, $phar);
             }
         }
@@ -142,7 +142,7 @@ define('BEHAT_BIN_PATH',     __FILE__);
 define('BEHAT_VERSION',      '%s');
 
 Phar::mapPhar('behat.phar');
-require_once 'phar://behat.phar/vendor/.composer/autoload.php';
+require_once 'phar://behat.phar/vendor/autoload.php';
 
 // internal encoding to utf8
 mb_internal_encoding('utf8');

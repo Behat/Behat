@@ -19,7 +19,7 @@ use Behat\Gherkin\Gherkin;
 /**
  * Behat suite runner.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class Runner
 {
@@ -31,7 +31,7 @@ class Runner
     /**
      * Initializes runner.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -41,7 +41,7 @@ class Runner
     /**
      * Returns container associated with this runner.
      *
-     * @return  Symfony\Component\DependencyInjection\ContainerInterface
+     * @return ContainerInterface
      */
     public function getContainer()
     {
@@ -51,7 +51,7 @@ class Runner
     /**
      * Sets main context class.
      *
-     * @param   string  $class
+     * @param string $class
      */
     public function setMainContextClass($class)
     {
@@ -79,7 +79,7 @@ class Runner
     /**
      * Sets path locator base path.
      *
-     * @param   string  $path
+     * @param string $path
      */
     public function setLocatorBasePath($path)
     {
@@ -89,7 +89,7 @@ class Runner
     /**
      * Sets features/scenarios paths to run.
      *
-     * @param   array   $paths
+     * @param array $paths
      */
     public function setFeaturesPaths(array $paths)
     {
@@ -99,7 +99,7 @@ class Runner
     /**
      * Returns paths to the features of current suite (basepath).
      *
-     * @return  array
+     * @return array
      */
     public function getFeaturesPaths()
     {
@@ -110,7 +110,7 @@ class Runner
     /**
      * Sets runner to be strict.
      *
-     * @param   Boolean $strict
+     * @param Boolean $strict
      */
     public function setStrict($strict = true)
     {
@@ -120,7 +120,7 @@ class Runner
     /**
      * Checks whether runner is strict.
      *
-     * @return  Boolean
+     * @return Boolean
      */
     public function isStrict()
     {
@@ -130,7 +130,7 @@ class Runner
     /**
      * Sets suite to dry-run mode (skip all steps).
      *
-     * @param   Boolean $dryRun
+     * @param Boolean $dryRun
      */
     public function setDryRun($dryRun = true)
     {
@@ -140,7 +140,7 @@ class Runner
     /**
      * Checks whether runner is in dry-run mode.
      *
-     * @return  Boolean
+     * @return Boolean
      */
     public function isDryRun()
     {
@@ -150,7 +150,7 @@ class Runner
     /**
      * Runs feature suite.
      *
-     * @return  integer CLI return code
+     * @return integer CLI return code
      */
     public function runSuite()
     {
@@ -166,8 +166,8 @@ class Runner
     /**
      * Parses and runs provided features.
      *
-     * @param   Behat\Gherkin\Gherkin   $gherkin    gherkin parser/loader
-     * @param   array                   $features   list of feature files
+     * @param Gherkin $gherkin  gherkin parser/loader
+     * @param array   $features list of feature files
      */
     protected function runFeatures(Gherkin $gherkin, $features)
     {
@@ -188,7 +188,7 @@ class Runner
     /**
      * Returns CLI code for finished suite.
      *
-     * @return  integer
+     * @return integer
      */
     protected function getCliReturnCode()
     {

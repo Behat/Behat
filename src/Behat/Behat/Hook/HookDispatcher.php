@@ -25,25 +25,30 @@ use Behat\Behat\Event\EventInterface,
 /**
  * Hook dispatcher.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class HookDispatcher implements EventSubscriberInterface
 {
-    /**
-     * Loaded hooks.
-     *
-     * @var     array
-     */
     private $hooks  = array();
-    /**
-     * Dry run of hooks.
-     *
-     * @var     Boolean
-     */
     private $dryRun = false;
 
     /**
-     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+     *
+     * @return array The event names to listen to
      */
     public static function getSubscribedEvents()
     {
@@ -58,7 +63,7 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Sets hook dispatcher to dry-run mode.
      *
-     * @param   Boolean $dryRun
+     * @param Boolean $dryRun
      */
     public function setDryRun($dryRun = true)
     {
@@ -68,7 +73,7 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Adds hook into dispatcher.
      *
-     * @param   Behat\Behat\Hook\HookInterface  $hook   hook instance
+     * @param HookInterface $hook
      */
     public function addHook(HookInterface $hook)
     {
@@ -82,7 +87,7 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Returns all available hooks.
      *
-     * @return  array
+     * @return array
      */
     public function getHooks()
     {
@@ -100,9 +105,9 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Listens to "suite.before" event.
      *
-     * @param   Behat\Behat\Event\SuiteEvent    $event  event to which hooks glued
+     * @param SuiteEvent $event
      *
-     * @uses    fireSuiteHooks()
+     * @uses fireSuiteHooks()
      */
     public function beforeSuite(SuiteEvent $event)
     {
@@ -112,9 +117,9 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Behat\Behat\Event\SuiteEvent    $event  event to which hooks glued
+     * @param SuiteEvent $event
      *
-     * @uses    fireSuiteHooks()
+     * @uses fireSuiteHooks()
      */
     public function afterSuite(SuiteEvent $event)
     {
@@ -124,9 +129,9 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Listens to "feature.before" event.
      *
-     * @param   Behat\Behat\Event\FeatureEvent  $event  event to which hooks glued
+     * @param FeatureEvent $event
      *
-     * @uses    fireFeatureHooks()
+     * @uses fireFeatureHooks()
      */
     public function beforeFeature(FeatureEvent $event)
     {
@@ -136,9 +141,9 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Listens to "feature.after" event.
      *
-     * @param   Behat\Behat\Event\FeatureEvent  $event  event to which hooks glued
+     * @param FeatureEvent $event
      *
-     * @uses    fireFeatureHooks()
+     * @uses fireFeatureHooks()
      */
     public function afterFeature(FeatureEvent $event)
     {
@@ -148,9 +153,9 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Listens to "scenario.before" event.
      *
-     * @param   Behat\Behat\Event\ScenarioEvent $event  event to which hooks glued
+     * @param ScenarioEvent $event
      *
-     * @uses    fireScenarioHooks()
+     * @uses fireScenarioHooks()
      */
     public function beforeScenario(ScenarioEvent $event)
     {
@@ -160,9 +165,9 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Behat\Behat\Event\ScenarioEvent $event  event to which hooks glued
+     * @param ScenarioEvent $event
      *
-     * @uses    fireScenarioHooks()
+     * @uses fireScenarioHooks()
      */
     public function afterScenario(ScenarioEvent $event)
     {
@@ -172,9 +177,9 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param   Behat\Behat\Event\OutlineExampleEvent   $event  event to which hooks glued
+     * @param OutlineExampleEvent $event
      *
-     * @uses    fireScenarioHooks()
+     * @uses fireScenarioHooks()
      */
     public function beforeOutlineExample(OutlineExampleEvent $event)
     {
@@ -184,9 +189,9 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Behat\Behat\Event\OutlineExampleEvent   $event  event to which hooks glued
+     * @param OutlineExampleEvent $event
      *
-     * @uses    fireScenarioHooks()
+     * @uses fireScenarioHooks()
      */
     public function afterOutlineExample(OutlineExampleEvent $event)
     {
@@ -196,9 +201,9 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Listens to "step.before" event.
      *
-     * @param   Behat\Behat\Event\StepEvent $event  event to which hooks glued
+     * @param StepEvent $event
      *
-     * @uses    fireStepHooks()
+     * @uses fireStepHooks()
      */
     public function beforeStep(StepEvent $event)
     {
@@ -208,9 +213,9 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Listens to "step.after" event.
      *
-     * @param   Behat\Behat\Event\StepEvent $event  event to which hooks glued
+     * @param StepEvent $event
      *
-     * @uses    fireStepHooks()
+     * @uses fireStepHooks()
      */
     public function afterStep(StepEvent $event)
     {
@@ -224,7 +229,12 @@ class HookDispatcher implements EventSubscriberInterface
      *
      * @see     set_error_handler()
      *
-     * @throws  Behat\Behat\Exception\ErrorException
+     * @param $code
+     * @param $message
+     * @param $file
+     * @param $line
+     *
+     * @throws \Behat\Behat\Exception\ErrorException
      */
     public function errorHandler($code, $message, $file, $line)
     {
@@ -237,8 +247,10 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Runs hooks with specified name.
      *
-     * @param   string                          $name   hooks name
-     * @param   Behat\Behat\Event\SuiteEvent    $event  event to which hooks glued
+     * @param string         $name  hooks name
+     * @param EventInterface $event event to which hooks glued
+     *
+     * @throws \Exception
      */
     protected function fireHooks($name, EventInterface $event)
     {
@@ -277,8 +289,8 @@ class HookDispatcher implements EventSubscriberInterface
     /**
      * Adds hook information to exception thrown from it.
      *
-     * @param   Behat\Behat\Hook\HookInterface  $hook       hook instance
-     * @param   Exception                       $exception  exception
+     * @param HookInterface $hook      hook instance
+     * @param \Exception    $exception exception
      */
     private function addHookInformationToException(HookInterface $hook, \Exception $exception)
     {

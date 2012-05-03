@@ -17,7 +17,7 @@ use Behat\Gherkin\Node\FeatureNode;
 /**
  * Feature event.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FeatureEvent extends Event implements EventInterface
 {
@@ -28,9 +28,9 @@ class FeatureEvent extends Event implements EventInterface
     /**
      * Initializes feature event.
      *
-     * @param   Behat\Gherkin\Node\FeatureNode  $feature    feature instance
-     * @param   mixed                           $parameters context parameters
-     * @param   integer                         $result     result code
+     * @param FeatureNode  $feature
+     * @param mixed        $parameters
+     * @param integer      $result
      */
     public function __construct(FeatureNode $feature, $parameters, $result = null)
     {
@@ -42,7 +42,7 @@ class FeatureEvent extends Event implements EventInterface
     /**
      * Returns feature node.
      *
-     * @return  Behat\Gherkin\Node\FeatureNode
+     * @return FeatureNode
      */
     public function getFeature()
     {
@@ -52,7 +52,7 @@ class FeatureEvent extends Event implements EventInterface
     /**
      * Returns context parameters.
      *
-     * @return  mixed
+     * @return mixed
      */
     public function getContextParameters()
     {
@@ -62,7 +62,7 @@ class FeatureEvent extends Event implements EventInterface
     /**
      * Returns feature tester result code.
      *
-     * @return  integer
+     * @return integer
      */
     public function getResult()
     {

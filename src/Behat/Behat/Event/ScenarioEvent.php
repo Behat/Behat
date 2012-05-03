@@ -19,7 +19,7 @@ use Behat\Gherkin\Node\ScenarioNode;
 /**
  * Scenario event.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ScenarioEvent extends Event implements EventInterface
 {
@@ -31,10 +31,10 @@ class ScenarioEvent extends Event implements EventInterface
     /**
      * Initializes scenario event.
      *
-     * @param   Behat\Gherkin\Node\ScenarioNode         $scenario
-     * @param   Behat\Behat\Context\ContextInterface    $context
-     * @param   integer                                 $result
-     * @param   Boolean                                 $skipped
+     * @param ScenarioNode     $scenario
+     * @param ContextInterface $context
+     * @param integer          $result
+     * @param Boolean          $skipped
      */
     public function __construct(ScenarioNode $scenario, ContextInterface $context, $result = null,
                                 $skipped = false)
@@ -48,7 +48,7 @@ class ScenarioEvent extends Event implements EventInterface
     /**
      * Returns scenario node.
      *
-     * @return  Behat\Gherkin\Node\ScenarioNode
+     * @return ScenarioNode
      */
     public function getScenario()
     {
@@ -58,7 +58,7 @@ class ScenarioEvent extends Event implements EventInterface
     /**
      * Returns context object.
      *
-     * @return  Behat\Behat\Context\ContextInterface
+     * @return ContextInterface
      */
     public function getContext()
     {
@@ -68,7 +68,7 @@ class ScenarioEvent extends Event implements EventInterface
     /**
      * Returns scenario tester result code.
      *
-     * @return  integer
+     * @return integer
      */
     public function getResult()
     {
@@ -78,7 +78,7 @@ class ScenarioEvent extends Event implements EventInterface
     /**
      * Checks whether scenario were skipped.
      *
-     * @return  Boolean
+     * @return Boolean
      */
     public function isSkipped()
     {

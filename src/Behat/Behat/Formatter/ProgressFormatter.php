@@ -25,24 +25,16 @@ use Behat\Gherkin\Node\BackgroundNode,
 /**
  * Progress formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ProgressFormatter extends ConsoleFormatter
 {
     /**
      * Maximum line length.
      *
-     * @var     integer
+     * @var integer
      */
     protected $maxLineLength = 0;
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDescription()
-    {
-        return "Prints one character per step.";
-    }
 
     /**
      * {@inheritdoc}
@@ -53,7 +45,22 @@ class ProgressFormatter extends ConsoleFormatter
     }
 
     /**
-     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+     *
+     * @return array The event names to listen to
      */
     public static function getSubscribedEvents()
     {
@@ -65,12 +72,12 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Behat\Behat\Event\SuiteEvent    $event
+     * @param SuiteEvent $event
      *
-     * @uses    printFailedSteps()
-     * @uses    printPendingSteps()
-     * @uses    printSummary()
-     * @uses    printUndefinedStepsSnippets()
+     * @uses printFailedSteps()
+     * @uses printPendingSteps()
+     * @uses printSummary()
+     * @uses printUndefinedStepsSnippets()
      */
     public function afterSuite(SuiteEvent $event)
     {
@@ -86,9 +93,9 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Listens to "step.after" event.
      *
-     * @param   Behat\Behat\Event\StepEvent $event
+     * @param StepEvent $event
      *
-     * @uses    printStep()
+     * @uses printStep()
      */
     public function afterStep(StepEvent $event)
     {
@@ -104,13 +111,13 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints step.
      *
-     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
-     * @param   integer                                     $result     step result code
-     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition instance (if step defined)
-     * @param   string                                      $snippet    snippet (if step is undefined)
-     * @param   Exception                                   $exception  exception (if step is failed)
+     * @param StepNode            $step       step node
+     * @param integer             $result     step result code
+     * @param DefinitionInterface $definition definition instance (if step defined)
+     * @param string              $snippet    snippet (if step is undefined)
+     * @param \Exception          $exception  exception (if step is failed)
      *
-     * @uses    Behat\Behat\Tester\StepTester
+     * @uses StepEvent
      */
     protected function printStep(StepNode $step, $result, DefinitionInterface $definition = null,
                                  $snippet = null, \Exception $exception = null)
@@ -137,7 +144,7 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints all failed steps info.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     * @param LoggerDataCollector $logger suite logger
      */
     protected function printFailedSteps(LoggerDataCollector $logger)
     {
@@ -151,7 +158,7 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints all pending steps information.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     * @param LoggerDataCollector $logger suite logger
      */
     protected function printPendingSteps(LoggerDataCollector $logger)
     {
@@ -165,7 +172,7 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints exceptions information.
      *
-     * @param   array   $events failed step events
+     * @param array $events failed step events
      */
     protected function printExceptionEvents(array $events)
     {
@@ -196,9 +203,9 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints path to step.
      *
-     * @param   Behat\Gherkin\Node\StepNode                 $step           step node
-     * @param   Behat\Behat\Definition\DefinitionInterface  $definition     definition (if step defined)
-     * @param   Exception                                   $exception      exception (if step failed)
+     * @param StepNode            $step       step node
+     * @param DefinitionInterface $definition definition (if step defined)
+     * @param \Exception          $exception  exception (if step failed)
      */
     protected function printStepPath(StepNode $step, DefinitionInterface $definition = null,
                                      \Exception $exception = null)
@@ -243,7 +250,7 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints summary suite run information.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     * @param LoggerDataCollector $logger suite logger
      */
     protected function printSummary(LoggerDataCollector $logger)
     {
@@ -258,7 +265,7 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints scenarios summary information.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     * @param LoggerDataCollector $logger suite logger
      */
     protected function printScenariosSummary(LoggerDataCollector $logger)
     {
@@ -271,7 +278,7 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints steps summary information.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     * @param LoggerDataCollector $logger suite logger
      */
     protected function printStepsSummary(LoggerDataCollector $logger)
     {
@@ -284,7 +291,7 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints statuses summary.
      *
-     * @param   array   $statusesStatistics statuses statistic hash (status => count)
+     * @param array $statusesStatistics statuses statistic hash (status => count)
      */
     protected function printStatusesSummary(array $statusesStatistics)
     {
@@ -303,7 +310,7 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints suite run time inforamtion.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     * @param LoggerDataCollector $logger suite logger
      */
     protected function printTimeSummary(LoggerDataCollector $logger)
     {
@@ -317,7 +324,7 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints undefined steps snippets.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     * @param LoggerDataCollector $logger suite logger
      */
     protected function printUndefinedStepsSnippets(LoggerDataCollector $logger)
     {
@@ -331,7 +338,7 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints steps snippets.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     * @param LoggerDataCollector $logger suite logger
      */
     protected function printSnippets(LoggerDataCollector $logger)
     {
@@ -365,8 +372,8 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints path comment.
      *
-     * @param   string  $path           item path
-     * @param   integer $indentCount    indenation number
+     * @param string  $path        item path
+     * @param integer $indentCount indenation number
      */
     protected function printPathComment($path, $indentCount = 0)
     {
@@ -377,9 +384,9 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Returns string with relativized paths.
      *
-     * @param   string  $string
+     * @param string $string
      *
-     * @return  string
+     * @return string
      */
     protected function relativizePathsInString($string)
     {

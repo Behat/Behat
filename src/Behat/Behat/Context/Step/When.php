@@ -15,15 +15,10 @@ use Behat\Gherkin\Node\StepNode;
 /**
  * When substep.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class When implements SubstepInterface
 {
-    /**
-     * Step node.
-     *
-     * @var     Behat\Gherkin\Node\StepNode
-     */
     private $node;
 
     /**
@@ -41,7 +36,9 @@ class When implements SubstepInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\Step\StepInterface::getStepNode()
+     * Returns substep node.
+     *
+     * @return StepNode
      */
     public function getStepNode()
     {

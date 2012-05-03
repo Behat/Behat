@@ -21,19 +21,18 @@ use Behat\Behat\Context\ContextInterface,
 /**
  * Annotated definitions proposal.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class AnnotatedDefinitionProposal implements DefinitionProposalInterface
 {
-    /**
-     * Proposed method names.
-     *
-     * @var     array
-     */
     private static $proposedMethods = array();
 
     /**
-     * @see     Behat\Behat\Definition\Proposal\DefinitionProposalInterface::supports()
+     * Checks if loader supports provided context.
+     *
+     * @param ContextInterface $context
+     *
+     * @return Boolean
      */
     public function supports(ContextInterface $context)
     {
@@ -41,31 +40,36 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
     }
 
     /**
-     * @see     Behat\Behat\Definition\Proposal\DefinitionProposalInterface::propose()
+     * Loads definitions and translations from provided context.
+     *
+     * @param ContextInterface $context
+     * @param StepNode         $step
+     *
+     * @return DefinitionSnippet
      */
     public function propose(ContextInterface $context, StepNode $step)
     {
-        $contextRefl  = new \ReflectionObject($context);
-        $contextClass = $contextRefl->getName();
-
-        $text = $step->getText();
+        $contextRefl     = new \ReflectionObject($context);
+        $contextClass    = $contextRefl->getName();
         $replacePatterns = array(
-            '/\'([^\']*)\'/', '/\"([^\"]*)\"/', // Quoted strings
-            '/(\d+)/',                          // Numbers
+            "/(?<= |^)\\\'(?:((?!\\').)*)\\\'(?= |$)/", // Single quoted strings
+            '/(?<= |^)\"(?:[^\"]*)\"(?= |$)/',          // Double quoted strings
+            '/(\d+)/',                                  // Numbers
         );
 
-        $regex = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+])/', '\\\\$1', $text);
+        $text  = $step->getText();
+        $text  = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+\'])/', '\\\\$1', $text);
         $regex = preg_replace(
             $replacePatterns,
             array(
-                "\'([^\']*)\'", "\"([^\"]*)\"",
+                "\\'([^\']*)\\'",
+                "\"([^\"]*)\"",
                 "(\\d+)",
             ),
-            $regex
+            $text
         );
-        // Single quotes without matching pair (escape in resulting regex):
-        $regex = preg_replace('/\'.*(?<!\')/', '\\\\$0', $regex);
-        preg_match('/' . $regex . '/', $text, $matches);
+
+        preg_match('/' . $regex . '/', $step->getText(), $matches);
         $count = count($matches) - 1;
 
         $methodName = preg_replace($replacePatterns, '', $text);
@@ -106,7 +110,7 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
 
         $args = array();
         for ($i = 0; $i < $count; $i++) {
-            $args[] = "\$argument" . ($i + 1);
+            $args[] = "\$arg" . ($i + 1);
         }
 
         foreach ($step->getArguments() as $argument) {

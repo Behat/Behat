@@ -21,21 +21,16 @@ use Behat\Behat\Definition\DefinitionDispatcher,
 /**
  * Closured step definitions loader.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ClosuredDefinitionLoader implements DefinitionLoaderInterface
 {
-    /**
-     * Definition dispatcher.
-     *
-     * @var     Behat\Behat\Definition\DefinitionDispatcher
-     */
     private $dispatcher;
 
     /**
      * Initializes loader.
      *
-     * @param   Behat\Behat\Definition\DefinitionDispatcher $dispatcher definition dispatcher
+     * @param DefinitionDispatcher $dispatcher
      */
     public function __construct(DefinitionDispatcher $dispatcher)
     {
@@ -43,7 +38,9 @@ class ClosuredDefinitionLoader implements DefinitionLoaderInterface
     }
 
     /**
-     * @see     Behat\Behat\Definition\Loader\DefinitionLoaderInterface::load()
+     * Loads definitions from provided resource.
+     *
+     * @param mixed $resource
      */
     public function load($resource)
     {
@@ -55,8 +52,8 @@ class ClosuredDefinitionLoader implements DefinitionLoaderInterface
     /**
      * Defines argument transformation.
      *
-     * @param   string      $regex      transformation regex (to find specific argument)
-     * @param   Callback    $callback   transformation callback (must return transformed argument)
+     * @param string   $regex    transformation regex (to find specific argument)
+     * @param callback $callback transformation callback (must return transformed argument)
      */
     public function Transform($regex, $callback)
     {
@@ -68,10 +65,12 @@ class ClosuredDefinitionLoader implements DefinitionLoaderInterface
      * call a step with ->Given|When|Then|...('I enter "12" in the field', $world) or
      * even with arguments ->Given|When|Then|...('I fill up fields', $world, $table).
      *
-     * @param   string  $type       step type (Given|When|Then|...)
-     * @param   string  $arguments  step regex & callback
+     * @param string $type      step type (Given|When|Then|...)
+     * @param string $arguments step regex & callback
      *
-     * @throws  Behat\Behat\Exception\RedundantException     if step definition is already exists
+     * @return ClosuredDefinitionLoader
+     *
+     * @throws RedundantException if step definition is already exists
      */
     public function __call($type, $arguments)
     {

@@ -14,6 +14,7 @@ use Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\Event\OutlineEvent,
     Behat\Behat\Event\OutlineExampleEvent,
     Behat\Behat\Event\StepEvent,
+    Behat\Behat\Event\EventInterface,
     Behat\Behat\Exception\UndefinedException;
 
 use Behat\Gherkin\Node\AbstractNode,
@@ -23,6 +24,7 @@ use Behat\Gherkin\Node\AbstractNode,
     Behat\Gherkin\Node\OutlineNode,
     Behat\Gherkin\Node\ScenarioNode,
     Behat\Gherkin\Node\StepNode,
+    Behat\Gherkin\Node\ExampleStepNode,
     Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
@@ -37,72 +39,64 @@ use Behat\Gherkin\Node\AbstractNode,
 /**
  * Pretty formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PrettyFormatter extends ProgressFormatter
 {
     /**
      * Maximum line length.
      *
-     * @var     integer
+     * @var integer
      */
-    protected   $maxLineLength          = 0;
+    protected $maxLineLength          = 0;
     /**
      * Are we in background.
      *
-     * @var     boolean
+     * @var Boolean
      */
-    protected   $inBackground           = false;
+    protected $inBackground           = false;
     /**
      * Is background printed.
      *
-     * @var     boolean
+     * @var Boolean
      */
-    protected   $isBackgroundPrinted    = false;
+    protected $isBackgroundPrinted    = false;
     /**
      * Are we in outline steps.
      *
-     * @var     boolean
+     * @var Boolean
      */
-    protected   $inOutlineSteps         = false;
+    protected $inOutlineSteps         = false;
     /**
      * Are we in outline example.
      *
-     * @var     boolean
+     * @var Boolean
      */
-    protected   $inOutlineExample       = false;
+    protected $inOutlineExample       = false;
     /**
      * Is outline headline printed.
      *
-     * @var     boolean
+     * @var Boolean
      */
-    protected   $isOutlineHeaderPrinted = false;
+    protected $isOutlineHeaderPrinted = false;
     /**
      * Delayed scenario event.
      *
-     * @var     Symfony\Component\EventDispatcher\Event
+     * @var EventInterface
      */
-    protected   $delayedScenarioEvent;
+    protected $delayedScenarioEvent;
     /**
      * Delayed step events.
      *
-     * @var     array
+     * @var array
      */
-    protected   $delayedStepEvents      = array();
+    protected $delayedStepEvents      = array();
     /**
      * Current step indentation.
      *
-     * @var     integer
+     * @var integer
      */
-    protected   $stepIndent             = '    ';
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDescription()
-    {
-        return 'Prints the feature as is.';
-    }
+    protected $stepIndent             = '    ';
 
     /**
      * {@inheritdoc}
@@ -113,7 +107,22 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+     *
+     * @return array The event names to listen to
      */
     public static function getSubscribedEvents()
     {
@@ -129,9 +138,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "suite.before" event.
      *
-     * @param   Behat\Behat\Event\SuiteEvent    $event
+     * @param SuiteEvent $event
      *
-     * @uses    printSuiteHeader()
+     * @uses printSuiteHeader()
      */
     public function beforeSuite(SuiteEvent $event)
     {
@@ -141,9 +150,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Behat\Behat\Event\SuiteEvent    $event
+     * @param SuiteEvent $event
      *
-     * @uses    printSuiteFooter()
+     * @uses printSuiteFooter()
      */
     public function afterSuite(SuiteEvent $event)
     {
@@ -153,9 +162,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "feature.before" event.
      *
-     * @param   Behat\Behat\Event\FeatureEvent  $event
+     * @param FeatureEvent  $event
      *
-     * @uses    printFeatureHeader()
+     * @uses printFeatureHeader()
      */
     public function beforeFeature(FeatureEvent $event)
     {
@@ -166,9 +175,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "feature.after" event.
      *
-     * @param   Behat\Behat\Event\FeatureEvent  $event
+     * @param FeatureEvent $event
      *
-     * @uses    printFeatureFooter()
+     * @uses printFeatureFooter()
      */
     public function afterFeature(FeatureEvent $event)
     {
@@ -178,9 +187,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "background.before" event.
      *
-     * @param   Behat\Behat\Event\BackgroundEvent  $event
+     * @param BackgroundEvent $event
      *
-     * @uses    printBackgroundHeader()
+     * @uses printBackgroundHeader()
      */
     public function beforeBackground(BackgroundEvent $event)
     {
@@ -196,9 +205,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "background.after" event.
      *
-     * @param   Behat\Behat\Event\BackgroundEvent  $event
+     * @param BackgroundEvent $event
      *
-     * @uses    printBackgroundFooter()
+     * @uses printBackgroundFooter()
      */
     public function afterBackground(BackgroundEvent $event)
     {
@@ -222,9 +231,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.before" event.
      *
-     * @param   Behat\Behat\Event\OutlineEvent  $event
+     * @param OutlineEvent $event
      *
-     * @uses    printOutlineHeader()
+     * @uses printOutlineHeader()
      */
     public function beforeOutline(OutlineEvent $event)
     {
@@ -244,9 +253,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param   Behat\Behat\Event\OutlineExampleEvent  $event
+     * @param OutlineExampleEvent $event
      *
-     * @uses    printOutlineExampleHeader()
+     * @uses printOutlineExampleHeader()
      */
     public function beforeOutlineExample(OutlineExampleEvent $event)
     {
@@ -259,9 +268,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Behat\Behat\Event\OutlineExampleEvent  $event
+     * @param OutlineExampleEvent $event
      *
-     * @uses    printOutlineExampleFooter()
+     * @uses printOutlineExampleFooter()
      */
     public function afterOutlineExample(OutlineExampleEvent $event)
     {
@@ -275,9 +284,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.after" event.
      *
-     * @param   Behat\Behat\Event\OutlineEvent  $event
+     * @param OutlineEvent $event
      *
-     * @uses    printOutlineFooter()
+     * @uses printOutlineFooter()
      */
     public function afterOutline(OutlineEvent $event)
     {
@@ -287,9 +296,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "scenario.before" event.
      *
-     * @param   Behat\Behat\Event\ScenarioEvent $event
+     * @param ScenarioEvent $event
      *
-     * @uses    printScenarioHeader()
+     * @uses printScenarioHeader()
      */
     public function beforeScenario(ScenarioEvent $event)
     {
@@ -307,9 +316,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Behat\Behat\Event\ScenarioEvent $event
+     * @param ScenarioEvent $event
      *
-     * @uses    printScenarioFooter()
+     * @uses printScenarioFooter()
      */
     public function afterScenario(ScenarioEvent $event)
     {
@@ -319,9 +328,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "step.after" event.
      *
-     * @param   Behat\Behat\Event\StepEvent $event
+     * @param StepEvent $event
      *
-     * @uses    printStep()
+     * @uses printStep()
      */
     public function afterStep(StepEvent $event)
     {
@@ -347,11 +356,11 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints feature header.
      *
-     * @param   Behat\Gherkin\Node\FeatureNode  $feature
+     * @param FeatureNode $feature
      *
-     * @uses    printFeatureOrScenarioTags()
-     * @uses    printFeatureName()
-     * @uses    printFeatureDescription()
+     * @uses printFeatureOrScenarioTags()
+     * @uses printFeatureName()
+     * @uses printFeatureDescription()
      */
     protected function printFeatureHeader(FeatureNode $feature)
     {
@@ -367,7 +376,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints node tags.
      *
-     * @param   Behat\Gherkin\Node\AbstractNode     $node
+     * @param AbstractNode $node
      */
     protected function printFeatureOrScenarioTags(AbstractNode $node)
     {
@@ -389,9 +398,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints feature keyword and name.
      *
-     * @param   Behat\Gherkin\Node\FeatureNode  $feature
+     * @param FeatureNode $feature
      *
-     * @uses    getFeatureOrScenarioName()
+     * @uses getFeatureOrScenarioName()
      */
     protected function printFeatureName(FeatureNode $feature)
     {
@@ -401,7 +410,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints feature description.
      *
-     * @param   Behat\Gherkin\Node\FeatureNode  $feature
+     * @param FeatureNode $feature
      */
     protected function printFeatureDescription(FeatureNode $feature)
     {
@@ -415,7 +424,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints feature footer.
      *
-     * @param   Behat\Gherkin\Node\FeatureNode  $feature
+     * @param FeatureNode $feature
      */
     protected function printFeatureFooter(FeatureNode $feature)
     {
@@ -424,10 +433,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints scenario keyword and name.
      *
-     * @param   Behat\Gherkin\Node\AbstractScenarioNode $scenario
+     * @param AbstractScenarioNode $scenario
      *
-     * @uses    getFeatureOrScenarioName()
-     * @uses    printScenarioPath()
+     * @uses getFeatureOrScenarioName()
+     * @uses printScenarioPath()
      */
     protected function printScenarioName(AbstractScenarioNode $scenario)
     {
@@ -444,10 +453,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints scenario definition path.
      *
-     * @param   Behat\Gherkin\Node\AbstractScenarioNode $scenario
+     * @param AbstractScenarioNode $scenario
      *
-     * @uses    getFeatureOrScenarioName()
-     * @uses    printPathComment()
+     * @uses getFeatureOrScenarioName()
+     * @uses printPathComment()
      */
     protected function printScenarioPath(AbstractScenarioNode $scenario)
     {
@@ -467,10 +476,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints background header.
      *
-     * @param   Behat\Gherkin\Node\BackgroundNode   $background
+     * @param BackgroundNode $background
      *
-     * @uses    printScenarioName()
-     * @uses    printScenarioPath()
+     * @uses printScenarioName()
+     * @uses printScenarioPath()
      */
     protected function printBackgroundHeader(BackgroundNode $background)
     {
@@ -482,7 +491,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints background footer.
      *
-     * @param   Behat\Gherkin\Node\BackgroundNode   $background
+     * @param BackgroundNode $background
      */
     protected function printBackgroundFooter(BackgroundNode $background)
     {
@@ -492,10 +501,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints outline header.
      *
-     * @param   Behat\Gherkin\Node\OutlineNode  $outline
+     * @param OutlineNode $outline
      *
-     * @uses    printFeatureOrScenarioTags()
-     * @uses    printScenarioName()
+     * @uses printFeatureOrScenarioTags()
+     * @uses printScenarioName()
      */
     protected function printOutlineHeader(OutlineNode $outline)
     {
@@ -508,7 +517,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints outline footer.
      *
-     * @param   Behat\Gherkin\Node\OutlineNode  $outline
+     * @param OutlineNode $outline
      */
     protected function printOutlineFooter(OutlineNode $outline)
     {
@@ -518,8 +527,8 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints outline example header.
      *
-     * @param   Behat\Gherkin\Node\OutlineNode  $outline
-     * @param   integer                         $iteration
+     * @param OutlineNode $outline
+     * @param integer     $iteration
      */
     protected function printOutlineExampleHeader(OutlineNode $outline, $iteration)
     {
@@ -528,14 +537,14 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints outline example result.
      *
-     * @param   Behat\Gherkin\Node\OutlineNode  $outline
-     * @param   integer                         $iteration  example row
-     * @param   integer                         $result     result code
-     * @param   boolean                         $isSkipped  is outline example skipped
+     * @param OutlineNode $outline    outline instance
+     * @param integer     $iteration  example row number
+     * @param integer     $result     result code
+     * @param Boolean     $skipped    is outline example skipped
      *
-     * @uses    printOutlineSteps()
-     * @uses    printOutlineExamplesSectionHeader()
-     * @uses    printOutlineExampleResult()
+     * @uses printOutlineSteps()
+     * @uses printOutlineExamplesSectionHeader()
+     * @uses printOutlineExampleResult()
      */
     protected function printOutlineExampleFooter(OutlineNode $outline, $iteration, $result, $skipped)
     {
@@ -551,7 +560,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints outline steps.
      *
-     * @param   Behat\Gherkin\Node\OutlineNode  $outline
+     * @param OutlineNode $outline
      */
     protected function printOutlineSteps(OutlineNode $outline)
     {
@@ -567,9 +576,9 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints outline examples header.
      *
-     * @param   Behat\Gherkin\Node\TableNode    $examples
+     * @param TableNode $examples
      *
-     * @uses    printColorizedTableRow()
+     * @uses printColorizedTableRow()
      */
     protected function printOutlineExamplesSectionHeader(TableNode $examples)
     {
@@ -585,13 +594,13 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints outline example result.
      *
-     * @param   Behat\Gherkin\Node\TableNode    $examples   examples table
-     * @param   integer                         $iteration  example row
-     * @param   integer                         $result     result code
-     * @param   boolean                         $isSkipped  is outline example skipped
+     * @param TableNode $examples  examples table
+     * @param integer   $iteration example row
+     * @param integer   $result    result code
+     * @param boolean   $isSkipped is outline example skipped
      *
-     * @uses    printColorizedTableRow()
-     * @uses    printOutlineExampleResultExceptions()
+     * @uses printColorizedTableRow()
+     * @uses printOutlineExampleResultExceptions()
      */
     protected function printOutlineExampleResult(TableNode $examples, $iteration, $result, $isSkipped)
     {
@@ -625,8 +634,8 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints outline example exceptions.
      *
-     * @param   Behat\Gherkin\Node\TableNode    $examples   examples table
-     * @param   array                           $events     failed steps events
+     * @param TableNode $examples examples table
+     * @param array     $events   failed steps events
      */
     protected function printOutlineExampleResultExceptions(TableNode $examples, array $events)
     {
@@ -652,10 +661,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints scenario header.
      *
-     * @param   Behat\Gherkin\Node\ScenarioNode $scenario
+     * @param ScenarioNode $scenario
      *
-     * @uses    printFeatureOrScenarioTags()
-     * @uses    printScenarioName()
+     * @uses printFeatureOrScenarioTags()
+     * @uses printScenarioName()
      */
     protected function printScenarioHeader(ScenarioNode $scenario)
     {
@@ -668,7 +677,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints scenario footer.
      *
-     * @param   Behat\Gherkin\Node\ScenarioNode $scenario
+     * @param ScenarioNode $scenario
      */
     protected function printScenarioFooter(ScenarioNode $scenario)
     {
@@ -678,16 +687,16 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step.
      *
-     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
-     * @param   integer                                     $result     result code
-     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition (if found one)
-     * @param   string                                      $snippet    snippet (if step is undefined)
-     * @param   Exception                                   $exception  exception (if step is failed)
+     * @param StepNode            $step       step node
+     * @param integer             $result     result code
+     * @param DefinitionInterface $definition definition (if found one)
+     * @param string              $snippet    snippet (if step is undefined)
+     * @param \Exception          $exception  exception (if step is failed)
      *
-     * @uses    printStepBlock()
-     * @uses    printStepArguments()
-     * @uses    printStepException()
-     * @uses    printStepSnippet()
+     * @uses printStepBlock()
+     * @uses printStepArguments()
+     * @uses printStepException()
+     * @uses printStepSnippet()
      */
     protected function printStep(StepNode $step, $result, DefinitionInterface $definition = null,
                                  $snippet = null, \Exception $exception = null)
@@ -703,7 +712,7 @@ class PrettyFormatter extends ProgressFormatter
             (!$exception instanceof UndefinedException || null === $snippet)) {
             $this->printStepException($exception, $color);
         }
-        if (null !== $snippet) {
+        if (null !== $snippet && $this->getParameter('snippets')) {
             $this->printStepSnippet($snippet);
         }
     }
@@ -711,12 +720,12 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step block (name & definition path).
      *
-     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
-     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition (if found one)
-     * @param   string                                      $color      color code
+     * @param StepNode            $step       step node
+     * @param DefinitionInterface $definition definition (if found one)
+     * @param string              $color      color code
      *
-     * @uses    printStepName()
-     * @uses    printStepDefinitionPath()
+     * @uses printStepName()
+     * @uses printStepDefinitionPath()
      */
     protected function printStepBlock(StepNode $step, DefinitionInterface $definition = null, $color)
     {
@@ -731,11 +740,11 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step name.
      *
-     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
-     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition (if found one)
-     * @param   string                                      $color      color code
+     * @param StepNode            $step       step node
+     * @param DefinitionInterface $definition definition (if found one)
+     * @param string              $color      color code
      *
-     * @uses    colorizeDefinitionArguments()
+     * @uses colorizeDefinitionArguments()
      */
     protected function printStepName(StepNode $step, DefinitionInterface $definition = null, $color)
     {
@@ -753,10 +762,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step definition path.
      *
-     * @param   Behat\Gherkin\Node\StepNode                 $step       step node
-     * @param   Behat\Behat\Definition\DefinitionInterface  $definition definition (if found one)
+     * @param StepNode            $step       step node
+     * @param DefinitionInterface $definition definition (if found one)
      *
-     * @uses    printPathComment()
+     * @uses printPathComment()
      */
     protected function printStepDefinitionPath(StepNode $step, DefinitionInterface $definition)
     {
@@ -782,11 +791,11 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step arguments.
      *
-     * @param   array   $arguments  step arguments
-     * @param   string  $color      color name
+     * @param array   $arguments step arguments
+     * @param string  $color     color name
      *
-     * @uses    printStepPyStringArgument()
-     * @uses    printStepTableArgument()
+     * @uses printStepPyStringArgument()
+     * @uses printStepTableArgument()
      */
     protected function printStepArguments(array $arguments, $color)
     {
@@ -802,8 +811,8 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step exception.
      *
-     * @param   Exception   $exception  exception
-     * @param   string      $color      color name
+     * @param \Exception $exception
+     * @param string     $color
      */
     protected function printStepException(\Exception $exception, $color)
     {
@@ -824,7 +833,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step snippet
      *
-     * @param   Behat\Behat\Definition\DefinitionSnippet    $snippet    snippet (for undefined steps)
+     * @param DefinitionSnippet $snippet
      */
     protected function printStepSnippet(DefinitionSnippet $snippet)
     {
@@ -833,8 +842,8 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints PyString argument.
      *
-     * @param   Behat\Gherkin\Node\PyStringNode     $pystring   pystring node
-     * @param   string                              $color      color name
+     * @param PyStringNode $pystring pystring node
+     * @param string       $color    color name
      */
     protected function printStepPyStringArgument(PyStringNode $pystring, $color = null)
     {
@@ -853,8 +862,8 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints table argument.
      *
-     * @param   Behat\Gherkin\Node\TableNode        $table      table node
-     * @param   string                              $color      color name
+     * @param TableNode $table
+     * @param string    $color
      */
     protected function printStepTableArgument(TableNode $table, $color = null)
     {
@@ -871,8 +880,8 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints table row in color.
      *
-     * @param   array   $row    columns array
-     * @param   string  $color  color code
+     * @param array  $row
+     * @param string $color
      */
     protected function printColorizedTableRow($row, $color)
     {
@@ -888,7 +897,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints suite header.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     * @param LoggerDataCollector $logger suite logger
      */
     protected function printSuiteHeader(LoggerDataCollector $logger)
     {
@@ -897,10 +906,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints suite footer information.
      *
-     * @param   Behat\Behat\DataCollector\LoggerDataCollector   $logger suite logger
+     * @param LoggerDataCollector $logger suite logger
      *
-     * @uses    printSummary()
-     * @uses    printUndefinedStepsSnippets()
+     * @uses printSummary()
+     * @uses printUndefinedStepsSnippets()
      */
     protected function printSuiteFooter(LoggerDataCollector $logger)
     {
@@ -911,8 +920,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Returns feature or scenario name.
      *
-     * @param   Behat\Gherkin\Node\AbstractNode     $node               node name
-     * @param   boolean                             $haveBaseIndent     is name have base indent
+     * @param AbstractNode $node
+     * @param Boolean      $haveBaseIndent
+     *
+     * @return string
      */
     protected function getFeatureOrScenarioName(AbstractNode $node, $haveBaseIndent = true)
     {
@@ -934,11 +945,11 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Returns step text with colorized arguments.
      *
-     * @param   string                                      $text
-     * @param   Behat\Behat\Definition\DefinitionInterface  $definition
-     * @param   string                                      $color
+     * @param string              $text
+     * @param DefinitionInterface $definition
+     * @param string              $color
      *
-     * @return  string
+     * @return string
      */
     protected function colorizeDefinitionArguments($text, DefinitionInterface $definition, $color)
     {
@@ -994,9 +1005,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Returns max lines size for section elements.
      *
-     * @param   Behat\Gherkin\Node\BackgroundNode   $scenario   element for calculations
+     * @param integer              $max      previous max value
+     * @param AbstractScenarioNode $scenario element for calculations
      *
-     * @return  integer
+     * @return integer
      */
     protected function getMaxLineLength($max, AbstractScenarioNode $scenario)
     {
@@ -1004,7 +1016,8 @@ class PrettyFormatter extends ProgressFormatter
         $max   = max($max, mb_strlen(current($lines)) + 2);
 
         foreach ($scenario->getSteps() as $step) {
-            $stepDescription = $step->getType() . ' ' . $step->getCleanText();
+            $text = $step instanceof ExampleStepNode ? $step->getCleanText() : $step->getText();
+            $stepDescription = $step->getType() . ' ' . $text;
             $max = max($max, mb_strlen($stepDescription) + 4);
         }
 

@@ -19,12 +19,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 /**
  * Help (story-syntax and definition printers) processor.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HelpProcessor implements ProcessorInterface
+class HelpProcessor extends Processor
 {
+    private $container;
+
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::confiugre()
+     * Constructs processor.
+     *
+     * @param ContainerInterface $container Container instance
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Configures command to be able to process it later.
+     *
+     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -44,12 +58,15 @@ class HelpProcessor implements ProcessorInterface
     }
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::process()
+     * Processes data from container and console input.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
-    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input, OutputInterface $output)
     {
         if ($input->getOption('story-syntax')) {
-            $container->get('behat.help_printer.story_syntax')->printSyntax(
+            $this->container->get('behat.help_printer.story_syntax')->printSyntax(
                 $output, $input->getOption('lang') ?: 'en'
             );
 
@@ -68,7 +85,7 @@ class HelpProcessor implements ProcessorInterface
                 $search = $type;
             }
 
-            $container->get('behat.help_printer.definitions')->printDefinitions(
+            $this->container->get('behat.help_printer.definitions')->printDefinitions(
                 $output, $search, $input->getOption('lang') ?: 'en', $short
             );
 

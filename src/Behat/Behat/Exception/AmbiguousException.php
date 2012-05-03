@@ -13,28 +13,18 @@ namespace Behat\Behat\Exception;
 /**
  * Ambiguous exception.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class AmbiguousException extends BehaviorException
 {
-    /**
-     * Step description.
-     *
-     * @var     string
-     */
     protected $text;
-    /**
-     * Matched definitions.
-     *
-     * @var     array
-     */
     protected $matches = array();
 
     /**
      * Initializes ambiguous exception.
      *
-     * @param   string  $text       step description
-     * @param   array   $matches    ambigious matches (array of Definition's)
+     * @param string $text    step description
+     * @param array  $matches ambigious matches (array of Definition's)
      */
     public function __construct($text, array $matches)
     {

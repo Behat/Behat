@@ -22,29 +22,12 @@ use Behat\Behat\Event\FeatureEvent,
 /**
  * Behat run logger.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class LoggerDataCollector implements EventSubscriberInterface
 {
-    /**
-     * Suite run start time.
-     *
-     * @var     float
-     */
     private $startTime;
-    /**
-     * Suite run finish time.
-     *
-     * @var     float
-     */
     private $finishTime;
-    /**
-     * Step statuses text notations.
-     *
-     * @var     array
-     *
-     * @uses    Behat\Behat\Tester\StepEvent
-     */
     private $statuses             = array(
         StepEvent::PASSED      => 'passed',
         StepEvent::SKIPPED     => 'skipped',
@@ -52,65 +35,15 @@ class LoggerDataCollector implements EventSubscriberInterface
         StepEvent::UNDEFINED   => 'undefined',
         StepEvent::FAILED      => 'failed'
     );
-    /**
-     * Overall suite result.
-     *
-     * @var     integer
-     */
     private $suiteResult          = 0;
-    /**
-     * Overall features count.
-     *
-     * @var     integer
-     */
     private $featuresCount        = 0;
-    /**
-     * All features statuses count.
-     *
-     * @var     array
-     */
     private $featuresStatuses     = array();
-    /**
-     * Overall scenarios count.
-     *
-     * @var     integer
-     */
     private $scenariosCount       = 0;
-    /**
-     * All scenarios statuses count.
-     *
-     * @var     array
-     */
     private $scenariosStatuses    = array();
-    /**
-     * Overall steps count.
-     *
-     * @var     integer
-     */
     private $stepsCount           = 0;
-    /**
-     * All steps statuses count.
-     *
-     * @var     array
-     */
     private $stepsStatuses        = array();
-    /**
-     * Missed definitions snippets.
-     *
-     * @var     array
-     */
     private $definitionsSnippets  = array();
-    /**
-     * Events of failed steps.
-     *
-     * @var     array
-     */
     private $failedStepsEvents    = array();
-    /**
-     * Events of pending steps.
-     *
-     * @var     array
-     */
     private $pendingStepsEvents   = array();
 
     /**
@@ -133,7 +66,22 @@ class LoggerDataCollector implements EventSubscriberInterface
     }
 
     /**
-     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+     *
+     * @return array The event names to listen to
      */
     public static function getSubscribedEvents()
     {
@@ -148,9 +96,9 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Listens to "suite.before" event.
      *
-     * @param   Behat\Behat\Event\SuiteEvent    $event
+     * @param SuiteEvent $event
      *
-     * @uses    startTimer()
+     * @uses startTimer()
      */
     public function beforeSuite(SuiteEvent $event)
     {
@@ -160,9 +108,9 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Listens to "suite.after" event.
      *
-     * @param   Behat\Behat\Event\SuiteEvent    $event
+     * @param SuiteEvent $event
      *
-     * @uses    finishTimer()
+     * @uses finishTimer()
      */
     public function afterSuite(SuiteEvent $event)
     {
@@ -172,9 +120,9 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Listens to "feature.after" event.
      *
-     * @param   Behat\Behat\Event\FeatureEvent  $event
+     * @param FeatureEvent $event
      *
-     * @uses    collectFeatureResult()
+     * @uses collectFeatureResult()
      */
     public function afterFeature(FeatureEvent $event)
     {
@@ -184,9 +132,9 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Behat\Behat\Event\ScenarioEvent $event
+     * @param ScenarioEvent $event
      *
-     * @uses    collectScenarioResult()
+     * @uses collectScenarioResult()
      */
     public function afterScenario(ScenarioEvent $event)
     {
@@ -196,9 +144,9 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Behat\Behat\Event\OutlineExampleEvent   $event
+     * @param OutlineExampleEvent $event
      *
-     * @uses    collectScenarioResult()
+     * @uses collectScenarioResult()
      */
     public function afterOutlineExample(OutlineExampleEvent $event)
     {
@@ -208,9 +156,9 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Listens to "step.after" event.
      *
-     * @param   Behat\Behat\Event\StepEvent $event
+     * @param StepEvent $event
      *
-     * @uses    collectStepStats()
+     * @uses collectStepStats()
      */
     public function afterStep(StepEvent $event)
     {
@@ -220,7 +168,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns suite total execution time.
      *
-     * @return  float   miliseconds
+     * @return float miliseconds
      */
     public function getTotalTime()
     {
@@ -230,7 +178,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns overall suites result.
      *
-     * @return  integer
+     * @return integer
      */
     public function getSuiteResult()
     {
@@ -240,7 +188,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns overall features count.
      *
-     * @return  integer
+     * @return integer
      */
     public function getFeaturesCount()
     {
@@ -250,7 +198,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns hash of features statuses count.
      *
-     * @return  array       hash (ex: passed => 10, failed => 2)
+     * @return array hash (ex: passed => 10, failed => 2)
      */
     public function getFeaturesStatuses()
     {
@@ -260,7 +208,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns overall scenarios count.
      *
-     * @return  integer
+     * @return integer
      */
     public function getScenariosCount()
     {
@@ -270,7 +218,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns hash of scenarios statuses count.
      *
-     * @return  array       hash (ex: passed => 10, failed => 2)
+     * @return array hash (ex: passed => 10, failed => 2)
      */
     public function getScenariosStatuses()
     {
@@ -280,7 +228,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns overall steps count.
      *
-     * @return  integer
+     * @return integer
      */
     public function getStepsCount()
     {
@@ -290,7 +238,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns hash of steps statuses count.
      *
-     * @return  array       hash (ex: passed => 10, failed => 2)
+     * @return array hash (ex: passed => 10, failed => 2)
      */
     public function getStepsStatuses()
     {
@@ -300,7 +248,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns hash of definition snippets for undefined steps.
      *
-     * @return  array       hash with md5 as key and snippet as value
+     * @return array hash with md5 as key and snippet as value
      */
     public function getDefinitionsSnippets()
     {
@@ -310,7 +258,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns array of failed steps events.
      *
-     * @return  array
+     * @return array
      */
     public function getFailedStepsEvents()
     {
@@ -320,7 +268,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Returns array of pending steps events;
      *
-     * @return  array
+     * @return array
      */
     public function getPendingStepsEvents()
     {
@@ -346,7 +294,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Collects feature result status.
      *
-     * @param   integer $result status code
+     * @param integer $result status code
      */
     private function collectFeatureResult($result)
     {
@@ -359,7 +307,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Collects scenario result status.
      *
-     * @param   integer $result status code
+     * @param integer $result status code
      */
     private function collectScenarioResult($result)
     {
@@ -370,7 +318,7 @@ class LoggerDataCollector implements EventSubscriberInterface
     /**
      * Collects step statistics.
      *
-     * @param   Behat\Behat\Event\StepEvent $event  step.after event
+     * @param StepEvent $event
      */
     private function collectStepStats(StepEvent $event)
     {

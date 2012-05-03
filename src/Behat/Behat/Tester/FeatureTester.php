@@ -23,39 +23,19 @@ use Behat\Behat\Exception\BehaviorException,
 /**
  * Feature tester.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FeatureTester implements NodeVisitorInterface
 {
-    /**
-     * Service container.
-     *
-     * @var     Symfony\Component\DependencyInjection\ContainerInterface
-     */
     private $container;
-    /**
-     * Event dispatcher.
-     *
-     * @var     Behat\Behat\EventDispatcher\EventDispatcher
-     */
     private $dispatcher;
-    /**
-     * Context parameters.
-     *
-     * @var     mixed
-     */
     private $parameters;
-    /**
-     * Dry run of tester.
-     *
-     * @var     Boolean
-     */
     private $dryRun = false;
 
     /**
      * Initializes tester.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -67,7 +47,7 @@ class FeatureTester implements NodeVisitorInterface
     /**
      * Sets tester to dry-run mode.
      *
-     * @param   Boolean $dryRun
+     * @param Boolean $dryRun
      */
     public function setDryRun($dryRun = true)
     {
@@ -77,11 +57,11 @@ class FeatureTester implements NodeVisitorInterface
     /**
      * Visits & tests FeatureNode.
      *
-     * @param   Behat\Gherkin\Node\AbstractNode $feature
+     * @param AbstractNode $feature
      *
-     * @return  integer
+     * @return integer
      *
-     * @throws  BehaviorException   if unknown scenario type (neither Outline or Scenario) found in feature
+     * @throws BehaviorException if unknown scenario type (neither Outline or Scenario) found in feature
      */
     public function visit(AbstractNode $feature)
     {

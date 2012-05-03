@@ -4,7 +4,8 @@ namespace Behat\Behat\Definition\Proposal;
 
 use Behat\Gherkin\Node\StepNode;
 
-use Behat\Behat\Context\ContextInterface;
+use Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Definition\DefinitionSnippet;
 
 /*
  * This file is part of the Behat.
@@ -17,22 +18,26 @@ use Behat\Behat\Context\ContextInterface;
 /**
  * Definition proposal interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface DefinitionProposalInterface
 {
     /**
      * Checks if loader supports provided context.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context
+     * @param ContextInterface $context
+     *
+     * @return Boolean
      */
     function supports(ContextInterface $context);
 
     /**
      * Loads definitions and translations from provided context.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context
-     * @param   Behat\Gherkin\Node\StepNode             $step
+     * @param ContextInterface $context
+     * @param StepNode         $step
+     *
+     * @return DefinitionSnippet
      */
     public function propose(ContextInterface $context, StepNode $step);
 }

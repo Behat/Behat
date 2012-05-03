@@ -53,7 +53,7 @@ Feature: Different result types
           /**
            * @Given /^I have magically created (\d+)\$$/
            */
-          public function iHaveMagicallyCreated($argument1)
+          public function iHaveMagicallyCreated($arg1)
           {
               throw new PendingException();
           }
@@ -61,7 +61,7 @@ Feature: Different result types
           /**
            * @When /^I have chose "([^"]*)" in coffee machine$/
            */
-          public function iHaveChoseInCoffeeMachine($argument1)
+          public function iHaveChoseInCoffeeMachine($arg1)
           {
               throw new PendingException();
           }
@@ -69,7 +69,7 @@ Feature: Different result types
           /**
            * @Then /^I should have "([^"]*)"$/
            */
-          public function iShouldHave($argument1)
+          public function iShouldHave($arg1)
           {
               throw new PendingException();
           }
@@ -87,7 +87,7 @@ Feature: Different result types
           /**
            * @Given /^I have magically created (\d+)\$$/
            */
-          public function iHaveMagicallyCreated($argument1)
+          public function iHaveMagicallyCreated($arg1)
           {
               throw new PendingException();
           }
@@ -95,7 +95,7 @@ Feature: Different result types
           /**
            * @When /^I have chose "([^"]*)" in coffee machine$/
            */
-          public function iHaveChoseInCoffeeMachine($argument1)
+          public function iHaveChoseInCoffeeMachine($arg1)
           {
               throw new PendingException();
           }
@@ -103,7 +103,7 @@ Feature: Different result types
           /**
            * @Then /^I should have "([^"]*)"$/
            */
-          public function iShouldHave($argument1)
+          public function iShouldHave($arg1)
           {
               throw new PendingException();
           }
@@ -136,7 +136,7 @@ Feature: Different result types
           /**
            * @Given /^human have ordered very very very hot "([^"]*)"$/
            */
-          public function humanOrdered($argument1) {
+          public function humanOrdered($arg1) {
               throw new PendingException;
           }
 
@@ -167,7 +167,7 @@ Feature: Different result types
           /**
            * @Then /^I should say "([^"]*)"$/
            */
-          public function iShouldSay($argument1)
+          public function iShouldSay($arg1)
           {
               throw new PendingException();
           }
@@ -191,7 +191,7 @@ Feature: Different result types
           /**
            * @Then /^I should say "([^"]*)"$/
            */
-          public function iShouldSay($argument1)
+          public function iShouldSay($arg1)
           {
               throw new PendingException();
           }
@@ -375,7 +375,7 @@ Feature: Different result types
       class FeatureContext extends BehatContext
       {
           /** @Given /^human have chosen "([^"]*)"$/ */
-          public function chosen($argument1) {
+          public function chosen($arg1) {
               throw new PendingException;
           }
 
@@ -433,7 +433,7 @@ Feature: Different result types
       class FeatureContext extends BehatContext
       {
           /** @Given /^customer bought coffee$/ */
-          public function chosen($argument1) {
+          public function chosen($arg1) {
               // do something
           }
 

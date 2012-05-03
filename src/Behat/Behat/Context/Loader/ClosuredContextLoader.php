@@ -18,28 +18,18 @@ use Behat\Behat\Context\ContextInterface,
 /**
  * Closured contexts reader.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ClosuredContextLoader implements ContextLoaderInterface
 {
-    /**
-     * Step definitions loader.
-     *
-     * @var     Behat\Behat\Definition\ClosuredDefinitionLoader
-     */
     private $definitionLoader;
-    /**
-     * Hooks loader.
-     *
-     * @var     Behat\Behat\Hook\ClosuredHookLoader
-     */
     private $hookLoader;
 
     /**
      * Initializes context loader.
      *
-     * @param   Behat\Behat\Definition\Loader\ClosuredDefinitionLoader  $definitionLoader   definitionLoader
-     * @param   Behat\Behat\Hook\Loader\ClosuredHookLoader              $hookLoader         hookLoader
+     * @param ClosuredDefinitionLoader $definitionLoader
+     * @param ClosuredHookLoader       $hookLoader
      */
     public function __construct(ClosuredDefinitionLoader $definitionLoader, ClosuredHookLoader $hookLoader)
     {
@@ -48,7 +38,11 @@ class ClosuredContextLoader implements ContextLoaderInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\Loader\ContextLoaderInterface::supports()
+     * Checks if loader supports provided context.
+     *
+     * @param ContextInterface $context
+     *
+     * @return Boolean
      */
     public function supports(ContextInterface $context)
     {
@@ -56,7 +50,9 @@ class ClosuredContextLoader implements ContextLoaderInterface
     }
 
     /**
-     * @see     Behat\Behat\Context\Loader\ContextLoaderInterface::load()
+     * Loads definitions and translations from provided context.
+     *
+     * @param ContextInterface $context
      */
     public function load(ContextInterface $context)
     {

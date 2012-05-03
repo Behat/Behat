@@ -26,60 +26,52 @@ use Behat\Gherkin\Node\FeatureNode,
 /**
  * Progress formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class JUnitFormatter extends ConsoleFormatter
 {
     /**
      * Current XML filename.
      *
-     * @var     string
+     * @var string
      */
     protected $filename;
     /**
      * Test cases.
      *
-     * @var     array
+     * @var array
      */
     protected $testcases = array();
     /**
      * Total steps count.
      *
-     * @var     integer
+     * @var integer
      */
     protected $stepsCount = 0;
     /**
      * Total exceptions count.
      *
-     * @var     integer
+     * @var integer
      */
     protected $exceptionsCount = 0;
     /**
      * Step exceptions.
      *
-     * @var     array
+     * @var array
      */
     protected $exceptions = array();
     /**
      * Feature start time.
      *
-     * @var     float
+     * @var float
      */
     protected $featureStartTime;
     /**
      * Scenario start time.
      *
-     * @var     float
+     * @var float
      */
     protected $scenarioStartTime;
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDescription()
-    {
-        return "Generates a report similar to Ant+JUnit.";
-    }
 
     /**
      * {@inheritdoc}
@@ -90,7 +82,22 @@ class JUnitFormatter extends ConsoleFormatter
     }
 
     /**
-     * @see     Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+     *
+     * @return array The event names to listen to
      */
     public static function getSubscribedEvents()
     {
@@ -105,9 +112,9 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "feature.before" event.
      *
-     * @param   Behat\Behat\Event\FeatureEvent  $event
+     * @param FeatureEvent $event
      *
-     * @uses    printTestSuiteHeader()
+     * @uses printTestSuiteHeader()
      */
     public function beforeFeature(FeatureEvent $event)
     {
@@ -125,10 +132,10 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "feature.after" event.
      *
-     * @param   Behat\Behat\Event\FeatureEvent  $event
+     * @param FeatureEvent $event
      *
-     * @uses    printTestSuiteFooter()
-     * @uses    flushOutputConsole()
+     * @uses printTestSuiteFooter()
+     * @uses flushOutputConsole()
      */
     public function afterFeature(FeatureEvent $event)
     {
@@ -139,7 +146,7 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "scenario.before" event.
      *
-     * @param   Behat\Behat\Event\ScenarioEvent     $event
+     * @param ScenarioEvent $event
      */
     public function beforeScenario(ScenarioEvent $event)
     {
@@ -149,9 +156,9 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "scenario.after" event.
      *
-     * @param   Behat\Behat\Event\ScenarioEvent     $event
+     * @param ScenarioEvent $event
      *
-     * @uses    printTestCase()
+     * @uses printTestCase()
      */
     public function afterScenario(ScenarioEvent $event)
     {
@@ -161,7 +168,7 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param   Behat\Behat\Event\OutlineExampleEvent   $event
+     * @param OutlineExampleEvent $event
      */
     public function beforeOutlineExample(OutlineExampleEvent $event)
     {
@@ -171,9 +178,9 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param   Behat\Behat\Event\OutlineExampleEvent   $event
+     * @param OutlineExampleEvent $event
      *
-     * @uses    printTestCase()
+     * @uses printTestCase()
      */
     public function afterOutlineExample(OutlineExampleEvent $event)
     {
@@ -183,7 +190,7 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "step.after" event.
      *
-     * @param   Behat\Behat\Event\StepEvent $event
+     * @param StepEvent $event
      */
     public function afterStep(StepEvent $event)
     {
@@ -198,7 +205,7 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Prints testsuite header.
      *
-     * @param   Behat\Gherkin\Node\FeatureNode  $feature
+     * @param FeatureNode $feature
      */
     protected function printTestSuiteHeader(FeatureNode $feature)
     {
@@ -208,12 +215,12 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Prints testsuite footer.
      *
-     * @param   Behat\Gherkin\Node\FeatureNode  $feature
-     * @param   float                           $time
+     * @param FeatureNode $feature
+     * @param float       $time
      */
     protected function printTestSuiteFooter(FeatureNode $feature, $time)
     {
-        $suiteStats = sprintf('errors="0" failures="%d" name="%s" file="%s" tests="%d" time="%F"',
+        $suiteStats = sprintf('classname="behat.features" errors="0" failures="%d" name="%s" file="%s" tests="%d" time="%F"',
             $this->exceptionsCount,
             htmlspecialchars($feature->getTitle()),
             htmlspecialchars($feature->getFile()),
@@ -229,14 +236,17 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Prints testcase.
      *
-     * @param   Behat\Gherkin\Node\ScenarioNode     $feature
-     * @param   float                               $time
-     * @param   Behat\Behat\Event\EventInterface    $event
+     * @param ScenarioNode   $scenario
+     * @param float          $time
+     * @param EventInterface $event
      */
     protected function printTestCase(ScenarioNode $scenario, $time, EventInterface $event)
     {
         $className  = $scenario->getFeature()->getTitle();
         $name       = $scenario->getTitle();
+        $name      .= $event instanceof OutlineExampleEvent
+                    ? ', Ex #' . ($event->getIteration() + 1)
+                    : '';
         $caseStats  = sprintf('classname="%s" name="%s" time="%F"',
             htmlspecialchars($className),
             htmlspecialchars($name),

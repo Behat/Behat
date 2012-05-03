@@ -16,26 +16,26 @@ use Symfony\Component\DependencyInjection\Reference,
  */
 
 /**
- * Gherkin pass - registers all available Gherkin loaders.
+ * Formatters pass - registers all available formatters.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GherkinPass implements CompilerPassInterface
+class FormattersPass implements CompilerPassInterface
 {
     /**
      * Processes container.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerBuilder  $container
+     * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('gherkin')) {
+        if (!$container->hasDefinition('behat.format_manager')) {
             return;
         }
-        $gherkinDefinition = $container->getDefinition('gherkin');
+        $manager = $container->getDefinition('behat.format_manager');
 
-        foreach ($container->findTaggedServiceIds('gherkin.loader') as $id => $attributes) {
-            $gherkinDefinition->addMethodCall('addLoader', array(new Reference($id)));
+        foreach ($container->findTaggedServiceIds('behat.formatter_dispatcher') as $id => $attributes) {
+            $manager->addMethodCall('addDispatcher', array(new Reference($id)));
         }
     }
 }

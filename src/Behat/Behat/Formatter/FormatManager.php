@@ -16,121 +16,73 @@ use Symfony\Component\Translation\Translator,
 /**
  * Format manager.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class FormatManager
 {
-    /**
-     * Translator service.
-     *
-     * @var     Symfony\Component\Translation\Translator
-     */
     private $translator;
-    /**
-     * Event dispatcher.
-     *
-     * @var     Symfony\Component\EventDispatcher\EventDispatcher
-     */
-    private $dispatcher;
-    /**
-     * List of initialized formatters.
-     *
-     * @var     array
-     */
-    private $formatters = array();
-    /**
-     * Default formatters.
-     */
-    private static $defaultFormatterClasses = array(
-        'pretty'   => 'Behat\Behat\Formatter\PrettyFormatter',
-        'progress' => 'Behat\Behat\Formatter\ProgressFormatter',
-        'html'     => 'Behat\Behat\Formatter\HtmlFormatter',
-        'junit'    => 'Behat\Behat\Formatter\JUnitFormatter',
-        'failed'   => 'Behat\Behat\Formatter\FailedScenariosFormatter',
-        'snippets' => 'Behat\Behat\Formatter\SnippetsFormatter',
-    );
-    /**
-     * Formatter classes.
-     *
-     * @var     array
-     */
-    private $formatterClasses = array();
+    private $eventDispatcher;
+    private $dispatchers = array();
+    private $formatters  = array();
 
     /**
      * Initializes format manager.
      *
-     * @param   Symfony\Component\Translation\Translator            $translator
-     * @param   Symfony\Component\EventDispatcher\EventDispatcher   $dispatcher
+     * @param Translator      $translator
+     * @param EventDispatcher $eventDispatcher
      */
-    public function __construct(Translator $translator, EventDispatcher $dispatcher)
+    public function __construct(Translator $translator, EventDispatcher $eventDispatcher)
     {
-        $this->translator = $translator;
-        $this->dispatcher = $dispatcher;
-
-        $this->formatterClasses = self::$defaultFormatterClasses;
+        $this->translator      = $translator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
-     * Returns default formatter names and their classes.
+     * Adds formatter dispatcher to the manager.
      *
-     * @return  array
+     * @param FormatterDispatcher $dispatcher Formatter dispatcher
      */
-    public static function getDefaultFormatterClasses()
+    public function addDispatcher(FormatterDispatcher $dispatcher)
     {
-        return self::$defaultFormatterClasses;
+        $this->dispatchers[$dispatcher->getName()] = $dispatcher;
     }
 
     /**
-     * Returns all currently available formats with their classes.
+     * Returns registered formatter dispatchers.
      *
-     * @return  array
+     * @return array
      */
-    public function getFormatterClasses()
+    public function getDispatchers()
     {
-        return $this->formatterClasses;
-    }
-
-    /**
-     * Sets formatter class to specific format.
-     *
-     * @param   string  $name   format name
-     * @param   string  $class  formatter class
-     */
-    public function setFormatterClass($name, $class)
-    {
-        $name = strtolower($name);
-        $this->formatterClasses[$name] = $class;
+        return $this->dispatchers;
     }
 
     /**
      * Inits specific formatter class by format name.
      *
-     * @param   string  $name
+     * @param string $name
+     *
+     * @return array
+     *
+     * @throws \RuntimeException
      */
     public function initFormatter($name)
     {
         $name = strtolower($name);
 
         if (class_exists($name)) {
-            $class = $name;
-        } elseif (isset($this->formatterClasses[$name])) {
-            $class = $this->formatterClasses[$name];
+            $dispatcher = new FormatterDispatcher($name);
+        } elseif (isset($this->dispatchers[$name])) {
+            $dispatcher = $this->dispatchers[$name];
         } else {
             throw new \RuntimeException("Unknown formatter: \"$name\". " .
                 'Available formatters are: ' . implode(', ', array_keys($this->formatterClasses))
             );
         }
 
-        $refClass = new \ReflectionClass($class);
-        if (!$refClass->implementsInterface('Behat\Behat\Formatter\FormatterInterface')) {
-            throw new \RuntimeException(sprintf(
-                'Formatter class "%s" should implement FormatterInterface', $class
-            ));
-        }
-
-        $formatter = new $class();
+        $formatter = $dispatcher->createFormatter();
         $formatter->setTranslator($this->translator);
-        $this->dispatcher->addSubscriber($formatter, -5);
+        $this->eventDispatcher->addSubscriber($formatter, -5);
 
         return $this->formatters[] = $formatter;
     }
@@ -138,8 +90,8 @@ class FormatManager
     /**
      * Sets specific parameter in all initialized formatters.
      *
-     * @param   string  $param  parameter name
-     * @param   mixed   $value  parameter value
+     * @param string $param
+     * @param mixed  $value
      */
     public function setFormattersParameter($param, $value)
     {
@@ -151,7 +103,7 @@ class FormatManager
     /**
      * Returns all initialized formatters.
      *
-     * @return  array
+     * @return array
      */
     public function getFormatters()
     {

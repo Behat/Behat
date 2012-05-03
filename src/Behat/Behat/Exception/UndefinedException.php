@@ -13,7 +13,7 @@ namespace Behat\Behat\Exception;
 /**
  * Undefined exception.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class UndefinedException extends BehaviorException
 {
@@ -22,7 +22,7 @@ class UndefinedException extends BehaviorException
     /**
      * Initialize undefined exception.
      *
-     * @param   string  $text   step text
+     * @param string $text step text
      */
     public function __construct($text)
     {

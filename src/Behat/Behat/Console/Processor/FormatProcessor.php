@@ -8,8 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Formatter\FormatManager,
-    Behat\Behat\Console\Input\InputSwitch;
+use Behat\Behat\Formatter\FormatterDispatcher;
 
 /*
  * This file is part of the Behat.
@@ -22,26 +21,47 @@ use Behat\Behat\Formatter\FormatManager,
 /**
  * Format processor.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FormatProcessor implements ProcessorInterface
+class FormatProcessor extends Processor
 {
+    private $container;
+
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::configure()
+     * Constructs processor.
+     *
+     * @param ContainerInterface $container Container instance
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Configures command to be able to process it later.
+     *
+     * @param Command $command
      */
     public function configure(Command $command)
     {
-        $defaultFormatters = FormatManager::getDefaultFormatterClasses();
+        $formatDispatchers = $this->container->get('behat.format_manager')->getDispatchers();
 
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
                 "How to format features. <comment>pretty</comment> is default.\n" .
                 "Default formatters are:\n" .
                 implode("\n",
-                    array_map(function($name) use($defaultFormatters) {
-                        $class = $defaultFormatters[$name];
-                        return "- <comment>$name</comment>: " . $class::getDescription();
-                    }, array_keys($defaultFormatters))
+                    array_map(function($dispatcher) {
+                        $comment = '- <comment>'.$dispatcher->getName().'</comment>: ';
+
+                        if ($dispatcher->getDescription()) {
+                            $comment .= $dispatcher->getDescription();
+                        } else {
+                            $comment .= $dispatcher->getClass();
+                        }
+
+                        return $comment;
+                    }, $formatDispatchers)
                 ) . "\n" .
                 "Can use multiple formats at once (splitted with \"<comment>,</comment>\")"
             )
@@ -52,57 +72,78 @@ class FormatProcessor implements ProcessorInterface
             ->addOption('--lang', null, InputOption::VALUE_REQUIRED,
                 'Print formatter output in particular language.'
             )
+
+            // --[no-]ansi
+            ->addOption('--ansi', null, InputOption::VALUE_NONE,
+                "Whether or not to use ANSI color in the output.\n".
+                "Behat decides based on your platform and the output\n".
+                "destination if not specified."
+            )
+            ->addOption('--no-ansi', null, InputOption::VALUE_NONE)
+
+            // --[no-]time
+            ->addOption('--time', null, InputOption::VALUE_NONE,
+                "Whether or not to show timer in output."
+            )
+            ->addOption('--no-time', null, InputOption::VALUE_NONE)
+
+            // --[no-]paths
+            ->addOption('--paths', null, InputOption::VALUE_NONE,
+                "Whether or not to print sources paths."
+            )
+            ->addOption('--no-paths', null, InputOption::VALUE_NONE)
+
+            // --[no-]snippets
+            ->addOption('--snippets', null, InputOption::VALUE_NONE,
+                "Whether or not to print snippets for undefined steps."
+            )
+            ->addOption('--no-snippets', null, InputOption::VALUE_NONE)
+
+            // --[no-]snippets-paths
+            ->addOption('--snippets-paths', null, InputOption::VALUE_NONE,
+                "Whether or not to print details about undefined steps\n".
+                "in their snippets."
+            )
+            ->addOption('--no-snippets-paths', null, InputOption::VALUE_NONE)
+
+            // --[no-]multiline
+            ->addOption('--multiline', null, InputOption::VALUE_NONE,
+                "Whether or not to print multiline arguments for steps."
+            )
+            ->addOption('--no-multiline', null, InputOption::VALUE_NONE)
+
+            // --[no-]expand
+            ->addOption('--expand', null, InputOption::VALUE_NONE,
+                "Whether or not to expand scenario outline examples\n".
+                "tables.\n"
+            )
+            ->addOption('--no-expand', null, InputOption::VALUE_NONE)
         ;
-
-        $definition = $command->getDefinition();
-
-        $definition->addOption(new InputSwitch('--[no-]ansi',
-            "Whether or not to use ANSI color in the output.\n".
-            "Behat decides based on your platform and the output\n".
-            "destination if not specified."
-        ));
-        $definition->addOption(new InputSwitch('--[no-]time',
-            "Whether or not to show timer in output."
-        ));
-        $definition->addOption(new InputSwitch('--[no-]paths',
-            "Whether or not to print sources paths."
-        ));
-        $definition->addOption(new InputSwitch('--[no-]snippets',
-            "Whether or not to print snippets for undefined steps."
-        ));
-        $definition->addOption(new InputSwitch('--[no-]snippets-paths',
-            "Whether or not to print details about undefined steps\n".
-            "in their snippets."
-        ));
-        $definition->addOption(new InputSwitch('--[no-]multiline',
-            "Whether or not to print multiline arguments for steps."
-        ));
-        $definition->addOption(new InputSwitch('--[no-]expand',
-            "Whether or not to expand scenario outline examples\n".
-            "tables.\n"
-        ));
     }
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::process()
+     * Processes data from container and console input.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
-    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input, OutputInterface $output)
     {
-        $translator = $container->get('behat.translator');
-        $manager    = $container->get('behat.format_manager');
-        $locator    = $container->get('behat.path_locator');
+        $translator = $this->container->get('behat.translator');
+        $manager    = $this->container->get('behat.format_manager');
+        $locator    = $this->container->get('behat.path_locator');
         $formats    = array_map('trim', explode(',',
-            $input->getOption('format') ?: $container->getParameter('behat.formatter.name')
+            $input->getOption('format') ?: $this->container->getParameter('behat.formatter.name')
         ));
 
         // load formatters translations
-        foreach (require($container->getParameter('behat.paths.i18n')) as $lang => $messages) {
+        foreach (require($this->container->getParameter('behat.paths.i18n')) as $lang => $messages) {
             $translator->addResource('array', $messages, $lang, 'behat');
         }
 
         // add user-defined formatter classes to manager
-        foreach ($container->getParameter('behat.formatter.classes') as $name => $class) {
-            $manager->setFormatterClass($name, $class);
+        foreach ($this->container->getParameter('behat.formatter.classes') as $name => $class) {
+            $manager->addDispatcher(new FormatterDispatcher($name, $class));
         }
 
         // init specified for run formatters
@@ -111,7 +152,7 @@ class FormatProcessor implements ProcessorInterface
         }
 
         // set formatter options from behat.yml
-        foreach (($parameters = $container->getParameter('behat.formatter.parameters')) as $name => $value) {
+        foreach (($parameters = $this->container->getParameter('behat.formatter.parameters')) as $name => $value) {
             if ('output_path' === $name) {
                 continue;
             }
@@ -130,26 +171,26 @@ class FormatProcessor implements ProcessorInterface
             $manager->setFormattersParameter('language', $input->getOption('lang'));
         }
 
-        if (null !== $ansi = $input->getOption('[no-]ansi')) {
+        if (null !== $ansi = $this->getSwitchValue($input, 'ansi')) {
             $output->setDecorated($ansi);
             $manager->setFormattersParameter('decorated', $ansi);
         }
-        if (null !== $time = $input->getOption('[no-]time')) {
+        if (null !== $time = $this->getSwitchValue($input, 'time')) {
             $manager->setFormattersParameter('time', $time);
         }
-        if (null !== $snippets = $input->getOption('[no-]snippets')) {
+        if (null !== $snippets = $this->getSwitchValue($input, 'snippets')) {
             $manager->setFormattersParameter('snippets', $snippets);
         }
-        if (null !== $snippetsPaths = $input->getOption('[no-]snippets-paths')) {
+        if (null !== $snippetsPaths = $this->getSwitchValue($input, 'snippets-paths')) {
             $manager->setFormattersParameter('snippets_paths', $snippetsPaths);
         }
-        if (null !== $paths = $input->getOption('[no-]paths')) {
+        if (null !== $paths = $this->getSwitchValue($input, 'paths')) {
             $manager->setFormattersParameter('paths', $paths);
         }
-        if (null !== $expand = $input->getOption('[no-]expand')) {
+        if (null !== $expand = $this->getSwitchValue($input, 'expand')) {
             $manager->setFormattersParameter('expand', $expand);
         }
-        if (null !== $multiline = $input->getOption('[no-]multiline')) {
+        if (null !== $multiline = $this->getSwitchValue($input, 'multiline')) {
             $manager->setFormattersParameter('multiline_arguments', $multiline);
         }
 
@@ -174,7 +215,7 @@ class FormatProcessor implements ProcessorInterface
             }
 
             $manager->setFormattersParameter('output_path', $out);
-            $manager->setFormattersParameter('decorated', (bool) $input->getOption('[no-]ansi'));
+            $manager->setFormattersParameter('decorated', (bool) $this->getSwitchValue($input, 'ansi'));
         } else {
             foreach (array_map('trim', explode(',', $outputs)) as $i => $out) {
                 if (!$out || 'null' === $out || 'false' === $out) {
@@ -195,7 +236,7 @@ class FormatProcessor implements ProcessorInterface
                 $formatters = $manager->getFormatters();
                 if (isset($formatters[$i])) {
                     $formatters[$i]->setParameter('output_path', $out);
-                    $formatters[$i]->setParameter('decorated', (bool) $input->getOption('[no-]ansi'));
+                    $formatters[$i]->setParameter('decorated', (bool) $this->getSwitchValue($input, 'ansi'));
                 }
             }
         }

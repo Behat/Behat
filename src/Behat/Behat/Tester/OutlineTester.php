@@ -23,14 +23,14 @@ use Behat\Behat\Event\OutlineEvent,
 /**
  * Outline tester.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class OutlineTester extends ScenarioTester
 {
     /**
      * Initializes tester.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerInterface    $container  service container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -41,9 +41,9 @@ class OutlineTester extends ScenarioTester
     /**
      * Visits & tests OutlineNode.
      *
-     * @param   Behat\Gherkin\Node\AbstractNode $outline
+     * @param AbstractNode $outline
      *
-     * @return  integer
+     * @return integer
      */
     public function visit(AbstractNode $outline)
     {
@@ -66,11 +66,11 @@ class OutlineTester extends ScenarioTester
     /**
      * Visits & tests OutlineNode example.
      *
-     * @param   Behat\Gherkin\Node\OutlineNode  $outline
-     * @param   integer                         $row        row number
-     * @param   array                           $tokens     step replacements for tokens
+     * @param OutlineNode $outline outline instance
+     * @param integer     $row     row number
+     * @param array       $tokens  step replacements for tokens
      *
-     * @return  integer
+     * @return integer
      */
     private function visitOutlineExample(OutlineNode $outline, $row, array $tokens = array())
     {
@@ -95,7 +95,7 @@ class OutlineTester extends ScenarioTester
 
         // Visit & test steps
         foreach ($outline->getSteps() as $step) {
-            $stResult = $this->visitStep($step, $outline, $context, $tokens, $skip, true);
+            $stResult = $this->visitStep($step, $outline, $context, $tokens, $skip);
             if (0 !== $stResult) {
                 $skip = true;
             }

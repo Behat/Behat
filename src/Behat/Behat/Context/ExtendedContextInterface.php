@@ -13,30 +13,30 @@ namespace Behat\Behat\Context;
 /**
  * Extended context interface.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface ExtendedContextInterface extends SubcontextableContextInterface
 {
     /**
      * Sets parent context of current context.
      *
-     * @param   Behat\Behat\Context\ExtendedContextInterface    $parentContext  parent context
+     * @param ExtendedContextInterface $parentContext
      */
     public function setParentContext(ExtendedContextInterface $parentContext);
 
     /**
      * Returns main context.
      *
-     * @return  Behat\Behat\Context\ExtendedContextInterface
+     * @return ExtendedContextInterface
      */
     public function getMainContext();
 
     /**
      * Find current context's subcontext by alias name.
      *
-     * @param   string  $alias  subcontext alias name
+     * @param string $alias
      *
-     * @return  Behat\Behat\Context\ExtendedContextInterface
+     * @return ExtendedContextInterface
      */
     public function getSubcontext($alias);
 }

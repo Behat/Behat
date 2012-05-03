@@ -15,7 +15,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * Class loader map file compiler.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class PearMapFileCompiler
 {

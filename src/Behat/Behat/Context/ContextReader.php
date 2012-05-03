@@ -15,27 +15,17 @@ use Behat\Behat\Context\Loader\ContextLoaderInterface;
 /**
  * Context reader.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ContextReader
 {
-    /**
-     * Context dispatcher.
-     *
-     * @var     Behat\Behat\Context\ContextDispatcher
-     */
     private $dispatcher;
-    /**
-     * Context loaders.
-     *
-     * @var     array
-     */
     private $loaders = array();
 
     /**
      * Initializes context reader.
      *
-     * @param   Behat\Behat\Context\ContextDispatcher   $dispatcher context dispatcher
+     * @param ContextDispatcher $dispatcher
      */
     public function __construct(ContextDispatcher $dispatcher)
     {
@@ -45,7 +35,7 @@ class ContextReader
     /**
      * Adds context loader to the list of available loaders.
      *
-     * @param   Behat\Behat\Context\Loader\ContextLoaderInterface   $loader
+     * @param ContextLoaderInterface $loader
      */
     public function addLoader(ContextLoaderInterface $loader)
     {
@@ -63,7 +53,7 @@ class ContextReader
     /**
      * Reads definition data from specific context class.
      *
-     * @param   Behat\Behat\Context\ContextInterface    $context
+     * @param ContextInterface $context
      */
     private function readFromContext(ContextInterface $context)
     {

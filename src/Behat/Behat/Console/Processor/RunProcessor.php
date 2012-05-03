@@ -19,12 +19,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
 /**
  * Runner configuration processor.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RunProcessor implements ProcessorInterface
+class RunProcessor extends Processor
 {
+    private $container;
+
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::configure()
+     * Constructs processor.
+     *
+     * @param ContainerInterface $container Container instance
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Configures command to be able to process it later.
+     *
+     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -46,36 +60,41 @@ class RunProcessor implements ProcessorInterface
     }
 
     /**
-     * @see     Behat\Behat\Console\Configuration\ProcessorInterface::process()
+     * Processes data from container and console input.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @throws \RuntimeException
      */
-    public function process(ContainerInterface $container, InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input, OutputInterface $output)
     {
-        $runner         = $container->get('behat.runner');
-        $hookDispatcher = $container->get('behat.hook_dispatcher');
+        $runner         = $this->container->get('behat.runner');
+        $hookDispatcher = $this->container->get('behat.hook_dispatcher');
 
         $runner->setStrict(
-            $input->getOption('strict') || $container->getParameter('behat.options.strict')
+            $input->getOption('strict') || $this->container->getParameter('behat.options.strict')
         );
         $runner->setDryRun(
-            $input->getOption('dry-run') || $container->getParameter('behat.options.dry_run')
+            $input->getOption('dry-run') || $this->container->getParameter('behat.options.dry_run')
         );
         $hookDispatcher->setDryRun(
-            $input->getOption('dry-run') || $container->getParameter('behat.options.dry_run')
+            $input->getOption('dry-run') || $this->container->getParameter('behat.options.dry_run')
         );
 
-        if ($file = $input->getOption('rerun') ?: $container->getParameter('behat.options.rerun')) {
+        if ($file = $input->getOption('rerun') ?: $this->container->getParameter('behat.options.rerun')) {
             if (file_exists($file)) {
                 $runner->setFeaturesPaths(explode("\n", trim(file_get_contents($file))));
             }
 
-            $container->get('behat.format_manager')
+            $this->container->get('behat.format_manager')
                 ->initFormatter('failed')
                 ->setParameter('output_path', $file);
         }
 
-        if ($input->getOption('append-snippets') || $container->getParameter('behat.options.append_snippets')) {
+        if ($input->getOption('append-snippets') || $this->container->getParameter('behat.options.append_snippets')) {
             $contextRefl = new \ReflectionClass(
-                $container->get('behat.context_dispatcher')->getContextClass()
+                $this->container->get('behat.context_dispatcher')->getContextClass()
             );
 
             if ($contextRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {
@@ -84,7 +103,7 @@ class RunProcessor implements ProcessorInterface
                 );
             }
 
-            $formatManager = $container->get('behat.format_manager');
+            $formatManager = $this->container->get('behat.format_manager');
             $formatManager->setFormattersParameter('snippets', false);
 
             $formatter = $formatManager->initFormatter('snippets');
@@ -92,7 +111,7 @@ class RunProcessor implements ProcessorInterface
             $formatter->setParameter('output_decorate', false);
             $formatter->setParameter('output', $snippets = fopen('php://memory', 'rw'));
 
-            $container->get('behat.event_dispatcher')
+            $this->container->get('behat.event_dispatcher')
                 ->addListener('afterSuite', function() use($contextRefl, $snippets) {
                     rewind($snippets);
                     $snippets = stream_get_contents($snippets);

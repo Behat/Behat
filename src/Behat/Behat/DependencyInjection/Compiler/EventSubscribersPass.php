@@ -16,16 +16,16 @@ use Symfony\Component\DependencyInjection\Reference,
  */
 
 /**
- * EventDispatcher pass - registers all available event subscribers.
+ * Event subscribers pass - registers all available event subscribers.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatcherPass implements CompilerPassInterface
+class EventSubscribersPass implements CompilerPassInterface
 {
     /**
      * Processes container.
      *
-     * @param   Symfony\Component\DependencyInjection\ContainerBuilder  $container
+     * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {

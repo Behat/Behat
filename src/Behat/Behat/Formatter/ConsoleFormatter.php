@@ -24,33 +24,24 @@ use Behat\Behat\Event\StepEvent,
 /**
  * Console formatter.
  *
- * @author      Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class ConsoleFormatter implements FormatterInterface
 {
     /**
      * Formatter parameters.
      *
-     * @var     Symfony\Component\DependencyInjection\ParameterBag\ParameterBag
+     * @var ParameterBag
      */
     protected $parameters;
-    /**
-     * Translator.
-     *
-     * @var     Symfony\Component\Translation\Translator
-     */
+
     private $translator;
-    /**
-     * Console output.
-     *
-     * @var     Symfony\Component\Console\Output\StreamOutput
-     */
     private $console;
 
     /**
      * Initialize formatter.
      *
-     * @uses    getDefaultParameters()
+     * @uses getDefaultParameters()
      */
     public function __construct()
     {
@@ -79,7 +70,9 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Set formatter translator.
+     *
+     * @param Translator $translator
      */
     final public function setTranslator(Translator $translator)
     {
@@ -89,12 +82,16 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Returns default parameters to construct ParameterBag.
      *
-     * @return  array
+     * @return array
      */
     abstract protected function getDefaultParameters();
 
     /**
-     * {@inheritdoc}
+     * Checks if current formatter has parameter.
+     *
+     * @param string $name
+     *
+     * @return Boolean
      */
     final public function hasParameter($name)
     {
@@ -102,7 +99,10 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Sets formatter parameter.
+     *
+     * @param string $name
+     * @param mixed  $value
      */
     final public function setParameter($name, $value)
     {
@@ -110,7 +110,11 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns parameter value.
+     *
+     * @param string $name
+     *
+     * @return mixed
      */
     final public function getParameter($name)
     {
@@ -120,9 +124,9 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Returns color code from tester result status code.
      *
-     * @param   integer $result tester result status code
+     * @param integer $result tester result status code
      *
-     * @return  string          passed|pending|skipped|undefined|failed
+     * @return string passed|pending|skipped|undefined|failed
      */
     final protected function getResultColorCode($result)
     {
@@ -138,10 +142,10 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Writes message(s) to output console.
      *
-     * @param   string|array    $messages   message or array of messages
-     * @param   boolean         $newline    do we need to append newline after messages
+     * @param string|array $messages message or array of messages
+     * @param Boolean      $newline  do we need to append newline after messages
      *
-     * @uses    getWritingConsole()
+     * @uses getWritingConsole()
      */
     final protected function write($messages, $newline = false)
     {
@@ -151,7 +155,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Writes newlined message(s) to output console.
      *
-     * @param   string|array    $messages   message or array of messages
+     * @param string|array $messages message or array of messages
      */
     final protected function writeln($messages = '')
     {
@@ -161,10 +165,10 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Returns console instance, prepared to write.
      *
-     * @return  Symfony\Component\Console\Output\StreamOutput
+     * @return StreamOutput
      *
-     * @uses    createOutputConsole()
-     * @uses    configureOutputConsole()
+     * @uses createOutputConsole()
+     * @uses configureOutputConsole()
      */
     final protected function getWritingConsole()
     {
@@ -181,7 +185,9 @@ abstract class ConsoleFormatter implements FormatterInterface
      *
      * Override this method & call flushOutputConsole() to write output in another stream
      *
-     * @return  resource
+     * @return resource
+     *
+     * @throws FormatterException
      */
     protected function createOutputStream()
     {
@@ -208,9 +214,9 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Returns new output console.
      *
-     * @return  Symfony\Component\Console\Output\StreamOutput
+     * @return StreamOutput
      *
-     * @uses    createOutputStream()
+     * @uses createOutputStream()
      */
     protected function createOutputConsole()
     {
@@ -242,7 +248,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Configure output console parameters.
      *
-     * @param   Symfony\Component\Console\Output\StreamOutput    $console
+     * @param StreamOutput $console
      */
     protected function configureOutputConsole(StreamOutput $console)
     {
@@ -257,7 +263,7 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Clear output console, so on next write formatter will need to init (create) it again.
      *
-     * @see     createOutputConsole()
+     * @see createOutputConsole()
      */
     final protected function flushOutputConsole()
     {
@@ -267,10 +273,10 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Translates message to output language.
      *
-     * @param   string  $message        message to translate
-     * @param   array   $parameters     message parameters
+     * @param string $message    message to translate
+     * @param array  $parameters message parameters
      *
-     * @return  string
+     * @return string
      */
     final protected function translate($message, array $parameters = array())
     {
@@ -282,11 +288,11 @@ abstract class ConsoleFormatter implements FormatterInterface
     /**
      * Translates numbered message to output language.
      *
-     * @param   string  $message        message specification to translate
-     * @param   string  $number         choice number
-     * @param   array   $parameters     message parameters
+     * @param string $message    message specification to translate
+     * @param string $number     choice number
+     * @param array  $parameters message parameters
      *
-     * @return  string
+     * @return string
      */
     final protected function translateChoice($message, $number, array $parameters = array())
     {
