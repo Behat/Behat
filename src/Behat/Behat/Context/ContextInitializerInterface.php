@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Context\Loader;
+namespace Behat\Behat\Context;
 
 use Behat\Behat\Context\ContextInterface;
 

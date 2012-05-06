@@ -98,12 +98,29 @@ class ContextDispatcher
         }
 
         $context = new $this->contextClass($this->getContextParameters());
+        $this->initializeContext($context);
+
+        return $context;
+    }
+
+    /**
+     * Initializes context with registered initializers.
+     *
+     * @param ContextInterface $context
+     */
+    private function initializeContext(ContextInterface $context)
+    {
         foreach ($this->initializers as $initializer) {
             if ($initializer->supports($context)) {
                 $initializer->initialize($context);
+
+                // if context have subcontexts - initialize them too
+                if ($context instanceof SubcontextableContextInterface) {
+                    foreach ($context->getSubcontexts() as $subcontext) {
+                        $this->initializeContext($subcontext);
+                    }
+                }
             }
         }
-
-        return $context;
     }
 }

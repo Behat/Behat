@@ -22,10 +22,8 @@ interface ExtensionInterface
     /**
      * Loads a specific configuration.
      *
-     * @param array            $config    Configuration hash
+     * @param array            $config    Extension configuration hash (from behat.yml)
      * @param ContainerBuilder $container ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
      */
     function load(array $config, ContainerBuilder $container);
 
