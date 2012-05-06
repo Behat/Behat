@@ -54,7 +54,7 @@ class BehatExtension implements ExtensionInterface
         // load configs DIC
         foreach ($config as $ns => $subconfig) {
             if ('extensions' === $ns) {
-                $container->setParameter('behat.extensions', $subconfig);
+                $container->setParameter('behat.extensions', (array) $subconfig);
                 continue;
             }
 
