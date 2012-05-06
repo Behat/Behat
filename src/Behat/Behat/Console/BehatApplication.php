@@ -102,7 +102,7 @@ class BehatApplication extends Application
     protected function configureContainer(ContainerInterface $container, InputInterface $input)
     {
         $extension  = new BehatExtension();
-        $cwd        = getcwd();
+        $cwd        = $this->configPath = getcwd();
         $configFile = $input->getParameterOption(array('--config', '-c'));
         $profile    = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
         $configs    = array();
@@ -144,24 +144,13 @@ class BehatApplication extends Application
     protected function loadExtensions(ContainerBuilder $container)
     {
         foreach ($container->getParameter('behat.extensions') as $id => $config) {
-            if ($this->configPath) {
-                $id = str_replace('%%BEHAT_CONFIG_PATH%%', $this->configPath, $id);
-            }
-
             $extension = null;
             if (class_exists($id)) {
                 $extension = new $id;
-            } elseif (file_exists($id)) {
-                $extension = require($id);
-            } elseif ($this->configPath && file_exists($this->configPath.DIRECTORY_SEPARATOR.$id)) {
+            } elseif (file_exists($this->configPath.DIRECTORY_SEPARATOR.$id)) {
                 $extension = require($this->configPath.DIRECTORY_SEPARATOR.$id);
             } else {
-                foreach (explode(':', get_include_path()) as $libPath) {
-                    if (file_exists($libPath.DIRECTORY_SEPARATOR.$id)) {
-                        $extension = require($libPath.DIRECTORY_SEPARATOR.$id);
-                        break;
-                    }
-                }
+                $extension = require($id);
             }
 
             if (null === $extension) {
@@ -177,6 +166,7 @@ class BehatApplication extends Application
 
             // load extension into temp container
             $tempContainer = new ContainerBuilder();
+            $tempContainer->setParameter('behat.paths.config', $this->configPath);
             $extension->load((array) $config, $tempContainer);
             $tempContainer->addObjectResource($extension);
 
