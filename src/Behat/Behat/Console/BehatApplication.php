@@ -158,6 +158,11 @@ class BehatApplication extends Application
                     '"%s" extension could not be found.', $id
                 ));
             }
+            if (!is_object($extension)) {
+                throw new \InvalidArgumentException(sprintf(
+                    '"%s" extension could not be initialized.', $id
+                ));
+            }
             if (!$extension instanceof ExtensionInterface) {
                 throw new \InvalidArgumentException(sprintf(
                     '"%s" extension should implement ExtensionInterface.', $id
