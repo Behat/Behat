@@ -113,13 +113,13 @@ class ContextDispatcher
         foreach ($this->initializers as $initializer) {
             if ($initializer->supports($context)) {
                 $initializer->initialize($context);
+            }
+        }
 
-                // if context have subcontexts - initialize them too
-                if ($context instanceof SubcontextableContextInterface) {
-                    foreach ($context->getSubcontexts() as $subcontext) {
-                        $this->initializeContext($subcontext);
-                    }
-                }
+        // if context have subcontexts - initialize them too
+        if ($context instanceof SubcontextableContextInterface) {
+            foreach ($context->getSubcontexts() as $subcontext) {
+                $this->initializeContext($subcontext);
             }
         }
     }
