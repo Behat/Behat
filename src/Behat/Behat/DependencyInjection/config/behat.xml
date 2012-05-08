@@ -46,8 +46,8 @@
         <parameter key="behat.runner.class">Behat\Behat\Runner</parameter>
         <parameter key="behat.processor.aggregate.class">Behat\Behat\Console\Processor\AggregateProcessor</parameter>
         <parameter key="behat.processor.locator.class">Behat\Behat\Console\Processor\LocatorProcessor</parameter>
+        <parameter key="behat.processor.context_reader.class">Behat\Behat\Console\Processor\ContextReaderProcessor</parameter>
         <parameter key="behat.processor.init.class">Behat\Behat\Console\Processor\InitProcessor</parameter>
-        <parameter key="behat.processor.context.class">Behat\Behat\Console\Processor\ContextProcessor</parameter>
         <parameter key="behat.processor.format.class">Behat\Behat\Console\Processor\FormatProcessor</parameter>
         <parameter key="behat.processor.help.class">Behat\Behat\Console\Processor\HelpProcessor</parameter>
         <parameter key="behat.processor.gherkin.class">Behat\Behat\Console\Processor\GherkinProcessor</parameter>
@@ -57,6 +57,7 @@
         <!-- Context -->
         <parameter key="behat.context.class">FeatureContext</parameter>
         <parameter key="behat.context_dispatcher.class">Behat\Behat\Context\ContextDispatcher</parameter>
+        <parameter key="behat.context_class_guesser.predefined.class">Behat\Behat\Context\ClassGuesser\PredefinedClassGuesser</parameter>
         <parameter key="behat.context_reader.class">Behat\Behat\Context\ContextReader</parameter>
         <parameter key="behat.context_loader.translated.class">Behat\Behat\Context\Loader\TranslatedContextLoader</parameter>
         <parameter key="behat.context_loader.annotated.class">Behat\Behat\Context\Loader\AnnotatedContextLoader</parameter>
@@ -137,11 +138,11 @@
             <argument type="service" id="service_container" />
             <tag name="behat.processor" />
         </service>
-        <service id="behat.processor.context" class="%behat.processor.context.class%">
+        <service id="behat.processor.format" class="%behat.processor.format.class%">
             <argument type="service" id="service_container" />
             <tag name="behat.processor" />
         </service>
-        <service id="behat.processor.format" class="%behat.processor.format.class%">
+        <service id="behat.processor.context_reader" class="%behat.processor.context_reader.class%">
             <argument type="service" id="service_container" />
             <tag name="behat.processor" />
         </service>
@@ -161,9 +162,15 @@
         <!-- Context -->
         <service id="behat.context_reader" class="%behat.context_reader.class%">
             <argument type="service" id="behat.context_dispatcher" />
+            <argument type="service" id="behat.definition_dispatcher" />
+            <argument type="service" id="behat.hook_dispatcher" />
         </service>
         <service id="behat.context_dispatcher" class="%behat.context_dispatcher.class%">
             <argument>%behat.context.parameters%</argument>
+        </service>
+        <service id="behat.context_class_guesser.predefined" class="%behat.context_class_guesser.predefined.class%">
+            <argument>%behat.context.class%</argument>
+            <tag name="behat.context_class_guesser" />
         </service>
         <service id="behat.context_loader.translated" class="%behat.context_loader.translated.class%">
             <argument type="service" id="behat.translator" />

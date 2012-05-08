@@ -49,34 +49,6 @@ class Runner
     }
 
     /**
-     * Sets main context class.
-     *
-     * @param string $class
-     */
-    public function setMainContextClass($class)
-    {
-        $dispatcher = $this->container->get('behat.context_dispatcher');
-        $reader     = $this->container->get('behat.context_reader');
-
-        if (null !== $dispatcher->getContextClass()) {
-            $this->cleanContextInformation();
-        }
-
-        $dispatcher->setContextClass($class);
-        $reader->read();
-    }
-
-    /**
-     * Cleans context information (definitions, transformations, hooks).
-     */
-    public function cleanContextInformation()
-    {
-        $this->container->get('behat.definition_dispatcher')->removeDefinitions();
-        $this->container->get('behat.definition_dispatcher')->removeTransformations();
-        $this->container->get('behat.hook_dispatcher')->removeHooks();
-    }
-
-    /**
      * Sets path locator base path.
      *
      * @param string $path

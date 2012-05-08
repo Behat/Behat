@@ -2,7 +2,8 @@
 
 namespace Behat\Behat\Context;
 
-use Behat\Behat\Context\Loader\ContextLoaderInterface;
+use Behat\Behat\Definition\DefinitionDispatcher,
+    Behat\Behat\Hook\HookDispatcher;
 
 /*
  * This file is part of the Behat.
@@ -19,25 +20,33 @@ use Behat\Behat\Context\Loader\ContextLoaderInterface;
  */
 class ContextReader
 {
-    private $dispatcher;
+    private $contextDispatcher;
+    private $definitionDispatcher;
+    private $hookDispatcher;
     private $loaders = array();
 
     /**
      * Initializes context reader.
      *
-     * @param ContextDispatcher $dispatcher
+     * @param ContextDispatcher    $contextDispatcher
+     * @param DefinitionDispatcher $definitionDispatcher
+     * @param HookDispatcher       $hookDispatcher
      */
-    public function __construct(ContextDispatcher $dispatcher)
+    public function __construct(ContextDispatcher $contextDispatcher,
+                                DefinitionDispatcher $definitionDispatcher,
+                                HookDispatcher $hookDispatcher)
     {
-        $this->dispatcher = $dispatcher;
+        $this->contextDispatcher    = $contextDispatcher;
+        $this->definitionDispatcher = $definitionDispatcher;
+        $this->hookDispatcher       = $hookDispatcher;
     }
 
     /**
      * Adds context loader to the list of available loaders.
      *
-     * @param ContextLoaderInterface $loader
+     * @param Loader\ContextLoaderInterface $loader
      */
-    public function addLoader(ContextLoaderInterface $loader)
+    public function addLoader(Loader\ContextLoaderInterface $loader)
     {
         $this->loaders[] = $loader;
     }
@@ -47,7 +56,12 @@ class ContextReader
      */
     public function read()
     {
-        $this->readFromContext($this->dispatcher->createContext());
+        // remove old data
+        $this->definitionDispatcher->clean();
+        $this->hookDispatcher->clean();
+
+        // load new data
+        $this->readFromContext($this->contextDispatcher->createContext());
     }
 
     /**

@@ -103,6 +103,14 @@ class HookDispatcher implements EventSubscriberInterface
     }
 
     /**
+     * Cleans dispatcher.
+     */
+    public function clean()
+    {
+        $this->removeHooks();
+    }
+
+    /**
      * Listens to "suite.before" event.
      *
      * @param SuiteEvent $event

@@ -17,7 +17,7 @@ use Behat\Behat\Context\ContextInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ContextInitializerInterface
+interface InitializerInterface
 {
     /**
      * Checks if initializer supports provided context.

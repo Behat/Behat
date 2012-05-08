@@ -112,6 +112,15 @@ class DefinitionDispatcher
     }
 
     /**
+     * Cleans dispatcher.
+     */
+    public function clean()
+    {
+        $this->removeDefinitions();
+        $this->removeTransformations();
+    }
+
+    /**
      * Finds step definition, that match specified step.
      *
      * @param ContextInterface $context

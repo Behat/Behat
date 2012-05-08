@@ -5,7 +5,12 @@ namespace Behat\Behat\Console\Processor;
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
+
+use Behat\Gherkin\Filter\NameFilter,
+    Behat\Gherkin\Filter\TagFilter,
+    Behat\Gherkin\Cache\FileCache;
 
 /*
  * This file is part of the Behat.
@@ -16,14 +21,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
  */
 
 /**
- * Context processor.
+ * Context reader processor.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextProcessor extends Processor
+class ContextReaderProcessor extends Processor
 {
-    private $container;
-
     /**
      * Constructs processor.
      *
@@ -42,7 +45,6 @@ class ContextProcessor extends Processor
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        $contextClass = $this->container->getParameter('behat.context.class');
-        $this->container->get('behat.runner')->setMainContextClass($contextClass);
+        $this->container->get('behat.context_reader')->read();
     }
 }
