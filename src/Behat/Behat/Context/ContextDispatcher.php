@@ -2,6 +2,8 @@
 
 namespace Behat\Behat\Context;
 
+use Behat\Behat\Context\Initializer\ContextInitializerInterface;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
