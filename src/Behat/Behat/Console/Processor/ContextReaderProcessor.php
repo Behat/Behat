@@ -45,6 +45,6 @@ class ContextReaderProcessor extends Processor
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        $this->container->get('behat.context_reader')->read();
+        $this->container->get('behat.context.reader')->read();
     }
 }

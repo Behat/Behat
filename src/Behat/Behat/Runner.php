@@ -169,7 +169,7 @@ class Runner
     {
         $dispatcher = $this->container->get('behat.event_dispatcher');
         $logger     = $this->container->get('behat.logger');
-        $parameters = $this->container->get('behat.context_dispatcher')->getContextParameters();
+        $parameters = $this->container->get('behat.context.dispatcher')->getContextParameters();
 
         $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, $parameters, false));
 
@@ -190,7 +190,7 @@ class Runner
     {
         $dispatcher = $this->container->get('behat.event_dispatcher');
         $logger     = $this->container->get('behat.logger');
-        $parameters = $this->container->get('behat.context_dispatcher')->getContextParameters();
+        $parameters = $this->container->get('behat.context.dispatcher')->getContextParameters();
 
         $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, $parameters, true));
     }

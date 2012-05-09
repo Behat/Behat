@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Reference,
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CommandProcessorsPass implements CompilerPassInterface
+class ConsoleProcessorsPass implements CompilerPassInterface
 {
     /**
      * Processes container.
@@ -29,12 +29,12 @@ class CommandProcessorsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.processor.aggregate')) {
+        if (!$container->hasDefinition('behat.console.processor.aggregate')) {
             return;
         }
-        $aggregator = $container->getDefinition('behat.processor.aggregate');
+        $aggregator = $container->getDefinition('behat.console.processor.aggregate');
 
-        foreach ($container->findTaggedServiceIds('behat.processor') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('behat.console.processor') as $id => $attributes) {
             $aggregator->addMethodCall('addProcessor', array(new Reference($id)));
         }
     }

@@ -70,7 +70,7 @@ class RunProcessor extends Processor
     public function process(InputInterface $input, OutputInterface $output)
     {
         $runner         = $this->container->get('behat.runner');
-        $hookDispatcher = $this->container->get('behat.hook_dispatcher');
+        $hookDispatcher = $this->container->get('behat.hook.dispatcher');
 
         $runner->setStrict(
             $input->getOption('strict') || $this->container->getParameter('behat.options.strict')
@@ -94,7 +94,7 @@ class RunProcessor extends Processor
 
         if ($input->getOption('append-snippets') || $this->container->getParameter('behat.options.append_snippets')) {
             $contextRefl = new \ReflectionClass(
-                $this->container->get('behat.context_dispatcher')->getContextClass()
+                $this->container->get('behat.context.dispatcher')->getContextClass()
             );
 
             if ($contextRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {

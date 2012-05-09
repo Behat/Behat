@@ -16,7 +16,7 @@ use Behat\Behat\DependencyInjection\BehatExtension,
     Behat\Behat\DependencyInjection\Compiler\FormattersPass,
     Behat\Behat\DependencyInjection\Compiler\ContextLoadersPass,
     Behat\Behat\DependencyInjection\Compiler\EventSubscribersPass,
-    Behat\Behat\DependencyInjection\Compiler\CommandProcessorsPass,
+    Behat\Behat\DependencyInjection\Compiler\ConsoleProcessorsPass,
     Behat\Behat\DependencyInjection\Compiler\DefinitionProposalsPass,
     Behat\Behat\DependencyInjection\Compiler\ContextClassGuessersPass,
     Behat\Behat\DependencyInjection\Compiler\ContextInitializersPass,
@@ -75,7 +75,7 @@ class BehatApplication extends Application
         $this->loadExtensions($container);
 
         // add core compiler passes
-        $container->addCompilerPass(new CommandProcessorsPass());
+        $container->addCompilerPass(new ConsoleProcessorsPass());
         $container->addCompilerPass(new GherkinLoadersPass());
         $container->addCompilerPass(new ContextLoadersPass());
         $container->addCompilerPass(new ContextClassGuessersPass());
@@ -88,7 +88,7 @@ class BehatApplication extends Application
         $container->compile();
 
         // setup command into application
-        $this->add($container->get('behat.command'));
+        $this->add($container->get('behat.console.command'));
 
         return parent::doRun($input, $output);
     }

@@ -34,7 +34,7 @@ class FormattersPass implements CompilerPassInterface
         }
         $manager = $container->getDefinition('behat.formatter.manager');
 
-        foreach ($container->findTaggedServiceIds('behat.formatter_dispatcher') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('behat.formatter.dispatcher') as $id => $attributes) {
             $manager->addMethodCall('addDispatcher', array(new Reference($id)));
         }
     }

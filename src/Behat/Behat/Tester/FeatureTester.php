@@ -41,7 +41,7 @@ class FeatureTester implements NodeVisitorInterface
     {
         $this->container  = $container;
         $this->dispatcher = $container->get('behat.event_dispatcher');
-        $this->parameters = $container->get('behat.context_dispatcher')->getContextParameters();
+        $this->parameters = $container->get('behat.context.dispatcher')->getContextParameters();
     }
 
     /**

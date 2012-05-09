@@ -29,12 +29,12 @@ class DefinitionProposalsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.definition_proposal_dispatcher')) {
+        if (!$container->hasDefinition('behat.definition.proposal_dispatcher')) {
             return;
         }
-        $dispatcher = $container->getDefinition('behat.definition_proposal_dispatcher');
+        $dispatcher = $container->getDefinition('behat.definition.proposal_dispatcher');
 
-        foreach ($container->findTaggedServiceIds('behat.definition_proposal') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('behat.definition.proposal') as $id => $attributes) {
             $dispatcher->addMethodCall('addProposal', array(new Reference($id)));
         }
     }

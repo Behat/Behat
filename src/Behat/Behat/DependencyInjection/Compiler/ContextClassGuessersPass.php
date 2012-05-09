@@ -29,12 +29,12 @@ class ContextClassGuessersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.context_dispatcher')) {
+        if (!$container->hasDefinition('behat.context.dispatcher')) {
             return;
         }
-        $dispatcher = $container->getDefinition('behat.context_dispatcher');
+        $dispatcher = $container->getDefinition('behat.context.dispatcher');
 
-        foreach ($container->findTaggedServiceIds('behat.context_class_guesser') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('behat.context.class_guesser') as $id => $attributes) {
             $dispatcher->addMethodCall('addClassGuesser', array(new Reference($id)));
         }
     }
