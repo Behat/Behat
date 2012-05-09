@@ -178,7 +178,7 @@
         </service>
         <service id="behat.context.class_guesser.predefined" class="%behat.context.class_guesser.predefined.class%">
             <argument>%behat.context.class%</argument>
-            <tag name="behat.context.class_guesser" />
+            <tag name="behat.context.class_guesser" priority="0" />
         </service>
         <service id="behat.context.loader.translated" class="%behat.context.loader.translated.class%">
             <argument type="service" id="behat.translator" />

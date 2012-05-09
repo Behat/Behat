@@ -34,8 +34,22 @@ class ContextClassGuessersPass implements CompilerPassInterface
         }
         $dispatcher = $container->getDefinition('behat.context.dispatcher');
 
+        $prioritizedGuessers = array();
         foreach ($container->findTaggedServiceIds('behat.context.class_guesser') as $id => $attributes) {
-            $dispatcher->addMethodCall('addClassGuesser', array(new Reference($id)));
+            $priority = intval(isset($attributes['priority']) ? $attributes['priority'] : 0);
+
+            if (!isset($prioritizedGuessers[$priority])) {
+                $prioritizedGuessers[$priority] = array();
+            }
+
+            $prioritizedGuessers[$priority][] = new Reference($id);
+        }
+
+        krsort($prioritizedGuessers);
+        foreach ($prioritizedGuessers as $guessers) {
+            foreach ($guessers as $guesser) {
+                $dispatcher->addMethodCall('addClassGuesser', array($guesser));
+            }
         }
     }
 }
