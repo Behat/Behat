@@ -52,7 +52,7 @@ class Configuration
                 arrayNode('paths')->
                     children()->
                         scalarNode('features')->
-                            defaultValue('%%BEHAT_BASE_PATH%%')->
+                            defaultValue('%behat.paths.base%/features')->
                         end()->
                         scalarNode('bootstrap')->
                             defaultValue('%behat.paths.features%/bootstrap')->
