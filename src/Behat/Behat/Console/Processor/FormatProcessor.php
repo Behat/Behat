@@ -202,7 +202,6 @@ class FormatProcessor extends Processor
         }
 
         if (false === strpos($outputs, ',')) {
-            // TODO: support absolute paths
             $out = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR.$outputs;
 
             // get realpath
