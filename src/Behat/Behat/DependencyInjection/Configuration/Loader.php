@@ -92,25 +92,17 @@ class Loader
      *
      * @return array
      *
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     protected function loadFileConfiguration($configFile, $profile)
     {
         if (!is_file($configFile) || !is_readable($configFile)) {
-            throw new \InvalidArgumentException("Config file \"$configFile\" not found");
+            throw new \RuntimeException("Config file \"$configFile\" not found");
         }
 
         $configPath = rtrim(dirname($configFile), DIRECTORY_SEPARATOR);
         $config     = Yaml::parse($configFile);
         $configs    = array();
-
-        if (isset($config['default'])) {
-            $configs[] = $config['default'];
-        }
-        if ('default' !== $profile && isset($config[$profile])) {
-            $configs[] = $config[$profile];
-            $this->profileFound = true;
-        }
 
         if (isset($config['imports']) && is_array($config['imports'])) {
             foreach ($config['imports'] as $path) {
@@ -118,6 +110,14 @@ class Loader
                     $configs[] = $importConfig;
                 }
             }
+        }
+
+        if (isset($config['default'])) {
+            $configs[] = $config['default'];
+        }
+        if ('default' !== $profile && isset($config[$profile])) {
+            $configs[] = $config[$profile];
+            $this->profileFound = true;
         }
 
         return $configs;
