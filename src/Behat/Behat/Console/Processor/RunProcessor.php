@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
  */
 
 /**
- * Runner configuration processor.
+ * command configuration processor.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -69,13 +69,13 @@ class RunProcessor extends Processor
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        $runner         = $this->container->get('behat.runner');
+        $command        = $this->container->get('behat.console.command');
         $hookDispatcher = $this->container->get('behat.hook.dispatcher');
 
-        $runner->setStrict(
+        $command->setStrict(
             $input->getOption('strict') || $this->container->getParameter('behat.options.strict')
         );
-        $runner->setDryRun(
+        $command->setDryRun(
             $input->getOption('dry-run') || $this->container->getParameter('behat.options.dry_run')
         );
         $hookDispatcher->setDryRun(
@@ -84,7 +84,7 @@ class RunProcessor extends Processor
 
         if ($file = $input->getOption('rerun') ?: $this->container->getParameter('behat.options.rerun')) {
             if (file_exists($file)) {
-                $runner->setFeaturesPaths(explode("\n", trim(file_get_contents($file))));
+                $command->setFeaturesPaths(explode("\n", trim(file_get_contents($file))));
             }
 
             $this->container->get('behat.formatter.manager')

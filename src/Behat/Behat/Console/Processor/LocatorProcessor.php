@@ -64,7 +64,7 @@ class LocatorProcessor extends Processor
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        $this->container->get('behat.runner')->setFeaturesPaths(
+        $this->container->get('behat.console.command')->setFeaturesPaths(
             array($input->getArgument('features'))
         );
 

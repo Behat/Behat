@@ -42,7 +42,6 @@
         <parameter key="gherkin.keywords.dumper.class">Behat\Gherkin\Keywords\KeywordsDumper</parameter>
 
         <!-- Core -->
-        <parameter key="behat.runner.class">Behat\Behat\Runner</parameter>
         <parameter key="behat.extensions" type="collection"></parameter>
 
         <parameter key="behat.console.command.class">Behat\Behat\Console\Command\BehatCommand</parameter>
@@ -131,9 +130,6 @@
         <service id="behat.console.command" class="%behat.console.command.class%">
             <argument type="service" id="service_container" />
             <argument type="service" id="behat.console.processor.aggregate" />
-        </service>
-        <service id="behat.runner" class="%behat.runner.class%">
-            <argument type="service" id="service_container" />
         </service>
 
         <!-- Processors -->
