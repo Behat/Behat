@@ -75,7 +75,7 @@ class ContextDispatcher
 
         $contextClassRefl = new \ReflectionClass($classname);
         if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\ContextInterface')) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new \RuntimeException(sprintf(
                 'Context class "%s" should implement ContextInterface', $classname
             ));
         }
