@@ -21,24 +21,16 @@ use Behat\Behat\Definition\DefinitionDispatcher,
 class ContextReader
 {
     private $contextDispatcher;
-    private $definitionDispatcher;
-    private $hookDispatcher;
     private $loaders = array();
 
     /**
      * Initializes context reader.
      *
-     * @param ContextDispatcher    $contextDispatcher
-     * @param DefinitionDispatcher $definitionDispatcher
-     * @param HookDispatcher       $hookDispatcher
+     * @param ContextDispatcher $contextDispatcher
      */
-    public function __construct(ContextDispatcher $contextDispatcher,
-                                DefinitionDispatcher $definitionDispatcher,
-                                HookDispatcher $hookDispatcher)
+    public function __construct(ContextDispatcher $contextDispatcher)
     {
-        $this->contextDispatcher    = $contextDispatcher;
-        $this->definitionDispatcher = $definitionDispatcher;
-        $this->hookDispatcher       = $hookDispatcher;
+        $this->contextDispatcher = $contextDispatcher;
     }
 
     /**
@@ -56,11 +48,6 @@ class ContextReader
      */
     public function read()
     {
-        // remove old data
-        $this->definitionDispatcher->clean();
-        $this->hookDispatcher->clean();
-
-        // load new data
         $this->readFromContext($this->contextDispatcher->createContext());
     }
 

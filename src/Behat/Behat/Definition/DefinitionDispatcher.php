@@ -76,14 +76,6 @@ class DefinitionDispatcher
     }
 
     /**
-     * Removes all registered definitions.
-     */
-    public function removeDefinitions()
-    {
-        $this->definitions = array();
-    }
-
-    /**
      * Adds transformation to dispatcher.
      *
      * @param TransformationInterface $transformation
@@ -104,20 +96,12 @@ class DefinitionDispatcher
     }
 
     /**
-     * Remove all registered transformations.
-     */
-    public function removeTransformations()
-    {
-        $this->transformations = array();
-    }
-
-    /**
      * Cleans dispatcher.
      */
     public function clean()
     {
-        $this->removeDefinitions();
-        $this->removeTransformations();
+        $this->definitions     = array();
+        $this->transformations = array();
     }
 
     /**

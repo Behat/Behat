@@ -95,19 +95,11 @@ class HookDispatcher implements EventSubscriberInterface
     }
 
     /**
-     * Removes all registered hooks.
-     */
-    public function removeHooks()
-    {
-        $this->hooks = array();
-    }
-
-    /**
      * Cleans dispatcher.
      */
     public function clean()
     {
-        $this->removeHooks();
+        $this->hooks = array();
     }
 
     /**

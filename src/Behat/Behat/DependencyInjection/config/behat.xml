@@ -170,8 +170,6 @@
         <!-- Context -->
         <service id="behat.context.reader" class="%behat.context.reader.class%">
             <argument type="service" id="behat.context.dispatcher" />
-            <argument type="service" id="behat.definition.dispatcher" />
-            <argument type="service" id="behat.hook.dispatcher" />
         </service>
         <service id="behat.context.dispatcher" class="%behat.context.dispatcher.class%">
             <argument>%behat.context.parameters%</argument>
