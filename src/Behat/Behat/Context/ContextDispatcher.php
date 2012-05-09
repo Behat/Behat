@@ -66,11 +66,11 @@ class ContextDispatcher
         }
 
         if (null === $classname) {
-            throw new \InvalidArgumentException(sprintf('Context class could not be guessed.'));
+            throw new \RuntimeException(sprintf('Context class could not be guessed.'));
         }
 
         if (!class_exists($classname)) {
-            throw new \InvalidArgumentException(sprintf('Context class "%s" not found', $classname));
+            throw new \RuntimeException(sprintf('Context class "%s" not found', $classname));
         }
 
         $contextClassRefl = new \ReflectionClass($classname);

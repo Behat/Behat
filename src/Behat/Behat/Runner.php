@@ -49,16 +49,6 @@ class Runner
     }
 
     /**
-     * Sets path locator base path.
-     *
-     * @param string $path
-     */
-    public function setLocatorBasePath($path)
-    {
-        $this->container->get('behat.path_locator')->locateBasePath($path);
-    }
-
-    /**
      * Sets features/scenarios paths to run.
      *
      * @param array $paths
@@ -75,8 +65,7 @@ class Runner
      */
     public function getFeaturesPaths()
     {
-        return $this->featuresPaths
-            ?: $this->container->get('behat.path_locator')->locateFeaturesPaths();
+        return $this->featuresPaths;
     }
 
     /**

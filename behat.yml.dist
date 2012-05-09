@@ -1,12 +1,12 @@
 default:
   paths:
-    features:   %%BEHAT_CONFIG_PATH%%/features
-    bootstrap:  %%BEHAT_CONFIG_PATH%%/features/bootstrap
+    features:   %behat.paths.base%/features
+    bootstrap:  %behat.paths.base%/features/bootstrap
 
 annotations:
   paths:
-    features:   %%BEHAT_CONFIG_PATH%%/features/annotations
+    features:   %behat.paths.base%/features/annotations
 
 closures:
   paths:
-    features:   %%BEHAT_CONFIG_PATH%%/features/closures
+    features:   %behat.paths.base%/features/closures

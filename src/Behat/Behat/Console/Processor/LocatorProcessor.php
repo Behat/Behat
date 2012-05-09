@@ -3,6 +3,7 @@
 namespace Behat\Behat\Console\Processor;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Finder\Finder,
     Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Input\InputInterface,
@@ -48,7 +49,8 @@ class LocatorProcessor extends Processor
             "- a feature <comment>(*.feature)</comment>\n" .
             "- a scenario at specific line <comment>(*.feature:10)</comment>.\n" .
             "- all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.\n" .
-            "- all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>."
+            "- all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>.",
+            ''
         );
     }
 
@@ -62,16 +64,21 @@ class LocatorProcessor extends Processor
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        $this->container->get('behat.runner')->setLocatorBasePath($input->getArgument('features'));
-        $locator = $this->container->get('behat.path_locator');
+        $this->container->get('behat.runner')->setFeaturesPaths(
+            array($input->getArgument('features'))
+        );
 
-        foreach ($locator->locateBootstrapFilesPaths() as $path) {
-            require_once($path);
-        }
+        if (is_dir($bootstrapPath = $this->container->getParameter('behat.paths.bootstrap'))) {
+            $iterator = Finder::create()
+                ->files()
+                ->name('*.php')
+                ->sortByName()
+                ->in($bootstrapPath)
+            ;
 
-        if (!($input->hasOption('init') && $input->getOption('init'))
-         && !is_dir($featuresPath = $locator->getFeaturesPath())) {
-            throw new \InvalidArgumentException("Features path \"$featuresPath\" does not exist");
+            foreach ($iterator as $path) {
+                require_once((string) $path);
+            }
         }
     }
 }

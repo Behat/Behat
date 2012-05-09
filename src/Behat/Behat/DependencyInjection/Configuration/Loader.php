@@ -20,7 +20,7 @@ use Symfony\Component\Yaml\Yaml;
 class Loader
 {
     private $configFile;
-    private $profile;
+    private $profileFound;
 
     /**
      * Constructs reader.
@@ -42,6 +42,7 @@ class Loader
     public function loadConfiguration($profile = 'default')
     {
         $configs = array();
+        $this->profileFound = false;
 
         // first is ENV config
         foreach ($this->loadEnvironmentConfiguration($profile) as $config) {
@@ -53,6 +54,13 @@ class Loader
             foreach ($this->loadFileConfiguration($this->configFile, $profile) as $config) {
                 $configs[] = $config;
             }
+        }
+
+        // if specific profile has not been found
+        if ('default' !== $profile && !$this->profileFound) {
+            throw new \RuntimeException(sprintf(
+                'Configuration for profile "%s" can not be found.', $profile
+            ));
         }
 
         return $configs;
@@ -92,19 +100,21 @@ class Loader
             throw new \InvalidArgumentException("Config file \"$configFile\" not found");
         }
 
-        $config  = Yaml::parse($configFile);
-        $configs = array();
+        $configPath = rtrim(dirname($configFile), DIRECTORY_SEPARATOR);
+        $config     = Yaml::parse($configFile);
+        $configs    = array();
 
         if (isset($config['default'])) {
             $configs[] = $config['default'];
         }
         if ('default' !== $profile && isset($config[$profile])) {
             $configs[] = $config[$profile];
+            $this->profileFound = true;
         }
 
         if (isset($config['imports']) && is_array($config['imports'])) {
             foreach ($config['imports'] as $path) {
-                foreach ($this->parseImport($path, $profile) as $importConfig) {
+                foreach ($this->parseImport($configPath, $path, $profile) as $importConfig) {
                     $configs[] = $importConfig;
                 }
             }
@@ -113,19 +123,16 @@ class Loader
         return $configs;
     }
 
-    private function parseImport($path, $profile)
+    private function parseImport($configPath, $path, $profile)
     {
-        if (!file_exists($path) && file_exists(getcwd().DIRECTORY_SEPARATOR.$path)) {
-            $path = getcwd().DIRECTORY_SEPARATOR.$path;
+        if (!file_exists($path) && file_exists($configPath.DIRECTORY_SEPARATOR.$path)) {
+            $path = $configPath.DIRECTORY_SEPARATOR.$path;
         }
 
         if (!file_exists($path)) {
-            foreach (explode(PATH_SEPARATOR, get_include_path()) as $libPath) {
-                if (file_exists($libPath.DIRECTORY_SEPARATOR.$path)) {
-                    $path = $libPath.DIRECTORY_SEPARATOR.$path;
-                    break;
-                }
-            }
+            throw new \RuntimeException(sprintf(
+                'Can not import config "%s": file not found.', $path
+            ));
         }
 
         return $this->loadFileConfiguration($path, $profile);

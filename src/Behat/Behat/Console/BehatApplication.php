@@ -37,8 +37,6 @@ use Behat\Behat\DependencyInjection\BehatExtension,
  */
 class BehatApplication extends Application
 {
-    private $configPath;
-
     /**
      * {@inheritdoc}
      */
@@ -73,7 +71,7 @@ class BehatApplication extends Application
     {
         // construct container and load extensions
         $container = new ContainerBuilder();
-        $this->configureContainer($container, $input);
+        $this->loadConfiguration($container, $input);
         $this->loadExtensions($container);
 
         // add core compiler passes
@@ -101,10 +99,10 @@ class BehatApplication extends Application
      * @param ContainerInterface $container
      * @param InputInterface     $input
      */
-    protected function configureContainer(ContainerInterface $container, InputInterface $input)
+    protected function loadConfiguration(ContainerInterface $container, InputInterface $input)
     {
         $extension  = new BehatExtension();
-        $cwd        = $this->configPath = getcwd();
+        $cwd        = getcwd();
         $configFile = $input->getParameterOption(array('--config', '-c'));
         $profile    = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
         $configs    = array();
@@ -126,14 +124,13 @@ class BehatApplication extends Application
         $extension->load($configs, $container);
         $container->addObjectResource($extension);
 
-        // set PathLocator path constant
+        // locate base path
+        $basePath = $cwd;
         if (file_exists($configFile)) {
-            $this->configPath = dirname($configFile);
-            $pathLocator = $container->getDefinition('behat.path_locator');
-            $pathLocator->addMethodCall('setPathConstant', array(
-                'BEHAT_CONFIG_PATH', dirname($configFile)
-            ));
+            $basePath = dirname($configFile);
         }
+
+        $container->setParameter('behat.paths.base', rtrim($basePath, DIRECTORY_SEPARATOR));
     }
 
     /**
@@ -145,12 +142,13 @@ class BehatApplication extends Application
      */
     protected function loadExtensions(ContainerBuilder $container)
     {
+        $configPath = $container->getParameter('behat.paths.base');
         foreach ($container->getParameter('behat.extensions') as $id => $config) {
             $extension = null;
             if (class_exists($id)) {
                 $extension = new $id;
-            } elseif (file_exists($this->configPath.DIRECTORY_SEPARATOR.$id)) {
-                $extension = require($this->configPath.DIRECTORY_SEPARATOR.$id);
+            } elseif (file_exists($configPath.DIRECTORY_SEPARATOR.$id)) {
+                $extension = require($configPath.DIRECTORY_SEPARATOR.$id);
             } else {
                 $extension = require($id);
             }
@@ -167,13 +165,17 @@ class BehatApplication extends Application
             }
             if (!$extension instanceof ExtensionInterface) {
                 throw new \InvalidArgumentException(sprintf(
-                    '"%s" extension should implement ExtensionInterface.', $id
+                    '"%s" extension class should implement ExtensionInterface.',
+                    get_class($extension)
                 ));
             }
 
             // load extension into temp container
             $tempContainer = new ContainerBuilder();
-            $tempContainer->setParameter('behat.paths.config', $this->configPath);
+            $tempContainer->setParameter('behat.paths.base',
+                $container->getParameter('behat.paths.base')
+            );
+
             $extension->load((array) $config, $tempContainer);
             $tempContainer->addObjectResource($extension);
 

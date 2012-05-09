@@ -81,7 +81,7 @@ class GherkinProcessor extends Processor
 
         if ($path = ($input->getOption('cache') ?: $this->container->getParameter('behat.options.cache'))) {
             $cache = new FileCache($path);
-            $this->container->get('gherkin.loader.gherkin')->setCache($cache);
+            $this->container->get('gherkin.loader.gherkin_file')->setCache($cache);
         }
     }
 }

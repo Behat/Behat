@@ -131,7 +131,6 @@ class FormatProcessor extends Processor
     {
         $translator = $this->container->get('behat.translator');
         $manager    = $this->container->get('behat.format_manager');
-        $locator    = $this->container->get('behat.path_locator');
         $formats    = array_map('trim', explode(',',
             $input->getOption('format') ?: $this->container->getParameter('behat.formatter.name')
         ));
@@ -159,8 +158,8 @@ class FormatProcessor extends Processor
             $manager->setFormattersParameter($name, $value);
         }
 
-        $manager->setFormattersParameter('base_path', $locator->getWorkPath());
-        $manager->setFormattersParameter('support_path', $locator->getBootstrapPath());
+        $manager->setFormattersParameter('base_path', $this->container->getParameter('behat.paths.base'));
+        $manager->setFormattersParameter('support_path', $this->container->getParameter('behat.paths.bootstrap'));
         $manager->setFormattersParameter('decorated', $output->isDecorated());
 
         if ($input->getOption('verbose')) {
@@ -203,7 +202,8 @@ class FormatProcessor extends Processor
         }
 
         if (false === strpos($outputs, ',')) {
-            $out = $locator->getOutputPath($outputs);
+            // TODO: support absolute paths
+            $out = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR.$outputs;
 
             // get realpath
             if (!file_exists($out)) {
@@ -222,7 +222,7 @@ class FormatProcessor extends Processor
                     continue;
                 }
 
-                $out = $locator->getOutputPath($out);
+                $out = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR.$out;
 
                 // get realpath
                 if (!file_exists($out)) {

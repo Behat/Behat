@@ -404,8 +404,8 @@ Feature: HTML Formatter
       """
       default:
         paths:
-          features:               %%BEHAT_CONFIG_PATH%%/features
-          bootstrap:              %%BEHAT_CONFIG_PATH%%/features/bootstrap
+          features:               %behat.paths.base%/features
+          bootstrap:              %behat.paths.base%/features/bootstrap
         formatter:
           name:                   'html'
           parameters:
