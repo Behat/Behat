@@ -33,7 +33,7 @@ class FeatureSuiteLoader extends AbstractFileLoader
      */
     public function __construct($featuresPath, Gherkin $gherkin)
     {
-        $this->featuresPath = $this->findAbsolutePath($featuresPath);
+        $this->featuresPath = $featuresPath;
         $this->gherkin      = $gherkin;
     }
 

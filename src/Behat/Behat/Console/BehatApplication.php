@@ -73,6 +73,7 @@ class BehatApplication extends Application
         $container = new ContainerBuilder();
         $this->loadConfiguration($container, $input);
         $this->loadExtensions($container);
+        $this->resolveRelativePaths($container);
 
         // add core compiler passes
         $container->addCompilerPass(new ConsoleProcessorsPass());
@@ -190,6 +191,30 @@ class BehatApplication extends Application
     }
 
     /**
+     * Resolves relative behat.paths.* parameters in container.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function resolveRelativePaths(ContainerBuilder $container)
+    {
+        $basePath      = $container->getParameter('behat.paths.base');
+        $featuresPath  = $container->getParameter('behat.paths.features');
+        $bootstrapPath = $container->getParameter('behat.paths.bootstrap');
+        $parameterBag  = $container->getParameterBag();
+        $featuresPath  = $parameterBag->resolveValue($featuresPath);
+        $bootstrapPath = $parameterBag->resolveValue($bootstrapPath);
+
+        if (!$this->isAbsolutePath($featuresPath)) {
+            $featuresPath = $basePath.DIRECTORY_SEPARATOR.$featuresPath;
+            $container->setParameter('behat.paths.features', $featuresPath);
+        }
+        if (!$this->isAbsolutePath($bootstrapPath)) {
+            $bootstrapPath = $basePath.DIRECTORY_SEPARATOR.$bootstrapPath;
+            $container->setParameter('behat.paths.bootstrap', $bootstrapPath);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getCommandName(InputInterface $input)
@@ -203,5 +228,27 @@ class BehatApplication extends Application
     protected function getTerminalWidth()
     {
         return PHP_INT_MAX;
+    }
+
+    /**
+     * Returns whether the file path is an absolute path.
+     *
+     * @param string $file A file path
+     *
+     * @return Boolean
+     */
+    private function isAbsolutePath($file)
+    {
+        if ($file[0] == '/' || $file[0] == '\\'
+            || (strlen($file) > 3 && ctype_alpha($file[0])
+                && $file[1] == ':'
+                && ($file[2] == '\\' || $file[2] == '/')
+            )
+            || null !== parse_url($file, PHP_URL_SCHEME)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
