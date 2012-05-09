@@ -26,10 +26,6 @@
         <parameter key="behat.options.dry_run">null</parameter>
         <parameter key="behat.options.append_snippets">null</parameter>
 
-        <!-- Gherkin loader parameters -->
-        <parameter key="gherkin.filters.name">null</parameter>
-        <parameter key="gherkin.filters.tags">null</parameter>
-
         <!-- Gherkin Parser -->
         <parameter key="gherkin.class">Behat\Gherkin\Gherkin</parameter>
         <parameter key="gherkin.parser.class">Behat\Gherkin\Parser</parameter>
@@ -40,6 +36,8 @@
         <parameter key="gherkin.keywords.class">Behat\Gherkin\Keywords\CachedArrayKeywords</parameter>
         <parameter key="gherkin.keywords.path">%gherkin.paths.i18n%</parameter>
         <parameter key="gherkin.keywords.dumper.class">Behat\Gherkin\Keywords\KeywordsDumper</parameter>
+        <parameter key="gherkin.filters.name">null</parameter>
+        <parameter key="gherkin.filters.tags">null</parameter>
 
         <!-- Core -->
         <parameter key="behat.extensions" type="collection"></parameter>
