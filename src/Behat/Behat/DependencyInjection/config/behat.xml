@@ -62,9 +62,9 @@
         <parameter key="behat.context_dispatcher.class">Behat\Behat\Context\ContextDispatcher</parameter>
         <parameter key="behat.context_class_guesser.predefined.class">Behat\Behat\Context\ClassGuesser\PredefinedClassGuesser</parameter>
         <parameter key="behat.context_reader.class">Behat\Behat\Context\ContextReader</parameter>
-        <parameter key="behat.context_loader.translated.class">Behat\Behat\Context\Loader\TranslatedContextLoader</parameter>
-        <parameter key="behat.context_loader.annotated.class">Behat\Behat\Context\Loader\AnnotatedContextLoader</parameter>
-        <parameter key="behat.context_loader.closured.class">Behat\Behat\Context\Loader\ClosuredContextLoader</parameter>
+        <parameter key="behat.context_loader.translated.class">Behat\Behat\Context\Loader\TranslatedLoader</parameter>
+        <parameter key="behat.context_loader.annotated.class">Behat\Behat\Context\Loader\AnnotatedLoader</parameter>
+        <parameter key="behat.context_loader.closured.class">Behat\Behat\Context\Loader\ClosuredLoader</parameter>
 
         <!-- Definition Dispathcer -->
         <parameter key="behat.definition_dispatcher.class">Behat\Behat\Definition\DefinitionDispatcher</parameter>

@@ -20,7 +20,7 @@ use Behat\Behat\Context\ContextInterface,
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ClosuredContextLoader implements ContextLoaderInterface
+class ClosuredLoader implements LoaderInterface
 {
     private $definitionLoader;
     private $hookLoader;

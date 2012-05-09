@@ -44,9 +44,9 @@ class ContextReader
     /**
      * Adds context loader to the list of available loaders.
      *
-     * @param Loader\ContextLoaderInterface $loader
+     * @param Loader\LoaderInterface $loader
      */
-    public function addLoader(Loader\ContextLoaderInterface $loader)
+    public function addLoader(Loader\LoaderInterface $loader)
     {
         $this->loaders[] = $loader;
     }
