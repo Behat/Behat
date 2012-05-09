@@ -118,7 +118,7 @@ class Runner
         $gherkin = $this->container->get('gherkin');
 
         $this->beforeSuite();
-        $this->runFeatures($gherkin, $this->getFeaturesPaths());
+        $this->runFeatures($gherkin);
         $this->afterSuite();
 
         return $this->getCliReturnCode();
@@ -127,12 +127,11 @@ class Runner
     /**
      * Parses and runs provided features.
      *
-     * @param Gherkin $gherkin  gherkin parser/loader
-     * @param array   $features list of feature files
+     * @param Gherkin $gherkin gherkin parser/loader
      */
-    protected function runFeatures(Gherkin $gherkin, $features)
+    protected function runFeatures(Gherkin $gherkin)
     {
-        foreach ($features as $path) {
+        foreach ($this->getFeaturesPaths() as $path) {
             // parse every feature with Gherkin
             $features = $gherkin->load((string) $path);
 
