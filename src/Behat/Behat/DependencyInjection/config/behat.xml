@@ -17,7 +17,7 @@
         <parameter key="behat.formatter.parameters" type="collection"></parameter>
         <parameter key="behat.formatter.classes" type="collection"></parameter>
         <parameter key="behat.formatter_dispatcher.class">Behat\Behat\Formatter\FormatterDispatcher</parameter>
-        <parameter key="behat.format_manager.class">Behat\Behat\Formatter\FormatManager</parameter>
+        <parameter key="behat.formatter.manager.class">Behat\Behat\Formatter\FormatterManager</parameter>
 
         <!-- Options -->
         <parameter key="behat.options.cache">null</parameter>
@@ -233,7 +233,7 @@
         </service>
 
         <!-- Format -->
-        <service id="behat.format_manager" class="%behat.format_manager.class%">
+        <service id="behat.formatter.manager" class="%behat.formatter.manager.class%">
             <argument type="service" id="behat.translator" />
             <argument type="service" id="behat.event_dispatcher" />
         </service>

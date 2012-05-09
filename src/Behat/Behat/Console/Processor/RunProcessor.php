@@ -87,7 +87,7 @@ class RunProcessor extends Processor
                 $runner->setFeaturesPaths(explode("\n", trim(file_get_contents($file))));
             }
 
-            $this->container->get('behat.format_manager')
+            $this->container->get('behat.formatter.manager')
                 ->initFormatter('failed')
                 ->setParameter('output_path', $file);
         }
@@ -103,7 +103,7 @@ class RunProcessor extends Processor
                 );
             }
 
-            $formatManager = $this->container->get('behat.format_manager');
+            $formatManager = $this->container->get('behat.formatter.manager');
             $formatManager->setFormattersParameter('snippets', false);
 
             $formatter = $formatManager->initFormatter('snippets');
