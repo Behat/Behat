@@ -100,9 +100,9 @@ class Loader
             throw new \RuntimeException("Config file \"$configFile\" not found");
         }
 
-        $configPath = rtrim(dirname($configFile), DIRECTORY_SEPARATOR);
-        $config     = Yaml::parse($configFile);
-        $configs    = array();
+        $basePath = rtrim(dirname($configFile), DIRECTORY_SEPARATOR);
+        $config   = Yaml::parse($configFile);
+        $configs  = array();
 
         // first load default profile from current config
         if (isset($config['default'])) {
@@ -112,7 +112,7 @@ class Loader
         // then load profiles from import
         if (isset($config['imports']) && is_array($config['imports'])) {
             foreach ($config['imports'] as $path) {
-                foreach ($this->parseImport($configPath, $path, $profile) as $importConfig) {
+                foreach ($this->parseImport($basePath, $path, $profile) as $importConfig) {
                     $configs[] = $importConfig;
                 }
             }
@@ -127,10 +127,10 @@ class Loader
         return $configs;
     }
 
-    private function parseImport($configPath, $path, $profile)
+    private function parseImport($basePath, $path, $profile)
     {
-        if (!file_exists($path) && file_exists($configPath.DIRECTORY_SEPARATOR.$path)) {
-            $path = $configPath.DIRECTORY_SEPARATOR.$path;
+        if (!file_exists($path) && file_exists($basePath.DIRECTORY_SEPARATOR.$path)) {
+            $path = $basePath.DIRECTORY_SEPARATOR.$path;
         }
 
         if (!file_exists($path)) {

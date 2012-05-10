@@ -148,13 +148,13 @@ class BehatApplication extends Application
      */
     protected function loadExtensions(ContainerBuilder $container)
     {
-        $configPath = $container->getParameter('behat.paths.base');
+        $basePath = $container->getParameter('behat.paths.base');
         foreach ($container->getParameter('behat.extensions') as $id => $config) {
             $extension = null;
             if (class_exists($id)) {
                 $extension = new $id;
-            } elseif (file_exists($configPath.DIRECTORY_SEPARATOR.$id)) {
-                $extension = require($configPath.DIRECTORY_SEPARATOR.$id);
+            } elseif (file_exists($basePath.DIRECTORY_SEPARATOR.$id)) {
+                $extension = require($basePath.DIRECTORY_SEPARATOR.$id);
             } else {
                 $extension = require($id);
             }
