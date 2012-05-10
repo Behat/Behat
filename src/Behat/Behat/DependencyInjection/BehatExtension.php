@@ -66,6 +66,12 @@ class BehatExtension implements ExtensionInterface
                 } else {
                     $parameterName = "behat.$ns.$key";
                 }
+
+                if ('behat.context.parameters' === $parameterName) {
+                    foreach ($value as $key => $val) {
+                        $container->setParameter($parameterName.'.'.$key, $val);
+                    }
+                }
                 $container->setParameter($parameterName, $value);
             }
         }
