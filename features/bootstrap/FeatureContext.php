@@ -116,9 +116,6 @@ class FeatureContext extends BaseFeaturesContext
      */
     public function iRunBehat($argumentsString = '')
     {
-        $php = 0 === mb_strpos(BEHAT_PHP_BIN_PATH, '/usr/bin/env')
-             ? BEHAT_PHP_BIN_PATH
-             : escapeshellarg(BEHAT_PHP_BIN_PATH);
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
         if ('/' === DIRECTORY_SEPARATOR) {
@@ -127,11 +124,11 @@ class FeatureContext extends BaseFeaturesContext
 
         if ($this->env) {
             exec($command = sprintf('BEHAT_PARAMS="%s" %s %s %s',
-                $this->env, $php, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
+                $this->env, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
             ), $output, $return);
         } else {
             exec($command = sprintf('%s %s %s --no-time',
-                $php, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
+                BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
             ), $output, $return);
         }
 
