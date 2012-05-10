@@ -108,12 +108,17 @@ class BehatApplication extends Application
         $profile    = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
         $configs    = array();
 
-        // check for config file in FS if no provided
+        // if config file is not provided
         if (!$configFile) {
+            // then use behat.yml
             if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
                 $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml';
+            // or behat.yml.dist
             } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml.dist')) {
                 $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml.dist';
+            // or config/behat.yml
+            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml')) {
+                $configFile = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml';
             }
         }
 
