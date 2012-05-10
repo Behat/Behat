@@ -34,7 +34,7 @@ class ContextInitializersPass implements CompilerPassInterface
         }
         $dispatcher = $container->getDefinition('behat.context.dispatcher');
 
-        foreach ($container->findTaggedServiceIds('behat.context_initializer') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('behat.context.initializer') as $id => $attributes) {
             $dispatcher->addMethodCall('addInitializer', array(new Reference($id)));
         }
     }
