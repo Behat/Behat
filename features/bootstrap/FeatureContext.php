@@ -32,7 +32,7 @@ class FeatureContext extends BaseFeaturesContext
      *
      * @var     string
      */
-    private $env = 'formatter[parameters][language]=en&formatter[parameters][time]=false&formatter[parameters][output_decorate]=false';
+    private $env;
     /**
      * Last runned command name.
      *
@@ -125,9 +125,15 @@ class FeatureContext extends BaseFeaturesContext
             $argumentsString .= ' 2>&1';
         }
 
-        exec($command = sprintf('BEHAT_PARAMS="%s" %s %s %s',
-            $this->env, $php, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
-        ), $output, $return);
+        if ($this->env) {
+            exec($command = sprintf('BEHAT_PARAMS="%s" %s %s %s',
+                $this->env, $php, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
+            ), $output, $return);
+        } else {
+            exec($command = sprintf('%s %s %s --no-time',
+                $php, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
+            ), $output, $return);
+        }
 
         $this->command = 'behat ' . $argumentsString;
         $this->output  = trim(implode("\n", $output));
