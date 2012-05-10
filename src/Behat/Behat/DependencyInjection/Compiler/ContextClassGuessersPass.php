@@ -41,7 +41,8 @@ class ContextClassGuessersPass implements CompilerPassInterface
         // from later extensions have more priority.
         $prioritizedGuessers = array();
         foreach ($container->findTaggedServiceIds('behat.context.class_guesser') as $id => $attributes) {
-            $priority = intval(isset($attributes['priority']) ? $attributes['priority'] : 0);
+            $attributes = isset($attributes[0]) ? $attributes[0] : array();
+            $priority   = intval(isset($attributes['priority']) ? $attributes['priority'] : 0);
 
             if (!isset($prioritizedGuessers[$priority])) {
                 $prioritizedGuessers[$priority] = array();
