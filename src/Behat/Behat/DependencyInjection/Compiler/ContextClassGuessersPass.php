@@ -34,6 +34,11 @@ class ContextClassGuessersPass implements CompilerPassInterface
         }
         $dispatcher = $container->getDefinition('behat.context.dispatcher');
 
+        // Sorts guessers by priority (0 by default).
+        // Guessers with higher priority go first.
+        // If two guessers has same priority, then the
+        // lastly added one goes first. Means guessers
+        // from later extensions have more priority.
         $prioritizedGuessers = array();
         foreach ($container->findTaggedServiceIds('behat.context.class_guesser') as $id => $attributes) {
             $priority = intval(isset($attributes['priority']) ? $attributes['priority'] : 0);
@@ -42,10 +47,10 @@ class ContextClassGuessersPass implements CompilerPassInterface
                 $prioritizedGuessers[$priority] = array();
             }
 
-            $prioritizedGuessers[$priority][] = new Reference($id);
+            array_unshift($prioritizedGuessers[$priority], new Reference($id));
         }
-
         krsort($prioritizedGuessers);
+
         foreach ($prioritizedGuessers as $guessers) {
             foreach ($guessers as $guesser) {
                 $dispatcher->addMethodCall('addClassGuesser', array($guesser));
