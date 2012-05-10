@@ -2,7 +2,8 @@
 
 namespace Behat\Behat\Extension;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder,
+    Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 /*
  * This file is part of the Behat.
@@ -26,6 +27,13 @@ interface ExtensionInterface
      * @param ContainerBuilder $container ContainerBuilder instance
      */
     function load(array $config, ContainerBuilder $container);
+
+    /**
+     * Setups configuration for current extension.
+     *
+     * @param ArrayNodeDefinition $builder
+     */
+    function getConfig(ArrayNodeDefinition $builder);
 
     /**
      * Returns compiler passes used by this extension.

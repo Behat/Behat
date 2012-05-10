@@ -7,6 +7,8 @@ use Symfony\Component\Config\Definition\Builder\NodeBuilder,
     Symfony\Component\Config\Definition\NodeInterface,
     Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
+use Behat\Behat\Extension\ExtensionManager;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -28,12 +30,20 @@ class Configuration
     /**
      * Generates the configuration tree.
      *
+     * @param ExtensionManager $extensionManager
+     *
      * @return NodeInterface
      */
-    public function getConfigTree()
+    public function getConfigTree(ExtensionManager $extensionManager)
     {
         $tree = new TreeBuilder();
-        $this->appendConfigChildrens($tree);
+        $root = $this->appendConfigChildrens($tree);
+
+        $extensionsNode = $root->fixXmlConfig('extension')->children()->arrayNode('extensions')->children();
+        foreach ($extensionManager->getExtensions() as $id => $extension) {
+            $extensionNode = $extensionsNode->arrayNode($id);
+            $extension->getConfig($extensionNode);
+        }
 
         return $tree->buildTree();
     }
@@ -41,7 +51,7 @@ class Configuration
     /**
      * Appends config childrens to configuration tree.
      *
-     * @param TreeBuilder $tree   tree builder
+     * @param TreeBuilder $tree tree builder
      *
      * @return ArrayNodeDefinition
      */
@@ -112,19 +122,14 @@ class Configuration
                 arrayNode('context')->
                     fixXmlConfig('parameter')->
                     children()->
-                        scalarNode('class')->end()->
+                        scalarNode('class')->
+                            defaultValue('FeatureContext')->
+                        end()->
                         arrayNode('parameters')->
                             useAttributeAsKey(0)->
                             prototype('variable')->end()->
                         end()->
                     end()->
-                end()->
-            end()->
-            fixXmlConfig('extension')->
-            children()->
-                arrayNode('extensions')->
-                    useAttributeAsKey(0)->
-                    prototype('variable')->end()->
                 end()->
             end()
         ;
