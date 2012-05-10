@@ -165,9 +165,7 @@ class BehatExtension implements ExtensionInterface
         foreach ($config as $id => $extensionConfig) {
             // create temporary container
             $tempContainer = new ContainerBuilder();
-            $tempContainer->setParameter('behat.paths.base',
-                $container->getParameter('behat.paths.base')
-            );
+            $tempContainer->setParameter('behat.paths.base', $this->basePath);
 
             // load extension into it
             $extension = $this->extensionManager->getExtension($id);
