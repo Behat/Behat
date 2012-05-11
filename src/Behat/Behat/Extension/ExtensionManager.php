@@ -37,7 +37,12 @@ class ExtensionManager
      */
     public function activateExtension($id)
     {
-        $this->extensions[$id] = $this->initializeExtension($id);
+        $extensionId = strtolower(str_replace(array('.', '-'), '_', $id));
+        if (!isset($this->extensions[$extensionId])) {
+            $this->extensions[$extensionId] = $this->initializeExtension($id);
+        }
+
+        return $extensionId;
     }
 
     /**

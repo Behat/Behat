@@ -53,12 +53,15 @@ class BehatExtension implements ExtensionInterface
             mb_internal_encoding('UTF-8');
         }
 
-        // activate specified by user extensions
-        foreach ($configs as $config) {
+        // activate and normalize specified by user extensions
+        foreach ($configs as $i => $config) {
             if (isset($config['extensions'])) {
+                $extensions = array();
                 foreach ($config['extensions'] as $id => $extensionConfig) {
-                    $this->extensionManager->activateExtension($id);
+                    $activationId = $this->extensionManager->activateExtension($id);
+                    $extensions[$activationId] = $extensionConfig;
                 }
+                $configs[$i]['extensions'] = $extensions;
             }
         }
 
