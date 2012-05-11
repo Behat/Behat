@@ -49,6 +49,7 @@ Contributors
 ------------
 
 - Konstantin Kudryashov [everzet](http://github.com/everzet) [lead developer]
+- Other [awesome developers](https://github.com/Behat/Behat/graphs/contributors)
 
 Sponsors
 --------
