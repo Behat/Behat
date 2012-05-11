@@ -49,7 +49,7 @@ abstract class Extension implements ExtensionInterface
     public function getConfig(ArrayNodeDefinition $builder)
     {
         $builder
-            ->useAttributeAsKey(0)
+            ->useAttributeAsKey('name')
             ->prototype('variable')
         ;
     }

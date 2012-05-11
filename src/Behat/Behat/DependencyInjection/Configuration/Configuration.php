@@ -86,11 +86,11 @@ class Configuration
                             defaultValue('pretty')->
                         end()->
                         arrayNode('classes')->
-                            useAttributeAsKey(0)->
-                            prototype('variable')->end()->
+                            useAttributeAsKey('name')->
+                            prototype('scalar')->end()->
                         end()->
                         arrayNode('parameters')->
-                            useAttributeAsKey(0)->
+                            useAttributeAsKey('name')->
                             prototype('variable')->end()->
                         end()->
                     end()->
@@ -126,7 +126,7 @@ class Configuration
                             defaultValue('FeatureContext')->
                         end()->
                         arrayNode('parameters')->
-                            useAttributeAsKey(0)->
+                            useAttributeAsKey('name')->
                             prototype('variable')->end()->
                         end()->
                     end()->
