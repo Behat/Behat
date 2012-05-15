@@ -11,15 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\DependencyInjection\BehatExtension,
-    Behat\Behat\DependencyInjection\Configuration\Loader,
-    Behat\Behat\DependencyInjection\Compiler\GherkinLoadersPass,
-    Behat\Behat\DependencyInjection\Compiler\FormattersPass,
-    Behat\Behat\DependencyInjection\Compiler\ContextLoadersPass,
-    Behat\Behat\DependencyInjection\Compiler\EventSubscribersPass,
-    Behat\Behat\DependencyInjection\Compiler\CommandProcessorsPass,
-    Behat\Behat\DependencyInjection\Compiler\DefinitionProposalsPass,
-    Behat\Behat\DependencyInjection\Compiler\ContextInitializersPass,
-    Behat\Behat\Extension\ExtensionInterface;
+    Behat\Behat\DependencyInjection\Configuration\Loader;
 
 /*
  * This file is part of the Behat.
@@ -36,8 +28,6 @@ use Behat\Behat\DependencyInjection\BehatExtension,
  */
 class BehatApplication extends Application
 {
-    private $configPath;
-
     /**
      * {@inheritdoc}
      */
@@ -70,25 +60,13 @@ class BehatApplication extends Application
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        // construct container and load extensions
+        // construct container
         $container = new ContainerBuilder();
-        $this->configureContainer($container, $input);
-        $this->loadExtensions($container);
-
-        // add core compiler passes
-        $container->addCompilerPass(new CommandProcessorsPass());
-        $container->addCompilerPass(new GherkinLoadersPass());
-        $container->addCompilerPass(new ContextLoadersPass());
-        $container->addCompilerPass(new ContextInitializersPass());
-        $container->addCompilerPass(new DefinitionProposalsPass());
-        $container->addCompilerPass(new FormattersPass());
-        $container->addCompilerPass(new EventSubscribersPass());
-
-        // compile and freeze container
+        $this->loadConfiguration($container, $input);
         $container->compile();
 
         // setup command into application
-        $this->add($container->get('behat.command'));
+        $this->add($container->get('behat.console.command'));
 
         return parent::doRun($input, $output);
     }
@@ -99,95 +77,40 @@ class BehatApplication extends Application
      * @param ContainerInterface $container
      * @param InputInterface     $input
      */
-    protected function configureContainer(ContainerInterface $container, InputInterface $input)
+    protected function loadConfiguration(ContainerInterface $container, InputInterface $input)
     {
-        $extension  = new BehatExtension();
-        $cwd        = getcwd();
-        $configFile = $input->getParameterOption(array('--config', '-c'));
-        $profile    = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
-        $configs    = array();
+        $file    = $input->getParameterOption(array('--config', '-c'));
+        $profile = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
+        $cwd     = getcwd();
 
-        // check for config file in FS if no provided
-        if (!$configFile) {
+        // if config file is not provided
+        if (!$file) {
+            // then use behat.yml
             if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
-                $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml';
+                $file = $cwd.DIRECTORY_SEPARATOR.'behat.yml';
+            // or behat.yml.dist
             } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml.dist')) {
-                $configFile = $cwd.DIRECTORY_SEPARATOR.'behat.yml.dist';
+                $file = $cwd.DIRECTORY_SEPARATOR.'behat.yml.dist';
+            // or config/behat.yml
+            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml')) {
+                $file = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml';
             }
         }
 
         // read configuration
-        $loader  = new Loader($configFile);
+        $loader  = new Loader($file);
         $configs = $loader->loadConfiguration($profile);
 
+        // locate base path
+        $basePath = $cwd;
+        if (file_exists($file)) {
+            $basePath = realpath(dirname($file));
+        }
+
         // load core extension into temp container
+        $extension = new BehatExtension($basePath);
         $extension->load($configs, $container);
         $container->addObjectResource($extension);
-
-        // set PathLocator path constant
-        if (file_exists($configFile)) {
-            $this->configPath = dirname($configFile);
-            $pathLocator = $container->getDefinition('behat.path_locator');
-            $pathLocator->addMethodCall('setPathConstant', array(
-                'BEHAT_CONFIG_PATH', dirname($configFile)
-            ));
-        }
-    }
-
-    /**
-     * Loads Behat extensions.
-     *
-     * @param ContainerBuilder $container
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function loadExtensions(ContainerBuilder $container)
-    {
-        foreach ($container->getParameter('behat.extensions') as $id => $config) {
-            if ($this->configPath) {
-                $id = str_replace('%%BEHAT_CONFIG_PATH%%', $this->configPath, $id);
-            }
-
-            $extension = null;
-            if (class_exists($id)) {
-                $extension = new $id;
-            } elseif (file_exists($id)) {
-                $extension = require($id);
-            } elseif ($this->configPath && file_exists($this->configPath.DIRECTORY_SEPARATOR.$id)) {
-                $extension = require($this->configPath.DIRECTORY_SEPARATOR.$id);
-            } else {
-                foreach (explode(':', get_include_path()) as $libPath) {
-                    if (file_exists($libPath.DIRECTORY_SEPARATOR.$id)) {
-                        $extension = require($libPath.DIRECTORY_SEPARATOR.$id);
-                        break;
-                    }
-                }
-            }
-
-            if (null === $extension) {
-                throw new \InvalidArgumentException(sprintf(
-                    '"%s" extension could not be found.', $id
-                ));
-            }
-            if (!$extension instanceof ExtensionInterface) {
-                throw new \InvalidArgumentException(sprintf(
-                    '"%s" extension should implement ExtensionInterface.', $id
-                ));
-            }
-
-            // load extension into temp container
-            $tempContainer = new ContainerBuilder();
-            $extension->load($config, $tempContainer);
-            $tempContainer->addObjectResource($extension);
-
-            // merge temp container into main
-            $container->merge($tempContainer);
-
-            // add extension compiler passes
-            foreach ($extension->getCompilerPasses() as $pass) {
-                $container->addCompilerPass($pass);
-            }
-        }
     }
 
     /**

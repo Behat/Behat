@@ -29,12 +29,12 @@ class ContextLoadersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.context_reader')) {
+        if (!$container->hasDefinition('behat.context.reader')) {
             return;
         }
-        $readerDefinition = $container->getDefinition('behat.context_reader');
+        $readerDefinition = $container->getDefinition('behat.context.reader');
 
-        foreach ($container->findTaggedServiceIds('behat.context_loader') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('behat.context.loader') as $id => $attributes) {
             $readerDefinition->addMethodCall('addLoader', array(new Reference($id)));
         }
     }

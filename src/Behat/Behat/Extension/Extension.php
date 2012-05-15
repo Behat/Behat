@@ -4,7 +4,9 @@ namespace Behat\Behat\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
-    Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+    Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
+    Symfony\Component\Config\FileLocator,
+    Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 /*
  * This file is part of the Behat.
@@ -19,15 +21,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Extension implements ExtensionInterface
+abstract class Extension implements ExtensionInterface
 {
     /**
      * Loads a specific configuration.
      *
-     * @param array            $config    Configuration hash
+     * @param array            $config    Extension configuration hash (from behat.yml)
      * @param ContainerBuilder $container ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
      */
     public function load(array $config, ContainerBuilder $container)
     {
@@ -39,6 +39,19 @@ class Extension implements ExtensionInterface
             $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/config'));
             $loader->load($config);
         }
+    }
+
+    /**
+     * Setups configuration for current extension.
+     *
+     * @param ArrayNodeDefinition $builder
+     */
+    public function getConfig(ArrayNodeDefinition $builder)
+    {
+        $builder
+            ->useAttributeAsKey('name')
+            ->prototype('variable')
+        ;
     }
 
     /**

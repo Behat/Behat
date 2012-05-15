@@ -8,8 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\PathLocator;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -58,7 +56,7 @@ class InitProcessor extends Processor
     public function process(InputInterface $input, OutputInterface $output)
     {
         if ($input->getOption('init')) {
-            $this->initFeaturesDirectoryStructure($this->container->get('behat.path_locator'), $output);
+            $this->initFeaturesDirectoryStructure($output);
 
             exit(0);
         }
@@ -67,14 +65,13 @@ class InitProcessor extends Processor
     /**
      * Creates features path structure (initializes behat tests structure).
      *
-     * @param   Behat\Behat\PathLocator                             $locator    path locator
-     * @param   Symfony\Component\Console\Input\OutputInterface     $output     output console
+     * @param OutputInterface $output output console
      */
-    protected function initFeaturesDirectoryStructure(PathLocator $locator, OutputInterface $output)
+    protected function initFeaturesDirectoryStructure(OutputInterface $output)
     {
-        $basePath       = realpath($locator->getWorkPath()) . DIRECTORY_SEPARATOR;
-        $featuresPath   = $locator->getFeaturesPath();
-        $bootstrapPath  = $locator->getBootstrapPath();
+        $basePath       = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR;
+        $featuresPath   = $this->container->getParameter('behat.paths.features');
+        $bootstrapPath  = $this->container->getParameter('behat.paths.bootstrap');
 
         if (!is_dir($featuresPath)) {
             mkdir($featuresPath, 0777, true);

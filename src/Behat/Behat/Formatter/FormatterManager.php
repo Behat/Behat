@@ -14,11 +14,11 @@ use Symfony\Component\Translation\Translator,
  */
 
 /**
- * Format manager.
+ * Formatters manager.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FormatManager
+class FormatterManager
 {
     private $translator;
     private $eventDispatcher;

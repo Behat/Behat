@@ -23,7 +23,7 @@ use Behat\Behat\Context\ContextInterface,
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AnnotatedContextLoader implements ContextLoaderInterface
+class AnnotatedLoader implements LoaderInterface
 {
     private $definitionDispatcher;
     private $hookDispatcher;

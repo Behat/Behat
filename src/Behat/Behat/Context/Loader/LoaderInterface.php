@@ -17,7 +17,7 @@ use Behat\Behat\Context\ContextInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ContextLoaderInterface
+interface LoaderInterface
 {
     /**
      * Checks if loader supports provided context.

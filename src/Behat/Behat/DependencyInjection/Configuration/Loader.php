@@ -20,7 +20,7 @@ use Symfony\Component\Yaml\Yaml;
 class Loader
 {
     private $configFile;
-    private $profile;
+    private $profileFound;
 
     /**
      * Constructs reader.
@@ -42,6 +42,7 @@ class Loader
     public function loadConfiguration($profile = 'default')
     {
         $configs = array();
+        $this->profileFound = false;
 
         // first is ENV config
         foreach ($this->loadEnvironmentConfiguration($profile) as $config) {
@@ -53,6 +54,13 @@ class Loader
             foreach ($this->loadFileConfiguration($this->configFile, $profile) as $config) {
                 $configs[] = $config;
             }
+        }
+
+        // if specific profile has not been found
+        if ('default' !== $profile && !$this->profileFound) {
+            throw new \RuntimeException(sprintf(
+                'Configuration for profile "%s" can not be found.', $profile
+            ));
         }
 
         return $configs;
@@ -84,48 +92,51 @@ class Loader
      *
      * @return array
      *
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     protected function loadFileConfiguration($configFile, $profile)
     {
         if (!is_file($configFile) || !is_readable($configFile)) {
-            throw new \InvalidArgumentException("Config file \"$configFile\" not found");
+            throw new \RuntimeException("Config file \"$configFile\" not found");
         }
 
-        $config  = Yaml::parse($configFile);
-        $configs = array();
+        $basePath = rtrim(dirname($configFile), DIRECTORY_SEPARATOR);
+        $config   = Yaml::parse($configFile);
+        $configs  = array();
 
+        // first load default profile from current config
         if (isset($config['default'])) {
             $configs[] = $config['default'];
         }
-        if ('default' !== $profile && isset($config[$profile])) {
-            $configs[] = $config[$profile];
-        }
 
+        // then load profiles from import
         if (isset($config['imports']) && is_array($config['imports'])) {
             foreach ($config['imports'] as $path) {
-                foreach ($this->parseImport($path, $profile) as $importConfig) {
+                foreach ($this->parseImport($basePath, $path, $profile) as $importConfig) {
                     $configs[] = $importConfig;
                 }
             }
         }
 
+        // then load specific profile from current config
+        if ('default' !== $profile && isset($config[$profile])) {
+            $configs[] = $config[$profile];
+            $this->profileFound = true;
+        }
+
         return $configs;
     }
 
-    private function parseImport($path, $profile)
+    private function parseImport($basePath, $path, $profile)
     {
-        if (!file_exists($path) && file_exists(getcwd().DIRECTORY_SEPARATOR.$path)) {
-            $path = getcwd().DIRECTORY_SEPARATOR.$path;
+        if (!file_exists($path) && file_exists($basePath.DIRECTORY_SEPARATOR.$path)) {
+            $path = $basePath.DIRECTORY_SEPARATOR.$path;
         }
 
         if (!file_exists($path)) {
-            foreach (explode(PATH_SEPARATOR, get_include_path()) as $libPath) {
-                if (file_exists($libPath.DIRECTORY_SEPARATOR.$path)) {
-                    $path = $libPath.DIRECTORY_SEPARATOR.$path;
-                    break;
-                }
-            }
+            throw new \RuntimeException(sprintf(
+                'Can not import config "%s": file not found.', $path
+            ));
         }
 
         return $this->loadFileConfiguration($path, $profile);

@@ -74,7 +74,7 @@ class OutlineTester extends ScenarioTester
      */
     private function visitOutlineExample(OutlineNode $outline, $row, array $tokens = array())
     {
-        $context  = $this->container->get('behat.context_dispatcher')->createContext();
+        $context  = $this->container->get('behat.context.dispatcher')->createContext();
         $itResult = 0;
         $skip     = false;
 

@@ -167,35 +167,58 @@ class PearCompiler
             <package>
                 <name>gherkin</name>
                 <channel>pear.behat.org</channel>
-                <min>2.1.1</min>
+                <min>2.2.1</min>
+                <max>2.3.0</max>
+                <exclude>2.3.0</exclude>
             </package>
             <package>
                 <name>Config</name>
                 <channel>pear.symfony.com</channel>
+                <min>2.0.0</min>
+                <max>2.3.0</max>
+                <exclude>2.3.0</exclude>
             </package>
             <package>
                 <name>Console</name>
                 <channel>pear.symfony.com</channel>
+                <min>2.0.0</min>
+                <max>2.3.0</max>
+                <exclude>2.3.0</exclude>
             </package>
             <package>
                 <name>DependencyInjection</name>
                 <channel>pear.symfony.com</channel>
+                <min>2.0.0</min>
+                <max>2.3.0</max>
+                <exclude>2.3.0</exclude>
             </package>
             <package>
                 <name>EventDispatcher</name>
                 <channel>pear.symfony.com</channel>
+                <min>2.0.0</min>
+                <max>2.3.0</max>
+                <exclude>2.3.0</exclude>
             </package>
             <package>
                 <name>Finder</name>
                 <channel>pear.symfony.com</channel>
+                <min>2.0.0</min>
+                <max>2.3.0</max>
+                <exclude>2.3.0</exclude>
             </package>
             <package>
                 <name>Translation</name>
                 <channel>pear.symfony.com</channel>
+                <min>2.0.0</min>
+                <max>2.3.0</max>
+                <exclude>2.3.0</exclude>
             </package>
             <package>
                 <name>Yaml</name>
                 <channel>pear.symfony.com</channel>
+                <min>2.0.0</min>
+                <max>2.3.0</max>
+                <exclude>2.3.0</exclude>
             </package>
             <extension>
                 <name>pcre</name>

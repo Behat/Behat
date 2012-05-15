@@ -17,9 +17,9 @@ namespace Behat\Behat\Context;
  */
 class ContextDispatcher
 {
-    private $contextClass;
-    private $initializers = array();
-    private $parameters   = array();
+    private $classGuessers = array();
+    private $initializers  = array();
+    private $parameters    = array();
 
     /**
      * Initialize dispatcher.
@@ -32,36 +32,55 @@ class ContextDispatcher
     }
 
     /**
-     * Sets context class name.
+     * Adds context class guesser to the dispatcher.
      *
-     * @param string $className
-     *
-     * @throws \InvalidArgumentException
+     * @param ClassGuesser\ClassGuesserInterface $guesser
      */
-    public function setContextClass($className)
+    public function addClassGuesser(ClassGuesser\ClassGuesserInterface $guesser)
     {
-        if (!class_exists($className)) {
-            throw new \InvalidArgumentException(sprintf('Context class "%s" not found', $className));
-        }
-
-        $contextClassRefl = new \ReflectionClass($className);
-        if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\ContextInterface')) {
-            throw new \InvalidArgumentException(sprintf(
-                'Context class "%s" should implement ContextInterface', $className
-            ));
-        }
-
-        $this->contextClass = $className;
+        $this->classGuessers[] = $guesser;
     }
 
     /**
-     * Returns context class name.
+     * Adds context initializer to the dispatcher.
+     *
+     * @param Initializer\InitializerInterface $initializer
+     */
+    public function addInitializer(Initializer\InitializerInterface $initializer)
+    {
+        $this->initializers[] = $initializer;
+    }
+
+    /**
+     * Returns context classname.
      *
      * @return  string
      */
     public function getContextClass()
     {
-        return $this->contextClass;
+        $classname = null;
+        foreach ($this->classGuessers as $guesser) {
+            if ($classname = $guesser->guess()) {
+                break;
+            }
+        }
+
+        if (null === $classname) {
+            throw new \RuntimeException(sprintf('Context class not found.'));
+        }
+
+        if (!class_exists($classname)) {
+            throw new \RuntimeException(sprintf('Context class "%s" not found', $classname));
+        }
+
+        $contextClassRefl = new \ReflectionClass($classname);
+        if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\ContextInterface')) {
+            throw new \RuntimeException(sprintf(
+                'Context class "%s" should implement ContextInterface', $classname
+            ));
+        }
+
+        return $classname;
     }
 
     /**
@@ -75,16 +94,6 @@ class ContextDispatcher
     }
 
     /**
-     * Adds initializer to the dispatcher.
-     *
-     * @param ContextInitializerInterface $initializer
-     */
-    public function addInitializer(ContextInitializerInterface $initializer)
-    {
-        $this->initializers[] = $initializer;
-    }
-
-    /**
      * Creates new context instance.
      *
      * @return ContextInterface
@@ -93,17 +102,33 @@ class ContextDispatcher
      */
     public function createContext()
     {
-        if (null === $this->contextClass) {
-            throw new \RuntimeException('Specify context class to use for ContextDispatcher');
-        }
+        $classname  = $this->getContextClass();
+        $parameters = $this->getContextParameters();
+        $context    = new $classname($parameters);
 
-        $context = new $this->contextClass($this->getContextParameters());
+        $this->initializeContext($context);
+
+        return $context;
+    }
+
+    /**
+     * Initializes context with registered initializers.
+     *
+     * @param ContextInterface $context
+     */
+    private function initializeContext(ContextInterface $context)
+    {
         foreach ($this->initializers as $initializer) {
             if ($initializer->supports($context)) {
                 $initializer->initialize($context);
             }
         }
 
-        return $context;
+        // if context has subcontexts - initialize them too
+        if ($context instanceof SubcontextableContextInterface) {
+            foreach ($context->getSubcontexts() as $subcontext) {
+                $this->initializeContext($subcontext);
+            }
+        }
     }
 }

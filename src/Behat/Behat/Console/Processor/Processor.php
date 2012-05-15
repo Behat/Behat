@@ -41,7 +41,8 @@ abstract class Processor implements ProcessorInterface
     {
         if ($input->getOption($name)) {
             return true;
-        } elseif ($input->getOption('no-'.$name)) {
+        }
+        if ($input->getOption('no-'.$name)) {
             return false;
         }
 

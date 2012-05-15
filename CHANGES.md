@@ -1,3 +1,19 @@
+2.4.0 / 2012-05-15
+==================
+
+  * New extension system based on Symfony2 DIC component
+  * Refactored paths reading system (now relative paths are fully supported)
+  * Support latest Composer changes
+  * Removed static constraint for transformations
+  * Updated to latest Gherkin with immutable AST
+  * Fixed couple of definition snippet generator bugs
+  * Option for HTML formatter to provide step definition links
+  * Added fallback locale (in case if provided lang is unsupported yet)
+  * Print step snippets in HTML formatter only if they're enabled
+  * Escape placeholder brackets in HTML formatter
+  * Use different names for examples in JUnit formatter
+  * Major core cleanup
+
 2.3.5 / 2012-03-30
 ==================
 

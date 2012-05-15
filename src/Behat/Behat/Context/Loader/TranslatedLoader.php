@@ -20,7 +20,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TranslatedContextLoader implements ContextLoaderInterface
+class TranslatedLoader implements LoaderInterface
 {
     private $translator;
 

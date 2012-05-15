@@ -44,7 +44,7 @@ class FormatProcessor extends Processor
      */
     public function configure(Command $command)
     {
-        $formatDispatchers = $this->container->get('behat.format_manager')->getDispatchers();
+        $formatDispatchers = $this->container->get('behat.formatter.manager')->getDispatchers();
 
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
@@ -130,8 +130,7 @@ class FormatProcessor extends Processor
     public function process(InputInterface $input, OutputInterface $output)
     {
         $translator = $this->container->get('behat.translator');
-        $manager    = $this->container->get('behat.format_manager');
-        $locator    = $this->container->get('behat.path_locator');
+        $manager    = $this->container->get('behat.formatter.manager');
         $formats    = array_map('trim', explode(',',
             $input->getOption('format') ?: $this->container->getParameter('behat.formatter.name')
         ));
@@ -159,8 +158,8 @@ class FormatProcessor extends Processor
             $manager->setFormattersParameter($name, $value);
         }
 
-        $manager->setFormattersParameter('base_path', $locator->getWorkPath());
-        $manager->setFormattersParameter('support_path', $locator->getBootstrapPath());
+        $manager->setFormattersParameter('base_path', $this->container->getParameter('behat.paths.base'));
+        $manager->setFormattersParameter('support_path', $this->container->getParameter('behat.paths.bootstrap'));
         $manager->setFormattersParameter('decorated', $output->isDecorated());
 
         if ($input->getOption('verbose')) {
@@ -203,7 +202,7 @@ class FormatProcessor extends Processor
         }
 
         if (false === strpos($outputs, ',')) {
-            $out = $locator->getOutputPath($outputs);
+            $out = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR.$outputs;
 
             // get realpath
             if (!file_exists($out)) {
@@ -222,7 +221,7 @@ class FormatProcessor extends Processor
                     continue;
                 }
 
-                $out = $locator->getOutputPath($out);
+                $out = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR.$out;
 
                 // get realpath
                 if (!file_exists($out)) {
