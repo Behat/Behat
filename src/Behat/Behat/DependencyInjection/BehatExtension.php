@@ -47,6 +47,7 @@ class BehatExtension implements ExtensionInterface
     public function load(array $configs, ContainerBuilder $container)
     {
         $this->loadDefaults($container);
+        $container->setParameter('behat.paths.base', $this->basePath);
 
         // set internal encoding to UTF-8
         if ('UTF-8' !== mb_internal_encoding()) {
@@ -64,6 +65,11 @@ class BehatExtension implements ExtensionInterface
                 $configs[$i]['extensions'] = $extensions;
             }
         }
+
+        // set list of extensions to container
+        $container->setParameter('behat.extension.classes',
+            $this->extensionManager->getExtensionClasses()
+        );
 
         // normalize and merge the actual configuration
         $tree   = $this->configuration->getConfigTree($this->extensionManager);
@@ -168,7 +174,12 @@ class BehatExtension implements ExtensionInterface
         foreach ($config as $id => $extensionConfig) {
             // create temporary container
             $tempContainer = new ContainerBuilder();
-            $tempContainer->setParameter('behat.paths.base', $this->basePath);
+            $tempContainer->setParameter('behat.paths.base',
+                $container->getParameter('behat.paths.base')
+            );
+            $tempContainer->setParameter('behat.extension.classes',
+                $container->getParameter('behat.extension.classes')
+            );
 
             // load extension into it
             $extension = $this->extensionManager->getExtension($id);
@@ -260,7 +271,6 @@ class BehatExtension implements ExtensionInterface
         $behatLibPath   = dirname($behatClassLoaderReflection->getFilename()) . '/../../../../';
         $gherkinLibPath = dirname($gherkinParserReflection->getFilename()) . '/../../../';
 
-        $container->setParameter('behat.paths.base', $this->basePath);
         $container->setParameter('gherkin.paths.lib', $gherkinLibPath);
         $container->setParameter('behat.paths.lib', $behatLibPath);
     }

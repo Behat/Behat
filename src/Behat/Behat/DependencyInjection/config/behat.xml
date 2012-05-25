@@ -40,8 +40,7 @@
         <parameter key="gherkin.filters.tags">null</parameter>
 
         <!-- Core -->
-        <parameter key="behat.extensions" type="collection"></parameter>
-
+        <parameter key="behat.extension.classes" type="collection"></parameter>
         <parameter key="behat.console.command.class">Behat\Behat\Console\Command\BehatCommand</parameter>
         <parameter key="behat.console.processor.aggregate.class">Behat\Behat\Console\Processor\AggregateProcessor</parameter>
         <parameter key="behat.console.processor.locator.class">Behat\Behat\Console\Processor\LocatorProcessor</parameter>

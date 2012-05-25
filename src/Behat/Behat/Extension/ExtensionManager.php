@@ -76,6 +76,23 @@ class ExtensionManager
     }
 
     /**
+     * Returns activated extension classes.
+     *
+     * @return array
+     */
+    public function getExtensionClasses()
+    {
+        return array_unique(
+            array_map(
+                function($extension) {
+                    return get_class($extension);
+                },
+                $this->extensions
+            )
+        );
+    }
+
+    /**
      * Initializes extension by id.
      *
      * @param string $id
