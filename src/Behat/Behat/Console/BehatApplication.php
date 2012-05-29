@@ -113,7 +113,7 @@ class BehatApplication extends Application
         $profile = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
         $configs = $loader->loadConfiguration($profile);
 
-        $this->loadCoreExtension($container, $basePath, $configs);
+        $this->loadCoreExtension($container, rtrim($basePath, DIRECTORY_SEPARATOR), $configs);
     }
 
     /**
@@ -135,11 +135,12 @@ class BehatApplication extends Application
         }
 
         // predefined config paths
+        $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR);
         foreach (array_filter(array(
-            getcwd().DIRECTORY_SEPARATOR.'behat.yml',
-            getcwd().DIRECTORY_SEPARATOR.'behat.yml.dist',
-            getcwd().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml',
-            getcwd().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml.dist',
+            $cwd.DIRECTORY_SEPARATOR.'behat.yml',
+            $cwd.DIRECTORY_SEPARATOR.'behat.yml.dist',
+            $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml',
+            $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml.dist',
         ), 'is_file') as $path) {
             return $path;
         }
