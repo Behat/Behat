@@ -83,7 +83,5 @@ class Transformation extends Annotation implements TransformationInterface
                 return call_user_func_array($callback, $transformArguments);
             }
         }
-
-        return false;
     }
 }

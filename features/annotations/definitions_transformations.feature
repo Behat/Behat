@@ -55,6 +55,11 @@ Feature: Step Arguments Transformations
               return new User($username, $age);
           }
 
+          /** @Transform /^(\d+)$/ */
+          public function castToNumber($number) {
+              return intval($number);
+          }
+
           /**
            * @Given /I am (".*" user)/
            * @Given /I am user:/
@@ -75,6 +80,7 @@ Feature: Step Arguments Transformations
            */
           public function ageMustBe($age) {
               assertEquals($age, $this->user->getAge());
+              assertInternalType('int', $age);
           }
       }
     """
