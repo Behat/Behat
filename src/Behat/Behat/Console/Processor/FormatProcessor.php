@@ -8,7 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
-use Behat\Behat\Formatter\FormatterDispatcher;
+use Behat\Behat\Formatter\FormatterManager,
+    Behat\Behat\Formatter\FormatterDispatcher;
 
 /*
  * This file is part of the Behat.
@@ -129,38 +130,85 @@ class FormatProcessor extends Processor
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        $translator = $this->container->get('behat.translator');
-        $manager    = $this->container->get('behat.formatter.manager');
-        $formats    = array_map('trim', explode(',',
+        $manager = $this->container->get('behat.formatter.manager');
+        $formats = array_map('trim', explode(',',
             $input->getOption('format') ?: $this->container->getParameter('behat.formatter.name')
         ));
 
-        // load formatters translations
-        foreach (require($this->container->getParameter('behat.paths.i18n')) as $lang => $messages) {
-            $translator->addResource('array', $messages, $lang, 'behat');
+        $this->loadFormatterTranslations();
+        $this->loadCustomFormatters($manager);
+        $this->initFormatters($manager, $formats);
+        $this->configureFormatters($manager, $input, $output);
+        $this->initMultipleOutputs($manager, $input);
+    }
+
+    /**
+     * Loads formatter translations from behat.paths.i18n parameter file.
+     */
+    protected function loadFormatterTranslations()
+    {
+        if (!is_file($i18nFile = $this->container->getParameter('behat.paths.i18n'))) {
+            return;
         }
 
-        // add user-defined formatter classes to manager
+        $translator = $this->container->get('behat.translator');
+        foreach (require($i18nFile) as $lang => $messages) {
+            $translator->addResource('array', $messages, $lang, 'behat');
+        }
+    }
+
+    /**
+     * Loads custom formatters, defined in behat.yml.
+     *
+     * @param FormatterManager $manager
+     */
+    protected function loadCustomFormatters(FormatterManager $manager)
+    {
         foreach ($this->container->getParameter('behat.formatter.classes') as $name => $class) {
             $manager->addDispatcher(new FormatterDispatcher($name, $class));
         }
+    }
 
-        // init specified for run formatters
+    /**
+     * Inits formatters.
+     *
+     * @param FormatterManager $manager
+     * @param $array           $formats
+     */
+    protected function initFormatters(FormatterManager $manager, array $formats)
+    {
         foreach ($formats as $format) {
             $manager->initFormatter($format);
         }
+    }
 
-        // set formatter options from behat.yml
-        foreach (($parameters = $this->container->getParameter('behat.formatter.parameters')) as $name => $value) {
+    /**
+     * Configures formatters based on container, input and output configurations.
+     *
+     * @param FormatterManager $manager
+     * @param InputInterface   $input
+     * @param OutputInterface  $output
+     */
+    protected function configureFormatters(FormatterManager $manager, InputInterface $input,
+                                           OutputInterface $output)
+    {
+        $parameters = $this->container->getParameter('behat.formatter.parameters');
+        foreach ($parameters as $name => $value) {
             if ('output_path' === $name) {
                 continue;
             }
             $manager->setFormattersParameter($name, $value);
         }
 
-        $manager->setFormattersParameter('base_path', $this->container->getParameter('behat.paths.base'));
-        $manager->setFormattersParameter('support_path', $this->container->getParameter('behat.paths.bootstrap'));
-        $manager->setFormattersParameter('decorated', $output->isDecorated());
+        $manager->setFormattersParameter('base_path',
+            $this->container->getParameter('behat.paths.base')
+        );
+        $manager->setFormattersParameter('support_path',
+            $this->container->getParameter('behat.paths.bootstrap')
+        );
+        $manager->setFormattersParameter('decorated',
+            $output->isDecorated()
+        );
 
         if ($input->getOption('verbose')) {
             $manager->setFormattersParameter('verbose', true);
@@ -192,7 +240,16 @@ class FormatProcessor extends Processor
         if (null !== $multiline = $this->getSwitchValue($input, 'multiline')) {
             $manager->setFormattersParameter('multiline_arguments', $multiline);
         }
+    }
 
+    /**
+     * Initializes multiple formatters with different outputs.
+     *
+     * @param FormatterManager $manager
+     * @param InputInterface   $input
+     */
+    protected function initMultipleOutputs(FormatterManager $manager, InputInterface $input)
+    {
         if ($input->getOption('out')) {
             $outputs = $input->getOption('out');
         } elseif (isset($parameters['output_path'])) {
@@ -202,42 +259,46 @@ class FormatProcessor extends Processor
         }
 
         if (false === strpos($outputs, ',')) {
-            $out = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR.$outputs;
+            $outputPath = $this->locateOutputPath($outputs);
+            $manager->setFormattersParameter('output_path', $outputPath);
+            $manager->setFormattersParameter('decorated', (bool) $this->getSwitchValue($input, 'ansi'));
 
-            // get realpath
-            if (!file_exists($out)) {
-                touch($out);
-                $out = realpath($out);
-                unlink($out);
-            } else {
-                $out = realpath($out);
+            return;
+        }
+
+        foreach (array_map('trim', explode(',', $outputs)) as $i => $out) {
+            if (!$out || 'null' === $out || 'false' === $out) {
+                continue;
             }
 
-            $manager->setFormattersParameter('output_path', $out);
-            $manager->setFormattersParameter('decorated', (bool) $this->getSwitchValue($input, 'ansi'));
-        } else {
-            foreach (array_map('trim', explode(',', $outputs)) as $i => $out) {
-                if (!$out || 'null' === $out || 'false' === $out) {
-                    continue;
-                }
-
-                $out = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR.$out;
-
-                // get realpath
-                if (!file_exists($out)) {
-                    touch($out);
-                    $out = realpath($out);
-                    unlink($out);
-                } else {
-                    $out = realpath($out);
-                }
-
-                $formatters = $manager->getFormatters();
-                if (isset($formatters[$i])) {
-                    $formatters[$i]->setParameter('output_path', $out);
-                    $formatters[$i]->setParameter('decorated', (bool) $this->getSwitchValue($input, 'ansi'));
-                }
+            $outputPath = $this->locateOutputPath($out);
+            $formatters = $manager->getFormatters();
+            if (isset($formatters[$i])) {
+                $formatters[$i]->setParameter('output_path', $outputPath);
+                $formatters[$i]->setParameter('decorated', (bool) $this->getSwitchValue($input, 'ansi'));
             }
         }
+    }
+
+    /**
+     * Locates output path from relative one.
+     *
+     * @param string $out
+     *
+     * @return string
+     */
+    private function locateOutputPath($out)
+    {
+        $out = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR.$out;
+
+        if (!file_exists($out)) {
+            touch($out);
+            $out = realpath($out);
+            unlink($out);
+        } else {
+            $out = realpath($out);
+        }
+
+        return $out;
     }
 }
