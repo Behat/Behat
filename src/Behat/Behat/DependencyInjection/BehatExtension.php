@@ -5,6 +5,7 @@ namespace Behat\Behat\DependencyInjection;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
     Symfony\Component\DependencyInjection\ContainerBuilder,
+    Symfony\Component\DependencyInjection\ParameterBag\ParameterBag,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Config\FileLocator;
 
@@ -176,16 +177,11 @@ class BehatExtension implements ExtensionInterface
             $extension = $this->extensionManager->getExtension($id);
 
             // create temporary container
-            $tempContainer = new ContainerBuilder();
+            $tempContainer = new ContainerBuilder(new ParameterBag(array(
+                'behat.paths.base'        => $container->getParameter('behat.paths.base'),
+                'behat.extension.classes' => $container->getParameter('behat.extension.classes'),
+            )));
             $tempContainer->addObjectResource($extension);
-
-            // set paths parameters
-            $tempContainer->setParameter('behat.paths.base',
-                $container->getParameter('behat.paths.base')
-            );
-            $tempContainer->setParameter('behat.extension.classes',
-                $container->getParameter('behat.extension.classes')
-            );
 
             // load extension into temporary container
             $extension->load($extensionConfig, $tempContainer);
