@@ -172,8 +172,14 @@ class BehatExtension implements ExtensionInterface
     protected function loadExtensionsConfiguration(array $config, ContainerBuilder $container)
     {
         foreach ($config as $id => $extensionConfig) {
+            // load extension from manager
+            $extension = $this->extensionManager->getExtension($id);
+
             // create temporary container
             $tempContainer = new ContainerBuilder();
+            $tempContainer->addObjectResource($extension);
+
+            // set paths parameters
             $tempContainer->setParameter('behat.paths.base',
                 $container->getParameter('behat.paths.base')
             );
@@ -181,8 +187,7 @@ class BehatExtension implements ExtensionInterface
                 $container->getParameter('behat.extension.classes')
             );
 
-            // load extension into it
-            $extension = $this->extensionManager->getExtension($id);
+            // load extension into temporary container
             $extension->load($extensionConfig, $tempContainer);
 
             // merge temporary container into normal one

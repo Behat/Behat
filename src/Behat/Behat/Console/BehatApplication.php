@@ -29,6 +29,8 @@ use Behat\Behat\DependencyInjection\BehatExtension,
  */
 class BehatApplication extends Application
 {
+    private $basePath;
+
     /**
      * {@inheritdoc}
      */
@@ -88,7 +90,7 @@ class BehatApplication extends Application
     protected function createContainer(InputInterface $input)
     {
         $container = new ContainerBuilder();
-        $this->loadConfiguration($container, $input);
+        $this->loadCoreExtension($container, $this->loadConfiguration($container, $input));
         $container->compile();
 
         return $container;
@@ -103,17 +105,16 @@ class BehatApplication extends Application
     protected function loadConfiguration(ContainerBuilder $container, InputInterface $input)
     {
         // locate paths
-        $basePath = getcwd();
+        $this->basePath = getcwd();
         if ($configPath = $this->getConfigurationFilePath($input)) {
-            $basePath = realpath(dirname($configPath));
+            $this->basePath = realpath(dirname($configPath));
         }
 
         // read configuration
         $loader  = new Loader($configPath);
         $profile = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
-        $configs = $loader->loadConfiguration($profile);
 
-        $this->loadCoreExtension($container, rtrim($basePath, DIRECTORY_SEPARATOR), $configs);
+        return $loader->loadConfiguration($profile);
     }
 
     /**
@@ -150,12 +151,17 @@ class BehatApplication extends Application
      * Loads core extension into container.
      *
      * @param ContainerBuilder $container
-     * @param string           $basePath
      * @param $array           $configs
      */
-    protected function loadCoreExtension(ContainerBuilder $container, $basePath, array $configs)
+    protected function loadCoreExtension(ContainerBuilder $container, array $configs)
     {
-        $extension = new BehatExtension($basePath);
+        if (null === $this->basePath) {
+            throw new RuntimeException(
+                'Suite basepath is not set. Seems you have forgot to load configuration first.'
+            );
+        }
+
+        $extension = new BehatExtension($this->basePath);
         $extension->load($configs, $container);
         $container->addObjectResource($extension);
     }
