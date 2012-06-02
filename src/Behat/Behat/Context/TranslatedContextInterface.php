@@ -22,5 +22,5 @@ interface TranslatedContextInterface extends ContextInterface
      *
      * @return array
      */
-    function getTranslationResources();
+    public function getTranslationResources();
 }

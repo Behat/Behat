@@ -106,7 +106,7 @@ class InitProcessor extends Processor
     /**
      * Returns feature context skelet.
      *
-     * @return  string
+     * @return string
      */
     protected function getFeatureContextSkelet()
     {
@@ -136,7 +136,7 @@ class FeatureContext extends BehatContext
      * Initializes context.
      * Every scenario gets it's own context object.
      *
-     * @param   array   $parameters     context parameters (set them up through behat.yml)
+     * @param array $parameters context parameters (set them up through behat.yml)
      */
     public function __construct(array $parameters)
     {

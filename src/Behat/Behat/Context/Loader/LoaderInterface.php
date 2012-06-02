@@ -26,12 +26,12 @@ interface LoaderInterface
      *
      * @return Boolean
      */
-    function supports(ContextInterface $context);
+    public function supports(ContextInterface $context);
 
     /**
      * Loads definitions and translations from provided context.
      *
      * @param ContextInterface $context
      */
-    function load(ContextInterface $context);
+    public function load(ContextInterface $context);
 }

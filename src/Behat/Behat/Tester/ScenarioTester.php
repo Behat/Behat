@@ -123,11 +123,11 @@ class ScenarioTester implements NodeVisitorInterface
     /**
      * Visits & tests StepNode.
      *
-     * @param StepNode         $step           step instance
-     * @param ScenarioNode     $logicalParent  logical parent of the step
-     * @param ContextInterface $context        context instance
-     * @param array            $tokens         step replacements for tokens
-     * @param boolean          $skip           mark step as skipped?
+     * @param StepNode         $step          step instance
+     * @param ScenarioNode     $logicalParent logical parent of the step
+     * @param ContextInterface $context       context instance
+     * @param array            $tokens        step replacements for tokens
+     * @param boolean          $skip          mark step as skipped?
      *
      * @see StepTester::visit()
      *

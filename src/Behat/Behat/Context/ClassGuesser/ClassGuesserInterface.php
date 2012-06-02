@@ -22,5 +22,5 @@ interface ClassGuesserInterface
      *
      * @return string|null
      */
-    function guess();
+    public function guess();
 }

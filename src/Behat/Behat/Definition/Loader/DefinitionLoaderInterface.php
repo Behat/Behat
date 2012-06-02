@@ -22,5 +22,5 @@ interface DefinitionLoaderInterface
      *
      * @param mixed $resource
      */
-    function load($resource);
+    public function load($resource);
 }

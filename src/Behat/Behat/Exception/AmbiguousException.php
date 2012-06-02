@@ -32,7 +32,7 @@ class AmbiguousException extends BehaviorException
         $this->matches  = $matches;
 
         $message = sprintf("Ambiguous match of \"%s\":", $text);
-        foreach ($matches as $definition){
+        foreach ($matches as $definition) {
             $message .= sprintf("\nto `%s` from %s", $definition->getRegex(), $definition->getPath());
         }
 

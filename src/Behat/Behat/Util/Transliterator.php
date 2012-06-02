@@ -28,7 +28,7 @@ class Transliterator
      *
      * By bmorel at ssi dot fr
      *
-     * @param  string $string
+     * @param  string  $string
      * @return boolean $bool
      */
     public static function seemsUtf8($string)
@@ -43,16 +43,18 @@ class Transliterator
             else return false; # Does not match any model
             for ($j=0; $j<$n; $j++) { # n bytes matching 10bbbbbb follow ?
                 if ((++$i == strlen($string)) || ((ord($string[$i]) & 0xC0) != 0x80))
+
                 return false;
             }
         }
+
         return true;
     }
 
     /**
      * Remove any illegal characters, accents, etc.
      *
-     * @param  string $string  String to unaccent
+     * @param  string $string String to unaccent
      * @return string $string  Unaccented string
      */
     public static function unaccent($string)
@@ -229,7 +231,7 @@ class Transliterator
 
             $bank = $ord >> 8;
 
-            if (!array_key_exists($bank, (array)$UTF8_TO_ASCII)) {
+            if (!array_key_exists($bank, (array) $UTF8_TO_ASCII)) {
                 $bankfile = __DIR__. '/data/'. sprintf("x%02x",$bank).'.php';
                 if (file_exists($bankfile)) {
                     include $bankfile;
@@ -252,21 +254,22 @@ class Transliterator
     /**
      * Does not transliterate correctly eastern languages
      *
-     * @param string $text
-     * @param string $separator
+     * @param  string $text
+     * @param  string $separator
      * @return string
      */
     public static function urlize($text, $separator = '-')
     {
         $text = self::unaccent($text);
+
         return self::postProcessText($text, $separator);
     }
 
     /**
      * Uses transliteration tables to convert any kind of utf8 character
      *
-     * @param string $text
-     * @param string $separator
+     * @param  string $text
+     * @param  string $separator
      * @return string $text
      */
     public static function transliterate($text, $separator = '-')
@@ -274,6 +277,7 @@ class Transliterator
         if (preg_match('/[\x80-\xff]/', $text) && self::validUtf8($text)) {
             $text = self::utf8ToAscii($text);
         }
+
         return self::postProcessText($text, $separator);
     }
 
@@ -343,6 +347,7 @@ class Transliterator
                     /* Current octet is neither in the US-ASCII range nor a legal first
                      * octet of a multi-octet sequence.
                      */
+
                     return false;
                 }
             } else {
@@ -384,18 +389,20 @@ class Transliterator
                     *((0xC0 & (*in) != 0x80) && (mState != 0))
                     * Incomplete multi-octet sequence.
                     */
+
                     return false;
                 }
             }
         }
+
         return true;
     }
 
     /**
      * Cleans up the text and adds separator
      *
-     * @param string $text
-     * @param string $separator
+     * @param  string $text
+     * @param  string $separator
      * @return string
      */
     private static function postProcessText($text, $separator)

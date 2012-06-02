@@ -29,7 +29,7 @@ interface DefinitionProposalInterface
      *
      * @return Boolean
      */
-    function supports(ContextInterface $context);
+    public function supports(ContextInterface $context);
 
     /**
      * Loads definitions and translations from provided context.

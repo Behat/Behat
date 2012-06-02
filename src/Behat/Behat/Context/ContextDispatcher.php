@@ -54,7 +54,7 @@ class ContextDispatcher
     /**
      * Returns context classname.
      *
-     * @return  string
+     * @return string
      */
     public function getContextClass()
     {
@@ -86,7 +86,7 @@ class ContextDispatcher
     /**
      * Returns context parameters.
      *
-     * @return  array
+     * @return array
      */
     public function getContextParameters()
     {

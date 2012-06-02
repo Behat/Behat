@@ -22,7 +22,7 @@ interface SubcontextableContextInterface extends ContextInterface
      *
      * @return array
      */
-    function getSubcontexts();
+    public function getSubcontexts();
 
     /**
      * Finds subcontext by it's name.
@@ -31,5 +31,5 @@ interface SubcontextableContextInterface extends ContextInterface
      *
      * @return ContextInterface
      */
-    function getSubcontextByClassName($className);
+    public function getSubcontextByClassName($className);
 }

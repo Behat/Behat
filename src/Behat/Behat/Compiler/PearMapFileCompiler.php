@@ -37,7 +37,7 @@ class PearMapFileCompiler
     /**
      * Compiles map file and autoloader.
      *
-     * @param   string  $version
+     * @param string $version
      */
     public function compile($autoloaderFilename = 'autoload.php', $mapFilename = 'autoload_map.php')
     {
@@ -83,10 +83,10 @@ MAP_FILE;
     /**
      * Generates mapping for specific path(s).
      *
-     * @param   mixed       $paths      single path or array of paths
-     * @param   string|null $prefixCode path prefix code
+     * @param mixed       $paths      single path or array of paths
+     * @param string|null $prefixCode path prefix code
      *
-     * @return  strings
+     * @return strings
      */
     protected function generateMappingFor($paths, $prefixCode = null)
     {
@@ -112,9 +112,9 @@ MAP_FILE;
     /**
      * Returns autoload.php content.
      *
-     * @param   string  $mapFilename
+     * @param string $mapFilename
      *
-     * @return  string
+     * @return string
      */
     protected function getAutoloadScript($mapFilename)
     {
@@ -145,7 +145,7 @@ EOF
     /**
      * Creates finder instance to search php files.
      *
-     * @return  Symfony\Component\Finder\Finder
+     * @return Symfony\Component\Finder\Finder
      */
     private function findPhpFile()
     {

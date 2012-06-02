@@ -22,26 +22,26 @@ interface AnnotationInterface
      *
      * @return string
      */
-    function getPath();
+    public function getPath();
 
     /**
      * Checks whether callback is closure.
      *
      * @return Boolean
      */
-    function isClosure();
+    public function isClosure();
 
     /**
      * Returns callback.
      *
      * @return callback
      */
-    function getCallback();
+    public function getCallback();
 
     /**
      * Returns callback reflection.
      *
      * @return \ReflectionFunction
      */
-    function getCallbackReflection();
+    public function getCallbackReflection();
 }

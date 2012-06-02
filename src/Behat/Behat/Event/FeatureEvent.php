@@ -28,9 +28,9 @@ class FeatureEvent extends Event implements EventInterface
     /**
      * Initializes feature event.
      *
-     * @param FeatureNode  $feature
-     * @param mixed        $parameters
-     * @param integer      $result
+     * @param FeatureNode $feature
+     * @param mixed       $parameters
+     * @param integer     $result
      */
     public function __construct(FeatureNode $feature, $parameters, $result = null)
     {

@@ -2,8 +2,6 @@
 
 namespace Behat\Behat\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-
 use Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\Definition\DefinitionSnippet,
     Behat\Behat\DataCollector\LoggerDataCollector,
@@ -162,7 +160,7 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "feature.before" event.
      *
-     * @param FeatureEvent  $event
+     * @param FeatureEvent $event
      *
      * @uses printFeatureHeader()
      */
@@ -537,10 +535,10 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints outline example result.
      *
-     * @param OutlineNode $outline    outline instance
-     * @param integer     $iteration  example row number
-     * @param integer     $result     result code
-     * @param Boolean     $skipped    is outline example skipped
+     * @param OutlineNode $outline   outline instance
+     * @param integer     $iteration example row number
+     * @param integer     $result    result code
+     * @param Boolean     $skipped   is outline example skipped
      *
      * @uses printOutlineSteps()
      * @uses printOutlineExamplesSectionHeader()
@@ -791,8 +789,8 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints step arguments.
      *
-     * @param array   $arguments step arguments
-     * @param string  $color     color name
+     * @param array  $arguments step arguments
+     * @param string $color     color name
      *
      * @uses printStepPyStringArgument()
      * @uses printStepTableArgument()

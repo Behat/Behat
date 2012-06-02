@@ -80,6 +80,7 @@ class Transformation extends Annotation implements TransformationInterface
             if (preg_match($translatedRegex, (string) $argument, $transformArguments)
              || preg_match($this->regex, (string) $argument, $transformArguments)) {
                 array_shift($transformArguments);
+
                 return call_user_func_array($callback, $transformArguments);
             }
         }

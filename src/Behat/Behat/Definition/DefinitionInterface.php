@@ -25,7 +25,7 @@ interface DefinitionInterface
      *
      * @return string
      */
-    function getType();
+    public function getType();
 
     /**
      * Runs definition callback.
@@ -36,5 +36,5 @@ interface DefinitionInterface
      *
      * @throws BehaviorException
      */
-    function run(ContextInterface $context);
+    public function run(ContextInterface $context);
 }

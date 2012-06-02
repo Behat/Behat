@@ -26,19 +26,19 @@ interface ExtensionInterface
      * @param array            $config    Extension configuration hash (from behat.yml)
      * @param ContainerBuilder $container ContainerBuilder instance
      */
-    function load(array $config, ContainerBuilder $container);
+    public function load(array $config, ContainerBuilder $container);
 
     /**
      * Setups configuration for current extension.
      *
      * @param ArrayNodeDefinition $builder
      */
-    function getConfig(ArrayNodeDefinition $builder);
+    public function getConfig(ArrayNodeDefinition $builder);
 
     /**
      * Returns compiler passes used by this extension.
      *
      * @return array
      */
-    function getCompilerPasses();
+    public function getCompilerPasses();
 }

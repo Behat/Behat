@@ -23,8 +23,8 @@ class BehatContext implements ExtendedContextInterface
     /**
      * Adds subcontext to current context.
      *
-     * @param   string                   $alias
-     * @param   ExtendedContextInterface $context
+     * @param string                   $alias
+     * @param ExtendedContextInterface $context
      */
     public function useContext($alias, ExtendedContextInterface $context)
     {
@@ -110,7 +110,7 @@ class BehatContext implements ExtendedContextInterface
     /**
      * Prints beautified debug string.
      *
-     * @param     string  $string     debug string
+     * @param string $string debug string
      */
     public function printDebug($string)
     {
