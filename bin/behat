@@ -13,7 +13,9 @@ define('BEHAT_PHP_BIN_PATH', getenv('PHP_PEAR_PHP_BIN') ?: '/usr/bin/env php');
 define('BEHAT_BIN_PATH',     __FILE__);
 define('BEHAT_VERSION',      'DEV');
 
-if (is_dir(__DIR__ . '/../vendor')) {
+if (file_exists(__DIR__ . '/../../../../app/autoload.php') && is_dir(__DIR__ . '/../../../../vendor')) {
+    require_once __DIR__ . '/../../../../app/autoload.php';
+} elseif (is_dir(__DIR__ . '/../vendor')) {
     require_once __DIR__ . '/../vendor/autoload.php';
 } elseif (is_file(__DIR__ . '/../../../autoload.php')) {
     require_once __DIR__ . '/../../../autoload.php';
