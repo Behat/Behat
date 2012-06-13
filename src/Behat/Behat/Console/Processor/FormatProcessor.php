@@ -165,7 +165,7 @@ class FormatProcessor extends Processor
     protected function loadCustomFormatters(FormatterManager $manager)
     {
         foreach ($this->container->getParameter('behat.formatter.classes') as $name => $class) {
-            $manager->addDispatcher(new FormatterDispatcher($name, $class));
+            $manager->addDispatcher(new FormatterDispatcher($class, $name));
         }
     }
 
