@@ -75,7 +75,7 @@ class ContextDispatcher
 
         if (!class_exists($classname)) {
             throw new \RuntimeException(sprintf(
-                'Context class "%s" not found', $classname
+                'Context class "%s" not found and can not be instantiated.', $classname
             ));
         }
 

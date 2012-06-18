@@ -120,6 +120,10 @@ class BehatExtension implements ExtensionInterface
      */
     protected function loadContextConfiguration(array $config, ContainerBuilder $container)
     {
+        if ('FeatureContext' !== $config['class']) {
+            $container->setParameter('behat.context.class.force', true);
+        }
+
         foreach ($config as $key => $value) {
             $container->setParameter('behat.context.'.$key, $value);
         }

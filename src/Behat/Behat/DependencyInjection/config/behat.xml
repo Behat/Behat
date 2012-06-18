@@ -53,6 +53,7 @@
 
         <!-- Context -->
         <parameter key="behat.context.class">FeatureContext</parameter>
+        <parameter key="behat.context.class.force">false</parameter>
         <parameter key="behat.context.parameters" type="collection"></parameter>
         <parameter key="behat.context.dispatcher.class">Behat\Behat\Context\ContextDispatcher</parameter>
         <parameter key="behat.context.reader.class">Behat\Behat\Context\ContextReader</parameter>
@@ -169,6 +170,7 @@
         </service>
         <service id="behat.context.class_guesser.predefined" class="%behat.context.class_guesser.predefined.class%">
             <argument>%behat.context.class%</argument>
+            <argument>%behat.context.class.force%</argument>
             <tag name="behat.context.class_guesser" priority="10" />
         </service>
         <service id="behat.context.loader.translated" class="%behat.context.loader.translated.class%">
