@@ -289,7 +289,11 @@ class FormatProcessor extends Processor
      */
     private function locateOutputPath($out)
     {
-        $out = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR.$out;
+        if ($this->isAbsolutePath($out)) {
+            return $out;
+        }
+
+        $out = getcwd().DIRECTORY_SEPARATOR.$out;
 
         if (!file_exists($out)) {
             touch($out);
@@ -300,5 +304,27 @@ class FormatProcessor extends Processor
         }
 
         return $out;
+    }
+
+    /**
+     * Returns whether the file path is an absolute path.
+     *
+     * @param string $file A file path
+     *
+     * @return Boolean
+     */
+    private function isAbsolutePath($file)
+    {
+        if ($file[0] == '/' || $file[0] == '\\'
+            || (strlen($file) > 3 && ctype_alpha($file[0])
+                && $file[1] == ':'
+                && ($file[2] == '\\' || $file[2] == '/')
+            )
+            || null !== parse_url($file, PHP_URL_SCHEME)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
