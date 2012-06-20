@@ -46,7 +46,7 @@ class ClosuredDefinitionLoader implements DefinitionLoaderInterface
     {
         $steps = $this;
 
-        require($resource);
+        require_once($resource);
     }
 
     /**
