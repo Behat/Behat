@@ -48,7 +48,7 @@ class ClosuredHookLoader implements HookLoaderInterface
     {
         $hooks = $this;
 
-        require($resource);
+        require_once($resource);
     }
 
     /**
