@@ -1,3 +1,8 @@
+2.4.2 / 2012-06-26
+==================
+
+  * Fixed broken autoloading with Composer installation
+
 2.4.1 / 2012-06-26
 ==================
 
