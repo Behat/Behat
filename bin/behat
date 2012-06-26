@@ -15,7 +15,7 @@ define('BEHAT_VERSION',      'DEV');
 
 if (is_dir($vendor = __DIR__.'/../vendor')) {
     require($vendor.'/autoload.php');
-} elseif (is_dir($vendor = __DIR__.'/../../../vendor')) {
+} elseif (is_dir($vendor = __DIR__.'/../../../../vendor')) {
     require($vendor.'/autoload.php');
 } else {
     die(
