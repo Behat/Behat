@@ -2,8 +2,6 @@
 
 namespace Behat\Behat\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-
 use Behat\Behat\Event\ScenarioEvent,
     Behat\Behat\Event\OutlineEvent,
     Behat\Behat\Event\StepEvent;

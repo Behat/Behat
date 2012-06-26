@@ -25,7 +25,7 @@ interface FormatterInterface extends EventSubscriberInterface
      *
      * @param Translator $translator
      */
-    function setTranslator(Translator $translator);
+    public function setTranslator(Translator $translator);
 
     /**
      * Checks if current formatter has parameter.
@@ -34,7 +34,7 @@ interface FormatterInterface extends EventSubscriberInterface
      *
      * @return Boolean
      */
-    function hasParameter($name);
+    public function hasParameter($name);
 
     /**
      * Sets formatter parameter.
@@ -42,7 +42,7 @@ interface FormatterInterface extends EventSubscriberInterface
      * @param string $name
      * @param mixed  $value
      */
-    function setParameter($name, $value);
+    public function setParameter($name, $value);
 
     /**
      * Returns parameter value.
@@ -51,5 +51,5 @@ interface FormatterInterface extends EventSubscriberInterface
      *
      * @return mixed
      */
-    function getParameter($name);
+    public function getParameter($name);
 }

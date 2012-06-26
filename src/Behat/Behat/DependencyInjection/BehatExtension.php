@@ -5,6 +5,7 @@ namespace Behat\Behat\DependencyInjection;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
     Symfony\Component\DependencyInjection\ContainerBuilder,
+    Symfony\Component\DependencyInjection\ParameterBag\ParameterBag,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Config\FileLocator;
 
@@ -47,6 +48,7 @@ class BehatExtension implements ExtensionInterface
     public function load(array $configs, ContainerBuilder $container)
     {
         $this->loadDefaults($container);
+        $container->setParameter('behat.paths.base', $this->basePath);
 
         // set internal encoding to UTF-8
         if ('UTF-8' !== mb_internal_encoding()) {
@@ -64,6 +66,11 @@ class BehatExtension implements ExtensionInterface
                 $configs[$i]['extensions'] = $extensions;
             }
         }
+
+        // set list of extensions to container
+        $container->setParameter('behat.extension.classes',
+            $this->extensionManager->getExtensionClasses()
+        );
 
         // normalize and merge the actual configuration
         $tree   = $this->configuration->getConfigTree($this->extensionManager);
@@ -113,6 +120,10 @@ class BehatExtension implements ExtensionInterface
      */
     protected function loadContextConfiguration(array $config, ContainerBuilder $container)
     {
+        if ('FeatureContext' !== $config['class']) {
+            $container->setParameter('behat.context.class.force', true);
+        }
+
         foreach ($config as $key => $value) {
             $container->setParameter('behat.context.'.$key, $value);
         }
@@ -166,12 +177,17 @@ class BehatExtension implements ExtensionInterface
     protected function loadExtensionsConfiguration(array $config, ContainerBuilder $container)
     {
         foreach ($config as $id => $extensionConfig) {
-            // create temporary container
-            $tempContainer = new ContainerBuilder();
-            $tempContainer->setParameter('behat.paths.base', $this->basePath);
-
-            // load extension into it
+            // load extension from manager
             $extension = $this->extensionManager->getExtension($id);
+
+            // create temporary container
+            $tempContainer = new ContainerBuilder(new ParameterBag(array(
+                'behat.paths.base'        => $container->getParameter('behat.paths.base'),
+                'behat.extension.classes' => $container->getParameter('behat.extension.classes'),
+            )));
+            $tempContainer->addObjectResource($extension);
+
+            // load extension into temporary container
             $extension->load($extensionConfig, $tempContainer);
 
             // merge temporary container into normal one
@@ -260,7 +276,6 @@ class BehatExtension implements ExtensionInterface
         $behatLibPath   = dirname($behatClassLoaderReflection->getFilename()) . '/../../../../';
         $gherkinLibPath = dirname($gherkinParserReflection->getFilename()) . '/../../../';
 
-        $container->setParameter('behat.paths.base', $this->basePath);
         $container->setParameter('gherkin.paths.lib', $gherkinLibPath);
         $container->setParameter('behat.paths.lib', $behatLibPath);
     }

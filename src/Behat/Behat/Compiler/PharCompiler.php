@@ -37,7 +37,7 @@ class PharCompiler
     /**
      * Compiles phar archive.
      *
-     * @param   string  $version
+     * @param string $version
      */
     public function compile($version)
     {
@@ -71,8 +71,6 @@ class PharCompiler
 
         // license and autoloading
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/LICENSE'), $phar);
-        $this->addFileToPhar(new \SplFileInfo($this->libPath . '/vendor/.composer/autoload.php'), $phar);
-        $this->addFileToPhar(new \SplFileInfo($this->libPath . '/vendor/.composer/autoload_namespaces.php'), $phar);
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/i18n.php'), $phar);
 
         // stub
@@ -85,8 +83,8 @@ class PharCompiler
     /**
      * Adds a file to phar archive.
      *
-     * @param   SplFileInfo $file   file info
-     * @param   Phar        $phar   phar packager
+     * @param SplFileInfo $file file info
+     * @param Phar        $phar phar packager
      */
     protected function addFileToPhar(\SplFileInfo $file, \Phar $phar)
     {
@@ -97,10 +95,10 @@ class PharCompiler
     /**
      * Replaces tokens in specified path.
      *
-     * @param   string|array    $files          files array or single file
-     * @param   string          $tokenStart     token start symbol
-     * @param   string          $tokenFinish    token finish symbol
-     * @param   array           $tokens         replace tokens array
+     * @param string|array $files       files array or single file
+     * @param string       $tokenStart  token start symbol
+     * @param string       $tokenFinish token finish symbol
+     * @param array        $tokens      replace tokens array
      */
     protected function replaceTokens($files, $tokenStart, $tokenFinish, array $tokens)
     {
@@ -120,9 +118,9 @@ class PharCompiler
     /**
      * Returns cli stub.
      *
-     * @param   string  $version
+     * @param string $version
      *
-     * @return  string
+     * @return string
      */
     protected function getStub($version)
     {

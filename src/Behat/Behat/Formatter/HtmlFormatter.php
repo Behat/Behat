@@ -482,7 +482,8 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printSummary(LoggerDataCollector $logger) {
+    protected function printSummary(LoggerDataCollector $logger)
+    {
         $results = $logger->getScenariosStatuses();
         $result = $results['failed'] > 0 ? 'failed' : 'passed';
         $this->writeln('<div class="summary '.$result.'">');
@@ -505,7 +506,8 @@ HTML
     /**
      * {@inheritdoc}
      */
-    protected function printScenariosSummary(LoggerDataCollector $logger) {
+    protected function printScenariosSummary(LoggerDataCollector $logger)
+    {
         $this->writeln('<p class="scenarios">');
         parent::printScenariosSummary($logger);
         $this->writeln('</p>');
@@ -514,7 +516,8 @@ HTML
     /**
      * {@inheritdoc}
      */
-    protected function printStepsSummary(LoggerDataCollector $logger) {
+    protected function printStepsSummary(LoggerDataCollector $logger)
+    {
         $this->writeln('<p class="steps">');
         parent::printStepsSummary($logger);
         $this->writeln('</p>');
@@ -533,7 +536,8 @@ HTML
     /**
      * {@inheritdoc}
      */
-    protected function printStatusesSummary(array $statusesStatistics) {
+    protected function printStatusesSummary(array $statusesStatistics)
+    {
         $statuses = array();
         $statusTpl = '<strong class="%s">%s</strong>';
         foreach ($statusesStatistics as $status => $count) {

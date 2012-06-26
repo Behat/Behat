@@ -26,12 +26,12 @@ interface InitializerInterface
      *
      * @return Boolean
      */
-    function supports(ContextInterface $context);
+    public function supports(ContextInterface $context);
 
     /**
      * Initializes provided context.
      *
      * @param ContextInterface $context
      */
-    function initialize(ContextInterface $context);
+    public function initialize(ContextInterface $context);
 }

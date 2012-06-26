@@ -26,12 +26,12 @@ interface HookInterface
      *
      * @return string
      */
-    function getEventName();
+    public function getEventName();
 
     /**
      * Runs hook callback.
      *
      * @param EventInterface $event
      */
-    function run(EventInterface $event);
+    public function run(EventInterface $event);
 }

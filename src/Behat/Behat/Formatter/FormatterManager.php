@@ -76,7 +76,7 @@ class FormatterManager
             $dispatcher = $this->dispatchers[$name];
         } else {
             throw new \RuntimeException("Unknown formatter: \"$name\". " .
-                'Available formatters are: ' . implode(', ', array_keys($this->formatterClasses))
+                'Available formatters are: ' . implode(', ', array_keys($this->dispatchers))
             );
         }
 

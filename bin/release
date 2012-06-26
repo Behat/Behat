@@ -21,7 +21,7 @@ system('rm -rf *.phar *.tgz');
 system('wget -nc http://getcomposer.org/composer.phar');
 system('php composer.phar update');
 
-require_once __DIR__ . '/../vendor/.composer/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Behat\Behat\Compiler;
 

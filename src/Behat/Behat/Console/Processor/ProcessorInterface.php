@@ -26,7 +26,7 @@ interface ProcessorInterface
      *
      * @param Command $command
      */
-    function configure(Command $command);
+    public function configure(Command $command);
 
     /**
      * Processes data from container and console input.
@@ -34,5 +34,5 @@ interface ProcessorInterface
      * @param InputInterface  $input
      * @param OutputInterface $output
      */
-    function process(InputInterface $input, OutputInterface $output);
+    public function process(InputInterface $input, OutputInterface $output);
 }

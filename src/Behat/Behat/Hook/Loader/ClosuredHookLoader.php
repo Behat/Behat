@@ -48,7 +48,7 @@ class ClosuredHookLoader implements HookLoaderInterface
     {
         $hooks = $this;
 
-        require($resource);
+        require_once($resource);
     }
 
     /**
@@ -85,8 +85,8 @@ class ClosuredHookLoader implements HookLoaderInterface
     /**
      * Hooks into "feature.after".
      *
-     * @param string    $filter   filter string (tags or name)
-     * @param callback  $callback hook callback
+     * @param string   $filter   filter string (tags or name)
+     * @param callback $callback hook callback
      */
     public function afterFeature($filter, $callback)
     {

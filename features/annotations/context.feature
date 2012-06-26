@@ -69,6 +69,16 @@ Feature: Context consistency
           }
       }
       """
+    And a file named "features/bootstrap/CustomContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext;
+
+      class CustomContext extends BehatContext
+      {
+      }
+      """
 
   Scenario: True "apples story"
     Given a file named "features/apples.feature" with:
@@ -195,4 +205,78 @@ Feature: Context consistency
 
     1 scenario (1 passed)
     2 steps (2 passed)
+    """
+
+  Scenario: Existing custom context class
+    Given a file named "behat.yml" with:
+      """
+      default:
+        context:
+          class: CustomContext
+      """
+    And a file named "features/params.feature" with:
+      """
+      Feature: Context parameters
+        In order to run a browser
+        As feature runner
+        I need to be able to configure behat context
+
+        Scenario: I'm little hungry
+          Then context parameter "parameter1" should be equal to "val_one"
+          And context parameter "parameter2" should be array with 2 elements
+      """
+  When I run "behat -f progress features/params.feature"
+  Then it should pass with:
+    """
+    UU
+
+    1 scenario (1 undefined)
+    2 steps (2 undefined)
+
+    You can implement step definitions for undefined steps with these snippets:
+
+        /**
+         * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
+         */
+        public function contextParameterShouldBeEqualTo($arg1, $arg2)
+        {
+            throw new PendingException();
+        }
+
+        /**
+         * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
+         */
+        public function contextParameterShouldBeArrayWithElements($arg1, $arg2)
+        {
+            throw new PendingException();
+        }
+    """
+
+  Scenario: Unexisting custom context class
+    Given a file named "behat.yml" with:
+      """
+      default:
+        context:
+          class: UnexistentContext
+      """
+    And a file named "features/params.feature" with:
+      """
+      Feature: Context parameters
+        In order to run a browser
+        As feature runner
+        I need to be able to configure behat context
+
+        Scenario: I'm little hungry
+          Then context parameter "parameter1" should be equal to "val_one"
+          And context parameter "parameter2" should be array with 2 elements
+      """
+  When I run "behat -f progress features/params.feature"
+  Then it should fail with:
+    """
+    [RuntimeException]
+      Context class "UnexistentContext" not found and can not be instantiated.
+
+
+
+    behat [--init] [-f|--format="..."] [--out="..."] [--lang="..."] [--[no-]ansi] [--[no-]time] [--[no-]paths] [--[no-]snippets] [--[no-]snippets-paths] [--[no-]multiline] [--[no-]expand] [--story-syntax] [-d|--definitions="..."] [--name="..."] [--tags="..."] [--cache="..."] [--strict] [--dry-run] [--rerun="..."] [--append-snippets] [features]
     """

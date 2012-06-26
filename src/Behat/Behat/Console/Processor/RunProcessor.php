@@ -93,37 +93,45 @@ class RunProcessor extends Processor
         }
 
         if ($input->getOption('append-snippets') || $this->container->getParameter('behat.options.append_snippets')) {
-            $contextRefl = new \ReflectionClass(
-                $this->container->get('behat.context.dispatcher')->getContextClass()
-            );
-
-            if ($contextRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {
-                throw new \RuntimeException(
-                    '--append-snippets doesn\'t support closured contexts'
-                );
-            }
-
-            $formatManager = $this->container->get('behat.formatter.manager');
-            $formatManager->setFormattersParameter('snippets', false);
-
-            $formatter = $formatManager->initFormatter('snippets');
-            $formatter->setParameter('decorated', false);
-            $formatter->setParameter('output_decorate', false);
-            $formatter->setParameter('output', $snippets = fopen('php://memory', 'rw'));
-
-            $this->container->get('behat.event_dispatcher')
-                ->addListener('afterSuite', function() use($contextRefl, $snippets) {
-                    rewind($snippets);
-                    $snippets = stream_get_contents($snippets);
-
-                    if (trim($snippets)) {
-                        $snippets = strtr($snippets, array('\\' => '\\\\', '$' => '\\$'));
-                        $context  = file_get_contents($contextRefl->getFileName());
-                        $context  = preg_replace('/}[ \n]*$/', rtrim($snippets)."\n}\n", $context);
-
-                        file_put_contents($contextRefl->getFileName(), $context);
-                    }
-                }, -5);
+            $this->initializeSnippetsAppender();
         }
+    }
+
+    /**
+     * Appends snippets to the main context after suite run.
+     */
+    protected function initializeSnippetsAppender()
+    {
+        $contextRefl = new \ReflectionClass(
+            $this->container->get('behat.context.dispatcher')->getContextClass()
+        );
+
+        if ($contextRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {
+            throw new \RuntimeException(
+                '--append-snippets doesn\'t support closured contexts'
+            );
+        }
+
+        $formatManager = $this->container->get('behat.formatter.manager');
+        $formatManager->setFormattersParameter('snippets', false);
+
+        $formatter = $formatManager->initFormatter('snippets');
+        $formatter->setParameter('decorated', false);
+        $formatter->setParameter('output_decorate', false);
+        $formatter->setParameter('output', $snippets = fopen('php://memory', 'rw'));
+
+        $this->container->get('behat.event_dispatcher')
+            ->addListener('afterSuite', function() use($contextRefl, $snippets) {
+                rewind($snippets);
+                $snippets = stream_get_contents($snippets);
+
+                if (trim($snippets)) {
+                    $snippets = strtr($snippets, array('\\' => '\\\\', '$' => '\\$'));
+                    $context  = file_get_contents($contextRefl->getFileName());
+                    $context  = preg_replace('/}[ \n]*$/', rtrim($snippets)."\n}\n", $context);
+
+                    file_put_contents($contextRefl->getFileName(), $context);
+                }
+            }, -5);
     }
 }

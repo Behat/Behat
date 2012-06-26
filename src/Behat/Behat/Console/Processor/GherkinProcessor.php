@@ -71,15 +71,21 @@ class GherkinProcessor extends Processor
     {
         $gherkinParser = $this->container->get('gherkin');
 
-        if ($name = ($input->getOption('name') ?: $this->container->getParameter('gherkin.filters.name'))) {
+        $name = $input->getOption('name')
+             ?: $this->container->getParameter('gherkin.filters.name');
+        if ($name) {
             $gherkinParser->addFilter(new NameFilter($name));
         }
 
-        if ($tags = ($input->getOption('tags') ?: $this->container->getParameter('gherkin.filters.tags'))) {
+        $tags = $input->getOption('tags')
+             ?: $this->container->getParameter('gherkin.filters.tags');
+        if ($tags) {
             $gherkinParser->addFilter(new TagFilter($tags));
         }
 
-        if ($path = ($input->getOption('cache') ?: $this->container->getParameter('behat.options.cache'))) {
+        $path = $input->getOption('cache')
+             ?: $this->container->getParameter('behat.options.cache');
+        if ($path) {
             $cache = new FileCache($path);
             $this->container->get('gherkin.loader.gherkin_file')->setCache($cache);
         }

@@ -142,12 +142,13 @@ class DefinitionDispatcher
 
                 // transform arguments
                 foreach ($arguments as $num => $argument) {
-                    foreach ($this->getTransformations() as $transformation) {
+                    foreach ($this->getTransformations() as $trans) {
                         $transRegex = $this->translateDefinitionRegex(
-                            $transformation->getRegex(), $step->getLanguage()
+                            $trans->getRegex(), $step->getLanguage()
                         );
 
-                        if ($newArgument = $transformation->transform($transRegex, $context, $argument)) {
+                        $newArgument = $trans->transform($transRegex, $context, $argument);
+                        if (null !== $newArgument) {
                             $arguments[$num] = $newArgument;
                         }
                     }

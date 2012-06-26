@@ -28,5 +28,5 @@ interface TransformationInterface
      *
      * @return mixed
      */
-    function transform($translatedRegex, ContextInterface $context, $argument);
+    public function transform($translatedRegex, ContextInterface $context, $argument);
 }

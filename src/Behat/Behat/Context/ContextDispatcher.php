@@ -54,7 +54,7 @@ class ContextDispatcher
     /**
      * Returns context classname.
      *
-     * @return  string
+     * @return string
      */
     public function getContextClass()
     {
@@ -66,11 +66,17 @@ class ContextDispatcher
         }
 
         if (null === $classname) {
-            throw new \RuntimeException(sprintf('Context class not found.'));
+            throw new \RuntimeException(
+                'Context class not found.'."\n".
+                'Maybe you have provided wrong or no `bootstrap` path in your behat.yml:'."\n".
+                'http://docs.behat.org/guides/7.config.html#paths'
+            );
         }
 
         if (!class_exists($classname)) {
-            throw new \RuntimeException(sprintf('Context class "%s" not found', $classname));
+            throw new \RuntimeException(sprintf(
+                'Context class "%s" not found and can not be instantiated.', $classname
+            ));
         }
 
         $contextClassRefl = new \ReflectionClass($classname);
@@ -86,7 +92,7 @@ class ContextDispatcher
     /**
      * Returns context parameters.
      *
-     * @return  array
+     * @return array
      */
     public function getContextParameters()
     {

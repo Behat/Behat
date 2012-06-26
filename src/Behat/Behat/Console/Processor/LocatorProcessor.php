@@ -68,16 +68,26 @@ class LocatorProcessor extends Processor
         );
 
         if (is_dir($bootstrapPath = $this->container->getParameter('behat.paths.bootstrap'))) {
-            $iterator = Finder::create()
-                ->files()
-                ->name('*.php')
-                ->sortByName()
-                ->in($bootstrapPath)
-            ;
+            $this->loadBootstrapScripts($bootstrapPath);
+        }
+    }
 
-            foreach ($iterator as $path) {
-                require_once((string) $path);
-            }
+    /**
+     * Requires *.php scripts from bootstrap/ folder.
+     *
+     * @param string $path
+     */
+    protected function loadBootstrapScripts($path)
+    {
+        $iterator = Finder::create()
+            ->files()
+            ->name('*.php')
+            ->sortByName()
+            ->in($path)
+        ;
+
+        foreach ($iterator as $file) {
+            require_once((string) $file);
         }
     }
 }

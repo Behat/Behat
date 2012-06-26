@@ -43,7 +43,7 @@ class OutputFormatter extends BaseOutputFormatter
     /**
      * Formats a message according to the given styles.
      *
-     * @param  string $message The message to style
+     * @param string $message The message to style
      *
      * @return string The styled message
      */

@@ -25,9 +25,20 @@
         "symfony/finder":                ">=2.0.0,<2.2.0-dev"
     },
 
+    "require-dev": {
+        "symfony/console":               "@stable",
+        "symfony/config":                "@stable",
+        "symfony/dependency-injection":  "@stable",
+        "symfony/event-dispatcher":      "@stable",
+        "symfony/translation":           "@stable",
+        "symfony/yaml":                  "@stable",
+        "symfony/finder":                "@stable"
+    },
+
     "suggest": {
-        "behat/mink-extension": "for integration of with Mink",
-        "behat/yii-extension":  "for integration of with Yii framework"
+        "behat/symfony2-extension":  "for integration with Symfony2 web framework",
+        "behat/yii-extension":       "for integration with Yii web framework",
+        "behat/mink-extension":      "for integration with Mink testing framework"
     },
 
     "autoload": {

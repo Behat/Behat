@@ -91,13 +91,13 @@ class InitProcessor extends Processor
             );
 
             file_put_contents(
-                $bootstrapPath . DIRECTORY_SEPARATOR . 'FeatureContext.php',
+                $bootstrapPath.DIRECTORY_SEPARATOR.'FeatureContext.php',
                 $this->getFeatureContextSkelet()
             );
 
             $output->writeln(
                 '<info>+f</info> ' .
-                str_replace($basePath, '', realpath($bootstrapPath)) . DIRECTORY_SEPARATOR .
+                str_replace($basePath, '', realpath($bootstrapPath)).DIRECTORY_SEPARATOR.
                 'FeatureContext.php <comment>- place your feature related code here</comment>'
             );
         }
@@ -106,7 +106,7 @@ class InitProcessor extends Processor
     /**
      * Returns feature context skelet.
      *
-     * @return  string
+     * @return string
      */
     protected function getFeatureContextSkelet()
     {
@@ -136,7 +136,7 @@ class FeatureContext extends BehatContext
      * Initializes context.
      * Every scenario gets it's own context object.
      *
-     * @param   array   $parameters     context parameters (set them up through behat.yml)
+     * @param array $parameters context parameters (set them up through behat.yml)
      */
     public function __construct(array $parameters)
     {

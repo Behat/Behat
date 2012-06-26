@@ -18,15 +18,18 @@ namespace Behat\Behat\Context\ClassGuesser;
 class PredefinedClassGuesser implements ClassGuesserInterface
 {
     private $classname;
+    private $force;
 
     /**
      * Initializes guesser.
      *
-     * @param string $classname
+     * @param string  $classname
+     * @param Boolean $force
      */
-    public function __construct($classname)
+    public function __construct($classname, $force = false)
     {
         $this->classname = $classname;
+        $this->force     = (bool) $force;
     }
 
     /**
@@ -36,6 +39,6 @@ class PredefinedClassGuesser implements ClassGuesserInterface
      */
     public function guess()
     {
-        return class_exists($this->classname) ? $this->classname : null;
+        return $this->force || class_exists($this->classname) ? $this->classname : null;
     }
 }

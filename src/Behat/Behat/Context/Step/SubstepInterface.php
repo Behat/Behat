@@ -24,5 +24,5 @@ interface SubstepInterface
      *
      * @return StepNode
      */
-    function getStepNode();
+    public function getStepNode();
 }

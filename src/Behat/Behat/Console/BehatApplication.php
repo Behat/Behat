@@ -5,6 +5,7 @@ namespace Behat\Behat\Console;
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Application,
+    Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputDefinition,
     Symfony\Component\Console\Input\InputOption,
@@ -28,6 +29,8 @@ use Behat\Behat\DependencyInjection\BehatExtension,
  */
 class BehatApplication extends Application
 {
+    private $basePath;
+
     /**
      * {@inheritdoc}
      */
@@ -60,55 +63,105 @@ class BehatApplication extends Application
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        // construct container
-        $container = new ContainerBuilder();
-        $this->loadConfiguration($container, $input);
-        $container->compile();
-
-        // setup command into application
-        $this->add($container->get('behat.console.command'));
+        $this->add($this->createCommand($input));
 
         return parent::doRun($input, $output);
     }
 
     /**
+     * Creates main command for application.
+     *
+     * @param InputInterface $input
+     *
+     * @return Command
+     */
+    protected function createCommand(InputInterface $input)
+    {
+        return $this->createContainer($input)->get('behat.console.command');
+    }
+
+    /**
+     * Creates container instance, loads extensions and freezes it.
+     *
+     * @param InputInterface $input
+     *
+     * @return ContainerInterface
+     */
+    protected function createContainer(InputInterface $input)
+    {
+        $container = new ContainerBuilder();
+        $this->loadCoreExtension($container, $this->loadConfiguration($container, $input));
+        $container->compile();
+
+        return $container;
+    }
+
+    /**
      * Configures container based on providen config file and profile.
      *
-     * @param ContainerInterface $container
-     * @param InputInterface     $input
+     * @param ContainerBuilder $container
+     * @param InputInterface   $input
      */
-    protected function loadConfiguration(ContainerInterface $container, InputInterface $input)
+    protected function loadConfiguration(ContainerBuilder $container, InputInterface $input)
     {
-        $file    = $input->getParameterOption(array('--config', '-c'));
-        $profile = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
-        $cwd     = getcwd();
-
-        // if config file is not provided
-        if (!$file) {
-            // then use behat.yml
-            if (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml')) {
-                $file = $cwd.DIRECTORY_SEPARATOR.'behat.yml';
-            // or behat.yml.dist
-            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'behat.yml.dist')) {
-                $file = $cwd.DIRECTORY_SEPARATOR.'behat.yml.dist';
-            // or config/behat.yml
-            } elseif (is_file($cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml')) {
-                $file = $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml';
-            }
+        // locate paths
+        $this->basePath = getcwd();
+        if ($configPath = $this->getConfigurationFilePath($input)) {
+            $this->basePath = realpath(dirname($configPath));
         }
 
         // read configuration
-        $loader  = new Loader($file);
-        $configs = $loader->loadConfiguration($profile);
+        $loader  = new Loader($configPath);
+        $profile = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
 
-        // locate base path
-        $basePath = $cwd;
-        if (file_exists($file)) {
-            $basePath = realpath(dirname($file));
+        return $loader->loadConfiguration($profile);
+    }
+
+    /**
+     * Finds configuration file and returns path to it.
+     *
+     * @param InputInterface $input
+     *
+     * @return string
+     */
+    protected function getConfigurationFilePath(InputInterface $input)
+    {
+        // custom configuration file
+        if ($file = $input->getParameterOption(array('--config', '-c'))) {
+            if (is_file($file)) {
+                return $file;
+            }
+
+            return;
         }
 
-        // load core extension into temp container
-        $extension = new BehatExtension($basePath);
+        // predefined config paths
+        $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR);
+        foreach (array_filter(array(
+            $cwd.DIRECTORY_SEPARATOR.'behat.yml',
+            $cwd.DIRECTORY_SEPARATOR.'behat.yml.dist',
+            $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml',
+            $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml.dist',
+        ), 'is_file') as $path) {
+            return $path;
+        }
+    }
+
+    /**
+     * Loads core extension into container.
+     *
+     * @param ContainerBuilder $container
+     * @param $array           $configs
+     */
+    protected function loadCoreExtension(ContainerBuilder $container, array $configs)
+    {
+        if (null === $this->basePath) {
+            throw new RuntimeException(
+                'Suite basepath is not set. Seems you have forgot to load configuration first.'
+            );
+        }
+
+        $extension = new BehatExtension($this->basePath);
         $extension->load($configs, $container);
         $container->addObjectResource($extension);
     }

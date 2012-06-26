@@ -19,17 +19,17 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Loader
 {
-    private $configFile;
+    private $configPath;
     private $profileFound;
 
     /**
      * Constructs reader.
      *
-     * @param string $configFile Configuration file path
+     * @param string $configPath Configuration file path
      */
-    public function __construct($configFile = null)
+    public function __construct($configPath = null)
     {
-        $this->configFile = $configFile;
+        $this->configPath = $configPath;
     }
 
     /**
@@ -45,13 +45,13 @@ class Loader
         $this->profileFound = false;
 
         // first is ENV config
-        foreach ($this->loadEnvironmentConfiguration($profile) as $config) {
+        foreach ($this->loadEnvironmentConfiguration() as $config) {
             $configs[] = $config;
         }
 
         // second is file configuration (if there is some)
-        if (null !== $this->configFile && file_exists($this->configFile)) {
-            foreach ($this->loadFileConfiguration($this->configFile, $profile) as $config) {
+        if ($this->configPath) {
+            foreach ($this->loadFileConfiguration($this->configPath, $profile) as $config) {
                 $configs[] = $config;
             }
         }
@@ -69,11 +69,9 @@ class Loader
     /**
      * Loads information from ENV variable.
      *
-     * @param string $profile Profile name
-     *
      * @return array
      */
-    protected function loadEnvironmentConfiguration($profile)
+    protected function loadEnvironmentConfiguration()
     {
         $configs = array();
         if ($envConfig = getenv('BEHAT_PARAMS')) {
@@ -87,21 +85,21 @@ class Loader
     /**
      * Loads information from YAML configuration file.
      *
-     * @param string $configFile Config file path
+     * @param string $configPath Config file path
      * @param string $profile    Profile name
      *
      * @return array
      *
      * @throws \RuntimeException
      */
-    protected function loadFileConfiguration($configFile, $profile)
+    protected function loadFileConfiguration($configPath, $profile)
     {
-        if (!is_file($configFile) || !is_readable($configFile)) {
-            throw new \RuntimeException("Config file \"$configFile\" not found");
+        if (!is_file($configPath) || !is_readable($configPath)) {
+            throw new \RuntimeException("Config file \"$configPath\" not found");
         }
 
-        $basePath = rtrim(dirname($configFile), DIRECTORY_SEPARATOR);
-        $config   = Yaml::parse($configFile);
+        $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
+        $config   = Yaml::parse($configPath);
         $configs  = array();
 
         // first load default profile from current config

@@ -36,11 +36,10 @@ class EventSubscribersPass implements CompilerPassInterface
 
         foreach ($container->findTaggedServiceIds('behat.event_subscriber') as $id => $attributes) {
             foreach ($attributes as $attribute) {
-                if (isset($attribute['priority'])) {
-                    $dispatcherDefinition->addMethodCall(
-                        'addSubscriber', array(new Reference($id), $attribute['priority'])
-                    );
-                }
+                $priority = isset($attribute['priority']) ? intval($attribute['priority']) : 0;
+                $dispatcherDefinition->addMethodCall(
+                    'addSubscriber', array(new Reference($id), $priority)
+                );
             }
         }
     }

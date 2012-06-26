@@ -2,8 +2,6 @@
 
 namespace Behat\Behat\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-
 use Behat\Behat\Event\SuiteEvent;
 
 /*
