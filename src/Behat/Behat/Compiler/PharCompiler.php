@@ -71,8 +71,6 @@ class PharCompiler
 
         // license and autoloading
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/LICENSE'), $phar);
-        $this->addFileToPhar(new \SplFileInfo($this->libPath . '/vendor/.composer/autoload.php'), $phar);
-        $this->addFileToPhar(new \SplFileInfo($this->libPath . '/vendor/.composer/autoload_namespaces.php'), $phar);
         $this->addFileToPhar(new \SplFileInfo($this->libPath . '/i18n.php'), $phar);
 
         // stub
