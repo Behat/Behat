@@ -1,3 +1,18 @@
+2.4.1 / 2012-06-26
+==================
+
+  * Force custom context class usage if user changed it from `FeatureContext`
+  * Clarified `Context class not found` exception
+  * Use CWD for CLI options, basepath (config path) for everything else
+  * Pass `behat.extension.classes` container param to extensions during their load
+  * Tuned `event_subscriber` priorities
+  * Use `require_once` instead of `require` in closured loaders
+  * Fixed transformers bug with falsy transformations (that return **falsy** values)
+  * Fixed custom formatters definition bug
+  * Fixed formatter manager exception bug
+  * Fixed czech translation
+  * Fixed CS to be PSR2 compliant
+
 2.4.0 / 2012-05-15
 ==================
 
