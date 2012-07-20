@@ -11,7 +11,7 @@ Feature: Syntax helpers
     When I run "behat --story-syntax"
     Then the output should contain:
       """
-      Feature: Internal operations
+      [Feature|Business Need|Ability]: Internal operations
         In order to stay secret
         As a secret organization
         We need to be able to erase past agents' memory
