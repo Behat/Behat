@@ -121,7 +121,14 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
             }
         }
 
-        $description = sprintf(<<<PHP
+        $description = $this->generateSnippet($regex, $methodName, $args);
+
+        return new DefinitionSnippet($step, $description);
+    }
+
+    protected function generateSnippet($regex, $methodName, array $args)
+    {
+        return sprintf(<<<PHP
     /**
      * @%s /^%s$/
      */
@@ -132,7 +139,5 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
 PHP
           , '%s', $regex, $methodName, implode(', ', $args)
         );
-
-        return new DefinitionSnippet($step, $description);
     }
 }
