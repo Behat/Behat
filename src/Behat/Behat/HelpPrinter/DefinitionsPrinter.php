@@ -82,7 +82,7 @@ TPL;
                 continue;
             }
 
-            $regex = preg_replace_callback('/\([^\)]*\)/', function($capture) {
+            $regex = preg_replace_callback('/\((?!\?:)[^\)]*\)/', function($capture) {
                 return "</comment><capture>{$capture[0]}</capture><comment>";
             }, $regex);
 
