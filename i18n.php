@@ -155,4 +155,17 @@
         'undefined_count'     => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
         'skipped_count'       => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
     ),
+    'zh-CN' =>
+    array (
+        'proposal_title' => mb_convert_encoding('你可以通过以下代码片段对未定义的步骤实现步骤定义：', getenv('OS') == 'Windows_NT' ? 'GBK' : 'UTF-8', 'UTF-8'),
+        'failed_steps_title' => mb_convert_encoding('未通过的步骤', getenv('OS') == 'Windows_NT' ? 'GBK' : 'UTF-8', 'UTF-8'),
+        'pending_steps_title' => mb_convert_encoding('待定的步骤', getenv('OS') == 'Windows_NT' ? 'GBK' : 'UTF-8', 'UTF-8'),
+        'scenarios_count' => mb_convert_encoding('{0} 没有场景|{1} 1 个场景|]1,Inf] %1% 个场景', getenv('OS') == 'Windows_NT' ? 'GBK' : 'UTF-8', 'UTF-8'),
+        'steps_count' => mb_convert_encoding('{0} 没有步骤|{1} 1 个步骤|]1,Inf] %1% 个步骤', getenv('OS') == 'Windows_NT' ? 'GBK' : 'UTF-8', 'UTF-8'),
+        'passed_count' => mb_convert_encoding('[1,Inf] %1% 已通过', getenv('OS') == 'Windows_NT' ? 'GBK' : 'UTF-8', 'UTF-8'),
+        'failed_count' => mb_convert_encoding('[1,Inf] %1% 未通过', getenv('OS') == 'Windows_NT' ? 'GBK' : 'UTF-8', 'UTF-8'),
+        'pending_count' => mb_convert_encoding('[1,Inf] %1% 待定的', getenv('OS') == 'Windows_NT' ? 'GBK' : 'UTF-8', 'UTF-8'),
+        'undefined_count' => mb_convert_encoding('[1,Inf] %1% 未定义', getenv('OS') == 'Windows_NT' ? 'GBK' : 'UTF-8', 'UTF-8'),
+        'skipped_count' => mb_convert_encoding('[1,Inf] %1% 跳过的', getenv('OS') == 'Windows_NT' ? 'GBK' : 'UTF-8', 'UTF-8'),
+    ),
 );
