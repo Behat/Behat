@@ -83,7 +83,7 @@ Feature: Error Reporting
           
         Scenario: Access defined index
           When I push "foo" to that array 
-           And I access array index 0
+          And I access array index 0
           Then I should get "foo"
           
       """
@@ -91,7 +91,7 @@ Feature: Error Reporting
   Scenario: Without BEHAT_ERROR_REPORTING
     When I run "behat -f progress"
     Then it should fail
-     And the output should contain:
+    And the output should contain:
     """
     (::) failed steps (::)
     
