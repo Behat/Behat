@@ -153,8 +153,7 @@ abstract class Definition extends Annotation implements DefinitionInterface
         set_error_handler(array($this, 'errorHandler'), $errorLevel);
         try {
             $return = call_user_func_array($callback, $values);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             restore_error_handler();
             throw $e;
         }
