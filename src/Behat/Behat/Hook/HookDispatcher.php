@@ -270,18 +270,17 @@ class HookDispatcher implements EventSubscriberInterface
                     $errorLevel = E_ALL ^ E_WARNING;
                 }
 
-                $oldHandler = set_error_handler(array($this, 'errorHandler'), $errorLevel);
+                set_error_handler(array($this, 'errorHandler'), $errorLevel);
 
                 try {
                     $hook->run($event);
                 } catch (\Exception $e) {
+                    restore_error_handler();
                     $this->addHookInformationToException($hook, $e);
                     throw $e;
                 }
 
-                if (null !== $oldHandler) {
-                    set_error_handler($oldHandler);
-                }
+                restore_error_handler();
             }
         }
     }

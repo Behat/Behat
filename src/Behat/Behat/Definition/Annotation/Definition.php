@@ -143,7 +143,6 @@ abstract class Definition extends Annotation implements DefinitionInterface
             $errorLevel = E_ALL ^ E_WARNING;
         }
 
-        $oldHandler = set_error_handler(array($this, 'errorHandler'), $errorLevel);
         $callback   = $this->getCallbackForContext($context);
 
         $values = $this->getValues();
@@ -151,11 +150,14 @@ abstract class Definition extends Annotation implements DefinitionInterface
             array_unshift($values, $context);
         }
 
-        $return = call_user_func_array($callback, $values);
-
-        if (null !== $oldHandler) {
-            set_error_handler($oldHandler);
+        set_error_handler(array($this, 'errorHandler'), $errorLevel);
+        try {
+            $return = call_user_func_array($callback, $values);
+        } catch (\Exception $e) {
+            restore_error_handler();
+            throw $e;
         }
+        restore_error_handler();
 
         return $return;
     }
