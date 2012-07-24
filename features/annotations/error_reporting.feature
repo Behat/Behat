@@ -90,10 +90,9 @@ Feature: Error Reporting
   
   Scenario: Without BEHAT_ERROR_REPORTING
     When I run "behat -f progress"
-    Then it should fail with:
+    Then it should fail
+     And the output should contain:
     """
-    .F-....
-    
     (::) failed steps (::)
     
     01. Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 33
