@@ -90,7 +90,8 @@ Feature: Error Reporting
   
   Scenario: Without BEHAT_ERROR_REPORTING
     When I run "behat -f progress"
-    Then it should fail with:
+    Then it should fail
+     And the output should contain:
     """
     .F-....
     
