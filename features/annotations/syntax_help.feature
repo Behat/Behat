@@ -123,6 +123,46 @@ Feature: Syntax helpers
        When /^(?:I|We) found (\d+) apples?$/
        Then /^(?:I|We) should have (\d+) apples$/
       """
+
+  Scenario: Print available definitions (ansi)
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\PendingException;
+
+      class FeatureContext extends BehatContext
+      {
+          /**
+           * @Given /^(?:I|We) have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^(?:I|We) ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^(?:I|We) found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then /^(?:I|We) should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              throw new PendingException();
+          }
+      }
+      """
     When I run "behat -dl --ansi"
     And I escape ansi characters in the output
     Then the output should contain:
