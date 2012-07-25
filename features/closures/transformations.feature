@@ -127,11 +127,11 @@ Feature: Step Arguments Transformations
           Then Username must be "antono"
           And Age must be 20
       """
-    When I run "behat -f progress"
+    When I run "behat --no-ansi -f progress"
     Then it should pass with:
       """
       ......
-      
+
       2 scenarios (2 passed)
       6 steps (6 passed)
       """
@@ -154,11 +154,11 @@ Feature: Step Arguments Transformations
           Then Username must be "vasiljev"
           And Age must be 30
       """
-    When I run "behat -f progress"
+    When I run "behat --no-ansi -f progress"
     Then it should pass with:
       """
       ......
-      
+
       2 scenarios (2 passed)
       6 steps (6 passed)
       """

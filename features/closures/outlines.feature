@@ -129,7 +129,7 @@ Feature: Scenario Outlines
             | 5       | 3       | 8      |
             | 5       | 5       | 10     |
       """
-    When I run "behat -f progress features/math.feature"
+    When I run "behat --no-ansi -f progress features/math.feature"
     Then it should pass with:
       """
       ...............
@@ -173,7 +173,7 @@ Feature: Scenario Outlines
             | 10      | 2       | 5      |
             | 50      | 5       | 10     |
       """
-    When I run "behat -f progress features/math.feature"
+    When I run "behat --no-ansi -f progress features/math.feature"
     Then it should pass with:
       """
       .........................
@@ -217,7 +217,7 @@ Feature: Scenario Outlines
             | 10      | 2       | 5      |
             | 50      | 10      | 2      |
       """
-    When I run "behat -f progress features/math.feature"
+    When I run "behat --no-ansi -f progress features/math.feature"
     Then it should fail with:
       """
       .........F....F.........F

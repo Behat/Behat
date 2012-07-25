@@ -115,7 +115,7 @@ Feature: Environment consistency
             | 0   | 5     | 8      |
             | 2   | 2     | 3      |
       """
-    When I run "behat -f progress features/apples.feature"
+    When I run "behat --no-ansi -f progress features/apples.feature"
     Then it should pass with:
       """
       ..................
@@ -154,7 +154,7 @@ Feature: Environment consistency
             | 0   | 5     | 8      |
             | 2   | 2     | 4      |
       """
-    When I run "behat -f progress features/apples.feature"
+    When I run "behat --no-ansi -f progress features/apples.feature"
     Then it should fail with:
       """
       ..F..F...F.......F
@@ -215,7 +215,7 @@ Feature: Environment consistency
           Then environment parameter "parameter1" should be equal to "val_one"
           And environment parameter "parameter2" should be array with 2 elements
       """
-  When I run "behat -f progress features/params.feature"
+  When I run "behat --no-ansi -f progress features/params.feature"
   Then it should pass with:
     """
     ..

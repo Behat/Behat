@@ -129,34 +129,34 @@ Feature: hooks
         Scenario: 130
           Given I must have 130
       """
-    When I run "behat -f pretty"
+    When I run "behat --no-ansi -f pretty"
     Then it should pass with:
       """
       = do something before all suite run
       Feature:
-      
+
         Scenario:             # features/test.feature:2
           Then I must have 50 # features/steps/steps.php:5
-      
+
         Scenario:                 # features/test.feature:4
           Given I have entered 12 # features/steps/steps.php:2
           Then I must have 12     # features/steps/steps.php:5
-      
+
         @thirty
         Scenario:                 # features/test.feature:9
           Given I must have 30    # features/steps/steps.php:5
           When I have entered 23  # features/steps/steps.php:2
           Then I must have 23     # features/steps/steps.php:5
-      
+
         @100 @thirty
         Scenario:                 # features/test.feature:14
           Given I must have 30    # features/steps/steps.php:5
           When I have entered 1   # features/steps/steps.php:2
           Then I must have 100    # features/steps/steps.php:5
-      
+
         Scenario: 130             # features/test.feature:19
           Given I must have 130   # features/steps/steps.php:5
-      
+
       = do something after all suite run
       5 scenarios (5 passed)
       10 steps (10 passed)

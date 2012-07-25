@@ -147,7 +147,7 @@ Feature: hooks
         Scenario: 130
           Given I must have 130
       """
-    When I run "behat -f pretty"
+    When I run "behat --no-ansi -f pretty"
     Then it should pass with:
       """
       = do something BEFORE ANY SUITE
@@ -203,7 +203,7 @@ Feature: hooks
         Scenario: 130
           Given I must have 130
       """
-    When I run "behat -f pretty"
+    When I run "behat --no-ansi -f pretty"
     Then it should pass with:
       """
       = do something BEFORE ANY SUITE
@@ -247,7 +247,7 @@ Feature: hooks
           Given I have entered 12
           Then I must have 12
       """
-    When I run "behat -f pretty"
+    When I run "behat --no-ansi -f pretty"
     Then it should pass with:
       """
       = do something BEFORE ANY SUITE

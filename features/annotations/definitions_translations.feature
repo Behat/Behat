@@ -102,7 +102,7 @@ Feature: Definitions translations
         </file>
       </xliff>
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       .....
@@ -188,7 +188,7 @@ Feature: Definitions translations
       '/"([^"]+)" user/':                                 '/пользователь "([^"]+)"/'
       '/^the ("[^"]+" user) name should be "([^"]*)"$/':  '/^(пользователь "[^"]+") должен иметь имя "([^"]*)"$/'
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       .....
@@ -276,7 +276,7 @@ Feature: Definitions translations
         '/^the ("[^"]+" user) name should be "([^"]*)"$/' => '/^(пользователь "[^"]+") должен иметь имя "([^"]*)"$/',
       );
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       .....

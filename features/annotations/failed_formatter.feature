@@ -114,7 +114,7 @@ Feature: Failed format
       """
 
   Scenario: Run feature with failing scenarios
-    When I run "behat -f failed"
+    When I run "behat --no-ansi -f failed"
     Then it should fail with:
       """
       %PATH%/features/apples.feature:9

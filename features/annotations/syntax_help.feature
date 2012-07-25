@@ -8,7 +8,7 @@ Feature: Syntax helpers
       """
       <?php class FeatureContext extends Behat\Behat\Context\BehatContext {}
       """
-    When I run "behat --story-syntax"
+    When I run "behat --no-ansi --story-syntax"
     Then the output should contain:
       """
       [Feature|Business Need|Ability]: Internal operations
@@ -44,7 +44,7 @@ Feature: Syntax helpers
       """
       <?php class FeatureContext extends Behat\Behat\Context\BehatContext {}
       """
-    When I run "behat --story-syntax --lang ru"
+    When I run "behat --no-ansi --story-syntax --lang ru"
     Then the output should contain:
       """
       # language: ru
@@ -115,7 +115,7 @@ Feature: Syntax helpers
           }
       }
       """
-    When I run "behat -dl"
+    When I run "behat --no-ansi -dl"
     Then the output should contain:
       """
       Given /^I have (\d+) apples?$/
@@ -186,7 +186,7 @@ Feature: Syntax helpers
         </file>
       </xliff>
       """
-    When I run "behat -dl --lang=ru"
+    When I run "behat --no-ansi -dl --lang=ru"
     Then the output should contain:
       """
       Given /^у меня (\d+) яблоко?$/
@@ -236,7 +236,7 @@ Feature: Syntax helpers
           }
       }
       """
-    When I run "behat -di"
+    When I run "behat --no-ansi -di"
     Then the output should contain:
       """
       Given /^I have (\d+) apples?$/
@@ -294,7 +294,7 @@ Feature: Syntax helpers
           }
       }
       """
-    When I run "behat -d 'found apples'"
+    When I run "behat --no-ansi -d 'found apples'"
     Then the output should contain:
       """
       When /^I found (\d+) apples?$/
@@ -363,7 +363,7 @@ Feature: Syntax helpers
         </file>
       </xliff>
       """
-    When I run "behat --lang=ru -d 'нашел'"
+    When I run "behat --no-ansi --lang=ru -d 'нашел'"
     Then the output should contain:
       """
       When /^Я нашел (\d+) яблоко?$/

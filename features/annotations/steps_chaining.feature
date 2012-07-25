@@ -195,7 +195,7 @@ Feature: Call step in other step
           Given I have entered "3"
           Then I entered "5" and expect "10"
       """
-    When I run "behat -f progress features/calc_en.feature"
+    When I run "behat --no-ansi -f progress features/calc_en.feature"
     Then it should fail with:
       """
       ........F
@@ -219,7 +219,7 @@ Feature: Call step in other step
           When I press +
           Then I should see "8" on the screen
       """
-    When I run "behat -f progress features/calc_en.feature"
+    When I run "behat --no-ansi -f progress features/calc_en.feature"
     Then it should fail with:
       """
       ..F
@@ -247,7 +247,7 @@ Feature: Call step in other step
           И Я создам себе passing таблицу
           И Вызовем несуществующий шаг
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should fail with:
       """
       .....F
@@ -271,7 +271,7 @@ Feature: Call step in other step
           Если Я сложу числа "12" и "27"
           То Я должен увидеть на экране "39"
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       ..
@@ -293,7 +293,7 @@ Feature: Call step in other step
           И Я создам себе passing таблицу
           И Вызовем несуществующий шаг
       """
-    When I run "behat --no-paths features/calc_ru.feature"
+    When I run "behat --no-ansi --no-paths features/calc_ru.feature"
     Then it should fail with:
       """
       Функционал: Стандартный калькулятор
@@ -324,7 +324,7 @@ Feature: Call step in other step
         Сценарий:
           Допустим Я создам себе failing таблицу
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should fail with:
       """
       ..FF

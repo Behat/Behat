@@ -74,7 +74,7 @@ Feature: HTML Formatter
           And I subtract the value 6
           Then I must have 4
       """
-    When I run "behat -f html"
+    When I run "behat --no-ansi -f html"
     Then it should pass
     And the output should contain:
       """
@@ -188,7 +188,7 @@ Feature: HTML Formatter
             | 5  | 15    |
             | 10 | 21    |
       """
-    When I run "behat -f html"
+    When I run "behat --no-ansi -f html"
     Then the output should contain:
       """
       <div class="scenario outline">
@@ -270,7 +270,7 @@ Feature: HTML Formatter
             | 5  | 15    |
             | 10 | 21    |
       """
-    When I run "behat -f html --expand"
+    When I run "behat --no-ansi -f html --expand"
     Then the output should contain:
       """
       <div class="scenario outline">
@@ -386,7 +386,7 @@ Feature: HTML Formatter
         Scenario: Nothing
           Given I have entered 10
       """
-    When I run "behat -c behat.yml -f html"
+    When I run "behat --no-ansi -c behat.yml -f html"
     Then the output should contain:
       """
       <div class="scenario">

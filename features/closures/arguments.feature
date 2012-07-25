@@ -110,11 +110,11 @@ Feature: Step Arguments
             '''
           Then it must be equals to string 1
       """
-    When I run "behat -f progress features/pystring.feature"
+    When I run "behat --no-ansi -f progress features/pystring.feature"
     Then it should pass with:
       """
       ..
-      
+
       1 scenario (1 passed)
       2 steps (2 passed)
       """
@@ -139,11 +139,11 @@ Feature: Step Arguments
             | word1  | word2 |
             | hello, | l     |
       """
-    When I run "behat -f progress features/pystring_tokens.feature"
+    When I run "behat --no-ansi -f progress features/pystring_tokens.feature"
     Then it should pass with:
       """
       ..
-      
+
       1 scenario (1 passed)
       2 steps (2 passed)
       """
@@ -163,7 +163,7 @@ Feature: Step Arguments
             | word1 | word2 | word3 |
             | super | XXL   | mega  |
       """
-    When I run "behat -f progress features/table_tokens.feature"
+    When I run "behat --no-ansi -f progress features/table_tokens.feature"
     Then it should pass with:
       """
       ..
@@ -183,7 +183,7 @@ Feature: Step Arguments
             | hyper | mini  | XXL   |
           Then it must be equals to table 1
       """
-    When I run "behat -f progress features/table.feature"
+    When I run "behat --no-ansi -f progress features/table.feature"
     Then it should pass with:
       """
       ..
@@ -211,7 +211,7 @@ Feature: Step Arguments
         Scenario:
           Given I have number2 = 243 and number1 = 13
       """
-    When I run "behat -f progress features/named_args.feature"
+    When I run "behat --no-ansi -f progress features/named_args.feature"
     Then it should pass with:
       """
       .

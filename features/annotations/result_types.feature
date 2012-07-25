@@ -40,7 +40,7 @@ Feature: Different result types
 
       class FeatureContext extends BehatContext {}
       """
-    When I run "behat -f progress features/coffee.feature"
+    When I run "behat --no-ansi -f progress features/coffee.feature"
     Then it should pass with:
       """
       UUUUUU
@@ -74,7 +74,7 @@ Feature: Different result types
               throw new PendingException();
           }
       """
-    When I run "behat --strict -f progress features/coffee.feature"
+    When I run "behat --no-ansi --strict -f progress features/coffee.feature"
     Then it should fail with:
       """
       UUUUUU
@@ -148,7 +148,7 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat -f progress features/coffee.feature"
+    When I run "behat --no-ansi -f progress features/coffee.feature"
     Then it should pass with:
       """
       P-U
@@ -172,7 +172,7 @@ Feature: Different result types
               throw new PendingException();
           }
       """
-    When I run "behat --strict -f progress features/coffee.feature"
+    When I run "behat --no-ansi --strict -f progress features/coffee.feature"
     Then it should fail with:
       """
       P-U
@@ -244,7 +244,7 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat -f progress features/coffee.feature"
+    When I run "behat --no-ansi -f progress features/coffee.feature"
     Then it should fail with:
       """
       .F..F-
@@ -332,7 +332,7 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat -f progress features/coffee.feature"
+    When I run "behat --no-ansi -f progress features/coffee.feature"
     Then it should fail with:
       """
       .F---..F--
@@ -392,7 +392,7 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat -f progress features/coffee.feature"
+    When I run "behat --no-ansi -f progress features/coffee.feature"
     Then it should fail with:
       """
       F-
@@ -443,7 +443,7 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat -f progress features/coffee.feature"
+    When I run "behat --no-ansi -f progress features/coffee.feature"
     Then it should fail
     And the output should contain:
       """
@@ -484,7 +484,7 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat -f progress features/coffee.feature"
+    When I run "behat --no-ansi -f progress features/coffee.feature"
     Then it should fail
     And the output should contain:
       """

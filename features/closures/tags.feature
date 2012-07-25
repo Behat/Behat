@@ -162,7 +162,7 @@ Feature: Tags
       """
 
   Scenario: Single tag
-    When I run "behat -f pretty --tags '@slow' --no-paths"
+    When I run "behat --no-ansi -f pretty --tags '@slow' --no-paths"
     Then it should pass
     And the output should contain:
       """
@@ -215,7 +215,7 @@ Feature: Tags
       """
 
   Scenario: Or tags
-    When I run "behat -f pretty --tags '@slow,@normal' --no-paths"
+    When I run "behat --no-ansi -f pretty --tags '@slow,@normal' --no-paths"
     Then it should pass
     And the output should contain:
       """
@@ -291,7 +291,7 @@ Feature: Tags
       """
 
   Scenario: And tags
-    When I run "behat -f pretty --tags '@slow,@normal&&@fast' --no-paths"
+    When I run "behat --no-ansi -f pretty --tags '@slow,@normal&&@fast' --no-paths"
     Then it should pass
     And the output should contain:
       """
@@ -341,7 +341,7 @@ Feature: Tags
       """
 
   Scenario: Not tags
-    When I run "behat -f pretty --tags '~@slow&&~@fast' --no-paths"
+    When I run "behat --no-ansi -f pretty --tags '~@slow&&~@fast' --no-paths"
     Then it should pass
     And the output should contain:
       """

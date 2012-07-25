@@ -104,7 +104,7 @@ Feature: Rerun
       """
 
   Scenario: Run one feature with 2 failed and 3 passing scenarios
-    When I run "behat -f progress features/apples.feature"
+    When I run "behat --no-ansi -f progress features/apples.feature"
     Then it should fail with:
       """
       ..F.............F....
@@ -124,8 +124,8 @@ Feature: Rerun
       """
 
   Scenario: Rerun only failed scenarios
-    Given I run "behat -f progress features/apples.feature --rerun re.log"
-    When I run "behat -f progress features/apples.feature --rerun re.log"
+    Given I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
+    When I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
     Then it should fail with:
     """
     ..F.......F....
@@ -145,7 +145,7 @@ Feature: Rerun
     """
 
   Scenario: Fixing scenario removes it from the rerun log
-    Given I run "behat -f progress features/apples.feature --rerun re.log"
+    Given I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
     And there is a file named "features/apples.feature" with:
       """
       Feature: Apples story
@@ -179,8 +179,8 @@ Feature: Rerun
             | 0   | 4     | 7      |
             | 2   | 2     | 3      |
       """
-    When I run "behat -f progress features/apples.feature --rerun re.log"
-    And I run "behat -f progress features/apples.feature --rerun re.log"
+    When I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
+    And I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
     Then it should fail with:
     """
     ..F

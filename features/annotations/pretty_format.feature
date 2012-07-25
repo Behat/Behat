@@ -89,7 +89,7 @@ Feature: Pretty Formatter
             |  10   | 20     |
             |  23   | 32     |
       """
-    When I run "behat -f pretty"
+    When I run "behat --no-ansi -f pretty"
     Then it should fail with:
       """
       Feature: World consistency
@@ -292,7 +292,7 @@ Feature: Pretty Formatter
           And I subtract the value 6
           Then I must have 4
       """
-    When I run "behat -f pretty"
+    When I run "behat --no-ansi -f pretty"
     Then it should pass with:
       """
       Feature: World consistency
@@ -450,7 +450,7 @@ Feature: Pretty Formatter
               | file      | bar  |
               | directory | dir  |
         """
-      When I run "behat features/ls.feature --no-snippets"
+      When I run "behat --no-ansi features/ls.feature --no-snippets"
       Then it should pass with:
         """
         Feature: ls
@@ -536,7 +536,7 @@ Feature: Pretty Formatter
             |  10   | 20     |
             |  23   | 32     |
       """
-    When I run "behat -f pretty --no-snippets"
+    When I run "behat --no-ansi -f pretty --no-snippets"
     Then it should pass with:
       """
       Feature: World consistency
