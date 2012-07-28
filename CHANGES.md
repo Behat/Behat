@@ -2,6 +2,7 @@
 ==================
 
   * Fixed broken `output_path` setting ([issue #169](https://github.com/Behat/Behat/issues/169))
+  * Added shellbang to phar executable ([issue #167](https://github.com/Behat/Behat/issues/167))
 
 2.4.1 / 2012-06-26
 ==================

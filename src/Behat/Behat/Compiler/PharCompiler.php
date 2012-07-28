@@ -125,6 +125,7 @@ class PharCompiler
     protected function getStub($version)
     {
         return sprintf(<<<'EOF'
+#!/usr/bin/env php
 <?php
 
 /*
