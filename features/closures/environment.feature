@@ -164,18 +164,22 @@ Feature: Environment consistency
       01. Failed asserting that 2 matches expected 5.
           In step `Then I should have 5 apples'. # features/steps/apple_steps.php:11
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 13 matches expected 10.
           In step `Then I should have 10 apples'. # features/steps/apple_steps.php:11
           From scenario `Found more apples'.      # features/apples.feature:13
+          Of feature `Apples story'.              # features/apples.feature
 
       03. Failed asserting that 1 matches expected 3.
           In step `Then I should have 3 apples'.  # features/steps/apple_steps.php:11
           From scenario `Other situations'.       # features/apples.feature:17
+          Of feature `Apples story'.              # features/apples.feature
 
       04. Failed asserting that 3 matches expected 4.
           In step `Then I should have 4 apples'.  # features/steps/apple_steps.php:11
           From scenario `Other situations'.       # features/apples.feature:17
+          Of feature `Apples story'.              # features/apples.feature
 
       5 scenarios (1 passed, 4 failed)
       18 steps (14 passed, 4 failed)

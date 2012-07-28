@@ -98,6 +98,7 @@ Feature: Error Reporting
     01. Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 33
         In step `When I access array index 0'.  # FeatureContext::iAccessArrayIndex()
         From scenario `Access undefined index'. # features/e_notice_in_scenario.feature:9
+        Of feature `E_NOTICE in scenario'.      # features/e_notice_in_scenario.feature
 
     2 scenarios (1 passed, 1 failed)
     7 steps (5 passed, 1 skipped, 1 failed)

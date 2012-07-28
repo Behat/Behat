@@ -227,14 +227,17 @@ Feature: Scenario Outlines
       01. Failed asserting that 20 matches expected '15'.
           In step `Then The result should be 15'. # features/steps/math.php:36
           From scenario ***.                      # features/math.feature:5
+          Of feature `Math'.                      # features/math.feature
 
       02. Failed asserting that 6 matches expected '7'.
           In step `Then The result should be 7'.  # features/steps/math.php:36
           From scenario ***.                      # features/math.feature:16
+          Of feature `Math'.                      # features/math.feature
 
       03. Failed asserting that 5 matches expected '2'.
           In step `Then The result should be 2'.  # features/steps/math.php:36
           From scenario ***.                      # features/math.feature:22
+          Of feature `Math'.                      # features/math.feature
 
       5 scenarios (2 passed, 3 failed)
       25 steps (22 passed, 3 failed)

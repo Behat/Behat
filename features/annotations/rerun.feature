@@ -114,10 +114,12 @@ Feature: Rerun
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:21
+          Of feature `Apples story'.             # features/apples.feature
 
       6 scenarios (4 passed, 2 failed)
       21 steps (19 passed, 2 failed)
@@ -135,10 +137,12 @@ Feature: Rerun
     01. Failed asserting that 2 matches expected 3.
         In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
         From scenario `I'm little hungry'.     # features/apples.feature:9
+        Of feature `Apples story'.             # features/apples.feature
 
     02. Failed asserting that 7 matches expected 8.
         In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
         From scenario `Other situations'.      # features/apples.feature:21
+        Of feature `Apples story'.             # features/apples.feature
 
     4 scenarios (2 passed, 2 failed)
     15 steps (13 passed, 2 failed)
@@ -190,6 +194,7 @@ Feature: Rerun
     01. Failed asserting that 2 matches expected 3.
         In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
         From scenario `I'm little hungry'.     # features/apples.feature:9
+        Of feature `Apples story'.             # features/apples.feature
 
     1 scenario (1 failed)
     3 steps (2 passed, 1 failed)

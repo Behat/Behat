@@ -191,10 +191,12 @@ Feature: Multiple formats
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
+          Of feature `Apples story'.             # features/apples.feature
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -304,10 +306,12 @@ Feature: Multiple formats
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
+          Of feature `Apples story'.             # features/apples.feature
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -350,10 +354,12 @@ Feature: Multiple formats
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
+          Of feature `Apples story'.             # features/apples.feature
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -534,10 +540,12 @@ Feature: Multiple formats
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
+          Of feature `Apples story'.             # features/apples.feature
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -652,10 +660,12 @@ Feature: Multiple formats
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
+          Of feature `Apples story'.             # features/apples.feature
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
