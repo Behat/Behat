@@ -250,6 +250,7 @@ class FormatProcessor extends Processor
      */
     protected function initMultipleOutputs(FormatterManager $manager, InputInterface $input)
     {
+        $parameters = $this->container->getParameter('behat.formatter.parameters');
         if ($input->getOption('out')) {
             $outputs = $input->getOption('out');
         } elseif (isset($parameters['output_path'])) {

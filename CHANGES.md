@@ -1,3 +1,8 @@
+2.4.2 / ????-??-??
+==================
+
+  * Fixed broken `output_path` setting ([issue #169](https://github.com/Behat/Behat/issues/169))
+
 2.4.1 / 2012-06-26
 ==================
 
