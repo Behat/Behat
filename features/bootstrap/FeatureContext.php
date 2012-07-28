@@ -138,6 +138,14 @@ class FeatureContext extends BaseFeaturesContext
     }
 
     /**
+     * @When I escape ansi characters in the output
+     */
+    public function iEscapeAnsiCharactersInTheOutput()
+    {
+        $this->output = addcslashes($this->output, "\033");
+    }
+
+    /**
      * Checks whether previously runned command passes|failes with provided output.
      *
      * @Then /^it should (fail|pass) with:$/
