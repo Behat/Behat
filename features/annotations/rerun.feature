@@ -130,7 +130,7 @@ Feature: Rerun
     When I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
     Then it should fail with:
     """
-    ..F.......F....
+    ..F...F
 
     (::) failed steps (::)
 
@@ -144,8 +144,8 @@ Feature: Rerun
         From scenario `Other situations'.      # features/apples.feature:21
         Of feature `Apples story'.             # features/apples.feature
 
-    4 scenarios (2 passed, 2 failed)
-    15 steps (13 passed, 2 failed)
+    2 scenarios (2 failed)
+    7 steps (5 passed, 2 failed)
     """
 
   Scenario: Fixing scenario removes it from the rerun log

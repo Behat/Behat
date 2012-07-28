@@ -3,6 +3,7 @@
 namespace Behat\Behat\Formatter;
 
 use Behat\Behat\Event\ScenarioEvent,
+    Behat\Behat\Event\OutlineExampleEvent,
     Behat\Behat\Event\OutlineEvent,
     Behat\Behat\Event\StepEvent;
 
@@ -49,7 +50,7 @@ class FailedScenariosFormatter extends ConsoleFormatter
      */
     public static function getSubscribedEvents()
     {
-        $events = array('afterScenario', 'afterOutline');
+        $events = array('afterScenario', 'afterOutlineExample');
 
         return array_combine($events, $events);
     }
@@ -68,15 +69,17 @@ class FailedScenariosFormatter extends ConsoleFormatter
     }
 
     /**
-     * Listens to "outline.after" event.
+     * Listens to "outline.example.after" event.
      *
-     * @param OutlineEvent $event
+     * @param ScenarioEvent $event
      */
-    public function afterOutline(OutlineEvent $event)
+    public function afterOutlineExample(OutlineExampleEvent $event)
     {
         if (StepEvent::FAILED === $event->getResult()) {
-            $outline = $event->getOutline();
-            $this->writeln($outline->getFile().':'.$outline->getLine());
+            $outline  = $event->getOutline();
+            $examples = $outline->getExamples();
+            $lines    = $examples->getRowLines();
+            $this->writeln($outline->getFile().':'.$lines[$event->getIteration() + 1]);
         }
     }
 }

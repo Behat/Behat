@@ -118,5 +118,5 @@ Feature: Failed format
     Then it should fail with:
       """
       %PATH%/features/apples.feature:9
-      %PATH%/features/apples.feature:22
+      %PATH%/features/apples.feature:30
       """
