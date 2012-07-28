@@ -1,10 +1,16 @@
-2.4.2 / ????-??-??
+2.4.3 / 2012-07-28
 ==================
 
   * Fixed broken `output_path` setting ([issue #169](https://github.com/Behat/Behat/issues/169))
   * Added shellbang to phar executable ([issue #167](https://github.com/Behat/Behat/issues/167))
   * Added feature title to progress exceptions ([issue #166](https://github.com/Behat/Behat/issues/166))
   * Tuned failed formatter to print only failed examples in outline ([issue #154](https://github.com/Behat/Behat/issues/154))
+  * Small bugfixes
+
+2.4.2 / 2012-06-26
+==================
+
+  * Fixed broken autoloading with Composer installation
 
 2.4.1 / 2012-06-26
 ==================
