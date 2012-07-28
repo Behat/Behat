@@ -268,7 +268,7 @@ Feature: Format options
       """
 
   Scenario: --no-paths option
-    When I run "behat --no-paths"
+    When I run "behat --no-ansi --no-paths"
     Then it should fail with:
       """
       Feature: Apples story
@@ -345,7 +345,7 @@ Feature: Format options
       """
 
   Scenario: --no-snippets option
-    When I run "behat --no-snippets"
+    When I run "behat --no-ansi --no-snippets"
     Then it should fail with:
       """
       Feature: Apples story
@@ -396,7 +396,7 @@ Feature: Format options
       """
 
   Scenario: --snippets-paths option
-    When I run "behat --snippets-paths"
+    When I run "behat --no-ansi --snippets-paths"
     Then it should fail with:
       """
       Feature: Apples story
@@ -479,7 +479,7 @@ Feature: Format options
       """
 
   Scenario: --expand option
-    When I run "behat --expand"
+    When I run "behat --no-ansi --expand"
     Then it should fail with:
       """
       Feature: Apples story
@@ -565,7 +565,7 @@ Feature: Format options
       """
 
   Scenario: --no-multiline option
-    When I run "behat --no-multiline"
+    When I run "behat --no-ansi --no-multiline"
     Then it should fail with:
       """
       Feature: Apples story

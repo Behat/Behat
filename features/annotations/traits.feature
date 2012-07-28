@@ -102,7 +102,7 @@ Feature: Support php 5.4 traits
       """
 
   Scenario: Run feature with failing scenarios
-    When I run "behat -f progress"
+    When I run "behat --no-ansi -f progress"
     Then it should pass with:
       """
       .....................

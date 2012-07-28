@@ -126,7 +126,7 @@ Feature: I18n
       """
 
   Scenario: Pretty
-    When I run "behat -f pretty --lang=ru"
+    When I run "behat --no-ansi -f pretty --lang=ru"
     Then it should fail with:
       """
       Функционал: Постоянство мира
@@ -177,7 +177,7 @@ Feature: I18n
       """
 
   Scenario: Progress
-    When I run "behat -f progress --lang=ru"
+    When I run "behat --no-ansi -f progress --lang=ru"
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
@@ -187,20 +187,24 @@ Feature: I18n
       01. Failed asserting that 14 matches expected '13'.
           In step `То Я должен иметь 13'. # features/steps/math.php:7
           From scenario `Провален'.       # features/World.feature:20
+          Of feature `Постоянство мира'.  # features/World.feature
 
       02. Failed asserting that 15 matches expected '16'.
           In step `То Я должен иметь 16'.       # features/steps/math.php:7
           From scenario `Пройдено и Провалено'. # features/World.feature:24
+          Of feature `Постоянство мира'.        # features/World.feature
 
       03. Failed asserting that 33 matches expected '32'.
           In step `То Я должен иметь 32'.       # features/steps/math.php:7
           From scenario `Пройдено и Провалено'. # features/World.feature:24
+          Of feature `Постоянство мира'.        # features/World.feature
 
       (::) шаги в ожидании (::)
 
       01. TODO: write pending definition
           In step `И Что-то еще не сделано'.    # features/steps/math.php:15
           From scenario `В ожидании'.           # features/World.feature:15
+          Of feature `Постоянство мира'.        # features/World.feature
 
       6 сценариев (1 пройден, 1 в ожидании, 1 не определен, 3 провалено)
       23 шага (16 пройдено, 2 пропущено, 1 в ожидании, 1 не определен, 3 провалено)

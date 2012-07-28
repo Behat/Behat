@@ -103,17 +103,17 @@ Feature: Profiles
       """
 
   Scenario:
-    Given I run "behat features/math.feature"
+    Given I run "behat --no-ansi features/math.feature"
     Then it should pass with:
       """
       ...............
-      
+
       3 scenarios (3 passed)
       15 steps (15 passed)
       """
 
   Scenario:
-    Given I run "behat --profile pretty_without_paths"
+    Given I run "behat --no-ansi --profile pretty_without_paths"
     Then it should pass with:
       """
       Feature: Math
@@ -138,26 +138,26 @@ Feature: Profiles
       """
 
   Scenario:
-    Given I run "behat --profile pretty"
+    Given I run "behat --no-ansi --profile pretty"
     Then it should pass with:
       """
       Feature: Math
-      
+
         Background:                     # features/math.feature:2
           Given I have basic calculator # FeatureContext::iHaveBasicCalculator()
-      
+
         Scenario Outline:                    # features/math.feature:5
           Given I have entered <number1>     # FeatureContext::iHaveEntered()
           And I have entered <number2>       # FeatureContext::iHaveEntered()
           When I add                         # FeatureContext::iAdd()
           Then The result should be <result> # FeatureContext::theResultShouldBe()
-      
+
           Examples:
             | number1 | number2 | result |
             | 10      | 12      | 22     |
             | 5       | 3       | 8      |
             | 5       | 5       | 10     |
-      
+
       3 scenarios (3 passed)
       15 steps (15 passed)
       """

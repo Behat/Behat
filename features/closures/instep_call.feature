@@ -129,7 +129,7 @@ Feature: Call step in other step
           When I press +
           Then I should see "44" on the screen
       """
-    When I run "behat -f progress features/calc_en.feature"
+    When I run "behat --no-ansi -f progress features/calc_en.feature"
     Then it should pass with:
       """
       .....
@@ -147,7 +147,7 @@ Feature: Call step in other step
           When I press +
           Then I should see "8" on the screen
       """
-    When I run "behat -f progress features/calc_en.feature"
+    When I run "behat --no-ansi -f progress features/calc_en.feature"
     Then it should fail with:
       """
       ..F
@@ -157,6 +157,7 @@ Feature: Call step in other step
       01. Failed asserting that 7 matches expected '8'.
           In step `Then I should see "8" on the screen'. # features/steps/calc_steps_en.php:9
           From scenario ***.                             # features/calc_en.feature:2
+          Of feature `Basic calculator'.                 # features/calc_en.feature
 
       1 scenario (1 failed)
       3 steps (2 passed, 1 failed)
@@ -174,7 +175,7 @@ Feature: Call step in other step
           То Я должен увидеть на экране "39"
           И Я создам себе passing таблицу
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       .....
@@ -196,7 +197,7 @@ Feature: Call step in other step
         Сценарий:
           Допустим Я создам себе failing таблицу
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should fail with:
       """
       ..FF
@@ -206,10 +207,12 @@ Feature: Call step in other step
       01. Failed asserting that 7 matches expected '8'.
           In step `То Я должен увидеть на экране "8"'. # features/steps/calc_steps_ru.php:8
           From scenario ***.                           # features/calc_ru.feature:3
+          Of feature `Стандартный калькулятор'.        # features/calc_ru.feature
 
       02. Failed asserting that two arrays are equal.
           In step `Допустим Я создам себе failing таблицу'. # features/steps/calc_steps_ru.php:11
           From scenario ***.                                # features/calc_ru.feature:8
+          Of feature `Стандартный калькулятор'.             # features/calc_ru.feature
 
       2 scenarios (2 failed)
       4 steps (2 passed, 2 failed)

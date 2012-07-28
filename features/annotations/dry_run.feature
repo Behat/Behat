@@ -96,7 +96,7 @@ Feature: Dry run
       """
 
   Scenario: Just run feature
-    When I run "behat --no-paths features/apples.feature"
+    When I run "behat --no-ansi --no-paths features/apples.feature"
     Then it should pass with:
       """
       HOOK: before suiteFeature: Apples story
@@ -135,7 +135,7 @@ Feature: Dry run
       """
 
   Scenario: Run feature with --dry-run
-    When I run "behat --dry-run features/apples.feature"
+    When I run "behat --no-ansi --dry-run features/apples.feature"
     Then it should pass with:
       """
       Feature: Apples story

@@ -226,8 +226,15 @@ class ProgressFormatter extends ConsoleFormatter
         }
         $scenarioPathLn     = mb_strlen($scenarioPath);
 
+        $feature       = $node->getFeature();
+        $title         = $feature->getTitle();
+        $title         = $title ? "`$title'" : '***';
+        $featurePath   = "Of feature $title.";
+        $featurePathLn = mb_strlen($featurePath);
+
         $this->maxLineLength = max($this->maxLineLength, $stepPathLn);
         $this->maxLineLength = max($this->maxLineLength, $scenarioPathLn);
+        $this->maxLineLength = max($this->maxLineLength, $featurePathLn);
 
         $this->write("    {+$color}$stepPath{-$color}");
         if (null !== $definition) {
@@ -244,6 +251,13 @@ class ProgressFormatter extends ConsoleFormatter
         $this->printPathComment(
             $this->relativizePathsInString($node->getFile()) . ':' . $node->getLine(), $indentCount
         );
+
+        $this->write("    {+$color}$featurePath{-$color}");
+        $indentCount = $this->maxLineLength - $featurePathLn;
+        $this->printPathComment(
+            $this->relativizePathsInString($feature->getFile()), $indentCount
+        );
+
         $this->writeln();
     }
 

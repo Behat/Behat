@@ -90,7 +90,7 @@ Feature: Parameters
       """
 
   Scenario:
-    When I run "behat"
+    When I run "behat --no-ansi"
     Then it should pass with:
       """
       ...............
@@ -105,7 +105,7 @@ Feature: Parameters
       """
       formatter[name]=pretty&formatter[parameters][paths]=false&formatter[parameters][time]=false
       """
-    When I run "behat -c unexistent"
+    When I run "behat --no-ansi -c unexistent"
     Then it should pass with:
       """
       Feature: Math
@@ -135,7 +135,7 @@ Feature: Parameters
       """
       formatter[name]=pretty&formatter[parameters][time]=false
       """
-    When I run "behat -c unexistent"
+    When I run "behat --no-ansi -c unexistent"
     Then it should pass with:
       """
       Feature: Math

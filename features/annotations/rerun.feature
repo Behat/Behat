@@ -104,7 +104,7 @@ Feature: Rerun
       """
 
   Scenario: Run one feature with 2 failed and 3 passing scenarios
-    When I run "behat -f progress features/apples.feature"
+    When I run "behat --no-ansi -f progress features/apples.feature"
     Then it should fail with:
       """
       ..F.............F....
@@ -114,38 +114,42 @@ Feature: Rerun
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:21
+          Of feature `Apples story'.             # features/apples.feature
 
       6 scenarios (4 passed, 2 failed)
       21 steps (19 passed, 2 failed)
       """
 
   Scenario: Rerun only failed scenarios
-    Given I run "behat -f progress features/apples.feature --rerun re.log"
-    When I run "behat -f progress features/apples.feature --rerun re.log"
+    Given I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
+    When I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
     Then it should fail with:
     """
-    ..F.......F....
+    ..F...F
 
     (::) failed steps (::)
 
     01. Failed asserting that 2 matches expected 3.
         In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
         From scenario `I'm little hungry'.     # features/apples.feature:9
+        Of feature `Apples story'.             # features/apples.feature
 
     02. Failed asserting that 7 matches expected 8.
         In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
         From scenario `Other situations'.      # features/apples.feature:21
+        Of feature `Apples story'.             # features/apples.feature
 
-    4 scenarios (2 passed, 2 failed)
-    15 steps (13 passed, 2 failed)
+    2 scenarios (2 failed)
+    7 steps (5 passed, 2 failed)
     """
 
   Scenario: Fixing scenario removes it from the rerun log
-    Given I run "behat -f progress features/apples.feature --rerun re.log"
+    Given I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
     And there is a file named "features/apples.feature" with:
       """
       Feature: Apples story
@@ -179,8 +183,8 @@ Feature: Rerun
             | 0   | 4     | 7      |
             | 2   | 2     | 3      |
       """
-    When I run "behat -f progress features/apples.feature --rerun re.log"
-    And I run "behat -f progress features/apples.feature --rerun re.log"
+    When I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
+    And I run "behat --no-ansi -f progress features/apples.feature --rerun re.log"
     Then it should fail with:
     """
     ..F
@@ -190,6 +194,7 @@ Feature: Rerun
     01. Failed asserting that 2 matches expected 3.
         In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
         From scenario `I'm little hungry'.     # features/apples.feature:9
+        Of feature `Apples story'.             # features/apples.feature
 
     1 scenario (1 failed)
     3 steps (2 passed, 1 failed)

@@ -25,16 +25,6 @@
         "symfony/finder":                ">=2.0.0,<2.2.0-dev"
     },
 
-    "require-dev": {
-        "symfony/console":               "@stable",
-        "symfony/config":                "@stable",
-        "symfony/dependency-injection":  "@stable",
-        "symfony/event-dispatcher":      "@stable",
-        "symfony/translation":           "@stable",
-        "symfony/yaml":                  "@stable",
-        "symfony/finder":                "@stable"
-    },
-
     "suggest": {
         "behat/symfony2-extension":  "for integration with Symfony2 web framework",
         "behat/yii-extension":       "for integration with Yii web framework",

@@ -195,7 +195,7 @@ Feature: Call step in other step
           Given I have entered "3"
           Then I entered "5" and expect "10"
       """
-    When I run "behat -f progress features/calc_en.feature"
+    When I run "behat --no-ansi -f progress features/calc_en.feature"
     Then it should fail with:
       """
       ........F
@@ -205,6 +205,7 @@ Feature: Call step in other step
       01. Failed asserting that 8 matches expected '10'.
           In step `Then I entered "5" and expect "10"'. # FeatureContext::complexStep()
           From scenario ***.                            # features/calc_en.feature:13
+          Of feature `Basic calculator'.                # features/calc_en.feature
 
       3 scenarios (2 passed, 1 failed)
       9 steps (8 passed, 1 failed)
@@ -219,7 +220,7 @@ Feature: Call step in other step
           When I press +
           Then I should see "8" on the screen
       """
-    When I run "behat -f progress features/calc_en.feature"
+    When I run "behat --no-ansi -f progress features/calc_en.feature"
     Then it should fail with:
       """
       ..F
@@ -229,6 +230,7 @@ Feature: Call step in other step
       01. Failed asserting that 7 matches expected '8'.
           In step `Then I should see "8" on the screen'. # FeatureContext::iShouldSeeEn()
           From scenario ***.                             # features/calc_en.feature:2
+          Of feature `Basic calculator'.                 # features/calc_en.feature
 
       1 scenario (1 failed)
       3 steps (2 passed, 1 failed)
@@ -247,7 +249,7 @@ Feature: Call step in other step
           И Я создам себе passing таблицу
           И Вызовем несуществующий шаг
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should fail with:
       """
       .....F
@@ -257,6 +259,7 @@ Feature: Call step in other step
       01. Undefined step "non-existent step"
           In step `И Вызовем несуществующий шаг'. # FeatureContext::assertUnexistentStepRu()
           From scenario ***.                      # features/calc_ru.feature:3
+          Of feature `Стандартный калькулятор'.   # features/calc_ru.feature
 
       1 scenario (1 failed)
       6 steps (5 passed, 1 failed)
@@ -271,7 +274,7 @@ Feature: Call step in other step
           Если Я сложу числа "12" и "27"
           То Я должен увидеть на экране "39"
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       ..
@@ -293,7 +296,7 @@ Feature: Call step in other step
           И Я создам себе passing таблицу
           И Вызовем несуществующий шаг
       """
-    When I run "behat --no-paths features/calc_ru.feature"
+    When I run "behat --no-ansi --no-paths features/calc_ru.feature"
     Then it should fail with:
       """
       Функционал: Стандартный калькулятор
@@ -324,7 +327,7 @@ Feature: Call step in other step
         Сценарий:
           Допустим Я создам себе failing таблицу
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should fail with:
       """
       ..FF
@@ -334,10 +337,12 @@ Feature: Call step in other step
       01. Failed asserting that 7 matches expected '8'.
           In step `То Я должен увидеть на экране "8"'. # FeatureContext::iShouldSeeRu()
           From scenario ***.                           # features/calc_ru.feature:3
+          Of feature `Стандартный калькулятор'.        # features/calc_ru.feature
 
       02. Failed asserting that two arrays are equal.
           In step `Допустим Я создам себе failing таблицу'. # FeatureContext::assertFailingTableRu()
           From scenario ***.                                # features/calc_ru.feature:8
+          Of feature `Стандартный калькулятор'.             # features/calc_ru.feature
 
       2 scenarios (2 failed)
       4 steps (2 passed, 2 failed)

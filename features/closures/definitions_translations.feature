@@ -125,7 +125,7 @@ Feature: Definitions translations
         </file>
       </xliff>
       """
-    When I run "behat -f progress features/calc_ru.feature"
+    When I run "behat --no-ansi -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       ....

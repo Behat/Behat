@@ -114,7 +114,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, default output
-    When I run "behat -f pretty,progress --no-multiline"
+    When I run "behat --no-ansi -f pretty,progress --no-multiline"
     Then it should fail with:
       """
       Feature: Apples story
@@ -191,10 +191,12 @@ Feature: Multiple formats
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
+          Of feature `Apples story'.             # features/apples.feature
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -227,7 +229,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, same output
-    When I run "behat -f pretty,progress --out=, --no-multiline"
+    When I run "behat --no-ansi -f pretty,progress --out=, --no-multiline"
     Then it should fail with:
       """
       Feature: Apples story
@@ -304,10 +306,12 @@ Feature: Multiple formats
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
+          Of feature `Apples story'.             # features/apples.feature
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -340,7 +344,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write first to file
-    When I run "behat -f pretty,progress --out=apples.pretty, --no-multiline --no-paths"
+    When I run "behat --no-ansi -f pretty,progress --out=apples.pretty, --no-multiline --no-paths"
     Then it should fail with:
       """
       ..F......U.......F.....UU
@@ -350,10 +354,12 @@ Feature: Multiple formats
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
+          Of feature `Apples story'.             # features/apples.feature
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -455,7 +461,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write second to file
-    When I run "behat -f pretty,progress --out=,apples.progress --no-multiline --no-paths"
+    When I run "behat --no-ansi -f pretty,progress --out=,apples.progress --no-multiline --no-paths"
     Then it should fail with:
       """
       Feature: Apples story
@@ -534,10 +540,12 @@ Feature: Multiple formats
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
+          Of feature `Apples story'.             # features/apples.feature
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -570,7 +578,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write both to files
-    When I run "behat -f pretty,progress --out=app.pretty,app.progress --no-multiline --no-paths"
+    When I run "behat --no-ansi -f pretty,progress --out=app.pretty,app.progress --no-multiline --no-paths"
     Then it should fail with:
       """
       """
@@ -652,10 +660,12 @@ Feature: Multiple formats
       01. Failed asserting that 2 matches expected 3.
           In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `I'm little hungry'.     # features/apples.feature:9
+          Of feature `Apples story'.             # features/apples.feature
 
       02. Failed asserting that 7 matches expected 8.
           In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
           From scenario `Other situations'.      # features/apples.feature:22
+          Of feature `Apples story'.             # features/apples.feature
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)

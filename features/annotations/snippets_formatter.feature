@@ -122,7 +122,7 @@ Feature: Snippets format
       """
 
   Scenario: Run feature with failing scenarios
-    When I run "behat -f snippets"
+    When I run "behat --no-ansi -f snippets"
     Then it should fail with:
       """
       /**

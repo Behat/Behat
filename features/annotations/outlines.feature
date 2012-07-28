@@ -110,7 +110,7 @@ Feature: Scenario Outlines
             | 5       | 3       | 8      |
             | 5       | 5       | 10     |
       """
-    When I run "behat -f progress features/math.feature"
+    When I run "behat --no-ansi -f progress features/math.feature"
     Then it should pass with:
       """
       ...............
@@ -154,7 +154,7 @@ Feature: Scenario Outlines
             | 10      | 2       | 5      |
             | 50      | 5       | 10     |
       """
-    When I run "behat -f progress features/math.feature"
+    When I run "behat --no-ansi -f progress features/math.feature"
     Then it should pass with:
       """
       .........................
@@ -199,7 +199,7 @@ Feature: Scenario Outlines
             | 50      | 10      | 2      |
             | 50      | 10      | 4      |
       """
-    When I run "behat -f progress features/math.feature"
+    When I run "behat --no-ansi -f progress features/math.feature"
     Then it should fail with:
       """
       .........F....F.........F....F
@@ -209,18 +209,22 @@ Feature: Scenario Outlines
       01. Failed asserting that 20 matches expected 15.
           In step `Then The result should be 15'. # FeatureContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:5
+          Of feature `Math'.                      # features/math.feature
 
       02. Failed asserting that 6 matches expected 7.
           In step `Then The result should be 7'.  # FeatureContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:16
+          Of feature `Math'.                      # features/math.feature
 
       03. Failed asserting that 5 matches expected 2.
           In step `Then The result should be 2'.  # FeatureContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:22
+          Of feature `Math'.                      # features/math.feature
 
       04. Failed asserting that 5 matches expected 4.
           In step `Then The result should be 4'.  # FeatureContext::theResultShouldBe()
           From scenario ***.                      # features/math.feature:22
+          Of feature `Math'.                      # features/math.feature
 
       6 scenarios (2 passed, 4 failed)
       30 steps (26 passed, 4 failed)

@@ -5,7 +5,7 @@ Feature: Init
 
   Scenario: Simple init
     Given I am in the "init_test" path
-    When I run "behat --init"
+    When I run "behat --no-ansi --init"
     Then it should pass with:
       """
       +d features - place your *.feature files here
@@ -23,7 +23,7 @@ Feature: Init
           features:   scenarios
           bootstrap:  supp
       """
-    When I run "behat --init"
+    When I run "behat --no-ansi --init"
     Then it should pass with:
       """
       +d scenarios - place your *.feature files here

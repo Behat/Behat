@@ -90,7 +90,7 @@ Feature: I18n
       """
 
   Scenario: Pretty
-    When I run "behat -f pretty --lang=ru"
+    When I run "behat --no-ansi -f pretty --lang=ru"
     Then it should fail with:
       """
       Функционал: Постоянство мира
@@ -145,7 +145,7 @@ Feature: I18n
       """
 
   Scenario: Progress
-    When I run "behat -f progress --lang=ru"
+    When I run "behat --no-ansi -f progress --lang=ru"
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
@@ -155,20 +155,24 @@ Feature: I18n
       01. Failed asserting that 14 matches expected 13.
           In step `То Я должен иметь 13'. # FeatureContext::iShouldHave()
           From scenario `Провален'.       # features/World.feature:20
+          Of feature `Постоянство мира'.  # features/World.feature
 
       02. Failed asserting that 15 matches expected 16.
           In step `То Я должен иметь 16'.       # FeatureContext::iShouldHave()
           From scenario `Пройдено и Провалено'. # features/World.feature:24
+          Of feature `Постоянство мира'.        # features/World.feature
 
       03. Failed asserting that 33 matches expected 32.
           In step `То Я должен иметь 32'.       # FeatureContext::iShouldHave()
           From scenario `Пройдено и Провалено'. # features/World.feature:24
+          Of feature `Постоянство мира'.        # features/World.feature
 
       (::) шаги в ожидании (::)
 
       01. TODO: write pending definition
           In step `И Что-то еще не сделано'.    # FeatureContext::somethingNotDone()
           From scenario `В ожидании'.           # features/World.feature:15
+          Of feature `Постоянство мира'.        # features/World.feature
 
       6 сценариев (1 пройден, 1 в ожидании, 1 не определен, 3 провалено)
       23 шага (16 пройдено, 2 пропущено, 1 в ожидании, 1 не определен, 3 провалено)
@@ -185,7 +189,7 @@ Feature: I18n
       """
 
   Scenario: Progress with unexisting locale
-    When I run "behat -f progress --lang=xx"
+    When I run "behat --no-ansi -f progress --lang=xx"
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
@@ -195,20 +199,24 @@ Feature: I18n
       01. Failed asserting that 14 matches expected 13.
           In step `То Я должен иметь 13'. # FeatureContext::iShouldHave()
           From scenario `Провален'.       # features/World.feature:20
+          Of feature `Постоянство мира'.  # features/World.feature
 
       02. Failed asserting that 15 matches expected 16.
           In step `То Я должен иметь 16'.       # FeatureContext::iShouldHave()
           From scenario `Пройдено и Провалено'. # features/World.feature:24
+          Of feature `Постоянство мира'.        # features/World.feature
 
       03. Failed asserting that 33 matches expected 32.
           In step `То Я должен иметь 32'.       # FeatureContext::iShouldHave()
           From scenario `Пройдено и Провалено'. # features/World.feature:24
+          Of feature `Постоянство мира'.        # features/World.feature
 
       (::) pending steps (::)
 
       01. TODO: write pending definition
           In step `И Что-то еще не сделано'.    # FeatureContext::somethingNotDone()
           From scenario `В ожидании'.           # features/World.feature:15
+          Of feature `Постоянство мира'.        # features/World.feature
 
       6 scenarios (1 passed, 1 pending, 1 undefined, 3 failed)
       23 steps (16 passed, 2 skipped, 1 pending, 1 undefined, 3 failed)
@@ -225,7 +233,7 @@ Feature: I18n
       """
 
   Scenario: Progress with unexisting locale
-    When I run "behat -f progress --lang=xx"
+    When I run "behat --no-ansi -f progress --lang=xx"
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
@@ -235,20 +243,24 @@ Feature: I18n
       01. Failed asserting that 14 matches expected 13.
           In step `То Я должен иметь 13'. # FeatureContext::iShouldHave()
           From scenario `Провален'.       # features/World.feature:20
+          Of feature `Постоянство мира'.  # features/World.feature
 
       02. Failed asserting that 15 matches expected 16.
           In step `То Я должен иметь 16'.       # FeatureContext::iShouldHave()
           From scenario `Пройдено и Провалено'. # features/World.feature:24
+          Of feature `Постоянство мира'.        # features/World.feature
 
       03. Failed asserting that 33 matches expected 32.
           In step `То Я должен иметь 32'.       # FeatureContext::iShouldHave()
           From scenario `Пройдено и Провалено'. # features/World.feature:24
+          Of feature `Постоянство мира'.        # features/World.feature
 
       (::) pending steps (::)
 
       01. TODO: write pending definition
           In step `И Что-то еще не сделано'.    # FeatureContext::somethingNotDone()
           From scenario `В ожидании'.           # features/World.feature:15
+          Of feature `Постоянство мира'.        # features/World.feature
 
       6 scenarios (1 passed, 1 pending, 1 undefined, 3 failed)
       23 steps (16 passed, 2 skipped, 1 pending, 1 undefined, 3 failed)

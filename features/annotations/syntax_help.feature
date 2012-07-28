@@ -8,10 +8,10 @@ Feature: Syntax helpers
       """
       <?php class FeatureContext extends Behat\Behat\Context\BehatContext {}
       """
-    When I run "behat --story-syntax"
+    When I run "behat --no-ansi --story-syntax"
     Then the output should contain:
       """
-      Feature: Internal operations
+      [Feature|Business Need|Ability]: Internal operations
         In order to stay secret
         As a secret organization
         We need to be able to erase past agents' memory
@@ -44,7 +44,7 @@ Feature: Syntax helpers
       """
       <?php class FeatureContext extends Behat\Behat\Context\BehatContext {}
       """
-    When I run "behat --story-syntax --lang ru"
+    When I run "behat --no-ansi --story-syntax --lang ru"
     Then the output should contain:
       """
       # language: ru
@@ -87,41 +87,90 @@ Feature: Syntax helpers
       class FeatureContext extends BehatContext
       {
           /**
-           * @Given /^I have (\d+) apples?$/
+           * @Given /^(?:I|We) have (\d+) apples?$/
            */
           public function iHaveApples($count) {
               throw new PendingException();
           }
 
           /**
-           * @When /^I ate (\d+) apples?$/
+           * @When /^(?:I|We) ate (\d+) apples?$/
            */
           public function iAteApples($count) {
               throw new PendingException();
           }
 
           /**
-           * @When /^I found (\d+) apples?$/
+           * @When /^(?:I|We) found (\d+) apples?$/
            */
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
           /**
-           * @Then /^I should have (\d+) apples$/
+           * @Then /^(?:I|We) should have (\d+) apples$/
            */
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }
       }
       """
-    When I run "behat -dl"
+    When I run "behat --no-ansi -dl"
     Then the output should contain:
       """
-      Given /^I have (\d+) apples?$/
-       When /^I ate (\d+) apples?$/
-       When /^I found (\d+) apples?$/
-       Then /^I should have (\d+) apples$/
+      Given /^(?:I|We) have (\d+) apples?$/
+       When /^(?:I|We) ate (\d+) apples?$/
+       When /^(?:I|We) found (\d+) apples?$/
+       Then /^(?:I|We) should have (\d+) apples$/
+      """
+
+  Scenario: Print available definitions (ansi)
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext,
+          Behat\Behat\Exception\PendingException;
+
+      class FeatureContext extends BehatContext
+      {
+          /**
+           * @Given /^(?:I|We) have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^(?:I|We) ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^(?:I|We) found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then /^(?:I|We) should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              throw new PendingException();
+          }
+      }
+      """
+    When I run "behat -dl --ansi"
+    And I escape ansi characters in the output
+    Then the output should contain:
+      """
+      \033[32mGiven\033[0m \033[33m/^(?:I|We) have \033[0m\033[33;1m(\d+)\033[0m\033[33m apples?$/\033[0m
+      \033[32m When\033[0m \033[33m/^(?:I|We) ate \033[0m\033[33;1m(\d+)\033[0m\033[33m apples?$/\033[0m
+      \033[32m When\033[0m \033[33m/^(?:I|We) found \033[0m\033[33;1m(\d+)\033[0m\033[33m apples?$/\033[0m
+      \033[32m Then\033[0m \033[33m/^(?:I|We) should have \033[0m\033[33;1m(\d+)\033[0m\033[33m apples$/\033[0m
       """
 
   Scenario: Print available definitions in native language
@@ -186,7 +235,7 @@ Feature: Syntax helpers
         </file>
       </xliff>
       """
-    When I run "behat -dl --lang=ru"
+    When I run "behat --no-ansi -dl --lang=ru"
     Then the output should contain:
       """
       Given /^у меня (\d+) яблоко?$/
@@ -236,7 +285,7 @@ Feature: Syntax helpers
           }
       }
       """
-    When I run "behat -di"
+    When I run "behat --no-ansi -di"
     Then the output should contain:
       """
       Given /^I have (\d+) apples?$/
@@ -294,7 +343,7 @@ Feature: Syntax helpers
           }
       }
       """
-    When I run "behat -d 'found apples'"
+    When I run "behat --no-ansi -d 'found apples'"
     Then the output should contain:
       """
       When /^I found (\d+) apples?$/
@@ -363,7 +412,7 @@ Feature: Syntax helpers
         </file>
       </xliff>
       """
-    When I run "behat --lang=ru -d 'нашел'"
+    When I run "behat --no-ansi --lang=ru -d 'нашел'"
     Then the output should contain:
       """
       When /^Я нашел (\d+) яблоко?$/

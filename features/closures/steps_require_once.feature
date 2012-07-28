@@ -95,7 +95,7 @@ Feature: hooks
           Given I have entered 1
           Then I must have 1
       """
-    When I run "behat -f pretty"
+    When I run "behat --no-ansi -f pretty"
     Then it should pass with:
       """
       Feature:
