@@ -30,13 +30,21 @@ class ClassNameRewritingVisitor extends \PHPParser_NodeVisitorAbstract
     {
         switch (true) {
             case $node instanceof \PHPParser_Node_Stmt_Namespace:
-                $this->rewriteName($node->name);
-                $this->currentNamespace = $node->name ? implode("\\", $node->name->parts) : '';
+                if (null === $node->name) {
+                    $this->currentNamespace = '';
+                } else {
+                    $this->currentNamespace = $this->rewriteName(implode("\\", $node->name->parts));
+                }
+
                 break;
 
             case $node instanceof \PHPParser_Node_Stmt_Trait:
             case $node instanceof \PHPParser_Node_Stmt_Interface:
             case $node instanceof \PHPParser_Node_Stmt_Class:
+                if ('' === $this->currentNamespace) {
+                    $node->name = $this->rewriteName($node->name);
+                }
+
                 $this->classNames[] = empty($this->currentNamespace) ? $node->name : ($this->currentNamespace.'\\'.$node->name);
                 break;
 
@@ -47,25 +55,36 @@ class ClassNameRewritingVisitor extends \PHPParser_NodeVisitorAbstract
                 break;
 
             case $node instanceof \PHPParser_Node_Name:
-                $this->rewriteName($node);
+                $this->rewriteNameNode($node);
                 break;
         }
     }
 
-    private function rewriteName(\PHPParser_Node_Name $node)
+    private function rewriteNameNode(\PHPParser_Node_Name $node)
     {
         if ($node->hasAttribute('visited')) {
             return;
         }
         $node->setAttribute('visited', true);
 
-        $name = implode("\\", $node->parts);
+        $newName = $this->rewriteName(implode("\\", $node->parts));
+        $node->parts = explode("\\", $newName);
+    }
+
+    private function rewriteName($name)
+    {
         if ( ! $this->shouldBeRewritten($name)) {
-            return;
+            return $name;
         }
 
-        $newParts = explode("\\", $this->prefix.$name);
-        $node->parts = $newParts;
+        // If the name has no namespace, we do not add one as it would require
+        // more complicated to the source code. Instead, we simply rewrite the
+        // name using the PEAR-style naming convention.
+        if (false === strpos($name, '\\')) {
+            return str_replace('\\', '_', $this->prefix).str_replace('\\', '_', $name);
+        }
+
+        return $this->prefix.$name;
     }
 
     private function shouldBeRewritten($name)

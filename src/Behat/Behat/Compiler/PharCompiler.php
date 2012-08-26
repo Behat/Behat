@@ -39,7 +39,7 @@ class PharCompiler
         $this->libPath = realpath(__DIR__ . '/../../../../');
         $this->phpParser = new \PHPParser_Parser(new \PHPParser_Lexer());
         $this->traverser = new \PHPParser_NodeTraverser();
-        $this->traverser->addVisitor($this->rewriter = new ClassNameRewritingVisitor('Behat\\Dependency\\', array('Symfony\\')));
+        $this->traverser->addVisitor($this->rewriter = new ClassNameRewritingVisitor('Behat\\Dependency\\', array('Symfony\\', 'Composer')));
         $this->printer = new \PHPParser_PrettyPrinter_Zend();
     }
 

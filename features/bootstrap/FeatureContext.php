@@ -12,6 +12,12 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
 // require parent class explicitly here
 require_once 'BaseFeaturesContext.php';
 
+if ( ! file_exists($autoloadFile = __DIR__.'/../../vendor/autoload.php')) {
+    echo 'Did not find vendor/autoload.php. Did you run "composer install --dev"?'.PHP_EOL;
+    exit(1);
+}
+require_once $autoloadFile;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
