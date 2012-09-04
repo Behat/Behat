@@ -1,3 +1,10 @@
+2.4.4 / 2012-09-12
+==================
+
+  * Fixed `RuntimeException` namespacing error
+  * Added `FormatterManager::disableFormatter(s)` method
+  * Updated Gherkin parser and fixed couple of helper bugs
+
 2.4.3 / 2012-07-28
 ==================
 

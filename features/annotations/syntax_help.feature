@@ -55,18 +55,18 @@ Feature: Syntax helpers
 
         [Предыстория|Контекст]:
           [Допустим|Дано|Пусть] there is agent A
-          [И|К тому же] there is agent B
+          [И|К тому же|Также] there is agent B
 
         Сценарий: Erasing agent memory
           [Допустим|Дано|Пусть] there is agent J
-          [И|К тому же] there is agent K
+          [И|К тому же|Также] there is agent K
           [Если|Когда] I erase agent K's memory
           [То|Тогда] there should be agent J
           [Но|А] there should not be agent K
 
         Структура сценария: Erasing other agents' memory
           [Допустим|Дано|Пусть] there is agent <agent1>
-          [И|К тому же] there is agent <agent2>
+          [И|К тому же|Также] there is agent <agent2>
           [Если|Когда] I erase agent <agent2>'s memory
           [То|Тогда] there should be agent <agent1>
           [Но|А] there should not be agent <agent2>

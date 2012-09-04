@@ -156,7 +156,7 @@ class BehatApplication extends Application
     protected function loadCoreExtension(ContainerBuilder $container, array $configs)
     {
         if (null === $this->basePath) {
-            throw new RuntimeException(
+            throw new \RuntimeException(
                 'Suite basepath is not set. Seems you have forgot to load configuration first.'
             );
         }
