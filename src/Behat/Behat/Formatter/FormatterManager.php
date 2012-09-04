@@ -2,6 +2,8 @@
 
 namespace Behat\Behat\Formatter;
 
+use Behat\Behat\Formatter\FormatterInterface;
+
 use Symfony\Component\Translation\Translator,
     Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -68,12 +70,10 @@ class FormatterManager
      */
     public function initFormatter($name)
     {
-        $name = strtolower($name);
-
         if (class_exists($name)) {
             $dispatcher = new FormatterDispatcher($name);
-        } elseif (isset($this->dispatchers[$name])) {
-            $dispatcher = $this->dispatchers[$name];
+        } elseif (isset($this->dispatchers[strtolower($name)])) {
+            $dispatcher = $this->dispatchers[strtolower($name)];
         } else {
             throw new \RuntimeException("Unknown formatter: \"$name\". " .
                 'Available formatters are: ' . implode(', ', array_keys($this->dispatchers))
@@ -108,5 +108,36 @@ class FormatterManager
     public function getFormatters()
     {
         return $this->formatters;
+    }
+
+    /**
+     * Disables formatter.
+     *
+     * @param FormatterInterface $formatter
+     */
+    public function disableFormatter(FormatterInterface $formatter)
+    {
+        $unsubscribe = array($this->eventDispatcher, 'removeSubscriber');
+        $this->formatters = array_filter($this->formatters,
+            function($registered) use($formatter, $unsubscribe) {
+                if ($registered === $formatter) {
+                    call_user_func($unsubscribe, $registered);
+
+                    return false;
+                }
+
+                return true;
+            }
+        );
+    }
+
+    /**
+     * Disables all initialized formatters.
+     */
+    public function disableFormatters()
+    {
+        foreach ($this->getFormatters() as $formatter) {
+            $this->disableFormatter($formatter);
+        }
     }
 }
