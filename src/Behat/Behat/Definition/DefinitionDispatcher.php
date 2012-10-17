@@ -35,6 +35,12 @@ class DefinitionDispatcher
     private $proposalDispatcher;
     private $translator;
 
+    /** 
+     * Set during initialization so we can re-load later in the process.
+     * @property AnnotatedLoader
+     */
+    private $definitionLoader = NULL;
+
     /**
      * Initializes definition dispatcher.
      *
@@ -46,7 +52,15 @@ class DefinitionDispatcher
         $this->proposalDispatcher   = $proposalDispatcher;
         $this->translator           = $translator;
     }
-
+    
+    /**
+     * An annotatedLoader callable late for just-in-time subcontext loading
+     * @param AnnotatedLoader $loader
+     */
+    public function setDefinitionLoader(\Behat\Behat\Context\Loader\AnnotatedLoader $loader) {
+      $this->definitionLoader = $loader;
+    }
+    
     /**
      * Adds definition to dispatcher.
      *
@@ -123,6 +137,9 @@ class DefinitionDispatcher
         $multiline  = $step->getArguments();
         $matches    = array();
 
+        // Load definitions for this context (and subcontexts)
+        $this->definitionLoader->load($context);
+        
         // find step to match
         foreach ($this->getDefinitions() as $origRegex => $definition) {
             $transRegex = $this->translateDefinitionRegex($origRegex, $step->getLanguage());

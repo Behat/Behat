@@ -8,6 +8,7 @@ use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Definition\TransformationInterface,
     Behat\Behat\Hook\HookDispatcher,
     Behat\Behat\Hook\HookInterface,
+    Behat\Behat\Context\SubcontextableContextInterface,
     Behat\Behat\Annotation\AnnotationInterface;
 
 /*
@@ -54,6 +55,7 @@ class AnnotatedLoader implements LoaderInterface
         $this->definitionDispatcher = $definitionDispatcher;
         $this->hookDispatcher       = $hookDispatcher;
         $this->availableAnnotations = implode("|", array_keys($this->annotationClasses));
+        $definitionDispatcher->setDefinitionLoader($this);
     }
 
     /**
@@ -75,6 +77,22 @@ class AnnotatedLoader implements LoaderInterface
      */
     public function load(ContextInterface $context)
     {
+        // Keeps track of previously-loaded contexts to skip
+        static $loadedContexts = array();
+        
+        // depth-first subcontext loading
+        if ($context instanceof SubcontextableContextInterface) {
+            foreach ($context->getSubcontexts() as $subcontext) {
+                $this->load($subcontext);
+            }
+        }
+        // skip if already visited, else mark visited.
+        $contextHash = get_class($context);
+        if(in_array($contextHash, $loadedContexts)) {
+          return;
+        }
+        array_push($loadedContexts, $contextHash);
+        
         $reflection = new \ReflectionObject($context);
 
         foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $methodRefl) {
