@@ -21,8 +21,20 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class Extension implements ExtensionInterface
+class Extension implements ExtensionInterface
 {
+    private $path;
+
+    /**
+     * Initializes extension.
+     *
+     * @param string $path path to extension directory
+     */
+    public function __construct($path = null)
+    {
+        $this->path = $path;
+    }
+
     /**
      * Loads a specific configuration.
      *
@@ -31,12 +43,12 @@ abstract class Extension implements ExtensionInterface
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        if (file_exists($config = __DIR__.DIRECTORY_SEPARATOR.'services.xml')) {
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/config'));
+        if (file_exists($this->getExtensionPath().($config = get_class($this).'Services.xml'))) {
+            $loader = new XmlFileLoader($container, new FileLocator($this->getExtensionPath()));
             $loader->load($config);
         }
-        if (file_exists($config = __DIR__.DIRECTORY_SEPARATOR.'services.yml')) {
-            $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/config'));
+        if (file_exists($this->getExtensionPath().($config = get_class($this).'Services.yml'))) {
+            $loader = new YamlFileLoader($container, new FileLocator($this->getExtensionPath()));
             $loader->load($config);
         }
     }
@@ -62,5 +74,15 @@ abstract class Extension implements ExtensionInterface
     public function getCompilerPasses()
     {
         return array();
+    }
+
+    /**
+     * Returns path to the extension directory.
+     *
+     * @return string
+     */
+    private function getExtensionPath()
+    {
+        return rtrim($this->path ?: __DIR__, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
     }
 }
