@@ -1,5 +1,5 @@
 {
-    "name":         "behat/behat",
+    "name":         "trahey/behat",
     "description":  "Scenario-oriented BDD framework for PHP 5.3",
     "keywords":     ["BDD", "Behat", "Symfony2"],
     "homepage":     "http://behat.org/",
