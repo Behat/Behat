@@ -13,6 +13,7 @@ use Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher,
     Behat\Behat\Exception\AmbiguousException,
     Behat\Behat\Exception\UndefinedException,
     Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Context\Loader\LoaderInterface,
     Behat\Behat\Definition\DefinitionSnippet;
 
 /*
@@ -56,11 +57,11 @@ class DefinitionDispatcher
      * An annotatedLoader callable late for just-in-time subcontext loading
      * @param AnnotatedLoader $loader
      */
-    public function setDefinitionLoader(\Behat\Behat\Context\Loader\AnnotatedLoader $loader) 
+    public function setDefinitionLoader(LoaderInterface $loader) 
     {
       $this->definitionLoader = $loader;
     }
-    
+
     /**
      * Adds definition to dispatcher.
      *

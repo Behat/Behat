@@ -89,10 +89,10 @@ class AnnotatedLoader implements LoaderInterface
         // skip if already visited, else mark visited.
         $contextHash = get_class($context);
         if(in_array($contextHash, $loadedContexts)) {
-          return;
+            return;
         }
         array_push($loadedContexts, $contextHash);
-        
+
         $reflection = new \ReflectionObject($context);
 
         foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $methodRefl) {
