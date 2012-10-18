@@ -79,7 +79,7 @@ class AnnotatedLoader implements LoaderInterface
     {
         // Keeps track of previously-loaded contexts to skip
         static $loadedContexts = array();
-        
+
         // depth-first subcontext loading
         if ($context instanceof SubcontextableContextInterface) {
             foreach ($context->getSubcontexts() as $subcontext) {

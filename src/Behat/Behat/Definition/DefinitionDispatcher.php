@@ -37,7 +37,6 @@ class DefinitionDispatcher
 
     /** 
      * Set during initialization so we can re-load later in the process.
-     * @property AnnotatedLoader
      */
     private $definitionLoader = NULL;
 
@@ -57,7 +56,8 @@ class DefinitionDispatcher
      * An annotatedLoader callable late for just-in-time subcontext loading
      * @param AnnotatedLoader $loader
      */
-    public function setDefinitionLoader(\Behat\Behat\Context\Loader\AnnotatedLoader $loader) {
+    public function setDefinitionLoader(\Behat\Behat\Context\Loader\AnnotatedLoader $loader) 
+    {
       $this->definitionLoader = $loader;
     }
     
