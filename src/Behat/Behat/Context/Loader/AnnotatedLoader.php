@@ -88,7 +88,7 @@ class AnnotatedLoader implements LoaderInterface
         }
         // skip if already visited, else mark visited.
         $contextHash = get_class($context);
-        if(in_array($contextHash, $loadedContexts)) {
+        if (in_array($contextHash, $loadedContexts)) {
             return;
         }
         array_push($loadedContexts, $contextHash);
