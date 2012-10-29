@@ -107,9 +107,9 @@ class ExtensionManager
         if (class_exists($id)) {
             $extension = new $id;
         } elseif (file_exists($this->basePath.DIRECTORY_SEPARATOR.$id)) {
-            $extension = require($this->basePath.DIRECTORY_SEPARATOR.$id);
+            require($this->basePath.DIRECTORY_SEPARATOR.$id);
         } else {
-            $extension = require($id);
+            require($id);
         }
 
         if (null === $extension) {
