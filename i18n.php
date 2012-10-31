@@ -155,6 +155,19 @@
         'undefined_count'     => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
         'skipped_count'       => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
     ),
+    'sk' =>
+    array(
+        'proposal_title' => 'Môžete implementovať definície krokov pre nedefinované kroky za pomoci týchto kusov kódu (snippetov):',
+        'failed_steps_title' => 'neúspešné kroky',
+        'pending_steps_title' => 'čakajúce kroky',
+        'scenarios_count' => '{0} Žiaden scenár|{1} 1 scenár||{2,3,4} %1% scenáre|]4,Inf] %1% scenárov',
+        'steps_count' => '{0} Žiaden krok|{1} 1 krok|{2,3,4} %1% kroky|]4,Inf] %1% krokov',
+        'passed_count' => '{1} %1% prešiel|{2,3,4} %1% prešli|]4,Inf] %1% prešlo',
+        'failed_count' => '{1} %1% zlyhal|{2,3,4} %1% zlyhali|]4,Inf] %1% zlyhalo',
+        'pending_count' => '{1} %1% čaká|{2,3,4} %1% čakajú|]4,Inf] %1% čaká',
+        'undefined_count' => '{1} %1% nedefinovaný|{2,3,4} %1% nedefinované|]4,Inf] %1% nedefinovaných',
+        'skipped_count' => '{1} %1% preskočený|{2,3,4} %1% preskočené|]4,Inf] %1% preskočených',
+    ),
     'zh-CN' =>
     array (
         'proposal_title' => '你可以通过以下代码片段对未定义的步骤实现步骤定义：',
