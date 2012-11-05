@@ -13,7 +13,16 @@ define('BEHAT_PHP_BIN_PATH', getenv('PHP_PEAR_PHP_BIN') ?: '/usr/bin/env php');
 define('BEHAT_BIN_PATH',     __FILE__);
 define('BEHAT_VERSION',      'DEV');
 
-if (is_dir($vendor = __DIR__.'/../vendor')) {
+$vendorDir = 'vendor';
+
+if (file_exists($config = __DIR__.'/../composer.json')) {
+	$config = json_decode(file_get_contents($config), true);
+	if (isset($config['config']['vendor-dir'])) {
+		$vendorDir = $config['config']['vendor-dir'];
+	}
+}
+
+if (is_dir($vendor = __DIR__.'/../'.$vendorDir)) {
     require($vendor.'/autoload.php');
 } elseif (is_dir($vendor = __DIR__.'/../../..')) {
     require($vendor.'/autoload.php');
