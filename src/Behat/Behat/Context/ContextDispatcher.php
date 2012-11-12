@@ -122,7 +122,7 @@ class ContextDispatcher
      *
      * @param ContextInterface $context
      */
-    private function initializeContext(ContextInterface $context)
+    public function initializeContext(ContextInterface $context)
     {
         foreach ($this->initializers as $initializer) {
             if ($initializer->supports($context)) {
