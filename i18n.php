@@ -131,16 +131,16 @@
     ),
     'pt' =>
     array (
-        'proposal_title'      => 'Você pode implementar definições de passos para aqueles ainda não definidos utilizando-se destes trechos:',
-        'failed_steps_title'  => 'passos que falharam',
+        'proposal_title'      => 'Para os passos não definidos você pode implementar as suas definições usando estes exemplos:',
+        'failed_steps_title'  => 'passos falhados',
         'pending_steps_title' => 'passos pendentes',
         'scenarios_count'     => '{0} Nenhum cenário|{1} 1 cenário|]1,Inf] %1% cenários',
         'steps_count'         => '{0} Nenhum passo|{1} 1 passo|]1,Inf] %1% passos',
-        'passed_count'        => '{1} passou|]1,Inf] %1% passaram',
-        'failed_count'        => '{1} falhou|]1,Inf] %1% falharam ',
-        'pending_count'       => '{1} pendente|]1,Inf] %1% pendentes',
-        'undefined_count'     => '{1} indefinido|]1,Inf] %1% indefinidos',
-        'skipped_count'       => '{1} ignorado|]1,Inf] %1% ignorados',
+        'passed_count'        => '{1} %1% passou|]1,Inf] %1% passaram',
+        'failed_count'        => '{1} %1% falhou|]1,Inf] %1% falharam ',
+        'pending_count'       => '{1} %1% pendente|]1,Inf] %1% pendentes',
+        'undefined_count'     => '{1} %1% indefinido|]1,Inf] %1% indefinidos',
+        'skipped_count'       => '{1} %1% ignorado|]1,Inf] %1% ignorados',
     ),
     'ru' =>
     array (
