@@ -16,13 +16,13 @@
     "require": {
         "php":                           ">=5.3.1",
         "behat/gherkin":                 ">=2.2.4,<2.3.0-dev",
-        "symfony/console":               ">=2.0.0,<2.2.0-dev",
-        "symfony/config":                ">=2.0.0,<2.2.0-dev",
-        "symfony/dependency-injection":  ">=2.0.0,<2.2.0-dev",
-        "symfony/event-dispatcher":      ">=2.0.0,<2.2.0-dev",
-        "symfony/translation":           ">=2.0.0,<2.2.0-dev",
-        "symfony/yaml":                  ">=2.0.0,<2.2.0-dev",
-        "symfony/finder":                ">=2.0.0,<2.2.0-dev"
+        "symfony/console":               ">=2.0.0,<2.3.0-dev",
+        "symfony/config":                ">=2.0.0,<2.3.0-dev",
+        "symfony/dependency-injection":  ">=2.0.0,<2.3.0-dev",
+        "symfony/event-dispatcher":      ">=2.0.0,<2.3.0-dev",
+        "symfony/translation":           ">=2.0.0,<2.3.0-dev",
+        "symfony/yaml":                  ">=2.0.0,<2.3.0-dev",
+        "symfony/finder":                ">=2.0.0,<2.3.0-dev"
     },
 
     "suggest": {
