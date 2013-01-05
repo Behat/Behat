@@ -177,7 +177,7 @@ class BehatApplication extends Application
     /**
      * {@inheritdoc}
      */
-    protected function getTerminalWidth()
+    public function getTerminalWidth()
     {
         return PHP_INT_MAX;
     }
