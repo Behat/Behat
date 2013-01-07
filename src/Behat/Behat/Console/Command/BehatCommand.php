@@ -175,7 +175,7 @@ class BehatCommand extends BaseCommand
     {
         $dispatcher = $this->getContainer()->get('behat.event_dispatcher');
         $logger     = $this->getContainer()->get('behat.logger');
-        $parameters = $this->getContainer()->get('behat.context.dispatcher')->getContextParameters();
+        $parameters = $this->getContainer()->getParameter('behat.context.parameters');
 
         $dispatcher->dispatch('beforeSuite', new SuiteEvent($logger, $parameters, false));
 
