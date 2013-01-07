@@ -4,12 +4,24 @@ namespace Behat\Behat\Context\Dispatcher;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Dispatcher fetching the context from the service container. It's up to
+ * the service container to either create a new instance or reuse an existing
+ * one.
+ */
 class Injectable extends AbstractDispatcher
 {
     private $container;
     private $contextId;
     private $className;
 
+    /**
+     * Constructor
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $serviceContainer
+     * @param $contextId
+     * @param $className
+     */
     public function __construct(ContainerInterface $serviceContainer, $contextId, $className)
     {
         $this->container = $serviceContainer;
