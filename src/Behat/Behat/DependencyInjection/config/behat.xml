@@ -59,6 +59,7 @@
         <parameter key="behat.context.class.force">false</parameter>
         <parameter key="behat.context.parameters" type="collection"></parameter>
         <parameter key="behat.context.dispatcher.instantiating.class">Behat\Behat\Context\Dispatcher\Instantiating</parameter>
+        <parameter key="behat.context.dispatcher.injectable.class">Behat\Behat\Context\Dispatcher\Injectable</parameter>
         <parameter key="behat.context.reader.class">Behat\Behat\Context\ContextReader</parameter>
         <parameter key="behat.context.class_guesser.predefined.class">Behat\Behat\Context\ClassGuesser\PredefinedClassGuesser</parameter>
         <parameter key="behat.context.loader.translated.class">Behat\Behat\Context\Loader\TranslatedLoader</parameter>
@@ -170,6 +171,14 @@
         </service>
         <service id="behat.context.dispatcher" alias="behat.context.dispatcher.instantiating" />
         <service id="behat.context.dispatcher.instantiating" class="%behat.context.dispatcher.instantiating.class%">
+            <argument>%behat.context.parameters%</argument>
+        </service>
+        <service id="behat.context.dispatcher.injectable" class="%behat.context.dispatcher.injectable.class%">
+            <argument type="service" id="service_container"></argument>
+            <argument>behat.context.injectable</argument>
+            <argument>%behat.context.class%</argument>
+        </service>
+        <service id="behat.context.injectable" class="%behat.context.class%" scope="prototype">
             <argument>%behat.context.parameters%</argument>
         </service>
         <service id="behat.context.class_guesser.predefined" class="%behat.context.class_guesser.predefined.class%">
