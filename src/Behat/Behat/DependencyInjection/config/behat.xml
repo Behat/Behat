@@ -58,7 +58,7 @@
         <parameter key="behat.context.class">FeatureContext</parameter>
         <parameter key="behat.context.class.force">false</parameter>
         <parameter key="behat.context.parameters" type="collection"></parameter>
-        <parameter key="behat.context.dispatcher.class">Behat\Behat\Context\ContextDispatcher</parameter>
+        <parameter key="behat.context.dispatcher.class">Behat\Behat\Context\Dispatcher\Instantiating</parameter>
         <parameter key="behat.context.reader.class">Behat\Behat\Context\ContextReader</parameter>
         <parameter key="behat.context.class_guesser.predefined.class">Behat\Behat\Context\ClassGuesser\PredefinedClassGuesser</parameter>
         <parameter key="behat.context.loader.translated.class">Behat\Behat\Context\Loader\TranslatedLoader</parameter>

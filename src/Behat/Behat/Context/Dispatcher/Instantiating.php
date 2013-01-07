@@ -1,6 +1,10 @@
 <?php
 
-namespace Behat\Behat\Context;
+namespace Behat\Behat\Context\Dispatcher;
+
+use Behat\Behat\Context\ClassGuesser\ClassGuesserInterface,
+    Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Context\Initializer\InitializerInterface;
 
 /*
  * This file is part of the Behat.
@@ -11,11 +15,11 @@ namespace Behat\Behat\Context;
  */
 
 /**
- * Context dispatcher.
+ * Context dispatcher directly instantiating new contexts.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextDispatcher
+class Instantiating implements DispatcherInterface
 {
     private $classGuessers = array();
     private $initializers  = array();
@@ -34,9 +38,9 @@ class ContextDispatcher
     /**
      * Adds context class guesser to the dispatcher.
      *
-     * @param ClassGuesser\ClassGuesserInterface $guesser
+     * @param ClassGuesserInterface $guesser
      */
-    public function addClassGuesser(ClassGuesser\ClassGuesserInterface $guesser)
+    public function addClassGuesser(ClassGuesserInterface $guesser)
     {
         $this->classGuessers[] = $guesser;
     }
@@ -44,9 +48,9 @@ class ContextDispatcher
     /**
      * Adds context initializer to the dispatcher.
      *
-     * @param Initializer\InitializerInterface $initializer
+     * @param InitializerInterface $initializer
      */
-    public function addInitializer(Initializer\InitializerInterface $initializer)
+    public function addInitializer(InitializerInterface $initializer)
     {
         $this->initializers[] = $initializer;
     }
@@ -54,6 +58,7 @@ class ContextDispatcher
     /**
      * Returns context classname.
      *
+     * @throws \RuntimeException If no class can be found or class can not be created
      * @return string
      */
     public function getContextClass()
