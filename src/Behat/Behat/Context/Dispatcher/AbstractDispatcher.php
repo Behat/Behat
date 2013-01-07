@@ -12,18 +12,7 @@ use Behat\Behat\Context\ClassGuesser\ClassGuesserInterface,
  */
 abstract class AbstractDispatcher implements DispatcherInterface
 {
-    private $classGuessers = array();
     private $initializers  = array();
-
-    /**
-     * Adds context class guesser to the dispatcher.
-     *
-     * @param ClassGuesserInterface $guesser
-     */
-    public function addClassGuesser(ClassGuesserInterface $guesser)
-    {
-        $this->classGuessers[] = $guesser;
-    }
 
     /**
      * Adds context initializer to the dispatcher.
@@ -33,45 +22,6 @@ abstract class AbstractDispatcher implements DispatcherInterface
     public function addInitializer(InitializerInterface $initializer)
     {
         $this->initializers[] = $initializer;
-    }
-
-    /**
-     * Returns context classname.
-     *
-     * @throws \RuntimeException If no class can be found or class can not be created
-     * @return string
-     */
-    public function getContextClass()
-    {
-        $classname = null;
-        foreach ($this->classGuessers as $guesser) {
-            if ($classname = $guesser->guess()) {
-                break;
-            }
-        }
-
-        if (null === $classname) {
-            throw new \RuntimeException(
-                'Context class not found.'."\n".
-                    'Maybe you have provided wrong or no `bootstrap` path in your behat.yml:'."\n".
-                    'http://docs.behat.org/guides/7.config.html#paths'
-            );
-        }
-
-        if (!class_exists($classname)) {
-            throw new \RuntimeException(sprintf(
-                'Context class "%s" not found and can not be instantiated.', $classname
-            ));
-        }
-
-        $contextClassRefl = new \ReflectionClass($classname);
-        if (!$contextClassRefl->implementsInterface('Behat\Behat\Context\ContextInterface')) {
-            throw new \RuntimeException(sprintf(
-                'Context class "%s" should implement ContextInterface', $classname
-            ));
-        }
-
-        return $classname;
     }
 
     /**

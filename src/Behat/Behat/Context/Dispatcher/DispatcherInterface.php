@@ -2,8 +2,7 @@
 
 namespace Behat\Behat\Context\Dispatcher;
 
-use Behat\Behat\Context\ClassGuesser\ClassGuesserInterface,
-    Behat\Behat\Context\Initializer\InitializerInterface;
+use Behat\Behat\Context\Initializer\InitializerInterface;
 
 /**
  * Interface for context dispatchers (creating new context objects after each
@@ -11,13 +10,6 @@ use Behat\Behat\Context\ClassGuesser\ClassGuesserInterface,
  */
 interface DispatcherInterface
 {
-    /**
-     * Adds context class guesser to the dispatcher.
-     *
-     * @param ClassGuesserInterface $guesser
-     */
-    public function addClassGuesser(ClassGuesserInterface $guesser);
-
     /**
      * Adds context initializer to the dispatcher.
      *
