@@ -2,8 +2,8 @@
 
 namespace Behat\Behat\Context\Dispatcher;
 
-use Behat\Behat\Context\ClassGuesser\ClassGuesserInterface,
-    Behat\Behat\Context\ContextInterface,
+use Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Context\SubcontextableContextInterface,
     Behat\Behat\Context\Initializer\InitializerInterface;
 
 /*
