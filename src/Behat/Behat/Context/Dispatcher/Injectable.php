@@ -23,20 +23,17 @@ class Injectable extends AbstractDispatcher
 {
     private $container;
     private $contextId;
-    private $className;
 
     /**
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $serviceContainer
      * @param string $contextId
-     * @param string $className
      */
-    public function __construct(ContainerInterface $serviceContainer, $contextId, $className)
+    public function __construct(ContainerInterface $serviceContainer, $contextId)
     {
         $this->container = $serviceContainer;
         $this->contextId = $contextId;
-        $this->className = $className;
     }
 
     /**
@@ -48,17 +45,16 @@ class Injectable extends AbstractDispatcher
      */
     public function createContext()
     {
-        try {
-            $context = $this->container->get($this->contextId);
-        } catch (\ReflectionException $e) {
+        if (!$this->container->has($this->contextId)) {
             throw new \RuntimeException(sprintf(
-                'Context class "%s" not found and can not be instantiated.', $this->className
+                'Context service "%s" not found.', $this->contextId
             ));
         }
 
+        $context = $this->container->get($this->contextId);
         if (!$context instanceof ContextInterface) {
             throw new \RuntimeException(sprintf(
-                'Context class "%s" must implement ContextInterface', $this->className
+                'Context service "%s" must implement ContextInterface', $this->contextId
             ));
         }
 
@@ -74,6 +70,12 @@ class Injectable extends AbstractDispatcher
      */
     public function getContextClass()
     {
-        return $this->className;
+        if (!$this->container->has($this->contextId)) {
+            throw new \RuntimeException(sprintf(
+                'Context service "%s" not found.', $this->contextId
+            ));
+        }
+
+        return get_class($this->container->get($this->contextId));
     }
 }

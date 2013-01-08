@@ -176,7 +176,6 @@
         <service id="behat.context.dispatcher.injectable" class="%behat.context.dispatcher.injectable.class%">
             <argument type="service" id="service_container"></argument>
             <argument>behat.context.injectable</argument>
-            <argument>%behat.context.class%</argument>
         </service>
         <service id="behat.context.injectable" class="%behat.context.class%" scope="prototype">
             <argument>%behat.context.parameters%</argument>
