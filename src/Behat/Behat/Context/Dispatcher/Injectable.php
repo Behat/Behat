@@ -2,7 +2,17 @@
 
 namespace Behat\Behat\Context\Dispatcher;
 
+use Behat\Behat\Context\ContextInterface;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 /**
  * Dispatcher fetching the context from the service container. It's up to
@@ -19,8 +29,8 @@ class Injectable extends AbstractDispatcher
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $serviceContainer
-     * @param $contextId
-     * @param $className
+     * @param string $contextId
+     * @param string $className
      */
     public function __construct(ContainerInterface $serviceContainer, $contextId, $className)
     {
@@ -46,7 +56,7 @@ class Injectable extends AbstractDispatcher
             ));
         }
 
-        if (!$context instanceof \Behat\Behat\Context\ContextInterface) {
+        if (!$context instanceof ContextInterface) {
             throw new \RuntimeException(sprintf(
                 'Context class "%s" must implement ContextInterface', $this->className
             ));

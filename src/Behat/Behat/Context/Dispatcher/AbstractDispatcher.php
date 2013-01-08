@@ -6,6 +6,14 @@ use Behat\Behat\Context\ClassGuesser\ClassGuesserInterface,
     Behat\Behat\Context\ContextInterface,
     Behat\Behat\Context\Initializer\InitializerInterface;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 /**
  * Dispatcher implementation providing the basic class guesser and initializer
  * logic.

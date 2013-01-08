@@ -4,6 +4,14 @@ namespace Behat\Behat\Context\Dispatcher;
 
 use Behat\Behat\Context\Initializer\InitializerInterface;
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 /**
  * Interface for context dispatchers (creating new context objects after each
  * scenario).

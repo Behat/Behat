@@ -89,8 +89,8 @@ class Instantiating extends AbstractDispatcher
         if (null === $classname) {
             throw new \RuntimeException(
                 'Context class not found.'."\n".
-                    'Maybe you have provided wrong or no `bootstrap` path in your behat.yml:'."\n".
-                    'http://docs.behat.org/guides/7.config.html#paths'
+                'Maybe you have provided wrong or no `bootstrap` path in your behat.yml:'."\n".
+                'http://docs.behat.org/guides/7.config.html#paths'
             );
         }
 
