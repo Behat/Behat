@@ -4,6 +4,11 @@ php:
   - 5.3
   - 5.4
 
+env:
+  - SYMFONY_VERSION='2.0.*'
+  - SYMFONY_VERSION='2.1.*'
+  - SYMFONY_VERSION='2.2.*@dev'
+
 branches:
   only:
     - master
@@ -11,6 +16,7 @@ branches:
 
 before_script:
   - curl http://getcomposer.org/installer | php
+  - php composer.phar require --no-update symfony/symfony=$SYMFONY_VERSION
   - php composer.phar install --dev
 
 script: bin/behat -fprogress --tags ~@php540
