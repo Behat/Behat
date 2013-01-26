@@ -17,6 +17,6 @@ branches:
 before_script:
   - curl http://getcomposer.org/installer | php
   - php composer.phar require --no-update symfony/symfony=$SYMFONY_VERSION
-  - php composer.phar install --dev
+  - php composer.phar install --dev --prefer-source
 
 script: bin/behat -fprogress --tags ~@php540
