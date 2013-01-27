@@ -14,10 +14,9 @@ branches:
     - master
     - develop
 
-before_script:
-  - curl http://getcomposer.org/installer | php
-  - php composer.phar require --no-update symfony/symfony=$SYMFONY_VERSION
-  - php composer.phar install --dev --prefer-source
+before_script: 
+  - composer require --no-update symfony/symfony=$SYMFONY_VERSION
+  - composer install --dev --prefer-source
   - export PATH=./bin:$PATH
 
 script: behat -fprogress --tags '~@php-version,@php'`php -r 'echo substr(phpversion(), 0, 3);'`
