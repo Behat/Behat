@@ -1,3 +1,15 @@
+2.4.5 / 2013-01-27
+==================
+
+  * Added wrapping of lines in progress formatter
+  * Added `--append-to` option to be able to add snippets to custom class
+  * Both `ScenarioEvent` and `OutlineExampleEvent` now extend same `BaseScenarioEvent` class
+  * Highly improved ability to create simple custom extensions
+  * Always hide stack traces for `PendingException`
+  * Ensured compatibility with all major symfony versions
+  * Fixed configs import directive and loading precedence
+  * Fixed path to vendor dir (solves problem of custom vendor dirs)
+
 2.4.4 / 2012-09-12
 ==================
 
