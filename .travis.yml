@@ -21,4 +21,4 @@ before_script:
 
 script:
   - bin/behat -fprogress --tags ~@php-version
-  - bin/behat -fprogress --tags '@php'`php -r 'echo substr(phpversion(), 0, 3);'``'`
+  - bin/behat -fprogress --tags '@php'`php -r 'echo substr(phpversion(), 0, 3);'`
