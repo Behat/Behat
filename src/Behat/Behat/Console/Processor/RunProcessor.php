@@ -56,6 +56,9 @@ class RunProcessor extends Processor
             ->addOption('--append-snippets', null, InputOption::VALUE_NONE,
                 "Appends snippets for undefined steps into main context."
             )
+            ->addOption('--append-to', null, InputOption::VALUE_REQUIRED,
+                "Appends snippets for undefined steps into specified class."
+            )
         ;
     }
 
@@ -92,20 +95,28 @@ class RunProcessor extends Processor
                 ->setParameter('output_path', $file);
         }
 
-        if ($input->getOption('append-snippets') || $this->container->getParameter('behat.options.append_snippets')) {
+        if ($input->getOption('append-snippets')) {
             $this->initializeSnippetsAppender();
+        } elseif ($class = $input->getOption('append-to')) {
+            $this->initializeSnippetsAppender($class);
+        } elseif ($class = $this->container->getParameter('behat.options.append_snippets')) {
+            $this->initializeSnippetsAppender(true !== $class ? $class : null);
         }
     }
 
     /**
      * Appends snippets to the main context after suite run.
+     *
+     * @param string $class
      */
-    protected function initializeSnippetsAppender()
+    protected function initializeSnippetsAppender($class = null)
     {
-        $contextRefl = new \ReflectionClass(
-            $this->container->get('behat.context.dispatcher')->getContextClass()
-        );
+        $classname = (null !== $class)
+            ? str_replace('/', '\\', $class)
+            : $this->container->get('behat.context.dispatcher')->getContextClass()
+        ;
 
+        $contextRefl = new \ReflectionClass($classname);
         if ($contextRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {
             throw new \RuntimeException(
                 '--append-snippets doesn\'t support closured contexts'
