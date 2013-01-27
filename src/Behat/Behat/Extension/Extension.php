@@ -23,18 +23,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
  */
 class Extension implements ExtensionInterface
 {
-    private $path;
-
-    /**
-     * Initializes extension.
-     *
-     * @param string $path path to extension directory
-     */
-    public function __construct($path = null)
-    {
-        $this->path = $path;
-    }
-
     /**
      * Loads a specific configuration.
      *
@@ -43,14 +31,19 @@ class Extension implements ExtensionInterface
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        if (file_exists($this->getExtensionPath().($config = get_class($this).'Services.xml'))) {
-            $loader = new XmlFileLoader($container, new FileLocator($this->getExtensionPath()));
-            $loader->load($config);
+        $path = rtrim($this->getServiceDefinitionsPath(), DIRECTORY_SEPARATOR);
+        $name = $this->getServiceDefinitionsName();
+
+        if (file_exists($path.DIRECTORY_SEPARATOR.($file = $name.'.xml'))) {
+            $loader = new XmlFileLoader($container, new FileLocator($path));
+            $loader->load($file);
         }
-        if (file_exists($this->getExtensionPath().($config = get_class($this).'Services.yml'))) {
-            $loader = new YamlFileLoader($container, new FileLocator($this->getExtensionPath()));
-            $loader->load($config);
+        if (file_exists($path.DIRECTORY_SEPARATOR.($file = $name.'.yml'))) {
+            $loader = new YamlFileLoader($container, new FileLocator($path));
+            $loader->load($file);
         }
+
+        $container->setParameter($this->getExtensionName().'.parameters', $config);
     }
 
     /**
@@ -77,12 +70,34 @@ class Extension implements ExtensionInterface
     }
 
     /**
-     * Returns path to the extension directory.
+     * Returns extension name used to store extension parameters in DIC.
      *
      * @return string
      */
-    private function getExtensionPath()
+    protected function getExtensionName()
     {
-        return rtrim($this->path ?: __DIR__, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+        return strtolower(ltrim(preg_replace('/[A-Z]/', "_$0", get_class($this)), '_'));
+    }
+
+    /**
+     * Returns name of the service definition config without extension and path.
+     *
+     * @return string
+     */
+    protected function getServiceDefinitionsName()
+    {
+        return get_class($this).'Services';
+    }
+
+    /**
+     * Returns service definition configs path.
+     *
+     * @return string
+     */
+    protected function getServiceDefinitionsPath()
+    {
+        $refl = new \ReflectionClass($this);
+
+        return dirname($refl->getFileName());
     }
 }
