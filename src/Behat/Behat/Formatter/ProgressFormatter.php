@@ -182,7 +182,7 @@ class ProgressFormatter extends ConsoleFormatter
             if (null !== $exception) {
                 $color = $exception instanceof PendingException ? 'pending' : 'failed';
 
-                if ($this->parameters->get('verbose')) {
+                if ($this->parameters->get('verbose') && 'pending' !== $color) {
                     $error = (string) $exception;
                 } else {
                     $error = $exception->getMessage();
