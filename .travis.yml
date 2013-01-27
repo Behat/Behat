@@ -19,4 +19,6 @@ before_script:
   - php composer.phar require --no-update symfony/symfony=$SYMFONY_VERSION
   - php composer.phar install --dev --prefer-source
 
-script: bin/behat -fprogress --tags ~@php540
+script:
+  - bin/behat -fprogress --tags ~@php-version
+  - bin/behat -fprogress --tags '@php'`php -r 'echo substr(phpversion(), 0, 3);'``'`

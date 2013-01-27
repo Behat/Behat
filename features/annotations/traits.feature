@@ -1,4 +1,4 @@
-@php540
+@php-version @php5.4
 Feature: Support php 5.4 traits
   In order to have much cleaner horizontal reusability
   As a context developer
