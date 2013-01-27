@@ -2,8 +2,6 @@
 
 namespace Behat\Behat\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-
 use Behat\Behat\Context\ContextInterface;
 
 use Behat\Gherkin\Node\ScenarioNode;
@@ -21,12 +19,9 @@ use Behat\Gherkin\Node\ScenarioNode;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ScenarioEvent extends Event implements EventInterface
+class ScenarioEvent extends BaseScenarioEvent
 {
     private $scenario;
-    private $context;
-    private $result;
-    private $skipped;
 
     /**
      * Initializes scenario event.
@@ -40,9 +35,8 @@ class ScenarioEvent extends Event implements EventInterface
                                 $skipped = false)
     {
         $this->scenario = $scenario;
-        $this->context  = $context;
-        $this->result   = $result;
-        $this->skipped  = $skipped;
+
+        parent::__construct($context, $result, $skipped);
     }
 
     /**
@@ -53,35 +47,5 @@ class ScenarioEvent extends Event implements EventInterface
     public function getScenario()
     {
         return $this->scenario;
-    }
-
-    /**
-     * Returns context object.
-     *
-     * @return ContextInterface
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     * Returns scenario tester result code.
-     *
-     * @return integer
-     */
-    public function getResult()
-    {
-        return $this->result;
-    }
-
-    /**
-     * Checks whether scenario were skipped.
-     *
-     * @return Boolean
-     */
-    public function isSkipped()
-    {
-        return $this->skipped;
     }
 }

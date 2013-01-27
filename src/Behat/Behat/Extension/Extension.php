@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class Extension implements ExtensionInterface
+class Extension implements ExtensionInterface
 {
     /**
      * Loads a specific configuration.
@@ -31,14 +31,19 @@ abstract class Extension implements ExtensionInterface
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        if (file_exists($config = __DIR__.DIRECTORY_SEPARATOR.'services.xml')) {
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/config'));
-            $loader->load($config);
+        $path = rtrim($this->getServiceDefinitionsPath(), DIRECTORY_SEPARATOR);
+        $name = $this->getServiceDefinitionsName();
+
+        if (file_exists($path.DIRECTORY_SEPARATOR.($file = $name.'.xml'))) {
+            $loader = new XmlFileLoader($container, new FileLocator($path));
+            $loader->load($file);
         }
-        if (file_exists($config = __DIR__.DIRECTORY_SEPARATOR.'services.yml')) {
-            $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/config'));
-            $loader->load($config);
+        if (file_exists($path.DIRECTORY_SEPARATOR.($file = $name.'.yml'))) {
+            $loader = new YamlFileLoader($container, new FileLocator($path));
+            $loader->load($file);
         }
+
+        $container->setParameter($this->getExtensionName().'.parameters', $config);
     }
 
     /**
@@ -62,5 +67,37 @@ abstract class Extension implements ExtensionInterface
     public function getCompilerPasses()
     {
         return array();
+    }
+
+    /**
+     * Returns extension name used to store extension parameters in DIC.
+     *
+     * @return string
+     */
+    protected function getExtensionName()
+    {
+        return strtolower(ltrim(preg_replace('/[A-Z]/', "_$0", get_class($this)), '_'));
+    }
+
+    /**
+     * Returns name of the service definition config without extension and path.
+     *
+     * @return string
+     */
+    protected function getServiceDefinitionsName()
+    {
+        return get_class($this).'Services';
+    }
+
+    /**
+     * Returns service definition configs path.
+     *
+     * @return string
+     */
+    protected function getServiceDefinitionsPath()
+    {
+        $refl = new \ReflectionClass($this);
+
+        return dirname($refl->getFileName());
     }
 }

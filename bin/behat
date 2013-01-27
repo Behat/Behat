@@ -13,11 +13,14 @@ define('BEHAT_PHP_BIN_PATH', getenv('PHP_PEAR_PHP_BIN') ?: '/usr/bin/env php');
 define('BEHAT_BIN_PATH',     __FILE__);
 define('BEHAT_VERSION',      'DEV');
 
-if (is_dir($vendor = __DIR__.'/../vendor')) {
-    require($vendor.'/autoload.php');
-} elseif (is_dir($vendor = __DIR__.'/../../../../vendor')) {
-    require($vendor.'/autoload.php');
-} else {
+function includeIfExists($file)
+{
+    if (file_exists($file)) {
+        return include $file;
+    }
+}
+
+if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) && (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))) {
     die(
         'You must set up the project dependencies, run the following commands:'.PHP_EOL.
         'curl -s http://getcomposer.org/installer | php'.PHP_EOL.

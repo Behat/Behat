@@ -131,16 +131,16 @@
     ),
     'pt' =>
     array (
-        'proposal_title'      => 'Você pode implementar definições de passos para aqueles ainda não definidos utilizando-se destes trechos:',
-        'failed_steps_title'  => 'passos que falharam',
+        'proposal_title'      => 'Para os passos não definidos você pode implementar as suas definições usando estes exemplos:',
+        'failed_steps_title'  => 'passos falhados',
         'pending_steps_title' => 'passos pendentes',
         'scenarios_count'     => '{0} Nenhum cenário|{1} 1 cenário|]1,Inf] %1% cenários',
         'steps_count'         => '{0} Nenhum passo|{1} 1 passo|]1,Inf] %1% passos',
-        'passed_count'        => '{1} passou|]1,Inf] %1% passaram',
-        'failed_count'        => '{1} falhou|]1,Inf] %1% falharam ',
-        'pending_count'       => '{1} pendente|]1,Inf] %1% pendentes',
-        'undefined_count'     => '{1} indefinido|]1,Inf] %1% indefinidos',
-        'skipped_count'       => '{1} ignorado|]1,Inf] %1% ignorados',
+        'passed_count'        => '{1} %1% passou|]1,Inf] %1% passaram',
+        'failed_count'        => '{1} %1% falhou|]1,Inf] %1% falharam ',
+        'pending_count'       => '{1} %1% pendente|]1,Inf] %1% pendentes',
+        'undefined_count'     => '{1} %1% indefinido|]1,Inf] %1% indefinidos',
+        'skipped_count'       => '{1} %1% ignorado|]1,Inf] %1% ignorados',
     ),
     'ru' =>
     array (
@@ -154,6 +154,19 @@
         'pending_count'       => '[1,Inf] %1% в ожидании',
         'undefined_count'     => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
         'skipped_count'       => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
+    ),
+    'sk' =>
+    array(
+        'proposal_title' => 'Môžete implementovať definície krokov pre nedefinované kroky za pomoci týchto kusov kódu (snippetov):',
+        'failed_steps_title' => 'neúspešné kroky',
+        'pending_steps_title' => 'čakajúce kroky',
+        'scenarios_count' => '{0} Žiaden scenár|{1} 1 scenár||{2,3,4} %1% scenáre|]4,Inf] %1% scenárov',
+        'steps_count' => '{0} Žiaden krok|{1} 1 krok|{2,3,4} %1% kroky|]4,Inf] %1% krokov',
+        'passed_count' => '{1} %1% prešiel|{2,3,4} %1% prešli|]4,Inf] %1% prešlo',
+        'failed_count' => '{1} %1% zlyhal|{2,3,4} %1% zlyhali|]4,Inf] %1% zlyhalo',
+        'pending_count' => '{1} %1% čaká|{2,3,4} %1% čakajú|]4,Inf] %1% čaká',
+        'undefined_count' => '{1} %1% nedefinovaný|{2,3,4} %1% nedefinované|]4,Inf] %1% nedefinovaných',
+        'skipped_count' => '{1} %1% preskočený|{2,3,4} %1% preskočené|]4,Inf] %1% preskočených',
     ),
     'zh-CN' =>
     array (
