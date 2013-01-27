@@ -30,6 +30,11 @@ use Behat\Gherkin\Node\BackgroundNode,
 class ProgressFormatter extends ConsoleFormatter
 {
     /**
+     * Holds amount of printed items in current line;
+     */
+    private $stepsPrinted = 0;
+
+    /**
      * Maximum line length.
      *
      * @var integer
@@ -138,6 +143,10 @@ class ProgressFormatter extends ConsoleFormatter
             case StepEvent::FAILED:
                 $this->write('{+failed}F{-failed}');
                 break;
+        }
+
+        if (++$this->stepsPrinted % 70 == 0) {
+            $this->writeln(' '.$this->stepsPrinted);
         }
     }
 
