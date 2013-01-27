@@ -120,7 +120,7 @@ Feature: Append snippets option
             | val1 | val2 |
       """
 
-  Scenario: Run feature with failing scenarios
+  Scenario: Append snippets to main context
     When I run "behat -f progress --append-snippets"
     And "features/bootstrap/FeatureContext.php" file should contain:
       """
@@ -187,6 +187,69 @@ Feature: Append snippets option
           }
 
           private function doSomethingUndefinedWith() {}
+
+          /**
+           * @Given /^do something undefined with \$$/
+           */
+          public function doSomethingUndefinedWith2()
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^do something undefined with \\(\d+)$/
+           */
+          public function doSomethingUndefinedWith3($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^pystring:$/
+           */
+          public function pystring(PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^pystring (\d+):$/
+           */
+          public function pystring2($arg1, PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^table:$/
+           */
+          public function table(TableNode $table)
+          {
+              throw new PendingException();
+          }
+      }
+      """
+
+  Scenario: Append snippets to custom class
+    Given a file named "features/bootstrap/AdditionalContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext;
+
+      class AdditionalContext extends BehatContext
+      {
+      }
+      """
+    When I run "behat -f progress --append-to=AdditionalContext"
+    Then "features/bootstrap/AdditionalContext.php" file should contain:
+      """
+      <?php
+
+      use Behat\Behat\Context\BehatContext;
+
+      class AdditionalContext extends BehatContext
+      {
 
           /**
            * @Given /^do something undefined with \$$/
