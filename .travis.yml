@@ -15,10 +15,11 @@ branches:
     - develop
 
 before_script:
+  - export PATH=./bin:$PATH
+  - export BEHAT_PARAMS='formatter[name]=progress'
+
   - curl http://getcomposer.org/installer | php
   - php composer.phar require --no-update symfony/symfony=$SYMFONY_VERSION
   - php composer.phar install --dev --prefer-source
 
-script:
-  - bin/behat -fprogress --tags ~@php-version
-  - bin/behat -fprogress --tags '@php'`php -r 'echo substr(phpversion(), 0, 3);'`
+script: behat --tags ~@php-version && behat --tags '@php'`php -r 'echo substr(phpversion(), 0, 3);'`
