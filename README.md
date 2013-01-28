@@ -12,7 +12,7 @@ Useful Links
 
 Note on Patches/Pull Requests
 -----------------------------
- 
+
 - Fork the project `develop` branch (all new development happens here, master for releases & hotfixes only).
 - Make your feature addition or bug fix.
 - Add features for it (look at test/Behat/features for examples).
