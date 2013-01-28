@@ -29,10 +29,10 @@ class ContextClassGuessersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.context.dispatcher')) {
+        if (!$container->hasDefinition('behat.context.dispatcher.instantiating')) {
             return;
         }
-        $dispatcher = $container->getDefinition('behat.context.dispatcher');
+        $dispatcher = $container->getDefinition('behat.context.dispatcher.instantiating');
 
         // Sorts guessers by priority (0 by default).
         // Guessers with higher priority go first.

@@ -29,10 +29,11 @@ class ContextInitializersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.context.dispatcher')) {
+        if (!$container->hasDefinition('behat.context.dispatcher')
+            && !$container->hasAlias('behat.context.dispatcher')) {
             return;
         }
-        $dispatcher = $container->getDefinition('behat.context.dispatcher');
+        $dispatcher = $container->findDefinition('behat.context.dispatcher');
 
         foreach ($container->findTaggedServiceIds('behat.context.initializer') as $id => $attributes) {
             $dispatcher->addMethodCall('addInitializer', array(new Reference($id)));

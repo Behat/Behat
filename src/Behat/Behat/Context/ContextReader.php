@@ -2,8 +2,7 @@
 
 namespace Behat\Behat\Context;
 
-use Behat\Behat\Definition\DefinitionDispatcher,
-    Behat\Behat\Hook\HookDispatcher;
+use Behat\Behat\Context\Dispatcher\DispatcherInterface;
 
 /*
  * This file is part of the Behat.
@@ -26,9 +25,9 @@ class ContextReader
     /**
      * Initializes context reader.
      *
-     * @param ContextDispatcher $contextDispatcher
+     * @param \Behat\Behat\Context\Dispatcher\DispatcherInterface $contextDispatcher
      */
-    public function __construct(ContextDispatcher $contextDispatcher)
+    public function __construct(DispatcherInterface $contextDispatcher)
     {
         $this->contextDispatcher = $contextDispatcher;
     }
