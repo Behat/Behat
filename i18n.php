@@ -181,4 +181,17 @@
         'undefined_count' => '[1,Inf] %1% 未定义',
         'skipped_count' => '[1,Inf] %1% 跳过的',
     ),
+    'tr' =>
+    array (
+        'proposal_title'      => 'Tanımlanmamış adımları tanımlamak için şu örneklerden yararlanabilirsiniz:',
+        'failed_steps_title'  => 'başarısız adımlar',
+        'pending_steps_title' => 'bekleyen adımlar',
+        'scenarios_count'     => '{0} Hiç senaryo yok|{1} 1 senaryo|]1,Inf] %1% senaryo',
+        'steps_count'         => '{0} Hiç adım yok|{1} 1 adım|]1,Inf] %1% adım',
+        'passed_count'        => '[1,Inf] %1% geçti',
+        'failed_count'        => '[1,Inf] %1% başarısız oldu',
+        'pending_count'       => '[1,Inf] %1% bekleyen',
+        'undefined_count'     => '[1,Inf] %1% tanımlanmamış',
+        'skipped_count'       => '[1,Inf] %1% atlandı',
+    )
 );
