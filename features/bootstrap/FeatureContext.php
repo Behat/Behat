@@ -123,7 +123,7 @@ class FeatureContext extends BaseFeaturesContext
         }
 
         if ($this->env) {
-            exec($command = sprintf('BEHAT_PARAMS="%s" %s %s %s',
+            exec($command = sprintf('BEHAT_PARAMS=\'%s\' %s %s %s',
                 $this->env, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
             ), $output, $return);
         } else {
