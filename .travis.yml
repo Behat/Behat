@@ -18,4 +18,4 @@ before_script:
   - php composer.phar install --dev --prefer-source
   - export PATH=./bin:$PATH
 
-script: behat -fprogress --tags '~@php-version,@php'`php -r 'echo substr(phpversion(), 0, 3);'`
+script: behat -fprogress --tags '~@php-version,@php'`php -r 'echo "@php5.".implode(",@php5.", range(3, PHP_MINOR_VERSION));'`
