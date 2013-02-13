@@ -15,3 +15,12 @@ Contributing to Formatter Translations
 Almost any output message (except exceptions and custom output) printed by Behat
 formatters could be translated into your language with `--lang` option. In order
 to fix/add translation, edit the appropriate section of the `i18n.php` file.
+
+Running tests
+~~~~~~~~~~~~~
+
+Make sure that you don't break anything with your changes by running:
+
+```bash
+$> bin/behat
+```
