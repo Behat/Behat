@@ -1,8 +1,8 @@
 Behat
 =====
 
-- [stable (master)](https://github.com/Behat/Behat) ([![Master Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=master)](http://travis-ci.org/Behat/Behat)) - staging branch. Last stable version.
-- [development (develop)](https://github.com/Behat/Behat/tree/develop) ([![Develop Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=develop)](http://travis-ci.org/Behat/Behat)) - development branch. Development happens here and you should send your PRs here too.
+- [stable (master)](https://github.com/Behat/Behat) ([![Master Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=master)](http://travis-ci.org/Behat/Behat)) - latest stable version.
+- [development (develop)](https://github.com/Behat/Behat/tree/develop) ([![Develop Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=develop)](http://travis-ci.org/Behat/Behat)) - development happens here and you should send your PRs here too.
 
 Useful Links
 ------------
@@ -15,18 +15,17 @@ Useful Links
 Installing Dependencies
 -----------------------
 
-    wget -nc http://getcomposer.org/composer.phar
-    php composer.phar update
+```bash
+$> curl -s https://getcomposer.org/installer | php
+$> php composer.phar install
+```
 
-Running Tests
--------------
+Running
+-------
 
-	bin/behat -f progress
-
-Copyright
----------
-
-Copyright (c) 2012 Konstantin Kudryashov (ever.zet). See LICENSE for details.
+```bash
+$> bin/behat -h
+```
 
 Contributors
 ------------
