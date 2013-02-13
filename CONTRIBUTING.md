@@ -8,3 +8,10 @@ Behat is an open source, community-driven project. If you'd like to contribute, 
 - Add `*.features` for those changes (please look into `features/` folder for some examples). This is important so we don't break it in a future version unintentionally,
 - Commit your code, but do not mess with `BehatApplication` version, or `CHANGES.md` one,
 - __Remember__: when you create Pull Request, always select `develop` branch as target, otherwise it will be closed.
+
+Contributing to Formatter Translations
+--------------------------------------
+
+Almost any output message (except exceptions and custom output) printed by Behat
+formatters could be translated into your language with `--lang` option. In order
+to fix/add translation, edit the appropriate section of the `i18n.php` file.
