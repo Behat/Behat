@@ -19,59 +19,56 @@ use Symfony\Component\Finder\Finder;
  */
 class PharCompiler
 {
-    /**
-     * Behat lib directory.
-     *
-     * @var     string
-     */
-    private $libPath;
+    private $rootDir;
+    private $phpParser;
+    private $traverser;
+    private $printer;
+    private $rewriter;
+    private $classMap = array();
 
     /**
      * Initializes compiler.
      */
     public function __construct()
     {
-        $this->libPath = realpath(__DIR__ . '/../../../../');
+        $this->phpParser = new \PHPParser_Parser(new \PHPParser_Lexer());
+        $this->traverser = new \PHPParser_NodeTraverser();
+        $this->traverser->addVisitor($this->rewriter = new ClassNameRewritingVisitor('Behat\\Dependency\\', array('Symfony\\', 'Composer')));
+        $this->printer = new \PHPParser_PrettyPrinter_Zend();
     }
 
     /**
      * Compiles phar archive.
      *
-     * @param string $version
+     * @param string $rootDir
+     * @param string $package
+     * @param string|null $alias
+     * @param array<\SplFileInfo> $files
      */
-    public function compile($version)
+    public function compile($rootDir, $package, $alias = null, array $files)
     {
-        if (file_exists($package = "behat-$version.phar")) {
-            unlink($package);
+        $this->rootDir = realpath($rootDir);
+        if (false === $this->rootDir) {
+            throw new \InvalidArgumentException(sprintf('The root dir "%s" does not exist.', $rootDir));
         }
 
         // create phar
-        $phar = new \Phar($package, 0, 'behat.phar');
+        $phar = new \Phar($package, 0, $alias ?: $package);
         $phar->setSignatureAlgorithm(\Phar::SHA1);
         $phar->startBuffering();
 
-        $finder = new Finder();
-        $finder->files()
-            ->ignoreVCS(true)
-            ->name('*.php')
-            ->name('*.xsd')
-            ->name('*.xml')
-            ->name('LICENSE')
-            ->notName('PharCompiler.php')
-            ->notName('PearCompiler.php')
-            ->in($this->libPath . '/src')
-            ->in($this->libPath . '/vendor');
+        foreach ($files as $file) {
+            assert($file instanceof \SplFileInfo);
 
-        foreach ($finder as $file) {
             // don't compile test suites
             if (!preg_match('/\/tests\/|\/test\//i', $file->getRealPath())) {
                 $this->addFileToPhar($file, $phar);
             }
         }
 
-        // license and autoloading
-        $this->addFileToPhar(new \SplFileInfo($this->libPath . '/LICENSE'), $phar);
-        $this->addFileToPhar(new \SplFileInfo($this->libPath . '/i18n.php'), $phar);
+        // autoloader class map
+        $classMap = '<?php return '.var_export($this->classMap, true).';';
+        $phar->addFromString('vendor/composer/autoload_classmap.php', $classMap);
 
         // stub
         $phar->setStub($this->getStub($version));
@@ -88,8 +85,26 @@ class PharCompiler
      */
     protected function addFileToPhar(\SplFileInfo $file, \Phar $phar)
     {
-        $path = str_replace($this->libPath . '/', '', $file->getRealPath());
-        $phar->addFromString($path, file_get_contents($file));
+        $path = str_replace(realpath($this->rootDir).DIRECTORY_SEPARATOR, '', $file->getRealPath());
+        $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+
+        $content = file_get_contents($file);
+        $extension = substr($path, -4);
+        if ('.php' === $extension) {
+            $ast = $this->phpParser->parse($content);
+
+            $this->rewriter->reset();
+            $ast = $this->traverser->traverse($ast);
+            foreach ($this->rewriter->getClassNames() as $name) {
+                $this->classMap[$name] = 'phar://behat.phar/'.$path;
+            }
+
+            $content = '<?php '.$this->printer->prettyPrint($ast);
+        } else if ('.yml' === $extension || '.xml' === $extension) {
+            $content = preg_replace('#Symfony\\\\#', 'Behat\\Dependency\\Symfony\\', $content);
+        }
+
+        $phar->addFromString($path, $content);
     }
 
     /**

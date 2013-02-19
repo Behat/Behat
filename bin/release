@@ -46,8 +46,25 @@ echo "PEAR package compiled: behat-$version.tgz\n";
 unlink($autoloaderFilename);
 unlink($mapFilename);
 
+$libPath = realpath(__DIR__.'/../');
+$finder = new Symfony\Component\Finder\Finder();
+$finder->files()
+    ->ignoreVCS(true)
+    ->name('*.php')
+    ->name('*.xsd')
+    ->name('*.xml')
+    ->name('LICENSE')
+    ->exclude($libPath . '/src/Behat/Behat/Compiler')
+    ->notName('PharCompiler.php')
+    ->notName('PearCompiler.php')
+    ->in($libPath . '/src')
+    ->in($libPath . '/vendor');
+$files = iterator_to_array($finder);
+$files[] = new \SplFileInfo($libPath.'/LICENSE');
+$files[] = new \SplFileInfo($libPath.'/i18n.php');
+
 $phar = new Compiler\PharCompiler();
-$phar->compile($version);
+$phar->compile($libPath, 'behat-'.$version.'.phar', 'behat.phar', $files);
 echo "PHAR package compiled: behat-$version.phar\n";
 
 system("cp behat-$version.phar behat.phar");
