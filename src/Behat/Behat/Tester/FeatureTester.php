@@ -67,32 +67,30 @@ class FeatureTester implements NodeVisitorInterface
     {
         $result = 0;
 
-        // If feature has scenarios - run them
-        if ($feature->hasScenarios()) {
-            $this->dispatcher->dispatch(
-                'beforeFeature', new FeatureEvent($feature, $this->parameters)
-            );
-
-            foreach ($feature->getScenarios() as $scenario) {
-                if ($scenario instanceof OutlineNode) {
-                    $tester = $this->container->get('behat.tester.outline');
-                } elseif ($scenario instanceof ScenarioNode) {
-                    $tester = $this->container->get('behat.tester.scenario');
-                } else {
-                    throw new BehaviorException(
-                        'Unknown scenario type found: ' . get_class($scenario)
-                    );
-                }
-
-                $tester->setDryRun($this->dryRun);
-                $result = max($result, $scenario->accept($tester));
+        $this->dispatcher->dispatch(
+            'beforeFeature', new FeatureEvent($feature, $this->parameters)
+        );
+        
+        // run each scenario in feature
+        foreach ($feature->getScenarios() as $scenario) {
+            if ($scenario instanceof OutlineNode) {
+                $tester = $this->container->get('behat.tester.outline');
+            } elseif ($scenario instanceof ScenarioNode) {
+                $tester = $this->container->get('behat.tester.scenario');
+            } else {
+                throw new BehaviorException(
+                    'Unknown scenario type found: ' . get_class($scenario)
+                );
             }
 
-            $this->dispatcher->dispatch(
-                'afterFeature', new FeatureEvent($feature, $this->parameters, $result)
-            );
+            $tester->setDryRun($this->dryRun);
+            $result = max($result, $scenario->accept($tester));
         }
-
+        
+        $this->dispatcher->dispatch(
+            'afterFeature', new FeatureEvent($feature, $this->parameters, $result)
+        );
+    
         return $result;
     }
 }
