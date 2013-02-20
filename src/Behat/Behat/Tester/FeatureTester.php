@@ -67,12 +67,13 @@ class FeatureTester implements NodeVisitorInterface
     {
         $result = 0;
 
+
+        $this->dispatcher->dispatch(
+            'beforeFeature', new FeatureEvent($feature, $this->parameters)
+        );
+
         // If feature has scenarios - run them
         if ($feature->hasScenarios()) {
-            $this->dispatcher->dispatch(
-                'beforeFeature', new FeatureEvent($feature, $this->parameters)
-            );
-
             foreach ($feature->getScenarios() as $scenario) {
                 if ($scenario instanceof OutlineNode) {
                     $tester = $this->container->get('behat.tester.outline');
@@ -87,11 +88,12 @@ class FeatureTester implements NodeVisitorInterface
                 $tester->setDryRun($this->dryRun);
                 $result = max($result, $scenario->accept($tester));
             }
-
-            $this->dispatcher->dispatch(
-                'afterFeature', new FeatureEvent($feature, $this->parameters, $result)
-            );
         }
+        
+        $this->dispatcher->dispatch(
+            'afterFeature', new FeatureEvent($feature, $this->parameters, $result)
+        );
+    
 
         return $result;
     }
