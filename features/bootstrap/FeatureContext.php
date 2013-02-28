@@ -176,12 +176,7 @@ class FeatureContext extends BaseFeaturesContext
             }, (string) $text);
         }
 
-        try {
-            assertEquals((string) $text, $this->output);
-        } catch (Exception $e) {
-            $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
-            throw new Exception($diff, $e->getCode(), $e);
-        }
+        assertEquals((string) $text, $this->output);
     }
 
     /**
@@ -194,13 +189,8 @@ class FeatureContext extends BaseFeaturesContext
      */
     public function fileShouldContain($path, PyStringNode $text)
     {
-        try {
-            assertFileExists($path);
-            assertEquals((string) $text, trim(file_get_contents($path)));
-        } catch (Exception $e) {
-            $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
-            throw new Exception($diff, $e->getCode(), $e);
-        }
+        assertFileExists($path);
+        assertEquals((string) $text, trim(file_get_contents($path)));
     }
 
     /**
@@ -237,12 +227,7 @@ class FeatureContext extends BaseFeaturesContext
             }, (string) $text);
         }
 
-        try {
-            assertContains((string) $text, $this->output);
-        } catch (Exception $e) {
-            $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
-            throw new Exception($diff, $e->getCode(), $e);
-        }
+        assertContains((string) $text, $this->output);
     }
 
     /**
