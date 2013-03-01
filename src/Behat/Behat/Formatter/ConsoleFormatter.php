@@ -308,10 +308,7 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     protected function exceptionToString(\Exception $exception)
     {
-        // (It is safe to instanceof here, even if PHPUnit has not been loaded -- the
-        // 'instanceof' operator in PHP does not trigger class autoloading of the argument)
-        if ($exception instanceof \PHPUnit_Framework_Exception)
-        {
+        if ($exception instanceof \PHPUnit_Framework_Exception) {
             // PHPUnit assertion exceptions do not include expected / observed info in their
             // messages, but expect the test listeners to format that info like the following
             // (see e.g. PHPUnit_TextUI_ResultPrinter::printDefectTrace)
