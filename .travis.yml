@@ -5,7 +5,8 @@ php: [5.3, 5.4, 5.5]
 env:
   - SYMFONY_VERSION='2.0.*'
   - SYMFONY_VERSION='2.1.*'
-  - SYMFONY_VERSION='2.2.*@dev'
+  - SYMFONY_VERSION='2.2.*'
+  - SYMFONY_VERSION='2.3.*@dev'
 
 branches:
   only:
