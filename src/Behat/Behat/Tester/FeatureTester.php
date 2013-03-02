@@ -70,7 +70,7 @@ class FeatureTester implements NodeVisitorInterface
         $this->dispatcher->dispatch(
             'beforeFeature', new FeatureEvent($feature, $this->parameters)
         );
-        
+
         // run each scenario in feature
         foreach ($feature->getScenarios() as $scenario) {
             if ($scenario instanceof OutlineNode) {
@@ -86,11 +86,11 @@ class FeatureTester implements NodeVisitorInterface
             $tester->setDryRun($this->dryRun);
             $result = max($result, $scenario->accept($tester));
         }
-        
+
         $this->dispatcher->dispatch(
             'afterFeature', new FeatureEvent($feature, $this->parameters, $result)
         );
-    
+
         return $result;
     }
 }
