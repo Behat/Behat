@@ -145,7 +145,7 @@ class BehatCommand extends BaseCommand
             // and run it in FeatureTester
             foreach ($features as $feature) {
                 $tester = $this->getContainer()->get('behat.tester.feature');
-                $tester->setDryRun($this->isDryRun());
+                $tester->setSkip($this->isDryRun());
 
                 $feature->accept($tester);
             }

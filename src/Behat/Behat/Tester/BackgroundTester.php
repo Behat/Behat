@@ -30,7 +30,7 @@ class BackgroundTester implements NodeVisitorInterface
     private $container;
     private $dispatcher;
     private $context;
-    private $dryRun = false;
+    private $skip = false;
 
     /**
      * Initializes tester.
@@ -66,11 +66,11 @@ class BackgroundTester implements NodeVisitorInterface
     /**
      * Sets tester to dry-run mode.
      *
-     * @param Boolean $dryRun
+     * @param Boolean $skip
      */
-    public function setDryRun($dryRun = true)
+    public function setSkip($skip = true)
     {
-        $this->dryRun = (bool) $dryRun;
+        $this->skip = (bool) $skip;
     }
 
     /**
@@ -92,7 +92,7 @@ class BackgroundTester implements NodeVisitorInterface
             $tester = $this->container->get('behat.tester.step');
             $tester->setLogicalParent($this->logicalParent);
             $tester->setContext($this->context);
-            $tester->skip($skip || $this->dryRun);
+            $tester->skip($skip || $this->skip);
 
             $stResult = $step->accept($tester);
 

@@ -33,7 +33,7 @@ class ScenarioTester implements NodeVisitorInterface
     protected $container;
     protected $dispatcher;
     private $context;
-    private $dryRun = false;
+    private $skip = false;
 
     /**
      * Initializes tester.
@@ -50,11 +50,11 @@ class ScenarioTester implements NodeVisitorInterface
     /**
      * Sets tester to dry-run mode.
      *
-     * @param Boolean $dryRun
+     * @param Boolean $skip
      */
-    public function setDryRun($dryRun = true)
+    public function setSkip($skip = true)
     {
-        $this->dryRun = (bool) $dryRun;
+        $this->skip = (bool) $skip;
     }
 
     /**
@@ -115,7 +115,7 @@ class ScenarioTester implements NodeVisitorInterface
         $tester = $this->container->get('behat.tester.background');
         $tester->setLogicalParent($logicalParent);
         $tester->setContext($context);
-        $tester->setDryRun($this->dryRun);
+        $tester->setSkip($this->skip);
 
         return $background->accept($tester);
     }
@@ -143,7 +143,7 @@ class ScenarioTester implements NodeVisitorInterface
         $tester = $this->container->get('behat.tester.step');
         $tester->setLogicalParent($logicalParent);
         $tester->setContext($context);
-        $tester->skip($skip || $this->dryRun);
+        $tester->skip($skip || $this->skip);
 
         return $step->accept($tester);
     }

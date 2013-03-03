@@ -30,7 +30,7 @@ class FeatureTester implements NodeVisitorInterface
     private $container;
     private $dispatcher;
     private $parameters;
-    private $dryRun = false;
+    private $skip = false;
 
     /**
      * Initializes tester.
@@ -47,11 +47,11 @@ class FeatureTester implements NodeVisitorInterface
     /**
      * Sets tester to dry-run mode.
      *
-     * @param Boolean $dryRun
+     * @param Boolean $skip
      */
-    public function setDryRun($dryRun = true)
+    public function setSkip($skip = true)
     {
-        $this->dryRun = (bool) $dryRun;
+        $this->skip = (bool) $skip;
     }
 
     /**
@@ -65,13 +65,14 @@ class FeatureTester implements NodeVisitorInterface
      */
     public function visit(AbstractNode $feature)
     {
-        $result = 0;
-
         $this->dispatcher->dispatch(
             'beforeFeature', new FeatureEvent($feature, $this->parameters)
         );
 
-        // run each scenario in feature
+        $result = 0;
+        $skip   = false;
+
+        // Visit & test scenarios
         foreach ($feature->getScenarios() as $scenario) {
             if ($scenario instanceof OutlineNode) {
                 $tester = $this->container->get('behat.tester.outline');
@@ -83,7 +84,7 @@ class FeatureTester implements NodeVisitorInterface
                 );
             }
 
-            $tester->setDryRun($this->dryRun);
+            $tester->setSkip($skip || $this->skip);
             $result = max($result, $scenario->accept($tester));
         }
 
