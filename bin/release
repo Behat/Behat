@@ -35,17 +35,6 @@ if (!isset($argv[2])) {
 }
 $stability = $argv[2];
 
-$ldr = new Compiler\PearMapFileCompiler($autoloaderFilename = 'autoload.php', $mapFilename = 'autoload_map.php');
-$ldr->compile();
-echo "Autoloader compiled\n";
-
-$pear = new Compiler\PearCompiler();
-$pear->compile($version, $stability);
-echo "PEAR package compiled: behat-$version.tgz\n";
-
-unlink($autoloaderFilename);
-unlink($mapFilename);
-
 $phar = new Compiler\PharCompiler();
 $phar->compile($version);
 echo "PHAR package compiled: behat-$version.phar\n";
