@@ -70,10 +70,10 @@ class FormatterManager
      */
     public function initFormatter($name)
     {
-        if (class_exists($name)) {
-            $dispatcher = new FormatterDispatcher($name);
-        } elseif (isset($this->dispatchers[strtolower($name)])) {
+        if (isset($this->dispatchers[strtolower($name)])) {
             $dispatcher = $this->dispatchers[strtolower($name)];
+        } elseif (class_exists($name)) {
+            $dispatcher = new FormatterDispatcher($name);
         } else {
             throw new \RuntimeException("Unknown formatter: \"$name\". " .
                 'Available formatters are: ' . implode(', ', array_keys($this->dispatchers))
