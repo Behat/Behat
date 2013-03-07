@@ -1024,25 +1024,25 @@ HTMLTPL;
      * @return string Name of the node, suitable for HTML id attribute.
      */
     protected function getHtmlIdentifier(AbstractNode $node) {
-	$prefix = "";
-	switch (get_class($node)) {
-	    case "Behat\Gherkin\Node\ScenarioNode":
+        $prefix = "";
+        switch (get_class($node)) {
+            case "Behat\Gherkin\Node\ScenarioNode":
                 $prefix = "scenario-";
-	        break;
-	    case "Behat\Gherkin\Node\OutlineNode": 
-	        $prefix = "scenario-outline-";
-	        break;
-	    case "Behat\Gherkin\Node\FeatureNode":
-	        $prefix = "feature-";
-	        break;
-	    default:
-	        $prefix = "";
-	}
+                break;
+            case "Behat\Gherkin\Node\OutlineNode": 
+                $prefix = "scenario-outline-";
+                break;
+            case "Behat\Gherkin\Node\FeatureNode":
+                $prefix = "feature-";
+                break;
+            default:
+            $prefix = "";
+        }
 
-	$title = strtolower(filter_var($node->getTitle(), FILTER_SANITIZE_URL));
+        $title = strtolower(filter_var($node->getTitle(), FILTER_SANITIZE_URL));
 
-	$identifier = $prefix . $title;
+        $identifier = $prefix . $title;
 
-	return $identifier;
+        return $identifier;
     }
 }
