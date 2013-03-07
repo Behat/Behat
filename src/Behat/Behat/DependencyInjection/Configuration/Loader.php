@@ -106,12 +106,12 @@ class Loader
         $config   = Yaml::parse($configPath);
         $configs  = array();
 
-        // first load default profile from current config, but only if custom profile requested
-        if ('default' !== $profile && isset($config['default'])) {
+        // first load default profile from current config
+        if (isset($config['default'])) {
             $configs[] = $config['default'];
         }
 
-        // then recursively load profiles from imports
+        // then load profiles from import
         if (isset($config['imports']) && is_array($config['imports'])) {
             foreach ($config['imports'] as $path) {
                 foreach ($this->parseImport($basePath, $path, $profile) as $importConfig) {
@@ -121,7 +121,7 @@ class Loader
         }
 
         // then load specific profile from current config
-        if (isset($config[$profile])) {
+        if ('default' !== $profile && isset($config[$profile])) {
             $configs[] = $config[$profile];
             $this->profileFound = true;
         }
