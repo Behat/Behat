@@ -1025,18 +1025,18 @@ HTMLTPL;
      */
     protected function getHtmlIdentifier(AbstractNode $node) {
         $prefix = "";
-        switch (get_class($node)) {
-            case "Behat\Gherkin\Node\ScenarioNode":
-                $prefix = "scenario-";
-                break;
-            case "Behat\Gherkin\Node\OutlineNode": 
-                $prefix = "scenario-outline-";
-                break;
-            case "Behat\Gherkin\Node\FeatureNode":
+        switch (true) {
+            case ($node instanceof FeatureNode):
                 $prefix = "feature-";
                 break;
+            case ($node instanceof OutlineNode): 
+                $prefix = "scenario-outline-";
+                break;
+            case ($node instanceof ScenarioNode):
+                $prefix = "scenario-";
+                break;
             default:
-            $prefix = "";
+                $prefix = "";
         }
 
         $title = strtolower(filter_var($node->getTitle(), FILTER_SANITIZE_URL));
