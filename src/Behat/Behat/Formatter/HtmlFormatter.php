@@ -77,7 +77,7 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printFeatureHeader(FeatureNode $feature)
     {
-        $this->writeln('<div class="feature">');
+        $this->writeln('<div class="feature" id="' . $this->getHtmlIdentifier($feature) . '">');
 
         parent::printFeatureHeader($feature);
     }
@@ -153,7 +153,7 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printScenarioHeader(ScenarioNode $scenario)
     {
-        $this->writeln('<div class="scenario">');
+        $this->writeln('<div class="scenario" id="' . $this->getHtmlIdentifier($scenario) . '">');
 
         $this->printFeatureOrScenarioTags($scenario);
         $this->printScenarioName($scenario);
@@ -189,7 +189,7 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printOutlineHeader(OutlineNode $outline)
     {
-        $this->writeln('<div class="scenario outline">');
+        $this->writeln('<div class="scenario outline" id="' . $this->getHtmlIdentifier($outline) . '">');
 
         $this->printFeatureOrScenarioTags($outline);
         $this->printScenarioName($outline);
@@ -1013,5 +1013,36 @@ HTMLTPL;
                 });
         });
 HTMLTPL;
+    }
+
+    /**
+     * Gets the name for a node, suitable for a HTML id attribute.
+     * 
+     * @param AbstractNode $node Feature/scenario/outline or equivalent to create a HTML id for.
+     * @author Victor Sollerhed <victor.sollerhed@gmail.com>
+     * 
+     * @return string Name of the node, suitable for HTML id attribute.
+     */
+    protected function getHtmlIdentifier(AbstractNode $node) {
+	$prefix = "";
+	switch (get_class($node)) {
+	    case "Behat\Gherkin\Node\ScenarioNode":
+                $prefix = "scenario-";
+	        break;
+	    case "Behat\Gherkin\Node\OutlineNode": 
+	        $prefix = "scenario-outline-";
+	        break;
+	    case "Behat\Gherkin\Node\FeatureNode":
+	        $prefix = "feature-";
+	        break;
+	    default:
+	        $prefix = "";
+	}
+
+	$title = strtolower(filter_var($node->getTitle(), FILTER_SANITIZE_URL));
+
+	$identifier = $prefix . $title;
+
+	return $identifier;
     }
 }

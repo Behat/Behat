@@ -113,7 +113,7 @@ Feature: HTML Formatter
     Then it should pass
     And the output should contain:
       """
-      <div class="feature">
+      <div class="feature" id="feature-worldconsistency">
       <h2>
       <span class="keyword">Feature: </span>
       <span class="title">World consistency</span>
@@ -139,7 +139,7 @@ Feature: HTML Formatter
       </li>
       </ol>
       </div>
-      <div class="scenario">
+      <div class="scenario" id="scenario-adding">
       <h3>
       <span class="keyword">Scenario: </span>
       <span class="title">Adding</span>
@@ -169,7 +169,7 @@ Feature: HTML Formatter
       </li>
       </ol>
       </div>
-      <div class="scenario">
+      <div class="scenario" id="scenario-subtracting">
       <h3>
       <span class="keyword">Scenario: </span>
       <span class="title">Subtracting</span>
@@ -226,7 +226,7 @@ Feature: HTML Formatter
     When I run "behat --no-ansi -f html"
     Then the output should contain:
       """
-      <div class="scenario outline">
+      <div class="scenario outline" id="scenario-outline-adding">
       <h3>
       <span class="keyword">Scenario Outline: </span>
       <span class="title">Adding</span>
@@ -308,7 +308,7 @@ Feature: HTML Formatter
     When I run "behat --no-ansi -f html --expand"
     Then the output should contain:
       """
-      <div class="scenario outline">
+      <div class="scenario outline" id="scenario-outline-adding">
       <h3>
       <span class="keyword">Scenario Outline: </span>
       <span class="title">Adding</span>
@@ -424,7 +424,7 @@ Feature: HTML Formatter
     When I run "behat --no-ansi -c behat.yml -f html"
     Then the output should contain:
       """
-      <div class="scenario">
+      <div class="scenario" id="scenario-nothing">
       <h3>
       <span class="keyword">Scenario: </span>
       <span class="title">Nothing</span>
