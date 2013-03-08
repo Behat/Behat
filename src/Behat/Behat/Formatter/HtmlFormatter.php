@@ -1023,20 +1023,20 @@ HTMLTPL;
      * 
      * @return string Name of the node, suitable for HTML id attribute.
      */
-    protected function getHtmlIdentifier(AbstractNode $node) {
-        $prefix = "";
+    protected function getHtmlIdentifier(AbstractNode $node)
+    {
         switch (true) {
             case ($node instanceof FeatureNode):
-                $prefix = "feature-";
+                $prefix = 'feature-';
                 break;
             case ($node instanceof OutlineNode): 
-                $prefix = "scenario-outline-";
+                $prefix = 'scenario-outline-';
                 break;
             case ($node instanceof ScenarioNode):
-                $prefix = "scenario-";
+                $prefix = 'scenario-';
                 break;
             default:
-                $prefix = "";
+                $prefix = '';
         }
 
         $title = strtolower(filter_var($node->getTitle(), FILTER_SANITIZE_URL));
