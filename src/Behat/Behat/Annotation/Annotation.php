@@ -166,7 +166,7 @@ abstract class Annotation implements AnnotationInterface
      */
     public function __sleep() {
         $serializable = array();
-        foreach ( $this as $paramName => $paramValue ) {
+        foreach ($this as $paramName => $paramValue) {
             if (!is_string($paramValue) && !is_array($paramValue) && is_callable($paramValue)) {
                 continue;
             }
