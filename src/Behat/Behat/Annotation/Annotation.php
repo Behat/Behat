@@ -158,4 +158,20 @@ abstract class Annotation implements AnnotationInterface
             return new \ReflectionFunction($this->callback);
         }
     }
+
+    /**
+     * Make sure that stuff can be serialized properly.
+     *
+     * @return array of serializable property names.
+     */
+    public function __sleep() {
+        $serializable = array();
+        foreach ($this as $paramName => $paramValue) {
+            if (!is_string($paramValue) && !is_array($paramValue) && is_callable($paramValue)) {
+                continue;
+            }
+            $serializable[] = $paramName;
+        }
+        return $serializable;
+    }
 }
