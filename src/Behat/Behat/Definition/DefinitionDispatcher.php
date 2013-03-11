@@ -141,7 +141,7 @@ class DefinitionDispatcher
                     $context, $definition->getCallbackReflection(), array_slice($arguments, 1), $multiline
                 );
 
-                if (!skip) {
+                if (!$skip) {
                     // transform arguments
                     foreach ($arguments as $num => $argument) {
                         foreach ($this->getTransformations() as $trans) {
