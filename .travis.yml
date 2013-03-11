@@ -8,11 +8,6 @@ env:
   - SYMFONY_VERSION='2.2.*'
   - SYMFONY_VERSION='2.3.*@dev'
 
-branches:
-  only:
-    - master
-    - develop
-
 before_script:
   - curl http://getcomposer.org/installer | php
   - php composer.phar require --no-update symfony/symfony=$SYMFONY_VERSION
