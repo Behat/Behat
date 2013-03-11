@@ -118,7 +118,7 @@ class DefinitionDispatcher
      * @throws AmbiguousException if step description is ambiguous
      * @throws UndefinedException if step definition not found
      */
-    public function findDefinition(ContextInterface $context, StepNode $step, $skip)
+    public function findDefinition(ContextInterface $context, StepNode $step, $skip = false)
     {
         $text       = $step->getText();
         $multiline  = $step->getArguments();
