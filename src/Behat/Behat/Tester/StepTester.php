@@ -114,7 +114,7 @@ class StepTester implements NodeVisitorInterface
         $snippet    = null;
 
         try {
-            $definition = $this->definitions->findDefinition($this->context, $step);
+            $definition = $this->definitions->findDefinition($this->context, $step, $this->skip);
 
             if ($this->skip) {
                 return new StepEvent(
