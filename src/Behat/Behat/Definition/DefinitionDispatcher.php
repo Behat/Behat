@@ -143,7 +143,7 @@ class DefinitionDispatcher
 
                 if (!$skip) {
                     // transform arguments
-                    foreach ($arguments as $num => &$argument) {
+                    foreach ($arguments as &$argument) {
                         foreach ($this->getTransformations() as $trans) {
                             $transRegex = $this->translateDefinitionRegex(
                                 $trans->getRegex(), $step->getLanguage()
