@@ -262,7 +262,8 @@ class HtmlFormatter extends PrettyFormatter
         foreach ($events as $event) {
             $exception = $event->getException();
             if ($exception && !$exception instanceof UndefinedException) {
-                $error = $this->relativizePathsInString($exception->getMessage());
+                $error = $this->exceptionToString($exception);
+                $error = $this->relativizePathsInString($error);
 
                 $this->writeln('<tr class="failed exception">');
                 $this->writeln('<td colspan="' . $colCount . '">');
@@ -378,7 +379,8 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printStepException(\Exception $exception, $color)
     {
-        $error = $this->relativizePathsInString($exception->getMessage());
+        $error = $this->exceptionToString($exception);
+        $error = $this->relativizePathsInString($error);
 
         $this->writeln('<pre class="backtrace">' . htmlspecialchars($error) . '</pre>');
     }
