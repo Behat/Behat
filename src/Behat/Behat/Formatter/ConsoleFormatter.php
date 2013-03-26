@@ -312,12 +312,13 @@ abstract class ConsoleFormatter implements FormatterInterface
             // PHPUnit assertion exceptions do not include expected / observed info in their
             // messages, but expect the test listeners to format that info like the following
             // (see e.g. PHPUnit_TextUI_ResultPrinter::printDefectTrace)
-            return \PHPUnit_Framework_TestFailure::exceptionToString($exception);
+            return trim(\PHPUnit_Framework_TestFailure::exceptionToString($exception));
         }
 
         if ($this->parameters->get('verbose')) {
-            return (string) $exception;
+            return trim($exception);
         }
-        return $exception->getMessage();
+
+        return trim($exception->getMessage());
     }
 }

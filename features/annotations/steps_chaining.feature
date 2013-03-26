@@ -340,6 +340,15 @@ Feature: Call step in other step
           Of feature `Стандартный калькулятор'.        # features/calc_ru.feature
 
       02. Failed asserting that two arrays are equal.
+          --- Expected
+          +++ Actual
+          @@ @@
+           Array (
+          -    'username' => 'everzet'
+          -    'password' => 'qwerty'
+          +    'username' => 'antono'
+          +    'password' => '123'
+           )
           In step `Допустим Я создам себе failing таблицу'. # FeatureContext::assertFailingTableRu()
           From scenario ***.                                # features/calc_ru.feature:8
           Of feature `Стандартный калькулятор'.             # features/calc_ru.feature
