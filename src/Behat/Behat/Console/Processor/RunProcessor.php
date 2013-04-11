@@ -155,7 +155,11 @@ class RunProcessor extends Processor
             }, -5);
     }
 
-    protected function initializeStopOnFailure() {
+    /**
+     * Adds listener to detect failed scenario and then triggers command to abort the suite run.
+     */
+    protected function initializeStopOnFailure()
+    {
         $command = $this->container->get('behat.console.command');
         
         $this->container->get('behat.event_dispatcher')
