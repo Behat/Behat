@@ -225,7 +225,7 @@ Feature: Different result types
       """
       <?php
       $steps->Given('/^I have throwed (\d+)\$ into machine$/', function($world, $money) {
-          $world->money += $money;
+          $world->money = isset($world->money) ? ($world->money + $money) : (int)$money;
       });
       $steps->Then('/^I should see (\d+)\$ on the screen$/', function($world, $money) {
           assertEquals($money, $world->money);
