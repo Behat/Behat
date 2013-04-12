@@ -109,6 +109,9 @@ class Configuration
                         booleanNode('dry_run')->
                             defaultNull()->
                         end()->
+                        booleanNode('stop_on_failure')->
+                            defaultNull()->
+                        end()->
                         scalarNode('rerun')->
                             defaultNull()->
                         end()->

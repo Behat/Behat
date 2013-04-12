@@ -8,6 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface;
 
+use Behat\Behat\Event\StepEvent;
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -48,6 +50,9 @@ class RunProcessor extends Processor
             )
             ->addOption('--dry-run', null, InputOption::VALUE_NONE,
                 'Invokes formatters without executing the steps & hooks.'
+            )
+            ->addOption('--stop-on-failure', null, InputOption::VALUE_NONE,
+                'Stop processing on first failed scenario.'
             )
             ->addOption('--rerun', null, InputOption::VALUE_REQUIRED,
                 "Save list of failed scenarios into new file\n" .
@@ -102,6 +107,10 @@ class RunProcessor extends Processor
         } elseif ($class = $this->container->getParameter('behat.options.append_snippets')) {
             $this->initializeSnippetsAppender(true !== $class ? $class : null);
         }
+
+        if ($input->getOption('stop-on-failure') || $this->container->getParameter('behat.options.stop_on_failure')) {
+            $this->initializeStopOnFailure();
+        }
     }
 
     /**
@@ -145,4 +154,20 @@ class RunProcessor extends Processor
                 }
             }, -5);
     }
+
+    /**
+     * Adds listener to detect failed scenario and then triggers command to abort the suite run.
+     */
+    protected function initializeStopOnFailure()
+    {
+        $command = $this->container->get('behat.console.command');
+        
+        $this->container->get('behat.event_dispatcher')
+            ->addListener('afterScenario', function ($scenarioEvent) use ($command) {
+                if ($scenarioEvent->getResult() === StepEvent::FAILED) {
+                    $command->abortSuite();
+                }
+            });
+    }
+
 }
