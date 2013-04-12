@@ -169,7 +169,7 @@ class BehatCommand extends BaseCommand
     }
 
     /**
-     * Abort Suite on interution or when running in stop-on-failure mode.
+     * Abort Suite on interuption or when running in stop-on-failure mode.
      */
     public function abortSuite()
     {
