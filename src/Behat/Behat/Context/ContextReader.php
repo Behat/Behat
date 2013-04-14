@@ -56,7 +56,7 @@ class ContextReader
      *
      * @param ContextInterface $context
      */
-    private function readFromContext(ContextInterface $context)
+    public function readFromContext(ContextInterface $context)
     {
         foreach ($this->loaders as $loader) {
             if ($loader->supports($context)) {

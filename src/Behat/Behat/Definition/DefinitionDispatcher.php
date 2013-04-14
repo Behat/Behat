@@ -13,6 +13,7 @@ use Behat\Behat\Definition\Proposal\DefinitionProposalDispatcher,
     Behat\Behat\Exception\AmbiguousException,
     Behat\Behat\Exception\UndefinedException,
     Behat\Behat\Context\ContextInterface,
+    Behat\Behat\Context\Loader\LoaderInterface,
     Behat\Behat\Definition\DefinitionSnippet;
 
 /*
@@ -35,6 +36,11 @@ class DefinitionDispatcher
     private $proposalDispatcher;
     private $translator;
 
+    /** 
+     * Set during initialization so we can re-load later in the process.
+     */
+    private $definitionLoader = NULL;
+
     /**
      * Initializes definition dispatcher.
      *
@@ -45,6 +51,15 @@ class DefinitionDispatcher
     {
         $this->proposalDispatcher   = $proposalDispatcher;
         $this->translator           = $translator;
+    }
+    
+    /**
+     * An annotatedLoader callable late for just-in-time subcontext loading
+     * @param AnnotatedLoader $loader
+     */
+    public function setDefinitionLoader(LoaderInterface $loader) 
+    {
+      $this->definitionLoader = $loader;
     }
 
     /**
@@ -124,6 +139,9 @@ class DefinitionDispatcher
         $multiline  = $step->getArguments();
         $matches    = array();
 
+        // Load definitions for this context (and subcontexts)
+        $this->definitionLoader->load($context);
+        
         // find step to match
         foreach ($this->getDefinitions() as $origRegex => $definition) {
             $transRegex = $this->translateDefinitionRegex($origRegex, $step->getLanguage());
