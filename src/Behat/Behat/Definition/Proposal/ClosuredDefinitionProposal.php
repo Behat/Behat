@@ -84,7 +84,7 @@ class ClosuredDefinitionProposal implements DefinitionProposalInterface
     throw new \Behat\Behat\Exception\PendingException();
 });
 PHP
-          , '%s', $regex, implode(', ', $args)
+          , '%s', str_replace('%', '%%', $regex), implode(', ', $args)
         );
 
         return new DefinitionSnippet($step, $description);
