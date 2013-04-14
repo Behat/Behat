@@ -84,7 +84,7 @@ class DefinitionSnippet
      */
     public function getSnippet()
     {
-        return sprintf($this->template, $this->type);
+        return sprintf(preg_replace('/%(?!s)/', '%%', $this->template), $this->type);
     }
 
     /**
