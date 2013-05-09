@@ -118,6 +118,9 @@ class Configuration
                         scalarNode('append_snippets')->
                             defaultNull()->
                         end()->
+                        scalarNode('feature_language')->
+                            defaultNull()->
+                        end()->
                     end()->
                 end()->
             end()->
