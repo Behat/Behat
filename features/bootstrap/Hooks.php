@@ -1,7 +1,6 @@
 <?php
 
-use Behat\Behat\Context\BehatContext,
-    Behat\Behat\Exception\PendingException;
+use Behat\Behat\Context\BehatContext;
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
@@ -27,8 +26,8 @@ class Hooks extends BehatContext
      */
     public function checkThatWeHaveMainContext()
     {
-        assertInstanceOf('FeatureContext', $this->getMainContext());
-        assertEquals('Hello, zet', $this->getMainContext()->getSubcontext('support')->hello('zet'));
+        \PHPUnit_Framework_Assert::assertInstanceOf('FeatureContext', $this->getMainContext());
+        \PHPUnit_Framework_Assert::assertEquals('Hello, zet', $this->getMainContext()->getSubcontext('support')->hello('zet'));
     }
 
     /**
@@ -70,7 +69,8 @@ class Hooks extends BehatContext
      *
      * @param   string  $path
      */
-    private static function rmdirRecursive($path) {
+    private static function rmdirRecursive($path)
+    {
         $files = scandir($path);
         array_shift($files);
         array_shift($files);
