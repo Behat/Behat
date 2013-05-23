@@ -1,7 +1,6 @@
 <?php
 
-use Behat\Behat\Context\BehatContext,
-    Behat\Behat\Exception\PendingException;
+use Behat\Behat\Context\BehatContext;
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
@@ -26,8 +25,8 @@ class BaseFeaturesContext extends BehatContext
      *
      * @Given /^(?:there is )?a file named "([^"]*)" with:$/
      *
-     * @param   string                          $filename   name of the file (relative path)
-     * @param   Behat\Gherkin\Node\PyStringNode $content    PyString string instance
+     * @param   string       $filename   name of the file (relative path)
+     * @param   PyStringNode $content    PyString string instance
      */
     public function aFileNamedWith($filename, PyStringNode $content) {}
 
