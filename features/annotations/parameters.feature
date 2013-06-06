@@ -158,3 +158,33 @@ Feature: Parameters
       3 scenarios (3 passed)
       15 steps (15 passed)
       """
+
+  @unix
+  Scenario: JSON-formatted parameters
+    Given "BEHAT_PARAMS" environment variable is set to:
+      """
+      {"formatter":{"name":"pretty", "parameters":{"time":false}}}
+      """
+    When I run "behat --no-ansi -c unexistent"
+    Then it should pass with:
+      """
+      Feature: Math
+
+        Background:                     # features/math.feature:2
+          Given I have basic calculator # FeatureContext::iHaveBasicCalculator()
+
+        Scenario Outline:                    # features/math.feature:5
+          Given I have entered <number1>     # FeatureContext::iHaveEntered()
+          And I have entered <number2>       # FeatureContext::iHaveEntered()
+          When I add                         # FeatureContext::iAdd()
+          Then The result should be <result> # FeatureContext::theResultShouldBe()
+
+          Examples:
+            | number1 | number2 | result |
+            | 10      | 12      | 22     |
+            | 5       | 3       | 8      |
+            | 5       | 5       | 10     |
+
+      3 scenarios (3 passed)
+      15 steps (15 passed)
+      """

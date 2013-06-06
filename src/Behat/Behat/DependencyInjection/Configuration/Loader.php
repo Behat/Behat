@@ -75,8 +75,12 @@ class Loader
     {
         $configs = array();
         if ($envConfig = getenv('BEHAT_PARAMS')) {
-            parse_str($envConfig, $config);
-            $configs[] = $this->normalizeRawConfiguration($config);
+            if (null === $config = @json_decode($envConfig, true)) {
+                @parse_str($envConfig, $config);
+                $config = $this->normalizeRawConfiguration($config);
+            }
+
+            $configs[] = $config;
         }
 
         return $configs;

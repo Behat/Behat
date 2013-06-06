@@ -65,6 +65,7 @@ class FeatureSuiteLoader extends AbstractFileLoader
 
         $iterator = Finder::create()
             ->depth(0)
+            ->followLinks()
             ->sortByName()
             ->in($this->featuresPath)
         ;

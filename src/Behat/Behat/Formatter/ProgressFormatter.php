@@ -189,13 +189,14 @@ class ProgressFormatter extends ConsoleFormatter
             $exception = $event->getException();
 
             if (null !== $exception) {
-                $color = $exception instanceof PendingException ? 'pending' : 'failed';
-
-                if ($this->parameters->get('verbose') && 'pending' !== $color) {
-                    $error = (string) $exception;
-                } else {
+                if ($exception instanceof PendingException) {
+                    $color = 'pending';
                     $error = $exception->getMessage();
+                } else {
+                    $color = 'failed';
+                    $error = $this->exceptionToString($exception);
                 }
+
                 $error = sprintf("%s. %s",
                     str_pad((string) ($number + 1), 2, '0', STR_PAD_LEFT),
                     strtr($error, array("\n" => "\n    "))

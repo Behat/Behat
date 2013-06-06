@@ -208,13 +208,13 @@ Feature: Different result types
         I need to be able to know about failed actions
 
         Background:
-          Given I have throwed 10$ into machine
+          Given I have thrown 10$ into machine
 
-        Scenario: Check throwed amount
+        Scenario: Check thrown amount
           Then I should see 12$ on the screen
 
         Scenario: Additional throws
-          Given I have throwed 20$ into machine
+          Given I have thrown 20$ into machine
           Then I should see 31$ on the screen
           And I should see 33$ on the screen
       """
@@ -232,7 +232,7 @@ Feature: Different result types
           private $money = 0;
 
           /**
-           * @Given /^I have throwed (\d+)\$ into machine$/
+           * @Given /^I have thrown (\d+)\$ into machine$/
            */
           public function pay($money) {
               $this->money += $money;
@@ -255,7 +255,7 @@ Feature: Different result types
 
       01. Failed asserting that 10 matches expected '12'.
           In step `Then I should see 12$ on the screen'. # FeatureContext::iShouldSee()
-          From scenario `Check throwed amount'.          # features/coffee.feature:9
+          From scenario `Check thrown amount'.           # features/coffee.feature:9
           Of feature `Failed coffee machine actions'.    # features/coffee.feature
 
       02. Failed asserting that 30 matches expected '31'.

@@ -642,11 +642,7 @@ class PrettyFormatter extends ProgressFormatter
             if ($exception && !$exception instanceof UndefinedException) {
                 $color = $this->getResultColorCode($event->getResult());
 
-                if ($this->parameters->get('verbose')) {
-                    $error = (string) $exception;
-                } else {
-                    $error = $exception->getMessage();
-                }
+                $error = $this->exceptionToString($exception);
                 $error = $this->relativizePathsInString($error);
 
                 $this->writeln(
@@ -816,11 +812,7 @@ class PrettyFormatter extends ProgressFormatter
     {
         $indent = $this->stepIndent;
 
-        if ($this->parameters->get('verbose')) {
-            $error = (string) $exception;
-        } else {
-            $error = $exception->getMessage();
-        }
+        $error = $this->exceptionToString($exception);
         $error = $this->relativizePathsInString($error);
 
         $this->writeln(

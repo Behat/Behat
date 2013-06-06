@@ -145,7 +145,7 @@ class BehatCommand extends BaseCommand
             // and run it in FeatureTester
             foreach ($features as $feature) {
                 $tester = $this->getContainer()->get('behat.tester.feature');
-                $tester->setDryRun($this->isDryRun());
+                $tester->setSkip($this->isDryRun());
 
                 $feature->accept($tester);
             }
@@ -169,6 +169,19 @@ class BehatCommand extends BaseCommand
     }
 
     /**
+     * Abort Suite on interuption or when running in stop-on-failure mode.
+     */
+    public function abortSuite()
+    {
+        $dispatcher = $this->getContainer()->get('behat.event_dispatcher');
+        $logger     = $this->getContainer()->get('behat.logger');
+        $parameters = $this->getContainer()->get('behat.context.dispatcher')->getContextParameters();
+
+        $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, $parameters, false));
+        exit(1);
+    }
+
+    /**
      * Fire beforeSuite event.
      */
     protected function beforeSuite()
@@ -182,10 +195,7 @@ class BehatCommand extends BaseCommand
         // catch app interruption
         if (function_exists('pcntl_signal')) {
             declare(ticks = 1);
-            pcntl_signal(SIGINT, function() use($dispatcher, $parameters, $logger) {
-                $dispatcher->dispatch('afterSuite', new SuiteEvent($logger, $parameters, false));
-                exit(1);
-            });
+            pcntl_signal(SIGINT, array($this, 'abortSuite'));
         }
     }
 

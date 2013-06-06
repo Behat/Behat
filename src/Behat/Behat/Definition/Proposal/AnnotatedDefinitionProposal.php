@@ -137,7 +137,7 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
         throw new PendingException();
     }
 PHP
-          , '%s', $regex, $methodName, implode(', ', $args)
+          , '%s', str_replace('%', '%%', $regex), $methodName, implode(', ', $args)
         );
     }
 }

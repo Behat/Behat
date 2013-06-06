@@ -300,4 +300,25 @@ abstract class ConsoleFormatter implements FormatterInterface
             $message, $number, $parameters, 'behat', $this->parameters->get('language')
         );
     }
+
+    /**
+     * Creates a user-presentable string describing the given exception.
+     *
+     * @param $exception \Exception The exception to describe
+     */
+    protected function exceptionToString(\Exception $exception)
+    {
+        if ($exception instanceof \PHPUnit_Framework_Exception) {
+            // PHPUnit assertion exceptions do not include expected / observed info in their
+            // messages, but expect the test listeners to format that info like the following
+            // (see e.g. PHPUnit_TextUI_ResultPrinter::printDefectTrace)
+            return trim(\PHPUnit_Framework_TestFailure::exceptionToString($exception));
+        }
+
+        if ($this->parameters->get('verbose')) {
+            return trim($exception);
+        }
+
+        return trim($exception->getMessage());
+    }
 }

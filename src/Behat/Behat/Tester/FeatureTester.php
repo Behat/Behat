@@ -30,7 +30,7 @@ class FeatureTester implements NodeVisitorInterface
     private $container;
     private $dispatcher;
     private $parameters;
-    private $dryRun = false;
+    private $skip = false;
 
     /**
      * Initializes tester.
@@ -47,11 +47,11 @@ class FeatureTester implements NodeVisitorInterface
     /**
      * Sets tester to dry-run mode.
      *
-     * @param Boolean $dryRun
+     * @param Boolean $skip
      */
-    public function setDryRun($dryRun = true)
+    public function setSkip($skip = true)
     {
-        $this->dryRun = (bool) $dryRun;
+        $this->skip = (bool) $skip;
     }
 
     /**
@@ -65,33 +65,32 @@ class FeatureTester implements NodeVisitorInterface
      */
     public function visit(AbstractNode $feature)
     {
+        $this->dispatcher->dispatch(
+            'beforeFeature', new FeatureEvent($feature, $this->parameters)
+        );
+
         $result = 0;
+        $skip   = false;
 
-        // If feature has scenarios - run them
-        if ($feature->hasScenarios()) {
-            $this->dispatcher->dispatch(
-                'beforeFeature', new FeatureEvent($feature, $this->parameters)
-            );
-
-            foreach ($feature->getScenarios() as $scenario) {
-                if ($scenario instanceof OutlineNode) {
-                    $tester = $this->container->get('behat.tester.outline');
-                } elseif ($scenario instanceof ScenarioNode) {
-                    $tester = $this->container->get('behat.tester.scenario');
-                } else {
-                    throw new BehaviorException(
-                        'Unknown scenario type found: ' . get_class($scenario)
-                    );
-                }
-
-                $tester->setDryRun($this->dryRun);
-                $result = max($result, $scenario->accept($tester));
+        // Visit & test scenarios
+        foreach ($feature->getScenarios() as $scenario) {
+            if ($scenario instanceof OutlineNode) {
+                $tester = $this->container->get('behat.tester.outline');
+            } elseif ($scenario instanceof ScenarioNode) {
+                $tester = $this->container->get('behat.tester.scenario');
+            } else {
+                throw new BehaviorException(
+                    'Unknown scenario type found: ' . get_class($scenario)
+                );
             }
 
-            $this->dispatcher->dispatch(
-                'afterFeature', new FeatureEvent($feature, $this->parameters, $result)
-            );
+            $tester->setSkip($skip || $this->skip);
+            $result = max($result, $scenario->accept($tester));
         }
+
+        $this->dispatcher->dispatch(
+            'afterFeature', new FeatureEvent($feature, $this->parameters, $result)
+        );
 
         return $result;
     }

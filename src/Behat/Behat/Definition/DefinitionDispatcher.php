@@ -109,6 +109,7 @@ class DefinitionDispatcher
      *
      * @param ContextInterface $context
      * @param StepNode         $step
+     * @param bool             $skip
      *
      * @return Definition
      *
@@ -117,7 +118,7 @@ class DefinitionDispatcher
      * @throws AmbiguousException if step description is ambiguous
      * @throws UndefinedException if step definition not found
      */
-    public function findDefinition(ContextInterface $context, StepNode $step)
+    public function findDefinition(ContextInterface $context, StepNode $step, $skip = false)
     {
         $text       = $step->getText();
         $multiline  = $step->getArguments();
@@ -140,16 +141,18 @@ class DefinitionDispatcher
                     $context, $definition->getCallbackReflection(), array_slice($arguments, 1), $multiline
                 );
 
-                // transform arguments
-                foreach ($arguments as $num => $argument) {
-                    foreach ($this->getTransformations() as $trans) {
-                        $transRegex = $this->translateDefinitionRegex(
-                            $trans->getRegex(), $step->getLanguage()
-                        );
+                if (!$skip) {
+                    // transform arguments
+                    foreach ($arguments as &$argument) {
+                        foreach ($this->getTransformations() as $trans) {
+                            $transRegex = $this->translateDefinitionRegex(
+                                $trans->getRegex(), $step->getLanguage()
+                            );
 
-                        $newArgument = $trans->transform($transRegex, $context, $argument);
-                        if (null !== $newArgument) {
-                            $arguments[$num] = $newArgument;
+                            $newArgument = $trans->transform($transRegex, $context, $argument);
+                            if (null !== $newArgument) {
+                                $argument = $newArgument;
+                            }
                         }
                     }
                 }

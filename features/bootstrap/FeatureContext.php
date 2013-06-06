@@ -1,12 +1,7 @@
 <?php
 
-use Behat\Behat\Context\BehatContext,
-    Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
-
-require_once 'PHPUnit/Autoload.php';
-require_once 'PHPUnit/Framework/Assert/Functions.php';
 
 // order of autoloading is undefined, so we should
 // require parent class explicitly here
@@ -92,7 +87,7 @@ class FeatureContext extends BaseFeaturesContext
      */
     public function fileShouldExist($path)
     {
-        assertFileExists(getcwd() . DIRECTORY_SEPARATOR . $path);
+        \PHPUnit_Framework_Assert::assertFileExists(getcwd() . DIRECTORY_SEPARATOR . $path);
     }
 
     /**
@@ -123,7 +118,7 @@ class FeatureContext extends BaseFeaturesContext
         }
 
         if ($this->env) {
-            exec($command = sprintf('BEHAT_PARAMS="%s" %s %s %s',
+            exec($command = sprintf('BEHAT_PARAMS=\'%s\' %s %s %s',
                 $this->env, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
             ), $output, $return);
         } else {
@@ -150,15 +145,15 @@ class FeatureContext extends BaseFeaturesContext
      *
      * @Then /^it should (fail|pass) with:$/
      *
-     * @param   string                          $success    "fail" or "pass"
-     * @param   Behat\Gherkin\Node\PyStringNode $text       PyString text instance
+     * @param   string       $success    "fail" or "pass"
+     * @param   PyStringNode $text       PyString text instance
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
         if ('fail' === $success) {
-            assertNotEquals(0, $this->return);
+            \PHPUnit_Framework_Assert::assertNotEquals(0, $this->return);
         } else {
-            assertEquals(0, $this->return);
+            \PHPUnit_Framework_Assert::assertEquals(0, $this->return);
         }
 
         $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
@@ -176,12 +171,7 @@ class FeatureContext extends BaseFeaturesContext
             }, (string) $text);
         }
 
-        try {
-            assertEquals((string) $text, $this->output);
-        } catch (Exception $e) {
-            $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
-            throw new Exception($diff, $e->getCode(), $e);
-        }
+        \PHPUnit_Framework_Assert::assertEquals((string) $text, $this->output);
     }
 
     /**
@@ -189,18 +179,13 @@ class FeatureContext extends BaseFeaturesContext
      *
      * @Given /^"([^"]*)" file should contain:$/
      *
-     * @param   string                          $path   file path
-     * @param   Behat\Gherkin\Node\PyStringNode $text   file content
+     * @param   string       $path   file path
+     * @param   PyStringNode $text   file content
      */
     public function fileShouldContain($path, PyStringNode $text)
     {
-        try {
-            assertFileExists($path);
-            assertEquals((string) $text, trim(file_get_contents($path)));
-        } catch (Exception $e) {
-            $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
-            throw new Exception($diff, $e->getCode(), $e);
-        }
+        \PHPUnit_Framework_Assert::assertFileExists($path);
+        \PHPUnit_Framework_Assert::assertEquals((string) $text, trim(file_get_contents($path)));
     }
 
     /**
@@ -218,7 +203,7 @@ class FeatureContext extends BaseFeaturesContext
      *
      * @Then the output should contain:
      *
-     * @param   Behat\Gherkin\Node\PyStringNode $text   PyString text instance
+     * @param   PyStringNode $text   PyString text instance
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
@@ -237,12 +222,7 @@ class FeatureContext extends BaseFeaturesContext
             }, (string) $text);
         }
 
-        try {
-            assertContains((string) $text, $this->output);
-        } catch (Exception $e) {
-            $diff = PHPUnit_Framework_TestFailure::exceptionToString($e);
-            throw new Exception($diff, $e->getCode(), $e);
-        }
+        \PHPUnit_Framework_Assert::assertContains((string) $text, $this->output);
     }
 
     /**
@@ -255,9 +235,9 @@ class FeatureContext extends BaseFeaturesContext
     public function itShouldFail($success)
     {
         if ('fail' === $success) {
-            assertNotEquals(0, $this->return);
+            \PHPUnit_Framework_Assert::assertNotEquals(0, $this->return);
         } else {
-            assertEquals(0, $this->return);
+            \PHPUnit_Framework_Assert::assertEquals(0, $this->return);
         }
     }
 }
