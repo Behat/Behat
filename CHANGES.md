@@ -1,3 +1,12 @@
+2.4.6 / 2013-06-06
+==================
+
+  * New --stop-on-failure option
+  * Support JSON in environment variables
+  * Update Gherkin
+  * Support Symfony 2.3
+  * Out-of-the-box support for PHPUnit assertions pretty output
+
 2.4.5 / 2013-01-27
 ==================
 
