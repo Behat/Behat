@@ -40,6 +40,31 @@ class ScenarioEvent extends BaseScenarioEvent
     }
 
     /**
+     * Serialize class properties.
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                'scenario' => $this->scenario,
+                'parentData' => parent::serialize(),
+            )
+        );
+    }
+
+    /**
+     * Unserialize class properties.
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        $data = unserialize($data);
+        $this->scenario = $data['scenario'];
+        parent::unserialize($data['parentData']);
+    }
+
+    /**
      * Returns scenario node.
      *
      * @return ScenarioNode

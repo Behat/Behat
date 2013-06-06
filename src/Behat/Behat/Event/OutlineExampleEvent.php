@@ -43,6 +43,33 @@ class OutlineExampleEvent extends BaseScenarioEvent
     }
 
     /**
+     * Serialize class properties.
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                'outline' => $this->outline,
+                'iteration' => $this->iteration,
+                'parentData' => parent::serialize(),
+            )
+        );
+    }
+
+    /**
+     * Unserialize class properties.
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        $data = unserialize($data);
+        $this->outline = $data['outline'];
+        $this->iteration = $data['iteration'];
+        parent::unserialize($data['parentData']);
+    }
+
+    /**
      * Returns outline node.
      *
      * @return OutlineNode

@@ -19,7 +19,7 @@ use Behat\Gherkin\Node\FeatureNode;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureEvent extends Event implements EventInterface
+class FeatureEvent extends BehatEvent
 {
     private $feature;
     private $result;
@@ -37,6 +37,35 @@ class FeatureEvent extends Event implements EventInterface
         $this->feature    = $feature;
         $this->parameters = $parameters;
         $this->result     = $result;
+    }
+
+    /**
+     * Serialize class properties.
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                'feature' => $this->feature,
+                'parameters' => $this->parameters,
+                'result' => $this->result,
+                'parentData' => parent::serialize(),
+            )
+        );
+    }
+
+    /**
+     * Unserialize class properties.
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        $data = unserialize($data);
+        $this->feature = $data['feature'];
+        $this->parameters = $data['parameters'];
+        $this->result = $data['result'];
+        parent::unserialize($data['parentData']);
     }
 
     /**

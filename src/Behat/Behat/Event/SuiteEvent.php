@@ -19,7 +19,7 @@ use Behat\Behat\DataCollector\LoggerDataCollector;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteEvent extends Event implements EventInterface
+class SuiteEvent extends BehatEvent
 {
     private $logger;
     private $completed;
@@ -37,6 +37,35 @@ class SuiteEvent extends Event implements EventInterface
         $this->logger     = $logger;
         $this->parameters = $parameters;
         $this->completed  = (Boolean) $completed;
+    }
+
+    /**
+     * Serialize class properties.
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                'logger' => $this->logger,
+                'parameters' => $this->parameters,
+                'completed' => $this->completed,
+                'parentData' => parent::serialize(),
+            )
+        );
+    }
+
+    /**
+     * Unserialize class properties.
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        $data = unserialize($data);
+        $this->logger = $data['logger'];
+        $this->parameters = $data['parameters'];
+        $this->completed = $data['completed'];
+        parent::unserialize($data['parentData']);
     }
 
     /**

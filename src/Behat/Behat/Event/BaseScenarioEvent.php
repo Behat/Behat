@@ -19,7 +19,7 @@ use Behat\Behat\Context\ContextInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class BaseScenarioEvent extends Event implements EventInterface
+abstract class BaseScenarioEvent extends BehatEvent
 {
     private $context;
     private $result;
@@ -37,6 +37,35 @@ abstract class BaseScenarioEvent extends Event implements EventInterface
         $this->context = $context;
         $this->result  = $result;
         $this->skipped = $skipped;
+    }
+
+    /**
+     * Serialize class properties.
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                'context' => $this->context,
+                'result' => $this->result,
+                'skipped' => $this->skipped,
+                'parentData' => parent::serialize(),
+            )
+        );
+    }
+
+    /**
+     * Unserialize class properties.
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        $data = unserialize($data);
+        $this->context = $data['context'];
+        $this->result = $data['result'];
+        $this->skipped = $data['skipped'];
+        parent::unserialize($data['parentData']);
     }
 
     /**

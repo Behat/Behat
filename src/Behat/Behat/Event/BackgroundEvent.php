@@ -19,7 +19,7 @@ use Behat\Gherkin\Node\BackgroundNode;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BackgroundEvent extends Event implements EventInterface
+class BackgroundEvent extends BehatEvent
 {
     private $background;
     private $result;
@@ -37,6 +37,35 @@ class BackgroundEvent extends Event implements EventInterface
         $this->background   = $background;
         $this->result       = $result;
         $this->skipped      = $skipped;
+    }
+
+    /**
+     * Serialize class properties.
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                'background' => $this->background,
+                'result' => $this->result,
+                'skipped' => $this->skipped,
+                'parentData' => parent::serialize(),
+            )
+        );
+    }
+
+    /**
+     * Unserialize class properties.
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        $data = unserialize($data);
+        $this->background = $data['background'];
+        $this->result = $data['result'];
+        $this->skipped = $data['skipped'];
+        parent::unserialize($data['parentData']);
     }
 
     /**
