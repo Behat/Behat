@@ -134,7 +134,7 @@ class FeatureContext extends BehatContext
 {
     /**
      * Initializes context.
-     * Every scenario gets it's own context object.
+     * Every scenario gets its own context object.
      *
      * @param array $parameters context parameters (set them up through behat.yml)
      */
