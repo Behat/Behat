@@ -33,7 +33,7 @@ class StepEvent extends Event implements EventInterface
     const FAILED    = 4;
 
     private $step;
-    private $parent;
+    private $logicalParent;
     private $context;
     private $result;
     private $definition;
@@ -44,24 +44,24 @@ class StepEvent extends Event implements EventInterface
      * Initializes step event.
      *
      * @param StepNode            $step
-     * @param ScenarioNode        $parent
+     * @param ScenarioNode        $logicalParent
      * @param ContextInterface    $context
      * @param integer             $result
      * @param DefinitionInterface $definition
      * @param \Exception          $exception
      * @param DefinitionSnippet   $snippet
      */
-    public function __construct(StepNode $step, ScenarioNode $parent, ContextInterface $context,
+    public function __construct(StepNode $step, ScenarioNode $logicalParent, ContextInterface $context,
                                 $result = null, DefinitionInterface $definition = null,
                                 \Exception $exception = null, DefinitionSnippet $snippet = null)
     {
-        $this->step       = $step;
-        $this->parent     = $parent;
-        $this->context    = $context;
-        $this->result     = $result;
-        $this->definition = $definition;
-        $this->exception  = $exception;
-        $this->snippet    = $snippet;
+        $this->step          = $step;
+        $this->logicalParent = $logicalParent;
+        $this->context       = $context;
+        $this->result        = $result;
+        $this->definition    = $definition;
+        $this->exception     = $exception;
+        $this->snippet       = $snippet;
     }
 
     /**
@@ -81,7 +81,7 @@ class StepEvent extends Event implements EventInterface
      */
     public function getLogicalParent()
     {
-        return $this->parent;
+        return $this->logicalParent;
     }
 
     /**

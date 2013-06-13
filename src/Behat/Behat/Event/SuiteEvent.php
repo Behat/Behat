@@ -23,20 +23,20 @@ class SuiteEvent extends Event implements EventInterface
 {
     private $logger;
     private $completed;
-    private $parameters;
+    private $contextParameters;
 
     /**
      * Initializes suite event.
      *
-     * @param LoggerDataCollector $logger     suite logger
-     * @param mixed               $parameters context parameters
-     * @param Boolean             $completed  is suite completed
+     * @param LoggerDataCollector $logger            suite logger
+     * @param mixed               $contextParameters context parameters
+     * @param Boolean             $completed         is suite completed
      */
-    public function __construct(LoggerDataCollector $logger, $parameters, $completed)
+    public function __construct(LoggerDataCollector $logger, $contextParameters, $completed)
     {
-        $this->logger     = $logger;
-        $this->parameters = $parameters;
-        $this->completed  = (Boolean) $completed;
+        $this->logger            = $logger;
+        $this->contextParameters = $contextParameters;
+        $this->completed         = (Boolean) $completed;
     }
 
     /**
@@ -56,7 +56,7 @@ class SuiteEvent extends Event implements EventInterface
      */
     public function getContextParameters()
     {
-        return $this->parameters;
+        return $this->contextParameters;
     }
 
     /**
