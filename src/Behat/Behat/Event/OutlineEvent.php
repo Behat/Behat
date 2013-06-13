@@ -19,7 +19,7 @@ use Behat\Gherkin\Node\OutlineNode;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineEvent extends Event implements EventInterface
+class OutlineEvent extends BehatEvent
 {
     private $outline;
     private $result;
@@ -34,6 +34,33 @@ class OutlineEvent extends Event implements EventInterface
     {
         $this->outline  = $outline;
         $this->result   = $result;
+    }
+
+    /**
+     * Serialize class properties.
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                'outline' => $this->outline,
+                'result' => $this->result,
+                'parentData' => parent::serialize(),
+            )
+        );
+    }
+
+    /**
+     * Unserialize class properties.
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        $data = unserialize($data);
+        $this->outline = $data['outline'];
+        $this->result = $data['result'];
+        parent::unserialize($data['parentData']);
     }
 
     /**

@@ -24,7 +24,7 @@ use Behat\Gherkin\Node\StepNode,
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepEvent extends Event implements EventInterface
+class StepEvent extends BehatEvent
 {
     const PASSED    = 0;
     const SKIPPED   = 1;
@@ -62,6 +62,43 @@ class StepEvent extends Event implements EventInterface
         $this->definition = $definition;
         $this->exception  = $exception;
         $this->snippet    = $snippet;
+    }
+
+    /**
+     * Serialize class properties.
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                'step' => $this->step,
+                'parent' => $this->parent,
+                'context' => $this->context,
+                'result' => $this->result,
+                'definition' => $this->definition,
+                'exception' => $this->exception,
+                'snippet' => $this->snippet,
+                'parentData' => parent::serialize(),
+            )
+        );
+    }
+
+    /**
+     * Unserialize class properties.
+     * @param string $data
+     */
+    public function unserialize($data)
+    {
+        $data = unserialize($data);
+        $this->step = $data['step'];
+        $this->parent = $data['parent'];
+        $this->context = $data['context'];
+        $this->result = $data['result'];
+        $this->definition = $data['definition'];
+        $this->exception = $data['exception'];
+        $this->snippet = $data['snippet'];
+        parent::unserialize($data['parentData']);
     }
 
     /**
