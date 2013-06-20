@@ -1,8 +1,8 @@
-Behat
+Behat - [![Total Downloads](https://poser.pugx.org/behat/behat/downloads.png)](https://packagist.org/packages/behat/behat)
 =====
 
-- [stable (master)](https://github.com/Behat/Behat) ([![Master Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=master)](http://travis-ci.org/Behat/Behat)) - latest stable version.
-- [development (develop)](https://github.com/Behat/Behat/tree/develop) ([![Develop Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=develop)](http://travis-ci.org/Behat/Behat)) - development happens here and you should send your PRs here too.
+- [stable (master)](https://github.com/Behat/Behat) [![Master Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=master)](http://travis-ci.org/Behat/Behat) [![Latest Stable Version](https://poser.pugx.org/behat/behat/v/stable.png)](https://packagist.org/packages/behat/behat)
+- [development (develop)](https://github.com/Behat/Behat/tree/develop) [![Develop Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=develop)](http://travis-ci.org/Behat/Behat) - development happens here and you should send your PRs here too.
 
 Useful Links
 ------------
