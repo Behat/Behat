@@ -278,7 +278,7 @@ class JUnitFormatter extends ConsoleFormatter
             $elemAttributes = '';
             if ($elemType !== 'skipped') {
                 $elemAttributes = sprintf(
-                    'messages="%s" type="%s"',
+                    'message="%s" type="%s"',
                     htmlspecialchars($error),
                     $this->getResultColorCode($event->getResult())
                 );
