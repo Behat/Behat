@@ -23,20 +23,20 @@ class FeatureEvent extends Event implements EventInterface
 {
     private $feature;
     private $result;
-    private $parameters;
+    private $contextParameters;
 
     /**
      * Initializes feature event.
      *
      * @param FeatureNode $feature
-     * @param mixed       $parameters
+     * @param mixed       $contextParameters
      * @param integer     $result
      */
-    public function __construct(FeatureNode $feature, $parameters, $result = null)
+    public function __construct(FeatureNode $feature, $contextParameters, $result = null)
     {
-        $this->feature    = $feature;
-        $this->parameters = $parameters;
-        $this->result     = $result;
+        $this->feature           = $feature;
+        $this->contextParameters = $contextParameters;
+        $this->result            = $result;
     }
 
     /**
@@ -56,7 +56,7 @@ class FeatureEvent extends Event implements EventInterface
      */
     public function getContextParameters()
     {
-        return $this->parameters;
+        return $this->contextParameters;
     }
 
     /**
