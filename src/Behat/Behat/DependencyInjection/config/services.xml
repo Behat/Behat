@@ -197,7 +197,7 @@
         </service>
 
         <service id="output.formatter.junit"
-                 class="Behat\Behat\Output\Formatter\JunitFormatter">
+                 class="Behat\Behat\Output\Formatter\JUnitFormatter">
             <call method="setParameter">
                 <argument>base_path</argument>
                 <argument>%paths.base%</argument>
