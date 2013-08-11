@@ -15,12 +15,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Context initializers pass.
- * Registers all available context initializers.
+ * Suite generators pass.
+ * Registers all available suite generators.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextInitializersPass implements CompilerPassInterface
+class SuiteGeneratorsPass implements CompilerPassInterface
 {
     /**
      * Processes container.
@@ -29,10 +29,10 @@ class ContextInitializersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $poolInitializerDefinition = $container->getDefinition('context.pool_initializer');
+        $factoryDefinition = $container->getDefinition('suite.suite_factory');
 
-        foreach ($container->findTaggedServiceIds('context.initializer') as $id => $attributes) {
-            $poolInitializerDefinition->addMethodCall('registerInitializer', array(new Reference($id)));
+        foreach ($container->findTaggedServiceIds('suite.generator') as $id => $attributes) {
+            $factoryDefinition->addMethodCall('registerGenerator', array(new Reference($id)));
         }
     }
 }

@@ -15,12 +15,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Context initializers pass.
- * Registers all available context initializers.
+ * Features loader pass.
+ * Registers all available features loaders.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextInitializersPass implements CompilerPassInterface
+class FeaturesLoadersPass implements CompilerPassInterface
 {
     /**
      * Processes container.
@@ -29,10 +29,10 @@ class ContextInitializersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $poolInitializerDefinition = $container->getDefinition('context.pool_initializer');
+        $suitedLoaderDefinition = $container->getDefinition('features.features_loader');
 
-        foreach ($container->findTaggedServiceIds('context.initializer') as $id => $attributes) {
-            $poolInitializerDefinition->addMethodCall('registerInitializer', array(new Reference($id)));
+        foreach ($container->findTaggedServiceIds('features.loader') as $id => $attributes) {
+            $suitedLoaderDefinition->addMethodCall('registerLoader', array(new Reference($id)));
         }
     }
 }

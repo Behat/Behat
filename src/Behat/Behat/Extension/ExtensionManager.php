@@ -9,6 +9,9 @@ namespace Behat\Behat\Extension;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use ReflectionObject;
+use RuntimeException;
+use Symfony\Component\Config\Resource\FileResource;
 
 /**
  * Extensions manager.
@@ -17,7 +20,13 @@ namespace Behat\Behat\Extension;
  */
 class ExtensionManager
 {
+    /**
+     * @var string
+     */
     private $basePath;
+    /**
+     * @var ExtensionInterface[string]
+     */
     private $extensions = array();
 
     /**
@@ -34,10 +43,12 @@ class ExtensionManager
      * Activate extension by its id.
      *
      * @param string $id phar file name, php file name, class name
+     *
+     * @return string
      */
     public function activateExtension($id)
     {
-        $extensionId = strtolower(preg_replace('/[^a-zA-Z0-9]/', '_', $id));
+        $extensionId = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $id));
         if (!isset($this->extensions[$extensionId])) {
             $this->extensions[$extensionId] = $this->initializeExtension($id);
         }
@@ -68,7 +79,7 @@ class ExtensionManager
     /**
      * Returns all activated extensions.
      *
-     * @return array
+     * @return ExtensionInterface[]
      */
     public function getExtensions()
     {
@@ -84,11 +95,23 @@ class ExtensionManager
     {
         return array_unique(
             array_map(
-                function($extension) {
+                function ($extension) {
                     return get_class($extension);
                 },
                 $this->extensions
             )
+        );
+    }
+
+    public function getExtensionResources()
+    {
+        return array_map(
+            function ($extension) {
+                $reflection = new ReflectionObject($extension);
+
+                return new FileResource($reflection->getFileName());
+            },
+            $this->extensions
         );
     }
 
@@ -99,31 +122,31 @@ class ExtensionManager
      *
      * @return ExtensionInterface
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function initializeExtension($id)
     {
         $extension = null;
         if (class_exists($id)) {
             $extension = new $id;
-        } elseif (file_exists($this->basePath.DIRECTORY_SEPARATOR.$id)) {
-            $extension = require($this->basePath.DIRECTORY_SEPARATOR.$id);
+        } elseif (file_exists($this->basePath . DIRECTORY_SEPARATOR . $id)) {
+            $extension = require($this->basePath . DIRECTORY_SEPARATOR . $id);
         } else {
             $extension = require($id);
         }
 
         if (null === $extension) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 '"%s" extension could not be found.', $id
             ));
         }
         if (!is_object($extension)) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 '"%s" extension could not be initialized.', $id
             ));
         }
         if (!$extension instanceof ExtensionInterface) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 '"%s" extension class should implement ExtensionInterface.',
                 get_class($extension)
             ));

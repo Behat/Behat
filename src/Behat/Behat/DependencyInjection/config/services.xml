@@ -1,0 +1,442 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="paths.base">null</parameter>
+        <parameter key="paths.lib">null</parameter>
+        <parameter key="paths.i18n">%paths.lib%/i18n.php</parameter>
+        <parameter key="paths.gherkin.lib">null</parameter>
+        <parameter key="paths.gherkin.i18n">%paths.gherkin.lib%/i18n.php</parameter>
+
+        <parameter type="collection" key="extension.classes"/>
+
+        <parameter key="options.strict">false</parameter>
+        <parameter key="options.dry_run">false</parameter>
+        <parameter key="options.stop_on_failure">false</parameter>
+        <parameter key="options.append_snippets">false</parameter>
+        <parameter key="options.error_reporting">32767</parameter>
+    </parameters>
+
+    <services>
+        <service id="console.command"
+                 class="Behat\Behat\Console\BehatCommand">
+            <argument type="collection"/>
+        </service>
+
+        <service id="console.processor.append_snippets"
+                 class="Behat\Behat\Console\Processor\AppendSnippetsProcessor">
+            <argument type="service" id="snippet.context_snippets_appender"/>
+            <argument type="service" id="output.formatter_manager"/>
+            <tag name="console.processor"/>
+        </service>
+
+        <service id="console.processor.definitions_printer"
+                 class="Behat\Behat\Console\Processor\DefinitionsPrinterProcessor">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="definition.printer"/>
+            <tag name="console.processor"/>
+        </service>
+
+        <service id="console.processor.dry_run"
+                 class="Behat\Behat\Console\Processor\DryRunProcessor">
+            <argument type="service" id="tester.tester_dispatcher"/>
+            <argument type="service" id="hook.hook_dispatcher"/>
+            <tag name="console.processor"/>
+        </service>
+
+        <service id="console.processor.rerun"
+                 class="Behat\Behat\Console\Processor\RerunProcessor">
+            <argument type="service" id="run_control.cache_failed_scenarios_for_rerun"/>
+            <tag name="console.processor"/>
+        </service>
+
+        <service id="console.processor.run"
+                 class="Behat\Behat\Console\Processor\RunProcessor">
+            <argument type="service" id="event_dispatcher"/>
+            <argument>%options.strict%</argument>
+            <tag name="console.processor"/>
+        </service>
+
+        <service id="console.processor.format"
+                 class="Behat\Behat\Console\Processor\FormatProcessor">
+            <argument type="service" id="output.formatter_manager"/>
+            <argument type="service" id="translator"/>
+            <argument>%paths.i18n%</argument>
+            <tag name="console.processor"/>
+        </service>
+
+        <service id="console.processor.gherkin_filter"
+                 class="Behat\Behat\Console\Processor\GherkinFilterProcessor">
+            <argument type="service" id="gherkin"/>
+            <tag name="console.processor"/>
+        </service>
+
+        <service id="console.processor.init"
+                 class="Behat\Behat\Console\Processor\InitProcessor">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="class_loader"/>
+            <argument>%paths.base%</argument>
+            <tag name="console.processor"/>
+        </service>
+
+        <service id="console.processor.stop_on_failure"
+                 class="Behat\Behat\Console\Processor\StopOnFailureProcessor">
+            <argument type="service" id="run_control.stop_on_failure"/>
+            <tag name="console.processor"/>
+        </service>
+
+        <service id="console.processor.story_syntax_printer"
+                 class="Behat\Behat\Console\Processor\StorySyntaxPrinterProcessor">
+            <argument type="service" id="gherkin.printer"/>
+            <tag name="console.processor"/>
+        </service>
+
+        <service id="callee.executor"
+                 class="Behat\Behat\Callee\EventSubscriber\CalleeExecutor">
+            <argument>%options.error_reporting%</argument>
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="context.pool_factory"
+                 class="Behat\Behat\Context\EventSubscriber\ContextPoolFactory">
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="context.pool_initializer"
+                 class="Behat\Behat\Context\EventSubscriber\ContextPoolInitializer">
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="context.dictionary_reader"
+                 class="Behat\Behat\Context\EventSubscriber\DictionaryReader">
+            <argument type="service" id="context.callees_reader"/>
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="context.callees_reader"
+                 class="Behat\Behat\Context\Reader\CachedReader"/>
+
+        <service id="context.loader.annotated"
+                 class="Behat\Behat\Context\Reader\Loader\AnnotatedContextLoader">
+            <tag name="context.loader"/>
+        </service>
+
+        <service id="context.loader.translatable"
+                 class="Behat\Behat\Context\Reader\Loader\TranslatableContextLoader">
+            <argument type="service" id="translator"/>
+            <tag name="context.loader"/>
+        </service>
+
+        <service id="definition.finder"
+                 class="Behat\Behat\Definition\EventSubscriber\DefinitionFinder">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="translator"/>
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="definition.printer"
+                 class="Behat\Behat\Definition\Support\DefinitionsPrinter">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="translator"/>
+        </service>
+
+        <service id="features.features_loader"
+                 class="Behat\Behat\Features\EventSubscriber\FeaturesLoader">
+            <argument type="service" id="event_dispatcher"/>
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="features.loader.gherkin"
+                 class="Behat\Behat\Features\Loader\GherkinLoader">
+            <argument type="service" id="gherkin"/>
+            <tag name="features.loader"/>
+        </service>
+
+        <service id="output.formatter_manager"
+                 class="Behat\Behat\Output\FormatterManager">
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="output.formatter.pretty"
+                 class="Behat\Behat\Output\Formatter\PrettyFormatter">
+            <argument type="service" id="tester.statistics_collector"/>
+            <argument type="service" id="snippet.snippets_collector"/>
+            <argument type="service" id="translator"/>
+            <call method="setParameter">
+                <argument>base_path</argument>
+                <argument>%paths.base%</argument>
+            </call>
+            <tag name="output.formatter"/>
+        </service>
+
+        <service id="output.formatter.progress"
+                 class="Behat\Behat\Output\Formatter\ProgressFormatter">
+            <argument type="service" id="tester.statistics_collector"/>
+            <argument type="service" id="snippet.snippets_collector"/>
+            <argument type="service" id="translator"/>
+            <call method="setParameter">
+                <argument>base_path</argument>
+                <argument>%paths.base%</argument>
+            </call>
+            <tag name="output.formatter"/>
+        </service>
+
+        <service id="output.formatter.html"
+                 class="Behat\Behat\Output\Formatter\HtmlFormatter">
+            <argument type="service" id="tester.statistics_collector"/>
+            <argument type="service" id="snippet.snippets_collector"/>
+            <argument type="service" id="translator"/>
+            <call method="setParameter">
+                <argument>base_path</argument>
+                <argument>%paths.base%</argument>
+            </call>
+            <tag name="output.formatter"/>
+        </service>
+
+        <service id="output.formatter.junit"
+                 class="Behat\Behat\Output\Formatter\JunitFormatter">
+            <call method="setParameter">
+                <argument>base_path</argument>
+                <argument>%paths.base%</argument>
+            </call>
+            <tag name="output.formatter"/>
+        </service>
+
+        <service id="output.formatter.failed_scenarios"
+                 class="Behat\Behat\Output\Formatter\FailedScenariosFormatter">
+            <call method="setParameter">
+                <argument>base_path</argument>
+                <argument>%paths.base%</argument>
+            </call>
+            <tag name="output.formatter"/>
+        </service>
+
+        <service id="output.formatter.snippets"
+                 class="Behat\Behat\Output\Formatter\SnippetsFormatter">
+            <argument type="service" id="tester.statistics_collector"/>
+            <argument type="service" id="snippet.snippets_collector"/>
+            <argument type="service" id="translator"/>
+            <call method="setParameter">
+                <argument>base_path</argument>
+                <argument>%paths.base%</argument>
+            </call>
+            <tag name="output.formatter"/>
+        </service>
+
+        <service id="gherkin"
+                 class="Behat\Gherkin\Gherkin"/>
+
+        <service id="gherkin.parser"
+                 class="Behat\Gherkin\Parser">
+            <argument type="service" id="gherkin.lexer"/>
+        </service>
+
+        <service id="gherkin.lexer"
+                 class="Behat\Gherkin\Lexer">
+            <argument type="service" id="gherkin.keywords"/>
+        </service>
+
+        <service id="gherkin.keywords"
+                 class="Behat\Gherkin\Keywords\CachedArrayKeywords">
+            <argument>%paths.gherkin.i18n%</argument>
+        </service>
+
+        <service id="gherkin.printer"
+                 class="Behat\Behat\Gherkin\Support\SyntaxPrinter">
+            <argument type="service">
+                <service class="Behat\Gherkin\Keywords\KeywordsDumper">
+                    <argument type="service" id="gherkin.keywords"/>
+                </service>
+            </argument>
+        </service>
+
+        <service id="gherkin.loader.directory"
+                 class="Behat\Gherkin\Loader\DirectoryLoader">
+            <argument type="service" id="gherkin"/>
+            <tag name="gherkin.loader"/>
+        </service>
+
+        <service id="gherkin.loader.gherkin_file"
+                 class="Behat\Gherkin\Loader\GherkinFileLoader">
+            <argument type="service" id="gherkin.parser"/>
+            <call method="setCache">
+                <argument type="service">
+                    <service class="Behat\Gherkin\Cache\MemoryCache"/>
+                </argument>
+            </call>
+            <tag name="gherkin.loader"/>
+        </service>
+
+        <service id="hook.hook_dispatcher"
+                 class="Behat\Behat\Hook\EventSubscriber\HookDispatcher">
+            <argument type="service" id="event_dispatcher"/>
+            <argument>%options.dry_run%</argument>
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="snippet.snippet_generator"
+                 class="Behat\Behat\Snippet\EventSubscriber\ContextSnippetGenerator">
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="snippet.snippets_collector"
+                 class="Behat\Behat\Snippet\EventSubscriber\SnippetsCollector">
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="snippet.context_snippets_appender"
+                 class="Behat\Behat\Snippet\EventSubscriber\ContextSnippetsAppender">
+            <argument type="service" id="snippet.snippets_collector"/>
+            <argument>%options.append_snippets%</argument>
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="suite.suites_loader"
+                 class="Behat\Behat\Suite\EventSubscriber\SuitesLoader">
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="suite.suite_factory"
+                 class="Behat\Behat\Suite\SuiteFactory"
+                 public="true"/>
+
+        <service id="suite.generator.basic"
+                 class="Behat\Behat\Suite\Generator\BasicSuiteGenerator">
+            <tag name="suite.generator"/>
+        </service>
+
+        <service id="transformer.arguments_transformer"
+                 class="Behat\Behat\Transformation\EventSubscriber\ArgumentsTransformer">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="translator"/>
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="tester.statistics_collector"
+                 class="Behat\Behat\Tester\EventSubscriber\StatisticsCollector">
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="run_control.properly_stop_on_sigint"
+                 class="Behat\Behat\RunControl\EventSubscriber\ProperlyAbortOnSigint">
+            <argument type="service" id="event_dispatcher"/>
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="run_control.stop_on_failure"
+                 class="Behat\Behat\RunControl\EventSubscriber\StopOnFirstFailure">
+            <argument type="service" id="event_dispatcher"/>
+            <argument>%options.stop_on_failure%</argument>
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="run_control.cache_failed_scenarios_for_rerun"
+                 class="Behat\Behat\RunControl\EventSubscriber\CacheFailedScenariosForRerun">
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="tester.tester_dispatcher"
+                 class="Behat\Behat\Tester\EventSubscriber\TesterDispatcher">
+            <argument type="service" id="tester.exercise"/>
+            <argument type="service" id="tester.suite"/>
+            <argument type="service" id="tester.feature"/>
+            <argument type="service" id="tester.background"/>
+            <argument type="service" id="tester.scenario"/>
+            <argument type="service" id="tester.outline"/>
+            <argument type="service" id="tester.outline_example"/>
+            <argument type="service" id="tester.step"/>
+            <argument type="service" id="tester.step_skip"/>
+            <argument>%options.dry_run%</argument>
+            <tag name="event_subscriber"/>
+        </service>
+
+        <service id="tester.exercise"
+                 class="Behat\Behat\Tester\ExerciseTester">
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="tester.suite"
+                 class="Behat\Behat\Tester\SuiteTester">
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="tester.feature"
+                 class="Behat\Behat\Tester\FeatureTester">
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="tester.background"
+                 class="Behat\Behat\Tester\BackgroundTester">
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="tester.scenario"
+                 class="Behat\Behat\Tester\ScenarioTester">
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="tester.outline"
+                 class="Behat\Behat\Tester\OutlineTester">
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="tester.outline_example"
+                 class="Behat\Behat\Tester\OutlineExampleTester">
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="tester.step"
+                 class="Behat\Behat\Tester\StepTester">
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="tester.step_skip"
+                 class="Behat\Behat\Tester\StepSkipTester">
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="class_loader"
+                 class="Symfony\Component\ClassLoader\ClassLoader">
+            <call method="register"/>
+        </service>
+
+        <service id="event_dispatcher"
+                 class="Symfony\Component\EventDispatcher\EventDispatcher"/>
+
+        <service id="translator"
+                 class="Symfony\Component\Translation\Translator">
+            <argument>en</argument>
+
+            <call method="setFallbackLocale">
+                <argument>en</argument>
+            </call>
+            <call method="addLoader">
+                <argument>xliff</argument>
+                <argument type="service">
+                    <service class="Symfony\Component\Translation\Loader\XliffFileLoader"/>
+                </argument>
+            </call>
+            <call method="addLoader">
+                <argument>yaml</argument>
+                <argument type="service">
+                    <service class="Symfony\Component\Translation\Loader\YamlFileLoader"/>
+                </argument>
+            </call>
+            <call method="addLoader">
+                <argument>php</argument>
+                <argument type="service">
+                    <service class="Symfony\Component\Translation\Loader\PhpFileLoader"/>
+                </argument>
+            </call>
+            <call method="addLoader">
+                <argument>array</argument>
+                <argument type="service">
+                    <service class="Symfony\Component\Translation\Loader\ArrayLoader"/>
+                </argument>
+            </call>
+        </service>
+    </services>
+</container>

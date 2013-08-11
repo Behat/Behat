@@ -15,12 +15,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Context initializers pass.
- * Registers all available context initializers.
+ * Formatters pass.
+ * Registers all available formatters.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextInitializersPass implements CompilerPassInterface
+class OutputFormattersPass implements CompilerPassInterface
 {
     /**
      * Processes container.
@@ -29,10 +29,13 @@ class ContextInitializersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $poolInitializerDefinition = $container->getDefinition('context.pool_initializer');
+        $managerDefinition = $container->getDefinition('output.formatter_manager');
 
-        foreach ($container->findTaggedServiceIds('context.initializer') as $id => $attributes) {
-            $poolInitializerDefinition->addMethodCall('registerInitializer', array(new Reference($id)));
+        $calls = array();
+        foreach ($container->findTaggedServiceIds('output.formatter') as $id => $attributes) {
+            $calls[] = array('registerFormatter', array(new Reference($id)));
         }
+
+        $managerDefinition->setMethodCalls(array_merge($calls, $managerDefinition->getMethodCalls()));
     }
 }
