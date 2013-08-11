@@ -15,12 +15,18 @@ namespace Behat\Behat\Context;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface TranslatedContextInterface extends ContextInterface
+interface TranslatableContextInterface extends ContextInterface
 {
     /**
-     * Returns array of i18n XLIFF files paths.
+     * Returns array of Translator-supported resource paths.
      *
-     * @return array
+     * For instance:
+     *
+     *  * array(__DIR__.'/../'ru.yml)
+     *  * array(__DIR__.'/../'en.xliff)
+     *  * array(__DIR__.'/../'de.php)
+     *
+     * @return string[]
      */
-    public function getTranslationResources();
+    public static function getTranslationResources();
 }
