@@ -1,18 +1,6 @@
 <?php
 
-namespace Behat\Behat\Formatter;
-
-use Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event;
-
-use Behat\Behat\Definition\DefinitionInterface,
-    Behat\Behat\DataCollector\LoggerDataCollector,
-    Behat\Behat\Exception\PendingException,
-    Behat\Behat\Event\SuiteEvent,
-    Behat\Behat\Event\StepEvent;
-
-use Behat\Gherkin\Node\BackgroundNode,
-    Behat\Gherkin\Node\StepNode;
+namespace Behat\Behat\Output\Formatter;
 
 /*
  * This file is part of the Behat.
@@ -21,78 +9,115 @@ use Behat\Gherkin\Node\BackgroundNode,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Definition\DefinitionInterface;
+use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\ExerciseEvent;
+use Behat\Behat\Event\StepEvent;
+use Behat\Behat\Exception\PendingException;
+use Behat\Behat\Snippet\EventSubscriber\SnippetsCollector;
+use Behat\Behat\Tester\EventSubscriber\StatisticsCollector;
+use Behat\Gherkin\Node\BackgroundNode;
+use Behat\Gherkin\Node\StepNode;
+use Exception;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Progress formatter.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ProgressFormatter extends ConsoleFormatter
+class ProgressFormatter extends TranslatableConsoleFormatter
 {
-    /**
-     * Holds amount of printed items in current line;
-     */
-    private $stepsPrinted = 0;
-
     /**
      * Maximum line length.
      *
      * @var integer
      */
     protected $maxLineLength = 0;
+    /**
+     * Holds amount of printed items in current line;
+     *
+     * @var integer
+     */
+    private $stepsPrinted = 0;
+    /**
+     * @var StatisticsCollector
+     */
+    private $statisticsCollector;
+    /**
+     * @var SnippetsCollector
+     */
+    private $snippetsCollector;
 
     /**
-     * {@inheritdoc}
+     * Initializes formatter.
+     *
+     * @param StatisticsCollector $statisticsCollector
+     * @param SnippetsCollector   $snippetsCollector
+     * @param TranslatorInterface $translator
      */
-    protected function getDefaultParameters()
+    public function __construct(
+        StatisticsCollector $statisticsCollector,
+        SnippetsCollector $snippetsCollector,
+        TranslatorInterface $translator
+    )
     {
-        return array();
+        $this->statisticsCollector = $statisticsCollector;
+        $this->snippetsCollector = $snippetsCollector;
+
+        parent::__construct($translator);
     }
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * array('eventName' => 'methodName')
-     *  * array('eventName' => array('methodName', $priority))
-     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
-     *
      * @return array The event names to listen to
      */
     public static function getSubscribedEvents()
     {
-        $events = array('afterSuite', 'afterStep');
+        return array(
+            EventInterface::AFTER_STEP     => array('afterStep', -50),
+            EventInterface::AFTER_EXERCISE => array('afterExercise', -50),
+        );
+    }
 
-        return array_combine($events, $events);
+    /**
+     * Returns formatter name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'progress';
+    }
+
+    /**
+     * Returns formatter description.
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Prints one character per step.';
     }
 
     /**
      * Listens to "suite.after" event.
      *
-     * @param SuiteEvent $event
+     * @param ExerciseEvent $event
      *
      * @uses printFailedSteps()
      * @uses printPendingSteps()
      * @uses printSummary()
      * @uses printUndefinedStepsSnippets()
      */
-    public function afterSuite(SuiteEvent $event)
+    public function afterExercise(ExerciseEvent $event)
     {
-        $logger = $event->getLogger();
-
         $this->writeln("\n");
-        $this->printFailedSteps($logger);
-        $this->printPendingSteps($logger);
-        $this->printSummary($logger);
-        $this->printUndefinedStepsSnippets($logger);
+        $this->printFailedSteps($this->statisticsCollector);
+        $this->printPendingSteps($this->statisticsCollector);
+        $this->printSummary($this->statisticsCollector);
+        $this->printUndefinedStepsSnippets($this->snippetsCollector);
     }
 
     /**
@@ -114,18 +139,34 @@ class ProgressFormatter extends ConsoleFormatter
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultParameters()
+    {
+        return array_merge(
+            parent::getDefaultParameters(),
+            array()
+        );
+    }
+
+    /**
      * Prints step.
      *
      * @param StepNode            $step       step node
      * @param integer             $result     step result code
      * @param DefinitionInterface $definition definition instance (if step defined)
      * @param string              $snippet    snippet (if step is undefined)
-     * @param \Exception          $exception  exception (if step is failed)
+     * @param Exception           $exception  exception (if step is failed)
      *
      * @uses StepEvent
      */
-    protected function printStep(StepNode $step, $result, DefinitionInterface $definition = null,
-                                 $snippet = null, \Exception $exception = null)
+    protected function printStep(
+        StepNode $step,
+        $result,
+        DefinitionInterface $definition = null,
+        $snippet = null,
+        Exception $exception = null
+    )
     {
         switch ($result) {
             case StepEvent::PASSED:
@@ -146,42 +187,42 @@ class ProgressFormatter extends ConsoleFormatter
         }
 
         if (++$this->stepsPrinted % 70 == 0) {
-            $this->writeln(' '.$this->stepsPrinted);
+            $this->writeln(' ' . $this->stepsPrinted);
         }
     }
 
     /**
      * Prints all failed steps info.
      *
-     * @param LoggerDataCollector $logger suite logger
+     * @param StatisticsCollector $stats
      */
-    protected function printFailedSteps(LoggerDataCollector $logger)
+    protected function printFailedSteps(StatisticsCollector $stats)
     {
-        if (count($logger->getFailedStepsEvents())) {
+        if (count($stats->getFailedStepsEvents())) {
             $header = $this->translate('failed_steps_title');
             $this->writeln("{+failed}(::) $header (::){-failed}\n");
-            $this->printExceptionEvents($logger->getFailedStepsEvents());
+            $this->printExceptionEvents($stats->getFailedStepsEvents());
         }
     }
 
     /**
      * Prints all pending steps information.
      *
-     * @param LoggerDataCollector $logger suite logger
+     * @param StatisticsCollector $stats
      */
-    protected function printPendingSteps(LoggerDataCollector $logger)
+    protected function printPendingSteps(StatisticsCollector $stats)
     {
-        if (count($logger->getPendingStepsEvents())) {
+        if (count($stats->getPendingStepsEvents())) {
             $header = $this->translate('pending_steps_title');
             $this->writeln("{+pending}(::) $header (::){-pending}\n");
-            $this->printExceptionEvents($logger->getPendingStepsEvents());
+            $this->printExceptionEvents($stats->getPendingStepsEvents());
         }
     }
 
     /**
      * Prints exceptions information.
      *
-     * @param array $events failed step events
+     * @param StepEvent[] $events failed step events
      */
     protected function printExceptionEvents(array $events)
     {
@@ -198,7 +239,7 @@ class ProgressFormatter extends ConsoleFormatter
                 }
 
                 $error = sprintf("%s. %s",
-                    str_pad((string) ($number + 1), 2, '0', STR_PAD_LEFT),
+                    str_pad((string)($number + 1), 2, '0', STR_PAD_LEFT),
                     strtr($error, array("\n" => "\n    "))
                 );
                 $error = $this->relativizePathsInString($error);
@@ -217,30 +258,33 @@ class ProgressFormatter extends ConsoleFormatter
      * @param DefinitionInterface $definition definition (if step defined)
      * @param \Exception          $exception  exception (if step failed)
      */
-    protected function printStepPath(StepNode $step, DefinitionInterface $definition = null,
-                                     \Exception $exception = null)
+    protected function printStepPath(
+        StepNode $step,
+        DefinitionInterface $definition = null,
+        \Exception $exception = null
+    )
     {
-        $color      = $exception instanceof PendingException ? 'pending' : 'failed';
-        $type       = $step->getType();
-        $text       = $step->getText();
-        $stepPath   = "In step `$type $text'.";
-        $stepPathLn = mb_strlen($stepPath);
+        $color = $exception instanceof PendingException ? 'pending' : 'failed';
+        $type = $step->getType();
+        $text = $step->getText();
+        $stepPath = "In step `$type $text'.";
+        $stepPathLn = mb_strlen($stepPath, 'utf8');
 
         $node = $step->getParent();
         if ($node instanceof BackgroundNode) {
-            $scenarioPath   = "From scenario background.";
+            $scenarioPath = "From scenario background.";
         } else {
-            $title          = $node->getTitle();
-            $title          = $title ? "`$title'" : '***';
-            $scenarioPath   = "From scenario $title.";
+            $title = $node->getTitle();
+            $title = $title ? "`$title'" : '***';
+            $scenarioPath = "From scenario $title.";
         }
-        $scenarioPathLn     = mb_strlen($scenarioPath);
+        $scenarioPathLn = mb_strlen($scenarioPath, 'utf8');
 
-        $feature       = $node->getFeature();
-        $title         = $feature->getTitle();
-        $title         = $title ? "`$title'" : '***';
-        $featurePath   = "Of feature $title.";
-        $featurePathLn = mb_strlen($featurePath);
+        $feature = $node->getFeature();
+        $title = $feature->getTitle();
+        $title = $title ? "`$title'" : '***';
+        $featurePath = "Of feature $title.";
+        $featurePathLn = mb_strlen($featurePath, 'utf8');
 
         $this->maxLineLength = max($this->maxLineLength, $stepPathLn);
         $this->maxLineLength = max($this->maxLineLength, $scenarioPathLn);
@@ -274,42 +318,42 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints summary suite run information.
      *
-     * @param LoggerDataCollector $logger suite logger
+     * @param StatisticsCollector $stats
      */
-    protected function printSummary(LoggerDataCollector $logger)
+    protected function printSummary(StatisticsCollector $stats)
     {
-        $this->printScenariosSummary($logger);
-        $this->printStepsSummary($logger);
+        $this->printScenariosSummary($stats);
+        $this->printStepsSummary($stats);
 
-        if ($this->parameters->get('time')) {
-            $this->printTimeSummary($logger);
+        if ($this->getParameter('time')) {
+            $this->printTimeSummary($stats);
         }
     }
 
     /**
      * Prints scenarios summary information.
      *
-     * @param LoggerDataCollector $logger suite logger
+     * @param StatisticsCollector $stats
      */
-    protected function printScenariosSummary(LoggerDataCollector $logger)
+    protected function printScenariosSummary(StatisticsCollector $stats)
     {
-        $count  = $logger->getScenariosCount();
+        $count = $stats->getScenariosCount();
         $header = $this->translateChoice('scenarios_count', $count, array('%1%' => $count));
         $this->write($header);
-        $this->printStatusesSummary($logger->getScenariosStatuses());
+        $this->printStatusesSummary($stats->getScenariosStatuses());
     }
 
     /**
      * Prints steps summary information.
      *
-     * @param LoggerDataCollector $logger suite logger
+     * @param StatisticsCollector $stats
      */
-    protected function printStepsSummary(LoggerDataCollector $logger)
+    protected function printStepsSummary(StatisticsCollector $stats)
     {
-        $count  = $logger->getStepsCount();
+        $count = $stats->getStepsCount();
         $header = $this->translateChoice('steps_count', $count, array('%1%' => $count));
         $this->write($header);
-        $this->printStatusesSummary($logger->getStepsStatuses());
+        $this->printStatusesSummary($stats->getStepsStatuses());
     }
 
     /**
@@ -332,15 +376,15 @@ class ProgressFormatter extends ConsoleFormatter
     }
 
     /**
-     * Prints suite run time inforamtion.
+     * Prints suite run time information.
      *
-     * @param LoggerDataCollector $logger suite logger
+     * @param StatisticsCollector $stats
      */
-    protected function printTimeSummary(LoggerDataCollector $logger)
+    protected function printTimeSummary(StatisticsCollector $stats)
     {
-        $time       = $logger->getTotalTime();
-        $minutes    = floor($time / 60);
-        $seconds    = round($time - ($minutes * 60), 3);
+        $time = $stats->getTotalTime();
+        $minutes = floor($time / 60);
+        $seconds = round($time - ($minutes * 60), 3);
 
         $this->writeln($minutes . 'm' . $seconds . 's');
     }
@@ -348,33 +392,33 @@ class ProgressFormatter extends ConsoleFormatter
     /**
      * Prints undefined steps snippets.
      *
-     * @param LoggerDataCollector $logger suite logger
+     * @param SnippetsCollector $snippets
      */
-    protected function printUndefinedStepsSnippets(LoggerDataCollector $logger)
+    protected function printUndefinedStepsSnippets(SnippetsCollector $snippets)
     {
-        if ($this->getParameter('snippets') && count($logger->getDefinitionsSnippets())) {
+        if ($this->getParameter('snippets') && $snippets->hasSnippets()) {
             $header = $this->translate('proposal_title');
             $this->writeln("\n{+undefined}$header{-undefined}\n");
-            $this->printSnippets($logger);
+            $this->printSnippets($snippets);
         }
     }
 
     /**
      * Prints steps snippets.
      *
-     * @param LoggerDataCollector $logger suite logger
+     * @param SnippetsCollector $snippets
      */
-    protected function printSnippets(LoggerDataCollector $logger)
+    protected function printSnippets(SnippetsCollector $snippets)
     {
-        foreach ($logger->getDefinitionsSnippets() as $snippet) {
+        foreach ($snippets->getSnippets() as $snippet) {
             $snippetText = $snippet->getSnippet();
 
             if ($this->getParameter('snippets_paths')) {
                 $indent = str_pad(
-                    '', mb_strlen($snippetText) - mb_strlen(ltrim($snippetText)), ' '
+                    '', mb_strlen($snippetText, 'utf8') - mb_strlen(ltrim($snippetText), 'utf8'), ' '
                 );
                 $this->writeln("{+undefined}$indent/**{-undefined}");
-                foreach ($snippet->getSteps() as $step) {
+                foreach ($snippets->getStepsThatNeed($snippet) as $step) {
                     $this->writeln(sprintf(
                         '{+undefined}%s * %s %s # %s:%d{-undefined}', $indent,
                         $step->getType(), $step->getText(),
@@ -397,7 +441,7 @@ class ProgressFormatter extends ConsoleFormatter
      * Prints path comment.
      *
      * @param string  $path        item path
-     * @param integer $indentCount indenation number
+     * @param integer $indentCount indentation number
      */
     protected function printPathComment($path, $indentCount = 0)
     {
@@ -414,11 +458,27 @@ class ProgressFormatter extends ConsoleFormatter
      */
     protected function relativizePathsInString($string)
     {
-        if ($basePath = $this->parameters->get('base_path')) {
+        if ($basePath = $this->getParameter('base_path')) {
             $basePath = realpath($basePath) . DIRECTORY_SEPARATOR;
             $string = str_replace($basePath, '', $string);
         }
 
         return $string;
+    }
+
+    /**
+     * @return StatisticsCollector
+     */
+    protected function getStatisticsCollector()
+    {
+        return $this->statisticsCollector;
+    }
+
+    /**
+     * @return SnippetsCollector
+     */
+    protected function getSnippetsCollector()
+    {
+        return $this->snippetsCollector;
     }
 }

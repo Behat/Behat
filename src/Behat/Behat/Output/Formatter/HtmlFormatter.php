@@ -1,21 +1,6 @@
 <?php
 
-namespace Behat\Behat\Formatter;
-
-use Behat\Behat\Definition\DefinitionInterface,
-    Behat\Behat\DataCollector\LoggerDataCollector,
-    Behat\Behat\Definition\DefinitionSnippet,
-    Behat\Behat\Exception\UndefinedException;
-
-use Behat\Gherkin\Node\AbstractNode,
-    Behat\Gherkin\Node\FeatureNode,
-    Behat\Gherkin\Node\BackgroundNode,
-    Behat\Gherkin\Node\AbstractScenarioNode,
-    Behat\Gherkin\Node\OutlineNode,
-    Behat\Gherkin\Node\ScenarioNode,
-    Behat\Gherkin\Node\StepNode,
-    Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode;
+namespace Behat\Behat\Output\Formatter;
 
 /*
  * This file is part of the Behat.
@@ -24,6 +9,19 @@ use Behat\Gherkin\Node\AbstractNode,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Definition\DefinitionInterface;
+use Behat\Behat\Exception\UndefinedException;
+use Behat\Behat\Output\Formatter\PrettyFormatter;
+use Behat\Behat\Snippet\SnippetInterface;
+use Behat\Behat\Tester\EventSubscriber\StatisticsCollector;
+use Behat\Gherkin\Node\AbstractScenarioNode;
+use Behat\Gherkin\Node\BackgroundNode;
+use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\OutlineNode;
+use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\StepNode;
+use Behat\Gherkin\Node\TableNode;
 
 /**
  * HTML formatter.
@@ -40,25 +38,48 @@ class HtmlFormatter extends PrettyFormatter
     protected $footer;
 
     /**
+     * Returns formatter name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'html';
+    }
+
+    /**
+     * Returns formatter description.
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Generates a nice looking HTML report.';
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getDefaultParameters()
     {
-        return array(
-            'template_path' => null
+        return array_merge(
+            parent::getDefaultParameters(),
+            array(
+                'template_path' => null
+            )
         );
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function printSuiteHeader(LoggerDataCollector $logger)
+    protected function printExerciseHeader()
     {
-        $this->parameters->set('decorated', false);
+        $this->setParameter('decorated', false);
 
         $template = $this->getHtmlTemplate();
-        $header         = mb_substr($template, 0, mb_strpos($template, '{{content}}'));
-        $this->footer   = mb_substr($template, mb_strpos($template, '{{content}}') + 11);
+        $header = mb_substr($template, 0, mb_strpos($template, '{{content}}'));
+        $this->footer = mb_substr($template, mb_strpos($template, '{{content}}') + 11);
 
         $this->writeln($header);
     }
@@ -66,9 +87,9 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printSuiteFooter(LoggerDataCollector $logger)
+    protected function printExerciseFooter()
     {
-        $this->printSummary($logger);
+        $this->printSummary($this->getStatisticsCollector());
         $this->writeln($this->footer);
     }
 
@@ -85,7 +106,7 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printFeatureOrScenarioTags(AbstractNode $node)
+    protected function printFeatureOrScenarioTags($node)
     {
         if (count($tags = $node->getOwnTags())) {
             $this->writeln('<ul class="tags">');
@@ -227,7 +248,7 @@ class HtmlFormatter extends PrettyFormatter
     protected function printOutlineExampleResult(TableNode $examples, $iteration, $result, $isSkipped)
     {
         if (!$this->getParameter('expand')) {
-            $color  = $this->getResultColorCode($result);
+            $color = $this->getResultColorCode($result);
 
             $this->printColorizedTableRow($examples->getRow($iteration + 1), $color);
             $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
@@ -290,8 +311,13 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printStep(StepNode $step, $result, DefinitionInterface $definition = null,
-                                 $snippet = null, \Exception $exception = null)
+    protected function printStep(
+        StepNode $step,
+        $result,
+        DefinitionInterface $definition = null,
+        $snippet = null,
+        \Exception $exception = null
+    )
     {
         $this->writeln('<li class="' . $this->getResultColorCode($result) . '">');
 
@@ -320,8 +346,8 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printStepName(StepNode $step, DefinitionInterface $definition = null, $color)
     {
-        $type   = $step->getType();
-        $text   = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
+        $type = $step->getType();
+        $text = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
 
         if (null !== $definition) {
             $text = $this->colorizeDefinitionArguments($text, $definition, $color);
@@ -350,7 +376,7 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function printStepPyStringArgument(PyStringNode $pystring, $color = null)
     {
-        $this->writeln('<pre class="argument">' . htmlspecialchars((string) $pystring) . '</pre>');
+        $this->writeln('<pre class="argument">' . htmlspecialchars((string)$pystring) . '</pre>');
     }
 
     /**
@@ -388,9 +414,9 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printStepSnippet(DefinitionSnippet $snippet)
+    protected function printStepSnippet(SnippetInterface $snippet)
     {
-        $this->writeln('<div class="snippet"><pre>' . htmlspecialchars($snippet) . '</pre></div>');
+        $this->writeln('<div class="snippet"><pre>' . htmlspecialchars($snippet->getSnippet()) . '</pre></div>');
     }
 
     /**
@@ -398,7 +424,7 @@ class HtmlFormatter extends PrettyFormatter
      */
     protected function colorizeDefinitionArguments($text, DefinitionInterface $definition, $color)
     {
-        $regex      = $definition->getRegex();
+        $regex = $definition->getRegex();
         $paramColor = $color . '_param';
 
         // If it's just a string - skip
@@ -420,7 +446,7 @@ class HtmlFormatter extends PrettyFormatter
             }
 
             $offset = $match[1] + $shift;
-            $value  = $match[0];
+            $value = $match[0];
 
             // Skip inner matches
             if ($lastReplacementPosition > $offset) {
@@ -428,10 +454,10 @@ class HtmlFormatter extends PrettyFormatter
             }
             $lastReplacementPosition = $offset + strlen($value);
 
-            $begin  = substr($text, 0, $offset);
-            $end    = substr($text, $offset + strlen($value));
+            $begin = substr($text, 0, $offset);
+            $end = substr($text, $offset + strlen($value));
             $format = "{+strong class=\"$paramColor\"-}%s{+/strong-}";
-            $text   = sprintf('%s'.$format.'%s', $begin, $value, $end);
+            $text = sprintf('%s' . $format . '%s', $begin, $value, $end);
 
             // Keep track of how many extra characters are added
             $shift += strlen($format) - 2;
@@ -468,7 +494,7 @@ class HtmlFormatter extends PrettyFormatter
     protected function printPathLink(DefinitionInterface $definition)
     {
         $url = $this->getParameter('paths_base_url')
-            . $this->relativizePathsInString($definition->getCallbackReflection()->getFileName());
+            . $this->relativizePathsInString($definition->getReflection()->getFileName());
         $path = $this->relativizePathsInString($definition->getPath());
         $this->writeln('<span class="path"><a href="' . $url . '">' . $path . '</a></span>');
     }
@@ -484,14 +510,14 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printSummary(LoggerDataCollector $logger)
+    protected function printSummary(StatisticsCollector $stats)
     {
-        $results = $logger->getScenariosStatuses();
+        $results = $stats->getScenariosStatuses();
         $result = $results['failed'] > 0 ? 'failed' : 'passed';
-        $this->writeln('<div class="summary '.$result.'">');
+        $this->writeln('<div class="summary ' . $result . '">');
 
         $this->writeln('<div class="counters">');
-        parent::printSummary($logger);
+        parent::printSummary($stats);
         $this->writeln('</div>');
 
         $this->writeln(<<<'HTML'
@@ -500,7 +526,7 @@ class HtmlFormatter extends PrettyFormatter
     <a href="javascript:void(0)" id="behat_hide_all">[-] all</a>
 </div>
 HTML
-);
+        );
 
         $this->writeln('</div>');
     }
@@ -508,30 +534,30 @@ HTML
     /**
      * {@inheritdoc}
      */
-    protected function printScenariosSummary(LoggerDataCollector $logger)
+    protected function printScenariosSummary(StatisticsCollector $stats)
     {
         $this->writeln('<p class="scenarios">');
-        parent::printScenariosSummary($logger);
+        parent::printScenariosSummary($stats);
         $this->writeln('</p>');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function printStepsSummary(LoggerDataCollector $logger)
+    protected function printStepsSummary(StatisticsCollector $stats)
     {
         $this->writeln('<p class="steps">');
-        parent::printStepsSummary($logger);
+        parent::printStepsSummary($stats);
         $this->writeln('</p>');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function printTimeSummary(LoggerDataCollector $logger)
+    protected function printTimeSummary(StatisticsCollector $stats)
     {
         $this->writeln('<p class="time">');
-        parent::printTimeSummary($logger);
+        parent::printTimeSummary($stats);
         $this->writeln('</p>');
     }
 
@@ -551,7 +577,7 @@ HTML
             }
         }
         if (count($statuses)) {
-            $this->writeln(' ('.implode(', ', $statuses).')');
+            $this->writeln(' (' . implode(', ', $statuses) . ')');
         }
     }
 
@@ -562,21 +588,21 @@ HTML
      */
     protected function getHtmlTemplate()
     {
-        $templatePath = $this->parameters->get('template_path')
-                     ?: $this->parameters->get('support_path') . DIRECTORY_SEPARATOR . 'html.tpl';
+        $templatePath = $this->getParameter('template_path')
+            ? : $this->getParameter('support_path') . DIRECTORY_SEPARATOR . 'html.tpl';
 
         if (file_exists($templatePath)) {
             return file_get_contents($templatePath);
         }
 
         return
-'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns ="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <title>Behat Test Suite</title>
-    <style type="text/css">
-' . $this->getHtmlTemplateStyle() . '
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+            <html xmlns ="http://www.w3.org/1999/xhtml">
+            <head>
+                <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+                <title>Behat Test Suite</title>
+                <style type="text/css">
+            ' . $this->getHtmlTemplateStyle() . '
     </style>
 
     <style type="text/css" media="print">

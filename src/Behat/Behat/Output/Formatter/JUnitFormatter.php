@@ -1,17 +1,6 @@
 <?php
 
-namespace Behat\Behat\Formatter;
-
-use Behat\Behat\Event\EventInterface,
-    Behat\Behat\Event\FeatureEvent,
-    Behat\Behat\Event\ScenarioEvent,
-    Behat\Behat\Event\OutlineExampleEvent,
-    Behat\Behat\Event\StepEvent;
-
-use Behat\Gherkin\Node\FeatureNode,
-    Behat\Gherkin\Node\ScenarioNode,
-    Behat\Gherkin\Node\StepNode,
-    Behat\Behat\Exception\FormatterException;
+namespace Behat\Behat\Output\Formatter;
 
 /*
  * This file is part of the Behat.
@@ -20,6 +9,14 @@ use Behat\Gherkin\Node\FeatureNode,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\FeatureEvent;
+use Behat\Behat\Event\OutlineExampleEvent;
+use Behat\Behat\Event\ScenarioEvent;
+use Behat\Behat\Event\StepEvent;
+use Behat\Behat\Exception\FormatterException;
+use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\ScenarioNode;
 
 /**
  * Progress formatter.
@@ -53,18 +50,6 @@ class JUnitFormatter extends ConsoleFormatter
      */
     protected $exceptionsCount = 0;
     /**
-     * Total failure count.
-     *
-     * @var integer
-     */
-    protected $failureCount = 0;
-    /**
-     * Total pending count.
-     *
-     * @var integer
-     */
-    protected $pendingCount = 0;
-    /**
      * Step exceptions.
      *
      * @var array
@@ -82,14 +67,6 @@ class JUnitFormatter extends ConsoleFormatter
      * @var float
      */
     protected $scenarioStartTime;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultParameters()
-    {
-        return array();
-    }
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -111,12 +88,35 @@ class JUnitFormatter extends ConsoleFormatter
      */
     public static function getSubscribedEvents()
     {
-        $events = array(
-            'beforeFeature', 'afterFeature', 'beforeScenario', 'afterScenario',
-            'beforeOutlineExample', 'afterOutlineExample', 'afterStep'
+        return array(
+            EventInterface::BEFORE_FEATURE         => array('beforeFeature', -50),
+            EventInterface::AFTER_FEATURE          => array('afterFeature', -50),
+            EventInterface::BEFORE_SCENARIO        => array('beforeScenario', -50),
+            EventInterface::AFTER_SCENARIO         => array('afterScenario', -50),
+            EventInterface::BEFORE_OUTLINE_EXAMPLE => array('beforeOutlineExample', -50),
+            EventInterface::AFTER_OUTLINE_EXAMPLE  => array('afterOutlineExample', -50),
+            EventInterface::AFTER_STEP             => array('afterStep', -50),
         );
+    }
 
-        return array_combine($events, $events);
+    /**
+     * Returns formatter name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'junit';
+    }
+
+    /**
+     * Returns formatter description.
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Generates a report similar to Ant+JUnit.';
     }
 
     /**
@@ -133,11 +133,9 @@ class JUnitFormatter extends ConsoleFormatter
 
         $this->printTestSuiteHeader($feature);
 
-        $this->stepsCount       = 0;
-        $this->testcases        = array();
-        $this->exceptionsCount  = 0;
-        $this->failureCount     = 0;
-        $this->pendingCount     = 0;
+        $this->stepsCount = 0;
+        $this->testcases = array();
+        $this->exceptionsCount = 0;
         $this->featureStartTime = microtime(true);
     }
 
@@ -209,14 +207,17 @@ class JUnitFormatter extends ConsoleFormatter
         if ($event->hasException()) {
             $this->exceptions[] = $event->getException();
             $this->exceptionsCount++;
-            if ($event->getResult() === StepEvent::SKIPPED || $event->getResult() === StepEvent::PENDING) {
-                $this->pendingCount++;
-            } else {
-                $this->failureCount++;
-            }
         }
 
         ++$this->stepsCount;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultParameters()
+    {
+        return array();
     }
 
     /**
@@ -237,10 +238,10 @@ class JUnitFormatter extends ConsoleFormatter
      */
     protected function printTestSuiteFooter(FeatureNode $feature, $time)
     {
-        $suiteStats = sprintf('errors="0" failures="%d" skipped="%d" name="%s" tests="%d" time="%F"',
-            $this->failureCount,
-            $this->pendingCount,
+        $suiteStats = sprintf('classname="behat.features" errors="0" failures="%d" name="%s" file="%s" tests="%d" time="%F"',
+            $this->exceptionsCount,
             htmlspecialchars($feature->getTitle()),
+            htmlspecialchars($feature->getFile()),
             $this->stepsCount,
             $time
         );
@@ -259,42 +260,28 @@ class JUnitFormatter extends ConsoleFormatter
      */
     protected function printTestCase(ScenarioNode $scenario, $time, EventInterface $event)
     {
-        $className  = $scenario->getFeature()->getTitle();
-        $name       = $scenario->getTitle();
-        $name      .= $event instanceof OutlineExampleEvent
-                    ? ', Ex #' . ($event->getIteration() + 1)
-                    : '';
-        $caseStats  = sprintf('classname="%s" name="%s" time="%F"',
+        $className = $scenario->getFeature()->getTitle();
+        $name = $scenario->getTitle();
+        $name .= $event instanceof OutlineExampleEvent
+            ? ', Ex #' . ($event->getIteration() + 1)
+            : '';
+        $caseStats = sprintf('classname="%s" name="%s" time="%F"',
             htmlspecialchars($className),
             htmlspecialchars($name),
             $time
         );
 
-        $xml  = "    <testcase $caseStats>\n";
+        $xml = "    <testcase $caseStats>\n";
 
         foreach ($this->exceptions as $exception) {
             $error = $this->exceptionToString($exception);
-            $elemType = $this->getElementType($event->getResult());
-            $elemAttributes = '';
-            if ($elemType !== 'skipped') {
-                $elemAttributes = sprintf(
-                    'message="%s" type="%s"',
-                    htmlspecialchars($error),
-                    $this->getResultColorCode($event->getResult())
-                );
-            }
-
             $xml .= sprintf(
-                '        <%s %s>',
-                $elemType,
-                $elemAttributes
+                '        <failure message="%s" type="%s">',
+                htmlspecialchars($error),
+                $this->getResultColorCode($event->getResult())
             );
-            $exception = str_replace(array('<![CDATA[', ']]>'), '', (string) $exception);
-            $xml .= sprintf(
-                "<![CDATA[\n%s\n]]></%s>\n",
-                $exception,
-                $elemType
-            );
+            $exception = str_replace(array('<![CDATA[', ']]>'), '', (string)$exception);
+            $xml .= "<![CDATA[\n$exception\n]]></failure>\n";
         }
         $this->exceptions = array();
 
@@ -308,7 +295,7 @@ class JUnitFormatter extends ConsoleFormatter
      */
     protected function createOutputStream()
     {
-        $outputPath = $this->parameters->get('output_path');
+        $outputPath = $this->getParameter('output_path');
 
         if (null === $outputPath) {
             throw new FormatterException(sprintf(
@@ -328,22 +315,4 @@ class JUnitFormatter extends ConsoleFormatter
 
         return fopen($outputPath . DIRECTORY_SEPARATOR . $this->filename, 'w');
     }
-
-    /**
-     * Transform the Excpetion type into the correct element
-     * to fulfil the requirements of the JUnit format xsd
-     *
-     * @see https://svn.jenkins-ci.org/trunk/hudson/dtkit/dtkit-format/dtkit-junit-model/src/main/resources/com/thalesgroup/dtkit/junit/model/xsd/junit-4.xsd
-     * @return string
-     **/
-    protected function getElementType($result)
-    {
-        switch ($result) {
-            case StepEvent::SKIPPED:    return 'skipped';
-            case StepEvent::PENDING:    return 'skipped';
-            case StepEvent::UNDEFINED:  return 'error';
-            case StepEvent::FAILED:     return 'failure';
-        }
-    }
-
 }

@@ -1,17 +1,6 @@
 <?php
 
-namespace Behat\Behat\Formatter;
-
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag,
-    Symfony\Component\EventDispatcher\EventDispatcher,
-    Symfony\Component\EventDispatcher\Event,
-    Symfony\Component\Translation\Translator,
-    Symfony\Component\Console\Output\StreamOutput,
-    Symfony\Component\Console\Formatter\OutputFormatterStyle;
-
-use Behat\Behat\Event\StepEvent,
-    Behat\Behat\Exception\FormatterException,
-    Behat\Behat\Console\Formatter\OutputFormatter;
+namespace Behat\Behat\Output\Formatter;
 
 /*
  * This file is part of the Behat.
@@ -20,6 +9,14 @@ use Behat\Behat\Event\StepEvent,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Console\Formatter\OutputFormatter;
+use Behat\Behat\Event\StepEvent;
+use Behat\Behat\Exception\FormatterException;
+use Behat\Behat\Output\Formatter\FormatterInterface;
+use InvalidArgumentException;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * Console formatter.
@@ -28,14 +25,7 @@ use Behat\Behat\Event\StepEvent,
  */
 abstract class ConsoleFormatter implements FormatterInterface
 {
-    /**
-     * Formatter parameters.
-     *
-     * @var ParameterBag
-     */
-    protected $parameters;
-
-    private $translator;
+    private $parameters;
     private $console;
 
     /**
@@ -45,46 +35,21 @@ abstract class ConsoleFormatter implements FormatterInterface
      */
     public function __construct()
     {
-        $defaultLanguage = null;
-        if (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
-            $defaultLanguage = $matches[1];
-        }
-
         $this->parameters = new ParameterBag(array_merge(array(
-            'language'              => $defaultLanguage,
-            'verbose'               => false,
-            'decorated'             => true,
-            'time'                  => true,
-            'base_path'             => null,
-            'support_path'          => null,
-            'output'                => null,
-            'output_path'           => null,
-            'output_styles'         => array(),
-            'output_decorate'       => null,
-            'snippets'              => true,
-            'snippets_paths'        => false,
-            'paths'                 => true,
-            'expand'                => false,
-            'multiline_arguments'   => true,
+            'verbose'         => false,
+            'decorated'       => true,
+            'time'            => true,
+            'base_path'       => null,
+            'output'          => null,
+            'output_path'     => null,
+            'support_path'    => null,
+            'output_styles'   => array(),
+            'output_decorate' => null,
+            'snippets'        => true,
+            'snippets_paths'  => false,
+            'paths'           => true,
         ), $this->getDefaultParameters()));
     }
-
-    /**
-     * Set formatter translator.
-     *
-     * @param Translator $translator
-     */
-    final public function setTranslator(Translator $translator)
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * Returns default parameters to construct ParameterBag.
-     *
-     * @return array
-     */
-    abstract protected function getDefaultParameters();
 
     /**
      * Checks if current formatter has parameter.
@@ -122,21 +87,39 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
+     * Returns default parameters to construct ParameterBag.
+     *
+     * @return array
+     */
+    abstract protected function getDefaultParameters();
+
+    /**
      * Returns color code from tester result status code.
      *
      * @param integer $result tester result status code
      *
-     * @return string passed|pending|skipped|undefined|failed
+     * @return string
+     *
+     * @throws InvalidArgumentException
      */
     final protected function getResultColorCode($result)
     {
         switch ($result) {
-            case StepEvent::PASSED:     return 'passed';
-            case StepEvent::SKIPPED:    return 'skipped';
-            case StepEvent::PENDING:    return 'pending';
-            case StepEvent::UNDEFINED:  return 'undefined';
-            case StepEvent::FAILED:     return 'failed';
+            case StepEvent::PASSED:
+                return 'passed';
+            case StepEvent::SKIPPED:
+                return 'skipped';
+            case StepEvent::PENDING:
+                return 'pending';
+            case StepEvent::UNDEFINED:
+                return 'undefined';
+            case StepEvent::FAILED:
+                return 'failed';
         }
+
+        throw new InvalidArgumentException(sprintf(
+            'Unsupported step result type: %s.', $result
+        ));
     }
 
     /**
@@ -271,40 +254,11 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Translates message to output language.
-     *
-     * @param string $message    message to translate
-     * @param array  $parameters message parameters
-     *
-     * @return string
-     */
-    final protected function translate($message, array $parameters = array())
-    {
-        return $this->translator->trans(
-            $message, $parameters, 'behat', $this->parameters->get('language')
-        );
-    }
-
-    /**
-     * Translates numbered message to output language.
-     *
-     * @param string $message    message specification to translate
-     * @param string $number     choice number
-     * @param array  $parameters message parameters
-     *
-     * @return string
-     */
-    final protected function translateChoice($message, $number, array $parameters = array())
-    {
-        return $this->translator->transChoice(
-            $message, $number, $parameters, 'behat', $this->parameters->get('language')
-        );
-    }
-
-    /**
      * Creates a user-presentable string describing the given exception.
      *
      * @param $exception \Exception The exception to describe
+     *
+     * @return string
      */
     protected function exceptionToString(\Exception $exception)
     {
