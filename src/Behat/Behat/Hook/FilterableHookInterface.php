@@ -9,19 +9,21 @@ namespace Behat\Behat\Hook;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Callee\CalleeInterface;
+use Behat\Behat\Event\EventInterface;
 
 /**
- * Hook interface.
+ * Filterable hook interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface HookInterface extends CalleeInterface
+interface FilterableHookInterface extends HookInterface
 {
     /**
-     * Returns hooked event type.
+     * Checks that current hook matches provided event object.
      *
-     * @return string
+     * @param EventInterface $event
+     *
+     * @return Boolean
      */
-    public function getEventName();
+    public function filterMatches(EventInterface $event);
 }

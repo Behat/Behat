@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Hook\Annotation;
+namespace Behat\Behat\Hook\Callee;
 
 /*
  * This file is part of the Behat.
@@ -11,17 +11,20 @@ namespace Behat\Behat\Hook\Annotation;
  */
 
 /**
- * AfterSuite hook class.
+ * AfterSuite hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class AfterSuite extends SuiteHook
 {
     /**
-     * {@inheritdoc}
+     * Initializes hook.
+     *
+     * @param Callable    $callback
+     * @param null|string $description
      */
-    public function getEventName()
+    public function __construct($callback, $description = null)
     {
-        return 'afterSuite';
+        parent::__construct('afterSuite', $callback, $description);
     }
 }
