@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Definition\Annotation;
+namespace Behat\Behat\Snippet;
 
 /*
  * This file is part of the Behat.
@@ -11,19 +11,23 @@ namespace Behat\Behat\Definition\Annotation;
  */
 
 /**
- * Given type step definition.
+ * Context interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Given extends Definition
+interface SnippetInterface
 {
     /**
-     * Returns definition type (Given|When|Then).
+     * Returns snippet unique hash (ignoring step type).
      *
      * @return string
      */
-    public function getType()
-    {
-        return 'Given';
-    }
+    public function getHash();
+
+    /**
+     * Returns definition snippet text.
+     *
+     * @return string
+     */
+    public function getSnippet();
 }

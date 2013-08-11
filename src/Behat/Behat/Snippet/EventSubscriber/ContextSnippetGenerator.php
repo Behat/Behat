@@ -1,14 +1,6 @@
 <?php
 
-namespace Behat\Behat\Definition\Proposal;
-
-use Behat\Gherkin\Node\StepNode,
-    Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode;
-
-use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Definition\DefinitionSnippet,
-    Behat\Behat\Util\Transliterator;
+namespace Behat\Behat\Snippet\EventSubscriber;
 
 /*
  * This file is part of the Behat.
@@ -17,48 +9,65 @@ use Behat\Behat\Context\ContextInterface,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Snippet\ContextSnippet;
+use Behat\Behat\Snippet\Event\SnippetCarrierEvent;
+use Behat\Behat\Snippet\Util\Transliterator;
+use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
+use ReflectionClass;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Annotated definitions proposal.
+ * Context snippet generator.
+ * Generates snippets for non-empty context pools.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AnnotatedDefinitionProposal implements DefinitionProposalInterface
+class ContextSnippetGenerator implements EventSubscriberInterface
 {
+    /**
+     * @var string[string]
+     */
     private static $proposedMethods = array();
 
     /**
-     * Checks if loader supports provided context.
+     * Returns an array of event names this subscriber wants to listen to.
      *
-     * @param ContextInterface $context
-     *
-     * @return Boolean
+     * @return array The event names to listen to
      */
-    public function supports(ContextInterface $context)
+    public static function getSubscribedEvents()
     {
-        return true;
+        return array(EventInterface::CREATE_SNIPPET => array('createSnippet', 0));
     }
 
     /**
-     * Loads definitions and translations from provided context.
+     * Generate snippet and set it to the event.
      *
-     * @param ContextInterface $context
-     * @param StepNode         $step
-     *
-     * @return DefinitionSnippet
+     * @param SnippetCarrierEvent $event
      */
-    public function propose(ContextInterface $context, StepNode $step)
+    public function createSnippet(SnippetCarrierEvent $event)
     {
-        $contextRefl     = new \ReflectionObject($context);
-        $contextClass    = $contextRefl->getName();
+        if ($event->hasSnippet()) {
+            return;
+        }
+        if (!$event->getContextPool()->hasContexts()) {
+            return;
+        }
+
+        $context = $event->getContextPool()->getFirstContext();
+        $step = $event->getStep();
+
+        $reflection = new ReflectionClass(is_object($context) ? get_class($context) : $context);
+        $contextClass = $reflection->getName();
         $replacePatterns = array(
             "/(?<= |^)\\\'(?:((?!\\').)*)\\\'(?= |$)/", // Single quoted strings
-            '/(?<= |^)\"(?:[^\"]*)\"(?= |$)/',          // Double quoted strings
-            '/(\d+)/',                                  // Numbers
+            '/(?<= |^)\"(?:[^\"]*)\"(?= |$)/', // Double quoted strings
+            '/(\d+)/', // Numbers
         );
 
-        $text  = $step->getText();
-        $text  = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+\'])/', '\\\\$1', $text);
+        $text = $step->getText();
+        $text = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+\'])/', '\\\\$1', $text);
         $regex = preg_replace(
             $replacePatterns,
             array(
@@ -90,8 +99,8 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
         }
 
         // check that proposed method name isn't arelady defined in context
-        while ($contextRefl->hasMethod($methodName)) {
-            $methodName  = preg_replace('/\d+$/', '', $methodName);
+        while ($reflection->hasMethod($methodName)) {
+            $methodName = preg_replace('/\d+$/', '', $methodName);
             $methodName .= $methodNumber++;
         }
 
@@ -100,7 +109,7 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
             foreach (self::$proposedMethods[$contextClass] as $proposedRegex => $proposedMethod) {
                 if ($proposedRegex !== $regex) {
                     while ($proposedMethod === $methodName) {
-                        $methodName  = preg_replace('/\d+$/', '', $methodName);
+                        $methodName = preg_replace('/\d+$/', '', $methodName);
                         $methodName .= $methodNumber++;
                     }
                 }
@@ -123,12 +132,13 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
 
         $description = $this->generateSnippet($regex, $methodName, $args);
 
-        return new DefinitionSnippet($step, $description);
+        $event->setSnippet(new ContextSnippet($step->getType(), $description, array($contextClass)));
     }
 
     protected function generateSnippet($regex, $methodName, array $args)
     {
-        return sprintf(<<<PHP
+        return sprintf(
+            <<<PHP
     /**
      * @%s /^%s$/
      */
@@ -137,7 +147,11 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
         throw new PendingException();
     }
 PHP
-          , '%s', str_replace('%', '%%', $regex), $methodName, implode(', ', $args)
+            ,
+            '%s',
+            str_replace('%', '%%', $regex),
+            $methodName,
+            implode(', ', $args)
         );
     }
 }

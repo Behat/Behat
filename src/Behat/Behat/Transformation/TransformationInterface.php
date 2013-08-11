@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Definition\Loader;
+namespace Behat\Behat\Transformation;
 
 /*
  * This file is part of the Behat.
@@ -9,18 +9,19 @@ namespace Behat\Behat\Definition\Loader;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Callee\CalleeInterface;
 
 /**
- * Definition loader interface.
+ * Step transformation interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface DefinitionLoaderInterface
+interface TransformationInterface extends CalleeInterface
 {
     /**
-     * Loads definitions from provided resource.
+     * Returns transformation regex.
      *
-     * @param mixed $resource
+     * @return string
      */
-    public function load($resource);
+    public function getRegex();
 }
