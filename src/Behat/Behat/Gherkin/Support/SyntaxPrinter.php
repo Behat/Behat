@@ -1,11 +1,6 @@
 <?php
 
-namespace Behat\Behat\HelpPrinter;
-
-use Behat\Gherkin\Keywords\KeywordsDumper;
-
-use Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Formatter\OutputFormatterStyle;
+namespace Behat\Behat\Gherkin\Support;
 
 /*
  * This file is part of the Behat.
@@ -14,13 +9,16 @@ use Symfony\Component\Console\Output\OutputInterface,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Gherkin\Keywords\KeywordsDumper;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Story syntax printer.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StorySyntaxPrinter
+class SyntaxPrinter
 {
     private $dumper;
 
@@ -43,13 +41,11 @@ class StorySyntaxPrinter
      */
     public function printSyntax(OutputInterface $output, $language = 'en')
     {
-        $output->getFormatter()->setStyle('comment', new OutputFormatterStyle('yellow'));
-        $output->getFormatter()->setStyle(
-            'keyword', new OutputFormatterStyle('green', null, array('bold'))
-        );
+        $output->getFormatter()->setStyle('gherkin_comment', new OutputFormatterStyle('yellow'));
+        $output->getFormatter()->setStyle('gherkin_keyword', new OutputFormatterStyle('green', null, array('bold')));
 
         $story = $this->dumper->dump($language);
-        $story = preg_replace('/^\#.*/', '<comment>$0</comment>', $story);
+        $story = preg_replace('/^\#.*/', '<gherkin_comment>$0</gherkin_comment>', $story);
 
         $output->writeln($story);
     }
@@ -63,10 +59,10 @@ class StorySyntaxPrinter
      */
     public function dumpKeywords(array $keywords)
     {
-        $dump = '<keyword>'.implode('</keyword>|<keyword>', $keywords).'</keyword>';
+        $dump = '<gherkin_keyword>' . implode('</gherkin_keyword>|<gherkin_keyword>', $keywords) . '</gherkin_keyword>';
 
         if (1 < count($keywords)) {
-            return '['.$dump.']';
+            return '[' . $dump . ']';
         }
 
         return $dump;
