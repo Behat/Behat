@@ -25,9 +25,9 @@
         <!-- Options -->
         <parameter key="behat.options.cache">null</parameter>
         <parameter key="behat.options.rerun">null</parameter>
-        <parameter key="behat.options.strict">null</parameter>
-        <parameter key="behat.options.dry_run">null</parameter>
-        <parameter key="behat.options.stop_on_failure">null</parameter>
+        <parameter key="behat.options.strict">false</parameter>
+        <parameter key="behat.options.dry_run">false</parameter>
+        <parameter key="behat.options.stop_on_failure">false</parameter>
         <parameter key="behat.options.append_snippets">null</parameter>
 
         <!-- Gherkin Parser -->
