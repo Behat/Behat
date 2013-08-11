@@ -164,18 +164,6 @@ class {className} implements ContextInterface
     public function __construct(array $parameters)
     {
     }
-
-//
-// Place your definition and hook methods here:
-//
-//    /**
-//     * @Given /^I have done something with "([^"]*)"$/
-//     */
-//    public function iHaveDoneSomethingWith($argument)
-//    {
-//        doSomethingWith($argument);
-//    }
-//
 }
 
 PHP

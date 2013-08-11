@@ -179,7 +179,7 @@ class BehatExtension
      */
     protected function registerOptionsConfiguration(array $options, ContainerBuilder $container)
     {
-        if ($options['cache_path'] && is_dir($options['cache_path']) && is_writable($options['cache_path'])) {
+        if ($options['cache_path']) {
             $cacheDefinition = new Definition('Behat\Gherkin\Cache\FileCache', array($options['cache_path']));
             $fileLoaderDefinition = $container->getDefinition('gherkin.loader.gherkin_file');
             $fileLoaderDefinition->addMethodCall('setCache', array($cacheDefinition));
