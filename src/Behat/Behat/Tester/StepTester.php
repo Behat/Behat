@@ -2,22 +2,6 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\EventDispatcher\Event;
-
-use Behat\Gherkin\Node\NodeVisitorInterface,
-    Behat\Gherkin\Node\AbstractNode,
-    Behat\Gherkin\Node\StepNode,
-    Behat\Gherkin\Node\ScenarioNode;
-
-use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Context\Step\SubstepInterface,
-    Behat\Behat\Definition\DefinitionInterface,
-    Behat\Behat\Exception\AmbiguousException,
-    Behat\Behat\Exception\UndefinedException,
-    Behat\Behat\Exception\PendingException,
-    Behat\Behat\Event\StepEvent;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -26,164 +10,128 @@ use Behat\Behat\Context\ContextInterface,
  * file that was distributed with this source code.
  */
 
+use Behat\Behat\Callee\Event\ExecuteCalleeEvent;
+use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Definition\Event\DefinitionCarrierEvent;
+use Behat\Behat\Definition\Event\ExecuteDefinitionEvent;
+use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\StepEvent;
+use Behat\Behat\EventDispatcher\DispatchingService;
+use Behat\Behat\Exception\PendingException;
+use Behat\Behat\Exception\UndefinedException;
+use Behat\Behat\Snippet\Event\SnippetCarrierEvent;
+use Behat\Behat\Snippet\SnippetInterface;
+use Behat\Behat\Suite\SuiteInterface;
+use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\StepNode;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
- * Step Tester.
+ * Step DispatchingTester.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepTester implements NodeVisitorInterface
+class StepTester extends DispatchingService
 {
-    private $logicalParent;
-    private $dispatcher;
-    private $context;
-    private $definitions;
-    private $skip = false;
-
     /**
-     * Initializes tester.
+     * Tests step.
      *
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->dispatcher  = $container->get('behat.event_dispatcher');
-        $this->definitions = $container->get('behat.definition.dispatcher');
-    }
-
-    /**
-     * Sets logical parent of the step, which is always a ScenarioNode.
-     *
-     * @param ScenarioNode $parent
-     */
-    public function setLogicalParent(ScenarioNode $parent)
-    {
-        $this->logicalParent = $parent;
-    }
-
-    /**
-     * Sets run context.
-     *
-     * @param ContextInterface $context
-     */
-    public function setContext(ContextInterface $context)
-    {
-        $this->context = $context;
-    }
-
-    /**
-     * Marks test as skipped.
-     *
-     * @param Boolean $skip skip test?
-     */
-    public function skip($skip = true)
-    {
-        $this->skip = $skip;
-    }
-
-    /**
-     * Visits & tests StepNode.
-     *
-     * @param AbstractNode $step
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contexts
+     * @param StepNode             $step
+     * @param ScenarioNode         $scenario
      *
      * @return integer
      */
-    public function visit(AbstractNode $step)
+    public function test(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        StepNode $step,
+        ScenarioNode $scenario
+    )
     {
-        $this->dispatcher->dispatch('beforeStep', new StepEvent(
-            $step, $this->logicalParent, $this->context
-        ));
-        $afterEvent = $this->executeStep($step);
-        $this->dispatcher->dispatch('afterStep', $afterEvent);
+        $event = new StepEvent($suite, $contexts, $scenario, $step);
+        $this->dispatch(EventInterface::BEFORE_STEP, $event);
 
-        return $afterEvent->getResult();
-    }
-
-    /**
-     * Searches and runs provided step with DefinitionDispatcher.
-     *
-     * @param StepNode $step step node
-     *
-     * @return StepEvent
-     */
-    protected function executeStep(StepNode $step)
-    {
-        $context    = $this->context;
-        $result     = null;
-        $definition = null;
-        $exception  = null;
-        $snippet    = null;
+        $result = StepEvent::PASSED;
+        $execution = $exception = $snippet = null;
 
         try {
-            $definition = $this->definitions->findDefinition($this->context, $step, $this->skip);
-
-            if ($this->skip) {
-                return new StepEvent(
-                    $step, $this->logicalParent, $context, StepEvent::SKIPPED, $definition
-                );
-            }
-
-            try {
-                $this->executeStepDefinition($step, $definition);
-                $result = StepEvent::PASSED;
-            } catch (PendingException $e) {
-                $result    = StepEvent::PENDING;
-                $exception = $e;
-            } catch (\Exception $e) {
-                $result    = StepEvent::FAILED;
-                $exception = $e;
-            }
+            $execution = $this->getExecutionEvent($suite, $step, $contexts);
+            $this->dispatch(EventInterface::EXECUTE_DEFINITION, $execution);
+        } catch (PendingException $e) {
+            $result = StepEvent::PENDING;
+            $exception = $e;
         } catch (UndefinedException $e) {
-            $result    = StepEvent::UNDEFINED;
-            $snippet   = $this->definitions->proposeDefinition($this->context, $step);
+            $result = StepEvent::UNDEFINED;
             $exception = $e;
+            $snippet = $this->getDefinitionSnippet($suite, $step, $contexts);
         } catch (\Exception $e) {
-            $result    = StepEvent::FAILED;
+            $result = StepEvent::FAILED;
             $exception = $e;
         }
 
-        return new StepEvent(
-            $step, $this->logicalParent, $context, $result, $definition, $exception, $snippet
+        $definition = null;
+        if ($execution) {
+            $definition = $execution->getCallee();
+        }
+
+        $event = new StepEvent(
+            $suite, $contexts, $scenario, $step, $result, $exception, $definition, $snippet
         );
+        $this->dispatch(EventInterface::AFTER_STEP, $event);
+
+        return $result;
     }
 
     /**
-     * Executes provided step definition.
+     * Returns execution event.
      *
-     * @param StepNode            $step       step node
-     * @param DefinitionInterface $definition step definition
+     * @param SuiteInterface       $suite
+     * @param StepNode             $step
+     * @param ContextPoolInterface $contexts
+     *
+     * @throws UndefinedException
+     *
+     * @return ExecuteCalleeEvent
      */
-    protected function executeStepDefinition(StepNode $step, DefinitionInterface $definition)
+    protected function getExecutionEvent(
+        SuiteInterface $suite,
+        StepNode $step,
+        ContextPoolInterface $contexts
+    )
     {
-        $this->executeStepsChain($step, $definition->run($this->context));
+        $definitionProvider = new DefinitionCarrierEvent($suite, $contexts, $step);
+        $this->dispatch(EventInterface::FIND_DEFINITION, $definitionProvider);
+
+        if (!$definitionProvider->hasDefinition()) {
+            throw new UndefinedException($step->getText());
+        }
+
+        $definition = $definitionProvider->getDefinition();
+        $arguments = $definitionProvider->getArguments();
+
+        return new ExecuteDefinitionEvent($suite, $contexts, $step, $definition, $arguments);
     }
 
     /**
-     * Executes steps chain (if there's one).
+     * Returns definition snippet.
      *
-     * @param StepNode $step  step node
-     * @param mixed    $chain chain
+     * @param SuiteInterface       $suite
+     * @param StepNode             $step
+     * @param ContextPoolInterface $contexts
      *
-     * @throws \Exception
+     * @return SnippetInterface
      */
-    private function executeStepsChain(StepNode $step, $chain = null)
+    protected function getDefinitionSnippet(
+        SuiteInterface $suite,
+        StepNode $step,
+        ContextPoolInterface $contexts
+    )
     {
-        if (null === $chain) {
-            return;
-        }
+        $snippetProvider = new SnippetCarrierEvent($suite, $contexts, $step);
+        $this->dispatch(EventInterface::CREATE_SNIPPET, $snippetProvider);
 
-        $chain = is_array($chain) ? $chain : array($chain);
-        foreach ($chain as $chainItem) {
-            if ($chainItem instanceof SubstepInterface) {
-                $substepNode = $chainItem->getStepNode();
-                $substepNode->setParent($step->getParent());
-                $substepEvent = $this->executeStep($substepNode);
-
-                if (StepEvent::PASSED !== $substepEvent->getResult()) {
-                    throw $substepEvent->getException();
-                }
-            } elseif (is_callable($chainItem)) {
-                $this->executeStepsChain($step, call_user_func($chainItem));
-            }
-        }
+        return $snippetProvider->getSnippet();
     }
 }
