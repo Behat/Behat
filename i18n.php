@@ -25,6 +25,19 @@
         'undefined_count'     => '{1} %1% nedefinován|{2,3,4} %1% nedefinovány|]4,Inf] %1% nedefinováno',
         'skipped_count'       => '{1} %1% přeskočen|{2,3,4} %1% přeskočeny|]4,Inf] %1% přeskočeno',
     ),
+    'da' =>
+    array (
+        'proposal_title'      => 'Du kan implementere step definitioner for udefinerede steps med disse kodestykker:',
+        'failed_steps_title'  => 'fejlede steps',
+        'pending_steps_title' => 'afventende steps',
+        'scenarios_count'     => '{0} Ingen scenarier|{1} 1 Scenarie|]1,Inf] %1% Scenarier',
+        'steps_count'         => '{0} Ingen steps|{1} 1 step|]1,Inf] %1% steps',
+        'passed_count'        => '[1,Inf] %1% bestod',
+        'failed_count'        => '[1,Inf] %1% fejlede',
+        'pending_count'       => '[1,Inf] %1% afventer',
+        'undefined_count'     => '[1,Inf] %1% er udefinerede',
+        'skipped_count'       => '[1,Inf] %1% er sprunget over',
+    ),
     'de' =>
     array (
         'proposal_title'      => 'Neue Anweisungen für undefinierte Schritte können mit diesen Code-Schnipseln angelegt werden:',
