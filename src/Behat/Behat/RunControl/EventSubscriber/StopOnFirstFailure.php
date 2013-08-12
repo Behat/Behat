@@ -11,8 +11,6 @@ namespace Behat\Behat\RunControl\EventSubscriber;
  */
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExerciseEvent;
-use Behat\Behat\Event\OutlineExampleEvent;
-use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepCollectionEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\EventDispatcher\DispatchingService;
