@@ -15,7 +15,6 @@ use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ScenarioNode;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Background tester.

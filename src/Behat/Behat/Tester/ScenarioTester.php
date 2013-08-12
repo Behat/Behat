@@ -14,7 +14,6 @@ use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\ScenarioNode;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Scenario tester.

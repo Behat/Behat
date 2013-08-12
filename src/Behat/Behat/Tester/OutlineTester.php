@@ -17,7 +17,6 @@ use Behat\Behat\Suite\SuiteInterface;
 use Behat\Behat\Tester\Event\OutlineExampleTesterCarrierEvent;
 use Behat\Gherkin\Node\OutlineNode;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Outline tester.

@@ -29,7 +29,6 @@ use Behat\Behat\Tester\StepSkipTester;
 use Behat\Behat\Tester\StepTester;
 use Behat\Behat\Tester\SuiteTester;
 use Behat\Gherkin\Node\OutlineNode;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

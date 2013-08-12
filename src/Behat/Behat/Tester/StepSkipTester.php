@@ -16,7 +16,6 @@ use Behat\Behat\Exception\UndefinedException;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Gherkin\Node\StepNode;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Step DispatchingTester.

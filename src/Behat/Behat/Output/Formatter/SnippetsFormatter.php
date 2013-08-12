@@ -11,7 +11,6 @@ namespace Behat\Behat\Output\Formatter;
  */
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExerciseEvent;
-use Behat\Behat\Event\SuiteEvent;
 use Behat\Behat\Output\Formatter\ProgressFormatter;
 
 /**

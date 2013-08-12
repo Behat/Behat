@@ -142,11 +142,11 @@ class FeatureContext implements ContextInterface
         }
 
         if ($this->env) {
-            exec($command = sprintf('BEHAT_PARAMS=\'%s\' %s %s %s',
+            exec(sprintf('BEHAT_PARAMS=\'%s\' %s %s %s',
                 $this->env, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
             ), $output, $return);
         } else {
-            exec($command = sprintf('%s %s %s --no-time',
+            exec(sprintf('%s %s %s --no-time',
                 BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
             ), $output, $return);
         }
