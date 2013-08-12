@@ -9,7 +9,6 @@ namespace Behat\Behat\Tester\EventSubscriber;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Tester\BackgroundTester;
 use Behat\Behat\Tester\Event\BackgroundTesterCarrierEvent;
