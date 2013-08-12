@@ -62,9 +62,10 @@ class GherkinLoader implements LoaderInterface
     public function load(SuiteInterface $suite, $locator)
     {
         $filters = $suite->getFeatureFilters();
-        $filters[] = new PathsFilter($suite->getFeatureLocators());
 
         if ($locator) {
+            $filters[] = new PathsFilter($suite->getFeatureLocators());
+
             return $this->gherkin->load($locator, $filters);
         }
 
