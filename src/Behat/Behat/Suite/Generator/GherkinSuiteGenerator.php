@@ -10,7 +10,7 @@ namespace Behat\Behat\Suite\Generator;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Suite\Generator\GeneratorInterface;
-use Behat\Behat\Suite\Suite;
+use Behat\Behat\Suite\GherkinSuite;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Filter\FilterInterface;
 use Behat\Gherkin\Filter\NameFilter;
@@ -19,11 +19,11 @@ use Behat\Gherkin\Filter\TagFilter;
 use InvalidArgumentException;
 
 /**
- * Basic suite generator.
+ * Gherkin suite generator.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BasicSuiteGenerator implements GeneratorInterface
+class GherkinSuiteGenerator implements GeneratorInterface
 {
     /**
      * Checks if generator support provided suite type and parameters.
@@ -35,7 +35,7 @@ class BasicSuiteGenerator implements GeneratorInterface
      */
     public function supports($type, array $parameters)
     {
-        return 'basic' === $type;
+        return 'gherkin' === $type;
     }
 
     /**
@@ -52,7 +52,7 @@ class BasicSuiteGenerator implements GeneratorInterface
         $featureFilters = $this->getFeatureFilters($suiteName, $parameters);
         $contextClasses = $this->getContextClasses($suiteName, $parameters);
 
-        return new Suite($suiteName, $featureLocators, $featureFilters, $contextClasses, $parameters);
+        return new GherkinSuite($suiteName, $featureLocators, $featureFilters, $contextClasses, $parameters);
     }
 
     /**

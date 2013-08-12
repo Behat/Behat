@@ -12,11 +12,11 @@ namespace Behat\Behat\Suite;
 use Behat\Gherkin\Filter\FilterInterface;
 
 /**
- * Basic suite.
+ * Gherkin suite.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Suite implements SuiteInterface
+class GherkinSuite implements SuiteInterface
 {
     /**
      * @var string

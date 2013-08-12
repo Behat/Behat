@@ -303,8 +303,8 @@
                  class="Behat\Behat\Suite\SuiteFactory"
                  public="true"/>
 
-        <service id="suite.generator.basic"
-                 class="Behat\Behat\Suite\Generator\BasicSuiteGenerator">
+        <service id="suite.generator.gherkin"
+                 class="Behat\Behat\Suite\Generator\GherkinSuiteGenerator">
             <tag name="suite.generator"/>
         </service>
 

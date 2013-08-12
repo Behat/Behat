@@ -33,22 +33,6 @@ interface SuiteInterface
     public function getName();
 
     /**
-     * Returns list of feature locators.
-     * Conventionally, locators that are not paths in the local filesystem should start with `@` sign
-     * followed by the ID of a remote storage.
-     *
-     * @return string[]
-     */
-    public function getFeatureLocators();
-
-    /**
-     * Returns feature filters.
-     *
-     * @return FilterInterface[]
-     */
-    public function getFeatureFilters();
-
-    /**
      * Returns context class names.
      *
      * @return string[]

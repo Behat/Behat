@@ -10,14 +10,14 @@ namespace Behat\Behat\Features\Loader;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Features\Loader\LoaderInterface;
-use Behat\Behat\Suite\Suite;
+use Behat\Behat\Suite\GherkinSuite;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Filter\PathsFilter;
 use Behat\Gherkin\Gherkin;
 use Behat\Gherkin\Node\FeatureNode;
 
 /**
- * Gherkin loader interface.
+ * Gherkin suites loader.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -48,14 +48,14 @@ class GherkinLoader implements LoaderInterface
      */
     public function supports(SuiteInterface $suite, $locator)
     {
-        return $suite instanceof Suite;
+        return $suite instanceof GherkinSuite;
     }
 
     /**
      * Loads features using provided suite & locator.
      *
-     * @param SuiteInterface $suite
-     * @param string         $locator
+     * @param GherkinSuite $suite
+     * @param string       $locator
      *
      * @return FeatureNode[]
      */

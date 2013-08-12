@@ -61,7 +61,7 @@ class Configuration
     {
         $defaultAutoload = array('' => '%paths.base%/features/bootstrap');
         $defaultSuiteParameters = array(
-            'type'     => 'basic',
+            'type'     => 'gherkin',
             'paths'    => array('%paths.base%/features'),
             'contexts' => array('FeatureContext'),
         );
