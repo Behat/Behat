@@ -2,16 +2,6 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\EventDispatcher\Event;
-
-use Behat\Gherkin\Node\NodeVisitorInterface,
-    Behat\Gherkin\Node\AbstractNode,
-    Behat\Gherkin\Node\OutlineNode;
-
-use Behat\Behat\Event\OutlineEvent,
-    Behat\Behat\Event\OutlineExampleEvent;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -19,93 +9,81 @@ use Behat\Behat\Event\OutlineEvent,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\OutlineEvent;
+use Behat\Behat\EventDispatcher\DispatchingService;
+use Behat\Behat\Suite\SuiteInterface;
+use Behat\Behat\Tester\Event\OutlineExampleTesterCarrierEvent;
+use Behat\Gherkin\Node\OutlineNode;
+use RuntimeException;
 
 /**
  * Outline tester.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineTester extends ScenarioTester
+class OutlineTester extends DispatchingService
 {
     /**
-     * Initializes tester.
+     * Tests outline.
      *
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container    = $container;
-        $this->dispatcher   = $container->get('behat.event_dispatcher');
-    }
-
-    /**
-     * Visits & tests OutlineNode.
-     *
-     * @param AbstractNode $outline
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contexts
+     * @param OutlineNode          $outline
      *
      * @return integer
      */
-    public function visit(AbstractNode $outline)
+    public function test(SuiteInterface $suite, ContextPoolInterface $contexts, OutlineNode $outline)
     {
-        $this->dispatcher->dispatch('beforeOutline', new OutlineEvent($outline));
+        $event = new OutlineEvent($suite, $contexts, $outline);
+        $this->dispatch(EventInterface::BEFORE_OUTLINE, $event);
 
         $result = 0;
-
-        // Run examples of outline
         foreach ($outline->getExamples()->getHash() as $iteration => $tokens) {
-            $itResult = $this->visitOutlineExample($outline, $iteration, $tokens);
-
-            $result = max($result, $itResult);
+            $tester = $this->getOutlineExampleTester($suite, $contexts, $outline, $iteration, $tokens);
+            $result = max($result, $tester->test($suite, $contexts, $outline, $iteration, $tokens));
         }
 
-        $this->dispatcher->dispatch('afterOutline', new OutlineEvent($outline, $result));
+        $event = new OutlineEvent($suite, $contexts, $outline, $result);
+        $this->dispatch(EventInterface::AFTER_OUTLINE, $event);
 
         return $result;
     }
 
     /**
-     * Visits & tests OutlineNode example.
+     * Returns outline example tester.
      *
-     * @param OutlineNode $outline outline instance
-     * @param integer     $row     row number
-     * @param array       $tokens  step replacements for tokens
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contexts
+     * @param OutlineNode          $outline
+     * @param integer              $iteration
+     * @param array                $tokens
      *
-     * @return integer
+     * @return OutlineExampleTester
+     *
+     * @throws RuntimeException If outline example tester is not found
      */
-    private function visitOutlineExample(OutlineNode $outline, $row, array $tokens = array())
+    private function getOutlineExampleTester(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        OutlineNode $outline,
+        $iteration,
+        array $tokens
+    )
     {
-        $context  = $this->container->get('behat.context.dispatcher')->createContext();
-        $itResult = 0;
-        $skip     = false;
+        $testerProvider = new Event\OutlineExampleTesterCarrierEvent($suite, $contexts, $outline, $iteration, $tokens);
 
-        $this->dispatcher->dispatch('beforeOutlineExample', new OutlineExampleEvent(
-            $outline, $row, $context
-        ));
-
-        // Visit & test background if has one
-        if ($outline->getFeature()->hasBackground()) {
-            $bgResult = $this->visitBackground(
-                $outline->getFeature()->getBackground(), $outline, $context
-            );
-            if (0 !== $bgResult) {
-                $skip = true;
-            }
-            $itResult = max($itResult, $bgResult);
+        $this->dispatch(EventInterface::CREATE_OUTLINE_EXAMPLE_TESTER, $testerProvider);
+        if (!$testerProvider->hasTester()) {
+            throw new RuntimeException(sprintf(
+                'Can not find tester for example #%d of "%s" outline from the "%s" suite.',
+                $iteration,
+                $outline->getTitle(),
+                $suite->getName()
+            ));
         }
 
-        // Visit & test steps
-        foreach ($outline->getSteps() as $step) {
-            $stResult = $this->visitStep($step, $outline, $context, $tokens, $skip);
-            if (0 !== $stResult) {
-                $skip = true;
-            }
-            $itResult = max($itResult, $stResult);
-        }
-
-        $this->dispatcher->dispatch('afterOutlineExample', new OutlineExampleEvent(
-            $outline, $row, $context, $itResult, $skip
-        ));
-
-        return $itResult;
+        return $testerProvider->getTester();
     }
 }

@@ -2,16 +2,6 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
-use Behat\Gherkin\Node\NodeVisitorInterface,
-    Behat\Gherkin\Node\AbstractNode,
-    Behat\Gherkin\Node\ScenarioNode,
-    Behat\Gherkin\Node\OutlineNode;
-
-use Behat\Behat\Exception\BehaviorException,
-    Behat\Behat\Event\FeatureEvent;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -19,79 +9,77 @@ use Behat\Behat\Exception\BehaviorException,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\FeatureEvent;
+use Behat\Behat\EventDispatcher\DispatchingService;
+use Behat\Behat\Suite\SuiteInterface;
+use Behat\Behat\Tester\Event\ScenarioTesterCarrierEvent;
+use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\ScenarioNode;
+use RuntimeException;
 
 /**
  * Feature tester.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureTester implements NodeVisitorInterface
+class FeatureTester extends DispatchingService
 {
-    private $container;
-    private $dispatcher;
-    private $parameters;
-    private $skip = false;
-
     /**
-     * Initializes tester.
+     * Tests feature.
      *
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container  = $container;
-        $this->dispatcher = $container->get('behat.event_dispatcher');
-        $this->parameters = $container->get('behat.context.dispatcher')->getContextParameters();
-    }
-
-    /**
-     * Sets tester to dry-run mode.
-     *
-     * @param Boolean $skip
-     */
-    public function setSkip($skip = true)
-    {
-        $this->skip = (bool) $skip;
-    }
-
-    /**
-     * Visits & tests FeatureNode.
-     *
-     * @param AbstractNode $feature
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contexts
+     * @param FeatureNode          $feature
      *
      * @return integer
-     *
-     * @throws BehaviorException if unknown scenario type (neither Outline or Scenario) found in feature
      */
-    public function visit(AbstractNode $feature)
+    public function test(SuiteInterface $suite, ContextPoolInterface $contexts, FeatureNode $feature)
     {
-        $this->dispatcher->dispatch(
-            'beforeFeature', new FeatureEvent($feature, $this->parameters)
-        );
+        $event = new FeatureEvent($suite, $contexts, $feature);
+        $this->dispatch(EventInterface::BEFORE_FEATURE, $event);
 
         $result = 0;
-        $skip   = false;
-
-        // Visit & test scenarios
         foreach ($feature->getScenarios() as $scenario) {
-            if ($scenario instanceof OutlineNode) {
-                $tester = $this->container->get('behat.tester.outline');
-            } elseif ($scenario instanceof ScenarioNode) {
-                $tester = $this->container->get('behat.tester.scenario');
-            } else {
-                throw new BehaviorException(
-                    'Unknown scenario type found: ' . get_class($scenario)
-                );
-            }
-
-            $tester->setSkip($skip || $this->skip);
-            $result = max($result, $scenario->accept($tester));
+            $tester = $this->getScenarioTester($suite, $contexts, $scenario);
+            $result = max($result, $tester->test($suite, $contexts, $scenario));
         }
 
-        $this->dispatcher->dispatch(
-            'afterFeature', new FeatureEvent($feature, $this->parameters, $result)
-        );
+        $event = new FeatureEvent($suite, $contexts, $feature, $result);
+        $this->dispatch(EventInterface::AFTER_FEATURE, $event);
 
         return $result;
+    }
+
+    /**
+     * Returns scenario tester.
+     *
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contexts
+     * @param ScenarioNode         $scenario
+     *
+     * @throws RuntimeException If scenario tester is not found
+     *
+     * @return ScenarioTester
+     */
+    private function getScenarioTester(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        ScenarioNode $scenario
+    )
+    {
+        $testerProvider = new ScenarioTesterCarrierEvent($suite, $contexts, $scenario);
+
+        $this->dispatch(EventInterface::CREATE_SCENARIO_TESTER, $testerProvider);
+        if (!$testerProvider->hasTester()) {
+            throw new RuntimeException(sprintf(
+                'Can not find tester for "%s" scenario from the "%s" suite.',
+                $scenario->getTitle(),
+                $suite->getName()
+            ));
+        }
+
+        return $testerProvider->getTester();
     }
 }

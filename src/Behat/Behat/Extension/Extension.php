@@ -2,12 +2,6 @@
 
 namespace Behat\Behat\Extension;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
-    Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
-    Symfony\Component\Config\FileLocator,
-    Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -15,14 +9,28 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use ReflectionClass;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Behat base extension class.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Extension implements ExtensionInterface
+abstract class Extension implements ExtensionInterface
 {
+    /**
+     * Returns extension name.
+     *
+     * @return string
+     */
+    abstract public function getExtensionName();
+
     /**
      * Loads a specific configuration.
      *
@@ -34,16 +42,16 @@ class Extension implements ExtensionInterface
         $path = rtrim($this->getServiceDefinitionsPath(), DIRECTORY_SEPARATOR);
         $name = $this->getServiceDefinitionsName();
 
-        if (file_exists($path.DIRECTORY_SEPARATOR.($file = $name.'.xml'))) {
+        if (file_exists($path . DIRECTORY_SEPARATOR . ($file = $name . '.xml'))) {
             $loader = new XmlFileLoader($container, new FileLocator($path));
             $loader->load($file);
         }
-        if (file_exists($path.DIRECTORY_SEPARATOR.($file = $name.'.yml'))) {
+        if (file_exists($path . DIRECTORY_SEPARATOR . ($file = $name . '.yml'))) {
             $loader = new YamlFileLoader($container, new FileLocator($path));
             $loader->load($file);
         }
 
-        $container->setParameter($this->getExtensionName().'.parameters', $config);
+        $container->setParameter($this->getExtensionName() . '.parameters', $config);
     }
 
     /**
@@ -55,28 +63,17 @@ class Extension implements ExtensionInterface
     {
         $builder
             ->useAttributeAsKey('name')
-            ->prototype('variable')
-        ;
+            ->prototype('variable');
     }
 
     /**
      * Returns compiler passes used by this extension.
      *
-     * @return array
+     * @return CompilerPassInterface[]
      */
     public function getCompilerPasses()
     {
         return array();
-    }
-
-    /**
-     * Returns extension name used to store extension parameters in DIC.
-     *
-     * @return string
-     */
-    protected function getExtensionName()
-    {
-        return strtolower(ltrim(preg_replace('/[A-Z]/', "_$0", get_class($this)), '_'));
     }
 
     /**
@@ -86,7 +83,7 @@ class Extension implements ExtensionInterface
      */
     protected function getServiceDefinitionsName()
     {
-        return get_class($this).'Services';
+        return 'services';
     }
 
     /**
@@ -96,8 +93,8 @@ class Extension implements ExtensionInterface
      */
     protected function getServiceDefinitionsPath()
     {
-        $refl = new \ReflectionClass($this);
+        $reflection = new ReflectionClass($this);
 
-        return dirname($refl->getFileName());
+        return dirname($reflection->getFileName());
     }
 }

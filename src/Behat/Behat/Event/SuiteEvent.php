@@ -2,10 +2,6 @@
 
 namespace Behat\Behat\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-
-use Behat\Behat\DataCollector\LoggerDataCollector;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -13,59 +9,55 @@ use Behat\Behat\DataCollector\LoggerDataCollector;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Suite\SuiteInterface;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Suite event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteEvent extends Event implements EventInterface
+class SuiteEvent extends Event implements LifecycleEventInterface
 {
-    private $logger;
-    private $completed;
-    private $parameters;
+    /**
+     * @var SuiteInterface
+     */
+    private $suite;
+    /**
+     * @var ContextPoolInterface
+     */
+    private $contexts;
 
     /**
      * Initializes suite event.
      *
-     * @param LoggerDataCollector $logger     suite logger
-     * @param mixed               $parameters context parameters
-     * @param Boolean             $completed  is suite completed
+     * @param SuiteInterface       $suite suite that being started
+     * @param ContextPoolInterface $contexts
      */
-    public function __construct(LoggerDataCollector $logger, $parameters, $completed)
+    public function __construct(SuiteInterface $suite, ContextPoolInterface $contexts)
     {
-        $this->logger     = $logger;
-        $this->parameters = $parameters;
-        $this->completed  = (Boolean) $completed;
+        $this->suite = $suite;
+        $this->contexts = $contexts;
     }
 
     /**
-     * Returns suite logger.
+     * Returns suite instance.
      *
-     * @return LoggerDataCollector
+     * @return SuiteInterface
      */
-    public function getLogger()
+    public function getSuite()
     {
-        return $this->logger;
+        return $this->suite;
     }
 
     /**
-     * Returns context parameters.
+     * Returns context pool instance.
      *
-     * @return mixed
+     * @return ContextPoolInterface
      */
-    public function getContextParameters()
+    public function getContextPool()
     {
-        return $this->parameters;
-    }
-
-    /**
-     * Checks whether test suite was completed entirely.
-     *
-     * @return Boolean
-     */
-    public function isCompleted()
-    {
-        return $this->completed;
+        return $this->contexts;
     }
 }

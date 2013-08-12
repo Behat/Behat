@@ -2,10 +2,6 @@
 
 namespace Behat\Behat\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-
-use Behat\Gherkin\Node\BackgroundNode;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -13,30 +9,58 @@ use Behat\Gherkin\Node\BackgroundNode;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Suite\SuiteInterface;
+use Behat\Gherkin\Node\BackgroundNode;
+use Behat\Gherkin\Node\ScenarioNode;
 
 /**
  * Background event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BackgroundEvent extends Event implements EventInterface
+class BackgroundEvent extends StepCollectionEvent
 {
+    /**
+     * @var ScenarioNode
+     */
+    private $scenario;
+    /**
+     * @var BackgroundNode
+     */
     private $background;
-    private $result;
-    private $skipped;
 
     /**
      * Initializes background event.
      *
-     * @param BackgroundNode $background
-     * @param integer        $result
-     * @param Boolean        $skipped
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contexts
+     * @param ScenarioNode         $scenario
+     * @param BackgroundNode       $background
+     * @param integer              $result
      */
-    public function __construct(BackgroundNode $background, $result = null, $skipped = false)
+    public function __construct(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        ScenarioNode $scenario,
+        BackgroundNode $background,
+        $result = null
+    )
     {
-        $this->background   = $background;
-        $this->result       = $result;
-        $this->skipped      = $skipped;
+        parent::__construct($suite, $contexts, $result);
+
+        $this->scenario = $scenario;
+        $this->background = $background;
+    }
+
+    /**
+     * Returns scenario node.
+     *
+     * @return ScenarioNode
+     */
+    public function getScenario()
+    {
+        return $this->scenario;
     }
 
     /**
@@ -47,25 +71,5 @@ class BackgroundEvent extends Event implements EventInterface
     public function getBackground()
     {
         return $this->background;
-    }
-
-    /**
-     * Return background tester result code.
-     *
-     * @return integer
-     */
-    public function getResult()
-    {
-        return $this->result;
-    }
-
-    /**
-     * Checks whether background were skipped.
-     *
-     * @return Boolean
-     */
-    public function isSkipped()
-    {
-        return $this->skipped;
     }
 }

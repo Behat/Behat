@@ -2,15 +2,6 @@
 
 namespace Behat\Behat\Tester;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
-use Behat\Gherkin\Node\NodeVisitorInterface,
-    Behat\Gherkin\Node\AbstractNode,
-    Behat\Gherkin\Node\ScenarioNode;
-
-use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Event\BackgroundEvent;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -18,91 +9,48 @@ use Behat\Behat\Context\ContextInterface,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Event\BackgroundEvent;
+use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Suite\SuiteInterface;
+use Behat\Gherkin\Node\BackgroundNode;
+use Behat\Gherkin\Node\ScenarioNode;
 
 /**
  * Background tester.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BackgroundTester implements NodeVisitorInterface
+class BackgroundTester extends StepCollectionTester
 {
-    private $logicalParent;
-    private $container;
-    private $dispatcher;
-    private $context;
-    private $skip = false;
-
     /**
-     * Initializes tester.
+     * Tests feature backgrounds.
      *
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container  = $container;
-        $this->dispatcher = $container->get('behat.event_dispatcher');
-    }
-
-    /**
-     * Sets logical parent of the step, which is always a ScenarioNode.
-     *
-     * @param ScenarioNode $parent
-     */
-    public function setLogicalParent(ScenarioNode $parent)
-    {
-        $this->logicalParent = $parent;
-    }
-
-    /**
-     * Sets run context.
-     *
-     * @param ContextInterface $context
-     */
-    public function setContext(ContextInterface $context)
-    {
-        $this->context = $context;
-    }
-
-    /**
-     * Sets tester to dry-run mode.
-     *
-     * @param Boolean $skip
-     */
-    public function setSkip($skip = true)
-    {
-        $this->skip = (bool) $skip;
-    }
-
-    /**
-     * Visits & tests BackgroundNode.
-     *
-     * @param AbstractNode $background
+     * @param SuiteInterface       $suite
+     * @param ScenarioNode         $scenario
+     * @param BackgroundNode       $background
+     * @param ContextPoolInterface $contexts
      *
      * @return integer
      */
-    public function visit(AbstractNode $background)
+    public function test(
+        SuiteInterface $suite,
+        ScenarioNode $scenario,
+        BackgroundNode $background,
+        ContextPoolInterface $contexts
+    )
     {
-        $this->dispatcher->dispatch('beforeBackground', new BackgroundEvent($background));
+        $event = new BackgroundEvent($suite, $contexts, $scenario, $background);
+        $this->dispatch(EventInterface::BEFORE_BACKGROUND, $event);
 
         $result = 0;
-        $skip   = false;
-
-        // Visit & test steps
         foreach ($background->getSteps() as $step) {
-            $tester = $this->container->get('behat.tester.step');
-            $tester->setLogicalParent($this->logicalParent);
-            $tester->setContext($this->context);
-            $tester->skip($skip || $this->skip);
-
-            $stResult = $step->accept($tester);
-
-            if (0 !== $stResult) {
-                $skip = true;
-            }
-            $result = max($result, $stResult);
+            $tester = $this->getStepTester($suite, $contexts, $step, $result);
+            $result = max($result, $tester->test($suite, $contexts, $step, $scenario));
         }
 
-        $this->dispatcher->dispatch('afterBackground', new BackgroundEvent($background, $result, $skip));
+        $event = new BackgroundEvent($suite, $contexts, $scenario, $background, $result);
+        $this->dispatch(EventInterface::AFTER_BACKGROUND, $event);
 
         return $result;
     }

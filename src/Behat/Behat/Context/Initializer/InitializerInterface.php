@@ -2,8 +2,6 @@
 
 namespace Behat\Behat\Context\Initializer;
 
-use Behat\Behat\Context\ContextInterface;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -11,6 +9,7 @@ use Behat\Behat\Context\ContextInterface;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\ContextInterface;
 
 /**
  * Context initializer interface.

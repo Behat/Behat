@@ -2,6 +2,7 @@
 
 namespace Behat\Behat\DependencyInjection\Configuration;
 
+use RuntimeException;
 use Symfony\Component\Yaml\Yaml;
 
 /*
@@ -38,6 +39,8 @@ class Loader
      * @param string $profile Profile name
      *
      * @return array
+     *
+     * @throws RuntimeException
      */
     public function loadConfiguration($profile = 'default')
     {
@@ -58,7 +61,7 @@ class Loader
 
         // if specific profile has not been found
         if ('default' !== $profile && !$this->profileFound) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Configuration for profile "%s" can not be found.', $profile
             ));
         }
@@ -70,14 +73,20 @@ class Loader
      * Loads information from ENV variable.
      *
      * @return array
+     *
+     * @throws RuntimeException If BEHAT_PARAMS environment var is set to invalid JSON
      */
     protected function loadEnvironmentConfiguration()
     {
         $configs = array();
         if ($envConfig = getenv('BEHAT_PARAMS')) {
-            if (null === $config = @json_decode($envConfig, true)) {
-                @parse_str($envConfig, $config);
-                $config = $this->normalizeRawConfiguration($config);
+            $config = @json_decode($envConfig, true);
+
+            if (!$config) {
+                throw new RuntimeException(sprintf(
+                    'Environment variable `BEHAT_PARAMS` should contain valid JSON, but it is set to "%s".',
+                    $envConfig
+                ));
             }
 
             $configs[] = $config;
@@ -94,12 +103,12 @@ class Loader
      *
      * @return array
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException If config file is not found
      */
     protected function loadFileConfiguration($configPath, $profile)
     {
         if (!is_file($configPath) || !is_readable($configPath)) {
-            throw new \RuntimeException("Config file \"$configPath\" not found");
+            throw new RuntimeException("Config file \"$configPath\" not found");
         }
 
         $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
@@ -129,6 +138,17 @@ class Loader
         return $configs;
     }
 
+    /**
+     * Parses import.
+     *
+     * @param string $basePath
+     * @param string $path
+     * @param string $profile
+     *
+     * @return array
+     *
+     * @throws RuntimeException If import file not found
+     */
     private function parseImport($basePath, $path, $profile)
     {
         if (!file_exists($path) && file_exists($basePath.DIRECTORY_SEPARATOR.$path)) {
@@ -142,34 +162,5 @@ class Loader
         }
 
         return $this->loadFileConfiguration($path, $profile);
-    }
-
-    private function normalizeRawConfiguration(array $config)
-    {
-        $normalize = function($value) {
-            if ('true' === $value || 'false' === $value) {
-                return 'true' === $value;
-            }
-
-            if (is_numeric($value)) {
-                return ctype_digit($value) ? intval($value) : floatval($value);
-            }
-
-            return $value;
-        };
-
-        if (isset($config['formatter']['parameters'])) {
-            $config['formatter']['parameters'] = array_map(
-                $normalize, $config['formatter']['parameters']
-            );
-        }
-
-        if (isset($config['context']['parameters'])) {
-            $config['context']['parameters'] = array_map(
-                $normalize, $config['context']['parameters']
-            );
-        }
-
-        return $config;
     }
 }
