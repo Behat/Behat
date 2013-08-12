@@ -9,7 +9,6 @@ namespace Behat\Behat\Tester;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ScenarioEvent;
