@@ -24,6 +24,7 @@ use Behat\Behat\Snippet\SnippetInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Gherkin\Node\StepNode;
+use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -66,15 +67,12 @@ class StepTester extends DispatchingService
             $result = StepEvent::UNDEFINED;
             $exception = $e;
             $snippet = $this->getDefinitionSnippet($suite, $step, $contexts);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = StepEvent::FAILED;
             $exception = $e;
         }
 
-        $definition = null;
-        if ($execution) {
-            $definition = $execution->getCallee();
-        }
+        $definition = $execution ? $execution->getCallee() : null;
 
         $event = new StepEvent(
             $suite, $contexts, $scenario, $step, $result, $exception, $definition, $snippet
