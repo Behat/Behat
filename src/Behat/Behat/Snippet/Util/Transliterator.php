@@ -335,7 +335,6 @@ class Transliterator
         $chars = $ar[0];
 
         foreach ($chars as $i => $c) {
-            $ud = 0;
             if (ord($c{0}) >= 0 && ord($c{0}) <= 127) {
                 continue;
             } // ASCII - next please
