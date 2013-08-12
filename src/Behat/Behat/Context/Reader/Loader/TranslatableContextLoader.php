@@ -55,7 +55,7 @@ class TranslatableContextLoader implements LoaderInterface
             return array();
         }
 
-        foreach ($contextClass::getTranslationResources() as $path) {
+        foreach (call_user_func(array($contextClass, 'getTranslationResources')) as $path) {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
 
             switch ($extension) {

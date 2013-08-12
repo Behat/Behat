@@ -13,6 +13,7 @@ use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExerciseEvent;
 use Behat\Behat\Event\OutlineExampleEvent;
 use Behat\Behat\Event\ScenarioEvent;
+use Behat\Behat\Event\StepCollectionEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -70,9 +71,9 @@ class StopOnFirstFailure extends DispatchingService implements EventSubscriberIn
     /**
      * Exits if scenario is a failure and if stopper is enabled.
      *
-     * @param ScenarioEvent|OutlineExampleEvent $event
+     * @param StepCollectionEvent $event
      */
-    public function exitAfterCurrentScenarioOnFailure($event)
+    public function exitAfterCurrentScenarioOnFailure(StepCollectionEvent $event)
     {
         if (!$this->enabled || StepEvent::FAILED !== $event->getResult()) {
             return;
