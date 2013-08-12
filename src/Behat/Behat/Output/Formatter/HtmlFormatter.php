@@ -14,6 +14,7 @@ use Behat\Behat\Exception\UndefinedException;
 use Behat\Behat\Output\Formatter\PrettyFormatter;
 use Behat\Behat\Snippet\SnippetInterface;
 use Behat\Behat\Tester\EventSubscriber\StatisticsCollector;
+use Behat\Gherkin\Node\AbstractNode;
 use Behat\Gherkin\Node\AbstractScenarioNode;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
@@ -106,8 +107,12 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printFeatureOrScenarioTags($node)
+    protected function printFeatureOrScenarioTags(AbstractNode $node)
     {
+        if (!($node instanceof FeatureNode) && !($node instanceof ScenarioNode)) {
+            return;
+        }
+
         if (count($tags = $node->getOwnTags())) {
             $this->writeln('<ul class="tags">');
             foreach ($tags as $tag) {

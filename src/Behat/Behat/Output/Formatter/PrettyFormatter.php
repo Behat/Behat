@@ -392,10 +392,14 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints node tags.
      *
-     * @param AbstractScenarioNode|FeatureNode $node
+     * @param AbstractNode $node
      */
-    protected function printFeatureOrScenarioTags($node)
+    protected function printFeatureOrScenarioTags(AbstractNode $node)
     {
+        if (!($node instanceof FeatureNode) && !($node instanceof ScenarioNode)) {
+            return;
+        }
+
         if (count($tags = $node->getOwnTags())) {
             $tags = implode(' ', array_map(function ($tag) {
                 return '@' . $tag;
