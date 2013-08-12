@@ -11,9 +11,9 @@ namespace Behat\Behat\Output\Formatter;
  */
 use Behat\Behat\Console\Formatter\OutputFormatter;
 use Behat\Behat\Event\StepEvent;
-use Behat\Behat\Exception\FormatterException;
 use Behat\Behat\Output\Formatter\FormatterInterface;
 use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -170,7 +170,7 @@ abstract class ConsoleFormatter implements FormatterInterface
      *
      * @return resource
      *
-     * @throws FormatterException
+     * @throws RuntimeException
      */
     protected function createOutputStream()
     {
@@ -185,7 +185,7 @@ abstract class ConsoleFormatter implements FormatterInterface
         } elseif (!is_dir($outputPath)) {
             $stream = fopen($outputPath, 'w');
         } else {
-            throw new FormatterException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Filename expected as "output_path" parameter of "%s" formatter, but got: "%s"',
                 basename(str_replace('\\', '/', get_class($this))), $outputPath
             ));

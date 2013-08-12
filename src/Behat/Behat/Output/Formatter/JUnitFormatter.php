@@ -14,9 +14,9 @@ use Behat\Behat\Event\FeatureEvent;
 use Behat\Behat\Event\OutlineExampleEvent;
 use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
-use Behat\Behat\Exception\FormatterException;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioNode;
+use RuntimeException;
 
 /**
  * Progress formatter.
@@ -298,11 +298,11 @@ class JUnitFormatter extends ConsoleFormatter
         $outputPath = $this->getParameter('output_path');
 
         if (null === $outputPath) {
-            throw new FormatterException(sprintf(
+            throw new RuntimeException(sprintf(
                 'You should specify "output_path" parameter for %s', get_class($this)
             ));
         } elseif (is_file($outputPath)) {
-            throw new FormatterException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Directory path expected as "output_path" parameter of %s, but got: %s',
                 get_class($this),
                 $outputPath
