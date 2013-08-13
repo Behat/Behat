@@ -2,10 +2,6 @@
 
 namespace Behat\Behat\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Reference,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-
 /*
  * This file is part of the Behat.
  *
@@ -14,9 +10,13 @@ use Symfony\Component\DependencyInjection\Reference,
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Event subscribers pass - registers all available event subscribers.
+ * Event subscribers pass.
+ * Registers all available event subscribers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -29,18 +29,10 @@ class EventSubscribersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.event_dispatcher')) {
-            return;
-        }
-        $dispatcherDefinition = $container->getDefinition('behat.event_dispatcher');
+        $dispatcherDefinition = $container->getDefinition('event_dispatcher');
 
-        foreach ($container->findTaggedServiceIds('behat.event_subscriber') as $id => $attributes) {
-            foreach ($attributes as $attribute) {
-                $priority = isset($attribute['priority']) ? intval($attribute['priority']) : 0;
-                $dispatcherDefinition->addMethodCall(
-                    'addSubscriber', array(new Reference($id), $priority)
-                );
-            }
+        foreach ($container->findTaggedServiceIds('event_subscriber') as $id => $attributes) {
+            $dispatcherDefinition->addMethodCall('addSubscriber', array(new Reference($id)));
         }
     }
 }

@@ -2,15 +2,6 @@
 
 namespace Behat\Behat\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface,
-    Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\ParameterBag\ParameterBag,
-    Symfony\Component\Config\Definition\Processor,
-    Symfony\Component\Config\FileLocator;
-
-use Behat\Behat\Extension\ExtensionManager;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -18,42 +9,61 @@ use Behat\Behat\Extension\ExtensionManager;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Extension\ExtensionManager;
+use ReflectionClass;
+use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * Behat service container extension.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BehatExtension implements ExtensionInterface
+class BehatExtension
 {
+    /**
+     * @var string
+     */
     protected $basePath;
+    /**
+     * @var Processor
+     */
     protected $processor;
+    /**
+     * @var Configuration\Configuration
+     */
     protected $configuration;
+    /**
+     * @var ExtensionManager
+     */
     protected $extensionManager;
 
     /**
      * Initializes configuration.
+     *
+     * @param string $basePath
      */
     public function __construct($basePath)
     {
-        $this->basePath         = $basePath;
-        $this->processor        = new Processor();
-        $this->configuration    = new Configuration\Configuration();
+        $this->basePath = $basePath;
+        $this->processor = new Processor();
+        $this->configuration = new Configuration\Configuration();
         $this->extensionManager = new ExtensionManager($basePath);
     }
 
     /**
-     * {@inheritdoc}
+     * Loads container configuration.
+     *
+     * @param array            $configs
+     * @param ContainerBuilder $container
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $this->loadDefaults($container);
-        $container->setParameter('behat.paths.base', $this->basePath);
-
-        // set internal encoding to UTF-8
-        if ('UTF-8' !== mb_internal_encoding()) {
-            mb_internal_encoding('UTF-8');
-        }
+        $this->registerDefaults($container);
 
         // activate and normalize specified by user extensions
         foreach ($configs as $i => $config) {
@@ -68,122 +78,138 @@ class BehatExtension implements ExtensionInterface
         }
 
         // set list of extensions to container
-        $container->setParameter('behat.extension.classes',
-            $this->extensionManager->getExtensionClasses()
-        );
+        $container->setParameter('extension.classes', $this->extensionManager->getExtensionClasses());
+        $container->setResources($this->extensionManager->getExtensionResources());
 
         // normalize and merge the actual configuration
-        $tree   = $this->configuration->getConfigTree($this->extensionManager);
+        $tree = $this->configuration->getConfigTree($this->extensionManager);
         $config = $this->processor->process($tree, $configs);
 
-        if (isset($config['paths'])) {
-            $this->loadPathsConfiguration($config['paths'], $container);
-        }
-        if (isset($config['context'])) {
-            $this->loadContextConfiguration($config['context'], $container);
-        }
-        if (isset($config['formatter'])) {
-            $this->loadFormatterConfiguration($config['formatter'], $container);
-        }
-        if (isset($config['options'])) {
-            $this->loadOptionsConfiguration($config['options'], $container);
-        }
-        if (isset($config['filters'])) {
-            $this->loadFiltersConfiguration($config['filters'], $container);
-        }
-        if (isset($config['extensions'])) {
-            $this->loadExtensionsConfiguration($config['extensions'], $container);
-        }
+        // register configuration sections
+        $this->registerAutoloadConfiguration($config['autoload'], $container);
+        $this->registerSuitesConfiguration($config['suites'], $container);
+        $this->registerFormattersConfiguration($config['formatters'], $container);
+        $this->registerOptionsConfiguration($config['options'], $container);
+        $this->registerExtensionsConfiguration($config['extensions'], $container);
 
-        $this->resolveRelativePaths($container);
         $this->addCompilerPasses($container);
     }
 
     /**
-     * Loads paths configuration.
+     * Registers Behat default configuration.
      *
-     * @param array            $config
      * @param ContainerBuilder $container
      */
-    protected function loadPathsConfiguration(array $config, ContainerBuilder $container)
+    protected function registerDefaults(ContainerBuilder $container)
     {
-        foreach ($config as $key => $path) {
-            $container->setParameter('behat.paths.'.$key, $path);
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/config'));
+        $loader->load('services.xml');
+
+        $behatClassLoaderReflection = new ReflectionClass('Behat\Behat\Console\BehatApplication');
+        $gherkinParserReflection = new ReflectionClass('Behat\Gherkin\Gherkin');
+
+        $behatLibPath = dirname($behatClassLoaderReflection->getFilename()) . '/../../../../';
+        $gherkinLibPath = dirname($gherkinParserReflection->getFilename()) . '/../../../';
+
+        $container->setParameter('paths.base', rtrim($this->basePath, DIRECTORY_SEPARATOR));
+        $container->setParameter('paths.lib', rtrim(realpath($behatLibPath), DIRECTORY_SEPARATOR));
+        $container->setParameter('paths.gherkin.lib', rtrim(realpath($gherkinLibPath), DIRECTORY_SEPARATOR));
+    }
+
+    /**
+     * Registers autoload configuration.
+     *
+     * @param array            $autoload
+     * @param ContainerBuilder $container
+     */
+    protected function registerAutoloadConfiguration(array $autoload, ContainerBuilder $container)
+    {
+        $loaderDefinition = $container->getDefinition('class_loader');
+        foreach ($autoload as $prefix => $path) {
+            $loaderDefinition->addMethodCall('addPrefix', array($prefix, $path));
         }
     }
 
     /**
-     * Loads context configuration.
+     * Registers suites configuration.
      *
-     * @param array            $config
+     * @param array            $suites
      * @param ContainerBuilder $container
      */
-    protected function loadContextConfiguration(array $config, ContainerBuilder $container)
+    protected function registerSuitesConfiguration(array $suites, ContainerBuilder $container)
     {
-        if ('FeatureContext' !== $config['class']) {
-            $container->setParameter('behat.context.class.force', true);
-        }
+        $loaderDefinition = $container->getDefinition('suite.suites_loader');
+        foreach ($suites as $name => $parameters) {
+            $suiteDefinition = new Definition('Behat\Behat\Suite\SuiteInterface');
+            $suiteDefinition->setFactoryService('suite.suite_factory');
+            $suiteDefinition->setFactoryMethod('createSuite');
+            $suiteDefinition->setArguments(array($name, $parameters['type'], $parameters));
 
-        foreach ($config as $key => $value) {
-            $container->setParameter('behat.context.'.$key, $value);
-        }
-    }
-
-    /**
-     * Loads formatter(s) configuration.
-     *
-     * @param array            $config
-     * @param ContainerBuilder $container
-     */
-    protected function loadFormatterConfiguration(array $config, ContainerBuilder $container)
-    {
-        foreach ($config as $key => $value) {
-            $container->setParameter('behat.formatter.'.$key, $value);
+            $loaderDefinition->addMethodCall('registerSuite', array($suiteDefinition));
         }
     }
 
     /**
-     * Loads behat options configuration.
+     * Registers formatters configuration.
      *
-     * @param array            $config
+     * @param array            $formatters
      * @param ContainerBuilder $container
      */
-    protected function loadOptionsConfiguration(array $config, ContainerBuilder $container)
+    protected function registerFormattersConfiguration(array $formatters, ContainerBuilder $container)
     {
-        foreach ($config as $key => $value) {
-            $container->setParameter('behat.options.'.$key, $value);
+        $managerDefinition = $container->getDefinition('output.formatter_manager');
+        foreach ($formatters as $name => $parameters) {
+            if ($parameters['enabled']) {
+                $managerDefinition->addMethodCall('enableFormatter', array($name));
+            } else {
+                $managerDefinition->addMethodCall('disableFormatter', array($name));
+            }
+
+            unset($parameters['enabled']);
+            $managerDefinition->addMethodCall('setFormatterParameters', array($name, $parameters));
         }
     }
 
     /**
-     * Loads gherkin filters configuration.
+     * Registers additional Behat options.
      *
-     * @param array            $config
+     * @param array            $options
      * @param ContainerBuilder $container
      */
-    protected function loadFiltersConfiguration(array $config, ContainerBuilder $container)
+    protected function registerOptionsConfiguration(array $options, ContainerBuilder $container)
     {
-        foreach ($config as $key => $filter) {
-            $container->setParameter('gherkin.filters.'.$key, $filter);
+        if ($options['cache_path']) {
+            $cacheDefinition = new Definition('Behat\Gherkin\Cache\FileCache', array($options['cache_path']));
+            $fileLoaderDefinition = $container->getDefinition('gherkin.loader.gherkin_file');
+            $fileLoaderDefinition->addMethodCall('setCache', array($cacheDefinition));
+
+            $failedScenarios = $container->getDefinition('run_control.cache_failed_scenarios_for_rerun');
+            $failedScenarios->addMethodCall('setCache', array($options['cache_path']));
         }
+
+        $container->setParameter('options.strict', $options['strict']);
+        $container->setParameter('options.dry_run', $options['dry_run']);
+        $container->setParameter('options.stop_on_failure', $options['stop_on_failure']);
+        $container->setParameter('options.append_snippets', $options['append_snippets']);
+        $container->setParameter('options.error_reporting', $options['error_reporting']);
     }
 
     /**
-     * Loads extensions configuration.
+     * Registers extensions configuration.
      *
-     * @param array            $config
+     * @param array            $extensions
      * @param ContainerBuilder $container
      */
-    protected function loadExtensionsConfiguration(array $config, ContainerBuilder $container)
+    protected function registerExtensionsConfiguration(array $extensions, ContainerBuilder $container)
     {
-        foreach ($config as $id => $extensionConfig) {
+        foreach ($extensions as $id => $extensionConfig) {
             // load extension from manager
             $extension = $this->extensionManager->getExtension($id);
 
             // create temporary container
             $tempContainer = new ContainerBuilder(new ParameterBag(array(
-                'behat.paths.base'        => $container->getParameter('behat.paths.base'),
-                'behat.extension.classes' => $container->getParameter('behat.extension.classes'),
+                'paths.base'        => $container->getParameter('paths.base'),
+                'extension.classes' => $container->getParameter('extension.classes'),
             )));
             $tempContainer->addObjectResource($extension);
 
@@ -199,29 +225,6 @@ class BehatExtension implements ExtensionInterface
     }
 
     /**
-     * Resolves relative behat.paths.* parameters in container.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function resolveRelativePaths(ContainerBuilder $container)
-    {
-        $featuresPath  = $container->getParameter('behat.paths.features');
-        $bootstrapPath = $container->getParameter('behat.paths.bootstrap');
-        $parameterBag  = $container->getParameterBag();
-        $featuresPath  = $parameterBag->resolveValue($featuresPath);
-        $bootstrapPath = $parameterBag->resolveValue($bootstrapPath);
-
-        if (!$this->isAbsolutePath($featuresPath)) {
-            $featuresPath = $this->basePath.DIRECTORY_SEPARATOR.$featuresPath;
-            $container->setParameter('behat.paths.features', $featuresPath);
-        }
-        if (!$this->isAbsolutePath($bootstrapPath)) {
-            $bootstrapPath = $this->basePath.DIRECTORY_SEPARATOR.$bootstrapPath;
-            $container->setParameter('behat.paths.bootstrap', $bootstrapPath);
-        }
-    }
-
-    /**
      * Adds core compiler passes to container.
      *
      * @param ContainerBuilder $container
@@ -229,76 +232,12 @@ class BehatExtension implements ExtensionInterface
     protected function addCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new Compiler\ConsoleProcessorsPass());
+        $container->addCompilerPass(new Compiler\OutputFormattersPass());
+        $container->addCompilerPass(new Compiler\SuiteGeneratorsPass());
+        $container->addCompilerPass(new Compiler\EventSubscribersPass());
+        $container->addCompilerPass(new Compiler\FeaturesLoadersPass());
         $container->addCompilerPass(new Compiler\GherkinLoadersPass());
         $container->addCompilerPass(new Compiler\ContextLoadersPass());
-        $container->addCompilerPass(new Compiler\ContextClassGuessersPass());
         $container->addCompilerPass(new Compiler\ContextInitializersPass());
-        $container->addCompilerPass(new Compiler\DefinitionProposalsPass());
-        $container->addCompilerPass(new Compiler\FormattersPass());
-        $container->addCompilerPass(new Compiler\EventSubscribersPass());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getXsdValidationBasePath()
-    {
-        return __DIR__ . '/config/schema';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getNamespace()
-    {
-        return 'http://behat.com/schema/dic/behat';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAlias()
-    {
-        return 'behat';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function loadDefaults($container)
-    {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/config'));
-        $loader->load('behat.xml');
-
-        $behatClassLoaderReflection = new \ReflectionClass('Behat\Behat\Console\BehatApplication');
-        $gherkinParserReflection    = new \ReflectionClass('Behat\Gherkin\Parser');
-
-        $behatLibPath   = dirname($behatClassLoaderReflection->getFilename()) . '/../../../../';
-        $gherkinLibPath = dirname($gherkinParserReflection->getFilename()) . '/../../../';
-
-        $container->setParameter('gherkin.paths.lib', $gherkinLibPath);
-        $container->setParameter('behat.paths.lib', $behatLibPath);
-    }
-
-    /**
-     * Returns whether the file path is an absolute path.
-     *
-     * @param string $file A file path
-     *
-     * @return Boolean
-     */
-    private function isAbsolutePath($file)
-    {
-        if ($file[0] == '/' || $file[0] == '\\'
-            || (strlen($file) > 3 && ctype_alpha($file[0])
-                && $file[1] == ':'
-                && ($file[2] == '\\' || $file[2] == '/')
-            )
-            || null !== parse_url($file, PHP_URL_SCHEME)
-        ) {
-            return true;
-        }
-
-        return false;
     }
 }

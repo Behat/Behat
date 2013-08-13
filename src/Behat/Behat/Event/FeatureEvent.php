@@ -2,10 +2,6 @@
 
 namespace Behat\Behat\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-
-use Behat\Gherkin\Node\FeatureNode;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -13,30 +9,70 @@ use Behat\Gherkin\Node\FeatureNode;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Suite\SuiteInterface;
+use Behat\Gherkin\Node\FeatureNode;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Feature event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureEvent extends Event implements EventInterface
+class FeatureEvent extends Event implements LifecycleEventInterface
 {
+    /**
+     * @var SuiteInterface
+     */
+    private $suite;
+    /**
+     * @var FeatureNode
+     */
     private $feature;
+    /**
+     * @var null|integer
+     */
     private $result;
-    private $parameters;
 
     /**
      * Initializes feature event.
      *
-     * @param FeatureNode $feature
-     * @param mixed       $parameters
-     * @param integer     $result
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contexts
+     * @param FeatureNode          $feature
+     * @param integer              $result
      */
-    public function __construct(FeatureNode $feature, $parameters, $result = null)
+    public function __construct(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        FeatureNode $feature,
+        $result = null
+    )
     {
-        $this->feature    = $feature;
-        $this->parameters = $parameters;
-        $this->result     = $result;
+        $this->suite = $suite;
+        $this->contexts = $contexts;
+        $this->feature = $feature;
+        $this->result = $result;
+    }
+
+    /**
+     * Returns suite instance.
+     *
+     * @return SuiteInterface
+     */
+    public function getSuite()
+    {
+        return $this->suite;
+    }
+
+    /**
+     * Returns context pool instance.
+     *
+     * @return ContextPoolInterface
+     */
+    public function getContextPool()
+    {
+        return $this->contexts;
     }
 
     /**
@@ -50,19 +86,9 @@ class FeatureEvent extends Event implements EventInterface
     }
 
     /**
-     * Returns context parameters.
-     *
-     * @return mixed
-     */
-    public function getContextParameters()
-    {
-        return $this->parameters;
-    }
-
-    /**
      * Returns feature tester result code.
      *
-     * @return integer
+     * @return null|integer
      */
     public function getResult()
     {

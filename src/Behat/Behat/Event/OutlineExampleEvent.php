@@ -2,10 +2,6 @@
 
 namespace Behat\Behat\Event;
 
-use Behat\Behat\Context\ContextInterface;
-
-use Behat\Gherkin\Node\OutlineNode;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -13,32 +9,46 @@ use Behat\Gherkin\Node\OutlineNode;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Suite\SuiteInterface;
+use Behat\Gherkin\Node\OutlineNode;
 
 /**
  * Outline example event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineExampleEvent extends BaseScenarioEvent
+class OutlineExampleEvent extends StepCollectionEvent
 {
+    /**
+     * @var OutlineNode
+     */
     private $outline;
+    /**
+     * @var integer
+     */
     private $iteration;
 
     /**
      * Initializes outline example event.
      *
-     * @param OutlineNode      $outline
-     * @param integer          $iteration iteration number
-     * @param ContextInterface $context
-     * @param integer          $result
-     * @param Boolean          $skipped
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contexts
+     * @param OutlineNode          $outline
+     * @param integer              $iteration iteration number
+     * @param integer              $result
      */
-    public function __construct(OutlineNode $outline, $iteration, ContextInterface $context,
-                                $result = null, $skipped = false)
+    public function __construct(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        OutlineNode $outline,
+        $iteration,
+        $result = null
+    )
     {
-        parent::__construct($context, $result, $skipped);
+        parent::__construct($suite, $contexts, $result);
 
-        $this->outline   = $outline;
+        $this->outline = $outline;
         $this->iteration = $iteration;
     }
 

@@ -2,10 +2,6 @@
 
 namespace Behat\Behat\Hook;
 
-use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Event\EventInterface,
-    Behat\Behat\Annotation\AnnotationInterface;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -13,13 +9,14 @@ use Behat\Behat\Context\ContextInterface,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Callee\CalleeInterface;
 
 /**
  * Hook interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface HookInterface
+interface HookInterface extends CalleeInterface
 {
     /**
      * Returns hooked event type.
@@ -27,11 +24,4 @@ interface HookInterface
      * @return string
      */
     public function getEventName();
-
-    /**
-     * Runs hook callback.
-     *
-     * @param EventInterface $event
-     */
-    public function run(EventInterface $event);
 }

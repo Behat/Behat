@@ -2,15 +2,6 @@
 
 namespace Behat\Behat\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-
-use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Definition\DefinitionInterface,
-    Behat\Behat\Definition\DefinitionSnippet;
-
-use Behat\Gherkin\Node\StepNode,
-    Behat\Gherkin\Node\ScenarioNode;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -18,50 +9,111 @@ use Behat\Gherkin\Node\StepNode,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Definition\DefinitionInterface;
+use Behat\Behat\Snippet\SnippetInterface;
+use Behat\Behat\Suite\SuiteInterface;
+use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\StepNode;
+use Exception;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Step event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepEvent extends Event implements EventInterface
+class StepEvent extends Event implements LifecycleEventInterface
 {
-    const PASSED    = 0;
-    const SKIPPED   = 1;
-    const PENDING   = 2;
+    const PASSED = 0;
+    const SKIPPED = 1;
+    const PENDING = 2;
     const UNDEFINED = 3;
-    const FAILED    = 4;
-
+    const FAILED = 4;
+    /**
+     * @var StepNode
+     */
     private $step;
-    private $parent;
-    private $context;
+    /**
+     * @var ScenarioNode
+     */
+    private $logicalParent;
+    /**
+     * @var SuiteInterface
+     */
+    private $suite;
+    /**
+     * @var ContextPoolInterface
+     */
+    private $contexts;
+    /**
+     * @var null|integer
+     */
     private $result;
+    /**
+     * @var DefinitionInterface
+     */
     private $definition;
+    /**
+     * @var Exception
+     */
     private $exception;
+    /**
+     * @var SnippetInterface
+     */
     private $snippet;
 
     /**
      * Initializes step event.
      *
-     * @param StepNode            $step
-     * @param ScenarioNode        $parent
-     * @param ContextInterface    $context
-     * @param integer             $result
-     * @param DefinitionInterface $definition
-     * @param \Exception          $exception
-     * @param DefinitionSnippet   $snippet
+     * @param SuiteInterface           $suite
+     * @param ContextPoolInterface     $contexts
+     * @param ScenarioNode             $logicalParent
+     * @param StepNode                 $step
+     * @param null|integer             $result
+     * @param null|Exception           $exception
+     * @param null|DefinitionInterface $definition
+     * @param null|SnippetInterface    $snippet
      */
-    public function __construct(StepNode $step, ScenarioNode $parent, ContextInterface $context,
-                                $result = null, DefinitionInterface $definition = null,
-                                \Exception $exception = null, DefinitionSnippet $snippet = null)
+    public function __construct(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        ScenarioNode $logicalParent,
+        StepNode $step,
+        $result = null,
+        Exception $exception = null,
+        DefinitionInterface $definition = null,
+        SnippetInterface $snippet = null
+    )
     {
-        $this->step       = $step;
-        $this->parent     = $parent;
-        $this->context    = $context;
-        $this->result     = $result;
+        $this->suite = $suite;
+        $this->contexts = $contexts;
+        $this->step = $step;
+        $this->logicalParent = $logicalParent;
+        $this->result = $result;
         $this->definition = $definition;
-        $this->exception  = $exception;
-        $this->snippet    = $snippet;
+        $this->exception = $exception;
+        $this->snippet = $snippet;
+    }
+
+    /**
+     * Returns suite instance.
+     *
+     * @return SuiteInterface
+     */
+    public function getSuite()
+    {
+        return $this->suite;
+    }
+
+    /**
+     * Returns context pool instance.
+     *
+     * @return ContextPoolInterface
+     */
+    public function getContextPool()
+    {
+        return $this->contexts;
     }
 
     /**
@@ -81,37 +133,17 @@ class StepEvent extends Event implements EventInterface
      */
     public function getLogicalParent()
     {
-        return $this->parent;
-    }
-
-    /**
-     * Returns context object.
-     *
-     * @return ContextInterface
-     */
-    public function getContext()
-    {
-        return $this->context;
+        return $this->logicalParent;
     }
 
     /**
      * Returns step tester result code.
      *
-     * @return integer
+     * @return null|integer
      */
     public function getResult()
     {
         return $this->result;
-    }
-
-    /**
-     * Returns step definition object.
-     *
-     * @return DefinitionInterface
-     */
-    public function getDefinition()
-    {
-        return $this->definition;
     }
 
     /**
@@ -125,13 +157,13 @@ class StepEvent extends Event implements EventInterface
     }
 
     /**
-     * Returns step tester exception.
+     * Returns step definition object.
      *
-     * @return \Exception
+     * @return DefinitionInterface
      */
-    public function getException()
+    public function getDefinition()
     {
-        return $this->exception;
+        return $this->definition;
     }
 
     /**
@@ -145,13 +177,13 @@ class StepEvent extends Event implements EventInterface
     }
 
     /**
-     * Returns step snippet.
+     * Returns step tester exception.
      *
-     * @return DefinitionSnippet
+     * @return Exception
      */
-    public function getSnippet()
+    public function getException()
     {
-        return $this->snippet;
+        return $this->exception;
     }
 
     /**
@@ -162,5 +194,15 @@ class StepEvent extends Event implements EventInterface
     public function hasSnippet()
     {
         return null !== $this->getSnippet();
+    }
+
+    /**
+     * Returns step snippet.
+     *
+     * @return SnippetInterface
+     */
+    public function getSnippet()
+    {
+        return $this->snippet;
     }
 }

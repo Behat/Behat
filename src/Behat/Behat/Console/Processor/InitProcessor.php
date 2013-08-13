@@ -2,12 +2,6 @@
 
 namespace Behat\Behat\Console\Processor;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Output\OutputInterface;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -15,24 +9,46 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Event\EventInterface;
+use Behat\Behat\EventDispatcher\DispatchingService;
+use Behat\Behat\Suite\Event\SuitesCarrierEvent;
+use RuntimeException;
+use Symfony\Component\ClassLoader\ClassLoader;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Init operation processor.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class InitProcessor extends Processor
+class InitProcessor extends DispatchingService implements ProcessorInterface
 {
-    private $container;
+    /**
+     * @var ClassLoader
+     */
+    private $autoloader;
+    /**
+     * @var string
+     */
+    private $basePath;
 
     /**
-     * Constructs processor.
+     * Initializes processor.
      *
-     * @param ContainerInterface $container Container instance
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param ClassLoader              $autoloader
+     * @param string                   $basePath
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(EventDispatcherInterface $eventDispatcher, ClassLoader $autoloader, $basePath)
     {
-        $this->container = $container;
+        parent::__construct($eventDispatcher);
+
+        $this->autoloader = $autoloader;
+        $this->basePath = $basePath;
     }
 
     /**
@@ -43,7 +59,7 @@ class InitProcessor extends Processor
     public function configure(Command $command)
     {
         $command->addOption('--init', null, InputOption::VALUE_NONE,
-            "Create <comment>features</comment> directory structure.\n"
+            "Create <comment>features</comment> directory structure."
         );
     }
 
@@ -52,110 +68,184 @@ class InitProcessor extends Processor
      *
      * @param InputInterface  $input
      * @param OutputInterface $output
+     *
+     * @return null|integer
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('init')) {
-            $this->initFeaturesDirectoryStructure($output);
-
-            exit(0);
+        if (!$input->getOption('init')) {
+            return null;
         }
+
+        $suitesProvider = new SuitesCarrierEvent();
+        $this->dispatch(EventInterface::LOAD_SUITES, $suitesProvider);
+
+        $basePath = $this->basePath . DIRECTORY_SEPARATOR;
+        foreach ($suitesProvider->getSuites() as $suite) {
+            foreach ($suite->getFeatureLocators() as $locator) {
+                if (0 !== strpos($locator, '@') && !is_dir($path = $this->locatePath($locator))) {
+                    mkdir($path, 0777, true);
+
+                    $output->writeln('<info>+d</info> ' .
+                        str_replace($basePath, '', realpath($path)) .
+                        ' <comment>- place your *.feature files here</comment>'
+                    );
+                }
+            }
+
+            foreach ($suite->getContextClasses() as $class) {
+                if (class_exists($class)) {
+                    continue;
+                }
+
+                $path = $this->findClassFile($class);
+                if (!is_dir(dirname($path))) {
+                    mkdir(dirname($path), 0777, true);
+                }
+
+                file_put_contents($path, $this->getFeatureContextSkelet($class));
+
+                $output->writeln(
+                    '<info>+f</info> ' .
+                    str_replace($basePath, '', realpath($path)) .
+                    ' <comment>- place your definitions here</comment>'
+                );
+            }
+        }
+
+        return 0;
     }
 
     /**
-     * Creates features path structure (initializes behat tests structure).
+     * Returns priority of the processor in which it should be configured and executed.
      *
-     * @param OutputInterface $output output console
+     * @return integer
      */
-    protected function initFeaturesDirectoryStructure(OutputInterface $output)
+    public function getPriority()
     {
-        $basePath       = $this->container->getParameter('behat.paths.base').DIRECTORY_SEPARATOR;
-        $featuresPath   = $this->container->getParameter('behat.paths.features');
-        $bootstrapPath  = $this->container->getParameter('behat.paths.bootstrap');
-
-        if (!is_dir($featuresPath)) {
-            mkdir($featuresPath, 0777, true);
-            $output->writeln(
-                '<info>+d</info> ' .
-                str_replace($basePath, '', realpath($featuresPath)) .
-                ' <comment>- place your *.feature files here</comment>'
-            );
-        }
-
-        if (!is_dir($bootstrapPath)) {
-            mkdir($bootstrapPath, 0777, true);
-            $output->writeln(
-                '<info>+d</info> ' .
-                str_replace($basePath, '', realpath($bootstrapPath)) .
-                ' <comment>- place bootstrap scripts and static files here</comment>'
-            );
-
-            file_put_contents(
-                $bootstrapPath.DIRECTORY_SEPARATOR.'FeatureContext.php',
-                $this->getFeatureContextSkelet()
-            );
-
-            $output->writeln(
-                '<info>+f</info> ' .
-                str_replace($basePath, '', realpath($bootstrapPath)).DIRECTORY_SEPARATOR.
-                'FeatureContext.php <comment>- place your feature related code here</comment>'
-            );
-        }
+        return 90;
     }
 
     /**
      * Returns feature context skelet.
      *
+     * @param string $class
+     *
      * @return string
      */
-    protected function getFeatureContextSkelet()
+    protected function getFeatureContextSkelet($class)
     {
-return <<<'PHP'
+        $namespace = '';
+        $className = $class;
+        if (false !== $pos = strrpos($class, '\\')) {
+            $namespace = 'namespace ' . substr($class, 0, $pos) . ';' . PHP_EOL . PHP_EOL;
+            $className = substr($class, $pos + 1);
+        }
+
+        return strtr(<<<'PHP'
 <?php
 
-use Behat\Behat\Context\ClosuredContextInterface,
-    Behat\Behat\Context\TranslatedContextInterface,
-    Behat\Behat\Context\BehatContext,
-    Behat\Behat\Exception\PendingException;
-use Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode;
-
-//
-// Require 3rd-party libraries here:
-//
-//   require_once 'PHPUnit/Autoload.php';
-//   require_once 'PHPUnit/Framework/Assert/Functions.php';
-//
+{namespace}use Behat\Behat\Context\ContextInterface;
+use Behat\Behat\Exception\PendingException;
+use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
 
 /**
- * Features context.
+ * Behat context class.
  */
-class FeatureContext extends BehatContext
+class {className} implements ContextInterface
 {
     /**
-     * Initializes context.
-     * Every scenario gets its own context object.
+     * Initializes context. Every scenario gets it's own context object.
      *
-     * @param array $parameters context parameters (set them up through behat.yml)
+     * @param array $parameters Suite parameters (set them up through behat.yml)
      */
     public function __construct(array $parameters)
     {
-        // Initialize your context here
     }
-
-//
-// Place your definition and hook methods here:
-//
-//    /**
-//     * @Given /^I have done something with "([^"]*)"$/
-//     */
-//    public function iHaveDoneSomethingWith($argument)
-//    {
-//        doSomethingWith($argument);
-//    }
-//
 }
 
-PHP;
+PHP
+            , array(
+                '{namespace}' => $namespace,
+                '{className}' => $className,
+            )
+        );
+    }
+
+    /**
+     * Finds file to store a class.
+     *
+     * @param string $class
+     *
+     * @return string
+     *
+     * @throws RuntimeException If class file could not be determined
+     */
+    private function findClassFile($class)
+    {
+        if (false !== $pos = strrpos($class, '\\')) {
+            // namespaced class name
+            $classPath = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, 0, $pos)) . DIRECTORY_SEPARATOR;
+            $className = substr($class, $pos + 1);
+        } else {
+            // PEAR-like class name
+            $classPath = null;
+            $className = $class;
+        }
+
+        $classPath .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+
+        foreach ($this->autoloader->getPrefixes() as $prefix => $dirs) {
+            if (0 === strpos($class, $prefix)) {
+                return current($dirs) . DIRECTORY_SEPARATOR . $classPath;
+            }
+        }
+
+        if ($dirs = $this->autoloader->getFallbackDirs()) {
+            return current($dirs) . DIRECTORY_SEPARATOR . $classPath;
+        }
+
+        throw new RuntimeException(sprintf(
+            'Could not find where to put "%s" class. Have you configured autoloader properly?'
+        ));
+    }
+
+    /**
+     * Locates path from a relative one.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private function locatePath($path)
+    {
+        if ($this->isAbsolutePath($path)) {
+            return $path;
+        }
+
+        return $this->basePath . DIRECTORY_SEPARATOR . $path;
+    }
+
+    /**
+     * Returns whether the file path is an absolute path.
+     *
+     * @param string $file A file path
+     *
+     * @return Boolean
+     */
+    private function isAbsolutePath($file)
+    {
+        if ($file[0] == '/' || $file[0] == '\\'
+            || (strlen($file) > 3 && ctype_alpha($file[0])
+                && $file[1] == ':'
+                && ($file[2] == '\\' || $file[2] == '/')
+            )
+            || null !== parse_url($file, PHP_URL_SCHEME)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

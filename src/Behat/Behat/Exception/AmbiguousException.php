@@ -28,8 +28,8 @@ class AmbiguousException extends BehaviorException
      */
     public function __construct($text, array $matches)
     {
-        $this->text     = $text;
-        $this->matches  = $matches;
+        $this->text = $text;
+        $this->matches = $matches;
 
         $message = sprintf("Ambiguous match of \"%s\":", $text);
         foreach ($matches as $definition) {

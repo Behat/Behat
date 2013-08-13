@@ -2,18 +2,6 @@
 
 namespace Behat\Behat\Console;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Console\Application,
-    Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputDefinition,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Output\OutputInterface;
-
-use Behat\Behat\DependencyInjection\BehatExtension,
-    Behat\Behat\DependencyInjection\Configuration\Loader;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -21,6 +9,17 @@ use Behat\Behat\DependencyInjection\BehatExtension,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\DependencyInjection\BehatExtension;
+use Behat\Behat\DependencyInjection\Configuration\Loader;
+use RuntimeException;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Behat console application.
@@ -32,23 +31,27 @@ class BehatApplication extends Application
     private $basePath;
 
     /**
-     * {@inheritdoc}
+     * Initializes application.
+     *
+     * @param string $version The version of the application
      */
     public function __construct($version)
     {
-        parent::__construct('Behat', $version);
+        parent::__construct('behat', $version);
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the default input definition.
+     *
+     * @return InputDefinition An InputDefinition instance
      */
-    public function getDefinition()
+    public function getDefaultInputDefinition()
     {
         return new InputDefinition(array(
-            new InputOption('--help',    '-h', InputOption::VALUE_NONE, 'Display this help message.'),
+            new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
             new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of exceptions.'),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
-            new InputOption('--config',  '-c', InputOption::VALUE_REQUIRED, 'Specify config file to use.'),
+            new InputOption('--config', '-c', InputOption::VALUE_REQUIRED, 'Specify config file to use.'),
             new InputOption('--profile', '-p', InputOption::VALUE_REQUIRED, 'Specify config profile to use.')
         ));
     }
@@ -56,8 +59,8 @@ class BehatApplication extends Application
     /**
      * Runs the current application.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
+     * @param InputInterface  $input  An Input instance
+     * @param OutputInterface $output An Output instance
      *
      * @return integer 0 if everything went fine, or an error code
      */
@@ -77,7 +80,7 @@ class BehatApplication extends Application
      */
     protected function createCommand(InputInterface $input)
     {
-        return $this->createContainer($input)->get('behat.console.command');
+        return $this->createContainer($input)->get('console.command');
     }
 
     /**
@@ -90,19 +93,20 @@ class BehatApplication extends Application
     protected function createContainer(InputInterface $input)
     {
         $container = new ContainerBuilder();
-        $this->loadCoreExtension($container, $this->loadConfiguration($container, $input));
+        $this->loadCoreExtension($container, $this->loadConfiguration($input));
         $container->compile();
 
         return $container;
     }
 
     /**
-     * Configures container based on providen config file and profile.
+     * Configures container based on provided config file and profile.
      *
-     * @param ContainerBuilder $container
-     * @param InputInterface   $input
+     * @param InputInterface $input
+     *
+     * @return array
      */
-    protected function loadConfiguration(ContainerBuilder $container, InputInterface $input)
+    protected function loadConfiguration(InputInterface $input)
     {
         // locate paths
         $this->basePath = getcwd();
@@ -111,8 +115,8 @@ class BehatApplication extends Application
         }
 
         // read configuration
-        $loader  = new Loader($configPath);
-        $profile = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
+        $loader = new Loader($configPath);
+        $profile = $input->getParameterOption(array('--profile', '-p')) ? : 'default';
 
         return $loader->loadConfiguration($profile);
     }
@@ -132,32 +136,40 @@ class BehatApplication extends Application
                 return $file;
             }
 
-            return;
+            return null;
         }
 
         // predefined config paths
         $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR);
-        foreach (array_filter(array(
-            $cwd.DIRECTORY_SEPARATOR.'behat.yml',
-            $cwd.DIRECTORY_SEPARATOR.'behat.yml.dist',
-            $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml',
-            $cwd.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'behat.yml.dist',
-        ), 'is_file') as $path) {
-            return $path;
+        $paths = array_filter(
+            array(
+                $cwd . DIRECTORY_SEPARATOR . 'behat.yml',
+                $cwd . DIRECTORY_SEPARATOR . 'behat.yml.dist',
+                $cwd . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'behat.yml',
+                $cwd . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'behat.yml.dist',
+            ),
+            'is_file'
+        );
+        if (count($paths)) {
+            return current($paths);
         }
+
+        return null;
     }
 
     /**
      * Loads core extension into container.
      *
      * @param ContainerBuilder $container
-     * @param $array           $configs
+     * @param array            $configs
+     *
+     * @throws RuntimeException
      */
     protected function loadCoreExtension(ContainerBuilder $container, array $configs)
     {
         if (null === $this->basePath) {
-            throw new \RuntimeException(
-                'Suite basepath is not set. Seems you have forgot to load configuration first.'
+            throw new RuntimeException(
+                'Suite base path is not set. Seems you have forgot to load configuration first.'
             );
         }
 
@@ -167,7 +179,11 @@ class BehatApplication extends Application
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the name of the command based on input.
+     *
+     * @param InputInterface $input The input interface
+     *
+     * @return string The command name
      */
     protected function getCommandName(InputInterface $input)
     {
@@ -175,7 +191,9 @@ class BehatApplication extends Application
     }
 
     /**
-     * {@inheritdoc}
+     * Tries to figure out the terminal width in which this application runs
+     *
+     * @return int|null
      */
     protected function getTerminalWidth()
     {

@@ -2,10 +2,6 @@
 
 namespace Behat\Behat\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Reference,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-
 /*
  * This file is part of the Behat.
  *
@@ -14,9 +10,13 @@ use Symfony\Component\DependencyInjection\Reference,
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Command pass - registers all available command processors.
+ * Console processors pass.
+ * Registers all available console processors.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -29,13 +29,11 @@ class ConsoleProcessorsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.console.processor.aggregate')) {
-            return;
+        $processors = array();
+        foreach ($container->findTaggedServiceIds('console.processor') as $id => $attributes) {
+            $processors[] = new Reference($id);
         }
-        $aggregator = $container->getDefinition('behat.console.processor.aggregate');
 
-        foreach ($container->findTaggedServiceIds('behat.console.processor') as $id => $attributes) {
-            $aggregator->addMethodCall('addProcessor', array(new Reference($id)));
-        }
+        $container->getDefinition('console.command')->replaceArgument(0, $processors);
     }
 }

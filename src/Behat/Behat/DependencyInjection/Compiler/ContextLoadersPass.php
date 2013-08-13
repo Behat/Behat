@@ -2,10 +2,6 @@
 
 namespace Behat\Behat\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Reference,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-
 /*
  * This file is part of the Behat.
  *
@@ -14,9 +10,13 @@ use Symfony\Component\DependencyInjection\Reference,
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Context loaders pass - registers all available context loaders.
+ * Context loaders pass.
+ * Registers all available context loaders.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -29,13 +29,10 @@ class ContextLoadersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.context.reader')) {
-            return;
-        }
-        $readerDefinition = $container->getDefinition('behat.context.reader');
+        $readerDefinition = $container->getDefinition('context.callees_reader');
 
-        foreach ($container->findTaggedServiceIds('behat.context.loader') as $id => $attributes) {
-            $readerDefinition->addMethodCall('addLoader', array(new Reference($id)));
+        foreach ($container->findTaggedServiceIds('context.loader') as $id => $attributes) {
+            $readerDefinition->addMethodCall('registerLoader', array(new Reference($id)));
         }
     }
 }

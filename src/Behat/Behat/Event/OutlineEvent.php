@@ -2,10 +2,6 @@
 
 namespace Behat\Behat\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-
-use Behat\Gherkin\Node\OutlineNode;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -13,27 +9,74 @@ use Behat\Gherkin\Node\OutlineNode;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Suite\SuiteInterface;
+use Behat\Gherkin\Node\OutlineNode;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Outline event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineEvent extends Event implements EventInterface
+class OutlineEvent extends Event implements LifecycleEventInterface
 {
+    /**
+     * @var SuiteInterface
+     */
+    private $suite;
+    /**
+     * @var ContextPoolInterface
+     */
+    private $contexts;
+    /**
+     * @var OutlineNode
+     */
     private $outline;
+    /**
+     * @var null|integer
+     */
     private $result;
 
     /**
      * Initializes outline event.
      *
-     * @param OutlineNode $outline
-     * @param integer     $result
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contexts
+     * @param OutlineNode          $outline
+     * @param null|integer         $result
      */
-    public function __construct(OutlineNode $outline, $result = null)
+    public function __construct(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        OutlineNode $outline,
+        $result = null
+    )
     {
-        $this->outline  = $outline;
-        $this->result   = $result;
+        $this->suite = $suite;
+        $this->contexts = $contexts;
+        $this->outline = $outline;
+        $this->result = $result;
+    }
+
+    /**
+     * Returns suite instance.
+     *
+     * @return SuiteInterface
+     */
+    public function getSuite()
+    {
+        return $this->suite;
+    }
+
+    /**
+     * Returns context pool instance.
+     *
+     * @return ContextPoolInterface
+     */
+    public function getContextPool()
+    {
+        return $this->contexts;
     }
 
     /**
@@ -49,7 +92,7 @@ class OutlineEvent extends Event implements EventInterface
     /**
      * Returns outline tester result code.
      *
-     * @return integer
+     * @return null|integer
      */
     public function getResult()
     {

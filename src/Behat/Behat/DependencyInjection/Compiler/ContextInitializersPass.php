@@ -2,10 +2,6 @@
 
 namespace Behat\Behat\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Reference,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-
 /*
  * This file is part of the Behat.
  *
@@ -14,9 +10,13 @@ use Symfony\Component\DependencyInjection\Reference,
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Context initializers pass - registers all available context initializers.
+ * Context initializers pass.
+ * Registers all available context initializers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -29,13 +29,10 @@ class ContextInitializersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('behat.context.dispatcher')) {
-            return;
-        }
-        $dispatcher = $container->getDefinition('behat.context.dispatcher');
+        $poolInitializerDefinition = $container->getDefinition('context.pool_initializer');
 
-        foreach ($container->findTaggedServiceIds('behat.context.initializer') as $id => $attributes) {
-            $dispatcher->addMethodCall('addInitializer', array(new Reference($id)));
+        foreach ($container->findTaggedServiceIds('context.initializer') as $id => $attributes) {
+            $poolInitializerDefinition->addMethodCall('registerInitializer', array(new Reference($id)));
         }
     }
 }

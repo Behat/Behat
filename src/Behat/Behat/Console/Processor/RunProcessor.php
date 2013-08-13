@@ -2,14 +2,6 @@
 
 namespace Behat\Behat\Console\Processor;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Output\OutputInterface;
-
-use Behat\Behat\Event\StepEvent;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -17,24 +9,44 @@ use Behat\Behat\Event\StepEvent;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\StepEvent;
+use Behat\Behat\EventDispatcher\DispatchingService;
+use Behat\Behat\Features\Event\FeaturesCarrierEvent;
+use Behat\Behat\Features\SuitedFeature;
+use Behat\Behat\Tester\Event\ExerciseTesterCarrierEvent;
+use Behat\Behat\Tester\ExerciseTester;
+use RuntimeException;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * command configuration processor.
+ * Run configuration processor.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RunProcessor extends Processor
+class RunProcessor extends DispatchingService implements ProcessorInterface
 {
-    private $container;
+    /**
+     * @var Boolean
+     */
+    private $strict;
 
     /**
-     * Constructs processor.
+     * Initializes processor.
      *
-     * @param ContainerInterface $container Container instance
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param Boolean                  $strict
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(EventDispatcherInterface $eventDispatcher, $strict = false)
     {
-        $this->container = $container;
+        parent::__construct($eventDispatcher);
+
+        $this->strict = $strict;
     }
 
     /**
@@ -45,26 +57,20 @@ class RunProcessor extends Processor
     public function configure(Command $command)
     {
         $command
+            ->addArgument('features', InputArgument::OPTIONAL,
+                "Feature(s) to run. Could be:" . PHP_EOL .
+                "- a dir <comment>(features/)</comment>" . PHP_EOL .
+                "- a feature <comment>(*.feature)</comment>" . PHP_EOL .
+                "- a scenario at specific line <comment>(*.feature:10)</comment>." . PHP_EOL .
+                "- all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>." . PHP_EOL .
+                "- all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>."
+            )
             ->addOption('--strict', null, InputOption::VALUE_NONE,
                 'Fail if there are any undefined or pending steps.'
             )
-            ->addOption('--dry-run', null, InputOption::VALUE_NONE,
-                'Invokes formatters without executing the steps & hooks.'
-            )
-            ->addOption('--stop-on-failure', null, InputOption::VALUE_NONE,
-                'Stop processing on first failed scenario.'
-            )
-            ->addOption('--rerun', null, InputOption::VALUE_REQUIRED,
-                "Save list of failed scenarios into new file\n" .
-                "or use existing file to run only scenarios from it."
-            )
-            ->addOption('--append-snippets', null, InputOption::VALUE_NONE,
-                "Appends snippets for undefined steps into main context."
-            )
-            ->addOption('--append-to', null, InputOption::VALUE_REQUIRED,
-                "Appends snippets for undefined steps into specified class."
-            )
-        ;
+            ->addOption('--suite', null, InputOption::VALUE_REQUIRED,
+                'Only execute features that belong to given suite.'
+            );
     }
 
     /**
@@ -73,101 +79,86 @@ class RunProcessor extends Processor
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @throws \RuntimeException
+     * @return integer
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        $command        = $this->container->get('behat.console.command');
-        $hookDispatcher = $this->container->get('behat.hook.dispatcher');
+        $suiteName = $input->getOption('suite');
 
-        $command->setStrict(
-            $input->getOption('strict') || $this->container->getParameter('behat.options.strict')
-        );
-        $command->setDryRun(
-            $input->getOption('dry-run') || $this->container->getParameter('behat.options.dry_run')
-        );
-        $hookDispatcher->setDryRun(
-            $input->getOption('dry-run') || $this->container->getParameter('behat.options.dry_run')
-        );
-
-        if ($file = $input->getOption('rerun') ?: $this->container->getParameter('behat.options.rerun')) {
-            if (file_exists($file)) {
-                $command->setFeaturesPaths(explode("\n", trim(file_get_contents($file))));
-            }
-
-            $this->container->get('behat.formatter.manager')
-                ->initFormatter('failed')
-                ->setParameter('output_path', $file);
+        $features = array();
+        foreach ($this->getLocators($input) as $locator) {
+            $features = array_merge($features, $this->getFeatures($locator, $suiteName));
         }
 
-        if ($input->getOption('append-snippets')) {
-            $this->initializeSnippetsAppender();
-        } elseif ($class = $input->getOption('append-to')) {
-            $this->initializeSnippetsAppender($class);
-        } elseif ($class = $this->container->getParameter('behat.options.append_snippets')) {
-            $this->initializeSnippetsAppender(true !== $class ? $class : null);
+        $result = $this->getExerciseTester()->test($features);
+
+        if ($this->strict || $input->getOption('strict')) {
+            return intval(StepEvent::PASSED < $result);
         }
 
-        if ($input->getOption('stop-on-failure') || $this->container->getParameter('behat.options.stop_on_failure')) {
-            $this->initializeStopOnFailure();
-        }
+        return intval(StepEvent::FAILED === $result);
     }
 
     /**
-     * Appends snippets to the main context after suite run.
+     * Returns priority of the processor in which it should be configured and executed.
      *
-     * @param string $class
+     * @return integer
      */
-    protected function initializeSnippetsAppender($class = null)
+    public function getPriority()
     {
-        $classname = (null !== $class)
-            ? str_replace('/', '\\', $class)
-            : $this->container->get('behat.context.dispatcher')->getContextClass()
-        ;
-
-        $contextRefl = new \ReflectionClass($classname);
-        if ($contextRefl->implementsInterface('Behat\Behat\Context\ClosuredContextInterface')) {
-            throw new \RuntimeException(
-                '--append-snippets doesn\'t support closured contexts'
-            );
-        }
-
-        $formatManager = $this->container->get('behat.formatter.manager');
-        $formatManager->setFormattersParameter('snippets', false);
-
-        $formatter = $formatManager->initFormatter('snippets');
-        $formatter->setParameter('decorated', false);
-        $formatter->setParameter('output_decorate', false);
-        $formatter->setParameter('output', $snippets = fopen('php://memory', 'rw'));
-
-        $this->container->get('behat.event_dispatcher')
-            ->addListener('afterSuite', function() use($contextRefl, $snippets) {
-                rewind($snippets);
-                $snippets = stream_get_contents($snippets);
-
-                if (trim($snippets)) {
-                    $snippets = strtr($snippets, array('\\' => '\\\\', '$' => '\\$'));
-                    $context  = file_get_contents($contextRefl->getFileName());
-                    $context  = preg_replace('/}[ \n]*$/', rtrim($snippets)."\n}\n", $context);
-
-                    file_put_contents($contextRefl->getFileName(), $context);
-                }
-            }, -5);
+        return 0;
     }
 
     /**
-     * Adds listener to detect failed scenario and then triggers command to abort the suite run.
+     * Gets feature locators from input.
+     *
+     * @param InputInterface $input
+     *
+     * @return string[]
      */
-    protected function initializeStopOnFailure()
+    private function getLocators(InputInterface $input)
     {
-        $command = $this->container->get('behat.console.command');
-        
-        $this->container->get('behat.event_dispatcher')
-            ->addListener('afterScenario', function ($scenarioEvent) use ($command) {
-                if ($scenarioEvent->getResult() === StepEvent::FAILED) {
-                    $command->abortSuite();
-                }
-            });
+        $featuresLocator = $input->getArgument('features');
+
+        if (is_file($featuresLocator) && 'scenarios' === pathinfo($featuresLocator, PATHINFO_EXTENSION)) {
+            return explode("\n", trim(file_get_contents($featuresLocator)));
+        }
+
+        return array($featuresLocator);
     }
 
+    /**
+     * Loads features for appropriate suite and locator if specified or all if not.
+     *
+     * @param null|string $locator
+     * @param null|string $suiteName
+     *
+     * @return SuitedFeature[]
+     */
+    private function getFeatures($locator = null, $suiteName = null)
+    {
+        $featuresProvider = new FeaturesCarrierEvent($locator, $suiteName);
+        $this->dispatch(EventInterface::LOAD_FEATURES, $featuresProvider);
+
+        return $featuresProvider->getFeatures();
+    }
+
+    /**
+     * Returns exercise tester instance.
+     *
+     * @return ExerciseTester
+     *
+     * @throws RuntimeException
+     */
+    private function getExerciseTester()
+    {
+        $testerProvider = new ExerciseTesterCarrierEvent();
+
+        $this->dispatch(EventInterface::CREATE_EXERCISE_TESTER, $testerProvider);
+        if (!$testerProvider->hasTester()) {
+            throw new RuntimeException('Can not find exercise tester.');
+        }
+
+        return $testerProvider->getTester();
+    }
 }
