@@ -27,13 +27,6 @@ Running
 $> bin/behat -h
 ```
 
-Running inside Vagrant
-----------------------
-
-1. Install [Vagrant](http://www.vagrantup.com).
-2. Install [Berkshelf plugin](http://berkshelf.com/#vagrant_with_berkshelf) for Vagrant
-3. Run `vagrant up`
-
 Contributors
 ------------
 
