@@ -56,7 +56,7 @@ class StepTester extends DispatchingService
         $execution = $exception = $snippet = null;
 
         try {
-            $execution = $this->getExecutionEvent($suite, $step, $contexts);
+            $execution = $this->getExecutionEvent($suite, $contexts, $step);
             $this->dispatch(EventInterface::EXECUTE_DEFINITION, $execution);
         } catch (PendingException $e) {
             $result = StepEvent::PENDING;
@@ -64,7 +64,7 @@ class StepTester extends DispatchingService
         } catch (UndefinedException $e) {
             $result = StepEvent::UNDEFINED;
             $exception = $e;
-            $snippet = $this->getDefinitionSnippet($suite, $step, $contexts);
+            $snippet = $this->getDefinitionSnippet($suite, $contexts, $step);
         } catch (Exception $e) {
             $result = StepEvent::FAILED;
             $exception = $e;
@@ -84,17 +84,17 @@ class StepTester extends DispatchingService
      * Returns execution event.
      *
      * @param SuiteInterface       $suite
-     * @param StepNode             $step
      * @param ContextPoolInterface $contexts
-     *
-     * @throws UndefinedException
+     * @param StepNode             $step
      *
      * @return ExecuteCalleeEvent
+     *
+     * @throws UndefinedException
      */
     protected function getExecutionEvent(
         SuiteInterface $suite,
-        StepNode $step,
-        ContextPoolInterface $contexts
+        ContextPoolInterface $contexts,
+        StepNode $step
     )
     {
         $definitionProvider = new DefinitionCarrierEvent($suite, $contexts, $step);
@@ -114,15 +114,15 @@ class StepTester extends DispatchingService
      * Returns definition snippet.
      *
      * @param SuiteInterface       $suite
-     * @param StepNode             $step
      * @param ContextPoolInterface $contexts
+     * @param StepNode             $step
      *
      * @return SnippetInterface
      */
     protected function getDefinitionSnippet(
         SuiteInterface $suite,
-        StepNode $step,
-        ContextPoolInterface $contexts
+        ContextPoolInterface $contexts,
+        StepNode $step
     )
     {
         $snippetProvider = new SnippetCarrierEvent($suite, $contexts, $step);

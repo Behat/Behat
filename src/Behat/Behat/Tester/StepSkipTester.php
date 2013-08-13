@@ -48,11 +48,11 @@ class StepSkipTester extends StepTester
         $execution = $exception = $snippet = null;
 
         try {
-            $execution = $this->getExecutionEvent($suite, $step, $contexts);
+            $execution = $this->getExecutionEvent($suite, $contexts, $step);
         } catch (UndefinedException $e) {
             $result = StepEvent::UNDEFINED;
             $exception = $e;
-            $snippet = $this->getDefinitionSnippet($suite, $step, $contexts);
+            $snippet = $this->getDefinitionSnippet($suite, $contexts, $step);
         }
 
         $definition = null;
