@@ -12,6 +12,7 @@ namespace Behat\Behat\Console\Processor;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\Event\SuitesCarrierEvent;
+use Behat\Behat\Suite\GherkinSuite;
 use RuntimeException;
 use Symfony\Component\ClassLoader\ClassLoader;
 use Symfony\Component\Console\Command\Command;
@@ -82,14 +83,16 @@ class InitProcessor extends DispatchingService implements ProcessorInterface
 
         $basePath = $this->basePath . DIRECTORY_SEPARATOR;
         foreach ($suitesProvider->getSuites() as $suite) {
-            foreach ($suite->getFeatureLocators() as $locator) {
-                if (0 !== strpos($locator, '@') && !is_dir($path = $this->locatePath($locator))) {
-                    mkdir($path, 0777, true);
+            if ($suite instanceof GherkinSuite) {
+                foreach ($suite->getFeatureLocators() as $locator) {
+                    if (0 !== strpos($locator, '@') && !is_dir($path = $this->locatePath($locator))) {
+                        mkdir($path, 0777, true);
 
-                    $output->writeln('<info>+d</info> ' .
-                        str_replace($basePath, '', realpath($path)) .
-                        ' <comment>- place your *.feature files here</comment>'
-                    );
+                        $output->writeln('<info>+d</info> ' .
+                            str_replace($basePath, '', realpath($path)) .
+                            ' <comment>- place your *.feature files here</comment>'
+                        );
+                    }
                 }
             }
 
