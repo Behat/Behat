@@ -21,6 +21,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 interface ExtensionInterface
 {
     /**
+     * Returns the extension name.
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
      * Loads a specific configuration.
      *
      * @param array            $config    Extension configuration hash (from behat.yml)

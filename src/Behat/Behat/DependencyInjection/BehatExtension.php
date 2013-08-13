@@ -65,13 +65,13 @@ class BehatExtension
     {
         $this->registerDefaults($container);
 
-        // activate and normalize specified by user extensions
+        // activateExtension and normalize specified by user extensions
         foreach ($configs as $i => $config) {
             if (isset($config['extensions'])) {
                 $extensions = array();
-                foreach ($config['extensions'] as $id => $extensionConfig) {
-                    $activationId = $this->extensionManager->activateExtension($id);
-                    $extensions[$activationId] = $extensionConfig;
+                foreach ($config['extensions'] as $extensionLocator => $extensionConfig) {
+                    $extension = $this->extensionManager->activateExtension($extensionLocator);
+                    $extensions[$extension->getName()] = $extensionConfig;
                 }
                 $configs[$i]['extensions'] = $extensions;
             }
@@ -79,10 +79,9 @@ class BehatExtension
 
         // set list of extensions to container
         $container->setParameter('extension.classes', $this->extensionManager->getExtensionClasses());
-        $container->setResources($this->extensionManager->getExtensionResources());
 
         // normalize and merge the actual configuration
-        $tree = $this->configuration->getConfigTree($this->extensionManager);
+        $tree = $this->configuration->getConfigTree($this->extensionManager->getExtensions());
         $config = $this->processor->process($tree, $configs);
 
         // register configuration sections
@@ -202,9 +201,9 @@ class BehatExtension
      */
     protected function registerExtensionsConfiguration(array $extensions, ContainerBuilder $container)
     {
-        foreach ($extensions as $id => $extensionConfig) {
+        foreach ($extensions as $name => $extensionConfig) {
             // load extension from manager
-            $extension = $this->extensionManager->getExtension($id);
+            $extension = $this->extensionManager->getExtension($name);
 
             // create temporary container
             $tempContainer = new ContainerBuilder(new ParameterBag(array(

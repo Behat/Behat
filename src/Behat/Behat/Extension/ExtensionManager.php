@@ -9,9 +9,7 @@ namespace Behat\Behat\Extension;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use ReflectionObject;
 use RuntimeException;
-use Symfony\Component\Config\Resource\FileResource;
 
 /**
  * Extensions manager.
@@ -25,9 +23,13 @@ class ExtensionManager
      */
     private $basePath;
     /**
-     * @var ExtensionInterface[string]
+     * @var ExtensionInterface[]
      */
     private $extensions = array();
+    /**
+     * @var ExtensionInterface[string]
+     */
+    private $locatedExtensions = array();
 
     /**
      * Initializes manager.
@@ -40,40 +42,37 @@ class ExtensionManager
     }
 
     /**
-     * Activate extension by its id.
+     * Activate extension by its locator.
      *
-     * @param string $id phar file name, php file name, class name
+     * @param string $locator phar file name, php file name, class name
      *
-     * @return string
+     * @return ExtensionInterface
      */
-    public function activateExtension($id)
+    public function activateExtension($locator)
     {
-        $extensionId = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $id));
-        if (!isset($this->extensions[$extensionId])) {
-            $this->extensions[$extensionId] = $this->initializeExtension($id);
-        }
+        $extension = $this->initialize($locator);
 
-        return $extensionId;
+        return $this->extensions[$extension->getName()] = $extension;
     }
 
     /**
-     * Returns specific extension by its id.
+     * Returns specific extension by its name.
      *
-     * @param string $id
+     * @param string $name
      *
      * @return ExtensionInterface
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    public function getExtension($id)
+    public function getExtension($name)
     {
-        if (!isset($this->extensions[$id])) {
-            throw new \RuntimeException(
-                sprintf('Extension "%s" has not been activated.', $id)
+        if (!isset($this->extensions[$name])) {
+            throw new RuntimeException(
+                sprintf('Extension "%s" has not been activated.', $name)
             );
         }
 
-        return $this->extensions[$id];
+        return $this->extensions[$name];
     }
 
     /**
@@ -93,56 +92,41 @@ class ExtensionManager
      */
     public function getExtensionClasses()
     {
-        return array_unique(
-            array_map(
-                function ($extension) {
-                    return get_class($extension);
-                },
-                $this->extensions
-            )
-        );
-    }
-
-    public function getExtensionResources()
-    {
-        return array_map(
-            function ($extension) {
-                $reflection = new ReflectionObject($extension);
-
-                return new FileResource($reflection->getFileName());
-            },
-            $this->extensions
-        );
+        return array_unique(array_map('get_class', $this->extensions));
     }
 
     /**
      * Initializes extension by id.
      *
-     * @param string $id
+     * @param string $locator
      *
      * @return ExtensionInterface
      *
      * @throws RuntimeException
      */
-    protected function initializeExtension($id)
+    private function initialize($locator)
     {
+        if (isset($this->locatedExtensions[$locator])) {
+            return $this->locatedExtensions[$locator];
+        }
+
         $extension = null;
-        if (class_exists($id)) {
-            $extension = new $id;
-        } elseif (file_exists($this->basePath . DIRECTORY_SEPARATOR . $id)) {
-            $extension = require($this->basePath . DIRECTORY_SEPARATOR . $id);
+        if (class_exists($locator)) {
+            $extension = new $locator;
+        } elseif (file_exists($this->basePath . DIRECTORY_SEPARATOR . $locator)) {
+            $extension = require($this->basePath . DIRECTORY_SEPARATOR . $locator);
         } else {
-            $extension = require($id);
+            $extension = require($locator);
         }
 
         if (null === $extension) {
             throw new RuntimeException(sprintf(
-                '"%s" extension could not be found.', $id
+                '"%s" extension could not be found.', $locator
             ));
         }
         if (!is_object($extension)) {
             throw new RuntimeException(sprintf(
-                '"%s" extension could not be initialized.', $id
+                '"%s" extension could not be initialized.', $locator
             ));
         }
         if (!$extension instanceof ExtensionInterface) {
@@ -152,6 +136,6 @@ class ExtensionManager
             ));
         }
 
-        return $extension;
+        return $this->locatedExtensions[$locator] = $extension;
     }
 }

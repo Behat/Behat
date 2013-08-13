@@ -9,7 +9,7 @@ namespace Behat\Behat\DependencyInjection\Configuration;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Extension\ExtensionManager;
+use Behat\Behat\Extension\ExtensionInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\NodeInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -27,11 +27,11 @@ class Configuration
     /**
      * Generates the configuration tree.
      *
-     * @param ExtensionManager $extensionManager
+     * @param ExtensionInterface[] $extensions
      *
      * @return NodeInterface
      */
-    public function getConfigTree(ExtensionManager $extensionManager)
+    public function getConfigTree(array $extensions)
     {
         $tree = new TreeBuilder();
         $root = $this->appendConfigChildren($tree);
@@ -42,8 +42,8 @@ class Configuration
                     ->addDefaultsIfNotSet()
                         ->children();
 
-        foreach ($extensionManager->getExtensions() as $id => $extension) {
-            $extensionNode = $extensionsNode->arrayNode($id);
+        foreach ($extensions as $extension) {
+            $extensionNode = $extensionsNode->arrayNode($extension->getName());
             $extension->getConfig($extensionNode);
         }
 

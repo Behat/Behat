@@ -25,13 +25,6 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 abstract class Extension implements ExtensionInterface
 {
     /**
-     * Returns extension name.
-     *
-     * @return string
-     */
-    abstract public function getExtensionName();
-
-    /**
      * Loads a specific configuration.
      *
      * @param array            $config    Extension configuration hash (from behat.yml)
@@ -51,7 +44,7 @@ abstract class Extension implements ExtensionInterface
             $loader->load($file);
         }
 
-        $container->setParameter($this->getExtensionName() . '.parameters', $config);
+        $container->setParameter($this->getName() . '.parameters', $config);
     }
 
     /**

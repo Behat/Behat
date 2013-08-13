@@ -60,7 +60,7 @@ Feature: Extensions
       }
 
       class CustomExtension extends Behat\Behat\Extension\Extension {
-          public function getExtensionName() {
+          public function getName() {
               return 'custom_extension';
           }
       }
