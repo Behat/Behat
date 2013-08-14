@@ -226,6 +226,25 @@ class FeatureContext extends BaseFeaturesContext
     }
 
     /**
+     * @Then /^the junit file "([^"]*)" should contain:$/
+     */
+    public function theJunitFileShouldContain($file, PyStringNode $text)
+    {
+        PHPUnit_Framework_Assert::assertFileExists($file);
+
+        // replace random time ...
+        $contents = preg_replace('@time="[0-9.]*"@', 'time="XXX"', file_get_contents($file));
+
+        // replace random path
+        $contents = preg_replace('@[0-9a-zA-Z]{32}@', 'XXX', $contents);
+
+        // fix random path in exception ...
+        $contents = preg_replace('@<!\[CDATA\[.*\]\]>@s', '<![CDATA[XXX]]>', $contents);
+
+        PHPUnit_Framework_Assert::assertEquals($contents, (string)$text);
+    }
+
+    /**
      * Checks whether previously runned command failed|passed.
      *
      * @Then /^it should (fail|pass)$/

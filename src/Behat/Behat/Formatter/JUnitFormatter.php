@@ -47,6 +47,18 @@ class JUnitFormatter extends ConsoleFormatter
      */
     protected $stepsCount = 0;
     /**
+     * Total scenarios count.
+     *
+     * @var integer
+     */
+    protected $scenariosCount = 0;
+    /**
+     * Total scenarios count.
+     *
+     * @var integer
+     */
+    protected $scenarioStepsCount = 0;
+    /**
      * Total exceptions count.
      *
      * @var integer
@@ -163,6 +175,7 @@ class JUnitFormatter extends ConsoleFormatter
     public function beforeScenario(ScenarioEvent $event)
     {
         $this->scenarioStartTime = microtime(true);
+        $this->scenarioStepsCount = 0;
     }
 
     /**
@@ -175,6 +188,8 @@ class JUnitFormatter extends ConsoleFormatter
     public function afterScenario(ScenarioEvent $event)
     {
         $this->printTestCase($event->getScenario(), microtime(true) - $this->scenarioStartTime, $event);
+
+        ++$this->scenariosCount;
     }
 
     /**
@@ -217,6 +232,7 @@ class JUnitFormatter extends ConsoleFormatter
         }
 
         ++$this->stepsCount;
+        ++$this->scenarioStepsCount;
     }
 
     /**
@@ -237,10 +253,12 @@ class JUnitFormatter extends ConsoleFormatter
      */
     protected function printTestSuiteFooter(FeatureNode $feature, $time)
     {
-        $suiteStats = sprintf('errors="0" failures="%d" skipped="%d" name="%s" tests="%d" time="%F"',
-            $this->failureCount,
+        $suiteStats = sprintf('classname="behat.features" errors="0" failures="%d" skipped="%d" name="%s" file="%s" tests="%d" assertions="%d" time="%F"',
+            $this->exceptionsCount,
             $this->pendingCount,
             htmlspecialchars($feature->getTitle()),
+            htmlspecialchars($feature->getFile()),
+            $this->scenariosCount,
             $this->stepsCount,
             $time
         );
@@ -259,15 +277,16 @@ class JUnitFormatter extends ConsoleFormatter
      */
     protected function printTestCase(ScenarioNode $scenario, $time, EventInterface $event)
     {
-        $className  = $scenario->getFeature()->getTitle();
-        $name       = $scenario->getTitle();
-        $name      .= $event instanceof OutlineExampleEvent
-                    ? ', Ex #' . ($event->getIteration() + 1)
-                    : '';
-        $caseStats  = sprintf('classname="%s" name="%s" time="%F"',
+        $className = $scenario->getFeature()->getTitle();
+        $name = $scenario->getTitle();
+        $name .= $event instanceof OutlineExampleEvent
+            ? ', Ex #' . ($event->getIteration() + 1)
+            : '';
+        $caseStats = sprintf('classname="%s" name="%s" time="%F" assertions="%d"',
             htmlspecialchars($className),
             htmlspecialchars($name),
-            $time
+            $time,
+            $this->scenarioStepsCount
         );
 
         $xml  = "    <testcase $caseStats>\n";
