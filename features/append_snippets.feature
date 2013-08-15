@@ -223,3 +223,173 @@ Feature: Append snippets option
           }
       }
       """
+
+  Scenario: Append snippets to main context with auto use PendingException
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\ContextInterface;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
+
+      class FeatureContext implements ContextInterface
+      {
+          private $apples = 0;
+          private $parameters;
+
+          public function __construct(array $parameters) {
+              $this->parameters = $parameters;
+          }
+
+          /**
+           * @Given /^I have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              $this->apples = intval($count);
+          }
+
+          /**
+           * @When /^I ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              $this->apples -= intval($count);
+          }
+
+          /**
+           * @When /^I found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              $this->apples += intval($count);
+          }
+
+          /**
+           * @Then /^I should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              \PHPUnit_Framework_Assert::assertEquals(intval($count), $this->apples);
+          }
+
+          /**
+           * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
+           */
+          public function contextParameterShouldBeEqualTo($key, $val) {
+              \PHPUnit_Framework_Assert::assertEquals($val, $this->parameters[$key]);
+          }
+
+          /**
+           * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
+           */
+          public function contextParameterShouldBeArrayWithElements($key, $count) {
+              \PHPUnit_Framework_Assert::assertInternalType('array', $this->parameters[$key]);
+              \PHPUnit_Framework_Assert::assertEquals(2, count($this->parameters[$key]));
+          }
+
+          private function doSomethingUndefinedWith() {}
+      }
+      """
+    When I run "behat -f progress --append-snippets"
+    Then "features/bootstrap/FeatureContext.php" file should contain:
+      """
+      <?php
+
+      use Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\ContextInterface;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
+
+      class FeatureContext implements ContextInterface
+      {
+          private $apples = 0;
+          private $parameters;
+
+          public function __construct(array $parameters) {
+              $this->parameters = $parameters;
+          }
+
+          /**
+           * @Given /^I have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              $this->apples = intval($count);
+          }
+
+          /**
+           * @When /^I ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              $this->apples -= intval($count);
+          }
+
+          /**
+           * @When /^I found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              $this->apples += intval($count);
+          }
+
+          /**
+           * @Then /^I should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              \PHPUnit_Framework_Assert::assertEquals(intval($count), $this->apples);
+          }
+
+          /**
+           * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
+           */
+          public function contextParameterShouldBeEqualTo($key, $val) {
+              \PHPUnit_Framework_Assert::assertEquals($val, $this->parameters[$key]);
+          }
+
+          /**
+           * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
+           */
+          public function contextParameterShouldBeArrayWithElements($key, $count) {
+              \PHPUnit_Framework_Assert::assertInternalType('array', $this->parameters[$key]);
+              \PHPUnit_Framework_Assert::assertEquals(2, count($this->parameters[$key]));
+          }
+
+          private function doSomethingUndefinedWith() {}
+
+          /**
+           * @Given /^do something undefined with \$$/
+           */
+          public function doSomethingUndefinedWith2()
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^do something undefined with \\(\d+)$/
+           */
+          public function doSomethingUndefinedWith3($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^pystring:$/
+           */
+          public function pystring(PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^pystring (\d+):$/
+           */
+          public function pystring2($arg1, PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^table:$/
+           */
+          public function table(TableNode $table)
+          {
+              throw new PendingException();
+          }
+      }
+      """
