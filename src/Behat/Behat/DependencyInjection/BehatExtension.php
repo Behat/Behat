@@ -111,8 +111,8 @@ class BehatExtension
         $gherkinLibPath = dirname($gherkinParserReflection->getFilename()) . '/../../../';
 
         $container->setParameter('paths.base', rtrim($this->basePath, DIRECTORY_SEPARATOR));
-        $container->setParameter('paths.lib', rtrim(realpath($behatLibPath), DIRECTORY_SEPARATOR));
-        $container->setParameter('paths.gherkin.lib', rtrim(realpath($gherkinLibPath), DIRECTORY_SEPARATOR));
+        $container->setParameter('paths.lib', rtrim($behatLibPath, DIRECTORY_SEPARATOR));
+        $container->setParameter('paths.gherkin.lib', rtrim($gherkinLibPath, DIRECTORY_SEPARATOR));
     }
 
     /**

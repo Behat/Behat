@@ -1,0 +1,18 @@
+{
+    "chmod": "0755",
+    "directories": ["src"],
+    "files": [
+        "LICENSE",
+        "i18n.php"
+    ],
+    "finder": [
+        {
+            "name": ["*.php", "*.xsd", "LICENSE"],
+            "exclude": ["Tests"],
+            "in": "vendor"
+        }
+    ],
+    "main": "bin/behat",
+    "output": "behat.phar",
+    "stub": true
+}
