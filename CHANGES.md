@@ -1,3 +1,30 @@
+3.0.0beta3 / 2013-08-13
+=======================
+
+  * Refactor extension sub-system. Update `ExtensionInterface`
+  * Avoid trying to create folders for non-fs suites
+
+3.0.0beta2 / 2013-08-13
+=======================
+
+  * Remove support for Symfony 2.0 components
+
+3.0.0beta1 / 2013-08-13
+=======================
+
+  * New suite-centric architecture
+  * New context pools sub-system with multi-context support
+  * New dynamic event-driven testing core
+  * Refactored console processors sub-system
+  * Refactored formatters management sub-system
+  * 8 new process extension points and 36 generic execution extension points
+  * Gherkin caching is enabled by default
+  * Rerun is enabled by default (use `--rerun` to rerun failed scenarios)
+  * New Gherkin Role filter
+  * Subcontexts removed in favor of context pools
+  * Chained steps extracted into [separate extension](https://github.com/Behat/ChainedStepsExtension)
+  * Closured step definitions removed
+
 2.5.0 / 2013-08-11
 ==================
 
