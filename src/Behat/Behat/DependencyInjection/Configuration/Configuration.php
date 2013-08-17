@@ -59,27 +59,14 @@ class Configuration
      */
     protected function appendConfigChildren(TreeBuilder $tree)
     {
-        $defaultAutoload = array('' => '%paths.base%/features/bootstrap');
-        $defaultSuiteParameters = array(
-            'type'     => 'gherkin',
-            'paths'    => array('%paths.base%/features'),
-            'contexts' => array('FeatureContext'),
-        );
-        $defaultSuites = array(
-            'default' => $defaultSuiteParameters
-        );
-        $defaultFormatters = array(
-            'pretty' => array('enabled' => true),
-        );
-
         return $tree->root('behat')
             ->children()
 
                 ->arrayNode('autoload')
+                    ->defaultValue(array('' => '%paths.base%/features/bootstrap'))
+                    ->treatTrueLike(array('' => '%paths.base%/features/bootstrap'))
                     ->treatFalseLike(array())
-                    ->defaultValue($defaultAutoload)
-                    ->treatTrueLike($defaultAutoload)
-                    ->treatNullLike($defaultAutoload)
+                    ->treatNullLike(array())
                     ->beforeNormalization()
                         ->ifString()
                         ->then(function($path) {
@@ -91,35 +78,54 @@ class Configuration
 
                 ->arrayNode('suites')
                     ->treatFalseLike(array())
-                    ->defaultValue($defaultSuites)
-                    ->treatTrueLike($defaultSuites)
-                    ->treatNullLike($defaultSuites)
+                    ->treatNullLike(array())
+                    ->defaultValue(array('default' => array(
+                        'type'       => 'gherkin',
+                        'settings'   => array(),
+                        'parameters' => array()
+                    )))
                     ->useAttributeAsKey('name')
                     ->prototype('array')
+                        ->addDefaultsIfNotSet()
                         ->beforeNormalization()
                             ->ifTrue(function($suite) {
-                                return (!isset($suite['type']) || 'basic' === $suite['type']);
+                                return count($suite);
                             })
-                            ->then(function($suite) use($defaultSuiteParameters) {
-                                if (isset($suite['path'])) {
-                                    $suite['paths'] = array($suite['path']);
-                                    unset($suite['path']);
-                                }
-                                if (isset($suite['context'])) {
-                                    $suite['contexts'] = array($suite['context']);
-                                    unset($suite['context']);
+                            ->then(function($suite) {
+                                $suite['settings'] = isset($suite['settings'])
+                                    ? $suite['settings']
+                                    : array();
+
+                                foreach ($suite as $key => $val) {
+                                    if (!in_array($key, array('type', 'settings', 'parameters'))) {
+                                        $suite['settings'][$key] = $val;
+                                        unset($suite[$key]);
+                                    }
                                 }
 
-                                return array_replace_recursive($defaultSuiteParameters, $suite);
+                                return $suite;
                             })
                         ->end()
-                        ->useAttributeAsKey('name')
-                        ->prototype('variable')->end()
+                        ->children()
+                            ->scalarNode('type')
+                                ->defaultValue('gherkin')
+                            ->end()
+                            ->arrayNode('settings')
+                                ->defaultValue(array())
+                                ->useAttributeAsKey('name')
+                                ->prototype('variable')->end()
+                            ->end()
+                            ->arrayNode('parameters')
+                                ->defaultValue(array())
+                                ->useAttributeAsKey('name')
+                                ->prototype('variable')->end()
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
 
                 ->arrayNode('formatters')
-                    ->defaultValue($defaultFormatters)
+                    ->defaultValue(array('pretty' => array('enabled' => true)))
                     ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->useAttributeAsKey('name')

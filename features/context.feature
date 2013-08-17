@@ -183,10 +183,11 @@ Feature: Context consistency
       default:
         suites:
           default:
-            parameter1: val_one
-            parameter2:
-              everzet: behat_admin
-              avalanche123: behat_admin
+            parameters:
+              parameter1: val_one
+              parameter2:
+                everzet: behat_admin
+                avalanche123: behat_admin
       """
     And a file named "features/params.feature" with:
       """

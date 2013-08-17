@@ -9,10 +9,11 @@ Feature: hooks
       default:
         suites:
           default:
-            before_suite:   BEFORE ANY SUITE
-            after_suite:    AFTER ANY SUITE
-            before_feature: BEFORE EVERY FEATURE
-            after_feature:  AFTER EVERY FEATURE
+            parameters:
+              before_suite:   BEFORE ANY SUITE
+              after_suite:    AFTER ANY SUITE
+              before_feature: BEFORE EVERY FEATURE
+              after_feature:  AFTER EVERY FEATURE
       """
     And a file named "features/bootstrap/FeatureContext.php" with:
       """

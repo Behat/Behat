@@ -19,22 +19,23 @@ use Behat\Behat\Suite\SuiteInterface;
 interface GeneratorInterface
 {
     /**
-     * Checks if generator support provided suite type and parameters.
+     * Checks if generator support provided suite type and settings.
      *
      * @param string $type
-     * @param array  $parameters
+     * @param array  $settings
      *
      * @return Boolean
      */
-    public function supports($type, array $parameters);
+    public function supports($type, array $settings);
 
     /**
-     * Generate suite with provided name and parameters.
+     * Generate suite with provided name, settings and parameters.
      *
      * @param string $suiteName
+     * @param array  $settings
      * @param array  $parameters
      *
      * @return SuiteInterface
      */
-    public function generate($suiteName, array $parameters);
+    public function generate($suiteName, array $settings, array $parameters);
 }

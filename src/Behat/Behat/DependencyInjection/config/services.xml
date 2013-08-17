@@ -305,6 +305,14 @@
 
         <service id="suite.generator.gherkin"
                  class="Behat\Behat\Suite\Generator\GherkinSuiteGenerator">
+            <argument type="collection">
+                <argument type="collection" key="paths">
+                    <argument>%paths.base%/features</argument>
+                </argument>
+                <argument type="collection" key="contexts">
+                    <argument>FeatureContext</argument>
+                </argument>
+            </argument>
             <tag name="suite.generator"/>
         </service>
 

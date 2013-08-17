@@ -26,79 +26,99 @@ use InvalidArgumentException;
 class GherkinSuiteGenerator implements GeneratorInterface
 {
     /**
-     * Checks if generator support provided suite type and parameters.
+     * @var array
+     */
+    private $defaultSettings = array();
+
+    /**
+     * Initializes suite generator.
+     *
+     * @param array $defaultSettings
+     */
+    public function __construct(array $defaultSettings = array())
+    {
+        $this->defaultSettings = $defaultSettings;
+    }
+
+    /**
+     * Checks if generator support provided suite type and settings.
      *
      * @param string $type
-     * @param array  $parameters
+     * @param array  $settings
      *
      * @return Boolean
      */
-    public function supports($type, array $parameters)
+    public function supports($type, array $settings)
     {
         return 'gherkin' === $type;
     }
 
     /**
-     * Generate suite with provided name and parameters.
+     * Generate suite with provided name, settings and parameters.
      *
      * @param string $suiteName
+     * @param array  $settings
      * @param array  $parameters
      *
      * @return SuiteInterface
      */
-    public function generate($suiteName, array $parameters)
+    public function generate($suiteName, array $settings, array $parameters)
     {
-        $featureLocators = $this->getFeatureLocators($suiteName, $parameters);
-        $featureFilters = $this->getFeatureFilters($suiteName, $parameters);
-        $contextClasses = $this->getContextClasses($suiteName, $parameters);
+        $settings = $this->normalizeSettings($settings);
 
-        return new GherkinSuite($suiteName, $featureLocators, $featureFilters, $contextClasses, $parameters);
+        $featureLocators = $this->getFeatureLocators($suiteName, $settings);
+        $featureFilters = $this->getFeatureFilters($suiteName, $settings);
+        $contextClasses = $this->getContextClasses($suiteName, $settings);
+
+        return new GherkinSuite(
+            $suiteName,
+            $featureLocators,
+            $featureFilters,
+            $contextClasses,
+            $parameters
+        );
     }
 
     /**
-     * Returns list of locators from suite parameters.
+     * Returns list of locators from suite settings.
      *
      * @param string $suiteName
-     * @param array  $parameters
+     * @param array  $settings
      *
      * @return string[]
      *
-     * @throws InvalidArgumentException If parameters do not have `paths` nor `path`
+     * @throws InvalidArgumentException If settings do not have `paths` nor `path`
      */
-    protected function getFeatureLocators($suiteName, array $parameters)
+    protected function getFeatureLocators($suiteName, array $settings)
     {
-        if (isset($parameters['paths'])) {
-            return $parameters['paths'];
-        }
-
-        if (!isset($parameters['path'])) {
+        if (!isset($settings['paths'])) {
             throw new InvalidArgumentException(sprintf(
-                'Suite "%s" should have either "path" or "paths" option set.',
+                'Suite "%s" should have either "paths" or "path" setting set.',
                 $suiteName
             ));
         }
 
-        return array($parameters['path']);
+        return $settings['paths'];
     }
 
     /**
-     * Returns list of filters from suite parameters.
+     * Returns list of filters from suite settings.
      *
      * @param string $suiteName
-     * @param array  $parameters
+     * @param array  $settings
      *
      * @return FilterInterface[]
      *
      * @throws InvalidArgumentException If unknown filter type provided
      */
-    protected function getFeatureFilters($suiteName, array $parameters)
+    protected function getFeatureFilters($suiteName, array $settings)
     {
-        if (!isset($parameters['filters'])) {
+        if (!isset($settings['filters'])) {
             return array();
         }
 
         $filters = array();
-        foreach ($parameters['filters'] as $type => $filterString) {
+        foreach ($settings['filters'] as $type => $filterString) {
             switch ($type) {
                 case 'role':
                     $filters[] = new RoleFilter($filterString);
@@ -123,19 +143,44 @@ class GherkinSuiteGenerator implements GeneratorInterface
     }
 
     /**
-     * Returns list of context classes from suite parameters.
+     * Returns list of context classes from suite settings.
      *
      * @param string $suiteName
-     * @param array  $parameters
+     * @param array  $settings
      *
      * @return string[]
      */
-    protected function getContextClasses($suiteName, array $parameters)
+    protected function getContextClasses($suiteName, array $settings)
     {
-        if (isset($parameters['context'])) {
-            return array($parameters['context']);
+        return isset($settings['contexts']) ? $settings['contexts'] : array();
+    }
+
+    /**
+     * Normalizes settings array.
+     *
+     * Sets default setting if none provided.
+     * Also merges `path` and `context` values into `paths` and `contexts` array.
+     *
+     * @param array $settings
+     *
+     * @return array
+     */
+    private function normalizeSettings(array $settings)
+    {
+        if (isset($settings['context'])) {
+            if (!isset($settings['contexts'])) {
+                $settings['contexts'] = array($settings['context']);
+            }
+            unset($settings['context']);
         }
 
-        return isset($parameters['contexts']) ? $parameters['contexts'] : array();
+        if (isset($settings['path'])) {
+            if (!isset($settings['paths'])) {
+                $settings['paths'] = array($settings['path']);
+            }
+            unset($settings['path']);
+        }
+
+        return array_merge($this->defaultSettings, $settings);
     }
 }

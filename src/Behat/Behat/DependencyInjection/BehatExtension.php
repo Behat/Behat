@@ -138,11 +138,13 @@ class BehatExtension
     protected function registerSuitesConfiguration(array $suites, ContainerBuilder $container)
     {
         $loaderDefinition = $container->getDefinition('suite.suites_loader');
-        foreach ($suites as $name => $parameters) {
+        foreach ($suites as $name => $config) {
             $suiteDefinition = new Definition('Behat\Behat\Suite\SuiteInterface');
             $suiteDefinition->setFactoryService('suite.suite_factory');
             $suiteDefinition->setFactoryMethod('createSuite');
-            $suiteDefinition->setArguments(array($name, $parameters['type'], $parameters));
+            $suiteDefinition->setArguments(array(
+                $name, $config['type'], $config['settings'], $config['parameters']
+            ));
 
             $loaderDefinition->addMethodCall('registerSuite', array($suiteDefinition));
         }

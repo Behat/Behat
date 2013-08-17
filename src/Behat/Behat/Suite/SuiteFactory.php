@@ -40,17 +40,18 @@ class SuiteFactory
      *
      * @param string $name
      * @param string $type
+     * @param array  $settings
      * @param array  $parameters
      *
      * @return SuiteInterface
      *
      * @throws RuntimeException If no appropriate generator found
      */
-    public function createSuite($name, $type, array $parameters)
+    public function createSuite($name, $type, array $settings, array $parameters)
     {
         foreach ($this->generators as $generator) {
-            if ($generator->supports($type, $parameters)) {
-                return $generator->generate($name, $parameters);
+            if ($generator->supports($type, $settings)) {
+                return $generator->generate($name, $settings, $parameters);
             }
         }
 

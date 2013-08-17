@@ -12,7 +12,8 @@ Feature: Config inheritance
       default:
         suites:
           default:
-            param2: val2
+            parameters:
+              param2: val2
         extensions:
           custom_extension.php:
             param1: val2
@@ -20,7 +21,8 @@ Feature: Config inheritance
       custom_profile:
         suites:
           default:
-            param2: val2
+            parameters:
+              param2: val2
         extensions:
           custom_extension.php:
             param1: val2
@@ -30,8 +32,9 @@ Feature: Config inheritance
       default:
         suites:
           default:
-            param1: val1
-            param2: val1
+            parameters:
+              param1: val1
+              param2: val1
         extensions:
           custom_extension.php:
             param1: val1
@@ -40,8 +43,9 @@ Feature: Config inheritance
       custom_profile:
         suites:
           default:
-            param1: val1
-            param2: val1
+            parameters:
+              param1: val1
+              param2: val1
         extensions:
           custom_extension.php:
             param1: val1
