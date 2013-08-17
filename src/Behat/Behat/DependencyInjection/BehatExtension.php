@@ -139,6 +139,10 @@ class BehatExtension
     {
         $loaderDefinition = $container->getDefinition('suite.suites_loader');
         foreach ($suites as $name => $config) {
+            if (!$config['enabled']) {
+                continue;
+            }
+
             $suiteDefinition = new Definition('Behat\Behat\Suite\SuiteInterface');
             $suiteDefinition->setFactoryService('suite.suite_factory');
             $suiteDefinition->setFactoryMethod('createSuite');

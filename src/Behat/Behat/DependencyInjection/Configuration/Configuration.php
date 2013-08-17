@@ -65,8 +65,8 @@ class Configuration
                 ->arrayNode('autoload')
                     ->defaultValue(array('' => '%paths.base%/features/bootstrap'))
                     ->treatTrueLike(array('' => '%paths.base%/features/bootstrap'))
+                    ->treatNullLike(array('' => '%paths.base%/features/bootstrap'))
                     ->treatFalseLike(array())
-                    ->treatNullLike(array())
                     ->beforeNormalization()
                         ->ifString()
                         ->then(function($path) {
@@ -77,19 +77,23 @@ class Configuration
                 ->end()
 
                 ->arrayNode('suites')
-                    ->treatFalseLike(array())
-                    ->treatNullLike(array())
                     ->defaultValue(array('default' => array(
+                        'enabled'    => true,
                         'type'       => 'gherkin',
                         'settings'   => array(),
                         'parameters' => array()
                     )))
+                    ->treatNullLike(array())
+                    ->treatFalseLike(array())
                     ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->addDefaultsIfNotSet()
+                        ->treatTrueLike(array('enabled' => true))
+                        ->treatNullLike(array('enabled' => true))
+                        ->treatFalseLike(array('enabled' => false))
                         ->beforeNormalization()
                             ->ifTrue(function($suite) {
-                                return count($suite);
+                                return is_array($suite) && count($suite);
                             })
                             ->then(function($suite) {
                                 $suite['settings'] = isset($suite['settings'])
@@ -97,7 +101,8 @@ class Configuration
                                     : array();
 
                                 foreach ($suite as $key => $val) {
-                                    if (!in_array($key, array('type', 'settings', 'parameters'))) {
+                                    $suiteKeys = array('enabled', 'type', 'settings', 'parameters');
+                                    if (!in_array($key, $suiteKeys)) {
                                         $suite['settings'][$key] = $val;
                                         unset($suite[$key]);
                                     }
@@ -107,6 +112,9 @@ class Configuration
                             })
                         ->end()
                         ->children()
+                            ->booleanNode('enabled')
+                                ->defaultTrue()
+                            ->end()
                             ->scalarNode('type')
                                 ->defaultValue('gherkin')
                             ->end()
@@ -129,9 +137,9 @@ class Configuration
                     ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->useAttributeAsKey('name')
-                        ->treatFalseLike(array('enabled' => false))
                         ->treatTrueLike(array('enabled' => true))
                         ->treatNullLike(array('enabled' => true))
+                        ->treatFalseLike(array('enabled' => false))
                         ->beforeNormalization()
                             ->ifTrue(function($a) {
                                 return is_array($a) && !isset($a['enabled']);
