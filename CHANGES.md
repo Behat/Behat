@@ -1,3 +1,10 @@
+3.0.0beta4 / 2013-08-17
+=======================
+
+  * Cleanup suite configuration sub-system
+  * New ability to turn off specific suites through `behat.yml`
+  * Support for danish language
+
 3.0.0beta3 / 2013-08-13
 =======================
 
