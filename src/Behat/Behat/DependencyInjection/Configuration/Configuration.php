@@ -63,16 +63,16 @@ class Configuration
             ->children()
 
                 ->arrayNode('autoload')
-                    ->defaultValue(array('' => '%paths.base%/features/bootstrap'))
-                    ->treatTrueLike(array('' => '%paths.base%/features/bootstrap'))
-                    ->treatNullLike(array('' => '%paths.base%/features/bootstrap'))
-                    ->treatFalseLike(array())
                     ->beforeNormalization()
                         ->ifString()
                         ->then(function($path) {
                             return array('' => $path);
                         })
                     ->end()
+                    ->defaultValue(array('' => '%paths.base%/features/bootstrap'))
+                    ->treatTrueLike(array('' => '%paths.base%/features/bootstrap'))
+                    ->treatNullLike(array('' => '%paths.base%/features/bootstrap'))
+                    ->treatFalseLike(array())
                     ->prototype('scalar')->end()
                 ->end()
 
@@ -87,10 +87,6 @@ class Configuration
                     ->treatFalseLike(array())
                     ->useAttributeAsKey('name')
                     ->prototype('array')
-                        ->addDefaultsIfNotSet()
-                        ->treatTrueLike(array('enabled' => true))
-                        ->treatNullLike(array('enabled' => true))
-                        ->treatFalseLike(array('enabled' => false))
                         ->beforeNormalization()
                             ->ifTrue(function($suite) {
                                 return is_array($suite) && count($suite);
@@ -111,6 +107,10 @@ class Configuration
                                 return $suite;
                             })
                         ->end()
+                        ->addDefaultsIfNotSet()
+                        ->treatTrueLike(array('enabled' => true))
+                        ->treatNullLike(array('enabled' => true))
+                        ->treatFalseLike(array('enabled' => false))
                         ->children()
                             ->booleanNode('enabled')
                                 ->defaultTrue()
@@ -136,10 +136,6 @@ class Configuration
                     ->defaultValue(array('pretty' => array('enabled' => true)))
                     ->useAttributeAsKey('name')
                     ->prototype('array')
-                        ->useAttributeAsKey('name')
-                        ->treatTrueLike(array('enabled' => true))
-                        ->treatNullLike(array('enabled' => true))
-                        ->treatFalseLike(array('enabled' => false))
                         ->beforeNormalization()
                             ->ifTrue(function($a) {
                                 return is_array($a) && !isset($a['enabled']);
@@ -148,6 +144,10 @@ class Configuration
                                 array_merge($a, array('enabled' => true));
                             })
                         ->end()
+                        ->useAttributeAsKey('name')
+                        ->treatTrueLike(array('enabled' => true))
+                        ->treatNullLike(array('enabled' => true))
+                        ->treatFalseLike(array('enabled' => false))
                         ->prototype('variable')->end()
                     ->end()
                 ->end()
