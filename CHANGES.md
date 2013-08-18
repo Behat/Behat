@@ -1,3 +1,10 @@
+2.5.0 / 2013-08-11
+==================
+
+  * First Behat LTS release
+  * Update Junit formatter to reflect latest junit format (thanks @alistairstead)
+  * Fix some container options
+
 2.4.6 / 2013-06-06
 ==================
 
