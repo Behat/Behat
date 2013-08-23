@@ -36,7 +36,7 @@ class OutlineEvent extends Event implements LifecycleEventInterface
     /**
      * @var null|integer
      */
-    private $result;
+    private $status;
 
     /**
      * Initializes outline event.
@@ -44,19 +44,19 @@ class OutlineEvent extends Event implements LifecycleEventInterface
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param OutlineNode          $outline
-     * @param null|integer         $result
+     * @param null|integer         $status
      */
     public function __construct(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
         OutlineNode $outline,
-        $result = null
+        $status = null
     )
     {
         $this->suite = $suite;
         $this->contexts = $contexts;
         $this->outline = $outline;
-        $this->result = $result;
+        $this->status = $status;
     }
 
     /**
@@ -90,12 +90,12 @@ class OutlineEvent extends Event implements LifecycleEventInterface
     }
 
     /**
-     * Returns outline tester result code.
+     * Returns outline tester status code.
      *
      * @return null|integer
      */
-    public function getResult()
+    public function getStatus()
     {
-        return $this->result;
+        return $this->status;
     }
 }

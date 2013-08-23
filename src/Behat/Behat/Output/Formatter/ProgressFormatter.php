@@ -131,7 +131,7 @@ class ProgressFormatter extends TranslatableConsoleFormatter
     {
         $this->printStep(
             $event->getStep(),
-            $event->getResult(),
+            $event->getStatus(),
             $event->getDefinition(),
             $event->getSnippet(),
             $event->getException()

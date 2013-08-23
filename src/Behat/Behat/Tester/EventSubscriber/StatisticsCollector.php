@@ -100,9 +100,9 @@ class StatisticsCollector implements EventSubscriberInterface
     public function collectFeatureResult(FeatureEvent $event)
     {
         ++$this->featuresCount;
-        ++$this->featuresStatuses[$this->statuses[$event->getResult()]];
+        ++$this->featuresStatuses[$this->statuses[$event->getStatus()]];
 
-        $this->suiteResult = max($this->suiteResult, $event->getResult());
+        $this->suiteResult = max($this->suiteResult, $event->getStatus());
     }
 
     /**
@@ -111,7 +111,7 @@ class StatisticsCollector implements EventSubscriberInterface
     public function collectScenarioResult(StepCollectionEvent $event)
     {
         ++$this->scenariosCount;
-        ++$this->scenariosStatuses[$this->statuses[$event->getResult()]];
+        ++$this->scenariosStatuses[$this->statuses[$event->getStatus()]];
     }
 
     /**
@@ -120,9 +120,9 @@ class StatisticsCollector implements EventSubscriberInterface
     public function collectStepStats(StepEvent $event)
     {
         ++$this->stepsCount;
-        ++$this->stepsStatuses[$this->statuses[$event->getResult()]];
+        ++$this->stepsStatuses[$this->statuses[$event->getStatus()]];
 
-        switch ($event->getResult()) {
+        switch ($event->getStatus()) {
             case StepEvent::FAILED:
                 $this->failedStepsEvents[] = $event;
                 break;

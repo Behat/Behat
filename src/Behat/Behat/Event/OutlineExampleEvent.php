@@ -36,17 +36,17 @@ class OutlineExampleEvent extends StepCollectionEvent
      * @param ContextPoolInterface $contexts
      * @param OutlineNode          $outline
      * @param integer              $iteration iteration number
-     * @param integer              $result
+     * @param integer              $status
      */
     public function __construct(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
         OutlineNode $outline,
         $iteration,
-        $result = null
+        $status = null
     )
     {
-        parent::__construct($suite, $contexts, $result);
+        parent::__construct($suite, $contexts, $status);
 
         $this->outline = $outline;
         $this->iteration = $iteration;

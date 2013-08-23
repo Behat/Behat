@@ -49,7 +49,7 @@ class StepEvent extends Event implements LifecycleEventInterface
     /**
      * @var null|integer
      */
-    private $result;
+    private $status;
     /**
      * @var null|string
      */
@@ -74,7 +74,7 @@ class StepEvent extends Event implements LifecycleEventInterface
      * @param ContextPoolInterface     $contexts
      * @param ScenarioNode             $logicalParent
      * @param StepNode                 $step
-     * @param null|integer             $result
+     * @param null|integer             $status
      * @param null|string              $stdOut
      * @param null|Exception           $exception
      * @param null|DefinitionInterface $definition
@@ -85,7 +85,7 @@ class StepEvent extends Event implements LifecycleEventInterface
         ContextPoolInterface $contexts,
         ScenarioNode $logicalParent,
         StepNode $step,
-        $result = null,
+        $status = null,
         $stdOut = null,
         Exception $exception = null,
         DefinitionInterface $definition = null,
@@ -96,7 +96,7 @@ class StepEvent extends Event implements LifecycleEventInterface
         $this->contexts = $contexts;
         $this->step = $step;
         $this->logicalParent = $logicalParent;
-        $this->result = $result;
+        $this->status = $status;
         $this->stdOut = $stdOut;
         $this->definition = $definition;
         $this->exception = $exception;
@@ -164,13 +164,13 @@ class StepEvent extends Event implements LifecycleEventInterface
     }
 
     /**
-     * Returns step tester result code.
+     * Returns step tester result status.
      *
      * @return null|integer
      */
-    public function getResult()
+    public function getStatus()
     {
-        return $this->result;
+        return $this->status;
     }
 
     /**

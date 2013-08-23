@@ -31,16 +31,16 @@ class ScenarioEvent extends StepCollectionEvent
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param ScenarioNode         $scenario
-     * @param integer              $result
+     * @param integer              $status
      */
     public function __construct(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
         ScenarioNode $scenario,
-        $result = null
+        $status = null
     )
     {
-        parent::__construct($suite, $contexts, $result);
+        parent::__construct($suite, $contexts, $status);
 
         $this->scenario = $scenario;
     }

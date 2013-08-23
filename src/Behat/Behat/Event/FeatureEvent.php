@@ -32,7 +32,7 @@ class FeatureEvent extends Event implements LifecycleEventInterface
     /**
      * @var null|integer
      */
-    private $result;
+    private $status;
 
     /**
      * Initializes feature event.
@@ -40,19 +40,19 @@ class FeatureEvent extends Event implements LifecycleEventInterface
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param FeatureNode          $feature
-     * @param integer              $result
+     * @param integer              $status
      */
     public function __construct(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
         FeatureNode $feature,
-        $result = null
+        $status = null
     )
     {
         $this->suite = $suite;
         $this->contexts = $contexts;
         $this->feature = $feature;
-        $this->result = $result;
+        $this->status = $status;
     }
 
     /**
@@ -86,12 +86,12 @@ class FeatureEvent extends Event implements LifecycleEventInterface
     }
 
     /**
-     * Returns feature tester result code.
+     * Returns feature tester status code.
      *
      * @return null|integer
      */
-    public function getResult()
+    public function getStatus()
     {
-        return $this->result;
+        return $this->status;
     }
 }

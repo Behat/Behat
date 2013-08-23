@@ -268,7 +268,7 @@ class HtmlFormatter extends PrettyFormatter
                 $this->writeln('<ol>');
                 $this->printStep(
                     $event->getStep(),
-                    $event->getResult(),
+                    $event->getStatus(),
                     $event->getDefinition(),
                     $event->getSnippet(),
                     $event->getException()

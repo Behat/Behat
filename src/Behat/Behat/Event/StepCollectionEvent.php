@@ -32,20 +32,20 @@ abstract class StepCollectionEvent extends Event implements LifecycleEventInterf
     /**
      * @var null|integer
      */
-    private $result;
+    private $status;
 
     /**
      * Initializes scenario event.
      *
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
-     * @param null|integer         $result
+     * @param null|integer         $status
      */
-    public function __construct(SuiteInterface $suite, ContextPoolInterface $contexts, $result = null)
+    public function __construct(SuiteInterface $suite, ContextPoolInterface $contexts, $status = null)
     {
         $this->suite = $suite;
         $this->contexts = $contexts;
-        $this->result = $result;
+        $this->status = $status;
     }
 
     /**
@@ -69,13 +69,13 @@ abstract class StepCollectionEvent extends Event implements LifecycleEventInterf
     }
 
     /**
-     * Returns scenario tester result code.
+     * Returns scenario tester status code.
      *
      * @return null|integer
      */
-    public function getResult()
+    public function getStatus()
     {
-        return $this->result;
+        return $this->status;
     }
 
     /**
@@ -85,6 +85,6 @@ abstract class StepCollectionEvent extends Event implements LifecycleEventInterf
      */
     public function isSkipped()
     {
-        return StepEvent::SKIPPED === $this->result;
+        return StepEvent::SKIPPED === $this->status;
     }
 }

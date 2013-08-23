@@ -62,7 +62,7 @@ class FailedScenariosFormatter extends ConsoleFormatter
      */
     public function afterScenario(ScenarioEvent $event)
     {
-        if (StepEvent::FAILED === $event->getResult()) {
+        if (StepEvent::FAILED === $event->getStatus()) {
             $scenario = $event->getScenario();
             $this->writeln($scenario->getFile() . ':' . $scenario->getLine());
         }
@@ -75,7 +75,7 @@ class FailedScenariosFormatter extends ConsoleFormatter
      */
     public function afterOutlineExample(OutlineExampleEvent $event)
     {
-        if (StepEvent::FAILED === $event->getResult()) {
+        if (StepEvent::FAILED === $event->getStatus()) {
             $outline = $event->getOutline();
             $examples = $outline->getExamples();
             $lines = $examples->getRowLines();

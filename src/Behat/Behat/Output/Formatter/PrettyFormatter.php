@@ -289,7 +289,7 @@ class PrettyFormatter extends ProgressFormatter
         $this->inOutlineExample = false;
 
         $this->printOutlineExampleFooter(
-            $event->getOutline(), $event->getIteration(), $event->getResult(), $event->isSkipped()
+            $event->getOutline(), $event->getIteration(), $event->getStatus(), $event->isSkipped()
         );
     }
 
@@ -360,7 +360,7 @@ class PrettyFormatter extends ProgressFormatter
 
         $this->printStep(
             $event->getStep(),
-            $event->getResult(),
+            $event->getStatus(),
             $event->getDefinition(),
             $event->getSnippet(),
             $event->getException()
@@ -649,7 +649,7 @@ class PrettyFormatter extends ProgressFormatter
             foreach ($this->delayedStepEvents as $event) {
                 $this->printStep(
                     $event->getStep(),
-                    $event->getResult(),
+                    $event->getStatus(),
                     $event->getDefinition(),
                     $event->getSnippet(),
                     $event->getException()
@@ -674,7 +674,7 @@ class PrettyFormatter extends ProgressFormatter
         foreach ($events as $event) {
             $exception = $event->getException();
             if ($exception && !$exception instanceof UndefinedException) {
-                $color = $this->getResultColorCode($event->getResult());
+                $color = $this->getResultColorCode($event->getStatus());
 
                 $error = $this->exceptionToString($exception);
                 $error = $this->relativizePathsInString($error);

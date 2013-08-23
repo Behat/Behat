@@ -73,7 +73,7 @@ class StopOnFirstFailure extends DispatchingService implements EventSubscriberIn
      */
     public function exitAfterCurrentScenarioOnFailure(StepCollectionEvent $event)
     {
-        if (!$this->enabled || StepEvent::FAILED !== $event->getResult()) {
+        if (!$this->enabled || StepEvent::FAILED !== $event->getStatus()) {
             return;
         }
 

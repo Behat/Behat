@@ -50,7 +50,7 @@ class SnippetsCollector implements EventSubscriberInterface
      */
     public function collectSnippet(StepEvent $event)
     {
-        if (StepEvent::UNDEFINED !== $event->getResult()) {
+        if (StepEvent::UNDEFINED !== $event->getStatus()) {
             return;
         }
         if (!$event->hasSnippet()) {

@@ -80,7 +80,7 @@ class CacheFailedScenariosForRerun implements EventSubscriberInterface
         if (!$this->getFileName()) {
             return;
         }
-        if (StepEvent::FAILED !== $event->getResult()) {
+        if (StepEvent::FAILED !== $event->getStatus()) {
             return;
         }
 
@@ -99,7 +99,7 @@ class CacheFailedScenariosForRerun implements EventSubscriberInterface
         if (!$this->getFileName()) {
             return;
         }
-        if (StepEvent::FAILED !== $event->getResult()) {
+        if (StepEvent::FAILED !== $event->getStatus()) {
             return;
         }
 

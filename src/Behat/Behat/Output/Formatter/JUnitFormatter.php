@@ -278,7 +278,7 @@ class JUnitFormatter extends ConsoleFormatter
             $xml .= sprintf(
                 '        <failure message="%s" type="%s">',
                 htmlspecialchars($error),
-                $this->getResultColorCode($event->getResult())
+                $this->getResultColorCode($event->getStatus())
             );
             $exception = str_replace(array('<![CDATA[', ']]>'), '', (string)$exception);
             $xml .= "<![CDATA[\n$exception\n]]></failure>\n";
