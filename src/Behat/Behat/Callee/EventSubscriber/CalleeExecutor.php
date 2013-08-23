@@ -73,21 +73,26 @@ class CalleeExecutor implements EventSubscriberInterface
         }
 
         set_error_handler(array($this, 'errorHandler'), $this->errorReporting);
+        ob_start();
 
         try {
             $return = call_user_func_array($callable, $event->getArguments());
         } catch (Exception $e) {
-            restore_error_handler();
-
             $event->setException($e);
+            $event->setStdOut(ob_get_length() ? ob_get_contents() : null);
             $event->stopPropagation();
+
+            ob_end_clean();
+            restore_error_handler();
 
             throw $e;
         }
 
-        restore_error_handler();
-
         $event->setReturn($return);
+        $event->setStdOut(ob_get_length() ? ob_get_contents() : null);
+
+        ob_end_clean();
+        restore_error_handler();
     }
 
     /**

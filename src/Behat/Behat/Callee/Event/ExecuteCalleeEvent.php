@@ -27,9 +27,10 @@ class ExecuteCalleeEvent extends Event implements LifecycleEventInterface
     private $contexts;
     private $callee;
     private $arguments;
-    private $executed = false;
     private $return;
     private $exception;
+    private $stdOut;
+    private $executed = false;
 
     /**
      * Initializes execution callee event.
@@ -144,6 +145,16 @@ class ExecuteCalleeEvent extends Event implements LifecycleEventInterface
     }
 
     /**
+     * Checks if exception has been thrown by callee.
+     *
+     * @return Boolean
+     */
+    public function hasException()
+    {
+        return null !== $this->exception;
+    }
+
+    /**
      * Returns exception which callee thrown (if some).
      *
      * @return null|Exception
@@ -161,6 +172,37 @@ class ExecuteCalleeEvent extends Event implements LifecycleEventInterface
     public function setException(Exception $exception)
     {
         $this->exception = $exception;
+        $this->executed = true;
+    }
+
+    /**
+     * Checks if callee produced standard output.
+     *
+     * @return Boolean
+     */
+    public function hasStdOut()
+    {
+        return null !== $this->stdOut;
+    }
+
+    /**
+     * Returns standard output produced during execution.
+     *
+     * @return null|string
+     */
+    public function getStdOut()
+    {
+        return $this->stdOut;
+    }
+
+    /**
+     * Sets standard output produced during execution.
+     *
+     * @param null|string $stdOut
+     */
+    public function setStdOut($stdOut)
+    {
+        $this->stdOut = $stdOut;
         $this->executed = true;
     }
 }
