@@ -70,10 +70,11 @@ class StepTester extends DispatchingService
             $exception = $e;
         }
 
+        $stdOut = $execution ? $execution->getStdOut() : null;
         $definition = $execution ? $execution->getCallee() : null;
 
         $event = new StepEvent(
-            $suite, $contexts, $scenario, $step, $result, $exception, $definition, $snippet
+            $suite, $contexts, $scenario, $step, $result, $stdOut, $exception, $definition, $snippet
         );
         $this->dispatch(EventInterface::AFTER_STEP, $event);
 

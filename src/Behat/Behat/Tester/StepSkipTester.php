@@ -55,13 +55,11 @@ class StepSkipTester extends StepTester
             $snippet = $this->getDefinitionSnippet($suite, $contexts, $step);
         }
 
-        $definition = null;
-        if ($execution) {
-            $definition = $execution->getCallee();
-        }
+        $stdOut = $execution ? $execution->getStdOut() : null;
+        $definition = $execution ? $execution->getCallee() : null;
 
         $event = new StepEvent(
-            $suite, $contexts, $scenario, $step, $result, $exception, $definition, $snippet
+            $suite, $contexts, $scenario, $step, $result, $stdOut, $exception, $definition, $snippet
         );
         $this->dispatch(EventInterface::AFTER_STEP, $event);
 

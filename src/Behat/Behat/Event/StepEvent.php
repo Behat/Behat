@@ -51,6 +51,10 @@ class StepEvent extends Event implements LifecycleEventInterface
      */
     private $result;
     /**
+     * @var null|string
+     */
+    private $stdOut;
+    /**
      * @var DefinitionInterface
      */
     private $definition;
@@ -71,6 +75,7 @@ class StepEvent extends Event implements LifecycleEventInterface
      * @param ScenarioNode             $logicalParent
      * @param StepNode                 $step
      * @param null|integer             $result
+     * @param null|string              $stdOut
      * @param null|Exception           $exception
      * @param null|DefinitionInterface $definition
      * @param null|SnippetInterface    $snippet
@@ -81,6 +86,7 @@ class StepEvent extends Event implements LifecycleEventInterface
         ScenarioNode $logicalParent,
         StepNode $step,
         $result = null,
+        $stdOut = null,
         Exception $exception = null,
         DefinitionInterface $definition = null,
         SnippetInterface $snippet = null
@@ -91,6 +97,7 @@ class StepEvent extends Event implements LifecycleEventInterface
         $this->step = $step;
         $this->logicalParent = $logicalParent;
         $this->result = $result;
+        $this->stdOut = $stdOut;
         $this->definition = $definition;
         $this->exception = $exception;
         $this->snippet = $snippet;
@@ -137,16 +144,6 @@ class StepEvent extends Event implements LifecycleEventInterface
     }
 
     /**
-     * Returns step tester result code.
-     *
-     * @return null|integer
-     */
-    public function getResult()
-    {
-        return $this->result;
-    }
-
-    /**
      * Checks whether event contains step definition.
      *
      * @return Boolean
@@ -167,13 +164,43 @@ class StepEvent extends Event implements LifecycleEventInterface
     }
 
     /**
+     * Returns step tester result code.
+     *
+     * @return null|integer
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * Checks if standard output was produced during event.
+     *
+     * @return Boolean
+     */
+    public function hasStdOut()
+    {
+        return null !== $this->stdOut;
+    }
+
+    /**
+     * Returns standard output produced during event.
+     *
+     * @return null|string
+     */
+    public function getStdOut()
+    {
+        return $this->stdOut;
+    }
+
+    /**
      * Checks whether event contains exception.
      *
      * @return Boolean
      */
     public function hasException()
     {
-        return null !== $this->getException();
+        return null !== $this->exception;
     }
 
     /**
@@ -193,7 +220,7 @@ class StepEvent extends Event implements LifecycleEventInterface
      */
     public function hasSnippet()
     {
-        return null !== $this->getSnippet();
+        return null !== $this->snippet;
     }
 
     /**

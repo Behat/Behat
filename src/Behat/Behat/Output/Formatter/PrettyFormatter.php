@@ -14,6 +14,7 @@ use Behat\Behat\Event\BackgroundEvent;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExerciseEvent;
 use Behat\Behat\Event\FeatureEvent;
+use Behat\Behat\Event\HookEvent;
 use Behat\Behat\Event\OutlineEvent;
 use Behat\Behat\Event\OutlineExampleEvent;
 use Behat\Behat\Event\ScenarioEvent;
@@ -114,6 +115,7 @@ class PrettyFormatter extends ProgressFormatter
             EventInterface::BEFORE_OUTLINE_EXAMPLE => array('beforeOutlineExample', -50),
             EventInterface::AFTER_OUTLINE_EXAMPLE  => array('afterOutlineExample', -50),
             EventInterface::AFTER_STEP             => array('afterStep', -50),
+            EventInterface::AFTER_HOOK             => array('afterHook', -50),
         );
     }
 
@@ -135,6 +137,14 @@ class PrettyFormatter extends ProgressFormatter
     public function getDescription()
     {
         return 'Prints the feature as is.';
+    }
+
+    /**
+     * @param HookEvent $event
+     */
+    public function afterHook(HookEvent $event)
+    {
+        $this->write($event->getStdOut());
     }
 
     /**
@@ -336,6 +346,8 @@ class PrettyFormatter extends ProgressFormatter
      */
     public function afterStep(StepEvent $event)
     {
+        $this->write($event->getStdOut());
+
         if ($this->inBackground && $this->isBackgroundPrinted) {
             return;
         }

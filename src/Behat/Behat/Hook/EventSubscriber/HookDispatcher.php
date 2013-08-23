@@ -11,12 +11,11 @@ namespace Behat\Behat\Hook\EventSubscriber;
  */
 use Behat\Behat\Callee\Event\ExecuteCalleeEvent;
 use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\HookEvent;
 use Behat\Behat\Event\LifecycleEventInterface;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Hook\Event\HooksCarrierEvent;
-use Behat\Behat\Hook\HookInterface;
 use Exception;
-use ReflectionObject;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -85,48 +84,35 @@ class HookDispatcher extends DispatchingService implements EventSubscriberInterf
      */
     public function dispatchHooks(LifecycleEventInterface $event)
     {
+        // TODO: skip hooks of failed steps and scenarios
+        // TODO: remove skip states from hook and tester dispatchers
         if ($this->skip) {
             return;
         }
 
-        $hooksProvider = new HooksCarrierEvent($event->getSuite(), $event->getContextPool());
+        $suite = $event->getSuite();
+        $contexts = $event->getContextPool();
+
+        $hooksProvider = new HooksCarrierEvent($suite, $contexts);
         $this->dispatch(EventInterface::LOAD_HOOKS, $hooksProvider);
 
         foreach ($hooksProvider->getHooksForEvent($event) as $hook) {
-            $execution = new ExecuteCalleeEvent(
-                $event->getSuite(), $event->getContextPool(), $hook, array($event)
-            );
+            $hookEvent = new HookEvent($event, $hook);
+            $this->dispatch(EventInterface::BEFORE_HOOK, $hookEvent);
+
+            $execution = new ExecuteCalleeEvent($suite, $contexts, $hook, array($event));
 
             try {
                 $this->dispatch(EventInterface::EXECUTE_HOOK, $execution);
             } catch (Exception $e) {
-                $this->addHookInformationToException($hook, $e);
+                $hookEvent = new HookEvent($event, $hook, $execution->getStdOut(), $e);
+                $this->dispatch(EventInterface::AFTER_HOOK, $hookEvent);
 
                 throw $e;
             }
+
+            $hookEvent = new HookEvent($event, $hook, $execution->getStdOut());
+            $this->dispatch(EventInterface::AFTER_HOOK, $hookEvent);
         }
-    }
-
-    /**
-     * Adds a hook information to exception thrown from it.
-     *
-     * @param HookInterface $hook      hook instance
-     * @param Exception     $exception exception
-     */
-    private function addHookInformationToException(HookInterface $hook, Exception $exception)
-    {
-        $reflection = new ReflectionObject($exception);
-        $message = $reflection->getProperty('message');
-
-        $message->setAccessible(true);
-        $message->setValue(
-            $exception,
-            sprintf(
-                "Exception has been thrown in '%s' hook, defined in %s\n\n%s",
-                $hook->getEventName(),
-                $hook->getPath(),
-                $exception->getMessage()
-            )
-        );
     }
 }

@@ -74,4 +74,6 @@ interface EventInterface
     const AFTER_BACKGROUND = 'afterBackground';
     const BEFORE_STEP = 'beforeStep';
     const AFTER_STEP = 'afterStep';
+    const BEFORE_HOOK = 'beforeHook';
+    const AFTER_HOOK = 'afterHook';
 }
