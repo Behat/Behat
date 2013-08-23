@@ -94,4 +94,14 @@ class FeatureEvent extends Event implements LifecycleEventInterface
     {
         return $this->status;
     }
+
+    /**
+     * Checks whether feature is skipped.
+     *
+     * @return Boolean
+     */
+    public function isSkipped()
+    {
+        return StepEvent::SKIPPED === $this->status;
+    }
 }

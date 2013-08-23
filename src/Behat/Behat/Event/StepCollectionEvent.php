@@ -79,7 +79,7 @@ abstract class StepCollectionEvent extends Event implements LifecycleEventInterf
     }
 
     /**
-     * Checks whether scenario was skipped.
+     * Checks whether scenario is skipped.
      *
      * @return Boolean
      */

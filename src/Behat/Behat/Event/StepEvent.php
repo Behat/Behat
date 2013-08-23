@@ -174,6 +174,16 @@ class StepEvent extends Event implements LifecycleEventInterface
     }
 
     /**
+     * Checks whether step is skipped.
+     *
+     * @return Boolean
+     */
+    public function isSkipped()
+    {
+        return StepEvent::SKIPPED === $this->status;
+    }
+
+    /**
      * Checks if standard output was produced during event.
      *
      * @return Boolean

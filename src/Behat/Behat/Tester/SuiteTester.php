@@ -47,7 +47,7 @@ class SuiteTester extends DispatchingService
             $result = max($result, $tester->test($suite, $contexts, $feature));
         }
 
-        $event = new SuiteEvent($suite, $contexts);
+        $event = new SuiteEvent($suite, $contexts, $result);
         $this->dispatch(EventInterface::AFTER_SUITE, $event);
 
         return $result;
