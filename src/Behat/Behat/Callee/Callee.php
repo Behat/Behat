@@ -20,10 +20,10 @@ use ReflectionMethod;
  */
 abstract class Callee implements CalleeInterface
 {
-    private $method;
     private $callable;
-    private $path;
     private $description;
+    private $reflection;
+    private $path;
 
     /**
      * Initializes callee.
@@ -43,45 +43,16 @@ abstract class Callee implements CalleeInterface
             ));
         }
 
-        if ($this->method = is_array($callable)) {
+        if (is_array($callable)) {
+            $this->reflection = new ReflectionMethod($callable[0], $callable[1]);
             $this->path = $callable[0] . '::' . $callable[1] . '()';
         } else {
-            $reflection = new ReflectionFunction($callable);
-            $this->path = $reflection->getFileName() . ':' . $reflection->getStartLine();
+            $this->reflection = new ReflectionFunction($callable);
+            $this->path = $this->reflection->getFileName() . ':' . $this->reflection->getStartLine();
         }
 
         $this->callable = $callable;
         $this->description = $description;
-    }
-
-    /**
-     * Returns callee definition path.
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * Returns callee description.
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Returns true if callee is a method, false otherwise.
-     *
-     * @return Boolean
-     */
-    public function isMethod()
-    {
-        return $this->method;
     }
 
     /**
@@ -95,16 +66,42 @@ abstract class Callee implements CalleeInterface
     }
 
     /**
+     * Returns callee description.
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Returns callee definition path.
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Returns true if callee is a method, false otherwise.
+     *
+     * @return Boolean
+     */
+    public function isMethod()
+    {
+        return $this->reflection instanceof ReflectionMethod;
+    }
+
+    /**
      * Returns callable reflection.
      *
      * @return ReflectionFunction|ReflectionMethod
      */
     public function getReflection()
     {
-        if ($this->isMethod()) {
-            return new ReflectionMethod($this->callable[0], $this->callable[1]);
-        }
-
-        return new ReflectionFunction($this->callable);
+        return $this->reflection;
     }
 }
