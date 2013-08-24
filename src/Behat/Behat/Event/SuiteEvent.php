@@ -76,14 +76,4 @@ class SuiteEvent extends Event implements LifecycleEventInterface
     {
         return $this->status;
     }
-
-    /**
-     * Checks whether suite is skipped.
-     *
-     * @return Boolean
-     */
-    public function isSkipped()
-    {
-        return StepEvent::SKIPPED === $this->status;
-    }
 }

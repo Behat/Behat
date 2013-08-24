@@ -98,14 +98,4 @@ class OutlineEvent extends Event implements LifecycleEventInterface
     {
         return $this->status;
     }
-
-    /**
-     * Checks whether outline is skipped.
-     *
-     * @return Boolean
-     */
-    public function isSkipped()
-    {
-        return StepEvent::SKIPPED === $this->status;
-    }
 }

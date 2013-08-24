@@ -289,7 +289,7 @@ class PrettyFormatter extends ProgressFormatter
         $this->inOutlineExample = false;
 
         $this->printOutlineExampleFooter(
-            $event->getOutline(), $event->getIteration(), $event->getStatus(), $event->isSkipped()
+            $event->getOutline(), $event->getIteration(), $event->getStatus(), StepEvent::SKIPPED === $event->getStatus()
         );
     }
 

@@ -77,14 +77,4 @@ abstract class StepCollectionEvent extends Event implements LifecycleEventInterf
     {
         return $this->status;
     }
-
-    /**
-     * Checks whether scenario is skipped.
-     *
-     * @return Boolean
-     */
-    public function isSkipped()
-    {
-        return StepEvent::SKIPPED === $this->status;
-    }
 }
