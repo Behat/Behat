@@ -9,6 +9,7 @@ namespace Behat\Behat\Hook\Callee;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Event\EventInterface;
 
 /**
  * BeforeSuite hook.
@@ -25,6 +26,6 @@ class BeforeSuite extends SuiteHook
      */
     public function __construct($callback, $description = null)
     {
-        parent::__construct('beforeSuite', $callback, $description);
+        parent::__construct(EventInterface::HOOKABLE_BEFORE_SUITE, $callback, $description);
     }
 }

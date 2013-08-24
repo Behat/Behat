@@ -74,6 +74,17 @@ interface EventInterface
     const AFTER_BACKGROUND = 'afterBackground';
     const BEFORE_STEP = 'beforeStep';
     const AFTER_STEP = 'afterStep';
+    /**
+     * Hookable events
+     */
+    const HOOKABLE_BEFORE_SUITE = 'hookableBeforeSuite';
+    const HOOKABLE_AFTER_SUITE = 'hookableAfterSuite';
+    const HOOKABLE_BEFORE_FEATURE = 'hookableBeforeFeature';
+    const HOOKABLE_AFTER_FEATURE = 'hookableAfterFeature';
+    const HOOKABLE_BEFORE_SCENARIO = 'hookableBeforeScenario';
+    const HOOKABLE_AFTER_SCENARIO = 'hookableAfterScenario';
+    const HOOKABLE_BEFORE_STEP = 'hookableBeforeStep';
+    const HOOKABLE_AFTER_STEP = 'hookableAfterStep';
     const BEFORE_HOOK = 'beforeHook';
     const AFTER_HOOK = 'afterHook';
 }

@@ -9,6 +9,7 @@ namespace Behat\Behat\Hook\Callee;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Event\EventInterface;
 
 /**
  * BeforeScenario hook.
@@ -26,6 +27,6 @@ class BeforeScenario extends ScenarioHook
      */
     public function __construct($filterString, $callback, $description = null)
     {
-        parent::__construct('beforeScenario', $filterString, $callback, $description);
+        parent::__construct(EventInterface::HOOKABLE_BEFORE_SCENARIO, $filterString, $callback, $description);
     }
 }

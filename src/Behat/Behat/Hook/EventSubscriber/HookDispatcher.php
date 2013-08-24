@@ -52,16 +52,14 @@ class HookDispatcher extends DispatchingService implements EventSubscriberInterf
     public static function getSubscribedEvents()
     {
         return array(
-            EventInterface::BEFORE_SUITE           => array('dispatchHooks', 10),
-            EventInterface::AFTER_SUITE            => array('dispatchHooks', 10),
-            EventInterface::BEFORE_FEATURE         => array('dispatchHooks', 10),
-            EventInterface::AFTER_FEATURE          => array('dispatchHooks', 10),
-            EventInterface::BEFORE_SCENARIO        => array('dispatchHooks', 10),
-            EventInterface::AFTER_SCENARIO         => array('dispatchHooks', 10),
-            EventInterface::BEFORE_OUTLINE_EXAMPLE => array('dispatchHooks', 10),
-            EventInterface::AFTER_OUTLINE_EXAMPLE  => array('dispatchHooks', 10),
-            EventInterface::BEFORE_STEP            => array('dispatchHooks', 10),
-            EventInterface::AFTER_STEP             => array('dispatchHooks', 10),
+            EventInterface::HOOKABLE_BEFORE_SUITE    => array('dispatchHooks', 10),
+            EventInterface::HOOKABLE_AFTER_SUITE     => array('dispatchHooks', 10),
+            EventInterface::HOOKABLE_BEFORE_FEATURE  => array('dispatchHooks', 10),
+            EventInterface::HOOKABLE_AFTER_FEATURE   => array('dispatchHooks', 10),
+            EventInterface::HOOKABLE_BEFORE_SCENARIO => array('dispatchHooks', 10),
+            EventInterface::HOOKABLE_AFTER_SCENARIO  => array('dispatchHooks', 10),
+            EventInterface::HOOKABLE_BEFORE_STEP     => array('dispatchHooks', 10),
+            EventInterface::HOOKABLE_AFTER_STEP      => array('dispatchHooks', 10),
         );
     }
 

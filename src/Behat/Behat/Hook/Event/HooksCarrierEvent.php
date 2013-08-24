@@ -101,14 +101,7 @@ class HooksCarrierEvent extends Event implements LifecycleEventInterface
         return array_filter(
             $this->hooks,
             function (HookInterface $hook) use ($event) {
-                $eventName = $event->getName();
-                if (EventInterface::BEFORE_OUTLINE_EXAMPLE === $eventName) {
-                    $eventName = EventInterface::BEFORE_SCENARIO;
-                } elseif (EventInterface::AFTER_OUTLINE_EXAMPLE === $eventName) {
-                    $eventName = EventInterface::AFTER_SCENARIO;
-                }
-
-                if ($eventName !== $hook->getEventName()) {
+                if ($event->getName() !== $hook->getEventName()) {
                     return false;
                 }
 
