@@ -55,7 +55,12 @@ class StepTester extends DispatchingService
 
         $event = new StepEvent($suite, $contexts, $scenario, $step);
         $this->dispatch(EventInterface::BEFORE_STEP, $event);
-        !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_STEP, $event);
+
+        try {
+            !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_STEP, $event);
+        } catch (Exception $e) {
+            $status = StepEvent::FAILED;
+        }
 
         $execution = $exception = $snippet = null;
 
@@ -78,7 +83,14 @@ class StepTester extends DispatchingService
         $definition = $execution ? $execution->getCallee() : null;
 
         $event = new StepEvent($suite, $contexts, $scenario, $step, $status, $stdOut, $exception, $definition, $snippet);
-        !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_STEP, $event);
+
+        try {
+            !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_STEP, $event);
+        } catch (Exception $e) {
+            $status = StepEvent::FAILED;
+            $event = new StepEvent($suite, $contexts, $scenario, $step, $status, $stdOut, $exception, $definition, $snippet);
+        }
+
         $this->dispatch(EventInterface::AFTER_STEP, $event);
 
         return $status;

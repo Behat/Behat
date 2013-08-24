@@ -18,6 +18,7 @@ use Behat\Behat\Suite\SuiteInterface;
 use Behat\Behat\Tester\Event\ScenarioTesterCarrierEvent;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioNode;
+use Exception;
 use RuntimeException;
 
 /**
@@ -48,7 +49,13 @@ class FeatureTester extends DispatchingService
 
         $event = new FeatureEvent($suite, $contexts, $feature);
         $this->dispatch(EventInterface::BEFORE_FEATURE, $event);
-        !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_FEATURE, $event);
+
+        try {
+            !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_FEATURE, $event);
+        } catch (Exception $e) {
+            $status = StepEvent::FAILED;
+            $skip = true;
+        }
 
         foreach ($feature->getScenarios() as $scenario) {
             $tester = $this->getScenarioTester($suite, $contexts, $scenario);
@@ -56,7 +63,14 @@ class FeatureTester extends DispatchingService
         }
 
         $event = new FeatureEvent($suite, $contexts, $feature, $status);
-        !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_FEATURE, $event);
+
+        try {
+            !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_FEATURE, $event);
+        } catch (Exception $e) {
+            $status = StepEvent::FAILED;
+            $event = new FeatureEvent($suite, $contexts, $feature, $status);
+        }
+
         $this->dispatch(EventInterface::AFTER_FEATURE, $event);
 
         return $status;

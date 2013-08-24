@@ -96,6 +96,13 @@ Feature: hooks
           }
 
           /**
+           * @BeforeScenario @exception
+           */
+          public function beforeScenarioException($event) {
+              throw new \Exception('Exception');
+          }
+
+          /**
            * @AfterStep @100
            */
           public function afterStep100($event) {
@@ -260,4 +267,55 @@ Feature: hooks
       = do something AFTER ANY SUITE
       1 scenario (1 passed)
       3 steps (3 passed)
+      """
+
+  Scenario: Background exceptions
+    Given a file named "features/background.feature" with:
+    """
+      Feature:
+
+        @exception
+        Scenario:
+          Then I must have 50
+        Scenario:
+          Given I have entered 12
+          Then I must have 12
+
+        @exception
+        Scenario:
+          Given I must have 30
+          When I have entered 23
+          Then I must have 23
+
+        Scenario: 130
+          Given I must have 130
+      """
+    When I run "behat --no-ansi -f pretty"
+    Then it should fail with:
+      """
+      = do something BEFORE ANY SUITE
+      Feature:
+
+      = do something BEFORE EVERY FEATURE
+        @exception
+        Scenario:             # features/background.feature:4
+          Then I must have 50 # FeatureContext::iMustHave()
+
+        Scenario:                 # features/background.feature:6
+          Given I have entered 12 # FeatureContext::iHaveEntered()
+          Then I must have 12     # FeatureContext::iMustHave()
+
+        @exception
+        Scenario:                 # features/background.feature:11
+          Given I must have 30    # FeatureContext::iMustHave()
+          When I have entered 23  # FeatureContext::iHaveEntered()
+          Then I must have 23     # FeatureContext::iMustHave()
+
+        Scenario: 130             # features/background.feature:16
+          Given I must have 130   # FeatureContext::iMustHave()
+
+      = do something AFTER EVERY FEATURE
+      = do something AFTER ANY SUITE
+      4 scenarios (2 passed, 2 failed)
+      7 steps (3 passed, 4 skipped)
       """

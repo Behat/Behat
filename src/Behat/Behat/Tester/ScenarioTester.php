@@ -15,6 +15,7 @@ use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\ScenarioNode;
+use Exception;
 
 /**
  * Scenario tester.
@@ -46,10 +47,16 @@ class ScenarioTester extends IsolatedStepCollectionTester
 
         $event = new ScenarioEvent($suite, $contexts, $scenario);
         $this->dispatch(EventInterface::BEFORE_SCENARIO, $event);
-        !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
+
+        try {
+            !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
+        } catch (Exception $e) {
+            $status = StepEvent::FAILED;
+            $skip = true;
+        }
 
         if ($scenario->getFeature()->hasBackground()) {
-            $skip = StepEvent::PASSED !== $status;
+            $skip = $skip || StepEvent::PASSED !== $status;
             $background = $scenario->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
@@ -57,14 +64,21 @@ class ScenarioTester extends IsolatedStepCollectionTester
         }
 
         foreach ($scenario->getSteps() as $step) {
-            $skip = StepEvent::PASSED !== $status;
+            $skip = $skip || StepEvent::PASSED !== $status;
 
             $tester = $this->getStepTester($suite, $contexts, $step);
             $status = max($status, $tester->test($suite, $contexts, $step, $scenario, $skip));
         }
 
         $event = new ScenarioEvent($suite, $contexts, $scenario, $status);
-        !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_SCENARIO, $event);
+
+        try {
+            !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_SCENARIO, $event);
+        } catch (Exception $e) {
+            $status = StepEvent::FAILED;
+            $event = new ScenarioEvent($suite, $contexts, $scenario, $status);
+        }
+
         $this->dispatch(EventInterface::AFTER_SCENARIO, $event);
 
         return $status;

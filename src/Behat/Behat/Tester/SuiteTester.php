@@ -18,6 +18,7 @@ use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Behat\Tester\Event\FeatureTesterCarrierEvent;
 use Behat\Gherkin\Node\FeatureNode;
+use Exception;
 use RuntimeException;
 
 /**
@@ -44,7 +45,13 @@ class SuiteTester extends DispatchingService
 
         $event = new SuiteEvent($suite, $contexts);
         $this->dispatch(EventInterface::BEFORE_SUITE, $event);
-        !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_SUITE, $event);
+
+        try {
+            !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_SUITE, $event);
+        } catch (Exception $e) {
+            $status = StepEvent::FAILED;
+            $skip = true;
+        }
 
         foreach ($features as $feature) {
             $tester = $this->getFeatureTester($suite, $contexts, $feature);
@@ -52,7 +59,14 @@ class SuiteTester extends DispatchingService
         }
 
         $event = new SuiteEvent($suite, $contexts, $status);
-        !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_SUITE, $event);
+
+        try {
+            !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_SUITE, $event);
+        } catch (Exception $e) {
+            $status = StepEvent::FAILED;
+            $event = new SuiteEvent($suite, $contexts, $status);
+        }
+
         $this->dispatch(EventInterface::AFTER_SUITE, $event);
 
         return $status;
