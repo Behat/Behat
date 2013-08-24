@@ -22,7 +22,7 @@ use Behat\Gherkin\Node\StepNode;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepSkipTester extends StepTester
+class SkipStepTester extends StepTester
 {
     /**
      * Skips step testing.

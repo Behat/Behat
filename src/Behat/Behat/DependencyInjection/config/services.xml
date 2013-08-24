@@ -356,7 +356,7 @@
             <argument type="service" id="tester.outline"/>
             <argument type="service" id="tester.outline_example"/>
             <argument type="service" id="tester.step"/>
-            <argument type="service" id="tester.step_skip"/>
+            <argument type="service" id="tester.skip_step"/>
             <argument>%options.dry_run%</argument>
             <tag name="event_subscriber"/>
         </service>
@@ -401,8 +401,8 @@
             <argument type="service" id="event_dispatcher"/>
         </service>
 
-        <service id="tester.step_skip"
-                 class="Behat\Behat\Tester\StepSkipTester">
+        <service id="tester.skip_step"
+                 class="Behat\Behat\Tester\SkipStepTester">
             <argument type="service" id="event_dispatcher"/>
         </service>
 

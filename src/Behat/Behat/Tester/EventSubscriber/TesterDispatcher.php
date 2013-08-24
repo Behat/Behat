@@ -24,6 +24,7 @@ use Behat\Behat\Tester\FeatureTester;
 use Behat\Behat\Tester\OutlineExampleTester;
 use Behat\Behat\Tester\OutlineTester;
 use Behat\Behat\Tester\ScenarioTester;
+use Behat\Behat\Tester\SkipStepTester;
 use Behat\Behat\Tester\StepSkipTester;
 use Behat\Behat\Tester\StepTester;
 use Behat\Behat\Tester\SuiteTester;
@@ -45,7 +46,7 @@ class TesterDispatcher implements EventSubscriberInterface
     private $outlineTester;
     private $outlineExampleTester;
     private $stepTester;
-    private $stepSkipTester;
+    private $skipStepTester;
     private $skip = false;
 
     /**
@@ -59,7 +60,7 @@ class TesterDispatcher implements EventSubscriberInterface
      * @param OutlineTester        $outlineTester
      * @param OutlineExampleTester $outlineExampleTester
      * @param StepTester           $stepTester
-     * @param StepSkipTester       $stepSkipTester
+     * @param SkipStepTester       $skipStepTester
      * @param Boolean              $skip
      */
     public function __construct(
@@ -71,7 +72,7 @@ class TesterDispatcher implements EventSubscriberInterface
         OutlineTester $outlineTester,
         OutlineExampleTester $outlineExampleTester,
         StepTester $stepTester,
-        StepSkipTester $stepSkipTester,
+        SkipStepTester $skipStepTester,
         $skip = false
     )
     {
@@ -83,7 +84,7 @@ class TesterDispatcher implements EventSubscriberInterface
         $this->outlineTester = $outlineTester;
         $this->outlineExampleTester = $outlineExampleTester;
         $this->stepTester = $stepTester;
-        $this->stepSkipTester = $stepSkipTester;
+        $this->skipStepTester = $skipStepTester;
         $this->skip = $skip;
     }
 
@@ -184,7 +185,7 @@ class TesterDispatcher implements EventSubscriberInterface
      */
     public function setStepTester(StepTesterCarrierEvent $event)
     {
-        $tester = $this->skip || ($event instanceof SkipStepTesterCarrierEvent) ? $this->stepSkipTester : $this->stepTester;
+        $tester = $this->skip || ($event instanceof SkipStepTesterCarrierEvent) ? $this->skipStepTester : $this->stepTester;
 
         $event->setTester($tester);
     }
