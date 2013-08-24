@@ -44,13 +44,13 @@ class StepSkipTester extends StepTester
         $event = new StepEvent($suite, $contexts, $scenario, $step);
         $this->dispatch(EventInterface::BEFORE_STEP, $event);
 
-        $result = StepEvent::SKIPPED;
+        $status = StepEvent::SKIPPED;
         $execution = $exception = $snippet = null;
 
         try {
             $execution = $this->getExecutionEvent($suite, $contexts, $step);
         } catch (UndefinedException $e) {
-            $result = StepEvent::UNDEFINED;
+            $status = StepEvent::UNDEFINED;
             $exception = $e;
             $snippet = $this->getDefinitionSnippet($suite, $contexts, $step);
         }
@@ -59,10 +59,10 @@ class StepSkipTester extends StepTester
         $definition = $execution ? $execution->getCallee() : null;
 
         $event = new StepEvent(
-            $suite, $contexts, $scenario, $step, $result, $stdOut, $exception, $definition, $snippet
+            $suite, $contexts, $scenario, $step, $status, $stdOut, $exception, $definition, $snippet
         );
         $this->dispatch(EventInterface::AFTER_STEP, $event);
 
-        return $result;
+        return $status;
     }
 }

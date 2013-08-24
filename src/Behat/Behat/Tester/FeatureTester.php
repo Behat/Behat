@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester;
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\FeatureEvent;
+use Behat\Behat\Event\StepEvent;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Behat\Tester\Event\ScenarioTesterCarrierEvent;
@@ -40,16 +41,16 @@ class FeatureTester extends DispatchingService
         $event = new FeatureEvent($suite, $contexts, $feature);
         $this->dispatch(EventInterface::BEFORE_FEATURE, $event);
 
-        $result = 0;
+        $status = StepEvent::PASSED;
         foreach ($feature->getScenarios() as $scenario) {
             $tester = $this->getScenarioTester($suite, $contexts, $scenario);
-            $result = max($result, $tester->test($suite, $contexts, $scenario));
+            $status = max($status, $tester->test($suite, $contexts, $scenario));
         }
 
-        $event = new FeatureEvent($suite, $contexts, $feature, $result);
+        $event = new FeatureEvent($suite, $contexts, $feature, $status);
         $this->dispatch(EventInterface::AFTER_FEATURE, $event);
 
-        return $result;
+        return $status;
     }
 
     /**

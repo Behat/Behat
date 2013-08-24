@@ -52,21 +52,21 @@ class StepTester extends DispatchingService
         $event = new StepEvent($suite, $contexts, $scenario, $step);
         $this->dispatch(EventInterface::BEFORE_STEP, $event);
 
-        $result = StepEvent::PASSED;
+        $status = StepEvent::PASSED;
         $execution = $exception = $snippet = null;
 
         try {
             $execution = $this->getExecutionEvent($suite, $contexts, $step);
             $this->dispatch(EventInterface::EXECUTE_DEFINITION, $execution);
         } catch (PendingException $e) {
-            $result = StepEvent::PENDING;
+            $status = StepEvent::PENDING;
             $exception = $e;
         } catch (UndefinedException $e) {
-            $result = StepEvent::UNDEFINED;
+            $status = StepEvent::UNDEFINED;
             $exception = $e;
             $snippet = $this->getDefinitionSnippet($suite, $contexts, $step);
         } catch (Exception $e) {
-            $result = StepEvent::FAILED;
+            $status = StepEvent::FAILED;
             $exception = $e;
         }
 
@@ -74,11 +74,11 @@ class StepTester extends DispatchingService
         $definition = $execution ? $execution->getCallee() : null;
 
         $event = new StepEvent(
-            $suite, $contexts, $scenario, $step, $result, $stdOut, $exception, $definition, $snippet
+            $suite, $contexts, $scenario, $step, $status, $stdOut, $exception, $definition, $snippet
         );
         $this->dispatch(EventInterface::AFTER_STEP, $event);
 
-        return $result;
+        return $status;
     }
 
     /**

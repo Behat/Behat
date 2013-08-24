@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester;
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\OutlineExampleEvent;
+use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\OutlineNode;
 
@@ -46,24 +47,24 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
         $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration);
         $this->dispatch(EventInterface::BEFORE_OUTLINE_EXAMPLE, $event);
 
-        $result = 0;
+        $status = StepEvent::PASSED;
         if ($outline->getFeature()->hasBackground()) {
             $background = $outline->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
-            $result = $tester->test($suite, $outline, $background, $contexts);
+            $status = $tester->test($suite, $outline, $background, $contexts);
         }
 
         foreach ($outline->getSteps() as $step) {
             $step = $step->createExampleRowStep($tokens);
 
-            $tester = $this->getStepTester($suite, $contexts, $step, $result);
-            $result = max($result, $tester->test($suite, $contexts, $step, $outline));
+            $tester = $this->getStepTester($suite, $contexts, $step, $status);
+            $status = max($status, $tester->test($suite, $contexts, $step, $outline));
         }
 
-        $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration, $result);
+        $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration, $status);
         $this->dispatch(EventInterface::AFTER_OUTLINE_EXAMPLE, $event);
 
-        return $result;
+        return $status;
     }
 }

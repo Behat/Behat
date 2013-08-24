@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester;
 use Behat\Behat\Context\Event\ContextPoolCarrierEvent;
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Event\SuiteEvent;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\SuiteInterface;
@@ -41,16 +42,16 @@ class SuiteTester extends DispatchingService
         $event = new SuiteEvent($suite, $contexts);
         $this->dispatch(EventInterface::BEFORE_SUITE, $event);
 
-        $result = 0;
+        $status = StepEvent::PASSED;
         foreach ($features as $feature) {
             $tester = $this->getFeatureTester($suite, $contexts, $feature);
-            $result = max($result, $tester->test($suite, $contexts, $feature));
+            $status = max($status, $tester->test($suite, $contexts, $feature));
         }
 
-        $event = new SuiteEvent($suite, $contexts, $result);
+        $event = new SuiteEvent($suite, $contexts, $status);
         $this->dispatch(EventInterface::AFTER_SUITE, $event);
 
-        return $result;
+        return $status;
     }
 
     /**

@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester;
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\OutlineEvent;
+use Behat\Behat\Event\StepEvent;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Behat\Tester\Event\OutlineExampleTesterCarrierEvent;
@@ -39,16 +40,16 @@ class OutlineTester extends DispatchingService
         $event = new OutlineEvent($suite, $contexts, $outline);
         $this->dispatch(EventInterface::BEFORE_OUTLINE, $event);
 
-        $result = 0;
+        $status = StepEvent::PASSED;
         foreach ($outline->getExamples()->getHash() as $iteration => $tokens) {
             $tester = $this->getOutlineExampleTester($suite, $contexts, $outline, $iteration, $tokens);
-            $result = max($result, $tester->test($suite, $contexts, $outline, $iteration, $tokens));
+            $status = max($status, $tester->test($suite, $contexts, $outline, $iteration, $tokens));
         }
 
-        $event = new OutlineEvent($suite, $contexts, $outline, $result);
+        $event = new OutlineEvent($suite, $contexts, $outline, $status);
         $this->dispatch(EventInterface::AFTER_OUTLINE, $event);
 
-        return $result;
+        return $status;
     }
 
     /**

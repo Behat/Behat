@@ -11,6 +11,7 @@ namespace Behat\Behat\Tester;
  */
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExerciseEvent;
+use Behat\Behat\Event\StepEvent;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Features\SuitedFeature;
 use Behat\Behat\Suite\SuiteInterface;
@@ -50,16 +51,16 @@ class ExerciseTester extends DispatchingService
             $features[$suite->getId()][] = $feature;
         }
 
-        $result = 0;
+        $status = StepEvent::PASSED;
         foreach ($suites as $id => $suite) {
             $tester = $this->getSuiteTester($suite);
-            $result = max($result, $tester->test($suite, $features[$id]));
+            $status = max($status, $tester->test($suite, $features[$id]));
         }
 
         $event = new ExerciseEvent(true);
         $this->dispatch(EventInterface::AFTER_EXERCISE, $event);
 
-        return $result;
+        return $status;
     }
 
     /**

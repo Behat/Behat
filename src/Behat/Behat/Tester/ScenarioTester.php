@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester;
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ScenarioEvent;
+use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\ScenarioNode;
 
@@ -38,22 +39,22 @@ class ScenarioTester extends IsolatedStepCollectionTester
         $event = new ScenarioEvent($suite, $contexts, $scenario);
         $this->dispatch(EventInterface::BEFORE_SCENARIO, $event);
 
-        $result = 0;
+        $status = StepEvent::PASSED;
         if ($scenario->getFeature()->hasBackground()) {
             $background = $scenario->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
-            $result = $tester->test($suite, $scenario, $background, $contexts);
+            $status = $tester->test($suite, $scenario, $background, $contexts);
         }
 
         foreach ($scenario->getSteps() as $step) {
-            $tester = $this->getStepTester($suite, $contexts, $step, $result);
-            $result = max($result, $tester->test($suite, $contexts, $step, $scenario));
+            $tester = $this->getStepTester($suite, $contexts, $step, $status);
+            $status = max($status, $tester->test($suite, $contexts, $step, $scenario));
         }
 
-        $event = new ScenarioEvent($suite, $contexts, $scenario, $result);
+        $event = new ScenarioEvent($suite, $contexts, $scenario, $status);
         $this->dispatch(EventInterface::AFTER_SCENARIO, $event);
 
-        return $result;
+        return $status;
     }
 }

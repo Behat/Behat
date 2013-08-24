@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester;
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Event\BackgroundEvent;
 use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ScenarioNode;
@@ -43,15 +44,15 @@ class BackgroundTester extends StepCollectionTester
         $event = new BackgroundEvent($suite, $contexts, $scenario, $background);
         $this->dispatch(EventInterface::BEFORE_BACKGROUND, $event);
 
-        $result = 0;
+        $status = StepEvent::PASSED;
         foreach ($background->getSteps() as $step) {
-            $tester = $this->getStepTester($suite, $contexts, $step, $result);
-            $result = max($result, $tester->test($suite, $contexts, $step, $scenario));
+            $tester = $this->getStepTester($suite, $contexts, $step, $status);
+            $status = max($status, $tester->test($suite, $contexts, $step, $scenario));
         }
 
-        $event = new BackgroundEvent($suite, $contexts, $scenario, $background, $result);
+        $event = new BackgroundEvent($suite, $contexts, $scenario, $background, $status);
         $this->dispatch(EventInterface::AFTER_BACKGROUND, $event);
 
-        return $result;
+        return $status;
     }
 }

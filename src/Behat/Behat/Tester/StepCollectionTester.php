@@ -31,7 +31,7 @@ abstract class StepCollectionTester extends DispatchingService
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param StepNode             $step
-     * @param integer              $result
+     * @param integer              $status
      *
      * @return StepTester
      *
@@ -41,10 +41,10 @@ abstract class StepCollectionTester extends DispatchingService
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
         StepNode $step,
-        $result
+        $status
     )
     {
-        if (StepEvent::PASSED < $result) {
+        if (StepEvent::PASSED < $status) {
             $testerProvider = new SkipStepTesterCarrierEvent($suite, $contexts, $step);
         } else {
             $testerProvider = new StepTesterCarrierEvent($suite, $contexts, $step);
