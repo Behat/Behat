@@ -37,7 +37,7 @@ class BackgroundEvent extends StepCollectionEvent
      * @param ContextPoolInterface $contexts
      * @param ScenarioNode         $scenario
      * @param BackgroundNode       $background
-     * @param integer              $status
+     * @param null|integer         $status
      */
     public function __construct(
         SuiteInterface $suite,

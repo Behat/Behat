@@ -35,8 +35,8 @@ class OutlineExampleEvent extends StepCollectionEvent
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param OutlineNode          $outline
-     * @param integer              $iteration iteration number
-     * @param integer              $status
+     * @param integer              $iteration
+     * @param null|integer         $status
      */
     public function __construct(
         SuiteInterface $suite,

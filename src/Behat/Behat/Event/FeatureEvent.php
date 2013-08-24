@@ -40,7 +40,7 @@ class FeatureEvent extends Event implements LifecycleEventInterface
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param FeatureNode          $feature
-     * @param integer              $status
+     * @param null|integer         $status
      */
     public function __construct(
         SuiteInterface $suite,

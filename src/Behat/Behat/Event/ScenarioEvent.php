@@ -31,7 +31,7 @@ class ScenarioEvent extends StepCollectionEvent
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param ScenarioNode         $scenario
-     * @param integer              $status
+     * @param null|integer         $status
      */
     public function __construct(
         SuiteInterface $suite,

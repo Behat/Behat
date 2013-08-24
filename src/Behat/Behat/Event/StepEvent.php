@@ -55,15 +55,15 @@ class StepEvent extends Event implements LifecycleEventInterface
      */
     private $stdOut;
     /**
-     * @var DefinitionInterface
+     * @var null|DefinitionInterface
      */
     private $definition;
     /**
-     * @var Exception
+     * @var null|Exception
      */
     private $exception;
     /**
-     * @var SnippetInterface
+     * @var null|SnippetInterface
      */
     private $snippet;
 
@@ -156,7 +156,7 @@ class StepEvent extends Event implements LifecycleEventInterface
     /**
      * Returns step definition object.
      *
-     * @return DefinitionInterface
+     * @return null|DefinitionInterface
      */
     public function getDefinition()
     {
@@ -206,7 +206,7 @@ class StepEvent extends Event implements LifecycleEventInterface
     /**
      * Returns step tester exception.
      *
-     * @return Exception
+     * @return null|Exception
      */
     public function getException()
     {
@@ -226,7 +226,7 @@ class StepEvent extends Event implements LifecycleEventInterface
     /**
      * Returns step snippet.
      *
-     * @return SnippetInterface
+     * @return null|SnippetInterface
      */
     public function getSnippet()
     {

@@ -29,7 +29,7 @@ class SuiteEvent extends Event implements LifecycleEventInterface
      */
     private $contexts;
     /**
-     * @var integer
+     * @var null|integer
      */
     private $status;
 
@@ -38,7 +38,7 @@ class SuiteEvent extends Event implements LifecycleEventInterface
      *
      * @param SuiteInterface       $suite suite that being started
      * @param ContextPoolInterface $contexts
-     * @param integer              $status
+     * @param null|integer         $status
      */
     public function __construct(SuiteInterface $suite, ContextPoolInterface $contexts, $status = null)
     {
@@ -75,5 +75,15 @@ class SuiteEvent extends Event implements LifecycleEventInterface
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Checks whether suite is skipped.
+     *
+     * @return Boolean
+     */
+    public function isSkipped()
+    {
+        return StepEvent::SKIPPED === $this->status;
     }
 }
