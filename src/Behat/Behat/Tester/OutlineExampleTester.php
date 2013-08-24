@@ -53,19 +53,19 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
         !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
 
         if ($outline->getFeature()->hasBackground()) {
+            $skip = StepEvent::PASSED !== $status;
             $background = $outline->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
             $status = $tester->test($suite, $outline, $background, $contexts, $skip);
-            $skip = StepEvent::PASSED !== $status;
         }
 
         foreach ($outline->getSteps() as $step) {
+            $skip = StepEvent::PASSED !== $status;
             $step = $step->createExampleRowStep($tokens);
 
             $tester = $this->getStepTester($suite, $contexts, $step);
             $status = max($status, $tester->test($suite, $contexts, $step, $outline, $skip));
-            $skip = StepEvent::PASSED !== $status;
         }
 
         $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration, $status);

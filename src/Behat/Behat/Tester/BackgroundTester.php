@@ -49,9 +49,10 @@ class BackgroundTester extends StepCollectionTester
         $this->dispatch(EventInterface::BEFORE_BACKGROUND, $event);
 
         foreach ($background->getSteps() as $step) {
+            $skip = StepEvent::PASSED !== $status;
+
             $tester = $this->getStepTester($suite, $contexts, $step);
             $status = max($status, $tester->test($suite, $contexts, $step, $scenario, $skip));
-            $skip = StepEvent::PASSED !== $status;
         }
 
         $event = new BackgroundEvent($suite, $contexts, $scenario, $background, $status);
