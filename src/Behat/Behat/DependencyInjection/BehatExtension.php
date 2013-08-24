@@ -9,13 +9,12 @@ namespace Behat\Behat\DependencyInjection;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\DependencyInjection\Configuration\Services;
 use Behat\Behat\Extension\ExtensionManager;
 use ReflectionClass;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
@@ -101,8 +100,8 @@ class BehatExtension
      */
     protected function registerDefaults(ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/config'));
-        $loader->load('services.xml');
+        $configuration = new Services();
+        $configuration->process($container);
 
         $behatClassLoaderReflection = new ReflectionClass('Behat\Behat\Console\BehatApplication');
         $gherkinParserReflection = new ReflectionClass('Behat\Gherkin\Gherkin');
@@ -147,7 +146,10 @@ class BehatExtension
             $suiteDefinition->setFactoryService('suite.suite_factory');
             $suiteDefinition->setFactoryMethod('createSuite');
             $suiteDefinition->setArguments(array(
-                $name, $config['type'], $config['settings'], $config['parameters']
+                $name,
+                $config['type'],
+                $config['settings'],
+                $config['parameters']
             ));
 
             $loaderDefinition->addMethodCall('registerSuite', array($suiteDefinition));
