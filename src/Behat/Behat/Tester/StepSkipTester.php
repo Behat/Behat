@@ -41,10 +41,11 @@ class StepSkipTester extends StepTester
         ScenarioNode $scenario
     )
     {
+        $status = StepEvent::SKIPPED;
+
         $event = new StepEvent($suite, $contexts, $scenario, $step);
         $this->dispatch(EventInterface::BEFORE_STEP, $event);
 
-        $status = StepEvent::SKIPPED;
         $execution = $exception = $snippet = null;
 
         try {

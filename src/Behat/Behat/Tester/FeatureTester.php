@@ -38,10 +38,11 @@ class FeatureTester extends DispatchingService
      */
     public function test(SuiteInterface $suite, ContextPoolInterface $contexts, FeatureNode $feature)
     {
+        $status = StepEvent::PASSED;
+
         $event = new FeatureEvent($suite, $contexts, $feature);
         $this->dispatch(EventInterface::BEFORE_FEATURE, $event);
 
-        $status = StepEvent::PASSED;
         foreach ($feature->getScenarios() as $scenario) {
             $tester = $this->getScenarioTester($suite, $contexts, $scenario);
             $status = max($status, $tester->test($suite, $contexts, $scenario));

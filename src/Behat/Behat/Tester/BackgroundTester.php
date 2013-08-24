@@ -41,10 +41,11 @@ class BackgroundTester extends StepCollectionTester
         ContextPoolInterface $contexts
     )
     {
+        $status = StepEvent::PASSED;
+
         $event = new BackgroundEvent($suite, $contexts, $scenario, $background);
         $this->dispatch(EventInterface::BEFORE_BACKGROUND, $event);
 
-        $status = StepEvent::PASSED;
         foreach ($background->getSteps() as $step) {
             $tester = $this->getStepTester($suite, $contexts, $step, $status);
             $status = max($status, $tester->test($suite, $contexts, $step, $scenario));

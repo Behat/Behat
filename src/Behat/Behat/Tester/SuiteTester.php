@@ -37,12 +37,13 @@ class SuiteTester extends DispatchingService
      */
     public function test(SuiteInterface $suite, array $features)
     {
+        $status = StepEvent::PASSED;
+
         $contexts = $this->createContextPool($suite);
 
         $event = new SuiteEvent($suite, $contexts);
         $this->dispatch(EventInterface::BEFORE_SUITE, $event);
 
-        $status = StepEvent::PASSED;
         foreach ($features as $feature) {
             $tester = $this->getFeatureTester($suite, $contexts, $feature);
             $status = max($status, $tester->test($suite, $contexts, $feature));

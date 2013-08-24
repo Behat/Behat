@@ -49,10 +49,11 @@ class StepTester extends DispatchingService
         ScenarioNode $scenario
     )
     {
+        $status = StepEvent::PASSED;
+
         $event = new StepEvent($suite, $contexts, $scenario, $step);
         $this->dispatch(EventInterface::BEFORE_STEP, $event);
 
-        $status = StepEvent::PASSED;
         $execution = $exception = $snippet = null;
 
         try {

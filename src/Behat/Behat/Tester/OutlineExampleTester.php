@@ -42,12 +42,13 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
         array $tokens
     )
     {
+        $status = StepEvent::PASSED;
+
         $contexts = $this->initializeContextPool($suite, $contexts);
 
         $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration);
         $this->dispatch(EventInterface::BEFORE_OUTLINE_EXAMPLE, $event);
 
-        $status = StepEvent::PASSED;
         if ($outline->getFeature()->hasBackground()) {
             $background = $outline->getFeature()->getBackground();
 

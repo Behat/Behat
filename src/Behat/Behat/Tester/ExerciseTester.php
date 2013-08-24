@@ -34,6 +34,8 @@ class ExerciseTester extends DispatchingService
      */
     public function test(array $suitedFeatures)
     {
+        $status = StepEvent::PASSED;
+
         $event = new ExerciseEvent(false);
         $this->dispatch(EventInterface::BEFORE_EXERCISE, $event);
 
@@ -51,7 +53,6 @@ class ExerciseTester extends DispatchingService
             $features[$suite->getId()][] = $feature;
         }
 
-        $status = StepEvent::PASSED;
         foreach ($suites as $id => $suite) {
             $tester = $this->getSuiteTester($suite);
             $status = max($status, $tester->test($suite, $features[$id]));

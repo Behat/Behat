@@ -34,12 +34,13 @@ class ScenarioTester extends IsolatedStepCollectionTester
      */
     public function test(SuiteInterface $suite, ContextPoolInterface $contexts, ScenarioNode $scenario)
     {
+        $status = StepEvent::PASSED;
+
         $contexts = $this->initializeContextPool($suite, $contexts);
 
         $event = new ScenarioEvent($suite, $contexts, $scenario);
         $this->dispatch(EventInterface::BEFORE_SCENARIO, $event);
 
-        $status = StepEvent::PASSED;
         if ($scenario->getFeature()->hasBackground()) {
             $background = $scenario->getFeature()->getBackground();
 
