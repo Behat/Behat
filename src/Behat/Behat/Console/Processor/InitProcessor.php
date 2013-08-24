@@ -126,7 +126,7 @@ class InitProcessor extends DispatchingService implements ProcessorInterface
      */
     public function getPriority()
     {
-        return 90;
+        return 80;
     }
 
     /**

@@ -31,6 +31,7 @@ class BackgroundTester extends StepCollectionTester
      * @param ScenarioNode         $scenario
      * @param BackgroundNode       $background
      * @param ContextPoolInterface $contexts
+     * @param Boolean              $skip
      *
      * @return integer
      */
@@ -38,17 +39,19 @@ class BackgroundTester extends StepCollectionTester
         SuiteInterface $suite,
         ScenarioNode $scenario,
         BackgroundNode $background,
-        ContextPoolInterface $contexts
+        ContextPoolInterface $contexts,
+        $skip = false
     )
     {
-        $status = StepEvent::PASSED;
+        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
 
         $event = new BackgroundEvent($suite, $contexts, $scenario, $background);
         $this->dispatch(EventInterface::BEFORE_BACKGROUND, $event);
 
         foreach ($background->getSteps() as $step) {
-            $tester = $this->getStepTester($suite, $contexts, $step, $status);
-            $status = max($status, $tester->test($suite, $contexts, $step, $scenario));
+            $tester = $this->getStepTester($suite, $contexts, $step);
+            $status = max($status, $tester->test($suite, $contexts, $step, $scenario, $skip));
+            $skip = StepEvent::PASSED !== $status;
         }
 
         $event = new BackgroundEvent($suite, $contexts, $scenario, $background, $status);

@@ -39,6 +39,7 @@ class StepTester extends DispatchingService
      * @param ContextPoolInterface $contexts
      * @param StepNode             $step
      * @param ScenarioNode         $scenario
+     * @param Boolean              $skip
      *
      * @return integer
      */
@@ -46,20 +47,21 @@ class StepTester extends DispatchingService
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
         StepNode $step,
-        ScenarioNode $scenario
+        ScenarioNode $scenario,
+        $skip = false
     )
     {
-        $status = StepEvent::PASSED;
+        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
 
         $event = new StepEvent($suite, $contexts, $scenario, $step);
         $this->dispatch(EventInterface::BEFORE_STEP, $event);
-        $this->dispatch(EventInterface::HOOKABLE_BEFORE_STEP, $event);
+        !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_STEP, $event);
 
         $execution = $exception = $snippet = null;
 
         try {
             $execution = $this->getExecutionEvent($suite, $contexts, $step);
-            $this->dispatch(EventInterface::EXECUTE_DEFINITION, $execution);
+            !$skip && $this->dispatch(EventInterface::EXECUTE_DEFINITION, $execution);
         } catch (PendingException $e) {
             $status = StepEvent::PENDING;
             $exception = $e;
@@ -78,7 +80,7 @@ class StepTester extends DispatchingService
         $event = new StepEvent(
             $suite, $contexts, $scenario, $step, $status, $stdOut, $exception, $definition, $snippet
         );
-        $this->dispatch(EventInterface::HOOKABLE_AFTER_STEP, $event);
+        !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_STEP, $event);
         $this->dispatch(EventInterface::AFTER_STEP, $event);
 
         return $status;

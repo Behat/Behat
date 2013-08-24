@@ -12,10 +12,8 @@ namespace Behat\Behat\Tester;
 
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Event\EventInterface;
-use Behat\Behat\Event\StepEvent;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\SuiteInterface;
-use Behat\Behat\Tester\Event\SkipStepTesterCarrierEvent;
 use Behat\Behat\Tester\Event\StepTesterCarrierEvent;
 use Behat\Gherkin\Node\StepNode;
 use RuntimeException;
@@ -31,24 +29,14 @@ abstract class StepCollectionTester extends DispatchingService
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param StepNode             $step
-     * @param integer              $status
      *
      * @return StepTester
      *
      * @throws RuntimeException If step tester is not found
      */
-    protected function getStepTester(
-        SuiteInterface $suite,
-        ContextPoolInterface $contexts,
-        StepNode $step,
-        $status
-    )
+    protected function getStepTester(SuiteInterface $suite, ContextPoolInterface $contexts, StepNode $step)
     {
-        if (StepEvent::PASSED < $status) {
-            $testerProvider = new SkipStepTesterCarrierEvent($suite, $contexts, $step);
-        } else {
-            $testerProvider = new StepTesterCarrierEvent($suite, $contexts, $step);
-        }
+        $testerProvider = new StepTesterCarrierEvent($suite, $contexts, $step);
 
         $this->dispatch(EventInterface::CREATE_STEP_TESTER, $testerProvider);
         if (!$testerProvider->hasTester()) {

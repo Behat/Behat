@@ -69,6 +69,6 @@ class StopOnFailureProcessor implements ProcessorInterface
      */
     public function getPriority()
     {
-        return 30;
+        return 20;
     }
 }

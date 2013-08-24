@@ -33,24 +33,30 @@ class FeatureTester extends DispatchingService
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param FeatureNode          $feature
+     * @param Boolean              $skip
      *
      * @return integer
      */
-    public function test(SuiteInterface $suite, ContextPoolInterface $contexts, FeatureNode $feature)
+    public function test(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        FeatureNode $feature,
+        $skip = false
+    )
     {
-        $status = StepEvent::PASSED;
+        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
 
         $event = new FeatureEvent($suite, $contexts, $feature);
         $this->dispatch(EventInterface::BEFORE_FEATURE, $event);
-        $this->dispatch(EventInterface::HOOKABLE_BEFORE_FEATURE, $event);
+        !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_FEATURE, $event);
 
         foreach ($feature->getScenarios() as $scenario) {
             $tester = $this->getScenarioTester($suite, $contexts, $scenario);
-            $status = max($status, $tester->test($suite, $contexts, $scenario));
+            $status = max($status, $tester->test($suite, $contexts, $scenario, $skip));
         }
 
         $event = new FeatureEvent($suite, $contexts, $feature, $status);
-        $this->dispatch(EventInterface::HOOKABLE_AFTER_FEATURE, $event);
+        !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_FEATURE, $event);
         $this->dispatch(EventInterface::AFTER_FEATURE, $event);
 
         return $status;

@@ -32,26 +32,27 @@ class SuiteTester extends DispatchingService
      *
      * @param SuiteInterface $suite
      * @param FeatureNode[]  $features
+     * @param Boolean        $skip
      *
      * @return integer
      */
-    public function test(SuiteInterface $suite, array $features)
+    public function test(SuiteInterface $suite, array $features, $skip = false)
     {
-        $status = StepEvent::PASSED;
+        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
 
         $contexts = $this->createContextPool($suite);
 
         $event = new SuiteEvent($suite, $contexts);
         $this->dispatch(EventInterface::BEFORE_SUITE, $event);
-        $this->dispatch(EventInterface::HOOKABLE_BEFORE_SUITE, $event);
+        !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_SUITE, $event);
 
         foreach ($features as $feature) {
             $tester = $this->getFeatureTester($suite, $contexts, $feature);
-            $status = max($status, $tester->test($suite, $contexts, $feature));
+            $status = max($status, $tester->test($suite, $contexts, $feature, $skip));
         }
 
         $event = new SuiteEvent($suite, $contexts, $status);
-        $this->dispatch(EventInterface::HOOKABLE_AFTER_SUITE, $event);
+        !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_SUITE, $event);
         $this->dispatch(EventInterface::AFTER_SUITE, $event);
 
         return $status;

@@ -29,12 +29,13 @@ class ExerciseTester extends DispatchingService
      * Tests suited features.
      *
      * @param SuitedFeature[] $suitedFeatures
+     * @param Boolean         $skip
      *
      * @return integer
      */
-    public function test(array $suitedFeatures)
+    public function test(array $suitedFeatures, $skip = false)
     {
-        $status = StepEvent::PASSED;
+        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
 
         $event = new ExerciseEvent(false);
         $this->dispatch(EventInterface::BEFORE_EXERCISE, $event);
@@ -55,7 +56,7 @@ class ExerciseTester extends DispatchingService
 
         foreach ($suites as $id => $suite) {
             $tester = $this->getSuiteTester($suite);
-            $status = max($status, $tester->test($suite, $features[$id]));
+            $status = max($status, $tester->test($suite, $features[$id], $skip));
         }
 
         $event = new ExerciseEvent(true);

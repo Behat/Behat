@@ -32,19 +32,25 @@ class OutlineTester extends DispatchingService
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param OutlineNode          $outline
+     * @param Boolean              $skip
      *
      * @return integer
      */
-    public function test(SuiteInterface $suite, ContextPoolInterface $contexts, OutlineNode $outline)
+    public function test(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        OutlineNode $outline,
+        $skip = false
+    )
     {
-        $status = StepEvent::PASSED;
+        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
 
         $event = new OutlineEvent($suite, $contexts, $outline);
         $this->dispatch(EventInterface::BEFORE_OUTLINE, $event);
 
         foreach ($outline->getExamples()->getHash() as $iteration => $tokens) {
             $tester = $this->getOutlineExampleTester($suite, $contexts, $outline, $iteration, $tokens);
-            $status = max($status, $tester->test($suite, $contexts, $outline, $iteration, $tokens));
+            $status = max($status, $tester->test($suite, $contexts, $outline, $iteration, $tokens, $skip));
         }
 
         $event = new OutlineEvent($suite, $contexts, $outline, $status);

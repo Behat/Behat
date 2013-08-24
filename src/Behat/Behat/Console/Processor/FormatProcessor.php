@@ -139,7 +139,7 @@ class FormatProcessor implements ProcessorInterface
      */
     public function getPriority()
     {
-        return 50;
+        return 40;
     }
 
     /**

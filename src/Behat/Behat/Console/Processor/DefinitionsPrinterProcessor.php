@@ -105,6 +105,6 @@ class DefinitionsPrinterProcessor extends DispatchingService implements Processo
      */
     public function getPriority()
     {
-        return 70;
+        return 60;
     }
 }

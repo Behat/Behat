@@ -31,6 +31,7 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
      * @param OutlineNode          $outline
      * @param integer              $iteration
      * @param array                $tokens
+     * @param Boolean              $skip
      *
      * @return integer
      */
@@ -39,33 +40,36 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
         ContextPoolInterface $contexts,
         OutlineNode $outline,
         $iteration,
-        array $tokens
+        array $tokens,
+        $skip = false
     )
     {
-        $status = StepEvent::PASSED;
+        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
 
         $contexts = $this->initializeContextPool($suite, $contexts);
 
         $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration);
         $this->dispatch(EventInterface::BEFORE_OUTLINE_EXAMPLE, $event);
-        $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
+        !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
 
         if ($outline->getFeature()->hasBackground()) {
             $background = $outline->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
-            $status = $tester->test($suite, $outline, $background, $contexts);
+            $status = $tester->test($suite, $outline, $background, $contexts, $skip);
+            $skip = StepEvent::PASSED !== $status;
         }
 
         foreach ($outline->getSteps() as $step) {
             $step = $step->createExampleRowStep($tokens);
 
-            $tester = $this->getStepTester($suite, $contexts, $step, $status);
-            $status = max($status, $tester->test($suite, $contexts, $step, $outline));
+            $tester = $this->getStepTester($suite, $contexts, $step);
+            $status = max($status, $tester->test($suite, $contexts, $step, $outline, $skip));
+            $skip = StepEvent::PASSED !== $status;
         }
 
         $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration, $status);
-        $this->dispatch(EventInterface::HOOKABLE_AFTER_SCENARIO, $event);
+        !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_SCENARIO, $event);
         $this->dispatch(EventInterface::AFTER_OUTLINE_EXAMPLE, $event);
 
         return $status;

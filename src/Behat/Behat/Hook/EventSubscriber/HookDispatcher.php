@@ -16,7 +16,6 @@ use Behat\Behat\Event\LifecycleEventInterface;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Hook\Event\HooksCarrierEvent;
 use Exception;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -26,24 +25,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class HookDispatcher extends DispatchingService implements EventSubscriberInterface
 {
-    /**
-     * @var Boolean
-     */
-    private $skip = false;
-
-    /**
-     * Initializes dispatcher.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param Boolean                  $skip
-     */
-    public function __construct(EventDispatcherInterface $eventDispatcher, $skip = false)
-    {
-        parent::__construct($eventDispatcher);
-
-        $this->skip = (bool)$skip;
-    }
-
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
@@ -64,16 +45,6 @@ class HookDispatcher extends DispatchingService implements EventSubscriberInterf
     }
 
     /**
-     * Tells dispatcher to skip all hooks.
-     *
-     * @param Boolean $skip
-     */
-    public function skipHooks($skip = true)
-    {
-        $this->skip = (bool)$skip;
-    }
-
-    /**
      * Runs hooks with specified name.
      *
      * @param LifecycleEventInterface $event An event to which hooks glued
@@ -82,12 +53,6 @@ class HookDispatcher extends DispatchingService implements EventSubscriberInterf
      */
     public function dispatchHooks(LifecycleEventInterface $event)
     {
-        // TODO: skip hooks of failed steps and scenarios
-        // TODO: remove skip states from hook and tester dispatchers
-        if ($this->skip) {
-            return;
-        }
-
         $suite = $event->getSuite();
         $contexts = $event->getContextPool();
 

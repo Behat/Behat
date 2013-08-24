@@ -34,18 +34,24 @@ class RunProcessor extends DispatchingService implements ProcessorInterface
     /**
      * @var Boolean
      */
+    private $skip;
+    /**
+     * @var Boolean
+     */
     private $strict;
 
     /**
      * Initializes processor.
      *
      * @param EventDispatcherInterface $eventDispatcher
+     * @param Boolean                  $skip
      * @param Boolean                  $strict
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, $strict = false)
+    public function __construct(EventDispatcherInterface $eventDispatcher, $skip = false, $strict = false)
     {
         parent::__construct($eventDispatcher);
 
+        $this->skip = $skip;
         $this->strict = $strict;
     }
 
@@ -67,6 +73,9 @@ class RunProcessor extends DispatchingService implements ProcessorInterface
             )
             ->addOption('--strict', null, InputOption::VALUE_NONE,
                 'Fail if there are any undefined or pending steps.'
+            )
+            ->addOption('--dry-run', null, InputOption::VALUE_NONE,
+                'Invokes formatters without executing the steps & hooks.'
             )
             ->addOption('--suite', null, InputOption::VALUE_REQUIRED,
                 'Only execute features that belong to given suite.'
@@ -90,7 +99,7 @@ class RunProcessor extends DispatchingService implements ProcessorInterface
             $features = array_merge($features, $this->getFeatures($locator, $suiteName));
         }
 
-        $result = $this->getExerciseTester()->test($features);
+        $result = $this->getExerciseTester()->test($features, $input->getOption('dry-run') || $this->skip);
 
         if ($this->strict || $input->getOption('strict')) {
             return intval(StepEvent::PASSED < $result);

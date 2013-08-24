@@ -77,6 +77,6 @@ class StorySyntaxPrinterProcessor implements ProcessorInterface
      */
     public function getPriority()
     {
-        return 80;
+        return 70;
     }
 }

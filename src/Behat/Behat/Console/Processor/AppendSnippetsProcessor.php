@@ -83,6 +83,6 @@ class AppendSnippetsProcessor implements ProcessorInterface
      */
     public function getPriority()
     {
-        return 40;
+        return 30;
     }
 }

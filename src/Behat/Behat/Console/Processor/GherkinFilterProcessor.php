@@ -88,6 +88,6 @@ class GherkinFilterProcessor implements ProcessorInterface
      */
     public function getPriority()
     {
-        return 60;
+        return 50;
     }
 }

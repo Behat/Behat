@@ -16,7 +16,6 @@ use Behat\Behat\Tester\Event\ExerciseTesterCarrierEvent;
 use Behat\Behat\Tester\Event\FeatureTesterCarrierEvent;
 use Behat\Behat\Tester\Event\OutlineExampleTesterCarrierEvent;
 use Behat\Behat\Tester\Event\ScenarioTesterCarrierEvent;
-use Behat\Behat\Tester\Event\SkipStepTesterCarrierEvent;
 use Behat\Behat\Tester\Event\StepTesterCarrierEvent;
 use Behat\Behat\Tester\Event\SuiteTesterCarrierEvent;
 use Behat\Behat\Tester\ExerciseTester;
@@ -24,8 +23,6 @@ use Behat\Behat\Tester\FeatureTester;
 use Behat\Behat\Tester\OutlineExampleTester;
 use Behat\Behat\Tester\OutlineTester;
 use Behat\Behat\Tester\ScenarioTester;
-use Behat\Behat\Tester\SkipStepTester;
-use Behat\Behat\Tester\StepSkipTester;
 use Behat\Behat\Tester\StepTester;
 use Behat\Behat\Tester\SuiteTester;
 use Behat\Gherkin\Node\OutlineNode;
@@ -46,8 +43,6 @@ class TesterDispatcher implements EventSubscriberInterface
     private $outlineTester;
     private $outlineExampleTester;
     private $stepTester;
-    private $skipStepTester;
-    private $skip = false;
 
     /**
      * Initializes dispatcher.
@@ -60,8 +55,6 @@ class TesterDispatcher implements EventSubscriberInterface
      * @param OutlineTester        $outlineTester
      * @param OutlineExampleTester $outlineExampleTester
      * @param StepTester           $stepTester
-     * @param SkipStepTester       $skipStepTester
-     * @param Boolean              $skip
      */
     public function __construct(
         ExerciseTester $exerciseTester,
@@ -71,9 +64,7 @@ class TesterDispatcher implements EventSubscriberInterface
         ScenarioTester $scenarioTester,
         OutlineTester $outlineTester,
         OutlineExampleTester $outlineExampleTester,
-        StepTester $stepTester,
-        SkipStepTester $skipStepTester,
-        $skip = false
+        StepTester $stepTester
     )
     {
         $this->exerciseTester = $exerciseTester;
@@ -84,8 +75,6 @@ class TesterDispatcher implements EventSubscriberInterface
         $this->outlineTester = $outlineTester;
         $this->outlineExampleTester = $outlineExampleTester;
         $this->stepTester = $stepTester;
-        $this->skipStepTester = $skipStepTester;
-        $this->skip = $skip;
     }
 
     /**
@@ -104,16 +93,6 @@ class TesterDispatcher implements EventSubscriberInterface
             EventInterface::CREATE_OUTLINE_EXAMPLE_TESTER => array('setOutlineExampleTester', 0),
             EventInterface::CREATE_STEP_TESTER            => array('setStepTester', 0),
         );
-    }
-
-    /**
-     * Tells dispatcher to skip step tests.
-     *
-     * @param Boolean $skip
-     */
-    public function skipStepTests($skip = true)
-    {
-        $this->skip = (bool)$skip;
     }
 
     /**
@@ -185,8 +164,6 @@ class TesterDispatcher implements EventSubscriberInterface
      */
     public function setStepTester(StepTesterCarrierEvent $event)
     {
-        $tester = $this->skip || ($event instanceof SkipStepTesterCarrierEvent) ? $this->skipStepTester : $this->stepTester;
-
-        $event->setTester($tester);
+        $event->setTester($this->stepTester);
     }
 }

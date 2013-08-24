@@ -29,33 +29,41 @@ class ScenarioTester extends IsolatedStepCollectionTester
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param ScenarioNode         $scenario
+     * @param Boolean              $skip
      *
      * @return integer
      */
-    public function test(SuiteInterface $suite, ContextPoolInterface $contexts, ScenarioNode $scenario)
+    public function test(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        ScenarioNode $scenario,
+        $skip = false
+    )
     {
-        $status = StepEvent::PASSED;
+        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
 
         $contexts = $this->initializeContextPool($suite, $contexts);
 
         $event = new ScenarioEvent($suite, $contexts, $scenario);
         $this->dispatch(EventInterface::BEFORE_SCENARIO, $event);
-        $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
+        !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
 
         if ($scenario->getFeature()->hasBackground()) {
             $background = $scenario->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
-            $status = $tester->test($suite, $scenario, $background, $contexts);
+            $status = $tester->test($suite, $scenario, $background, $contexts, $skip);
+            $skip = StepEvent::PASSED !== $status;
         }
 
         foreach ($scenario->getSteps() as $step) {
-            $tester = $this->getStepTester($suite, $contexts, $step, $status);
-            $status = max($status, $tester->test($suite, $contexts, $step, $scenario));
+            $tester = $this->getStepTester($suite, $contexts, $step);
+            $status = max($status, $tester->test($suite, $contexts, $step, $scenario, $skip));
+            $skip = StepEvent::PASSED !== $status;
         }
 
         $event = new ScenarioEvent($suite, $contexts, $scenario, $status);
-        $this->dispatch(EventInterface::HOOKABLE_AFTER_SCENARIO, $event);
+        !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_SCENARIO, $event);
         $this->dispatch(EventInterface::AFTER_SCENARIO, $event);
 
         return $status;

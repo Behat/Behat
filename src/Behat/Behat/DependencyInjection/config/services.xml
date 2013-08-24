@@ -40,13 +40,6 @@
             <tag name="console.processor"/>
         </service>
 
-        <service id="console.processor.dry_run"
-                 class="Behat\Behat\Console\Processor\DryRunProcessor">
-            <argument type="service" id="tester.tester_dispatcher"/>
-            <argument type="service" id="hook.hook_dispatcher"/>
-            <tag name="console.processor"/>
-        </service>
-
         <service id="console.processor.rerun"
                  class="Behat\Behat\Console\Processor\RerunProcessor">
             <argument type="service" id="run_control.cache_failed_scenarios_for_rerun"/>
@@ -56,6 +49,7 @@
         <service id="console.processor.run"
                  class="Behat\Behat\Console\Processor\RunProcessor">
             <argument type="service" id="event_dispatcher"/>
+            <argument>%options.dry_run%</argument>
             <argument>%options.strict%</argument>
             <tag name="console.processor"/>
         </service>
@@ -273,7 +267,6 @@
         <service id="hook.hook_dispatcher"
                  class="Behat\Behat\Hook\EventSubscriber\HookDispatcher">
             <argument type="service" id="event_dispatcher"/>
-            <argument>%options.dry_run%</argument>
             <tag name="event_subscriber"/>
         </service>
 
@@ -356,8 +349,6 @@
             <argument type="service" id="tester.outline"/>
             <argument type="service" id="tester.outline_example"/>
             <argument type="service" id="tester.step"/>
-            <argument type="service" id="tester.skip_step"/>
-            <argument>%options.dry_run%</argument>
             <tag name="event_subscriber"/>
         </service>
 
@@ -398,11 +389,6 @@
 
         <service id="tester.step"
                  class="Behat\Behat\Tester\StepTester">
-            <argument type="service" id="event_dispatcher"/>
-        </service>
-
-        <service id="tester.skip_step"
-                 class="Behat\Behat\Tester\SkipStepTester">
             <argument type="service" id="event_dispatcher"/>
         </service>
 
