@@ -47,8 +47,8 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
         $contexts = $this->initializeContextPool($suite, $contexts);
 
         $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration);
-        $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
         $this->dispatch(EventInterface::BEFORE_OUTLINE_EXAMPLE, $event);
+        $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
 
         if ($outline->getFeature()->hasBackground()) {
             $background = $outline->getFeature()->getBackground();
@@ -65,8 +65,8 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
         }
 
         $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration, $status);
-        $this->dispatch(EventInterface::AFTER_OUTLINE_EXAMPLE, $event);
         $this->dispatch(EventInterface::HOOKABLE_AFTER_SCENARIO, $event);
+        $this->dispatch(EventInterface::AFTER_OUTLINE_EXAMPLE, $event);
 
         return $status;
     }

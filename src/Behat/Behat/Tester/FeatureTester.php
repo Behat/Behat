@@ -41,8 +41,8 @@ class FeatureTester extends DispatchingService
         $status = StepEvent::PASSED;
 
         $event = new FeatureEvent($suite, $contexts, $feature);
-        $this->dispatch(EventInterface::HOOKABLE_BEFORE_FEATURE, $event);
         $this->dispatch(EventInterface::BEFORE_FEATURE, $event);
+        $this->dispatch(EventInterface::HOOKABLE_BEFORE_FEATURE, $event);
 
         foreach ($feature->getScenarios() as $scenario) {
             $tester = $this->getScenarioTester($suite, $contexts, $scenario);
@@ -50,8 +50,8 @@ class FeatureTester extends DispatchingService
         }
 
         $event = new FeatureEvent($suite, $contexts, $feature, $status);
-        $this->dispatch(EventInterface::AFTER_FEATURE, $event);
         $this->dispatch(EventInterface::HOOKABLE_AFTER_FEATURE, $event);
+        $this->dispatch(EventInterface::AFTER_FEATURE, $event);
 
         return $status;
     }

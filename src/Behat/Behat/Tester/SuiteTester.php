@@ -42,8 +42,8 @@ class SuiteTester extends DispatchingService
         $contexts = $this->createContextPool($suite);
 
         $event = new SuiteEvent($suite, $contexts);
-        $this->dispatch(EventInterface::HOOKABLE_BEFORE_SUITE, $event);
         $this->dispatch(EventInterface::BEFORE_SUITE, $event);
+        $this->dispatch(EventInterface::HOOKABLE_BEFORE_SUITE, $event);
 
         foreach ($features as $feature) {
             $tester = $this->getFeatureTester($suite, $contexts, $feature);
@@ -51,8 +51,8 @@ class SuiteTester extends DispatchingService
         }
 
         $event = new SuiteEvent($suite, $contexts, $status);
-        $this->dispatch(EventInterface::AFTER_SUITE, $event);
         $this->dispatch(EventInterface::HOOKABLE_AFTER_SUITE, $event);
+        $this->dispatch(EventInterface::AFTER_SUITE, $event);
 
         return $status;
     }

@@ -108,12 +108,12 @@ Feature: Dry run
       STEP: I ate 1 apples    When I ate 1 apple
       STEP: I should have 3 apples    Then I should have 3 apples
 
-      HOOK: before scenario  Scenario: Found more apples
-      STEP: I have 3 applesSTEP: I found 5 apples    When I found 5 apples
+        Scenario: Found more apples
+      HOOK: before scenarioSTEP: I have 3 applesSTEP: I found 5 apples    When I found 5 apples
       STEP: I should have 8 apples    Then I should have 8 apples
 
-      HOOK: before scenario  Scenario: Found more apples
-      STEP: I have 3 applesSTEP: I found 2 apples    When I found 2 apples
+        Scenario: Found more apples
+      HOOK: before scenarioSTEP: I have 3 applesSTEP: I found 2 apples    When I found 2 apples
       STEP: I should have 5 apples    Then I should have 5 apples
 
         Scenario Outline: Other situations

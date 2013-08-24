@@ -39,8 +39,8 @@ class ScenarioTester extends IsolatedStepCollectionTester
         $contexts = $this->initializeContextPool($suite, $contexts);
 
         $event = new ScenarioEvent($suite, $contexts, $scenario);
-        $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
         $this->dispatch(EventInterface::BEFORE_SCENARIO, $event);
+        $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
 
         if ($scenario->getFeature()->hasBackground()) {
             $background = $scenario->getFeature()->getBackground();
@@ -55,8 +55,8 @@ class ScenarioTester extends IsolatedStepCollectionTester
         }
 
         $event = new ScenarioEvent($suite, $contexts, $scenario, $status);
-        $this->dispatch(EventInterface::AFTER_SCENARIO, $event);
         $this->dispatch(EventInterface::HOOKABLE_AFTER_SCENARIO, $event);
+        $this->dispatch(EventInterface::AFTER_SCENARIO, $event);
 
         return $status;
     }

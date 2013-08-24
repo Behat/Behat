@@ -146,9 +146,9 @@ Feature: hooks
     Then it should pass with:
       """
       = do something BEFORE ANY SUITE
-      = do something BEFORE EVERY FEATURE
       Feature:
 
+      = do something BEFORE EVERY FEATURE
         Scenario:             # features/test.feature:2
           Then I must have 50 # FeatureContext::iMustHave()
 
@@ -202,9 +202,9 @@ Feature: hooks
     Then it should pass with:
       """
       = do something BEFORE ANY SUITE
-      = do something BEFORE EVERY FEATURE
       Feature:
 
+      = do something BEFORE EVERY FEATURE
         Scenario:             # features/1-one.feature:2
           Then I must have 50 # FeatureContext::iMustHave()
 
@@ -216,11 +216,11 @@ Feature: hooks
           Given I must have 130   # FeatureContext::iMustHave()
 
       = do something AFTER EVERY FEATURE
-      = do something BEFORE EVERY FEATURE
-      = do something before SOME feature
       @someFeature
       Feature:
 
+      = do something BEFORE EVERY FEATURE
+      = do something before SOME feature
         Scenario: 130             # features/2-two.feature:3
           Given I must have 130   # FeatureContext::iMustHave()
 
@@ -246,9 +246,9 @@ Feature: hooks
     Then it should pass with:
       """
       = do something BEFORE ANY SUITE
-      = do something BEFORE EVERY FEATURE
       Feature:
 
+      = do something BEFORE EVERY FEATURE
         Background:            # features/background.feature:2
           Given I must have 50 # FeatureContext::iMustHave()
 
