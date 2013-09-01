@@ -24,6 +24,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class ContextSnippetsAppender implements EventSubscriberInterface
 {
     /**
+     * @const PendingException class
+     */
+    const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Exception\PendingException';
+
+    /**
      * @var SnippetsCollector
      */
     private $snippets;
@@ -83,11 +88,26 @@ class ContextSnippetsAppender implements EventSubscriberInterface
             foreach ($snippet->getContextClasses() as $contextClass) {
                 $reflection = new ReflectionClass($contextClass);
                 $generated = rtrim(strtr($snippet->getSnippet(), array('\\' => '\\\\', '$' => '\\$')));
+
                 $content = file_get_contents($reflection->getFileName());
+                $regexp = sprintf('@.*use[^;]*\\\\?%s[^;]*;.*@ms', preg_quote(self::PENDING_EXCEPTION_CLASS, '@'));
+
+                if (!preg_match($regexp, $content)) {
+                    $content = $this->addPendingException($content);
+                }
+
                 $content = preg_replace('/}[ \n]*$/', "\n" . $generated . "\n}\n", $content);
 
                 file_put_contents($reflection->getFileName(), $content);
             }
         }
+    }
+
+    private function addPendingException($content)
+    {
+        $regexp = sprintf('@^(.*)(use\s+[^;]*);@m', self::PENDING_EXCEPTION_CLASS);
+        $replaceWith = "\$1".'use '.self::PENDING_EXCEPTION_CLASS.";\n\$2;";
+
+        return preg_replace('@^(.*)(use\s+[^;]*);@m', $replaceWith, $content, 1);
     }
 }
