@@ -40,6 +40,8 @@ interface EventInterface
     const EXECUTE_DEFINITION = 'executeDefinition';
     const EXECUTE_TRANSFORMATION = 'executeTransformation';
     const EXECUTE_HOOK = 'executeHook';
+    const BEFORE_HOOK = 'beforeHook';
+    const AFTER_HOOK = 'afterHook';
     /**
      * Dictionary events
      */
@@ -85,6 +87,4 @@ interface EventInterface
     const HOOKABLE_AFTER_SCENARIO = 'hookableAfterScenario';
     const HOOKABLE_BEFORE_STEP = 'hookableBeforeStep';
     const HOOKABLE_AFTER_STEP = 'hookableAfterStep';
-    const BEFORE_HOOK = 'beforeHook';
-    const AFTER_HOOK = 'afterHook';
 }
