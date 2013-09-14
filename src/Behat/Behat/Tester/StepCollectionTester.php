@@ -41,9 +41,8 @@ abstract class StepCollectionTester extends DispatchingService
         $this->dispatch(EventInterface::CREATE_STEP_TESTER, $testerProvider);
         if (!$testerProvider->hasTester()) {
             throw new RuntimeException(sprintf(
-                'Can not find tester for "%s" step of "%s" scenario in the "%s" suite.',
+                'Can not find tester for "%s" step in the "%s" suite.',
                 $step->getText(),
-                $step->getParent()->getTitle(),
                 $suite->getName()
             ));
         }

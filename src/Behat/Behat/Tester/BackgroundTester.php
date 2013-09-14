@@ -15,7 +15,7 @@ use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\BackgroundNode;
-use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\ScenarioInterface;
 
 /**
  * Background tester.
@@ -28,7 +28,7 @@ class BackgroundTester extends StepCollectionTester
      * Tests feature backgrounds.
      *
      * @param SuiteInterface       $suite
-     * @param ScenarioNode         $scenario
+     * @param ScenarioInterface    $scenario
      * @param BackgroundNode       $background
      * @param ContextPoolInterface $contexts
      * @param Boolean              $skip
@@ -37,7 +37,7 @@ class BackgroundTester extends StepCollectionTester
      */
     public function test(
         SuiteInterface $suite,
-        ScenarioNode $scenario,
+        ScenarioInterface $scenario,
         BackgroundNode $background,
         ContextPoolInterface $contexts,
         $skip = false

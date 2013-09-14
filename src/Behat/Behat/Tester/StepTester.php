@@ -21,7 +21,7 @@ use Behat\Behat\Exception\UndefinedException;
 use Behat\Behat\Snippet\Event\SnippetCarrierEvent;
 use Behat\Behat\Snippet\SnippetInterface;
 use Behat\Behat\Suite\SuiteInterface;
-use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Gherkin\Node\StepNode;
 use Exception;
 
@@ -38,7 +38,7 @@ class StepTester extends DispatchingService
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param StepNode             $step
-     * @param ScenarioNode         $scenario
+     * @param ScenarioInterface    $scenario
      * @param Boolean              $skip
      *
      * @return integer
@@ -47,7 +47,7 @@ class StepTester extends DispatchingService
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
         StepNode $step,
-        ScenarioNode $scenario,
+        ScenarioInterface $scenario,
         $skip = false
     )
     {

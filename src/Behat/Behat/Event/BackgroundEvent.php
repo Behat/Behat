@@ -12,7 +12,7 @@ namespace Behat\Behat\Event;
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\BackgroundNode;
-use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\ScenarioInterface;
 
 /**
  * Background event.
@@ -22,7 +22,7 @@ use Behat\Gherkin\Node\ScenarioNode;
 class BackgroundEvent extends StepCollectionEvent
 {
     /**
-     * @var ScenarioNode
+     * @var ScenarioInterface
      */
     private $scenario;
     /**
@@ -35,14 +35,14 @@ class BackgroundEvent extends StepCollectionEvent
      *
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
-     * @param ScenarioNode         $scenario
+     * @param ScenarioInterface    $scenario
      * @param BackgroundNode       $background
      * @param null|integer         $status
      */
     public function __construct(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
-        ScenarioNode $scenario,
+        ScenarioInterface $scenario,
         BackgroundNode $background,
         $status = null
     )
@@ -56,7 +56,7 @@ class BackgroundEvent extends StepCollectionEvent
     /**
      * Returns scenario node.
      *
-     * @return ScenarioNode
+     * @return ScenarioInterface
      */
     public function getScenario()
     {

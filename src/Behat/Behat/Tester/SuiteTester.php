@@ -113,7 +113,7 @@ class SuiteTester extends DispatchingService
         FeatureNode $feature
     )
     {
-        $testerProvider = new Event\FeatureTesterCarrierEvent($suite, $contexts, $feature);
+        $testerProvider = new FeatureTesterCarrierEvent($suite, $contexts, $feature);
 
         $this->dispatch(EventInterface::CREATE_FEATURE_TESTER, $testerProvider);
         if (!$testerProvider->hasTester()) {

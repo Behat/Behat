@@ -103,11 +103,7 @@ class CacheFailedScenariosForRerun implements EventSubscriberInterface
             return;
         }
 
-        $outline = $event->getOutline();
-        $examples = $outline->getExamples();
-        $lines = $examples->getRowLines();
-
-        $this->lines[] = $outline->getFile() . ':' . $lines[$event->getIteration() + 1];
+        $this->lines[] = $event->getExample()->getFile() . ':' . $event->getExample()->getLine();
     }
 
     /**

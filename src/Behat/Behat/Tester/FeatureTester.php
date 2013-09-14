@@ -17,7 +17,7 @@ use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Behat\Tester\Event\ScenarioTesterCarrierEvent;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\ScenarioInterface;
 use Exception;
 use RuntimeException;
 
@@ -81,7 +81,7 @@ class FeatureTester extends DispatchingService
      *
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
-     * @param ScenarioNode         $scenario
+     * @param ScenarioInterface    $scenario
      *
      * @throws RuntimeException If scenario tester is not found
      *
@@ -90,7 +90,7 @@ class FeatureTester extends DispatchingService
     private function getScenarioTester(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
-        ScenarioNode $scenario
+        ScenarioInterface $scenario
     )
     {
         $testerProvider = new ScenarioTesterCarrierEvent($suite, $contexts, $scenario);

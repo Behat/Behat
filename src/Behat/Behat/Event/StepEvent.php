@@ -13,6 +13,7 @@ use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Definition\DefinitionInterface;
 use Behat\Behat\Snippet\SnippetInterface;
 use Behat\Behat\Suite\SuiteInterface;
+use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Gherkin\Node\StepNode;
 use Exception;
@@ -35,7 +36,7 @@ class StepEvent extends Event implements LifecycleEventInterface
      */
     private $step;
     /**
-     * @var ScenarioNode
+     * @var ScenarioInterface
      */
     private $logicalParent;
     /**
@@ -72,7 +73,7 @@ class StepEvent extends Event implements LifecycleEventInterface
      *
      * @param SuiteInterface           $suite
      * @param ContextPoolInterface     $contexts
-     * @param ScenarioNode             $logicalParent
+     * @param ScenarioInterface        $logicalParent
      * @param StepNode                 $step
      * @param null|integer             $status
      * @param null|string              $stdOut
@@ -83,7 +84,7 @@ class StepEvent extends Event implements LifecycleEventInterface
     public function __construct(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
-        ScenarioNode $logicalParent,
+        ScenarioInterface $logicalParent,
         StepNode $step,
         $status = null,
         $stdOut = null,

@@ -17,6 +17,7 @@ use Behat\Behat\Exception\PendingException;
 use Behat\Behat\Snippet\EventSubscriber\SnippetsCollector;
 use Behat\Behat\Tester\EventSubscriber\StatisticsCollector;
 use Behat\Gherkin\Node\BackgroundNode;
+use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\StepNode;
 use Exception;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -270,17 +271,23 @@ class ProgressFormatter extends TranslatableConsoleFormatter
         $stepPath = "In step `$type $text'.";
         $stepPathLn = mb_strlen($stepPath, 'utf8');
 
-        $node = $step->getParent();
+        $node = $step->getContainer();
         if ($node instanceof BackgroundNode) {
             $scenarioPath = "From scenario background.";
+            $feature = $node->getFeature();
+        } elseif ($node instanceof ExampleNode) {
+            $title = $node->getOutline()->getTitle();
+            $title = $title ? "`$title'" : '***';
+            $scenarioPath = "From scenario $title.";
+            $feature = $node->getOutline()->getFeature();
         } else {
             $title = $node->getTitle();
             $title = $title ? "`$title'" : '***';
             $scenarioPath = "From scenario $title.";
+            $feature = $node->getFeature();
         }
         $scenarioPathLn = mb_strlen($scenarioPath, 'utf8');
 
-        $feature = $node->getFeature();
         $title = $feature->getTitle();
         $title = $title ? "`$title'" : '***';
         $featurePath = "Of feature $title.";
@@ -303,7 +310,7 @@ class ProgressFormatter extends TranslatableConsoleFormatter
         $this->write("    {+$color}$scenarioPath{-$color}");
         $indentCount = $this->maxLineLength - $scenarioPathLn;
         $this->printPathComment(
-            $this->relativizePathsInString($node->getFile()) . ':' . $node->getLine(), $indentCount
+            $this->relativizePathsInString($node->getFile()) . ':' . ($node instanceof ExampleNode ? $node->getOutline()->getLine() : $node->getLine()), $indentCount
         );
 
         $this->write("    {+$color}$featurePath{-$color}");

@@ -12,7 +12,7 @@ namespace Behat\Behat\Tester\Event;
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Behat\Tester\Event\ContextualTesterCarrierEvent;
-use Behat\Gherkin\Node\OutlineNode;
+use Behat\Gherkin\Node\ExampleNode;
 
 /**
  * Outline example tester carrier event.
@@ -22,69 +22,31 @@ use Behat\Gherkin\Node\OutlineNode;
 class OutlineExampleTesterCarrierEvent extends ContextualTesterCarrierEvent
 {
     /**
-     * @var OutlineNode
+     * @var ExampleNode
      */
-    private $outline;
-    /**
-     * @var integer
-     */
-    private $iteration;
-    /**
-     * @var array
-     */
-    private $tokens;
+    private $example;
 
     /**
      * Initializes event.
      *
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
-     * @param OutlineNode          $outline
-     * @param integer              $iteration
-     * @param array                $tokens
+     * @param ExampleNode          $example
      */
-    public function __construct(
-        SuiteInterface $suite,
-        ContextPoolInterface $contexts,
-        OutlineNode $outline,
-        $iteration,
-        array $tokens
-    )
+    public function __construct(SuiteInterface $suite, ContextPoolInterface $contexts, ExampleNode $example)
     {
         parent::__construct($suite, $contexts);
 
-        $this->outline = $outline;
-        $this->iteration = $iteration;
-        $this->tokens = $tokens;
+        $this->example = $example;
     }
 
     /**
-     * Returns outline node.
+     * Returns example node.
      *
-     * @return OutlineNode
+     * @return ExampleNode
      */
-    public function getOutline()
+    public function getExample()
     {
-        return $this->outline;
-    }
-
-    /**
-     * Returns outline example iteration number.
-     *
-     * @return integer
-     */
-    public function getIteration()
-    {
-        return $this->iteration;
-    }
-
-    /**
-     * Returns example row tokens.
-     *
-     * @return array
-     */
-    public function getTokens()
-    {
-        return $this->tokens;
+        return $this->example;
     }
 }

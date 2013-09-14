@@ -13,7 +13,7 @@ use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Behat\Tester\Event\ContextualTesterCarrierEvent;
 use Behat\Gherkin\Node\OutlineNode;
-use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\ScenarioInterface;
 
 /**
  * Scenario tester carrier event.
@@ -23,18 +23,22 @@ use Behat\Gherkin\Node\ScenarioNode;
 class ScenarioTesterCarrierEvent extends ContextualTesterCarrierEvent
 {
     /**
-     * @var ScenarioNode
+     * @var ScenarioInterface
      */
     private $scenario;
 
     /**
      * Initializes event.
      *
-     * @param SuiteInterface       $suite
+     * @param SuiteInterface $suite
      * @param ContextPoolInterface $contexts
-     * @param ScenarioNode         $scenario
+     * @param ScenarioInterface $scenario
      */
-    public function __construct(SuiteInterface $suite, ContextPoolInterface $contexts, ScenarioNode $scenario)
+    public function __construct(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        ScenarioInterface $scenario
+    )
     {
         parent::__construct($suite, $contexts);
 
@@ -44,7 +48,7 @@ class ScenarioTesterCarrierEvent extends ContextualTesterCarrierEvent
     /**
      * Returns scenario node.
      *
-     * @return ScenarioNode
+     * @return ScenarioInterface
      */
     public function getScenario()
     {

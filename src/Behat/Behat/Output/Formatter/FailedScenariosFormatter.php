@@ -77,9 +77,9 @@ class FailedScenariosFormatter extends ConsoleFormatter
     {
         if (StepEvent::FAILED === $event->getStatus()) {
             $outline = $event->getOutline();
-            $examples = $outline->getExamples();
-            $lines = $examples->getRowLines();
-            $this->writeln($outline->getFile() . ':' . $lines[$event->getIteration() + 1]);
+            $examples = $outline->getExampleTable();
+            $lines = $examples->getLines();
+            $this->writeln($outline->getFile() . ':' . $lines[$event->getIteration()]);
         }
     }
 

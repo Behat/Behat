@@ -14,7 +14,7 @@ use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\OutlineExampleEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Suite\SuiteInterface;
-use Behat\Gherkin\Node\OutlineNode;
+use Behat\Gherkin\Node\ExampleNode;
 use Exception;
 
 /**
@@ -29,9 +29,7 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
      *
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
-     * @param OutlineNode          $outline
-     * @param integer              $iteration
-     * @param array                $tokens
+     * @param ExampleNode          $example
      * @param Boolean              $skip
      *
      * @return integer
@@ -39,9 +37,7 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
     public function test(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
-        OutlineNode $outline,
-        $iteration,
-        array $tokens,
+        ExampleNode $example,
         $skip = false
     )
     {
@@ -49,7 +45,7 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
 
         $contexts = $this->initializeContextPool($suite, $contexts);
 
-        $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration);
+        $event = new OutlineExampleEvent($suite, $contexts, $example);
         $this->dispatch(EventInterface::BEFORE_OUTLINE_EXAMPLE, $event);
 
         try {
@@ -59,29 +55,28 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
             $skip = true;
         }
 
-        if ($outline->getFeature()->hasBackground()) {
+        if ($example->getOutline()->getFeature()->hasBackground()) {
             $skip = $skip || StepEvent::PASSED !== $status;
-            $background = $outline->getFeature()->getBackground();
+            $background = $example->getOutline()->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
-            $status = $tester->test($suite, $outline, $background, $contexts, $skip);
+            $status = $tester->test($suite, $example->getOutline(), $background, $contexts, $skip);
         }
 
-        foreach ($outline->getSteps() as $step) {
+        foreach ($example->getSteps() as $step) {
             $skip = $skip || StepEvent::PASSED !== $status;
-            $step = $step->createExampleRowStep($tokens);
 
             $tester = $this->getStepTester($suite, $contexts, $step);
-            $status = max($status, $tester->test($suite, $contexts, $step, $outline, $skip));
+            $status = max($status, $tester->test($suite, $contexts, $step, $example->getOutline(), $skip));
         }
 
-        $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration, $status);
+        $event = new OutlineExampleEvent($suite, $contexts, $example, $status);
 
         try {
             !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_SCENARIO, $event);
         } catch (Exception $e) {
             $status = StepEvent::FAILED;
-            $event = new OutlineExampleEvent($suite, $contexts, $outline, $iteration, $status);
+            $event = new OutlineExampleEvent($suite, $contexts, $example, $status);
         }
 
         $this->dispatch(EventInterface::AFTER_OUTLINE_EXAMPLE, $event);

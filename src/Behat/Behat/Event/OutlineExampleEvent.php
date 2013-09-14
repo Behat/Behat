@@ -11,6 +11,7 @@ namespace Behat\Behat\Event;
  */
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Suite\SuiteInterface;
+use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\OutlineNode;
 
 /**
@@ -21,54 +22,69 @@ use Behat\Gherkin\Node\OutlineNode;
 class OutlineExampleEvent extends StepCollectionEvent
 {
     /**
-     * @var OutlineNode
+     * @var ExampleNode
      */
-    private $outline;
-    /**
-     * @var integer
-     */
-    private $iteration;
+    private $example;
 
     /**
      * Initializes outline example event.
      *
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
-     * @param OutlineNode          $outline
-     * @param integer              $iteration
+     * @param ExampleNode          $example
      * @param null|integer         $status
      */
     public function __construct(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
-        OutlineNode $outline,
-        $iteration,
+        ExampleNode $example,
         $status = null
     )
     {
         parent::__construct($suite, $contexts, $status);
 
-        $this->outline = $outline;
-        $this->iteration = $iteration;
+        $this->example = $example;
     }
 
     /**
-     * Returns outline node.
+     * Returns example node.
+     *
+     * @return ExampleNode
+     */
+    public function getExample()
+    {
+        return $this->example;
+    }
+
+    /**
+     * Returns example outline.
      *
      * @return OutlineNode
      */
     public function getOutline()
     {
-        return $this->outline;
+        return $this->example->getOutline();
     }
 
     /**
-     * Returns example number on which event occurs.
+     * Returns example tokens.
+     *
+     * @return array
+     */
+    public function getTokens()
+    {
+        return $this->example->getTokens();
+    }
+
+    /**
+     * Returns iteration number.
      *
      * @return integer
      */
     public function getIteration()
     {
-        return $this->iteration;
+        $lines = $this->getOutline()->getExampleTable()->getLines();
+
+        return array_search($this->getExample()->getLine(), $lines);
     }
 }

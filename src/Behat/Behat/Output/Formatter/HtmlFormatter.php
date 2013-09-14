@@ -14,15 +14,16 @@ use Behat\Behat\Exception\UndefinedException;
 use Behat\Behat\Output\Formatter\PrettyFormatter;
 use Behat\Behat\Snippet\SnippetInterface;
 use Behat\Behat\Tester\EventSubscriber\StatisticsCollector;
-use Behat\Gherkin\Node\AbstractNode;
-use Behat\Gherkin\Node\AbstractScenarioNode;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\StepContainerInterface;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\TaggedNodeInterface;
 
 /**
  * HTML formatter.
@@ -107,13 +108,15 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printFeatureOrScenarioTags(AbstractNode $node)
+    protected function printFeatureOrScenarioTags(TaggedNodeInterface $node)
     {
-        if (!($node instanceof FeatureNode) && !($node instanceof ScenarioNode)) {
+        if (!($node instanceof FeatureNode) && !($node instanceof ScenarioInterface)) {
             return;
         }
 
-        if (count($tags = $node->getOwnTags())) {
+        $tags = $node instanceof ScenarioInterface ? $node->getOwnTags() : $node->getTags();
+
+        if (count($tags)) {
             $this->writeln('<ul class="tags">');
             foreach ($tags as $tag) {
                 $this->writeln("<li>@$tag</li>");
@@ -188,7 +191,7 @@ class HtmlFormatter extends PrettyFormatter
     /**
      * {@inheritdoc}
      */
-    protected function printScenarioName(AbstractScenarioNode $scenario)
+    protected function printScenarioName(StepContainerInterface $scenario)
     {
         $this->writeln('<h3>');
         $this->writeln('<span class="keyword">' . $scenario->getKeyword() . ': </span>');
@@ -255,11 +258,11 @@ class HtmlFormatter extends PrettyFormatter
         if (!$this->getParameter('expand')) {
             $color = $this->getResultColorCode($result);
 
-            $this->printColorizedTableRow($examples->getRow($iteration + 1), $color);
+            $this->printColorizedTableRow($examples->getRow($iteration), $color);
             $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
         } else {
             $this->write('<h4>' . $examples->getKeyword() . ': ');
-            foreach ($examples->getRow($iteration + 1) as $value) {
+            foreach ($examples->getRow($iteration) as $value) {
                 $this->write('<span>' . $value . '</span>');
             }
             $this->writeln('</h4>');
@@ -352,7 +355,13 @@ class HtmlFormatter extends PrettyFormatter
     protected function printStepName(StepNode $step, DefinitionInterface $definition = null, $color)
     {
         $type = $step->getType();
-        $text = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
+        $text = $step->getText();
+
+        if ($this->inOutlineSteps) {
+            $index = array_search($step, $step->getContainer()->getSteps());
+            $steps = $step->getContainer()->getOutline()->getSteps();
+            $text = $steps[$index]->getText();
+        }
 
         if (null !== $definition) {
             $text = $this->colorizeDefinitionArguments($text, $definition, $color);

@@ -21,16 +21,17 @@ use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Exception\UndefinedException;
 use Behat\Behat\Snippet\SnippetInterface;
-use Behat\Gherkin\Node\AbstractNode;
-use Behat\Gherkin\Node\AbstractScenarioNode;
 use Behat\Gherkin\Node\BackgroundNode;
-use Behat\Gherkin\Node\ExampleStepNode;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\NodeInterface;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\StepContainerInterface;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\TaggedNodeInterface;
 
 /**
  * Pretty formatter.
@@ -404,15 +405,17 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints node tags.
      *
-     * @param AbstractNode $node
+     * @param TaggedNodeInterface $node
      */
-    protected function printFeatureOrScenarioTags(AbstractNode $node)
+    protected function printFeatureOrScenarioTags(TaggedNodeInterface $node)
     {
-        if (!($node instanceof FeatureNode) && !($node instanceof ScenarioNode)) {
+        if (!($node instanceof FeatureNode) && !($node instanceof ScenarioInterface)) {
             return;
         }
 
-        if (count($tags = $node->getOwnTags())) {
+        $tags = $node instanceof ScenarioInterface ? $node->getOwnTags() : $node->getTags();
+
+        if (count($tags)) {
             $tags = implode(' ', array_map(function ($tag) {
                 return '@' . $tag;
             }, $tags));
@@ -465,12 +468,12 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints scenario keyword and name.
      *
-     * @param AbstractScenarioNode $scenario
+     * @param StepContainerInterface $scenario
      *
      * @uses getFeatureOrScenarioName()
      * @uses printScenarioPath()
      */
-    protected function printScenarioName(AbstractScenarioNode $scenario)
+    protected function printScenarioName(StepContainerInterface $scenario)
     {
         $title = explode("\n", $this->getFeatureOrScenarioName($scenario));
 
@@ -485,12 +488,12 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Prints scenario definition path.
      *
-     * @param AbstractScenarioNode $scenario
+     * @param StepContainerInterface $scenario
      *
      * @uses getFeatureOrScenarioName()
      * @uses printPathComment()
      */
-    protected function printScenarioPath(AbstractScenarioNode $scenario)
+    protected function printScenarioPath(StepContainerInterface $scenario)
     {
         if ($this->getParameter('paths')) {
             $lines = explode("\n", $this->getFeatureOrScenarioName($scenario));
@@ -582,11 +585,11 @@ class PrettyFormatter extends ProgressFormatter
     {
         if (!$this->isOutlineHeaderPrinted) {
             $this->printOutlineSteps($outline);
-            $this->printOutlineExamplesSectionHeader($outline->getExamples());
+            $this->printOutlineExamplesSectionHeader($outline->getExampleTable());
             $this->isOutlineHeaderPrinted = true;
         }
 
-        $this->printOutlineExampleResult($outline->getExamples(), $iteration, $result, $skipped);
+        $this->printOutlineExampleResult($outline->getExampleTable(), $iteration, $result, $skipped);
     }
 
     /**
@@ -639,11 +642,11 @@ class PrettyFormatter extends ProgressFormatter
         if (!$this->getParameter('expand')) {
             $color = $this->getResultColorCode($result);
 
-            $this->printColorizedTableRow($examples->getRowAsString($iteration + 1), $color);
+            $this->printColorizedTableRow($examples->getRowAsString($iteration), $color);
             $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
         } else {
             $this->write('      ' . $examples->getKeyword() . ': ');
-            $this->writeln('| ' . implode(' | ', $examples->getRow($iteration + 1)) . ' |');
+            $this->writeln('| ' . implode(' | ', $examples->getRow($iteration)) . ' |');
 
             $this->stepIndent = '        ';
             foreach ($this->delayedStepEvents as $event) {
@@ -657,7 +660,7 @@ class PrettyFormatter extends ProgressFormatter
             }
             $this->stepIndent = '    ';
 
-            if ($iteration < count($examples->getRows()) - 2) {
+            if ($iteration < count($examples->getRows()) - 1) {
                 $this->writeln();
             }
         }
@@ -783,7 +786,14 @@ class PrettyFormatter extends ProgressFormatter
     protected function printStepName(StepNode $step, DefinitionInterface $definition = null, $color)
     {
         $type = $step->getType();
-        $text = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
+        $text = $step->getText();
+
+        if ($this->inOutlineSteps) {
+            $index = array_search($step, $step->getContainer()->getSteps());
+            $steps = $step->getContainer()->getOutline()->getSteps();
+            $text = $steps[$index]->getText();
+        }
+
         $indent = $this->stepIndent;
 
         if (null !== $definition) {
@@ -805,7 +815,14 @@ class PrettyFormatter extends ProgressFormatter
     {
         if ($this->getParameter('paths')) {
             $type = $step->getType();
-            $text = $this->inOutlineSteps ? $step->getCleanText() : $step->getText();
+            $text = $step->getText();
+
+            if ($this->inOutlineSteps) {
+                $index = array_search($step, $step->getContainer()->getSteps());
+                $steps = $step->getContainer()->getOutline()->getSteps();
+                $text = $steps[$index]->getText();
+            }
+
             $indent = $this->stepIndent;
             $nameLength = mb_strlen("$indent$type $text", 'utf8');
             $indentCount = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
@@ -946,12 +963,12 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Returns feature or scenario name.
      *
-     * @param AbstractNode $node
-     * @param Boolean      $haveBaseIndent
+     * @param NodeInterface $node
+     * @param Boolean       $haveBaseIndent
      *
      * @return string
      */
-    protected function getFeatureOrScenarioName(AbstractNode $node, $haveBaseIndent = true)
+    protected function getFeatureOrScenarioName(NodeInterface $node, $haveBaseIndent = true)
     {
         $keyword = $node->getKeyword();
         $baseIndent = ($node instanceof FeatureNode) || !$haveBaseIndent ? '' : '  ';
@@ -1031,18 +1048,18 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Returns max lines size for section elements.
      *
-     * @param integer              $max      previous max value
-     * @param AbstractScenarioNode $scenario element for calculations
+     * @param integer                $max      previous max value
+     * @param StepContainerInterface $scenario element for calculations
      *
      * @return integer
      */
-    protected function getMaxLineLength($max, AbstractScenarioNode $scenario)
+    protected function getMaxLineLength($max, StepContainerInterface $scenario)
     {
         $lines = explode("\n", $this->getFeatureOrScenarioName($scenario, false));
         $max = max($max, mb_strlen(current($lines), 'utf8') + 2);
 
         foreach ($scenario->getSteps() as $step) {
-            $text = $step instanceof ExampleStepNode ? $step->getCleanText() : $step->getText();
+            $text = $step->getText();
             $stepDescription = $step->getType() . ' ' . $text;
             $max = max($max, mb_strlen($stepDescription, 'utf8') + 4);
         }
