@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Event;
+namespace Behat\Behat\Hook\Event;
 
 /*
  * This file is part of the Behat.
@@ -10,6 +10,7 @@ namespace Behat\Behat\Event;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Context\Pool\ContextPoolInterface;
+use Behat\Behat\Event\LifecycleEventInterface;
 use Behat\Behat\Hook\HookInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Exception;

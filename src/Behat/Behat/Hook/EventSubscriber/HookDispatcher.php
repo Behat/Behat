@@ -11,7 +11,7 @@ namespace Behat\Behat\Hook\EventSubscriber;
  */
 use Behat\Behat\Callee\Event\ExecuteCalleeEvent;
 use Behat\Behat\Event\EventInterface;
-use Behat\Behat\Event\HookEvent;
+use Behat\Behat\Hook\Event\HookEvent;
 use Behat\Behat\Event\LifecycleEventInterface;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Hook\Event\HooksCarrierEvent;

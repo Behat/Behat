@@ -15,7 +15,7 @@ use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExampleEvent;
 use Behat\Behat\Event\ExerciseEvent;
 use Behat\Behat\Event\FeatureEvent;
-use Behat\Behat\Event\HookEvent;
+use Behat\Behat\Hook\Event\HookEvent;
 use Behat\Behat\Event\OutlineEvent;
 use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
@@ -141,7 +141,7 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * @param HookEvent $event
+     * @param \Behat\Behat\Hook\Event\HookEvent $event
      */
     public function afterHook(HookEvent $event)
     {
