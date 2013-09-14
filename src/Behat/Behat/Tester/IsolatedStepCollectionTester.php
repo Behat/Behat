@@ -57,7 +57,7 @@ abstract class IsolatedStepCollectionTester extends StepCollectionTester
         BackgroundNode $background
     )
     {
-        $testerProvider = new Event\BackgroundTesterCarrierEvent($suite, $contexts, $background);
+        $testerProvider = new BackgroundTesterCarrierEvent($suite, $contexts, $background);
 
         $this->dispatch(EventInterface::CREATE_BACKGROUND_TESTER, $testerProvider);
         if (!$testerProvider->hasTester()) {
