@@ -29,4 +29,14 @@ class BeforeFeature extends FeatureHook
     {
         parent::__construct(EventInterface::HOOKABLE_BEFORE_FEATURE, $filterString, $callback, $description);
     }
+
+    /**
+     * Returns hook name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'BeforeFeature';
+    }
 }

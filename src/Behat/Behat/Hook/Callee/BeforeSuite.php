@@ -28,4 +28,14 @@ class BeforeSuite extends SuiteHook
     {
         parent::__construct(EventInterface::HOOKABLE_BEFORE_SUITE, $callback, $description);
     }
+
+    /**
+     * Returns hook name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'BeforeSuite';
+    }
 }

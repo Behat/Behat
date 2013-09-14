@@ -19,9 +19,23 @@ use Behat\Behat\Callee\CalleeInterface;
 interface HookInterface extends CalleeInterface
 {
     /**
+     * Returns hook name.
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
      * Returns hooked event type.
      *
      * @return string
      */
     public function getEventName();
+
+    /**
+     * Represents hook as a string.
+     *
+     * @return string
+     */
+    public function toString();
 }

@@ -29,4 +29,14 @@ class AfterFeature extends FeatureHook
     {
         parent::__construct(EventInterface::HOOKABLE_AFTER_FEATURE, $filterString, $callback, $description);
     }
+
+    /**
+     * Returns hook name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'AfterFeature';
+    }
 }

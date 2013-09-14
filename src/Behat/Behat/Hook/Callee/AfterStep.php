@@ -29,4 +29,14 @@ class AfterStep extends StepHook
     {
         parent::__construct(EventInterface::HOOKABLE_AFTER_STEP, $filterString, $callback, $description);
     }
+
+    /**
+     * Returns hook name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'AfterStep';
+    }
 }

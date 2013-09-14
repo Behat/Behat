@@ -29,4 +29,14 @@ class BeforeStep extends StepHook
     {
         parent::__construct(EventInterface::HOOKABLE_BEFORE_STEP, $filterString, $callback, $description);
     }
+
+    /**
+     * Returns hook name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'BeforeStep';
+    }
 }

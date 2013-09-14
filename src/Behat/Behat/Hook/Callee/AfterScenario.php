@@ -29,4 +29,14 @@ class AfterScenario extends ScenarioHook
     {
         parent::__construct(EventInterface::HOOKABLE_AFTER_SCENARIO, $filterString, $callback, $description);
     }
+
+    /**
+     * Returns hook name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'AfterScenario';
+    }
 }

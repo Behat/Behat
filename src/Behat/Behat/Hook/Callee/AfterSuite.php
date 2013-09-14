@@ -28,4 +28,14 @@ class AfterSuite extends SuiteHook
     {
         parent::__construct(EventInterface::HOOKABLE_AFTER_SUITE, $callback, $description);
     }
+
+    /**
+     * Returns hook name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'AfterSuite';
+    }
 }

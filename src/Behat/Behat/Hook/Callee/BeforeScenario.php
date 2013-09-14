@@ -29,4 +29,14 @@ class BeforeScenario extends ScenarioHook
     {
         parent::__construct(EventInterface::HOOKABLE_BEFORE_SCENARIO, $filterString, $callback, $description);
     }
+
+    /**
+     * Returns hook name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'BeforeScenario';
+    }
 }

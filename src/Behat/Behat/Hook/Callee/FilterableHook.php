@@ -47,4 +47,14 @@ abstract class FilterableHook extends Hook implements FilterableHookInterface
     {
         return $this->filterString;
     }
+
+    /**
+     * Represents hook as a string.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return trim($this->getName() . ' ' . $this->getFilterString());
+    }
 }

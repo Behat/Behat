@@ -47,4 +47,14 @@ abstract class Hook extends Callee implements HookInterface
     {
         return $this->eventName;
     }
+
+    /**
+     * Represents hook as a string.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return $this->getName();
+    }
 }
