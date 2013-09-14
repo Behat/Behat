@@ -12,11 +12,11 @@ namespace Behat\Behat\Output\Formatter;
 use Behat\Behat\Definition\DefinitionInterface;
 use Behat\Behat\Event\BackgroundEvent;
 use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\ExampleEvent;
 use Behat\Behat\Event\ExerciseEvent;
 use Behat\Behat\Event\FeatureEvent;
 use Behat\Behat\Event\HookEvent;
 use Behat\Behat\Event\OutlineEvent;
-use Behat\Behat\Event\OutlineExampleEvent;
 use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Exception\UndefinedException;
@@ -103,20 +103,20 @@ class PrettyFormatter extends ProgressFormatter
     public static function getSubscribedEvents()
     {
         return array(
-            EventInterface::BEFORE_EXERCISE        => array('beforeExercise', -50),
-            EventInterface::AFTER_EXERCISE         => array('afterExercise', -50),
-            EventInterface::BEFORE_FEATURE         => array('beforeFeature', -50),
-            EventInterface::AFTER_FEATURE          => array('afterFeature', -50),
-            EventInterface::BEFORE_SCENARIO        => array('beforeScenario', -50),
-            EventInterface::AFTER_SCENARIO         => array('afterScenario', -50),
-            EventInterface::BEFORE_BACKGROUND      => array('beforeBackground', -50),
-            EventInterface::AFTER_BACKGROUND       => array('afterBackground', -50),
-            EventInterface::BEFORE_OUTLINE         => array('beforeOutline', -50),
-            EventInterface::AFTER_OUTLINE          => array('afterOutline', -50),
-            EventInterface::BEFORE_OUTLINE_EXAMPLE => array('beforeOutlineExample', -50),
-            EventInterface::AFTER_OUTLINE_EXAMPLE  => array('afterOutlineExample', -50),
-            EventInterface::AFTER_STEP             => array('afterStep', -50),
-            EventInterface::AFTER_HOOK             => array('afterHook', -50),
+            EventInterface::BEFORE_EXERCISE   => array('beforeExercise', -50),
+            EventInterface::AFTER_EXERCISE    => array('afterExercise', -50),
+            EventInterface::BEFORE_FEATURE    => array('beforeFeature', -50),
+            EventInterface::AFTER_FEATURE     => array('afterFeature', -50),
+            EventInterface::BEFORE_SCENARIO   => array('beforeScenario', -50),
+            EventInterface::AFTER_SCENARIO    => array('afterScenario', -50),
+            EventInterface::BEFORE_BACKGROUND => array('beforeBackground', -50),
+            EventInterface::AFTER_BACKGROUND  => array('afterBackground', -50),
+            EventInterface::BEFORE_OUTLINE    => array('beforeOutline', -50),
+            EventInterface::AFTER_OUTLINE     => array('afterOutline', -50),
+            EventInterface::BEFORE_EXAMPLE    => array('beforeExample', -50),
+            EventInterface::AFTER_EXAMPLE     => array('afterExample', -50),
+            EventInterface::AFTER_STEP        => array('afterStep', -50),
+            EventInterface::AFTER_HOOK        => array('afterHook', -50),
         );
     }
 
@@ -266,31 +266,35 @@ class PrettyFormatter extends ProgressFormatter
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param OutlineExampleEvent $event
+     * @param ExampleEvent $event
      *
      * @uses printOutlineExampleHeader()
      */
-    public function beforeOutlineExample(OutlineExampleEvent $event)
+    public function beforeExample(ExampleEvent $event)
     {
         $this->inOutlineExample = true;
         $this->delayedStepEvents = array();
 
-        $this->printOutlineExampleHeader($event->getOutline(), $event->getIteration());
+        $example = $event->getExample();
+
+        $this->printOutlineExampleHeader($example->getOutline(), $example->getIndex() + 1);
     }
 
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param OutlineExampleEvent $event
+     * @param ExampleEvent $event
      *
      * @uses printOutlineExampleFooter()
      */
-    public function afterOutlineExample(OutlineExampleEvent $event)
+    public function afterExample(ExampleEvent $event)
     {
         $this->inOutlineExample = false;
 
+        $example = $event->getExample();
+
         $this->printOutlineExampleFooter(
-            $event->getOutline(), $event->getIteration(), $event->getStatus(), StepEvent::SKIPPED === $event->getStatus()
+            $example->getOutline(), $example->getIndex() + 1, $event->getStatus(), StepEvent::SKIPPED === $event->getStatus()
         );
     }
 

@@ -407,7 +407,7 @@ class Services
             new Reference('tester.background'),
             new Reference('tester.scenario'),
             new Reference('tester.outline'),
-            new Reference('tester.outline_example'),
+            new Reference('tester.example'),
             new Reference('tester.step')
         ));
         $definition->addTag('event_subscriber');
@@ -443,10 +443,10 @@ class Services
         ));
         $container->setDefinition('tester.outline', $definition);
 
-        $definition = new Definition('Behat\Behat\Tester\OutlineExampleTester', array(
+        $definition = new Definition('Behat\Behat\Tester\ExampleTester', array(
             new Reference('event_dispatcher')
         ));
-        $container->setDefinition('tester.outline_example', $definition);
+        $container->setDefinition('tester.example', $definition);
 
         $definition = new Definition('Behat\Behat\Tester\StepTester', array(
             new Reference('event_dispatcher')

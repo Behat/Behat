@@ -11,7 +11,7 @@ namespace Behat\Behat\Tester;
  */
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Event\EventInterface;
-use Behat\Behat\Event\OutlineExampleEvent;
+use Behat\Behat\Event\ExampleEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\ExampleNode;
@@ -22,7 +22,7 @@ use Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineExampleTester extends IsolatedStepCollectionTester
+class ExampleTester extends IsolatedStepCollectionTester
 {
     /**
      * Tests outline example.
@@ -45,8 +45,8 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
 
         $contexts = $this->initializeContextPool($suite, $contexts);
 
-        $event = new OutlineExampleEvent($suite, $contexts, $example);
-        $this->dispatch(EventInterface::BEFORE_OUTLINE_EXAMPLE, $event);
+        $event = new ExampleEvent($suite, $contexts, $example);
+        $this->dispatch(EventInterface::BEFORE_EXAMPLE, $event);
 
         try {
             !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_SCENARIO, $event);
@@ -70,16 +70,16 @@ class OutlineExampleTester extends IsolatedStepCollectionTester
             $status = max($status, $tester->test($suite, $contexts, $step, $example->getOutline(), $skip));
         }
 
-        $event = new OutlineExampleEvent($suite, $contexts, $example, $status);
+        $event = new ExampleEvent($suite, $contexts, $example, $status);
 
         try {
             !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_SCENARIO, $event);
         } catch (Exception $e) {
             $status = StepEvent::FAILED;
-            $event = new OutlineExampleEvent($suite, $contexts, $example, $status);
+            $event = new ExampleEvent($suite, $contexts, $example, $status);
         }
 
-        $this->dispatch(EventInterface::AFTER_OUTLINE_EXAMPLE, $event);
+        $this->dispatch(EventInterface::AFTER_EXAMPLE, $event);
 
         return $status;
     }

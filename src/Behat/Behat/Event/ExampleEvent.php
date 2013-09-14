@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Tester\Event;
+namespace Behat\Behat\Event;
 
 /*
  * This file is part of the Behat.
@@ -11,15 +11,14 @@ namespace Behat\Behat\Tester\Event;
  */
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Suite\SuiteInterface;
-use Behat\Behat\Tester\Event\ContextualTesterCarrierEvent;
 use Behat\Gherkin\Node\ExampleNode;
 
 /**
- * Outline example tester carrier event.
+ * Outline example event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineExampleTesterCarrierEvent extends ContextualTesterCarrierEvent
+class ExampleEvent extends StepCollectionEvent
 {
     /**
      * @var ExampleNode
@@ -27,15 +26,21 @@ class OutlineExampleTesterCarrierEvent extends ContextualTesterCarrierEvent
     private $example;
 
     /**
-     * Initializes event.
+     * Initializes outline example event.
      *
      * @param SuiteInterface       $suite
      * @param ContextPoolInterface $contexts
      * @param ExampleNode          $example
+     * @param null|integer         $status
      */
-    public function __construct(SuiteInterface $suite, ContextPoolInterface $contexts, ExampleNode $example)
+    public function __construct(
+        SuiteInterface $suite,
+        ContextPoolInterface $contexts,
+        ExampleNode $example,
+        $status = null
+    )
     {
-        parent::__construct($suite, $contexts);
+        parent::__construct($suite, $contexts, $status);
 
         $this->example = $example;
     }

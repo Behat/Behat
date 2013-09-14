@@ -15,7 +15,7 @@ use Behat\Behat\Event\OutlineEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\SuiteInterface;
-use Behat\Behat\Tester\Event\OutlineExampleTesterCarrierEvent;
+use Behat\Behat\Tester\Event\ExampleTesterCarrierEvent;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\OutlineNode;
 use RuntimeException;
@@ -50,7 +50,7 @@ class OutlineTester extends DispatchingService
         $this->dispatch(EventInterface::BEFORE_OUTLINE, $event);
 
         foreach ($outline->getExamples() as $example) {
-            $tester = $this->getOutlineExampleTester($suite, $contexts, $example);
+            $tester = $this->getExampleTester($suite, $contexts, $example);
             $status = max($status, $tester->test($suite, $contexts, $example, $skip));
         }
 
@@ -67,19 +67,19 @@ class OutlineTester extends DispatchingService
      * @param ContextPoolInterface $contexts
      * @param ExampleNode          $example
      *
-     * @return OutlineExampleTester
+     * @return ExampleTester
      *
      * @throws RuntimeException If outline example tester is not found
      */
-    private function getOutlineExampleTester(
+    private function getExampleTester(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
         ExampleNode $example
     )
     {
-        $testerProvider = new OutlineExampleTesterCarrierEvent($suite, $contexts, $example);
+        $testerProvider = new ExampleTesterCarrierEvent($suite, $contexts, $example);
 
-        $this->dispatch(EventInterface::CREATE_OUTLINE_EXAMPLE_TESTER, $testerProvider);
+        $this->dispatch(EventInterface::CREATE_EXAMPLE_TESTER, $testerProvider);
         if (!$testerProvider->hasTester()) {
             throw new RuntimeException(sprintf(
                 'Can not find tester for example #%d of "%s" outline from the "%s" suite.',

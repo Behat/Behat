@@ -10,8 +10,8 @@ namespace Behat\Behat\Output\Formatter;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\ExampleEvent;
 use Behat\Behat\Event\FeatureEvent;
-use Behat\Behat\Event\OutlineExampleEvent;
 use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Gherkin\Node\FeatureNode;
@@ -89,13 +89,13 @@ class JUnitFormatter extends ConsoleFormatter
     public static function getSubscribedEvents()
     {
         return array(
-            EventInterface::BEFORE_FEATURE         => array('beforeFeature', -50),
-            EventInterface::AFTER_FEATURE          => array('afterFeature', -50),
-            EventInterface::BEFORE_SCENARIO        => array('beforeScenario', -50),
-            EventInterface::AFTER_SCENARIO         => array('afterScenario', -50),
-            EventInterface::BEFORE_OUTLINE_EXAMPLE => array('beforeOutlineExample', -50),
-            EventInterface::AFTER_OUTLINE_EXAMPLE  => array('afterOutlineExample', -50),
-            EventInterface::AFTER_STEP             => array('afterStep', -50),
+            EventInterface::BEFORE_FEATURE  => array('beforeFeature', -50),
+            EventInterface::AFTER_FEATURE   => array('afterFeature', -50),
+            EventInterface::BEFORE_SCENARIO => array('beforeScenario', -50),
+            EventInterface::AFTER_SCENARIO  => array('afterScenario', -50),
+            EventInterface::BEFORE_EXAMPLE  => array('beforeOutlineExample', -50),
+            EventInterface::AFTER_EXAMPLE   => array('afterOutlineExample', -50),
+            EventInterface::AFTER_STEP      => array('afterStep', -50),
         );
     }
 
@@ -178,9 +178,9 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "outline.example.before" event.
      *
-     * @param OutlineExampleEvent $event
+     * @param ExampleEvent $event
      */
-    public function beforeOutlineExample(OutlineExampleEvent $event)
+    public function beforeOutlineExample(ExampleEvent $event)
     {
         $this->scenarioStartTime = microtime(true);
     }
@@ -188,11 +188,11 @@ class JUnitFormatter extends ConsoleFormatter
     /**
      * Listens to "outline.example.after" event.
      *
-     * @param OutlineExampleEvent $event
+     * @param ExampleEvent $event
      *
      * @uses printTestCase()
      */
-    public function afterOutlineExample(OutlineExampleEvent $event)
+    public function afterOutlineExample(ExampleEvent $event)
     {
         $this->printTestCase($event->getOutline(), microtime(true) - $this->scenarioStartTime, $event);
     }
@@ -262,7 +262,7 @@ class JUnitFormatter extends ConsoleFormatter
     {
         $className = $scenario->getFeature()->getTitle();
         $name = $scenario->getTitle();
-        $name .= $event instanceof OutlineExampleEvent
+        $name .= $event instanceof ExampleEvent
             ? ', Ex #' . ($event->getIteration() + 1)
             : '';
         $caseStats = sprintf('classname="%s" name="%s" time="%F"',

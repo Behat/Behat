@@ -53,7 +53,7 @@ interface EventInterface
     const CREATE_FEATURE_TESTER = 'getFeatureTester';
     const CREATE_BACKGROUND_TESTER = 'getBackgroundTester';
     const CREATE_SCENARIO_TESTER = 'getScenarioTester';
-    const CREATE_OUTLINE_EXAMPLE_TESTER = 'getOutlineExampleTester';
+    const CREATE_EXAMPLE_TESTER = 'getExampleTester';
     const CREATE_STEP_TESTER = 'getStepTester';
     /**
      * Lifecycle events
@@ -68,8 +68,8 @@ interface EventInterface
     const AFTER_SCENARIO = 'afterScenario';
     const BEFORE_OUTLINE = 'beforeOutline';
     const AFTER_OUTLINE = 'afterOutline';
-    const BEFORE_OUTLINE_EXAMPLE = 'beforeOutlineExample';
-    const AFTER_OUTLINE_EXAMPLE = 'afterOutlineExample';
+    const BEFORE_EXAMPLE = 'beforeExample';
+    const AFTER_EXAMPLE = 'afterExample';
     const BEFORE_BACKGROUND = 'beforeBackground';
     const AFTER_BACKGROUND = 'afterBackground';
     const BEFORE_STEP = 'beforeStep';

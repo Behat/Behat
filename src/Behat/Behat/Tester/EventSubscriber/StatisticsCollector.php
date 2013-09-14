@@ -69,12 +69,12 @@ class StatisticsCollector implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            EventInterface::BEFORE_EXERCISE       => array('startTimer', -10),
-            EventInterface::AFTER_EXERCISE        => array('finishTimer', -10),
-            EventInterface::AFTER_FEATURE         => array('collectFeatureResult', -10),
-            EventInterface::AFTER_SCENARIO        => array('collectScenarioResult', -10),
-            EventInterface::AFTER_OUTLINE_EXAMPLE => array('collectScenarioResult', -10),
-            EventInterface::AFTER_STEP            => array('collectStepStats', -10),
+            EventInterface::BEFORE_EXERCISE => array('startTimer', -10),
+            EventInterface::AFTER_EXERCISE  => array('finishTimer', -10),
+            EventInterface::AFTER_FEATURE   => array('collectFeatureResult', -10),
+            EventInterface::AFTER_SCENARIO  => array('collectScenarioResult', -10),
+            EventInterface::AFTER_EXAMPLE   => array('collectScenarioResult', -10),
+            EventInterface::AFTER_STEP      => array('collectStepStats', -10),
         );
     }
 

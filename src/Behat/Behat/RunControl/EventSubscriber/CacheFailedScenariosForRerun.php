@@ -10,7 +10,7 @@ namespace Behat\Behat\RunControl\EventSubscriber;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Event\EventInterface;
-use Behat\Behat\Event\OutlineExampleEvent;
+use Behat\Behat\Event\ExampleEvent;
 use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -44,9 +44,9 @@ class CacheFailedScenariosForRerun implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            EventInterface::AFTER_SCENARIO        => array('collectFailedScenario', -50),
-            EventInterface::AFTER_OUTLINE_EXAMPLE => array('collectFailedOutlineExample', -50),
-            EventInterface::AFTER_EXERCISE        => array('writeCache', -50),
+            EventInterface::AFTER_SCENARIO => array('collectFailedScenario', -50),
+            EventInterface::AFTER_EXAMPLE  => array('collectFailedOutlineExample', -50),
+            EventInterface::AFTER_EXERCISE => array('writeCache', -50),
         );
     }
 
@@ -92,9 +92,9 @@ class CacheFailedScenariosForRerun implements EventSubscriberInterface
     /**
      * Records outline example if it is failed.
      *
-     * @param OutlineExampleEvent $event
+     * @param ExampleEvent $event
      */
-    public function collectFailedOutlineExample(OutlineExampleEvent $event)
+    public function collectFailedOutlineExample(ExampleEvent $event)
     {
         if (!$this->getFileName()) {
             return;

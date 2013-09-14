@@ -12,15 +12,15 @@ namespace Behat\Behat\Tester\EventSubscriber;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Tester\BackgroundTester;
 use Behat\Behat\Tester\Event\BackgroundTesterCarrierEvent;
+use Behat\Behat\Tester\Event\ExampleTesterCarrierEvent;
 use Behat\Behat\Tester\Event\ExerciseTesterCarrierEvent;
 use Behat\Behat\Tester\Event\FeatureTesterCarrierEvent;
-use Behat\Behat\Tester\Event\OutlineExampleTesterCarrierEvent;
 use Behat\Behat\Tester\Event\ScenarioTesterCarrierEvent;
 use Behat\Behat\Tester\Event\StepTesterCarrierEvent;
 use Behat\Behat\Tester\Event\SuiteTesterCarrierEvent;
+use Behat\Behat\Tester\ExampleTester;
 use Behat\Behat\Tester\ExerciseTester;
 use Behat\Behat\Tester\FeatureTester;
-use Behat\Behat\Tester\OutlineExampleTester;
 use Behat\Behat\Tester\OutlineTester;
 use Behat\Behat\Tester\ScenarioTester;
 use Behat\Behat\Tester\StepTester;
@@ -41,20 +41,20 @@ class TesterDispatcher implements EventSubscriberInterface
     private $backgroundTester;
     private $scenarioTester;
     private $outlineTester;
-    private $outlineExampleTester;
+    private $exampleTester;
     private $stepTester;
 
     /**
      * Initializes dispatcher.
      *
-     * @param ExerciseTester       $exerciseTester
-     * @param SuiteTester          $suiteTester
-     * @param FeatureTester        $featureTester
-     * @param BackgroundTester     $backgroundTester
-     * @param ScenarioTester       $scenarioTester
-     * @param OutlineTester        $outlineTester
-     * @param OutlineExampleTester $outlineExampleTester
-     * @param StepTester           $stepTester
+     * @param ExerciseTester   $exerciseTester
+     * @param SuiteTester      $suiteTester
+     * @param FeatureTester    $featureTester
+     * @param BackgroundTester $backgroundTester
+     * @param ScenarioTester   $scenarioTester
+     * @param OutlineTester    $outlineTester
+     * @param ExampleTester    $exampleTester
+     * @param StepTester       $stepTester
      */
     public function __construct(
         ExerciseTester $exerciseTester,
@@ -63,7 +63,7 @@ class TesterDispatcher implements EventSubscriberInterface
         BackgroundTester $backgroundTester,
         ScenarioTester $scenarioTester,
         OutlineTester $outlineTester,
-        OutlineExampleTester $outlineExampleTester,
+        ExampleTester $exampleTester,
         StepTester $stepTester
     )
     {
@@ -73,7 +73,7 @@ class TesterDispatcher implements EventSubscriberInterface
         $this->backgroundTester = $backgroundTester;
         $this->scenarioTester = $scenarioTester;
         $this->outlineTester = $outlineTester;
-        $this->outlineExampleTester = $outlineExampleTester;
+        $this->exampleTester = $exampleTester;
         $this->stepTester = $stepTester;
     }
 
@@ -85,13 +85,13 @@ class TesterDispatcher implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            EventInterface::CREATE_EXERCISE_TESTER        => array('setExerciseTester', 0),
-            EventInterface::CREATE_SUITE_TESTER           => array('setSuiteTester', 0),
-            EventInterface::CREATE_FEATURE_TESTER         => array('setFeatureTester', 0),
-            EventInterface::CREATE_BACKGROUND_TESTER      => array('setBackgroundTester', 0),
-            EventInterface::CREATE_SCENARIO_TESTER        => array('setScenarioTester', 0),
-            EventInterface::CREATE_OUTLINE_EXAMPLE_TESTER => array('setOutlineExampleTester', 0),
-            EventInterface::CREATE_STEP_TESTER            => array('setStepTester', 0),
+            EventInterface::CREATE_EXERCISE_TESTER   => array('setExerciseTester', 0),
+            EventInterface::CREATE_SUITE_TESTER      => array('setSuiteTester', 0),
+            EventInterface::CREATE_FEATURE_TESTER    => array('setFeatureTester', 0),
+            EventInterface::CREATE_BACKGROUND_TESTER => array('setBackgroundTester', 0),
+            EventInterface::CREATE_SCENARIO_TESTER   => array('setScenarioTester', 0),
+            EventInterface::CREATE_EXAMPLE_TESTER    => array('setExampleTester', 0),
+            EventInterface::CREATE_STEP_TESTER       => array('setStepTester', 0),
         );
     }
 
@@ -150,11 +150,11 @@ class TesterDispatcher implements EventSubscriberInterface
     /**
      * Sets outline example tester to the carrier event.
      *
-     * @param OutlineExampleTesterCarrierEvent $event
+     * @param ExampleTesterCarrierEvent $event
      */
-    public function setOutlineExampleTester(OutlineExampleTesterCarrierEvent $event)
+    public function setExampleTester(ExampleTesterCarrierEvent $event)
     {
-        $event->setTester($this->outlineExampleTester);
+        $event->setTester($this->exampleTester);
     }
 
     /**
