@@ -72,7 +72,7 @@ class Services
 
         $definition = new Definition('Behat\Behat\Console\Processor\AppendSnippetsProcessor', array(
             new Reference('snippet.context_snippets_appender'),
-            new Reference('output.formatter_manager')
+            new Reference('output.manager')
         ));
         $definition->addTag('console.processor');
         $container->setDefinition('console.processor.append_snippets', $definition);
@@ -99,7 +99,7 @@ class Services
         $container->setDefinition('console.processor.run', $definition);
 
         $definition = new Definition('Behat\Behat\Console\Processor\FormatProcessor', array(
-            new Reference('output.formatter_manager'),
+            new Reference('output.manager'),
             new Reference('translator'),
             '%paths.i18n%'
         ));
@@ -205,10 +205,10 @@ class Services
 
     private function registerOutputServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\FormatterManager', array(
+        $definition = new Definition('Behat\Behat\Output\OutputManager', array(
             new Reference('event_dispatcher')
         ));
-        $container->setDefinition('output.formatter_manager', $definition);
+        $container->setDefinition('output.manager', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Formatter\PrettyFormatter', array(
             new Reference('tester.statistics_collector'),

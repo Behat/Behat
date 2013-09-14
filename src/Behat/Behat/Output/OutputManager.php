@@ -18,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FormatterManager
+class OutputManager
 {
     /**
      * @var EventDispatcherInterface

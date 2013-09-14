@@ -9,7 +9,7 @@ namespace Behat\Behat\Console\Processor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Output\FormatterManager;
+use Behat\Behat\Output\OutputManager;
 use Behat\Behat\Snippet\EventSubscriber\ContextSnippetsAppender;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,7 +29,7 @@ class AppendSnippetsProcessor implements ProcessorInterface
      */
     private $contextSnippetsAppender;
     /**
-     * @var FormatterManager
+     * @var OutputManager
      */
     private $formatterManager;
 
@@ -37,11 +37,11 @@ class AppendSnippetsProcessor implements ProcessorInterface
      * Initializes processor.
      *
      * @param ContextSnippetsAppender $contextSnippetsAppender
-     * @param FormatterManager        $formatterManager
+     * @param OutputManager        $formatterManager
      */
     public function __construct(
         ContextSnippetsAppender $contextSnippetsAppender,
-        FormatterManager $formatterManager
+        OutputManager $formatterManager
     )
     {
         $this->contextSnippetsAppender = $contextSnippetsAppender;

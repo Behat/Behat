@@ -164,7 +164,7 @@ class BehatExtension
      */
     protected function registerFormattersConfiguration(array $formatters, ContainerBuilder $container)
     {
-        $managerDefinition = $container->getDefinition('output.formatter_manager');
+        $managerDefinition = $container->getDefinition('output.manager');
         foreach ($formatters as $name => $parameters) {
             if ($parameters['enabled']) {
                 $managerDefinition->addMethodCall('enableFormatter', array($name));

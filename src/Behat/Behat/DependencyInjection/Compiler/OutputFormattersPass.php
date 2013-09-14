@@ -29,7 +29,7 @@ class OutputFormattersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $managerDefinition = $container->getDefinition('output.formatter_manager');
+        $managerDefinition = $container->getDefinition('output.manager');
 
         $calls = array();
         foreach ($container->findTaggedServiceIds('output.formatter') as $id => $attributes) {

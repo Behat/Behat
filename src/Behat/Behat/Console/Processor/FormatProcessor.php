@@ -10,7 +10,7 @@ namespace Behat\Behat\Console\Processor;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Output\Formatter\FormatterInterface;
-use Behat\Behat\Output\FormatterManager;
+use Behat\Behat\Output\OutputManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,7 +25,7 @@ use Symfony\Component\Translation\Translator;
 class FormatProcessor implements ProcessorInterface
 {
     /**
-     * @var FormatterManager
+     * @var OutputManager
      */
     private $formatterManager;
     /**
@@ -40,11 +40,11 @@ class FormatProcessor implements ProcessorInterface
     /**
      * Initializes processor.
      *
-     * @param FormatterManager $formatterManager
+     * @param OutputManager $formatterManager
      * @param Translator       $translator
      * @param string           $i18nPath
      */
-    public function __construct(FormatterManager $formatterManager, Translator $translator, $i18nPath)
+    public function __construct(OutputManager $formatterManager, Translator $translator, $i18nPath)
     {
         $this->formatterManager = $formatterManager;
         $this->translator = $translator;
