@@ -335,12 +335,12 @@ Feature: Different result types
 
       (::) failed steps (::)
 
-      01. NO water in coffee machine!!!
+      01. NO water in coffee machine!!! (Exception)
           In step `Given I have no water'.             # FeatureContext::noWater()
           From scenario `I have no water'.             # features/coffee.feature:9
           Of feature `Skipped coffee machine actions'. # features/coffee.feature
 
-      02. NO electricity in coffee machine!!!
+      02. NO electricity in coffee machine!!! (Exception)
           In step `And I have no electricity'.         # FeatureContext::haveNoElectricity()
           From scenario `I have no electricity'.       # features/coffee.feature:15
           Of feature `Skipped coffee machine actions'. # features/coffee.feature

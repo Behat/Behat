@@ -110,83 +110,6 @@ Feature: Format options
             | val1 | val2 |
       """
 
-  Scenario: --ansi option
-    When I run "behat --ansi"
-    Then it should fail with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Background:             [30m# features/apples.feature:6[0m
-          [32mGiven I have [0m[32;1m3[0m[32m apples[0m [30m# FeatureContext::iHaveApples()[0m
-
-        Scenario: I'm little hungry   [30m# features/apples.feature:9[0m
-          [32mWhen I ate [0m[32;1m1[0m[32m apple[0m          [30m# FeatureContext::iAteApples()[0m
-          [31mThen I should have [0m[31;1m3[0m[31m apples[0m [30m# FeatureContext::iShouldHaveApples()[0m
-            [31mFailed asserting that 2 matches expected 3.[0m
-
-        Scenario: Found more apples   [30m# features/apples.feature:13[0m
-          [32mWhen I found [0m[32;1m5[0m[32m apples[0m       [30m# FeatureContext::iFoundApples()[0m
-          [32mThen I should have [0m[32;1m8[0m[32m apples[0m [30m# FeatureContext::iShouldHaveApples()[0m
-
-        Scenario: Found more apples   [30m# features/apples.feature:17[0m
-          [32mWhen I found [0m[32;1m2[0m[32m apples[0m       [30m# FeatureContext::iFoundApples()[0m
-          [32mThen I should have [0m[32;1m5[0m[32m apples[0m [30m# FeatureContext::iShouldHaveApples()[0m
-          [33mAnd do something undefined[0m
-
-        Scenario Outline: Other situations   [30m# features/apples.feature:22[0m
-          [36mWhen I ate [0m[36;1m<ate>[0m[36m apples[0m            [30m# FeatureContext::iAteApples()[0m
-          [36mAnd I found [0m[36;1m<found>[0m[36m apples[0m         [30m# FeatureContext::iFoundApples()[0m
-          [36mThen I should have [0m[36;1m<result>[0m[36m apples[0m [30m# FeatureContext::iShouldHaveApples()[0m
-
-          Examples:
-      [36m[0m[36m      [0m[36m[0m|[36m[0m[36m ate [0m[36m[0m|[36m[0m[36m found [0m[36m[0m|[36m[0m[36m result [0m[36m[0m|[36m[0m
-      [32m[0m[32m      [0m[32m[0m|[32m[0m[32m 3   [0m[32m[0m|[32m[0m[32m 1     [0m[32m[0m|[32m[0m[32m 1      [0m[32m[0m|[32m[0m
-      [31m[0m[31m      [0m[31m[0m|[31m[0m[31m 0   [0m[31m[0m|[31m[0m[31m 4     [0m[31m[0m|[31m[0m[31m 8      [0m[31m[0m|[31m[0m
-              [31mFailed asserting that 7 matches expected 8.[0m
-      [32m[0m[32m      [0m[32m[0m|[32m[0m[32m 2   [0m[32m[0m|[32m[0m[32m 2     [0m[32m[0m|[32m[0m[32m 3      [0m[32m[0m|[32m[0m
-
-        Scenario: Multilines                 [30m# features/apples.feature:33[0m
-          [33mGiven pystring:[0m
-      [33m      '''
-            some pystring
-            '''[0m
-          [33mAnd table:[0m
-      [33m      | col1 | col2 |
-            | val1 | val2 |[0m
-
-      7 scenarios ([32m3 passed[0m, [33m2 undefined[0m, [31m2 failed[0m)
-      25 steps ([32m20 passed[0m, [33m3 undefined[0m, [31m2 failed[0m)
-
-      [33mYou can implement step definitions for undefined steps with these snippets:[0m
-
-      [33m    /**
-           * @Given /^do something undefined$/
-           */
-          public function doSomethingUndefined()
-          {
-              throw new PendingException();
-          }[0m
-
-      [33m    /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
-          {
-              throw new PendingException();
-          }[0m
-
-      [33m    /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
-          {
-              throw new PendingException();
-          }[0m
-      """
-
   Scenario: --no-ansi option
     When I run "behat --no-ansi"
     Then it should fail with:
@@ -233,6 +156,10 @@ Feature: Format options
           And table:
             | col1 | col2 |
             | val1 | val2 |
+
+      Failing Scenarios:
+      features/apples.feature:9 # Scenario: I'm little hungry
+      features/apples.feature:30 # Scenario Outline: Other situations
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -311,6 +238,10 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
+      Failing Scenarios:
+      features/apples.feature:9
+      features/apples.feature:30
+
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
 
@@ -388,6 +319,10 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
+      Failing Scenarios:
+      features/apples.feature:9 # Scenario: I'm little hungry
+      features/apples.feature:30 # Scenario Outline: Other situations
+
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
       """
@@ -438,6 +373,10 @@ Feature: Format options
           And table:
             | col1 | col2 |
             | val1 | val2 |
+
+      Failing Scenarios:
+      features/apples.feature:9 # Scenario: I'm little hungry
+      features/apples.feature:30 # Scenario Outline: Other situations
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -506,18 +445,21 @@ Feature: Format options
           And I found <found> apples         # FeatureContext::iFoundApples()
           Then I should have <result> apples # FeatureContext::iShouldHaveApples()
 
-            Examples: | 3 | 1 | 1 |
+          Examples:
+            | ate | found | result |
+
+            | 3   | 1     | 1      |         # features/apples.feature:29
               When I ate 3 apples            # FeatureContext::iAteApples()
               And I found 1 apples           # FeatureContext::iFoundApples()
               Then I should have 1 apples    # FeatureContext::iShouldHaveApples()
 
-            Examples: | 0 | 4 | 8 |
+            | 0   | 4     | 8      |         # features/apples.feature:30
               When I ate 0 apples            # FeatureContext::iAteApples()
               And I found 4 apples           # FeatureContext::iFoundApples()
               Then I should have 8 apples    # FeatureContext::iShouldHaveApples()
                 Failed asserting that 7 matches expected 8.
 
-            Examples: | 2 | 2 | 3 |
+            | 2   | 2     | 3      |         # features/apples.feature:31
               When I ate 2 apples            # FeatureContext::iAteApples()
               And I found 2 apples           # FeatureContext::iFoundApples()
               Then I should have 3 apples    # FeatureContext::iShouldHaveApples()
@@ -530,6 +472,10 @@ Feature: Format options
           And table:
             | col1 | col2 |
             | val1 | val2 |
+
+      Failing Scenarios:
+      features/apples.feature:9 # Scenario: I'm little hungry
+      features/apples.feature:30 # Scenario Outline: Other situations
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -602,6 +548,10 @@ Feature: Format options
         Scenario: Multilines                 # features/apples.feature:33
           Given pystring:
           And table:
+
+      Failing Scenarios:
+      features/apples.feature:9 # Scenario: I'm little hungry
+      features/apples.feature:30 # Scenario Outline: Other situations
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)

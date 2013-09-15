@@ -96,36 +96,66 @@ Feature: Dry run
     When I run "behat --no-ansi --no-paths features/apples.feature"
     Then it should pass with:
       """
-      HOOK: before suiteFeature: Apples story
+      > BeforeSuite
+        HOOK: before suite
+      Feature: Apples story
         In order to eat apple
         As a little kid
         I need to have an apple in my pocket
 
-      HOOK: before scenario  Background:
-      STEP: I have 3 apples    Given I have 3 apples
+        > BeforeScenario
+          HOOK: before scenario
+        Background:
+          Given I have 3 apples
+            STEP: I have 3 apples
 
         Scenario: I'm little hungry
-      STEP: I ate 1 apples    When I ate 1 apple
-      STEP: I should have 3 apples    Then I should have 3 apples
+          When I ate 1 apple
+            STEP: I ate 1 apples
+          Then I should have 3 apples
+            STEP: I should have 3 apples
 
         Scenario: Found more apples
-      HOOK: before scenarioSTEP: I have 3 applesSTEP: I found 5 apples    When I found 5 apples
-      STEP: I should have 8 apples    Then I should have 8 apples
+        > BeforeScenario
+          HOOK: before scenario
+          When I found 5 apples
+            STEP: I found 5 apples
+          Then I should have 8 apples
+            STEP: I should have 8 apples
 
         Scenario: Found more apples
-      HOOK: before scenarioSTEP: I have 3 applesSTEP: I found 2 apples    When I found 2 apples
-      STEP: I should have 5 apples    Then I should have 5 apples
+        > BeforeScenario
+          HOOK: before scenario
+          When I found 2 apples
+            STEP: I found 2 apples
+          Then I should have 5 apples
+            STEP: I should have 5 apples
 
         Scenario Outline: Other situations
-      HOOK: before scenarioSTEP: I have 3 applesSTEP: I ate 3 applesSTEP: I found 1 applesSTEP: I should have 1 apples    When I ate <ate> apples
+          > BeforeScenario
+            HOOK: before scenario
+          When I ate <ate> apples
           And I found <found> apples
           Then I should have <result> apples
 
           Examples:
             | ate | found | result |
             | 3   | 1     | 1      |
-      HOOK: before scenarioSTEP: I have 3 applesSTEP: I ate 0 applesSTEP: I found 4 applesSTEP: I should have 8 apples      | 0   | 4     | 8      |
-      HOOK: before scenarioSTEP: I have 3 applesSTEP: I ate 2 applesSTEP: I found 2 applesSTEP: I should have 3 apples      | 2   | 2     | 3      |
+              STEP: I ate 3 apples
+              STEP: I found 1 apples
+              STEP: I should have 1 apples
+          > BeforeScenario
+            HOOK: before scenario
+            | 0   | 4     | 8      |
+              STEP: I ate 0 apples
+              STEP: I found 4 apples
+              STEP: I should have 8 apples
+          > BeforeScenario
+            HOOK: before scenario
+            | 2   | 2     | 3      |
+              STEP: I ate 2 apples
+              STEP: I found 2 apples
+              STEP: I should have 3 apples
 
       6 scenarios (6 passed)
       21 steps (21 passed)

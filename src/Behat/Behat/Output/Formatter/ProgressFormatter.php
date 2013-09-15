@@ -20,14 +20,13 @@ use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\StepNode;
 use Exception;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Progress formatter.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ProgressFormatter extends TranslatableConsoleFormatter
+class ProgressFormatter extends CliFormatter
 {
     /**
      * Maximum line length.
@@ -41,33 +40,6 @@ class ProgressFormatter extends TranslatableConsoleFormatter
      * @var integer
      */
     private $stepsPrinted = 0;
-    /**
-     * @var StatisticsCollector
-     */
-    private $statisticsCollector;
-    /**
-     * @var SnippetsCollector
-     */
-    private $snippetsCollector;
-
-    /**
-     * Initializes formatter.
-     *
-     * @param StatisticsCollector $statisticsCollector
-     * @param SnippetsCollector   $snippetsCollector
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(
-        StatisticsCollector $statisticsCollector,
-        SnippetsCollector $snippetsCollector,
-        TranslatorInterface $translator
-    )
-    {
-        $this->statisticsCollector = $statisticsCollector;
-        $this->snippetsCollector = $snippetsCollector;
-
-        parent::__construct($translator);
-    }
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -115,10 +87,10 @@ class ProgressFormatter extends TranslatableConsoleFormatter
     public function afterExercise(ExerciseEvent $event)
     {
         $this->writeln("\n");
-        $this->printFailedSteps($this->statisticsCollector);
-        $this->printPendingSteps($this->statisticsCollector);
-        $this->printSummary($this->statisticsCollector);
-        $this->printUndefinedStepsSnippets($this->snippetsCollector);
+        $this->printFailedSteps($this->getStatisticsCollector());
+        $this->printPendingSteps($this->getStatisticsCollector());
+        $this->printSummary($this->getStatisticsCollector());
+        $this->printUndefinedStepsSnippets($this->getSnippetsCollector());
     }
 
     /**
@@ -136,17 +108,6 @@ class ProgressFormatter extends TranslatableConsoleFormatter
             $event->getDefinition(),
             $event->getSnippet(),
             $event->getException()
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultParameters()
-    {
-        return array_merge(
-            parent::getDefaultParameters(),
-            array()
         );
     }
 
@@ -474,18 +435,10 @@ class ProgressFormatter extends TranslatableConsoleFormatter
     }
 
     /**
-     * @return StatisticsCollector
+     * {@inheritdoc}
      */
-    protected function getStatisticsCollector()
+    protected function getDefaultParameters()
     {
-        return $this->statisticsCollector;
-    }
-
-    /**
-     * @return SnippetsCollector
-     */
-    protected function getSnippetsCollector()
-    {
-        return $this->snippetsCollector;
+        return array();
     }
 }

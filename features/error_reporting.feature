@@ -15,12 +15,6 @@ Feature: Error Reporting
 
       class FeatureContext implements ContextInterface
       {
-          public function __construct(array $parameters) {
-              // E_NOTICE in FeatureContext construct
-              $array = array();
-              $foo = $array[0];
-          }
-
           /**
            * @Given /^I have an empty array$/
            */
@@ -69,7 +63,7 @@ Feature: Error Reporting
       Feature: E_NOTICE in scenario
         In order to test the BEHAT_ERROR_REPORTING constant
         As a contributor of behat
-        I need to have a FeatureContext that throws E_NOTICE on __construct and within steps.
+        I need to have a FeatureContext that throws E_NOTICE within steps.
 
         Background:
           Given I have an empty array
@@ -92,7 +86,7 @@ Feature: Error Reporting
     """
     (::) failed steps (::)
 
-    01. Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 30
+    01. Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 24
         In step `When I access array index 0'.  # FeatureContext::iAccessArrayIndex()
         From scenario `Access undefined index'. # features/e_notice_in_scenario.feature:9
         Of feature `E_NOTICE in scenario'.      # features/e_notice_in_scenario.feature

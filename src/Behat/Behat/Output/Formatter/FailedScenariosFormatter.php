@@ -13,14 +13,13 @@ use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExampleEvent;
 use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
-use Behat\Behat\Output\Formatter\ConsoleFormatter;
 
 /**
  * Failed scenarios formatter.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FailedScenariosFormatter extends ConsoleFormatter
+class FailedScenariosFormatter extends CliFormatter
 {
     /**
      * Returns an array of event names this subscriber wants to listen to.

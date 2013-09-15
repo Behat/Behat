@@ -11,20 +11,28 @@ namespace Behat\Behat\Output\Formatter;
  */
 use Behat\Behat\Console\Formatter\OutputFormatter;
 use Behat\Behat\Event\StepEvent;
-use Behat\Behat\Output\Formatter\FormatterInterface;
+use Behat\Behat\Snippet\EventSubscriber\SnippetsCollector;
+use Behat\Behat\Tester\EventSubscriber\StatisticsCollector;
+use Exception;
 use InvalidArgumentException;
+use PHPUnit_Framework_Exception;
+use PHPUnit_Framework_TestFailure;
 use RuntimeException;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Console formatter.
+ * Base CLI formatter class.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class ConsoleFormatter implements FormatterInterface
+abstract class CliFormatter implements FormatterInterface
 {
+    private $statistics;
+    private $snippets;
+    private $translator;
     private $parameters;
     private $console;
 
@@ -33,9 +41,23 @@ abstract class ConsoleFormatter implements FormatterInterface
      *
      * @uses getDefaultParameters()
      */
-    public function __construct()
+    public function __construct(
+        StatisticsCollector $statistics,
+        SnippetsCollector $snippets,
+        TranslatorInterface $translator
+    )
     {
+        $this->statistics = $statistics;
+        $this->snippets = $snippets;
+        $this->translator = $translator;
+
+        $defaultLanguage = null;
+        if (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
+            $defaultLanguage = $matches[1];
+        }
+
         $this->parameters = new ParameterBag(array_merge(array(
+            'language'        => $defaultLanguage,
             'verbose'         => false,
             'decorated'       => true,
             'time'            => true,
@@ -94,73 +116,23 @@ abstract class ConsoleFormatter implements FormatterInterface
     abstract protected function getDefaultParameters();
 
     /**
-     * Returns color code from tester result status code.
+     * Returns exercise statistics collector.
      *
-     * @param integer $result tester result status code
-     *
-     * @return string
-     *
-     * @throws InvalidArgumentException
+     * @return StatisticsCollector
      */
-    final protected function getResultColorCode($result)
+    protected function getStatisticsCollector()
     {
-        switch ($result) {
-            case StepEvent::PASSED:
-                return 'passed';
-            case StepEvent::SKIPPED:
-                return 'skipped';
-            case StepEvent::PENDING:
-                return 'pending';
-            case StepEvent::UNDEFINED:
-                return 'undefined';
-            case StepEvent::FAILED:
-                return 'failed';
-        }
-
-        throw new InvalidArgumentException(sprintf(
-            'Unsupported step result type: %s.', $result
-        ));
+        return $this->statistics;
     }
 
     /**
-     * Writes message(s) to output console.
+     * Returns exercise snippets collector.
      *
-     * @param string|array $messages message or array of messages
-     * @param Boolean      $newline  do we need to append newline after messages
-     *
-     * @uses getWritingConsole()
+     * @return SnippetsCollector
      */
-    final protected function write($messages, $newline = false)
+    protected function getSnippetsCollector()
     {
-        $this->getWritingConsole()->write($messages, $newline);
-    }
-
-    /**
-     * Writes newlined message(s) to output console.
-     *
-     * @param string|array $messages message or array of messages
-     */
-    final protected function writeln($messages = '')
-    {
-        $this->write($messages, true);
-    }
-
-    /**
-     * Returns console instance, prepared to write.
-     *
-     * @return StreamOutput
-     *
-     * @uses createOutputConsole()
-     * @uses configureOutputConsole()
-     */
-    final protected function getWritingConsole()
-    {
-        if (null === $this->console) {
-            $this->console = $this->createOutputConsole();
-        }
-        $this->configureOutputConsole($this->console);
-
-        return $this->console;
+        return $this->snippets;
     }
 
     /**
@@ -244,6 +216,134 @@ abstract class ConsoleFormatter implements FormatterInterface
     }
 
     /**
+     * Creates a user-presentable string describing the given exception.
+     *
+     * @param $exception Exception The exception to describe
+     *
+     * @return string
+     */
+    protected function exceptionToString(Exception $exception)
+    {
+        if ($exception instanceof PHPUnit_Framework_Exception) {
+            // PHPUnit assertion exceptions do not include expected / observed info in their
+            // messages, but expect the test listeners to format that info like the following
+            // (see e.g. PHPUnit_TextUI_ResultPrinter::printDefectTrace)
+            return trim(PHPUnit_Framework_TestFailure::exceptionToString($exception));
+        }
+
+        if ($this->parameters->get('verbose')) {
+            return trim($exception);
+        }
+
+        if ($exception instanceof \Behat\Behat\Exception\Exception) {
+            return trim($exception->getMessage());
+        }
+
+        return trim($exception->getMessage() . ' (' . get_class($exception) . ')');
+    }
+
+    /**
+     * Translates message to output language.
+     *
+     * @param string $message    message to translate
+     * @param array  $parameters message parameters
+     *
+     * @return string
+     */
+    final protected function translate($message, array $parameters = array())
+    {
+        return $this->translator->trans(
+            $message, $parameters, 'formatter', $this->getParameter('language')
+        );
+    }
+
+    /**
+     * Translates numbered message to output language.
+     *
+     * @param string $message    message specification to translate
+     * @param string $number     choice number
+     * @param array  $parameters message parameters
+     *
+     * @return string
+     */
+    final protected function translateChoice($message, $number, array $parameters = array())
+    {
+        return $this->translator->transChoice(
+            $message, $number, $parameters, 'formatter', $this->getParameter('language')
+        );
+    }
+
+    /**
+     * Returns color code from tester status code.
+     *
+     * @param integer $result tester result status code
+     *
+     * @return string
+     *
+     * @throws InvalidArgumentException
+     */
+    final protected function getColorCode($result)
+    {
+        switch ($result) {
+            case StepEvent::PASSED:
+                return 'passed';
+            case StepEvent::SKIPPED:
+                return 'skipped';
+            case StepEvent::PENDING:
+                return 'pending';
+            case StepEvent::UNDEFINED:
+                return 'undefined';
+            case StepEvent::FAILED:
+                return 'failed';
+        }
+
+        throw new InvalidArgumentException(sprintf(
+            'Unsupported step result type: %s.', $result
+        ));
+    }
+
+    /**
+     * Writes message(s) to output console.
+     *
+     * @param string|array $messages message or array of messages
+     * @param Boolean      $newline  do we need to append newline after messages
+     *
+     * @uses getWritingConsole()
+     */
+    final protected function write($messages, $newline = false)
+    {
+        $this->getWritingConsole()->write($messages, $newline);
+    }
+
+    /**
+     * Writes newlined message(s) to output console.
+     *
+     * @param string|array $messages message or array of messages
+     */
+    final protected function writeln($messages = '')
+    {
+        $this->write($messages, true);
+    }
+
+    /**
+     * Returns console instance, prepared to write.
+     *
+     * @return StreamOutput
+     *
+     * @uses createOutputConsole()
+     * @uses configureOutputConsole()
+     */
+    final protected function getWritingConsole()
+    {
+        if (null === $this->console) {
+            $this->console = $this->createOutputConsole();
+        }
+        $this->configureOutputConsole($this->console);
+
+        return $this->console;
+    }
+
+    /**
      * Clear output console, so on next write formatter will need to init (create) it again.
      *
      * @see createOutputConsole()
@@ -251,28 +351,5 @@ abstract class ConsoleFormatter implements FormatterInterface
     final protected function flushOutputConsole()
     {
         $this->console = null;
-    }
-
-    /**
-     * Creates a user-presentable string describing the given exception.
-     *
-     * @param $exception \Exception The exception to describe
-     *
-     * @return string
-     */
-    protected function exceptionToString(\Exception $exception)
-    {
-        if ($exception instanceof \PHPUnit_Framework_Exception) {
-            // PHPUnit assertion exceptions do not include expected / observed info in their
-            // messages, but expect the test listeners to format that info like the following
-            // (see e.g. PHPUnit_TextUI_ResultPrinter::printDefectTrace)
-            return trim(\PHPUnit_Framework_TestFailure::exceptionToString($exception));
-        }
-
-        if ($this->parameters->get('verbose')) {
-            return trim($exception);
-        }
-
-        return trim($exception->getMessage());
     }
 }

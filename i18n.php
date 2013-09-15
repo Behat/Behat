@@ -1,19 +1,20 @@
-<?php return array (
-    'en' =>
-    array (
-        'proposal_title'      => 'You can implement step definitions for undefined steps with these snippets:',
-        'failed_steps_title'  => 'failed steps',
-        'pending_steps_title' => 'pending steps',
-        'scenarios_count'     => '{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios',
-        'steps_count'         => '{0} No steps|{1} 1 step|]1,Inf] %1% steps',
-        'passed_count'        => '[1,Inf] %1% passed',
-        'failed_count'        => '[1,Inf] %1% failed',
-        'pending_count'       => '[1,Inf] %1% pending',
-        'undefined_count'     => '[1,Inf] %1% undefined',
-        'skipped_count'       => '[1,Inf] %1% skipped',
+<?php return array(
+    'en'    =>
+    array(
+        'proposal_title'          => 'You can implement step definitions for undefined steps with these snippets:',
+        'failing_scenarios_title' => 'Failing Scenarios',
+        'failed_steps_title'      => 'failed steps',
+        'pending_steps_title'     => 'pending steps',
+        'scenarios_count'         => '{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios',
+        'steps_count'             => '{0} No steps|{1} 1 step|]1,Inf] %1% steps',
+        'passed_count'            => '[1,Inf] %1% passed',
+        'failed_count'            => '[1,Inf] %1% failed',
+        'pending_count'           => '[1,Inf] %1% pending',
+        'undefined_count'         => '[1,Inf] %1% undefined',
+        'skipped_count'           => '[1,Inf] %1% skipped',
     ),
-    'cs' =>
-    array (
+    'cs'    =>
+    array(
         'proposal_title'      => 'Můžete implementovat definice kroku pro nedefinované kroky za použití těchto kusů kódu (snippetů):',
         'failed_steps_title'  => 'zkažené kroky',
         'pending_steps_title' => 'čekající kroky',
@@ -25,8 +26,8 @@
         'undefined_count'     => '{1} %1% nedefinován|{2,3,4} %1% nedefinovány|]4,Inf] %1% nedefinováno',
         'skipped_count'       => '{1} %1% přeskočen|{2,3,4} %1% přeskočeny|]4,Inf] %1% přeskočeno',
     ),
-    'da' =>
-    array (
+    'da'    =>
+    array(
         'proposal_title'      => 'Du kan implementere step definitioner for udefinerede steps med disse kodestykker:',
         'failed_steps_title'  => 'fejlede steps',
         'pending_steps_title' => 'afventende steps',
@@ -38,8 +39,8 @@
         'undefined_count'     => '[1,Inf] %1% er udefinerede',
         'skipped_count'       => '[1,Inf] %1% er sprunget over',
     ),
-    'de' =>
-    array (
+    'de'    =>
+    array(
         'proposal_title'      => 'Neue Anweisungen für undefinierte Schritte können mit diesen Code-Schnipseln angelegt werden:',
         'failed_steps_title'  => 'fehlgeschlagene Schritte',
         'pending_steps_title' => 'ausbleibende Schritte',
@@ -51,8 +52,8 @@
         'undefined_count'     => '[1,Inf] %1% undefiniert',
         'skipped_count'       => '[1,Inf] %1% übersprungen',
     ),
-    'es' =>
-    array (
+    'es'    =>
+    array(
         'proposal_title'      => 'Puedes implementar la definición de pasos de los pasos sin definir con el siguiente código:',
         'failed_steps_title'  => 'Pasos fallidos',
         'pending_steps_title' => 'Pasos pendientes',
@@ -64,8 +65,8 @@
         'undefined_count'     => '[1,Inf] %1% sin definir',
         'skipped_count'       => '[1,Inf] %1% omitidos',
     ),
-    'fr' =>
-    array (
+    'fr'    =>
+    array(
         'proposal_title'      => 'Vous pouvez implémenter les définitions d\'étapes pour les étapes non définies avec ces modèles :',
         'failed_steps_title'  => 'étapes échouées',
         'pending_steps_title' => 'étapes en attente',
@@ -77,8 +78,8 @@
         'undefined_count'     => '[1,Inf] %1% non définies',
         'skipped_count'       => '[1,Inf] %1% ignorées',
     ),
-    'id' =>
-    array (
+    'id'    =>
+    array(
         'proposal_title'      => 'Anda dapat membuat definisi untuk langkah yang tidak terdefinisikan menggunakan potongan kode ini:',
         'failed_steps_title'  => 'langkah gagal',
         'pending_steps_title' => 'langkah ditunda',
@@ -90,8 +91,8 @@
         'undefined_count'     => '[1,Inf] %1% tidak terdefinisikan',
         'skipped_count'       => '[1,Inf] %1% dilewat',
     ),
-    'it' =>
-    array (
+    'it'    =>
+    array(
         'proposal_title'      => 'E\' possibile implementare gli step ancora non definiti con queste parti di codice:',
         'failed_steps_title'  => 'step falliti',
         'pending_steps_title' => 'step pendenti',
@@ -103,8 +104,8 @@
         'undefined_count'     => '[1,Inf] %1% non definito',
         'skipped_count'       => '[1,Inf] %1% saltato',
     ),
-    'ja' =>
-    array (
+    'ja'    =>
+    array(
         'proposal_title'      => '未定義のステップを、次のスニペットで実装できます:',
         'failed_steps_title'  => '失敗したステップ',
         'pending_steps_title' => 'ペンディング中のステップ',
@@ -116,8 +117,8 @@
         'undefined_count'     => '[1,Inf] %1% 個未定義',
         'skipped_count'       => '[1,Inf] %1% 個スキップ',
     ),
-    'nl' =>
-    array (
+    'nl'    =>
+    array(
         'proposal_title'      => 'U kunt stap definities voor ongedefinieerde stappen implementeren met deze snippets:',
         'failed_steps_title'  => 'mislukte stappen',
         'pending_steps_title' => 'wachtende stappen',
@@ -129,8 +130,8 @@
         'undefined_count'     => '[1,Inf] %1% ongedefinieerd',
         'skipped_count'       => '[1,Inf] %1% overgeslagen',
     ),
-    'pl' =>
-    array (
+    'pl'    =>
+    array(
         'proposal_title'      => 'Możesz zaimplementować niezdefiniowane jeszcze kroki, korzystając z tych fragmentów kodu:',
         'failed_steps_title'  => 'nieudane kroki',
         'pending_steps_title' => 'oczekujące kroki',
@@ -142,8 +143,8 @@
         'undefined_count'     => '{1} %1% niezdefiniowany|{2,3,4,22,23,24,32,33,34,42,43,44} %1% niezdefiniowane|]4,Inf] %1% niezdefiniowanych',
         'skipped_count'       => '{1} %1% pominięty|{2,3,4,22,23,24,32,33,34,42,43,44} %1% pominięte|]4,Inf] %1% pominiętych',
     ),
-    'pt' =>
-    array (
+    'pt'    =>
+    array(
         'proposal_title'      => 'Para os passos não definidos você pode implementar as suas definições usando estes exemplos:',
         'failed_steps_title'  => 'passos falhados',
         'pending_steps_title' => 'passos pendentes',
@@ -155,47 +156,48 @@
         'undefined_count'     => '{1} %1% indefinido|]1,Inf] %1% indefinidos',
         'skipped_count'       => '{1} %1% ignorado|]1,Inf] %1% ignorados',
     ),
-    'ru' =>
-    array (
-        'proposal_title'      => 'Вы можете реализовать определения для новых шагов с помощью этих шаблонов:',
-        'failed_steps_title'  => 'проваленные шаги',
-        'pending_steps_title' => 'шаги в ожидании',
-        'scenarios_count'     => '{0} Нет сценариев|{1,21,31} %1% сценарий|{2,3,4,22,23,24} %1% сценария|]4,Inf] %1% сценариев',
-        'steps_count'         => '{0} Нет шагов|{1,21,31} %1% шаг|{2,3,4,22,23,24} %1% шага|]4,Inf] %1% шагов',
-        'passed_count'        => '{1,21,31} %1% пройден|]1,Inf] %1% пройдено',
-        'failed_count'        => '{1,21,31} %1% провален|]1,Inf] %1% провалено',
-        'pending_count'       => '[1,Inf] %1% в ожидании',
-        'undefined_count'     => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
-        'skipped_count'       => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
-    ),
-    'sk' =>
+    'ru'    =>
     array(
-        'proposal_title' => 'Môžete implementovať definície krokov pre nedefinované kroky za pomoci týchto kusov kódu (snippetov):',
-        'failed_steps_title' => 'neúspešné kroky',
+        'proposal_title'          => 'Вы можете реализовать определения для новых шагов с помощью этих шаблонов:',
+        'failing_scenarios_title' => 'Проваливающиеся Сценарии',
+        'failed_steps_title'      => 'проваленные шаги',
+        'pending_steps_title'     => 'шаги в ожидании',
+        'scenarios_count'         => '{0} Нет сценариев|{1,21,31} %1% сценарий|{2,3,4,22,23,24} %1% сценария|]4,Inf] %1% сценариев',
+        'steps_count'             => '{0} Нет шагов|{1,21,31} %1% шаг|{2,3,4,22,23,24} %1% шага|]4,Inf] %1% шагов',
+        'passed_count'            => '{1,21,31} %1% пройден|]1,Inf] %1% пройдено',
+        'failed_count'            => '{1,21,31} %1% провален|]1,Inf] %1% провалено',
+        'pending_count'           => '[1,Inf] %1% в ожидании',
+        'undefined_count'         => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
+        'skipped_count'           => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
+    ),
+    'sk'    =>
+    array(
+        'proposal_title'      => 'Môžete implementovať definície krokov pre nedefinované kroky za pomoci týchto kusov kódu (snippetov):',
+        'failed_steps_title'  => 'neúspešné kroky',
         'pending_steps_title' => 'čakajúce kroky',
-        'scenarios_count' => '{0} Žiaden scenár|{1} 1 scenár||{2,3,4} %1% scenáre|]4,Inf] %1% scenárov',
-        'steps_count' => '{0} Žiaden krok|{1} 1 krok|{2,3,4} %1% kroky|]4,Inf] %1% krokov',
-        'passed_count' => '{1} %1% prešiel|{2,3,4} %1% prešli|]4,Inf] %1% prešlo',
-        'failed_count' => '{1} %1% zlyhal|{2,3,4} %1% zlyhali|]4,Inf] %1% zlyhalo',
-        'pending_count' => '{1} %1% čaká|{2,3,4} %1% čakajú|]4,Inf] %1% čaká',
-        'undefined_count' => '{1} %1% nedefinovaný|{2,3,4} %1% nedefinované|]4,Inf] %1% nedefinovaných',
-        'skipped_count' => '{1} %1% preskočený|{2,3,4} %1% preskočené|]4,Inf] %1% preskočených',
+        'scenarios_count'     => '{0} Žiaden scenár|{1} 1 scenár||{2,3,4} %1% scenáre|]4,Inf] %1% scenárov',
+        'steps_count'         => '{0} Žiaden krok|{1} 1 krok|{2,3,4} %1% kroky|]4,Inf] %1% krokov',
+        'passed_count'        => '{1} %1% prešiel|{2,3,4} %1% prešli|]4,Inf] %1% prešlo',
+        'failed_count'        => '{1} %1% zlyhal|{2,3,4} %1% zlyhali|]4,Inf] %1% zlyhalo',
+        'pending_count'       => '{1} %1% čaká|{2,3,4} %1% čakajú|]4,Inf] %1% čaká',
+        'undefined_count'     => '{1} %1% nedefinovaný|{2,3,4} %1% nedefinované|]4,Inf] %1% nedefinovaných',
+        'skipped_count'       => '{1} %1% preskočený|{2,3,4} %1% preskočené|]4,Inf] %1% preskočených',
     ),
     'zh-CN' =>
-    array (
-        'proposal_title' => '你可以通过以下代码片段对未定义的步骤实现步骤定义：',
-        'failed_steps_title' => '未通过的步骤',
+    array(
+        'proposal_title'      => '你可以通过以下代码片段对未定义的步骤实现步骤定义：',
+        'failed_steps_title'  => '未通过的步骤',
         'pending_steps_title' => '待定的步骤',
-        'scenarios_count' => '{0} 没有场景|{1} 1 个场景|]1,Inf] %1% 个场景',
-        'steps_count' => '{0} 没有步骤|{1} 1 个步骤|]1,Inf] %1% 个步骤',
-        'passed_count' => '[1,Inf] %1% 已通过',
-        'failed_count' => '[1,Inf] %1% 未通过',
-        'pending_count' => '[1,Inf] %1% 待定的',
-        'undefined_count' => '[1,Inf] %1% 未定义',
-        'skipped_count' => '[1,Inf] %1% 跳过的',
+        'scenarios_count'     => '{0} 没有场景|{1} 1 个场景|]1,Inf] %1% 个场景',
+        'steps_count'         => '{0} 没有步骤|{1} 1 个步骤|]1,Inf] %1% 个步骤',
+        'passed_count'        => '[1,Inf] %1% 已通过',
+        'failed_count'        => '[1,Inf] %1% 未通过',
+        'pending_count'       => '[1,Inf] %1% 待定的',
+        'undefined_count'     => '[1,Inf] %1% 未定义',
+        'skipped_count'       => '[1,Inf] %1% 跳过的',
     ),
-    'tr' =>
-    array (
+    'tr'    =>
+    array(
         'proposal_title'      => 'Tanımlanmamış adımları tanımlamak için şu örneklerden yararlanabilirsiniz:',
         'failed_steps_title'  => 'başarısız adımlar',
         'pending_steps_title' => 'bekleyen adımlar',
