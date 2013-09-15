@@ -13,6 +13,7 @@ use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Gherkin\Node\StepContainerInterface;
 
 /**
  * Background event.
@@ -26,6 +27,10 @@ class BackgroundEvent extends StepCollectionEvent
      */
     private $scenario;
     /**
+     * @var StepContainerInterface
+     */
+    private $container;
+    /**
      * @var BackgroundNode
      */
     private $background;
@@ -33,16 +38,18 @@ class BackgroundEvent extends StepCollectionEvent
     /**
      * Initializes background event.
      *
-     * @param SuiteInterface       $suite
-     * @param ContextPoolInterface $contexts
-     * @param ScenarioInterface    $scenario
-     * @param BackgroundNode       $background
-     * @param null|integer         $status
+     * @param SuiteInterface         $suite
+     * @param ContextPoolInterface   $contexts
+     * @param ScenarioInterface      $scenario
+     * @param StepContainerInterface $container
+     * @param BackgroundNode         $background
+     * @param null|integer           $status
      */
     public function __construct(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
         ScenarioInterface $scenario,
+        StepContainerInterface $container,
         BackgroundNode $background,
         $status = null
     )
@@ -50,6 +57,7 @@ class BackgroundEvent extends StepCollectionEvent
         parent::__construct($suite, $contexts, $status);
 
         $this->scenario = $scenario;
+        $this->container = $container;
         $this->background = $background;
     }
 
@@ -61,6 +69,16 @@ class BackgroundEvent extends StepCollectionEvent
     public function getScenario()
     {
         return $this->scenario;
+    }
+
+    /**
+     * Returns step container background was run from.
+     *
+     * @return StepContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**

@@ -16,6 +16,7 @@ use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Gherkin\Node\StepContainerInterface;
 
 /**
  * Background tester.
@@ -27,17 +28,19 @@ class BackgroundTester extends StepCollectionTester
     /**
      * Tests feature backgrounds.
      *
-     * @param SuiteInterface       $suite
-     * @param ScenarioInterface    $scenario
-     * @param BackgroundNode       $background
-     * @param ContextPoolInterface $contexts
-     * @param Boolean              $skip
+     * @param SuiteInterface         $suite
+     * @param ScenarioInterface      $scenario
+     * @param StepContainerInterface $container
+     * @param BackgroundNode         $background
+     * @param ContextPoolInterface   $contexts
+     * @param Boolean                $skip
      *
      * @return integer
      */
     public function test(
         SuiteInterface $suite,
         ScenarioInterface $scenario,
+        StepContainerInterface $container,
         BackgroundNode $background,
         ContextPoolInterface $contexts,
         $skip = false
@@ -45,7 +48,7 @@ class BackgroundTester extends StepCollectionTester
     {
         $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
 
-        $event = new BackgroundEvent($suite, $contexts, $scenario, $background);
+        $event = new BackgroundEvent($suite, $contexts, $scenario, $container, $background);
         $this->dispatch(EventInterface::BEFORE_BACKGROUND, $event);
 
         foreach ($background->getSteps() as $step) {
@@ -55,7 +58,7 @@ class BackgroundTester extends StepCollectionTester
             $status = max($status, $tester->test($suite, $contexts, $step, $scenario, $skip));
         }
 
-        $event = new BackgroundEvent($suite, $contexts, $scenario, $background, $status);
+        $event = new BackgroundEvent($suite, $contexts, $scenario, $container, $background, $status);
         $this->dispatch(EventInterface::AFTER_BACKGROUND, $event);
 
         return $status;

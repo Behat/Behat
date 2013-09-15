@@ -92,7 +92,7 @@ class SnippetsCollector implements EventSubscriberInterface
     /**
      * Returns hash of definition snippets for undefined steps.
      *
-     * @return SnippetInterface[string]
+     * @return SnippetInterface[]
      */
     public function getSnippets()
     {

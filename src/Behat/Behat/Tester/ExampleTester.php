@@ -60,7 +60,7 @@ class ExampleTester extends IsolatedStepCollectionTester
             $background = $example->getOutline()->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
-            $status = $tester->test($suite, $example->getOutline(), $background, $contexts, $skip);
+            $status = $tester->test($suite, $example->getOutline(), $example, $background, $contexts, $skip);
         }
 
         foreach ($example->getSteps() as $step) {

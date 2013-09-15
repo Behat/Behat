@@ -60,7 +60,7 @@ class ScenarioTester extends IsolatedStepCollectionTester
             $background = $scenario->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
-            $status = $tester->test($suite, $scenario, $background, $contexts, $skip);
+            $status = $tester->test($suite, $scenario, $scenario, $background, $contexts, $skip);
         }
 
         foreach ($scenario->getSteps() as $step) {
