@@ -110,9 +110,12 @@ Feature: Stop on failure
         Scenario: 1st Failing
           When I have a step that passes
           And I have another step that fails
-            step failed as supposed
+            step failed as supposed (Exception)
           Then I should have a scenario that failed
-      
+
+      Failing Scenarios:
+      features/failing.feature:18
+
       3 scenarios (2 passed, 1 failed)
       11 steps (9 passed, 1 skipped, 1 failed)
       """

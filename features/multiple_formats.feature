@@ -137,10 +137,10 @@ Feature: Multiple formats
       .    And do something undefined
       U
         Scenario Outline: Other situations   # features/apples.feature:22
-      ....    When I ate <ate> apples            # FeatureContext::iAteApples()
-          And I found <found> apples         # FeatureContext::iFoundApples()
-          Then I should have <result> apples # FeatureContext::iShouldHaveApples()
-
+      .    When I ate <ate> apples            # FeatureContext::iAteApples()
+      .    And I found <found> apples         # FeatureContext::iFoundApples()
+      .    Then I should have <result> apples # FeatureContext::iShouldHaveApples()
+      .
           Examples:
             | ate | found | result |
             | 3   | 1     | 1      |
@@ -152,6 +152,10 @@ Feature: Multiple formats
       .    Given pystring:
       U    And table:
       U
+      Failing Scenarios:
+      features/apples.feature:9 # Scenario: I'm little hungry
+      features/apples.feature:30 # Scenario Outline: Other situations
+
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
 
@@ -252,10 +256,10 @@ Feature: Multiple formats
       .    And do something undefined
       U
         Scenario Outline: Other situations   # features/apples.feature:22
-      ....    When I ate <ate> apples            # FeatureContext::iAteApples()
-          And I found <found> apples         # FeatureContext::iFoundApples()
-          Then I should have <result> apples # FeatureContext::iShouldHaveApples()
-
+      .    When I ate <ate> apples            # FeatureContext::iAteApples()
+      .    And I found <found> apples         # FeatureContext::iFoundApples()
+      .    Then I should have <result> apples # FeatureContext::iShouldHaveApples()
+      .
           Examples:
             | ate | found | result |
             | 3   | 1     | 1      |
@@ -267,6 +271,10 @@ Feature: Multiple formats
       .    Given pystring:
       U    And table:
       U
+      Failing Scenarios:
+      features/apples.feature:9 # Scenario: I'm little hungry
+      features/apples.feature:30 # Scenario Outline: Other situations
+
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
 
@@ -427,6 +435,10 @@ Feature: Multiple formats
           Given pystring:
           And table:
 
+      Failing Scenarios:
+      features/apples.feature:9
+      features/apples.feature:30
+
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
 
@@ -498,6 +510,10 @@ Feature: Multiple formats
         Scenario: Multilines
           Given pystring:
           And table:
+
+      Failing Scenarios:
+      features/apples.feature:9
+      features/apples.feature:30
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)
@@ -618,6 +634,10 @@ Feature: Multiple formats
         Scenario: Multilines
           Given pystring:
           And table:
+
+      Failing Scenarios:
+      features/apples.feature:9
+      features/apples.feature:30
 
       7 scenarios (3 passed, 2 undefined, 2 failed)
       25 steps (20 passed, 3 undefined, 2 failed)

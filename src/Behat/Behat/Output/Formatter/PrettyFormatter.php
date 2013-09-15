@@ -2,98 +2,35 @@
 
 namespace Behat\Behat\Output\Formatter;
 
-/*
- * This file is part of the Behat.
- * (c) Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 use Behat\Behat\Definition\DefinitionInterface;
 use Behat\Behat\Event\BackgroundEvent;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExampleEvent;
-use Behat\Behat\Event\ExerciseEvent;
 use Behat\Behat\Event\FeatureEvent;
-use Behat\Behat\Hook\Event\HookEvent;
 use Behat\Behat\Event\OutlineEvent;
 use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Exception\UndefinedException;
-use Behat\Behat\Snippet\SnippetInterface;
+use Behat\Behat\Hook\Event\HookEvent;
+use Behat\Behat\Snippet\EventSubscriber\SnippetsCollector;
+use Behat\Behat\Tester\EventSubscriber\StatisticsCollector;
 use Behat\Gherkin\Node\BackgroundNode;
-use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\NodeInterface;
-use Behat\Gherkin\Node\OutlineNode;
+use Behat\Gherkin\Node\ExampleNode;
+use Behat\Gherkin\Node\KeywordNodeInterface;
 use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\ScenarioInterface;
-use Behat\Gherkin\Node\ScenarioNode;
-use Behat\Gherkin\Node\StepContainerInterface;
-use Behat\Gherkin\Node\StepNode;
+use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Gherkin\Node\TableNode;
-use Behat\Gherkin\Node\TaggedNodeInterface;
 
-/**
- * Pretty formatter.
- *
- * @author Konstantin Kudryashov <ever.zet@gmail.com>
- */
-class PrettyFormatter extends ProgressFormatter
+class PrettyFormatter extends CliFormatter
 {
     /**
-     * Maximum line length.
-     *
      * @var integer
      */
-    protected $maxLineLength = 0;
+    private $maxLineLength = 0;
     /**
-     * Are we in background.
-     *
-     * @var Boolean
-     */
-    protected $inBackground = false;
-    /**
-     * Is background printed.
-     *
-     * @var Boolean
-     */
-    protected $isBackgroundPrinted = false;
-    /**
-     * Are we in outline steps.
-     *
-     * @var Boolean
-     */
-    protected $inOutlineSteps = false;
-    /**
-     * Are we in outline example.
-     *
-     * @var Boolean
-     */
-    protected $inOutlineExample = false;
-    /**
-     * Is outline headline printed.
-     *
-     * @var Boolean
-     */
-    protected $isOutlineHeaderPrinted = false;
-    /**
-     * Delayed scenario event.
-     *
-     * @var EventInterface
-     */
-    protected $delayedScenarioEvent;
-    /**
-     * Delayed step events.
-     *
      * @var StepEvent[]
      */
-    protected $delayedStepEvents = array();
-    /**
-     * Current step indentation.
-     *
-     * @var integer
-     */
-    protected $stepIndent = '    ';
+    private $exampleRowEvents = array();
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -103,20 +40,17 @@ class PrettyFormatter extends ProgressFormatter
     public static function getSubscribedEvents()
     {
         return array(
-            EventInterface::BEFORE_EXERCISE   => array('beforeExercise', -50),
-            EventInterface::AFTER_EXERCISE    => array('afterExercise', -50),
-            EventInterface::BEFORE_FEATURE    => array('beforeFeature', -50),
-            EventInterface::AFTER_FEATURE     => array('afterFeature', -50),
-            EventInterface::BEFORE_SCENARIO   => array('beforeScenario', -50),
-            EventInterface::AFTER_SCENARIO    => array('afterScenario', -50),
-            EventInterface::BEFORE_BACKGROUND => array('beforeBackground', -50),
-            EventInterface::AFTER_BACKGROUND  => array('afterBackground', -50),
-            EventInterface::BEFORE_OUTLINE    => array('beforeOutline', -50),
-            EventInterface::AFTER_OUTLINE     => array('afterOutline', -50),
-            EventInterface::BEFORE_EXAMPLE    => array('beforeExample', -50),
-            EventInterface::AFTER_EXAMPLE     => array('afterExample', -50),
-            EventInterface::AFTER_STEP        => array('afterStep', -50),
-            EventInterface::AFTER_HOOK        => array('afterHook', -50),
+            EventInterface::BEFORE_FEATURE    => array('printFeatureHeader', -50),
+            EventInterface::BEFORE_SCENARIO   => array('printScenarioHeader', -50),
+            EventInterface::AFTER_SCENARIO    => array('printScenarioFooter', -50),
+            EventInterface::BEFORE_BACKGROUND => array('printBackgroundHeader', -50),
+            EventInterface::AFTER_BACKGROUND  => array('printBackgroundFooter', -50),
+            EventInterface::BEFORE_OUTLINE    => array('printOutlineHeader', -50),
+            EventInterface::AFTER_OUTLINE     => array('printOutlineFooter', -50),
+            EventInterface::AFTER_STEP        => array('printStep', -50),
+            EventInterface::AFTER_EXAMPLE     => array('printExampleRow', -50),
+            EventInterface::AFTER_HOOK        => array('printHookExceptionOrStdOut', -50),
+            EventInterface::AFTER_EXERCISE    => array('printExerciseStats', -50),
         );
     }
 
@@ -141,863 +75,620 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * @param \Behat\Behat\Hook\Event\HookEvent $event
-     */
-    public function afterHook(HookEvent $event)
-    {
-        $this->write($event->getStdOut());
-    }
-
-    /**
-     * Listens to "suite.before" event.
-     *
-     * @param ExerciseEvent $event
-     *
-     * @uses printExerciseHeader()
-     */
-    public function beforeExercise(ExerciseEvent $event)
-    {
-        $this->printExerciseHeader();
-    }
-
-    /**
-     * Listens to "suite.after" event.
-     *
-     * @param ExerciseEvent $event
-     *
-     * @uses printExerciseFooter()
-     */
-    public function afterExercise(ExerciseEvent $event)
-    {
-        $this->printExerciseFooter();
-    }
-
-    /**
-     * Listens to "feature.before" event.
+     * Prints feature header on BEFORE_FEATURE event.
      *
      * @param FeatureEvent $event
-     *
-     * @uses printFeatureHeader()
      */
-    public function beforeFeature(FeatureEvent $event)
+    public function printFeatureHeader(FeatureEvent $event)
     {
-        $this->isBackgroundPrinted = false;
-        $this->printFeatureHeader($event->getFeature());
-    }
+        $feature = $event->getFeature();
+        $keyword = $feature->getKeyword();
 
-    /**
-     * Listens to "feature.after" event.
-     *
-     * @param FeatureEvent $event
-     *
-     * @uses printFeatureFooter()
-     */
-    public function afterFeature(FeatureEvent $event)
-    {
-        $this->printFeatureFooter($event->getFeature());
-    }
-
-    /**
-     * Listens to "background.before" event.
-     *
-     * @param BackgroundEvent $event
-     *
-     * @uses printBackgroundHeader()
-     */
-    public function beforeBackground(BackgroundEvent $event)
-    {
-        $this->inBackground = true;
-
-        if ($this->isBackgroundPrinted) {
-            return;
-        }
-
-        $this->printBackgroundHeader($event->getBackground());
-    }
-
-    /**
-     * Listens to "background.after" event.
-     *
-     * @param BackgroundEvent $event
-     *
-     * @uses printBackgroundFooter()
-     */
-    public function afterBackground(BackgroundEvent $event)
-    {
-        $this->inBackground = false;
-
-        if ($this->isBackgroundPrinted) {
-            return;
-        }
-        $this->isBackgroundPrinted = true;
-
-        $this->printBackgroundFooter($event->getBackground());
-
-        if (null !== $this->delayedScenarioEvent) {
-            $method = $this->delayedScenarioEvent[0];
-            $event = $this->delayedScenarioEvent[1];
-
-            $this->$method($event);
-        }
-    }
-
-    /**
-     * Listens to "outline.before" event.
-     *
-     * @param OutlineEvent $event
-     *
-     * @uses printOutlineHeader()
-     */
-    public function beforeOutline(OutlineEvent $event)
-    {
-        $outline = $event->getOutline();
-
-        if (!$this->isBackgroundPrinted && $outline->getFeature()->hasBackground()) {
-            $this->delayedScenarioEvent = array(__FUNCTION__, $event);
-
-            return;
-        }
-
-        $this->isOutlineHeaderPrinted = false;
-
-        $this->printOutlineHeader($outline);
-    }
-
-    /**
-     * Listens to "outline.example.before" event.
-     *
-     * @param ExampleEvent $event
-     *
-     * @uses printOutlineExampleHeader()
-     */
-    public function beforeExample(ExampleEvent $event)
-    {
-        $this->inOutlineExample = true;
-        $this->delayedStepEvents = array();
-
-        $example = $event->getExample();
-
-        $this->printOutlineExampleHeader($example->getOutline(), $example->getIndex() + 1);
-    }
-
-    /**
-     * Listens to "outline.example.after" event.
-     *
-     * @param ExampleEvent $event
-     *
-     * @uses printOutlineExampleFooter()
-     */
-    public function afterExample(ExampleEvent $event)
-    {
-        $this->inOutlineExample = false;
-
-        $example = $event->getExample();
-
-        $this->printOutlineExampleFooter(
-            $example->getOutline(), $example->getIndex() + 1, $event->getStatus(), StepEvent::SKIPPED === $event->getStatus()
-        );
-    }
-
-    /**
-     * Listens to "outline.after" event.
-     *
-     * @param OutlineEvent $event
-     *
-     * @uses printOutlineFooter()
-     */
-    public function afterOutline(OutlineEvent $event)
-    {
-        $this->printOutlineFooter($event->getOutline());
-    }
-
-    /**
-     * Listens to "scenario.before" event.
-     *
-     * @param ScenarioEvent $event
-     *
-     * @uses printScenarioHeader()
-     */
-    public function beforeScenario(ScenarioEvent $event)
-    {
-        $scenario = $event->getScenario();
-
-        if (!$this->isBackgroundPrinted && $scenario->getFeature()->hasBackground()) {
-            $this->delayedScenarioEvent = array(__FUNCTION__, $event);
-
-            return;
-        }
-
-        $this->printScenarioHeader($scenario);
-    }
-
-    /**
-     * Listens to "scenario.after" event.
-     *
-     * @param ScenarioEvent $event
-     *
-     * @uses printScenarioFooter()
-     */
-    public function afterScenario(ScenarioEvent $event)
-    {
-        $this->printScenarioFooter($event->getScenario());
-    }
-
-    /**
-     * Listens to "step.after" event.
-     *
-     * @param StepEvent $event
-     *
-     * @uses printStep()
-     */
-    public function afterStep(StepEvent $event)
-    {
-        $this->write($event->getStdOut());
-
-        if ($this->inBackground && $this->isBackgroundPrinted) {
-            return;
-        }
-
-        if (!$this->inBackground && $this->inOutlineExample) {
-            $this->delayedStepEvents[] = $event;
-
-            return;
-        }
-
-        $this->printStep(
-            $event->getStep(),
-            $event->getStatus(),
-            $event->getDefinition(),
-            $event->getSnippet(),
-            $event->getException()
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultParameters()
-    {
-        return array_merge(
-            parent::getDefaultParameters(),
-            array(
-                'expand'              => false,
-                'multiline_arguments' => true,
-            )
-        );
-    }
-
-    /**
-     * Prints feature header.
-     *
-     * @param FeatureNode $feature
-     *
-     * @uses printFeatureOrScenarioTags()
-     * @uses printFeatureName()
-     * @uses printFeatureDescription()
-     */
-    protected function printFeatureHeader(FeatureNode $feature)
-    {
-        $this->printFeatureOrScenarioTags($feature);
-        $this->printFeatureName($feature);
-        if (null !== $feature->getDescription()) {
-            $this->printFeatureDescription($feature);
-        }
-
-        $this->writeln();
-    }
-
-    /**
-     * Prints node tags.
-     *
-     * @param TaggedNodeInterface $node
-     */
-    protected function printFeatureOrScenarioTags(TaggedNodeInterface $node)
-    {
-        if (!($node instanceof FeatureNode) && !($node instanceof ScenarioInterface)) {
-            return;
-        }
-
-        $tags = $node instanceof ScenarioInterface ? $node->getOwnTags() : $node->getTags();
-
-        if (count($tags)) {
+        if ($feature->hasTags()) {
             $tags = implode(' ', array_map(function ($tag) {
                 return '@' . $tag;
-            }, $tags));
+            }, $feature->getTags()));
 
-            if ($node instanceof FeatureNode) {
-                $indent = '';
-            } else {
-                $indent = '  ';
+            $this->writeln("{+tag}$tags{-tag}");
+        }
+
+        $this->writeln(trim("$keyword: " . $feature->getTitle()));
+
+        if ($feature->hasDescription()) {
+            foreach (explode("\n", $feature->getDescription()) as $line) {
+                $this->writeln("  $line");
             }
-
-            $this->writeln("$indent{+tag}$tags{-tag}");
         }
-    }
 
-    /**
-     * Prints feature keyword and name.
-     *
-     * @param FeatureNode $feature
-     *
-     * @uses getFeatureOrScenarioName()
-     */
-    protected function printFeatureName(FeatureNode $feature)
-    {
-        $this->writeln($this->getFeatureOrScenarioName($feature));
-    }
-
-    /**
-     * Prints feature description.
-     *
-     * @param FeatureNode $feature
-     */
-    protected function printFeatureDescription(FeatureNode $feature)
-    {
-        $lines = explode("\n", $feature->getDescription());
-
-        foreach ($lines as $line) {
-            $this->writeln("  $line");
+        if ($feature->hasBackground()) {
+            $this->recalculateMaxLineLength($feature->getBackground());
         }
+
+        $this->writeln();
     }
 
     /**
-     * Prints feature footer.
+     * Prints scenario header on BEFORE_SCENARIO event.
      *
-     * @param FeatureNode $feature
+     * @param ScenarioEvent $event
      */
-    protected function printFeatureFooter(FeatureNode $feature)
+    public function printScenarioHeader(ScenarioEvent $event)
     {
-    }
+        $scenario = $event->getScenario();
+        $feature = $scenario->getFeature();
 
-    /**
-     * Prints scenario keyword and name.
-     *
-     * @param StepContainerInterface $scenario
-     *
-     * @uses getFeatureOrScenarioName()
-     * @uses printScenarioPath()
-     */
-    protected function printScenarioName(StepContainerInterface $scenario)
-    {
-        $title = explode("\n", $this->getFeatureOrScenarioName($scenario));
-
-        $this->write(array_shift($title));
-        $this->printScenarioPath($scenario);
-
-        if (count($title)) {
-            $this->writeln(implode("\n", $title));
+        if ($feature->hasBackground() && 0 == $scenario->getIndex()) {
+            return;
         }
+
+        if ($scenario->hasOwnTags()) {
+            $tags = implode(' ', array_map(function ($tag) {
+                return '@' . $tag;
+            }, $scenario->getOwnTags()));
+
+            $this->writeln("  {+tag}$tags{-tag}");
+        }
+
+        $this->recalculateMaxLineLength($scenario);
+        $this->printKeywordNodeTitle($scenario);
     }
 
     /**
-     * Prints scenario definition path.
-     *
-     * @param StepContainerInterface $scenario
-     *
-     * @uses getFeatureOrScenarioName()
-     * @uses printPathComment()
+     * Prints scenario footer on AFTER_SCENARIO event.
      */
-    protected function printScenarioPath(StepContainerInterface $scenario)
+    public function printScenarioFooter()
     {
-        if ($this->getParameter('paths')) {
-            $lines = explode("\n", $this->getFeatureOrScenarioName($scenario));
-            $nameLength = mb_strlen(current($lines), 'utf8');
-            $indentCount = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
+        $this->writeln();
+    }
 
-            $this->printPathComment(
-                $this->relativizePathsInString($scenario->getFile()) . ':' . $scenario->getLine(), $indentCount
-            );
-        } else {
+    /**
+     * Prints background header on BEFORE_BACKGROUND event.
+     *
+     * @param BackgroundEvent $event
+     */
+    public function printBackgroundHeader(BackgroundEvent $event)
+    {
+        $scenario = $event->getScenario();
+        $container = $event->getContainer();
+        $background = $event->getBackground();
+
+        if ($container instanceof ExampleNode && 0 !== $container->getIndex()) {
+            return;
+        }
+
+        if (0 !== $scenario->getIndex()) {
+            return;
+        }
+
+        $this->printKeywordNodeTitle($background);
+    }
+
+    /**
+     * Prints background footer on AFTER_BACKGROUND event.
+     *
+     * @param BackgroundEvent $event
+     */
+    public function printBackgroundFooter(BackgroundEvent $event)
+    {
+        $scenario = $event->getScenario();
+        $container = $event->getContainer();
+
+        if ($container instanceof ExampleNode && 0 !== $container->getIndex()) {
+            return;
+        }
+
+        if (0 !== $scenario->getIndex()) {
+            return;
+        }
+
+        $this->writeln();
+
+        if ($scenario->hasOwnTags()) {
+            $tags = implode(' ', array_map(function ($tag) {
+                return '@' . $tag;
+            }, $scenario->getOwnTags()));
+
+            $this->writeln("  {+tag}$tags{-tag}");
+        }
+
+        $this->recalculateMaxLineLength($scenario);
+        $this->printKeywordNodeTitle($scenario);
+    }
+
+    /**
+     * Prints outline header on BEFORE_OUTLINE event.
+     *
+     * @param OutlineEvent $event
+     */
+    public function printOutlineHeader(OutlineEvent $event)
+    {
+        $outline = $event->getOutline();
+        $feature = $outline->getFeature();
+
+        if ($feature->hasBackground() && 0 == $outline->getIndex()) {
+            return;
+        }
+
+        if ($outline->hasOwnTags()) {
+            $tags = implode(' ', array_map(function ($tag) {
+                return '@' . $tag;
+            }, $outline->getOwnTags()));
+
+            $this->writeln("  {+tag}$tags{-tag}");
+        }
+
+        $this->recalculateMaxLineLength($outline);
+        $this->printKeywordNodeTitle($outline);
+    }
+
+    /**
+     * Prints outline footer on AFTER_OUTLINE event.
+     */
+    public function printOutlineFooter()
+    {
+        $this->writeln();
+    }
+
+    /**
+     * Prints example row results on AFTER_EXAMPLE event.
+     *
+     * @param ExampleEvent $event
+     */
+    public function printExampleRow(ExampleEvent $event)
+    {
+        $example = $event->getExample();
+        $table = $example->getOutline()->getExampleTable();
+
+        if (0 == $example->getIndex()) {
+            $keyword = $table->getKeyword();
+
             $this->writeln();
-        }
-    }
-
-    /**
-     * Prints background header.
-     *
-     * @param BackgroundNode $background
-     *
-     * @uses printScenarioName()
-     * @uses printScenarioPath()
-     */
-    protected function printBackgroundHeader(BackgroundNode $background)
-    {
-        $this->maxLineLength = $this->getMaxLineLength($this->maxLineLength, $background);
-
-        $this->printScenarioName($background);
-    }
-
-    /**
-     * Prints background footer.
-     *
-     * @param BackgroundNode $background
-     */
-    protected function printBackgroundFooter(BackgroundNode $background)
-    {
-        $this->writeln();
-    }
-
-    /**
-     * Prints outline header.
-     *
-     * @param OutlineNode $outline
-     *
-     * @uses printFeatureOrScenarioTags()
-     * @uses printScenarioName()
-     */
-    protected function printOutlineHeader(OutlineNode $outline)
-    {
-        $this->maxLineLength = $this->getMaxLineLength($this->maxLineLength, $outline);
-
-        $this->printFeatureOrScenarioTags($outline);
-        $this->printScenarioName($outline);
-    }
-
-    /**
-     * Prints outline footer.
-     *
-     * @param OutlineNode $outline
-     */
-    protected function printOutlineFooter(OutlineNode $outline)
-    {
-        $this->writeln();
-    }
-
-    /**
-     * Prints outline example header.
-     *
-     * @param OutlineNode $outline
-     * @param integer     $iteration
-     */
-    protected function printOutlineExampleHeader(OutlineNode $outline, $iteration)
-    {
-    }
-
-    /**
-     * Prints outline example result.
-     *
-     * @param OutlineNode $outline   outline instance
-     * @param integer     $iteration example row number
-     * @param integer     $result    result code
-     * @param Boolean     $skipped   is outline example skipped
-     *
-     * @uses printOutlineSteps()
-     * @uses printOutlineExamplesSectionHeader()
-     * @uses printOutlineExampleResult()
-     */
-    protected function printOutlineExampleFooter(OutlineNode $outline, $iteration, $result, $skipped)
-    {
-        if (!$this->isOutlineHeaderPrinted) {
-            $this->printOutlineSteps($outline);
-            $this->printOutlineExamplesSectionHeader($outline->getExampleTable());
-            $this->isOutlineHeaderPrinted = true;
-        }
-
-        $this->printOutlineExampleResult($outline->getExampleTable(), $iteration, $result, $skipped);
-    }
-
-    /**
-     * Prints outline steps.
-     *
-     * @param OutlineNode $outline
-     */
-    protected function printOutlineSteps(OutlineNode $outline)
-    {
-        $this->inOutlineSteps = true;
-
-        foreach ($this->delayedStepEvents as $event) {
-            $this->printStep($event->getStep(), StepEvent::SKIPPED, $event->getDefinition());
-        }
-
-        $this->inOutlineSteps = false;
-    }
-
-    /**
-     * Prints outline examples header.
-     *
-     * @param TableNode $examples
-     *
-     * @uses printColorizedTableRow()
-     */
-    protected function printOutlineExamplesSectionHeader(TableNode $examples)
-    {
-        $this->writeln();
-        $keyword = $examples->getKeyword();
-
-        if (!$this->getParameter('expand')) {
             $this->writeln("    $keyword:");
-            $this->printColorizedTableRow($examples->getRowAsString(0), 'skipped');
-        }
-    }
 
-    /**
-     * Prints outline example result.
-     *
-     * @param TableNode $examples  examples table
-     * @param integer   $iteration example row
-     * @param integer   $result    result code
-     * @param boolean   $isSkipped is outline example skipped
-     *
-     * @uses printColorizedTableRow()
-     * @uses printOutlineExampleResultExceptions()
-     */
-    protected function printOutlineExampleResult(TableNode $examples, $iteration, $result, $isSkipped)
-    {
+            $row = $table->getRowAsStringWithWrappedValues(0, function ($val) {
+                return "{+skipped_param}$val{-skipped_param}";
+            });
+
+            $this->writeln("      $row");
+        }
+
         if (!$this->getParameter('expand')) {
-            $color = $this->getResultColorCode($result);
-
-            $this->printColorizedTableRow($examples->getRowAsString($iteration), $color);
-            $this->printOutlineExampleResultExceptions($examples, $this->delayedStepEvents);
-        } else {
-            $this->write('      ' . $examples->getKeyword() . ': ');
-            $this->writeln('| ' . implode(' | ', $examples->getRow($iteration)) . ' |');
-
-            $this->stepIndent = '        ';
-            foreach ($this->delayedStepEvents as $event) {
-                $this->printStep(
-                    $event->getStep(),
-                    $event->getStatus(),
-                    $event->getDefinition(),
-                    $event->getSnippet(),
-                    $event->getException()
-                );
-            }
-            $this->stepIndent = '    ';
-
-            if ($iteration < count($examples->getRows()) - 1) {
-                $this->writeln();
-            }
-        }
-    }
-
-    /**
-     * Prints outline example exceptions.
-     *
-     * @param TableNode   $examples examples table
-     * @param StepEvent[] $events   failed steps events
-     */
-    protected function printOutlineExampleResultExceptions(TableNode $examples, array $events)
-    {
-        foreach ($events as $event) {
-            $exception = $event->getException();
-            if ($exception && !$exception instanceof UndefinedException) {
-                $color = $this->getResultColorCode($event->getStatus());
-
-                $error = $this->exceptionToString($exception);
-                $error = $this->relativizePathsInString($error);
-
-                $this->writeln(
-                    "        {+$color}" . strtr($error, array("\n" => "\n      ")) . "{-$color}"
-                );
-            }
-        }
-    }
-
-    /**
-     * Prints scenario header.
-     *
-     * @param ScenarioNode $scenario
-     *
-     * @uses printFeatureOrScenarioTags()
-     * @uses printScenarioName()
-     */
-    protected function printScenarioHeader(ScenarioNode $scenario)
-    {
-        $this->maxLineLength = $this->getMaxLineLength($this->maxLineLength, $scenario);
-
-        $this->printFeatureOrScenarioTags($scenario);
-        $this->printScenarioName($scenario);
-    }
-
-    /**
-     * Prints scenario footer.
-     *
-     * @param ScenarioNode $scenario
-     */
-    protected function printScenarioFooter(ScenarioNode $scenario)
-    {
-        $this->writeln();
-    }
-
-    /**
-     * Prints step.
-     *
-     * @param StepNode            $step       step node
-     * @param integer             $result     result code
-     * @param DefinitionInterface $definition definition (if found one)
-     * @param string              $snippet    snippet (if step is undefined)
-     * @param \Exception          $exception  exception (if step is failed)
-     *
-     * @uses printStepBlock()
-     * @uses printStepArguments()
-     * @uses printStepException()
-     * @uses printStepSnippet()
-     */
-    protected function printStep(
-        StepNode $step,
-        $result,
-        DefinitionInterface $definition = null,
-        $snippet = null,
-        \Exception $exception = null
-    )
-    {
-        $color = $this->getResultColorCode($result);
-
-        $this->printStepBlock($step, $definition, $color);
-
-        if ($this->getParameter('multiline_arguments')) {
-            $this->printStepArguments($step->getArguments(), $color);
-        }
-        if (null !== $exception &&
-            (!$exception instanceof UndefinedException || null === $snippet)
-        ) {
-            $this->printStepException($exception, $color);
-        }
-        if (null !== $snippet && $this->getParameter('snippets')) {
-            $this->printStepSnippet($snippet);
-        }
-    }
-
-    /**
-     * Prints step block (name & definition path).
-     *
-     * @param StepNode            $step       step node
-     * @param DefinitionInterface $definition definition (if found one)
-     * @param string              $color      color code
-     *
-     * @uses printStepName()
-     * @uses printStepDefinitionPath()
-     */
-    protected function printStepBlock(StepNode $step, DefinitionInterface $definition = null, $color)
-    {
-        $this->printStepName($step, $definition, $color);
-        if (null !== $definition) {
-            $this->printStepDefinitionPath($step, $definition);
+            $this->printExampleRowResult($event);
         } else {
             $this->writeln();
+            $this->printExpandedExampleResult($event);
         }
+
+        $this->exampleRowEvents = array();
     }
 
     /**
-     * Prints step name.
+     * Generates example row column.
      *
-     * @param StepNode            $step       step node
-     * @param DefinitionInterface $definition definition (if found one)
-     * @param string              $color      color code
+     * @param string  $value
+     * @param integer $column
      *
-     * @uses colorizeDefinitionArguments()
+     * @return string
      */
-    protected function printStepName(StepNode $step, DefinitionInterface $definition = null, $color)
+    public function getExampleRowCell($value, $column)
     {
-        $type = $step->getType();
-        $text = $step->getText();
+        $status = StepEvent::PASSED;
 
-        if ($this->inOutlineSteps) {
-            $index = array_search($step, $step->getContainer()->getSteps());
-            $steps = $step->getContainer()->getOutline()->getSteps();
-            $text = $steps[$index]->getText();
-        }
+        foreach ($this->exampleRowEvents as $event) {
+            $header = $event->getStep()->getContainer()->getOutline()->getExampleTable()->getRow(0);
+            $steps = $event->getStep()->getContainer()->getOutline()->getSteps();
+            $outlineStepText = $steps[$event->getStep()->getIndex()]->getText();
 
-        $indent = $this->stepIndent;
-
-        if (null !== $definition) {
-            $text = $this->colorizeDefinitionArguments($text, $definition, $color);
-        }
-
-        $this->write("$indent{+$color}$type $text{-$color}");
-    }
-
-    /**
-     * Prints step definition path.
-     *
-     * @param StepNode            $step       step node
-     * @param DefinitionInterface $definition definition (if found one)
-     *
-     * @uses printPathComment()
-     */
-    protected function printStepDefinitionPath(StepNode $step, DefinitionInterface $definition)
-    {
-        if ($this->getParameter('paths')) {
-            $type = $step->getType();
-            $text = $step->getText();
-
-            if ($this->inOutlineSteps) {
-                $index = array_search($step, $step->getContainer()->getSteps());
-                $steps = $step->getContainer()->getOutline()->getSteps();
-                $text = $steps[$index]->getText();
-            }
-
-            $indent = $this->stepIndent;
-            $nameLength = mb_strlen("$indent$type $text", 'utf8');
-            $indentCount = $nameLength > $this->maxLineLength ? 0 : $this->maxLineLength - $nameLength;
-
-            $this->printPathComment(
-                $this->relativizePathsInString($definition->getPath()), $indentCount
-            );
-
-            if ($this->getParameter('expand')) {
-                $this->maxLineLength = max($this->maxLineLength, $nameLength);
-            }
-        } else {
-            $this->writeln();
-        }
-    }
-
-    /**
-     * Prints step arguments.
-     *
-     * @param array  $arguments step arguments
-     * @param string $color     color name
-     *
-     * @uses printStepPyStringArgument()
-     * @uses printStepTableArgument()
-     */
-    protected function printStepArguments(array $arguments, $color)
-    {
-        foreach ($arguments as $argument) {
-            if ($argument instanceof PyStringNode) {
-                $this->printStepPyStringArgument($argument, $color);
-            } elseif ($argument instanceof TableNode) {
-                $this->printStepTableArgument($argument, $color);
+            if (false !== strpos($outlineStepText, '<' . $header[$column] . '>')) {
+                $status = max($status, $event->getStatus());
             }
         }
+
+        $color = $this->getColorCode($status);
+
+        return "{+$color}$value{-$color}";
     }
 
     /**
-     * Prints step exception.
+     * Prints step on AFTER_STEP event.
      *
-     * @param \Exception $exception
-     * @param string     $color
+     * @param StepEvent $event
      */
-    protected function printStepException(\Exception $exception, $color)
+    public function printStep(StepEvent $event)
     {
-        $indent = $this->stepIndent;
+        $step = $event->getStep();
 
-        $error = $this->exceptionToString($exception);
-        $error = $this->relativizePathsInString($error);
+        // It is a background step
+        if ($step->getContainer() instanceof BackgroundNode) {
+            $this->printBackgroundStep($event);
 
-        $this->writeln(
-            "$indent  {+$color}" . strtr($error, array("\n" => "\n$indent  ")) . "{-$color}"
-        );
-    }
-
-    /**
-     * Prints step snippet
-     *
-     * @param SnippetInterface $snippet
-     */
-    protected function printStepSnippet(SnippetInterface $snippet)
-    {
-    }
-
-    /**
-     * Prints PyString argument.
-     *
-     * @param PyStringNode $pystring pystring node
-     * @param string       $color    color name
-     */
-    protected function printStepPyStringArgument(PyStringNode $pystring, $color = null)
-    {
-        $indent = $this->stepIndent;
-        $string = strtr(
-            sprintf("$indent  \"\"\"\n%s\n\"\"\"", (string)$pystring), array("\n" => "\n$indent  ")
-        );
-
-        if (null !== $color) {
-            $this->writeln("{+$color}$string{-$color}");
-        } else {
-            $this->writeln($string);
+            return;
         }
-    }
 
-    /**
-     * Prints table argument.
-     *
-     * @param TableNode $table
-     * @param string    $color
-     */
-    protected function printStepTableArgument(TableNode $table, $color = null)
-    {
-        $indent = $this->stepIndent;
-        $string = strtr("$indent  " . (string)$table, array("\n" => "\n$indent  "));
+        // It is an example step
+        if ($step->getContainer() instanceof ExampleNode) {
+            $this->printExampleStep($event);
 
-        if (null !== $color) {
-            $this->writeln("{+$color}$string{-$color}");
-        } else {
-            $this->writeln($string);
+            return;
         }
+
+        $this->printStepBody($event);
     }
 
     /**
-     * Prints table row in color.
-     *
-     * @param array  $row
-     * @param string $color
+     * Prints exercise stats on AFTER_EXERCISE event.
      */
-    protected function printColorizedTableRow($row, $color)
-    {
-        $string = preg_replace(
-            '/|([^|]*)|/',
-            "{+$color}\$1{-$color}",
-            '      ' . $row
-        );
-
-        $this->writeln($string);
-    }
-
-    /**
-     * Prints suite header.
-     */
-    protected function printExerciseHeader()
-    {
-    }
-
-    /**
-     * Prints suite footer information.
-     *
-     * @uses printSummary()
-     * @uses printUndefinedStepsSnippets()
-     */
-    protected function printExerciseFooter()
+    public function printExerciseStats()
     {
         $this->printSummary($this->getStatisticsCollector());
         $this->printUndefinedStepsSnippets($this->getSnippetsCollector());
     }
 
+
     /**
-     * Returns feature or scenario name.
+     * Prints hook stdOut or exception.
      *
-     * @param NodeInterface $node
-     * @param Boolean       $haveBaseIndent
-     *
-     * @return string
+     * @param HookEvent $event
      */
-    protected function getFeatureOrScenarioName(NodeInterface $node, $haveBaseIndent = true)
+    public function printHookExceptionOrStdOut(HookEvent $event)
+    {
+        if (!$event->hasStdOut() && !$event->hasException()) {
+            return;
+        }
+
+        $lcEvent = $event->getLifecycleEvent();
+        $hook = $event->getHook();
+        $indent = '';
+
+        if ($lcEvent instanceof ScenarioEvent) {
+            $indent = '  ';
+        }
+        if ($lcEvent instanceof ExampleEvent) {
+            $indent = '    ';
+        }
+        if ($lcEvent instanceof StepEvent) {
+            $indent = '    ';
+        }
+
+        $hookText = $hook->toString();
+        if ($event->hasException()) {
+            $this->write("$indent{+failed}> $hookText{-failed}");
+        } else {
+            $this->write("$indent{+passed}> $hookText{-passed}");
+        }
+
+        if ($this->getParameter('paths')) {
+            $path = $this->relativizePathsInString($hook->getPath());
+            $this->printLineComment($path, mb_strlen("$indent> $hookText", 'utf8'));
+        }
+
+        $this->writeln();
+
+        if ($event->hasStdOut()) {
+            $this->writeln("$indent  " . strtr($event->getStdOut(), array("\n" => "\n$indent  ")));
+        }
+        if ($event->hasException()) {
+            $error = $this->exceptionToString($event->getException());
+            $error = $this->relativizePathsInString($error);
+            $this->writeln(
+                "$indent  {+failed}" . strtr($error, array("\n" => "\n$indent  ")) . "{-failed}"
+            );
+        }
+    }
+
+    protected function printKeywordNodeTitle(KeywordNodeInterface $node)
     {
         $keyword = $node->getKeyword();
-        $baseIndent = ($node instanceof FeatureNode) || !$haveBaseIndent ? '' : '  ';
 
         $lines = explode("\n", $node->getTitle());
         $title = array_shift($lines);
+        $this->write($firstLine = "  $keyword:" . ($title ? " $title" : ''));
 
-        if (count($lines)) {
-            foreach ($lines as $line) {
-                $title .= "\n" . $baseIndent . '  ' . $line;
+        if ($this->getParameter('paths')) {
+            $path = $this->relativizePathsInString($node->getFile()) . ':' . $node->getLine();
+            $this->printLineComment($path, mb_strlen($firstLine, 'utf8'));
+        }
+
+        $this->writeln();
+
+        foreach ($lines as $line) {
+            $this->writeln("    $line");
+        }
+    }
+
+    protected function printBackgroundStep(StepEvent $event)
+    {
+        // Skip non-failing background steps in scenarios
+        if (0 !== $event->getScenario()->getIndex() && $event->getStatus() < StepEvent::FAILED) {
+            return;
+        }
+
+        if ($event->getContainer() instanceof ExampleNode && 0 !== $event->getContainer()->getIndex()) {
+            return;
+        }
+
+        $this->printStepBody($event);
+    }
+
+    protected function printExampleStep(StepEvent $event)
+    {
+        if (0 == $event->getStep()->getContainer()->getIndex()) {
+            $this->printStepBody($event, true);
+        }
+
+        $this->exampleRowEvents[] = $event;
+    }
+
+    protected function printStepBody(StepEvent $event, $outlineStep = false, $indent = '    ')
+    {
+        $step = $event->getStep();
+
+        // If it is example step - use outline step instead
+        if ($outlineStep) {
+            $steps = $step->getContainer()->getOutline()->getSteps();
+            $step = $steps[$step->getIndex()];
+        }
+
+        $type = $step->getType();
+        $text = $step->getText();
+        $color = $this->getColorCode($outlineStep ? StepEvent::SKIPPED : $event->getStatus());
+
+        // Print step text
+        if ($event->hasDefinition()) {
+            $colored = $this->colorizeDefinitionArguments($text, $event->getDefinition(), $color);
+            $this->write("$indent{+$color}$type $colored{-$color}");
+        } else {
+            $this->write("$indent{+$color}$type $text{-$color}");
+        }
+
+        // Print definition path (if some & enabled)
+        if ($this->getParameter('paths') && $event->hasDefinition()) {
+            $path = $this->relativizePathsInString($event->getDefinition()->getPath());
+            $this->printLineComment($path, mb_strlen("$indent$type $text", 'utf8'));
+        }
+
+        $this->writeln();
+
+        // Print multiline arguments
+        if ($this->getParameter('multiline_arguments') && $step->hasArguments()) {
+            foreach ($step->getArguments() as $argument) {
+                if ($argument instanceof PyStringNode) {
+                    $this->printStepPyStringArgument($argument, $color, $indent . '  ');
+                } elseif ($argument instanceof TableNode) {
+                    $this->printStepTableArgument($argument, $color, $indent . '  ');
+                }
             }
         }
 
-        return "$baseIndent$keyword:" . ($title ? ' ' . $title : '');
+        if ($outlineStep) {
+            return;
+        }
+
+        // Print step StdOut
+        if ($event->hasStdOut()) {
+            $this->writeln("$indent  " . strtr($event->getStdOut(), array("\n" => "\n$indent  ")));
+        }
+
+        // Print step exception
+        if ($event->hasException() && !($event->getException() instanceof UndefinedException)) {
+            $error = $this->exceptionToString($event->getException());
+            $error = $this->relativizePathsInString($error);
+            $this->writeln("$indent  {+$color}" . strtr($error, array("\n" => "\n$indent  ")) . "{-$color}");
+        }
     }
 
-    /**
-     * Returns step text with colorized arguments.
-     *
-     * @param string              $text
-     * @param DefinitionInterface $definition
-     * @param string              $color
-     *
-     * @return string
-     */
+    protected function printExampleRowResult(ExampleEvent $event)
+    {
+        $example = $event->getExample();
+        $table = $example->getOutline()->getExampleTable();
+
+        // Example result row
+        $row = $table->getRowAsStringWithWrappedValues($example->getIndex() + 1,
+            array($this, 'getExampleRowCell')
+        );
+        $this->writeln("      $row");
+
+        foreach ($this->exampleRowEvents as $event) {
+            // Print step StdOut
+            if ($event->hasStdOut()) {
+                $this->writeln("        " . strtr($event->getStdOut(), array("\n" => "\n        ")));
+            }
+
+            // Print step exception
+            if ($event->hasException() && !($event->getException() instanceof UndefinedException)) {
+                $color = $this->getColorCode($event->getStatus());
+                $error = $this->exceptionToString($event->getException());
+                $error = $this->relativizePathsInString($error);
+                $this->writeln("        {+$color}" . strtr($error, array("\n" => "\n        ")) . "{-$color}");
+            }
+        }
+    }
+
+    protected function printExpandedExampleResult(ExampleEvent $event)
+    {
+        $example = $event->getExample();
+        $this->write($firstLine = "      " . $example->getTitle());
+
+        if ($this->getParameter('paths')) {
+            $path = $this->relativizePathsInString($example->getFile()) . ':' . $example->getLine();
+            $this->printLineComment($path, mb_strlen($firstLine, 'utf8'));
+        }
+
+        $this->writeln();
+
+        foreach ($this->exampleRowEvents as $event) {
+            $this->printStepBody($event, false, '        ');
+        }
+    }
+
+    protected function printStepPyStringArgument(PyStringNode $pystring, $color, $indent)
+    {
+        $string = strtr(
+            sprintf("$indent\"\"\"\n%s\n\"\"\"", (string)$pystring), array("\n" => "\n$indent")
+        );
+
+        if (null !== $color) {
+            $this->writeln("{+$color}$string{-$color}");
+        } else {
+            $this->writeln($string);
+        }
+    }
+
+    protected function printStepTableArgument(TableNode $table, $color, $indent)
+    {
+        $string = strtr($indent . (string)$table, array("\n" => "\n$indent"));
+
+        if (null !== $color) {
+            $this->writeln("{+$color}$string{-$color}");
+        } else {
+            $this->writeln($string);
+        }
+    }
+
+    protected function printSummary(StatisticsCollector $stats)
+    {
+        if (count($stats->getFailedStepsEvents())) {
+            $this->maxLineLength = 0;
+            $header = $this->translate('failing_scenarios_title');
+            $this->writeln("{+failed}$header:{-failed}");
+            foreach ($stats->getFailedStepsEvents() as $event) {
+                $scenario = $event->getScenario();
+
+                $file = $this->relativizePathsInString($scenario->getFile());
+                $line = $event->getContainer()->getLine();
+                $text = "$file:$line";
+                $this->write("{+failed}$text{-failed}");
+
+                if ($this->getParameter('paths')) {
+                    $this->maxLineLength = max($this->maxLineLength, mb_strlen($text, 'utf8'));
+                    $this->printLineComment(
+                        $scenario->getKeyword() . ': ' . $scenario->getTitle(),
+                        mb_strlen($text, 'utf8')
+                    );
+                }
+
+                $this->writeln();
+            }
+
+            $this->writeln();
+        }
+
+        $count = $stats->getScenariosCount();
+        $header = $this->translateChoice('scenarios_count', $count, array('%1%' => $count));
+        $this->write($header);
+        $this->printStatusesSummary($stats->getScenariosStatuses());
+
+        $count = $stats->getStepsCount();
+        $header = $this->translateChoice('steps_count', $count, array('%1%' => $count));
+        $this->write($header);
+        $this->printStatusesSummary($stats->getStepsStatuses());
+
+        if ($this->getParameter('time')) {
+            $this->printTimeSummary($stats);
+        }
+    }
+
+    protected function printStatusesSummary(array $statusesStatistics)
+    {
+        $statuses = array();
+        foreach ($statusesStatistics as $status => $count) {
+            if ($count) {
+                $transStatus = $this->translateChoice(
+                    "{$status}_count", $count, array('%1%' => $count)
+                );
+                $statuses[] = "{+$status}$transStatus{-$status}";
+            }
+        }
+        $this->writeln(count($statuses) ? ' ' . sprintf('(%s)', implode(', ', $statuses)) : '');
+    }
+
+    protected function printTimeSummary(StatisticsCollector $stats)
+    {
+        $time = $stats->getTotalTime();
+        $minutes = floor($time / 60);
+        $seconds = round($time - ($minutes * 60), 3);
+
+        $this->writeln($minutes . 'm' . $seconds . 's');
+    }
+
+    protected function printUndefinedStepsSnippets(SnippetsCollector $snippets)
+    {
+        if (!$this->getParameter('snippets') || !$snippets->hasSnippets()) {
+            return;
+        }
+
+        $header = $this->translate('proposal_title');
+        $this->writeln("\n{+undefined}$header{-undefined}\n");
+
+        foreach ($snippets->getSnippets() as $snippet) {
+            $snippetText = $snippet->getSnippet();
+
+            if ($this->getParameter('snippets_paths')) {
+                $indent = str_pad(
+                    '', mb_strlen($snippetText, 'utf8') - mb_strlen(ltrim($snippetText), 'utf8'), ' '
+                );
+                $this->writeln("{+undefined}$indent/**{-undefined}");
+                foreach ($snippets->getStepsThatNeed($snippet) as $step) {
+                    $this->writeln(sprintf(
+                        '{+undefined}%s * %s %s # %s:%d{-undefined}', $indent,
+                        $step->getType(), $step->getText(),
+                        $this->relativizePathsInString($step->getFile()), $step->getLine()
+                    ));
+                }
+
+                if (false !== mb_strpos($snippetText, '/**')) {
+                    $snippetText = str_replace('/**', ' *', $snippetText);
+                } else {
+                    $this->writeln("{+undefined}$indent */{-undefined}");
+                }
+            }
+
+            $this->writeln("{+undefined}$snippetText{-undefined}\n");
+        }
+    }
+
+    protected function printLineComment($path, $lineLength = 0)
+    {
+        $indent = str_repeat(' ', max(0, $this->maxLineLength - $lineLength));
+
+        $this->write("$indent {+comment}# $path{-comment}");
+    }
+
+    protected function recalculateMaxLineLength(ScenarioLikeInterface $scenario)
+    {
+        $keyword = $scenario->getKeyword();
+        $lines = explode("\n", $scenario->getTitle());
+        $title = array_shift($lines);
+        $scenarioTitle = "  $keyword:" . ($title ? " $title" : '');
+
+        $this->maxLineLength = max($this->maxLineLength, mb_strlen($scenarioTitle, 'utf8'));
+
+        foreach ($scenario->getSteps() as $step) {
+            $type = $step->getType();
+            $text = $step->getText();
+            $indent = '    ';
+
+            $container = $step->getContainer();
+            if ($container instanceof ExampleNode) {
+                $steps = $container->getOutline()->getSteps();
+                $text = $steps[$step->getIndex()];
+            }
+
+            $stepDescription = "$indent$type $text";
+            $this->maxLineLength = max($this->maxLineLength, mb_strlen($stepDescription, 'utf8'));
+        }
+    }
+
+    protected function relativizePathsInString($string)
+    {
+        if ($basePath = getcwd()) {
+            $basePath = realpath($basePath) . DIRECTORY_SEPARATOR;
+            $string = str_replace($basePath, '', $string);
+        }
+
+        return $string;
+    }
+
     protected function colorizeDefinitionArguments($text, DefinitionInterface $definition, $color)
     {
         $regex = $definition->getRegex();
@@ -1050,24 +741,15 @@ class PrettyFormatter extends ProgressFormatter
     }
 
     /**
-     * Returns max lines size for section elements.
+     * Returns default parameters to construct ParameterBag.
      *
-     * @param integer                $max      previous max value
-     * @param StepContainerInterface $scenario element for calculations
-     *
-     * @return integer
+     * @return array
      */
-    protected function getMaxLineLength($max, StepContainerInterface $scenario)
+    protected function getDefaultParameters()
     {
-        $lines = explode("\n", $this->getFeatureOrScenarioName($scenario, false));
-        $max = max($max, mb_strlen(current($lines), 'utf8') + 2);
-
-        foreach ($scenario->getSteps() as $step) {
-            $text = $step->getText();
-            $stepDescription = $step->getType() . ' ' . $text;
-            $max = max($max, mb_strlen($stepDescription, 'utf8') + 4);
-        }
-
-        return $max;
+        return array(
+            'expand'              => false,
+            'multiline_arguments' => true,
+        );
     }
 }

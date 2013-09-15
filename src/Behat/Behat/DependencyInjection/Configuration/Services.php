@@ -210,6 +210,7 @@ class Services
         ));
         $container->setDefinition('output.manager', $definition);
 
+
         $definition = new Definition('Behat\Behat\Output\Formatter\PrettyFormatter', array(
             new Reference('tester.statistics_collector'),
             new Reference('snippet.snippets_collector'),
@@ -234,27 +235,11 @@ class Services
         $definition->addTag('output.formatter');
         $container->setDefinition('output.formatter.progress', $definition);
 
-        $definition = new Definition('Behat\Behat\Output\Formatter\HtmlFormatter', array(
+        $definition = new Definition('Behat\Behat\Output\Formatter\FailedScenariosFormatter', array(
             new Reference('tester.statistics_collector'),
             new Reference('snippet.snippets_collector'),
             new Reference('translator')
         ));
-        $definition->addMethodCall('setParameter', array(
-            'base_path',
-            '%paths.base%'
-        ));
-        $definition->addTag('output.formatter');
-        $container->setDefinition('output.formatter.html', $definition);
-
-        $definition = new Definition('Behat\Behat\Output\Formatter\JUnitFormatter');
-        $definition->addMethodCall('setParameter', array(
-            'base_path',
-            '%paths.base%'
-        ));
-        $definition->addTag('output.formatter');
-        $container->setDefinition('output.formatter.junit', $definition);
-
-        $definition = new Definition('Behat\Behat\Output\Formatter\FailedScenariosFormatter');
         $definition->addMethodCall('setParameter', array(
             'base_path',
             '%paths.base%'

@@ -152,10 +152,14 @@ Feature: hooks
     When I run "behat --no-ansi -f pretty"
     Then it should pass with:
       """
-      = do something BEFORE ANY SUITE
+      > BeforeSuite # FeatureContext::doSomethingBeforeSuite()
+        = do something BEFORE ANY SUITE
+
       Feature:
 
-      = do something BEFORE EVERY FEATURE
+      > BeforeFeature # FeatureContext::doSomethingBeforeFeature()
+        = do something BEFORE EVERY FEATURE
+
         Scenario:             # features/test.feature:2
           Then I must have 50 # FeatureContext::iMustHave()
 
@@ -178,8 +182,12 @@ Feature: hooks
         Scenario: 130             # features/test.feature:19
           Given I must have 130   # FeatureContext::iMustHave()
 
-      = do something AFTER EVERY FEATURE
-      = do something AFTER ANY SUITE
+      > AfterFeature              # FeatureContext::doSomethingAfterFeature()
+        = do something AFTER EVERY FEATURE
+
+      > AfterSuite                # FeatureContext::doSomethingAfterSuite()
+        = do something AFTER ANY SUITE
+
       5 scenarios (5 passed)
       10 steps (10 passed)
       """
@@ -208,10 +216,14 @@ Feature: hooks
     When I run "behat --no-ansi -f pretty"
     Then it should pass with:
       """
-      = do something BEFORE ANY SUITE
+      > BeforeSuite # FeatureContext::doSomethingBeforeSuite()
+        = do something BEFORE ANY SUITE
+
       Feature:
 
-      = do something BEFORE EVERY FEATURE
+      > BeforeFeature # FeatureContext::doSomethingBeforeFeature()
+        = do something BEFORE EVERY FEATURE
+
         Scenario:             # features/1-one.feature:2
           Then I must have 50 # FeatureContext::iMustHave()
 
@@ -222,18 +234,30 @@ Feature: hooks
         Scenario: 130             # features/1-one.feature:9
           Given I must have 130   # FeatureContext::iMustHave()
 
-      = do something AFTER EVERY FEATURE
+      > AfterFeature              # FeatureContext::doSomethingAfterFeature()
+        = do something AFTER EVERY FEATURE
+
       @someFeature
       Feature:
 
-      = do something BEFORE EVERY FEATURE
-      = do something before SOME feature
+      > BeforeFeature             # FeatureContext::doSomethingBeforeFeature()
+        = do something BEFORE EVERY FEATURE
+
+      > BeforeFeature @someFeature # FeatureContext::doSomethingBeforeSomeFeature()
+        = do something before SOME feature
+
         Scenario: 130             # features/2-two.feature:3
           Given I must have 130   # FeatureContext::iMustHave()
 
-      = do something AFTER EVERY FEATURE
-      = do something after SOME feature
-      = do something AFTER ANY SUITE
+      > AfterFeature              # FeatureContext::doSomethingAfterFeature()
+        = do something AFTER EVERY FEATURE
+
+      > AfterFeature @someFeature # FeatureContext::doSomethingAfterSomeFeature()
+        = do something after SOME feature
+
+      > AfterSuite                # FeatureContext::doSomethingAfterSuite()
+        = do something AFTER ANY SUITE
+
       4 scenarios (4 passed)
       5 steps (5 passed)
       """
@@ -252,10 +276,14 @@ Feature: hooks
     When I run "behat --no-ansi -f pretty"
     Then it should pass with:
       """
-      = do something BEFORE ANY SUITE
+      > BeforeSuite # FeatureContext::doSomethingBeforeSuite()
+        = do something BEFORE ANY SUITE
+
       Feature:
 
-      = do something BEFORE EVERY FEATURE
+      > BeforeFeature          # FeatureContext::doSomethingBeforeFeature()
+        = do something BEFORE EVERY FEATURE
+
         Background:            # features/background.feature:2
           Given I must have 50 # FeatureContext::iMustHave()
 
@@ -263,8 +291,12 @@ Feature: hooks
           Given I have entered 12 # FeatureContext::iHaveEntered()
           Then I must have 12     # FeatureContext::iMustHave()
 
-      = do something AFTER EVERY FEATURE
-      = do something AFTER ANY SUITE
+      > AfterFeature              # FeatureContext::doSomethingAfterFeature()
+        = do something AFTER EVERY FEATURE
+
+      > AfterSuite                # FeatureContext::doSomethingAfterSuite()
+        = do something AFTER ANY SUITE
+
       1 scenario (1 passed)
       3 steps (3 passed)
       """
@@ -293,12 +325,18 @@ Feature: hooks
     When I run "behat --no-ansi -f pretty"
     Then it should fail with:
       """
-      = do something BEFORE ANY SUITE
+      > BeforeSuite # FeatureContext::doSomethingBeforeSuite()
+        = do something BEFORE ANY SUITE
+
       Feature:
 
-      = do something BEFORE EVERY FEATURE
+      > BeforeFeature # FeatureContext::doSomethingBeforeFeature()
+        = do something BEFORE EVERY FEATURE
+
         @exception
         Scenario:             # features/background.feature:4
+        > BeforeScenario @exception # FeatureContext::beforeScenarioException()
+          Exception (Exception)
           Then I must have 50 # FeatureContext::iMustHave()
 
         Scenario:                 # features/background.feature:6
@@ -307,6 +345,8 @@ Feature: hooks
 
         @exception
         Scenario:                 # features/background.feature:11
+        > BeforeScenario @exception # FeatureContext::beforeScenarioException()
+          Exception (Exception)
           Given I must have 30    # FeatureContext::iMustHave()
           When I have entered 23  # FeatureContext::iHaveEntered()
           Then I must have 23     # FeatureContext::iMustHave()
@@ -314,8 +354,12 @@ Feature: hooks
         Scenario: 130             # features/background.feature:16
           Given I must have 130   # FeatureContext::iMustHave()
 
-      = do something AFTER EVERY FEATURE
-      = do something AFTER ANY SUITE
+      > AfterFeature              # FeatureContext::doSomethingAfterFeature()
+        = do something AFTER EVERY FEATURE
+
+      > AfterSuite                # FeatureContext::doSomethingAfterSuite()
+        = do something AFTER ANY SUITE
+
       4 scenarios (2 passed, 2 failed)
       7 steps (3 passed, 4 skipped)
       """
