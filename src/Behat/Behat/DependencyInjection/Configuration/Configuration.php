@@ -58,7 +58,9 @@ class Configuration
     protected function appendConfigChildrens(TreeBuilder $tree)
     {
         $boolFilter = function ($v) {
-            return filter_var($v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $filtered = filter_var($v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+            return (null === $filtered) ? $v : $filtered;
         };
 
         return $tree->root('behat')->

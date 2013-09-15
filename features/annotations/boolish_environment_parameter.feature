@@ -125,3 +125,19 @@ You can implement step definitions for undefined steps with these snippets:
       | off    |
       | no     |
       | 0      |
+
+  Scenario Outline: Non-boolish strict option
+    Given "BEHAT_PARAMS" environment variable is set to:
+      """
+      options[strict]=<strict>&formatter[parameters][time]=false
+      """
+    When I run "behat --no-ansi -f progress features/coffee.feature"
+    Then it should fail with:
+      """
+      [Symfony\Component\Config\Definition\Exception\InvalidTypeException]
+        Invalid type for path "behat.options.strict". Expected boolean, but got string.
+      """
+    Examples:
+      | strict    |
+      | null      |
+      | dont-care |
