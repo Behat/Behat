@@ -57,6 +57,10 @@ class Configuration
      */
     protected function appendConfigChildrens(TreeBuilder $tree)
     {
+        $boolFilter = function ($v) {
+            return filter_var($v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        };
+
         return $tree->root('behat')->
             children()->
                 arrayNode('paths')->
@@ -104,12 +108,21 @@ class Configuration
                             defaultNull()->
                         end()->
                         booleanNode('strict')->
+                            beforeNormalization()->
+                                ifString()->then($boolFilter)->
+                            end()->
                             defaultFalse()->
                         end()->
                         booleanNode('dry_run')->
+                            beforeNormalization()->
+                                ifString()->then($boolFilter)->
+                            end()->
                             defaultFalse()->
                         end()->
                         booleanNode('stop_on_failure')->
+                            beforeNormalization()->
+                                ifString()->then($boolFilter)->
+                            end()->
                             defaultFalse()->
                         end()->
                         scalarNode('rerun')->
