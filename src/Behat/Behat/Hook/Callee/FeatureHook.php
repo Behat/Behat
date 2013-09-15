@@ -10,6 +10,7 @@ namespace Behat\Behat\Hook\Callee;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\FeatureEvent;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use InvalidArgumentException;
@@ -51,7 +52,7 @@ abstract class FeatureHook extends FilterableHook
     /**
      * Checks if provided event matches hook filter.
      *
-     * @param EventInterface $event
+     * @param FeatureEvent $event
      *
      * @return Boolean
      */

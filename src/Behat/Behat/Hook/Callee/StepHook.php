@@ -10,6 +10,7 @@ namespace Behat\Behat\Hook\Callee;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\StepEvent;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
 
@@ -23,7 +24,7 @@ abstract class StepHook extends FilterableHook
     /**
      * Checks if provided event matches hook filter.
      *
-     * @param EventInterface $event
+     * @param StepEvent $event
      *
      * @return Boolean
      */
@@ -33,7 +34,7 @@ abstract class StepHook extends FilterableHook
             return true;
         }
 
-        $scenario = $event->getLogicalParent();
+        $scenario = $event->getScenario();
 
         if (false !== strpos($filterString, '@')) {
             $filter = new TagFilter($filterString);

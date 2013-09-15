@@ -38,7 +38,7 @@ class StepEvent extends Event implements LifecycleEventInterface
     /**
      * @var ScenarioInterface
      */
-    private $logicalParent;
+    private $scenario;
     /**
      * @var SuiteInterface
      */
@@ -73,7 +73,7 @@ class StepEvent extends Event implements LifecycleEventInterface
      *
      * @param SuiteInterface           $suite
      * @param ContextPoolInterface     $contexts
-     * @param ScenarioInterface        $logicalParent
+     * @param ScenarioInterface        $scenario
      * @param StepNode                 $step
      * @param null|integer             $status
      * @param null|string              $stdOut
@@ -84,7 +84,7 @@ class StepEvent extends Event implements LifecycleEventInterface
     public function __construct(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
-        ScenarioInterface $logicalParent,
+        ScenarioInterface $scenario,
         StepNode $step,
         $status = null,
         $stdOut = null,
@@ -96,7 +96,7 @@ class StepEvent extends Event implements LifecycleEventInterface
         $this->suite = $suite;
         $this->contexts = $contexts;
         $this->step = $step;
-        $this->logicalParent = $logicalParent;
+        $this->scenario = $scenario;
         $this->status = $status;
         $this->stdOut = $stdOut;
         $this->definition = $definition;
@@ -135,13 +135,13 @@ class StepEvent extends Event implements LifecycleEventInterface
     }
 
     /**
-     * Returns logical parent to the step, which is always a ScenarioNode.
+     * Returns logical scenario to the step.
      *
-     * @return ScenarioNode
+     * @return ScenarioInterface
      */
-    public function getLogicalParent()
+    public function getScenario()
     {
-        return $this->logicalParent;
+        return $this->scenario;
     }
 
     /**

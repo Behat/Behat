@@ -10,9 +10,11 @@ namespace Behat\Behat\Hook\Callee;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Event\OutlineEvent;
 use Behat\Behat\Event\ScenarioEvent;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
+use RuntimeException;
 
 /**
  * Base ScenarioHook hook class.
@@ -27,6 +29,8 @@ abstract class ScenarioHook extends FilterableHook
      * @param EventInterface $event
      *
      * @return Boolean
+     *
+     * @throws RuntimeException
      */
     public function filterMatches(EventInterface $event)
     {
@@ -36,8 +40,12 @@ abstract class ScenarioHook extends FilterableHook
 
         if ($event instanceof ScenarioEvent) {
             $scenario = $event->getScenario();
-        } else {
+        } elseif ($event instanceof OutlineEvent) {
             $scenario = $event->getOutline();
+        } else {
+            throw new RuntimeException(sprintf(
+                'Unsupported type of scenario event: %s', get_class($event)
+            ));
         }
 
         if (false !== strpos($filterString, '@')) {
