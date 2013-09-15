@@ -14,7 +14,7 @@ use Behat\Behat\Definition\DefinitionInterface;
 use Behat\Behat\Snippet\SnippetInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\ScenarioInterface;
-use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\StepContainerInterface;
 use Behat\Gherkin\Node\StepNode;
 use Exception;
 use Symfony\Component\EventDispatcher\Event;
@@ -39,6 +39,10 @@ class StepEvent extends Event implements LifecycleEventInterface
      * @var ScenarioInterface
      */
     private $scenario;
+    /**
+     * @var StepContainerInterface
+     */
+    private $container;
     /**
      * @var SuiteInterface
      */
@@ -74,6 +78,7 @@ class StepEvent extends Event implements LifecycleEventInterface
      * @param SuiteInterface           $suite
      * @param ContextPoolInterface     $contexts
      * @param ScenarioInterface        $scenario
+     * @param StepContainerInterface   $container
      * @param StepNode                 $step
      * @param null|integer             $status
      * @param null|string              $stdOut
@@ -85,6 +90,7 @@ class StepEvent extends Event implements LifecycleEventInterface
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
         ScenarioInterface $scenario,
+        StepContainerInterface $container,
         StepNode $step,
         $status = null,
         $stdOut = null,
@@ -97,6 +103,7 @@ class StepEvent extends Event implements LifecycleEventInterface
         $this->contexts = $contexts;
         $this->step = $step;
         $this->scenario = $scenario;
+        $this->container = $container;
         $this->status = $status;
         $this->stdOut = $stdOut;
         $this->definition = $definition;
@@ -137,11 +144,31 @@ class StepEvent extends Event implements LifecycleEventInterface
     /**
      * Returns logical scenario to the step.
      *
+     * - For scenario, this would be a scenario itself
+     * - For outline example, this would be an outline of that example
+     * - For scenario background, this would be a scenario this background was runned for
+     * - For outline background, this would be an outline this background was runned for
+     *
      * @return ScenarioInterface
      */
     public function getScenario()
     {
         return $this->scenario;
+    }
+
+    /**
+     * Returns logical step container this step belongs to.
+     *
+     * - For scenario, this would be a scenario itself
+     * - For outline example, this would be an outline example itself
+     * - For scenario background, this would be a scenario this background was runned for
+     * - For outline background step, this would be an outline example this background was runned for
+     *
+     * @return StepContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**

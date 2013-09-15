@@ -67,7 +67,7 @@ class ScenarioTester extends IsolatedStepCollectionTester
             $skip = $skip || StepEvent::PASSED !== $status;
 
             $tester = $this->getStepTester($suite, $contexts, $step);
-            $status = max($status, $tester->test($suite, $contexts, $step, $scenario, $skip));
+            $status = max($status, $tester->test($suite, $contexts, $scenario, $scenario, $step, $skip));
         }
 
         $event = new ScenarioEvent($suite, $contexts, $scenario, $status);

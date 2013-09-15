@@ -72,7 +72,10 @@ class BackgroundEvent extends StepCollectionEvent
     }
 
     /**
-     * Returns step container background was run from.
+     * Returns logical step container this background was runned for.
+     *
+     * - For scenario, this would be a scenario itself
+     * - For outline example, this would be an outline example itself
      *
      * @return StepContainerInterface
      */

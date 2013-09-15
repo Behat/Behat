@@ -55,19 +55,21 @@ class ExampleTester extends IsolatedStepCollectionTester
             $skip = true;
         }
 
+        $outline = $example->getOutline();
+
         if ($example->getOutline()->getFeature()->hasBackground()) {
             $skip = $skip || StepEvent::PASSED !== $status;
-            $background = $example->getOutline()->getFeature()->getBackground();
+            $background = $outline->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
-            $status = $tester->test($suite, $example->getOutline(), $example, $background, $contexts, $skip);
+            $status = $tester->test($suite, $outline, $example, $background, $contexts, $skip);
         }
 
         foreach ($example->getSteps() as $step) {
             $skip = $skip || StepEvent::PASSED !== $status;
 
             $tester = $this->getStepTester($suite, $contexts, $step);
-            $status = max($status, $tester->test($suite, $contexts, $step, $example->getOutline(), $skip));
+            $status = max($status, $tester->test($suite, $contexts, $outline, $example, $step, $skip));
         }
 
         $event = new ExampleEvent($suite, $contexts, $example, $status);

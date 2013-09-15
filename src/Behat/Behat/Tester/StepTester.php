@@ -22,6 +22,7 @@ use Behat\Behat\Snippet\Event\SnippetCarrierEvent;
 use Behat\Behat\Snippet\SnippetInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Gherkin\Node\StepContainerInterface;
 use Behat\Gherkin\Node\StepNode;
 use Exception;
 
@@ -35,25 +36,27 @@ class StepTester extends DispatchingService
     /**
      * Tests step.
      *
-     * @param SuiteInterface       $suite
-     * @param ContextPoolInterface $contexts
-     * @param StepNode             $step
-     * @param ScenarioInterface    $scenario
-     * @param Boolean              $skip
+     * @param SuiteInterface         $suite
+     * @param ContextPoolInterface   $contexts
+     * @param ScenarioInterface      $scenario
+     * @param StepContainerInterface $container
+     * @param StepNode               $step
+     * @param Boolean                $skip
      *
      * @return integer
      */
     public function test(
         SuiteInterface $suite,
         ContextPoolInterface $contexts,
-        StepNode $step,
         ScenarioInterface $scenario,
+        StepContainerInterface $container,
+        StepNode $step,
         $skip = false
     )
     {
         $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
 
-        $event = new StepEvent($suite, $contexts, $scenario, $step);
+        $event = new StepEvent($suite, $contexts, $scenario, $container, $step);
         $this->dispatch(EventInterface::BEFORE_STEP, $event);
 
         try {
@@ -82,13 +85,13 @@ class StepTester extends DispatchingService
         $stdOut = $execution ? $execution->getStdOut() : null;
         $definition = $execution ? $execution->getCallee() : null;
 
-        $event = new StepEvent($suite, $contexts, $scenario, $step, $status, $stdOut, $exception, $definition, $snippet);
+        $event = new StepEvent($suite, $contexts, $scenario, $container, $step, $status, $stdOut, $exception, $definition, $snippet);
 
         try {
             !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_STEP, $event);
         } catch (Exception $e) {
             $status = StepEvent::FAILED;
-            $event = new StepEvent($suite, $contexts, $scenario, $step, $status, $stdOut, $exception, $definition, $snippet);
+            $event = new StepEvent($suite, $contexts, $scenario, $container, $step, $status, $stdOut, $exception, $definition, $snippet);
         }
 
         $this->dispatch(EventInterface::AFTER_STEP, $event);
