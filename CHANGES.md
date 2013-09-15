@@ -1,3 +1,11 @@
+3.0.0beta5 / 2013-09-15
+=======================
+
+  * Switch to Gherkin 3.0 parser
+  * Complete rewrite of pretty formatter (much better outline handling)
+  * Automatically add `use` for `PendingException` to contexts during `--append-snippets`
+  * Lots of optimizations
+
 3.0.0beta4 / 2013-08-17
 =======================
 
