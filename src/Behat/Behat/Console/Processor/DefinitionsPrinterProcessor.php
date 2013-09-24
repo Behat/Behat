@@ -78,22 +78,16 @@ class DefinitionsPrinterProcessor extends DispatchingService implements Processo
             return null;
         }
 
-        $description = true;
-        if ('l' === $type) {
-            $description = false;
-        } elseif ('i' === $type) {
-            $description = true;
-        }
-
         $suitesProvider = new SuitesCarrierEvent();
         $this->dispatch(EventInterface::LOAD_SUITES, $suitesProvider);
 
-        $this->definitionsPrinter->printDefinitions(
-            $output,
-            $suitesProvider->getSuites(),
-            $input->getOption('lang') ? : 'en',
-            $description
-        );
+        if ($input->getOption('suite')) {
+            $suites = array($suitesProvider->getSuite($input->getOption('suite')));
+        } else {
+            $suites = $suitesProvider->getSuites();
+        }
+
+        $this->definitionsPrinter->printDefinitions($output, $suites, $input->getOption('lang') ? : 'en', $type);
 
         return 0;
     }

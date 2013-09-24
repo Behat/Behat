@@ -77,7 +77,7 @@ class RunProcessor extends DispatchingService implements ProcessorInterface
             ->addOption('--dry-run', null, InputOption::VALUE_NONE,
                 'Invokes formatters without executing the steps & hooks.'
             )
-            ->addOption('--suite', null, InputOption::VALUE_REQUIRED,
+            ->addOption('--suite', '-s', InputOption::VALUE_REQUIRED,
                 'Only execute features that belong to given suite.'
             );
     }

@@ -282,5 +282,5 @@ Feature: Context consistency
 
 
 
-    behat [--init] [--story-syntax] [-d|--definitions="..."] [--name="..."] [--tags="..."] [--role="..."] [-f|--format="..."] [--out="..."] [--lang="..."] [--ansi] [--no-ansi] [--no-time] [--no-paths] [--no-snippets] [--no-multiline] [--expand] [--snippets-paths] [--append-snippets] [--stop-on-failure] [--rerun] [--strict] [--dry-run] [--suite="..."] [features]
+    behat [--init] [--story-syntax] [-d|--definitions="..."] [--name="..."] [--tags="..."] [--role="..."] [-f|--format="..."] [--out="..."] [--lang="..."] [--ansi] [--no-ansi] [--no-time] [--no-paths] [--no-snippets] [--no-multiline] [--expand] [--snippets-paths] [--append-snippets] [--stop-on-failure] [--rerun] [--strict] [--dry-run] [-s|--suite="..."] [features]
     """

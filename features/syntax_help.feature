@@ -118,59 +118,10 @@ Feature: Syntax helpers
     When I run "behat --no-ansi -dl"
     Then the output should contain:
       """
-      Given /^(?:I|We) have (\d+) apples?$/
-       When /^(?:I|We) ate (\d+) apples?$/
-       When /^(?:I|We) found (\d+) apples?$/
-       Then /^(?:I|We) should have (\d+) apples$/
-      """
-
-  Scenario: Print available definitions (ansi)
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
-
-      class FeatureContext implements ContextInterface
-      {
-          /**
-           * @Given /^(?:I|We) have (\d+) apples?$/
-           */
-          public function iHaveApples($count) {
-              throw new PendingException();
-          }
-
-          /**
-           * @When /^(?:I|We) ate (\d+) apples?$/
-           */
-          public function iAteApples($count) {
-              throw new PendingException();
-          }
-
-          /**
-           * @When /^(?:I|We) found (\d+) apples?$/
-           */
-          public function iFoundApples($count) {
-              throw new PendingException();
-          }
-
-          /**
-           * @Then /^(?:I|We) should have (\d+) apples$/
-           */
-          public function iShouldHaveApples($count) {
-              throw new PendingException();
-          }
-      }
-      """
-    When I run "behat -dl --ansi"
-    And I escape ansi characters in the output
-    Then the output should contain:
-      """
-      \033[32mGiven\033[0m \033[33m/^(?:I|We) have \033[0m\033[33;1m(\d+)\033[0m\033[33m apples?$/\033[0m
-      \033[32m When\033[0m \033[33m/^(?:I|We) ate \033[0m\033[33;1m(\d+)\033[0m\033[33m apples?$/\033[0m
-      \033[32m When\033[0m \033[33m/^(?:I|We) found \033[0m\033[33;1m(\d+)\033[0m\033[33m apples?$/\033[0m
-      \033[32m Then\033[0m \033[33m/^(?:I|We) should have \033[0m\033[33;1m(\d+)\033[0m\033[33m apples$/\033[0m
+      default | Given /^(?:I|We) have (\d+) apples?$/
+      default |  When /^(?:I|We) ate (\d+) apples?$/
+      default |  When /^(?:I|We) found (\d+) apples?$/
+      default |  Then /^(?:I|We) should have (\d+) apples$/
       """
 
   Scenario: Print available definitions in native language
@@ -238,10 +189,10 @@ Feature: Syntax helpers
     When I run "behat --no-ansi -dl --lang=ru"
     Then the output should contain:
       """
-      Given /^у меня (\d+) яблоко?$/
-       When /^I ate (\d+) apples?$/
-       When /^Я нашел (\d+) яблоко?$/
-       Then /^I should have (\d+) apples$/
+      default | Given /^у меня (\d+) яблоко?$/
+      default |  When /^I ate (\d+) apples?$/
+      default |  When /^Я нашел (\d+) яблоко?$/
+      default |  Then /^I should have (\d+) apples$/
       """
 
   Scenario: Print extended definitions info
@@ -288,18 +239,18 @@ Feature: Syntax helpers
     When I run "behat --no-ansi -di"
     Then the output should contain:
       """
-      Given /^I have (\d+) apples?$/
-          # FeatureContext::iHaveApples()
+      default | Given /^I have (\d+) apples?$/
+              | at `FeatureContext::iHaveApples()`
 
-       When /^I ate (\d+) apples?$/
-          - Eating apples
-          # FeatureContext::iAteApples()
+      default | When /^I ate (\d+) apples?$/
+              | Eating apples
+              | at `FeatureContext::iAteApples()`
 
-       When /^I found (\d+) apples?$/
-          # FeatureContext::iFoundApples()
+      default | When /^I found (\d+) apples?$/
+              | at `FeatureContext::iFoundApples()`
 
-       Then /^I should have (\d+) apples$/
-          # FeatureContext::iShouldHaveApples()
+      default | Then /^I should have (\d+) apples$/
+              | at `FeatureContext::iShouldHaveApples()`
       """
 
   Scenario: Search definition
@@ -343,11 +294,11 @@ Feature: Syntax helpers
           }
       }
       """
-    When I run "behat --no-ansi -d 'found apples'"
+    When I run "behat --no-ansi -d 'I found 25 apples'"
     Then the output should contain:
       """
-      When /^I found (\d+) apples?$/
-          # FeatureContext::iFoundApples()
+      default | When /^I found (\d+) apples?$/
+              | at `FeatureContext::iFoundApples()`
       """
 
   Scenario: Search definition
@@ -415,6 +366,6 @@ Feature: Syntax helpers
     When I run "behat --no-ansi --lang=ru -d 'нашел'"
     Then the output should contain:
       """
-      When /^Я нашел (\d+) яблоко?$/
-          # FeatureContext::iFoundApples()
+      default | When /^Я нашел (\d+) яблоко?$/
+              | at `FeatureContext::iFoundApples()`
       """
