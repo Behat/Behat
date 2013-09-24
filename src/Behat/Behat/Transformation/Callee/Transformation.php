@@ -47,4 +47,14 @@ class Transformation extends Callee implements TransformationInterface
     {
         return $this->regex;
     }
+
+    /**
+     * Represents transformation as a string.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return 'Transform ' . $this->getRegex();
+    }
 }

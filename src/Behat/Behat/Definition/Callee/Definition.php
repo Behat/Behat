@@ -63,4 +63,14 @@ abstract class Definition extends Callee implements DefinitionInterface
     {
         return $this->regex;
     }
+
+    /**
+     * Represents definition as a string.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return $this->getType() . ' ' . $this->getRegex();
+    }
 }

@@ -24,4 +24,11 @@ interface TransformationInterface extends CalleeInterface
      * @return string
      */
     public function getRegex();
+
+    /**
+     * Represents transformation as a string.
+     *
+     * @return string
+     */
+    public function toString();
 }

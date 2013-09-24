@@ -31,4 +31,11 @@ interface DefinitionInterface extends CalleeInterface
      * @return string
      */
     public function getRegex();
+
+    /**
+     * Represents definition as a string.
+     *
+     * @return string
+     */
+    public function toString();
 }
