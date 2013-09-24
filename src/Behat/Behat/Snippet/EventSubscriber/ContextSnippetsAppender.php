@@ -10,7 +10,6 @@ namespace Behat\Behat\Snippet\EventSubscriber;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Event\EventInterface;
-use Behat\Behat\Event\ExerciseEvent;
 use Behat\Behat\Snippet\ContextSnippet;
 use ReflectionClass;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -27,7 +26,6 @@ class ContextSnippetsAppender implements EventSubscriberInterface
      * @const PendingException class
      */
     const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Exception\PendingException';
-
     /**
      * @var SnippetsCollector
      */
@@ -71,10 +69,8 @@ class ContextSnippetsAppender implements EventSubscriberInterface
 
     /**
      * Appends snippets to appropriate contexts.
-     *
-     * @param ExerciseEvent $event
      */
-    public function appendSnippets(ExerciseEvent $event)
+    public function appendSnippets()
     {
         if (!$this->enabled) {
             return;
@@ -105,8 +101,7 @@ class ContextSnippetsAppender implements EventSubscriberInterface
 
     private function addPendingException($content)
     {
-        $regexp = sprintf('@^(.*)(use\s+[^;]*);@m', self::PENDING_EXCEPTION_CLASS);
-        $replaceWith = "\$1".'use '.self::PENDING_EXCEPTION_CLASS.";\n\$2;";
+        $replaceWith = "\$1" . 'use ' . self::PENDING_EXCEPTION_CLASS . ";\n\$2;";
 
         return preg_replace('@^(.*)(use\s+[^;]*);@m', $replaceWith, $content, 1);
     }
