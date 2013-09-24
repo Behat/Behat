@@ -33,9 +33,7 @@ class SuitesLoader implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            EventInterface::LOAD_SUITES => array('setRegisteredSuites', 0)
-        );
+        return array(EventInterface::LOAD_SUITES => array('setRegisteredSuites', 0));
     }
 
     /**

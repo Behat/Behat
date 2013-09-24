@@ -91,7 +91,7 @@ class GherkinSuite implements SuiteInterface
     /**
      * Returns list of feature locators.
      * Conventionally, locators that are not paths in the local filesystem should start with `@` sign
-     * followed by the ID of a remote storage.
+     * followed by the ID of a remote storage (f.e.: @github:/path/to/some.feature)
      *
      * @return string[]
      */

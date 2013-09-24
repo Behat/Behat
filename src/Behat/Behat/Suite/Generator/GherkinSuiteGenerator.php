@@ -66,15 +66,11 @@ class GherkinSuiteGenerator implements GeneratorInterface
     {
         $settings = $this->normalizeSettings($settings);
 
-        $featureLocators = $this->getFeatureLocators($suiteName, $settings);
-        $featureFilters = $this->getFeatureFilters($suiteName, $settings);
-        $contextClasses = $this->getContextClasses($suiteName, $settings);
-
         return new GherkinSuite(
             $suiteName,
-            $featureLocators,
-            $featureFilters,
-            $contextClasses,
+            $this->getFeatureLocators($suiteName, $settings),
+            $this->getFeatureFilters($suiteName, $settings),
+            $this->getContextClasses($suiteName, $settings),
             $parameters
         );
     }
