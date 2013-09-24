@@ -61,27 +61,19 @@ class ContextSnippetGenerator implements EventSubscriberInterface
         $reflection = new ReflectionClass(is_object($context) ? get_class($context) : $context);
         $contextClass = $reflection->getName();
         $replacePatterns = array(
-            "/(?<= |^)\\\'(?:((?!\\').)*)\\\'(?= |$)/", // Single quoted strings
-            '/(?<= |^)\"(?:[^\"]*)\"(?= |$)/', // Double quoted strings
-            '/(\d+)/', // Numbers
+            "/(?<= |^)\\\'(?:((?!\\').)*)\\\'(?= |$)/" => "\\'([^\']*)\\'", // Single quoted strings
+            '/(?<= |^)\"(?:[^\"]*)\"(?= |$)/'          => "\"([^\"]*)\"", // Double quoted strings
+            '/(\d+)/'                                  => "(\\d+)", // Numbers
         );
 
         $text = $step->getText();
         $text = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+\'])/', '\\\\$1', $text);
-        $regex = preg_replace(
-            $replacePatterns,
-            array(
-                "\\'([^\']*)\\'",
-                "\"([^\"]*)\"",
-                "(\\d+)",
-            ),
-            $text
-        );
+        $regex = preg_replace(array_keys($replacePatterns), array_values($replacePatterns), $text);
 
         preg_match('/' . $regex . '/', $step->getText(), $matches);
         $count = count($matches) - 1;
 
-        $methodName = preg_replace($replacePatterns, '', $text);
+        $methodName = preg_replace(array_keys($replacePatterns), '', $text);
         $methodName = Transliterator::transliterate($methodName, ' ');
         $methodName = preg_replace('/[^a-zA-Z\_\ ]/', '', $methodName);
         $methodName = str_replace(' ', '', ucwords($methodName));
@@ -98,7 +90,7 @@ class ContextSnippetGenerator implements EventSubscriberInterface
             $methodNumber = intval($matches[1]);
         }
 
-        // check that proposed method name isn't arelady defined in context
+        // check that proposed method name isn't already defined in context
         while ($reflection->hasMethod($methodName)) {
             $methodName = preg_replace('/\d+$/', '', $methodName);
             $methodName .= $methodNumber++;
