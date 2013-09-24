@@ -38,9 +38,7 @@ class FeaturesLoader extends DispatchingService implements EventSubscriberInterf
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            EventInterface::LOAD_FEATURES => array('loadFeatures', 0)
-        );
+        return array(EventInterface::LOAD_FEATURES => array('loadFeatures', 0));
     }
 
     /**
@@ -88,16 +86,13 @@ class FeaturesLoader extends DispatchingService implements EventSubscriberInterf
      */
     private function loadSuiteFeatures(SuiteInterface $suite, $locator = null)
     {
+        $wrapFeatureIntoSuitedFeature = function ($feature) use ($suite) {
+            return new SuitedFeature($suite, $feature);
+        };
+
         foreach ($this->loaders as $loader) {
             if ($loader->supports($suite, $locator)) {
-                $suitedFeatures = array_map(
-                    function ($feature) use ($suite) {
-                        return new SuitedFeature($suite, $feature);
-                    },
-                    $loader->load($suite, $locator)
-                );
-
-                return $suitedFeatures;
+                return array_map($wrapFeatureIntoSuitedFeature, $loader->load($suite, $locator));
             }
         }
 
