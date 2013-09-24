@@ -68,8 +68,8 @@ class ContextPoolInitializer implements EventSubscriberInterface
             return;
         }
 
-        $initializedPool = new InitializedContextPool();
-        foreach ($event->getContextPool()->getContexts() as $class) {
+        $pool = new InitializedContextPool();
+        foreach ($event->getContextPool()->getContextClasses() as $class) {
             $context = new $class($event->getSuite()->getParameters());
 
             foreach ($this->initializers as $initializer) {
@@ -78,9 +78,9 @@ class ContextPoolInitializer implements EventSubscriberInterface
                 }
             }
 
-            $initializedPool->registerContext($context);
+            $pool->registerContext($context);
         }
 
-        $event->setContextPool($initializedPool);
+        $event->setContextPool($pool);
     }
 }

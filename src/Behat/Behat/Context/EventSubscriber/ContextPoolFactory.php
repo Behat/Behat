@@ -45,11 +45,11 @@ class ContextPoolFactory implements EventSubscriberInterface
             return;
         }
 
-        $uninitializedPool = new UninitializedContextPool();
+        $pool = new UninitializedContextPool();
         foreach ($event->getSuite()->getContextClasses() as $class) {
-            $uninitializedPool->registerContextClass($class);
+            $pool->registerContextClass($class);
         }
 
-        $event->setContextPool($uninitializedPool);
+        $event->setContextPool($pool);
     }
 }

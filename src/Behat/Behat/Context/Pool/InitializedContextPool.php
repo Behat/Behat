@@ -52,7 +52,7 @@ class InitializedContextPool implements ContextPoolInterface
      */
     public function getContexts()
     {
-        return $this->contexts;
+        return array_values($this->contexts);
     }
 
     /**
@@ -62,7 +62,7 @@ class InitializedContextPool implements ContextPoolInterface
      */
     public function getContextClasses()
     {
-        return array_map('get_class', $this->contexts);
+        return array_keys($this->contexts);
     }
 
     /**
