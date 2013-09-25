@@ -73,7 +73,7 @@ Feature: JUnit Formatter
     And the junit file "/tmp/test/behat/TEST-World.xml" should contain:
       """
       <?xml version="1.0" encoding="UTF-8"?>
-      <testsuite classname="behat.features" errors="0" failures="0" skipped="0" name="World consistency" file="/tmp/behat/XXX/features/World.feature" tests="2" assertions="8" time="XXX">
+      <testsuite errors="0" failures="0" skipped="0" name="World consistency" tests="2" time="XXX">
           <testcase classname="World consistency" name="Adding" time="XXX" assertions="4">
           </testcase>
           <testcase classname="World consistency" name="Subtracting" time="XXX" assertions="4">
@@ -107,7 +107,7 @@ Feature: JUnit Formatter
     And the junit file "/tmp/test/behat/TEST-World-Error.xml" should contain:
       """
       <?xml version="1.0" encoding="UTF-8"?>
-      <testsuite classname="behat.features" errors="0" failures="1" skipped="0" name="World consistency" file="/tmp/behat/XXX/features/World-Error.feature" tests="2" assertions="7" time="XXX">
+      <testsuite errors="0" failures="1" skipped="0" name="World consistency" tests="2" time="XXX">
           <testcase classname="World consistency" name="Adding" time="XXX" assertions="3">
               <failure message="Failed asserting that '10' matches expected '15'." type="failed"><![CDATA[XXX]]></failure>
           </testcase>
