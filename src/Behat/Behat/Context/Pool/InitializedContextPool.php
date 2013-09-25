@@ -97,18 +97,4 @@ class InitializedContextPool implements ContextPoolInterface
 
         return $this->contexts[$class];
     }
-
-    /**
-     * Returns first registered context instance.
-     *
-     * @return null|ContextInterface
-     */
-    public function getFirstContext()
-    {
-        if (!$this->hasContexts()) {
-            return null;
-        }
-
-        return end($this->contexts);
-    }
 }

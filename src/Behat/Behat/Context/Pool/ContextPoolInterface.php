@@ -56,11 +56,4 @@ interface ContextPoolInterface
      * @return string|ContextInterface
      */
     public function getContext($class);
-
-    /**
-     * Returns first registered context class or instance.
-     *
-     * @return null|string|ContextInterface
-     */
-    public function getFirstContext();
 }

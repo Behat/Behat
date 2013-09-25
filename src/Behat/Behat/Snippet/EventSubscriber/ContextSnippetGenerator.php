@@ -55,11 +55,20 @@ class ContextSnippetGenerator implements EventSubscriberInterface
             return;
         }
 
-        $context = $event->getContextPool()->getFirstContext();
+        $contextClass = null;
+        foreach ($event->getContextPool()->getContextClasses() as $class) {
+            if (!in_array('Behat\Behat\Snippet\SnippetlessContextInterface', class_implements($class))) {
+                $contextClass = $class;
+                break;
+            }
+        }
+        if (null === $contextClass) {
+            return;
+        }
+
         $step = $event->getStep();
 
-        $reflection = new ReflectionClass(is_object($context) ? get_class($context) : $context);
-        $contextClass = $reflection->getName();
+        $reflection = new ReflectionClass($contextClass);
         $replacePatterns = array(
             "/(?<= |^)\\\'(?:((?!\\').)*)\\\'(?= |$)/" => "\\'([^\']*)\\'", // Single quoted strings
             '/(?<= |^)\"(?:[^\"]*)\"(?= |$)/'          => "\"([^\"]*)\"", // Double quoted strings
