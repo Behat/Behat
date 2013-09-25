@@ -1,3 +1,15 @@
+3.0.0beta6 / 2013-09-25
+=======================
+
+  * Skip step execution and `AfterStep` hook if its `BeforeStep` hook failed
+  * Fix failure-initiated skips of hooks in Scenario and Example testers
+  * Refactor Suite routines
+  * Cleanup Context Pools
+  * Enhance `--definitions` option with suites output and regex search
+  * Add `toString()` methods to `DefinitionInterface` and `TransformationInterface`
+  * Add `SnippetlessContextInterface` to `Snippet` namespace - to prevent snippet generation for
+    custom contexts
+
 3.0.0beta5 / 2013-09-15
 =======================
 
