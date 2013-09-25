@@ -62,7 +62,8 @@ class StepTester extends DispatchingService
         try {
             !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_STEP, $event);
         } catch (Exception $e) {
-            $status = StepEvent::FAILED;
+            $status = StepEvent::SKIPPED;
+            $skip = true;
         }
 
         $execution = $exception = $snippet = null;
