@@ -56,18 +56,18 @@ class ScenarioTester extends IsolatedStepCollectionTester
         }
 
         if ($scenario->getFeature()->hasBackground()) {
-            $skip = $skip || StepEvent::PASSED !== $status;
+            $skipStep = $skip || StepEvent::PASSED !== $status;
             $background = $scenario->getFeature()->getBackground();
 
             $tester = $this->getBackgroundTester($suite, $contexts, $background);
-            $status = $tester->test($suite, $scenario, $scenario, $background, $contexts, $skip);
+            $status = $tester->test($suite, $scenario, $scenario, $background, $contexts, $skipStep);
         }
 
         foreach ($scenario->getSteps() as $step) {
-            $skip = $skip || StepEvent::PASSED !== $status;
+            $skipStep = $skip || StepEvent::PASSED !== $status;
 
             $tester = $this->getStepTester($suite, $contexts, $step);
-            $status = max($status, $tester->test($suite, $contexts, $scenario, $scenario, $step, $skip));
+            $status = max($status, $tester->test($suite, $contexts, $scenario, $scenario, $step, $skipStep));
         }
 
         $event = new ScenarioEvent($suite, $contexts, $scenario, $status);
