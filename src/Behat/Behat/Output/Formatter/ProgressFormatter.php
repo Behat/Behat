@@ -49,8 +49,8 @@ class ProgressFormatter extends CliFormatter
     public static function getSubscribedEvents()
     {
         return array(
-            EventInterface::AFTER_STEP     => array('afterStep', -50),
-            EventInterface::AFTER_EXERCISE => array('afterExercise', -50),
+            EventInterface::AFTER_STEP     => array('printStepCharacter', -50),
+            EventInterface::AFTER_EXERCISE => array('printStatistics', -50),
         );
     }
 
@@ -75,62 +75,15 @@ class ProgressFormatter extends CliFormatter
     }
 
     /**
-     * Listens to "suite.after" event.
-     *
-     * @param ExerciseEvent $event
-     *
-     * @uses printFailedSteps()
-     * @uses printPendingSteps()
-     * @uses printSummary()
-     * @uses printUndefinedStepsSnippets()
-     */
-    public function afterExercise(ExerciseEvent $event)
-    {
-        $this->writeln("\n");
-        $this->printFailedSteps($this->getStatisticsCollector());
-        $this->printPendingSteps($this->getStatisticsCollector());
-        $this->printSummary($this->getStatisticsCollector());
-        $this->printUndefinedStepsSnippets($this->getSnippetsCollector());
-    }
-
-    /**
-     * Listens to "step.after" event.
+     * Prints step status character after each step.
      *
      * @param StepEvent $event
-     *
-     * @uses printStep()
      */
-    public function afterStep(StepEvent $event)
+    public function printStepCharacter(StepEvent $event)
     {
-        $this->printStep(
-            $event->getStep(),
-            $event->getStatus(),
-            $event->getDefinition(),
-            $event->getSnippet(),
-            $event->getException()
-        );
-    }
+        $status = $event->getStatus();
 
-    /**
-     * Prints step.
-     *
-     * @param StepNode            $step       step node
-     * @param integer             $result     step result code
-     * @param DefinitionInterface $definition definition instance (if step defined)
-     * @param string              $snippet    snippet (if step is undefined)
-     * @param Exception           $exception  exception (if step is failed)
-     *
-     * @uses StepEvent
-     */
-    protected function printStep(
-        StepNode $step,
-        $result,
-        DefinitionInterface $definition = null,
-        $snippet = null,
-        Exception $exception = null
-    )
-    {
-        switch ($result) {
+        switch ($status) {
             case StepEvent::PASSED:
                 $this->write('{+passed}.{-passed}');
                 break;
@@ -151,6 +104,25 @@ class ProgressFormatter extends CliFormatter
         if (++$this->stepsPrinted % 70 == 0) {
             $this->writeln(' ' . $this->stepsPrinted);
         }
+    }
+
+    /**
+     * Prints exercise statistics after execution.
+     *
+     * @param ExerciseEvent $event
+     *
+     * @uses printFailedSteps()
+     * @uses printPendingSteps()
+     * @uses printSummary()
+     * @uses printUndefinedStepsSnippets()
+     */
+    public function printStatistics(ExerciseEvent $event)
+    {
+        $this->writeln("\n");
+        $this->printFailedSteps($this->getStatisticsCollector());
+        $this->printPendingSteps($this->getStatisticsCollector());
+        $this->printSummary($this->getStatisticsCollector());
+        $this->printUndefinedStepsSnippets($this->getSnippetsCollector());
     }
 
     /**
