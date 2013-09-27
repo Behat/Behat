@@ -51,8 +51,8 @@ class StopOnFirstFailure extends DispatchingService implements EventSubscriberIn
     public static function getSubscribedEvents()
     {
         return array(
-            EventInterface::AFTER_SCENARIO        => array('exitAfterCurrentScenarioOnFailure', -100),
-            EventInterface::AFTER_EXAMPLE => array('exitAfterCurrentScenarioOnFailure', -100),
+            EventInterface::AFTER_SCENARIO => array('exitAfterCurrentScenarioOnFailure', -100),
+            EventInterface::AFTER_EXAMPLE  => array('exitAfterCurrentScenarioOnFailure', -100),
         );
     }
 
