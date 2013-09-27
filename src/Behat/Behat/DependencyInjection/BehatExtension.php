@@ -192,13 +192,13 @@ class BehatExtension
 
             $failedScenarios = $container->getDefinition('run_control.cache_failed_scenarios_for_rerun');
             $failedScenarios->addMethodCall('setCache', array($options['cache_path']));
+
+            unset($options['cache_path']);
         }
 
-        $container->setParameter('options.strict', $options['strict']);
-        $container->setParameter('options.dry_run', $options['dry_run']);
-        $container->setParameter('options.stop_on_failure', $options['stop_on_failure']);
-        $container->setParameter('options.append_snippets', $options['append_snippets']);
-        $container->setParameter('options.error_reporting', $options['error_reporting']);
+        foreach ($options as $key => $val) {
+            $container->setParameter('options.' . $key, $val);
+        }
     }
 
     /**
