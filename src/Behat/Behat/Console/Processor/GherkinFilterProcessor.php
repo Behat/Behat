@@ -48,11 +48,11 @@ class GherkinFilterProcessor implements ProcessorInterface
     public function configure(Command $command)
     {
         $command
-            ->addOption('--name', null, InputOption::VALUE_REQUIRED,
+            ->addOption('--name', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 "Only execute the feature elements which match" . PHP_EOL .
                 "part of the given name or regex."
             )
-            ->addOption('--tags', null, InputOption::VALUE_REQUIRED,
+            ->addOption('--tags', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 "Only execute the features or scenarios with tags" . PHP_EOL .
                 "matching tag filter expression."
             )
@@ -70,12 +70,13 @@ class GherkinFilterProcessor implements ProcessorInterface
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        if ($name = $input->getOption('name')) {
+        foreach ($input->getOption('name') as $name) {
             $this->gherkin->addFilter(new NameFilter($name));
         }
-        if ($tags = $input->getOption('tags')) {
+        foreach ($input->getOption('tags') as $tags) {
             $this->gherkin->addFilter(new TagFilter($tags));
         }
+
         if ($role = $input->getOption('role')) {
             $this->gherkin->addFilter(new RoleFilter($role));
         }

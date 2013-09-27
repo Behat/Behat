@@ -60,9 +60,9 @@ class RerunProcessor implements ProcessorInterface
         $this->cache->setKey(md5(
             $input->getParameterOption(array('--profile', '-p')) .
             $input->getOption('suite') .
-            $input->getOption('tags') .
+            implode(' ', $input->getOption('name')) .
+            implode(' ', $input->getOption('tags')) .
             $input->getOption('role') .
-            $input->getOption('name') .
             $input->getArgument('features')
         ));
 
