@@ -49,16 +49,16 @@ class GherkinFilterProcessor implements ProcessorInterface
     {
         $command
             ->addOption('--name', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                "Only execute the feature elements which match" . PHP_EOL .
-                "part of the given name or regex."
+                "Only execute the feature elements which match part" . PHP_EOL .
+                "of the given name or regex."
             )
             ->addOption('--tags', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 "Only execute the features or scenarios with tags" . PHP_EOL .
                 "matching tag filter expression."
             )
             ->addOption('--role', null, InputOption::VALUE_REQUIRED,
-                "Only execute the features with actor role" . PHP_EOL .
-                "matching wildcard."
+                "Only execute the features with actor role matching" . PHP_EOL .
+                "a wildcard."
             );
     }
 

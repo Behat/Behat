@@ -111,7 +111,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, default output
-    When I run "behat --no-ansi -f pretty,progress --no-multiline"
+    When I run "behat --no-ansi -f pretty -f progress --no-multiline"
     Then it should fail with:
       """
       Feature: Apples story
@@ -230,7 +230,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, same output
-    When I run "behat --no-ansi -f pretty,progress --out=, --no-multiline"
+    When I run "behat --no-ansi -f pretty -f progress --out=std --no-multiline"
     Then it should fail with:
       """
       Feature: Apples story
@@ -349,7 +349,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write first to file
-    When I run "behat --no-ansi -f pretty,progress --out=apples.pretty, --no-multiline --no-paths"
+    When I run "behat --no-ansi -f pretty -f progress -o apples.pretty -o std --no-multiline --no-paths"
     Then it should fail with:
       """
       ..F......U.......F.....UU
@@ -470,7 +470,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write second to file
-    When I run "behat --no-ansi -f pretty,progress --out=,apples.progress --no-multiline --no-paths"
+    When I run "behat --no-ansi -f pretty -f progress --out=std --out=apples.progress --no-multiline --no-paths"
     Then it should fail with:
       """
       Feature: Apples story
@@ -591,7 +591,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write both to files
-    When I run "behat --no-ansi -f pretty,progress --out=app.pretty,app.progress --no-multiline --no-paths"
+    When I run "behat --no-ansi -f pretty -f progress --out=app.pretty --out=app.progress --no-multiline --no-paths"
     Then it should fail with:
       """
       """

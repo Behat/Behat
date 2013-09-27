@@ -41,8 +41,8 @@ class FormatProcessor implements ProcessorInterface
      * Initializes processor.
      *
      * @param OutputManager $formatterManager
-     * @param Translator       $translator
-     * @param string           $i18nPath
+     * @param Translator    $translator
+     * @param string        $i18nPath
      */
     public function __construct(OutputManager $formatterManager, Translator $translator, $i18nPath)
     {
@@ -61,9 +61,9 @@ class FormatProcessor implements ProcessorInterface
         $formatters = $this->formatterManager->getFormatters();
 
         $command
-            ->addOption('--format', '-f', InputOption::VALUE_REQUIRED,
-                "How to format features. <comment>pretty</comment> is default." . PHP_EOL .
-                "Default formatters are:" . PHP_EOL .
+            ->addOption('--format', '-f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                "How to format features. <comment>pretty</comment> is default. Available" . PHP_EOL .
+                "formats are:" . PHP_EOL .
                 implode(PHP_EOL,
                     array_map(function (FormatterInterface $formatter) {
                         $comment = '- <comment>' . $formatter->getName() . '</comment>: ';
@@ -72,39 +72,40 @@ class FormatProcessor implements ProcessorInterface
                         return $comment;
                     }, $formatters)
                 ) . PHP_EOL .
-                "Can use multiple formats at once (splitted with '<comment>,</comment>')"
+                "You can use multiple formats at the same time."
             )
-            ->addOption('--out', null, InputOption::VALUE_REQUIRED,
-                "Write formatter output to a file/directory" . PHP_EOL .
-                "instead of STDOUT <comment>(output_path)</comment>."
+            ->addOption('--out', '-o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                "Write format output to a file/directory instead of" . PHP_EOL .
+                "STDOUT <comment>(output_path)</comment>. You can also provide different" . PHP_EOL .
+                "outputs to multiple formats."
             )
             ->addOption('--lang', null, InputOption::VALUE_REQUIRED,
                 'Print formatter output in particular language.'
             )
             ->addOption('--ansi', null, InputOption::VALUE_NONE,
-                "Tell behat to to use ANSI color in the output." . PHP_EOL .
-                "Behat decides based on your platform and the output" . PHP_EOL .
-                "destination if not specified."
+                "Tell behat to to use ANSI color in the output. Behat" . PHP_EOL .
+                "decides based on your platform and the output if not" . PHP_EOL .
+                "specified."
             )
             ->addOption('--no-ansi', null, InputOption::VALUE_NONE,
-                "Tell behat not to use ANSI color in the output." . PHP_EOL .
-                "Behat decides based on your platform and the output" . PHP_EOL .
-                "destination if not specified."
+                "Tell behat not to use ANSI color in the output."
             )
             ->addOption('--no-time', null, InputOption::VALUE_NONE,
-                "Do not show timer in output."
+                "Do not show timer in the output."
             )
             ->addOption('--no-paths', null, InputOption::VALUE_NONE,
-                "Do not print features, scenarios and step definition paths."
+                "Do not print features, scenarios and step definition" . PHP_EOL .
+                "paths."
             )
             ->addOption('--no-snippets', null, InputOption::VALUE_NONE,
-                "Do not print snippets for undefined steps after suite stats."
+                "Do not print snippets for undefined steps after stats."
             )
             ->addOption('--no-multiline', null, InputOption::VALUE_NONE,
                 "Do not print multiline arguments for steps."
             )
             ->addOption('--expand', null, InputOption::VALUE_NONE,
-                "Visually expand scenario outline example tables into sub-scenario."
+                "Visually expand scenario outline examples into sub-" . PHP_EOL .
+                "scenarios."
             )
             ->addOption('--snippets-paths', null, InputOption::VALUE_NONE,
                 "Print details about undefined steps in their snippets."
@@ -119,17 +120,12 @@ class FormatProcessor implements ProcessorInterface
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        $formats = array();
-        if ($input->getOption('format')) {
-            $formats = array_map(
-                'trim',
-                explode(',', $input->getOption('format') ? : 'pretty')
-            );
-        }
+        $formats = $input->getOption('format');
+        $outputs = $input->getOption('out');
 
         $this->loadTranslations();
         $this->configureFormatters($formats, $input, $output);
-        $this->configureOutput($formats, $input);
+        $this->configureOutputs($formats, $outputs, !$input->getOption('no-ansi'));
     }
 
     /**
@@ -207,20 +203,18 @@ class FormatProcessor implements ProcessorInterface
     /**
      * Initializes multiple formatters with different outputs.
      *
-     * @param array          $formats
-     * @param InputInterface $input
+     * @param array   $formats
+     * @param array   $outputs
+     * @param Boolean $decorated
      */
-    private function configureOutput(array $formats, InputInterface $input)
+    private function configureOutputs(array $formats, array $outputs, $decorated = false)
     {
-        if (!$input->getOption('out')) {
+        if (!count($outputs)) {
             return;
         }
 
-        $outputs = $input->getOption('out');
-        $decorated = !$input->getOption('no-ansi');
-
-        if (false === strpos($outputs, ',')) {
-            $outputPath = $this->locateOutputPath($outputs);
+        if (1 == count($outputs) && 'std' !== $outputs[0] && 'null' !== $outputs[0] && 'false' !== $outputs[0]) {
+            $outputPath = $this->locateOutputPath($outputs[0]);
 
             $this->formatterManager->setFormattersParameterIfExists('output_path', $outputPath);
             $this->formatterManager->setFormattersParameterIfExists('decorated', $decorated);
@@ -228,8 +222,8 @@ class FormatProcessor implements ProcessorInterface
             return;
         }
 
-        foreach (array_map('trim', explode(',', $outputs)) as $i => $out) {
-            if (!$out || 'null' === $out || 'false' === $out) {
+        foreach ($outputs as $i => $out) {
+            if ('std' === $out || 'null' === $out || 'false' === $out) {
                 continue;
             }
 
