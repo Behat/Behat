@@ -680,7 +680,7 @@ class PrettyFormatter extends CliFormatter
 
     protected function relativizePathsInString($string)
     {
-        if ($basePath = getcwd()) {
+        if ($basePath = $this->getParameter('base_path')) {
             $basePath = realpath($basePath) . DIRECTORY_SEPARATOR;
             $string = str_replace($basePath, '', $string);
         }
