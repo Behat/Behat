@@ -235,6 +235,18 @@ class Services
         $definition->addTag('output.formatter');
         $container->setDefinition('output.formatter.progress', $definition);
 
+        $definition = new Definition('Behat\Behat\Output\Formatter\HtmlFormatter', array(
+            new Reference('tester.statistics_collector'),
+            new Reference('snippet.snippets_collector'),
+            new Reference('translator')
+        ));
+        $definition->addMethodCall('setParameter', array(
+            'base_path',
+            '%paths.base%'
+        ));
+        $definition->addTag('output.formatter');
+        $container->setDefinition('output.formatter.html', $definition);
+
         $definition = new Definition('Behat\Behat\Output\Formatter\FailedScenariosFormatter', array(
             new Reference('tester.statistics_collector'),
             new Reference('snippet.snippets_collector'),
