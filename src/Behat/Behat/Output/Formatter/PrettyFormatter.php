@@ -324,7 +324,6 @@ class PrettyFormatter extends CliFormatter
         $this->printUndefinedStepsSnippets($this->getSnippetsCollector());
     }
 
-
     /**
      * Prints hook stdOut or exception.
      *
