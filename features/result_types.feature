@@ -27,10 +27,13 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface, Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\ContextInterface,
+          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
+          Behat\Behat\Exception\PendingException;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface {}
+      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface {}
       """
     When I run "behat --no-ansi -f progress features/coffee.feature"
     Then it should pass with:
@@ -120,10 +123,13 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface, Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\ContextInterface,
+          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
+          Behat\Behat\Exception\PendingException;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface
       {
           /**
            * @Given /^human have ordered very very very hot "([^"]*)"$/

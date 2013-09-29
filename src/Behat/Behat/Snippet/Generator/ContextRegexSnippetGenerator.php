@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Snippet\EventSubscriber;
+namespace Behat\Behat\Snippet\Generator;
 
 /*
  * This file is part of the Behat.
@@ -9,22 +9,23 @@ namespace Behat\Behat\Snippet\EventSubscriber;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Event\EventInterface;
+use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Snippet\ContextSnippet;
-use Behat\Behat\Snippet\Event\SnippetCarrierEvent;
+use Behat\Behat\Snippet\SnippetInterface;
 use Behat\Behat\Snippet\Util\Transliterator;
+use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\TableNode;
 use ReflectionClass;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Context snippet generator.
- * Generates snippets for non-empty context pools.
+ * Context regex snippet generator.
+ * Generates regex snippets for friendly contexts.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextSnippetGenerator implements EventSubscriberInterface
+class ContextRegexSnippetGenerator implements GeneratorInterface
 {
     /**
      * @var string[string]
@@ -32,41 +33,47 @@ class ContextSnippetGenerator implements EventSubscriberInterface
     private static $proposedMethods = array();
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * Checks if generator supports suite, contextPool and step.
      *
-     * @return array The event names to listen to
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contextPool
+     * @param StepNode             $step
+     *
+     * @return Boolean
      */
-    public static function getSubscribedEvents()
+    public function supports(SuiteInterface $suite, ContextPoolInterface $contextPool, StepNode $step)
     {
-        return array(EventInterface::CREATE_SNIPPET => array('createSnippet', 0));
+        if (!$contextPool->hasContexts()) {
+            return false;
+        }
+
+        foreach ($contextPool->getContextClasses() as $class) {
+            if (in_array('Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface', class_implements($class))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
-     * Generate snippet and set it to the event.
+     * Generates snippet.
      *
-     * @param SnippetCarrierEvent $event
+     * @param SuiteInterface       $suite
+     * @param ContextPoolInterface $contextPool
+     * @param StepNode             $step
+     *
+     * @return SnippetInterface
      */
-    public function createSnippet(SnippetCarrierEvent $event)
+    public function generate(SuiteInterface $suite, ContextPoolInterface $contextPool, StepNode $step)
     {
-        if ($event->hasSnippet()) {
-            return;
-        }
-        if (!$event->getContextPool()->hasContexts()) {
-            return;
-        }
-
         $contextClass = null;
-        foreach ($event->getContextPool()->getContextClasses() as $class) {
-            if (!in_array('Behat\Behat\Snippet\SnippetlessContextInterface', class_implements($class))) {
+        foreach ($contextPool->getContextClasses() as $class) {
+            if (in_array('Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface', class_implements($class))) {
                 $contextClass = $class;
                 break;
             }
         }
-        if (null === $contextClass) {
-            return;
-        }
-
-        $step = $event->getStep();
 
         $reflection = new ReflectionClass($contextClass);
         $replacePatterns = array(
@@ -133,7 +140,7 @@ class ContextSnippetGenerator implements EventSubscriberInterface
 
         $description = $this->generateSnippet($regex, $methodName, $args);
 
-        $event->setSnippet(new ContextSnippet($step->getType(), $description, array($contextClass)));
+        return new ContextSnippet($step->getType(), $description, array($contextClass));
     }
 
     protected function generateSnippet($regex, $methodName, array $args)

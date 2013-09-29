@@ -9,11 +9,12 @@ Feature: Append snippets option
       <?php
 
       use Behat\Behat\Context\ContextInterface,
+          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface
       {
           private $apples = 0;
           private $parameters;
@@ -124,11 +125,12 @@ Feature: Append snippets option
       <?php
 
       use Behat\Behat\Context\ContextInterface,
+          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface
       {
           private $apples = 0;
           private $parameters;
@@ -229,11 +231,13 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface;
+      use Behat\Behat\Context\ContextInterface,
+          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface
       {
           private $apples = 0;
           private $parameters;
@@ -293,12 +297,13 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Behat\Exception\PendingException;
-      use Behat\Behat\Context\ContextInterface;
+      use Behat\Behat\Context\ContextInterface,
+          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
+          Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface
       {
           private $apples = 0;
           private $parameters;

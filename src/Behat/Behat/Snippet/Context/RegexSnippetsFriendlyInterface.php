@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Snippet;
+namespace Behat\Behat\Snippet\Context;
 
 /*
  * This file is part of the Behat.
@@ -11,13 +11,13 @@ namespace Behat\Behat\Snippet;
  */
 
 /**
- * Snippetless context interface.
+ * Regex-snippets friendly interface.
  *
- * Implement this interface with your context to prevent Behat
- * from generating snippets for it.
+ * Implement this interface with your context to mark
+ * it as a target for regex-based snippets.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface SnippetlessContextInterface
+interface RegexSnippetsFriendlyInterface
 {
 }

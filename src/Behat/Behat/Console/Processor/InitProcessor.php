@@ -149,6 +149,7 @@ class InitProcessor extends DispatchingService implements ProcessorInterface
 <?php
 
 {namespace}use Behat\Behat\Context\ContextInterface;
+use Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface
 use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
@@ -156,7 +157,7 @@ use Behat\Gherkin\Node\TableNode;
 /**
  * Behat context class.
  */
-class {className} implements ContextInterface
+class {className} implements ContextInterface, RegexSnippetsFriendlyInterface
 {
     /**
      * Initializes context. Every scenario gets it's own context object.

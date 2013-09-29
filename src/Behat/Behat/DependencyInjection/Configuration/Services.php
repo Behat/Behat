@@ -338,9 +338,13 @@ class Services
 
     private function registerSnippetServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Snippet\EventSubscriber\ContextSnippetGenerator');
+        $definition = new Definition('Behat\Behat\Snippet\EventSubscriber\SnippetFactory');
         $definition->addTag('event_subscriber');
-        $container->setDefinition('snippet.snippet_generator', $definition);
+        $container->setDefinition('snippet.snippet_factory', $definition);
+
+        $definition = new Definition('Behat\Behat\Snippet\Generator\ContextRegexSnippetGenerator');
+        $definition->addTag('snippet.generator');
+        $container->setDefinition('snippet.generator.context_regex', $definition);
 
         $definition = new Definition('Behat\Behat\Snippet\EventSubscriber\SnippetsCollector');
         $definition->addTag('event_subscriber');
