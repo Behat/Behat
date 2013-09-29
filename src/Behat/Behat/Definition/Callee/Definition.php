@@ -26,19 +26,25 @@ abstract class Definition extends Callee implements DefinitionInterface
     /**
      * @var string
      */
+    private $pattern;
+    /**
+     * @var string
+     */
     private $regex;
 
     /**
      * Initializes definition.
      *
      * @param string      $type
+     * @param string      $pattern
      * @param string      $regex
      * @param Callable    $callback
      * @param null|string $description
      */
-    public function __construct($type, $regex, $callback, $description = null)
+    public function __construct($type, $pattern, $regex, $callback, $description = null)
     {
         $this->type = $type;
+        $this->pattern = $pattern;
         $this->regex = $regex;
 
         parent::__construct($callback, $description);
@@ -52,6 +58,16 @@ abstract class Definition extends Callee implements DefinitionInterface
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Returns step pattern exactly as it was defined.
+     *
+     * @return string
+     */
+    public function getPattern()
+    {
+        return $this->pattern;
     }
 
     /**

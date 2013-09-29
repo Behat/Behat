@@ -22,20 +22,35 @@ class Transformation extends Callee implements TransformationInterface
     /**
      * @var string
      */
+    private $pattern;
+    /**
+     * @var string
+     */
     private $regex;
 
     /**
      * Initializes transformation.
      *
+     * @param string      $pattern
      * @param string      $regex
      * @param Callable    $callable
      * @param null|string $description
      */
-    public function __construct($regex, $callable, $description = null)
+    public function __construct($pattern, $regex, $callable, $description = null)
     {
         $this->regex = $regex;
 
         parent::__construct($callable, $description);
+    }
+
+    /**
+     * Returns transformation pattern exactly as it was defined.
+     *
+     * @return string
+     */
+    public function getPattern()
+    {
+        return $this->pattern;
     }
 
     /**
