@@ -1,3 +1,12 @@
+3.0.0beta7 / 2013-09-29
+=======================
+
+  * Multivalue options are now array options (format, output, name and tags)
+  * Added back junit formatter (should support all junit formats from 4 to 7)
+  * Added back html formatter
+  * Small optimizations and refactorings
+  * Proper handling of hook failures
+
 3.0.0beta6 / 2013-09-25
 =======================
 
