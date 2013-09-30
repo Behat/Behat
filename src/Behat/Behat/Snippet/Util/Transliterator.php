@@ -20,7 +20,7 @@ namespace Behat\Behat\Snippet\Util;
  * @author         Jonathan H. Wage <jonwage@gmail.com>
  * @author         <hsivonen@iki.fi>
  */
-class Transliterator
+abstract class Transliterator
 {
     /**
      * Check if a string has utf7 characters in it

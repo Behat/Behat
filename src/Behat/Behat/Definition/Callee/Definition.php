@@ -11,6 +11,7 @@ namespace Behat\Behat\Definition\Callee;
  */
 use Behat\Behat\Callee\Callee;
 use Behat\Behat\Definition\DefinitionInterface;
+use Behat\Behat\Snippet\Util\Turnip;
 
 /**
  * Base definition callee class.
@@ -48,7 +49,7 @@ abstract class Definition extends Callee implements DefinitionInterface
         $this->regex = $pattern;
         // If it is a turnip pattern - transform it to regex
         if ('/' !== substr($pattern, 0, 1)) {
-            $this->regex = $this->turnipPatternToRegex($pattern);
+            $this->regex = Turnip::turnipToRegex($pattern);
         }
 
         parent::__construct($callback, $description);
@@ -92,30 +93,5 @@ abstract class Definition extends Callee implements DefinitionInterface
     public function toString()
     {
         return $this->getType() . ' ' . $this->getPattern();
-    }
-
-    /**
-     * Transforms turnip-style string to regex.
-     *
-     * @param string $turnip
-     *
-     * @return string
-     */
-    private function turnipPatternToRegex($turnip)
-    {
-        $regex = preg_quote($turnip, '/');
-
-        // placeholder
-        $regex = preg_replace_callback("/\\\:([a-zA-Z0-9_]+)/", function ($match) {
-            return sprintf("[\"']?(?P<%s>(?<=\")[^\"]+(?=\")|(?<=')[^']+(?=')|(?<=\s)\w+(?=\s|$))['\"]?", $match[1]);
-        }, $regex);
-
-        // variation
-        $regex = preg_replace('/([^\s\/]+)\\\\\/([^\s]+)/', '(?:\1|\2)', $regex);
-
-        // optional ending
-        $regex = preg_replace('/([^\s]+)\\\\\(([^\s\\\]+)\\\\\)/', '\1(?:\2)?', $regex);
-
-        return '/^' . $regex . '$/';
     }
 }
