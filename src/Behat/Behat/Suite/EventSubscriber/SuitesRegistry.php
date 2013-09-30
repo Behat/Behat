@@ -19,7 +19,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuitesLoader implements EventSubscriberInterface
+class SuitesRegistry implements EventSubscriberInterface
 {
     /**
      * @var SuiteInterface[]

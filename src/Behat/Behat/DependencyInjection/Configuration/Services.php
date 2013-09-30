@@ -368,9 +368,9 @@ class Services
 
     private function registerSuiteServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Suite\EventSubscriber\SuitesLoader');
+        $definition = new Definition('Behat\Behat\Suite\EventSubscriber\SuitesRegistry');
         $definition->addTag('event_subscriber');
-        $container->setDefinition('suite.suites_loader', $definition);
+        $container->setDefinition('suite.suites_registry', $definition);
 
         $definition = new Definition('Behat\Behat\Suite\SuiteFactory');
         $container->setDefinition('suite.suite_factory', $definition);

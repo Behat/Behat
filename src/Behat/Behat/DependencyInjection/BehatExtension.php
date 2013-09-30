@@ -136,7 +136,7 @@ class BehatExtension
      */
     protected function registerSuitesConfiguration(array $suites, ContainerBuilder $container)
     {
-        $loaderDefinition = $container->getDefinition('suite.suites_loader');
+        $registryDefinition = $container->getDefinition('suite.suites_registry');
         foreach ($suites as $name => $config) {
             if (!$config['enabled']) {
                 continue;
@@ -152,7 +152,7 @@ class BehatExtension
                 $config['parameters']
             ));
 
-            $loaderDefinition->addMethodCall('registerSuite', array($suiteDefinition));
+            $registryDefinition->addMethodCall('registerSuite', array($suiteDefinition));
         }
     }
 
