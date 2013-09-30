@@ -53,7 +53,7 @@ class DefaultContextGenerator implements GeneratorInterface
 <?php
 
 {namespace}use Behat\Behat\Context\ContextInterface;
-use Behat\Behat\Snippet\Context\SnippetsFriendlyInterface
+use Behat\Behat\Snippet\Context\SnippetsFriendlyInterface;
 use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
