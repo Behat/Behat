@@ -155,15 +155,10 @@ class AnnotatedContextLoader implements LoaderInterface
         if (preg_match('/^\@(' . $this->stepAnnotationsRegex . ')\s+(.+)$/i', $docLine, $match)) {
             $type = strtolower($match[1]);
             $class = $this->stepClasses[$type];
-            $regex = $pattern = $match[2];
+            $pattern = $match[2];
             $callable = array($method->getDeclaringClass()->getName(), $method->getName());
 
-            // If it is a turnip step - transform it to regex
-            if ('/' !== substr($pattern, 0, 1)) {
-                $regex = $this->turnipPatternToRegex($pattern);
-            }
-
-            return array(new $class($pattern, $regex, $callable, $description));
+            return array(new $class($pattern, $callable, $description));
         }
 
         return array();
@@ -210,30 +205,5 @@ class AnnotatedContextLoader implements LoaderInterface
         }
 
         return array();
-    }
-
-    /**
-     * Transforms turnip-style string to regex.
-     *
-     * @param string $turnip
-     *
-     * @return string
-     */
-    private function turnipPatternToRegex($turnip)
-    {
-        $regex = preg_quote($turnip, '/');
-
-        // placeholder
-        $regex = preg_replace_callback('/\:([^\s]+)/', function ($match) {
-            return sprintf('"?(?P<%s>[^"]+)"?', $match[1]);
-        }, $regex);
-
-        // variation
-        $regex = preg_replace('/([^\s\/]+)\\\\\/([^\s]+)/', '(?:\1|\2)', $regex);
-
-        // optional ending
-        $regex = preg_replace('/([^\s]+)\\\\\(([^\s\\\]+)\\\\\)/', '\1(?:\2)?', $regex);
-
-        return '/^' . $regex . '$/';
     }
 }

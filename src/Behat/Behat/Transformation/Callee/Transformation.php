@@ -32,13 +32,18 @@ class Transformation extends Callee implements TransformationInterface
      * Initializes transformation.
      *
      * @param string      $pattern
-     * @param string      $regex
      * @param Callable    $callable
      * @param null|string $description
      */
-    public function __construct($pattern, $regex, $callable, $description = null)
+    public function __construct($pattern, $callable, $description = null)
     {
-        $this->regex = $regex;
+        $this->pattern = $pattern;
+
+        $this->regex = $pattern;
+        // If it is a turnip pattern - transform it to regex
+        if ('/' !== substr($pattern, 0, 1)) {
+            $this->regex = $this->turnipPatternToRegex($pattern);
+        }
 
         parent::__construct($callable, $description);
     }
@@ -71,5 +76,30 @@ class Transformation extends Callee implements TransformationInterface
     public function toString()
     {
         return 'Transform ' . $this->getRegex();
+    }
+
+    /**
+     * Transforms turnip-style string to regex.
+     *
+     * @param string $turnip
+     *
+     * @return string
+     */
+    private function turnipPatternToRegex($turnip)
+    {
+        $regex = preg_quote($turnip, '/');
+
+        // placeholder
+        $regex = preg_replace_callback('/\:([^\s]+)/', function ($match) {
+            return sprintf('"?(?P<%s>[^"]+)"?', $match[1]);
+        }, $regex);
+
+        // variation
+        $regex = preg_replace('/([^\s\/]+)\\\\\/([^\s]+)/', '(?:\1|\2)', $regex);
+
+        // optional ending
+        $regex = preg_replace('/([^\s]+)\\\\\(([^\s\\\]+)\\\\\)/', '\1(?:\2)?', $regex);
+
+        return '/^' . $regex . '$/';
     }
 }

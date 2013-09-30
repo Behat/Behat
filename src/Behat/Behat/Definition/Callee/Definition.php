@@ -37,15 +37,19 @@ abstract class Definition extends Callee implements DefinitionInterface
      *
      * @param string      $type
      * @param string      $pattern
-     * @param string      $regex
      * @param Callable    $callback
      * @param null|string $description
      */
-    public function __construct($type, $pattern, $regex, $callback, $description = null)
+    public function __construct($type, $pattern, $callback, $description = null)
     {
         $this->type = $type;
         $this->pattern = $pattern;
-        $this->regex = $regex;
+
+        $this->regex = $pattern;
+        // If it is a turnip pattern - transform it to regex
+        if ('/' !== substr($pattern, 0, 1)) {
+            $this->regex = $this->turnipPatternToRegex($pattern);
+        }
 
         parent::__construct($callback, $description);
     }
@@ -88,5 +92,30 @@ abstract class Definition extends Callee implements DefinitionInterface
     public function toString()
     {
         return $this->getType() . ' ' . $this->getRegex();
+    }
+
+    /**
+     * Transforms turnip-style string to regex.
+     *
+     * @param string $turnip
+     *
+     * @return string
+     */
+    private function turnipPatternToRegex($turnip)
+    {
+        $regex = preg_quote($turnip, '/');
+
+        // placeholder
+        $regex = preg_replace_callback('/\:([^\s]+)/', function ($match) {
+            return sprintf('"?(?P<%s>[^"]+)"?', $match[1]);
+        }, $regex);
+
+        // variation
+        $regex = preg_replace('/([^\s\/]+)\\\\\/([^\s]+)/', '(?:\1|\2)', $regex);
+
+        // optional ending
+        $regex = preg_replace('/([^\s]+)\\\\\(([^\s\\\]+)\\\\\)/', '\1(?:\2)?', $regex);
+
+        return '/^' . $regex . '$/';
     }
 }

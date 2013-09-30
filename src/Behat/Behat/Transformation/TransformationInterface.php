@@ -19,6 +19,13 @@ use Behat\Behat\Callee\CalleeInterface;
 interface TransformationInterface extends CalleeInterface
 {
     /**
+     * Returns transformation pattern exactly as it was defined.
+     *
+     * @return string
+     */
+    public function getPattern();
+
+    /**
      * Returns transformation regex.
      *
      * @return string

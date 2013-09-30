@@ -26,6 +26,13 @@ interface DefinitionInterface extends CalleeInterface
     public function getType();
 
     /**
+     * Returns step pattern exactly as it was defined.
+     *
+     * @return string
+     */
+    public function getPattern();
+
+    /**
      * Returns regular expression.
      *
      * @return string

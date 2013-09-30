@@ -22,12 +22,11 @@ class Given extends Definition
      * Initializes definition.
      *
      * @param string      $pattern
-     * @param string      $regex
      * @param Callable    $callback
      * @param null|string $description
      */
-    public function __construct($pattern, $regex, $callback, $description = null)
+    public function __construct($pattern, $callback, $description = null)
     {
-        parent::__construct('Given', $pattern, $regex, $callback, $description);
+        parent::__construct('Given', $pattern, $callback, $description);
     }
 }
