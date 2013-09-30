@@ -60,7 +60,7 @@ class SnippetFactory implements EventSubscriberInterface
                 $snippet = $generator->generate($event->getSuite(), $event->getContextPool(), $event->getStep());
                 $event->setSnippet($snippet);
 
-                break;
+                return;
             }
         }
     }
