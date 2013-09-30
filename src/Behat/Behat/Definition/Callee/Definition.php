@@ -91,7 +91,7 @@ abstract class Definition extends Callee implements DefinitionInterface
      */
     public function toString()
     {
-        return $this->getType() . ' ' . $this->getRegex();
+        return $this->getType() . ' ' . $this->getPattern();
     }
 
     /**
