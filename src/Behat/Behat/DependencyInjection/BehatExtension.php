@@ -245,6 +245,7 @@ class BehatExtension
         $container->addCompilerPass(new Compiler\FeaturesLoadersPass());
         $container->addCompilerPass(new Compiler\GherkinLoadersPass());
         $container->addCompilerPass(new Compiler\ContextLoadersPass());
+        $container->addCompilerPass(new Compiler\ContextGeneratorsPass());
         $container->addCompilerPass(new Compiler\ContextInitializersPass());
         $container->addCompilerPass(new Compiler\SnippetGeneratorsPass());
     }

@@ -9,10 +9,12 @@ namespace Behat\Behat\Console\Processor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Context\Generator\GeneratorInterface;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\Event\SuitesCarrierEvent;
 use Behat\Behat\Suite\GherkinSuite;
+use Behat\Behat\Suite\SuiteInterface;
 use RuntimeException;
 use Symfony\Component\ClassLoader\ClassLoader;
 use Symfony\Component\Console\Command\Command;
@@ -36,6 +38,10 @@ class InitProcessor extends DispatchingService implements ProcessorInterface
      * @var string
      */
     private $basePath;
+    /**
+     * @var GeneratorInterface[]
+     */
+    private $generators = array();
 
     /**
      * Initializes processor.
@@ -50,6 +56,20 @@ class InitProcessor extends DispatchingService implements ProcessorInterface
 
         $this->autoloader = $autoloader;
         $this->basePath = $basePath;
+    }
+
+    /**
+     * Registers context generator.
+     *
+     * @param GeneratorInterface $generator
+     */
+    public function registerGenerator(GeneratorInterface $generator)
+    {
+        $this->generators[] = $generator;
+
+        usort($this->generators, function (GeneratorInterface $generator1, GeneratorInterface $generator2) {
+            return $generator2->getPriority() - $generator1->getPriority();
+        });
     }
 
     /**
@@ -96,17 +116,17 @@ class InitProcessor extends DispatchingService implements ProcessorInterface
                 }
             }
 
-            foreach ($suite->getContextClasses() as $class) {
-                if (class_exists($class)) {
+            foreach ($suite->getContextClasses() as $classname) {
+                if (class_exists($classname)) {
                     continue;
                 }
 
-                $path = $this->findClassFile($class);
+                $path = $this->findClassFile($classname);
                 if (!is_dir(dirname($path))) {
                     mkdir(dirname($path), 0777, true);
                 }
 
-                file_put_contents($path, $this->getFeatureContextSkelet($class));
+                file_put_contents($path, $this->generateContextClass($suite, $classname));
 
                 $output->writeln(
                     '<info>+f</info> ' .
@@ -132,49 +152,26 @@ class InitProcessor extends DispatchingService implements ProcessorInterface
     /**
      * Returns feature context skelet.
      *
-     * @param string $class
+     * @param SuiteInterface $suite
+     * @param string         $classname
      *
      * @return string
+     *
+     * @throws RuntimeException If appropriate generator is not found
      */
-    protected function getFeatureContextSkelet($class)
+    protected function generateContextClass(SuiteInterface $suite, $classname)
     {
-        $namespace = '';
-        $className = $class;
-        if (false !== $pos = strrpos($class, '\\')) {
-            $namespace = 'namespace ' . substr($class, 0, $pos) . ';' . PHP_EOL . PHP_EOL;
-            $className = substr($class, $pos + 1);
+        foreach ($this->generators as $generator) {
+            if ($generator->supports($suite, $classname)) {
+                return $generator->generate($suite, $classname);
+            }
         }
 
-        return strtr(<<<'PHP'
-<?php
-
-{namespace}use Behat\Behat\Context\ContextInterface;
-use Behat\Behat\Snippet\Context\SnippetsFriendlyInterface
-use Behat\Behat\Exception\PendingException;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
-
-/**
- * Behat context class.
- */
-class {className} implements ContextInterface, SnippetsFriendlyInterface
-{
-    /**
-     * Initializes context. Every scenario gets it's own context object.
-     *
-     * @param array $parameters Suite parameters (set them up through behat.yml)
-     */
-    public function __construct(array $parameters)
-    {
-    }
-}
-
-PHP
-            , array(
-                '{namespace}' => $namespace,
-                '{className}' => $className,
-            )
-        );
+        throw new RuntimeException(sprintf(
+            'Could not find context generator for "%s" class of the "%s" suite.',
+            $classname,
+            $suite->getName()
+        ));
     }
 
     /**

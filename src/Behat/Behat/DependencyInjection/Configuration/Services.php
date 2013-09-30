@@ -170,6 +170,10 @@ class Services
         ));
         $definition->addTag('context.loader');
         $container->setDefinition('context.loader.translatable', $definition);
+
+        $definition = new Definition('Behat\Behat\Context\Generator\DefaultContextGenerator');
+        $definition->addTag('context.generator');
+        $container->setDefinition('context.generator.default', $definition);
     }
 
     private function registerDefinitionServices(ContainerBuilder $container)
