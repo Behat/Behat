@@ -113,7 +113,7 @@ Feature: Stop on failure
             step failed as supposed (Exception)
           Then I should have a scenario that failed
 
-      Failing Scenarios:
+      Failed scenarios:
       features/failing.feature:18
 
       3 scenarios (2 passed, 1 failed)

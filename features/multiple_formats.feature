@@ -153,7 +153,7 @@ Feature: Multiple formats
       .    Given pystring:
       U    And table:
       U
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9 # Scenario: I'm little hungry
       features/apples.feature:30 # Scenario Outline: Other situations
 
@@ -272,7 +272,7 @@ Feature: Multiple formats
       .    Given pystring:
       U    And table:
       U
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9 # Scenario: I'm little hungry
       features/apples.feature:30 # Scenario Outline: Other situations
 
@@ -436,7 +436,7 @@ Feature: Multiple formats
           Given pystring:
           And table:
 
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9
       features/apples.feature:30
 
@@ -512,7 +512,7 @@ Feature: Multiple formats
           Given pystring:
           And table:
 
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9
       features/apples.feature:30
 
@@ -636,7 +636,7 @@ Feature: Multiple formats
           Given pystring:
           And table:
 
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9
       features/apples.feature:30
 

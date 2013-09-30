@@ -122,7 +122,7 @@ Feature: Pretty Formatter
             | 23    | 32     |
               Failed asserting that 33 matches expected '32'.
 
-      Failing Scenarios:
+      Failed scenarios:
       features/World.feature:19 # Scenario: Failed
       features/World.feature:30 # Scenario Outline: Passed & Failed
       features/World.feature:32 # Scenario Outline: Passed & Failed

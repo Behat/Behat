@@ -548,7 +548,7 @@ class PrettyFormatter extends CliFormatter
     {
         if (count($stats->getFailedStepsEvents())) {
             $this->maxLineLength = 0;
-            $header = $this->translate('failing_scenarios_title');
+            $header = $this->translate('failed_scenarios_title');
             $this->writeln("{+failed}$header:{-failed}");
             foreach ($stats->getFailedStepsEvents() as $event) {
                 $scenario = $event->getScenario();

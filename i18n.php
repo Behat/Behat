@@ -1,17 +1,31 @@
 <?php return array(
     'en'    =>
     array(
-        'proposal_title'          => 'You can implement step definitions for undefined steps with these snippets:',
-        'failing_scenarios_title' => 'Failing Scenarios',
-        'failed_steps_title'      => 'failed steps',
-        'pending_steps_title'     => 'pending steps',
-        'scenarios_count'         => '{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios',
-        'steps_count'             => '{0} No steps|{1} 1 step|]1,Inf] %1% steps',
-        'passed_count'            => '[1,Inf] %1% passed',
-        'failed_count'            => '[1,Inf] %1% failed',
-        'pending_count'           => '[1,Inf] %1% pending',
-        'undefined_count'         => '[1,Inf] %1% undefined',
-        'skipped_count'           => '[1,Inf] %1% skipped',
+        'proposal_title'         => 'You can implement step definitions for undefined steps with these snippets:',
+        'failed_scenarios_title' => 'Failed scenarios',
+        'failed_steps_title'     => 'failed steps',
+        'pending_steps_title'    => 'pending steps',
+        'scenarios_count'        => '{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios',
+        'steps_count'            => '{0} No steps|{1} 1 step|]1,Inf] %1% steps',
+        'passed_count'           => '[1,Inf] %1% passed',
+        'failed_count'           => '[1,Inf] %1% failed',
+        'pending_count'          => '[1,Inf] %1% pending',
+        'undefined_count'        => '[1,Inf] %1% undefined',
+        'skipped_count'          => '[1,Inf] %1% skipped',
+    ),
+    'ru'    =>
+    array(
+        'proposal_title'         => 'Вы можете реализовать определения для новых шагов с помощью этих шаблонов:',
+        'failed_scenarios_title' => 'Проваленные сценарии',
+        'failed_steps_title'     => 'проваленные шаги',
+        'pending_steps_title'    => 'шаги в ожидании',
+        'scenarios_count'        => '{0} Нет сценариев|{1,21,31} %1% сценарий|{2,3,4,22,23,24} %1% сценария|]4,Inf] %1% сценариев',
+        'steps_count'            => '{0} Нет шагов|{1,21,31} %1% шаг|{2,3,4,22,23,24} %1% шага|]4,Inf] %1% шагов',
+        'passed_count'           => '{1,21,31} %1% пройден|]1,Inf] %1% пройдено',
+        'failed_count'           => '{1,21,31} %1% провален|]1,Inf] %1% провалено',
+        'pending_count'          => '[1,Inf] %1% в ожидании',
+        'undefined_count'        => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
+        'skipped_count'          => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
     ),
     'cs'    =>
     array(
@@ -155,20 +169,6 @@
         'pending_count'       => '{1} %1% pendente|]1,Inf] %1% pendentes',
         'undefined_count'     => '{1} %1% indefinido|]1,Inf] %1% indefinidos',
         'skipped_count'       => '{1} %1% ignorado|]1,Inf] %1% ignorados',
-    ),
-    'ru'    =>
-    array(
-        'proposal_title'          => 'Вы можете реализовать определения для новых шагов с помощью этих шаблонов:',
-        'failing_scenarios_title' => 'Проваливающиеся Сценарии',
-        'failed_steps_title'      => 'проваленные шаги',
-        'pending_steps_title'     => 'шаги в ожидании',
-        'scenarios_count'         => '{0} Нет сценариев|{1,21,31} %1% сценарий|{2,3,4,22,23,24} %1% сценария|]4,Inf] %1% сценариев',
-        'steps_count'             => '{0} Нет шагов|{1,21,31} %1% шаг|{2,3,4,22,23,24} %1% шага|]4,Inf] %1% шагов',
-        'passed_count'            => '{1,21,31} %1% пройден|]1,Inf] %1% пройдено',
-        'failed_count'            => '{1,21,31} %1% провален|]1,Inf] %1% провалено',
-        'pending_count'           => '[1,Inf] %1% в ожидании',
-        'undefined_count'         => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
-        'skipped_count'           => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
     ),
     'sk'    =>
     array(

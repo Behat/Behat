@@ -158,7 +158,7 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9 # Scenario: I'm little hungry
       features/apples.feature:30 # Scenario Outline: Other situations
 
@@ -239,7 +239,7 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9
       features/apples.feature:30
 
@@ -320,7 +320,7 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9 # Scenario: I'm little hungry
       features/apples.feature:30 # Scenario Outline: Other situations
 
@@ -375,7 +375,7 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9 # Scenario: I'm little hungry
       features/apples.feature:30 # Scenario Outline: Other situations
 
@@ -474,7 +474,7 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9 # Scenario: I'm little hungry
       features/apples.feature:30 # Scenario Outline: Other situations
 
@@ -550,7 +550,7 @@ Feature: Format options
           Given pystring:
           And table:
 
-      Failing Scenarios:
+      Failed scenarios:
       features/apples.feature:9 # Scenario: I'm little hungry
       features/apples.feature:30 # Scenario Outline: Other situations
 

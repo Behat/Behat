@@ -125,7 +125,7 @@ Feature: I18n
             | 23       | 32        |
               Failed asserting that 33 matches expected 32.
 
-      Проваливающиеся Сценарии:
+      Проваленные сценарии:
       features/World.feature:20 # Сценарий: Провален
       features/World.feature:31 # Структура сценария: Пройдено и Провалено
       features/World.feature:33 # Структура сценария: Пройдено и Провалено
