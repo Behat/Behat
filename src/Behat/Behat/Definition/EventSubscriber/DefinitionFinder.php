@@ -124,7 +124,7 @@ class DefinitionFinder extends DispatchingService implements EventSubscriberInte
         $arguments = array();
         foreach ($definition->getReflection()->getParameters() as $num => $parameter) {
             if (isset($match[$parameter->getName()])) {
-                $arguments[] = $match[$parameter->getName()];
+                $arguments[$parameter->getName()] = $match[$parameter->getName()];
             } elseif (isset($match[$num])) {
                 $arguments[] = $match[$num];
             }

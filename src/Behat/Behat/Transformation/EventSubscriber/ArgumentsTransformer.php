@@ -75,10 +75,18 @@ class ArgumentsTransformer extends DispatchingService implements EventSubscriber
         $transformations = $this->getTransformations($suite, $contexts);
 
         $arguments = array();
-        foreach ($event->getArguments() as $argument) {
+        foreach ($event->getArguments() as $index => $argument) {
             $subject = $this->getTransformationSubject($argument);
 
             foreach ($transformations as $regex => $transformation) {
+                if ($this->isPlaceholderTransformation($transformation)) {
+                    if (':' . $index === $transformation->getPattern()) {
+                        $argument = $this->executeTransformation($suite, $contexts, $transformation, array($argument)) ? : $argument;
+                    }
+
+                    continue;
+                }
+
                 $trans = $this->translator->trans($regex, array(), $suiteId, $language);
                 $trans = ($regex !== $trans) ? $trans : null;
 
@@ -148,5 +156,18 @@ class ArgumentsTransformer extends DispatchingService implements EventSubscriber
         $this->dispatch(EventInterface::EXECUTE_TRANSFORMATION, $execution);
 
         return $execution->getReturn();
+    }
+
+    /**
+     * Checks if transformation is for a specific placeholder.
+     *
+     * @param TransformationInterface $transformation
+     *
+     * @return Boolean
+     */
+    private function isPlaceholderTransformation(TransformationInterface $transformation)
+    {
+        return ':' === substr($transformation->getPattern(), 0, 1)
+            && preg_match('/^:\w+$/', $transformation->getPattern());
     }
 }

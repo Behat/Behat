@@ -55,9 +55,15 @@ Feature: Step Arguments Transformations
               return intval($number);
           }
 
+          /** @Transform :user */
+          public function castToUser($username) {
+              return new User($username);
+          }
+
           /**
            * @Given /I am (".*" user)/
-           * @Given /I am user:/
+           * @Given I am user:
+           * @Given I am :user
            */
           public function iAmUser(User $user) {
               $this->user = $user;
@@ -130,3 +136,23 @@ Feature: Step Arguments Transformations
       6 steps (6 passed)
       """
 
+  Scenario: Named Arguments Transformations
+    Given a file named "features/step_arguments.feature" with:
+    """
+      Feature: Step Arguments
+        Scenario:
+          Given I am "everzet"
+          Then Username must be "everzet"
+
+        Scenario:
+          Given I am "antono"
+          Then Username must be "antono"
+      """
+    When I run "behat -f progress --no-ansi"
+    Then it should pass with:
+      """
+      ....
+
+      2 scenarios (2 passed)
+      4 steps (4 passed)
+      """
