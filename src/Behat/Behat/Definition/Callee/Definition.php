@@ -106,7 +106,7 @@ abstract class Definition extends Callee implements DefinitionInterface
         $regex = preg_quote($turnip, '/');
 
         // placeholder
-        $regex = preg_replace_callback("/\\\:([^\s]+)/", function ($match) {
+        $regex = preg_replace_callback("/\\\:([a-zA-Z0-9_]+)/", function ($match) {
             return sprintf("[\"']?(?P<%s>(?<=\")[^\"]+(?=\")|(?<=')[^']+(?=')|(?<=\s)\w+(?=\s|$))['\"]?", $match[1]);
         }, $regex);
 

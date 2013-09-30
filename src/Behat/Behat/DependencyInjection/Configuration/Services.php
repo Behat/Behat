@@ -342,6 +342,10 @@ class Services
         $definition->addTag('event_subscriber');
         $container->setDefinition('snippet.snippet_factory', $definition);
 
+        $definition = new Definition('Behat\Behat\Snippet\Generator\ContextTurnipSnippetGenerator');
+        $definition->addTag('snippet.generator');
+        $container->setDefinition('snippet.generator.context_turnip', $definition);
+
         $definition = new Definition('Behat\Behat\Snippet\Generator\ContextRegexSnippetGenerator');
         $definition->addTag('snippet.generator');
         $container->setDefinition('snippet.generator.context_regex', $definition);
