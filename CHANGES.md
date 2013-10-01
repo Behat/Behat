@@ -1,3 +1,13 @@
+3.0.0beta8 / 2013-10-01
+=======================
+
+  * Add `*SnippetsFriendlyInterface`(s) that are now required to generate snippets
+  * Add support for turnip-style definitions
+  * Use turnip-style definitions by default from `--init`
+  * Rename `SuitesLoader` to `SuitesRegistry` to clarify purpose
+  * Extract snippet generators into extendable component
+  * Extract context generators into extendable component
+
 3.0.0beta7 / 2013-09-29
 =======================
 
