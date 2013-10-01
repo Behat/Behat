@@ -3,6 +3,7 @@
 namespace Behat\Behat\Definition\Annotation;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\PyStringNode;
 
 use Behat\Behat\Definition\TransformationInterface,
     Behat\Behat\Context\ContextInterface,
