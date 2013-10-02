@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Context\EventSubscriber;
+namespace Behat\Behat\Context\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -22,7 +22,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextPoolInitializer implements EventSubscriberInterface
+class InitializeContextPool implements EventSubscriberInterface
 {
     /**
      * @var InitializerInterface[]

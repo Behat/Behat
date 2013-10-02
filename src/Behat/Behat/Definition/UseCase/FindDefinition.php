@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Definition\EventSubscriber;
+namespace Behat\Behat\Definition\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -26,7 +26,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionFinder extends DispatchingService implements EventSubscriberInterface
+class FindDefinition extends DispatchingService implements EventSubscriberInterface
 {
     /**
      * @var TranslatorInterface

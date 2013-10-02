@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Hook\EventSubscriber;
+namespace Behat\Behat\Hook\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -23,7 +23,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookDispatcher extends DispatchingService implements EventSubscriberInterface
+class DispatchHooks extends DispatchingService implements EventSubscriberInterface
 {
     /**
      * Returns an array of event names this subscriber wants to listen to.

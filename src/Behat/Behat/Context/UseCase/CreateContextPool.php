@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Context\EventSubscriber;
+namespace Behat\Behat\Context\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -20,7 +20,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextPoolFactory implements EventSubscriberInterface
+class CreateContextPool implements EventSubscriberInterface
 {
     /**
      * Returns an array of event names this subscriber wants to listen to.

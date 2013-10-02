@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\RunControl\EventSubscriber;
+namespace Behat\Behat\RunControl\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -34,10 +34,8 @@ class ProperlyAbortOnSigint extends DispatchingService implements EventSubscribe
 
     /**
      * Registers listener.
-     *
-     * @param ExerciseEvent $event
      */
-    public function registerSignalListener(ExerciseEvent $event)
+    public function registerSignalListener()
     {
         if (function_exists('pcntl_signal')) {
             declare(ticks = 1);

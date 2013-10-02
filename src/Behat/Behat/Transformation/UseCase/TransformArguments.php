@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Transformation\EventSubscriber;
+namespace Behat\Behat\Transformation\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -28,7 +28,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ArgumentsTransformer extends DispatchingService implements EventSubscriberInterface
+class TransformArguments extends DispatchingService implements EventSubscriberInterface
 {
     /**
      * @var TranslatorInterface

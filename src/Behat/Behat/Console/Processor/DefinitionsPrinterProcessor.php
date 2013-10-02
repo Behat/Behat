@@ -9,7 +9,7 @@ namespace Behat\Behat\Console\Processor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Definition\Support\DefinitionsPrinter;
+use Behat\Behat\Definition\UseCase\PrintDefinitions;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\Event\SuitesCarrierEvent;
@@ -27,7 +27,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class DefinitionsPrinterProcessor extends DispatchingService implements ProcessorInterface
 {
     /**
-     * @var DefinitionsPrinter
+     * @var \Behat\Behat\Definition\UseCase\PrintDefinitions
      */
     private $definitionsPrinter;
 
@@ -35,11 +35,11 @@ class DefinitionsPrinterProcessor extends DispatchingService implements Processo
      * Initializes processor.
      *
      * @param EventDispatcherInterface $eventDispatcher
-     * @param DefinitionsPrinter       $definitionsPrinter
+     * @param PrintDefinitions       $definitionsPrinter
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
-        DefinitionsPrinter $definitionsPrinter
+        PrintDefinitions $definitionsPrinter
     )
     {
         parent::__construct($eventDispatcher);

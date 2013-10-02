@@ -12,8 +12,8 @@ use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Exception\UndefinedException;
 use Behat\Behat\Hook\Event\HookEvent;
-use Behat\Behat\Snippet\EventSubscriber\SnippetsCollector;
-use Behat\Behat\Tester\EventSubscriber\StatisticsCollector;
+use Behat\Behat\Snippet\UseCase\CollectSnippets;
+use Behat\Behat\RunControl\UseCase\CollectStatistics;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\KeywordNodeInterface;
@@ -544,7 +544,7 @@ class PrettyFormatter extends CliFormatter
         }
     }
 
-    protected function printSummary(StatisticsCollector $stats)
+    protected function printSummary(CollectStatistics $stats)
     {
         if (count($stats->getFailedStepsEvents())) {
             $this->maxLineLength = 0;
@@ -601,7 +601,7 @@ class PrettyFormatter extends CliFormatter
         $this->writeln(count($statuses) ? ' ' . sprintf('(%s)', implode(', ', $statuses)) : '');
     }
 
-    protected function printTimeSummary(StatisticsCollector $stats)
+    protected function printTimeSummary(CollectStatistics $stats)
     {
         $time = $stats->getTotalTime();
         $minutes = floor($time / 60);
@@ -610,7 +610,7 @@ class PrettyFormatter extends CliFormatter
         $this->writeln($minutes . 'm' . $seconds . 's');
     }
 
-    protected function printUndefinedStepsSnippets(SnippetsCollector $snippets)
+    protected function printUndefinedStepsSnippets(CollectSnippets $snippets)
     {
         if (!$this->getParameter('snippets') || !$snippets->hasSnippets()) {
             return;

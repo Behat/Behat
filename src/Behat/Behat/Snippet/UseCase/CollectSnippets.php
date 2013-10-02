@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Snippet\EventSubscriber;
+namespace Behat\Behat\Snippet\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -22,7 +22,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SnippetsCollector implements EventSubscriberInterface
+class CollectSnippets implements EventSubscriberInterface
 {
     /**
      * @var SnippetInterface[string]

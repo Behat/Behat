@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Definition\Support;
+namespace Behat\Behat\Definition\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -27,7 +27,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionsPrinter extends DispatchingService
+class PrintDefinitions extends DispatchingService
 {
     /**
      * @var TranslatorInterface

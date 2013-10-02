@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Snippet\EventSubscriber;
+namespace Behat\Behat\Snippet\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SnippetFactory implements EventSubscriberInterface
+class CreateSnippet implements EventSubscriberInterface
 {
     /**
      * @var GeneratorInterface[]

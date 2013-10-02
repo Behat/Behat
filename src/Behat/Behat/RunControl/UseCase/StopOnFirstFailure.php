@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\RunControl\EventSubscriber;
+namespace Behat\Behat\RunControl\UseCase;
 
 /*
  * This file is part of the Behat.

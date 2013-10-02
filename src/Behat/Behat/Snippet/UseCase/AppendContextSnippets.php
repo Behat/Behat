@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Snippet\EventSubscriber;
+namespace Behat\Behat\Snippet\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -11,6 +11,7 @@ namespace Behat\Behat\Snippet\EventSubscriber;
  */
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Snippet\ContextSnippet;
+use Behat\Behat\Snippet\UseCase\CollectSnippets;
 use ReflectionClass;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -20,14 +21,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextSnippetsAppender implements EventSubscriberInterface
+class AppendContextSnippets implements EventSubscriberInterface
 {
     /**
      * @const PendingException class
      */
     const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Exception\PendingException';
     /**
-     * @var SnippetsCollector
+     * @var CollectSnippets
      */
     private $snippets;
     /**
@@ -38,10 +39,10 @@ class ContextSnippetsAppender implements EventSubscriberInterface
     /**
      * Initializes appender.
      *
-     * @param SnippetsCollector $snippets
+     * @param CollectSnippets $snippets
      * @param Boolean           $enabled
      */
-    public function __construct(SnippetsCollector $snippets, $enabled = false)
+    public function __construct(CollectSnippets $snippets, $enabled = false)
     {
         $this->snippets = $snippets;
         $this->enabled = (bool)$enabled;

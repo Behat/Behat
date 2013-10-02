@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Gherkin\Support;
+namespace Behat\Behat\Gherkin\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SyntaxPrinter
+class PrintSyntax
 {
     private $dumper;
 

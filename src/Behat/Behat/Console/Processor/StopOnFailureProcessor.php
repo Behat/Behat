@@ -9,7 +9,7 @@ namespace Behat\Behat\Console\Processor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\RunControl\EventSubscriber\StopOnFirstFailure;
+use Behat\Behat\RunControl\UseCase\StopOnFirstFailure;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -30,7 +30,7 @@ class StopOnFailureProcessor implements ProcessorInterface
     /**
      * Initializes processor.
      *
-     * @param StopOnFirstFailure $onFailureStopper
+     * @param \Behat\Behat\RunControl\UseCase\StopOnFirstFailure $onFailureStopper
      */
     public function __construct(StopOnFirstFailure $onFailureStopper)
     {

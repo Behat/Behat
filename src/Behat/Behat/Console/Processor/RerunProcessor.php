@@ -9,7 +9,7 @@ namespace Behat\Behat\Console\Processor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\RunControl\EventSubscriber\CacheFailedScenariosForRerun;
+use Behat\Behat\RunControl\UseCase\CacheFailedScenariosForRerun;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RerunProcessor implements ProcessorInterface
 {
     /**
-     * @var CacheFailedScenariosForRerun
+     * @var \Behat\Behat\RunControl\UseCase\CacheFailedScenariosForRerun
      */
     private $cache;
 

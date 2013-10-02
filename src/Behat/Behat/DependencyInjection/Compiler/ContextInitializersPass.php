@@ -29,7 +29,7 @@ class ContextInitializersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $poolInitializerDefinition = $container->getDefinition('context.pool_initializer');
+        $poolInitializerDefinition = $container->getDefinition('context.use_case.initialize_context_pool');
 
         foreach ($container->findTaggedServiceIds('context.initializer') as $id => $attributes) {
             $poolInitializerDefinition->addMethodCall('registerInitializer', array(new Reference($id)));

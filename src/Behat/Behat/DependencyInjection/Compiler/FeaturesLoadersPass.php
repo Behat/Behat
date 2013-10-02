@@ -29,10 +29,10 @@ class FeaturesLoadersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $suitedLoaderDefinition = $container->getDefinition('features.features_loader');
+        $useCase = $container->getDefinition('features.use_case.load_features');
 
         foreach ($container->findTaggedServiceIds('features.loader') as $id => $attributes) {
-            $suitedLoaderDefinition->addMethodCall('registerLoader', array(new Reference($id)));
+            $useCase->addMethodCall('registerLoader', array(new Reference($id)));
         }
     }
 }

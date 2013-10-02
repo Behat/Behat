@@ -18,7 +18,7 @@ use Behat\Behat\Event\OutlineEvent;
 use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Exception\UndefinedException;
-use Behat\Behat\Tester\EventSubscriber\StatisticsCollector;
+use Behat\Behat\RunControl\UseCase\CollectStatistics;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\NodeInterface;
@@ -516,7 +516,7 @@ HTML
         }
     }
 
-    protected function printTimeSummary(StatisticsCollector $stats)
+    protected function printTimeSummary(CollectStatistics $stats)
     {
         $this->writeln('<p class="time">');
         $time = $stats->getTotalTime();

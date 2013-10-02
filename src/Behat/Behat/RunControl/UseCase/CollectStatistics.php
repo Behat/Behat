@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Tester\EventSubscriber;
+namespace Behat\Behat\RunControl\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StatisticsCollector implements EventSubscriberInterface
+class CollectStatistics implements EventSubscriberInterface
 {
     private $startTime;
     private $finishTime;

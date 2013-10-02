@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Callee\EventSubscriber;
+namespace Behat\Behat\Callee\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CalleeExecutor implements EventSubscriberInterface
+class ExecuteCallee implements EventSubscriberInterface
 {
     private $errorReporting;
 

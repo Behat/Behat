@@ -65,13 +65,11 @@ class Services
 
     private function registerConsoleServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Console\BehatCommand', array(
-            array()
-        ));
+        $definition = new Definition('Behat\Behat\Console\BehatCommand', array(array()));
         $container->setDefinition('console.command', $definition);
 
         $definition = new Definition('Behat\Behat\Console\Processor\AppendSnippetsProcessor', array(
-            new Reference('snippet.context_snippets_appender'),
+            new Reference('snippet.use_case.append_context_snippets'),
             new Reference('output.manager')
         ));
         $definition->addTag('console.processor');
@@ -79,13 +77,13 @@ class Services
 
         $definition = new Definition('Behat\Behat\Console\Processor\DefinitionsPrinterProcessor', array(
             new Reference('event_dispatcher'),
-            new Reference('definition.printer')
+            new Reference('definition.use_case.print_definitions')
         ));
         $definition->addTag('console.processor');
         $container->setDefinition('console.processor.definitions_printer', $definition);
 
         $definition = new Definition('Behat\Behat\Console\Processor\RerunProcessor', array(
-            new Reference('run_control.cache_failed_scenarios_for_rerun')
+            new Reference('run_control.use_case.cache_failed_scenarios_for_rerun')
         ));
         $definition->addTag('console.processor');
         $container->setDefinition('console.processor.rerun', $definition);
@@ -121,13 +119,13 @@ class Services
         $container->setDefinition('console.processor.init', $definition);
 
         $definition = new Definition('Behat\Behat\Console\Processor\StopOnFailureProcessor', array(
-            new Reference('run_control.stop_on_failure')
+            new Reference('run_control.use_case.stop_on_failure')
         ));
         $definition->addTag('console.processor');
         $container->setDefinition('console.processor.stop_on_failure', $definition);
 
         $definition = new Definition('Behat\Behat\Console\Processor\StorySyntaxPrinterProcessor', array(
-            new Reference('gherkin.printer')
+            new Reference('gherkin.use_case.print_syntax')
         ));
         $definition->addTag('console.processor');
         $container->setDefinition('console.processor.story_syntax_printer', $definition);
@@ -135,28 +133,37 @@ class Services
 
     private function registerCalleeServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Callee\EventSubscriber\CalleeExecutor', array(
+        $definition = new Definition('Behat\Behat\Callee\UseCase\ExecuteCallee', array(
             '%options.error_reporting%'
         ));
         $definition->addTag('event_subscriber');
-        $container->setDefinition('callee.executor', $definition);
+        $container->setDefinition('callee.use_case.execute_callee', $definition);
     }
 
     private function registerContextServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\EventSubscriber\ContextPoolFactory');
-        $definition->addTag('event_subscriber');
-        $container->setDefinition('context.pool_factory', $definition);
+        $readerRef = new Reference('context.callees_reader');
+        $translatorRef = new Reference('translator');
 
-        $definition = new Definition('Behat\Behat\Context\EventSubscriber\ContextPoolInitializer');
+        $definition = new Definition('Behat\Behat\Context\UseCase\CreateContextPool');
         $definition->addTag('event_subscriber');
-        $container->setDefinition('context.pool_initializer', $definition);
+        $container->setDefinition('context.use_case.create_context_pool', $definition);
 
-        $definition = new Definition('Behat\Behat\Context\EventSubscriber\DictionaryReader', array(
-            new Reference('context.callees_reader')
-        ));
+        $definition = new Definition('Behat\Behat\Context\UseCase\InitializeContextPool');
         $definition->addTag('event_subscriber');
-        $container->setDefinition('context.dictionary_reader', $definition);
+        $container->setDefinition('context.use_case.initialize_context_pool', $definition);
+
+        $definition = new Definition('Behat\Behat\Context\UseCase\LoadContextHooks', array($readerRef));
+        $definition->addTag('event_subscriber');
+        $container->setDefinition('context.use_case.load_context_hooks', $definition);
+
+        $definition = new Definition('Behat\Behat\Context\UseCase\LoadContextDefinitions', array($readerRef));
+        $definition->addTag('event_subscriber');
+        $container->setDefinition('context.use_case.load_context_definitions', $definition);
+
+        $definition = new Definition('Behat\Behat\Context\UseCase\LoadContextTransformations', array($readerRef));
+        $definition->addTag('event_subscriber');
+        $container->setDefinition('context.use_case.load_context_transformations', $definition);
 
         $definition = new Definition('Behat\Behat\Context\Reader\CachedReader');
         $container->setDefinition('context.callees_reader', $definition);
@@ -165,9 +172,7 @@ class Services
         $definition->addTag('context.loader');
         $container->setDefinition('context.loader.annotated', $definition);
 
-        $definition = new Definition('Behat\Behat\Context\Reader\Loader\TranslatableContextLoader', array(
-            new Reference('translator')
-        ));
+        $definition = new Definition('Behat\Behat\Context\Reader\Loader\TranslatableContextLoader', array($translatorRef));
         $definition->addTag('context.loader');
         $container->setDefinition('context.loader.translatable', $definition);
 
@@ -178,31 +183,33 @@ class Services
 
     private function registerDefinitionServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\EventSubscriber\DefinitionFinder', array(
-            new Reference('event_dispatcher'),
-            new Reference('translator')
+        $eventDispatcherRef = new Reference('event_dispatcher');
+        $translatorRef = new Reference('translator');
+
+        $definition = new Definition('Behat\Behat\Definition\UseCase\FindDefinition', array(
+            $eventDispatcherRef,
+            $translatorRef
         ));
         $definition->addTag('event_subscriber');
-        $container->setDefinition('definition.finder', $definition);
+        $container->setDefinition('definition.use_case.find_definition', $definition);
 
-        $definition = new Definition('Behat\Behat\Definition\Support\DefinitionsPrinter', array(
-            new Reference('event_dispatcher'),
-            new Reference('translator')
+        $definition = new Definition('Behat\Behat\Definition\UseCase\PrintDefinitions', array(
+            $eventDispatcherRef,
+            $translatorRef
         ));
-        $container->setDefinition('definition.printer', $definition);
+        $container->setDefinition('definition.use_case.print_definitions', $definition);
     }
 
     private function registerFeaturesServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Features\EventSubscriber\FeaturesLoader', array(
-            new Reference('event_dispatcher')
-        ));
-        $definition->addTag('event_subscriber');
-        $container->setDefinition('features.features_loader', $definition);
+        $eventDispatcherRef = new Reference('event_dispatcher');
+        $gherkinRef = new Reference('gherkin');
 
-        $definition = new Definition('Behat\Behat\Features\Loader\GherkinLoader', array(
-            new Reference('gherkin')
-        ));
+        $definition = new Definition('Behat\Behat\Features\UseCase\LoadFeatures', array($eventDispatcherRef));
+        $definition->addTag('event_subscriber');
+        $container->setDefinition('features.use_case.load_features', $definition);
+
+        $definition = new Definition('Behat\Behat\Features\Loader\GherkinLoader', array($gherkinRef));
         $definition->addTag('features.loader');
         $container->setDefinition('features.loader.gherkin', $definition);
     }
@@ -214,10 +221,9 @@ class Services
         ));
         $container->setDefinition('output.manager', $definition);
 
-
         $definition = new Definition('Behat\Behat\Output\Formatter\PrettyFormatter', array(
-            new Reference('tester.statistics_collector'),
-            new Reference('snippet.snippets_collector'),
+            new Reference('run_control.use_case.collect_statistics'),
+            new Reference('snippet.use_case.collect_snippets'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -228,8 +234,8 @@ class Services
         $container->setDefinition('output.formatter.pretty', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Formatter\ProgressFormatter', array(
-            new Reference('tester.statistics_collector'),
-            new Reference('snippet.snippets_collector'),
+            new Reference('run_control.use_case.collect_statistics'),
+            new Reference('snippet.use_case.collect_snippets'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -240,8 +246,8 @@ class Services
         $container->setDefinition('output.formatter.progress', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Formatter\HtmlFormatter', array(
-            new Reference('tester.statistics_collector'),
-            new Reference('snippet.snippets_collector'),
+            new Reference('run_control.use_case.collect_statistics'),
+            new Reference('snippet.use_case.collect_snippets'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -252,8 +258,8 @@ class Services
         $container->setDefinition('output.formatter.html', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Formatter\JunitFormatter', array(
-            new Reference('tester.statistics_collector'),
-            new Reference('snippet.snippets_collector'),
+            new Reference('run_control.use_case.collect_statistics'),
+            new Reference('snippet.use_case.collect_snippets'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -264,8 +270,8 @@ class Services
         $container->setDefinition('output.formatter.junit', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Formatter\FailedScenariosFormatter', array(
-            new Reference('tester.statistics_collector'),
-            new Reference('snippet.snippets_collector'),
+            new Reference('run_control.use_case.collect_statistics'),
+            new Reference('snippet.use_case.collect_snippets'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -276,8 +282,8 @@ class Services
         $container->setDefinition('output.formatter.failed_scenarios', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Formatter\SnippetsFormatter', array(
-            new Reference('tester.statistics_collector'),
-            new Reference('snippet.snippets_collector'),
+            new Reference('run_control.use_case.collect_statistics'),
+            new Reference('snippet.use_case.collect_snippets'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -290,40 +296,33 @@ class Services
 
     private function registerGherkinServices(ContainerBuilder $container)
     {
+        $gherkinRef = new Reference('gherkin');
+        $lexerRef = new Reference('gherkin.lexer');
+        $parserRef = new Reference('gherkin.parser');
+        $keywordsRef = new Reference('gherkin.keywords');
+
         $definition = new Definition('Behat\Gherkin\Gherkin');
         $container->setDefinition('gherkin', $definition);
 
-        $definition = new Definition('Behat\Gherkin\Parser', array(
-            new Reference('gherkin.lexer')
-        ));
+        $definition = new Definition('Behat\Gherkin\Parser', array($lexerRef));
         $container->setDefinition('gherkin.parser', $definition);
 
-        $definition = new Definition('Behat\Gherkin\Lexer', array(
-            new Reference('gherkin.keywords')
-        ));
+        $definition = new Definition('Behat\Gherkin\Lexer', array($keywordsRef));
         $container->setDefinition('gherkin.lexer', $definition);
 
-        $definition = new Definition('Behat\Gherkin\Keywords\CachedArrayKeywords', array(
-            '%paths.gherkin.i18n%'
-        ));
+        $definition = new Definition('Behat\Gherkin\Keywords\CachedArrayKeywords', array('%paths.gherkin.i18n%'));
         $container->setDefinition('gherkin.keywords', $definition);
 
-        $definition = new Definition('Behat\Behat\Gherkin\Support\SyntaxPrinter', array(
-            new Definition('Behat\Gherkin\Keywords\KeywordsDumper', array(
-                new Reference('gherkin.keywords')
-            ))
+        $definition = new Definition('Behat\Behat\Gherkin\UseCase\PrintSyntax', array(
+            new Definition('Behat\Gherkin\Keywords\KeywordsDumper', array($keywordsRef))
         ));
-        $container->setDefinition('gherkin.printer', $definition);
+        $container->setDefinition('gherkin.use_case.print_syntax', $definition);
 
-        $definition = new Definition('Behat\Gherkin\Loader\DirectoryLoader', array(
-            new Reference('gherkin')
-        ));
+        $definition = new Definition('Behat\Gherkin\Loader\DirectoryLoader', array($gherkinRef));
         $definition->addTag('gherkin.loader');
         $container->setDefinition('gherkin.loader.directory', $definition);
 
-        $definition = new Definition('Behat\Gherkin\Loader\GherkinFileLoader', array(
-            new Reference('gherkin.parser')
-        ));
+        $definition = new Definition('Behat\Gherkin\Loader\GherkinFileLoader', array($parserRef));
         $definition->addMethodCall('setCache', array(
             new Definition('Behat\Gherkin\Cache\MemoryCache')
         ));
@@ -333,18 +332,20 @@ class Services
 
     private function registerHookServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Hook\EventSubscriber\HookDispatcher', array(
-            new Reference('event_dispatcher')
-        ));
+        $eventDispatcherRef = new Reference('event_dispatcher');
+
+        $definition = new Definition('Behat\Behat\Hook\UseCase\DispatchHooks', array($eventDispatcherRef));
         $definition->addTag('event_subscriber');
-        $container->setDefinition('hook.hook_dispatcher', $definition);
+        $container->setDefinition('hook.use_case.dispatch_hooks', $definition);
     }
 
     private function registerSnippetServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Snippet\EventSubscriber\SnippetFactory');
+        $snippetsCollectorRef = new Reference('snippet.use_case.collect_snippets');
+
+        $definition = new Definition('Behat\Behat\Snippet\UseCase\CreateSnippet');
         $definition->addTag('event_subscriber');
-        $container->setDefinition('snippet.snippet_factory', $definition);
+        $container->setDefinition('snippet.use_case.create_snippet', $definition);
 
         $definition = new Definition('Behat\Behat\Snippet\Generator\ContextTurnipSnippetGenerator');
         $definition->addTag('snippet.generator');
@@ -354,23 +355,23 @@ class Services
         $definition->addTag('snippet.generator');
         $container->setDefinition('snippet.generator.context_regex', $definition);
 
-        $definition = new Definition('Behat\Behat\Snippet\EventSubscriber\SnippetsCollector');
+        $definition = new Definition('Behat\Behat\Snippet\UseCase\CollectSnippets');
         $definition->addTag('event_subscriber');
-        $container->setDefinition('snippet.snippets_collector', $definition);
+        $container->setDefinition('snippet.use_case.collect_snippets', $definition);
 
-        $definition = new Definition('Behat\Behat\Snippet\EventSubscriber\ContextSnippetsAppender', array(
-            new Reference('snippet.snippets_collector'),
+        $definition = new Definition('Behat\Behat\Snippet\UseCase\AppendContextSnippets', array(
+            $snippetsCollectorRef,
             '%options.append_snippets%'
         ));
         $definition->addTag('event_subscriber');
-        $container->setDefinition('snippet.context_snippets_appender', $definition);
+        $container->setDefinition('snippet.use_case.append_context_snippets', $definition);
     }
 
     private function registerSuiteServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Suite\EventSubscriber\SuitesRegistry');
+        $definition = new Definition('Behat\Behat\Suite\UseCase\LoadSuites');
         $definition->addTag('event_subscriber');
-        $container->setDefinition('suite.suites_registry', $definition);
+        $container->setDefinition('suite.use_case.load_suites', $definition);
 
         $definition = new Definition('Behat\Behat\Suite\SuiteFactory');
         $container->setDefinition('suite.suite_factory', $definition);
@@ -387,40 +388,42 @@ class Services
 
     private function registerTransformerServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\EventSubscriber\ArgumentsTransformer', array(
+        $definition = new Definition('Behat\Behat\Transformation\UseCase\TransformArguments', array(
             new Reference('event_dispatcher'),
             new Reference('translator')
         ));
         $definition->addTag('event_subscriber');
-        $container->setDefinition('transformer.arguments_transformer', $definition);
+        $container->setDefinition('transformer.use_case.transform_arguments', $definition);
     }
 
     private function registerRunControlServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\RunControl\EventSubscriber\ProperlyAbortOnSigint', array(
-            new Reference('event_dispatcher')
+        $eventDispatcherRef = new Reference('event_dispatcher');
+
+        $definition = new Definition('Behat\Behat\RunControl\UseCase\ProperlyAbortOnSigint', array(
+            $eventDispatcherRef
         ));
         $definition->addTag('event_subscriber');
-        $container->setDefinition('run_control.properly_stop_on_sigint', $definition);
+        $container->setDefinition('run_control.use_case.properly_stop_on_sigint', $definition);
 
-        $definition = new Definition('Behat\Behat\RunControl\EventSubscriber\StopOnFirstFailure', array(
-            new Reference('event_dispatcher'),
+        $definition = new Definition('Behat\Behat\RunControl\UseCase\StopOnFirstFailure', array(
+            $eventDispatcherRef,
             '%options.stop_on_failure%'
         ));
         $definition->addTag('event_subscriber');
-        $container->setDefinition('run_control.stop_on_failure', $definition);
+        $container->setDefinition('run_control.use_case.stop_on_failure', $definition);
 
-        $definition = new Definition('Behat\Behat\RunControl\EventSubscriber\CacheFailedScenariosForRerun');
+        $definition = new Definition('Behat\Behat\RunControl\UseCase\CacheFailedScenariosForRerun');
         $definition->addTag('event_subscriber');
-        $container->setDefinition('run_control.cache_failed_scenarios_for_rerun', $definition);
+        $container->setDefinition('run_control.use_case.cache_failed_scenarios_for_rerun', $definition);
+
+        $definition = new Definition('Behat\Behat\RunControl\UseCase\CollectStatistics');
+        $definition->addTag('event_subscriber');
+        $container->setDefinition('run_control.use_case.collect_statistics', $definition);
     }
 
     private function registerTesterServices(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\EventSubscriber\StatisticsCollector');
-        $definition->addTag('event_subscriber');
-        $container->setDefinition('tester.statistics_collector', $definition);
-
         $definition = new Definition('Behat\Behat\Tester\EventSubscriber\TesterDispatcher', array(
             new Reference('tester.exercise'),
             new Reference('tester.suite'),

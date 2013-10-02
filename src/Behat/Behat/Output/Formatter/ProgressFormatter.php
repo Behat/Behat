@@ -14,8 +14,8 @@ use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExerciseEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Exception\PendingException;
-use Behat\Behat\Snippet\EventSubscriber\SnippetsCollector;
-use Behat\Behat\Tester\EventSubscriber\StatisticsCollector;
+use Behat\Behat\Snippet\UseCase\CollectSnippets;
+use Behat\Behat\RunControl\UseCase\CollectStatistics;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\StepNode;
@@ -128,9 +128,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints all failed steps info.
      *
-     * @param StatisticsCollector $stats
+     * @param CollectStatistics $stats
      */
-    protected function printFailedSteps(StatisticsCollector $stats)
+    protected function printFailedSteps(CollectStatistics $stats)
     {
         if (count($stats->getFailedStepsEvents())) {
             $header = $this->translate('failed_steps_title');
@@ -142,9 +142,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints all pending steps information.
      *
-     * @param StatisticsCollector $stats
+     * @param CollectStatistics $stats
      */
-    protected function printPendingSteps(StatisticsCollector $stats)
+    protected function printPendingSteps(CollectStatistics $stats)
     {
         if (count($stats->getPendingStepsEvents())) {
             $header = $this->translate('pending_steps_title');
@@ -258,9 +258,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints summary suite run information.
      *
-     * @param StatisticsCollector $stats
+     * @param \Behat\Behat\RunControl\UseCase\CollectStatistics $stats
      */
-    protected function printSummary(StatisticsCollector $stats)
+    protected function printSummary(CollectStatistics $stats)
     {
         $this->printScenariosSummary($stats);
         $this->printStepsSummary($stats);
@@ -273,9 +273,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints scenarios summary information.
      *
-     * @param StatisticsCollector $stats
+     * @param CollectStatistics $stats
      */
-    protected function printScenariosSummary(StatisticsCollector $stats)
+    protected function printScenariosSummary(CollectStatistics $stats)
     {
         $count = $stats->getScenariosCount();
         $header = $this->translateChoice('scenarios_count', $count, array('%1%' => $count));
@@ -286,9 +286,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints steps summary information.
      *
-     * @param StatisticsCollector $stats
+     * @param CollectStatistics $stats
      */
-    protected function printStepsSummary(StatisticsCollector $stats)
+    protected function printStepsSummary(CollectStatistics $stats)
     {
         $count = $stats->getStepsCount();
         $header = $this->translateChoice('steps_count', $count, array('%1%' => $count));
@@ -318,9 +318,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints suite run time information.
      *
-     * @param StatisticsCollector $stats
+     * @param CollectStatistics $stats
      */
-    protected function printTimeSummary(StatisticsCollector $stats)
+    protected function printTimeSummary(CollectStatistics $stats)
     {
         $time = $stats->getTotalTime();
         $minutes = floor($time / 60);
@@ -332,9 +332,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints undefined steps snippets.
      *
-     * @param SnippetsCollector $snippets
+     * @param \Behat\Behat\Snippet\UseCase\CollectSnippets $snippets
      */
-    protected function printUndefinedStepsSnippets(SnippetsCollector $snippets)
+    protected function printUndefinedStepsSnippets(CollectSnippets $snippets)
     {
         if ($this->getParameter('snippets') && $snippets->hasSnippets()) {
             $header = $this->translate('proposal_title');
@@ -346,9 +346,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints steps snippets.
      *
-     * @param SnippetsCollector $snippets
+     * @param CollectSnippets $snippets
      */
-    protected function printSnippets(SnippetsCollector $snippets)
+    protected function printSnippets(CollectSnippets $snippets)
     {
         foreach ($snippets->getSnippets() as $snippet) {
             $snippetText = $snippet->getSnippet();

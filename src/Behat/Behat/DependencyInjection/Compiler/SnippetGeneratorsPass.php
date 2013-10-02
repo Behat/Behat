@@ -29,10 +29,10 @@ class SnippetGeneratorsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $factoryDefinition = $container->getDefinition('snippet.snippet_factory');
+        $useCase = $container->getDefinition('snippet.use_case.create_snippet');
 
         foreach ($container->findTaggedServiceIds('snippet.generator') as $id => $attributes) {
-            $factoryDefinition->addMethodCall('registerGenerator', array(new Reference($id)));
+            $useCase->addMethodCall('registerGenerator', array(new Reference($id)));
         }
     }
 }

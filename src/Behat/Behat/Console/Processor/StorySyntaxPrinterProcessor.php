@@ -9,7 +9,7 @@ namespace Behat\Behat\Console\Processor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Gherkin\Support\SyntaxPrinter;
+use Behat\Behat\Gherkin\UseCase\PrintSyntax;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,16 +23,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 class StorySyntaxPrinterProcessor implements ProcessorInterface
 {
     /**
-     * @var SyntaxPrinter
+     * @var \Behat\Behat\Gherkin\UseCase\PrintSyntax
      */
     private $syntaxPrinter;
 
     /**
      * Constructs processor.
      *
-     * @param SyntaxPrinter $syntaxPrinter
+     * @param PrintSyntax $syntaxPrinter
      */
-    public function __construct(SyntaxPrinter $syntaxPrinter)
+    public function __construct(PrintSyntax $syntaxPrinter)
     {
         $this->syntaxPrinter = $syntaxPrinter;
     }

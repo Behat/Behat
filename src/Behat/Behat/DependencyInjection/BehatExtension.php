@@ -136,7 +136,7 @@ class BehatExtension
      */
     protected function registerSuitesConfiguration(array $suites, ContainerBuilder $container)
     {
-        $registryDefinition = $container->getDefinition('suite.suites_registry');
+        $registryDefinition = $container->getDefinition('suite.use_case.load_suites');
         foreach ($suites as $name => $config) {
             if (!$config['enabled']) {
                 continue;
@@ -190,7 +190,7 @@ class BehatExtension
             $fileLoaderDefinition = $container->getDefinition('gherkin.loader.gherkin_file');
             $fileLoaderDefinition->addMethodCall('setCache', array($cacheDefinition));
 
-            $failedScenarios = $container->getDefinition('run_control.cache_failed_scenarios_for_rerun');
+            $failedScenarios = $container->getDefinition('run_control.use_case.cache_failed_scenarios_for_rerun');
             $failedScenarios->addMethodCall('setCache', array($options['cache_path']));
 
             unset($options['cache_path']);

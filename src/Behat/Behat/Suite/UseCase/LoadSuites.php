@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Suite\EventSubscriber;
+namespace Behat\Behat\Suite\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -19,7 +19,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuitesRegistry implements EventSubscriberInterface
+class LoadSuites implements EventSubscriberInterface
 {
     /**
      * @var SuiteInterface[]
@@ -33,7 +33,7 @@ class SuitesRegistry implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(EventInterface::LOAD_SUITES => array('setRegisteredSuites', 0));
+        return array(EventInterface::LOAD_SUITES => array('loadSuites', 0));
     }
 
     /**
@@ -51,7 +51,7 @@ class SuitesRegistry implements EventSubscriberInterface
      *
      * @param SuitesCarrierEvent $event
      */
-    public function setRegisteredSuites(SuitesCarrierEvent $event)
+    public function loadSuites(SuitesCarrierEvent $event)
     {
         array_map(array($event, 'addSuite'), $this->suites);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Features\EventSubscriber;
+namespace Behat\Behat\Features\UseCase;
 
 /*
  * This file is part of the Behat.
@@ -24,7 +24,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeaturesLoader extends DispatchingService implements EventSubscriberInterface
+class LoadFeatures extends DispatchingService implements EventSubscriberInterface
 {
     /**
      * @var LoaderInterface[]
