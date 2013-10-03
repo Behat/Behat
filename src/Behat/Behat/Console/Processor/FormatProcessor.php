@@ -27,7 +27,7 @@ class FormatProcessor implements ProcessorInterface
     /**
      * @var OutputManager
      */
-    private $formatterManager;
+    private $outputManager;
     /**
      * @var Translator
      */
@@ -40,13 +40,13 @@ class FormatProcessor implements ProcessorInterface
     /**
      * Initializes processor.
      *
-     * @param OutputManager $formatterManager
+     * @param OutputManager $outputManager
      * @param Translator    $translator
      * @param string        $i18nPath
      */
-    public function __construct(OutputManager $formatterManager, Translator $translator, $i18nPath)
+    public function __construct(OutputManager $outputManager, Translator $translator, $i18nPath)
     {
-        $this->formatterManager = $formatterManager;
+        $this->outputManager = $outputManager;
         $this->translator = $translator;
         $this->i18nPath = $i18nPath;
     }
@@ -58,7 +58,7 @@ class FormatProcessor implements ProcessorInterface
      */
     public function configure(Command $command)
     {
-        $formatters = $this->formatterManager->getFormatters();
+        $formatters = $this->outputManager->getFormatters();
 
         $command
             ->addOption('--format', '-f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
@@ -158,45 +158,45 @@ class FormatProcessor implements ProcessorInterface
     private function configureFormatters(array $formats, InputInterface $input, OutputInterface $output)
     {
         if (count($formats)) {
-            $this->formatterManager->disableAllFormatters();
+            $this->outputManager->disableAllFormatters();
             foreach ($formats as $format) {
-                $this->formatterManager->enableFormatter($format);
+                $this->outputManager->enableFormatter($format);
             }
         }
 
-        $this->formatterManager->setFormattersParameterIfExists('decorated', $output->isDecorated());
+        $this->outputManager->setFormattersParameterIfExists('decorated', $output->isDecorated());
 
         if ($input->getOption('verbose')) {
-            $this->formatterManager->setFormattersParameterIfExists('verbose', true);
+            $this->outputManager->setFormattersParameterIfExists('verbose', true);
         }
         if ($input->getOption('lang')) {
-            $this->formatterManager->setFormattersParameterIfExists('language', $input->getOption('lang'));
+            $this->outputManager->setFormattersParameterIfExists('language', $input->getOption('lang'));
         }
         if ($input->getOption('ansi')) {
             $output->setDecorated(true);
-            $this->formatterManager->setFormattersParameterIfExists('decorated', true);
+            $this->outputManager->setFormattersParameterIfExists('decorated', true);
         }
         if ($input->getOption('no-ansi')) {
             $output->setDecorated(false);
-            $this->formatterManager->setFormattersParameterIfExists('decorated', false);
+            $this->outputManager->setFormattersParameterIfExists('decorated', false);
         }
         if ($input->getOption('no-time')) {
-            $this->formatterManager->setFormattersParameterIfExists('time', false);
+            $this->outputManager->setFormattersParameterIfExists('time', false);
         }
         if ($input->getOption('no-paths')) {
-            $this->formatterManager->setFormattersParameterIfExists('paths', false);
+            $this->outputManager->setFormattersParameterIfExists('paths', false);
         }
         if ($input->getOption('no-snippets')) {
-            $this->formatterManager->setFormattersParameterIfExists('snippets', false);
+            $this->outputManager->setFormattersParameterIfExists('snippets', false);
         }
         if ($input->getOption('no-multiline')) {
-            $this->formatterManager->setFormattersParameterIfExists('multiline_arguments', false);
+            $this->outputManager->setFormattersParameterIfExists('multiline_arguments', false);
         }
         if ($input->getOption('snippets-paths')) {
-            $this->formatterManager->setFormattersParameterIfExists('snippets_paths', true);
+            $this->outputManager->setFormattersParameterIfExists('snippets_paths', true);
         }
         if ($input->getOption('expand')) {
-            $this->formatterManager->setFormattersParameterIfExists('expand', true);
+            $this->outputManager->setFormattersParameterIfExists('expand', true);
         }
     }
 
@@ -216,8 +216,8 @@ class FormatProcessor implements ProcessorInterface
         if (1 == count($outputs) && 'std' !== $outputs[0] && 'null' !== $outputs[0] && 'false' !== $outputs[0]) {
             $outputPath = $this->locateOutputPath($outputs[0]);
 
-            $this->formatterManager->setFormattersParameterIfExists('output_path', $outputPath);
-            $this->formatterManager->setFormattersParameterIfExists('decorated', $decorated);
+            $this->outputManager->setFormattersParameterIfExists('output_path', $outputPath);
+            $this->outputManager->setFormattersParameterIfExists('decorated', $decorated);
 
             return;
         }
@@ -229,8 +229,8 @@ class FormatProcessor implements ProcessorInterface
 
             $outputPath = $this->locateOutputPath($out);
             if (isset($formats[$i])) {
-                $this->formatterManager->setFormatterParameter($formats[$i], 'output_path', $outputPath);
-                $this->formatterManager->setFormatterParameter($formats[$i], 'decorated', $decorated);
+                $this->outputManager->setFormatterParameter($formats[$i], 'output_path', $outputPath);
+                $this->outputManager->setFormatterParameter($formats[$i], 'decorated', $decorated);
             }
         }
     }

@@ -27,25 +27,22 @@ class AppendSnippetsProcessor implements ProcessorInterface
     /**
      * @var AppendContextSnippets
      */
-    private $contextSnippetsAppender;
+    private $useCase;
     /**
      * @var OutputManager
      */
-    private $formatterManager;
+    private $outputManager;
 
     /**
      * Initializes processor.
      *
-     * @param \Behat\Behat\Snippet\UseCase\AppendContextSnippets $contextSnippetsAppender
-     * @param OutputManager        $formatterManager
+     * @param AppendContextSnippets $useCase
+     * @param OutputManager         $outputManager
      */
-    public function __construct(
-        AppendContextSnippets $contextSnippetsAppender,
-        OutputManager $formatterManager
-    )
+    public function __construct(AppendContextSnippets $useCase, OutputManager $outputManager)
     {
-        $this->contextSnippetsAppender = $contextSnippetsAppender;
-        $this->formatterManager = $formatterManager;
+        $this->useCase = $useCase;
+        $this->outputManager = $outputManager;
     }
 
     /**
@@ -63,7 +60,7 @@ class AppendSnippetsProcessor implements ProcessorInterface
     /**
      * Processes data from console input.
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     public function process(InputInterface $input, OutputInterface $output)
@@ -72,8 +69,8 @@ class AppendSnippetsProcessor implements ProcessorInterface
             return;
         }
 
-        $this->contextSnippetsAppender->enable();
-        $this->formatterManager->setFormattersParameterIfExists('snippets', false);
+        $this->useCase->enable();
+        $this->outputManager->setFormattersParameterIfExists('snippets', false);
     }
 
     /**

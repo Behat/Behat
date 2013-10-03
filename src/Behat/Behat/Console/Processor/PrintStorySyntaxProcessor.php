@@ -20,21 +20,21 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StorySyntaxPrinterProcessor implements ProcessorInterface
+class PrintStorySyntaxProcessor implements ProcessorInterface
 {
     /**
-     * @var \Behat\Behat\Gherkin\UseCase\PrintSyntax
+     * @var PrintSyntax
      */
-    private $syntaxPrinter;
+    private $useCase;
 
     /**
      * Constructs processor.
      *
-     * @param PrintSyntax $syntaxPrinter
+     * @param PrintSyntax $useCase
      */
-    public function __construct(PrintSyntax $syntaxPrinter)
+    public function __construct(PrintSyntax $useCase)
     {
-        $this->syntaxPrinter = $syntaxPrinter;
+        $this->useCase = $useCase;
     }
 
     /**
@@ -65,7 +65,7 @@ class StorySyntaxPrinterProcessor implements ProcessorInterface
             return null;
         }
 
-        $this->syntaxPrinter->printSyntax($output, $input->getOption('lang') ? : 'en');
+        $this->useCase->printSyntax($output, $input->getOption('lang') ? : 'en');
 
         return 0;
     }

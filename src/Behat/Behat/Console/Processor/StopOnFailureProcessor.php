@@ -25,16 +25,16 @@ class StopOnFailureProcessor implements ProcessorInterface
     /**
      * @var StopOnFirstFailure
      */
-    private $onFailureStopper;
+    private $useCase;
 
     /**
      * Initializes processor.
      *
-     * @param \Behat\Behat\RunControl\UseCase\StopOnFirstFailure $onFailureStopper
+     * @param StopOnFirstFailure $useCase
      */
-    public function __construct(StopOnFirstFailure $onFailureStopper)
+    public function __construct(StopOnFirstFailure $useCase)
     {
-        $this->onFailureStopper = $onFailureStopper;
+        $this->useCase = $useCase;
     }
 
     /**
@@ -57,9 +57,11 @@ class StopOnFailureProcessor implements ProcessorInterface
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('stop-on-failure')) {
-            $this->onFailureStopper->enable();
+        if (!$input->getOption('stop-on-failure')) {
+            return;
         }
+
+        $this->useCase->enable();
     }
 
     /**

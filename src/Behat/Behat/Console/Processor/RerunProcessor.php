@@ -23,18 +23,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RerunProcessor implements ProcessorInterface
 {
     /**
-     * @var \Behat\Behat\RunControl\UseCase\CacheFailedScenariosForRerun
+     * @var CacheFailedScenariosForRerun
      */
-    private $cache;
+    private $useCase;
 
     /**
      * Initializes processor.
      *
-     * @param CacheFailedScenariosForRerun $cache
+     * @param CacheFailedScenariosForRerun $useCase
      */
-    public function __construct(CacheFailedScenariosForRerun $cache)
+    public function __construct(CacheFailedScenariosForRerun $useCase)
     {
-        $this->cache = $cache;
+        $this->useCase = $useCase;
     }
 
     /**
@@ -57,7 +57,7 @@ class RerunProcessor implements ProcessorInterface
      */
     public function process(InputInterface $input, OutputInterface $output)
     {
-        $this->cache->setKey(md5(
+        $this->useCase->setKey(md5(
             $input->getParameterOption(array('--profile', '-p')) .
             $input->getOption('suite') .
             implode(' ', $input->getOption('name')) .
@@ -69,11 +69,11 @@ class RerunProcessor implements ProcessorInterface
         if (!$input->getOption('rerun')) {
             return;
         }
-        if (!$this->cache->getFileName() || !file_exists($this->cache->getFileName())) {
+        if (!$this->useCase->getFileName() || !file_exists($this->useCase->getFileName())) {
             return;
         }
 
-        $input->setArgument('features', $this->cache->getFileName());
+        $input->setArgument('features', $this->useCase->getFileName());
     }
 
     /**

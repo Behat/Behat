@@ -24,27 +24,24 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionsPrinterProcessor extends DispatchingService implements ProcessorInterface
+class PrintDefinitionsProcessor extends DispatchingService implements ProcessorInterface
 {
     /**
-     * @var \Behat\Behat\Definition\UseCase\PrintDefinitions
+     * @var PrintDefinitions
      */
-    private $definitionsPrinter;
+    private $useCase;
 
     /**
      * Initializes processor.
      *
      * @param EventDispatcherInterface $eventDispatcher
-     * @param PrintDefinitions       $definitionsPrinter
+     * @param PrintDefinitions         $useCase
      */
-    public function __construct(
-        EventDispatcherInterface $eventDispatcher,
-        PrintDefinitions $definitionsPrinter
-    )
+    public function __construct(EventDispatcherInterface $eventDispatcher, PrintDefinitions $useCase)
     {
         parent::__construct($eventDispatcher);
 
-        $this->definitionsPrinter = $definitionsPrinter;
+        $this->useCase = $useCase;
     }
 
     /**
@@ -87,7 +84,7 @@ class DefinitionsPrinterProcessor extends DispatchingService implements Processo
             $suites = $suitesProvider->getSuites();
         }
 
-        $this->definitionsPrinter->printDefinitions($output, $suites, $input->getOption('lang') ? : 'en', $type);
+        $this->useCase->printDefinitions($output, $suites, $input->getOption('lang') ? : 'en', $type);
 
         return 0;
     }

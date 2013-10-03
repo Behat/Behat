@@ -75,12 +75,12 @@ class Services
         $definition->addTag('console.processor');
         $container->setDefinition('console.processor.append_snippets', $definition);
 
-        $definition = new Definition('Behat\Behat\Console\Processor\DefinitionsPrinterProcessor', array(
+        $definition = new Definition('Behat\Behat\Console\Processor\PrintDefinitionsProcessor', array(
             new Reference('event_dispatcher'),
             new Reference('definition.use_case.print_definitions')
         ));
         $definition->addTag('console.processor');
-        $container->setDefinition('console.processor.definitions_printer', $definition);
+        $container->setDefinition('console.processor.print_definitions', $definition);
 
         $definition = new Definition('Behat\Behat\Console\Processor\RerunProcessor', array(
             new Reference('run_control.use_case.cache_failed_scenarios_for_rerun')
@@ -124,11 +124,11 @@ class Services
         $definition->addTag('console.processor');
         $container->setDefinition('console.processor.stop_on_failure', $definition);
 
-        $definition = new Definition('Behat\Behat\Console\Processor\StorySyntaxPrinterProcessor', array(
+        $definition = new Definition('Behat\Behat\Console\Processor\PrintStorySyntaxProcessor', array(
             new Reference('gherkin.use_case.print_syntax')
         ));
         $definition->addTag('console.processor');
-        $container->setDefinition('console.processor.story_syntax_printer', $definition);
+        $container->setDefinition('console.processor.print_story_syntax', $definition);
     }
 
     private function registerCalleeServices(ContainerBuilder $container)
