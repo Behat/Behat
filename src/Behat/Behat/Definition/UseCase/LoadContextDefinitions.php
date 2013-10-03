@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Context\UseCase;
+namespace Behat\Behat\Definition\UseCase;
 
 /*
  * This file is part of the Behat.

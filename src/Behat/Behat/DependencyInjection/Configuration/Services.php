@@ -161,10 +161,6 @@ class Services
         $definition->addTag('event_subscriber');
         $container->setDefinition('context.use_case.load_context_hooks', $definition);
 
-        $definition = new Definition('Behat\Behat\Context\UseCase\LoadContextDefinitions', array($readerRef));
-        $definition->addTag('event_subscriber');
-        $container->setDefinition('context.use_case.load_context_definitions', $definition);
-
         $definition = new Definition('Behat\Behat\Context\UseCase\LoadContextTransformations', array($readerRef));
         $definition->addTag('event_subscriber');
         $container->setDefinition('context.use_case.load_context_transformations', $definition);
@@ -175,10 +171,6 @@ class Services
         $definition = new Definition('Behat\Behat\Context\Loader\AnnotatedContextLoader');
         $definition->addTag('context.loader');
         $container->setDefinition('context.loader.annotated', $definition);
-
-        $definition = new Definition('Behat\Behat\Context\Loader\Annotation\DefinitionAnnotationReader');
-        $definition->addTag('context.annotation_reader');
-        $container->setDefinition('context.annotation_reader.definition', $definition);
 
         $definition = new Definition('Behat\Behat\Context\Loader\Annotation\TransformationAnnotationReader');
         $definition->addTag('context.annotation_reader');
@@ -201,6 +193,7 @@ class Services
     {
         $eventDispatcherRef = new Reference('event_dispatcher');
         $translatorRef = new Reference('translator');
+        $readerRef = new Reference('context.callees_reader');
 
         $definition = new Definition('Behat\Behat\Definition\UseCase\FindDefinition', array(
             $eventDispatcherRef,
@@ -214,6 +207,14 @@ class Services
             $translatorRef
         ));
         $container->setDefinition('definition.use_case.print_definitions', $definition);
+
+        $definition = new Definition('Behat\Behat\Definition\Context\DefinitionAnnotationReader');
+        $definition->addTag('context.annotation_reader');
+        $container->setDefinition('context.annotation_reader.definition', $definition);
+
+        $definition = new Definition('Behat\Behat\Definition\UseCase\LoadContextDefinitions', array($readerRef));
+        $definition->addTag('event_subscriber');
+        $container->setDefinition('definition.use_case.load_context_definitions', $definition);
     }
 
     private function registerFeaturesServices(ContainerBuilder $container)
