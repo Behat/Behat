@@ -157,10 +157,6 @@ class Services
         $definition = new Definition('Behat\Behat\Context\UseCase\GenerateContextClass');
         $container->setDefinition('context.use_case.generate_context_class', $definition);
 
-        $definition = new Definition('Behat\Behat\Context\UseCase\LoadContextHooks', array($readerRef));
-        $definition->addTag('event_subscriber');
-        $container->setDefinition('context.use_case.load_context_hooks', $definition);
-
         $definition = new Definition('Behat\Behat\Context\UseCase\LoadContextTransformations', array($readerRef));
         $definition->addTag('event_subscriber');
         $container->setDefinition('context.use_case.load_context_transformations', $definition);
@@ -175,10 +171,6 @@ class Services
         $definition = new Definition('Behat\Behat\Context\Loader\Annotation\TransformationAnnotationReader');
         $definition->addTag('context.annotation_reader');
         $container->setDefinition('context.annotation_reader.transformation', $definition);
-
-        $definition = new Definition('Behat\Behat\Context\Loader\Annotation\HookAnnotationReader');
-        $definition->addTag('context.annotation_reader');
-        $container->setDefinition('context.annotation_reader.hook', $definition);
 
         $definition = new Definition('Behat\Behat\Context\Loader\TranslatableContextLoader', array($translatorRef));
         $definition->addTag('context.loader');
@@ -350,10 +342,19 @@ class Services
     private function registerHookServices(ContainerBuilder $container)
     {
         $eventDispatcherRef = new Reference('event_dispatcher');
+        $readerRef = new Reference('context.callees_reader');
 
         $definition = new Definition('Behat\Behat\Hook\UseCase\DispatchHooks', array($eventDispatcherRef));
         $definition->addTag('event_subscriber');
         $container->setDefinition('hook.use_case.dispatch_hooks', $definition);
+
+        $definition = new Definition('Behat\Behat\Hook\UseCase\LoadContextHooks', array($readerRef));
+        $definition->addTag('event_subscriber');
+        $container->setDefinition('hook.use_case.load_context_hooks', $definition);
+
+        $definition = new Definition('Behat\Behat\Hook\Context\HookAnnotationReader');
+        $definition->addTag('context.annotation_reader');
+        $container->setDefinition('context.annotation_reader.hook', $definition);
     }
 
     private function registerSnippetServices(ContainerBuilder $container)
