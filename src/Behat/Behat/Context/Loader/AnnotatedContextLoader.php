@@ -108,7 +108,11 @@ class AnnotatedContextLoader implements LoaderInterface
                 }
 
                 foreach ($this->readers as $reader) {
-                    $callees = array_merge($callees, $reader->readAnnotation($method, $docLine, $description));
+                    if ($callee = $reader->readAnnotation($method, $docLine, $description)) {
+                        $callees[] = $callee;
+
+                        break;
+                    }
                 }
             }
         }

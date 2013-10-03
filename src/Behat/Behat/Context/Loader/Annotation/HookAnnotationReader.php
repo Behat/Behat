@@ -53,7 +53,7 @@ class HookAnnotationReader implements AnnotationReaderInterface
      * @param string           $docLine
      * @param string           $description
      *
-     * @return CalleeInterface[]
+     * @return null|CalleeInterface
      */
     public function readAnnotation(ReflectionMethod $method, $docLine, $description)
     {
@@ -62,7 +62,7 @@ class HookAnnotationReader implements AnnotationReaderInterface
             $class = self::$classes[$type];
             $callable = array($method->getDeclaringClass()->getName(), $method->getName());
 
-            return array(new $class($callable, $description));
+            return new $class($callable, $description);
         }
 
         if (preg_match(self::$filterableRegex, $docLine, $match)) {
@@ -71,9 +71,9 @@ class HookAnnotationReader implements AnnotationReaderInterface
             $pattern = isset($match[2]) ? $match[2] : null;
             $callable = array($method->getDeclaringClass()->getName(), $method->getName());
 
-            return array(new $class($pattern, $callable, $description));
+            return new $class($pattern, $callable, $description);
         }
 
-        return array();
+        return null;
     }
 }

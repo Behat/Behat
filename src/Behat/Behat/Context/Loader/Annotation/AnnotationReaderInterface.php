@@ -26,7 +26,7 @@ interface AnnotationReaderInterface
      * @param string           $docLine
      * @param string           $description
      *
-     * @return CalleeInterface[]
+     * @return null|CalleeInterface
      */
     public function readAnnotation(ReflectionMethod $method, $docLine, $description);
 }

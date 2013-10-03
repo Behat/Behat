@@ -39,19 +39,19 @@ class DefinitionAnnotationReader implements AnnotationReaderInterface
      * @param string           $docLine
      * @param string           $description
      *
-     * @return CalleeInterface[]
+     * @return null|CalleeInterface
      */
     public function readAnnotation(ReflectionMethod $method, $docLine, $description)
     {
-        if (preg_match(self::$regex, $docLine, $match)) {
-            $type = strtolower($match[1]);
-            $class = self::$classes[$type];
-            $pattern = $match[2];
-            $callable = array($method->getDeclaringClass()->getName(), $method->getName());
-
-            return array(new $class($pattern, $callable, $description));
+        if (!preg_match(self::$regex, $docLine, $match)) {
+            return null;
         }
 
-        return array();
+        $type = strtolower($match[1]);
+        $class = self::$classes[$type];
+        $pattern = $match[2];
+        $callable = array($method->getDeclaringClass()->getName(), $method->getName());
+
+        return new $class($pattern, $callable, $description);
     }
 }
