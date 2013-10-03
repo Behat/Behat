@@ -94,6 +94,9 @@ class AnnotatedContextLoader implements LoaderInterface
             foreach (explode("\n", $docBlock) as $docLine) {
                 $docLine = preg_replace('/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/', '', $docLine);
 
+                if ('' == $docLine) {
+                    continue;
+                }
                 if ('' !== $docLine && '@' !== substr($docLine, 0, 1)) {
                     $description = $docLine;
 
