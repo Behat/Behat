@@ -14,7 +14,7 @@ use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExerciseEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Exception\PendingException;
-use Behat\Behat\Snippet\Repository\ContextSnippetRepository;
+use Behat\Behat\Snippet\RepositoryInterface as SnippetRepositoryInterface;
 use Behat\Behat\RunControl\UseCase\CollectStatistics;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ExampleNode;
@@ -122,7 +122,7 @@ class ProgressFormatter extends CliFormatter
         $this->printFailedSteps($this->getStatisticsCollector());
         $this->printPendingSteps($this->getStatisticsCollector());
         $this->printSummary($this->getStatisticsCollector());
-        $this->printUndefinedStepsSnippets($this->getSnippetsCollector());
+        $this->printUndefinedStepsSnippets($this->getSnippetsRepository());
     }
 
     /**
@@ -332,9 +332,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints undefined steps snippets.
      *
-     * @param \Behat\Behat\Snippet\Repository\ContextSnippetRepository $snippets
+     * @param SnippetRepositoryInterface $snippets
      */
-    protected function printUndefinedStepsSnippets(ContextSnippetRepository $snippets)
+    protected function printUndefinedStepsSnippets(SnippetRepositoryInterface $snippets)
     {
         if ($this->getParameter('snippets') && $snippets->hasSnippets()) {
             $header = $this->translate('proposal_title');
@@ -346,9 +346,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints steps snippets.
      *
-     * @param ContextSnippetRepository $snippets
+     * @param SnippetRepositoryInterface $snippets
      */
-    protected function printSnippets(ContextSnippetRepository $snippets)
+    protected function printSnippets(SnippetRepositoryInterface $snippets)
     {
         foreach ($snippets->getSnippets() as $snippet) {
             $snippetText = $snippet->getSnippet();

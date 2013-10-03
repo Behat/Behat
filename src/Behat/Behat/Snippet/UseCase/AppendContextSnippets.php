@@ -11,7 +11,7 @@ namespace Behat\Behat\Snippet\UseCase;
  */
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Snippet\ContextSnippet;
-use Behat\Behat\Snippet\Repository\ContextSnippetRepository;
+use Behat\Behat\Snippet\RepositoryInterface;
 use ReflectionClass;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -28,9 +28,9 @@ class AppendContextSnippets implements EventSubscriberInterface
      */
     const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Exception\PendingException';
     /**
-     * @var ContextSnippetRepository
+     * @var RepositoryInterface
      */
-    private $snippets;
+    private $repository;
     /**
      * @var Boolean
      */
@@ -39,12 +39,12 @@ class AppendContextSnippets implements EventSubscriberInterface
     /**
      * Initializes appender.
      *
-     * @param \Behat\Behat\Snippet\Repository\ContextSnippetRepository $snippets
-     * @param Boolean           $enabled
+     * @param RepositoryInterface $repository
+     * @param Boolean             $enabled
      */
-    public function __construct(\Behat\Behat\Snippet\Repository\ContextSnippetRepository $snippets, $enabled = false)
+    public function __construct(RepositoryInterface $repository, $enabled = false)
     {
-        $this->snippets = $snippets;
+        $this->repository = $repository;
         $this->enabled = (bool)$enabled;
     }
 
@@ -77,7 +77,7 @@ class AppendContextSnippets implements EventSubscriberInterface
             return;
         }
 
-        foreach ($this->snippets->getSnippets() as $snippet) {
+        foreach ($this->repository->getSnippets() as $snippet) {
             if (!$snippet instanceof ContextSnippet) {
                 continue;
             }

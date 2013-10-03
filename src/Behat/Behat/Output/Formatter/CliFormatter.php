@@ -11,7 +11,7 @@ namespace Behat\Behat\Output\Formatter;
  */
 use Behat\Behat\Console\Formatter\OutputFormatter;
 use Behat\Behat\Event\StepEvent;
-use Behat\Behat\Snippet\Repository\ContextSnippetRepository;
+use Behat\Behat\Snippet\RepositoryInterface as SnippetRepositoryInterface;
 use Behat\Behat\RunControl\UseCase\CollectStatistics;
 use Exception;
 use InvalidArgumentException;
@@ -43,7 +43,7 @@ abstract class CliFormatter implements FormatterInterface
      */
     public function __construct(
         CollectStatistics $statistics,
-        ContextSnippetRepository $snippets,
+        SnippetRepositoryInterface $snippets,
         TranslatorInterface $translator
     )
     {
@@ -128,9 +128,9 @@ abstract class CliFormatter implements FormatterInterface
     /**
      * Returns exercise snippets collector.
      *
-     * @return \Behat\Behat\Snippet\Repository\ContextSnippetRepository
+     * @return SnippetRepositoryInterface
      */
-    protected function getSnippetsCollector()
+    protected function getSnippetsRepository()
     {
         return $this->snippets;
     }

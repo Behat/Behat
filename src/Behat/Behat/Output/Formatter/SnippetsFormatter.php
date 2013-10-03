@@ -62,6 +62,6 @@ class SnippetsFormatter extends ProgressFormatter
     public function afterExercise(ExerciseEvent $event)
     {
         $this->writeln();
-        $this->printSnippets($this->getSnippetsCollector());
+        $this->printSnippets($this->getSnippetsRepository());
     }
 }

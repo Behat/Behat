@@ -12,7 +12,7 @@ use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Exception\UndefinedException;
 use Behat\Behat\Hook\Event\HookEvent;
-use Behat\Behat\Snippet\Repository\ContextSnippetRepository;
+use Behat\Behat\Snippet\RepositoryInterface as SnippetRepositoryInterface;
 use Behat\Behat\RunControl\UseCase\CollectStatistics;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ExampleNode;
@@ -321,7 +321,7 @@ class PrettyFormatter extends CliFormatter
     public function printExerciseStats()
     {
         $this->printSummary($this->getStatisticsCollector());
-        $this->printUndefinedStepsSnippets($this->getSnippetsCollector());
+        $this->printUndefinedStepsSnippets($this->getSnippetsRepository());
     }
 
     /**
@@ -610,7 +610,7 @@ class PrettyFormatter extends CliFormatter
         $this->writeln($minutes . 'm' . $seconds . 's');
     }
 
-    protected function printUndefinedStepsSnippets(ContextSnippetRepository $snippets)
+    protected function printUndefinedStepsSnippets(SnippetRepositoryInterface $snippets)
     {
         if (!$this->getParameter('snippets') || !$snippets->hasSnippets()) {
             return;
