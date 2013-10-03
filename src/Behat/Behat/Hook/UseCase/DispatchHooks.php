@@ -66,7 +66,7 @@ class DispatchHooks extends DispatchingService implements EventSubscriberInterfa
             $execution = new ExecuteCalleeEvent($suite, $contexts, $hook, array($event));
 
             try {
-                $this->dispatch(EventInterface::EXECUTE_HOOK, $execution);
+                $this->dispatch(EventInterface::EXECUTE_CALLEE, $execution);
             } catch (Exception $e) {
                 $hookEvent = new HookEvent($event, $hook, $execution->getStdOut(), $e);
                 $this->dispatch(EventInterface::AFTER_HOOK, $hookEvent);

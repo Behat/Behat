@@ -9,12 +9,11 @@ namespace Behat\Behat\Console\Processor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Context\Generator\GeneratorInterface;
+use Behat\Behat\Context\UseCase\GenerateContextClass;
 use Behat\Behat\Event\EventInterface;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Suite\Event\SuitesCarrierEvent;
 use Behat\Behat\Suite\GherkinSuite;
-use Behat\Behat\Suite\SuiteInterface;
 use RuntimeException;
 use Symfony\Component\ClassLoader\ClassLoader;
 use Symfony\Component\Console\Command\Command;
@@ -31,6 +30,10 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class InitProcessor extends DispatchingService implements ProcessorInterface
 {
     /**
+     * @var GenerateContextClass
+     */
+    private $contextGenerator;
+    /**
      * @var ClassLoader
      */
     private $autoloader;
@@ -38,38 +41,27 @@ class InitProcessor extends DispatchingService implements ProcessorInterface
      * @var string
      */
     private $basePath;
-    /**
-     * @var GeneratorInterface[]
-     */
-    private $generators = array();
 
     /**
      * Initializes processor.
      *
      * @param EventDispatcherInterface $eventDispatcher
+     * @param GenerateContextClass     $contextGenerator
      * @param ClassLoader              $autoloader
      * @param string                   $basePath
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, ClassLoader $autoloader, $basePath)
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        GenerateContextClass $contextGenerator,
+        ClassLoader $autoloader,
+        $basePath
+    )
     {
         parent::__construct($eventDispatcher);
 
+        $this->contextGenerator = $contextGenerator;
         $this->autoloader = $autoloader;
         $this->basePath = $basePath;
-    }
-
-    /**
-     * Registers context generator.
-     *
-     * @param GeneratorInterface $generator
-     */
-    public function registerGenerator(GeneratorInterface $generator)
-    {
-        $this->generators[] = $generator;
-
-        usort($this->generators, function (GeneratorInterface $generator1, GeneratorInterface $generator2) {
-            return $generator2->getPriority() - $generator1->getPriority();
-        });
     }
 
     /**
@@ -126,7 +118,7 @@ class InitProcessor extends DispatchingService implements ProcessorInterface
                     mkdir(dirname($path), 0777, true);
                 }
 
-                file_put_contents($path, $this->generateContextClass($suite, $classname));
+                file_put_contents($path, $this->contextGenerator->generateContextClass($suite, $classname));
 
                 $output->writeln(
                     '<info>+f</info> ' .
@@ -147,31 +139,6 @@ class InitProcessor extends DispatchingService implements ProcessorInterface
     public function getPriority()
     {
         return 80;
-    }
-
-    /**
-     * Returns feature context skelet.
-     *
-     * @param SuiteInterface $suite
-     * @param string         $classname
-     *
-     * @return string
-     *
-     * @throws RuntimeException If appropriate generator is not found
-     */
-    protected function generateContextClass(SuiteInterface $suite, $classname)
-    {
-        foreach ($this->generators as $generator) {
-            if ($generator->supports($suite, $classname)) {
-                return $generator->generate($suite, $classname);
-            }
-        }
-
-        throw new RuntimeException(sprintf(
-            'Could not find context generator for "%s" class of the "%s" suite.',
-            $classname,
-            $suite->getName()
-        ));
     }
 
     /**

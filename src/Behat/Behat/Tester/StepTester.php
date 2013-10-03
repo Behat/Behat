@@ -68,7 +68,7 @@ class StepTester extends DispatchingService
 
         try {
             $execution = $this->getExecutionEvent($suite, $contexts, $step);
-            !$skip && $this->dispatch(EventInterface::EXECUTE_DEFINITION, $execution);
+            !$skip && $this->dispatch(EventInterface::EXECUTE_CALLEE, $execution);
         } catch (PendingException $e) {
             $status = StepEvent::PENDING;
             $exception = $e;

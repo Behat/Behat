@@ -42,12 +42,7 @@ class ExecuteCallee implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            EventInterface::EXECUTE_HOOK           => array('executeCallee', 0),
-            EventInterface::EXECUTE_DEFINITION     => array('executeCallee', 0),
-            EventInterface::EXECUTE_TRANSFORMATION => array('executeCallee', 0),
-            EventInterface::EXECUTE_CALLEE         => array('executeCallee', 0),
-        );
+        return array(EventInterface::EXECUTE_CALLEE => array('executeCallee', 0));
     }
 
     /**

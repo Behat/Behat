@@ -112,6 +112,7 @@ class Services
 
         $definition = new Definition('Behat\Behat\Console\Processor\InitProcessor', array(
             new Reference('event_dispatcher'),
+            new Reference('context.use_case.generate_context_class'),
             new Reference('class_loader'),
             '%paths.base%'
         ));
@@ -152,6 +153,9 @@ class Services
         $definition = new Definition('Behat\Behat\Context\UseCase\InitializeContextPool');
         $definition->addTag('event_subscriber');
         $container->setDefinition('context.use_case.initialize_context_pool', $definition);
+
+        $definition = new Definition('Behat\Behat\Context\UseCase\GenerateContextClass');
+        $container->setDefinition('context.use_case.generate_context_class', $definition);
 
         $definition = new Definition('Behat\Behat\Context\UseCase\LoadContextHooks', array($readerRef));
         $definition->addTag('event_subscriber');

@@ -29,13 +29,13 @@ class ContextGeneratorsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $initDefinition = $container->getDefinition('console.processor.init');
+        $useCase = $container->getDefinition('context.use_case.generate_context_class');
 
         $calls = array();
         foreach ($container->findTaggedServiceIds('context.generator') as $id => $attributes) {
             $calls[] = array('registerGenerator', array(new Reference($id)));
         }
 
-        $initDefinition->setMethodCalls(array_merge($calls, $initDefinition->getMethodCalls()));
+        $useCase->setMethodCalls(array_merge($calls, $useCase->getMethodCalls()));
     }
 }

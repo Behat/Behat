@@ -37,11 +37,6 @@ interface EventInterface
      * Execution events
      */
     const EXECUTE_CALLEE = 'executeCallee';
-    const EXECUTE_DEFINITION = 'executeDefinition';
-    const EXECUTE_TRANSFORMATION = 'executeTransformation';
-    const EXECUTE_HOOK = 'executeHook';
-    const BEFORE_HOOK = 'beforeHook';
-    const AFTER_HOOK = 'afterHook';
     /**
      * Dictionary events
      */
@@ -75,6 +70,8 @@ interface EventInterface
     const AFTER_BACKGROUND = 'afterBackground';
     const BEFORE_STEP = 'beforeStep';
     const AFTER_STEP = 'afterStep';
+    const BEFORE_HOOK = 'beforeHook';
+    const AFTER_HOOK = 'afterHook';
     /**
      * Hookable events
      */

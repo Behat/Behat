@@ -9,7 +9,7 @@ namespace Behat\Behat\Output\Formatter;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Console\Formatter\OutputFormatter;
+use Behat\Behat\Output\Style\OutputFormatter;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Snippet\RepositoryInterface as SnippetRepositoryInterface;
 use Behat\Behat\RunControl\UseCase\CollectStatistics;

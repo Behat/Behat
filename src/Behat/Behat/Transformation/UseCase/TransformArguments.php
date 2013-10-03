@@ -54,16 +54,19 @@ class TransformArguments extends DispatchingService implements EventSubscriberIn
      */
     public static function getSubscribedEvents()
     {
-        return array(EventInterface::EXECUTE_DEFINITION => array('transformArguments', 50));
+        return array(EventInterface::EXECUTE_CALLEE => array('transformArguments', 50));
     }
 
     /**
      * Transforms definition execution arguments and sets them back to the event.
      *
-     * @param ExecuteDefinitionEvent $event
+     * @param ExecuteCalleeEvent $event
      */
-    public function transformArguments(ExecuteDefinitionEvent $event)
+    public function transformArguments(ExecuteCalleeEvent $event)
     {
+        if (!$event instanceof ExecuteDefinitionEvent) {
+            return;
+        }
         if (!$event->hasArguments()) {
             return;
         }
@@ -153,7 +156,7 @@ class TransformArguments extends DispatchingService implements EventSubscriberIn
     )
     {
         $execution = new ExecuteCalleeEvent($suite, $contexts, $transformation, $arguments);
-        $this->dispatch(EventInterface::EXECUTE_TRANSFORMATION, $execution);
+        $this->dispatch(EventInterface::EXECUTE_CALLEE, $execution);
 
         return $execution->getReturn();
     }
@@ -168,6 +171,6 @@ class TransformArguments extends DispatchingService implements EventSubscriberIn
     private function isPlaceholderTransformation(TransformationInterface $transformation)
     {
         return ':' === substr($transformation->getPattern(), 0, 1)
-            && preg_match('/^:\w+$/', $transformation->getPattern());
+        && preg_match('/^:\w+$/', $transformation->getPattern());
     }
 }

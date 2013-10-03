@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Console\Formatter;
+namespace Behat\Behat\Output\Style;
 
 /*
  * This file is part of the Behat.
