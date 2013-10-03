@@ -176,6 +176,18 @@ class Services
         $definition->addTag('context.loader');
         $container->setDefinition('context.loader.annotated', $definition);
 
+        $definition = new Definition('Behat\Behat\Context\Loader\Annotation\DefinitionAnnotationReader');
+        $definition->addTag('context.annotation_reader');
+        $container->setDefinition('context.annotation_reader.definition', $definition);
+
+        $definition = new Definition('Behat\Behat\Context\Loader\Annotation\TransformationAnnotationReader');
+        $definition->addTag('context.annotation_reader');
+        $container->setDefinition('context.annotation_reader.transformation', $definition);
+
+        $definition = new Definition('Behat\Behat\Context\Loader\Annotation\HookAnnotationReader');
+        $definition->addTag('context.annotation_reader');
+        $container->setDefinition('context.annotation_reader.hook', $definition);
+
         $definition = new Definition('Behat\Behat\Context\Loader\TranslatableContextLoader', array($translatorRef));
         $definition->addTag('context.loader');
         $container->setDefinition('context.loader.translatable', $definition);
