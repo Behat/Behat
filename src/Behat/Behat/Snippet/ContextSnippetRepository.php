@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Snippet\Repository;
+namespace Behat\Behat\Snippet;
 
 /*
  * This file is part of the Behat.

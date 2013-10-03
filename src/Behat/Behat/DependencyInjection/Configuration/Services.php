@@ -223,7 +223,7 @@ class Services
 
         $definition = new Definition('Behat\Behat\Output\Formatter\PrettyFormatter', array(
             new Reference('run_control.use_case.collect_statistics'),
-            new Reference('snippet.repository.context_snippet_repository'),
+            new Reference('snippet.context_snippet_repository'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -235,7 +235,7 @@ class Services
 
         $definition = new Definition('Behat\Behat\Output\Formatter\ProgressFormatter', array(
             new Reference('run_control.use_case.collect_statistics'),
-            new Reference('snippet.repository.context_snippet_repository'),
+            new Reference('snippet.context_snippet_repository'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -247,7 +247,7 @@ class Services
 
         $definition = new Definition('Behat\Behat\Output\Formatter\HtmlFormatter', array(
             new Reference('run_control.use_case.collect_statistics'),
-            new Reference('snippet.repository.context_snippet_repository'),
+            new Reference('snippet.context_snippet_repository'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -259,7 +259,7 @@ class Services
 
         $definition = new Definition('Behat\Behat\Output\Formatter\JunitFormatter', array(
             new Reference('run_control.use_case.collect_statistics'),
-            new Reference('snippet.repository.context_snippet_repository'),
+            new Reference('snippet.context_snippet_repository'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -271,7 +271,7 @@ class Services
 
         $definition = new Definition('Behat\Behat\Output\Formatter\FailedScenariosFormatter', array(
             new Reference('run_control.use_case.collect_statistics'),
-            new Reference('snippet.repository.context_snippet_repository'),
+            new Reference('snippet.context_snippet_repository'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -283,7 +283,7 @@ class Services
 
         $definition = new Definition('Behat\Behat\Output\Formatter\SnippetsFormatter', array(
             new Reference('run_control.use_case.collect_statistics'),
-            new Reference('snippet.repository.context_snippet_repository'),
+            new Reference('snippet.context_snippet_repository'),
             new Reference('translator')
         ));
         $definition->addMethodCall('setParameter', array(
@@ -341,7 +341,7 @@ class Services
 
     private function registerSnippetServices(ContainerBuilder $container)
     {
-        $snippetsRepositoryRef = new Reference('snippet.repository.context_snippet_repository');
+        $snippetsRepositoryRef = new Reference('snippet.context_snippet_repository');
 
         $definition = new Definition('Behat\Behat\Snippet\UseCase\CreateSnippet', array(
             $snippetsRepositoryRef
@@ -357,8 +357,8 @@ class Services
         $definition->addTag('snippet.generator');
         $container->setDefinition('snippet.generator.context_regex', $definition);
 
-        $definition = new Definition('Behat\Behat\Snippet\Repository\ContextSnippetRepository');
-        $container->setDefinition('snippet.repository.context_snippet_repository', $definition);
+        $definition = new Definition('Behat\Behat\Snippet\ContextSnippetRepository');
+        $container->setDefinition('snippet.context_snippet_repository', $definition);
 
         $definition = new Definition('Behat\Behat\Snippet\UseCase\AppendContextSnippets', array(
             $snippetsRepositoryRef,
