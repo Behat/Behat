@@ -11,7 +11,7 @@ namespace Behat\Behat\Context\Reader;
  */
 use Behat\Behat\Callee\CalleeInterface;
 use Behat\Behat\Context\Pool\ContextPoolInterface;
-use Behat\Behat\Context\Reader\Loader\LoaderInterface;
+use Behat\Behat\Context\Loader\LoaderInterface;
 use Behat\Behat\Suite\SuiteInterface;
 
 /**

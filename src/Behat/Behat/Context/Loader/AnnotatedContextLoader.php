@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Context\Reader\Loader;
+namespace Behat\Behat\Context\Loader;
 
 /*
  * This file is part of the Behat.
@@ -10,6 +10,7 @@ namespace Behat\Behat\Context\Reader\Loader;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Callee\CalleeInterface;
+use Behat\Behat\Context\Loader\LoaderInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use ReflectionClass;
 use ReflectionException;

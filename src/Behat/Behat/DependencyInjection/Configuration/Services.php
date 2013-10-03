@@ -172,11 +172,11 @@ class Services
         $definition = new Definition('Behat\Behat\Context\Reader\CachedReader');
         $container->setDefinition('context.callees_reader', $definition);
 
-        $definition = new Definition('Behat\Behat\Context\Reader\Loader\AnnotatedContextLoader');
+        $definition = new Definition('Behat\Behat\Context\Loader\AnnotatedContextLoader');
         $definition->addTag('context.loader');
         $container->setDefinition('context.loader.annotated', $definition);
 
-        $definition = new Definition('Behat\Behat\Context\Reader\Loader\TranslatableContextLoader', array($translatorRef));
+        $definition = new Definition('Behat\Behat\Context\Loader\TranslatableContextLoader', array($translatorRef));
         $definition->addTag('context.loader');
         $container->setDefinition('context.loader.translatable', $definition);
 
