@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Context\Loader\Annotation;
+namespace Behat\Behat\Transformation\Context;
 
 /*
  * This file is part of the Behat.
@@ -10,6 +10,7 @@ namespace Behat\Behat\Context\Loader\Annotation;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Callee\CalleeInterface;
+use Behat\Behat\Context\Loader\AnnotationReaderInterface;
 use Behat\Behat\Transformation\Callee\Transformation;
 use ReflectionMethod;
 

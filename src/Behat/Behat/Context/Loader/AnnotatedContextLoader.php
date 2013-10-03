@@ -10,7 +10,6 @@ namespace Behat\Behat\Context\Loader;
  * file that was distributed with this source code.
  */
 use Behat\Behat\Callee\CalleeInterface;
-use Behat\Behat\Context\Loader\Annotation\AnnotationReaderInterface;
 use Behat\Behat\Context\Loader\LoaderInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use ReflectionClass;

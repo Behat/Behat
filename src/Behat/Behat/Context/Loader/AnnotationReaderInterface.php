@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Context\Loader\Annotation;
+namespace Behat\Behat\Context\Loader;
 
 /*
  * This file is part of the Behat.

@@ -38,7 +38,7 @@ class Services
         $this->registerHookServices($container);
         $this->registerSnippetServices($container);
         $this->registerSuiteServices($container);
-        $this->registerTransformerServices($container);
+        $this->registerTransformationServices($container);
         $this->registerRunControlServices($container);
         $this->registerTesterServices($container);
         $this->registerClassLoader($container);
@@ -157,20 +157,12 @@ class Services
         $definition = new Definition('Behat\Behat\Context\UseCase\GenerateContextClass');
         $container->setDefinition('context.use_case.generate_context_class', $definition);
 
-        $definition = new Definition('Behat\Behat\Context\UseCase\LoadContextTransformations', array($readerRef));
-        $definition->addTag('event_subscriber');
-        $container->setDefinition('context.use_case.load_context_transformations', $definition);
-
         $definition = new Definition('Behat\Behat\Context\Reader\CachedReader');
         $container->setDefinition('context.callees_reader', $definition);
 
         $definition = new Definition('Behat\Behat\Context\Loader\AnnotatedContextLoader');
         $definition->addTag('context.loader');
         $container->setDefinition('context.loader.annotated', $definition);
-
-        $definition = new Definition('Behat\Behat\Context\Loader\Annotation\TransformationAnnotationReader');
-        $definition->addTag('context.annotation_reader');
-        $container->setDefinition('context.annotation_reader.transformation', $definition);
 
         $definition = new Definition('Behat\Behat\Context\Loader\TranslatableContextLoader', array($translatorRef));
         $definition->addTag('context.loader');
@@ -405,14 +397,24 @@ class Services
         $container->setDefinition('suite.generator.gherkin', $definition);
     }
 
-    private function registerTransformerServices(ContainerBuilder $container)
+    private function registerTransformationServices(ContainerBuilder $container)
     {
+        $readerRef = new Reference('context.callees_reader');
+
         $definition = new Definition('Behat\Behat\Transformation\UseCase\TransformArguments', array(
             new Reference('event_dispatcher'),
             new Reference('translator')
         ));
         $definition->addTag('event_subscriber');
         $container->setDefinition('transformer.use_case.transform_arguments', $definition);
+
+        $definition = new Definition('Behat\Behat\Transformation\UseCase\LoadContextTransformations', array($readerRef));
+        $definition->addTag('event_subscriber');
+        $container->setDefinition('transformations.use_case.load_context_transformations', $definition);
+
+        $definition = new Definition('Behat\Behat\Transformation\Context\TransformationAnnotationReader');
+        $definition->addTag('context.annotation_reader');
+        $container->setDefinition('context.annotation_reader.transformation', $definition);
     }
 
     private function registerRunControlServices(ContainerBuilder $container)
