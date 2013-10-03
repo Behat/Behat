@@ -15,7 +15,7 @@ namespace Behat\Behat\Snippet;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextSnippet implements ContextSnippetInterface
+class ContextSnippet implements SnippetInterface
 {
     /**
      * @var string
@@ -82,5 +82,20 @@ class ContextSnippet implements ContextSnippetInterface
     public function setContextClasses(array $contextClasses)
     {
         $this->contextClasses = $contextClasses;
+    }
+
+    /**
+     * Merges provided snippet into current one.
+     *
+     * @param SnippetInterface $snippet
+     */
+    public function merge(SnippetInterface $snippet)
+    {
+        if (!$snippet instanceof ContextSnippet) {
+            return;
+        }
+
+        $classes = array_merge($this->getContextClasses(), $snippet->getContextClasses());
+        $this->setContextClasses(array_unique($classes));
     }
 }

@@ -12,7 +12,7 @@ use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Exception\UndefinedException;
 use Behat\Behat\Hook\Event\HookEvent;
-use Behat\Behat\Snippet\UseCase\CollectSnippets;
+use Behat\Behat\Snippet\Repository\ContextSnippetRepository;
 use Behat\Behat\RunControl\UseCase\CollectStatistics;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ExampleNode;
@@ -610,7 +610,7 @@ class PrettyFormatter extends CliFormatter
         $this->writeln($minutes . 'm' . $seconds . 's');
     }
 
-    protected function printUndefinedStepsSnippets(CollectSnippets $snippets)
+    protected function printUndefinedStepsSnippets(ContextSnippetRepository $snippets)
     {
         if (!$this->getParameter('snippets') || !$snippets->hasSnippets()) {
             return;
@@ -627,7 +627,7 @@ class PrettyFormatter extends CliFormatter
                     '', mb_strlen($snippetText, 'utf8') - mb_strlen(ltrim($snippetText), 'utf8'), ' '
                 );
                 $this->writeln("{+undefined}$indent/**{-undefined}");
-                foreach ($snippets->getStepsThatNeed($snippet) as $step) {
+                foreach ($snippets->getStepsThatNeedSnippet($snippet) as $step) {
                     $this->writeln(sprintf(
                         '{+undefined}%s * %s %s # %s:%d{-undefined}', $indent,
                         $step->getType(), $step->getText(),

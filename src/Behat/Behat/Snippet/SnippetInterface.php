@@ -30,4 +30,11 @@ interface SnippetInterface
      * @return string
      */
     public function getSnippet();
+
+    /**
+     * Merges provided snippet into current one.
+     *
+     * @param SnippetInterface $snippet
+     */
+    public function merge(SnippetInterface $snippet);
 }

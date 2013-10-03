@@ -46,7 +46,6 @@ interface EventInterface
      * Dictionary events
      */
     const FIND_DEFINITION = 'findDefinition';
-    const CREATE_SNIPPET = 'createSnippet';
     /**
      * Tester creation events
      */

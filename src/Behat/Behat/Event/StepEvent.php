@@ -11,7 +11,6 @@ namespace Behat\Behat\Event;
  */
 use Behat\Behat\Context\Pool\ContextPoolInterface;
 use Behat\Behat\Definition\DefinitionInterface;
-use Behat\Behat\Snippet\SnippetInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Gherkin\Node\StepContainerInterface;
@@ -67,10 +66,6 @@ class StepEvent extends Event implements LifecycleEventInterface
      * @var null|Exception
      */
     private $exception;
-    /**
-     * @var null|SnippetInterface
-     */
-    private $snippet;
 
     /**
      * Initializes step event.
@@ -84,7 +79,6 @@ class StepEvent extends Event implements LifecycleEventInterface
      * @param null|string              $stdOut
      * @param null|Exception           $exception
      * @param null|DefinitionInterface $definition
-     * @param null|SnippetInterface    $snippet
      */
     public function __construct(
         SuiteInterface $suite,
@@ -95,8 +89,7 @@ class StepEvent extends Event implements LifecycleEventInterface
         $status = null,
         $stdOut = null,
         Exception $exception = null,
-        DefinitionInterface $definition = null,
-        SnippetInterface $snippet = null
+        DefinitionInterface $definition = null
     )
     {
         $this->suite = $suite;
@@ -108,7 +101,6 @@ class StepEvent extends Event implements LifecycleEventInterface
         $this->stdOut = $stdOut;
         $this->definition = $definition;
         $this->exception = $exception;
-        $this->snippet = $snippet;
     }
 
     /**
@@ -239,25 +231,5 @@ class StepEvent extends Event implements LifecycleEventInterface
     public function getException()
     {
         return $this->exception;
-    }
-
-    /**
-     * Checks whether event contains snippet.
-     *
-     * @return Boolean
-     */
-    public function hasSnippet()
-    {
-        return null !== $this->snippet;
-    }
-
-    /**
-     * Returns step snippet.
-     *
-     * @return null|SnippetInterface
-     */
-    public function getSnippet()
-    {
-        return $this->snippet;
     }
 }

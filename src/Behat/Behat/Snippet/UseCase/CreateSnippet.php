@@ -9,9 +9,10 @@ namespace Behat\Behat\Snippet\UseCase;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Behat\Behat\Definition\Event\DefinitionCarrierEvent;
 use Behat\Behat\Event\EventInterface;
-use Behat\Behat\Snippet\Event\SnippetCarrierEvent;
 use Behat\Behat\Snippet\Generator\GeneratorInterface;
+use Behat\Behat\Snippet\RepositoryInterface;
 use Behat\Behat\Snippet\Util\Transliterator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -24,9 +25,23 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class CreateSnippet implements EventSubscriberInterface
 {
     /**
+     * @var RepositoryInterface
+     */
+    private $repository;
+    /**
      * @var GeneratorInterface[]
      */
     private $generators = array();
+
+    /**
+     * Initializes use case.
+     *
+     * @param RepositoryInterface $repository
+     */
+    public function __construct(RepositoryInterface $repository)
+    {
+        $this->repository = $repository;
+    }
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -35,7 +50,7 @@ class CreateSnippet implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(EventInterface::CREATE_SNIPPET => array('createSnippet', 0));
+        return array(EventInterface::FIND_DEFINITION => array('createSnippet', -999));
     }
 
     /**
@@ -51,14 +66,22 @@ class CreateSnippet implements EventSubscriberInterface
     /**
      * Generate snippet and set it to the event.
      *
-     * @param SnippetCarrierEvent $event
+     * @param DefinitionCarrierEvent $event
      */
-    public function createSnippet(SnippetCarrierEvent $event)
+    public function createSnippet(DefinitionCarrierEvent $event)
     {
+        if ($event->hasDefinition()) {
+            return;
+        }
+
+        $suite = $event->getSuite();
+        $contextPool = $event->getContextPool();
+        $step = $event->getStep();
+
         foreach ($this->generators as $generator) {
-            if ($generator->supports($event->getSuite(), $event->getContextPool(), $event->getStep())) {
-                $snippet = $generator->generate($event->getSuite(), $event->getContextPool(), $event->getStep());
-                $event->setSnippet($snippet);
+            if ($generator->supports($suite, $contextPool, $step)) {
+                $snippet = $generator->generate($suite, $contextPool, $step);
+                $this->repository->registerSnippet($step, $snippet);
 
                 return;
             }

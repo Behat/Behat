@@ -18,8 +18,6 @@ use Behat\Behat\Event\StepEvent;
 use Behat\Behat\EventDispatcher\DispatchingService;
 use Behat\Behat\Exception\PendingException;
 use Behat\Behat\Exception\UndefinedException;
-use Behat\Behat\Snippet\Event\SnippetCarrierEvent;
-use Behat\Behat\Snippet\SnippetInterface;
 use Behat\Behat\Suite\SuiteInterface;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Gherkin\Node\StepContainerInterface;
@@ -66,7 +64,7 @@ class StepTester extends DispatchingService
             $skip = true;
         }
 
-        $execution = $exception = $snippet = null;
+        $execution = $exception = null;
 
         try {
             $execution = $this->getExecutionEvent($suite, $contexts, $step);
@@ -77,7 +75,6 @@ class StepTester extends DispatchingService
         } catch (UndefinedException $e) {
             $status = StepEvent::UNDEFINED;
             $exception = $e;
-            $snippet = $this->getDefinitionSnippet($suite, $contexts, $step);
         } catch (Exception $e) {
             $status = StepEvent::FAILED;
             $exception = $e;
@@ -86,13 +83,13 @@ class StepTester extends DispatchingService
         $stdOut = $execution ? $execution->getStdOut() : null;
         $definition = $execution ? $execution->getCallee() : null;
 
-        $event = new StepEvent($suite, $contexts, $scenario, $container, $step, $status, $stdOut, $exception, $definition, $snippet);
+        $event = new StepEvent($suite, $contexts, $scenario, $container, $step, $status, $stdOut, $exception, $definition);
 
         try {
             !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_STEP, $event);
         } catch (Exception $e) {
             $status = StepEvent::FAILED;
-            $event = new StepEvent($suite, $contexts, $scenario, $container, $step, $status, $stdOut, $exception, $definition, $snippet);
+            $event = new StepEvent($suite, $contexts, $scenario, $container, $step, $status, $stdOut, $exception, $definition);
         }
 
         $this->dispatch(EventInterface::AFTER_STEP, $event);
@@ -128,26 +125,5 @@ class StepTester extends DispatchingService
         $arguments = $definitionProvider->getArguments();
 
         return new ExecuteDefinitionEvent($suite, $contexts, $step, $definition, $arguments);
-    }
-
-    /**
-     * Returns definition snippet.
-     *
-     * @param SuiteInterface       $suite
-     * @param ContextPoolInterface $contexts
-     * @param StepNode             $step
-     *
-     * @return SnippetInterface
-     */
-    protected function getDefinitionSnippet(
-        SuiteInterface $suite,
-        ContextPoolInterface $contexts,
-        StepNode $step
-    )
-    {
-        $snippetProvider = new SnippetCarrierEvent($suite, $contexts, $step);
-        $this->dispatch(EventInterface::CREATE_SNIPPET, $snippetProvider);
-
-        return $snippetProvider->getSnippet();
     }
 }

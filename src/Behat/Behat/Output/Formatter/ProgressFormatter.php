@@ -14,7 +14,7 @@ use Behat\Behat\Event\EventInterface;
 use Behat\Behat\Event\ExerciseEvent;
 use Behat\Behat\Event\StepEvent;
 use Behat\Behat\Exception\PendingException;
-use Behat\Behat\Snippet\UseCase\CollectSnippets;
+use Behat\Behat\Snippet\Repository\ContextSnippetRepository;
 use Behat\Behat\RunControl\UseCase\CollectStatistics;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\ExampleNode;
@@ -332,9 +332,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints undefined steps snippets.
      *
-     * @param \Behat\Behat\Snippet\UseCase\CollectSnippets $snippets
+     * @param \Behat\Behat\Snippet\Repository\ContextSnippetRepository $snippets
      */
-    protected function printUndefinedStepsSnippets(CollectSnippets $snippets)
+    protected function printUndefinedStepsSnippets(ContextSnippetRepository $snippets)
     {
         if ($this->getParameter('snippets') && $snippets->hasSnippets()) {
             $header = $this->translate('proposal_title');
@@ -346,9 +346,9 @@ class ProgressFormatter extends CliFormatter
     /**
      * Prints steps snippets.
      *
-     * @param CollectSnippets $snippets
+     * @param ContextSnippetRepository $snippets
      */
-    protected function printSnippets(CollectSnippets $snippets)
+    protected function printSnippets(ContextSnippetRepository $snippets)
     {
         foreach ($snippets->getSnippets() as $snippet) {
             $snippetText = $snippet->getSnippet();
@@ -358,7 +358,7 @@ class ProgressFormatter extends CliFormatter
                     '', mb_strlen($snippetText, 'utf8') - mb_strlen(ltrim($snippetText), 'utf8'), ' '
                 );
                 $this->writeln("{+undefined}$indent/**{-undefined}");
-                foreach ($snippets->getStepsThatNeed($snippet) as $step) {
+                foreach ($snippets->getStepsThatNeedSnippet($snippet) as $step) {
                     $this->writeln(sprintf(
                         '{+undefined}%s * %s %s # %s:%d{-undefined}', $indent,
                         $step->getType(), $step->getText(),
