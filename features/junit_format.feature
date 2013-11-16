@@ -116,3 +116,41 @@ Feature: JUnit Formatter
       </testsuite>
 
       """
+
+  Scenario: Multiple parameters
+    Given a file named "features/World.feature" with:
+    """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background:
+          Given I have entered 10
+
+        Scenario: Adding
+          Then I must have 10
+          And I add the value 6
+          Then I must have 16
+      """
+    And I am in the "features/folder/" path
+    And a file named "World.feature" with:
+    """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background:
+          Given I have entered 10
+
+        Scenario: Subtracting
+          Then I must have 10
+          And I subtract the value 6
+          Then I must have 4
+      """
+    And I am in the "../../" path
+    When I run "behat --no-ansi -f junit --out test"
+    Then it should pass
+    And file "test/TEST-World.xml" should exist
+    And file "test/TEST-folder-World.xml" should exist
