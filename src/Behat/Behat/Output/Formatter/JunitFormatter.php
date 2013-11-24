@@ -120,8 +120,13 @@ class JunitFormatter extends CliFormatter
     public function prepareTestSuite(FeatureEvent $event)
     {
         $feature = $event->getFeature();
+        $replace = array(
+            $this->getParameter('features_path') => '',
+            DIRECTORY_SEPARATOR => '-',
+            '.feature' => '.xml'
+        );
 
-        $this->filename = sprintf('TEST-%s.xml', basename($feature->getFile(), '.feature'));
+        $this->filename = 'TEST' . strtr($feature->getFile(), $replace);
         $this->failures = $this->tests = $this->skipped = $this->time = 0;
         $this->testCases = array();
         $this->stdout = '';
