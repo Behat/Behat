@@ -141,7 +141,12 @@ class JUnitFormatter extends ConsoleFormatter
     public function beforeFeature(FeatureEvent $event)
     {
         $feature = $event->getFeature();
-        $this->filename = 'TEST-' . basename($feature->getFile(), '.feature') . '.xml';
+        $replace = array(
+            $this->getParameter('features_path') => '',
+            DIRECTORY_SEPARATOR => '-',
+            '.feature' => '.xml'
+        );
+        $this->filename = 'TEST' . strtr($feature->getFile(), $replace);
 
         $this->printTestSuiteHeader($feature);
 

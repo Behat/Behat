@@ -203,6 +203,9 @@ class FormatProcessor extends Processor
         $manager->setFormattersParameter('base_path',
             $this->container->getParameter('behat.paths.base')
         );
+        $manager->setFormattersParameter('features_path',
+            $this->container->getParameter('behat.paths.features')
+        );
         $manager->setFormattersParameter('support_path',
             $this->container->getParameter('behat.paths.bootstrap')
         );
