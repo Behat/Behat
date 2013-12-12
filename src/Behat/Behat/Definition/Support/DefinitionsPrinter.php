@@ -128,10 +128,12 @@ class DefinitionsPrinter extends DispatchingService
                 ));
 
                 if ($definition->getDescription()) {
-                    $lines[] = strtr('{space}<dimmed>|</dimmed> {description}', array(
-                        '{space}'       => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
-                        '{description}' => $definition->getDescription()
-                    ));
+                    foreach(explode("\n", $definition->getDescription()) as $descriptionLine) {
+                        $lines[] = strtr('{space}<dimmed>|</dimmed> {description}', array(
+                            '{space}'       => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
+                            '{description}' => $descriptionLine
+                        ));
+                    }
                 }
 
                 $lines[] = strtr('{space}<dimmed>|</dimmed> at `{path}`', array(

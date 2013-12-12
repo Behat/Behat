@@ -214,6 +214,12 @@ Feature: Syntax helpers
 
           /**
            * Eating apples
+           * 
+           * More details on eating apples, and a list:
+           * - one
+           * - two
+           * --
+           * Internal note not showing in help
            *
            * @When /^I ate (\d+) apples?$/
            */
@@ -244,6 +250,10 @@ Feature: Syntax helpers
 
       default | When /^I ate (\d+) apples?$/
               | Eating apples
+              |
+              | More details on eating apples, and a list:
+              | - one
+              | - two
               | at `FeatureContext::iAteApples()`
 
       default | When /^I found (\d+) apples?$/
