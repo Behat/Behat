@@ -118,14 +118,24 @@ class AnnotatedContextLoader implements LoaderInterface
         }
 
         if ($docBlock = $method->getDocComment()) {
-            $description = null;
+            // Remove indentation
+            $description = preg_replace('/^[\s\t]*/m', '', $docBlock);
+            // Remove block comment syntax
+            $description = preg_replace('/^\/\*\*\s*|^\s*\*\s|^\s*\*\/$/m', '', $description);
+            // Remove annotations
+            $description = preg_replace('/^@.*$/m', '', $description);
+            // Ignore docs after a "--" separator
+            if(preg_match('/^--.*$/m', $description)) {
+                $descriptionParts = preg_split('/^--.*$/m', $description);
+                $description = array_shift($descriptionParts);
+            }
+            // Trim leading and trailing newlines
+            $description = trim($description, "\n");
 
             foreach (explode("\n", $docBlock) as $docLine) {
                 $docLine = preg_replace('/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/', '', $docLine);
-
+                // Ignore lines without annotations
                 if ('' !== trim($docLine) && 0 !== strpos(trim($docLine), '@')) {
-                    $description = trim($docLine);
-
                     continue;
                 }
 
