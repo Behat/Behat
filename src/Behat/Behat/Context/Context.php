@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Context;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -10,11 +8,15 @@ namespace Behat\Behat\Context;
  * file that was distributed with this source code.
  */
 
+namespace Behat\Behat\Context;
+
 /**
  * Context interface.
  *
+ * Marks custom user-defined class as a Behat context.
+ *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ContextInterface
+interface Context
 {
 }

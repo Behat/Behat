@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Context;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -10,12 +8,20 @@ namespace Behat\Behat\Context;
  * file that was distributed with this source code.
  */
 
+namespace Behat\Behat\Context;
+
+use Behat\Behat\Context\Reader\TranslatableContextReader;
+
 /**
- * Translated context interface.
+ * Translatable context interface.
+ *
+ * Context that implements this interface is also treated as a translation provider for all it's callees.
+ *
+ * @see TranslatableContextReader
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface TranslatableContextInterface extends ContextInterface
+interface TranslatableContext extends Context
 {
     /**
      * Returns array of Translator-supported resource paths.

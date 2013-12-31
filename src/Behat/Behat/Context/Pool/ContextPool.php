@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Context\Pool;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,14 +7,17 @@ namespace Behat\Behat\Context\Pool;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Context\ContextInterface;
+
+namespace Behat\Behat\Context\Pool;
 
 /**
  * Context pool interface.
  *
+ * Represents pool (collection) of context classes.
+ *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ContextPoolInterface
+interface ContextPool
 {
     /**
      * Checks if pool has any contexts registered.
@@ -24,13 +25,6 @@ interface ContextPoolInterface
      * @return Boolean
      */
     public function hasContexts();
-
-    /**
-     * Returns list of registered context classes or instances.
-     *
-     * @return string[]|ContextInterface[]
-     */
-    public function getContexts();
 
     /**
      * Returns list of registered context classes.
@@ -46,14 +40,5 @@ interface ContextPoolInterface
      *
      * @return Boolean
      */
-    public function hasContext($class);
-
-    /**
-     * Returns registered context class or instance by its class name.
-     *
-     * @param string $class
-     *
-     * @return string|ContextInterface
-     */
-    public function getContext($class);
+    public function hasContextClass($class);
 }

@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Context\Pool;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,28 +7,32 @@ namespace Behat\Behat\Context\Pool;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Context\ContextInterface;
-use InvalidArgumentException;
+
+namespace Behat\Behat\Context\Pool;
+
+use Behat\Behat\Context\Context;
+use Behat\Behat\Context\Exception\ContextNotFoundException;
 
 /**
  * Initialized context pool.
- * Context pool containing context instances.
+ *
+ * Pool containing instantiated context objects.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class InitializedContextPool implements ContextPoolInterface
+class InitializedContextPool implements ContextPool
 {
     /**
-     * @var ContextInterface[]
+     * @var Context[]
      */
     private $contexts = array();
 
     /**
      * Registers context instance in the pool.
      *
-     * @param ContextInterface $context
+     * @param Context $context
      */
-    public function registerContext(ContextInterface $context)
+    public function registerContext(Context $context)
     {
         $this->contexts[get_class($context)] = $context;
     }
@@ -43,16 +45,6 @@ class InitializedContextPool implements ContextPoolInterface
     public function hasContexts()
     {
         return count($this->contexts) > 0;
-    }
-
-    /**
-     * Returns list of registered context instances.
-     *
-     * @return ContextInterface[]
-     */
-    public function getContexts()
-    {
-        return array_values($this->contexts);
     }
 
     /**
@@ -72,9 +64,19 @@ class InitializedContextPool implements ContextPoolInterface
      *
      * @return Boolean
      */
-    public function hasContext($class)
+    public function hasContextClass($class)
     {
         return isset($this->contexts[$class]);
+    }
+
+    /**
+     * Returns list of registered context instances.
+     *
+     * @return Context[]
+     */
+    public function getContexts()
+    {
+        return array_values($this->contexts);
     }
 
     /**
@@ -82,17 +84,17 @@ class InitializedContextPool implements ContextPoolInterface
      *
      * @param string $class
      *
-     * @return ContextInterface
+     * @return Context
      *
-     * @throws InvalidArgumentException If context is not in the pool
+     * @throws ContextNotFoundException If context is not in the pool
      */
     public function getContext($class)
     {
-        if (!$this->hasContext($class)) {
-            throw new InvalidArgumentException(sprintf(
-                'Context "%s" can not be found in a context pool.',
+        if (!$this->hasContextClass($class)) {
+            throw new ContextNotFoundException(sprintf(
+                '`%s` context is not found in the context pool. Have you registered it?',
                 $class
-            ));
+            ), $class);
         }
 
         return $this->contexts[$class];

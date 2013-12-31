@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Context\Initializer;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,28 +7,33 @@ namespace Behat\Behat\Context\Initializer;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Context\ContextInterface;
+
+namespace Behat\Behat\Context\Initializer;
+
+use Behat\Behat\Context\Context;
 
 /**
  * Context initializer interface.
  *
+ * Initializes custom contexts.
+ *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface InitializerInterface
+interface ContextInitializer
 {
     /**
      * Checks if initializer supports provided context.
      *
-     * @param ContextInterface $context
+     * @param Context $context
      *
      * @return Boolean
      */
-    public function supports(ContextInterface $context);
+    public function supportsContext(Context $context);
 
     /**
      * Initializes provided context.
      *
-     * @param ContextInterface $context
+     * @param Context $context
      */
-    public function initialize(ContextInterface $context);
+    public function initializeContext(Context $context);
 }

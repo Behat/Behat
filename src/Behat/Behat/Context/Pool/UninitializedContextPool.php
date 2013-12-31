@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Context\Pool;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,41 +7,62 @@ namespace Behat\Behat\Context\Pool;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use InvalidArgumentException;
+
+namespace Behat\Behat\Context\Pool;
+
+use Behat\Behat\Context\Exception\ContextNotFoundException;
+use Behat\Behat\Context\Exception\WrongContextClassException;
 
 /**
  * Uninitialized context pool.
- * Context pool containing context classes.
+ *
+ * Pool containing context classes.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class UninitializedContextPool implements ContextPoolInterface
+class UninitializedContextPool implements ContextPool
 {
     /**
      * @var string[]
      */
     private $contextClasses = array();
+    /**
+     * @var array
+     */
+    private $constructorArguments = array();
+
+    /**
+     * Initialized context pool.
+     *
+     * @param array $constructorArguments
+     */
+    public function __construct(array $constructorArguments = array())
+    {
+        $this->constructorArguments = $constructorArguments;
+    }
 
     /**
      * Registers context class.
      *
      * @param string $contextClass
      *
-     * @throws InvalidArgumentException If class does not exist or does not implement ContextInterface
+     * @throws ContextNotFoundException If class does not exist
+     * @throws WrongContextClassException if class does not implement Context interface
      */
     public function registerContextClass($contextClass)
     {
         if (!class_exists($contextClass)) {
-            throw new InvalidArgumentException(sprintf(
-                'Context class "%s" not found and can not be used.',
+            throw new ContextNotFoundException(sprintf(
+                '`%s` context class not found and can not be used.',
                 $contextClass
-            ));
+            ), $contextClass);
         }
-        if (!is_subclass_of($contextClass, 'Behat\Behat\Context\ContextInterface')) {
-            throw new InvalidArgumentException(sprintf(
-                'Every context class must implement ContextInterface, but "%s" does not.',
+
+        if (!is_subclass_of($contextClass, 'Behat\Behat\Context\Context')) {
+            throw new WrongContextClassException(sprintf(
+                'Every context class must implement Behat Context interface, but `%s` does not.',
                 $contextClass
-            ));
+            ), $contextClass);
         }
 
         $this->contextClasses[$contextClass] = true;
@@ -64,19 +83,9 @@ class UninitializedContextPool implements ContextPoolInterface
      *
      * @return string[]
      */
-    public function getContexts()
-    {
-        return array_keys($this->contextClasses);
-    }
-
-    /**
-     * Returns list of registered context classes.
-     *
-     * @return string[]
-     */
     public function getContextClasses()
     {
-        return $this->getContexts();
+        return array_keys($this->contextClasses);
     }
 
     /**
@@ -86,29 +95,18 @@ class UninitializedContextPool implements ContextPoolInterface
      *
      * @return Boolean
      */
-    public function hasContext($class)
+    public function hasContextClass($class)
     {
         return isset($this->contextClasses[$class]);
     }
 
     /**
-     * Returns registered context by its class name.
+     * Returns constructor arguments
      *
-     * @param string $class
-     *
-     * @return string
-     *
-     * @throws InvalidArgumentException If context is not in the pool
+     * @return array
      */
-    public function getContext($class)
+    public function getConstructorArguments()
     {
-        if (!$this->hasContext($class)) {
-            throw new InvalidArgumentException(sprintf(
-                'Context "%s" can not be found in a context pool.',
-                $class
-            ));
-        }
-
-        return $class;
+        return $this->constructorArguments;
     }
 }
