@@ -10,14 +10,14 @@
 
 namespace Behat\Testwork\Call\Exception;
 
-use RuntimeException;
+use InvalidArgumentException;
 
 /**
  * Bad callback exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BadCallbackException extends RuntimeException implements CallException
+class BadCallbackException extends InvalidArgumentException implements CallException
 {
     /**
      * @var Callable
