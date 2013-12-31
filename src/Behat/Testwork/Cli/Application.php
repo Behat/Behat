@@ -68,7 +68,8 @@ class Application extends BaseApplication
             new InputOption('--config', '-c', InputOption::VALUE_REQUIRED, 'Specify config file to use.'),
             new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of exceptions.'),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
-            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this behat version.')
+            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
+            new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
         ));
     }
 
