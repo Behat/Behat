@@ -14,6 +14,7 @@ use Behat\Behat\Tester\Event\ExampleTested;
 use Behat\Behat\Tester\Event\ScenarioTested;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
@@ -41,27 +42,76 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
             return true;
         }
 
+        $feature = $event->getSubject();
         if ($event instanceof ScenarioTested) {
             $scenario = $event->getScenario();
         } else {
             $scenario = $event->getExample();
         }
 
+        return $this->isMatch($feature, $scenario, $filterString);
+    }
+
+    /**
+     * Checks if nodes match filter.
+     *
+     * @param FeatureNode       $feature
+     * @param ScenarioInterface $scenario
+     * @param string            $filterString
+     *
+     * @return Boolean
+     */
+    protected function isMatch(FeatureNode $feature, ScenarioInterface $scenario, $filterString)
+    {
         if (false !== strpos($filterString, '@')) {
-            $filter = new TagFilter($filterString);
+            return $this->isMatchTagFilter($feature, $scenario, $filterString);
+        }
 
-            if ($filter->isFeatureMatch($event->getSubject())) {
-                return true;
-            }
-            if ($filter->isScenarioMatch($scenario)) {
-                return true;
-            }
-        } elseif (!empty($filterString)) {
-            $filter = new NameFilter($filterString);
+        if (!empty($filterString)) {
+            return $this->isMatchNameFilter($scenario, $filterString);
+        }
 
-            if ($filter->isScenarioMatch($scenario)) {
-                return true;
-            }
+        return false;
+    }
+
+    /**
+     * Checks if node match tag filter.
+     *
+     * @param FeatureNode       $feature
+     * @param ScenarioInterface $scenario
+     * @param string            $filterString
+     *
+     * @return Boolean
+     */
+    protected function isMatchTagFilter(FeatureNode $feature, ScenarioInterface $scenario, $filterString)
+    {
+        $filter = new TagFilter($filterString);
+
+        if ($filter->isFeatureMatch($feature)) {
+            return true;
+        }
+
+        if ($filter->isScenarioMatch($feature, $scenario)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if scenario matches name filter.
+     *
+     * @param ScenarioInterface $scenario
+     * @param string            $filterString
+     *
+     * @return Boolean
+     */
+    protected function isMatchNameFilter(ScenarioInterface $scenario, $filterString)
+    {
+        $filter = new NameFilter($filterString);
+
+        if ($filter->isScenarioMatch($scenario)) {
+            return true;
         }
 
         return false;
