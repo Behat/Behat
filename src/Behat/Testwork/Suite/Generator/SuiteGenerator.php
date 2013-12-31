@@ -1,22 +1,25 @@
 <?php
 
-namespace Behat\Behat\Suite\Generator;
-
 /*
- * This file is part of the Behat.
+ * This file is part of the Behat Testwork.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Suite\SuiteInterface;
+
+namespace Behat\Testwork\Suite\Generator;
+
+use Behat\Testwork\Suite\Suite;
 
 /**
- * Generator interface.
+ * Testwork suite generator interface.
+ *
+ * Generates suite using provided name, settings and parameters.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface GeneratorInterface
+interface SuiteGenerator
 {
     /**
      * Checks if generator support provided suite type and settings.
@@ -26,7 +29,7 @@ interface GeneratorInterface
      *
      * @return Boolean
      */
-    public function supports($type, array $settings);
+    public function supportsTypeAndSettings($type, array $settings);
 
     /**
      * Generate suite with provided name, settings and parameters.
@@ -35,7 +38,7 @@ interface GeneratorInterface
      * @param array  $settings
      * @param array  $parameters
      *
-     * @return SuiteInterface
+     * @return Suite
      */
-    public function generate($suiteName, array $settings, array $parameters);
+    public function generateSuite($suiteName, array $settings, array $parameters);
 }
