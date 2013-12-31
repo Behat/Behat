@@ -49,6 +49,7 @@ class Services
     private function setDefaultParameters(ContainerBuilder $container)
     {
         $container->setParameter('paths.base', null);
+        $container->setParameter('paths.features', '%paths.base%/features');
         $container->setParameter('paths.lib', null);
         $container->setParameter('paths.i18n', '%paths.lib%/i18n.php');
         $container->setParameter('paths.gherkin.lib', null);
@@ -267,6 +268,10 @@ class Services
             'base_path',
             '%paths.base%'
         ));
+        $definition->addMethodCall('setParameter', array(
+            'features_path',
+            '%paths.features%'
+        ));
         $definition->addTag('output.formatter');
         $container->setDefinition('output.formatter.junit', $definition);
 
@@ -389,7 +394,7 @@ class Services
 
         $definition = new Definition('Behat\Behat\Suite\Generator\GherkinSuiteGenerator', array(
             array(
-                'paths'    => array('%paths.base%/features'),
+                'paths'    => array('%paths.features%'),
                 'contexts' => array('FeatureContext')
             )
         ));

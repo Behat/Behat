@@ -62,6 +62,7 @@ abstract class CliFormatter implements FormatterInterface
             'decorated'       => true,
             'time'            => true,
             'base_path'       => null,
+            'features_path'   => null,
             'output'          => null,
             'output_path'     => null,
             'support_path'    => null,
