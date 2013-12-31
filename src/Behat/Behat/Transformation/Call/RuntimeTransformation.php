@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Transformation\Callee;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,25 +7,25 @@ namespace Behat\Behat\Transformation\Callee;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Callee\Callee;
-use Behat\Behat\Snippet\Util\Turnip;
-use Behat\Behat\Transformation\TransformationInterface;
+
+namespace Behat\Behat\Transformation\Call;
+
+use Behat\Behat\Transformation\Transformation;
+use Behat\Testwork\Call\RuntimeCallee;
 
 /**
- * Step transformation.
+ * Runtime step transformation.
+ *
+ * Transformation that is created and executed in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Transformation extends Callee implements TransformationInterface
+class RuntimeTransformation extends RuntimeCallee implements Transformation
 {
     /**
      * @var string
      */
     private $pattern;
-    /**
-     * @var string
-     */
-    private $regex;
 
     /**
      * Initializes transformation.
@@ -39,12 +37,6 @@ class Transformation extends Callee implements TransformationInterface
     public function __construct($pattern, $callable, $description = null)
     {
         $this->pattern = $pattern;
-
-        $this->regex = $pattern;
-        // If it is a turnip pattern - transform it to regex
-        if ('/' !== substr($pattern, 0, 1)) {
-            $this->regex = Turnip::turnipToRegex($pattern);
-        }
 
         parent::__construct($callable, $description);
     }
@@ -60,21 +52,11 @@ class Transformation extends Callee implements TransformationInterface
     }
 
     /**
-     * Returns transformation regex.
-     *
-     * @return string
-     */
-    public function getRegex()
-    {
-        return $this->regex;
-    }
-
-    /**
      * Represents transformation as a string.
      *
      * @return string
      */
-    public function toString()
+    public function __toString()
     {
         return 'Transform ' . $this->getPattern();
     }
