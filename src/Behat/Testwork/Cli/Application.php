@@ -129,7 +129,7 @@ class Application extends BaseApplication
      */
     private function createContainer(InputInterface $input, OutputInterface $output)
     {
-        $basePath = $this->getBasePath();
+        $basePath = rtrim($this->getBasePath(), DIRECTORY_SEPARATOR);
 
         $container = new ContainerBuilder();
 
