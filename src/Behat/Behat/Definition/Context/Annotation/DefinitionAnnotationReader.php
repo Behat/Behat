@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Definition\Context;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,16 +7,21 @@ namespace Behat\Behat\Definition\Context;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Callee\CalleeInterface;
-use Behat\Behat\Context\Loader\AnnotationReaderInterface;
+
+namespace Behat\Behat\Definition\Context\Annotation;
+
+use Behat\Behat\Context\Annotation\AnnotationReader;
+use Behat\Behat\Definition\Call\RuntimeDefinition;
 use ReflectionMethod;
 
 /**
- * Step definitions annotation reader.
+ * Step definition annotation reader.
+ *
+ * Reads definition annotations of context class.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionAnnotationReader implements AnnotationReaderInterface
+class DefinitionAnnotationReader implements AnnotationReader
 {
     /**
      * @var string
@@ -28,9 +31,9 @@ class DefinitionAnnotationReader implements AnnotationReaderInterface
      * @var string[]
      */
     private static $classes = array(
-        'given' => 'Behat\Behat\Definition\Callee\Given',
-        'when'  => 'Behat\Behat\Definition\Callee\When',
-        'then'  => 'Behat\Behat\Definition\Callee\Then',
+        'given' => 'Behat\Behat\Definition\Call\Given',
+        'when'  => 'Behat\Behat\Definition\Call\When',
+        'then'  => 'Behat\Behat\Definition\Call\Then',
     );
 
     /**
@@ -40,9 +43,9 @@ class DefinitionAnnotationReader implements AnnotationReaderInterface
      * @param string           $docLine
      * @param string           $description
      *
-     * @return null|CalleeInterface
+     * @return null|RuntimeDefinition
      */
-    public function readAnnotation(ReflectionMethod $method, $docLine, $description)
+    public function readCallee(ReflectionMethod $method, $docLine, $description)
     {
         if (!preg_match(self::$regex, $docLine, $match)) {
             return null;

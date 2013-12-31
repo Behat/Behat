@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Definition\Callee;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,14 +7,15 @@ namespace Behat\Behat\Definition\Callee;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Definition\Callee\Definition;
+
+namespace Behat\Behat\Definition\Call;
 
 /**
- * "Given" definition.
+ * Then-step definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Given extends Definition
+class Then extends RuntimeDefinition
 {
     /**
      * Initializes definition.
@@ -27,6 +26,6 @@ class Given extends Definition
      */
     public function __construct($pattern, $callback, $description = null)
     {
-        parent::__construct('Given', $pattern, $callback, $description);
+        parent::__construct('Then', $pattern, $callback, $description);
     }
 }

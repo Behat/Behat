@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Definition\Callee;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,16 +7,20 @@ namespace Behat\Behat\Definition\Callee;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Callee\Callee;
-use Behat\Behat\Definition\DefinitionInterface;
-use Behat\Behat\Snippet\Util\Turnip;
+
+namespace Behat\Behat\Definition\Call;
+
+use Behat\Behat\Definition\Definition;
+use Behat\Testwork\Call\RuntimeCallee;
 
 /**
- * Base definition callee class.
+ * Runtime definition.
+ *
+ * Definition created and executed in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class Definition extends Callee implements DefinitionInterface
+abstract class RuntimeDefinition extends RuntimeCallee implements Definition
 {
     /**
      * @var string
@@ -28,10 +30,6 @@ abstract class Definition extends Callee implements DefinitionInterface
      * @var string
      */
     private $pattern;
-    /**
-     * @var string
-     */
-    private $regex;
 
     /**
      * Initializes definition.
@@ -45,12 +43,6 @@ abstract class Definition extends Callee implements DefinitionInterface
     {
         $this->type = $type;
         $this->pattern = $pattern;
-
-        $this->regex = $pattern;
-        // If it is a turnip pattern - transform it to regex
-        if ('/' !== substr($pattern, 0, 1)) {
-            $this->regex = Turnip::turnipToRegex($pattern);
-        }
 
         parent::__construct($callback, $description);
     }
@@ -76,21 +68,11 @@ abstract class Definition extends Callee implements DefinitionInterface
     }
 
     /**
-     * Returns regular expression.
-     *
-     * @return string
-     */
-    public function getRegex()
-    {
-        return $this->regex;
-    }
-
-    /**
      * Represents definition as a string.
      *
      * @return string
      */
-    public function toString()
+    public function __toString()
     {
         return $this->getType() . ' ' . $this->getPattern();
     }
