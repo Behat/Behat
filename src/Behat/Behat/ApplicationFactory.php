@@ -10,6 +10,7 @@
 
 namespace Behat\Behat;
 
+use Behat\Behat\Autoloader\ServiceContainer\AutoloaderExtension;
 use Behat\Behat\Cli\ServiceContainer\CliExtension;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
@@ -21,7 +22,6 @@ use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Behat\Transformation\ServiceContainer\TransformationExtension;
 use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
 use Behat\Testwork\ApplicationFactory as BaseFactory;
-use Behat\Testwork\Autoloader\ServiceContainer\AutoloaderExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -76,10 +76,10 @@ class ApplicationFactory extends BaseFactory
             new EnvironmentExtension($processor),
             new SubjectExtension($processor),
             new EventDispatcherExtension($processor),
-            new AutoloaderExtension($processor),
             new ExceptionExtension($processor),
 
             // Behat extensions
+            new AutoloaderExtension($processor),
             new TranslatorExtension($processor),
             new CliExtension($processor),
             new GherkinExtension($processor),

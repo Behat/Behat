@@ -53,9 +53,9 @@ class AutoloaderExtension implements Extension
                     return array('' => $path);
                 })
             ->end()
-            ->defaultValue(array('' => '%paths.base%/features/bootstrap'))
-            ->treatTrueLike(array('' => '%paths.base%/features/bootstrap'))
-            ->treatNullLike(array('' => '%paths.base%/features/bootstrap'))
+            ->defaultValue(array())
+            ->treatTrueLike(array())
+            ->treatNullLike(array())
             ->treatFalseLike(array())
             ->prototype('scalar')->end()
         ;
