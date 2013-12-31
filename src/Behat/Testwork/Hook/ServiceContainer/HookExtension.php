@@ -82,7 +82,7 @@ class HookExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Hook\HookDispatcher', array(
             new Reference(self::REPOSITORY_ID),
-            new Reference(CallExtension::CALL_CENTRE_ID)
+            new Reference(CallExtension::CALL_CENTER_ID)
         ));
         $container->setDefinition(self::DISPATCHER_ID, $definition);
     }

@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Call\Filter;
 
-use Behat\Testwork\Call\CallCentre;
+use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\CallResult;
 
 /**
@@ -18,7 +18,7 @@ use Behat\Testwork\Call\CallResult;
  *
  * Filters call results and produces new ones.
  *
- * @see CallCentre
+ * @see CallCenter
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

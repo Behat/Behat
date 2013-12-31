@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Call\Handler;
 
 use Behat\Testwork\Call\Call;
-use Behat\Testwork\Call\CallCentre;
+use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\CallResult;
 
 /**
@@ -19,7 +19,7 @@ use Behat\Testwork\Call\CallResult;
  *
  * Handles calls and produces call results.
  *
- * @see CallCentre
+ * @see CallCenter
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -28,7 +28,7 @@ class CallExtension implements Extension
     /*
      * Available services
      */
-    const CALL_CENTRE_ID = 'call.centre';
+    const CALL_CENTER_ID = 'call.center';
 
     /*
      * Available extension points
@@ -85,7 +85,7 @@ class CallExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadCallCentre($container);
+        $this->loadCallCenter($container);
         $this->loadCallHandlers($container, $config['error_reporting']);
     }
 
@@ -102,14 +102,14 @@ class CallExtension implements Extension
     }
 
     /**
-     * Loads call centre service.
+     * Loads call center service.
      *
      * @param ContainerBuilder $container
      */
-    protected function loadCallCentre(ContainerBuilder $container)
+    protected function loadCallCenter(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Call\CallCentre');
-        $container->setDefinition(self::CALL_CENTRE_ID, $definition);
+        $definition = new Definition('Behat\Testwork\Call\CallCenter');
+        $container->setDefinition(self::CALL_CENTER_ID, $definition);
     }
 
     /**
@@ -126,14 +126,14 @@ class CallExtension implements Extension
     }
 
     /**
-     * Registers all call filters to the CallCentre.
+     * Registers all call filters to the CallCenter.
      *
      * @param ContainerBuilder $container
      */
     protected function processCallFilters(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, CallExtension::CALL_FILTER_TAG);
-        $definition = $container->getDefinition(CallExtension::CALL_CENTRE_ID);
+        $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerCallFilter', array($reference));
@@ -141,14 +141,14 @@ class CallExtension implements Extension
     }
 
     /**
-     * Registers all call handlers to the CallCentre.
+     * Registers all call handlers to the CallCenter.
      *
      * @param ContainerBuilder $container
      */
     protected function processCallHandlers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, CallExtension::CALL_HANDLER_TAG);
-        $definition = $container->getDefinition(CallExtension::CALL_CENTRE_ID);
+        $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerCallHandler', array($reference));
@@ -156,14 +156,14 @@ class CallExtension implements Extension
     }
 
     /**
-     * Registers all call result filters to the CallCentre.
+     * Registers all call result filters to the CallCenter.
      *
      * @param ContainerBuilder $container
      */
     protected function processResultFilters(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, CallExtension::RESULT_FILTER_TAG);
-        $definition = $container->getDefinition(CallExtension::CALL_CENTRE_ID);
+        $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerResultFilter', array($reference));

@@ -17,7 +17,7 @@ use Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Transformation\TransformationRepository;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\TableNode;
-use Behat\Testwork\Call\CallCentre;
+use Behat\Testwork\Call\CallCenter;
 use Exception;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -35,9 +35,9 @@ class RepositoryArgumentTransformer implements ArgumentTransformer
      */
     private $repository;
     /**
-     * @var CallCentre
+     * @var CallCenter
      */
-    private $callCentre;
+    private $callCenter;
     /**
      * @var PatternTransformer
      */
@@ -51,18 +51,18 @@ class RepositoryArgumentTransformer implements ArgumentTransformer
      * Initializes transformer.
      *
      * @param TransformationRepository $repository
-     * @param CallCentre               $callCentre
+     * @param CallCenter               $callCenter
      * @param PatternTransformer       $patternTransformer
      * @param TranslatorInterface      $translator
      */
     public function __construct(
         TransformationRepository $repository,
-        CallCentre $callCentre,
+        CallCenter $callCenter,
         PatternTransformer $patternTransformer,
         TranslatorInterface $translator
     ) {
         $this->repository = $repository;
-        $this->callCentre = $callCentre;
+        $this->callCenter = $callCenter;
         $this->patternTransformer = $patternTransformer;
         $this->translator = $translator;
     }
@@ -162,7 +162,7 @@ class RepositoryArgumentTransformer implements ArgumentTransformer
             $arguments
         );
 
-        $result = $this->callCentre->makeCall($call);
+        $result = $this->callCenter->makeCall($call);
 
         if ($result->hasException()) {
             throw $result->getException();

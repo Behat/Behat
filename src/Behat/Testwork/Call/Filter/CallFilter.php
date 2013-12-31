@@ -11,14 +11,14 @@
 namespace Behat\Testwork\Call\Filter;
 
 use Behat\Testwork\Call\Call;
-use Behat\Testwork\Call\CallCentre;
+use Behat\Testwork\Call\CallCenter;
 
 /**
  * Testwork call filter interface.
  *
  * Filters call before its being made and returns a new call.
  *
- * @see CallCentre
+ * @see CallCenter
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -120,7 +120,7 @@ class TransformationExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Transformation\Transformer\RepositoryArgumentTransformer', array(
             new Reference(self::REPOSITORY_ID),
-            new Reference(CallExtension::CALL_CENTRE_ID),
+            new Reference(CallExtension::CALL_CENTER_ID),
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID)
         ));

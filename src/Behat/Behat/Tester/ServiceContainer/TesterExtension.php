@@ -171,7 +171,7 @@ class TesterExtension extends BaseExtension
     {
         $definition = new Definition('Behat\Behat\Tester\StepTester', array(
             new Reference(DefinitionExtension::FINDER_ID),
-            new Reference(CallExtension::CALL_CENTRE_ID),
+            new Reference(CallExtension::CALL_CENTER_ID),
             new Reference(HookExtension::DISPATCHER_ID),
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
         ));

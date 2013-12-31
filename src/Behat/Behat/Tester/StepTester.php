@@ -19,7 +19,7 @@ use Behat\Behat\Tester\Result\StepTestResult;
 use Behat\Behat\Tester\Result\TestResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
-use Behat\Testwork\Call\CallCentre;
+use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\HookDispatcher;
@@ -38,9 +38,9 @@ class StepTester
      */
     private $definitionFinder;
     /**
-     * @var CallCentre
+     * @var CallCenter
      */
-    private $callCentre;
+    private $callCenter;
     /**
      * @var HookDispatcher
      */
@@ -54,18 +54,18 @@ class StepTester
      * Initialize tester.
      *
      * @param DefinitionFinder         $definitionFinder
-     * @param CallCentre               $callCentre
+     * @param CallCenter               $callCenter
      * @param HookDispatcher           $hookDispatcher
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         DefinitionFinder $definitionFinder,
-        CallCentre $callCentre,
+        CallCenter $callCenter,
         HookDispatcher $hookDispatcher,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->definitionFinder = $definitionFinder;
-        $this->callCentre = $callCentre;
+        $this->callCenter = $callCenter;
         $this->hookDispatcher = $hookDispatcher;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -184,7 +184,7 @@ class StepTester
         }
 
         $call = $this->createDefinitionCall($environment, $feature, $search, $step);
-        $result = $this->callCentre->makeCall($call);
+        $result = $this->callCenter->makeCall($call);
 
         return new StepTestResult($search, null, $result, $hookResults);
     }

@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Hook;
 
-use Behat\Testwork\Call\CallCentre;
+use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Hook\Call\HookCall;
@@ -30,20 +30,20 @@ class HookDispatcher
      */
     private $repository;
     /**
-     * @var CallCentre
+     * @var CallCenter
      */
-    private $callCentre;
+    private $callCenter;
 
     /**
      * Initializes hook dispatcher.
      *
      * @param HookRepository $repository
-     * @param CallCentre     $callCentre
+     * @param CallCenter     $callCenter
      */
-    public function __construct(HookRepository $repository, CallCentre $callCentre)
+    public function __construct(HookRepository $repository, CallCenter $callCenter)
     {
         $this->repository = $repository;
-        $this->callCentre = $callCentre;
+        $this->callCenter = $callCenter;
     }
 
     /**
@@ -74,6 +74,6 @@ class HookDispatcher
      */
     private function dispatchEventHook(LifecycleEvent $event, Hook $hook)
     {
-        return $this->callCentre->makeCall(new HookCall($event, $hook));
+        return $this->callCenter->makeCall(new HookCall($event, $hook));
     }
 }
