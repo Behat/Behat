@@ -171,14 +171,4 @@ class Application extends BaseApplication
     {
         return $this->getName();
     }
-
-    /**
-     * Tries to figure out the terminal width in which this application runs
-     *
-     * @return int|null
-     */
-    final protected function getTerminalWidth()
-    {
-        return PHP_INT_MAX;
-    }
 }
