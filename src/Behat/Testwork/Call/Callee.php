@@ -1,23 +1,26 @@
 <?php
 
-namespace Behat\Behat\Callee;
-
 /*
- * This file is part of the Behat.
+ * This file is part of the Behat Testwork.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace Behat\Testwork\Call;
+
 use ReflectionFunction;
 use ReflectionMethod;
 
 /**
- * Callee interface.
+ * Testwork callee interface.
+ *
+ * Represents callable objects.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface CalleeInterface
+interface Callee
 {
     /**
      * Returns callee definition path.
@@ -38,7 +41,14 @@ interface CalleeInterface
      *
      * @return Boolean
      */
-    public function isMethod();
+    public function isAMethod();
+
+    /**
+     * Returns true if callee is an instance (non-static) method, false otherwise.
+     *
+     * @return Boolean
+     */
+    public function isAnInstanceMethod();
 
     /**
      * Returns callable.

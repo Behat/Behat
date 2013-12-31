@@ -1,28 +1,43 @@
 <?php
 
-namespace Behat\Behat\Callee;
-
 /*
- * This file is part of the Behat.
+ * This file is part of the Behat Testwork.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use InvalidArgumentException;
+
+namespace Behat\Testwork\Call;
+
+use Behat\Testwork\Call\Exception\BadCallbackException;
 use ReflectionFunction;
 use ReflectionMethod;
 
 /**
- * Core callee class.
+ * Testwork runtime callee.
+ *
+ * Callee created and executed in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class Callee implements CalleeInterface
+class RuntimeCallee implements Callee
 {
+    /**
+     * @var callable
+     */
     private $callable;
+    /**
+     * @var null|string
+     */
     private $description;
+    /**
+     * @var ReflectionFunction|ReflectionMethod
+     */
     private $reflection;
+    /**
+     * @var string
+     */
     private $path;
 
     /**
@@ -31,16 +46,16 @@ abstract class Callee implements CalleeInterface
      * @param Callable    $callable
      * @param null|string $description
      *
-     * @throws InvalidArgumentException If invalid callback provided
+     * @throws BadCallbackException If invalid callback provided
      */
     public function __construct($callable, $description = null)
     {
         if (!is_array($callable) && !is_callable($callable)) {
-            throw new InvalidArgumentException(sprintf(
-                '%s callback should be a valid callable, but %s given',
+            throw new BadCallbackException(sprintf(
+                '%s expects a valid callable, but `%s` given',
                 get_class($this),
                 gettype($callable)
-            ));
+            ), $callable);
         }
 
         if (is_array($callable)) {
@@ -53,16 +68,6 @@ abstract class Callee implements CalleeInterface
 
         $this->callable = $callable;
         $this->description = $description;
-    }
-
-    /**
-     * Returns callable.
-     *
-     * @return Callable
-     */
-    public function getCallable()
-    {
-        return $this->callable;
     }
 
     /**
@@ -86,13 +91,13 @@ abstract class Callee implements CalleeInterface
     }
 
     /**
-     * Returns true if callee is a method, false otherwise.
+     * Returns callable.
      *
-     * @return Boolean
+     * @return Callable
      */
-    public function isMethod()
+    public function getCallable()
     {
-        return $this->reflection instanceof ReflectionMethod;
+        return $this->callable;
     }
 
     /**
@@ -103,5 +108,26 @@ abstract class Callee implements CalleeInterface
     public function getReflection()
     {
         return $this->reflection;
+    }
+
+    /**
+     * Returns true if callee is a method, false otherwise.
+     *
+     * @return Boolean
+     */
+    public function isAMethod()
+    {
+        return $this->reflection instanceof ReflectionMethod;
+    }
+
+    /**
+     * Returns true if callee is an instance (non-static) method, false otherwise.
+     *
+     * @return Boolean
+     */
+    public function isAnInstanceMethod()
+    {
+        return $this->reflection instanceof ReflectionMethod
+        && !$this->reflection->isStatic();
     }
 }
