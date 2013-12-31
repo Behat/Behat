@@ -106,8 +106,8 @@ class TransformationExtension implements Extension
      */
     protected function loadDefinitionArgumentsTransformer(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\Call\Handler\DefinitionArgumentsTransformer');
-        $definition->addTag(CallExtension::CALL_HANDLER_TAG, array('priority' => 200));
+        $definition = new Definition('Behat\Behat\Transformation\Call\Filter\DefinitionArgumentsTransformer');
+        $definition->addTag(CallExtension::CALL_FILTER_TAG, array('priority' => 200));
         $container->setDefinition($this->getDefinitionArgumentTransformerId(), $definition);
     }
 
@@ -175,6 +175,6 @@ class TransformationExtension implements Extension
      */
     protected function getDefinitionArgumentTransformerId()
     {
-        return CallExtension::CALL_HANDLER_TAG . '.definition_argument_transformer';
+        return CallExtension::CALL_FILTER_TAG . '.definition_argument_transformer';
     }
 }

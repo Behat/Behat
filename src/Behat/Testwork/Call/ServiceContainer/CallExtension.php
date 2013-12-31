@@ -33,8 +33,9 @@ class CallExtension implements Extension
     /*
      * Available extension points
      */
+    const CALL_FILTER_TAG = 'call.call_filter';
     const CALL_HANDLER_TAG = 'call.call_handler';
-    const RESULT_HANDLER_TAG = 'call.result_handler';
+    const RESULT_FILTER_TAG = 'call.result_filter';
 
     /**
      * @var ServiceProcessor
@@ -95,8 +96,9 @@ class CallExtension implements Extension
      */
     public function process(ContainerBuilder $container)
     {
+        $this->processCallFilters($container);
         $this->processCallHandlers($container);
-        $this->processResultHandlers($container);
+        $this->processResultFilters($container);
     }
 
     /**
@@ -124,6 +126,21 @@ class CallExtension implements Extension
     }
 
     /**
+     * Registers all call filters to the CallCentre.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function processCallFilters(ContainerBuilder $container)
+    {
+        $references = $this->processor->findAndSortTaggedServices($container, CallExtension::CALL_FILTER_TAG);
+        $definition = $container->getDefinition(CallExtension::CALL_CENTRE_ID);
+
+        foreach ($references as $reference) {
+            $definition->addMethodCall('registerCallFilter', array($reference));
+        }
+    }
+
+    /**
      * Registers all call handlers to the CallCentre.
      *
      * @param ContainerBuilder $container
@@ -139,17 +156,17 @@ class CallExtension implements Extension
     }
 
     /**
-     * Registers all call result handlers to the CallCentre.
+     * Registers all call result filters to the CallCentre.
      *
      * @param ContainerBuilder $container
      */
-    protected function processResultHandlers(ContainerBuilder $container)
+    protected function processResultFilters(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, CallExtension::RESULT_HANDLER_TAG);
+        $references = $this->processor->findAndSortTaggedServices($container, CallExtension::RESULT_FILTER_TAG);
         $definition = $container->getDefinition(CallExtension::CALL_CENTRE_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerResultHandler', array($reference));
+            $definition->addMethodCall('registerResultFilter', array($reference));
         }
     }
 }

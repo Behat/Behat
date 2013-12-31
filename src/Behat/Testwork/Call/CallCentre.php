@@ -11,8 +11,10 @@
 namespace Behat\Testwork\Call;
 
 use Behat\Testwork\Call\Exception\CallHandlingException;
+use Behat\Testwork\Call\Filter\CallFilter;
+use Behat\Testwork\Call\Filter\ResultFilter;
 use Behat\Testwork\Call\Handler\CallHandler;
-use Behat\Testwork\Call\Handler\ResultHandler;
+use Exception;
 
 /**
  * Testwork call centre.
@@ -24,46 +26,86 @@ use Behat\Testwork\Call\Handler\ResultHandler;
 class CallCentre
 {
     /**
+     * @var CallFilter[]
+     */
+    private $callFilters = array();
+    /**
      * @var CallHandler[]
      */
     private $callHandlers = array();
     /**
-     * @var ResultHandler[]
+     * @var ResultFilter[]
      */
-    private $resultHandlers = array();
+    private $resultFilters = array();
+
+    /**
+     * Registers call filter.
+     *
+     * @param CallFilter $filter
+     */
+    public function registerCallFilter(CallFilter $filter)
+    {
+        $this->callFilters[] = $filter;
+    }
 
     /**
      * Registers call handler.
      *
-     * @param CallHandler $callHandler
+     * @param CallHandler $handler
      */
-    public function registerCallHandler(CallHandler $callHandler)
+    public function registerCallHandler(CallHandler $handler)
     {
-        $this->callHandlers[] = $callHandler;
+        $this->callHandlers[] = $handler;
     }
 
     /**
-     * Registers call result handler.
+     * Registers call result filter.
      *
-     * @param ResultHandler $resultHandler
+     * @param ResultFilter $filter
      */
-    public function registerResultHandler(ResultHandler $resultHandler)
+    public function registerResultFilter(ResultFilter $filter)
     {
-        $this->resultHandlers[] = $resultHandler;
+        $this->resultFilters[] = $filter;
     }
 
     /**
-     * Handles call and its result using registered handlers and returns result.
+     * Handles call and its result using registered filters and handlers.
      *
      * @param Call $call
      *
      * @return CallResult
-     *
-     * @throws CallHandlingException If none of the registered handlers produced call result
      */
     public function makeCall(Call $call)
     {
-        return $this->handleResult($this->handleCall($call));
+        try {
+            $filteredCall = $this->filterCall($call);
+            $result = $this->handleCall($filteredCall);
+            $filteredResult = $this->filterResult($result);
+        } catch (Exception $e) {
+            return new CallResult($call, null, $e, null);
+        }
+
+        return $filteredResult;
+    }
+
+    /**
+     * Filters call using registered filters and returns a filtered one.
+     *
+     * @param Call $call
+     *
+     * @return Call
+     */
+    private function filterCall(Call $call)
+    {
+        foreach ($this->callFilters as $filter) {
+            if (!$filter->supportsCall($call)) {
+                continue;
+            }
+
+            return $filter->filterCall($call);
+        }
+
+        return $call;
     }
 
     /**
@@ -82,14 +124,7 @@ class CallCentre
                 continue;
             }
 
-            $return = $handler->handleCall($call);
-
-            if ($return instanceof CallResult) {
-                return $return;
-            }
-            if ($return instanceof Call) {
-                $call = $return;
-            }
+            return $handler->handleCall($call);
         }
 
         throw new CallHandlingException(sprintf(
@@ -99,24 +134,20 @@ class CallCentre
     }
 
     /**
-     * Handles call result using registered result handlers.
+     * Filters call result using registered filters and returns a filtered one.
      *
      * @param CallResult $result
      *
      * @return CallResult
      */
-    private function handleResult(CallResult $result)
+    private function filterResult(CallResult $result)
     {
-        foreach ($this->resultHandlers as $handler) {
-            if (!$handler->supportsResult($result)) {
+        foreach ($this->resultFilters as $filter) {
+            if (!$filter->supportsResult($result)) {
                 continue;
             }
 
-            $return = $handler->handleResult($result);
-
-            if ($return instanceof CallResult) {
-                $result = $return;
-            }
+            return $filter->filterResult($result);
         }
 
         return $result;

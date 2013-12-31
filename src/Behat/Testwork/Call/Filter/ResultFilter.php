@@ -8,24 +8,24 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Call\Handler;
+namespace Behat\Testwork\Call\Filter;
 
 use Behat\Testwork\Call\CallCentre;
 use Behat\Testwork\Call\CallResult;
 
 /**
- * Testwork call result handler interface.
+ * Testwork call result filter interface.
  *
- * Handles call results and produces new ones (if necessary).
+ * Filters call results and produces new ones.
  *
  * @see CallCentre
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ResultHandler
+interface ResultFilter
 {
     /**
-     * Checks if handler supports call result.
+     * Checks if filter supports call result.
      *
      * @param CallResult $result
      *
@@ -34,11 +34,11 @@ interface ResultHandler
     public function supportsResult(CallResult $result);
 
     /**
-     * Handles call result and returns either a new result or a null.
+     * Filters call result and returns a new result.
      *
      * @param CallResult $result
      *
-     * @return null|CallResult
+     * @return CallResult
      */
-    public function handleResult(CallResult $result);
+    public function filterResult(CallResult $result);
 }

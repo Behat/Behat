@@ -8,14 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Transformation\Call\Handler;
+namespace Behat\Behat\Transformation\Call\Filter;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Transformation\Transformer\ArgumentTransformer;
 use Behat\Testwork\Call\Call;
-use Behat\Testwork\Call\CallResult;
-use Behat\Testwork\Call\Handler\CallHandler;
-use Exception;
+use Behat\Testwork\Call\Filter\CallFilter;
 
 /**
  * Definition arguments transformer handler.
@@ -24,7 +22,7 @@ use Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionArgumentsTransformer implements CallHandler
+class DefinitionArgumentsTransformer implements CallFilter
 {
     /**
      * @var ArgumentTransformer[]
@@ -54,13 +52,13 @@ class DefinitionArgumentsTransformer implements CallHandler
     }
 
     /**
-     * Handles call and returns either new call, call result or a null.
+     * Filters call and a new one.
      *
      * @param DefinitionCall $definitionCall
      *
-     * @return CallResult|DefinitionCall
+     * @return DefinitionCall
      */
-    public function handleCall(Call $definitionCall)
+    public function filterCall(Call $definitionCall)
     {
         $newArguments = array();
         $transformed = false;
@@ -72,11 +70,7 @@ class DefinitionArgumentsTransformer implements CallHandler
                     continue;
                 }
 
-                try {
-                    $newValue = $transformer->transformArgument($definitionCall, $index, $newValue);
-                } catch (Exception $e) {
-                    return new CallResult($definitionCall, null, $e, null);
-                }
+                $newValue = $transformer->transformArgument($definitionCall, $index, $newValue);
 
                 break;
             }
