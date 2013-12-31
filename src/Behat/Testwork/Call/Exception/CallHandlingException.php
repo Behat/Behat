@@ -31,11 +31,11 @@ class CallHandlingException extends RuntimeException implements CallException
      * Initializes exception.
      *
      * @param string $message
-     * @param Call   $call
+     * @param Call   $callable
      */
-    public function __construct($message, Call $call)
+    public function __construct($message, Call $callable)
     {
-        $this->call = $call;
+        $this->call = $callable;
 
         parent::__construct($message);
     }

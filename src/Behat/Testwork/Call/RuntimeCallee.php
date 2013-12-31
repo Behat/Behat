@@ -24,7 +24,7 @@ use ReflectionMethod;
 class RuntimeCallee implements Callee
 {
     /**
-     * @var callable
+     * @var Callable
      */
     private $callable;
     /**

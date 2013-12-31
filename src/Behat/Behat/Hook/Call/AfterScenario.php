@@ -23,12 +23,12 @@ class AfterScenario extends RuntimeScenarioHook
      * Initializes hook.
      *
      * @param null|string $filterString
-     * @param Callable    $callback
+     * @param Callable    $callable
      * @param null|string $description
      */
-    public function __construct($filterString, $callback, $description = null)
+    public function __construct($filterString, $callable, $description = null)
     {
-        parent::__construct(ScenarioTested::AFTER, $filterString, $callback, $description);
+        parent::__construct(ScenarioTested::AFTER, $filterString, $callable, $description);
     }
 
     /**

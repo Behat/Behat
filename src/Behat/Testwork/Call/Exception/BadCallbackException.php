@@ -20,19 +20,19 @@ use RuntimeException;
 class BadCallbackException extends RuntimeException implements CallException
 {
     /**
-     * @var callback
+     * @var Callable
      */
-    private $callback;
+    private $callable;
 
     /**
      * Initializes exception.
      *
      * @param string   $message
-     * @param callback $call
+     * @param Callable $callable
      */
-    public function __construct($message, $call)
+    public function __construct($message, $callable)
     {
-        $this->callback = $call;
+        $this->callable = $callable;
 
         parent::__construct($message);
     }
@@ -40,10 +40,10 @@ class BadCallbackException extends RuntimeException implements CallException
     /**
      * Returns callback that caused exception.
      *
-     * @return callback
+     * @return Callable
      */
-    public function getCallback()
+    public function getCallable()
     {
-        return $this->callback;
+        return $this->callable;
     }
 }

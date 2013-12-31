@@ -31,14 +31,14 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHo
      *
      * @param string      $eventName
      * @param null|string $filterString
-     * @param Callable    $callback
+     * @param Callable    $callable
      * @param null|string $description
      */
-    public function __construct($eventName, $filterString, $callback, $description = null)
+    public function __construct($eventName, $filterString, $callable, $description = null)
     {
         $this->filterString = $filterString;
 
-        parent::__construct($eventName, $callback, $description);
+        parent::__construct($eventName, $callable, $description);
     }
 
     /**

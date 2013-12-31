@@ -36,15 +36,15 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
      *
      * @param string      $type
      * @param string      $pattern
-     * @param Callable    $callback
+     * @param Callable    $callable
      * @param null|string $description
      */
-    public function __construct($type, $pattern, $callback, $description = null)
+    public function __construct($type, $pattern, $callable, $description = null)
     {
         $this->type = $type;
         $this->pattern = $pattern;
 
-        parent::__construct($callback, $description);
+        parent::__construct($callable, $description);
     }
 
     /**

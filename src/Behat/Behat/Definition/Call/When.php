@@ -21,11 +21,11 @@ class When extends RuntimeDefinition
      * Initializes definition.
      *
      * @param string      $pattern
-     * @param Callable    $callback
+     * @param Callable    $callable
      * @param null|string $description
      */
-    public function __construct($pattern, $callback, $description = null)
+    public function __construct($pattern, $callable, $description = null)
     {
-        parent::__construct('When', $pattern, $callback, $description);
+        parent::__construct('When', $pattern, $callable, $description);
     }
 }

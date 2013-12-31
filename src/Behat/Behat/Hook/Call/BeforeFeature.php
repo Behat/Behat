@@ -23,12 +23,12 @@ class BeforeFeature extends RuntimeFeatureHook
      * Initializes hook.
      *
      * @param null|string $filterString
-     * @param Callable    $callback
+     * @param Callable    $callable
      * @param null|string $description
      */
-    public function __construct($filterString, $callback, $description = null)
+    public function __construct($filterString, $callable, $description = null)
     {
-        parent::__construct(FeatureTested::BEFORE, $filterString, $callback, $description);
+        parent::__construct(FeatureTested::BEFORE, $filterString, $callable, $description);
     }
 
     /**
