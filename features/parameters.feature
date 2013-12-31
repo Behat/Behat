@@ -8,12 +8,11 @@ Feature: Parameters
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $result;
           private $numbers;
@@ -84,7 +83,7 @@ Feature: Parameters
       """
 
   Scenario:
-    When I run "behat --no-ansi"
+    When I run "behat --no-colors"
     Then it should pass with:
       """
       ...............
@@ -97,9 +96,14 @@ Feature: Parameters
   Scenario:
     Given "BEHAT_PARAMS" environment variable is set to:
       """
-      {"formatters": {"pretty": {"paths": false, "time": false}}}
+      {"formatters": {"pretty": {"paths": false, "timer": false}}}
       """
-    When I run "behat --no-ansi -c unexistent"
+    And a file named "behat.yml" with:
+      """
+      default:
+        formatters: ~
+      """
+    When I run "behat --no-colors -c unexistent"
     Then it should pass with:
       """
       Feature: Math
@@ -127,15 +131,20 @@ Feature: Parameters
   Scenario:
     Given "BEHAT_PARAMS" environment variable is set to:
       """
-      {"formatters": {"pretty": {"time": false}}}
+      {"formatters": {"pretty": {"timer": false}}}
       """
-    When I run "behat --no-ansi -c unexistent"
+    And a file named "behat.yml" with:
+      """
+      default:
+        formatters: ~
+      """
+    When I run "behat --no-colors -c unexistent"
     Then it should pass with:
       """
       Feature: Math
 
-        Background:                     # features/math.feature:2
-          Given I have basic calculator # FeatureContext::iHaveBasicCalculator()
+        Background:                          # features/math.feature:2
+          Given I have basic calculator      # FeatureContext::iHaveBasicCalculator()
 
         Scenario Outline:                    # features/math.feature:5
           Given I have entered <number1>     # FeatureContext::iHaveEntered()

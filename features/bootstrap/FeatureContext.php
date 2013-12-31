@@ -7,7 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Context\ContextInterface;
+
+use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 
 /**
@@ -15,7 +16,7 @@ use Behat\Gherkin\Node\PyStringNode;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureContext implements ContextInterface
+class FeatureContext implements Context
 {
     /**
      * Environment variable
@@ -45,7 +46,7 @@ class FeatureContext implements ContextInterface
     /**
      * Cleans test folders in the temporary directory.
      *
-     * @BeforeSuite
+     * @BeforeFeature
      */
     public static function cleanTestFolders()
     {
@@ -81,12 +82,12 @@ class FeatureContext implements ContextInterface
      *
      * @Given /^(?:there is )?a file named "([^"]*)" with:$/
      *
-     * @param   string       $filename   name of the file (relative path)
-     * @param   PyStringNode $content    PyString string instance
+     * @param   string       $filename name of the file (relative path)
+     * @param   PyStringNode $content  PyString string instance
      */
     public function aFileNamedWith($filename, PyStringNode $content)
     {
-        $content = strtr((string)$content, array("'''" => '"""'));
+        $content = strtr((string) $content, array("'''" => '"""'));
         $this->createFile($filename, $content);
     }
 
@@ -123,13 +124,13 @@ class FeatureContext implements ContextInterface
      */
     public function iSetEnvironmentVariable(PyStringNode $value)
     {
-        $this->env = (string)$value;
+        $this->env = (string) $value;
     }
 
     /**
      * Runs behat command with provided parameters
      *
-     * @When /^I run "behat(?: ([^"]*))?"$/
+     * @When /^I run "behat(?: ((?:\"|[^"])*))?"$/
      *
      * @param   string $argumentsString
      */
@@ -142,13 +143,19 @@ class FeatureContext implements ContextInterface
         }
 
         if ($this->env) {
-            exec(sprintf('BEHAT_PARAMS=\'%s\' %s %s %s',
-                $this->env, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
-            ), $output, $return);
+            exec(
+                sprintf(
+                    'BEHAT_PARAMS=\'%s\' %s %s %s',
+                    $this->env, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
+                ), $output, $return
+            );
         } else {
-            exec(sprintf('%s %s %s --no-time',
-                BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
-            ), $output, $return);
+            exec(
+                sprintf(
+                    '%s %s %s --format-settings=\'{"timer": false}\'',
+                    BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
+                ), $output, $return
+            );
         }
 
         $this->command = 'behat ' . $argumentsString;
@@ -169,33 +176,35 @@ class FeatureContext implements ContextInterface
      *
      * @Then /^it should (fail|pass) with:$/
      *
-     * @param   string       $success    "fail" or "pass"
-     * @param   PyStringNode $text       PyString text instance
+     * @param   string       $success "fail" or "pass"
+     * @param   PyStringNode $text    PyString text instance
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
-        if ('fail' === $success) {
-            PHPUnit_Framework_Assert::assertNotEquals(0, $this->return);
-        } else {
-            PHPUnit_Framework_Assert::assertEquals(0, $this->return);
-        }
-
         $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
-            $text = preg_replace_callback('/ features\/[^\n ]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
-            $text = preg_replace_callback('/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
-            $text = preg_replace_callback('/\+[fd] [^ ]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
+            $text = preg_replace_callback(
+                '/ features\/[^\n ]+/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, (string) $text
+            );
+            $text = preg_replace_callback(
+                '/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, (string) $text
+            );
+            $text = preg_replace_callback(
+                '/\+[fd] [^ ]+/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, (string) $text
+            );
         }
 
-        PHPUnit_Framework_Assert::assertEquals((string)$text, $this->output);
+        $this->itShouldFail($success);
+
+        PHPUnit_Framework_Assert::assertEquals((string) $text, $this->output);
     }
 
     /**
@@ -203,13 +212,13 @@ class FeatureContext implements ContextInterface
      *
      * @Given /^"([^"]*)" file should contain:$/
      *
-     * @param   string       $path   file path
-     * @param   PyStringNode $text   file content
+     * @param   string       $path file path
+     * @param   PyStringNode $text file content
      */
     public function fileShouldContain($path, PyStringNode $text)
     {
         PHPUnit_Framework_Assert::assertFileExists($path);
-        PHPUnit_Framework_Assert::assertEquals((string)$text, trim(file_get_contents($path)));
+        PHPUnit_Framework_Assert::assertEquals((string) $text, trim(file_get_contents($path)));
     }
 
     /**
@@ -227,7 +236,7 @@ class FeatureContext implements ContextInterface
      *
      * @Then the output should contain:
      *
-     * @param   PyStringNode $text   PyString text instance
+     * @param   PyStringNode $text PyString text instance
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
@@ -235,18 +244,24 @@ class FeatureContext implements ContextInterface
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
-            $text = preg_replace_callback('/ features\/[^\n ]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
-            $text = preg_replace_callback('/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
-            $text = preg_replace_callback('/\+[fd] [^ ]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
+            $text = preg_replace_callback(
+                '/ features\/[^\n ]+/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, (string) $text
+            );
+            $text = preg_replace_callback(
+                '/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, (string) $text
+            );
+            $text = preg_replace_callback(
+                '/\+[fd] [^ ]+/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, (string) $text
+            );
         }
 
-        PHPUnit_Framework_Assert::assertContains((string)$text, $this->output);
+        PHPUnit_Framework_Assert::assertContains((string) $text, $this->output);
     }
 
     /**
@@ -254,13 +269,21 @@ class FeatureContext implements ContextInterface
      *
      * @Then /^it should (fail|pass)$/
      *
-     * @param   string $success    "fail" or "pass"
+     * @param   string $success "fail" or "pass"
      */
     public function itShouldFail($success)
     {
         if ('fail' === $success) {
+            if (0 === $this->return) {
+                echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->output;
+            }
+
             PHPUnit_Framework_Assert::assertNotEquals(0, $this->return);
         } else {
+            if (0 !== $this->return) {
+                echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->output;
+            }
+
             PHPUnit_Framework_Assert::assertEquals(0, $this->return);
         }
     }

@@ -27,15 +27,14 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\RegexAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface {}
+      class FeatureContext implements RegexAcceptingContext {}
       """
-    When I run "behat --no-ansi -f progress features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature"
     Then it should pass with:
       """
       UUUUUU
@@ -43,7 +42,7 @@ Feature: Different result types
       2 scenarios (2 undefined)
       6 steps (6 undefined)
 
-      You can implement step definitions for undefined steps with these snippets:
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^I have magically created (\d+)\$$/
@@ -69,7 +68,7 @@ Feature: Different result types
               throw new PendingException();
           }
       """
-    When I run "behat --no-ansi --strict -f progress features/coffee.feature"
+    When I run "behat --no-colors --strict -f progress features/coffee.feature"
     Then it should fail with:
       """
       UUUUUU
@@ -77,7 +76,7 @@ Feature: Different result types
       2 scenarios (2 undefined)
       6 steps (6 undefined)
 
-      You can implement step definitions for undefined steps with these snippets:
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^I have magically created (\d+)\$$/
@@ -123,13 +122,12 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\RegexAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface
+      class FeatureContext implements RegexAcceptingContext
       {
           /**
            * @Given /^human have ordered very very very hot "([^"]*)"$/
@@ -146,22 +144,20 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat --no-ansi -f progress features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature"
     Then it should pass with:
       """
       P-U
 
-      (::) pending steps (::)
+      --- Pending steps:
 
-      01. TODO: write pending definition
-          In step `Given human have ordered very very very hot "coffee"'. # FeatureContext::humanOrdered()
-          From scenario background.                                       # features/coffee.feature:6
-          Of feature `Pending coffee machine actions'.                    # features/coffee.feature
+          Given human have ordered very very very hot "coffee" # FeatureContext::humanOrdered()
+            TODO: write pending definition
 
       1 scenario (1 undefined)
-      3 steps (1 skipped, 1 pending, 1 undefined)
+      3 steps (1 undefined, 1 pending, 1 skipped)
 
-      You can implement step definitions for undefined steps with these snippets:
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Then /^I should say "([^"]*)"$/
@@ -171,22 +167,20 @@ Feature: Different result types
               throw new PendingException();
           }
       """
-    When I run "behat --no-ansi --strict -f progress features/coffee.feature"
+    When I run "behat --no-colors --strict -f progress features/coffee.feature"
     Then it should fail with:
       """
       P-U
 
-      (::) pending steps (::)
+      --- Pending steps:
 
-      01. TODO: write pending definition
-          In step `Given human have ordered very very very hot "coffee"'. # FeatureContext::humanOrdered()
-          From scenario background.                                       # features/coffee.feature:6
-          Of feature `Pending coffee machine actions'.                    # features/coffee.feature
+          Given human have ordered very very very hot "coffee" # FeatureContext::humanOrdered()
+            TODO: write pending definition
 
       1 scenario (1 undefined)
-      3 steps (1 skipped, 1 pending, 1 undefined)
+      3 steps (1 undefined, 1 pending, 1 skipped)
 
-      You can implement step definitions for undefined steps with these snippets:
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Then /^I should say "([^"]*)"$/
@@ -220,12 +214,12 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\Context,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $money = 0;
 
@@ -244,25 +238,23 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat --no-ansi -f progress features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature"
     Then it should fail with:
       """
       .F..F-
 
-      (::) failed steps (::)
+      --- Failed steps:
 
-      01. Failed asserting that 10 matches expected '12'.
-          In step `Then I should see 12$ on the screen'. # FeatureContext::iShouldSee()
-          From scenario `Check thrown amount'.           # features/coffee.feature:9
-          Of feature `Failed coffee machine actions'.    # features/coffee.feature
+          features/coffee.feature:9
+            Then I should see 12$ on the screen # features/coffee.feature:10
+              Failed asserting that 10 matches expected '12'.
 
-      02. Failed asserting that 30 matches expected '31'.
-          In step `Then I should see 31$ on the screen'. # FeatureContext::iShouldSee()
-          From scenario `Additional throws'.             # features/coffee.feature:12
-          Of feature `Failed coffee machine actions'.    # features/coffee.feature
+          features/coffee.feature:12
+            Then I should see 31$ on the screen # features/coffee.feature:14
+              Failed asserting that 30 matches expected '31'.
 
       2 scenarios (2 failed)
-      6 steps (3 passed, 1 skipped, 2 failed)
+      6 steps (3 passed, 2 failed, 1 skipped)
       """
 
   Scenario: Skipped steps
@@ -292,12 +284,12 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\Context,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $money = 0;
 
@@ -334,25 +326,23 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat --no-ansi -f progress features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature"
     Then it should fail with:
       """
       .F---..F--
 
-      (::) failed steps (::)
+      --- Failed steps:
 
-      01. NO water in coffee machine!!! (Exception)
-          In step `Given I have no water'.             # FeatureContext::noWater()
-          From scenario `I have no water'.             # features/coffee.feature:9
-          Of feature `Skipped coffee machine actions'. # features/coffee.feature
+          features/coffee.feature:9
+            Given I have no water # features/coffee.feature:10
+              NO water in coffee machine!!! (Exception)
 
-      02. NO electricity in coffee machine!!! (Exception)
-          In step `And I have no electricity'.         # FeatureContext::haveNoElectricity()
-          From scenario `I have no electricity'.       # features/coffee.feature:15
-          Of feature `Skipped coffee machine actions'. # features/coffee.feature
+          features/coffee.feature:15
+            And I have no electricity # features/coffee.feature:17
+              NO electricity in coffee machine!!! (Exception)
 
       2 scenarios (2 failed)
-      10 steps (3 passed, 5 skipped, 2 failed)
+      10 steps (3 passed, 2 failed, 5 skipped)
       """
 
   Scenario: Ambigious steps
@@ -371,12 +361,12 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\Context,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           /** @Given /^human have chosen "([^"]*)"$/ */
           public function chosen($arg1) {
@@ -396,22 +386,21 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat --no-ansi -f progress features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature"
     Then it should fail with:
       """
       F-
 
-      (::) failed steps (::)
+      --- Failed steps:
 
-      01. Ambiguous match of "human have chosen "Latte"":
-          to `/^human have chosen "([^"]*)"$/` from FeatureContext::chosen()
-          to `/^human have chosen "Latte"$/` from FeatureContext::chosenLatte()
-          In step `Given human have chosen "Latte"'.
-          From scenario `Ambigious coffee type'.        # features/coffee.feature:6
-          Of feature `Ambigious orders in coffee menu'. # features/coffee.feature
+          features/coffee.feature:6
+            Given human have chosen "Latte" # features/coffee.feature:7
+              Ambiguous match of "human have chosen "Latte"":
+              to `/^human have chosen "([^"]*)"$/` from FeatureContext::chosen()
+              to `/^human have chosen "Latte"$/` from FeatureContext::chosenLatte()
 
       1 scenario (1 failed)
-      2 steps (1 skipped, 1 failed)
+      2 steps (1 failed, 1 skipped)
       """
 
   Scenario: Redundant steps
@@ -430,12 +419,12 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           /** @Given /^customer bought coffee$/ */
           public function chosen($arg1) {
@@ -448,7 +437,7 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat --no-ansi -f progress features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature"
     Then it should fail
     And the output should contain:
       """
@@ -471,12 +460,12 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\Context,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           /** @Given /^customer bought coffee$/ */
           public function chosen() {
@@ -489,19 +478,18 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat --no-ansi -f progress features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature"
     Then it should fail
     And the output should contain:
       """
       F-
 
-      (::) failed steps (::)
+      --- Failed steps:
 
-      01. User Error: some error in features/bootstrap/FeatureContext.php line 12
-          In step `Given customer bought coffee'. # FeatureContext::chosen()
-          From scenario `Redundant menu'.         # features/coffee.feature:6
-          Of feature `Redundant actions'.         # features/coffee.feature
+          features/coffee.feature:6
+            Given customer bought coffee # features/coffee.feature:7
+              User Error: some error in features/bootstrap/FeatureContext.php line 12
 
       1 scenario (1 failed)
-      2 steps (1 skipped, 1 failed)
+      2 steps (1 failed, 1 skipped)
       """

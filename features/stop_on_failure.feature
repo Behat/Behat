@@ -8,12 +8,9 @@ Feature: Stop on failure
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\Context;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           /**
            * @Given /^I have (?:a|another) step that passes?$/
@@ -87,7 +84,7 @@ Feature: Stop on failure
       """
 
   Scenario: Just run feature
-    When I run "behat --no-ansi --no-paths --stop-on-failure features/failing.feature"
+    When I run "behat --no-colors --format-settings='{\"paths\": false}' --stop-on-failure features/failing.feature"
     Then it should fail with:
       """
       Feature: Failing Feature
@@ -113,15 +110,16 @@ Feature: Stop on failure
             step failed as supposed (Exception)
           Then I should have a scenario that failed
 
-      Failed scenarios:
-      features/failing.feature:18
+      --- Failed scenarios:
+
+          features/failing.feature:18
 
       3 scenarios (2 passed, 1 failed)
-      11 steps (9 passed, 1 skipped, 1 failed)
+      11 steps (9 passed, 1 failed, 1 skipped)
       """
 
   Scenario: Just run feature
-    When I run "behat --no-ansi --no-paths --stop-on-failure features/passing.feature"
+    When I run "behat --no-colors --format-settings='{\"paths\": false}' --stop-on-failure features/passing.feature"
     Then it should pass with:
       """
       Feature: Passing Feature

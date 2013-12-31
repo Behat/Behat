@@ -8,12 +8,9 @@ Feature: Rerun
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\Context;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $apples = 0;
           private $parameters;
@@ -101,52 +98,48 @@ Feature: Rerun
       """
 
   Scenario: Run one feature with 2 failed and 3 passing scenarios
-    When I run "behat --no-ansi -f progress features/apples.feature"
+    When I run "behat --no-colors -f progress features/apples.feature"
     Then it should fail with:
       """
       ..F.............F....
 
-      (::) failed steps (::)
+      --- Failed steps:
 
-      01. Failed asserting that 2 matches expected 3.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `I'm little hungry'.     # features/apples.feature:9
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:9
+            Then I should have 3 apples # features/apples.feature:11
+              Failed asserting that 2 matches expected 3.
 
-      02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `Other situations'.      # features/apples.feature:21
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:29
+            Then I should have 8 apples # features/apples.feature:24
+              Failed asserting that 7 matches expected 8.
 
       6 scenarios (4 passed, 2 failed)
       21 steps (19 passed, 2 failed)
       """
 
   Scenario: Rerun only failed scenarios
-    Given I run "behat --no-ansi -f progress features/apples.feature"
-    When I run "behat --no-ansi -f progress features/apples.feature --rerun"
+    Given I run "behat --no-colors -f progress features/apples.feature"
+    When I run "behat --no-colors -f progress features/apples.feature --rerun"
     Then it should fail with:
     """
     ..F...F
 
-    (::) failed steps (::)
+    --- Failed steps:
 
-    01. Failed asserting that 2 matches expected 3.
-        In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
-        From scenario `I'm little hungry'.     # features/apples.feature:9
-        Of feature `Apples story'.             # features/apples.feature
+        features/apples.feature:9
+          Then I should have 3 apples # features/apples.feature:11
+            Failed asserting that 2 matches expected 3.
 
-    02. Failed asserting that 7 matches expected 8.
-        In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
-        From scenario `Other situations'.      # features/apples.feature:21
-        Of feature `Apples story'.             # features/apples.feature
+        features/apples.feature:29
+          Then I should have 8 apples # features/apples.feature:24
+            Failed asserting that 7 matches expected 8.
 
     2 scenarios (2 failed)
     7 steps (5 passed, 2 failed)
     """
 
   Scenario: Fixing scenario removes it from the rerun log
-    Given I run "behat --no-ansi -f progress features/apples.feature"
+    Given I run "behat --no-colors -f progress features/apples.feature"
     And there is a file named "features/apples.feature" with:
       """
       Feature: Apples story
@@ -180,18 +173,17 @@ Feature: Rerun
             | 0   | 4     | 7      |
             | 2   | 2     | 3      |
       """
-    When I run "behat --no-ansi -f progress features/apples.feature"
-    And I run "behat --no-ansi -f progress features/apples.feature --rerun"
+    When I run "behat --no-colors -f progress features/apples.feature"
+    And I run "behat --no-colors -f progress features/apples.feature --rerun"
     Then it should fail with:
     """
     ..F
 
-    (::) failed steps (::)
+    --- Failed steps:
 
-    01. Failed asserting that 2 matches expected 3.
-        In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
-        From scenario `I'm little hungry'.     # features/apples.feature:9
-        Of feature `Apples story'.             # features/apples.feature
+        features/apples.feature:9
+          Then I should have 3 apples # features/apples.feature:11
+            Failed asserting that 2 matches expected 3.
 
     1 scenario (1 failed)
     3 steps (2 passed, 1 failed)

@@ -10,8 +10,6 @@ Feature: hooks
         suites:
           default:
             parameters:
-              before_suite:   BEFORE ANY SUITE
-              after_suite:    AFTER ANY SUITE
               before_feature: BEFORE EVERY FEATURE
               after_feature:  AFTER EVERY FEATURE
       """
@@ -19,29 +17,20 @@ Feature: hooks
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $number;
-
-          /**
-           * @BeforeSuite
-           */
-          static public function doSomethingBeforeSuite($event) {
-              $params = $event->getSuite()->getParameters();
-              echo "= do something ".$params['before_suite']."\n";
-          }
 
           /**
            * @BeforeFeature
            */
           static public function doSomethingBeforeFeature($event) {
               $params = $event->getSuite()->getParameters();
-              echo "= do something ".$params['before_feature']."\n";
+              echo "= do something ".$params['before_feature'];
           }
 
           /**
@@ -49,29 +38,21 @@ Feature: hooks
            */
           static public function doSomethingAfterFeature($event) {
               $params = $event->getSuite()->getParameters();
-              echo "= do something ".$params['after_feature']."\n";
+              echo "= do something ".$params['after_feature'];
           }
 
           /**
            * @BeforeFeature @someFeature
            */
           static public function doSomethingBeforeSomeFeature($event) {
-              echo "= do something before SOME feature\n";
+              echo "= do something before SOME feature";
           }
 
           /**
            * @AfterFeature @someFeature
            */
           static public function doSomethingAfterSomeFeature($event) {
-              echo "= do something after SOME feature\n";
-          }
-
-          /**
-           * @AfterSuite
-           */
-          static public function doSomethingAfterSuite($event) {
-              $params = $event->getSuite()->getParameters();
-              echo "= do something ".$params['after_suite']."\n";
+              echo "= do something after SOME feature";
           }
 
           /**
@@ -103,9 +84,9 @@ Feature: hooks
           }
 
           /**
-           * @AfterStep @100
+           * @BeforeStep I must have 100
            */
-          public function afterStep100($event) {
+          public function beforeStep100($event) {
               $this->number = 100;
           }
 
@@ -149,16 +130,14 @@ Feature: hooks
         Scenario: 130
           Given I must have 130
       """
-    When I run "behat --no-ansi -f pretty"
+    When I run "behat --no-colors -f pretty"
     Then it should pass with:
       """
-      > BeforeSuite # FeatureContext::doSomethingBeforeSuite()
-        = do something BEFORE ANY SUITE
-
+      ┌─ @BeforeFeature # FeatureContext::doSomethingBeforeFeature()
+      │
+      │  = do something BEFORE EVERY FEATURE
+      │
       Feature:
-
-      > BeforeFeature # FeatureContext::doSomethingBeforeFeature()
-        = do something BEFORE EVERY FEATURE
 
         Scenario:             # features/test.feature:2
           Then I must have 50 # FeatureContext::iMustHave()
@@ -168,25 +147,24 @@ Feature: hooks
           Then I must have 12     # FeatureContext::iMustHave()
 
         @thirty
-        Scenario:                 # features/test.feature:9
-          Given I must have 30    # FeatureContext::iMustHave()
-          When I have entered 23  # FeatureContext::iHaveEntered()
-          Then I must have 23     # FeatureContext::iMustHave()
+        Scenario:                # features/test.feature:9
+          Given I must have 30   # FeatureContext::iMustHave()
+          When I have entered 23 # FeatureContext::iHaveEntered()
+          Then I must have 23    # FeatureContext::iMustHave()
 
         @100 @thirty
-        Scenario:                 # features/test.feature:14
-          Given I must have 30    # FeatureContext::iMustHave()
-          When I have entered 1   # FeatureContext::iHaveEntered()
-          Then I must have 100    # FeatureContext::iMustHave()
+        Scenario:               # features/test.feature:14
+          Given I must have 30  # FeatureContext::iMustHave()
+          When I have entered 1 # FeatureContext::iHaveEntered()
+          Then I must have 100  # FeatureContext::iMustHave()
 
-        Scenario: 130             # features/test.feature:19
-          Given I must have 130   # FeatureContext::iMustHave()
+        Scenario: 130           # features/test.feature:19
+          Given I must have 130 # FeatureContext::iMustHave()
 
-      > AfterFeature              # FeatureContext::doSomethingAfterFeature()
-        = do something AFTER EVERY FEATURE
-
-      > AfterSuite                # FeatureContext::doSomethingAfterSuite()
-        = do something AFTER ANY SUITE
+      │
+      │  = do something AFTER EVERY FEATURE
+      │
+      └─ @AfterFeature # FeatureContext::doSomethingAfterFeature()
 
       5 scenarios (5 passed)
       10 steps (10 passed)
@@ -213,16 +191,14 @@ Feature: hooks
         Scenario: 130
           Given I must have 130
       """
-    When I run "behat --no-ansi -f pretty"
+    When I run "behat --no-colors -f pretty"
     Then it should pass with:
       """
-      > BeforeSuite # FeatureContext::doSomethingBeforeSuite()
-        = do something BEFORE ANY SUITE
-
+      ┌─ @BeforeFeature # FeatureContext::doSomethingBeforeFeature()
+      │
+      │  = do something BEFORE EVERY FEATURE
+      │
       Feature:
-
-      > BeforeFeature # FeatureContext::doSomethingBeforeFeature()
-        = do something BEFORE EVERY FEATURE
 
         Scenario:             # features/1-one.feature:2
           Then I must have 50 # FeatureContext::iMustHave()
@@ -231,32 +207,36 @@ Feature: hooks
           Given I have entered 12 # FeatureContext::iHaveEntered()
           Then I must have 12     # FeatureContext::iMustHave()
 
-        Scenario: 130             # features/1-one.feature:9
-          Given I must have 130   # FeatureContext::iMustHave()
+        Scenario: 130           # features/1-one.feature:9
+          Given I must have 130 # FeatureContext::iMustHave()
 
-      > AfterFeature              # FeatureContext::doSomethingAfterFeature()
-        = do something AFTER EVERY FEATURE
+      │
+      │  = do something AFTER EVERY FEATURE
+      │
+      └─ @AfterFeature # FeatureContext::doSomethingAfterFeature()
 
+      ┌─ @BeforeFeature # FeatureContext::doSomethingBeforeFeature()
+      │
+      │  = do something BEFORE EVERY FEATURE
+      │
+      ┌─ @BeforeFeature @someFeature # FeatureContext::doSomethingBeforeSomeFeature()
+      │
+      │  = do something before SOME feature
+      │
       @someFeature
       Feature:
 
-      > BeforeFeature             # FeatureContext::doSomethingBeforeFeature()
-        = do something BEFORE EVERY FEATURE
+        Scenario: 130           # features/2-two.feature:3
+          Given I must have 130 # FeatureContext::iMustHave()
 
-      > BeforeFeature @someFeature # FeatureContext::doSomethingBeforeSomeFeature()
-        = do something before SOME feature
-
-        Scenario: 130             # features/2-two.feature:3
-          Given I must have 130   # FeatureContext::iMustHave()
-
-      > AfterFeature              # FeatureContext::doSomethingAfterFeature()
-        = do something AFTER EVERY FEATURE
-
-      > AfterFeature @someFeature # FeatureContext::doSomethingAfterSomeFeature()
-        = do something after SOME feature
-
-      > AfterSuite                # FeatureContext::doSomethingAfterSuite()
-        = do something AFTER ANY SUITE
+      │
+      │  = do something AFTER EVERY FEATURE
+      │
+      └─ @AfterFeature # FeatureContext::doSomethingAfterFeature()
+      │
+      │  = do something after SOME feature
+      │
+      └─ @AfterFeature @someFeature # FeatureContext::doSomethingAfterSomeFeature()
 
       4 scenarios (4 passed)
       5 steps (5 passed)
@@ -273,29 +253,26 @@ Feature: hooks
           Given I have entered 12
           Then I must have 12
       """
-    When I run "behat --no-ansi -f pretty"
+    When I run "behat --no-colors -f pretty"
     Then it should pass with:
       """
-      > BeforeSuite # FeatureContext::doSomethingBeforeSuite()
-        = do something BEFORE ANY SUITE
-
+      ┌─ @BeforeFeature # FeatureContext::doSomethingBeforeFeature()
+      │
+      │  = do something BEFORE EVERY FEATURE
+      │
       Feature:
 
-      > BeforeFeature          # FeatureContext::doSomethingBeforeFeature()
-        = do something BEFORE EVERY FEATURE
-
-        Background:            # features/background.feature:2
-          Given I must have 50 # FeatureContext::iMustHave()
+        Background:               # features/background.feature:2
+          Given I must have 50    # FeatureContext::iMustHave()
 
         Scenario:                 # features/background.feature:5
           Given I have entered 12 # FeatureContext::iHaveEntered()
           Then I must have 12     # FeatureContext::iMustHave()
 
-      > AfterFeature              # FeatureContext::doSomethingAfterFeature()
-        = do something AFTER EVERY FEATURE
-
-      > AfterSuite                # FeatureContext::doSomethingAfterSuite()
-        = do something AFTER ANY SUITE
+      │
+      │  = do something AFTER EVERY FEATURE
+      │
+      └─ @AfterFeature # FeatureContext::doSomethingAfterFeature()
 
       1 scenario (1 passed)
       3 steps (3 passed)
@@ -322,43 +299,49 @@ Feature: hooks
         Scenario: 130
           Given I must have 130
       """
-    When I run "behat --no-ansi -f pretty"
+    When I run "behat --no-colors -f pretty"
     Then it should fail with:
       """
-      > BeforeSuite # FeatureContext::doSomethingBeforeSuite()
-        = do something BEFORE ANY SUITE
-
+      ┌─ @BeforeFeature # FeatureContext::doSomethingBeforeFeature()
+      │
+      │  = do something BEFORE EVERY FEATURE
+      │
       Feature:
 
-      > BeforeFeature # FeatureContext::doSomethingBeforeFeature()
-        = do something BEFORE EVERY FEATURE
-
+        ┌─ @BeforeScenario @exception # FeatureContext::beforeScenarioException()
+        │
+        ╳  Exception (Exception)
+        │
         @exception
         Scenario:             # features/background.feature:4
-        > BeforeScenario @exception # FeatureContext::beforeScenarioException()
-          Exception (Exception)
           Then I must have 50 # FeatureContext::iMustHave()
 
         Scenario:                 # features/background.feature:6
           Given I have entered 12 # FeatureContext::iHaveEntered()
           Then I must have 12     # FeatureContext::iMustHave()
 
+        ┌─ @BeforeScenario @exception # FeatureContext::beforeScenarioException()
+        │
+        ╳  Exception (Exception)
+        │
         @exception
-        Scenario:                 # features/background.feature:11
-        > BeforeScenario @exception # FeatureContext::beforeScenarioException()
-          Exception (Exception)
-          Given I must have 30    # FeatureContext::iMustHave()
-          When I have entered 23  # FeatureContext::iHaveEntered()
-          Then I must have 23     # FeatureContext::iMustHave()
+        Scenario:                # features/background.feature:11
+          Given I must have 30   # FeatureContext::iMustHave()
+          When I have entered 23 # FeatureContext::iHaveEntered()
+          Then I must have 23    # FeatureContext::iMustHave()
 
-        Scenario: 130             # features/background.feature:16
-          Given I must have 130   # FeatureContext::iMustHave()
+        Scenario: 130           # features/background.feature:16
+          Given I must have 130 # FeatureContext::iMustHave()
 
-      > AfterFeature              # FeatureContext::doSomethingAfterFeature()
-        = do something AFTER EVERY FEATURE
+      │
+      │  = do something AFTER EVERY FEATURE
+      │
+      └─ @AfterFeature # FeatureContext::doSomethingAfterFeature()
 
-      > AfterSuite                # FeatureContext::doSomethingAfterSuite()
-        = do something AFTER ANY SUITE
+      --- Failed scenarios:
+
+          features/background.feature:4
+          features/background.feature:11
 
       4 scenarios (2 passed, 2 failed)
       7 steps (3 passed, 4 skipped)

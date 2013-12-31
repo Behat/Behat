@@ -8,13 +8,12 @@ Feature: Multiple formats
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\RegexAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface
+      class FeatureContext implements RegexAcceptingContext
       {
           private $apples = 0;
           private $parameters;
@@ -112,7 +111,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, default output
-    When I run "behat --no-ansi -f pretty -f progress --no-multiline"
+    When I run "behat --no-colors -f pretty -f progress --format-settings='{\"multiline\": false}'"
     Then it should fail with:
       """
       Feature: Apples story
@@ -120,8 +119,8 @@ Feature: Multiple formats
         As a little kid
         I need to have an apple in my pocket
 
-        Background:             # features/apples.feature:6
-          Given I have 3 apples # FeatureContext::iHaveApples()
+        Background:                   # features/apples.feature:6
+          Given I have 3 apples       # FeatureContext::iHaveApples()
       .
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
@@ -138,10 +137,10 @@ Feature: Multiple formats
       .    And do something undefined
       U
         Scenario Outline: Other situations   # features/apples.feature:22
-      .    When I ate <ate> apples            # FeatureContext::iAteApples()
-      .    And I found <found> apples         # FeatureContext::iFoundApples()
-      .    Then I should have <result> apples # FeatureContext::iShouldHaveApples()
-      .
+      ....    When I ate <ate> apples            # FeatureContext::iAteApples()
+          And I found <found> apples         # FeatureContext::iFoundApples()
+          Then I should have <result> apples # FeatureContext::iShouldHaveApples()
+
           Examples:
             | ate | found | result |
             | 3   | 1     | 1      |
@@ -149,61 +148,35 @@ Feature: Multiple formats
               Failed asserting that 7 matches expected 8.
       ....      | 2   | 2     | 3      |
 
-        Scenario: Multilines                 # features/apples.feature:33
+        Scenario: Multilines    # features/apples.feature:33
       .    Given pystring:
+            ...
       U    And table:
+            ...
       U
-      Failed scenarios:
-      features/apples.feature:9 # Scenario: I'm little hungry
-      features/apples.feature:30 # Scenario Outline: Other situations
+      --- Failed scenarios:
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+          features/apples.feature:9
+          features/apples.feature:30
 
-      You can implement step definitions for undefined steps with these snippets:
-
-          /**
-           * @Given /^do something undefined$/
-           */
-          public function doSomethingUndefined()
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
-          {
-              throw new PendingException();
-          }
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
 
 
+      --- Failed steps:
 
-      (::) failed steps (::)
+          features/apples.feature:9
+            Then I should have 3 apples # features/apples.feature:11
+              Failed asserting that 2 matches expected 3.
 
-      01. Failed asserting that 2 matches expected 3.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `I'm little hungry'.     # features/apples.feature:9
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:30
+            Then I should have 8 apples # features/apples.feature:25
+              Failed asserting that 7 matches expected 8.
 
-      02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `Other situations'.      # features/apples.feature:22
-          Of feature `Apples story'.             # features/apples.feature
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
-
-      You can implement step definitions for undefined steps with these snippets:
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^do something undefined$/
@@ -231,7 +204,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, same output
-    When I run "behat --no-ansi -f pretty -f progress --out=std --no-multiline"
+    When I run "behat --no-colors -f pretty -f progress --out=std --format-settings='{\"multiline\": false}'"
     Then it should fail with:
       """
       Feature: Apples story
@@ -239,8 +212,8 @@ Feature: Multiple formats
         As a little kid
         I need to have an apple in my pocket
 
-        Background:             # features/apples.feature:6
-          Given I have 3 apples # FeatureContext::iHaveApples()
+        Background:                   # features/apples.feature:6
+          Given I have 3 apples       # FeatureContext::iHaveApples()
       .
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
@@ -257,10 +230,10 @@ Feature: Multiple formats
       .    And do something undefined
       U
         Scenario Outline: Other situations   # features/apples.feature:22
-      .    When I ate <ate> apples            # FeatureContext::iAteApples()
-      .    And I found <found> apples         # FeatureContext::iFoundApples()
-      .    Then I should have <result> apples # FeatureContext::iShouldHaveApples()
-      .
+      ....    When I ate <ate> apples            # FeatureContext::iAteApples()
+          And I found <found> apples         # FeatureContext::iFoundApples()
+          Then I should have <result> apples # FeatureContext::iShouldHaveApples()
+
           Examples:
             | ate | found | result |
             | 3   | 1     | 1      |
@@ -268,61 +241,35 @@ Feature: Multiple formats
               Failed asserting that 7 matches expected 8.
       ....      | 2   | 2     | 3      |
 
-        Scenario: Multilines                 # features/apples.feature:33
+        Scenario: Multilines    # features/apples.feature:33
       .    Given pystring:
+            ...
       U    And table:
+            ...
       U
-      Failed scenarios:
-      features/apples.feature:9 # Scenario: I'm little hungry
-      features/apples.feature:30 # Scenario Outline: Other situations
+      --- Failed scenarios:
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+          features/apples.feature:9
+          features/apples.feature:30
 
-      You can implement step definitions for undefined steps with these snippets:
-
-          /**
-           * @Given /^do something undefined$/
-           */
-          public function doSomethingUndefined()
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
-          {
-              throw new PendingException();
-          }
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
 
 
+      --- Failed steps:
 
-      (::) failed steps (::)
+          features/apples.feature:9
+            Then I should have 3 apples # features/apples.feature:11
+              Failed asserting that 2 matches expected 3.
 
-      01. Failed asserting that 2 matches expected 3.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `I'm little hungry'.     # features/apples.feature:9
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:30
+            Then I should have 8 apples # features/apples.feature:25
+              Failed asserting that 7 matches expected 8.
 
-      02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `Other situations'.      # features/apples.feature:22
-          Of feature `Apples story'.             # features/apples.feature
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
-
-      You can implement step definitions for undefined steps with these snippets:
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^do something undefined$/
@@ -350,27 +297,25 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write first to file
-    When I run "behat --no-ansi -f pretty -o apples.pretty -f progress -o std --no-multiline --no-paths"
+    When I run "behat --no-colors -f pretty -o apples.pretty -f progress -o std --format-settings='{\"multiline\": false, \"paths\": false}'"
     Then it should fail with:
       """
       ..F......U.......F.....UU
 
-      (::) failed steps (::)
+      --- Failed steps:
 
-      01. Failed asserting that 2 matches expected 3.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `I'm little hungry'.     # features/apples.feature:9
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:9
+            Then I should have 3 apples # features/apples.feature:11
+              Failed asserting that 2 matches expected 3.
 
-      02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `Other situations'.      # features/apples.feature:22
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:30
+            Then I should have 8 apples # features/apples.feature:25
+              Failed asserting that 7 matches expected 8.
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
 
-      You can implement step definitions for undefined steps with these snippets:
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^do something undefined$/
@@ -434,44 +379,21 @@ Feature: Multiple formats
 
         Scenario: Multilines
           Given pystring:
+            ...
           And table:
+            ...
 
-      Failed scenarios:
-      features/apples.feature:9
-      features/apples.feature:30
+      --- Failed scenarios:
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+          features/apples.feature:9
+          features/apples.feature:30
 
-      You can implement step definitions for undefined steps with these snippets:
-
-          /**
-           * @Given /^do something undefined$/
-           */
-          public function doSomethingUndefined()
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
-          {
-              throw new PendingException();
-          }
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
       """
 
   Scenario: 2 formats, write second to file
-    When I run "behat --no-ansi -f pretty -o std --format=progress --out=apples.progress --no-multiline --no-paths"
+    When I run "behat --no-colors -f pretty -o std --format=progress --out=apples.progress --format-settings='{\"multiline\": false, \"paths\": false}'"
     Then it should fail with:
       """
       Feature: Apples story
@@ -510,16 +432,19 @@ Feature: Multiple formats
 
         Scenario: Multilines
           Given pystring:
+            ...
           And table:
+            ...
 
-      Failed scenarios:
-      features/apples.feature:9
-      features/apples.feature:30
+      --- Failed scenarios:
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+          features/apples.feature:9
+          features/apples.feature:30
 
-      You can implement step definitions for undefined steps with these snippets:
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
+
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^do something undefined$/
@@ -549,22 +474,25 @@ Feature: Multiple formats
       """
       ..F......U.......F.....UU
 
-      (::) failed steps (::)
+      --- Failed steps:
 
-      01. Failed asserting that 2 matches expected 3.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `I'm little hungry'.     # features/apples.feature:9
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:9
+            Then I should have 3 apples # features/apples.feature:11
+              Failed asserting that 2 matches expected 3.
 
-      02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `Other situations'.      # features/apples.feature:22
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:30
+            Then I should have 8 apples # features/apples.feature:25
+              Failed asserting that 7 matches expected 8.
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
+      """
 
-      You can implement step definitions for undefined steps with these snippets:
+  Scenario: 2 formats, write both to files
+    When I run "behat --no-colors -f pretty -o app.pretty -f progress -o app.progress --format-settings='{\"multiline\": false, \"paths\": false}'"
+    Then it should fail with:
+      """
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^do something undefined$/
@@ -589,12 +517,6 @@ Feature: Multiple formats
           {
               throw new PendingException();
           }
-      """
-
-  Scenario: 2 formats, write both to files
-    When I run "behat --no-ansi -f pretty -o app.pretty -f progress -o app.progress --no-multiline --no-paths"
-    Then it should fail with:
-      """
       """
     And "app.pretty" file should contain:
       """
@@ -634,83 +556,32 @@ Feature: Multiple formats
 
         Scenario: Multilines
           Given pystring:
+            ...
           And table:
+            ...
 
-      Failed scenarios:
-      features/apples.feature:9
-      features/apples.feature:30
+      --- Failed scenarios:
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+          features/apples.feature:9
+          features/apples.feature:30
 
-      You can implement step definitions for undefined steps with these snippets:
-
-          /**
-           * @Given /^do something undefined$/
-           */
-          public function doSomethingUndefined()
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
-          {
-              throw new PendingException();
-          }
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
       """
     And "app.progress" file should contain:
       """
       ..F......U.......F.....UU
 
-      (::) failed steps (::)
+      --- Failed steps:
 
-      01. Failed asserting that 2 matches expected 3.
-          In step `Then I should have 3 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `I'm little hungry'.     # features/apples.feature:9
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:9
+            Then I should have 3 apples # features/apples.feature:11
+              Failed asserting that 2 matches expected 3.
 
-      02. Failed asserting that 7 matches expected 8.
-          In step `Then I should have 8 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `Other situations'.      # features/apples.feature:22
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:30
+            Then I should have 8 apples # features/apples.feature:25
+              Failed asserting that 7 matches expected 8.
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
-
-      You can implement step definitions for undefined steps with these snippets:
-
-          /**
-           * @Given /^do something undefined$/
-           */
-          public function doSomethingUndefined()
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
-          {
-              throw new PendingException();
-          }
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
       """

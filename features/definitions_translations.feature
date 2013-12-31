@@ -20,12 +20,11 @@ Feature: Definitions translations
       """
       <?php
 
-      use Behat\Behat\Context\TranslatableContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\TranslatableContext;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements TranslatableContextInterface
+      class FeatureContext implements TranslatableContext
       {
           private $numbers = array();
           private $result = 0;
@@ -98,7 +97,7 @@ Feature: Definitions translations
         </file>
       </xliff>
       """
-    When I run "behat --no-ansi -f progress features/calc_ru.feature"
+    When I run "behat --no-colors -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       .....
@@ -124,12 +123,11 @@ Feature: Definitions translations
       """
       <?php
 
-      use Behat\Behat\Context\TranslatableContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\TranslatableContext;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements TranslatableContextInterface
+      class FeatureContext implements TranslatableContext
       {
           private $numbers = array();
           private $result = 0;
@@ -180,7 +178,7 @@ Feature: Definitions translations
       '/"([^"]+)" user/':                                 '/пользователь "([^"]+)"/'
       '/^the ("[^"]+" user) name should be "([^"]*)"$/':  '/^(пользователь "[^"]+") должен иметь имя "([^"]*)"$/'
       """
-    When I run "behat --no-ansi -f progress features/calc_ru.feature"
+    When I run "behat --no-colors -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       .....
@@ -206,12 +204,11 @@ Feature: Definitions translations
       """
       <?php
 
-      use Behat\Behat\Context\TranslatableContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\TranslatableContext;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements TranslatableContextInterface
+      class FeatureContext implements TranslatableContext
       {
           private $numbers = array();
           private $result = 0;
@@ -264,7 +261,7 @@ Feature: Definitions translations
         '/^the ("[^"]+" user) name should be "([^"]*)"$/' => '/^(пользователь "[^"]+") должен иметь имя "([^"]*)"$/',
       );
       """
-    When I run "behat --no-ansi -f progress features/calc_ru.feature"
+    When I run "behat --no-colors -f progress features/calc_ru.feature"
     Then it should pass with:
       """
       .....

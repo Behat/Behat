@@ -8,13 +8,12 @@ Feature: Context consistency
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\RegexAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface
+      class FeatureContext implements RegexAcceptingContext
       {
           private $apples = 0;
           private $parameters;
@@ -71,13 +70,12 @@ Feature: Context consistency
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\RegexAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class CustomContext implements ContextInterface, RegexSnippetsFriendlyInterface
+      class CustomContext implements RegexAcceptingContext
       {
       }
       """
@@ -112,7 +110,7 @@ Feature: Context consistency
             | 0   | 5     | 8      |
             | 2   | 2     | 3      |
       """
-    When I run "behat --no-ansi -f progress features/apples.feature"
+    When I run "behat --no-colors -f progress features/apples.feature"
     Then it should pass with:
       """
       ..................
@@ -151,32 +149,28 @@ Feature: Context consistency
             | 0   | 5     | 8      |
             | 2   | 2     | 4      |
       """
-    When I run "behat --no-ansi -f progress features/apples.feature"
+    When I run "behat --no-colors -f progress features/apples.feature"
     Then it should fail with:
       """
       ..F..F...F.......F
 
-      (::) failed steps (::)
+      --- Failed steps:
 
-      01. Failed asserting that 2 matches expected 5.
-          In step `Then I should have 5 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `I'm little hungry'.     # features/apples.feature:9
-          Of feature `Apples story'.             # features/apples.feature
+          features/apples.feature:9
+            Then I should have 5 apples # features/apples.feature:11
+              Failed asserting that 2 matches expected 5.
 
-      02. Failed asserting that 13 matches expected 10.
-          In step `Then I should have 10 apples'. # FeatureContext::iShouldHaveApples()
-          From scenario `Found more apples'.      # features/apples.feature:13
-          Of feature `Apples story'.              # features/apples.feature
+          features/apples.feature:13
+            Then I should have 10 apples # features/apples.feature:15
+              Failed asserting that 13 matches expected 10.
 
-      03. Failed asserting that 1 matches expected 3.
-          In step `Then I should have 3 apples'.  # FeatureContext::iShouldHaveApples()
-          From scenario `Other situations'.       # features/apples.feature:17
-          Of feature `Apples story'.              # features/apples.feature
+          features/apples.feature:24
+            Then I should have 3 apples # features/apples.feature:20
+              Failed asserting that 1 matches expected 3.
 
-      04. Failed asserting that 3 matches expected 4.
-          In step `Then I should have 4 apples'.  # FeatureContext::iShouldHaveApples()
-          From scenario `Other situations'.       # features/apples.feature:17
-          Of feature `Apples story'.              # features/apples.feature
+          features/apples.feature:26
+            Then I should have 4 apples # features/apples.feature:20
+              Failed asserting that 3 matches expected 4.
 
       5 scenarios (1 passed, 4 failed)
       18 steps (14 passed, 4 failed)
@@ -205,7 +199,7 @@ Feature: Context consistency
           Then context parameter "parameter1" should be equal to "val_one"
           And context parameter "parameter2" should be array with 2 elements
       """
-  When I run "behat --no-ansi -f progress features/params.feature"
+  When I run "behat --no-colors -f progress features/params.feature"
   Then it should pass with:
     """
     ..
@@ -233,7 +227,7 @@ Feature: Context consistency
           Then context parameter "parameter1" should be equal to "val_one"
           And context parameter "parameter2" should be array with 2 elements
       """
-  When I run "behat --no-ansi -f progress features/params.feature"
+  When I run "behat --no-colors -f progress features/params.feature"
   Then it should pass with:
     """
     UU
@@ -241,7 +235,7 @@ Feature: Context consistency
     1 scenario (1 undefined)
     2 steps (2 undefined)
 
-    You can implement step definitions for undefined steps with these snippets:
+    --- CustomContext has missing steps. Define them with these snippets:
 
         /**
          * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
@@ -279,13 +273,13 @@ Feature: Context consistency
           Then context parameter "parameter1" should be equal to "val_one"
           And context parameter "parameter2" should be array with 2 elements
       """
-  When I run "behat --no-ansi -f progress features/params.feature"
+  When I run "behat --no-colors -f progress features/params.feature"
   Then it should fail with:
     """
-    [InvalidArgumentException]
-      Context class "UnexistentContext" not found and can not be used.
+    [Behat\Behat\Context\Exception\ContextNotFoundException]
+      `UnexistentContext` context class not found and can not be used.
 
 
 
-    behat [--init] [--story-syntax] [-d|--definitions="..."] [--name="..."] [--tags="..."] [--role="..."] [-f|--format="..."] [-o|--out="..."] [--lang="..."] [--ansi] [--no-ansi] [--no-time] [--no-paths] [--no-snippets] [--no-multiline] [--expand] [--snippets-paths] [--append-snippets] [--stop-on-failure] [--rerun] [--strict] [--dry-run] [-s|--suite="..."] [features]
+    behat [-s|--suite="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--colors] [--no-colors] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--rerun] [--stop-on-failure] [--strict] [--dry-run] [features]
     """

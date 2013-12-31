@@ -8,20 +8,12 @@ Feature: Dry run
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
-          /**
-           * @BeforeSuite
-           */
-          public static function beforeSuite() {
-              echo "HOOK: before suite";
-          }
-
           /**
            * @BeforeScenario
            */
@@ -93,76 +85,89 @@ Feature: Dry run
       """
 
   Scenario: Just run feature
-    When I run "behat --no-ansi --no-paths features/apples.feature"
+    When I run "behat --no-colors --format-settings='{\"paths\": false}' features/apples.feature"
     Then it should pass with:
       """
-      > BeforeSuite
-        HOOK: before suite
       Feature: Apples story
         In order to eat apple
         As a little kid
         I need to have an apple in my pocket
 
-        > BeforeScenario
-          HOOK: before scenario
+        ┌─ @BeforeScenario # FeatureContext::beforeScenario()
+        │
+        │  HOOK: before scenario
+        │
         Background:
           Given I have 3 apples
-            STEP: I have 3 apples
+            │ STEP: I have 3 apples
 
         Scenario: I'm little hungry
           When I ate 1 apple
-            STEP: I ate 1 apples
+            │ STEP: I ate 1 apples
           Then I should have 3 apples
-            STEP: I should have 3 apples
+            │ STEP: I should have 3 apples
 
+        ┌─ @BeforeScenario # FeatureContext::beforeScenario()
+        │
+        │  HOOK: before scenario
+        │
         Scenario: Found more apples
-        > BeforeScenario
-          HOOK: before scenario
           When I found 5 apples
-            STEP: I found 5 apples
+            │ STEP: I found 5 apples
           Then I should have 8 apples
-            STEP: I should have 8 apples
+            │ STEP: I should have 8 apples
 
+        ┌─ @BeforeScenario # FeatureContext::beforeScenario()
+        │
+        │  HOOK: before scenario
+        │
         Scenario: Found more apples
-        > BeforeScenario
-          HOOK: before scenario
           When I found 2 apples
-            STEP: I found 2 apples
+            │ STEP: I found 2 apples
           Then I should have 5 apples
-            STEP: I should have 5 apples
+            │ STEP: I should have 5 apples
 
         Scenario Outline: Other situations
-          > BeforeScenario
-            HOOK: before scenario
           When I ate <ate> apples
           And I found <found> apples
           Then I should have <result> apples
 
           Examples:
             | ate | found | result |
+            ┌─ @BeforeScenario # FeatureContext::beforeScenario()
+            │
+            │  HOOK: before scenario
+            │
             | 3   | 1     | 1      |
-              STEP: I ate 3 apples
-              STEP: I found 1 apples
-              STEP: I should have 1 apples
-          > BeforeScenario
-            HOOK: before scenario
+              │ STEP: I have 3 apples
+              │ STEP: I ate 3 apples
+              │ STEP: I found 1 apples
+              │ STEP: I should have 1 apples
+            ┌─ @BeforeScenario # FeatureContext::beforeScenario()
+            │
+            │  HOOK: before scenario
+            │
             | 0   | 4     | 8      |
-              STEP: I ate 0 apples
-              STEP: I found 4 apples
-              STEP: I should have 8 apples
-          > BeforeScenario
-            HOOK: before scenario
+              │ STEP: I have 3 apples
+              │ STEP: I ate 0 apples
+              │ STEP: I found 4 apples
+              │ STEP: I should have 8 apples
+            ┌─ @BeforeScenario # FeatureContext::beforeScenario()
+            │
+            │  HOOK: before scenario
+            │
             | 2   | 2     | 3      |
-              STEP: I ate 2 apples
-              STEP: I found 2 apples
-              STEP: I should have 3 apples
+              │ STEP: I have 3 apples
+              │ STEP: I ate 2 apples
+              │ STEP: I found 2 apples
+              │ STEP: I should have 3 apples
 
       6 scenarios (6 passed)
       21 steps (21 passed)
       """
 
   Scenario: Run feature with --dry-run
-    When I run "behat --no-ansi --dry-run features/apples.feature"
+    When I run "behat --no-colors --dry-run features/apples.feature"
     Then it should pass with:
       """
       Feature: Apples story
@@ -170,8 +175,8 @@ Feature: Dry run
         As a little kid
         I need to have an apple in my pocket
 
-        Background:             # features/apples.feature:6
-          Given I have 3 apples # FeatureContext::iHaveApples()
+        Background:                   # features/apples.feature:6
+          Given I have 3 apples       # FeatureContext::iHaveApples()
 
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()

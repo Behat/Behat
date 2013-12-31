@@ -16,9 +16,9 @@ Feature: Extensions
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface;
+      use Behat\Behat\Context\Context;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $extension;
 
@@ -39,7 +39,10 @@ Feature: Extensions
       """
       <?php
 
-      class CustomInitializer implements Behat\Behat\Context\Initializer\InitializerInterface
+      use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+      use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+      class CustomInitializer implements Behat\Behat\Context\Initializer\ContextInitializer
       {
           private $parameters;
 
@@ -48,34 +51,39 @@ Feature: Extensions
               $this->parameters = $parameters;
           }
 
-          public function supports(Behat\Behat\Context\ContextInterface $context)
+          public function supportsContext(Behat\Behat\Context\Context $context)
           {
               return true;
           }
 
-          public function initialize(Behat\Behat\Context\ContextInterface $context)
+          public function initializeContext(Behat\Behat\Context\Context $context)
           {
               $context->setExtensionParameters($this->parameters);
           }
       }
 
-      class CustomExtension extends Behat\Behat\Extension\Extension {
-          public function getName() {
+      class CustomExtension implements Behat\Testwork\ServiceContainer\Extension {
+          public function getConfigKey()
+          {
               return 'custom_extension';
           }
+
+          public function configure(ArrayNodeDefinition $builder)
+          {
+              $builder->useAttributeAsKey('name')->prototype('variable');
+          }
+
+          public function load(ContainerBuilder $container, array $config)
+          {
+              $definition = $container->register('custom_initializer', 'CustomInitializer', array($config));
+              $definition->setArguments(array($config));
+              $definition->addTag('context.initializer', array('priority' => 100));
+          }
+
+          public function process(ContainerBuilder $container) {}
       }
 
       return new CustomExtension;
-      """
-    And a file named "services.yml" with:
-      """
-      services:
-        custom_initializer:
-          class: CustomInitializer
-          arguments:
-            - %custom_extension.parameters%
-          tags:
-            - { name: context.initializer }
       """
     And a file named "features/extensions.feature" with:
       """
