@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Snippet\Context;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -10,14 +8,19 @@ namespace Behat\Behat\Snippet\Context;
  * file that was distributed with this source code.
  */
 
+namespace Behat\Behat\Snippet;
+
 /**
- * Default snippets-friendly interface.
- *
- * Implement this interface with your context to mark
- * it as a target for snippets generation.
+ * Snippet repository interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface SnippetsFriendlyInterface extends TurnipSnippetsFriendlyInterface
+interface SnippetRepository
 {
+    /**
+     * Returns all generated snippets.
+     *
+     * @return AggregateSnippet[]
+     */
+    public function getSnippets();
 }
