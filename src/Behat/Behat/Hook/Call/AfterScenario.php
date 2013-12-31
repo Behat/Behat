@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Hook\Callee;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,14 +7,17 @@ namespace Behat\Behat\Hook\Callee;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Event\EventInterface;
+
+namespace Behat\Behat\Hook\Call;
+
+use Behat\Behat\Tester\Event\ScenarioTested;
 
 /**
- * AfterFeature hook.
+ * After scenario hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AfterFeature extends FeatureHook
+class AfterScenario extends RuntimeScenarioHook
 {
     /**
      * Initializes hook.
@@ -27,7 +28,7 @@ class AfterFeature extends FeatureHook
      */
     public function __construct($filterString, $callback, $description = null)
     {
-        parent::__construct(EventInterface::HOOKABLE_AFTER_FEATURE, $filterString, $callback, $description);
+        parent::__construct(ScenarioTested::AFTER, $filterString, $callback, $description);
     }
 
     /**
@@ -37,6 +38,6 @@ class AfterFeature extends FeatureHook
      */
     public function getName()
     {
-        return 'AfterFeature';
+        return 'AfterScenario';
     }
 }

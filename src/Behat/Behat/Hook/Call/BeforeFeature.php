@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Hook\Callee;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,24 +7,28 @@ namespace Behat\Behat\Hook\Callee;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Event\EventInterface;
+
+namespace Behat\Behat\Hook\Call;
+
+use Behat\Behat\Tester\Event\FeatureTested;
 
 /**
- * AfterSuite hook.
+ * Before feature hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AfterSuite extends SuiteHook
+class BeforeFeature extends RuntimeFeatureHook
 {
     /**
      * Initializes hook.
      *
+     * @param null|string $filterString
      * @param Callable    $callback
      * @param null|string $description
      */
-    public function __construct($callback, $description = null)
+    public function __construct($filterString, $callback, $description = null)
     {
-        parent::__construct(EventInterface::HOOKABLE_AFTER_SUITE, $callback, $description);
+        parent::__construct(FeatureTested::BEFORE, $filterString, $callback, $description);
     }
 
     /**
@@ -36,6 +38,6 @@ class AfterSuite extends SuiteHook
      */
     public function getName()
     {
-        return 'AfterSuite';
+        return 'BeforeFeature';
     }
 }

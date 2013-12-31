@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Hook\Callee;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,14 +7,17 @@ namespace Behat\Behat\Hook\Callee;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Event\EventInterface;
+
+namespace Behat\Behat\Hook\Call;
+
+use Behat\Behat\Tester\Event\ScenarioTested;
 
 /**
- * BeforeScenario hook.
+ * Before scenario hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BeforeScenario extends ScenarioHook
+class BeforeScenario extends RuntimeScenarioHook
 {
     /**
      * Initializes hook.
@@ -27,7 +28,7 @@ class BeforeScenario extends ScenarioHook
      */
     public function __construct($filterString, $callback, $description = null)
     {
-        parent::__construct(EventInterface::HOOKABLE_BEFORE_SCENARIO, $filterString, $callback, $description);
+        parent::__construct(ScenarioTested::BEFORE, $filterString, $callback, $description);
     }
 
     /**

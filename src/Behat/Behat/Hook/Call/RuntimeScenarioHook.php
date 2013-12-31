@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Hook\Callee;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,48 +7,52 @@ namespace Behat\Behat\Hook\Callee;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Event\EventInterface;
-use Behat\Behat\Event\OutlineEvent;
-use Behat\Behat\Event\ScenarioEvent;
+
+namespace Behat\Behat\Hook\Call;
+
+use Behat\Behat\Tester\Event\ExampleTested;
+use Behat\Behat\Tester\Event\ScenarioTested;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
-use RuntimeException;
+use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
+use Behat\Testwork\Hook\Event\LifecycleEvent;
 
 /**
- * Base ScenarioHook hook class.
+ * Runtime scenario hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class ScenarioHook extends FilterableHook
+abstract class RuntimeScenarioHook extends RuntimeFilterableHook
 {
     /**
      * Checks if provided event matches hook filter.
      *
-     * @param EventInterface $event
+     * @param LifecycleEvent $event
      *
      * @return Boolean
-     *
-     * @throws RuntimeException
      */
-    public function filterMatches(EventInterface $event)
+    public function filterMatches(LifecycleEvent $event)
     {
+        if (!$event instanceof ScenarioTested && !$event instanceof ExampleTested) {
+            return false;
+        }
         if (null === ($filterString = $this->getFilterString())) {
             return true;
         }
 
-        if ($event instanceof ScenarioEvent) {
+        if ($event instanceof ScenarioTested) {
             $scenario = $event->getScenario();
-        } elseif ($event instanceof OutlineEvent) {
-            $scenario = $event->getOutline();
         } else {
-            throw new RuntimeException(sprintf(
-                'Unsupported type of scenario event: %s', get_class($event)
-            ));
+            $scenario = $event->getExample();
         }
 
         if (false !== strpos($filterString, '@')) {
             $filter = new TagFilter($filterString);
 
+            if ($filter->isFeatureMatch($event->getSubject())) {
+                return true;
+            }
             if ($filter->isScenarioMatch($scenario)) {
                 return true;
             }
