@@ -1,6 +1,6 @@
 <?php
 
-namespace Behat\Behat\Snippet\Util;
+namespace Behat\Transliterator;
 
 /**
  * This is the part taken from Doctrine 1.2.3
