@@ -28,11 +28,11 @@ class ExtensionException extends RuntimeException implements ServiceContainerExc
      * Initializes exception.
      *
      * @param string $message
-     * @param string $extensionSuiteName
+     * @param string $extensionName
      */
-    public function __construct($message, $extensionSuiteName)
+    public function __construct($message, $extensionName)
     {
-        $this->extensionName = $extensionSuiteName;
+        $this->extensionName = $extensionName;
 
         parent::__construct($message);
     }

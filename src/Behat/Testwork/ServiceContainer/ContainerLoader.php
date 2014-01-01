@@ -131,10 +131,10 @@ class ContainerLoader
         }
 
         // Load activated extensions
-        foreach ($config as $extensionName => $extensionConfig) {
-            if (null === $extension = $this->extensionManager->getExtension($extensionName)) {
+        foreach ($config as $extensionConfigKey => $extensionConfig) {
+            if (null === $extension = $this->extensionManager->getExtension($extensionConfigKey)) {
                 throw new ExtensionException(
-                    sprintf('`%s` extension has not been activated.', $extensionName), $extensionName
+                    sprintf('None of the activated extensions use `%s` config section.', $extensionConfigKey), $extensionConfigKey
                 );
             }
 

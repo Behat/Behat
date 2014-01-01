@@ -26,14 +26,14 @@ class ParameterNotFoundException extends SuiteException
      * Initializes exception.
      *
      * @param string $message
-     * @param string $suiteName
+     * @param string $name
      * @param string $parameter
      */
-    public function __construct($message, $suiteName, $parameter)
+    public function __construct($message, $name, $parameter)
     {
         $this->parameter = $parameter;
 
-        parent::__construct($message, $suiteName);
+        parent::__construct($message, $name);
     }
 
     /**
