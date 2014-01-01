@@ -8,13 +8,12 @@ Feature: Format options
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
+      use Behat\Behat\Context\RegexAcceptingContext,
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface
+      class FeatureContext implements RegexAcceptingContext
       {
           private $apples = 0;
           private $parameters;
@@ -111,8 +110,8 @@ Feature: Format options
             | val1 | val2 |
       """
 
-  Scenario: --no-ansi option
-    When I run "behat --no-ansi"
+  Scenario: --no-colors option
+    When I run "behat --no-colors"
     Then it should fail with:
       """
       Feature: Apples story
@@ -120,8 +119,8 @@ Feature: Format options
         As a little kid
         I need to have an apple in my pocket
 
-        Background:             # features/apples.feature:6
-          Given I have 3 apples # FeatureContext::iHaveApples()
+        Background:                   # features/apples.feature:6
+          Given I have 3 apples       # FeatureContext::iHaveApples()
 
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
@@ -149,7 +148,7 @@ Feature: Format options
               Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
-        Scenario: Multilines                 # features/apples.feature:33
+        Scenario: Multilines    # features/apples.feature:33
           Given pystring:
             '''
             some pystring
@@ -158,14 +157,15 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
-      Failed scenarios:
-      features/apples.feature:9 # Scenario: I'm little hungry
-      features/apples.feature:30 # Scenario Outline: Other situations
+      --- Failed scenarios:
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+          features/apples.feature:9
+          features/apples.feature:30
 
-      You can implement step definitions for undefined steps with these snippets:
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
+
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^do something undefined$/
@@ -193,7 +193,7 @@ Feature: Format options
       """
 
   Scenario: --no-paths option
-    When I run "behat --no-ansi --no-paths"
+    When I run "behat --no-colors --format-settings='{\"paths\": false}'"
     Then it should fail with:
       """
       Feature: Apples story
@@ -239,14 +239,15 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
-      Failed scenarios:
-      features/apples.feature:9
-      features/apples.feature:30
+      --- Failed scenarios:
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+          features/apples.feature:9
+          features/apples.feature:30
 
-      You can implement step definitions for undefined steps with these snippets:
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
+
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^do something undefined$/
@@ -274,7 +275,7 @@ Feature: Format options
       """
 
   Scenario: --no-snippets option
-    When I run "behat --no-ansi --no-snippets"
+    When I run "behat --no-colors --no-snippets"
     Then it should fail with:
       """
       Feature: Apples story
@@ -282,8 +283,8 @@ Feature: Format options
         As a little kid
         I need to have an apple in my pocket
 
-        Background:             # features/apples.feature:6
-          Given I have 3 apples # FeatureContext::iHaveApples()
+        Background:                   # features/apples.feature:6
+          Given I have 3 apples       # FeatureContext::iHaveApples()
 
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
@@ -311,7 +312,7 @@ Feature: Format options
               Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
-        Scenario: Multilines                 # features/apples.feature:33
+        Scenario: Multilines    # features/apples.feature:33
           Given pystring:
             '''
             some pystring
@@ -320,103 +321,17 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
-      Failed scenarios:
-      features/apples.feature:9 # Scenario: I'm little hungry
-      features/apples.feature:30 # Scenario Outline: Other situations
+      --- Failed scenarios:
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
-      """
+          features/apples.feature:9
+          features/apples.feature:30
 
-  Scenario: --snippets-paths option
-    When I run "behat --no-ansi --snippets-paths"
-    Then it should fail with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Background:             # features/apples.feature:6
-          Given I have 3 apples # FeatureContext::iHaveApples()
-
-        Scenario: I'm little hungry   # features/apples.feature:9
-          When I ate 1 apple          # FeatureContext::iAteApples()
-          Then I should have 3 apples # FeatureContext::iShouldHaveApples()
-            Failed asserting that 2 matches expected 3.
-
-        Scenario: Found more apples   # features/apples.feature:13
-          When I found 5 apples       # FeatureContext::iFoundApples()
-          Then I should have 8 apples # FeatureContext::iShouldHaveApples()
-
-        Scenario: Found more apples   # features/apples.feature:17
-          When I found 2 apples       # FeatureContext::iFoundApples()
-          Then I should have 5 apples # FeatureContext::iShouldHaveApples()
-          And do something undefined
-
-        Scenario Outline: Other situations   # features/apples.feature:22
-          When I ate <ate> apples            # FeatureContext::iAteApples()
-          And I found <found> apples         # FeatureContext::iFoundApples()
-          Then I should have <result> apples # FeatureContext::iShouldHaveApples()
-
-          Examples:
-            | ate | found | result |
-            | 3   | 1     | 1      |
-            | 0   | 4     | 8      |
-              Failed asserting that 7 matches expected 8.
-            | 2   | 2     | 3      |
-
-        Scenario: Multilines                 # features/apples.feature:33
-          Given pystring:
-            '''
-            some pystring
-            '''
-          And table:
-            | col1 | col2 |
-            | val1 | val2 |
-
-      Failed scenarios:
-      features/apples.feature:9 # Scenario: I'm little hungry
-      features/apples.feature:30 # Scenario Outline: Other situations
-
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
-
-      You can implement step definitions for undefined steps with these snippets:
-
-          /**
-           * And do something undefined # features/apples.feature:20
-           *
-           * @Given /^do something undefined$/
-           */
-          public function doSomethingUndefined()
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * Given pystring: # features/apples.feature:34
-           *
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
-          {
-              throw new PendingException();
-          }
-
-          /**
-           * And table: # features/apples.feature:38
-           *
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
-          {
-              throw new PendingException();
-          }
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
       """
 
   Scenario: --expand option
-    When I run "behat --no-ansi --expand"
+    When I run "behat --no-colors --format-settings='{\"expand\": true}'"
     Then it should fail with:
       """
       Feature: Apples story
@@ -424,8 +339,8 @@ Feature: Format options
         As a little kid
         I need to have an apple in my pocket
 
-        Background:             # features/apples.feature:6
-          Given I have 3 apples # FeatureContext::iHaveApples()
+        Background:                   # features/apples.feature:6
+          Given I have 3 apples       # FeatureContext::iHaveApples()
 
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
@@ -449,23 +364,23 @@ Feature: Format options
           Examples:
             | ate | found | result |
 
-            | 3   | 1     | 1      |         # features/apples.feature:29
+            | 3   | 1     | 1      |
               When I ate 3 apples            # FeatureContext::iAteApples()
               And I found 1 apples           # FeatureContext::iFoundApples()
               Then I should have 1 apples    # FeatureContext::iShouldHaveApples()
 
-            | 0   | 4     | 8      |         # features/apples.feature:30
+            | 0   | 4     | 8      |
               When I ate 0 apples            # FeatureContext::iAteApples()
               And I found 4 apples           # FeatureContext::iFoundApples()
               Then I should have 8 apples    # FeatureContext::iShouldHaveApples()
                 Failed asserting that 7 matches expected 8.
 
-            | 2   | 2     | 3      |         # features/apples.feature:31
+            | 2   | 2     | 3      |
               When I ate 2 apples            # FeatureContext::iAteApples()
               And I found 2 apples           # FeatureContext::iFoundApples()
               Then I should have 3 apples    # FeatureContext::iShouldHaveApples()
 
-        Scenario: Multilines                 # features/apples.feature:33
+        Scenario: Multilines    # features/apples.feature:33
           Given pystring:
             '''
             some pystring
@@ -474,14 +389,15 @@ Feature: Format options
             | col1 | col2 |
             | val1 | val2 |
 
-      Failed scenarios:
-      features/apples.feature:9 # Scenario: I'm little hungry
-      features/apples.feature:30 # Scenario Outline: Other situations
+      --- Failed scenarios:
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+          features/apples.feature:9
+          features/apples.feature:30
 
-      You can implement step definitions for undefined steps with these snippets:
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
+
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^do something undefined$/
@@ -509,7 +425,7 @@ Feature: Format options
       """
 
   Scenario: --no-multiline option
-    When I run "behat --no-ansi --no-multiline"
+    When I run "behat --no-colors --format-settings='{\"multiline\": false}'"
     Then it should fail with:
       """
       Feature: Apples story
@@ -517,8 +433,8 @@ Feature: Format options
         As a little kid
         I need to have an apple in my pocket
 
-        Background:             # features/apples.feature:6
-          Given I have 3 apples # FeatureContext::iHaveApples()
+        Background:                   # features/apples.feature:6
+          Given I have 3 apples       # FeatureContext::iHaveApples()
 
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
@@ -546,18 +462,21 @@ Feature: Format options
               Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
-        Scenario: Multilines                 # features/apples.feature:33
+        Scenario: Multilines    # features/apples.feature:33
           Given pystring:
+            ...
           And table:
+            ...
 
-      Failed scenarios:
-      features/apples.feature:9 # Scenario: I'm little hungry
-      features/apples.feature:30 # Scenario Outline: Other situations
+      --- Failed scenarios:
 
-      7 scenarios (3 passed, 2 undefined, 2 failed)
-      25 steps (20 passed, 3 undefined, 2 failed)
+          features/apples.feature:9
+          features/apples.feature:30
 
-      You can implement step definitions for undefined steps with these snippets:
+      7 scenarios (3 passed, 2 failed, 2 undefined)
+      25 steps (20 passed, 2 failed, 3 undefined)
+
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^do something undefined$/

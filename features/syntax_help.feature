@@ -6,9 +6,9 @@ Feature: Syntax helpers
   Scenario: Print story syntax
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
-      <?php class FeatureContext implements Behat\Behat\Context\ContextInterface {}
+      <?php class FeatureContext implements Behat\Behat\Context\Context {}
       """
-    When I run "behat --no-ansi --story-syntax"
+    When I run "behat --no-colors --story-syntax"
     Then the output should contain:
       """
       [Feature|Business Need|Ability]: Internal operations
@@ -42,9 +42,9 @@ Feature: Syntax helpers
   Scenario: Print story syntax in native language
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
-      <?php class FeatureContext implements Behat\Behat\Context\ContextInterface {}
+      <?php class FeatureContext implements Behat\Behat\Context\Context {}
       """
-    When I run "behat --no-ansi --story-syntax --lang ru"
+    When I run "behat --no-colors --story-syntax --lang ru"
     Then the output should contain:
       """
       # language: ru
@@ -81,10 +81,10 @@ Feature: Syntax helpers
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           /**
            * @Given /^(?:I|We) have (\d+) apples?$/
@@ -115,7 +115,7 @@ Feature: Syntax helpers
           }
       }
       """
-    When I run "behat --no-ansi -dl"
+    When I run "behat --no-colors -dl"
     Then the output should contain:
       """
       default | Given /^(?:I|We) have (\d+) apples?$/
@@ -129,11 +129,11 @@ Feature: Syntax helpers
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException,
-          Behat\Behat\Context\TranslatableContextInterface;
+          Behat\Behat\Context\TranslatableContext;
 
-      class FeatureContext implements TranslatableContextInterface
+      class FeatureContext implements TranslatableContext
       {
           /**
            * @Given /^I have (\d+) apples?$/
@@ -186,7 +186,7 @@ Feature: Syntax helpers
         </file>
       </xliff>
       """
-    When I run "behat --no-ansi -dl --lang=ru"
+    When I run "behat --no-colors -dl --lang=ru"
     Then the output should contain:
       """
       default | Given /^у меня (\d+) яблоко?$/
@@ -200,10 +200,10 @@ Feature: Syntax helpers
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           /**
            * @Given /^I have (\d+) apples?$/
@@ -236,7 +236,7 @@ Feature: Syntax helpers
           }
       }
       """
-    When I run "behat --no-ansi -di"
+    When I run "behat --no-colors -di"
     Then the output should contain:
       """
       default | Given /^I have (\d+) apples?$/
@@ -258,59 +258,11 @@ Feature: Syntax helpers
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
-
-      class FeatureContext implements ContextInterface
-      {
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
-          public function iHaveApples($count) {
-              throw new PendingException();
-          }
-
-          /**
-           * Eating apples
-           *
-           * @When /^I ate (\d+) apples?$/
-           */
-          public function iAteApples($count) {
-              throw new PendingException();
-          }
-
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
-          public function iFoundApples($count) {
-              throw new PendingException();
-          }
-
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
-          public function iShouldHaveApples($count) {
-              throw new PendingException();
-          }
-      }
-      """
-    When I run "behat --no-ansi -d 'I found 25 apples'"
-    Then the output should contain:
-      """
-      default | When /^I found (\d+) apples?$/
-              | at `FeatureContext::iFoundApples()`
-      """
-
-  Scenario: Search definition
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\ContextInterface,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException,
-          Behat\Behat\Context\TranslatableContextInterface;
+          Behat\Behat\Context\TranslatableContext;
 
-      class FeatureContext implements TranslatableContextInterface
+      class FeatureContext implements TranslatableContext
       {
           /**
            * @Given /^I have (\d+) apples?$/
@@ -363,7 +315,7 @@ Feature: Syntax helpers
         </file>
       </xliff>
       """
-    When I run "behat --no-ansi --lang=ru -d 'нашел'"
+    When I run "behat --no-colors --lang=ru -d 'нашел'"
     Then the output should contain:
       """
       default | When /^Я нашел (\d+) яблоко?$/

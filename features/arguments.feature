@@ -8,12 +8,11 @@ Feature: Step Arguments
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingExceptionException;
+      use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $input;
           private $strings = array();
@@ -81,7 +80,7 @@ Feature: Step Arguments
             '''
           Then it must be equals to string 1
       """
-    When I run "behat --no-ansi -f progress features/pystring.feature"
+    When I run "behat --no-colors -f progress features/pystring.feature"
     Then it should pass with:
       """
       ..
@@ -110,7 +109,7 @@ Feature: Step Arguments
             | word1  | word2 |
             | hello, | l     |
       """
-    When I run "behat --no-ansi -f progress features/pystring_tokens.feature"
+    When I run "behat --no-colors -f progress features/pystring_tokens.feature"
     Then it should pass with:
       """
       ..
@@ -134,7 +133,7 @@ Feature: Step Arguments
             | word1 | word2 | word3 |
             | super | XXL   | mega  |
       """
-    When I run "behat --no-ansi -f progress features/table_tokens.feature"
+    When I run "behat --no-colors -f progress features/table_tokens.feature"
     Then it should pass with:
       """
       ..
@@ -154,7 +153,7 @@ Feature: Step Arguments
             | hyper | mini  | XXL   |
           Then it must be equals to table 1
       """
-    When I run "behat --no-ansi -f progress features/table.feature"
+    When I run "behat --no-colors -f progress features/table.feature"
     Then it should pass with:
       """
       ..
@@ -174,7 +173,7 @@ Feature: Step Arguments
         Scenario:
           Given I have number2 = 243 and number1 = 13
       """
-    When I run "behat --no-ansi -f progress features/named_args.feature "
+    When I run "behat --no-colors -f progress features/named_args.feature "
     Then it should pass with:
       """
       .

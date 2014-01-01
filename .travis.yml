@@ -1,16 +1,20 @@
 language: php
 
-php: [5.3, 5.4, 5.5]
+php: [5.3, 5.4, 5.5, hhvm]
+
+matrix:
+  allow_failures:
+    - php: hhvm
 
 env:
   - SYMFONY_VERSION='2.1.*'
   - SYMFONY_VERSION='2.2.*'
   - SYMFONY_VERSION='2.3.*'
+  - SYMFONY_VERSION='2.4.*'
 
 before_script:
-  - curl http://getcomposer.org/installer | php
-  - php composer.phar require --no-update symfony/symfony=$SYMFONY_VERSION
-  - php composer.phar install --dev --prefer-source
+  - composer require --no-update symfony/symfony=$SYMFONY_VERSION
+  - composer install --dev --prefer-source
   - export PATH=./bin:$PATH
 
 script: behat -fprogress --tags '~@php-version,'`php -r 'echo "@php5.".implode(",@php5.", range(3, PHP_MINOR_VERSION));'`

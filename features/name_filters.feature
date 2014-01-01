@@ -8,12 +8,11 @@ Feature: Name filters
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           /**
            * @Given /^Some slow step N(\d+)$/
@@ -58,7 +57,7 @@ Feature: Name filters
       """
 
   Scenario: First Name
-    When I run "behat --no-ansi -f pretty --name First"
+    When I run "behat --no-colors -f pretty --name First"
     Then it should pass with:
       """
       Feature: First Feature
@@ -87,7 +86,7 @@ Feature: Name filters
       """
 
   Scenario: Second Name
-    When I run "behat --no-ansi -f pretty --name 'Second Scenario'"
+    When I run "behat --no-colors -f pretty --name 'Second Scenario'"
     Then it should pass with:
       """
       Feature: First Feature
@@ -103,7 +102,7 @@ Feature: Name filters
       """
 
   Scenario: RegEx
-    When I run "behat --no-ansi -f pretty --name '/nd Scenario$/'"
+    When I run "behat --no-colors -f pretty --name '/nd Scenario$/'"
     Then it should pass with:
       """
       Feature: First Feature

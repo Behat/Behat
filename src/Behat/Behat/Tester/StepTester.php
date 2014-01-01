@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Tester;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,145 +7,253 @@ namespace Behat\Behat\Tester;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Callee\Event\ExecuteCalleeEvent;
-use Behat\Behat\Context\Pool\ContextPoolInterface;
-use Behat\Behat\Definition\Event\DefinitionCarrierEvent;
-use Behat\Behat\Definition\Event\ExecuteDefinitionEvent;
-use Behat\Behat\Event\EventInterface;
-use Behat\Behat\Event\StepEvent;
-use Behat\Behat\EventDispatcher\DispatchingService;
-use Behat\Behat\Exception\PendingException;
-use Behat\Behat\Exception\UndefinedException;
-use Behat\Behat\Snippet\Event\SnippetCarrierEvent;
-use Behat\Behat\Snippet\SnippetInterface;
-use Behat\Behat\Suite\SuiteInterface;
-use Behat\Gherkin\Node\ScenarioInterface;
-use Behat\Gherkin\Node\StepContainerInterface;
+
+namespace Behat\Behat\Tester;
+
+use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Definition\DefinitionFinder;
+use Behat\Behat\Definition\Exception\SearchException;
+use Behat\Behat\Definition\SearchResult;
+use Behat\Behat\Tester\Event\StepTested;
+use Behat\Behat\Tester\Result\StepTestResult;
+use Behat\Behat\Tester\Result\TestResult;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
-use Exception;
+use Behat\Testwork\Call\CallCenter;
+use Behat\Testwork\Call\CallResults;
+use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\Hook\HookDispatcher;
+use Behat\Testwork\Suite\Suite;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Step DispatchingTester.
+ * Step tester.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepTester extends DispatchingService
+class StepTester
 {
+    /**
+     * @var DefinitionFinder
+     */
+    private $definitionFinder;
+    /**
+     * @var CallCenter
+     */
+    private $callCenter;
+    /**
+     * @var HookDispatcher
+     */
+    private $hookDispatcher;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * Initialize tester.
+     *
+     * @param DefinitionFinder         $definitionFinder
+     * @param CallCenter               $callCenter
+     * @param HookDispatcher           $hookDispatcher
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(
+        DefinitionFinder $definitionFinder,
+        CallCenter $callCenter,
+        HookDispatcher $hookDispatcher,
+        EventDispatcherInterface $eventDispatcher
+    ) {
+        $this->definitionFinder = $definitionFinder;
+        $this->callCenter = $callCenter;
+        $this->hookDispatcher = $hookDispatcher;
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     /**
      * Tests step.
      *
-     * @param SuiteInterface         $suite
-     * @param ContextPoolInterface   $contexts
-     * @param ScenarioInterface      $scenario
-     * @param StepContainerInterface $container
-     * @param StepNode               $step
-     * @param Boolean                $skip
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param StepNode    $step
+     * @param Boolean     $skip
      *
-     * @return integer
+     * @return TestResult
      */
-    public function test(
-        SuiteInterface $suite,
-        ContextPoolInterface $contexts,
-        ScenarioInterface $scenario,
-        StepContainerInterface $container,
+    public function test(Suite $suite, Environment $environment, FeatureNode $feature, StepNode $step, $skip = false)
+    {
+        $beforeHooks = $skip ? new CallResults() : $this->dispatchBeforeHooks($suite, $environment, $feature, $step);
+        $this->dispatchBeforeEvent($suite, $environment, $feature, $step, $beforeHooks);
+
+        try {
+            $search = $this->searchDefinition($environment, $feature, $step);
+            $result = $this->testDefinition($environment, $feature, $step, $search, $beforeHooks, $skip);
+        } catch (SearchException $exception) {
+            $result = new StepTestResult(null, $exception, null, $beforeHooks);
+        }
+
+        $skip = TestResult::PASSED < $result->getResultCode() ? true : $skip;
+        $afterHooks = $skip ? new CallResults() : $this->dispatchAfterHooks($suite, $environment, $feature, $step, $result);
+        $this->dispatchAfterEvent($suite, $environment, $feature, $step, $result, $afterHooks);
+
+        $result = new StepTestResult(
+            $result->getSearchResult(),
+            $result->getSearchException(),
+            $result->getCallResult(),
+            CallResults::merge($beforeHooks, $afterHooks)
+        );
+
+        return new TestResult($result->getResultCode());
+    }
+
+    /**
+     * Dispatches BEFORE event.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param StepNode    $step
+     * @param CallResults $hookCallResults
+     */
+    private function dispatchBeforeEvent(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
         StepNode $step,
+        CallResults $hookCallResults
+    ) {
+        $event = new StepTested($suite, $environment, $feature, $step, null, $hookCallResults);
+
+        $this->eventDispatcher->dispatch(StepTested::BEFORE, $event);
+    }
+
+    /**
+     * Dispatches BEFORE event hooks.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param StepNode    $step
+     *
+     * @return CallResults
+     */
+    private function dispatchBeforeHooks(Suite $suite, Environment $environment, FeatureNode $feature, StepNode $step)
+    {
+        $event = new StepTested($suite, $environment, $feature, $step);
+
+        return $this->hookDispatcher->dispatchEventHooks(StepTested::BEFORE, $event);
+    }
+
+    /**
+     * Searches for a definition.
+     *
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param StepNode    $step
+     *
+     * @return SearchResult
+     */
+    private function searchDefinition(Environment $environment, FeatureNode $feature, StepNode $step)
+    {
+        return $this->definitionFinder->findDefinition($environment, $feature, $step);
+    }
+
+    /**
+     * Tests found definition.
+     *
+     * @param Environment  $environment
+     * @param FeatureNode  $feature
+     * @param StepNode     $step
+     * @param SearchResult $search
+     * @param CallResults  $hookResults
+     * @param Boolean      $skip
+     *
+     * @return StepTestResult
+     */
+    private function testDefinition(
+        Environment $environment,
+        FeatureNode $feature,
+        StepNode $step,
+        SearchResult $search,
+        CallResults $hookResults,
         $skip = false
-    )
-    {
-        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
-
-        $event = new StepEvent($suite, $contexts, $scenario, $container, $step);
-        $this->dispatch(EventInterface::BEFORE_STEP, $event);
-
-        try {
-            !$skip && $this->dispatch(EventInterface::HOOKABLE_BEFORE_STEP, $event);
-        } catch (Exception $e) {
-            $status = StepEvent::FAILED;
-            $skip = true;
+    ) {
+        if ($skip || !$search->hasMatch()) {
+            return new StepTestResult($search, null, null, $hookResults);
         }
 
-        $execution = $exception = $snippet = null;
+        $call = $this->createDefinitionCall($environment, $feature, $search, $step);
+        $result = $this->callCenter->makeCall($call);
 
-        try {
-            $execution = $this->getExecutionEvent($suite, $contexts, $step);
-            !$skip && $this->dispatch(EventInterface::EXECUTE_DEFINITION, $execution);
-        } catch (PendingException $e) {
-            $status = StepEvent::PENDING;
-            $exception = $e;
-        } catch (UndefinedException $e) {
-            $status = StepEvent::UNDEFINED;
-            $exception = $e;
-            $snippet = $this->getDefinitionSnippet($suite, $contexts, $step);
-        } catch (Exception $e) {
-            $status = StepEvent::FAILED;
-            $exception = $e;
-        }
-
-        $stdOut = $execution ? $execution->getStdOut() : null;
-        $definition = $execution ? $execution->getCallee() : null;
-
-        $event = new StepEvent($suite, $contexts, $scenario, $container, $step, $status, $stdOut, $exception, $definition, $snippet);
-
-        try {
-            !$skip && $this->dispatch(EventInterface::HOOKABLE_AFTER_STEP, $event);
-        } catch (Exception $e) {
-            $status = StepEvent::FAILED;
-            $event = new StepEvent($suite, $contexts, $scenario, $container, $step, $status, $stdOut, $exception, $definition, $snippet);
-        }
-
-        $this->dispatch(EventInterface::AFTER_STEP, $event);
-
-        return $status;
+        return new StepTestResult($search, null, $result, $hookResults);
     }
 
     /**
-     * Returns execution event.
+     * Creates definition call.
      *
-     * @param SuiteInterface       $suite
-     * @param ContextPoolInterface $contexts
-     * @param StepNode             $step
+     * @param Environment  $environment
+     * @param FeatureNode  $feature
+     * @param SearchResult $search
+     * @param StepNode     $step
      *
-     * @return ExecuteCalleeEvent
-     *
-     * @throws UndefinedException
+     * @return DefinitionCall
      */
-    protected function getExecutionEvent(
-        SuiteInterface $suite,
-        ContextPoolInterface $contexts,
+    private function createDefinitionCall(
+        Environment $environment,
+        FeatureNode $feature,
+        SearchResult $search,
         StepNode $step
-    )
-    {
-        $definitionProvider = new DefinitionCarrierEvent($suite, $contexts, $step);
-        $this->dispatch(EventInterface::FIND_DEFINITION, $definitionProvider);
+    ) {
+        $definition = $search->getMatchedDefinition();
+        $arguments = $search->getMatchedArguments();
 
-        if (!$definitionProvider->hasDefinition()) {
-            throw new UndefinedException($step->getText());
-        }
-
-        $definition = $definitionProvider->getDefinition();
-        $arguments = $definitionProvider->getArguments();
-
-        return new ExecuteDefinitionEvent($suite, $contexts, $step, $definition, $arguments);
+        return new DefinitionCall($environment, $feature, $step, $definition, $arguments);
     }
 
     /**
-     * Returns definition snippet.
+     * Dispatches AFTER event hooks.
      *
-     * @param SuiteInterface       $suite
-     * @param ContextPoolInterface $contexts
-     * @param StepNode             $step
+     * @param Suite          $suite
+     * @param Environment    $environment
+     * @param FeatureNode    $feature
+     * @param StepNode       $step
+     * @param StepTestResult $result
      *
-     * @return SnippetInterface
+     * @return CallResults
      */
-    protected function getDefinitionSnippet(
-        SuiteInterface $suite,
-        ContextPoolInterface $contexts,
-        StepNode $step
-    )
-    {
-        $snippetProvider = new SnippetCarrierEvent($suite, $contexts, $step);
-        $this->dispatch(EventInterface::CREATE_SNIPPET, $snippetProvider);
+    private function dispatchAfterHooks(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
+        StepNode $step,
+        StepTestResult $result
+    ) {
+        $event = new StepTested($suite, $environment, $feature, $step, $result);
 
-        return $snippetProvider->getSnippet();
+        return $this->hookDispatcher->dispatchEventHooks(StepTested::AFTER, $event);
+    }
+
+    /**
+     * Dispatches AFTER event.
+     *
+     * @param Suite          $suite
+     * @param Environment    $environment
+     * @param FeatureNode    $feature
+     * @param StepNode       $step
+     * @param StepTestResult $result
+     * @param CallResults    $hookCallResults
+     */
+    private function dispatchAfterEvent(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
+        StepNode $step,
+        StepTestResult $result,
+        CallResults $hookCallResults
+    ) {
+        $event = new StepTested($suite, $environment, $feature, $step, $result, $hookCallResults);
+
+        $this->eventDispatcher->dispatch(StepTested::AFTER, $event);
     }
 }

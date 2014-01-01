@@ -12,6 +12,7 @@
             "in": "vendor"
         }
     ],
+    "compactors": "Herrera\\Box\\Compactor\\Php",
     "main": "bin/behat",
     "output": "behat.phar",
     "stub": true

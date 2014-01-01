@@ -55,9 +55,9 @@ Feature: Config inheritance
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface;
+      use Behat\Behat\Context\Context;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $parameters;
           private $extension;
@@ -90,9 +90,12 @@ Feature: Config inheritance
       <?php
 
       use Symfony\Component\DependencyInjection\ContainerBuilder;
-      use Behat\Behat\Context\ContextInterface;
+      use Behat\Behat\Context\Context;
+      use Behat\Behat\Context\Initializer\ContextInitializer;
+      use Behat\Testwork\ServiceContainer\Extension;
+      use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-      class CustomInitializer implements Behat\Behat\Context\Initializer\InitializerInterface
+      class CustomInitializer implements ContextInitializer
       {
           private $parameters;
 
@@ -101,28 +104,37 @@ Feature: Config inheritance
               $this->parameters = $parameters;
           }
 
-          public function supports(ContextInterface $context)
+          public function supportsContext(Context $context)
           {
               return true;
           }
 
-          public function initialize(ContextInterface $context)
+          public function initializeContext(Context $context)
           {
               $context->setExtensionParameters($this->parameters);
           }
       }
 
-      class CustomExtension extends Behat\Behat\Extension\Extension
+      class CustomExtension implements Extension
       {
-          public function getName() {
-              return 'custom_extension';
+          public function getConfigKey()
+          {
+              return 'custom';
           }
 
-          public function load(array $config, ContainerBuilder $container) {
+          public function configure(ArrayNodeDefinition $builder)
+          {
+              $builder->useAttributeAsKey('name')->prototype('variable');
+          }
+
+          public function load(ContainerBuilder $container, array $config)
+          {
               $definition = $container->register('custom_initializer', 'CustomInitializer');
               $definition->setArguments(array($config));
-              $definition->addTag('context.initializer');
+              $definition->addTag('context.initializer', array('priority' => 100));
           }
+
+          public function process(ContainerBuilder $container) {}
       }
 
       return new CustomExtension;

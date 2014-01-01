@@ -7,45 +7,32 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Context\ContextInterface;
+
+use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
 
 /**
  * Behat test suite context.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureContext implements ContextInterface
+class FeatureContext implements Context
 {
     /**
-     * Environment variable
-     *
      * @var string
      */
-    private $env;
+    private $phpBin;
     /**
-     * Last runned command name.
-     *
-     * @var string
+     * @var Process
      */
-    private $command;
-    /**
-     * Last runned command output.
-     *
-     * @var string
-     */
-    private $output;
-    /**
-     * Last runned command return code.
-     *
-     * @var integer
-     */
-    private $return;
+    private $process;
 
     /**
      * Cleans test folders in the temporary directory.
      *
-     * @BeforeSuite
+     * @BeforeFeature
      */
     public static function cleanTestFolders()
     {
@@ -59,7 +46,7 @@ class FeatureContext implements ContextInterface
      *
      * @BeforeScenario
      */
-    public function prepareTestFolders($event)
+    public function prepareTestFolders()
     {
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR .
             md5(microtime() * rand(0, 10000));
@@ -74,6 +61,13 @@ class FeatureContext implements ContextInterface
         mkdir('features' . DIRECTORY_SEPARATOR . 'support');
         mkdir('features' . DIRECTORY_SEPARATOR . 'steps');
         mkdir('features' . DIRECTORY_SEPARATOR . 'steps' . DIRECTORY_SEPARATOR . 'i18n');
+
+        $phpFinder = new PhpExecutableFinder();
+        if (false === $php = $phpFinder->find()) {
+            throw new \RuntimeException('Unable to find the PHP executable.');
+        }
+        $this->phpBin = $php;
+        $this->process = new Process(null);
     }
 
     /**
@@ -81,12 +75,12 @@ class FeatureContext implements ContextInterface
      *
      * @Given /^(?:there is )?a file named "([^"]*)" with:$/
      *
-     * @param   string       $filename   name of the file (relative path)
-     * @param   PyStringNode $content    PyString string instance
+     * @param   string       $filename name of the file (relative path)
+     * @param   PyStringNode $content  PyString string instance
      */
     public function aFileNamedWith($filename, PyStringNode $content)
     {
-        $content = strtr((string)$content, array("'''" => '"""'));
+        $content = strtr((string) $content, array("'''" => '"""'));
         $this->createFile($filename, $content);
     }
 
@@ -119,17 +113,17 @@ class FeatureContext implements ContextInterface
      *
      * @When /^"BEHAT_PARAMS" environment variable is set to:$/
      *
-     * @param   PyStringNode $value
+     * @param PyStringNode $value
      */
     public function iSetEnvironmentVariable(PyStringNode $value)
     {
-        $this->env = (string)$value;
+        $this->process->setEnv(array('BEHAT_PARAMS' => (string) $value));
     }
 
     /**
      * Runs behat command with provided parameters
      *
-     * @When /^I run "behat(?: ([^"]*))?"$/
+     * @When /^I run "behat(?: ((?:\"|[^"])*))?"$/
      *
      * @param   string $argumentsString
      */
@@ -137,31 +131,18 @@ class FeatureContext implements ContextInterface
     {
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
-        if ('/' === DIRECTORY_SEPARATOR) {
-            $argumentsString .= ' 2>&1';
-        }
-
-        if ($this->env) {
-            exec(sprintf('BEHAT_PARAMS=\'%s\' %s %s %s',
-                $this->env, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
-            ), $output, $return);
-        } else {
-            exec(sprintf('%s %s %s --no-time',
-                BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
-            ), $output, $return);
-        }
-
-        $this->command = 'behat ' . $argumentsString;
-        $this->output = trim(implode("\n", $output));
-        $this->return = $return;
-    }
-
-    /**
-     * @When I escape ansi characters in the output
-     */
-    public function iEscapeAnsiCharactersInTheOutput()
-    {
-        $this->output = addcslashes($this->output, "\033");
+        $this->process->setWorkingDirectory(getcwd());
+        $this->process->setCommandLine(
+            sprintf(
+                '%s %s %s %s',
+                $this->phpBin,
+                escapeshellarg(BEHAT_BIN_PATH),
+                $argumentsString,
+                strtr('--format-settings=\'{"timer": false}\'', array('\'' => '"', '"' => '\"'))
+            )
+        );
+        $this->process->start();
+        $this->process->wait();
     }
 
     /**
@@ -169,33 +150,13 @@ class FeatureContext implements ContextInterface
      *
      * @Then /^it should (fail|pass) with:$/
      *
-     * @param   string       $success    "fail" or "pass"
-     * @param   PyStringNode $text       PyString text instance
+     * @param   string       $success "fail" or "pass"
+     * @param   PyStringNode $text    PyString text instance
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
-        if ('fail' === $success) {
-            PHPUnit_Framework_Assert::assertNotEquals(0, $this->return);
-        } else {
-            PHPUnit_Framework_Assert::assertEquals(0, $this->return);
-        }
-
-        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
-
-        // windows path fix
-        if ('/' !== DIRECTORY_SEPARATOR) {
-            $text = preg_replace_callback('/ features\/[^\n ]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
-            $text = preg_replace_callback('/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
-            $text = preg_replace_callback('/\+[fd] [^ ]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
-        }
-
-        PHPUnit_Framework_Assert::assertEquals((string)$text, $this->output);
+        $this->itShouldFail($success);
+        $this->theOutputShouldContain($text);
     }
 
     /**
@@ -203,23 +164,20 @@ class FeatureContext implements ContextInterface
      *
      * @Given /^"([^"]*)" file should contain:$/
      *
-     * @param   string       $path   file path
-     * @param   PyStringNode $text   file content
+     * @param   string       $path file path
+     * @param   PyStringNode $text file content
      */
     public function fileShouldContain($path, PyStringNode $text)
     {
         PHPUnit_Framework_Assert::assertFileExists($path);
-        PHPUnit_Framework_Assert::assertEquals((string)$text, trim(file_get_contents($path)));
-    }
 
-    /**
-     * Prints last command output string.
-     *
-     * @Then display output
-     */
-    public function displayLastCommandOutput()
-    {
-        print("\n\n`" . $this->command . "`:\n" . $this->output . "\n\n");
+        $fileContent = trim(file_get_contents($path));
+        // Normalize the line endings in the output
+        if ("\n" !== PHP_EOL) {
+            $fileContent = str_replace(PHP_EOL, "\n", $fileContent);
+        }
+
+        PHPUnit_Framework_Assert::assertEquals($this->getExpectedOutput($text), $fileContent);
     }
 
     /**
@@ -227,26 +185,37 @@ class FeatureContext implements ContextInterface
      *
      * @Then the output should contain:
      *
-     * @param   PyStringNode $text   PyString text instance
+     * @param   PyStringNode $text PyString text instance
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
+        PHPUnit_Framework_Assert::assertContains($this->getExpectedOutput($text), $this->getOutput());
+    }
+
+    private function getExpectedOutput(PyStringNode $expectedText)
+    {
+        $text = strtr($expectedText, array('\'\'\'' => '"""'));
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
-            $text = preg_replace_callback('/ features\/[^\n ]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
-            $text = preg_replace_callback('/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
-            $text = preg_replace_callback('/\+[fd] [^ ]+/', function ($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string)$text);
+            $text = preg_replace_callback(
+                '/ features\/[^\n ]+/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, $text
+            );
+            $text = preg_replace_callback(
+                '/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, $text
+            );
+            $text = preg_replace_callback(
+                '/\+[fd] [^ ]+/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, $text
+            );
         }
 
-        PHPUnit_Framework_Assert::assertContains((string)$text, $this->output);
+        return $text;
     }
 
     /**
@@ -254,15 +223,40 @@ class FeatureContext implements ContextInterface
      *
      * @Then /^it should (fail|pass)$/
      *
-     * @param   string $success    "fail" or "pass"
+     * @param   string $success "fail" or "pass"
      */
     public function itShouldFail($success)
     {
         if ('fail' === $success) {
-            PHPUnit_Framework_Assert::assertNotEquals(0, $this->return);
+            if (0 === $this->getExitCode()) {
+                echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
+            }
+
+            PHPUnit_Framework_Assert::assertNotEquals(0, $this->getExitCode());
         } else {
-            PHPUnit_Framework_Assert::assertEquals(0, $this->return);
+            if (0 !== $this->getExitCode()) {
+                echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
+            }
+
+            PHPUnit_Framework_Assert::assertEquals(0, $this->getExitCode());
         }
+    }
+
+    private function getExitCode()
+    {
+        return $this->process->getExitCode();
+    }
+
+    private function getOutput()
+    {
+        $output = $this->process->getErrorOutput() . $this->process->getOutput();
+
+        // Normalize the line endings in the output
+        if ("\n" !== PHP_EOL) {
+            $output = str_replace(PHP_EOL, "\n", $output);
+        }
+
+        return trim(preg_replace("/ +$/m", '', $output));
     }
 
     private function createFile($filename, $content)
@@ -279,11 +273,6 @@ class FeatureContext implements ContextInterface
         chdir($path);
     }
 
-    /**
-     * Removes files and folders recursively at provided path.
-     *
-     * @param string $path
-     */
     private static function clearDirectory($path)
     {
         $files = scandir($path);

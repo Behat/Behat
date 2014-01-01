@@ -8,12 +8,9 @@ Feature: Profiles
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\Context;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $result;
           private $numbers;
@@ -101,7 +98,7 @@ Feature: Profiles
       """
 
   Scenario:
-    Given I run "behat --no-ansi features/math.feature"
+    Given I run "behat --no-colors features/math.feature"
     Then it should pass with:
       """
       ...............
@@ -111,7 +108,7 @@ Feature: Profiles
       """
 
   Scenario:
-    Given I run "behat --no-ansi --profile pretty_without_paths"
+    Given I run "behat --no-colors --profile pretty_without_paths"
     Then it should pass with:
       """
       Feature: Math
@@ -136,13 +133,13 @@ Feature: Profiles
       """
 
   Scenario:
-    Given I run "behat --no-ansi --profile pretty"
+    Given I run "behat --no-colors --profile pretty"
     Then it should pass with:
       """
       Feature: Math
 
-        Background:                     # features/math.feature:2
-          Given I have basic calculator # FeatureContext::iHaveBasicCalculator()
+        Background:                          # features/math.feature:2
+          Given I have basic calculator      # FeatureContext::iHaveBasicCalculator()
 
         Scenario Outline:                    # features/math.feature:5
           Given I have entered <number1>     # FeatureContext::iHaveEntered()

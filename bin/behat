@@ -28,5 +28,5 @@ if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) && (!$loader
     );
 }
 
-$app = new Behat\Behat\Console\BehatApplication(BEHAT_VERSION);
-$app->run();
+$factory = new \Behat\Behat\ApplicationFactory();
+$factory->createApplication()->run();

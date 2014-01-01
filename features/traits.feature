@@ -9,12 +9,9 @@ Feature: Support php 5.4 traits
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\Context;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           use ApplesDefinitions;
 
@@ -97,7 +94,7 @@ Feature: Support php 5.4 traits
       """
 
   Scenario: Run feature with failing scenarios
-    When I run "behat --no-ansi -f progress"
+    When I run "behat --no-colors -f progress"
     Then it should pass with:
       """
       .....................

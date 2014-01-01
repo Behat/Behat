@@ -8,12 +8,9 @@ Feature: Tags
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\Context;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           /**
            * @Given /^Some slow step N(\d+)$/
@@ -118,7 +115,7 @@ Feature: Tags
       """
 
   Scenario: Single tag
-    When I run "behat --no-ansi -f pretty --tags '@slow' --no-paths"
+    When I run "behat --no-colors -f pretty --tags '@slow' --format-settings='{\"paths\": false}'"
     Then it should pass
     And the output should contain:
       """
@@ -171,7 +168,7 @@ Feature: Tags
       """
 
   Scenario: Or tags
-    When I run "behat --no-ansi -f pretty --tags '@slow,@normal' --no-paths"
+    When I run "behat --no-colors -f pretty --tags '@slow,@normal' --format-settings='{\"paths\": false}'"
     Then it should pass
     And the output should contain:
       """
@@ -244,83 +241,4 @@ Feature: Tags
       """
       9 scenarios (9 passed)
       22 steps (22 passed)
-      """
-
-  Scenario: And tags
-    When I run "behat --no-ansi -f pretty --tags '@slow,@normal&&@fast' --no-paths"
-    Then it should pass
-    And the output should contain:
-      """
-      @slow
-      Feature: Feature N1
-
-        Background:
-          Given Some slow step N11
-
-        @fast
-        Scenario:
-          Given Some fast step N14
-      """
-    And the output should contain:
-      """
-      Feature: Feature N2
-
-        Background:
-          Given Some normal step N21
-
-        @slow @fast
-        Scenario:
-          Given Some slow step N22
-          And Some fast step N23
-      """
-    And the output should contain:
-      """
-      Feature: Feature N3
-
-        Background:
-          Given Some normal step N21
-
-        @normal @fast
-        Scenario Outline:
-          Given Some normal step N<num>
-          And Some fast step N37
-
-          Examples:
-            | num |
-            | 35  |
-            | 36  |
-      """
-    And the output should contain:
-      """
-      4 scenarios (4 passed)
-      11 steps (11 passed)
-      """
-
-  Scenario: Not tags
-    When I run "behat --no-ansi -f pretty --tags '~@slow&&~@fast' --no-paths"
-    Then it should pass
-    And the output should contain:
-      """
-      Feature: Feature N3
-
-        Background:
-          Given Some normal step N21
-
-        @normal
-        Scenario:
-          Given Some normal step N38
-      """
-    And the output should contain:
-      """
-      Feature: Feature N4
-
-        @normal
-        Scenario:
-          Given Some normal step N41
-          And Some fast step N42
-      """
-    And the output should contain:
-      """
-      2 scenarios (2 passed)
-      4 steps (4 passed)
       """

@@ -5,11 +5,12 @@ Feature: Init
 
   Scenario: Simple init
     Given I am in the "init_test" path
-    When I run "behat --no-ansi --init"
+    When I run "behat --no-colors --init"
     Then it should pass with:
       """
       +d features - place your *.feature files here
-      +f features/bootstrap/FeatureContext.php - place your definitions here
+      +d features/bootstrap - place your context classes here
+      +f features/bootstrap/FeatureContext.php - place your definitions, transformations and hooks here
       """
     And file "features/bootstrap/FeatureContext.php" should exist
 
@@ -24,11 +25,12 @@ Feature: Init
             path:    %paths.base%/scenarios
             context: CustomContext
       """
-    When I run "behat --no-ansi --init"
+    When I run "behat --no-colors --init"
     Then it should pass with:
       """
       +d scenarios - place your *.feature files here
-      +f supp/CustomContext.php - place your definitions here
+      +d supp - place your context classes here
+      +f supp/CustomContext.php - place your definitions, transformations and hooks here
       """
     And file "supp/CustomContext.php" should exist
 
@@ -46,13 +48,14 @@ Feature: Init
             path:    %paths.base%/scenarios2
             context: Custom2Context
       """
-    When I run "behat --no-ansi --init"
+    When I run "behat --no-colors --init"
     Then it should pass with:
       """
       +d scenarios1 - place your *.feature files here
-      +f contexts/Custom1Context.php - place your definitions here
+      +d contexts - place your context classes here
+      +f contexts/Custom1Context.php - place your definitions, transformations and hooks here
       +d scenarios2 - place your *.feature files here
-      +f contexts/Custom2Context.php - place your definitions here
+      +f contexts/Custom2Context.php - place your definitions, transformations and hooks here
       """
     And file "contexts/Custom1Context.php" should exist
     And file "contexts/Custom2Context.php" should exist

@@ -8,12 +8,12 @@ Feature: Error Reporting
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           /**
            * @Given /^I have an empty array$/
@@ -80,27 +80,26 @@ Feature: Error Reporting
       """
 
   Scenario: With default error reporting
-    When I run "behat -f progress --no-ansi"
+    When I run "behat -f progress --no-colors"
     Then it should fail
     And the output should contain:
     """
-    (::) failed steps (::)
+    --- Failed steps:
 
-    01. Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 24
-        In step `When I access array index 0'.  # FeatureContext::iAccessArrayIndex()
-        From scenario `Access undefined index'. # features/e_notice_in_scenario.feature:9
-        Of feature `E_NOTICE in scenario'.      # features/e_notice_in_scenario.feature
+        features/e_notice_in_scenario.feature:9
+          When I access array index 0 # features/e_notice_in_scenario.feature:10
+            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 24
 
     2 scenarios (1 passed, 1 failed)
-    7 steps (5 passed, 1 skipped, 1 failed)
+    7 steps (5 passed, 1 failed, 1 skipped)
     """
 
   Scenario: With error reporting ignoring E_NOTICE
     Given a file named "behat.yml" with:
       """
       default:
-        options:
+        call:
           error_reporting: 32759
       """
-    When I run "behat -f progress --no-ansi"
+    When I run "behat -f progress --no-colors"
     Then it should pass

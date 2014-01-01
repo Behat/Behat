@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Tester;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,86 +7,157 @@ namespace Behat\Behat\Tester;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Context\Pool\ContextPoolInterface;
-use Behat\Behat\Event\EventInterface;
-use Behat\Behat\Event\OutlineEvent;
-use Behat\Behat\Event\StepEvent;
-use Behat\Behat\EventDispatcher\DispatchingService;
-use Behat\Behat\Suite\SuiteInterface;
-use Behat\Behat\Tester\Event\ExampleTesterCarrierEvent;
+
+namespace Behat\Behat\Tester;
+
+use Behat\Behat\Tester\Event\OutlineTested;
+use Behat\Behat\Tester\Result\OutlineTestResult;
 use Behat\Gherkin\Node\ExampleNode;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
-use RuntimeException;
+use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Result\TestResults;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Outline tester.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineTester extends DispatchingService
+class OutlineTester
 {
     /**
-     * Tests outline.
-     *
-     * @param SuiteInterface       $suite
-     * @param ContextPoolInterface $contexts
-     * @param OutlineNode          $outline
-     * @param Boolean              $skip
-     *
-     * @return integer
+     * @var StepContainerTester
      */
-    public function test(
-        SuiteInterface $suite,
-        ContextPoolInterface $contexts,
-        OutlineNode $outline,
-        $skip = false
-    )
+    private $exampleTester;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * Initializes tester.
+     *
+     * @param StepContainerTester      $exampleTester
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(StepContainerTester $exampleTester, EventDispatcherInterface $eventDispatcher)
     {
-        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
-
-        $event = new OutlineEvent($suite, $contexts, $outline);
-        $this->dispatch(EventInterface::BEFORE_OUTLINE, $event);
-
-        foreach ($outline->getExamples() as $example) {
-            $tester = $this->getExampleTester($suite, $contexts, $example);
-            $status = max($status, $tester->test($suite, $contexts, $example, $skip));
-        }
-
-        $event = new OutlineEvent($suite, $contexts, $outline, $status);
-        $this->dispatch(EventInterface::AFTER_OUTLINE, $event);
-
-        return $status;
+        $this->exampleTester = $exampleTester;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
-     * Returns outline example tester.
+     * Tests outline.
      *
-     * @param SuiteInterface       $suite
-     * @param ContextPoolInterface $contexts
-     * @param ExampleNode          $example
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param OutlineNode $outline
+     * @param Boolean     $skip
      *
-     * @return ExampleTester
-     *
-     * @throws RuntimeException If outline example tester is not found
+     * @return TestResult
      */
-    private function getExampleTester(
-        SuiteInterface $suite,
-        ContextPoolInterface $contexts,
-        ExampleNode $example
-    )
-    {
-        $testerProvider = new ExampleTesterCarrierEvent($suite, $contexts, $example);
+    public function test(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
+        OutlineNode $outline,
+        $skip = false
+    ) {
+        $this->dispatchBeforeEvent($suite, $environment, $feature, $outline);
+        $result = $this->testOutline($suite, $environment, $feature, $outline, $skip);
+        $this->dispatchAfterEvent($suite, $environment, $feature, $outline, $result);
 
-        $this->dispatch(EventInterface::CREATE_EXAMPLE_TESTER, $testerProvider);
-        if (!$testerProvider->hasTester()) {
-            throw new RuntimeException(sprintf(
-                'Can not find tester for example #%d of "%s" outline from the "%s" suite.',
-                $example->getLine(),
-                $example->getOutline()->getTitle(),
-                $suite->getName()
-            ));
+        return new TestResult($result->getResultCode());
+    }
+
+    /**
+     * Dispatches BEFORE event.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param OutlineNode $outline
+     */
+    private function dispatchBeforeEvent(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
+        OutlineNode $outline
+    ) {
+        $event = new OutlineTested($suite, $environment, $feature, $outline);
+
+        $this->eventDispatcher->dispatch(OutlineTested::BEFORE, $event);
+    }
+
+    /**
+     * Tests outline examples.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param OutlineNode $outline
+     * @param Boolean     $skip
+     *
+     * @return OutlineTestResult
+     */
+    private function testOutline(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
+        OutlineNode $outline,
+        $skip = false
+    ) {
+        $results = array();
+        foreach ($outline->getExamples() as $example) {
+            $results[] = $this->testExample($suite, $environment, $feature, $example, $skip);
         }
 
-        return $testerProvider->getTester();
+        return new OutlineTestResult(new TestResults($results));
+    }
+
+    /**
+     * Tests outline example.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param ExampleNode $example
+     * @param Boolean     $skip
+     *
+     * @return TestResult
+     */
+    private function testExample(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
+        ExampleNode $example,
+        $skip = false
+    ) {
+        return $this->exampleTester->test($suite, $environment, $feature, $example, $skip);
+    }
+
+    /**
+     * Dispatches AFTER event.
+     *
+     * @param Suite             $suite
+     * @param Environment       $environment
+     * @param FeatureNode       $feature
+     * @param OutlineNode       $outline
+     * @param OutlineTestResult $result
+     */
+    private function dispatchAfterEvent(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
+        OutlineNode $outline,
+        OutlineTestResult $result
+    ) {
+        $event = new OutlineTested($suite, $environment, $feature, $outline, $result);
+
+        $this->eventDispatcher->dispatch(OutlineTested::AFTER, $event);
     }
 }

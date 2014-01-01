@@ -8,13 +8,12 @@ Feature: Pretty Formatter
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\RegexAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface, RegexSnippetsFriendlyInterface
+      class FeatureContext implements RegexAcceptingContext
       {
           private $value;
 
@@ -82,7 +81,7 @@ Feature: Pretty Formatter
             |  10   | 20     |
             |  23   | 32     |
       """
-    When I run "behat --no-ansi -f pretty"
+    When I run "behat --no-colors -f pretty"
     Then it should fail with:
       """
       Feature: World consistency
@@ -104,9 +103,9 @@ Feature: Pretty Formatter
             TODO: write pending definition
           Then I must have 10        # FeatureContext::iMustHave()
 
-        Scenario: Failed             # features/World.feature:19
-          When I add 4               # FeatureContext::iAdd()
-          Then I must have 13        # FeatureContext::iMustHave()
+        Scenario: Failed          # features/World.feature:19
+          When I add 4            # FeatureContext::iAdd()
+          Then I must have 13     # FeatureContext::iMustHave()
             Failed asserting that 14 matches expected '13'.
 
         Scenario Outline: Passed & Failed # features/World.feature:23
@@ -122,15 +121,16 @@ Feature: Pretty Formatter
             | 23    | 32     |
               Failed asserting that 33 matches expected '32'.
 
-      Failed scenarios:
-      features/World.feature:19 # Scenario: Failed
-      features/World.feature:30 # Scenario Outline: Passed & Failed
-      features/World.feature:32 # Scenario Outline: Passed & Failed
+      --- Failed scenarios:
 
-      6 scenarios (1 passed, 1 pending, 1 undefined, 3 failed)
-      23 steps (16 passed, 2 skipped, 1 pending, 1 undefined, 3 failed)
+          features/World.feature:19
+          features/World.feature:30
+          features/World.feature:32
 
-      You can implement step definitions for undefined steps with these snippets:
+      6 scenarios (1 passed, 3 failed, 1 undefined, 1 pending)
+      23 steps (16 passed, 3 failed, 1 undefined, 1 pending, 2 skipped)
+
+      --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
            * @Given /^Something new$/
@@ -141,104 +141,14 @@ Feature: Pretty Formatter
           }
       """
 
-  Scenario: Multiple parameters
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\ContextInterface, Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements ContextInterface
-      {
-          private $value;
-
-          /**
-           * @Given /I have entered (\d+)/
-           */
-          public function iHaveEntered($num) {
-              $this->value = $num;
-          }
-
-          /**
-           * @Then /I must have (\d+)/
-           */
-          public function iMustHave($num) {
-              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
-          }
-
-          /**
-           * @When /I (add|subtract) the value (\d+)/
-           */
-          public function iAddOrSubstact($op, $num) {
-              if ($op == 'add')
-                $this->value += $num;
-              elseif ($op == 'subtract')
-                $this->value -= $num;
-          }
-
-          /**
-           * @When /^regex (?P<pattern>\/([^\/]|\\\/)*\/)$/
-           */
-          public function somethingNotDoneYet($pattern) {}
-      }
-      """
-    And a file named "features/World.feature" with:
-      """
-      Feature: World consistency
-        In order to maintain stable behaviors
-        As a features developer
-        I want, that "World" flushes between scenarios
-
-        Background:
-          Given I have entered 10
-
-        Scenario: Adding
-          Then I must have 10
-          And I add the value 6
-          Then I must have 16
-          And regex /some\/regex_ha/
-
-        Scenario: Subtracting
-          Then I must have 10
-          And I subtract the value 6
-          Then I must have 4
-      """
-    When I run "behat -f pretty --ansi"
-    Then it should pass with:
-      """
-      Feature: World consistency
-        In order to maintain stable behaviors
-        As a features developer
-        I want, that "World" flushes between scenarios
-
-        Background:               [30m# features/World.feature:6[0m
-          [32mGiven I have entered [0m[32;1m10[0m[32m[0m [30m# FeatureContext::iHaveEntered()[0m
-
-        Scenario: Adding             [30m# features/World.feature:9[0m
-          [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# FeatureContext::iMustHave()[0m
-          [32mAnd I [0m[32;1madd[0m[32m the value [0m[32;1m6[0m[32m[0m      [30m# FeatureContext::iAddOrSubstact()[0m
-          [32mThen I must have [0m[32;1m16[0m[32m[0m        [30m# FeatureContext::iMustHave()[0m
-          [32mAnd regex [0m[32;1m/some\/regex_ha/[0m[32m[0m [30m# FeatureContext::somethingNotDoneYet()[0m
-
-        Scenario: Subtracting        [30m# features/World.feature:15[0m
-          [32mThen I must have [0m[32;1m10[0m[32m[0m        [30m# FeatureContext::iMustHave()[0m
-          [32mAnd I [0m[32;1msubtract[0m[32m the value [0m[32;1m6[0m[32m[0m [30m# FeatureContext::iAddOrSubstact()[0m
-          [32mThen I must have [0m[32;1m4[0m[32m[0m         [30m# FeatureContext::iMustHave()[0m
-
-      2 scenarios ([32m2 passed[0m)
-      9 steps ([32m9 passed[0m)
-      """
-
   Scenario: Multiline titles
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface, Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,  Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\Context;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $value;
 
@@ -290,7 +200,7 @@ Feature: Pretty Formatter
           And I subtract the value 6
           Then I must have 4
       """
-    When I run "behat --no-ansi -f pretty"
+    When I run "behat --no-colors -f pretty"
     Then it should pass with:
       """
       Feature: World consistency
@@ -298,8 +208,8 @@ Feature: Pretty Formatter
         As a features developer
         I want, that "World" flushes between scenarios
 
-        Background:               # features/World.feature:6
-          Given I have entered 10 # FeatureContext::iHaveEntered()
+        Background:                       # features/World.feature:6
+          Given I have entered 10         # FeatureContext::iHaveEntered()
 
         Scenario: Adding some interesting # features/World.feature:9
                   value
@@ -307,12 +217,12 @@ Feature: Pretty Formatter
           And I add the value 6           # FeatureContext::iAddOrSubstact()
           Then I must have 16             # FeatureContext::iMustHave()
 
-        Scenario: Subtracting             # features/World.feature:15
+        Scenario: Subtracting        # features/World.feature:15
                   some
                   value
-          Then I must have 10             # FeatureContext::iMustHave()
-          And I subtract the value 6      # FeatureContext::iAddOrSubstact()
-          Then I must have 4              # FeatureContext::iMustHave()
+          Then I must have 10        # FeatureContext::iMustHave()
+          And I subtract the value 6 # FeatureContext::iAddOrSubstact()
+          Then I must have 4         # FeatureContext::iMustHave()
 
       2 scenarios (2 passed)
       8 steps (8 passed)
@@ -323,12 +233,11 @@ Feature: Pretty Formatter
         """
         <?php
 
-        use Behat\Behat\Context\ContextInterface,
-            Behat\Behat\Exception\PendingException;
+        use Behat\Behat\Context\Context;
         use Behat\Gherkin\Node\PyStringNode,
             Behat\Gherkin\Node\TableNode;
 
-        class FeatureContext implements ContextInterface
+        class FeatureContext implements Context
         {
             private $value = 10;
 
@@ -380,7 +289,7 @@ Feature: Pretty Formatter
               | file      | bar  |
               | directory | dir  |
         """
-      When I run "behat --no-ansi features/ls.feature --no-snippets"
+      When I run "behat --no-colors features/ls.feature --no-snippets"
       Then it should pass with:
         """
         Feature: ls
@@ -388,7 +297,7 @@ Feature: Pretty Formatter
           As a UNIX user
           I need to be able to list the current directory's contents
 
-          Background:                       # features/ls.feature:6
+          Background:                           # features/ls.feature:6
             Given I have a file named "foo"
 
           Scenario: List 2 files in a directory # features/ls.feature:9
@@ -423,12 +332,12 @@ Feature: Pretty Formatter
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {}
       """
     And a file named "features/World.feature" with:
@@ -466,7 +375,7 @@ Feature: Pretty Formatter
             |  10   | 20     |
             |  23   | 32     |
       """
-    When I run "behat --no-ansi -f pretty --no-snippets"
+    When I run "behat --no-colors -f pretty --no-snippets"
     Then it should pass with:
       """
       Feature: World consistency

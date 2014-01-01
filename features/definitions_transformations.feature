@@ -27,12 +27,12 @@ Feature: Step Arguments Transformations
       """
       <?php
 
-      use Behat\Behat\Context\ContextInterface,
-          Behat\Behat\Exception\PendingException;
+      use Behat\Behat\Context\Context,
+          Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements ContextInterface
+      class FeatureContext implements Context
       {
           private $user;
 
@@ -41,7 +41,7 @@ Feature: Step Arguments Transformations
               return new User($username, $age);
           }
 
-          /** @Transform /^table:username,age$/ */
+          /** @Transform table:username,age */
           public function createUserFromTable(TableNode $table) {
               $hash     = $table->getHash();
               $username = $hash[0]['username'];
@@ -100,7 +100,7 @@ Feature: Step Arguments Transformations
           Then Username must be "antono"
           And Age must be 29
       """
-    When I run "behat -f progress --no-ansi"
+    When I run "behat -f progress --no-colors"
     Then it should pass with:
       """
       ......
@@ -127,7 +127,7 @@ Feature: Step Arguments Transformations
           Then Username must be "vasiljev"
           And Age must be 30
       """
-    When I run "behat -f progress --no-ansi"
+    When I run "behat -f progress --no-colors"
     Then it should pass with:
       """
       ......
@@ -148,7 +148,7 @@ Feature: Step Arguments Transformations
           Given I am "antono"
           Then Username must be "antono"
       """
-    When I run "behat -f progress --no-ansi"
+    When I run "behat -f progress --no-colors"
     Then it should pass with:
       """
       ....

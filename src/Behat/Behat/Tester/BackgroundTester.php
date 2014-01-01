@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Tester;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,58 +7,139 @@ namespace Behat\Behat\Tester;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Behat\Behat\Context\Pool\ContextPoolInterface;
-use Behat\Behat\Event\BackgroundEvent;
-use Behat\Behat\Event\EventInterface;
-use Behat\Behat\Event\StepEvent;
-use Behat\Behat\Suite\SuiteInterface;
-use Behat\Gherkin\Node\BackgroundNode;
-use Behat\Gherkin\Node\ScenarioInterface;
-use Behat\Gherkin\Node\StepContainerInterface;
+
+namespace Behat\Behat\Tester;
+
+use Behat\Behat\Tester\Event\BackgroundTested;
+use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\StepNode;
+use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Result\TestResults;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Background tester.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BackgroundTester extends StepCollectionTester
+class BackgroundTester
 {
+    /**
+     * @var StepTester
+     */
+    private $stepTester;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * Initializes tester.
+     *
+     * @param StepTester               $stepTester
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(StepTester $stepTester, EventDispatcherInterface $eventDispatcher)
+    {
+        $this->stepTester = $stepTester;
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     /**
      * Tests feature backgrounds.
      *
-     * @param SuiteInterface         $suite
-     * @param ScenarioInterface      $scenario
-     * @param StepContainerInterface $container
-     * @param BackgroundNode         $background
-     * @param ContextPoolInterface   $contexts
-     * @param Boolean                $skip
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param Boolean     $skip
      *
-     * @return integer
+     * @return TestResults
      */
-    public function test(
-        SuiteInterface $suite,
-        ScenarioInterface $scenario,
-        StepContainerInterface $container,
-        BackgroundNode $background,
-        ContextPoolInterface $contexts,
-        $skip = false
-    )
+    public function test(Suite $suite, Environment $environment, FeatureNode $feature, $skip = false)
     {
-        $status = $skip ? StepEvent::SKIPPED : StepEvent::PASSED;
+        $this->dispatchBeforeEvent($suite, $environment, $feature);
+        $results = $this->testBackground($suite, $environment, $feature, $skip);
+        $this->dispatchAfterEvent($suite, $environment, $feature, $results);
 
-        $event = new BackgroundEvent($suite, $contexts, $scenario, $container, $background);
-        $this->dispatch(EventInterface::BEFORE_BACKGROUND, $event);
+        return $results;
+    }
 
+    /**
+     * Dispatches BEFORE event.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     */
+    private function dispatchBeforeEvent(Suite $suite, Environment $environment, FeatureNode $feature)
+    {
+        $event = new BackgroundTested($suite, $environment, $feature, $feature->getBackground());
+
+        $this->eventDispatcher->dispatch(BackgroundTested::BEFORE, $event);
+    }
+
+    /**
+     * Tests background.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param Boolean     $skip
+     *
+     * @return TestResults
+     */
+    private function testBackground(Suite $suite, Environment $environment, FeatureNode $feature, $skip = false)
+    {
+        $background = $feature->getBackground();
+
+        $results = array();
         foreach ($background->getSteps() as $step) {
-            $skipStep = $skip || StepEvent::PASSED !== $status;
-
-            $tester = $this->getStepTester($suite, $contexts, $step);
-            $status = max($status, $tester->test($suite, $contexts, $scenario, $container, $step, $skipStep));
+            $results[] = $lastResult = $this->testStep($suite, $environment, $feature, $step, $skip);
+            $skip = TestResult::PASSED < $lastResult->getResultCode() ? true : $skip;
         }
 
-        $event = new BackgroundEvent($suite, $contexts, $scenario, $container, $background, $status);
-        $this->dispatch(EventInterface::AFTER_BACKGROUND, $event);
+        return new TestResults($results);
+    }
 
-        return $status;
+    /**
+     * Tests background step.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param StepNode    $step
+     * @param Boolean     $skip
+     *
+     * @return TestResult
+     */
+    private function testStep(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
+        StepNode $step,
+        $skip = false
+    ) {
+        return $this->stepTester->test($suite, $environment, $feature, $step, $skip);
+    }
+
+    /**
+     * Dispatches AFTER event.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param TestResults $results
+     */
+    private function dispatchAfterEvent(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
+        TestResults $results
+    ) {
+        $event = new BackgroundTested($suite, $environment, $feature, $feature->getBackground(), $results);
+
+        $this->eventDispatcher->dispatch(BackgroundTested::AFTER, $event);
     }
 }
