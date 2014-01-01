@@ -69,7 +69,7 @@ PHP;
 
         $namespace = '';
         if (false !== $pos = strrpos($fqn, '\\')) {
-            $namespace = 'namespace ' . substr($fqn, 0, $pos) . ';' . PHP_EOL . PHP_EOL;
+            $namespace = 'namespace ' . substr($fqn, 0, $pos) . ";\n\n";
             $classname = substr($fqn, $pos + 1);
         }
 
