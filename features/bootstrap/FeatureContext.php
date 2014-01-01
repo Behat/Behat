@@ -189,14 +189,7 @@ class FeatureContext implements Context
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        $output = $this->getOutput();
-
-        // Normalize the line endings in the output
-        if ("\n" !== PHP_EOL) {
-            $output = str_replace(PHP_EOL, "\n", $output);
-        }
-
-        PHPUnit_Framework_Assert::assertContains($this->getExpectedOutput($text), $output);
+        PHPUnit_Framework_Assert::assertContains($this->getExpectedOutput($text), $this->getOutput());
     }
 
     private function getExpectedOutput(PyStringNode $expectedText)
@@ -256,7 +249,14 @@ class FeatureContext implements Context
 
     private function getOutput()
     {
-        return trim(preg_replace("/ +$/m", '', $this->process->getErrorOutput() . $this->process->getOutput()));
+        $output = $this->process->getErrorOutput() . $this->process->getOutput();
+
+        // Normalize the line endings in the output
+        if ("\n" !== PHP_EOL) {
+            $output = str_replace(PHP_EOL, "\n", $output);
+        }
+
+        return trim(preg_replace("/ +$/m", '', $output));
     }
 
     private function createFile($filename, $content)
