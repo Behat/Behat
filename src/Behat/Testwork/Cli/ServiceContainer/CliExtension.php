@@ -32,7 +32,6 @@ class CliExtension implements Extension
     const COMMAND_ID = 'cli.command';
     const INPUT_ID = 'cli.input';
     const OUTPUT_ID = 'cli.output';
-    const FILESYSTEM_LOGGER_ID = 'cli.filesystem.logger';
 
     /*
      * Available extension points
@@ -82,7 +81,6 @@ class CliExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadCommand($container);
-        $this->loadFilesystemLogger($container);
     }
 
     /**
@@ -104,20 +102,6 @@ class CliExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Cli\Command', array('%cli.command.name%', array()));
         $container->setDefinition(self::COMMAND_ID, $definition);
-    }
-
-    /**
-     * Loads filesystem logger.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadFilesystemLogger(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Testwork\Cli\Filesystem\CliFilesystemLogger', array(
-            '%paths.base%',
-            new Reference(self::OUTPUT_ID)
-        ));
-        $container->setDefinition(self::FILESYSTEM_LOGGER_ID, $definition);
     }
 
     /**

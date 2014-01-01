@@ -12,8 +12,8 @@ namespace Behat\Behat\Context\ServiceContainer;
 
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Testwork\Autoloader\ServiceContainer\AutoloaderExtension;
-use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
+use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
@@ -137,7 +137,7 @@ class ContextExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Context\Suite\Setup\ContextSetup', array(
             new Reference(AutoloaderExtension::CLASS_LOADER_ID),
-            new Reference(CliExtension::FILESYSTEM_LOGGER_ID)
+            new Reference(FilesystemExtension::LOGGER_ID)
         ));
         $definition->addTag(SuiteExtension::SETUP_TAG, array('priority' => 20));
         $container->setDefinition(self::getSuiteSetupId(), $definition);
@@ -151,7 +151,7 @@ class ContextExtension implements Extension
     private function loadSnippetAppender(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Snippet\Appender\ContextSnippetAppender', array(
-            new Reference(CliExtension::FILESYSTEM_LOGGER_ID)
+            new Reference(FilesystemExtension::LOGGER_ID)
         ));
         $definition->addTag(SnippetExtension::APPENDER_TAG, array('priority' => 50));
         $container->setDefinition(SnippetExtension::APPENDER_TAG . '.context', $definition);

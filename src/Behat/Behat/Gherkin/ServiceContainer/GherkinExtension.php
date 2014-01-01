@@ -12,6 +12,7 @@ namespace Behat\Behat\Gherkin\ServiceContainer;
 
 use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Subject\ServiceContainer\SubjectExtension;
@@ -258,7 +259,7 @@ class GherkinExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Gherkin\Suite\Setup\GherkinSuiteFilesystemSetup', array(
             '%paths.base%',
-            new Reference(CliExtension::FILESYSTEM_LOGGER_ID)
+            new Reference(FilesystemExtension::LOGGER_ID)
         ));
         $definition->addTag(SuiteExtension::SETUP_TAG, array('priority' => 50));
         $container->setDefinition(SuiteExtension::SETUP_TAG . '.gherkin', $definition);

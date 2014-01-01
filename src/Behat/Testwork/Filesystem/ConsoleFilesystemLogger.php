@@ -8,9 +8,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Cli\Filesystem;
+namespace Behat\Testwork\Filesystem;
 
-use Behat\Testwork\Filesystem\FilesystemLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -18,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CliFilesystemLogger implements FilesystemLogger
+class ConsoleFilesystemLogger implements FilesystemLogger
 {
     /**
      * @var string

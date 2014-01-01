@@ -26,6 +26,7 @@ use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
+use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Subject\ServiceContainer\SubjectExtension;
@@ -77,6 +78,7 @@ class ApplicationFactory extends BaseFactory
             new EnvironmentExtension($processor),
             new SubjectExtension($processor),
             new EventDispatcherExtension($processor),
+            new FilesystemExtension($processor),
             new ExceptionExtension($processor),
 
             // Behat extensions
