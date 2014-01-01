@@ -10,6 +10,8 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
 
 /**
  * Behat test suite context.
@@ -19,29 +21,13 @@ use Behat\Gherkin\Node\PyStringNode;
 class FeatureContext implements Context
 {
     /**
-     * Environment variable
-     *
      * @var string
      */
-    private $env;
+    private $phpBin;
     /**
-     * Last runned command name.
-     *
-     * @var string
+     * @var Process
      */
-    private $command;
-    /**
-     * Last runned command output.
-     *
-     * @var string
-     */
-    private $output;
-    /**
-     * Last runned command return code.
-     *
-     * @var integer
-     */
-    private $return;
+    private $process;
 
     /**
      * Cleans test folders in the temporary directory.
@@ -60,7 +46,7 @@ class FeatureContext implements Context
      *
      * @BeforeScenario
      */
-    public function prepareTestFolders($event)
+    public function prepareTestFolders()
     {
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR .
             md5(microtime() * rand(0, 10000));
@@ -75,6 +61,13 @@ class FeatureContext implements Context
         mkdir('features' . DIRECTORY_SEPARATOR . 'support');
         mkdir('features' . DIRECTORY_SEPARATOR . 'steps');
         mkdir('features' . DIRECTORY_SEPARATOR . 'steps' . DIRECTORY_SEPARATOR . 'i18n');
+
+        $phpFinder = new PhpExecutableFinder();
+        if (false === $php = $phpFinder->find()) {
+            throw new \RuntimeException('Unable to find the PHP executable.');
+        }
+        $this->phpBin = $php;
+        $this->process = new Process(null, $dir);
     }
 
     /**
@@ -101,6 +94,7 @@ class FeatureContext implements Context
     public function iAmInThePath($path)
     {
         $this->moveToNewPath($path);
+        $this->process->setWorkingDirectory($path);
     }
 
     /**
@@ -120,11 +114,11 @@ class FeatureContext implements Context
      *
      * @When /^"BEHAT_PARAMS" environment variable is set to:$/
      *
-     * @param   PyStringNode $value
+     * @param PyStringNode $value
      */
     public function iSetEnvironmentVariable(PyStringNode $value)
     {
-        $this->env = (string) $value;
+        $this->process->setEnv(array('BEHAT_PARAMS' => (string) $value));
     }
 
     /**
@@ -138,37 +132,16 @@ class FeatureContext implements Context
     {
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
-        if ('/' === DIRECTORY_SEPARATOR) {
-            $argumentsString .= ' 2>&1';
-        }
-
-        if ($this->env) {
-            exec(
-                sprintf(
-                    'BEHAT_PARAMS=\'%s\' %s %s %s',
-                    $this->env, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
-                ), $output, $return
-            );
-        } else {
-            exec(
-                sprintf(
-                    '%s %s %s --format-settings=\'{"timer": false}\'',
-                    BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
-                ), $output, $return
-            );
-        }
-
-        $this->command = 'behat ' . $argumentsString;
-        $this->output = trim(implode("\n", $output));
-        $this->return = $return;
-    }
-
-    /**
-     * @When I escape ansi characters in the output
-     */
-    public function iEscapeAnsiCharactersInTheOutput()
-    {
-        $this->output = addcslashes($this->output, "\033");
+        $this->process->setCommandLine(
+            sprintf(
+                '%s %s %s --format-settings=\'{"timer": false}\'',
+                $this->phpBin,
+                escapeshellarg(BEHAT_BIN_PATH),
+                $argumentsString
+            )
+        );
+        $this->process->start();
+        $this->process->wait();
     }
 
     /**
@@ -182,6 +155,7 @@ class FeatureContext implements Context
     public function itShouldPassWith($success, PyStringNode $text)
     {
         $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
+        $output = $this->getOutput();
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
@@ -204,7 +178,7 @@ class FeatureContext implements Context
 
         $this->itShouldFail($success);
 
-        PHPUnit_Framework_Assert::assertEquals((string) $text, $this->output);
+        PHPUnit_Framework_Assert::assertEquals((string) $text, $output);
     }
 
     /**
@@ -222,16 +196,6 @@ class FeatureContext implements Context
     }
 
     /**
-     * Prints last command output string.
-     *
-     * @Then display output
-     */
-    public function displayLastCommandOutput()
-    {
-        print("\n\n`" . $this->command . "`:\n" . $this->output . "\n\n");
-    }
-
-    /**
      * Checks whether last command output contains provided string.
      *
      * @Then the output should contain:
@@ -241,6 +205,7 @@ class FeatureContext implements Context
     public function theOutputShouldContain(PyStringNode $text)
     {
         $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
+        $output = $this->getOutput();
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
@@ -261,7 +226,7 @@ class FeatureContext implements Context
             );
         }
 
-        PHPUnit_Framework_Assert::assertContains((string) $text, $this->output);
+        PHPUnit_Framework_Assert::assertContains((string) $text, $output);
     }
 
     /**
@@ -274,18 +239,28 @@ class FeatureContext implements Context
     public function itShouldFail($success)
     {
         if ('fail' === $success) {
-            if (0 === $this->return) {
-                echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->output;
+            if (0 === $this->getExitCode()) {
+                echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
             }
 
-            PHPUnit_Framework_Assert::assertNotEquals(0, $this->return);
+            PHPUnit_Framework_Assert::assertNotEquals(0, $this->getExitCode());
         } else {
-            if (0 !== $this->return) {
-                echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->output;
+            if (0 !== $this->getExitCode()) {
+                echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
             }
 
-            PHPUnit_Framework_Assert::assertEquals(0, $this->return);
+            PHPUnit_Framework_Assert::assertEquals(0, $this->getExitCode());
         }
+    }
+
+    private function getExitCode()
+    {
+        return $this->process->getExitCode();
+    }
+
+    private function getOutput()
+    {
+        return trim(preg_replace("/ +$/m", '', $this->process->getErrorOutput() . $this->process->getOutput()));
     }
 
     private function createFile($filename, $content)
@@ -302,11 +277,6 @@ class FeatureContext implements Context
         chdir($path);
     }
 
-    /**
-     * Removes files and folders recursively at provided path.
-     *
-     * @param string $path
-     */
     private static function clearDirectory($path)
     {
         $files = scandir($path);
