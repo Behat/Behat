@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Behat abstract definition printer.
+ * Behat console-based definition printer.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

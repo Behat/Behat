@@ -1,7 +1,7 @@
 <?php return array(
     'en' =>
         array(
-            'snippet_proposal_title' => '{+keyword}%1%{-keyword} {+undefined}has missing steps. Define them with these snippets:{-undefined}',
+            'snippet_proposal_title' => '<snippet_keyword>%1%</snippet_keyword> <snippet_undefined>has missing steps. Define them with these snippets:</snippet_undefined>',
             'failed_scenarios_title' => 'Failed scenarios:',
             'failed_hooks_title'     => 'Failed hooks:',
             'failed_steps_title'     => 'Failed steps:',
@@ -16,7 +16,7 @@
         ),
     'ru' =>
         array(
-            'snippet_proposal_title' => '{+keyword}%1%{-keyword} {+undefined}не содержит необходимых определений. Вы можете добавить их используя шаблоны:{-undefined}',
+            'snippet_proposal_title' => '<snippet_keyword>%1%</snippet_keyword> <snippet_undefined>не содержит необходимых определений. Вы можете добавить их используя шаблоны:</snippet_undefined>',
             'failed_scenarios_title' => 'Проваленные сценарии:',
             'failed_hooks_title'     => 'Проваленные хуки:',
             'failed_steps_title'     => 'Проваленные шаги:',

@@ -10,21 +10,18 @@
 
 namespace Behat\Behat\Snippet\Cli;
 
-use Behat\Behat\Snippet\AggregateSnippet;
-use Behat\Behat\Snippet\Printer\SnippetPrinter;
+use Behat\Behat\Snippet\Printer\ConsoleSnippetPrinter;
 use Behat\Behat\Snippet\SnippetRegistry;
 use Behat\Behat\Snippet\SnippetWriter;
 use Behat\Behat\Tester\Event\StepTested;
 use Behat\Behat\Tester\Result\TestResult;
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Event\ExerciseTested;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Snippets controller.
@@ -33,7 +30,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SnippetsController implements Controller, SnippetPrinter
+class SnippetsController implements Controller
 {
     /**
      * @var SnippetRegistry
@@ -44,7 +41,7 @@ class SnippetsController implements Controller, SnippetPrinter
      */
     private $writer;
     /**
-     * @var OutputPrinter
+     * @var ConsoleSnippetPrinter
      */
     private $printer;
     /**
@@ -52,31 +49,28 @@ class SnippetsController implements Controller, SnippetPrinter
      */
     private $eventDispatcher;
     /**
-     * @var TranslatorInterface
+     * @var OutputInterface
      */
-    private $translator;
+    private $output;
 
     /**
      * Initializes controller.
      *
      * @param SnippetRegistry          $registry
      * @param SnippetWriter            $writer
-     * @param OutputPrinter            $printer
+     * @param ConsoleSnippetPrinter    $printer
      * @param EventDispatcherInterface $eventDispatcher
-     * @param TranslatorInterface      $translator
      */
     public function __construct(
         SnippetRegistry $registry,
         SnippetWriter $writer,
-        OutputPrinter $printer,
-        EventDispatcherInterface $eventDispatcher,
-        TranslatorInterface $translator
+        ConsoleSnippetPrinter $printer,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->registry = $registry;
         $this->writer = $writer;
         $this->printer = $printer;
         $this->eventDispatcher = $eventDispatcher;
-        $this->translator = $translator;
     }
 
     /**
@@ -108,6 +102,7 @@ class SnippetsController implements Controller, SnippetPrinter
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->eventDispatcher->addListener(StepTested::AFTER, array($this, 'registerUndefinedStep'), -999);
+        $this->output = $output;
 
         if ($input->getOption('append-snippets')) {
             $this->eventDispatcher->addListener(ExerciseTested::AFTER, array($this, 'appendAllSnippets'), -999);
@@ -136,7 +131,7 @@ class SnippetsController implements Controller, SnippetPrinter
     public function appendAllSnippets()
     {
         $snippets = $this->registry->getSnippets();
-        count($snippets) && $this->printer->writeln();
+        count($snippets) && $this->output->writeln('');
         $this->writer->appendSnippets($snippets);
     }
 
@@ -146,24 +141,7 @@ class SnippetsController implements Controller, SnippetPrinter
     public function printAllSnippets()
     {
         $snippets = $this->registry->getSnippets();
-        count($snippets) && $this->printer->writeln();
-        $this->writer->printSnippets($this, $snippets);
-    }
-
-    /**
-     * Prints snippets of specific target.
-     *
-     * @param string             $target
-     * @param AggregateSnippet[] $snippets
-     */
-    public function printSnippets($target, array $snippets)
-    {
-        $message = $this->translator->trans('snippet_proposal_title', array('%1%' => $target), 'output');
-
-        $this->printer->writeln('--- ' . $message . PHP_EOL);
-
-        foreach ($snippets as $snippet) {
-            $this->printer->writeln(sprintf('{+undefined}%s{-undefined}', $snippet->getSnippet()) . PHP_EOL);
-        }
+        count($snippets) && $this->output->writeln('');
+        $this->writer->printSnippets($this->printer, $snippets);
     }
 }

@@ -14,7 +14,7 @@ use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Behat definition list printer.
+ * Behat console-based definition list printer.
  *
  * Prints simple definitions list.
  *
