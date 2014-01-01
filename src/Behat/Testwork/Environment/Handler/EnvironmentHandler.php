@@ -25,8 +25,8 @@ interface EnvironmentHandler
     /**
      * Checks if handler supports provided suite.
      *
-     * @param Suite      $suite
-     * @param null|mixed $subject
+     * @param Suite $suite
+     * @param mixed $subject
      *
      * @return Boolean
      */
@@ -35,8 +35,8 @@ interface EnvironmentHandler
     /**
      * Builds environment object based on provided suite.
      *
-     * @param Suite      $suite
-     * @param null|mixed $subject
+     * @param Suite $suite
+     * @param mixed $subject
      *
      * @return Environment
      */

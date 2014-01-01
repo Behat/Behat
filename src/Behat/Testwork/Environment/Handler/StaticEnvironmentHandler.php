@@ -26,8 +26,8 @@ class StaticEnvironmentHandler implements EnvironmentHandler
     /**
      * Checks if handler supports provided suite.
      *
-     * @param Suite      $suite
-     * @param null|mixed $subject
+     * @param Suite $suite
+     * @param mixed $subject
      *
      * @return Boolean
      */
@@ -39,8 +39,8 @@ class StaticEnvironmentHandler implements EnvironmentHandler
     /**
      * Builds environment object based on provided suite.
      *
-     * @param Suite      $suite
-     * @param null|mixed $subject
+     * @param Suite $suite
+     * @param mixed $subject
      *
      * @return Environment
      */
