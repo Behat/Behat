@@ -129,7 +129,6 @@ TPL;
      */
     private function getMainContextClass(ContextPool $contextPool)
     {
-        $contextClass = null;
         foreach ($contextPool->getContextClasses() as $class) {
             if (in_array(
                 'Behat\Behat\Context\RegexAcceptingContext',
