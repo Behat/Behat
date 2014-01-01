@@ -122,8 +122,7 @@ abstract class OutputExtension implements Extension
     protected function loadOutputController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Output\Cli\OutputController', array(
-            new Reference(self::MANAGER_ID),
-            new Reference(CliExtension::OUTPUT_PRINTER_ID)
+            new Reference(self::MANAGER_ID)
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 1000));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.output', $definition);

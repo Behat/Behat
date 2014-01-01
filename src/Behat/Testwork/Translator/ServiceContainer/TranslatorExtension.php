@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Translator\ServiceContainer;
 
-use Behat\Behat\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -51,12 +51,12 @@ class TranslatorExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('locale')
-                    ->defaultValue('en')
-                ->end()
-                ->scalarNode('fallback_locale')
-                    ->defaultValue('en')
-                ->end()
+            ->scalarNode('locale')
+            ->defaultValue('en')
+            ->end()
+            ->scalarNode('fallback_locale')
+            ->defaultValue('en')
+            ->end()
             ->end();
     }
 

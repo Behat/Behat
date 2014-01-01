@@ -11,7 +11,7 @@
 namespace Behat\Behat\Gherkin\ServiceContainer;
 
 use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
-use Behat\Behat\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Subject\ServiceContainer\SubjectExtension;
@@ -77,13 +77,13 @@ class GherkinExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('cache')
-                    ->defaultValue(
-                        is_writable(sys_get_temp_dir())
-                            ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gherkin_cache'
-                            : null
-                    )
-                ->end()
+            ->scalarNode('cache')
+            ->defaultValue(
+                is_writable(sys_get_temp_dir())
+                    ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gherkin_cache'
+                    : null
+            )
+            ->end()
             ->end();
     }
 

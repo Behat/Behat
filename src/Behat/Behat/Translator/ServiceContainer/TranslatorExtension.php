@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Translator\ServiceContainer;
 
-use Behat\Behat\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension as BaseExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

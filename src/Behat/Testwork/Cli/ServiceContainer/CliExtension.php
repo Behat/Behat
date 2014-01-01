@@ -33,7 +33,6 @@ class CliExtension implements Extension
     const INPUT_ID = 'cli.input';
     const OUTPUT_ID = 'cli.output';
     const FILESYSTEM_LOGGER_ID = 'cli.filesystem.logger';
-    const OUTPUT_PRINTER_ID = 'cli.printer.output';
 
     /*
      * Available extension points
@@ -84,7 +83,6 @@ class CliExtension implements Extension
     {
         $this->loadCommand($container);
         $this->loadFilesystemLogger($container);
-        $this->loadOutputPrinter($container);
     }
 
     /**
@@ -120,17 +118,6 @@ class CliExtension implements Extension
             new Reference(self::OUTPUT_ID)
         ));
         $container->setDefinition(self::FILESYSTEM_LOGGER_ID, $definition);
-    }
-
-    /**
-     * Loads output printer.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadOutputPrinter(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Testwork\Cli\Printer\CliOutputPrinter');
-        $container->setDefinition(self::OUTPUT_PRINTER_ID, $definition);
     }
 
     /**

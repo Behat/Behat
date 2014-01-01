@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Snippet\ServiceContainer;
 
-use Behat\Behat\Cli\ServiceContainer\CliExtension;
 use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
+use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
