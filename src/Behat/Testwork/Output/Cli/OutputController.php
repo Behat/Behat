@@ -13,6 +13,7 @@ namespace Behat\Testwork\Output\Cli;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\OutputManager;
+use Behat\Testwork\Printer\OutputPrinter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -31,15 +32,21 @@ class OutputController implements Controller
      * @var OutputManager
      */
     private $manager;
+    /**
+     * @var OutputPrinter
+     */
+    private $printer;
 
     /**
      * Initializes controller.
      *
      * @param OutputManager $manager
+     * @param OutputPrinter $printer
      */
-    public function __construct(OutputManager $manager)
+    public function __construct(OutputManager $manager, OutputPrinter $printer)
     {
         $this->manager = $manager;
+        $this->printer = $printer;
     }
 
     /**
@@ -140,16 +147,19 @@ class OutputController implements Controller
         }
 
         if ($input->getOption('verbose')) {
+            $this->printer->setVerbose(true);
             $this->manager->setFormattersParameter('verbose', true);
         }
 
         if ($input->getOption('colors')) {
             $output->setDecorated(true);
+            $this->printer->setOutputDecorated(true);
             $this->manager->setFormattersParameter('output_decorate', true);
         }
 
         if ($input->getOption('no-colors')) {
             $output->setDecorated(false);
+            $this->printer->setOutputDecorated(false);
             $this->manager->setFormattersParameter('output_decorate', false);
         }
     }
