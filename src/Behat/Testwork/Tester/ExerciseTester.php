@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Tester;
 
-use Behat\Behat\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Subject\Subjects;
 use Behat\Testwork\Tester\Event\ExerciseTested;
 use Behat\Testwork\Tester\Result\ExerciseTestResult;

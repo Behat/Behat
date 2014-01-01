@@ -10,8 +10,6 @@
 
 namespace Behat\Testwork\Tester\Result;
 
-use Behat\Behat\Tester\Result\FeatureTestResult;
-
 /**
  * Testwork suite test result.
  *
@@ -37,7 +35,7 @@ class SuiteTestResult extends TestResult
     /**
      * Returns all suite subjects tests results.
      *
-     * @return FeatureTestResult[]
+     * @return TestResults
      */
     public function getSubjectTestResults()
     {
