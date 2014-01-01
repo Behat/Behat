@@ -10,15 +10,14 @@
 
 namespace Behat\Testwork\Printer\Exception;
 
-use Exception;
-use RuntimeException;
+use InvalidArgumentException;
 
 /**
  * Bad output path exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BadOutputPathException extends RuntimeException implements PrinterException
+class BadOutputPathException extends InvalidArgumentException implements PrinterException
 {
     /**
      * @var string
