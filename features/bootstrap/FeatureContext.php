@@ -154,31 +154,8 @@ class FeatureContext implements Context
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
-        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
-        $output = $this->getOutput();
-
-        // windows path fix
-        if ('/' !== DIRECTORY_SEPARATOR) {
-            $text = preg_replace_callback(
-                '/ features\/[^\n ]+/', function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
-            );
-            $text = preg_replace_callback(
-                '/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
-            );
-            $text = preg_replace_callback(
-                '/\+[fd] [^ ]+/', function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
-            );
-        }
-
         $this->itShouldFail($success);
-
-        PHPUnit_Framework_Assert::assertEquals((string) $text, $output);
+        $this->theOutputShouldContain($text);
     }
 
     /**
@@ -224,6 +201,9 @@ class FeatureContext implements Context
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 }, (string) $text
             );
+
+            // Normalize the line endings in the output
+            $output = str_replace(PHP_EOL, "\n", $output);
         }
 
         PHPUnit_Framework_Assert::assertContains((string) $text, $output);
