@@ -10,14 +10,14 @@
 
 namespace Behat\Behat\Context\Exception;
 
-use RuntimeException;
+use InvalidArgumentException;
 
 /**
  * Context not found exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextNotFoundException extends RuntimeException implements ContextException
+class ContextNotFoundException extends InvalidArgumentException implements ContextException
 {
     /**
      * @var string

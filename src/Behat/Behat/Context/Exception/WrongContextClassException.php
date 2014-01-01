@@ -10,14 +10,14 @@
 
 namespace Behat\Behat\Context\Exception;
 
-use RuntimeException;
+use InvalidArgumentException;
 
 /**
  * Wrong context class exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class WrongContextClassException extends RuntimeException implements ContextException
+class WrongContextClassException extends InvalidArgumentException implements ContextException
 {
     /**
      * @var string

@@ -10,14 +10,14 @@
 
 namespace Behat\Behat\Context\Exception;
 
-use RuntimeException;
+use InvalidArgumentException;
 
 /**
  * Unknown translation resource exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class UnknownTranslationResourceException extends RuntimeException implements ContextException
+class UnknownTranslationResourceException extends InvalidArgumentException implements ContextException
 {
     /**
      * @var string
