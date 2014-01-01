@@ -30,7 +30,7 @@ class ContextEnvironmentReader implements EnvironmentReader
      */
     private $contextReaders = array();
     /**
-     * @var Callee[]
+     * @var Callee[][]
      */
     private $callees = array();
 
