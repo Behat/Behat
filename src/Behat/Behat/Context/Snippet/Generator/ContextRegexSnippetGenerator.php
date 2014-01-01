@@ -13,14 +13,9 @@ namespace Behat\Behat\Context\Snippet\Generator;
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Pool\ContextPool;
 use Behat\Behat\Context\Snippet\ContextSnippet;
-use Behat\Behat\Snippet\Generator\SnippetGenerator;
 use Behat\Behat\Snippet\Snippet;
-use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\StepNode;
-use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Transliterator\Transliterator;
-use ReflectionClass;
 
 /**
  * Context regex snippet generator.
@@ -29,7 +24,7 @@ use ReflectionClass;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextRegexSnippetGenerator implements SnippetGenerator
+class ContextRegexSnippetGenerator extends AbstractContextSnippetGenerator
 {
     /**
      * @var string[string]
@@ -51,10 +46,6 @@ class ContextRegexSnippetGenerator implements SnippetGenerator
         throw new PendingException();
     }
 TPL;
-    /**
-     * @var string[string]
-     */
-    private static $proposedMethods = array();
 
     /**
      * Checks if generator supports environment and step.
@@ -91,10 +82,10 @@ TPL;
         $contextPool = $environment->getContextPool();
         $contextClass = $this->getMainContextClass($contextPool);
 
-        $stepText = $this->getStepText($step);
-        $stepRegex = $this->getStepRegex($stepText);
+        $stepText = $step->getText();
+        list($stepRegex, $tokenCount) = $this->getRegexAndTokenCount($stepText);
         $methodName = $this->getMethodName($contextClass, $stepText, $stepRegex);
-        $methodArguments = $this->getMethodArguments($step, $stepRegex);
+        $methodArguments = $this->getMethodArguments($step, $tokenCount);
         $snippetTemplate = $this->getSnippetTemplate($stepRegex, $methodName, $methodArguments);
 
         return new ContextSnippet($step, $snippetTemplate, $contextClass);
@@ -112,11 +103,21 @@ TPL;
     protected function getSnippetTemplate($regex, $methodName, array $methodArguments)
     {
         return sprintf(
-            static::$templateTemplate,
+            self::$templateTemplate,
             str_replace('%', '%%', $regex),
             $methodName,
             implode(', ', $methodArguments)
         );
+    }
+
+    /**
+     * Returns replace patterns.
+     *
+     * @return array
+     */
+    protected function getReplacePatterns()
+    {
+        return array_keys(self::$replacePatterns);
     }
 
     /**
@@ -143,145 +144,34 @@ TPL;
     }
 
     /**
-     * Returns snippet-ready step text.
+     * Generates definition regex and counts tokens inside.
      *
-     * @param StepNode $step
+     * @param $stepText
      *
-     * @return string
+     * @return array
      */
-    private function getStepText(StepNode $step)
+    private function getRegexAndTokenCount($stepText)
     {
-        $text = $step->getText();
-        $text = preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+\'])/', '\\\\$1', $text);
-
-        return $text;
-    }
-
-    /**
-     * Generates definition regex from text.
-     *
-     * @param string $stepText
-     *
-     * @return string
-     */
-    private function getStepRegex($stepText)
-    {
-        return preg_replace(
-            array_keys(static::$replacePatterns),
-            array_values(static::$replacePatterns),
-            $stepText
+        $stepRegex = preg_replace(
+            array_keys(self::$replacePatterns),
+            array_values(self::$replacePatterns),
+            $this->escapeStepText($stepText)
         );
+
+        preg_match('/^' . $stepRegex . '$/', $stepText, $matches);
+
+        return array($stepRegex, count($matches) ? count($matches) - 1 : 0);
     }
 
     /**
-     * Generates method name using step text and regex.
-     *
-     * @param string $contextClass
-     * @param string $stepText
-     * @param string $stepRegex
-     *
-     * @return string
-     */
-    private function getMethodName($contextClass, $stepText, $stepRegex)
-    {
-        $methodName = $this->deduceMethodName($stepText);
-        $methodName = $this->ensureMethodNameUniqueness($contextClass, $stepRegex, $methodName);
-
-        return $methodName;
-    }
-
-    /**
-     * Returns an array of method argument names from step and regex.
-     *
-     * @param StepNode $step
-     * @param string   $stepRegex
-     *
-     * @return string[]
-     */
-    private function getMethodArguments(StepNode $step, $stepRegex)
-    {
-        preg_match('/^' . $stepRegex . '$/', $step->getText(), $matches);
-        $count = count($matches) - 1;
-
-        $args = array();
-        for ($i = 0; $i < $count; $i++) {
-            $args[] = "\$arg" . ($i + 1);
-        }
-
-        foreach ($step->getArguments() as $argument) {
-            if ($argument instanceof PyStringNode) {
-                $args[] = "PyStringNode \$string";
-            } elseif ($argument instanceof TableNode) {
-                $args[] = "TableNode \$table";
-            }
-        }
-
-        return $args;
-    }
-
-    /**
-     * Generates definition method name based on the step text.
+     * Returns escaped step text.
      *
      * @param string $stepText
      *
      * @return string
      */
-    private function deduceMethodName($stepText)
+    private function escapeStepText($stepText)
     {
-        $methodName = preg_replace(array_keys(static::$replacePatterns), '', $stepText);
-        $methodName = Transliterator::transliterate($methodName, ' ');
-        $methodName = preg_replace('/[^a-zA-Z\_\ ]/', '', $methodName);
-        $methodName = str_replace(' ', '', ucwords($methodName));
-
-        // check that method name is not empty
-        if (0 !== strlen($methodName)) {
-            $methodName[0] = strtolower($methodName[0]);
-
-            return $methodName;
-        } else {
-            $methodName = 'stepDefinition1';
-
-            return $methodName;
-        }
-    }
-
-    /**
-     * Ensures uniqueness of the method name in the context.
-     *
-     * @param string $contextClass
-     * @param string $stepRegex
-     * @param string $methodName
-     *
-     * @return string
-     */
-    private function ensureMethodNameUniqueness($contextClass, $stepRegex, $methodName)
-    {
-        $reflection = new ReflectionClass($contextClass);
-
-        // get method number from method name
-        $methodNumber = 2;
-        if (preg_match('/(\d+)$/', $methodName, $matches)) {
-            $methodNumber = intval($matches[1]);
-        }
-
-        // check that proposed method name isn't already defined in the context
-        while ($reflection->hasMethod($methodName)) {
-            $methodName = preg_replace('/\d+$/', '', $methodName);
-            $methodName .= $methodNumber++;
-        }
-
-        // check that proposed method name haven't been proposed earlier
-        if (isset(self::$proposedMethods[$contextClass])) {
-            foreach (self::$proposedMethods[$contextClass] as $proposedRegex => $proposedMethod) {
-                if ($proposedRegex !== $stepRegex) {
-                    while ($proposedMethod === $methodName) {
-                        $methodName = preg_replace('/\d+$/', '', $methodName);
-                        $methodName .= $methodNumber++;
-                    }
-                }
-            }
-        }
-
-        return static::$proposedMethods[$contextClass][$stepRegex] = $methodName;
+        return preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+\'])/', '\\\\$1', $stepText);
     }
 }

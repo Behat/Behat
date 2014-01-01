@@ -13,14 +13,9 @@ namespace Behat\Behat\Context\Snippet\Generator;
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Pool\ContextPool;
 use Behat\Behat\Context\Snippet\ContextSnippet;
-use Behat\Behat\Snippet\Generator\SnippetGenerator;
 use Behat\Behat\Snippet\Snippet;
-use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\StepNode;
-use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Transliterator\Transliterator;
-use ReflectionClass;
 
 /**
  * Context turnip-style snippet generator.
@@ -29,7 +24,7 @@ use ReflectionClass;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextTurnipSnippetGenerator implements SnippetGenerator
+class ContextTurnipSnippetGenerator extends AbstractContextSnippetGenerator
 {
     /**
      * @var string[]
@@ -51,11 +46,6 @@ class ContextTurnipSnippetGenerator implements SnippetGenerator
         throw new PendingException();
     }
 TPL;
-
-    /**
-     * @var string[string]
-     */
-    private static $proposedMethods = array();
 
     /**
      * Checks if generator supports search query.
@@ -93,7 +83,7 @@ TPL;
         $contextClass = $this->getMainContextClass($contextPool);
 
         $stepText = $step->getText();
-        list($stepPattern, $tokenCount) = $this->getPatternAndTokensCount($stepText);
+        list($stepPattern, $tokenCount) = $this->getPatternAndTokenCount($stepText);
         $methodName = $this->getMethodName($contextClass, $stepText, $stepPattern);
         $methodArguments = $this->getMethodArguments($step, $tokenCount);
         $snippetTemplate = $this->getSnippetTemplate($stepPattern, $methodName, $methodArguments);
@@ -113,11 +103,21 @@ TPL;
     protected function getSnippetTemplate($pattern, $methodName, array $methodArguments)
     {
         return sprintf(
-            static::$templateTemplate,
+            self::$templateTemplate,
             str_replace('%', '%%', $pattern),
             $methodName,
             implode(', ', $methodArguments)
         );
+    }
+
+    /**
+     * Returns replace patterns.
+     *
+     * @return array
+     */
+    protected function getReplacePatterns()
+    {
+        return self::$placeholderPatterns;
     }
 
     /**
@@ -150,11 +150,11 @@ TPL;
      *
      * @return array
      */
-    private function getPatternAndTokensCount($stepText)
+    private function getPatternAndTokenCount($stepText)
     {
         $count = 0;
         $pattern = $stepText;
-        foreach (static::$placeholderPatterns as $replacePattern) {
+        foreach ($this->getReplacePatterns() as $replacePattern) {
             $pattern = preg_replace_callback(
                 $replacePattern,
                 function () use (&$count) {
@@ -165,114 +165,5 @@ TPL;
         }
 
         return array($pattern, $count);
-    }
-
-    /**
-     * Generates method name using step text and pattern.
-     *
-     * @param string $contextClass
-     * @param string $stepText
-     * @param string $stepPattern
-     *
-     * @return string
-     */
-    private function getMethodName($contextClass, $stepText, $stepPattern)
-    {
-        $methodName = $this->deduceMethodName($stepText);
-        $methodName = $this->ensureMethodNameUniqueness($contextClass, $stepPattern, $methodName);
-
-        return $methodName;
-    }
-
-    /**
-     * Returns an array of method argument names from step and token count.
-     *
-     * @param StepNode $step
-     * @param integer  $tokenCount
-     *
-     * @return string[]
-     */
-    private function getMethodArguments(StepNode $step, $tokenCount)
-    {
-        $args = array();
-        for ($i = 0; $i < $tokenCount; $i++) {
-            $args[] = "\$arg" . ($i + 1);
-        }
-
-        foreach ($step->getArguments() as $argument) {
-            if ($argument instanceof PyStringNode) {
-                $args[] = "PyStringNode \$string";
-            } elseif ($argument instanceof TableNode) {
-                $args[] = "TableNode \$table";
-            }
-        }
-
-        return $args;
-    }
-
-    /**
-     * Generates definition method name based on the step text.
-     *
-     * @param string $stepText
-     *
-     * @return string
-     */
-    private function deduceMethodName($stepText)
-    {
-        $methodName = preg_replace(static::$placeholderPatterns, '', $stepText);
-        $methodName = Transliterator::transliterate($methodName, ' ');
-        $methodName = preg_replace('/[^a-zA-Z\_\ ]/', '', $methodName);
-        $methodName = str_replace(' ', '', ucwords($methodName));
-
-        // check that method name is not empty
-        if (0 !== strlen($methodName)) {
-            $methodName[0] = strtolower($methodName[0]);
-
-            return $methodName;
-        } else {
-            $methodName = 'stepDefinition1';
-
-            return $methodName;
-        }
-    }
-
-    /**
-     * Ensures uniqueness of the method name in the context.
-     *
-     * @param string $contextClass
-     * @param string $stepPattern
-     * @param string $methodName
-     *
-     * @return string
-     */
-    private function ensureMethodNameUniqueness($contextClass, $stepPattern, $methodName)
-    {
-        $reflection = new ReflectionClass($contextClass);
-
-        // get method number from method name
-        $methodNumber = 2;
-        if (preg_match('/(\d+)$/', $methodName, $matches)) {
-            $methodNumber = intval($matches[1]);
-        }
-
-        // check that proposed method name isn't already defined in context
-        while ($reflection->hasMethod($methodName)) {
-            $methodName = preg_replace('/\d+$/', '', $methodName);
-            $methodName .= $methodNumber++;
-        }
-
-        // check that proposed method name haven't been proposed earlier
-        if (isset(self::$proposedMethods[$contextClass])) {
-            foreach (self::$proposedMethods[$contextClass] as $proposedPattern => $proposedMethod) {
-                if ($proposedPattern !== $stepPattern) {
-                    while ($proposedMethod === $methodName) {
-                        $methodName = preg_replace('/\d+$/', '', $methodName);
-                        $methodName .= $methodNumber++;
-                    }
-                }
-            }
-        }
-
-        return static::$proposedMethods[$contextClass][$stepPattern] = $methodName;
     }
 }
