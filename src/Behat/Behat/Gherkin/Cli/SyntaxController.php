@@ -12,8 +12,8 @@ namespace Behat\Behat\Gherkin\Cli;
 
 use Behat\Gherkin\Keywords\KeywordsDumper;
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Printer\OutputPrinter;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,24 +36,18 @@ class SyntaxController implements Controller
      * @var TranslatorInterface
      */
     private $translator;
-    /**
-     * @var OutputPrinter
-     */
-    private $printer;
 
     /**
      * Initializes controller.
      *
-     * @param KeywordsDumper $dumper
+     * @param KeywordsDumper      $dumper
      * @param TranslatorInterface $translator
-     * @param OutputPrinter  $printer
      */
-    public function __construct(KeywordsDumper $dumper, TranslatorInterface $translator, OutputPrinter $printer)
+    public function __construct(KeywordsDumper $dumper, TranslatorInterface $translator)
     {
         $dumper->setKeywordsDumperFunction(array($this, 'dumpKeywords'));
         $this->keywordsDumper = $dumper;
         $this->translator = $translator;
-        $this->printer = $printer;
     }
 
     /**
@@ -64,7 +58,8 @@ class SyntaxController implements Controller
     public function configure(Command $command)
     {
         $command
-            ->addOption('--story-syntax', null, InputOption::VALUE_NONE,
+            ->addOption(
+                '--story-syntax', null, InputOption::VALUE_NONE,
                 "Print <comment>*.feature</comment> example." . PHP_EOL .
                 "Use <info>--lang</info> to see specific language."
             );
@@ -84,16 +79,13 @@ class SyntaxController implements Controller
             return null;
         }
 
-        $this->printer->setOutputStyles(
-            array(
-                'gherkin_comment' => array('yellow'),
-                'gherkin_keyword' => array('green', null, array('bold')),
-            )
-        );
+        $output->getFormatter()->setStyle('gherkin_keyword', new OutputFormatterStyle('green', null, array('bold')));
+        $output->getFormatter()->setStyle('gherkin_comment', new OutputFormatterStyle('yellow'));
+
         $story = $this->keywordsDumper->dump($this->translator->getLocale());
-        $story = preg_replace('/^\#.*/', '{+gherkin_comment}$0{-gherkin_comment}', $story);
-        $this->printer->writeln($story);
-        $this->printer->writeln();
+        $story = preg_replace('/^\#.*/', '<gherkin_comment>$0</gherkin_comment>', $story);
+        $output->writeln($story);
+        $output->writeln('');
 
         return 0;
     }
@@ -107,7 +99,7 @@ class SyntaxController implements Controller
      */
     public function dumpKeywords(array $keywords)
     {
-        $dump = '{+gherkin_keyword}' . implode('{-gherkin_keyword}|{+gherkin_keyword}', $keywords) . '{-gherkin_keyword}';
+        $dump = '<gherkin_keyword>' . implode('</gherkin_keyword>|<gherkin_keyword>', $keywords) . '</gherkin_keyword>';
 
         if (1 < count($keywords)) {
             return '[' . $dump . ']';

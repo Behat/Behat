@@ -273,8 +273,7 @@ class GherkinExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Gherkin\Cli\SyntaxController', array(
             new Reference(self::KEYWORDS_DUMPER_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID),
-            new Reference(CliExtension::OUTPUT_PRINTER_ID)
+            new Reference(TranslatorExtension::TRANSLATOR_ID)
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 550));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.gherkin_syntax', $definition);
