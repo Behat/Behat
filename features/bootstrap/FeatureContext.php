@@ -94,7 +94,6 @@ class FeatureContext implements Context
     public function iAmInThePath($path)
     {
         $this->moveToNewPath($path);
-        $this->process->setWorkingDirectory($path);
     }
 
     /**
@@ -275,6 +274,7 @@ class FeatureContext implements Context
         }
 
         chdir($path);
+        $this->process->setWorkingDirectory(realpath($path));
     }
 
     private static function clearDirectory($path)
