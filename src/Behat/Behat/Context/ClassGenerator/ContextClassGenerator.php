@@ -37,7 +37,7 @@ interface ContextClassGenerator
      *
      * @param string $classname
      *
-     * @return string
+     * @return string The context class source code
      */
     public function generateClass($classname);
 }
