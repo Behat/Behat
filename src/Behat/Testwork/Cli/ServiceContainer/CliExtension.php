@@ -130,7 +130,6 @@ class CliExtension implements Extension
     protected function loadOutputPrinter(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Cli\Printer\CliOutputPrinter');
-        $definition->setScope($container::SCOPE_PROTOTYPE);
         $container->setDefinition(self::OUTPUT_PRINTER_ID, $definition);
     }
 
