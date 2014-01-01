@@ -78,10 +78,7 @@ class InitializedContextEnvironment implements ContextEnvironment
         $callable = $callee->getCallable();
 
         if ($callee->isAnInstanceMethod()) {
-            $callable = $callee->getCallable();
-            $callable = array($this->contextPool->getContext($callable[0]), $callable[1]);
-
-            return $callable;
+            return array($this->contextPool->getContext($callable[0]), $callable[1]);
         }
 
         return $callable;
