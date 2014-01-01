@@ -26,10 +26,6 @@ use Behat\Testwork\Environment\StaticEnvironment;
 class UninitializedContextEnvironment extends StaticEnvironment implements ContextEnvironment
 {
     /**
-     * @var string
-     */
-    private $suiteName;
-    /**
      * @var UninitializedContextPool
      */
     private $contextPool;
@@ -42,18 +38,9 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
      */
     public function __construct($suiteName, UninitializedContextPool $contextPool)
     {
-        $this->suiteName = $suiteName;
-        $this->contextPool = $contextPool;
-    }
+        parent::__construct($suiteName);
 
-    /**
-     * Returns unique ID used for reading and caching of environment assets (callees).
-     *
-     * @return string
-     */
-    public function getSuiteName()
-    {
-        return $this->suiteName;
+        $this->contextPool = $contextPool;
     }
 
     /**
