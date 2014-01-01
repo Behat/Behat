@@ -10,13 +10,13 @@
 
 namespace Behat\Testwork\ServiceContainer\Exception;
 
-use RuntimeException;
+use InvalidArgumentException;
 
 /**
  * Testwork configuration loading exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConfigurationLoadingException extends RuntimeException implements ServiceContainerException
+class ConfigurationLoadingException extends InvalidArgumentException implements ServiceContainerException
 {
 }

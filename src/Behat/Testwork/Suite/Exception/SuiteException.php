@@ -11,14 +11,14 @@
 namespace Behat\Testwork\Suite\Exception;
 
 use Behat\Testwork\Exception\TestworkException;
-use RuntimeException;
+use InvalidArgumentException;
 
 /**
  * Core suite exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteException extends RuntimeException implements TestworkException
+class SuiteException extends InvalidArgumentException implements TestworkException
 {
     /**
      * @var string

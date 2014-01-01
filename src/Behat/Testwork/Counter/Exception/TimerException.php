@@ -11,13 +11,13 @@
 namespace Behat\Testwork\Counter\Exception;
 
 use Behat\Testwork\Exception\TestworkException;
-use RuntimeException;
+use LogicException;
 
 /**
  * Testwork timer exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TimerException extends RuntimeException implements TestworkException
+class TimerException extends LogicException implements TestworkException
 {
 }
