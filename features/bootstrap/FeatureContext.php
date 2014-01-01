@@ -67,7 +67,7 @@ class FeatureContext implements Context
             throw new \RuntimeException('Unable to find the PHP executable.');
         }
         $this->phpBin = $php;
-        $this->process = new Process(null, $dir);
+        $this->process = new Process(null, realpath($dir));
     }
 
     /**
