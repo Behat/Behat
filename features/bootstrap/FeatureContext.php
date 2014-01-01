@@ -134,10 +134,11 @@ class FeatureContext implements Context
         $this->process->setWorkingDirectory(getcwd());
         $this->process->setCommandLine(
             sprintf(
-                '%s %s %s --format-settings=\'{"timer": false}\'',
+                '%s %s %s %s',
                 $this->phpBin,
                 escapeshellarg(BEHAT_BIN_PATH),
-                $argumentsString
+                $argumentsString,
+                strtr('--format-settings=\'{"timer": false}\'', array('\'' => '"', '"' => '\"'))
             )
         );
         $this->process->start();
