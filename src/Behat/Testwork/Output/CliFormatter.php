@@ -32,10 +32,6 @@ abstract class CliFormatter implements Formatter
      */
     private $exceptionPresenter;
     /**
-     * @var Boolean
-     */
-    private $verbose = false;
-    /**
      * @var array
      */
     private $parameters = array();
@@ -62,9 +58,8 @@ abstract class CliFormatter implements Formatter
     final public function setParameter($name, $value)
     {
         switch ($name) {
-            case 'verbose':
-                $this->verbose = $value;
-                $this->printer->setVerbose($value);
+            case 'output_verbosity':
+                $this->printer->setOutputVerbosity($value);
                 break;
             case 'output_path':
                 $this->printer->setOutputPath($value);
@@ -90,8 +85,8 @@ abstract class CliFormatter implements Formatter
     final public function getParameter($name)
     {
         switch ($name) {
-            case 'verbose':
-                return $this->printer->isVerbose();
+            case 'output_verbosity':
+                return $this->printer->getOutputVerbosity();
             case 'output_path':
                 return $this->printer->getOutputPath();
             case 'output_decorate':
@@ -132,6 +127,6 @@ abstract class CliFormatter implements Formatter
      */
     final public function presentException(Exception $exception)
     {
-        return $this->exceptionPresenter->presentException($exception, $this->verbose);
+        return $this->exceptionPresenter->presentException($exception, $this->printer->getOutputVerbosity());
     }
 }

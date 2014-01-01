@@ -19,6 +19,9 @@ namespace Behat\Testwork\Output\Printer;
  */
 interface OutputPrinter
 {
+    const VERBOSITY_QUIET = 0;
+    const VERBOSITY_NORMAL = 1;
+
     /**
      * Sets output path.
      *
@@ -62,18 +65,18 @@ interface OutputPrinter
     public function isOutputDecorated();
 
     /**
-     * Sets output to be verbose.
+     * Sets output verbosity level.
      *
-     * @param Boolean $verbose
+     * @param integer $level
      */
-    public function setVerbose($verbose = true);
+    public function setOutputVerbosity($level);
 
     /**
-     * Checks if output is verbose.
+     * Returns output verbosity level.
      *
-     * @return Boolean
+     * @return integer
      */
-    public function isVerbose();
+    public function getOutputVerbosity();
 
     /**
      * Writes message(s) to output console.

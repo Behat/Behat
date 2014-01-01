@@ -38,9 +38,9 @@ class ConsoleOutputPrinter implements OutputPrinter
      */
     private $outputDecorated = null;
     /**
-     * @var Boolean
+     * @var integer
      */
-    private $verbose = false;
+    private $verbosityLevel = 0;
     /**
      * @var OutputInterface
      */
@@ -110,24 +110,24 @@ class ConsoleOutputPrinter implements OutputPrinter
     }
 
     /**
-     * Sets output to be verbose.
+     * Sets output verbosity level.
      *
-     * @param Boolean $verbose
+     * @param integer $level
      */
-    public function setVerbose($verbose = true)
+    public function setOutputVerbosity($level)
     {
-        $this->verbose = $verbose;
+        $this->verbosityLevel = intval($level);
         $this->flush();
     }
 
     /**
-     * Checks if output is verbose.
+     * Returns output verbosity level.
      *
-     * @return Boolean
+     * @return integer
      */
-    public function isVerbose()
+    public function getOutputVerbosity()
     {
-        return $this->verbose;
+        return $this->verbosityLevel;
     }
 
     /**
@@ -175,7 +175,7 @@ class ConsoleOutputPrinter implements OutputPrinter
      */
     protected function configureOutputConsole(StreamOutput $console)
     {
-        $verbosity = $this->verbose ? StreamOutput::VERBOSITY_VERBOSE : StreamOutput::VERBOSITY_NORMAL;
+        $verbosity = $this->verbosityLevel ? StreamOutput::VERBOSITY_VERBOSE : StreamOutput::VERBOSITY_NORMAL;
         $console->setVerbosity($verbosity);
 
         if (null !== $this->outputDecorated) {

@@ -18,7 +18,7 @@ use Exception;
  *
  * Finds a best way to present particular exception as a string.
  *
- * @see ExceptionPresenter
+ * @see    ExceptionPresenter
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -37,9 +37,9 @@ interface ExceptionStringer
      * Strings provided exception.
      *
      * @param Exception $exception
-     * @param Boolean   $verbose
+     * @param integer   $verbosity
      *
      * @return string
      */
-    public function stringException(Exception $exception, $verbose);
+    public function stringException(Exception $exception, $verbosity);
 }

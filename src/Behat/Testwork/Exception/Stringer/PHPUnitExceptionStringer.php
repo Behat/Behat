@@ -41,11 +41,11 @@ class PHPUnitExceptionStringer implements ExceptionStringer
      * Strings provided exception.
      *
      * @param Exception $exception
-     * @param Boolean   $verbose
+     * @param integer   $verbosity
      *
      * @return string
      */
-    public function stringException(Exception $exception, $verbose)
+    public function stringException(Exception $exception, $verbosity)
     {
         // PHPUnit assertion exceptions do not include expected / observed info in their
         // messages, but expect the test listeners to format that info like the following

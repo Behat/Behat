@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Exception;
 
 use Behat\Testwork\Exception\Stringer\ExceptionStringer;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Exception;
 
 /**
@@ -64,15 +65,15 @@ class ExceptionPresenter
      * Presents exception as a string.
      *
      * @param Exception $exception
-     * @param Boolean   $verbose
+     * @param integer   $verbosity
      *
      * @return string
      */
-    public function presentException(Exception $exception, $verbose = false)
+    public function presentException(Exception $exception, $verbosity = OutputPrinter::VERBOSITY_QUIET)
     {
         foreach ($this->stringers as $stringer) {
             if ($stringer->supportsException($exception)) {
-                return $this->relativizePaths($stringer->stringException($exception, $verbose));
+                return $this->relativizePaths($stringer->stringException($exception, $verbosity));
             }
         }
 
@@ -80,7 +81,7 @@ class ExceptionPresenter
             return trim($this->relativizePaths($exception->getMessage()));
         }
 
-        if ($verbose) {
+        if (OutputPrinter::VERBOSITY_NORMAL === $verbosity) {
             return $this->relativizePaths(trim($exception));
         }
 
