@@ -125,7 +125,7 @@ abstract class OutputExtension implements Extension
             new Reference(self::MANAGER_ID),
             new Reference(CliExtension::OUTPUT_PRINTER_ID)
         ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 600));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 1000));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.output', $definition);
     }
 

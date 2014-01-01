@@ -39,6 +39,14 @@ class ExceptionPresenter
      */
     public function __construct($basePath = null)
     {
+        if (null !== $basePath) {
+            $realBasePath = realpath($basePath);
+
+            if ($realBasePath) {
+                $basePath = $realBasePath;
+            }
+        }
+
         $this->basePath = $basePath;
     }
 

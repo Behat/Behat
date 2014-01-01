@@ -53,7 +53,7 @@ interface Callee
     /**
      * Returns callable.
      *
-     * @return Callable
+     * @return callable
      */
     public function getCallable();
 

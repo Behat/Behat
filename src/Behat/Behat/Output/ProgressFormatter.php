@@ -82,6 +82,15 @@ class ProgressFormatter extends TranslatableCliFormatter
             TestResult::PENDING   => 0,
             TestResult::SKIPPED   => 0
         );
+
+        if (null !== $basePath) {
+            $realBasePath = realpath($basePath);
+
+            if ($realBasePath) {
+                $basePath = $realBasePath;
+            }
+        }
+
         $this->basePath = $basePath;
 
         $this->setParameter('timer', true);

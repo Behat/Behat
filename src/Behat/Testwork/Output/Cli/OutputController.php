@@ -138,7 +138,7 @@ class OutputController implements Controller
      */
     protected function setFormattersParameters(InputInterface $input, OutputInterface $output)
     {
-        $this->manager->setFormattersParameter('decorated', $output->isDecorated());
+        $this->manager->setFormattersParameter('output_decorate', $output->isDecorated());
 
         if ($input->getOption('format-settings')) {
             foreach ($input->getOption('format-settings') as $jsonSettings) {

@@ -134,10 +134,11 @@ class FeatureContext implements Context
         $this->process->setWorkingDirectory(getcwd());
         $this->process->setCommandLine(
             sprintf(
-                '%s %s %s --format-settings=\'{"timer": false}\'',
+                '%s %s %s %s',
                 $this->phpBin,
                 escapeshellarg(BEHAT_BIN_PATH),
-                $argumentsString
+                $argumentsString,
+                strtr('--format-settings=\'{"timer": false}\'', array('\'' => '"', '"' => '\"'))
             )
         );
         $this->process->start();
@@ -154,31 +155,8 @@ class FeatureContext implements Context
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
-        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
-        $output = $this->getOutput();
-
-        // windows path fix
-        if ('/' !== DIRECTORY_SEPARATOR) {
-            $text = preg_replace_callback(
-                '/ features\/[^\n ]+/', function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
-            );
-            $text = preg_replace_callback(
-                '/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
-            );
-            $text = preg_replace_callback(
-                '/\+[fd] [^ ]+/', function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
-            );
-        }
-
         $this->itShouldFail($success);
-
-        PHPUnit_Framework_Assert::assertEquals((string) $text, $output);
+        $this->theOutputShouldContain($text);
     }
 
     /**
@@ -192,7 +170,14 @@ class FeatureContext implements Context
     public function fileShouldContain($path, PyStringNode $text)
     {
         PHPUnit_Framework_Assert::assertFileExists($path);
-        PHPUnit_Framework_Assert::assertEquals((string) $text, trim(file_get_contents($path)));
+
+        $fileContent = trim(file_get_contents($path));
+        // Normalize the line endings in the output
+        if ("\n" !== PHP_EOL) {
+            $fileContent = str_replace(PHP_EOL, "\n", $fileContent);
+        }
+
+        PHPUnit_Framework_Assert::assertEquals($this->getExpectedOutput($text), $fileContent);
     }
 
     /**
@@ -204,29 +189,33 @@ class FeatureContext implements Context
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
-        $output = $this->getOutput();
+        PHPUnit_Framework_Assert::assertContains($this->getExpectedOutput($text), $this->getOutput());
+    }
+
+    private function getExpectedOutput(PyStringNode $expectedText)
+    {
+        $text = strtr($expectedText, array('\'\'\'' => '"""'));
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
                 '/ features\/[^\n ]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
+                }, $text
             );
             $text = preg_replace_callback(
                 '/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
+                }, $text
             );
             $text = preg_replace_callback(
                 '/\+[fd] [^ ]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
+                }, $text
             );
         }
 
-        PHPUnit_Framework_Assert::assertContains((string) $text, $output);
+        return $text;
     }
 
     /**
@@ -260,7 +249,14 @@ class FeatureContext implements Context
 
     private function getOutput()
     {
-        return trim(preg_replace("/ +$/m", '', $this->process->getErrorOutput() . $this->process->getOutput()));
+        $output = $this->process->getErrorOutput() . $this->process->getOutput();
+
+        // Normalize the line endings in the output
+        if ("\n" !== PHP_EOL) {
+            $output = str_replace(PHP_EOL, "\n", $output);
+        }
+
+        return trim(preg_replace("/ +$/m", '', $output));
     }
 
     private function createFile($filename, $content)

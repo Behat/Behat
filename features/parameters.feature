@@ -92,7 +92,6 @@ Feature: Parameters
       15 steps (15 passed)
       """
 
-  @unix
   Scenario:
     Given "BEHAT_PARAMS" environment variable is set to:
       """
@@ -127,7 +126,6 @@ Feature: Parameters
       15 steps (15 passed)
       """
 
-  @unix
   Scenario:
     Given "BEHAT_PARAMS" environment variable is set to:
       """

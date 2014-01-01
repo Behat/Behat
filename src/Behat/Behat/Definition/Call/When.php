@@ -21,7 +21,7 @@ class When extends RuntimeDefinition
      * Initializes definition.
      *
      * @param string      $pattern
-     * @param Callable    $callable
+     * @param callable    $callable
      * @param null|string $description
      */
     public function __construct($pattern, $callable, $description = null)

@@ -31,7 +31,7 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHo
      *
      * @param string      $eventName
      * @param null|string $filterString
-     * @param Callable    $callable
+     * @param callable    $callable
      * @param null|string $description
      */
     public function __construct($eventName, $filterString, $callable, $description = null)

@@ -11,7 +11,6 @@
 namespace Behat\Behat\Output\ServiceContainer;
 
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
-use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension as BaseExtension;
 use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
