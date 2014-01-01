@@ -169,6 +169,16 @@ abstract class OutputExtension implements Extension
     abstract protected function getDefaultFormatterName();
 
     /**
+     * Creates output printer definition.
+     *
+     * @return Definition
+     */
+    protected function createOutputPrinterDefinition()
+    {
+        return new Definition('Behat\Testwork\Output\Printer\ConsoleOutputPrinter');
+    }
+
+    /**
      * Processes all available output formatters.
      *
      * @param ContainerBuilder $container

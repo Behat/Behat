@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Cli\Printer;
+namespace Behat\Behat\Output\Printer;
 
-use Behat\Behat\Cli\Formatter\ConsoleFormatter;
+use Behat\Behat\Output\Printer\Formatter\ConsoleFormatter;
 use Behat\Behat\Tester\Result\TestResult;
-use Behat\Testwork\Cli\Printer\CliOutputPrinter as BasePrinter;
+use Behat\Testwork\Output\Printer\ConsoleOutputPrinter as BasePrinter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 /**
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CliOutputPrinter extends BasePrinter
+class ConsoleOutputPrinter extends BasePrinter
 {
     /**
      * Converts result code to style name.

@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Output;
 
 use Behat\Testwork\Exception\ExceptionPresenter;
-use Behat\Testwork\Printer\OutputPrinter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Exception;
 
 /**
@@ -42,6 +42,9 @@ abstract class CliFormatter implements Formatter
 
     /**
      * Initializes formatter.
+     *
+     * @param OutputPrinter      $printer
+     * @param ExceptionPresenter $exceptionPresenter
      */
     public function __construct(OutputPrinter $printer, ExceptionPresenter $exceptionPresenter)
     {

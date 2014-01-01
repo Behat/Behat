@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Printer\Exception;
+namespace Behat\Testwork\Output\Exception;
 
 /**
  * Core printer exception interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface PrinterException
+interface PrinterException extends OutputException
 {
 }

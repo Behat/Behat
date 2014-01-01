@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Output;
 
 use Behat\Testwork\Exception\ExceptionPresenter;
-use Behat\Testwork\Printer\OutputPrinter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**

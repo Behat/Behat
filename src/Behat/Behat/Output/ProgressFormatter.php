@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Output;
 
-use Behat\Behat\Cli\Printer\CliOutputPrinter;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
+use Behat\Behat\Output\Printer\ConsoleOutputPrinter;
 use Behat\Behat\Tester\Event\ExampleTested;
 use Behat\Behat\Tester\Event\ScenarioTested;
 use Behat\Behat\Tester\Event\StepTested;
@@ -20,8 +20,8 @@ use Behat\Testwork\Counter\MemoryUsage;
 use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Output\TranslatableCliFormatter;
-use Behat\Testwork\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Event\ExerciseTested;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -214,7 +214,7 @@ class ProgressFormatter extends TranslatableCliFormatter
             return;
         }
 
-        $style = CliOutputPrinter::getStyleForResult(TestResult::FAILED);
+        $style = ConsoleOutputPrinter::getStyleForResult(TestResult::FAILED);
         $this->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $this->translate('failed_steps_title'), $style));
         foreach ($this->failedStepPaths as $i => $info) {
             list($text, $path, $exception, $stdOut) = $info;
@@ -242,7 +242,7 @@ class ProgressFormatter extends TranslatableCliFormatter
             return;
         }
 
-        $style = CliOutputPrinter::getStyleForResult(TestResult::PENDING);
+        $style = ConsoleOutputPrinter::getStyleForResult(TestResult::PENDING);
         $this->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $this->translate('pending_steps_title'), $style));
         foreach ($this->pendingStepPaths as $info) {
             list($text, $path, $exception) = $info;
@@ -265,7 +265,7 @@ class ProgressFormatter extends TranslatableCliFormatter
                 continue;
             }
 
-            $style = CliOutputPrinter::getStyleForResult($resultCode);
+            $style = ConsoleOutputPrinter::getStyleForResult($resultCode);
             $transId = TestResult::codeToString($resultCode) . '_count';
             $message = $this->translateChoice($transId, $count, array('%1%' => $count));
             $details[] = sprintf('{+%s}%s{-%s}', $style, $message, $style);
@@ -287,7 +287,7 @@ class ProgressFormatter extends TranslatableCliFormatter
                 continue;
             }
 
-            $style = CliOutputPrinter::getStyleForResult($resultCode);
+            $style = ConsoleOutputPrinter::getStyleForResult($resultCode);
             $transId = TestResult::codeToString($resultCode) . '_count';
             $message = $this->translateChoice($transId, $count, array('%1%' => $count));
             $details[] = sprintf('{+%s}%s{-%s}', $style, $message, $style);

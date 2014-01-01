@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Printer;
+namespace Behat\Testwork\Output\Printer;
 
 /**
  * Testwork printer interface.

@@ -8,10 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Cli\Printer;
+namespace Behat\Testwork\Output\Printer;
 
-use Behat\Testwork\Printer\Exception\BadOutputPathException;
-use Behat\Testwork\Printer\OutputPrinter;
+use Behat\Testwork\Output\Exception\BadOutputPathException;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,7 +23,7 @@ use Symfony\Component\Console\Output\StreamOutput;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CliOutputPrinter implements OutputPrinter
+class ConsoleOutputPrinter implements OutputPrinter
 {
     /**
      * @var null|string

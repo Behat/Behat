@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Cli\Formatter;
+namespace Behat\Behat\Output\Printer\Formatter;
 
 use Symfony\Component\Console\Formatter\OutputFormatter as BaseOutputFormatter;
 

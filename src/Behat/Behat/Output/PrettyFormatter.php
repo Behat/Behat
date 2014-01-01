@@ -10,11 +10,11 @@
 
 namespace Behat\Behat\Output;
 
-use Behat\Behat\Cli\Printer\CliOutputPrinter;
 use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Hook\Call\AfterFeature;
 use Behat\Behat\Hook\Call\AfterScenario;
+use Behat\Behat\Output\Printer\ConsoleOutputPrinter;
 use Behat\Behat\Tester\Event\BackgroundTested;
 use Behat\Behat\Tester\Event\ExampleTested;
 use Behat\Behat\Tester\Event\FeatureTested;
@@ -40,8 +40,8 @@ use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Counter\MemoryUsage;
 use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Exception\ExceptionPresenter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Output\TranslatableCliFormatter;
-use Behat\Testwork\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Event\ExerciseTested;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -325,7 +325,7 @@ class PrettyFormatter extends TranslatableCliFormatter
 
     public function printExamplesSteps(OutlineNode $outline)
     {
-        $style = CliOutputPrinter::getStyleForResult(TestResult::SKIPPED);
+        $style = ConsoleOutputPrinter::getStyleForResult(TestResult::SKIPPED);
 
         foreach ($outline->getSteps() as $step) {
             $definition = $this->currentAfterStepEvents[$step->getLine()]->getTestResult()->hasFoundDefinition()
@@ -340,7 +340,7 @@ class PrettyFormatter extends TranslatableCliFormatter
 
     public function printExamplesTable(ExampleTableNode $table)
     {
-        $style = CliOutputPrinter::getStyleForResult(TestResult::SKIPPED);
+        $style = ConsoleOutputPrinter::getStyleForResult(TestResult::SKIPPED);
 
         $this->writeln(sprintf('    {+keyword}%s:{-keyword}', $table->getKeyword()));
 
@@ -435,7 +435,7 @@ class PrettyFormatter extends TranslatableCliFormatter
             }
         }
 
-        $style = CliOutputPrinter::getStyleForResult($resultCode);
+        $style = ConsoleOutputPrinter::getStyleForResult($resultCode);
 
         return sprintf('{+%s}%s{-%s}', $style, $value, $style);
     }
@@ -493,7 +493,7 @@ class PrettyFormatter extends TranslatableCliFormatter
         $this->printBeforeHookCallResults($beforeEvent->getHookCallResults(), $lpad);
 
         $step = $afterEvent->getStep();
-        $style = CliOutputPrinter::getStyleForResult($afterEvent->getResultCode());
+        $style = ConsoleOutputPrinter::getStyleForResult($afterEvent->getResultCode());
         $definition = $afterEvent->getTestResult()->hasFoundDefinition()
             ? $afterEvent->getTestResult()->getSearchResult()->getMatchedDefinition()
             : null;
@@ -566,7 +566,7 @@ class PrettyFormatter extends TranslatableCliFormatter
 
         if ($callResult->hasException()) {
             $style = $callResult->getException() instanceof PendingException
-                ? CliOutputPrinter::getStyleForResult(TestResult::PENDING)
+                ? ConsoleOutputPrinter::getStyleForResult(TestResult::PENDING)
                 : 'exception';
 
             $exception = $this->presentException($callResult->getException());
@@ -592,7 +592,7 @@ class PrettyFormatter extends TranslatableCliFormatter
             }
 
             $resultCode = $callResult->hasException() ? TestResult::FAILED : TestResult::PASSED;
-            $style = CliOutputPrinter::getStyleForResult($resultCode);
+            $style = ConsoleOutputPrinter::getStyleForResult($resultCode);
             $hook = $callResult->getCall()->getCallee();
 
             $this->writeln(sprintf('%s┌─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $lpad, $style, $hook, $style, $hook->getPath()));
@@ -618,7 +618,7 @@ class PrettyFormatter extends TranslatableCliFormatter
             $this->printHookCallResult($callResult, $lpad);
 
             $resultCode = $callResult->hasException() ? TestResult::FAILED : TestResult::PASSED;
-            $style = CliOutputPrinter::getStyleForResult($resultCode);
+            $style = ConsoleOutputPrinter::getStyleForResult($resultCode);
             $hook = $callResult->getCall()->getCallee();
 
             $this->writeln(sprintf('%s└─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $lpad, $style, $hook, $style, $hook->getPath()));
@@ -655,7 +655,7 @@ class PrettyFormatter extends TranslatableCliFormatter
     public function printCounters()
     {
         if (count($this->failedScenarioPaths)) {
-            $style = CliOutputPrinter::getStyleForResult(TestResult::FAILED);
+            $style = ConsoleOutputPrinter::getStyleForResult(TestResult::FAILED);
             $this->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $this->translate('failed_scenarios_title'), $style));
             foreach ($this->failedScenarioPaths as $path) {
                 $this->writeln(sprintf('    {+%s}%s{-%s}', $style, $this->relativizePath($path), $style));
@@ -671,7 +671,7 @@ class PrettyFormatter extends TranslatableCliFormatter
                 continue;
             }
 
-            $style = CliOutputPrinter::getStyleForResult($resultCode);
+            $style = ConsoleOutputPrinter::getStyleForResult($resultCode);
             $transId = TestResult::codeToString($resultCode) . '_count';
             $message = $this->translateChoice($transId, $count, array('%1%' => $count));
             $details[] = sprintf('{+%s}%s{-%s}', $style, $message, $style);
@@ -689,7 +689,7 @@ class PrettyFormatter extends TranslatableCliFormatter
                 continue;
             }
 
-            $style = CliOutputPrinter::getStyleForResult($resultCode);
+            $style = ConsoleOutputPrinter::getStyleForResult($resultCode);
             $transId = TestResult::codeToString($resultCode) . '_count';
             $message = $this->translateChoice($transId, $count, array('%1%' => $count));
             $details[] = sprintf('{+%s}%s{-%s}', $style, $message, $style);

@@ -56,7 +56,7 @@ class OutputExtension extends BaseExtension
     protected function loadPrettyFormatter(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Output\PrettyFormatter', array(
-            new Definition('Behat\Behat\Cli\Printer\CliOutputPrinter'),
+            $this->createOutputPrinterDefinition(),
             new Reference(ExceptionExtension::PRESENTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
@@ -74,7 +74,7 @@ class OutputExtension extends BaseExtension
     protected function loadProgressFormatter(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Output\ProgressFormatter', array(
-            new Definition('Behat\Behat\Cli\Printer\CliOutputPrinter'),
+            $this->createOutputPrinterDefinition(),
             new Reference(ExceptionExtension::PRESENTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
@@ -82,5 +82,15 @@ class OutputExtension extends BaseExtension
         ));
         $definition->addTag(self::FORMATTER_TAG, array('priority' => 100));
         $container->setDefinition(self::FORMATTER_TAG . '.progress', $definition);
+    }
+
+    /**
+     * Creates output printer definition.
+     *
+     * @return Definition
+     */
+    protected function createOutputPrinterDefinition()
+    {
+        return new Definition('Behat\Behat\Output\Printer\ConsoleOutputPrinter');
     }
 }

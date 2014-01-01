@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Printer\Exception;
+namespace Behat\Testwork\Output\Exception;
 
 use InvalidArgumentException;
 
