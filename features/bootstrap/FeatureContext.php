@@ -67,7 +67,7 @@ class FeatureContext implements Context
             throw new \RuntimeException('Unable to find the PHP executable.');
         }
         $this->phpBin = $php;
-        $this->process = new Process(null, realpath($dir));
+        $this->process = new Process(null);
     }
 
     /**
@@ -131,6 +131,7 @@ class FeatureContext implements Context
     {
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
+        $this->process->setWorkingDirectory(getcwd());
         $this->process->setCommandLine(
             sprintf(
                 '%s %s %s --format-settings=\'{"timer": false}\'',
@@ -274,7 +275,6 @@ class FeatureContext implements Context
         }
 
         chdir($path);
-        $this->process->setWorkingDirectory(realpath($path));
     }
 
     private static function clearDirectory($path)
