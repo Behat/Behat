@@ -39,7 +39,7 @@ use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
  */
 class ApplicationFactory extends BaseFactory
 {
-    const VERSION = '3.0.0RC1';
+    const VERSION = '3.0-dev';
 
     /**
      * Returns application name.
