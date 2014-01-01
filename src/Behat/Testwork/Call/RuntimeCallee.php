@@ -12,6 +12,7 @@ namespace Behat\Testwork\Call;
 
 use Behat\Testwork\Call\Exception\BadCallbackException;
 use ReflectionFunction;
+use ReflectionFunctionAbstract;
 use ReflectionMethod;
 
 /**
@@ -32,7 +33,7 @@ class RuntimeCallee implements Callee
      */
     private $description;
     /**
-     * @var ReflectionFunction|ReflectionMethod
+     * @var ReflectionFunctionAbstract
      */
     private $reflection;
     /**
@@ -103,7 +104,7 @@ class RuntimeCallee implements Callee
     /**
      * Returns callable reflection.
      *
-     * @return ReflectionFunction|ReflectionMethod
+     * @return ReflectionFunctionAbstract
      */
     public function getReflection()
     {
@@ -128,6 +129,6 @@ class RuntimeCallee implements Callee
     public function isAnInstanceMethod()
     {
         return $this->reflection instanceof ReflectionMethod
-        && !$this->reflection->isStatic();
+            && !$this->reflection->isStatic();
     }
 }
