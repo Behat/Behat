@@ -27,6 +27,7 @@
     },
 
     "require-dev": {
+        "symfony/process": "~2.4",
         "phpunit/phpunit": "~3.7.28"
     },
 
