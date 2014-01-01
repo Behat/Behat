@@ -1,3 +1,13 @@
+3.0.0rc1 / 2014-01-01
+=======================
+
+  * New layered and highly extendable architecture
+  * Standard output buffering of definitions and hooks
+  * Hooks as first class citizens
+  * New pretty and progress formatters
+  * Huge speed and memory footprint improvements
+  * Moved 40% of non-Behat related codebase into a shared foundation called Testwork
+
 3.0.0beta8 / 2013-10-01
 =======================
 
