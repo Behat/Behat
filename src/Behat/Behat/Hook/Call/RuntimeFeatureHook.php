@@ -29,7 +29,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      *
      * @param string      $eventName
      * @param null|string $filterString
-     * @param Callable    $callable
+     * @param callable    $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If callback is method, but not a static one

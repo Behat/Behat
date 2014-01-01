@@ -25,7 +25,7 @@ use ReflectionMethod;
 class RuntimeCallee implements Callee
 {
     /**
-     * @var Callable
+     * @var callable
      */
     private $callable;
     /**
@@ -44,7 +44,7 @@ class RuntimeCallee implements Callee
     /**
      * Initializes callee.
      *
-     * @param Callable    $callable
+     * @param callable    $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If invalid callback provided
@@ -94,7 +94,7 @@ class RuntimeCallee implements Callee
     /**
      * Returns callable.
      *
-     * @return Callable
+     * @return callable
      */
     public function getCallable()
     {

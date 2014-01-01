@@ -23,7 +23,7 @@ class BeforeStep extends RuntimeStepHook
      * Initializes hook.
      *
      * @param null|string $filterString
-     * @param Callable    $callable
+     * @param callable    $callable
      * @param null|string $description
      */
     public function __construct($filterString, $callable, $description = null)

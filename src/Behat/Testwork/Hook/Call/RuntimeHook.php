@@ -31,7 +31,7 @@ abstract class RuntimeHook extends RuntimeCallee implements Hook
      * Initializes hook.
      *
      * @param string      $eventName
-     * @param Callable    $callable
+     * @param callable    $callable
      * @param null|string $description
      */
     public function __construct($eventName, $callable, $description = null)

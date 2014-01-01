@@ -20,7 +20,7 @@ use InvalidArgumentException;
 class BadCallbackException extends InvalidArgumentException implements CallException
 {
     /**
-     * @var Callable
+     * @var callable
      */
     private $callable;
 
@@ -28,7 +28,7 @@ class BadCallbackException extends InvalidArgumentException implements CallExcep
      * Initializes exception.
      *
      * @param string   $message
-     * @param Callable $callable
+     * @param callable $callable
      */
     public function __construct($message, $callable)
     {
@@ -40,7 +40,7 @@ class BadCallbackException extends InvalidArgumentException implements CallExcep
     /**
      * Returns callback that caused exception.
      *
-     * @return Callable
+     * @return callable
      */
     public function getCallable()
     {
