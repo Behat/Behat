@@ -10,9 +10,9 @@
 
 namespace Behat\Behat\Definition\Cli;
 
-use Behat\Behat\Definition\Cli\Printer\DefinitionInformationPrinter;
-use Behat\Behat\Definition\Cli\Printer\DefinitionListPrinter;
 use Behat\Behat\Definition\DefinitionWriter;
+use Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter;
+use Behat\Behat\Definition\Printer\ConsoleDefinitionListPrinter;
 use Behat\Behat\Definition\Printer\DefinitionPrinter;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\Suite\SuiteRepository;
@@ -39,27 +39,27 @@ class AvailableDefinitionsController implements Controller
      */
     private $writer;
     /**
-     * @var DefinitionListPrinter
+     * @var ConsoleDefinitionListPrinter
      */
     private $listPrinter;
     /**
-     * @var DefinitionInformationPrinter
+     * @var ConsoleDefinitionInformationPrinter
      */
     private $infoPrinter;
 
     /**
      * Initializes controller.
      *
-     * @param SuiteRepository              $suiteRepository
-     * @param DefinitionWriter             $writer
-     * @param DefinitionListPrinter        $listPrinter
-     * @param DefinitionInformationPrinter $infoPrinter
+     * @param SuiteRepository                     $suiteRepository
+     * @param DefinitionWriter                    $writer
+     * @param ConsoleDefinitionListPrinter        $listPrinter
+     * @param ConsoleDefinitionInformationPrinter $infoPrinter
      */
     public function __construct(
         SuiteRepository $suiteRepository,
         DefinitionWriter $writer,
-        DefinitionListPrinter $listPrinter,
-        DefinitionInformationPrinter $infoPrinter
+        ConsoleDefinitionListPrinter $listPrinter,
+        ConsoleDefinitionInformationPrinter $infoPrinter
     ) {
         $this->suiteRepository = $suiteRepository;
         $this->writer = $writer;

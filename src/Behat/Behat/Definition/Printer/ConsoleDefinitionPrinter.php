@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Definition\Cli\Printer;
+namespace Behat\Behat\Definition\Printer;
 
 use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
-use Behat\Behat\Definition\Printer\DefinitionPrinter;
-use Behat\Testwork\Printer\OutputPrinter;
 use Behat\Testwork\Suite\Suite;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -22,12 +22,12 @@ use Symfony\Component\Translation\TranslatorInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class AbstractDefinitionPrinter implements DefinitionPrinter
+abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
 {
     /**
-     * @var OutputPrinter
+     * @var OutputInterface
      */
-    private $printer;
+    private $output;
     /**
      * @var PatternTransformer
      */
@@ -40,26 +40,22 @@ abstract class AbstractDefinitionPrinter implements DefinitionPrinter
     /**
      * Initializes printer.
      *
-     * @param OutputPrinter       $printer
+     * @param OutputInterface     $output
      * @param PatternTransformer  $patternTransformer
      * @param TranslatorInterface $translator
      */
     public function __construct(
-        OutputPrinter $printer,
+        OutputInterface $output,
         PatternTransformer $patternTransformer,
         TranslatorInterface $translator
     ) {
-        $this->printer = $printer;
+        $this->output = $output;
         $this->patternTransformer = $patternTransformer;
         $this->translator = $translator;
 
-        $printer->setOutputStyles(
-            array(
-                'def_regex'         => array('yellow'),
-                'def_regex_capture' => array('yellow', null, array('bold')),
-                'def_dimmed'        => array('black', null, array('bold'))
-            )
-        );
+        $output->getFormatter()->setStyle('def_regex', new OutputFormatterStyle('yellow'));
+        $output->getFormatter()->setStyle('def_regex_capture', new OutputFormatterStyle('yellow', null, array('bold')));
+        $output->getFormatter()->setStyle('def_dimmed', new OutputFormatterStyle('black', null, array('bold')));
     }
 
     /**
@@ -69,8 +65,8 @@ abstract class AbstractDefinitionPrinter implements DefinitionPrinter
      */
     protected function write($text)
     {
-        $this->printer->writeln($text);
-        $this->printer->writeln();
+        $this->output->writeln($text);
+        $this->output->writeln('');
     }
 
     /**

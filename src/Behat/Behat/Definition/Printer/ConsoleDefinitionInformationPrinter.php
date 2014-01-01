@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Definition\Cli\Printer;
+namespace Behat\Behat\Definition\Printer;
 
 use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Suite\Suite;
@@ -20,7 +20,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionInformationPrinter extends AbstractDefinitionPrinter
+class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
 {
     /**
      * @var null|string
@@ -57,7 +57,7 @@ class DefinitionInformationPrinter extends AbstractDefinitionPrinter
             }
 
             $lines[] = strtr(
-                '{suite} {+def_dimmed}|{-def_dimmed} {+info}{type}{-info} {+def_regex}{regex}{-def_regex}', array(
+                '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>', array(
                     '{suite}' => $suite->getName(),
                     '{type}'  => $definition->getType(),
                     '{regex}' => $regex,
@@ -66,7 +66,7 @@ class DefinitionInformationPrinter extends AbstractDefinitionPrinter
 
             if ($definition->getDescription()) {
                 $lines[] = strtr(
-                    '{space}{+def_dimmed}|{-def_dimmed} {description}', array(
+                    '{space}<def_dimmed>|</def_dimmed> {description}', array(
                         '{space}'       => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
                         '{description}' => $definition->getDescription()
                     )
@@ -74,7 +74,7 @@ class DefinitionInformationPrinter extends AbstractDefinitionPrinter
             }
 
             $lines[] = strtr(
-                '{space}{+def_dimmed}|{-def_dimmed} at `{path}`', array(
+                '{space}<def_dimmed>|</def_dimmed> at `{path}`', array(
                     '{space}' => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
                     '{path}'  => $definition->getPath()
                 )

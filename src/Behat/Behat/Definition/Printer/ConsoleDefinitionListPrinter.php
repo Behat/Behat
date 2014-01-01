@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Definition\Cli\Printer;
+namespace Behat\Behat\Definition\Printer;
 
 use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Suite\Suite;
@@ -20,7 +20,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionListPrinter extends AbstractDefinitionPrinter
+class ConsoleDefinitionListPrinter extends ConsoleDefinitionPrinter
 {
     /**
      * Prints definition.
@@ -34,7 +34,7 @@ class DefinitionListPrinter extends AbstractDefinitionPrinter
 
         foreach ($definitions as $definition) {
             $output[] = strtr(
-                '{suite} {+def_dimmed}|{-def_dimmed} {+info}{type}{-info} {+def_regex}{regex}{-def_regex}', array(
+                '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>', array(
                     '{suite}' => $suite->getName(),
                     '{type}'  => str_pad($definition->getType(), 5, ' ', STR_PAD_LEFT),
                     '{regex}' => $this->getDefinitionPattern($suite, $definition),

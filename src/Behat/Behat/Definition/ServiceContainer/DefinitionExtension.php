@@ -190,15 +190,15 @@ class DefinitionExtension implements Extension
      */
     protected function loadDefinitionPrinters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Cli\Printer\DefinitionInformationPrinter', array(
-            new Reference(CliExtension::OUTPUT_PRINTER_ID),
+        $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter', array(
+            new Reference(CliExtension::OUTPUT_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID)
         ));
         $container->setDefinition($this->getInformationPrinterId(), $definition);
 
-        $definition = new Definition('Behat\Behat\Definition\Cli\Printer\DefinitionListPrinter', array(
-            new Reference(CliExtension::OUTPUT_PRINTER_ID),
+        $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionListPrinter', array(
+            new Reference(CliExtension::OUTPUT_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID)
         ));
