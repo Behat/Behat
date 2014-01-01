@@ -170,7 +170,14 @@ class FeatureContext implements Context
     public function fileShouldContain($path, PyStringNode $text)
     {
         PHPUnit_Framework_Assert::assertFileExists($path);
-        PHPUnit_Framework_Assert::assertEquals((string) $text, trim(file_get_contents($path)));
+
+        $fileContent = trim(file_get_contents($path));
+        // Normalize the line endings in the output
+        if ("\n" !== PHP_EOL) {
+            $fileContent = str_replace(PHP_EOL, "\n", $fileContent);
+        }
+
+        PHPUnit_Framework_Assert::assertEquals($this->getExpectedOutput($text), $fileContent);
     }
 
     /**
@@ -182,32 +189,40 @@ class FeatureContext implements Context
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
         $output = $this->getOutput();
+
+        // Normalize the line endings in the output
+        if ("\n" !== PHP_EOL) {
+            $output = str_replace(PHP_EOL, "\n", $output);
+        }
+
+        PHPUnit_Framework_Assert::assertContains($this->getExpectedOutput($text), $output);
+    }
+
+    private function getExpectedOutput(PyStringNode $expectedText)
+    {
+        $text = strtr($expectedText, array('\'\'\'' => '"""'));
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
                 '/ features\/[^\n ]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
+                }, $text
             );
             $text = preg_replace_callback(
                 '/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
+                }, $text
             );
             $text = preg_replace_callback(
                 '/\+[fd] [^ ]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, (string) $text
+                }, $text
             );
-
-            // Normalize the line endings in the output
-            $output = str_replace(PHP_EOL, "\n", $output);
         }
 
-        PHPUnit_Framework_Assert::assertContains((string) $text, $output);
+        return $text;
     }
 
     /**
