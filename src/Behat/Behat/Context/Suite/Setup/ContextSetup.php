@@ -56,7 +56,7 @@ class ContextSetup implements SuiteSetup
      *
      * @param ContextClassGenerator $generator
      */
-    final public function registerClassGenerator(ContextClassGenerator $generator)
+    public function registerClassGenerator(ContextClassGenerator $generator)
     {
         $this->classGenerators[] = $generator;
     }

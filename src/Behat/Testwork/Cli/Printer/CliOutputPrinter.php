@@ -136,7 +136,7 @@ class CliOutputPrinter implements OutputPrinter
      *
      * @param string|array $messages message or array of messages
      */
-    final public function write($messages)
+    public function write($messages)
     {
         $this->getWritingConsole()->write($messages, false);
     }
@@ -146,7 +146,7 @@ class CliOutputPrinter implements OutputPrinter
      *
      * @param string|array $messages message or array of messages
      */
-    final public function writeln($messages = '')
+    public function writeln($messages = '')
     {
         $this->getWritingConsole()->write($messages, true);
     }
@@ -154,7 +154,7 @@ class CliOutputPrinter implements OutputPrinter
     /**
      * Clear output console, so on next write formatter will need to init (create) it again.
      */
-    final public function flush()
+    public function flush()
     {
         $this->output = null;
     }

@@ -39,7 +39,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      *
      * @param ContextInitializer $initializer
      */
-    final public function registerContextInitializer(ContextInitializer $initializer)
+    public function registerContextInitializer(ContextInitializer $initializer)
     {
         $this->initializers[] = $initializer;
     }
