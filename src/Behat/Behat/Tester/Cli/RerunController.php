@@ -112,7 +112,7 @@ class RerunController implements Controller
             return;
         }
 
-        $feature = $event->getSubject();
+        $feature = $event->getFeature();
         $scenario = $event->getScenario();
 
         $this->lines[] = $feature->getFile() . ':' . $scenario->getLine();
@@ -132,7 +132,7 @@ class RerunController implements Controller
             return;
         }
 
-        $feature = $event->getSubject();
+        $feature = $event->getFeature();
         $example = $event->getExample();
 
         $this->lines[] = $feature->getFile() . ':' . $example->getLine();

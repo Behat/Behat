@@ -28,6 +28,10 @@ class ExampleTested extends AbstractScenarioTested
     const AFTER = 'tester.example_tested.after';
 
     /**
+     * @var FeatureNode
+     */
+    private $feature;
+    /**
      * @var ExampleNode
      */
     private $example;
@@ -58,11 +62,22 @@ class ExampleTested extends AbstractScenarioTested
         StepContainerTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment, $feature);
+        parent::__construct($suite, $environment);
 
+        $this->feature = $feature;
         $this->example = $example;
         $this->testResult = $testResult;
         $this->hookCallResults = $hookCallResults;
+    }
+
+    /**
+     * Returns feature.
+     *
+     * @return FeatureNode
+     */
+    public function getFeature()
+    {
+        return $this->feature;
     }
 
     /**

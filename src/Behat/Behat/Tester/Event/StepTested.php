@@ -29,6 +29,10 @@ class StepTested extends LifecycleEvent
     const AFTER = 'tester.step_tested.after';
 
     /**
+     * @var FeatureNode
+     */
+    private $feature;
+    /**
      * @var StepNode
      */
     private $step;
@@ -59,11 +63,22 @@ class StepTested extends LifecycleEvent
         StepTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment, $feature);
+        parent::__construct($suite, $environment);
 
+        $this->feature = $feature;
         $this->step = $step;
         $this->testResult = $testResult;
         $this->hookCallResults = $hookCallResults;
+    }
+
+    /**
+     * Returns feature.
+     *
+     * @return FeatureNode
+     */
+    public function getFeature()
+    {
+        return $this->feature;
     }
 
     /**

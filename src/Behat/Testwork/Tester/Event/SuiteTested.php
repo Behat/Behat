@@ -10,24 +10,21 @@
 
 namespace Behat\Testwork\Tester\Event;
 
+use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\Hook\Event\LifecycleEvent;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\SuiteTestResult;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Testwork suite tested event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteTested extends Event
+class SuiteTested extends LifecycleEvent
 {
     const BEFORE = 'tester.suite_tested.before';
     const AFTER = 'tester.suite_tested.after';
 
-    /**
-     * @var Suite
-     */
-    private $suite;
     /**
      * @var null|SuiteTestResult
      */
@@ -37,22 +34,14 @@ class SuiteTested extends Event
      * Initializes event.
      *
      * @param Suite                $suite
+     * @param Environment          $environment
      * @param null|SuiteTestResult $testResult
      */
-    public function __construct(Suite $suite, SuiteTestResult $testResult = null)
+    public function __construct(Suite $suite, Environment $environment, SuiteTestResult $testResult = null)
     {
-        $this->suite = $suite;
-        $this->testResult = $testResult;
-    }
+        parent::__construct($suite, $environment);
 
-    /**
-     * Returns suite in which this event was fired.
-     *
-     * @return Suite
-     */
-    public function getSuite()
-    {
-        return $this->suite;
+        $this->testResult = $testResult;
     }
 
     /**

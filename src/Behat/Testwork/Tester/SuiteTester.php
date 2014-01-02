@@ -69,40 +69,13 @@ class SuiteTester
      */
     public function test(Subjects $testSubjects, $skip = false)
     {
-        $this->dispatchBeforeEvent($testSubjects->getSuite());
-        $result = $this->testSuite($testSubjects, $skip);
-        $this->dispatchAfterEvent($testSubjects->getSuite(), $result);
+        $environment = $this->buildEnvironment($testSubjects->getSuite());
+
+        $this->dispatchBeforeEvent($testSubjects->getSuite(), $environment);
+        $result = $this->testSuite($environment, $testSubjects, $skip);
+        $this->dispatchAfterEvent($testSubjects->getSuite(), $environment, $result);
 
         return new TestResult($result->getResultCode());
-    }
-
-    /**
-     * Dispatches BEFORE event.
-     *
-     * @param Suite $suite
-     */
-    private function dispatchBeforeEvent(Suite $suite)
-    {
-        $this->eventDispatcher->dispatch(SuiteTested::BEFORE, new SuiteTested($suite));
-    }
-
-    /**
-     * Tests provided test subjects against provided environment.
-     *
-     * @param Subjects $testSubjects
-     * @param Boolean  $skip
-     *
-     * @return SuiteTestResult
-     */
-    private function testSuite(Subjects $testSubjects, $skip = false)
-    {
-        $results = array();
-        foreach ($testSubjects as $subject) {
-            $environment = $this->buildEnvironment($testSubjects->getSuite());
-            $results[] = $this->testSubject($testSubjects->getSuite(), $environment, $subject, $skip);
-        }
-
-        return new SuiteTestResult(new TestResults($results));
     }
 
     /**
@@ -115,6 +88,36 @@ class SuiteTester
     private function buildEnvironment(Suite $suite)
     {
         return $this->environmentManager->buildEnvironment($suite);
+    }
+
+    /**
+     * Dispatches BEFORE event.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     */
+    private function dispatchBeforeEvent(Suite $suite, Environment $environment)
+    {
+        $this->eventDispatcher->dispatch(SuiteTested::BEFORE, new SuiteTested($suite, $environment));
+    }
+
+    /**
+     * Tests provided test subjects against provided environment.
+     *
+     * @param Environment $environment
+     * @param Subjects    $testSubjects
+     * @param Boolean     $skip
+     *
+     * @return SuiteTestResult
+     */
+    private function testSuite(Environment $environment, Subjects $testSubjects, $skip = false)
+    {
+        $results = array();
+        foreach ($testSubjects as $subject) {
+            $results[] = $this->testSubject($testSubjects->getSuite(), $environment, $subject, $skip);
+        }
+
+        return new SuiteTestResult(new TestResults($results));
     }
 
     /**
@@ -136,10 +139,11 @@ class SuiteTester
      * Dispatches AFTER event.
      *
      * @param Suite           $suite
+     * @param Environment     $environment
      * @param SuiteTestResult $result
      */
-    private function dispatchAfterEvent(Suite $suite, SuiteTestResult $result)
+    private function dispatchAfterEvent(Suite $suite, Environment $environment, SuiteTestResult $result)
     {
-        $this->eventDispatcher->dispatch(SuiteTested::AFTER, new SuiteTested($suite, $result));
+        $this->eventDispatcher->dispatch(SuiteTested::AFTER, new SuiteTested($suite, $environment, $result));
     }
 }

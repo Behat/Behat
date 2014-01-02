@@ -152,7 +152,7 @@ class ProgressFormatter extends TranslatableCliFormatter
         $this->stepStats[$event->getResultCode()]++;
         if (TestResult::FAILED == $event->getResultCode()) {
             $text = sprintf('%s %s', $event->getStep()->getType(), $event->getStep()->getText());
-            $path = sprintf('%s:%d', $this->relativizePath($event->getSubject()->getFile()), $event->getStep()->getLine());
+            $path = sprintf('%s:%d', $this->relativizePath($event->getFeature()->getFile()), $event->getStep()->getLine());
             $exception = $event->getTestResult()->hasSearchException()
                 ? $event->getTestResult()->getSearchException()
                 : $event->getTestResult()->getCallResult()->getException();
@@ -178,7 +178,7 @@ class ProgressFormatter extends TranslatableCliFormatter
     {
         $this->scenarioStats[$event->getResultCode()]++;
         if (TestResult::FAILED === $event->getResultCode()) {
-            $feature = $event->getSubject();
+            $feature = $event->getFeature();
             $scenario = $event instanceof ExampleTested ? $event->getExample() : $event->getScenario();
             $this->failedScenarioPaths[] = sprintf('%s:%s', $this->relativizePath($feature->getFile()), $scenario->getLine());
         }

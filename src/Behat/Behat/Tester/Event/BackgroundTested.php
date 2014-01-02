@@ -28,6 +28,10 @@ class BackgroundTested extends LifecycleEvent
     const AFTER = 'tester.background_tested.after';
 
     /**
+     * @var FeatureNode
+     */
+    private $feature;
+    /**
      * @var BackgroundNode
      */
     private $background;
@@ -52,10 +56,21 @@ class BackgroundTested extends LifecycleEvent
         BackgroundNode $background,
         TestResults $stepTestResult = null
     ) {
-        parent::__construct($suite, $environment, $feature);
+        parent::__construct($suite, $environment);
 
+        $this->feature = $feature;
         $this->background = $background;
         $this->stepTestResults = $stepTestResult;
+    }
+
+    /**
+     * Returns feature.
+     *
+     * @return FeatureNode
+     */
+    public function getFeature()
+    {
+        return $this->feature;
     }
 
     /**

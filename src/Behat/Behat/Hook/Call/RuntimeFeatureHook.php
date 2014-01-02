@@ -67,7 +67,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
             return true;
         }
 
-        $feature = $event->getSubject();
+        $feature = $event->getFeature();
 
         if (false !== strpos($filterString, '@')) {
             $filter = new TagFilter($filterString);

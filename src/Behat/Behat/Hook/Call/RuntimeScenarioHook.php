@@ -42,7 +42,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
             return true;
         }
 
-        $feature = $event->getSubject();
+        $feature = $event->getFeature();
         if ($event instanceof ScenarioTested) {
             $scenario = $event->getScenario();
         } else {
