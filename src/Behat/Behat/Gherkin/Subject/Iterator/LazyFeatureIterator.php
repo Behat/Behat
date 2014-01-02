@@ -8,20 +8,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Gherkin\Subject;
+namespace Behat\Behat\Gherkin\Subject\Iterator;
 
 use Behat\Gherkin\Filter\FilterInterface;
 use Behat\Gherkin\Gherkin;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Testwork\Subject\Subjects;
+use Behat\Testwork\Subject\Iterator\SubjectIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Behat lazy features iterator.
+ * Behat lazy feature iterator.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class LazyFeatures implements Subjects
+class LazyFeatureIterator implements SubjectIterator
 {
     /**
      * @var Suite

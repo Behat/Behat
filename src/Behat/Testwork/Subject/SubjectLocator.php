@@ -10,8 +10,9 @@
 
 namespace Behat\Testwork\Subject;
 
-use Behat\Testwork\Subject\Exception\SubjectLoadingException;
-use Behat\Testwork\Subject\Loader\SubjectsLoader;
+use Behat\Testwork\Subject\Exception\IteratorCreationException;
+use Behat\Testwork\Subject\Iterator\IteratorFactory;
+use Behat\Testwork\Subject\Iterator\SubjectIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -21,61 +22,61 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SubjectsLocator
+class SubjectLocator
 {
     /**
-     * @var SubjectsLoader[]
+     * @var IteratorFactory[]
      */
     private $loaders = array();
 
     /**
-     * Registers subject loader.
+     * Registers subject iterator factory.
      *
-     * @param SubjectsLoader $loader
+     * @param IteratorFactory $loader
      */
-    public function registerSubjectLoader(SubjectsLoader $loader)
+    public function registerIteratorFactory(IteratorFactory $loader)
     {
         $this->loaders[] = $loader;
     }
 
     /**
-     * Locates suites subjects for provided suites at locator.
+     * Creates suites subject iterators for provided locator.
      *
      * @param Suite[]     $suites
      * @param null|string $locator
      *
-     * @return Subjects[]
+     * @return SubjectIterator[]
      */
-    public function locateTestSubjects(array $suites, $locator = null)
+    public function createSubjectIterators(array $suites, $locator = null)
     {
         $subjects = array();
         foreach ($suites as $suite) {
-            $subjects[] = $this->locateSuiteSubjects($suite, $locator);
+            $subjects[] = $this->createSuiteSubjectIterators($suite, $locator);
         }
 
         return $subjects;
     }
 
     /**
-     * Loads suite subjects for provided suite at locator.
+     * Creates suite subject iterator for provided locator.
      *
      * @param Suite       $suite
      * @param null|string $locator
      *
-     * @return Subjects
+     * @return SubjectIterator
      *
-     * @throws SubjectLoadingException If loader for locator not found
+     * @throws IteratorCreationException If loader for locator not found
      */
-    public function locateSuiteSubjects(Suite $suite, $locator = null)
+    private function createSuiteSubjectIterators(Suite $suite, $locator = null)
     {
         foreach ($this->loaders as $loader) {
             if ($loader->supportsSuiteAndLocator($suite, $locator)) {
-                return $loader->loadTestSubjects($suite, $locator);
+                return $loader->createSubjectIterator($suite, $locator);
             }
         }
 
-        throw new SubjectLoadingException(sprintf(
-            'Can not find subjects loader for the `%s` suite & `%s` locator.',
+        throw new IteratorCreationException(sprintf(
+            'Can not find subject iterator factory for the `%s` suite and `%s` locator.',
             $suite->getName(),
             $locator
         ), $suite, $locator);

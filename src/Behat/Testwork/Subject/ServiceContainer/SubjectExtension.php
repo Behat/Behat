@@ -33,7 +33,7 @@ class SubjectExtension implements Extension
     /*
      * Available extension points
      */
-    const LOADER_TAG = 'subject.loader';
+    const ITERATOR_FACTORY_TAG = 'subject.iterator_factory';
 
     /**
      * @var ServiceProcessor
@@ -97,7 +97,7 @@ class SubjectExtension implements Extension
      */
     protected function loadLocator(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Subject\SubjectsLocator');
+        $definition = new Definition('Behat\Testwork\Subject\SubjectLocator');
         $container->setDefinition(self::LOCATOR_ID, $definition);
     }
 
@@ -108,11 +108,11 @@ class SubjectExtension implements Extension
      */
     protected function processLoaders(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::LOADER_TAG);
+        $references = $this->processor->findAndSortTaggedServices($container, self::ITERATOR_FACTORY_TAG);
         $definition = $container->getDefinition(self::LOCATOR_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerSubjectLoader', array($reference));
+            $definition->addMethodCall('registerIteratorFactory', array($reference));
         }
     }
 }

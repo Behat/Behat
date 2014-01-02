@@ -8,22 +8,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Subject\Loader;
+namespace Behat\Testwork\Subject\Iterator;
 
-use Behat\Testwork\Subject\Subjects;
-use Behat\Testwork\Subject\SubjectsLocator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork test subject loader interface.
+ * Testwork test subject iterator factory interface.
  *
- * Used by SubjectsLocator.
+ * Used by SubjectLocator.
  *
  * @see SubjectsLocator
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface SubjectsLoader
+interface IteratorFactory
 {
     /**
      * Checks if loader supports provided suite & locator.
@@ -36,12 +34,12 @@ interface SubjectsLoader
     public function supportsSuiteAndLocator(Suite $suite, $locator);
 
     /**
-     * Loads test subjects using provided suite & locator.
+     * Loads test subject iterator using provided suite & locator.
      *
      * @param Suite  $suite
      * @param string $locator
      *
-     * @return Subjects
+     * @return SubjectIterator
      */
-    public function loadTestSubjects(Suite $suite, $locator);
+    public function createSubjectIterator(Suite $suite, $locator);
 }

@@ -18,7 +18,7 @@ use RuntimeException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SubjectLoadingException extends RuntimeException implements SubjectException
+class IteratorCreationException extends RuntimeException implements SubjectException
 {
     /**
      * @var Suite

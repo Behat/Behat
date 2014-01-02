@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Subject;
+namespace Behat\Testwork\Subject\Iterator;
 
 use Behat\Testwork\Suite\Suite;
 use Iterator;
@@ -20,7 +20,7 @@ use Iterator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface Subjects extends Iterator
+interface SubjectIterator extends Iterator
 {
     /**
      * Returns suite that was used to load subjects.

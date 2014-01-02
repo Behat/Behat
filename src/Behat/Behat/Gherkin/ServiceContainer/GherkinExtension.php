@@ -225,12 +225,12 @@ class GherkinExtension implements Extension
      */
     private function loadFeatureLoader(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Gherkin\Subject\Loader\GherkinFeaturesLoader', array(
+        $definition = new Definition('Behat\Behat\Gherkin\Subject\Iterator\FeatureIteratorFactory', array(
             new Reference(self::MANAGER_ID),
             '%paths.base%'
         ));
-        $definition->addTag(SubjectExtension::LOADER_TAG, array('priority' => 50));
-        $container->setDefinition(SubjectExtension::LOADER_TAG . '.gherkin_features', $definition);
+        $definition->addTag(SubjectExtension::ITERATOR_FACTORY_TAG, array('priority' => 50));
+        $container->setDefinition(SubjectExtension::ITERATOR_FACTORY_TAG . '.gherkin_feature', $definition);
     }
 
     /**

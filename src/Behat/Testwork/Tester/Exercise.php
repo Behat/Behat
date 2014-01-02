@@ -10,8 +10,8 @@
 
 namespace Behat\Testwork\Tester;
 
-use Behat\Testwork\Subject\GroupedSubjects;
-use Behat\Testwork\Subject\Subjects;
+use Behat\Testwork\Subject\Iterator\GroupedSubjectIterator;
+use Behat\Testwork\Subject\Iterator\SubjectIterator;
 use Behat\Testwork\Tester\Event\ExerciseCompleted;
 use Behat\Testwork\Tester\Result\ExerciseTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -51,15 +51,15 @@ class Exercise
     /**
      * Tests suites subjects.
      *
-     * @param Subjects[] $suitesSubjects
-     * @param Boolean    $skip
+     * @param SubjectIterator[] $subjectIterators
+     * @param Boolean           $skip
      *
      * @return TestResult
      */
-    public function run(array $suitesSubjects, $skip = false)
+    public function run(array $subjectIterators, $skip = false)
     {
         $this->dispatchBeforeEvent();
-        $result = $this->testExercise($suitesSubjects, $skip);
+        $result = $this->testExercise($subjectIterators, $skip);
         $this->dispatchAfterEvent($result);
 
         return new TestResult($result->getResultCode());
@@ -76,15 +76,15 @@ class Exercise
     /**
      * Tests provided suites.
      *
-     * @param Subjects[] $suitesSubjects
-     * @param Boolean    $skip
+     * @param SubjectIterator[] $subjectIterators
+     * @param Boolean           $skip
      *
      * @return ExerciseTestResult
      */
-    private function testExercise(array $suitesSubjects, $skip = false)
+    private function testExercise(array $subjectIterators, $skip = false)
     {
         $results = array();
-        foreach (GroupedSubjects::group($suitesSubjects) as $suiteSubjects) {
+        foreach (GroupedSubjectIterator::group($subjectIterators) as $suiteSubjects) {
             $results[] = $this->testSuiteSubjects($suiteSubjects, $skip);
         }
 
@@ -94,14 +94,14 @@ class Exercise
     /**
      * Tests provided suite subjects.
      *
-     * @param Subjects $suiteSubjects
-     * @param Boolean  $skip
+     * @param SubjectIterator $subjectIterator
+     * @param Boolean         $skip
      *
      * @return TestResult
      */
-    private function testSuiteSubjects(Subjects $suiteSubjects, $skip = false)
+    private function testSuiteSubjects(SubjectIterator $subjectIterator, $skip = false)
     {
-        return $this->suiteTester->test($suiteSubjects, $skip);
+        return $this->suiteTester->test($subjectIterator, $skip);
     }
 
     /**

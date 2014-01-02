@@ -11,8 +11,8 @@
 namespace Behat\Testwork\Tester\Cli;
 
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Subject\Subjects;
-use Behat\Testwork\Subject\SubjectsLocator;
+use Behat\Testwork\Subject\Iterator\SubjectIterator;
+use Behat\Testwork\Subject\SubjectLocator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Suite\SuiteRepository;
 use Behat\Testwork\Tester\Exercise;
@@ -35,7 +35,7 @@ class ExerciseController implements Controller
      */
     private $suites;
     /**
-     * @var SubjectsLocator
+     * @var SubjectLocator
      */
     private $locator;
     /**
@@ -55,14 +55,14 @@ class ExerciseController implements Controller
      * Initializes controller.
      *
      * @param SuiteRepository $suites
-     * @param SubjectsLocator $locator
+     * @param SubjectLocator  $locator
      * @param Exercise        $exercise
      * @param Boolean         $strict
      * @param Boolean         $skip
      */
     public function __construct(
         SuiteRepository $suites,
-        SubjectsLocator $locator,
+        SubjectLocator $locator,
         Exercise $exercise,
         $strict = false,
         $skip = false
@@ -113,22 +113,22 @@ class ExerciseController implements Controller
     }
 
     /**
-     * Loads exercise subjects.
+     * Loads exercise subject iterators.
      *
      * @param InputInterface $input
      *
-     * @return Subjects[]
+     * @return SubjectIterator[]
      */
     protected function getSubjects(InputInterface $input)
     {
-        return $this->locateSubjects($this->getAvailableSuites(), $input->getArgument('locator'));
+        return $this->createSubjectIterators($this->getAvailableSuites(), $input->getArgument('locator'));
     }
 
     /**
      * Tests exercise subjects.
      *
-     * @param InputInterface $input
-     * @param Subjects[]     $subjects
+     * @param InputInterface    $input
+     * @param SubjectIterator[] $subjects
      *
      * @return TestResult
      */
@@ -165,15 +165,15 @@ class ExerciseController implements Controller
     }
 
     /**
-     * Locates all subjects for all suites at locator.
+     * Creates subject iterators for all suites.
      *
      * @param Suite[]     $suites
      * @param null|string $locator
      *
-     * @return Subjects[]
+     * @return SubjectIterator[]
      */
-    protected function locateSubjects($suites, $locator)
+    protected function createSubjectIterators($suites, $locator)
     {
-        return $this->locator->locateTestSubjects($suites, $locator);
+        return $this->locator->createSubjectIterators($suites, $locator);
     }
 }

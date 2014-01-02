@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Tester\Cli;
 
-use Behat\Testwork\Subject\Subjects;
+use Behat\Testwork\Subject\Iterator\SubjectIterator;
 use Behat\Testwork\Tester\Cli\ExerciseController as BaseController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -52,17 +52,17 @@ class ExerciseController extends BaseController
     }
 
     /**
-     * Loads exercise subjects.
+     * Creates exercise subject iterators.
      *
      * @param InputInterface $input
      *
-     * @return Subjects[]
+     * @return SubjectIterator[]
      */
     protected function getSubjects(InputInterface $input)
     {
         $subjects = array();
         foreach ($this->getFeatureLocators($input) as $locator) {
-            $subjects = array_merge($subjects, $this->locateSubjects($this->getAvailableSuites(), $locator));
+            $subjects = array_merge($subjects, $this->createSubjectIterators($this->getAvailableSuites(), $locator));
         }
 
         return $subjects;

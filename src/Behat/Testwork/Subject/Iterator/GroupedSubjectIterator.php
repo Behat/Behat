@@ -8,25 +8,25 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Subject;
+namespace Behat\Testwork\Subject\Iterator;
 
 use Behat\Testwork\Suite\Suite;
 
 /**
  * Testwork grouped subjects iterator.
  *
- * Iterates over subjects iterators grouped by suites.
+ * Iterates over subject iterators grouped by their suites.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GroupedSubjects implements Subjects
+class GroupedSubjectIterator implements SubjectIterator
 {
     /**
      * @var Suite
      */
     private $suite;
     /**
-     * @var Subjects[]
+     * @var SubjectIterator[]
      */
     private $subjects;
     /**
@@ -37,8 +37,8 @@ class GroupedSubjects implements Subjects
     /**
      * Initializes subjects.
      *
-     * @param Suite      $suite
-     * @param Subjects[] $subjects
+     * @param Suite             $suite
+     * @param SubjectIterator[] $subjects
      */
     public function __construct(Suite $suite, array $subjects)
     {
@@ -49,9 +49,9 @@ class GroupedSubjects implements Subjects
     /**
      * Groups subjects by their suite.
      *
-     * @param Subjects[] $suitesSubjects
+     * @param SubjectIterator[] $suitesSubjects
      *
-     * @return GroupedSubjects[]
+     * @return GroupedSubjectIterator[]
      */
     public static function group(array $suitesSubjects)
     {
@@ -62,7 +62,7 @@ class GroupedSubjects implements Subjects
 
         return array_map(
             function ($subjects) {
-                return new GroupedSubjects($subjects[0]->getSuite(), $subjects);
+                return new GroupedSubjectIterator($subjects[0]->getSuite(), $subjects);
             }, $groupedSubjects
         );
     }

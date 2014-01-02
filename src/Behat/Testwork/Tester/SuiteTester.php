@@ -14,7 +14,7 @@ use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Hook\HookDispatcher;
-use Behat\Testwork\Subject\Subjects;
+use Behat\Testwork\Subject\Iterator\SubjectIterator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Event\SuiteTested;
 use Behat\Testwork\Tester\Result\SuiteTestResult;
@@ -71,21 +71,21 @@ class SuiteTester
     /**
      * Tests provided suite subjects.
      *
-     * @param Subjects $subjects
-     * @param Boolean  $skip
+     * @param SubjectIterator $subjectIterator
+     * @param Boolean         $skip
      *
      * @return TestResult
      */
-    public function test(Subjects $subjects, $skip = false)
+    public function test(SubjectIterator $subjectIterator, $skip = false)
     {
-        $suite = $subjects->getSuite();
-        $environment = $this->buildEnvironment($subjects->getSuite());
+        $suite = $subjectIterator->getSuite();
+        $environment = $this->buildEnvironment($subjectIterator->getSuite());
 
         $beforeHooks = $skip ? new CallResults() : $this->dispatchBeforeHooks($suite, $environment);
         $this->dispatchBeforeEvent($suite, $environment, $beforeHooks);
 
         $skip = $skip || $beforeHooks->hasExceptions();
-        $result = $this->testSuite($environment, $suite, $subjects, $beforeHooks, $skip);
+        $result = $this->testSuite($environment, $suite, $subjectIterator, $beforeHooks, $skip);
 
         $afterHooks = $skip ? new CallResults() : $this->dispatchAfterHooks($suite, $environment, $result);
         $this->dispatchAfterEvent($suite, $environment, $result, $afterHooks);
@@ -139,23 +139,23 @@ class SuiteTester
     /**
      * Tests provided test subjects against provided environment.
      *
-     * @param Environment $environment
-     * @param Suite       $suite
-     * @param Subjects    $subjects
-     * @param CallResults $hookResults
-     * @param Boolean     $skip
+     * @param Environment     $environment
+     * @param Suite           $suite
+     * @param SubjectIterator $subjectIterator
+     * @param CallResults     $hookResults
+     * @param Boolean         $skip
      *
      * @return SuiteTestResult
      */
     private function testSuite(
         Environment $environment,
         Suite $suite,
-        Subjects $subjects,
+        SubjectIterator $subjectIterator,
         CallResults $hookResults,
         $skip = false
     ) {
         $results = array();
-        foreach ($subjects as $subject) {
+        foreach ($subjectIterator as $subject) {
             $results[] = $this->testSubject($suite, $environment, $subject, $skip);
         }
 
@@ -167,14 +167,14 @@ class SuiteTester
      *
      * @param Suite       $suite
      * @param Environment $environment
-     * @param mixed       $testSubject
+     * @param mixed       $subject
      * @param Boolean     $skip
      *
      * @return TestResult
      */
-    private function testSubject(Suite $suite, Environment $environment, $testSubject, $skip = false)
+    private function testSubject(Suite $suite, Environment $environment, $subject, $skip = false)
     {
-        return $this->subjectTester->test($suite, $environment, $testSubject, $skip);
+        return $this->subjectTester->test($suite, $environment, $subject, $skip);
     }
 
     /**

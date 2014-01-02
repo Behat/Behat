@@ -8,24 +8,23 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Gherkin\Subject\Loader;
+namespace Behat\Behat\Gherkin\Subject\Iterator;
 
-use Behat\Behat\Gherkin\Subject\LazyFeatures;
 use Behat\Behat\Gherkin\Suite\GherkinSuite;
 use Behat\Gherkin\Filter\PathsFilter;
 use Behat\Gherkin\Gherkin;
-use Behat\Testwork\Subject\Loader\SubjectsLoader;
+use Behat\Testwork\Subject\Iterator\IteratorFactory;
 use Behat\Testwork\Suite\Suite;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Gherkin features loader.
+ * Gherkin feature loader.
  *
  * Loads gherkin features from the filesystem using gherkin parser.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GherkinFeaturesLoader implements SubjectsLoader
+class FeatureIteratorFactory implements IteratorFactory
 {
     /**
      * @var Gherkin
@@ -62,21 +61,21 @@ class GherkinFeaturesLoader implements SubjectsLoader
     }
 
     /**
-     * Loads features using provided suite & locator.
+     * Loads feature iterator using provided suite & locator.
      *
      * @param GherkinSuite $suite
      * @param string       $locator
      *
-     * @return LazyFeatures
+     * @return \Behat\Behat\Gherkin\Iterator\LazyFeatureIterator
      */
-    public function loadTestSubjects(Suite $suite, $locator)
+    public function createSubjectIterator(Suite $suite, $locator)
     {
         $filters = $suite->getFeatureFilters();
 
         if ($locator) {
             $filters[] = new PathsFilter($suite->getFeatureLocators());
 
-            return new LazyFeatures($suite, $this->gherkin, $this->findFeatureFiles($locator), $filters);
+            return new LazyFeatureIterator($suite, $this->gherkin, $this->findFeatureFiles($locator), $filters);
         }
 
         $featurePaths = array();
@@ -84,7 +83,7 @@ class GherkinFeaturesLoader implements SubjectsLoader
             $featurePaths = array_merge($featurePaths, $this->findFeatureFiles($suiteLocator));
         }
 
-        return new LazyFeatures($suite, $this->gherkin, $featurePaths, $filters);
+        return new LazyFeatureIterator($suite, $this->gherkin, $featurePaths, $filters);
     }
 
     /**
