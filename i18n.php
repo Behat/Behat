@@ -75,7 +75,7 @@
         'skipped_count'          => '{1} %1% pominięty|{2,3,4,22,23,24,32,33,34,42,43,44} %1% pominięte|]4,Inf] %1% pominiętych',
     ),
     'pt' => array(
-        'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> tem definições em falta. Defina-as com estes fragmentos:</snippet_undefined>',
+        'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> contém definições em falta. Defina-as com estes fragmentos:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Os fragmentos para as seguintes definições da suite <snippet_keyword>%1%</snippet_keyword> não foram gerados (verifique a configuração):</snippet_undefined>',
         'failed_scenarios_title' => 'Cenários que falharam:',
         'failed_hooks_title'     => 'Hooks que falharam:',
