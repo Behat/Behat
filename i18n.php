@@ -31,4 +31,20 @@
             'undefined_count'        => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
             'skipped_count'          => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
         ),
+    'it' =>
+        array(
+            'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> ha dei passaggi mancanti. Definiscili con questi snippet:</snippet_undefined>',
+            'snippet_missing_title'  => '<snippet_undefined>Gli snippet per i seguenti passaggi della suite <snippet_keyword>%1%</snippet_keyword> non sono stati generati (verifica la configurazione):</snippet_undefined>',
+            'failed_scenarios_title' => 'Scenari falliti:',
+            'failed_hooks_title'     => 'Hook falliti:',
+            'failed_steps_title'     => 'Passaggi falliti:',
+            'pending_steps_title'    => 'Passaggi in sospeso:',
+            'scenarios_count'        => '{0} Nessuno scenario|{1} 1 scenario|]1,Inf] %1% scenari',
+            'steps_count'            => '{0} Nessun passaggio|{1} 1 passaggio|]1,Inf] %1% passaggi',
+            'passed_count'           => '{1} 1 superato|]1,Inf] %1% superati',
+            'failed_count'           => '{1} 1 fallito|]1,Inf] %1% falliti',
+            'pending_count'          => '[1,Inf] %1% in sospeso',
+            'undefined_count'        => '{1} 1 non definito|]1,Inf] %1% non definiti',
+            'skipped_count'          => '{1} 1 ignorato|]1,Inf] %1% ignorati',
+        ),
 );
