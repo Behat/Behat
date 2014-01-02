@@ -23,15 +23,15 @@ use Behat\Gherkin\Node\StepNode;
 interface SnippetPrinter
 {
     /**
-     * Prints snippets of specific target.
+     * Prints snippets of the specific target.
      *
-     * @param string             $target
+     * @param string             $targetName
      * @param AggregateSnippet[] $snippets
      */
-    public function printSnippets($target, array $snippets);
+    public function printSnippets($targetName, array $snippets);
 
     /**
-     * Prints undefined steps of specific suite.
+     * Prints undefined steps of the specific suite.
      *
      * @param string     $suiteName
      * @param StepNode[] $steps

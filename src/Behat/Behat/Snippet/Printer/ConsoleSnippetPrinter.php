@@ -52,12 +52,12 @@ class ConsoleSnippetPrinter implements SnippetPrinter
     /**
      * Prints snippets of specific target.
      *
-     * @param string             $suiteName
+     * @param string             $targetName
      * @param AggregateSnippet[] $snippets
      */
-    public function printSnippets($suiteName, array $snippets)
+    public function printSnippets($targetName, array $snippets)
     {
-        $message = $this->translator->trans('snippet_proposal_title', array('%1%' => $suiteName), 'output');
+        $message = $this->translator->trans('snippet_proposal_title', array('%1%' => $targetName), 'output');
 
         $this->output->writeln('--- ' . $message . PHP_EOL);
 
