@@ -38,16 +38,12 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     {
         parent::__construct($eventName, $filterString, $callable, $description);
 
-        if ($this->isAMethod()) {
-            $reflection = $this->getReflection();
-
-            if (!$reflection->isStatic()) {
-                throw new BadCallbackException(sprintf(
-                    'Feature hook callback: %s::%s() must be a static method',
-                    $callable[0],
-                    $callable[1]
-                ), $callable);
-            }
+        if ($this->isAnInstanceMethod()) {
+            throw new BadCallbackException(sprintf(
+                'Feature hook callback: %s::%s() must be a static method',
+                $callable[0],
+                $callable[1]
+            ), $callable);
         }
     }
 
