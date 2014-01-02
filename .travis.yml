@@ -16,6 +16,6 @@ before_script:
   - composer require --no-update symfony/symfony=$SYMFONY_VERSION
   - composer install --dev --prefer-source
   - export PATH=./bin:$PATH
-  - cat "<?php echo '@php5' . implode(',@php5.', range(3, PHP_MINOR_VERSION));" > php_version_tag.php
+  - print "<?php echo '@php5' . implode(',@php5.', range(3, PHP_MINOR_VERSION));" > php_version_tag.php
 
 script: behat -fprogress --tags '~@php-version,'`php php_version_tag.php`
