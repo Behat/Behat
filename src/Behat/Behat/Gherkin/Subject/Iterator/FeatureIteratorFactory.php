@@ -66,7 +66,7 @@ class FeatureIteratorFactory implements IteratorFactory
      * @param GherkinSuite $suite
      * @param string       $locator
      *
-     * @return \Behat\Behat\Gherkin\Iterator\LazyFeatureIterator
+     * @return LazyFeatureIterator
      */
     public function createSubjectIterator(Suite $suite, $locator)
     {

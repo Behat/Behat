@@ -13,9 +13,9 @@ namespace Behat\Testwork\Subject\Iterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork grouped subjects iterator.
+ * Testwork grouped subject iterator.
  *
- * Iterates over subject iterators grouped by their suites.
+ * Iterates over subject iterators grouped by their suite.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
