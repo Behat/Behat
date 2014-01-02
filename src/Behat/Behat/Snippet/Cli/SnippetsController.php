@@ -111,6 +111,10 @@ class SnippetsController implements Controller
         if (!$input->getOption('no-snippets') && !$input->getOption('append-snippets')) {
             $this->eventDispatcher->addListener(ExerciseTested::AFTER, array($this, 'printAllSnippets'), -999);
         }
+
+        if (!$input->getOption('no-snippets')) {
+            $this->eventDispatcher->addListener(ExerciseTested::AFTER, array($this, 'printUndefinedSteps'), -995);
+        }
     }
 
     /**
@@ -132,16 +136,29 @@ class SnippetsController implements Controller
     {
         $snippets = $this->registry->getSnippets();
         count($snippets) && $this->output->writeln('');
+
         $this->writer->appendSnippets($snippets);
     }
 
     /**
-     * Prints all snippets to the console.
+     * Prints all snippets.
      */
     public function printAllSnippets()
     {
         $snippets = $this->registry->getSnippets();
         count($snippets) && $this->output->writeln('');
+
         $this->writer->printSnippets($this->printer, $snippets);
+    }
+
+    /**
+     * Prints all undefined steps.
+     */
+    public function printUndefinedSteps()
+    {
+        $undefined = $this->registry->getUndefinedSteps();
+        count($undefined) && $this->output->writeln('');
+
+        $this->writer->printUndefinedSteps($this->printer, $undefined);
     }
 }

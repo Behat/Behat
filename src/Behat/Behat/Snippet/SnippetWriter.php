@@ -77,6 +77,31 @@ class SnippetWriter
     }
 
     /**
+     * Prints undefined steps using provided printer.
+     *
+     * @param SnippetPrinter  $printer
+     * @param UndefinedStep[] $undefinedSteps
+     */
+    public function printUndefinedSteps(SnippetPrinter $printer, array $undefinedSteps)
+    {
+        $printableSteps = array();
+        foreach ($undefinedSteps as $undefinedStep) {
+            $suiteName = $undefinedStep->getEnvironment()->getSuiteName();
+            $step = $undefinedStep->getStep();
+
+            if (!isset($printableSteps[$suiteName])) {
+                $printableSteps[$suiteName] = array();
+            }
+
+            $printableSteps[$suiteName][$step->getText()] = $step;
+        }
+
+        foreach ($printableSteps as $suiteName => $steps) {
+            $printer->printUndefinedSteps($suiteName, array_values($steps));
+        }
+    }
+
+    /**
      * Appends snippet to appropriate targets.
      *
      * @param AggregateSnippet $snippet

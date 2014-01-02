@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Behat\Snippet;
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -9,6 +7,9 @@ namespace Behat\Behat\Snippet;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace Behat\Behat\Snippet;
+
 use Behat\Gherkin\Node\StepNode;
 
 /**

@@ -11,6 +11,7 @@
 namespace Behat\Behat\Snippet\Printer;
 
 use Behat\Behat\Snippet\AggregateSnippet;
+use Behat\Gherkin\Node\StepNode;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -51,17 +52,36 @@ class ConsoleSnippetPrinter implements SnippetPrinter
     /**
      * Prints snippets of specific target.
      *
-     * @param string             $target
+     * @param string             $suiteName
      * @param AggregateSnippet[] $snippets
      */
-    public function printSnippets($target, array $snippets)
+    public function printSnippets($suiteName, array $snippets)
     {
-        $message = $this->translator->trans('snippet_proposal_title', array('%1%' => $target), 'output');
+        $message = $this->translator->trans('snippet_proposal_title', array('%1%' => $suiteName), 'output');
 
         $this->output->writeln('--- ' . $message . PHP_EOL);
 
         foreach ($snippets as $snippet) {
             $this->output->writeln(sprintf('<snippet_undefined>%s</snippet_undefined>', $snippet->getSnippet()) . PHP_EOL);
         }
+    }
+
+    /**
+     * Prints undefined steps of specific suite.
+     *
+     * @param string     $suiteName
+     * @param StepNode[] $steps
+     */
+    public function printUndefinedSteps($suiteName, array $steps)
+    {
+        $message = $this->translator->trans('snippet_missing_title', array('%1%' => $suiteName), 'output');
+
+        $this->output->writeln('--- ' . $message . PHP_EOL);
+
+        foreach ($steps as $step) {
+            $this->output->writeln(sprintf('    <snippet_undefined>%s %s</snippet_undefined>', $step->getType(), $step->getText()));
+        }
+
+        $this->output->writeln('');
     }
 }

@@ -28,9 +28,9 @@ class SnippetRegistry implements SnippetRepository
      */
     private $generators = array();
     /**
-     * @var array
+     * @var UndefinedStep[]
      */
-    private $undefinedStepTuples = array();
+    private $undefinedSteps = array();
     /**
      * @var AggregateSnippet[]
      */
@@ -61,7 +61,7 @@ class SnippetRegistry implements SnippetRepository
      */
     public function registerUndefinedStep(Environment $environment, StepNode $step)
     {
-        $this->undefinedStepTuples[] = array($environment, $step);
+        $this->undefinedSteps[] = new UndefinedStep($environment, $step);
         $this->snippetsGenerated = false;
     }
 
@@ -72,14 +72,35 @@ class SnippetRegistry implements SnippetRepository
      */
     public function getSnippets()
     {
+        $this->generateSnippets();
+
+        return $this->snippets;
+    }
+
+    /**
+     * Returns steps for which there was no snippet generated.
+     *
+     * @return UndefinedStep[]
+     */
+    public function getUndefinedSteps()
+    {
+        $this->generateSnippets();
+
+        return $this->undefinedSteps;
+    }
+
+    /**
+     * Generates snippets for undefined steps.
+     */
+    private function generateSnippets()
+    {
         if ($this->snippetsGenerated) {
-            return $this->snippets;
+            return null;
         }
 
         $snippetsSet = array();
-        foreach ($this->undefinedStepTuples as $tuple) {
-            list($environment, $step) = $tuple;
-            $snippet = $this->generateSnippet($environment, $step);
+        foreach ($this->undefinedSteps as $i => $undefinedStep) {
+            $snippet = $this->generateSnippet($undefinedStep->getEnvironment(), $undefinedStep->getStep());
 
             if (!$snippet) {
                 continue;
@@ -90,16 +111,19 @@ class SnippetRegistry implements SnippetRepository
             }
 
             $snippetsSet[$snippet->getHash()][] = $snippet;
+            unset($this->undefinedSteps[$i]);
         }
 
+        $this->snippets = array_values(
+            array_map(
+                function (array $snippets) {
+                    return new AggregateSnippet($snippets);
+                },
+                $snippetsSet
+            )
+        );
+        $this->undefinedSteps = array_values($this->undefinedSteps);
         $this->snippetsGenerated = true;
-
-        return $this->snippets = array_values(array_map(
-            function (array $snippets) {
-                return new AggregateSnippet($snippets);
-            },
-            $snippetsSet
-        ));
     }
 
     /**

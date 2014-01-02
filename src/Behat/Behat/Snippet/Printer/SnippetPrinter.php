@@ -11,6 +11,7 @@
 namespace Behat\Behat\Snippet\Printer;
 
 use Behat\Behat\Snippet\AggregateSnippet;
+use Behat\Gherkin\Node\StepNode;
 
 /**
  * Snippet printer interface.
@@ -28,4 +29,12 @@ interface SnippetPrinter
      * @param AggregateSnippet[] $snippets
      */
     public function printSnippets($target, array $snippets);
+
+    /**
+     * Prints undefined steps of specific suite.
+     *
+     * @param string     $suiteName
+     * @param StepNode[] $steps
+     */
+    public function printUndefinedSteps($suiteName, array $steps);
 }

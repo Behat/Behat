@@ -1,7 +1,8 @@
 <?php return array(
     'en' =>
         array(
-            'snippet_proposal_title' => '<snippet_keyword>%1%</snippet_keyword> <snippet_undefined>has missing steps. Define them with these snippets:</snippet_undefined>',
+            'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> has missing steps. Define them with these snippets:</snippet_undefined>',
+            'snippet_missing_title'  => '<snippet_undefined>Snippets for following steps of <snippet_keyword>%1%</snippet_keyword> suite were not generated (check your configuration):</snippet_undefined>',
             'failed_scenarios_title' => 'Failed scenarios:',
             'failed_hooks_title'     => 'Failed hooks:',
             'failed_steps_title'     => 'Failed steps:',
@@ -17,6 +18,7 @@
     'ru' =>
         array(
             'snippet_proposal_title' => '<snippet_keyword>%1%</snippet_keyword> <snippet_undefined>не содержит необходимых определений. Вы можете добавить их используя шаблоны:</snippet_undefined>',
+            'snippet_missing_title'  => '<snippet_undefined>Шаблоны для следующих шагов в среде <snippet_keyword>%1%</snippet_keyword> не были сгенерированы (проверьте ваши настройки):</snippet_undefined>',
             'failed_scenarios_title' => 'Проваленные сценарии:',
             'failed_hooks_title'     => 'Проваленные хуки:',
             'failed_steps_title'     => 'Проваленные шаги:',

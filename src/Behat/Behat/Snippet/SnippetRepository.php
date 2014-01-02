@@ -23,4 +23,11 @@ interface SnippetRepository
      * @return AggregateSnippet[]
      */
     public function getSnippets();
+
+    /**
+     * Returns steps for which there was no snippet generated.
+     *
+     * @return UndefinedStep[]
+     */
+    public function getUndefinedSteps();
 }
