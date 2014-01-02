@@ -58,7 +58,7 @@ class GroupedSubjects implements Subjects
 
         return array_map(
             function ($subjects) {
-                return new static($subjects);
+                return new GroupedSubjects($subjects);
             }, $groupedSubjects
         );
     }
