@@ -43,6 +43,7 @@ use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Output\TranslatableCliFormatter;
 use Behat\Testwork\Tester\Event\ExerciseTested;
+use Behat\Testwork\Tester\Event\SuiteTested;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -148,6 +149,8 @@ class PrettyFormatter extends TranslatableCliFormatter
         return array(
             ExerciseTested::BEFORE   => array('startExerciseTimer', 999),
             ExerciseTested::AFTER    => array('printCounters', -50),
+            SuiteTested::BEFORE      => array('printSuiteHeader', -50),
+            SuiteTested::AFTER       => array('printSuiteFooter', -50),
             FeatureTested::BEFORE    => array('printFeatureHeader', -50),
             FeatureTested::AFTER     => array('printFeatureFooter', -50),
             ScenarioTested::BEFORE   => array('printScenarioHeader', -50),
@@ -177,6 +180,16 @@ class PrettyFormatter extends TranslatableCliFormatter
     {
         $this->timer = new Timer();
         $this->timer->start();
+    }
+
+    public function printSuiteHeader(SuiteTested $event)
+    {
+        $this->printBeforeHookCallResults($event->getHookCallResults(), '');
+    }
+
+    public function printSuiteFooter(SuiteTested $event)
+    {
+        $this->printAfterHookCallResults($event->getHookCallResults(), '');
     }
 
     public function printFeatureHeader(FeatureTested $event)

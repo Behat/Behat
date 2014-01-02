@@ -10,8 +10,10 @@
 
 namespace Behat\Testwork\Tester;
 
+use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
+use Behat\Testwork\Hook\HookDispatcher;
 use Behat\Testwork\Subject\Subjects;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Event\SuiteTested;
@@ -38,6 +40,10 @@ class SuiteTester
      */
     private $environmentManager;
     /**
+     * @var HookDispatcher
+     */
+    private $hookDispatcher;
+    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -47,33 +53,44 @@ class SuiteTester
      *
      * @param SubjectTester            $subjectTester
      * @param EnvironmentManager       $environmentManager
+     * @param HookDispatcher           $hookDispatcher
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         SubjectTester $subjectTester,
         EnvironmentManager $environmentManager,
+        HookDispatcher $hookDispatcher,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->subjectTester = $subjectTester;
         $this->environmentManager = $environmentManager;
+        $this->hookDispatcher = $hookDispatcher;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
      * Tests provided suite subjects.
      *
-     * @param Subjects $testSubjects
+     * @param Subjects $subjects
      * @param Boolean  $skip
      *
      * @return TestResult
      */
-    public function test(Subjects $testSubjects, $skip = false)
+    public function test(Subjects $subjects, $skip = false)
     {
-        $environment = $this->buildEnvironment($testSubjects->getSuite());
+        $suite = $subjects->getSuite();
+        $environment = $this->buildEnvironment($subjects->getSuite());
 
-        $this->dispatchBeforeEvent($testSubjects->getSuite(), $environment);
-        $result = $this->testSuite($environment, $testSubjects, $skip);
-        $this->dispatchAfterEvent($testSubjects->getSuite(), $environment, $result);
+        $beforeHooks = $skip ? new CallResults() : $this->dispatchBeforeHooks($suite, $environment);
+        $this->dispatchBeforeEvent($suite, $environment, $beforeHooks);
+
+        $skip = $beforeHooks->hasExceptions() ? true : $skip;
+        $result = $this->testSuite($environment, $suite, $subjects, $beforeHooks, $skip);
+
+        $afterHooks = $skip ? new CallResults() : $this->dispatchAfterHooks($suite, $environment, $result);
+        $this->dispatchAfterEvent($suite, $environment, $result, $afterHooks);
+
+        $result = new SuiteTestResult($result->getSubjectTestResults(), CallResults::merge($beforeHooks, $afterHooks));
 
         return new TestResult($result->getResultCode());
     }
@@ -91,33 +108,58 @@ class SuiteTester
     }
 
     /**
+     * Dispatches BEFORE event hooks.
+     *
+     * @param Suite       $suite
+     * @param Environment $environment
+     *
+     * @return CallResults
+     */
+    private function dispatchBeforeHooks(Suite $suite, Environment $environment)
+    {
+        $event = new SuiteTested($suite, $environment);
+
+        return $this->hookDispatcher->dispatchEventHooks(SuiteTested::BEFORE, $event);
+    }
+
+    /**
      * Dispatches BEFORE event.
      *
      * @param Suite       $suite
      * @param Environment $environment
+     * @param CallResults $hookCallResults
      */
-    private function dispatchBeforeEvent(Suite $suite, Environment $environment)
+    private function dispatchBeforeEvent(Suite $suite, Environment $environment, CallResults $hookCallResults)
     {
-        $this->eventDispatcher->dispatch(SuiteTested::BEFORE, new SuiteTested($suite, $environment));
+        $event = new SuiteTested($suite, $environment, null, $hookCallResults);
+
+        $this->eventDispatcher->dispatch(SuiteTested::BEFORE, $event);
     }
 
     /**
      * Tests provided test subjects against provided environment.
      *
      * @param Environment $environment
-     * @param Subjects    $testSubjects
+     * @param Suite       $suite
+     * @param Subjects    $subjects
+     * @param CallResults $hookResults
      * @param Boolean     $skip
      *
      * @return SuiteTestResult
      */
-    private function testSuite(Environment $environment, Subjects $testSubjects, $skip = false)
-    {
+    private function testSuite(
+        Environment $environment,
+        Suite $suite,
+        Subjects $subjects,
+        CallResults $hookResults,
+        $skip = false
+    ) {
         $results = array();
-        foreach ($testSubjects as $subject) {
-            $results[] = $this->testSubject($testSubjects->getSuite(), $environment, $subject, $skip);
+        foreach ($subjects as $subject) {
+            $results[] = $this->testSubject($suite, $environment, $subject, $skip);
         }
 
-        return new SuiteTestResult(new TestResults($results));
+        return new SuiteTestResult(new TestResults($results), $hookResults);
     }
 
     /**
@@ -136,14 +178,38 @@ class SuiteTester
     }
 
     /**
+     * Dispatches AFTER event hooks.
+     *
+     * @param Suite           $suite
+     * @param Environment     $environment
+     * @param SuiteTestResult $result
+     *
+     * @return CallResults
+     */
+    private function dispatchAfterHooks(
+        Suite $suite,
+        Environment $environment,
+        SuiteTestResult $result
+    ) {
+        $event = new SuiteTested($suite, $environment, $result);
+
+        return $this->hookDispatcher->dispatchEventHooks(SuiteTested::AFTER, $event);
+    }
+
+    /**
      * Dispatches AFTER event.
      *
      * @param Suite           $suite
      * @param Environment     $environment
      * @param SuiteTestResult $result
+     * @param CallResults     $hookCallResults
      */
-    private function dispatchAfterEvent(Suite $suite, Environment $environment, SuiteTestResult $result)
-    {
-        $this->eventDispatcher->dispatch(SuiteTested::AFTER, new SuiteTested($suite, $environment, $result));
+    private function dispatchAfterEvent(
+        Suite $suite,
+        Environment $environment,
+        SuiteTestResult $result,
+        CallResults $hookCallResults
+    ) {
+        $this->eventDispatcher->dispatch(SuiteTested::AFTER, new SuiteTested($suite, $environment, $result, $hookCallResults));
     }
 }

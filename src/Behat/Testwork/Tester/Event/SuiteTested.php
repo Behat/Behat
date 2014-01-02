@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Tester\Event;
 
+use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
 use Behat\Testwork\Suite\Suite;
@@ -29,6 +30,10 @@ class SuiteTested extends LifecycleEvent
      * @var null|SuiteTestResult
      */
     private $testResult;
+    /**
+     * @var null|CallResults
+     */
+    private $hookCallResults;
 
     /**
      * Initializes event.
@@ -36,12 +41,18 @@ class SuiteTested extends LifecycleEvent
      * @param Suite                $suite
      * @param Environment          $environment
      * @param null|SuiteTestResult $testResult
+     * @param null|CallResults     $hookCallResults
      */
-    public function __construct(Suite $suite, Environment $environment, SuiteTestResult $testResult = null)
-    {
+    public function __construct(
+        Suite $suite,
+        Environment $environment,
+        SuiteTestResult $testResult = null,
+        CallResults $hookCallResults = null
+    ) {
         parent::__construct($suite, $environment);
 
         $this->testResult = $testResult;
+        $this->hookCallResults = $hookCallResults;
     }
 
     /**
@@ -52,6 +63,16 @@ class SuiteTested extends LifecycleEvent
     public function getTestResult()
     {
         return $this->testResult;
+    }
+
+    /**
+     * Returns hook call results.
+     *
+     * @return null|CallResults
+     */
+    public function getHookCallResults()
+    {
+        return $this->hookCallResults;
     }
 
     /**

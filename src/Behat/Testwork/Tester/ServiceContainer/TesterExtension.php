@@ -13,6 +13,7 @@ namespace Behat\Testwork\Tester\ServiceContainer;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use Behat\Testwork\Hook\ServiceContainer\HookExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\Subject\ServiceContainer\SubjectExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
@@ -149,6 +150,7 @@ abstract class TesterExtension implements Extension
         $definition = new Definition('Behat\Testwork\Tester\SuiteTester', array(
             new Reference(self::SUBJECT_TESTER_ID),
             new Reference(EnvironmentExtension::MANAGER_ID),
+            new Reference(HookExtension::DISPATCHER_ID),
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
         ));
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);

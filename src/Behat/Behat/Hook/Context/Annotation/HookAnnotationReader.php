@@ -26,11 +26,13 @@ class HookAnnotationReader implements AnnotationReader
     /**
      * @var string
      */
-    private static $regex = '/^\@(beforefeature|afterfeature|beforescenario|afterscenario|beforestep|afterstep)(?:\s+(.+))?$/i';
+    private static $regex = '/^\@(beforesuite|aftersuite|beforefeature|afterfeature|beforescenario|afterscenario|beforestep|afterstep)(?:\s+(.+))?$/i';
     /**
      * @var string[]
      */
     private static $classes = array(
+        'beforesuite'    => 'Behat\Behat\Hook\Call\BeforeSuite',
+        'aftersuite'     => 'Behat\Behat\Hook\Call\AfterSuite',
         'beforefeature'  => 'Behat\Behat\Hook\Call\BeforeFeature',
         'afterfeature'   => 'Behat\Behat\Hook\Call\AfterFeature',
         'beforescenario' => 'Behat\Behat\Hook\Call\BeforeScenario',
