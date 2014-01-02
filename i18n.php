@@ -15,11 +15,11 @@
         'skipped_count'          => '[1,Inf] %1% skipped',
     ),
     'fr' => array(
-        'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> a des étapes manquantes. Définissez-les aves les modèles suivants :</snippet_undefined>',
+        'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> a des étapes manquantes. Définissez-les avec les modèles suivants :</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Les modèles des étapes de la suite <snippet_keyword>%1%</snippet_keyword> n\'ont pas été générés (vérifiez votre configuration):</snippet_undefined>',
         'failed_scenarios_title' => 'Scénarios échoués:',
         'failed_hooks_title'     => 'Hooks échoués:',
-        'failed_steps_title'     => 'Etapes échoués:',
+        'failed_steps_title'     => 'Etapes échouées:',
         'pending_steps_title'    => 'Etapes en attente:',
         'scenarios_count'        => '{0} Pas de scénario|{1} 1 scénario|]1,Inf] %1% scénarios',
         'steps_count'            => '{0} Pas d\'étape|{1} 1 étape|]1,Inf] %1% étapes',
