@@ -36,6 +36,7 @@ class OutputExtension extends BaseExtension
     {
         $this->loadPrettyFormatter($container);
         $this->loadProgressFormatter($container);
+        $this->loadJUnitFormatter($container);
     }
 
     /**
@@ -64,6 +65,20 @@ class OutputExtension extends BaseExtension
         ));
         $definition->addTag(self::FORMATTER_TAG, array('priority' => 100));
         $container->setDefinition(self::FORMATTER_TAG . '.pretty', $definition);
+    }
+
+    /**
+     * Loads JUnit formatter.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadJUnitFormatter(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Output\JUnitFormatter', array(
+            '%paths.base%'
+        ));
+        $definition->addTag(self::FORMATTER_TAG, array('priority' => 100));
+        $container->setDefinition(self::FORMATTER_TAG . '.junit', $definition);
     }
 
     /**
