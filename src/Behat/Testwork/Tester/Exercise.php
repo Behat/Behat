@@ -10,23 +10,22 @@
 
 namespace Behat\Testwork\Tester;
 
-use Behat\Testwork\Counter\MemoryUsage;
 use Behat\Testwork\Subject\GroupedSubjects;
-use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Subject\Subjects;
 use Behat\Testwork\Tester\Event\ExerciseTested;
 use Behat\Testwork\Tester\Result\ExerciseTestResult;
+use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Testwork Exercise tester.
+ * Testwork exercise.
  *
- * Tests exercises. Exercise is a set of test subject suites.
+ * Runs tests against all provided suites.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExerciseTester
+class Exercise
 {
     /**
      * @var SuiteTester
@@ -57,7 +56,7 @@ class ExerciseTester
      *
      * @return TestResult
      */
-    public function test(array $suitesSubjects, $skip = false)
+    public function run(array $suitesSubjects, $skip = false)
     {
         $this->dispatchBeforeEvent();
         $result = $this->testExercise($suitesSubjects, $skip);

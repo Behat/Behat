@@ -15,7 +15,7 @@ use Behat\Testwork\Subject\Subjects;
 use Behat\Testwork\Subject\SubjectsLocator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Suite\SuiteRepository;
-use Behat\Testwork\Tester\ExerciseTester;
+use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,9 +39,9 @@ class ExerciseController implements Controller
      */
     private $locator;
     /**
-     * @var ExerciseTester
+     * @var Exercise
      */
-    private $tester;
+    private $exercise;
     /**
      * @var Boolean
      */
@@ -56,20 +56,20 @@ class ExerciseController implements Controller
      *
      * @param SuiteRepository $suites
      * @param SubjectsLocator $locator
-     * @param ExerciseTester  $tester
+     * @param Exercise        $exercise
      * @param Boolean         $strict
      * @param Boolean         $skip
      */
     public function __construct(
         SuiteRepository $suites,
         SubjectsLocator $locator,
-        ExerciseTester $tester,
+        Exercise $exercise,
         $strict = false,
         $skip = false
     ) {
         $this->suites = $suites;
         $this->locator = $locator;
-        $this->tester = $tester;
+        $this->exercise = $exercise;
         $this->strict = $strict;
         $this->skip = $skip;
     }
@@ -134,7 +134,7 @@ class ExerciseController implements Controller
      */
     protected function testSubjects(InputInterface $input, $subjects)
     {
-        return $this->tester->test($subjects, $input->getOption('dry-run') || $this->skip);
+        return $this->exercise->run($subjects, $input->getOption('dry-run') || $this->skip);
     }
 
     /**
