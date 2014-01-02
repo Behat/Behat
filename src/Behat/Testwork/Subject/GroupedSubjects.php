@@ -57,10 +57,6 @@ class GroupedSubjects implements Subjects
     {
         $groupedSubjects = array();
         foreach ($suitesSubjects as $suiteSubjects) {
-            if (!isset($groupedSubjects[$suiteSubjects->getSuite()->getName()])) {
-                $groupedSubjects[$suiteSubjects->getSuite()->getName()] = array();
-            }
-
             $groupedSubjects[$suiteSubjects->getSuite()->getName()][] = $suiteSubjects;
         }
 
