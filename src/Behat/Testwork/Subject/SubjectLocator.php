@@ -12,7 +12,6 @@ namespace Behat\Testwork\Subject;
 
 use Behat\Testwork\Subject\Exception\IteratorCreationException;
 use Behat\Testwork\Subject\Iterator\IteratorFactory;
-use Behat\Testwork\Subject\Iterator\SubjectIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**

@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Gherkin\Subject\Iterator;
+namespace Behat\Behat\Gherkin\Subject;
 
 use Behat\Gherkin\Filter\FilterInterface;
 use Behat\Gherkin\Gherkin;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Testwork\Subject\Iterator\SubjectIterator;
+use Behat\Testwork\Subject\SubjectIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**

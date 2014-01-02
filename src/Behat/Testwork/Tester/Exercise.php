@@ -10,8 +10,8 @@
 
 namespace Behat\Testwork\Tester;
 
-use Behat\Testwork\Subject\Iterator\GroupedSubjectIterator;
-use Behat\Testwork\Subject\Iterator\SubjectIterator;
+use Behat\Testwork\Subject\GroupedSubjectIterator;
+use Behat\Testwork\Subject\SubjectIterator;
 use Behat\Testwork\Tester\Event\ExerciseCompleted;
 use Behat\Testwork\Tester\Result\ExerciseTestResult;
 use Behat\Testwork\Tester\Result\TestResult;

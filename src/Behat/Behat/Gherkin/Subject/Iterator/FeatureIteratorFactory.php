@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Gherkin\Subject\Iterator;
 
+use Behat\Behat\Gherkin\Subject\LazyFeatureIterator;
 use Behat\Behat\Gherkin\Suite\GherkinSuite;
 use Behat\Gherkin\Filter\PathsFilter;
 use Behat\Gherkin\Gherkin;

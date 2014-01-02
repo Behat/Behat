@@ -10,8 +10,9 @@
 
 namespace Behat\Testwork\Subject\Iterator;
 
-use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Subject\SubjectIterator;
 use Behat\Testwork\Subject\SubjectLocator;
+use Behat\Testwork\Suite\Suite;
 
 /**
  * Testwork test subject iterator factory interface.

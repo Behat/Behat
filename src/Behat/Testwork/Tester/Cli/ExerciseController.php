@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Tester\Cli;
 
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Subject\Iterator\SubjectIterator;
+use Behat\Testwork\Subject\SubjectIterator;
 use Behat\Testwork\Subject\SubjectLocator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Suite\SuiteRepository;

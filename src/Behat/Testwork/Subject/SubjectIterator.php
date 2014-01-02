@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Subject\Iterator;
+namespace Behat\Testwork\Subject;
 
 use Behat\Testwork\Suite\Suite;
 use Iterator;

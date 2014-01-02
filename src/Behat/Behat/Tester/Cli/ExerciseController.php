@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Tester\Cli;
 
-use Behat\Testwork\Subject\Iterator\SubjectIterator;
+use Behat\Testwork\Subject\SubjectIterator;
 use Behat\Testwork\Tester\Cli\ExerciseController as BaseController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

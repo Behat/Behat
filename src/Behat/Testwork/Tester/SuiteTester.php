@@ -14,7 +14,7 @@ use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Hook\HookDispatcher;
-use Behat\Testwork\Subject\Iterator\SubjectIterator;
+use Behat\Testwork\Subject\SubjectIterator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Event\SuiteTested;
 use Behat\Testwork\Tester\Result\SuiteTestResult;
