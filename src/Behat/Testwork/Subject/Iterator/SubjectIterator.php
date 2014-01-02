@@ -14,7 +14,7 @@ use Behat\Testwork\Suite\Suite;
 use Iterator;
 
 /**
- * Testwork test subjects iterator.
+ * Testwork test subject iterator.
  *
  * Iterates over test subjects.
  *

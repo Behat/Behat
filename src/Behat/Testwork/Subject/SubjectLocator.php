@@ -27,7 +27,7 @@ class SubjectLocator
     /**
      * @var IteratorFactory[]
      */
-    private $loaders = array();
+    private $factories = array();
 
     /**
      * Registers subject iterator factory.
@@ -36,7 +36,7 @@ class SubjectLocator
      */
     public function registerIteratorFactory(IteratorFactory $loader)
     {
-        $this->loaders[] = $loader;
+        $this->factories[] = $loader;
     }
 
     /**
@@ -69,9 +69,9 @@ class SubjectLocator
      */
     private function createSuiteSubjectIterators(Suite $suite, $locator = null)
     {
-        foreach ($this->loaders as $loader) {
-            if ($loader->supportsSuiteAndLocator($suite, $locator)) {
-                return $loader->createSubjectIterator($suite, $locator);
+        foreach ($this->factories as $factory) {
+            if ($factory->supportsSuiteAndLocator($suite, $locator)) {
+                return $factory->createSubjectIterator($suite, $locator);
             }
         }
 
