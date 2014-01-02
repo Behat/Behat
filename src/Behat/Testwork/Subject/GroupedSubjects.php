@@ -22,6 +22,10 @@ use Behat\Testwork\Suite\Suite;
 class GroupedSubjects implements Subjects
 {
     /**
+     * @var Suite
+     */
+    private $suite;
+    /**
      * @var Subjects[]
      */
     private $subjects;
@@ -33,10 +37,12 @@ class GroupedSubjects implements Subjects
     /**
      * Initializes subjects.
      *
+     * @param Suite      $suite
      * @param Subjects[] $subjects
      */
-    public function __construct(array $subjects)
+    public function __construct(Suite $suite, array $subjects)
     {
+        $this->suite = $suite;
         $this->subjects = $subjects;
     }
 
@@ -58,7 +64,7 @@ class GroupedSubjects implements Subjects
 
         return array_map(
             function ($subjects) {
-                return new GroupedSubjects($subjects);
+                return new GroupedSubjects($subjects[0]->getSuite(), $subjects);
             }, $groupedSubjects
         );
     }
@@ -70,7 +76,7 @@ class GroupedSubjects implements Subjects
      */
     public function getSuite()
     {
-        return count($this->subjects) ? $this->subjects[0]->getSuite() : null;
+        return $this->suite;
     }
 
     /**
