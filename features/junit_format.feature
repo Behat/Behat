@@ -84,6 +84,15 @@ Feature: JUnit Formatter
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with:
       """
+      --- FeatureContext has missing steps. Define them with these snippets:
+
+          /**
+           * @Given /^Something new$/
+           */
+          public function somethingNew()
+          {
+              throw new PendingException();
+          }
       """
     And "junit/default.xml" file should contain:
       """
