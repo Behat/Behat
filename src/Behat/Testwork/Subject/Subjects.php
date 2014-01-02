@@ -16,6 +16,8 @@ use Iterator;
 /**
  * Testwork test subjects iterator.
  *
+ * Iterates over test subjects.
+ *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface Subjects extends Iterator

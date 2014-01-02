@@ -10,6 +10,8 @@
 
 namespace Behat\Testwork\Tester;
 
+use Behat\Testwork\Counter\MemoryUsage;
+use Behat\Testwork\Subject\GroupedSubjects;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Subject\Subjects;
 use Behat\Testwork\Tester\Event\ExerciseTested;
@@ -83,7 +85,7 @@ class ExerciseTester
     private function testExercise(array $suitesSubjects, $skip = false)
     {
         $results = array();
-        foreach ($suitesSubjects as $suiteSubjects) {
+        foreach (GroupedSubjects::group($suitesSubjects) as $suiteSubjects) {
             $results[] = $this->testSuiteSubjects($suiteSubjects, $skip);
         }
 
