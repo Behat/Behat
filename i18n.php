@@ -50,7 +50,7 @@
     'de' =>
         array(
             'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> hat fehlende Schritte. Definiere diese mit den folgenden Snippets:</snippet_undefined>',
-            'snippet_missing_title'  => '<snippet_undefined>Snippets für die folgenden Schritte in der <snippet_keyword>%1%</snippet_keyword> Suite wurden nicht generiert (Überprüfen sie ihre Konfiguration):</snippet_undefined>',
+            'snippet_missing_title'  => '<snippet_undefined>Snippets für die folgenden Schritte in der <snippet_keyword>%1%</snippet_keyword> Suite wurden nicht generiert (Konfiguration überprüfen):</snippet_undefined>',
             'failed_scenarios_title' => 'Fehlgeschlagene Szenarien:',
             'failed_hooks_title'     => 'Fehlgeschlagene Hooks:',
             'failed_steps_title'     => 'Fehlgeschlagene Schritte:',
@@ -60,7 +60,7 @@
             'passed_count'           => '[1,Inf] %1% bestanden',
             'failed_count'           => '[1,Inf] %1% fehlgeschlagen',
             'pending_count'          => '[1,Inf] %1% ausstehend',
-            'undefined_count'        => '[1,Inf] %1% undefiniert',
+            'undefined_count'        => '[1,Inf] %1% nicht definiert',
             'skipped_count'          => '[1,Inf] %1% übersprungen',
         ),        
 );
