@@ -187,7 +187,16 @@ class FeatureContext implements Context
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        PHPUnit_Framework_Assert::assertContains($this->getExpectedOutput($text), $this->getOutput());
+        $expectedOutput = $this->getExpectedOutput($text);
+        if (is_string($expectedOutput) && empty($expectedOutput)) {
+            try {
+                PHPUnit_Framework_Assert::assertEmpty($this->getOutput());
+            } catch (PHPUnit_Framework_ExpectationFailedException $e) {
+                throw new PHPUnit_Framework_ExpectationFailedException('Failed asserting that the output is empty'.PHP_EOL.'Actual output:'.PHP_EOL.$this->getOutput());
+            }
+        }
+
+        PHPUnit_Framework_Assert::assertContains($expectedOutput, $this->getOutput());
     }
 
     private function getExpectedOutput(PyStringNode $expectedText)
