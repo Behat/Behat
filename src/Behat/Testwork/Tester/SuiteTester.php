@@ -84,7 +84,7 @@ class SuiteTester
         $beforeHooks = $skip ? new CallResults() : $this->dispatchBeforeHooks($suite, $environment);
         $this->dispatchBeforeEvent($suite, $environment, $beforeHooks);
 
-        $skip = $beforeHooks->hasExceptions() ? true : $skip;
+        $skip = $skip || $beforeHooks->hasExceptions();
         $result = $this->testSuite($environment, $suite, $subjects, $beforeHooks, $skip);
 
         $afterHooks = $skip ? new CallResults() : $this->dispatchAfterHooks($suite, $environment, $result);

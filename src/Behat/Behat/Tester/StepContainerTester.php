@@ -107,7 +107,7 @@ class StepContainerTester
         $beforeHooks = $skip ? new CallResults() : $this->dispatchBeforeHooks($suite, $environment, $feature, $container);
         $this->dispatchBeforeEvent($suite, $environment, $feature, $container, $beforeHooks);
 
-        $skip = $beforeHooks->hasExceptions() ? true : $skip;
+        $skip = $skip || $beforeHooks->hasExceptions();
         $result = $this->testContainer($suite, $environment, $feature, $container, $beforeHooks, $skip);
 
         $afterHooks = $skip ? new CallResults() : $this->dispatchAfterHooks($suite, $environment, $feature, $container, $result);
