@@ -2,7 +2,7 @@
     'en' =>
         array(
             'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> has missing steps. Define them with these snippets:</snippet_undefined>',
-            'snippet_missing_title'  => '<snippet_undefined>Snippets for following steps of <snippet_keyword>%1%</snippet_keyword> suite were not generated (check your configuration):</snippet_undefined>',
+            'snippet_missing_title'  => '<snippet_undefined>Snippets for the following steps in the <snippet_keyword>%1%</snippet_keyword> suite were not generated (check your configuration):</snippet_undefined>',
             'failed_scenarios_title' => 'Failed scenarios:',
             'failed_hooks_title'     => 'Failed hooks:',
             'failed_steps_title'     => 'Failed steps:',
