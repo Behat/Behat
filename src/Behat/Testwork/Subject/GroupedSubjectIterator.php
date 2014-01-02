@@ -28,7 +28,7 @@ class GroupedSubjectIterator implements SubjectIterator
     /**
      * @var SubjectIterator[]
      */
-    private $subjects;
+    private $iterators;
     /**
      * @var integer
      */
@@ -38,31 +38,31 @@ class GroupedSubjectIterator implements SubjectIterator
      * Initializes subjects.
      *
      * @param Suite             $suite
-     * @param SubjectIterator[] $subjects
+     * @param SubjectIterator[] $subjectIterators
      */
-    public function __construct(Suite $suite, array $subjects)
+    public function __construct(Suite $suite, array $subjectIterators)
     {
         $this->suite = $suite;
-        $this->subjects = $subjects;
+        $this->iterators = $subjectIterators;
     }
 
     /**
      * Groups subjects by their suite.
      *
-     * @param SubjectIterator[] $suitesSubjects
+     * @param SubjectIterator[] $subjectIterators
      *
      * @return GroupedSubjectIterator[]
      */
-    public static function group(array $suitesSubjects)
+    public static function group(array $subjectIterators)
     {
         $groupedSubjects = array();
-        foreach ($suitesSubjects as $suiteSubjects) {
-            $groupedSubjects[$suiteSubjects->getSuite()->getName()][] = $suiteSubjects;
+        foreach ($subjectIterators as $subjectIterator) {
+            $groupedSubjects[$subjectIterator->getSuite()->getName()][] = $subjectIterator;
         }
 
         return array_map(
-            function ($subjects) {
-                return new GroupedSubjectIterator($subjects[0]->getSuite(), $subjects);
+            function ($iterator) {
+                return new GroupedSubjectIterator($iterator[0]->getSuite(), $iterator);
             }, $groupedSubjects
         );
     }
@@ -83,8 +83,8 @@ class GroupedSubjectIterator implements SubjectIterator
     public function rewind()
     {
         $this->position = 0;
-        if (isset($this->subjects[$this->position])) {
-            $this->subjects[$this->position]->rewind();
+        if (isset($this->iterators[$this->position])) {
+            $this->iterators[$this->position]->rewind();
         }
     }
 
@@ -93,12 +93,12 @@ class GroupedSubjectIterator implements SubjectIterator
      */
     public function next()
     {
-        $this->subjects[$this->position]->next();
-        if (!$this->subjects[$this->position]->valid()) {
+        $this->iterators[$this->position]->next();
+        if (!$this->iterators[$this->position]->valid()) {
             $this->position++;
 
-            if (isset($this->subjects[$this->position])) {
-                $this->subjects[$this->position]->rewind();
+            if (isset($this->iterators[$this->position])) {
+                $this->iterators[$this->position]->rewind();
             }
         }
     }
@@ -110,7 +110,7 @@ class GroupedSubjectIterator implements SubjectIterator
      */
     public function valid()
     {
-        return isset($this->subjects[$this->position]) && $this->subjects[$this->position]->valid();
+        return isset($this->iterators[$this->position]) && $this->iterators[$this->position]->valid();
     }
 
     /**
@@ -120,7 +120,7 @@ class GroupedSubjectIterator implements SubjectIterator
      */
     public function current()
     {
-        return $this->subjects[$this->position]->current();
+        return $this->iterators[$this->position]->current();
     }
 
     /**
@@ -130,6 +130,6 @@ class GroupedSubjectIterator implements SubjectIterator
      */
     public function key()
     {
-        return $this->position + $this->subjects[$this->position]->key();
+        return $this->position + $this->iterators[$this->position]->key();
     }
 }
