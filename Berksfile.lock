@@ -1,6 +1,25 @@
-cookbook 'apt', :locked_version => '1.9.2'
-cookbook 'php', :locked_version => '1.1.8'
-cookbook 'build-essential', :locked_version => '1.4.0'
-cookbook 'xml', :locked_version => '1.1.2'
-cookbook 'mysql', :locked_version => '3.0.0'
-cookbook 'openssl', :locked_version => '1.0.2'
+{
+  "sources": {
+    "apt": {
+      "locked_version": "1.9.2"
+    },
+    "php": {
+      "locked_version": "1.1.8"
+    },
+    "php5_ppa": {
+      "locked_version": "0.1.1"
+    },
+    "build-essential": {
+      "locked_version": "1.4.2"
+    },
+    "xml": {
+      "locked_version": "1.2.0"
+    },
+    "mysql": {
+      "locked_version": "4.0.14"
+    },
+    "openssl": {
+      "locked_version": "1.1.0"
+    }
+  }
+}
