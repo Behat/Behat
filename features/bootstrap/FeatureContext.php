@@ -162,7 +162,7 @@ class FeatureContext implements Context
     /**
      * Checks whether specified file exists and contains specified string.
      *
-     * @Given /^"([^"]*)" file should contain:$/
+     * @Then /^"([^"]*)" file should contain:$/
      *
      * @param   string       $path file path
      * @param   PyStringNode $text file content
