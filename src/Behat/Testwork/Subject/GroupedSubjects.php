@@ -47,19 +47,21 @@ class GroupedSubjects implements Subjects
     }
 
     /**
-     * @param Subjects[] $subjects
+     * Groups subjects by their suite.
+     *
+     * @param Subjects[] $suitesSubjects
      *
      * @return GroupedSubjects[]
      */
-    public static function group(array $subjects)
+    public static function group(array $suitesSubjects)
     {
         $groupedSubjects = array();
-        foreach ($subjects as $collection) {
-            if (!isset($groupedSubjects[$collection->getSuite()->getName()])) {
-                $groupedSubjects[$collection->getSuite()->getName()] = array();
+        foreach ($suitesSubjects as $suiteSubjects) {
+            if (!isset($groupedSubjects[$suiteSubjects->getSuite()->getName()])) {
+                $groupedSubjects[$suiteSubjects->getSuite()->getName()] = array();
             }
 
-            $groupedSubjects[$collection->getSuite()->getName()][] = $collection;
+            $groupedSubjects[$suiteSubjects->getSuite()->getName()][] = $suiteSubjects;
         }
 
         return array_map(
