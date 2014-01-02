@@ -14,14 +14,14 @@ use Behat\Testwork\Tester\Result\ExerciseTestResult;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Testwork exercise tested event.
+ * Testwork exercise completed event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExerciseTested extends Event
+class ExerciseCompleted extends Event
 {
-    const BEFORE = 'tester.exercise_tested.before';
-    const AFTER = 'tester.exercise_tested.after';
+    const BEFORE = 'tester.exercise_completed.before';
+    const AFTER = 'tester.exercise_completed.after';
 
     /**
      * @var null|ExerciseTestResult
@@ -45,11 +45,11 @@ class ExerciseTested extends Event
     }
 
     /**
-     * Checks whether exercise was completed entirely.
+     * Checks whether exercise was completed successfully.
      *
      * @return Boolean
      */
-    public function isCompleted()
+    public function isSuccessfullyCompleted()
     {
         return !$this->stopped;
     }

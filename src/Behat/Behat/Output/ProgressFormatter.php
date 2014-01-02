@@ -22,7 +22,7 @@ use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Output\TranslatableCliFormatter;
-use Behat\Testwork\Tester\Event\ExerciseTested;
+use Behat\Testwork\Tester\Event\ExerciseCompleted;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -99,11 +99,11 @@ class ProgressFormatter extends TranslatableCliFormatter
     public static function getSubscribedEvents()
     {
         return array(
-            ExerciseTested::BEFORE => array('startExerciseTimer', 999),
-            ExerciseTested::AFTER  => array('printStatistics', -50),
-            ScenarioTested::AFTER  => array('collectScenarioStats', 999),
-            ExampleTested::AFTER   => array('collectScenarioStats', 999),
-            StepTested::AFTER      => array('printStepCharacter', -50),
+            ExerciseCompleted::BEFORE => array('startExerciseTimer', 999),
+            ExerciseCompleted::AFTER  => array('printStatistics', -50),
+            ScenarioTested::AFTER     => array('collectScenarioStats', 999),
+            ExampleTested::AFTER      => array('collectScenarioStats', 999),
+            StepTested::AFTER         => array('printStepCharacter', -50),
         );
     }
 
@@ -223,10 +223,10 @@ class ProgressFormatter extends TranslatableCliFormatter
             $this->writeln(sprintf('    {+%s}%s{-%s}', $style, $scenarioPath, $style));
             $this->writeln(sprintf('      {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $text, $style, $path));
 
-            $pad = function($line) { return '        ' . $line; };
+            $pad = function ($line) { return '        ' . $line; };
 
             if (null !== $stdOut) {
-                $padText = function($line) { return '        │ ' . $line; };
+                $padText = function ($line) { return '        │ ' . $line; };
                 $this->writeln(implode("\n", array_map($padText, explode("\n", $stdOut))));
             }
 
@@ -249,7 +249,7 @@ class ProgressFormatter extends TranslatableCliFormatter
 
             $this->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $text, $style, $path));
 
-            $pad = function($line) { return '      ' . $line; };
+            $pad = function ($line) { return '      ' . $line; };
             $this->writeln(sprintf('{+%s}%s{-%s}', $style, implode("\n", array_map($pad, explode("\n", $exception))), $style));
 
             $this->writeln();

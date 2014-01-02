@@ -42,7 +42,7 @@ use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Output\TranslatableCliFormatter;
-use Behat\Testwork\Tester\Event\ExerciseTested;
+use Behat\Testwork\Tester\Event\ExerciseCompleted;
 use Behat\Testwork\Tester\Event\SuiteTested;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -147,22 +147,22 @@ class PrettyFormatter extends TranslatableCliFormatter
     public static function getSubscribedEvents()
     {
         return array(
-            ExerciseTested::BEFORE   => array('startExerciseTimer', 999),
-            ExerciseTested::AFTER    => array('printCounters', -50),
-            SuiteTested::BEFORE      => array('printSuiteHeader', -50),
-            SuiteTested::AFTER       => array('printSuiteFooter', -50),
-            FeatureTested::BEFORE    => array('printFeatureHeader', -50),
-            FeatureTested::AFTER     => array('printFeatureFooter', -50),
-            ScenarioTested::BEFORE   => array('printScenarioHeader', -50),
-            ScenarioTested::AFTER    => array('printScenarioFooter', -50),
-            OutlineTested::BEFORE    => array('printOutlineHeader', -50),
-            OutlineTested::AFTER     => array('printOutlineFooter', -50),
-            ExampleTested::BEFORE    => array('printExampleRowHeader'),
-            ExampleTested::AFTER     => array(array('printExamplesHeader', -30), array('printExampleRow', -50)),
-            BackgroundTested::BEFORE => array('printBackgroundHeader', -50),
-            BackgroundTested::AFTER  => array('printBackgroundFooter', -50),
-            StepTested::BEFORE       => array('printStepHeader', -50),
-            StepTested::AFTER        => array('printStepFooter', -50),
+            ExerciseCompleted::BEFORE => array('startExerciseTimer', 999),
+            ExerciseCompleted::AFTER  => array('printCounters', -50),
+            SuiteTested::BEFORE       => array('printSuiteHeader', -50),
+            SuiteTested::AFTER        => array('printSuiteFooter', -50),
+            FeatureTested::BEFORE     => array('printFeatureHeader', -50),
+            FeatureTested::AFTER      => array('printFeatureFooter', -50),
+            ScenarioTested::BEFORE    => array('printScenarioHeader', -50),
+            ScenarioTested::AFTER     => array('printScenarioFooter', -50),
+            OutlineTested::BEFORE     => array('printOutlineHeader', -50),
+            OutlineTested::AFTER      => array('printOutlineFooter', -50),
+            ExampleTested::BEFORE     => array('printExampleRowHeader'),
+            ExampleTested::AFTER      => array(array('printExamplesHeader', -30), array('printExampleRow', -50)),
+            BackgroundTested::BEFORE  => array('printBackgroundHeader', -50),
+            BackgroundTested::AFTER   => array('printBackgroundFooter', -50),
+            StepTested::BEFORE        => array('printStepHeader', -50),
+            StepTested::AFTER         => array('printStepFooter', -50),
         );
     }
 

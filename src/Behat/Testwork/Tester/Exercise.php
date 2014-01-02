@@ -12,7 +12,7 @@ namespace Behat\Testwork\Tester;
 
 use Behat\Testwork\Subject\GroupedSubjects;
 use Behat\Testwork\Subject\Subjects;
-use Behat\Testwork\Tester\Event\ExerciseTested;
+use Behat\Testwork\Tester\Event\ExerciseCompleted;
 use Behat\Testwork\Tester\Result\ExerciseTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
@@ -70,7 +70,7 @@ class Exercise
      */
     private function dispatchBeforeEvent()
     {
-        $this->eventDispatcher->dispatch(ExerciseTested::BEFORE, new ExerciseTested());
+        $this->eventDispatcher->dispatch(ExerciseCompleted::BEFORE, new ExerciseCompleted());
     }
 
     /**
@@ -111,6 +111,6 @@ class Exercise
      */
     private function dispatchAfterEvent(ExerciseTestResult $result)
     {
-        $this->eventDispatcher->dispatch(ExerciseTested::AFTER, new ExerciseTested($result));
+        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new ExerciseCompleted($result));
     }
 }
