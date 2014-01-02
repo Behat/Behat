@@ -69,7 +69,7 @@ class ExceptionPresenter
      *
      * @return string
      */
-    public function presentException(Exception $exception, $verbosity = OutputPrinter::VERBOSITY_QUIET)
+    public function presentException(Exception $exception, $verbosity = OutputPrinter::VERBOSITY_NORMAL)
     {
         foreach ($this->stringers as $stringer) {
             if ($stringer->supportsException($exception)) {
@@ -81,7 +81,7 @@ class ExceptionPresenter
             return trim($this->relativizePaths($exception->getMessage()));
         }
 
-        if (OutputPrinter::VERBOSITY_NORMAL <= $verbosity) {
+        if (OutputPrinter::VERBOSITY_VERBOSE <= $verbosity) {
             return $this->relativizePaths(trim($exception));
         }
 

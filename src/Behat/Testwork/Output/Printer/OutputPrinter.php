@@ -19,8 +19,8 @@ namespace Behat\Testwork\Output\Printer;
  */
 interface OutputPrinter
 {
-    const VERBOSITY_QUIET = 0;
     const VERBOSITY_NORMAL = 1;
+    const VERBOSITY_VERBOSE = 2;
 
     /**
      * Sets output path.
