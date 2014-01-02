@@ -46,7 +46,7 @@ class SubjectsLocator
      *
      * @return Subjects[]
      */
-    public function locateSubjects(array $suites, $locator = null)
+    public function locateTestSubjects(array $suites, $locator = null)
     {
         $subjects = array();
         foreach ($suites as $suite) {

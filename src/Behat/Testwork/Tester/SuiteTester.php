@@ -98,7 +98,7 @@ class SuiteTester
     {
         $results = array();
         foreach ($testSubjects as $subject) {
-            $environment = $this->buildEnvironment($testSubjects->getSuite(), $subject);
+            $environment = $this->buildEnvironment($testSubjects->getSuite());
             $results[] = $this->testSubject($testSubjects->getSuite(), $environment, $subject, $skip);
         }
 
@@ -109,13 +109,12 @@ class SuiteTester
      * Builds test an environment for a suite and subject.
      *
      * @param Suite $suite
-     * @param mixed $testSubject
      *
      * @return Environment
      */
-    private function buildEnvironment(Suite $suite, $testSubject)
+    private function buildEnvironment(Suite $suite)
     {
-        return $this->environmentManager->buildEnvironment($suite, $testSubject);
+        return $this->environmentManager->buildEnvironment($suite);
     }
 
     /**

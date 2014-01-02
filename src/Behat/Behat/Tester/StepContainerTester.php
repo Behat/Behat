@@ -102,7 +102,7 @@ class StepContainerTester
         StepContainerInterface $container,
         $skip = false
     ) {
-        $environment = $this->isolateEnvironment($environment);
+        $environment = $this->isolateEnvironment($environment, $feature);
 
         $beforeHooks = $skip ? new CallResults() : $this->dispatchBeforeHooks($suite, $environment, $feature, $container);
         $this->dispatchBeforeEvent($suite, $environment, $feature, $container, $beforeHooks);
@@ -122,12 +122,13 @@ class StepContainerTester
      * Isolates test environment for a scenario run.
      *
      * @param Environment $environment
+     * @param FeatureNode $feature
      *
      * @return Environment
      */
-    private function isolateEnvironment(Environment $environment)
+    private function isolateEnvironment(Environment $environment, FeatureNode $feature)
     {
-        return $this->environmentManager->isolateEnvironment($environment);
+        return $this->environmentManager->isolateEnvironment($environment, $feature);
     }
 
     /**

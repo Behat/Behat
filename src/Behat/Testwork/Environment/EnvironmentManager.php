@@ -58,48 +58,48 @@ class EnvironmentManager
     /**
      * Builds new environment for provided test suite.
      *
-     * @param Suite      $suite
-     * @param null|mixed $testSubject
+     * @param Suite $suite
      *
      * @return Environment
      *
      * @throws EnvironmentBuildException
      */
-    public function buildEnvironment(Suite $suite, $testSubject = null)
+    public function buildEnvironment(Suite $suite)
     {
         foreach ($this->handlers as $handler) {
-            if ($handler->supportsSuiteAndSubject($suite, $testSubject)) {
-                return $handler->buildEnvironment($suite, $testSubject);
+            if ($handler->supportsSuite($suite)) {
+                return $handler->buildEnvironment($suite);
             }
         }
 
         throw new EnvironmentBuildException(sprintf(
             'None of the registered environment handlers seem to support `%s` suite.',
             $suite->getName()
-        ), $suite, $testSubject);
+        ), $suite);
     }
 
     /**
      * Creates new isolated test environment using built one.
      *
      * @param Environment $environment
+     * @param mixed       $testSubject
      *
      * @return Environment
      *
      * @throws EnvironmentIsolationException If appropriate environment handler is not found
      */
-    public function isolateEnvironment(Environment $environment)
+    public function isolateEnvironment(Environment $environment, $testSubject = null)
     {
         foreach ($this->handlers as $handler) {
-            if ($handler->supportsEnvironment($environment)) {
-                return $handler->isolateEnvironment($environment);
+            if ($handler->supportsEnvironmentAndSubject($environment, $testSubject)) {
+                return $handler->isolateEnvironment($environment, $testSubject);
             }
         }
 
         throw new EnvironmentIsolationException(sprintf(
             'None of the registered environment handlers seem to support `%s` environment.',
             get_class($environment)
-        ), $environment);
+        ), $environment, $testSubject);
     }
 
     /**

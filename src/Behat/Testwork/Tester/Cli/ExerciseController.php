@@ -174,6 +174,6 @@ class ExerciseController implements Controller
      */
     protected function locateSubjects($suites, $locator)
     {
-        return $this->locator->locateSubjects($suites, $locator);
+        return $this->locator->locateTestSubjects($suites, $locator);
     }
 }
