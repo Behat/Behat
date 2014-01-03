@@ -97,7 +97,7 @@ class AnnotatedContextReader implements ContextReader
         }
 
         if ($docBlock = $method->getDocComment()) {
-            $callees = array_merge($callees, $this->readDocBlockCallees($method, $docBlock));
+            $callees = array_merge($callees, $this->readDocBlockCallees($class, $method, $docBlock));
         }
 
         return $callees;
@@ -106,12 +106,13 @@ class AnnotatedContextReader implements ContextReader
     /**
      * Reads callees from the method doc block.
      *
+     * @param string           $class
      * @param ReflectionMethod $method
      * @param string           $docBlock
      *
      * @return Callee[]
      */
-    private function readDocBlockCallees(ReflectionMethod $method, $docBlock)
+    private function readDocBlockCallees($class, ReflectionMethod $method, $docBlock)
     {
         $description = null;
 
@@ -136,7 +137,7 @@ class AnnotatedContextReader implements ContextReader
             }
 
             foreach ($this->readers as $reader) {
-                if ($callee = $reader->readCallee($method, $docLine, $description)) {
+                if ($callee = $reader->readCallee($class, $method, $docLine, $description)) {
                     $callees[] = $callee;
 
                     break;

@@ -13,10 +13,10 @@ Feature: Context consistency
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements RegexAcceptingContext
+      class CoreContext
       {
-          private $apples = 0;
-          private $parameters;
+          protected $apples = 0;
+          protected $parameters;
 
           public function __construct(array $parameters) {
               $this->parameters = $parameters;
@@ -64,6 +64,10 @@ Feature: Context consistency
               PHPUnit_Framework_Assert::assertInternalType('array', $this->parameters[$key]);
               PHPUnit_Framework_Assert::assertEquals(2, count($this->parameters[$key]));
           }
+      }
+
+      class FeatureContext extends CoreContext implements RegexAcceptingContext
+      {
       }
       """
     And a file named "features/bootstrap/CustomContext.php" with:

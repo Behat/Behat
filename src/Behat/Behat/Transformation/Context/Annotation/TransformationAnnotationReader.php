@@ -31,20 +31,21 @@ class TransformationAnnotationReader implements AnnotationReader
     /**
      * Loads step callees (if exist) associated with specific method.
      *
+     * @param string           $contextClass
      * @param ReflectionMethod $method
      * @param string           $docLine
      * @param string           $description
      *
      * @return null|RuntimeTransformation
      */
-    public function readCallee(ReflectionMethod $method, $docLine, $description)
+    public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description)
     {
         if (!preg_match(self::$regex, $docLine, $match)) {
             return null;
         }
 
         $pattern = $match[1];
-        $callable = array($method->getDeclaringClass()->getName(), $method->getName());
+        $callable = array($contextClass, $method->getName());
 
         return new RuntimeTransformation($pattern, $callable, $description);
     }

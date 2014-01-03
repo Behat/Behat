@@ -39,13 +39,14 @@ class DefinitionAnnotationReader implements AnnotationReader
     /**
      * Loads step callees (if exist) associated with specific method.
      *
+     * @param string           $contextClass
      * @param ReflectionMethod $method
      * @param string           $docLine
      * @param string           $description
      *
      * @return null|RuntimeDefinition
      */
-    public function readCallee(ReflectionMethod $method, $docLine, $description)
+    public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description)
     {
         if (!preg_match(self::$regex, $docLine, $match)) {
             return null;
@@ -54,7 +55,7 @@ class DefinitionAnnotationReader implements AnnotationReader
         $type = strtolower($match[1]);
         $class = self::$classes[$type];
         $pattern = $match[2];
-        $callable = array($method->getDeclaringClass()->getName(), $method->getName());
+        $callable = array($contextClass, $method->getName());
 
         return new $class($pattern, $callable, $description);
     }

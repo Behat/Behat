@@ -28,11 +28,12 @@ interface AnnotationReader
     /**
      * Loads custom callees associated with a provided method.
      *
+     * @param string           $contextClass
      * @param ReflectionMethod $method
      * @param string           $docLine
      * @param string           $description
      *
      * @return null|Callee
      */
-    public function readCallee(ReflectionMethod $method, $docLine, $description);
+    public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description);
 }

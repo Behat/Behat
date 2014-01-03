@@ -156,7 +156,7 @@ class ContainerLoader
             'extensions' => $container->getParameter('extensions'),
         )));
         $tempContainer->addObjectResource($extension);
-        $extension->load($tempContainer, $config);
+        $extension->load($container, $config);
         $container->merge($tempContainer);
         $container->addCompilerPass($extension);
     }
