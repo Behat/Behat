@@ -11,8 +11,8 @@
 namespace Behat\Testwork\Tester\Cli;
 
 use Behat\Testwork\Cli\Controller;
+use Behat\Testwork\Subject\SubjectFinder;
 use Behat\Testwork\Subject\SubjectIterator;
-use Behat\Testwork\Subject\SubjectLocator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Suite\SuiteRepository;
 use Behat\Testwork\Tester\Exercise;
@@ -33,11 +33,11 @@ class ExerciseController implements Controller
     /**
      * @var SuiteRepository
      */
-    private $suites;
+    private $suiteRepository;
     /**
-     * @var SubjectLocator
+     * @var SubjectFinder
      */
-    private $locator;
+    private $subjectFinder;
     /**
      * @var Exercise
      */
@@ -54,21 +54,21 @@ class ExerciseController implements Controller
     /**
      * Initializes controller.
      *
-     * @param SuiteRepository $suites
-     * @param SubjectLocator  $locator
+     * @param SuiteRepository $suiteRepository
+     * @param SubjectFinder   $subjectFinder
      * @param Exercise        $exercise
      * @param Boolean         $strict
      * @param Boolean         $skip
      */
     public function __construct(
-        SuiteRepository $suites,
-        SubjectLocator $locator,
+        SuiteRepository $suiteRepository,
+        SubjectFinder $subjectFinder,
         Exercise $exercise,
         $strict = false,
         $skip = false
     ) {
-        $this->suites = $suites;
-        $this->locator = $locator;
+        $this->suiteRepository = $suiteRepository;
+        $this->subjectFinder = $subjectFinder;
         $this->exercise = $exercise;
         $this->strict = $strict;
         $this->skip = $skip;
@@ -106,22 +106,22 @@ class ExerciseController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $subjects = $this->getSubjects($input);
+        $subjects = $this->findSubjects($input);
         $result = $this->testSubjects($input, $subjects);
 
         return $this->interpretResult($input, $result);
     }
 
     /**
-     * Loads exercise subject iterators.
+     * Finds exercise subject.
      *
      * @param InputInterface $input
      *
      * @return SubjectIterator[]
      */
-    protected function getSubjects(InputInterface $input)
+    protected function findSubjects(InputInterface $input)
     {
-        return $this->createSubjectIterators($this->getAvailableSuites(), $input->getArgument('locator'));
+        return $this->findSuitesSubjects($this->getAvailableSuites(), $input->getArgument('locator'));
     }
 
     /**
@@ -161,19 +161,19 @@ class ExerciseController implements Controller
      */
     protected function getAvailableSuites()
     {
-        return $this->suites->getSuites();
+        return $this->suiteRepository->getSuites();
     }
 
     /**
-     * Creates subject iterators for all suites.
+     * Finds subject iterators for all provided suites using locator.
      *
      * @param Suite[]     $suites
      * @param null|string $locator
      *
      * @return SubjectIterator[]
      */
-    protected function createSubjectIterators($suites, $locator)
+    protected function findSuitesSubjects($suites, $locator)
     {
-        return $this->locator->createSubjectIterators($suites, $locator);
+        return $this->subjectFinder->findSuitesSubjects($suites, $locator);
     }
 }

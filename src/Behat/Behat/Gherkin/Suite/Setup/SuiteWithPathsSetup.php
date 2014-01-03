@@ -72,22 +72,6 @@ class SuiteWithPathsSetup implements SuiteSetup
     }
 
     /**
-     * Returns list of locators of the suite.
-     *
-     * @param Suite $suite
-     *
-     * @return string[]
-     */
-    protected function getFeatureLocators(Suite $suite)
-    {
-        if ($suite->hasSetting('path') && null !== $suite->getSetting('path')) {
-            return array($suite->getSetting('path'));
-        }
-
-        return $suite->getSetting('paths');
-    }
-
-    /**
      * Creates feature directory.
      *
      * @param string $path
@@ -137,5 +121,21 @@ class SuiteWithPathsSetup implements SuiteSetup
         }
 
         return false;
+    }
+
+    /**
+     * Returns list of locators of the suite.
+     *
+     * @param Suite $suite
+     *
+     * @return string[]
+     */
+    private function getFeatureLocators(Suite $suite)
+    {
+        if ($suite->hasSetting('path') && null !== $suite->getSetting('path')) {
+            return array($suite->getSetting('path'));
+        }
+
+        return $suite->getSetting('paths');
     }
 }

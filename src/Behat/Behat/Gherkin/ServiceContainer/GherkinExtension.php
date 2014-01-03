@@ -105,7 +105,7 @@ class GherkinExtension implements Extension
         $this->loadFilterController($container);
         $this->loadSuiteWithPathsSetup($container);
         $this->loadGherkinSuiteGenerator($container);
-        $this->loadFilesystemFeatureLoader($container);
+        $this->loadFilesystemFeatureLocator($container);
     }
 
     /**
@@ -277,18 +277,18 @@ class GherkinExtension implements Extension
     }
 
     /**
-     * Loads filesystem feature loader.
+     * Loads filesystem feature locator.
      *
      * @param ContainerBuilder $container
      */
-    protected function loadFilesystemFeatureLoader(ContainerBuilder $container)
+    protected function loadFilesystemFeatureLocator(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Gherkin\Subject\Iterator\FeatureIteratorFactory', array(
+        $definition = new Definition('Behat\Behat\Gherkin\Subject\Locator\FilesystemFeatureLocator', array(
             new Reference(self::MANAGER_ID),
             '%paths.base%'
         ));
-        $definition->addTag(SubjectExtension::ITERATOR_FACTORY_TAG, array('priority' => 50));
-        $container->setDefinition(SubjectExtension::ITERATOR_FACTORY_TAG . '.filesystem_feature', $definition);
+        $definition->addTag(SubjectExtension::LOCATOR_TAG, array('priority' => 50));
+        $container->setDefinition(SubjectExtension::LOCATOR_TAG . '.filesystem_feature', $definition);
     }
 
     /**

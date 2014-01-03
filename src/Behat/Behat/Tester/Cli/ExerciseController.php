@@ -58,11 +58,11 @@ class ExerciseController extends BaseController
      *
      * @return SubjectIterator[]
      */
-    protected function getSubjects(InputInterface $input)
+    protected function findSubjects(InputInterface $input)
     {
         $subjects = array();
         foreach ($this->getFeatureLocators($input) as $locator) {
-            $subjects = array_merge($subjects, $this->createSubjectIterators($this->getAvailableSuites(), $locator));
+            $subjects = array_merge($subjects, $this->findSuitesSubjects($this->getAvailableSuites(), $locator));
         }
 
         return $subjects;

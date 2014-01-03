@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Gherkin\Subject\Iterator;
+namespace Behat\Behat\Gherkin\Subject\Locator;
 
 use Behat\Behat\Gherkin\Subject\LazyFeatureIterator;
 use Behat\Gherkin\Filter\FilterInterface;
@@ -17,7 +17,7 @@ use Behat\Gherkin\Filter\PathsFilter;
 use Behat\Gherkin\Filter\RoleFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Gherkin;
-use Behat\Testwork\Subject\Iterator\IteratorFactory;
+use Behat\Testwork\Subject\Locator\SubjectLocator;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
 use Symfony\Component\Finder\Finder;
@@ -29,7 +29,7 @@ use Symfony\Component\Finder\Finder;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureIteratorFactory implements IteratorFactory
+class FilesystemFeatureLocator implements SubjectLocator
 {
     /**
      * @var Gherkin
@@ -74,7 +74,7 @@ class FeatureIteratorFactory implements IteratorFactory
      *
      * @return LazyFeatureIterator
      */
-    public function createSubjectIterator(Suite $suite, $locator)
+    public function locateSubjects(Suite $suite, $locator)
     {
         $suiteLocators = $this->getFeatureLocators($suite);
         $suiteFilters = $this->getFeatureFilters($suite);

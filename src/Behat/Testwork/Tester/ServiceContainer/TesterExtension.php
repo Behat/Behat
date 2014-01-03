@@ -103,7 +103,7 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', array(
             new Reference(SuiteExtension::REGISTRY_ID),
-            new Reference(SubjectExtension::LOCATOR_ID),
+            new Reference(SubjectExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
             $strict,
             $skip
