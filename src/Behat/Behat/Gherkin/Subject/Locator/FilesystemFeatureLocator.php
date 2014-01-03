@@ -20,7 +20,9 @@ use Behat\Gherkin\Gherkin;
 use Behat\Testwork\Subject\Locator\SubjectLocator;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
-use Symfony\Component\Finder\Finder;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RegexIterator;
 
 /**
  * Gherkin feature loader.
@@ -168,10 +170,14 @@ class FilesystemFeatureLocator implements SubjectLocator
             return array($absolutePath);
         }
 
-        $finder = new Finder();
-        $iterator = $finder->files()->name('*.feature')->sortByName()->in($absolutePath);
+        $fileIterator = new RegexIterator(
+            new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($absolutePath)
+            ), '/^.+\.feature/i',
+            RegexIterator::MATCH
+        );
 
-        return array_map('strval', iterator_to_array($iterator));
+        return array_map('strval', iterator_to_array($fileIterator));
     }
 
     /**
