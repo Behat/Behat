@@ -126,8 +126,12 @@ class JUnitFormatter implements Formatter
     public function startScenario(ScenarioTested $event)
     {
         $scenario = $event->getScenario();
+        $title = implode(' ', array_map(function ($l) {
+            return trim($l);
+        }, explode("\n", $scenario->getTitle())));
+
         $this->currentTestcase = $testcase = $this->currentTestsuite->addChild('testcase');
-        $testcase->addAttribute('name', $scenario->getTitle());
+        $testcase->addAttribute('name', $title);
 
         $this->testcaseStats = array(
             TestResult::PASSED    => 0,

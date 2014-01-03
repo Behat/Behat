@@ -186,12 +186,12 @@ Feature: JUnit Formatter
       """
     And "junit/default.xml" file should contain:
       """
-      <?xml version="1.0" ?>
+      <?xml version="1.0"?>
       <testsuites name="default">
-          <testsuite name="World consistency" file="features/World.feature" tests="2" failures="0" errors="0" disabled="0">
-              <testcase name="Adding some interesting value" assertions="3" status="PASSED" />
-              <testcase name="Subtracting some value" assertions="3" status="PASSED" />
-          </testsuite>
+        <testsuite name="World consistency" file="features/World.feature" tests="2" failures="0" errors="0">
+          <testcase name="Adding some interesting value" assertions="4" status="PASSED"/>
+          <testcase name="Subtracting some value" assertions="4" status="PASSED"/>
+        </testsuite>
       </testsuites>
       """
 
@@ -265,10 +265,10 @@ Feature: JUnit Formatter
           suites:
               world:
                   context: FeatureContext
-                  path: %paths.base%/World.feature
+                  path: %paths.base%/features/World.feature
               user:
                   context: FeatureContext
-                  path: %paths.base%/User.feature
+                  path: %paths.base%/features/User.feature
       """
     When I run "behat --no-colors -f junit -o junit"
     Then it should pass with:
@@ -276,19 +276,19 @@ Feature: JUnit Formatter
       """
     And "junit/world.xml" file should contain:
       """
-      <?xml version="1.0" ?>
+      <?xml version="1.0"?>
       <testsuites name="world">
-          <testsuite name="World consistency" file="features/World.feature" tests="1" failures="0" errors="0" disabled="0">
-              <testcase name="Passing" assertions="3" status="PASSED" />
-          </testsuite>
+        <testsuite name="World consistency" file="features/World.feature" tests="1" failures="0" errors="0">
+          <testcase name="Passing" assertions="3" status="PASSED"/>
+        </testsuite>
       </testsuites>
       """
     And "junit/user.xml" file should contain:
       """
-      <?xml version="1.0" ?>
-      <testsuites name="world">
-          <testsuite name="User consistency" file="features/User.feature" tests="1" failures="0" errors="0" disabled="0">
-              <testcase name="Passing" assertions="3" status="PASSED" />
-          </testsuite>
+      <?xml version="1.0"?>
+      <testsuites name="user">
+        <testsuite name="User consistency" file="features/User.feature" tests="1" failures="0" errors="0">
+          <testcase name="Passing" assertions="3" status="PASSED"/>
+        </testsuite>
       </testsuites>
       """
