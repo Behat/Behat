@@ -26,6 +26,11 @@ class OutlineTested extends LifecycleEvent
 {
     const BEFORE = 'tester.outline_tested.before';
     const AFTER = 'tester.outline_tested.after';
+
+    /**
+     * @var FeatureNode
+     */
+    private $feature;
     /**
      * @var OutlineNode
      */
@@ -51,10 +56,21 @@ class OutlineTested extends LifecycleEvent
         OutlineNode $outline,
         OutlineTestResult $testResult = null
     ) {
-        parent::__construct($suite, $environment, $feature);
+        parent::__construct($suite, $environment);
 
+        $this->feature = $feature;
         $this->outline = $outline;
         $this->testResult = $testResult;
+    }
+
+    /**
+     * Returns feature.
+     *
+     * @return FeatureNode
+     */
+    public function getFeature()
+    {
+        return $this->feature;
     }
 
     /**

@@ -13,6 +13,7 @@ namespace Behat\Testwork\Tester\ServiceContainer;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use Behat\Testwork\Hook\ServiceContainer\HookExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\Subject\ServiceContainer\SubjectExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
@@ -33,7 +34,7 @@ abstract class TesterExtension implements Extension
     /*
      * Available services
      */
-    const EXERCISE_TESTER_ID = 'tester.exercise';
+    const EXERCISE_ID = 'tester.exercise';
     const SUITE_TESTER_ID = 'tester.suite';
     const SUBJECT_TESTER_ID = 'tester.subject';
 
@@ -77,7 +78,7 @@ abstract class TesterExtension implements Extension
     {
         $this->loadExerciseController($container, $config['strict'], $config['skip']);
         $this->loadSigintController($container);
-        $this->loadExerciseTester($container);
+        $this->loadExercise($container);
         $this->loadSuiteTester($container);
         $this->loadSubjectTester($container);
     }
@@ -102,8 +103,8 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', array(
             new Reference(SuiteExtension::REGISTRY_ID),
-            new Reference(SubjectExtension::LOCATOR_ID),
-            new Reference(self::EXERCISE_TESTER_ID),
+            new Reference(SubjectExtension::FINDER_ID),
+            new Reference(self::EXERCISE_ID),
             $strict,
             $skip
         ));
@@ -130,13 +131,13 @@ abstract class TesterExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadExerciseTester(ContainerBuilder $container)
+    protected function loadExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\ExerciseTester', array(
+        $definition = new Definition('Behat\Testwork\Tester\Exercise', array(
             new Reference(self::SUITE_TESTER_ID),
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
         ));
-        $container->setDefinition(self::EXERCISE_TESTER_ID, $definition);
+        $container->setDefinition(self::EXERCISE_ID, $definition);
     }
 
     /**
@@ -149,6 +150,7 @@ abstract class TesterExtension implements Extension
         $definition = new Definition('Behat\Testwork\Tester\SuiteTester', array(
             new Reference(self::SUBJECT_TESTER_ID),
             new Reference(EnvironmentExtension::MANAGER_ID),
+            new Reference(HookExtension::DISPATCHER_ID),
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
         ));
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);

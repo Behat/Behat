@@ -42,7 +42,7 @@ abstract class RuntimeStepHook extends RuntimeFilterableHook
         if (!empty($filterString)) {
             $filter = new NameFilter($filterString);
 
-            if ($filter->isFeatureMatch($event->getSubject())) {
+            if ($filter->isFeatureMatch($event->getFeature())) {
                 return true;
             }
 

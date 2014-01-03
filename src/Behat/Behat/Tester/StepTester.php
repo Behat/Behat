@@ -93,7 +93,7 @@ class StepTester
             $result = new StepTestResult(null, $exception, null, $beforeHooks);
         }
 
-        $skip = TestResult::PASSED < $result->getResultCode() ? true : $skip;
+        $skip = $skip || TestResult::PASSED < $result->getResultCode();
         $afterHooks = $skip ? new CallResults() : $this->dispatchAfterHooks($suite, $environment, $feature, $step, $result);
         $this->dispatchAfterEvent($suite, $environment, $feature, $step, $result, $afterHooks);
 

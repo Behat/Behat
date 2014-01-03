@@ -10,12 +10,11 @@
 
 namespace Behat\Behat\Gherkin\Suite;
 
-use Behat\Gherkin\Filter\FilterInterface;
 use Behat\Testwork\Suite\Exception\ParameterNotFoundException;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Gherkin suite.
+ * Behat Gherkin suite.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -25,14 +24,6 @@ class GherkinSuite implements Suite
      * @var string
      */
     private $name;
-    /**
-     * @var string[]
-     */
-    private $featureLocators = array();
-    /**
-     * @var FilterInterface[]
-     */
-    private $featureFilters = array();
     /**
      * @var array
      */
@@ -46,21 +37,12 @@ class GherkinSuite implements Suite
      * Initializes suite.
      *
      * @param string $name
-     * @param array  $featureLocators
-     * @param array  $featureFilters
      * @param array  $settings
      * @param array  $parameters
      */
-    public function __construct(
-        $name,
-        array $featureLocators,
-        array $featureFilters,
-        array $settings,
-        array $parameters
-    ) {
+    public function __construct($name, array $settings, array $parameters)
+    {
         $this->name = $name;
-        $this->featureLocators = $featureLocators;
-        $this->featureFilters = $featureFilters;
         $this->settings = $settings;
         $this->parameters = $parameters;
     }
@@ -73,28 +55,6 @@ class GherkinSuite implements Suite
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Returns list of feature locators.
-     * Conventionally, locators that are not paths in the local filesystem should start with `@` sign
-     * followed by the ID of a remote storage (f.e.: @github:/path/to/some.feature)
-     *
-     * @return string[]
-     */
-    public function getFeatureLocators()
-    {
-        return $this->featureLocators;
-    }
-
-    /**
-     * Returns feature filters.
-     *
-     * @return FilterInterface[]
-     */
-    public function getFeatureFilters()
-    {
-        return $this->featureFilters;
     }
 
     /**

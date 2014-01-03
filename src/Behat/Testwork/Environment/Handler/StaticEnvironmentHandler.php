@@ -27,11 +27,10 @@ class StaticEnvironmentHandler implements EnvironmentHandler
      * Checks if handler supports provided suite.
      *
      * @param Suite $suite
-     * @param mixed $subject
      *
      * @return Boolean
      */
-    public function supportsSuiteAndSubject(Suite $suite, $subject = null)
+    public function supportsSuite(Suite $suite)
     {
         return true;
     }
@@ -40,11 +39,10 @@ class StaticEnvironmentHandler implements EnvironmentHandler
      * Builds environment object based on provided suite.
      *
      * @param Suite $suite
-     * @param mixed $subject
      *
      * @return Environment
      */
-    public function buildEnvironment(Suite $suite, $subject = null)
+    public function buildEnvironment(Suite $suite)
     {
         return new StaticEnvironment($suite->getName());
     }
@@ -53,10 +51,11 @@ class StaticEnvironmentHandler implements EnvironmentHandler
      * Checks if handler supports provided environment.
      *
      * @param Environment $environment
+     * @param mixed       $testSubject
      *
      * @return Boolean
      */
-    public function supportsEnvironment(Environment $environment)
+    public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null)
     {
         return $environment instanceof StaticEnvironment;
     }
@@ -65,10 +64,11 @@ class StaticEnvironmentHandler implements EnvironmentHandler
      * Isolates provided environment.
      *
      * @param Environment $environment
+     * @param mixed       $testSubject
      *
      * @return Environment
      */
-    public function isolateEnvironment(Environment $environment)
+    public function isolateEnvironment(Environment $environment, $testSubject = null)
     {
         return $environment;
     }

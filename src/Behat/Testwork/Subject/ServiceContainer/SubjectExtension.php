@@ -28,12 +28,12 @@ class SubjectExtension implements Extension
     /*
      * Available services
      */
-    const LOCATOR_ID = 'subject.locator';
+    const FINDER_ID = 'subject.finder';
 
     /*
      * Available extension points
      */
-    const LOADER_TAG = 'subject.loader';
+    const LOCATOR_TAG = 'subject.locator';
 
     /**
      * @var ServiceProcessor
@@ -77,7 +77,7 @@ class SubjectExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadLocator($container);
+        $this->loadFinder($container);
     }
 
     /**
@@ -87,32 +87,32 @@ class SubjectExtension implements Extension
      */
     public function process(ContainerBuilder $container)
     {
-        $this->processLoaders($container);
+        $this->processLocators($container);
     }
 
     /**
-     * Loads subject repository.
+     * Loads subject finder.
      *
      * @param ContainerBuilder $container
      */
-    protected function loadLocator(ContainerBuilder $container)
+    protected function loadFinder(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Subject\SubjectsLocator');
-        $container->setDefinition(self::LOCATOR_ID, $definition);
+        $definition = new Definition('Behat\Testwork\Subject\SubjectFinder');
+        $container->setDefinition(self::FINDER_ID, $definition);
     }
 
     /**
-     * Processes subject loaders.
+     * Processes subject locators.
      *
      * @param ContainerBuilder $container
      */
-    protected function processLoaders(ContainerBuilder $container)
+    protected function processLocators(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::LOADER_TAG);
-        $definition = $container->getDefinition(self::LOCATOR_ID);
+        $references = $this->processor->findAndSortTaggedServices($container, self::LOCATOR_TAG);
+        $definition = $container->getDefinition(self::FINDER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerSubjectLoader', array($reference));
+            $definition->addMethodCall('registerSubjectLocator', array($reference));
         }
     }
 }

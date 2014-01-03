@@ -10,21 +10,22 @@
 
 namespace Behat\Testwork\Tester;
 
-use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Subject\Subjects;
-use Behat\Testwork\Tester\Event\ExerciseTested;
+use Behat\Testwork\Subject\GroupedSubjectIterator;
+use Behat\Testwork\Subject\SubjectIterator;
+use Behat\Testwork\Tester\Event\ExerciseCompleted;
 use Behat\Testwork\Tester\Result\ExerciseTestResult;
+use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Testwork Exercise tester.
+ * Testwork exercise.
  *
- * Tests exercises. Exercise is a set of test subject suites.
+ * Runs tests against all provided suites.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExerciseTester
+class Exercise
 {
     /**
      * @var SuiteTester
@@ -50,15 +51,15 @@ class ExerciseTester
     /**
      * Tests suites subjects.
      *
-     * @param Subjects[] $suitesSubjects
-     * @param Boolean    $skip
+     * @param SubjectIterator[] $subjectIterators
+     * @param Boolean           $skip
      *
      * @return TestResult
      */
-    public function test(array $suitesSubjects, $skip = false)
+    public function run(array $subjectIterators, $skip = false)
     {
         $this->dispatchBeforeEvent();
-        $result = $this->testExercise($suitesSubjects, $skip);
+        $result = $this->testExercise($subjectIterators, $skip);
         $this->dispatchAfterEvent($result);
 
         return new TestResult($result->getResultCode());
@@ -69,21 +70,21 @@ class ExerciseTester
      */
     private function dispatchBeforeEvent()
     {
-        $this->eventDispatcher->dispatch(ExerciseTested::BEFORE, new ExerciseTested());
+        $this->eventDispatcher->dispatch(ExerciseCompleted::BEFORE, new ExerciseCompleted());
     }
 
     /**
      * Tests provided suites.
      *
-     * @param Subjects[] $suitesSubjects
-     * @param Boolean    $skip
+     * @param SubjectIterator[] $subjectIterators
+     * @param Boolean           $skip
      *
      * @return ExerciseTestResult
      */
-    private function testExercise(array $suitesSubjects, $skip = false)
+    private function testExercise(array $subjectIterators, $skip = false)
     {
         $results = array();
-        foreach ($suitesSubjects as $suiteSubjects) {
+        foreach (GroupedSubjectIterator::group($subjectIterators) as $suiteSubjects) {
             $results[] = $this->testSuiteSubjects($suiteSubjects, $skip);
         }
 
@@ -93,14 +94,14 @@ class ExerciseTester
     /**
      * Tests provided suite subjects.
      *
-     * @param Subjects $suiteSubjects
-     * @param Boolean  $skip
+     * @param SubjectIterator $subjectIterator
+     * @param Boolean         $skip
      *
      * @return TestResult
      */
-    private function testSuiteSubjects(Subjects $suiteSubjects, $skip = false)
+    private function testSuiteSubjects(SubjectIterator $subjectIterator, $skip = false)
     {
-        return $this->suiteTester->test($suiteSubjects, $skip);
+        return $this->suiteTester->test($subjectIterator, $skip);
     }
 
     /**
@@ -110,6 +111,6 @@ class ExerciseTester
      */
     private function dispatchAfterEvent(ExerciseTestResult $result)
     {
-        $this->eventDispatcher->dispatch(ExerciseTested::AFTER, new ExerciseTested($result));
+        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new ExerciseCompleted($result));
     }
 }

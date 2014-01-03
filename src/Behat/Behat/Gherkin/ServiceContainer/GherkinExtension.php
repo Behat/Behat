@@ -97,21 +97,15 @@ class GherkinExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadParameters($container);
-
         $this->loadGherkin($container);
         $this->loadKeywords($container);
         $this->loadParser($container);
         $this->loadDefaultLoaders($container, $config['cache']);
-        $this->loadFeatureLoader($container);
-        $this->loadSuiteGenerator($container);
-        $this->loadSuiteSetup($container);
         $this->loadSyntaxController($container);
-
-        $definition = new Definition('Behat\Behat\Gherkin\Cli\FiltersController', array(
-            new Reference(self::MANAGER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 700));
-        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.gherkin_filters', $definition);
+        $this->loadFilterController($container);
+        $this->loadSuiteWithPathsSetup($container);
+        $this->loadGherkinSuiteGenerator($container);
+        $this->loadFilesystemFeatureLocator($container);
     }
 
     /**
@@ -129,10 +123,16 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    private function loadParameters(ContainerBuilder $container)
+    protected function loadParameters(ContainerBuilder $container)
     {
         $container->setParameter('gherkin.paths.lib', $this->getLibPath());
         $container->setParameter('gherkin.paths.i18n', '%gherkin.paths.lib%/i18n.php');
+        $container->setParameter(
+            'gherkin.suite.default_settings', array(
+                'paths'    => array('%paths.base%/features'),
+                'contexts' => array('FeatureContext')
+            )
+        );
     }
 
     /**
@@ -140,7 +140,7 @@ class GherkinExtension implements Extension
      *
      * @return string
      */
-    private function getLibPath()
+    protected function getLibPath()
     {
         $reflection = new ReflectionClass('Behat\Gherkin\Gherkin');
         $libPath = rtrim(dirname($reflection->getFilename()) . '/../../../', DIRECTORY_SEPARATOR);
@@ -153,7 +153,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    private function loadGherkin(ContainerBuilder $container)
+    protected function loadGherkin(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Gherkin\Gherkin');
         $container->setDefinition(self::MANAGER_ID, $definition);
@@ -164,7 +164,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    private function loadKeywords(ContainerBuilder $container)
+    protected function loadKeywords(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Gherkin\Keywords\CachedArrayKeywords', array(
             '%gherkin.paths.i18n%'
@@ -182,7 +182,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    private function loadParser(ContainerBuilder $container)
+    protected function loadParser(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Gherkin\Parser', array(
             new Reference('gherkin.lexer')
@@ -201,7 +201,7 @@ class GherkinExtension implements Extension
      * @param ContainerBuilder $container
      * @param string           $cachePath
      */
-    private function loadDefaultLoaders(ContainerBuilder $container, $cachePath)
+    protected function loadDefaultLoaders(ContainerBuilder $container, $cachePath)
     {
         $definition = new Definition('Behat\Gherkin\Loader\GherkinFileLoader', array(
             new Reference('gherkin.parser')
@@ -219,54 +219,7 @@ class GherkinExtension implements Extension
     }
 
     /**
-     * Loads gherkin feature loader.
-     *
-     * @param ContainerBuilder $container
-     */
-    private function loadFeatureLoader(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\Gherkin\Subject\Loader\GherkinFeaturesLoader', array(
-            new Reference(self::MANAGER_ID),
-            '%paths.base%'
-        ));
-        $definition->addTag(SubjectExtension::LOADER_TAG, array('priority' => 50));
-        $container->setDefinition(SubjectExtension::LOADER_TAG . '.gherkin_features', $definition);
-    }
-
-    /**
-     * Loads gherkin suite generator.
-     *
-     * @param ContainerBuilder $container
-     */
-    private function loadSuiteGenerator(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\Gherkin\Suite\Generator\GherkinSuiteGenerator', array(
-            array(
-                'paths'    => array('%paths.base%/features'),
-                'contexts' => array('FeatureContext')
-            )
-        ));
-        $definition->addTag(SuiteExtension::GENERATOR_TAG, array('priority' => 50));
-        $container->setDefinition(SuiteExtension::GENERATOR_TAG . '.gherkin', $definition);
-    }
-
-    /**
-     * Loads gherkin suite setup.
-     *
-     * @param ContainerBuilder $container
-     */
-    private function loadSuiteSetup(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\Gherkin\Suite\Setup\GherkinSuiteFilesystemSetup', array(
-            '%paths.base%',
-            new Reference(FilesystemExtension::LOGGER_ID)
-        ));
-        $definition->addTag(SuiteExtension::SETUP_TAG, array('priority' => 50));
-        $container->setDefinition(SuiteExtension::SETUP_TAG . '.gherkin', $definition);
-    }
-
-    /**
-     * Loads gherkin controller.
+     * Loads syntax controller.
      *
      * @param ContainerBuilder $container
      */
@@ -281,11 +234,69 @@ class GherkinExtension implements Extension
     }
 
     /**
+     * Loads filter controller.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadFilterController(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Gherkin\Cli\FilterController', array(
+            new Reference(self::MANAGER_ID)
+        ));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 700));
+        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.gherkin_filters', $definition);
+    }
+
+    /**
+     * Loads suite with paths setup.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadSuiteWithPathsSetup(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Gherkin\Suite\Setup\SuiteWithPathsSetup', array(
+            '%paths.base%',
+            new Reference(FilesystemExtension::LOGGER_ID)
+        ));
+        $definition->addTag(SuiteExtension::SETUP_TAG, array('priority' => 50));
+        $container->setDefinition(SuiteExtension::SETUP_TAG . '.suite_with_paths', $definition);
+    }
+
+    /**
+     * Loads Gherkin suite generator.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadGherkinSuiteGenerator(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Gherkin\Suite\Generator\GherkinSuiteGenerator', array(
+            '%gherkin.suite.default_settings%'
+        ));
+        $definition->addTag(SuiteExtension::GENERATOR_TAG, array('priority' => 50));
+        $container->setDefinition(SuiteExtension::GENERATOR_TAG . '.gherkin', $definition);
+    }
+
+    /**
+     * Loads filesystem feature locator.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadFilesystemFeatureLocator(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Gherkin\Subject\Locator\FilesystemFeatureLocator', array(
+            new Reference(self::MANAGER_ID),
+            '%paths.base%'
+        ));
+        $definition->addTag(SubjectExtension::LOCATOR_TAG, array('priority' => 50));
+        $container->setDefinition(SubjectExtension::LOCATOR_TAG . '.filesystem_feature', $definition);
+    }
+
+    /**
      * Processes all available gherkin loaders.
      *
      * @param ContainerBuilder $container
      */
-    private function processLoaders(ContainerBuilder $container)
+    protected function processLoaders(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::LOADER_TAG);
         $definition = $container->getDefinition(self::MANAGER_ID);

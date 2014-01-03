@@ -24,16 +24,22 @@ class EnvironmentIsolationException extends RuntimeException implements Environm
      * @var Environment
      */
     private $environment;
+    /**
+     * @var mixed
+     */
+    private $subject;
 
     /**
      * Initializes exception.
      *
      * @param string      $message
      * @param Environment $environment
+     * @param mixed       $testSubject
      */
-    public function __construct($message, Environment $environment)
+    public function __construct($message, Environment $environment, $testSubject = null)
     {
         $this->environment = $environment;
+        $this->subject = $testSubject;
 
         parent::__construct($message);
     }
@@ -46,5 +52,15 @@ class EnvironmentIsolationException extends RuntimeException implements Environm
     public function getEnvironment()
     {
         return $this->environment;
+    }
+
+    /**
+     * Returns test subject that caused exception.
+     *
+     * @return mixed
+     */
+    public function getSubject()
+    {
+        return $this->subject;
     }
 }

@@ -66,8 +66,8 @@ class TesterExtension extends BaseExtension
     {
         $definition = new Definition('Behat\Behat\Tester\Cli\ExerciseController', array(
             new Reference(SuiteExtension::REGISTRY_ID),
-            new Reference(SubjectExtension::LOCATOR_ID),
-            new Reference(self::EXERCISE_TESTER_ID),
+            new Reference(SubjectExtension::FINDER_ID),
+            new Reference(self::EXERCISE_ID),
             $strict,
             $skip
         ));

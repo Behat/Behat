@@ -15,7 +15,7 @@ use Behat\Behat\Tester\Event\ExampleTested;
 use Behat\Behat\Tester\Event\ScenarioTested;
 use Behat\Behat\Tester\Result\TestResult;
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Tester\Event\ExerciseTested;
+use Behat\Testwork\Tester\Event\ExerciseCompleted;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -85,7 +85,7 @@ class StopOnFailureController implements Controller
             return;
         }
 
-        $this->eventDispatcher->dispatch(ExerciseTested::AFTER, new ExerciseTested(null, false));
+        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new ExerciseCompleted(null, false));
 
         exit(1);
     }

@@ -16,7 +16,7 @@ use Behat\Behat\Snippet\SnippetWriter;
 use Behat\Behat\Tester\Event\StepTested;
 use Behat\Behat\Tester\Result\TestResult;
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Tester\Event\ExerciseTested;
+use Behat\Testwork\Tester\Event\ExerciseCompleted;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -105,15 +105,15 @@ class SnippetsController implements Controller
         $this->output = $output;
 
         if ($input->getOption('append-snippets')) {
-            $this->eventDispatcher->addListener(ExerciseTested::AFTER, array($this, 'appendAllSnippets'), -999);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'appendAllSnippets'), -999);
         }
 
         if (!$input->getOption('no-snippets') && !$input->getOption('append-snippets')) {
-            $this->eventDispatcher->addListener(ExerciseTested::AFTER, array($this, 'printAllSnippets'), -999);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'printAllSnippets'), -999);
         }
 
         if (!$input->getOption('no-snippets')) {
-            $this->eventDispatcher->addListener(ExerciseTested::AFTER, array($this, 'printUndefinedSteps'), -995);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'printUndefinedSteps'), -995);
         }
     }
 

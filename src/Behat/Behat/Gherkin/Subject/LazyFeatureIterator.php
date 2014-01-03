@@ -13,15 +13,15 @@ namespace Behat\Behat\Gherkin\Subject;
 use Behat\Gherkin\Filter\FilterInterface;
 use Behat\Gherkin\Gherkin;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Testwork\Subject\Subjects;
+use Behat\Testwork\Subject\SubjectIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Behat lazy features.
+ * Behat lazy feature iterator.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class LazyFeatures implements Subjects
+class LazyFeatureIterator implements SubjectIterator
 {
     /**
      * @var Suite
@@ -42,7 +42,7 @@ class LazyFeatures implements Subjects
     /**
      * @var integer
      */
-    private $currentKey = 0;
+    private $position = 0;
     /**
      * @var FeatureNode[]
      */
@@ -83,8 +83,8 @@ class LazyFeatures implements Subjects
      */
     public function rewind()
     {
-        $this->currentKey = 0;
-        $this->parseToNextAvailableFeature();
+        $this->position = 0;
+        $this->moveToNextAvailableFeature();
     }
 
     /**
@@ -92,7 +92,7 @@ class LazyFeatures implements Subjects
      */
     public function next()
     {
-        $this->parseToNextAvailableFeature();
+        $this->moveToNextAvailableFeature();
     }
 
     /**
@@ -112,7 +112,7 @@ class LazyFeatures implements Subjects
      */
     public function key()
     {
-        return $this->currentKey;
+        return $this->position;
     }
 
     /**
@@ -128,11 +128,11 @@ class LazyFeatures implements Subjects
     /**
      * Parses paths consequently.
      */
-    private function parseToNextAvailableFeature()
+    private function moveToNextAvailableFeature()
     {
-        while (!count($this->features) && $this->currentKey < count($this->paths)) {
-            $this->features = $this->parseFeature($this->paths[$this->currentKey]);
-            $this->currentKey++;
+        while (!count($this->features) && $this->position < count($this->paths)) {
+            $this->features = $this->parseFeature($this->paths[$this->position]);
+            $this->position++;
         }
 
         $this->currentFeature = array_shift($this->features);

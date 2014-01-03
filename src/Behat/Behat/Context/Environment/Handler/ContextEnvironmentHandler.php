@@ -48,24 +48,23 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      * Checks if handler supports provided suite.
      *
      * @param Suite $suite
-     * @param mixed $subject
      *
      * @return Boolean
      */
-    public function supportsSuiteAndSubject(Suite $suite, $subject = null)
+    public function supportsSuite(Suite $suite)
     {
-        return $suite->hasSetting('contexts') || $suite->hasSetting('context');
+        return ($suite->hasSetting('contexts') && is_array($suite->getSetting('contexts')))
+            || ($suite->hasSetting('context') && null !== $suite->getSetting('context'));
     }
 
     /**
      * Builds environment object based on provided suite.
      *
      * @param Suite $suite
-     * @param mixed $subject
      *
      * @return Environment
      */
-    public function buildEnvironment(Suite $suite, $subject = null)
+    public function buildEnvironment(Suite $suite)
     {
         $contextPool = new UninitializedContextPool($suite->getParameters());
 
@@ -80,10 +79,11 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      * Checks if handler supports provided environment.
      *
      * @param Environment $environment
+     * @param mixed       $testSubject
      *
      * @return Boolean
      */
-    public function supportsEnvironment(Environment $environment)
+    public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null)
     {
         return $environment instanceof UninitializedContextEnvironment;
     }
@@ -92,10 +92,11 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      * Isolates provided environment.
      *
      * @param UninitializedContextEnvironment $environment
+     * @param mixed                           $testSubject
      *
      * @return InitializedContextEnvironment
      */
-    public function isolateEnvironment(Environment $environment)
+    public function isolateEnvironment(Environment $environment, $testSubject = null)
     {
         $uninitializedPool = $environment->getContextPool();
         $initializedPool = new InitializedContextPool();
@@ -139,7 +140,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     private function getContextClasses(Suite $suite)
     {
-        if ($suite->hasSetting('context')) {
+        if ($suite->hasSetting('context') && null !== $suite->getSetting('context')) {
             return array($suite->getSetting('context'));
         }
 

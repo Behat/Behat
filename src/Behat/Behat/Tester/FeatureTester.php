@@ -86,7 +86,7 @@ class FeatureTester implements SubjectTester
         $beforeHooks = $skip ? new CallResults() : $this->dispatchBeforeHooks($suite, $environment, $feature);
         $this->dispatchBeforeEvent($suite, $environment, $feature, $beforeHooks);
 
-        $skip = $beforeHooks->hasExceptions() ? true : $skip;
+        $skip = $skip || $beforeHooks->hasExceptions();
         $result = $this->testFeature($suite, $environment, $feature, $beforeHooks, $skip);
 
         $afterHooks = $skip ? new CallResults() : $this->dispatchAfterHooks($suite, $environment, $feature, $result);

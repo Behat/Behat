@@ -22,7 +22,7 @@ use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Output\TranslatableCliFormatter;
-use Behat\Testwork\Tester\Event\ExerciseTested;
+use Behat\Testwork\Tester\Event\ExerciseCompleted;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -99,11 +99,11 @@ class ProgressFormatter extends TranslatableCliFormatter
     public static function getSubscribedEvents()
     {
         return array(
-            ExerciseTested::BEFORE => array('startExerciseTimer', 999),
-            ExerciseTested::AFTER  => array('printStatistics', -50),
-            ScenarioTested::AFTER  => array('collectScenarioStats', 999),
-            ExampleTested::AFTER   => array('collectScenarioStats', 999),
-            StepTested::AFTER      => array('printStepCharacter', -50),
+            ExerciseCompleted::BEFORE => array('startExerciseTimer', 999),
+            ExerciseCompleted::AFTER  => array('printStatistics', -50),
+            ScenarioTested::AFTER     => array('collectScenarioStats', 999),
+            ExampleTested::AFTER      => array('collectScenarioStats', 999),
+            StepTested::AFTER         => array('printStepCharacter', -50),
         );
     }
 
@@ -152,7 +152,7 @@ class ProgressFormatter extends TranslatableCliFormatter
         $this->stepStats[$event->getResultCode()]++;
         if (TestResult::FAILED == $event->getResultCode()) {
             $text = sprintf('%s %s', $event->getStep()->getType(), $event->getStep()->getText());
-            $path = sprintf('%s:%d', $this->relativizePath($event->getSubject()->getFile()), $event->getStep()->getLine());
+            $path = sprintf('%s:%d', $this->relativizePath($event->getFeature()->getFile()), $event->getStep()->getLine());
             $exception = $event->getTestResult()->hasSearchException()
                 ? $event->getTestResult()->getSearchException()
                 : $event->getTestResult()->getCallResult()->getException();
@@ -178,7 +178,7 @@ class ProgressFormatter extends TranslatableCliFormatter
     {
         $this->scenarioStats[$event->getResultCode()]++;
         if (TestResult::FAILED === $event->getResultCode()) {
-            $feature = $event->getSubject();
+            $feature = $event->getFeature();
             $scenario = $event instanceof ExampleTested ? $event->getExample() : $event->getScenario();
             $this->failedScenarioPaths[] = sprintf('%s:%s', $this->relativizePath($feature->getFile()), $scenario->getLine());
         }
@@ -223,10 +223,10 @@ class ProgressFormatter extends TranslatableCliFormatter
             $this->writeln(sprintf('    {+%s}%s{-%s}', $style, $scenarioPath, $style));
             $this->writeln(sprintf('      {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $text, $style, $path));
 
-            $pad = function($line) { return '        ' . $line; };
+            $pad = function ($line) { return '        ' . $line; };
 
             if (null !== $stdOut) {
-                $padText = function($line) { return '        │ ' . $line; };
+                $padText = function ($line) { return '        │ ' . $line; };
                 $this->writeln(implode("\n", array_map($padText, explode("\n", $stdOut))));
             }
 
@@ -249,7 +249,7 @@ class ProgressFormatter extends TranslatableCliFormatter
 
             $this->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $text, $style, $path));
 
-            $pad = function($line) { return '      ' . $line; };
+            $pad = function ($line) { return '      ' . $line; };
             $this->writeln(sprintf('{+%s}%s{-%s}', $style, implode("\n", array_map($pad, explode("\n", $exception))), $style));
 
             $this->writeln();

@@ -14,7 +14,7 @@ use Behat\Behat\Tester\Event\ExampleTested;
 use Behat\Behat\Tester\Event\ScenarioTested;
 use Behat\Behat\Tester\Result\TestResult;
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Tester\Event\ExerciseTested;
+use Behat\Testwork\Tester\Event\ExerciseCompleted;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -84,7 +84,7 @@ class RerunController implements Controller
                 'collectFailedScenario'
             ), -50);
         $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'collectFailedExample'), -50);
-        $this->eventDispatcher->addListener(ExerciseTested::AFTER, array($this, 'writeCache'), -50);
+        $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'writeCache'), -50);
         $this->key = $this->generateKey($input);
 
         if (!$input->getOption('rerun')) {
@@ -112,7 +112,7 @@ class RerunController implements Controller
             return;
         }
 
-        $feature = $event->getSubject();
+        $feature = $event->getFeature();
         $scenario = $event->getScenario();
 
         $this->lines[] = $feature->getFile() . ':' . $scenario->getLine();
@@ -132,7 +132,7 @@ class RerunController implements Controller
             return;
         }
 
-        $feature = $event->getSubject();
+        $feature = $event->getFeature();
         $example = $event->getExample();
 
         $this->lines[] = $feature->getFile() . ':' . $example->getLine();

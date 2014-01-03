@@ -10,19 +10,18 @@
 
 namespace Behat\Behat\Gherkin\Suite\Setup;
 
-use Behat\Behat\Gherkin\Suite\GherkinSuite;
 use Behat\Testwork\Filesystem\FilesystemLogger;
 use Behat\Testwork\Suite\Setup\SuiteSetup;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Gherkin suite filesystem setup.
+ * Suite with paths setup.
  *
  * Sets up gherkin suite in the filesystem (creates feature folders).
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GherkinSuiteFilesystemSetup implements SuiteSetup
+class SuiteWithPathsSetup implements SuiteSetup
 {
     /**
      * @var string
@@ -54,17 +53,18 @@ class GherkinSuiteFilesystemSetup implements SuiteSetup
      */
     public function supportsSuite(Suite $suite)
     {
-        return $suite instanceof GherkinSuite;
+        return ($suite->hasSetting('paths') && is_array($suite->getSetting('paths')))
+            || ($suite->hasSetting('path') && null !== $suite->getSetting('path'));
     }
 
     /**
      * Sets up provided suite.
      *
-     * @param GherkinSuite $suite
+     * @param Suite $suite
      */
     public function setupSuite(Suite $suite)
     {
-        foreach ($suite->getFeatureLocators() as $locator) {
+        foreach ($this->getFeatureLocators($suite) as $locator) {
             if (0 !== strpos($locator, '@') && !is_dir($path = $this->locatePath($locator))) {
                 $this->createFeatureDirectory($path);
             }
@@ -121,5 +121,21 @@ class GherkinSuiteFilesystemSetup implements SuiteSetup
         }
 
         return false;
+    }
+
+    /**
+     * Returns list of locators of the suite.
+     *
+     * @param Suite $suite
+     *
+     * @return string[]
+     */
+    private function getFeatureLocators(Suite $suite)
+    {
+        if ($suite->hasSetting('path') && null !== $suite->getSetting('path')) {
+            return array($suite->getSetting('path'));
+        }
+
+        return $suite->getSetting('paths');
     }
 }

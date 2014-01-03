@@ -11,18 +11,17 @@
 namespace Behat\Behat\Hook\Call;
 
 use Behat\Behat\Hook\Exception\BadCallbackException;
-use Behat\Behat\Tester\Event\FeatureTested;
-use Behat\Gherkin\Filter\NameFilter;
-use Behat\Gherkin\Filter\TagFilter;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Tester\Event\SuiteTested;
 
 /**
- * Runtime feature hook.
+ * Runtime suite hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class RuntimeFeatureHook extends RuntimeFilterableHook
+abstract class RuntimeSuiteHook extends RuntimeFilterableHook
 {
     /**
      * Initializes hook.
@@ -56,29 +55,34 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      */
     public function filterMatches(LifecycleEvent $event)
     {
-        if (!$event instanceof FeatureTested) {
+        if (!$event instanceof SuiteTested) {
             return false;
         }
         if (null === ($filterString = $this->getFilterString())) {
             return true;
         }
 
-        $feature = $event->getFeature();
-
-        if (false !== strpos($filterString, '@')) {
-            $filter = new TagFilter($filterString);
-
-            if ($filter->isFeatureMatch($feature)) {
-                return true;
-            }
-        } elseif (!empty($filterString)) {
-            $filter = new NameFilter($filterString);
-
-            if ($filter->isFeatureMatch($feature)) {
-                return true;
-            }
+        if (!empty($filterString)) {
+            return $this->isSuiteMatch($event->getSuite(), $filterString);
         }
 
         return false;
+    }
+
+    /**
+     * Checks if Feature matches specified filter.
+     *
+     * @param Suite  $suite
+     * @param string $filterString
+     *
+     * @return Boolean
+     */
+    private function isSuiteMatch(Suite $suite, $filterString)
+    {
+        if ('/' === $filterString[0]) {
+            return 1 === preg_match($filterString, $suite->getName());
+        }
+
+        return false !== mb_strpos($suite->getName(), $filterString, 0, 'utf8');
     }
 }

@@ -42,7 +42,8 @@ use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Output\TranslatableCliFormatter;
-use Behat\Testwork\Tester\Event\ExerciseTested;
+use Behat\Testwork\Tester\Event\ExerciseCompleted;
+use Behat\Testwork\Tester\Event\SuiteTested;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -146,20 +147,22 @@ class PrettyFormatter extends TranslatableCliFormatter
     public static function getSubscribedEvents()
     {
         return array(
-            ExerciseTested::BEFORE   => array('startExerciseTimer', 999),
-            ExerciseTested::AFTER    => array('printCounters', -50),
-            FeatureTested::BEFORE    => array('printFeatureHeader', -50),
-            FeatureTested::AFTER     => array('printFeatureFooter', -50),
-            ScenarioTested::BEFORE   => array('printScenarioHeader', -50),
-            ScenarioTested::AFTER    => array('printScenarioFooter', -50),
-            OutlineTested::BEFORE    => array('printOutlineHeader', -50),
-            OutlineTested::AFTER     => array('printOutlineFooter', -50),
-            ExampleTested::BEFORE    => array('printExampleRowHeader'),
-            ExampleTested::AFTER     => array(array('printExamplesHeader', -30), array('printExampleRow', -50)),
-            BackgroundTested::BEFORE => array('printBackgroundHeader', -50),
-            BackgroundTested::AFTER  => array('printBackgroundFooter', -50),
-            StepTested::BEFORE       => array('printStepHeader', -50),
-            StepTested::AFTER        => array('printStepFooter', -50),
+            ExerciseCompleted::BEFORE => array('startExerciseTimer', 999),
+            ExerciseCompleted::AFTER  => array('printCounters', -50),
+            SuiteTested::BEFORE       => array('printSuiteHeader', -50),
+            SuiteTested::AFTER        => array('printSuiteFooter', -50),
+            FeatureTested::BEFORE     => array('printFeatureHeader', -50),
+            FeatureTested::AFTER      => array('printFeatureFooter', -50),
+            ScenarioTested::BEFORE    => array('printScenarioHeader', -50),
+            ScenarioTested::AFTER     => array('printScenarioFooter', -50),
+            OutlineTested::BEFORE     => array('printOutlineHeader', -50),
+            OutlineTested::AFTER      => array('printOutlineFooter', -50),
+            ExampleTested::BEFORE     => array('printExampleRowHeader'),
+            ExampleTested::AFTER      => array(array('printExamplesHeader', -30), array('printExampleRow', -50)),
+            BackgroundTested::BEFORE  => array('printBackgroundHeader', -50),
+            BackgroundTested::AFTER   => array('printBackgroundFooter', -50),
+            StepTested::BEFORE        => array('printStepHeader', -50),
+            StepTested::AFTER         => array('printStepFooter', -50),
         );
     }
 
@@ -177,6 +180,16 @@ class PrettyFormatter extends TranslatableCliFormatter
     {
         $this->timer = new Timer();
         $this->timer->start();
+    }
+
+    public function printSuiteHeader(SuiteTested $event)
+    {
+        $this->printBeforeHookCallResults($event->getHookCallResults(), '');
+    }
+
+    public function printSuiteFooter(SuiteTested $event)
+    {
+        $this->printAfterHookCallResults($event->getHookCallResults(), '');
     }
 
     public function printFeatureHeader(FeatureTested $event)
@@ -219,12 +232,12 @@ class PrettyFormatter extends TranslatableCliFormatter
         $this->printBeforeHookCallResults($event->getHookCallResults(), '  ');
         $this->currentScenario = $event->getScenario();
 
-        $this->calculateCurrentMaxLineLength($event->getScenario(), $event->getSubject()->getBackground());
-        if ($event->getSubject()->hasBackground() && !$this->backgroundPrinted) {
+        $this->calculateCurrentMaxLineLength($event->getScenario(), $event->getFeature()->getBackground());
+        if ($event->getFeature()->hasBackground() && !$this->backgroundPrinted) {
             return;
         }
 
-        $this->printFullScenarioHeader($event->getScenario(), $event->getSubject());
+        $this->printFullScenarioHeader($event->getScenario(), $event->getFeature());
     }
 
     public function printFullScenarioHeader(ScenarioInterface $scenario, FeatureNode $feature)
@@ -274,7 +287,7 @@ class PrettyFormatter extends TranslatableCliFormatter
 
         $this->scenarioStats[$event->getResultCode()]++;
         if (TestResult::FAILED === $event->getResultCode()) {
-            $feature = $event->getSubject();
+            $feature = $event->getFeature();
             $scenario = $event->getScenario();
             $this->failedScenarioPaths[] = sprintf('%s:%s', $feature->getFile(), $scenario->getLine());
         }
@@ -289,12 +302,12 @@ class PrettyFormatter extends TranslatableCliFormatter
         $this->inOutline = true;
         $this->currentScenario = $event->getOutline();
 
-        $this->calculateCurrentMaxLineLength($event->getOutline(), $event->getSubject()->getBackground());
-        if ($event->getSubject()->hasBackground() && !$this->backgroundPrinted) {
+        $this->calculateCurrentMaxLineLength($event->getOutline(), $event->getFeature()->getBackground());
+        if ($event->getFeature()->hasBackground() && !$this->backgroundPrinted) {
             return;
         }
 
-        $this->printFullScenarioHeader($event->getOutline(), $event->getSubject());
+        $this->printFullScenarioHeader($event->getOutline(), $event->getFeature());
     }
 
     public function printOutlineFooter()
@@ -370,7 +383,7 @@ class PrettyFormatter extends TranslatableCliFormatter
         $this->printAfterHookCallResults($event->getHookCallResults(), '      ');
 
         if (TestResult::FAILED === $event->getResultCode()) {
-            $feature = $event->getSubject();
+            $feature = $event->getFeature();
             $scenario = $event->getExample();
             $this->failedScenarioPaths[] = sprintf('%s:%s', $feature->getFile(), $scenario->getLine());
         }
@@ -448,7 +461,7 @@ class PrettyFormatter extends TranslatableCliFormatter
             return;
         }
 
-        $this->printScenarioTitle($event->getBackground(), $event->getSubject());
+        $this->printScenarioTitle($event->getBackground(), $event->getFeature());
     }
 
     public function printBackgroundFooter(BackgroundTested $event)
@@ -461,7 +474,7 @@ class PrettyFormatter extends TranslatableCliFormatter
 
         $this->writeln();
         $this->backgroundPrinted = true;
-        $this->printFullScenarioHeader($this->currentScenario, $event->getSubject());
+        $this->printFullScenarioHeader($this->currentScenario, $event->getFeature());
     }
 
     public function printStepHeader(StepTested $event)

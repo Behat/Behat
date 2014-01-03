@@ -14,11 +14,13 @@ use Behat\Testwork\Suite\Suite;
 use Iterator;
 
 /**
- * Testwork test subjects iterator.
+ * Testwork test subject iterator.
+ *
+ * Iterates over test subjects.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface Subjects extends Iterator
+interface SubjectIterator extends Iterator
 {
     /**
      * Returns suite that was used to load subjects.

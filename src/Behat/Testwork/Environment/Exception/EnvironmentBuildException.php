@@ -24,22 +24,16 @@ class EnvironmentBuildException extends RuntimeException implements EnvironmentE
      * @var Suite
      */
     private $suite;
-    /**
-     * @var mixed
-     */
-    private $testSubject;
 
     /**
      * Initializes exception.
      *
      * @param string $message
      * @param Suite  $suite
-     * @param mixed  $subject
      */
-    public function __construct($message, Suite $suite, $subject)
+    public function __construct($message, Suite $suite)
     {
         $this->suite = $suite;
-        $this->testSubject = $subject;
 
         parent::__construct($message);
     }
@@ -52,15 +46,5 @@ class EnvironmentBuildException extends RuntimeException implements EnvironmentE
     public function getSuite()
     {
         return $this->suite;
-    }
-
-    /**
-     * Returns test subject that caused exception.
-     *
-     * @return mixed
-     */
-    public function getSubject()
-    {
-        return $this->testSubject;
     }
 }

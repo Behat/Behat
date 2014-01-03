@@ -28,6 +28,10 @@ class FeatureTested extends LifecycleEvent
     const AFTER = 'tester.feature_tested.after';
 
     /**
+     * @var FeatureNode
+     */
+    private $feature;
+    /**
      * @var null|FeatureTestResult
      */
     private $testResult;
@@ -52,8 +56,9 @@ class FeatureTested extends LifecycleEvent
         FeatureTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment, $feature);
+        parent::__construct($suite, $environment);
 
+        $this->feature = $feature;
         $this->testResult = $testResult;
         $this->hookCallResults = $hookCallResults;
     }
@@ -65,7 +70,7 @@ class FeatureTested extends LifecycleEvent
      */
     public function getFeature()
     {
-        return $this->getSubject();
+        return $this->feature;
     }
 
     /**

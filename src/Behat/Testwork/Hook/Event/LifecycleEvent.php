@@ -31,23 +31,17 @@ abstract class LifecycleEvent extends Event
      * @var Environment
      */
     private $environment;
-    /**
-     * @var mixed
-     */
-    private $subject;
 
     /**
      * Initializes scenario event.
      *
      * @param Suite       $suite
      * @param Environment $environment
-     * @param mixed       $subject
      */
-    public function __construct(Suite $suite, Environment $environment, $subject)
+    public function __construct(Suite $suite, Environment $environment)
     {
         $this->suite = $suite;
         $this->environment = $environment;
-        $this->subject = $subject;
     }
 
     /**
@@ -68,16 +62,6 @@ abstract class LifecycleEvent extends Event
     public function getEnvironment()
     {
         return $this->environment;
-    }
-
-    /**
-     * Returns test subject.
-     *
-     * @return mixed
-     */
-    public function getSubject()
-    {
-        return $this->subject;
     }
 
     /**
