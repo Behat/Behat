@@ -177,12 +177,7 @@ class FilesystemFeatureLocator implements SubjectLocator
             RegexIterator::MATCH
         );
         $paths = array_map('strval', iterator_to_array($iterator));
-
-        uasort(
-            $paths, function ($path1, $path2) {
-                return strnatcasecmp($path1, $path2);
-            }
-        );
+        uasort($paths, 'strnatcasecmp');
 
         return $paths;
     }
