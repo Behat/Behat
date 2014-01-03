@@ -96,36 +96,28 @@ Feature: JUnit Formatter
       """
     And "junit/default.xml" file should contain:
       """
-      <?xml version="1.0" ?>
+      <?xml version="1.0"?>
       <testsuites name="default">
-          <testsuite name="World consistency" file="features/World.feature" tests="4" failures="3" errors="1" disabled="1">
-              <testcase name="Undefined" assertions="4" status="UNDEFINED">
-                  <error type="undefined" message="Given Something new" />
-                  <skipped>Then I must have 10</skipped>
-              </testcase>
-
-              <testcase name="Pending" assertions="4" status="PENDING">
-                  <skipped>
-                      And Something not done yet
-                      TODO: write pending definition
-                  </skipped>
-                  <skipped>The I must have 10</skipped>
-              </testcase>
-
-              <testcase name="Failed" assertions="3" status="FAILED">
-                  <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'" />
-              </testcase>
-
-              <testcase name="Passed & Failed #1" assertions="4" status="FAILED">
-                  <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'" />
-              </testcase>
-
-              <testcase name="Passed & Failed #2" assertions="4" status="PASSED" />
-
-              <testcase name="Passed & Failed #3" assertions="4" status="FAILED">
-                  <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'" />
-              </testcase>
-          </testsuite>
+        <testsuite name="World consistency" file="features/World.feature" tests="6" failures="3" errors="2">
+          <testcase name="Undefined" assertions="4" status="UNDEFINED">
+            <error type="undefined" message="And Something new"/>
+            <skipped>Then I must have 10</skipped>
+          </testcase>
+          <testcase name="Pending" assertions="4" status="PENDING">
+            <skipped>And Something not done yet: TODO: write pending definition</skipped>
+            <skipped>Then I must have 10</skipped>
+          </testcase>
+          <testcase name="Failed" assertions="3" status="FAILED">
+            <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
+          </testcase>
+          <testcase name="Passed &amp; Failed #1" assertions="4" status="FAILED">
+            <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
+          </testcase>
+          <testcase name="Passed &amp; Failed #2" assertions="4" status="PASSED"/>
+          <testcase name="Passed &amp; Failed #3" assertions="4" status="FAILED">
+            <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
+          </testcase>
+        </testsuite>
       </testsuites>
       """
 
