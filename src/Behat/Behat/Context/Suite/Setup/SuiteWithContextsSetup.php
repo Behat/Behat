@@ -24,7 +24,7 @@ use Symfony\Component\ClassLoader\ClassLoader;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextSetup implements SuiteSetup
+class SuiteWithContextsSetup implements SuiteSetup
 {
     /**
      * @var ClassLoader
@@ -70,7 +70,8 @@ class ContextSetup implements SuiteSetup
      */
     public function supportsSuite(Suite $suite)
     {
-        return $suite->hasSetting('contexts') || $suite->hasSetting('context');
+        return ($suite->hasSetting('contexts') && is_array($suite->getSetting('contexts')))
+            || ($suite->hasSetting('context') && null !== $suite->getSetting('context'));
     }
 
     /**
@@ -216,7 +217,7 @@ class ContextSetup implements SuiteSetup
      */
     private function getContextClasses(Suite $suite)
     {
-        if ($suite->hasSetting('context')) {
+        if ($suite->hasSetting('context') && null !== $suite->getSetting('context')) {
             return array($suite->getSetting('context'));
         }
 

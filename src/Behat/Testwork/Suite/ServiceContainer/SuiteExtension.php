@@ -74,7 +74,7 @@ class SuiteExtension implements Extension
         $builder
             ->defaultValue(array('default' => array(
                 'enabled'    => true,
-                'type'       => 'gherkin',
+                'type'       => null,
                 'settings'   => array(),
                 'parameters' => array()
             )))
@@ -111,7 +111,7 @@ class SuiteExtension implements Extension
                         ->defaultTrue()
                     ->end()
                     ->scalarNode('type')
-                        ->defaultValue('gherkin')
+                        ->defaultValue(null)
                     ->end()
                     ->arrayNode('settings')
                         ->defaultValue(array())

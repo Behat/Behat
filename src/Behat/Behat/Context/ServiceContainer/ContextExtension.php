@@ -135,7 +135,7 @@ class ContextExtension implements Extension
      */
     private function loadSuiteSetup(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Suite\Setup\ContextSetup', array(
+        $definition = new Definition('Behat\Behat\Context\Suite\Setup\SuiteWithContextsSetup', array(
             new Reference(AutoloaderExtension::CLASS_LOADER_ID),
             new Reference(FilesystemExtension::LOGGER_ID)
         ));
@@ -290,7 +290,7 @@ class ContextExtension implements Extension
      */
     private static function getSuiteSetupId()
     {
-        return SuiteExtension::SETUP_TAG . '.context';
+        return SuiteExtension::SETUP_TAG . '.suite_with_contexts';
     }
 
     /**

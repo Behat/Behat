@@ -53,7 +53,8 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function supportsSuite(Suite $suite)
     {
-        return $suite->hasSetting('contexts') || $suite->hasSetting('context');
+        return ($suite->hasSetting('contexts') && is_array($suite->getSetting('contexts')))
+            || ($suite->hasSetting('context') && null !== $suite->getSetting('context'));
     }
 
     /**
@@ -139,7 +140,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     private function getContextClasses(Suite $suite)
     {
-        if ($suite->hasSetting('context')) {
+        if ($suite->hasSetting('context') && null !== $suite->getSetting('context')) {
             return array($suite->getSetting('context'));
         }
 

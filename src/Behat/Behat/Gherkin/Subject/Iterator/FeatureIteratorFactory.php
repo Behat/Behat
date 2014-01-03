@@ -11,10 +11,14 @@
 namespace Behat\Behat\Gherkin\Subject\Iterator;
 
 use Behat\Behat\Gherkin\Subject\LazyFeatureIterator;
-use Behat\Behat\Gherkin\Suite\GherkinSuite;
+use Behat\Gherkin\Filter\FilterInterface;
+use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\PathsFilter;
+use Behat\Gherkin\Filter\RoleFilter;
+use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Gherkin;
 use Behat\Testwork\Subject\Iterator\IteratorFactory;
+use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
 use Symfony\Component\Finder\Finder;
 
@@ -58,33 +62,91 @@ class FeatureIteratorFactory implements IteratorFactory
      */
     public function supportsSuiteAndLocator(Suite $suite, $locator)
     {
-        return $suite instanceof GherkinSuite;
+        return ($suite->hasSetting('paths') && is_array($suite->getSetting('paths')))
+            || ($suite->hasSetting('path') && null !== $suite->getSetting('path'));
     }
 
     /**
      * Loads feature iterator using provided suite & locator.
      *
-     * @param GherkinSuite $suite
-     * @param string       $locator
+     * @param Suite  $suite
+     * @param string $locator
      *
      * @return LazyFeatureIterator
      */
     public function createSubjectIterator(Suite $suite, $locator)
     {
-        $filters = $suite->getFeatureFilters();
+        $suiteLocators = $this->getFeatureLocators($suite);
+        $suiteFilters = $this->getFeatureFilters($suite);
 
         if ($locator) {
-            $filters[] = new PathsFilter($suite->getFeatureLocators());
+            $suiteFilters[] = new PathsFilter($suiteLocators);
 
-            return new LazyFeatureIterator($suite, $this->gherkin, $this->findFeatureFiles($locator), $filters);
+            return new LazyFeatureIterator($suite, $this->gherkin, $this->findFeatureFiles($locator), $suiteFilters);
         }
 
         $featurePaths = array();
-        foreach ($suite->getFeatureLocators() as $suiteLocator) {
+        foreach ($suiteLocators as $suiteLocator) {
             $featurePaths = array_merge($featurePaths, $this->findFeatureFiles($suiteLocator));
         }
 
-        return new LazyFeatureIterator($suite, $this->gherkin, $featurePaths, $filters);
+        return new LazyFeatureIterator($suite, $this->gherkin, $featurePaths, $suiteFilters);
+    }
+
+    /**
+     * Returns list of locators of the suite.
+     *
+     * @param Suite $suite
+     *
+     * @return string[]
+     */
+    protected function getFeatureLocators(Suite $suite)
+    {
+        if ($suite->hasSetting('path') && null !== $suite->getSetting('path')) {
+            return array($suite->getSetting('path'));
+        }
+
+        return $suite->getSetting('paths');
+    }
+
+    /**
+     * Returns list of filters from suite settings.
+     *
+     * @param Suite $suite
+     *
+     * @return FilterInterface[]
+     *
+     * @throws SuiteConfigurationException If unknown filter type provided
+     */
+    protected function getFeatureFilters(Suite $suite)
+    {
+        if (!$suite->hasSetting('filters') || !is_array($suite->getSetting('filters'))) {
+            return array();
+        }
+
+        $filters = array();
+        foreach ($suite->getSetting('filters') as $type => $filterString) {
+            switch ($type) {
+                case 'role':
+                    $filters[] = new RoleFilter($filterString);
+                    break;
+                case 'name':
+                    $filters[] = new NameFilter($filterString);
+                    break;
+                case 'tags':
+                    $filters[] = new TagFilter($filterString);
+                    break;
+                default:
+                    throw new SuiteConfigurationException(sprintf(
+                        '`%s` filter is not supported by the `%s` suite. Supported types are %s.',
+                        $type,
+                        $suite->getName(),
+                        implode(', ', array('`role`', '`name`', '`tags`'))
+                    ), $suite->getName());
+            }
+        }
+
+        return $filters;
     }
 
     /**
@@ -130,7 +192,8 @@ class FeatureIteratorFactory implements IteratorFactory
         }
 
         if (is_file($this->basePath . DIRECTORY_SEPARATOR . $path)
-            || is_dir($this->basePath . DIRECTORY_SEPARATOR . $path)) {
+            || is_dir($this->basePath . DIRECTORY_SEPARATOR . $path)
+        ) {
             return realpath($this->basePath . DIRECTORY_SEPARATOR . $path);
         }
 

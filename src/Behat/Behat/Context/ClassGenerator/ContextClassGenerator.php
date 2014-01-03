@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Context\ClassGenerator;
 
-use Behat\Behat\Context\Suite\Setup\ContextSetup;
+use Behat\Behat\Context\Suite\Setup\SuiteWithContextsSetup;
 
 /**
  * Context class generator interface.
