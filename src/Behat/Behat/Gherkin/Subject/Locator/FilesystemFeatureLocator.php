@@ -170,14 +170,21 @@ class FilesystemFeatureLocator implements SubjectLocator
             return array($absolutePath);
         }
 
-        $fileIterator = new RegexIterator(
+        $iterator = new RegexIterator(
             new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($absolutePath)
             ), '/^.+\.feature/i',
             RegexIterator::MATCH
         );
+        $paths = array_map('strval', iterator_to_array($iterator));
 
-        return array_map('strval', iterator_to_array($fileIterator));
+        uasort(
+            $paths, function ($path1, $path2) {
+                return strnatcasecmp($path1, $path2);
+            }
+        );
+
+        return $paths;
     }
 
     /**
