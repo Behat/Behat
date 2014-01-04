@@ -58,11 +58,10 @@ class SuiteRegistry implements SuiteRepository
      * @param string $name
      * @param string $type
      * @param array  $settings
-     * @param array  $parameters
      *
      * @throws SuiteConfigurationException
      */
-    public function registerSuiteConfiguration($name, $type, array $settings, array $parameters)
+    public function registerSuiteConfiguration($name, $type, array $settings)
     {
         if (isset($this->suiteConfigurations[$name])) {
             throw new SuiteConfigurationException(sprintf(
@@ -71,7 +70,7 @@ class SuiteRegistry implements SuiteRepository
             ), $name);
         }
 
-        $this->suiteConfigurations[$name] = array($type, $settings, $parameters);
+        $this->suiteConfigurations[$name] = array($type, $settings);
         $this->suitesGenerated = false;
     }
 
@@ -88,9 +87,9 @@ class SuiteRegistry implements SuiteRepository
 
         $this->suites = array();
         foreach ($this->suiteConfigurations as $name => $configuration) {
-            list($type, $settings, $parameters) = $configuration;
+            list($type, $settings) = $configuration;
 
-            $this->suites[] = $this->generateSuite($name, $type, $settings, $parameters);
+            $this->suites[] = $this->generateSuite($name, $type, $settings);
         }
 
         $this->suitesGenerated = true;
@@ -104,20 +103,19 @@ class SuiteRegistry implements SuiteRepository
      * @param string $name
      * @param string $type
      * @param array  $settings
-     * @param array  $parameters
      *
      * @return Suite
      *
      * @throws SuiteGenerationException If no appropriate generator found
      */
-    private function generateSuite($name, $type, array $settings, array $parameters)
+    private function generateSuite($name, $type, array $settings)
     {
         foreach ($this->generators as $generator) {
             if (!$generator->supportsTypeAndSettings($type, $settings)) {
                 continue;
             }
 
-            return $generator->generateSuite($name, $settings, $parameters);
+            return $generator->generateSuite($name, $settings);
         }
 
         throw new SuiteGenerationException(sprintf(

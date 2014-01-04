@@ -50,17 +50,11 @@ class GherkinSuiteGenerator implements SuiteGenerator
     }
 
     /**
-     * Generate suite with provided name, settings and parameters.
-     *
-     * @param string $suiteName
-     * @param array  $settings
-     * @param array  $parameters
-     *
-     * @return Suite
+     * {@inheritdoc}
      */
-    public function generateSuite($suiteName, array $settings, array $parameters)
+    public function generateSuite($suiteName, array $settings)
     {
-        return new GenericSuite($suiteName, $this->mergeDefaultSettings($settings), $parameters);
+        return new GenericSuite($suiteName, $this->mergeDefaultSettings($settings));
     }
 
     /**

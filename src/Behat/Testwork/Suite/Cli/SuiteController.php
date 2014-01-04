@@ -86,7 +86,7 @@ class SuiteController implements Controller
             }
 
             $this->registry->registerSuiteConfiguration(
-                $name, $config['type'], $config['settings'], $config['parameters']
+                $name, $config['type'], $config['settings']
             );
         }
     }

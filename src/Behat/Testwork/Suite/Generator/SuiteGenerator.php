@@ -32,13 +32,12 @@ interface SuiteGenerator
     public function supportsTypeAndSettings($type, array $settings);
 
     /**
-     * Generate suite with provided name, settings and parameters.
+     * Generate suite with provided name and settings.
      *
      * @param string $suiteName
      * @param array  $settings
-     * @param array  $parameters
      *
      * @return Suite
      */
-    public function generateSuite($suiteName, array $settings, array $parameters);
+    public function generateSuite($suiteName, array $settings);
 }
