@@ -48,7 +48,7 @@ class JUnitFormatter implements Formatter
      */
     private $testsuiteStats;
     /**
-     * @var int
+     * @var \SimpleXmlElement
      */
     private $currentTestcase;
     /**
@@ -59,6 +59,10 @@ class JUnitFormatter implements Formatter
      * @var int[]
      */
     private $examples;
+    /**
+     * @var string
+     */
+    private $outlineName;
 
     /**
      * @param string $basePath
@@ -91,7 +95,7 @@ class JUnitFormatter implements Formatter
             StepTested::AFTER       => array('saveStep', -50),
             OutlineTested::BEFORE   => array('startOutline', -50),
             ExampleTested::BEFORE   => array('startExample', -50),
-            ExampleTested::AFTER    => array('endScenario', -50),
+            ExampleTested::AFTER    => array('endExample', -50),
         );
     }
 
@@ -99,7 +103,8 @@ class JUnitFormatter implements Formatter
     {
         $suite = $event->getSuite();
 
-        $this->xml = new \SimpleXmlElement('<testsuites name="'.$suite->getName().'"></testsuites>');
+        $this->xml = new \SimpleXmlElement('<testsuites></testsuites>');
+        $this->xml->addAttribute('name', $suite->getName());
     }
 
     public function startFeature(FeatureTested $event)
@@ -108,7 +113,7 @@ class JUnitFormatter implements Formatter
 
         $this->currentTestsuite = $testsuite = $this->xml->addChild('testsuite');
         $testsuite->addAttribute('name', $subject->getTitle());
-        $testsuite->addAttribute('file', str_replace('\\', '/', $this->relativizePath($subject->getFile())));
+        $testsuite->addAttribute('file', $this->relativizePath($subject->getFile()));
 
         $this->testsuiteStats = array(
             'PASSED' => 0,
@@ -201,17 +206,19 @@ class JUnitFormatter implements Formatter
         }
     }
 
-    public function endScenario()
+    public function endExample(ExampleTested $event)
     {
-        if (0 !== $this->testcaseStats[TestResult::FAILED]) {
-            $status = 'FAILED';
-        } elseif (0 !== $this->testcaseStats[TestResult::PENDING]) {
-            $status = 'PENDING';
-        } elseif (0 !== $this->testcaseStats[TestResult::UNDEFINED]) {
-            $status = 'UNDEFINED';
-        } else {
-            $status = 'PASSED';
-        }
+        $status = strtoupper(TestResult::codeToString($event->getResultCode()));
+
+        $this->testsuiteStats[$status]++;
+
+        $this->currentTestcase->addAttribute('assertions', array_sum($this->testcaseStats));
+        $this->currentTestcase->addAttribute('status', $status);
+    }
+
+    public function endScenario(ScenarioTested $event)
+    {
+        $status = strtoupper(TestResult::codeToString($event->getResultCode()));
 
         $this->testsuiteStats[$status]++;
 
@@ -231,10 +238,9 @@ class JUnitFormatter implements Formatter
 
     public function writeSuite(SuiteTested $event)
     {
-        $outputPath = $this->getParameter('output_path');
-        $outputDir = $this->relativizePath($outputPath);
+        $outputDir = $this->getParameter('output_path');
         if (!is_dir($outputDir)) {
-            mkdir($outputDir);
+            mkdir($outputDir, 0, true);
         }
 
         $dom = new \DOMDocument('1.0');
@@ -242,7 +248,7 @@ class JUnitFormatter implements Formatter
         $dom->formatOutput = true;
         $dom->loadXml($this->xml->asXml());
         
-        file_put_contents($this->basePath.DIRECTORY_SEPARATOR.$outputDir.DIRECTORY_SEPARATOR.$event->getSuite()->getName().'.xml', $dom->saveXML());
+        file_put_contents($outputDir.'/'.$event->getSuite()->getName().'.xml', $dom->saveXML());
     }
     
     /**

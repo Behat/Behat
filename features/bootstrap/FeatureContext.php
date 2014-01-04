@@ -157,6 +157,24 @@ class FeatureContext implements Context
     }
 
     /**
+     * Checks whether previously runned command passes|failes with no output.
+     *
+     * @Then /^it should (fail|pass) with no output$/
+     *
+     * @param string $success "fail" or "pass"
+     */
+    public function itShouldPassWithNoOutput($success)
+    {
+        $this->itShouldFail($success);
+
+        try {
+            PHPUnit_Framework_Assert::assertEmpty($this->getOutput());
+        } catch (PHPUnit_Framework_ExpectationFailedException $e) {
+            throw new PHPUnit_Framework_ExpectationFailedException('Failed asserting that the output is empty'.PHP_EOL.'Actual output:'.PHP_EOL.$this->getOutput());
+        }
+    }
+
+    /**
      * Checks whether specified file exists and contains specified string.
      *
      * @Then /^"([^"]*)" file should contain:$/
@@ -187,16 +205,7 @@ class FeatureContext implements Context
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        $expectedOutput = $this->getExpectedOutput($text);
-        if (is_string($expectedOutput) && empty($expectedOutput)) {
-            try {
-                PHPUnit_Framework_Assert::assertEmpty($this->getOutput());
-            } catch (PHPUnit_Framework_ExpectationFailedException $e) {
-                throw new PHPUnit_Framework_ExpectationFailedException('Failed asserting that the output is empty'.PHP_EOL.'Actual output:'.PHP_EOL.$this->getOutput());
-            }
-        }
-
-        PHPUnit_Framework_Assert::assertContains($expectedOutput, $this->getOutput());
+        PHPUnit_Framework_Assert::assertContains($this->getExpectedOutput($text), $this->getOutput());
     }
 
     private function getExpectedOutput(PyStringNode $expectedText)
@@ -206,7 +215,7 @@ class FeatureContext implements Context
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
-                '/ features\/[^\n ]+/', function ($matches) {
+                '/(?: |")features\/[^\n ]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 }, $text
             );

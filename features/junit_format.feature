@@ -181,9 +181,7 @@ Feature: JUnit Formatter
           Then I must have 4
       """
     When I run "behat --no-colors -f junit -o junit"
-    Then it should pass with:
-      """
-      """
+    Then it should pass with no output
     And "junit/default.xml" file should contain:
       """
       <?xml version="1.0"?>
@@ -271,9 +269,7 @@ Feature: JUnit Formatter
                   path: %paths.base%/features/User.feature
       """
     When I run "behat --no-colors -f junit -o junit"
-    Then it should pass with:
-      """
-      """
+    Then it should pass with no output
     And "junit/world.xml" file should contain:
       """
       <?xml version="1.0"?>
