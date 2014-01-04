@@ -322,7 +322,7 @@ class PrettyFormatter extends TranslatableCliFormatter
 
     public function printExamplesHeader(ExampleTested $event)
     {
-        $example = $event->getExample();
+        $example = $event->getScenario();
         $outline = $this->currentScenario;
         $index = array_search($example, $outline->getExamples());
 
@@ -370,7 +370,7 @@ class PrettyFormatter extends TranslatableCliFormatter
 
     public function printExampleRow(ExampleTested $event)
     {
-        $example = $event->getExample();
+        $example = $event->getScenario();
 
         $this->printBeforeHookCallResults($this->currentExampleEvent->getHookCallResults(), '      ');
 
@@ -384,7 +384,7 @@ class PrettyFormatter extends TranslatableCliFormatter
 
         if (TestResult::FAILED === $event->getResultCode()) {
             $feature = $event->getFeature();
-            $scenario = $event->getExample();
+            $scenario = $event->getScenario();
             $this->failedScenarioPaths[] = sprintf('%s:%s', $feature->getFile(), $scenario->getLine());
         }
         $this->scenarioStats[$event->getResultCode()]++;
@@ -423,7 +423,7 @@ class PrettyFormatter extends TranslatableCliFormatter
 
         $this->writeln(sprintf('      %s', $row));
 
-        foreach ($this->currentAfterStepEvents as $i => $afterEvent) {
+        foreach ($this->currentAfterStepEvents as $afterEvent) {
             $this->printStepOutputOrException($afterEvent->getTestResult(), '      ');
         }
     }
@@ -438,7 +438,7 @@ class PrettyFormatter extends TranslatableCliFormatter
                 continue;
             }
 
-            $index = array_search($event->getStep(), $this->currentExampleEvent->getExample()->getSteps());
+            $index = array_search($event->getStep(), $this->currentExampleEvent->getScenario()->getSteps());
             $header = $outline->getExampleTable()->getRow(0);
             $steps = $outline->getSteps();
             $outlineStepText = $steps[$index]->getText();

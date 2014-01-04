@@ -179,7 +179,7 @@ class ProgressFormatter extends TranslatableCliFormatter
         $this->scenarioStats[$event->getResultCode()]++;
         if (TestResult::FAILED === $event->getResultCode()) {
             $feature = $event->getFeature();
-            $scenario = $event instanceof ExampleTested ? $event->getExample() : $event->getScenario();
+            $scenario = $event->getScenario();
             $this->failedScenarioPaths[] = sprintf('%s:%s', $this->relativizePath($feature->getFile()), $scenario->getLine());
         }
     }

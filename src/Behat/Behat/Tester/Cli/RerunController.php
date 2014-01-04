@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Tester\Cli;
 
+use Behat\Behat\Tester\Event\AbstractScenarioTested;
 use Behat\Behat\Tester\Event\ExampleTested;
 use Behat\Behat\Tester\Event\ScenarioTested;
 use Behat\Behat\Tester\Result\TestResult;
@@ -83,7 +84,7 @@ class RerunController implements Controller
                 $this,
                 'collectFailedScenario'
             ), -50);
-        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'collectFailedExample'), -50);
+        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'collectFailedScenario'), -50);
         $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'writeCache'), -50);
         $this->key = $this->generateKey($input);
 
@@ -101,9 +102,9 @@ class RerunController implements Controller
     /**
      * Records scenario if it is failed.
      *
-     * @param ScenarioTested $event
+     * @param AbstractScenarioTested $event
      */
-    public function collectFailedScenario(ScenarioTested $event)
+    public function collectFailedScenario(AbstractScenarioTested $event)
     {
         if (!$this->getFileName()) {
             return;
@@ -116,26 +117,6 @@ class RerunController implements Controller
         $scenario = $event->getScenario();
 
         $this->lines[] = $feature->getFile() . ':' . $scenario->getLine();
-    }
-
-    /**
-     * Records outline example if it is failed.
-     *
-     * @param ExampleTested $event
-     */
-    public function collectFailedExample(ExampleTested $event)
-    {
-        if (!$this->getFileName()) {
-            return;
-        }
-        if (TestResult::FAILED !== $event->getResultCode()) {
-            return;
-        }
-
-        $feature = $event->getFeature();
-        $example = $event->getExample();
-
-        $this->lines[] = $feature->getFile() . ':' . $example->getLine();
     }
 
     /**
