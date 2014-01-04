@@ -288,3 +288,84 @@ Feature: JUnit Formatter
         </testsuite>
       </testsuites>
       """
+
+  Scenario: Output in hooks and steps
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          private $value;
+
+          /**
+           * @Given /I have entered (\d+)/
+           */
+          public function iHaveEntered($num) {
+              $this->value = $num;
+          }
+
+          /**
+           * @Then /I must have (\d+)/
+           */
+          public function iMustHave($num) {
+              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
+          }
+
+          /**
+           * @When /I (add|subtract) the value (\d+)/
+           */
+          public function iAddOrSubstact($op, $num) {
+              if ($op == 'add')
+                $this->value += $num;
+              elseif ($op == 'subtract')
+                $this->value -= $num;
+          }
+
+          /**
+           * @When /I produce some output/
+           */
+          public function iProduceOutput() {
+              echo 'output from step!';
+              throw new Exception('Failed');
+          }
+      }
+      """
+    And a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background:
+          Given I have entered 10
+
+        Scenario: Adding some interesting value
+          Then I must have 10
+          And I add the value 6
+          Then I must have 16
+
+        Scenario: Subtracting some value
+          Then I must have 10
+          And I subtract the value 6
+          And I produce some output
+          Then I must have 4
+      """
+    When I run "behat --no-colors -f junit -o junit"
+    Then it should fail with no output
+    And "junit/default.xml" file should contain:
+      """
+      <?xml version="1.0"?>
+      <testsuites name="default">
+        <testsuite name="World consistency" file="features/World.feature" tests="2" failures="1" errors="0">
+          <testcase name="Adding some interesting value" assertions="4" status="PASSED"/>
+          <testcase name="Subtracting some value" assertions="5" status="FAILED">
+            <failure message="And I produce some output: Failed">output from step!</failure>
+            <skipped>Then I must have 4</skipped>
+          </testcase>
+        </testsuite>
+      </testsuites>
+      """
