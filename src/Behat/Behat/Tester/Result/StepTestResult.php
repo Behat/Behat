@@ -15,6 +15,7 @@ use Behat\Behat\Definition\SearchResult;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Call\CallResults;
+use Exception;
 
 /**
  * Step test result.
@@ -148,5 +149,35 @@ class StepTestResult extends TestResult
         }
 
         return static::PASSED;
+    }
+
+    /**
+     * @return Exception|null
+     */
+    public function getException()
+    {
+        if ($this->searchException) {
+            return $this->searchException;
+        }
+
+        foreach ($this->hookCallResults as $callResult) {
+            if ($callResult->hasException()) {
+                return $callResult->getException();
+            }
+        }
+
+        if ($this->callResult->hasException()) {
+            return $this->callResult->getException();
+        }
+
+        return null;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasException()
+    {
+        return null !== $this->getException();
     }
 }
