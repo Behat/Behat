@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\ServiceContainer;
 
-use Behat\Testwork\ServiceContainer\Exception\ProcessingException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -30,8 +29,6 @@ class ServiceProcessor
      * @param string           $tag
      *
      * @return Reference[]
-     *
-     * @throws ProcessingException
      */
     public function findAndSortTaggedServices(ContainerBuilder $container, $tag)
     {
@@ -39,15 +36,7 @@ class ServiceProcessor
         foreach ($container->findTaggedServiceIds($tag) as $id => $tags) {
             $firstTags = current($tags);
 
-            if (!isset($firstTags['priority'])) {
-                throw new ProcessingException(sprintf(
-                    'All `%s` tags should have a `priority` attribute, but `%s` service has none.',
-                    $tag,
-                    $id
-                ));
-            }
-
-            $serviceTags[] = array_merge($firstTags, array('id' => $id));
+            $serviceTags[] = array_merge(array('priority' => 0), $firstTags, array('id' => $id));
         }
 
         usort($serviceTags, function ($tag1, $tag2) { return $tag2['priority'] - $tag1['priority']; });
