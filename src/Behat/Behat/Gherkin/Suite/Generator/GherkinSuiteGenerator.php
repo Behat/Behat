@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Gherkin\Suite\Generator;
 
-use Behat\Behat\Gherkin\Suite\GherkinSuite;
 use Behat\Testwork\Suite\Generator\SuiteGenerator;
+use Behat\Testwork\Suite\GenericSuite;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -60,7 +60,7 @@ class GherkinSuiteGenerator implements SuiteGenerator
      */
     public function generateSuite($suiteName, array $settings, array $parameters)
     {
-        return new GherkinSuite($suiteName, $this->mergeDefaultSettings($settings), $parameters);
+        return new GenericSuite($suiteName, $this->mergeDefaultSettings($settings), $parameters);
     }
 
     /**
