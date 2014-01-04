@@ -88,7 +88,7 @@ class SuiteWithContextsSetup implements SuiteSetup
 
             $this->ensureContextDirectory($path = $this->findClassFile($classname));
 
-            if ($content = $this->generateClass($classname)) {
+            if ($content = $this->generateClass($suite, $classname)) {
                 $this->createContextFile($path, $content);
             }
         }
@@ -156,16 +156,17 @@ class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Generates class using registered class generators.
      *
+     * @param Suite  $suite
      * @param string $classname
      *
      * @return null|string
      */
-    final protected function generateClass($classname)
+    final protected function generateClass(Suite $suite, $classname)
     {
         $content = null;
         foreach ($this->classGenerators as $generator) {
-            if ($generator->supportsClassname($classname)) {
-                $content = $generator->generateClass($classname);
+            if ($generator->supportsSuiteAndClassname($suite, $classname)) {
+                $content = $generator->generateClass($suite, $classname);
             }
         }
 

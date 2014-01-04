@@ -11,6 +11,7 @@
 namespace Behat\Behat\Context\ClassGenerator;
 
 use Behat\Behat\Context\Suite\Setup\SuiteWithContextsSetup;
+use Behat\Testwork\Suite\Suite;
 
 /**
  * Context class generator interface.
@@ -26,18 +27,20 @@ interface ContextClassGenerator
     /**
      * Checks if generator supports provided context class.
      *
+     * @param Suite  $suite
      * @param string $classname
      *
      * @return Boolean
      */
-    public function supportsClassname($classname);
+    public function supportsSuiteAndClassname(Suite $suite, $classname);
 
     /**
      * Generates context class code.
      *
+     * @param Suite  $suite
      * @param string $classname
      *
      * @return string The context class source code
      */
-    public function generateClass($classname);
+    public function generateClass(Suite $suite, $classname);
 }

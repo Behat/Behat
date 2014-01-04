@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Context\ClassGenerator;
 
+use Behat\Testwork\Suite\Suite;
+
 /**
  * Simple context class generator.
  *
@@ -45,25 +47,17 @@ class {className} implements TurnipAcceptingContext
 PHP;
 
     /**
-     * Checks if generator supports provided context class.
-     *
-     * @param string $classname
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
-    public function supportsClassname($classname)
+    public function supportsSuiteAndClassname(Suite $suite, $classname)
     {
         return true;
     }
 
     /**
-     * Generates context class code.
-     *
-     * @param string $classname
-     *
-     * @return string The context class source code
+     * {@inheritdoc}
      */
-    public function generateClass($classname)
+    public function generateClass(Suite $suite, $classname)
     {
         $fqn = $classname;
 
