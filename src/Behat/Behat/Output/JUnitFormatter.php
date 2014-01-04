@@ -109,11 +109,11 @@ class JUnitFormatter implements Formatter
 
     public function startFeature(FeatureTested $event)
     {
-        $subject = $event->getSubject();
+        $feature = $event->getFeature();
 
         $this->currentTestsuite = $testsuite = $this->xml->addChild('testsuite');
-        $testsuite->addAttribute('name', $subject->getTitle());
-        $testsuite->addAttribute('file', $this->relativizePath($subject->getFile()));
+        $testsuite->addAttribute('name', $feature->getTitle());
+        $testsuite->addAttribute('file', $this->relativizePath($feature->getFile()));
 
         $this->testsuiteStats = array(
             'PASSED' => 0,
