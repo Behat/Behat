@@ -66,7 +66,8 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function buildEnvironment(Suite $suite)
     {
-        $contextPool = new UninitializedContextPool($suite->getParameters());
+        $constructorArguments = $suite->hasSetting('parameters') ? (array) $suite->getSetting('parameters') : array();
+        $contextPool = new UninitializedContextPool($constructorArguments);
 
         foreach ($this->getContextClasses($suite) as $class) {
             $contextPool->registerContextClass($class);

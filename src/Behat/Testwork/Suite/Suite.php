@@ -50,29 +50,4 @@ interface Suite
      * @return mixed
      */
     public function getSetting($key);
-
-    /**
-     * Returns custom parameters.
-     *
-     * @return array
-     */
-    public function getParameters();
-
-    /**
-     * Checks if parameter with provided name exists.
-     *
-     * @param string $key
-     *
-     * @return Boolean
-     */
-    public function hasParameter($key);
-
-    /**
-     * Returns parameter value by its key.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function getParameter($key);
 }

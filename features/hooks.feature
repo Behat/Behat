@@ -29,7 +29,7 @@ Feature: hooks
            * @BeforeFeature
            */
           static public function doSomethingBeforeFeature($event) {
-              $params = $event->getSuite()->getParameters();
+              $params = $event->getSuite()->getSetting('parameters');
               echo "= do something ".$params['before_feature'];
           }
 
@@ -37,7 +37,7 @@ Feature: hooks
            * @AfterFeature
            */
           static public function doSomethingAfterFeature($event) {
-              $params = $event->getSuite()->getParameters();
+              $params = $event->getSuite()->getSetting('parameters');
               echo "= do something ".$params['after_feature'];
           }
 

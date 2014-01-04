@@ -73,10 +73,9 @@ Feature: Config inheritance
           /** @When this scenario executes */
           public function thisScenarioExecutes() {}
 
-          /** @Then the context config should be merged */
-          public function theContextConfigMerged() {
-              \PHPUnit_Framework_Assert::assertEquals('val1', $this->parameters['param1']);
-              \PHPUnit_Framework_Assert::assertEquals('val2', $this->parameters['param2']);
+          /** @Then the context parameters should be overwritten */
+          public function theContextParametersOverwrite() {
+              \PHPUnit_Framework_Assert::assertEquals(array('param2' => 'val2'), $this->parameters);
           }
 
           /** @Then the extension config should be merged */
@@ -144,7 +143,7 @@ Feature: Config inheritance
       Feature:
         Scenario:
           When this scenario executes
-          Then the context config should be merged
+          Then the context parameters should be overwritten
           And the extension config should be merged
       """
 

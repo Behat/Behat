@@ -92,7 +92,7 @@ class SuiteExtension implements Extension
                             : array();
 
                         foreach ($suite as $key => $val) {
-                            $suiteKeys = array('enabled', 'type', 'settings', 'parameters');
+                            $suiteKeys = array('enabled', 'type', 'settings');
                             if (!in_array($key, $suiteKeys)) {
                                 $suite['settings'][$key] = $val;
                                 unset($suite[$key]);
@@ -114,11 +114,6 @@ class SuiteExtension implements Extension
                         ->defaultValue(null)
                     ->end()
                     ->arrayNode('settings')
-                        ->defaultValue(array())
-                        ->useAttributeAsKey('name')
-                        ->prototype('variable')->end()
-                    ->end()
-                    ->arrayNode('parameters')
                         ->defaultValue(array())
                         ->useAttributeAsKey('name')
                         ->prototype('variable')->end()
@@ -169,9 +164,8 @@ class SuiteExtension implements Extension
             }
 
             $configuredSuites[$name] = array(
-                'type'       => $config['type'],
-                'settings'   => $config['settings'],
-                'parameters' => $config['parameters']
+                'type'     => $config['type'],
+                'settings' => $config['settings'],
             );
         }
 
