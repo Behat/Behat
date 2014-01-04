@@ -173,7 +173,7 @@ class FilesystemFeatureLocator implements SubjectLocator
         $iterator = new RegexIterator(
             new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($absolutePath)
-            ), '/^.+\.feature/i',
+            ), '/^.+\.feature$/i',
             RegexIterator::MATCH
         );
         $paths = array_map('strval', iterator_to_array($iterator));
