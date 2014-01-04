@@ -22,7 +22,6 @@
         "symfony/event-dispatcher":      "~2.1",
         "symfony/translation":           "~2.1",
         "symfony/yaml":                  "~2.1",
-        "symfony/finder":                "~2.1",
         "symfony/class-loader":          "~2.1"
     },
 
