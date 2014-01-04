@@ -27,96 +27,29 @@ class ExampleTested extends AbstractScenarioTested
     const BEFORE = 'tester.example_tested.before';
     const AFTER = 'tester.example_tested.after';
 
-    /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var ExampleNode
-     */
-    private $example;
-    /**
-     * @var null|StepContainerTestResult
-     */
-    private $testResult;
-    /**
-     * @var null|CallResults
-     */
-    private $hookCallResults;
-
-    /**
-     * Initializes event.
-     *
-     * @param Suite                   $suite
-     * @param Environment             $environment
-     * @param FeatureNode             $feature
-     * @param ExampleNode             $example
-     * @param null|StepContainerTestResult $testResult
-     * @param null|CallResults        $hookCallResults
-     */
     public function __construct(
         Suite $suite,
         Environment $environment,
         FeatureNode $feature,
-        ExampleNode $example,
+        ExampleNode $scenario,
         StepContainerTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment);
-
-        $this->feature = $feature;
-        $this->example = $example;
-        $this->testResult = $testResult;
-        $this->hookCallResults = $hookCallResults;
+        parent::__construct(
+            $suite,
+            $environment,
+            $feature,
+            $scenario,
+            $testResult,
+            $hookCallResults
+        );
     }
 
     /**
-     * Returns feature.
-     *
-     * @return FeatureNode
-     */
-    public function getFeature()
-    {
-        return $this->feature;
-    }
-
-    /**
-     * Returns example node.
-     *
      * @return ExampleNode
      */
-    public function getExample()
+    public function getScenario()
     {
-        return $this->example;
-    }
-
-    /**
-     * Returns example test result (if scenario was tested).
-     *
-     * @return null|StepContainerTestResult
-     */
-    public function getTestResult()
-    {
-        return $this->testResult;
-    }
-
-    /**
-     * Returns hook call results.
-     *
-     * @return null|CallResults
-     */
-    public function getHookCallResults()
-    {
-        return $this->hookCallResults;
-    }
-
-    /**
-     * Returns step tester result status.
-     *
-     * @return integer
-     */
-    public function getResultCode()
-    {
-        return $this->testResult->getResultCode();
+        return parent::getScenario();
     }
 }

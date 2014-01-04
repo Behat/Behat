@@ -10,7 +10,13 @@
 
 namespace Behat\Behat\Tester\Event;
 
+use Behat\Behat\Tester\Result\StepContainerTestResult;
+use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Testwork\Call\CallResults;
+use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\Suite\Suite;
 
 /**
  * Abstract scenario tested event.
@@ -19,4 +25,96 @@ use Behat\Testwork\Hook\Event\LifecycleEvent;
  */
 abstract class AbstractScenarioTested extends LifecycleEvent
 {
+    /**
+     * @var FeatureNode
+     */
+    private $feature;
+    /**
+     * @var ScenarioInterface
+     */
+    private $scenario;
+    /**
+     * @var StepContainerTestResult
+     */
+    private $testResult;
+    /**
+     * @var null|CallResults
+     */
+    private $hookCallResults;
+
+    /**
+     * Initializes event.
+     *
+     * @param Suite                   $suite
+     * @param Environment             $environment
+     * @param FeatureNode             $feature
+     * @param ScenarioInterface            $scenario
+     * @param null|StepContainerTestResult $testResult
+     * @param null|CallResults        $hookCallResults
+     */
+    public function __construct(
+        Suite $suite,
+        Environment $environment,
+        FeatureNode $feature,
+        ScenarioInterface $scenario,
+        StepContainerTestResult $testResult = null,
+        CallResults $hookCallResults = null
+    ) {
+        parent::__construct($suite, $environment);
+
+        $this->feature = $feature;
+        $this->scenario = $scenario;
+        $this->testResult = $testResult;
+        $this->hookCallResults = $hookCallResults;
+    }
+
+    /**
+     * Returns feature.
+     *
+     * @return FeatureNode
+     */
+    public function getFeature()
+    {
+        return $this->feature;
+    }
+
+    /**
+     * Returns scenario node.
+     *
+     * @return ScenarioInterface
+     */
+    public function getScenario()
+    {
+        return $this->scenario;
+    }
+
+    /**
+     * Returns scenario test result (if scenario was tested).
+     *
+     * @return null|StepContainerTestResult
+     */
+    public function getTestResult()
+    {
+        return $this->testResult;
+    }
+
+    /**
+     * Returns hook call results.
+     *
+     * @return null|CallResults
+     */
+    public function getHookCallResults()
+    {
+        return $this->hookCallResults;
+    }
+
+    /**
+     * Returns step tester result status.
+     *
+     * @return integer
+     */
+    public function getResultCode()
+    {
+        return $this->testResult->getResultCode();
+    }
 }

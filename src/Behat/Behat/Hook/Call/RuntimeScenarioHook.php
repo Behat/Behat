@@ -10,8 +10,7 @@
 
 namespace Behat\Behat\Hook\Call;
 
-use Behat\Behat\Tester\Event\ExampleTested;
-use Behat\Behat\Tester\Event\ScenarioTested;
+use Behat\Behat\Tester\Event\AbstractScenarioTested;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Node\FeatureNode;
@@ -35,7 +34,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
      */
     public function filterMatches(LifecycleEvent $event)
     {
-        if (!$event instanceof ScenarioTested && !$event instanceof ExampleTested) {
+        if (!$event instanceof AbstractScenarioTested) {
             return false;
         }
         if (null === ($filterString = $this->getFilterString())) {
@@ -43,11 +42,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
         }
 
         $feature = $event->getFeature();
-        if ($event instanceof ScenarioTested) {
-            $scenario = $event->getScenario();
-        } else {
-            $scenario = $event->getExample();
-        }
+        $scenario = $event->getScenario();
 
         return $this->isMatch($feature, $scenario, $filterString);
     }
