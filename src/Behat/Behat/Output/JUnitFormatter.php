@@ -212,7 +212,7 @@ class JUnitFormatter implements Formatter
     {
         $outputDir = $this->getParameter('output_path');
         if (!is_dir($outputDir)) {
-            mkdir($outputDir, 0, true);
+            mkdir($outputDir, 0777, true);
         }
 
         $dom = new \DOMDocument('1.0');

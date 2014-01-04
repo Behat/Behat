@@ -1,17 +1,15 @@
 Feature: JUnit Formatter
-  In order to debug features
-  As a feature writer
-  I need to have JUnit formatter
+  In order integrate with Jenkins
+  As a developer
+  I need to be able to generate a JUnit-compatible report
 
-  Scenario: Complex
+  Scenario: Normal Scenario's
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
       use Behat\Behat\Context\RegexAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
 
       class FeatureContext implements RegexAcceptingContext
       {
@@ -71,7 +69,6 @@ Feature: JUnit Formatter
           Then I must have 13
 
         Scenario Outline: Passed & Failed
-          Given I must have 10
           When I add <value>
           Then I must have <result>
 
@@ -110,11 +107,11 @@ Feature: JUnit Formatter
           <testcase name="Failed" assertions="3" status="FAILED">
             <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
           </testcase>
-          <testcase name="Passed &amp; Failed #1" assertions="4" status="FAILED">
+          <testcase name="Passed &amp; Failed #1" assertions="3" status="FAILED">
             <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
           </testcase>
-          <testcase name="Passed &amp; Failed #2" assertions="4" status="PASSED"/>
-          <testcase name="Passed &amp; Failed #3" assertions="4" status="FAILED">
+          <testcase name="Passed &amp; Failed #2" assertions="3" status="PASSED"/>
+          <testcase name="Passed &amp; Failed #3" assertions="3" status="FAILED">
             <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
           </testcase>
         </testsuite>
@@ -198,10 +195,7 @@ Feature: JUnit Formatter
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\RegexAcceptingContext;
 
       class FeatureContext implements RegexAcceptingContext
       {
@@ -301,6 +295,20 @@ Feature: JUnit Formatter
           private $value;
 
           /**
+           * @BeforeFeature
+           */
+          public static function outputtingFeatureHook() {
+              echo 'output from hook!';
+          }
+
+          /**
+           * @BeforeScenario
+           */
+          public static function outputtingScenarioHook() {
+              echo 'output from another hook!';
+          }
+
+          /**
            * @Given /I have entered (\d+)/
            */
           public function iHaveEntered($num) {
@@ -329,7 +337,6 @@ Feature: JUnit Formatter
            */
           public function iProduceOutput() {
               echo 'output from step!';
-              throw new Exception('Failed');
           }
       }
       """
@@ -344,27 +351,27 @@ Feature: JUnit Formatter
           Given I have entered 10
 
         Scenario: Adding some interesting value
-          Then I must have 10
           And I add the value 6
           Then I must have 16
 
         Scenario: Subtracting some value
-          Then I must have 10
           And I subtract the value 6
           And I produce some output
           Then I must have 4
       """
     When I run "behat --no-colors -f junit -o junit"
-    Then it should fail with no output
+    Then it should pass with no output
     And "junit/default.xml" file should contain:
       """
       <?xml version="1.0"?>
       <testsuites name="default">
-        <testsuite name="World consistency" file="features/World.feature" tests="2" failures="1" errors="0">
-          <testcase name="Adding some interesting value" assertions="4" status="PASSED"/>
-          <testcase name="Subtracting some value" assertions="5" status="FAILED">
-            <failure message="And I produce some output: Failed">output from step!</failure>
-            <skipped>Then I must have 4</skipped>
+        <testsuite name="World consistency" file="features/World.feature" tests="2" failures="0" errors="0">
+          <system-out>output from beforeFeature hook!</system-out>
+          <system-out>output from another hook!</system-out>
+          <testcase name="Adding some interesting value" assertions="3" status="PASSED"/>
+          <system-out>output from another hook!</system-out>
+          <testcase name="Subtracting some value" assertions="4" status="PASSED">
+            <system-out>output from step!</system-out>
           </testcase>
         </testsuite>
       </testsuites>
