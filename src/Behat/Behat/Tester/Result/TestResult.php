@@ -30,17 +30,10 @@ class TestResult extends BaseTestResult
      */
     public static function codeToString($resultCode)
     {
-        switch ($resultCode) {
-            case self::SKIPPED:
-                return 'skipped';
-            case self::PENDING:
-                return 'pending';
-            case self::UNDEFINED:
-                return 'undefined';
-            case self::FAILED:
-                return 'failed';
+        if (self::UNDEFINED === $resultCode) {
+            return 'undefined';
         }
 
-        return 'passed';
+        return parent::codeToString($resultCode);
     }
 }
