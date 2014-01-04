@@ -20,7 +20,7 @@ class SimpleContextClassGenerator implements ContextClassGenerator
     /**
      * @var string
      */
-    private static $template = <<<'PHP'
+    protected static $template = <<<'PHP'
 <?php
 
 {namespace}use Behat\Behat\Context\TurnipAcceptingContext;
