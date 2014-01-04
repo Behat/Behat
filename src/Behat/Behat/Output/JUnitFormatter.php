@@ -17,6 +17,7 @@ use Behat\Behat\Tester\Event\FeatureTested;
 use Behat\Behat\Tester\Event\OutlineTested;
 use Behat\Behat\Tester\Event\ScenarioTested;
 use Behat\Behat\Tester\Event\BackgroundTested;
+use Behat\Testwork\Hook\Event\LifecycleEvent;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Event\SuiteTested;
 
@@ -86,20 +87,20 @@ class JUnitFormatter implements Formatter
     public static function getSubscribedEvents()
     {
         return array(
-            SuiteTested::BEFORE     => array('startSuite', 999),
-            SuiteTested::AFTER      => array('writeSuite', -50),
-            FeatureTested::BEFORE   => array('startFeature', -50),
-            FeatureTested::AFTER    => array('endFeature', -50),
+            SuiteTested::BEFORE     => array('createTestsuites', -50),
+            SuiteTested::AFTER      => array('writeFile', -50),
+            FeatureTested::BEFORE   => array('createTestsuite', -50),
+            FeatureTested::AFTER    => array('writeTestsuite', -50),
             ScenarioTested::BEFORE  => array('startScenario', -50),
-            ScenarioTested::AFTER   => array('endScenario', -50),
-            StepTested::AFTER       => array('saveStep', -50),
+            ScenarioTested::AFTER   => array('writeTestcase', -50),
+            StepTested::AFTER       => array('writeStep', -50),
             OutlineTested::BEFORE   => array('startOutline', -50),
             ExampleTested::BEFORE   => array('startExample', -50),
-            ExampleTested::AFTER    => array('endExample', -50),
+            ExampleTested::AFTER    => array('writeTestcase', -50),
         );
     }
 
-    public function startSuite(SuiteTested $event)
+    public function createTestsuites(SuiteTested $event)
     {
         $suite = $event->getSuite();
 
@@ -107,7 +108,7 @@ class JUnitFormatter implements Formatter
         $this->xml->addAttribute('name', $suite->getName());
     }
 
-    public function startFeature(FeatureTested $event)
+    public function createTestsuite(FeatureTested $event)
     {
         $feature = $event->getFeature();
 
@@ -130,44 +131,25 @@ class JUnitFormatter implements Formatter
 
     public function startScenario(ScenarioTested $event)
     {
-        $scenario = $event->getScenario();
         $title = implode(' ', array_map(function ($l) {
             return trim($l);
-        }, explode("\n", $scenario->getTitle())));
+        }, explode("\n", $event->getScenario()->getTitle())));
 
-        $this->currentTestcase = $testcase = $this->currentTestsuite->addChild('testcase');
-        $testcase->addAttribute('name', $title);
-
-        $this->testcaseStats = array(
-            TestResult::PASSED    => 0,
-            TestResult::SKIPPED   => 0,
-            TestResult::PENDING   => 0,
-            TestResult::UNDEFINED => 0,
-            TestResult::FAILED    => 0,
-        );
+        $this->createTestcase($title);
     }
 
     public function startExample(ExampleTested $event)
     {
-        $example = $event->getExample();
         if (!isset($this->examples[$this->outlineName])) {
             $this->examples[$this->outlineName] = 1;
         } else {
             $this->examples[$this->outlineName]++;
         }
-        $this->currentTestcase = $testcase = $this->currentTestsuite->addChild('testcase');
-        $testcase->addAttribute('name', $this->outlineName.' #'.$this->examples[$this->outlineName]);
 
-        $this->testcaseStats = array(
-            TestResult::PASSED    => 0,
-            TestResult::SKIPPED   => 0,
-            TestResult::PENDING   => 0,
-            TestResult::UNDEFINED => 0,
-            TestResult::FAILED    => 0,
-        );
+        $this->createTestcase($this->outlineName.' #'.$this->examples[$this->outlineName]);
     }
 
-    public function saveStep(StepTested $event)
+    public function writeStep(StepTested $event)
     {
         $this->testcaseStats[$event->getResultCode()]++;
         $step = $event->getStep();
@@ -206,7 +188,7 @@ class JUnitFormatter implements Formatter
         }
     }
 
-    public function endExample(ExampleTested $event)
+    public function writeTestcase(LifecycleEvent $event)
     {
         $status = strtoupper(TestResult::codeToString($event->getResultCode()));
 
@@ -216,17 +198,7 @@ class JUnitFormatter implements Formatter
         $this->currentTestcase->addAttribute('status', $status);
     }
 
-    public function endScenario(ScenarioTested $event)
-    {
-        $status = strtoupper(TestResult::codeToString($event->getResultCode()));
-
-        $this->testsuiteStats[$status]++;
-
-        $this->currentTestcase->addAttribute('assertions', array_sum($this->testcaseStats));
-        $this->currentTestcase->addAttribute('status', $status);
-    }
-
-    public function endFeature(FeatureTested $event)
+    public function writeTestsuite(FeatureTested $event)
     {
         $testResult = $event->getTestResult();
 
@@ -236,7 +208,7 @@ class JUnitFormatter implements Formatter
         $testsuite->addAttribute('errors', $this->testsuiteStats['PENDING'] + $this->testsuiteStats['UNDEFINED']);
     }
 
-    public function writeSuite(SuiteTested $event)
+    public function writeFile(SuiteTested $event)
     {
         $outputDir = $this->getParameter('output_path');
         if (!is_dir($outputDir)) {
@@ -281,6 +253,25 @@ class JUnitFormatter implements Formatter
     public function getParameter($name)
     {
         return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
+    }
+
+    /**
+     * Creates testcase element.
+     *
+     * @param string $name
+     */
+    protected function createTestcase($name)
+    {
+        $this->currentTestcase = $testcase = $this->currentTestsuite->addChild('testcase');
+        $testcase->addAttribute('name', $name);
+
+        $this->testcaseStats = array(
+            TestResult::PASSED    => 0,
+            TestResult::SKIPPED   => 0,
+            TestResult::PENDING   => 0,
+            TestResult::UNDEFINED => 0,
+            TestResult::FAILED    => 0,
+        );
     }
 
     private function relativizePath($path)
