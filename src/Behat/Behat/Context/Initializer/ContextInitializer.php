@@ -22,15 +22,6 @@ use Behat\Behat\Context\Context;
 interface ContextInitializer
 {
     /**
-     * Checks if initializer supports provided context.
-     *
-     * @param Context $context
-     *
-     * @return Boolean
-     */
-    public function supportsContext(Context $context);
-
-    /**
      * Initializes provided context.
      *
      * @param Context $context
