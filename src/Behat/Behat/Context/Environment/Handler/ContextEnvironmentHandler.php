@@ -123,9 +123,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
         $context = new $classname($constructorArguments);
 
         foreach ($this->initializers as $initializer) {
-            if ($initializer->supportsContext($context)) {
-                $initializer->initializeContext($context);
-            }
+            $initializer->initializeContext($context);
         }
 
         return $context;
