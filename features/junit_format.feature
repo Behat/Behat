@@ -95,13 +95,13 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0"?>
       <testsuites name="default">
-        <testsuite name="World consistency" file="features/World.feature" tests="6" failures="3" errors="2">
+        <testsuite name="World consistency" tests="6" failures="3" errors="2">
           <testcase name="Undefined" assertions="4" status="UNDEFINED">
-            <error type="undefined" message="And Something new"/>
+            <error type="undefined">And Something new</error>
             <skipped>Then I must have 10</skipped>
           </testcase>
           <testcase name="Pending" assertions="4" status="PENDING">
-            <skipped>And Something not done yet: TODO: write pending definition</skipped>
+            <error type="pending" message="TODO: write pending definition">And Something not done yet</error>
             <skipped>Then I must have 10</skipped>
           </testcase>
           <testcase name="Failed" assertions="3" status="FAILED">
@@ -117,6 +117,7 @@ Feature: JUnit Formatter
         </testsuite>
       </testsuites>
       """
+    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Multiline titles
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -183,12 +184,13 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0"?>
       <testsuites name="default">
-        <testsuite name="World consistency" file="features/World.feature" tests="2" failures="0" errors="0">
+        <testsuite name="World consistency" tests="2" failures="0" errors="0">
           <testcase name="Adding some interesting value" assertions="4" status="PASSED"/>
           <testcase name="Subtracting some value" assertions="4" status="PASSED"/>
         </testsuite>
       </testsuites>
       """
+    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Multiple suites
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -268,20 +270,22 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0"?>
       <testsuites name="world">
-        <testsuite name="World consistency" file="features/World.feature" tests="1" failures="0" errors="0">
+        <testsuite name="World consistency" tests="1" failures="0" errors="0">
           <testcase name="Passing" assertions="3" status="PASSED"/>
         </testsuite>
       </testsuites>
       """
+    And the file "junit/world.xml" should be a valid document according to "junit.xsd"
     And "junit/user.xml" file should contain:
       """
       <?xml version="1.0"?>
       <testsuites name="user">
-        <testsuite name="User consistency" file="features/User.feature" tests="1" failures="0" errors="0">
+        <testsuite name="User consistency" tests="1" failures="0" errors="0">
           <testcase name="Passing" assertions="3" status="PASSED"/>
         </testsuite>
       </testsuites>
       """
+    And the file "junit/user.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Output in hooks and steps
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -365,7 +369,7 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0"?>
       <testsuites name="default">
-        <testsuite name="World consistency" file="features/World.feature" tests="2" failures="0" errors="0">
+        <testsuite name="World consistency" tests="2" failures="0" errors="0">
           <system-out>output from beforeFeature hook!</system-out>
           <system-out>output from another hook!</system-out>
           <testcase name="Adding some interesting value" assertions="3" status="PASSED"/>
@@ -376,3 +380,4 @@ Feature: JUnit Formatter
         </testsuite>
       </testsuites>
       """
+    And the file "junit/default.xml" should be a valid document according to "junit.xsd"

@@ -258,6 +258,22 @@ class FeatureContext implements Context
         }
     }
 
+    /**
+     * Checks whether the file is validate according to an XML schema.
+     *
+     * @Then /^the file "([^"]+)" should be a valid document according to "([^"]+)"$/
+     *
+     * @param string $xmlFile
+     * @param string $schemaPath relative to features/bootstrap/schema
+     */
+    public function itShouldBeValid($xmlFile, $schemaPath)
+    {
+        $dom = new DomDocument();
+        $dom->load($xmlFile);
+
+        $dom->schemaValidate(__DIR__.'/schema/'.$schemaPath);
+    }
+
     private function getExitCode()
     {
         return $this->process->getExitCode();

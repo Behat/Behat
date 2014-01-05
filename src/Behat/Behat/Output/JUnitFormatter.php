@@ -114,7 +114,6 @@ class JUnitFormatter implements Formatter
 
         $this->currentTestsuite = $testsuite = $this->xml->addChild('testsuite');
         $testsuite->addAttribute('name', $feature->getTitle());
-        $testsuite->addAttribute('file', $this->relativizePath($feature->getFile()));
 
         $this->testsuiteStats = array(
             'PASSED' => 0,
@@ -158,19 +157,17 @@ class JUnitFormatter implements Formatter
                 $this->currentTestcase->addChild('skipped', $step->getType().' '.$step->getText());
                 break;
             case TestResult::PENDING:
-                $content = $step->getType().' '.$step->getText().': ';
+                $error = $this->currentTestcase->addChild('error', $step->getType().' '.$step->getText());
+                $error->addAttribute('type', 'pending');
 
                 $callResult = $event->getTestResult()->getCallResult();
                 if ($callResult->hasException()) {
-                    $content .= $callResult->getException()->getMessage();
+                    $error->addAttribute('message', $callResult->getException()->getMessage());
                 }
-
-                $this->currentTestcase->addChild('skipped', $content);
                 break;
             case TestResult::UNDEFINED:
-                $error = $this->currentTestcase->addChild('error');
+                $error = $this->currentTestcase->addChild('error', $step->getType().' '.$step->getText());
                 $error->addAttribute('type', 'undefined');
-                $error->addAttribute('message', $step->getType().' '.$step->getText());
                 break;
             case TestResult::FAILED:
                 $content = $step->getType().' '.$step->getText().': ';
