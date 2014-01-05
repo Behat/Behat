@@ -217,7 +217,7 @@ class JUnitFormatter implements Formatter
         $dom->formatOutput = true;
         $dom->loadXml($this->xml->asXml());
         
-        file_put_contents($outputDir.'/'.$event->getSuite()->getName().'.xml', $dom->saveXML());
+        file_put_contents($outputDir.'/'.$this->sluggifyName($event->getSuite()->getName()).'.xml', $dom->saveXML());
     }
     
     /**
@@ -269,6 +269,11 @@ class JUnitFormatter implements Formatter
             TestResult::UNDEFINED => 0,
             TestResult::FAILED    => 0,
         );
+    }
+
+    private function sluggifyName($name)
+    {
+        return strtolower(preg_replace('/[^[:alnum:]-_]/', '', str_replace(array(' ', "\n"), '-', $name)));
     }
 
     private function relativizePath($path)
