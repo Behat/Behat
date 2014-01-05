@@ -57,9 +57,9 @@ class JUnitFormatter implements Formatter
      */
     private $testcaseStats;
     /**
-     * @var int[]
+     * @var int
      */
-    private $examples;
+    private $exampleIndex;
     /**
      * @var string
      */
@@ -127,6 +127,7 @@ class JUnitFormatter implements Formatter
     public function startOutline(OutlineTested $event)
     {
         $this->outlineName = $event->getOutline()->getTitle();
+        $this->exampleIndex = 0;
     }
 
     public function startScenario(ScenarioTested $event)
@@ -140,13 +141,9 @@ class JUnitFormatter implements Formatter
 
     public function startExample(ExampleTested $event)
     {
-        if (!isset($this->examples[$this->outlineName])) {
-            $this->examples[$this->outlineName] = 1;
-        } else {
-            $this->examples[$this->outlineName]++;
-        }
+        $this->exampleIndex++;
 
-        $this->createTestcase($this->outlineName.' #'.$this->examples[$this->outlineName]);
+        $this->createTestcase($this->outlineName.' #'.$this->exampleIndex);
     }
 
     public function writeStep(StepTested $event)
