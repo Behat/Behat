@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Suite\Exception;
 
 use Behat\Testwork\Exception\TestworkException;
+use Exception;
 use InvalidArgumentException;
 
 /**
@@ -28,14 +29,15 @@ class SuiteException extends InvalidArgumentException implements TestworkExcepti
     /**
      * Initializes exception.
      *
-     * @param string $message
-     * @param string $name
+     * @param string         $message
+     * @param string         $name
+     * @param Exception|null $previous
      */
-    public function __construct($message, $name)
+    public function __construct($message, $name, Exception $previous = null)
     {
         $this->name = $name;
 
-        parent::__construct($message);
+        parent::__construct($message, 0, $previous);
     }
 
     /**
