@@ -55,20 +55,6 @@ class FilesystemFeatureLocator implements SubjectLocator
     }
 
     /**
-     * Checks if loader supports provided suite & locator.
-     *
-     * @param Suite  $suite
-     * @param string $locator
-     *
-     * @return Boolean
-     */
-    public function supportsSuiteAndLocator(Suite $suite, $locator)
-    {
-        return ($suite->hasSetting('paths') && is_array($suite->getSetting('paths')))
-            || ($suite->hasSetting('path') && null !== $suite->getSetting('path'));
-    }
-
-    /**
      * Loads feature iterator using provided suite & locator.
      *
      * @param Suite  $suite
