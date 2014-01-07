@@ -98,11 +98,9 @@ Feature: JUnit Formatter
         <testsuite name="World consistency" tests="6" failures="3" errors="2">
           <testcase name="Undefined" assertions="4" status="UNDEFINED">
             <error type="undefined">And Something new</error>
-            <skipped>Then I must have 10</skipped>
           </testcase>
           <testcase name="Pending" assertions="4" status="PENDING">
             <error type="pending" message="TODO: write pending definition">And Something not done yet</error>
-            <skipped>Then I must have 10</skipped>
           </testcase>
           <testcase name="Failed" assertions="3" status="FAILED">
             <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
