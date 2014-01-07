@@ -20,6 +20,7 @@ use Behat\Behat\Tester\Event\BackgroundTested;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Event\SuiteTested;
+use Behat\Testwork\Exception\ExceptionPresenter;
 
 /**
  * Behat JUnit formatter.
@@ -32,6 +33,10 @@ class JUnitFormatter implements Formatter
      * @var array
      */
     private $parameters = array();
+    /**
+     * @var ExceptionPresenter
+     */
+    private $exceptionPresenter;
     /**
      * @var string
      */
@@ -68,8 +73,10 @@ class JUnitFormatter implements Formatter
     /**
      * @param string $basePath
      */
-    public function __construct($basePath)
+    public function __construct($basePath, ExceptionPresenter $exceptionPresenter)
     {
+        $this->exceptionPresenter = $exceptionPresenter;
+
         if (null !== $basePath) {
             $realBasePath = realpath($basePath);
 
@@ -172,7 +179,7 @@ class JUnitFormatter implements Formatter
 
                 $callResult = $event->getTestResult()->getCallResult();
                 if ($callResult->hasException()) {
-                    $content .= $callResult->getException()->getMessage();
+                    $content .= $this->exceptionPresenter->presentException($callResult->getException());
                 }
                 $failure = $this->currentTestcase->addChild('failure');
                 $failure->addAttribute('message', $content);

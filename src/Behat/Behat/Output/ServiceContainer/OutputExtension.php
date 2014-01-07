@@ -75,7 +75,8 @@ class OutputExtension extends BaseExtension
     protected function loadJUnitFormatter(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Output\JUnitFormatter', array(
-            '%paths.base%'
+            '%paths.base%',
+            new Reference(ExceptionExtension::PRESENTER_ID),
         ));
         $definition->addTag(self::FORMATTER_TAG, array('priority' => 100));
         $container->setDefinition(self::FORMATTER_TAG . '.junit', $definition);
