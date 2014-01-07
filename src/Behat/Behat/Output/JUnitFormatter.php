@@ -152,9 +152,7 @@ class JUnitFormatter implements Formatter
 
         switch ($event->getResultCode()) {
             case TestResult::PASSED:
-                break;
             case TestResult::SKIPPED:
-                $this->currentTestcase->addChild('skipped', $step->getType().' '.$step->getText());
                 break;
             case TestResult::PENDING:
                 $error = $this->currentTestcase->addChild('error', $step->getType().' '.$step->getText());
