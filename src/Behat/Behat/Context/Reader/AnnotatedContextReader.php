@@ -11,8 +11,8 @@
 namespace Behat\Behat\Context\Reader;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
+use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Testwork\Call\Callee;
-use Behat\Testwork\Environment\Environment;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -55,12 +55,12 @@ class AnnotatedContextReader implements ContextReader
     /**
      * Loads annotation-based callees from context.
      *
-     * @param Environment $environment
-     * @param string      $contextClassname
+     * @param ContextEnvironment $environment
+     * @param string             $contextClassname
      *
      * @return Callee[]
      */
-    public function readContextCallees(Environment $environment, $contextClassname)
+    public function readContextCallees(ContextEnvironment $environment, $contextClassname)
     {
         $reflection = new ReflectionClass($contextClassname);
 
