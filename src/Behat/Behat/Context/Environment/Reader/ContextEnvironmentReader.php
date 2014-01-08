@@ -19,7 +19,7 @@ use Behat\Testwork\Environment\Reader\EnvironmentReader;
 /**
  * Context-based environment reader.
  *
- * Reads context pool callees using registered context loaders.
+ * Reads context environment callees using registered context loaders.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -66,10 +66,8 @@ class ContextEnvironmentReader implements EnvironmentReader
      */
     public function readEnvironmentCallees(Environment $environment)
     {
-        $contextPool = $environment->getContextPool();
-
         $callees = array();
-        foreach ($contextPool->getContextClasses() as $contextClassname) {
+        foreach ($environment->getContextClasses() as $contextClassname) {
             $callees = array_merge(
                 $callees,
                 $this->readContextCallees($environment, $contextClassname)

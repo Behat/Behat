@@ -11,7 +11,6 @@
 namespace Behat\Behat\Context\Snippet\Generator;
 
 use Behat\Behat\Context\Environment\ContextEnvironment;
-use Behat\Behat\Context\Pool\ContextPool;
 use Behat\Behat\Context\Snippet\ContextSnippet;
 use Behat\Behat\Snippet\Snippet;
 use Behat\Gherkin\Node\StepNode;
@@ -61,12 +60,11 @@ TPL;
             return false;
         }
 
-        $contextPool = $environment->getContextPool();
-        if (!$contextPool->hasContexts()) {
+        if (!$environment->hasContexts()) {
             return false;
         }
 
-        return null !== $this->getMainContextClass($contextPool);
+        return null !== $this->getMainContextClass($environment);
     }
 
     /**
@@ -79,8 +77,7 @@ TPL;
      */
     public function generateSnippet(Environment $environment, StepNode $step)
     {
-        $contextPool = $environment->getContextPool();
-        $contextClass = $this->getMainContextClass($contextPool);
+        $contextClass = $this->getMainContextClass($environment);
 
         $stepText = $step->getText();
         list($stepRegex, $tokenCount) = $this->getRegexAndTokenCount($stepText);
@@ -121,15 +118,15 @@ TPL;
     }
 
     /**
-     * Tries to get main context class out of the pool.
+     * Tries to get main context class out of the environment.
      *
-     * @param ContextPool $contextPool
+     * @param ContextEnvironment $environment
      *
      * @return null|string
      */
-    private function getMainContextClass(ContextPool $contextPool)
+    private function getMainContextClass(ContextEnvironment $environment)
     {
-        foreach ($contextPool->getContextClasses() as $class) {
+        foreach ($environment->getContextClasses() as $class) {
             if (in_array(
                 'Behat\Behat\Context\RegexAcceptingContext',
                 class_implements($class)

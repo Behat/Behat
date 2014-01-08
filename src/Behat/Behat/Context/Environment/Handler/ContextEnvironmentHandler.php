@@ -14,8 +14,6 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Context\Environment\UninitializedContextEnvironment;
 use Behat\Behat\Context\Initializer\ContextInitializer;
-use Behat\Behat\Context\Pool\InitializedContextPool;
-use Behat\Behat\Context\Pool\UninitializedContextPool;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\Handler\EnvironmentHandler;
 use Behat\Testwork\Suite\Suite;
@@ -23,7 +21,7 @@ use Behat\Testwork\Suite\Suite;
 /**
  * Context-based environment handler.
  *
- * Handles build and initialisation of ContextPool-based environments using registered context initializers.
+ * Handles build and initialisation of context-based environments using registered context initializers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -62,18 +60,19 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      *
      * @param Suite $suite
      *
-     * @return Environment
+     * @return UninitializedContextEnvironment
      */
     public function buildEnvironment(Suite $suite)
     {
+        $suiteName = $suite->getName();
         $constructorArguments = $suite->hasSetting('parameters') ? (array) $suite->getSetting('parameters') : array();
-        $contextPool = new UninitializedContextPool($constructorArguments);
+        $environment = new UninitializedContextEnvironment($suiteName, $constructorArguments);
 
         foreach ($this->getContextClasses($suite) as $class) {
-            $contextPool->registerContextClass($class);
+            $environment->registerContextClass($class);
         }
 
-        return new UninitializedContextEnvironment($suite->getName(), $contextPool);
+        return $environment;
     }
 
     /**
@@ -92,23 +91,22 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Isolates provided environment.
      *
-     * @param UninitializedContextEnvironment $environment
+     * @param UninitializedContextEnvironment $uninitializedEnvironment
      * @param mixed                           $testSubject
      *
      * @return InitializedContextEnvironment
      */
-    public function isolateEnvironment(Environment $environment, $testSubject = null)
+    public function isolateEnvironment(Environment $uninitializedEnvironment, $testSubject = null)
     {
-        $uninitializedPool = $environment->getContextPool();
-        $initializedPool = new InitializedContextPool();
-        $constructorArguments = $uninitializedPool->getConstructorArguments();
+        $constructorArguments = $uninitializedEnvironment->getConstructorArguments();
+        $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuiteName());
 
-        foreach ($uninitializedPool->getContextClasses() as $class) {
+        foreach ($uninitializedEnvironment->getContextClasses() as $class) {
             $context = $this->initializeContext($class, $constructorArguments);
-            $initializedPool->registerContext($context);
+            $environment->registerContext($context);
         }
 
-        return new InitializedContextEnvironment($environment->getSuiteName(), $initializedPool);
+        return $environment;
     }
 
     /**

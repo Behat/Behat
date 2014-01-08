@@ -10,14 +10,15 @@
 
 namespace Behat\Behat\Context\Environment;
 
+use Behat\Behat\Context\Context;
 use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
-use Behat\Behat\Context\Pool\InitializedContextPool;
+use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Testwork\Call\Callee;
 
 /**
  * Initialized context environment.
  *
- * Environment based on initialized context pool.
+ * Environment based on initialized context objects.
  *
  * @see ContextEnvironmentHandler
  *
@@ -30,20 +31,28 @@ class InitializedContextEnvironment implements ContextEnvironment
      */
     private $suiteName;
     /**
-     * @var InitializedContextPool
+     * @var Context[]
      */
-    private $contextPool;
+    private $contexts = array();
 
     /**
      * Initializes environment.
      *
-     * @param string                 $suiteName
-     * @param InitializedContextPool $contextPool
+     * @param string $suiteName
      */
-    public function __construct($suiteName, InitializedContextPool $contextPool)
+    public function __construct($suiteName)
     {
         $this->suiteName = $suiteName;
-        $this->contextPool = $contextPool;
+    }
+
+    /**
+     * Registers context instance in the environment.
+     *
+     * @param Context $context
+     */
+    public function registerContext(Context $context)
+    {
+        $this->contexts[get_class($context)] = $context;
     }
 
     /**
@@ -57,17 +66,70 @@ class InitializedContextEnvironment implements ContextEnvironment
     }
 
     /**
-     * Returns context pool.
+     * Checks if environment has any contexts registered.
      *
-     * @return InitializedContextPool
+     * @return Boolean
      */
-    public function getContextPool()
+    public function hasContexts()
     {
-        return $this->contextPool;
+        return count($this->contexts) > 0;
     }
 
     /**
-     * Creates callable using provided Callee and context pool in hand.
+     * Returns list of registered context classes.
+     *
+     * @return string[]
+     */
+    public function getContextClasses()
+    {
+        return array_keys($this->contexts);
+    }
+
+    /**
+     * Checks if environment contains context with specified class name.
+     *
+     * @param string $class
+     *
+     * @return Boolean
+     */
+    public function hasContextClass($class)
+    {
+        return isset($this->contexts[$class]);
+    }
+
+    /**
+     * Returns list of registered context instances.
+     *
+     * @return Context[]
+     */
+    public function getContexts()
+    {
+        return array_values($this->contexts);
+    }
+
+    /**
+     * Returns registered context by its class name.
+     *
+     * @param string $class
+     *
+     * @return Context
+     *
+     * @throws ContextNotFoundException If context is not in the environment
+     */
+    public function getContext($class)
+    {
+        if (!$this->hasContextClass($class)) {
+            throw new ContextNotFoundException(sprintf(
+                '`%s` context is not found in the suite environment. Have you registered it?',
+                $class
+            ), $class);
+        }
+
+        return $this->contexts[$class];
+    }
+
+    /**
+     * Creates callable using provided Callee and context environment in hand.
      *
      * @param Callee $callee
      *
@@ -78,7 +140,7 @@ class InitializedContextEnvironment implements ContextEnvironment
         $callable = $callee->getCallable();
 
         if ($callee->isAnInstanceMethod()) {
-            return array($this->contextPool->getContext($callable[0]), $callable[1]);
+            return array($this->getContext($callable[0]), $callable[1]);
         }
 
         return $callable;
