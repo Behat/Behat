@@ -36,6 +36,7 @@ class ContextExtension implements Extension
      * Available extension points
      */
     const INITIALIZER_TAG = 'context.initializer';
+    const ARGUMENT_RESOLVER_TAG = 'context.argument_resolver';
     const READER_TAG = 'context.reader';
     const CLASS_GENERATOR_TAG = 'context.class_generator';
     const ANNOTATION_READER_TAG = 'context.annotation_reader';
@@ -99,6 +100,7 @@ class ContextExtension implements Extension
     public function process(ContainerBuilder $container)
     {
         $this->processContextInitializers($container);
+        $this->processArgumentResolvers($container);
         $this->processContextReaders($container);
         $this->processClassGenerators($container);
         $this->processAnnotationReaders($container);
@@ -215,6 +217,21 @@ class ContextExtension implements Extension
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerContextInitializer', array($reference));
+        }
+    }
+
+    /**
+     * Processes all argument resolvers.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function processArgumentResolvers(ContainerBuilder $container)
+    {
+        $references = $this->processor->findAndSortTaggedServices($container, self::ARGUMENT_RESOLVER_TAG);
+        $definition = $container->getDefinition(self::getEnvironmentHandlerId());
+
+        foreach ($references as $reference) {
+            $definition->addMethodCall('registerArgumentResolver', array($reference));
         }
     }
 

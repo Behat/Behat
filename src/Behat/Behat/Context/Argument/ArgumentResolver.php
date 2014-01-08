@@ -8,26 +8,27 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Context\Initializer;
+namespace Behat\Behat\Context\Argument;
 
-use Behat\Behat\Context\Context;
+use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 
 /**
- * Context initializer interface.
- *
- * Initializes custom contexts. Used by ContextEnvironmentHandler.
+ * Context constructor argument resolver.
  *
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ContextInitializer
+interface ArgumentResolver
 {
     /**
-     * Initializes provided context.
+     * Resolves passed context arguments.
      *
-     * @param Context $context
+     * @param ContextEnvironment $environment
+     * @param mixed[]            $arguments
+     *
+     * @return mixed[]
      */
-    public function initializeContext(Context $context);
-}
+    public function resolveArguments(ContextEnvironment $environment, array $arguments);
+} 

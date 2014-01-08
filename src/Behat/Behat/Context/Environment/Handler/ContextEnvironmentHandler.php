@@ -10,7 +10,9 @@
 
 namespace Behat\Behat\Context\Environment\Handler;
 
+use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Context\Environment\UninitializedContextEnvironment;
 use Behat\Behat\Context\Initializer\ContextInitializer;
@@ -28,9 +30,23 @@ use Behat\Testwork\Suite\Suite;
 class ContextEnvironmentHandler implements EnvironmentHandler
 {
     /**
+     * @var ArgumentResolver[]
+     */
+    private $argumentResolvers = array();
+    /**
      * @var ContextInitializer[]
      */
-    private $initializers = array();
+    private $contextInitializers = array();
+
+    /**
+     * Registers context argument resolver.
+     *
+     * @param ArgumentResolver $resolver
+     */
+    public function registerArgumentResolver(ArgumentResolver $resolver)
+    {
+        $this->argumentResolvers[] = $resolver;
+    }
 
     /**
      * Registers context initializer.
@@ -39,7 +55,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function registerContextInitializer(ContextInitializer $initializer)
     {
-        $this->initializers[] = $initializer;
+        $this->contextInitializers[] = $initializer;
     }
 
     /**
@@ -98,6 +114,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
         $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
 
         foreach ($uninitializedEnvironment->getContextSignatures() as $class => $arguments) {
+            $arguments = $this->resolveArguments($uninitializedEnvironment, $arguments);
             $context = $this->initializeContext($class, $arguments);
             $environment->registerContext($context);
         }
@@ -117,10 +134,27 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     {
         $context = new $classname($constructorArguments);
 
-        foreach ($this->initializers as $initializer) {
+        foreach ($this->contextInitializers as $initializer) {
             $initializer->initializeContext($context);
         }
 
         return $context;
+    }
+
+    /**
+     * Resolves context constructor arguments using .
+     *
+     * @param ContextEnvironment $context
+     * @param mixed[]            $arguments
+     *
+     * @return mixed[]
+     */
+    private function resolveArguments(ContextEnvironment $context, array $arguments)
+    {
+        foreach ($this->argumentResolvers as $resolver) {
+            $arguments = $resolver->resolveArguments($context, $arguments);
+        }
+
+        return $arguments;
     }
 }
