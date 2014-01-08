@@ -108,7 +108,7 @@ class RepositorySearchEngine implements SearchEngine
      */
     private function getRegex(Environment $environment, Definition $definition, $language)
     {
-        $assetsId = $environment->getSuiteName();
+        $assetsId = $environment->getSuite()->getName();
         $pattern = $definition->getPattern();
 
         $translatedPattern = $this->translator->trans($pattern, array(), $assetsId, $language);

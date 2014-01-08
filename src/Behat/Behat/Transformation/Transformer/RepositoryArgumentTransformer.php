@@ -218,7 +218,7 @@ class RepositoryArgumentTransformer implements ArgumentTransformer
         &$match
     ) {
         $regex = $this->getRegex(
-            $definitionCall->getEnvironment()->getSuiteName(),
+            $definitionCall->getEnvironment()->getSuite()->getName(),
             $pattern,
             $definitionCall->getFeature()->getLanguage()
         );

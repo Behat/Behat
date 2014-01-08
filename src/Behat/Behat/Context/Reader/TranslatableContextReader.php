@@ -56,7 +56,7 @@ class TranslatableContextReader implements ContextReader
             return array();
         }
 
-        $assetsId = $environment->getSuiteName();
+        $assetsId = $environment->getSuite()->getName();
         foreach (call_user_func(array($contextClassname, 'getTranslationResources')) as $path) {
             $this->addTranslationResource($path, $assetsId);
         }

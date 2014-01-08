@@ -63,7 +63,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function buildEnvironment(Suite $suite)
     {
-        $environment = new UninitializedContextEnvironment($suite->getName());
+        $environment = new UninitializedContextEnvironment($suite);
 
         foreach ($suite->getSetting('contexts') as $class => $arguments) {
             $environment->registerContextSignature($class, $arguments);
@@ -95,7 +95,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function isolateEnvironment(Environment $uninitializedEnvironment, $testSubject = null)
     {
-        $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuiteName());
+        $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
 
         foreach ($uninitializedEnvironment->getContextSignatures() as $class => $arguments) {
             $context = $this->initializeContext($class, $arguments);
