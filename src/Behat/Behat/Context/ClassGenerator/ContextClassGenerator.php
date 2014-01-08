@@ -18,7 +18,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * Used by ContextPool suite setup to generate context classes.
  *
- * @see ContextSetup
+ * @see SuiteWithContextsSetup
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

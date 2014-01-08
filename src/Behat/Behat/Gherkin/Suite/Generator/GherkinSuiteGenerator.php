@@ -12,7 +12,6 @@ namespace Behat\Behat\Gherkin\Suite\Generator;
 
 use Behat\Testwork\Suite\Generator\SuiteGenerator;
 use Behat\Testwork\Suite\GenericSuite;
-use Behat\Testwork\Suite\Suite;
 
 /**
  * Gherkin suite generator.
