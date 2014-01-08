@@ -51,8 +51,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function supportsSuite(Suite $suite)
     {
-        return ($suite->hasSetting('contexts') && is_array($suite->getSetting('contexts')))
-            || ($suite->hasSetting('context') && null !== $suite->getSetting('context'));
+        return $suite->hasSetting('contexts') && is_array($suite->getSetting('contexts'));
     }
 
     /**
@@ -64,12 +63,10 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function buildEnvironment(Suite $suite)
     {
-        $suiteName = $suite->getName();
-        $constructorArguments = $suite->hasSetting('parameters') ? (array) $suite->getSetting('parameters') : array();
-        $environment = new UninitializedContextEnvironment($suiteName, $constructorArguments);
+        $environment = new UninitializedContextEnvironment($suite->getName());
 
-        foreach ($this->getContextClasses($suite) as $class) {
-            $environment->registerContextClass($class);
+        foreach ($suite->getSetting('contexts') as $class => $arguments) {
+            $environment->registerContextSignature($class, $arguments);
         }
 
         return $environment;
@@ -98,11 +95,10 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function isolateEnvironment(Environment $uninitializedEnvironment, $testSubject = null)
     {
-        $constructorArguments = $uninitializedEnvironment->getConstructorArguments();
         $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuiteName());
 
-        foreach ($uninitializedEnvironment->getContextClasses() as $class) {
-            $context = $this->initializeContext($class, $constructorArguments);
+        foreach ($uninitializedEnvironment->getContextSignatures() as $class => $arguments) {
+            $context = $this->initializeContext($class, $arguments);
             $environment->registerContext($context);
         }
 
@@ -126,21 +122,5 @@ class ContextEnvironmentHandler implements EnvironmentHandler
         }
 
         return $context;
-    }
-
-    /**
-     * Returns array of context classes from the suite.
-     *
-     * @param Suite $suite
-     *
-     * @return string[]
-     */
-    private function getContextClasses(Suite $suite)
-    {
-        if ($suite->hasSetting('context') && null !== $suite->getSetting('context')) {
-            return array($suite->getSetting('context'));
-        }
-
-        return $suite->getSetting('contexts');
     }
 }

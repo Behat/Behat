@@ -22,8 +22,8 @@ Feature: Init
         autoload: %paths.base%/supp
         suites:
           default:
-            path:    %paths.base%/scenarios
-            context: CustomContext
+            path:     %paths.base%/scenarios
+            contexts: { CustomContext: ~ }
       """
     When I run "behat --no-colors --init"
     Then it should pass with:
@@ -42,11 +42,11 @@ Feature: Init
         autoload: %paths.base%/contexts
         suites:
           suite1:
-            path:    %paths.base%/scenarios1
-            context: Custom1Context
+            path:     %paths.base%/scenarios1
+            contexts: { Custom1Context: ~ }
           suite2:
-            path:    %paths.base%/scenarios2
-            context: Custom2Context
+            path:     %paths.base%/scenarios2
+            contexts: { Custom2Context: ~ }
       """
     When I run "behat --no-colors --init"
     Then it should pass with:

@@ -127,12 +127,6 @@ class GherkinExtension implements Extension
     {
         $container->setParameter('gherkin.paths.lib', $this->getLibPath());
         $container->setParameter('gherkin.paths.i18n', '%gherkin.paths.lib%/i18n.php');
-        $container->setParameter(
-            'gherkin.suite.default_settings', array(
-                'paths'    => array('%paths.base%/features'),
-                'contexts' => array('FeatureContext')
-            )
-        );
     }
 
     /**
@@ -270,7 +264,7 @@ class GherkinExtension implements Extension
     protected function loadGherkinSuiteGenerator(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Gherkin\Suite\Generator\GherkinSuiteGenerator', array(
-            '%gherkin.suite.default_settings%'
+            '%paths.base%'
         ));
         $definition->addTag(SuiteExtension::GENERATOR_TAG, array('priority' => 50));
         $container->setDefinition(SuiteExtension::GENERATOR_TAG . '.gherkin', $definition);

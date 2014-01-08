@@ -21,18 +21,18 @@ use Behat\Testwork\Suite\GenericSuite;
 class GherkinSuiteGenerator implements SuiteGenerator
 {
     /**
-     * @var array
+     * @var string
      */
-    private $defaultSettings = array();
+    private $basePath;
 
     /**
-     * Initializes suite generator.
+     * Initializes generator.
      *
-     * @param array $defaultSettings
+     * @param string $basePath
      */
-    public function __construct(array $defaultSettings = array())
+    public function __construct($basePath)
     {
-        $this->defaultSettings = $defaultSettings;
+        $this->basePath = $basePath;
     }
 
     /**
@@ -53,18 +53,12 @@ class GherkinSuiteGenerator implements SuiteGenerator
      */
     public function generateSuite($suiteName, array $settings)
     {
-        return new GenericSuite($suiteName, $this->mergeDefaultSettings($settings));
-    }
-
-    /**
-     * Merges provided settings into default ones.
-     *
-     * @param array $settings
-     *
-     * @return array
-     */
-    private function mergeDefaultSettings(array $settings)
-    {
-        return array_merge($this->defaultSettings, $settings);
+        return new GenericSuite($suiteName, array_merge(
+            array(
+                'paths'    => array($this->basePath . DIRECTORY_SEPARATOR . 'features'),
+                'contexts' => array('FeatureContext' => array())
+            ),
+            $settings
+        ));
     }
 }

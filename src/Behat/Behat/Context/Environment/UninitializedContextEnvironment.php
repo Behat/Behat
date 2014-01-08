@@ -20,59 +20,43 @@ use Behat\Testwork\Environment\StaticEnvironment;
  *
  * Environment based on uninitialized context objects (classes).
  *
- * @see ContextEnvironmentHandler
+ * @see    ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class UninitializedContextEnvironment extends StaticEnvironment implements ContextEnvironment
 {
     /**
-     * @var string[]
+     * @var string[string]
      */
-    private $contextClasses = array();
-    /**
-     * @var array
-     */
-    private $constructorArguments = array();
+    private $signatures = array();
 
     /**
-     * Initializes environment.
+     * Registers context class signature.
      *
-     * @param string $suiteName
-     * @param array  $constructorArguments
-     */
-    public function __construct($suiteName, array $constructorArguments = array())
-    {
-        parent::__construct($suiteName);
-
-        $this->constructorArguments = $constructorArguments;
-    }
-
-    /**
-     * Registers context class.
-     *
-     * @param string $contextClass
+     * @param string     $classname
+     * @param null|array $arguments
      *
      * @throws ContextNotFoundException If class does not exist
      * @throws WrongContextClassException if class does not implement Context interface
      */
-    public function registerContextClass($contextClass)
+    public function registerContextSignature($classname, array $arguments = null)
     {
-        if (!class_exists($contextClass)) {
+        if (!class_exists($classname)) {
             throw new ContextNotFoundException(sprintf(
                 '`%s` context class not found and can not be used.',
-                $contextClass
-            ), $contextClass);
+                $classname
+            ), $classname);
         }
 
-        if (!is_subclass_of($contextClass, 'Behat\Behat\Context\Context')) {
+        if (!is_subclass_of($classname, 'Behat\Behat\Context\Context')) {
             throw new WrongContextClassException(sprintf(
                 'Every context class must implement Behat Context interface, but `%s` does not.',
-                $contextClass
-            ), $contextClass);
+                $classname
+            ), $classname);
         }
 
-        $this->contextClasses[$contextClass] = true;
+        $this->signatures[$classname] = $arguments ?: array();
     }
 
     /**
@@ -82,7 +66,7 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
      */
     public function hasContexts()
     {
-        return count($this->contextClasses) > 0;
+        return count($this->signatures) > 0;
     }
 
     /**
@@ -92,7 +76,7 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
      */
     public function getContextClasses()
     {
-        return array_keys($this->contextClasses);
+        return array_keys($this->signatures);
     }
 
     /**
@@ -104,16 +88,16 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
      */
     public function hasContextClass($class)
     {
-        return isset($this->contextClasses[$class]);
+        return isset($this->signatures[$class]);
     }
 
     /**
-     * Returns constructor arguments
+     * Returns context signatures (hash of classes and constructor arguments).
      *
-     * @return array
+     * @return string[string]
      */
-    public function getConstructorArguments()
+    public function getContextSignatures()
     {
-        return $this->constructorArguments;
+        return $this->signatures;
     }
 }
