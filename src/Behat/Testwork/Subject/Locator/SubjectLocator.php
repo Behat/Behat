@@ -31,7 +31,7 @@ interface SubjectLocator
      * @param Suite  $suite
      * @param string $locator
      *
-     * @return null|SubjectIterator
+     * @return SubjectIterator
      */
     public function locateSubjects(Suite $suite, $locator);
 }
