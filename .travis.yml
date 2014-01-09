@@ -2,9 +2,20 @@ language: php
 
 php: [5.3, 5.4, 5.5, hhvm]
 
+branches:
+  only:
+    - /^v?\d+\.\d+(?:\.\d+)?$/
+
 matrix:
   allow_failures:
     - php: hhvm
+  exclude:
+    - php: hhvm
+      env: SYMFONY_VERSION='2.1.*'
+    - php: hhvm
+      env: SYMFONY_VERSION='2.2.*'
+    - php: hhvm
+      env: SYMFONY_VERSION='2.3.*'
 
 env:
   - SYMFONY_VERSION='2.1.*'
