@@ -11,7 +11,6 @@
 namespace Behat\Behat\Context\Environment;
 
 use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
-use Behat\Behat\Context\Pool\ContextPool;
 use Behat\Testwork\Environment\Environment;
 
 /**
@@ -26,9 +25,25 @@ use Behat\Testwork\Environment\Environment;
 interface ContextEnvironment extends Environment
 {
     /**
-     * Returns context pool.
+     * Checks if environment has any contexts registered.
      *
-     * @return ContextPool
+     * @return Boolean
      */
-    public function getContextPool();
+    public function hasContexts();
+
+    /**
+     * Returns list of registered context classes.
+     *
+     * @return string[]
+     */
+    public function getContextClasses();
+
+    /**
+     * Checks if environment contains context with the specified class name.
+     *
+     * @param string $class
+     *
+     * @return Boolean
+     */
+    public function hasContextClass($class);
 }

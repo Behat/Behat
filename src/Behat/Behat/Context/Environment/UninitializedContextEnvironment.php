@@ -11,13 +11,14 @@
 namespace Behat\Behat\Context\Environment;
 
 use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
-use Behat\Behat\Context\Pool\UninitializedContextPool;
+use Behat\Behat\Context\Exception\ContextNotFoundException;
+use Behat\Behat\Context\Exception\WrongContextClassException;
 use Behat\Testwork\Environment\StaticEnvironment;
 
 /**
  * Uninitialized context environment.
  *
- * Environment based on uninitialized context pool.
+ * Environment based on uninitialized context objects (classes).
  *
  * @see ContextEnvironmentHandler
  *
@@ -26,30 +27,93 @@ use Behat\Testwork\Environment\StaticEnvironment;
 class UninitializedContextEnvironment extends StaticEnvironment implements ContextEnvironment
 {
     /**
-     * @var UninitializedContextPool
+     * @var string[]
      */
-    private $contextPool;
+    private $contextClasses = array();
+    /**
+     * @var array
+     */
+    private $constructorArguments = array();
 
     /**
      * Initializes environment.
      *
-     * @param string                   $suiteName
-     * @param UninitializedContextPool $contextPool
+     * @param string $suiteName
+     * @param array  $constructorArguments
      */
-    public function __construct($suiteName, UninitializedContextPool $contextPool)
+    public function __construct($suiteName, array $constructorArguments = array())
     {
         parent::__construct($suiteName);
 
-        $this->contextPool = $contextPool;
+        $this->constructorArguments = $constructorArguments;
     }
 
     /**
-     * Returns context pool.
+     * Registers context class.
      *
-     * @return UninitializedContextPool
+     * @param string $contextClass
+     *
+     * @throws ContextNotFoundException If class does not exist
+     * @throws WrongContextClassException if class does not implement Context interface
      */
-    public function getContextPool()
+    public function registerContextClass($contextClass)
     {
-        return $this->contextPool;
+        if (!class_exists($contextClass)) {
+            throw new ContextNotFoundException(sprintf(
+                '`%s` context class not found and can not be used.',
+                $contextClass
+            ), $contextClass);
+        }
+
+        if (!is_subclass_of($contextClass, 'Behat\Behat\Context\Context')) {
+            throw new WrongContextClassException(sprintf(
+                'Every context class must implement Behat Context interface, but `%s` does not.',
+                $contextClass
+            ), $contextClass);
+        }
+
+        $this->contextClasses[$contextClass] = true;
+    }
+
+    /**
+     * Checks if environment has any contexts registered.
+     *
+     * @return Boolean
+     */
+    public function hasContexts()
+    {
+        return count($this->contextClasses) > 0;
+    }
+
+    /**
+     * Returns list of registered context classes.
+     *
+     * @return string[]
+     */
+    public function getContextClasses()
+    {
+        return array_keys($this->contextClasses);
+    }
+
+    /**
+     * Checks if environment contains context with specified class name.
+     *
+     * @param string $class
+     *
+     * @return Boolean
+     */
+    public function hasContextClass($class)
+    {
+        return isset($this->contextClasses[$class]);
+    }
+
+    /**
+     * Returns constructor arguments
+     *
+     * @return array
+     */
+    public function getConstructorArguments()
+    {
+        return $this->constructorArguments;
     }
 }
