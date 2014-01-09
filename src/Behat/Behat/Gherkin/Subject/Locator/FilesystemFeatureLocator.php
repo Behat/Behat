@@ -17,6 +17,7 @@ use Behat\Gherkin\Filter\PathsFilter;
 use Behat\Gherkin\Filter\RoleFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Gherkin;
+use Behat\Testwork\Subject\EmptySubjectIterator;
 use Behat\Testwork\Subject\Locator\SubjectLocator;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
@@ -64,7 +65,11 @@ class FilesystemFeatureLocator implements SubjectLocator
      */
     public function locateSubjects(Suite $suite, $locator)
     {
-        $suiteLocators = $this->getFeatureLocators($suite);
+        if (!$suite->hasSetting('paths')) {
+            return new EmptySubjectIterator($suite);
+        }
+
+        $suiteLocators = $suite->getSetting('paths');
         $suiteFilters = $this->getFeatureFilters($suite);
 
         if ($locator) {
@@ -79,22 +84,6 @@ class FilesystemFeatureLocator implements SubjectLocator
         }
 
         return new LazyFeatureIterator($suite, $this->gherkin, $featurePaths, $suiteFilters);
-    }
-
-    /**
-     * Returns list of locators of the suite.
-     *
-     * @param Suite $suite
-     *
-     * @return string[]
-     */
-    protected function getFeatureLocators(Suite $suite)
-    {
-        if ($suite->hasSetting('path') && null !== $suite->getSetting('path')) {
-            return array($suite->getSetting('path'));
-        }
-
-        return $suite->getSetting('paths');
     }
 
     /**
