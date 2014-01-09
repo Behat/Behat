@@ -14,6 +14,7 @@ use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Behat\Context\Exception\WrongContextClassException;
 use Behat\Testwork\Environment\StaticEnvironment;
+use Behat\Testwork\Suite\Suite;
 
 /**
  * Uninitialized context environment.
@@ -30,22 +31,15 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
      * @var string[]
      */
     private $contextClasses = array();
-    /**
-     * @var array
-     */
-    private $constructorArguments = array();
 
     /**
      * Initializes environment.
      *
-     * @param string $suiteName
-     * @param array  $constructorArguments
+     * @param Suite $suite
      */
-    public function __construct($suiteName, array $constructorArguments = array())
+    public function __construct(Suite $suite)
     {
-        parent::__construct($suiteName);
-
-        $this->constructorArguments = $constructorArguments;
+        parent::__construct($suite);
     }
 
     /**
@@ -105,15 +99,5 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
     public function hasContextClass($class)
     {
         return isset($this->contextClasses[$class]);
-    }
-
-    /**
-     * Returns constructor arguments
-     *
-     * @return array
-     */
-    public function getConstructorArguments()
-    {
-        return $this->constructorArguments;
     }
 }
