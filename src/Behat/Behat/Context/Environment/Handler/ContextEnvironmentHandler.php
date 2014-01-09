@@ -79,13 +79,13 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Sets specific context class arguments.
      *
-     * @param string  $classname
+     * @param string  $class
      * @param mixed[] $arguments
      */
-    public function setContextArguments($classname, array $arguments)
+    public function setContextArguments($class, array $arguments)
     {
-        $classname = $this->resolveClass($classname);
-        $this->arguments[$classname] = $arguments;
+        $class = $this->resolveClass($class);
+        $this->arguments[$class] = $arguments;
     }
 
     /**
@@ -173,15 +173,15 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Resolves arguments for a specific class using registered argument resolvers.
      *
-     * @param string $classname
+     * @param string $class
      *
      * @return mixed[]
      */
-    final protected function resolveClassArguments($classname)
+    final protected function resolveClassArguments($class)
     {
-        $arguments = isset($this->arguments[$classname]) ? $this->arguments[$classname] : array();
+        $arguments = isset($this->arguments[$class]) ? $this->arguments[$class] : array();
         foreach ($this->argumentResolvers as $resolver) {
-            $arguments = $resolver->resolveArguments($classname, $arguments);
+            $arguments = $resolver->resolveArguments($class, $arguments);
         }
 
         return $arguments;
@@ -190,14 +190,14 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Initializes context class and returns new context instance.
      *
-     * @param string $classname
+     * @param string $class
      * @param array  $constructorArguments
      *
      * @return Context
      */
-    final protected function initializeContext($classname, array $constructorArguments)
+    final protected function initializeContext($class, array $constructorArguments)
     {
-        $context = new $classname($constructorArguments);
+        $context = new $class($constructorArguments);
 
         foreach ($this->contextInitializers as $initializer) {
             $initializer->initializeContext($context);
