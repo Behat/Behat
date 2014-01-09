@@ -67,9 +67,7 @@ class SubjectFinder
     {
         $iterators = array();
         foreach ($this->subjectLocators as $subjectLocator) {
-            if ($iterator = $subjectLocator->locateSubjects($suite, $locator)) {
-                $iterators[] = $iterator;
-            }
+            $iterators[] = $subjectLocator->locateSubjects($suite, $locator);
         }
 
         return $iterators;
