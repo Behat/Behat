@@ -179,11 +179,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     final protected function resolveClassArguments($classname)
     {
-        if (!isset($this->arguments[$classname])) {
-            return array();
-        }
-
-        $arguments = $this->arguments[$classname];
+        $arguments = isset($this->arguments[$classname]) ? $this->arguments[$classname] : array();
         foreach ($this->argumentResolvers as $resolver) {
             $arguments = $resolver->resolveArguments($classname, $arguments);
         }
