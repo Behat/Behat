@@ -22,17 +22,17 @@ class ContextNotFoundException extends InvalidArgumentException implements Conte
     /**
      * @var string
      */
-    private $classname;
+    private $class;
 
     /**
      * Initializes exception.
      *
      * @param string $message
-     * @param string $classname
+     * @param string $class
      */
-    public function __construct($message, $classname)
+    public function __construct($message, $class)
     {
-        $this->classname = $classname;
+        $this->class = $class;
 
         parent::__construct($message);
     }
@@ -42,8 +42,8 @@ class ContextNotFoundException extends InvalidArgumentException implements Conte
      *
      * @return string
      */
-    public function getClassname()
+    public function getClass()
     {
-        return $this->classname;
+        return $this->class;
     }
 }
