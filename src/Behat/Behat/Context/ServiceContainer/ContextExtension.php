@@ -35,11 +35,12 @@ class ContextExtension implements Extension
     /*
      * Available extension points
      */
-    const INITIALIZER_TAG = 'context.initializer';
+    const CLASS_RESOLVER_TAG = 'context.class_resolver';
     const ARGUMENT_RESOLVER_TAG = 'context.argument_resolver';
+    const INITIALIZER_TAG = 'context.initializer';
     const READER_TAG = 'context.reader';
-    const CLASS_GENERATOR_TAG = 'context.class_generator';
     const ANNOTATION_READER_TAG = 'context.annotation_reader';
+    const CLASS_GENERATOR_TAG = 'context.class_generator';
 
     /**
      * @var ServiceProcessor
@@ -100,8 +101,9 @@ class ContextExtension implements Extension
      */
     public function process(ContainerBuilder $container)
     {
-        $this->processContextInitializers($container);
+        $this->processClassResolvers($container);
         $this->processArgumentResolvers($container);
+        $this->processContextInitializers($container);
         $this->processContextReaders($container);
         $this->processClassGenerators($container);
         $this->processAnnotationReaders($container);
@@ -115,16 +117,13 @@ class ContextExtension implements Extension
      */
     protected function loadEnvironmentHandler(ContainerBuilder $container, array $contexts)
     {
-        $definition = new Definition('Behat\Behat\Context\ArgumentHolder');
+        $definition = new Definition('Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler');
+        $definition->addTag(EnvironmentExtension::HANDLER_TAG, array('priority' => 50));
+
         foreach ($contexts as $class => $arguments) {
             $definition->addMethodCall('setContextArguments', array($class, $arguments));
         }
-        $container->setDefinition(self::getArgumentHolderId(), $definition);
 
-        $definition = new Definition('Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler', array(
-            new Reference(self::getArgumentHolderId())
-        ));
-        $definition->addTag(EnvironmentExtension::HANDLER_TAG, array('priority' => 50));
         $container->setDefinition(self::getEnvironmentHandlerId(), $definition);
     }
 
@@ -192,7 +191,7 @@ class ContextExtension implements Extension
      */
     protected function loadDefaultClassGenerators(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\ClassGenerator\SimpleContextClassGenerator');
+        $definition = new Definition('Behat\Behat\Context\ContextClass\SimpleClassGenerator');
         $definition->addTag(self::CLASS_GENERATOR_TAG, array('priority' => 50));
         $container->setDefinition(self::CLASS_GENERATOR_TAG . '.simple', $definition);
     }
@@ -220,13 +219,13 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processContextInitializers(ContainerBuilder $container)
+    protected function processClassResolvers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::INITIALIZER_TAG);
+        $references = $this->processor->findAndSortTaggedServices($container, self::CLASS_RESOLVER_TAG);
         $definition = $container->getDefinition(self::getEnvironmentHandlerId());
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerContextInitializer', array($reference));
+            $definition->addMethodCall('registerClassResolver', array($reference));
         }
     }
 
@@ -238,10 +237,25 @@ class ContextExtension implements Extension
     protected function processArgumentResolvers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ARGUMENT_RESOLVER_TAG);
-        $definition = $container->getDefinition(self::getArgumentHolderId());
+        $definition = $container->getDefinition(self::getEnvironmentHandlerId());
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerArgumentResolver', array($reference));
+        }
+    }
+
+    /**
+     * Processes all context initializers.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function processContextInitializers(ContainerBuilder $container)
+    {
+        $references = $this->processor->findAndSortTaggedServices($container, self::INITIALIZER_TAG);
+        $definition = $container->getDefinition(self::getEnvironmentHandlerId());
+
+        foreach ($references as $reference) {
+            $definition->addMethodCall('registerContextInitializer', array($reference));
         }
     }
 
@@ -298,16 +312,6 @@ class ContextExtension implements Extension
     private static function getEnvironmentHandlerId()
     {
         return EnvironmentExtension::HANDLER_TAG . '.context';
-    }
-
-    /**
-     * Returns context argument holder id.
-     *
-     * @return string
-     */
-    private static function getArgumentHolderId()
-    {
-        return 'context.argument_holder';
     }
 
     /**

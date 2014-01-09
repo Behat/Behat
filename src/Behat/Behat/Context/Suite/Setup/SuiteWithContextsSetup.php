@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Context\Suite\Setup;
 
-use Behat\Behat\Context\ClassGenerator\ContextClassGenerator;
+use Behat\Behat\Context\ContextClass\ClassGenerator;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Testwork\Filesystem\FilesystemLogger;
 use Behat\Testwork\Suite\Setup\SuiteSetup;
@@ -35,7 +35,7 @@ class SuiteWithContextsSetup implements SuiteSetup
      */
     private $logger;
     /**
-     * @var ContextClassGenerator[]
+     * @var ClassGenerator[]
      */
     private $classGenerators = array();
 
@@ -54,9 +54,9 @@ class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Registers class generator.
      *
-     * @param ContextClassGenerator $generator
+     * @param ClassGenerator $generator
      */
-    public function registerClassGenerator(ContextClassGenerator $generator)
+    public function registerClassGenerator(ClassGenerator $generator)
     {
         $this->classGenerators[] = $generator;
     }
