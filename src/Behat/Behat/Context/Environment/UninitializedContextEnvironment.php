@@ -14,7 +14,6 @@ use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Behat\Context\Exception\WrongContextClassException;
 use Behat\Testwork\Environment\StaticEnvironment;
-use Behat\Testwork\Suite\Suite;
 
 /**
  * Uninitialized context environment.
