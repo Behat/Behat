@@ -104,7 +104,6 @@ class GherkinExtension implements Extension
         $this->loadSyntaxController($container);
         $this->loadFilterController($container);
         $this->loadSuiteWithPathsSetup($container);
-        $this->loadGherkinSuiteGenerator($container);
         $this->loadFilesystemFeatureLocator($container);
     }
 
@@ -128,7 +127,7 @@ class GherkinExtension implements Extension
         $container->setParameter('gherkin.paths.lib', $this->getLibPath());
         $container->setParameter('gherkin.paths.i18n', '%gherkin.paths.lib%/i18n.php');
         $container->setParameter(
-            'gherkin.suite.default_settings', array(
+            'suite.generic.default_settings', array(
                 'paths'    => array('%paths.base%/features'),
                 'contexts' => array('FeatureContext')
             )
@@ -260,20 +259,6 @@ class GherkinExtension implements Extension
         ));
         $definition->addTag(SuiteExtension::SETUP_TAG, array('priority' => 50));
         $container->setDefinition(SuiteExtension::SETUP_TAG . '.suite_with_paths', $definition);
-    }
-
-    /**
-     * Loads Gherkin suite generator.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadGherkinSuiteGenerator(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\Gherkin\Suite\Generator\GherkinSuiteGenerator', array(
-            '%gherkin.suite.default_settings%'
-        ));
-        $definition->addTag(SuiteExtension::GENERATOR_TAG, array('priority' => 50));
-        $container->setDefinition(SuiteExtension::GENERATOR_TAG . '.gherkin', $definition);
     }
 
     /**

@@ -1,24 +1,23 @@
 <?php
 
 /*
- * This file is part of the Behat.
+ * This file is part of the Behat Testwork.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Gherkin\Suite\Generator;
+namespace Behat\Testwork\Suite\Generator;
 
-use Behat\Testwork\Suite\Generator\SuiteGenerator;
 use Behat\Testwork\Suite\GenericSuite;
 
 /**
- * Gherkin suite generator.
+ * Generic suite generator.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GherkinSuiteGenerator implements SuiteGenerator
+class GenericSuiteGenerator implements SuiteGenerator
 {
     /**
      * @var array
