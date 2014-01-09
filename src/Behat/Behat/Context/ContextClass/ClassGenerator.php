@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Context\ClassGenerator;
+namespace Behat\Behat\Context\ContextClass;
 
 use Behat\Behat\Context\Suite\Setup\SuiteWithContextsSetup;
 use Behat\Testwork\Suite\Suite;
@@ -22,7 +22,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ContextClassGenerator
+interface ClassGenerator
 {
     /**
      * Checks if generator supports provided context class.

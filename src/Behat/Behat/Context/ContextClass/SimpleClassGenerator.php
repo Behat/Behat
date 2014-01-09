@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Context\ClassGenerator;
+namespace Behat\Behat\Context\ContextClass;
 
 use Behat\Testwork\Suite\Suite;
 
@@ -17,7 +17,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SimpleContextClassGenerator implements ContextClassGenerator
+class SimpleClassGenerator implements ClassGenerator
 {
     /**
      * @var string

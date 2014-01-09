@@ -191,7 +191,7 @@ class ContextExtension implements Extension
      */
     protected function loadDefaultClassGenerators(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\ClassGenerator\SimpleContextClassGenerator');
+        $definition = new Definition('Behat\Behat\Context\ContextClass\SimpleClassGenerator');
         $definition->addTag(self::CLASS_GENERATOR_TAG, array('priority' => 50));
         $container->setDefinition(self::CLASS_GENERATOR_TAG . '.simple', $definition);
     }
