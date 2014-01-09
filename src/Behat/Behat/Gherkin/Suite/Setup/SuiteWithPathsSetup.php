@@ -53,8 +53,7 @@ class SuiteWithPathsSetup implements SuiteSetup
      */
     public function supportsSuite(Suite $suite)
     {
-        return ($suite->hasSetting('paths') && is_array($suite->getSetting('paths')))
-            || ($suite->hasSetting('path') && null !== $suite->getSetting('path'));
+        return $suite->hasSetting('paths') && is_array($suite->getSetting('paths'));
     }
 
     /**
@@ -64,7 +63,7 @@ class SuiteWithPathsSetup implements SuiteSetup
      */
     public function setupSuite(Suite $suite)
     {
-        foreach ($this->getFeatureLocators($suite) as $locator) {
+        foreach ($suite->getSetting('paths') as $locator) {
             if (0 !== strpos($locator, '@') && !is_dir($path = $this->locatePath($locator))) {
                 $this->createFeatureDirectory($path);
             }
@@ -121,21 +120,5 @@ class SuiteWithPathsSetup implements SuiteSetup
         }
 
         return false;
-    }
-
-    /**
-     * Returns list of locators of the suite.
-     *
-     * @param Suite $suite
-     *
-     * @return string[]
-     */
-    private function getFeatureLocators(Suite $suite)
-    {
-        if ($suite->hasSetting('path') && null !== $suite->getSetting('path')) {
-            return array($suite->getSetting('path'));
-        }
-
-        return $suite->getSetting('paths');
     }
 }

@@ -217,7 +217,7 @@ Feature: Context consistency
       default:
         suites:
           default:
-            context: CustomContext
+            contexts: [ CustomContext ]
       """
     And a file named "features/params.feature" with:
       """
@@ -263,7 +263,7 @@ Feature: Context consistency
       default:
         suites:
           default:
-            context: UnexistentContext
+            contexts: [ UnexistentContext ]
       """
     And a file named "features/params.feature" with:
       """
