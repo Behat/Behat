@@ -86,7 +86,7 @@ class SnippetWriter
     {
         $printableSteps = array();
         foreach ($undefinedSteps as $undefinedStep) {
-            $suiteName = $undefinedStep->getEnvironment()->getSuiteName();
+            $suiteName = $undefinedStep->getEnvironment()->getSuite()->getName();
             $step = $undefinedStep->getStep();
 
             if (!isset($printableSteps[$suiteName])) {

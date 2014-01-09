@@ -16,7 +16,7 @@ use Behat\Testwork\Suite\Suite;
 /**
  * Context class generator interface.
  *
- * Used by ContextPool suite setup to generate context classes.
+ * Used by context suite setup to generate context classes.
  *
  * @see SuiteWithContextsSetup
  *

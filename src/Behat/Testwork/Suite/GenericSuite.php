@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat.
+ * This file is part of the Behat Testwork.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -13,7 +13,7 @@ namespace Behat\Testwork\Suite;
 use Behat\Testwork\Suite\Exception\ParameterNotFoundException;
 
 /**
- * Behat Gherkin suite.
+ * Testwork generic test suite.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

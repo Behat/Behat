@@ -10,12 +10,12 @@
 
 namespace Behat\Behat\Context\Environment\Handler;
 
+use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Context\Environment\UninitializedContextEnvironment;
 use Behat\Behat\Context\Initializer\ContextInitializer;
-use Behat\Behat\Context\Pool\InitializedContextPool;
-use Behat\Behat\Context\Pool\UninitializedContextPool;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\Handler\EnvironmentHandler;
 use Behat\Testwork\Suite\Suite;
@@ -23,16 +23,30 @@ use Behat\Testwork\Suite\Suite;
 /**
  * Context-based environment handler.
  *
- * Handles build and initialisation of ContextPool-based environments using registered context initializers.
+ * Handles build and initialisation of context-based environments using registered context initializers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ContextEnvironmentHandler implements EnvironmentHandler
 {
     /**
+     * @var ArgumentResolver[]
+     */
+    private $argumentResolvers = array();
+    /**
      * @var ContextInitializer[]
      */
-    private $initializers = array();
+    private $contextInitializers = array();
+
+    /**
+     * Registers context argument resolver.
+     *
+     * @param ArgumentResolver $resolver
+     */
+    public function registerArgumentResolver(ArgumentResolver $resolver)
+    {
+        $this->argumentResolvers[] = $resolver;
+    }
 
     /**
      * Registers context initializer.
@@ -41,7 +55,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function registerContextInitializer(ContextInitializer $initializer)
     {
-        $this->initializers[] = $initializer;
+        $this->contextInitializers[] = $initializer;
     }
 
     /**
@@ -53,8 +67,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function supportsSuite(Suite $suite)
     {
-        return ($suite->hasSetting('contexts') && is_array($suite->getSetting('contexts')))
-            || ($suite->hasSetting('context') && null !== $suite->getSetting('context'));
+        return $suite->hasSetting('contexts') && is_array($suite->getSetting('contexts'));
     }
 
     /**
@@ -62,18 +75,17 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      *
      * @param Suite $suite
      *
-     * @return Environment
+     * @return UninitializedContextEnvironment
      */
     public function buildEnvironment(Suite $suite)
     {
-        $constructorArguments = $suite->hasSetting('parameters') ? (array) $suite->getSetting('parameters') : array();
-        $contextPool = new UninitializedContextPool($constructorArguments);
+        $environment = new UninitializedContextEnvironment($suite);
 
-        foreach ($this->getContextClasses($suite) as $class) {
-            $contextPool->registerContextClass($class);
+        foreach ($suite->getSetting('contexts') as $class => $arguments) {
+            $environment->registerContextSignature($class, $arguments);
         }
 
-        return new UninitializedContextEnvironment($suite->getName(), $contextPool);
+        return $environment;
     }
 
     /**
@@ -92,23 +104,22 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Isolates provided environment.
      *
-     * @param UninitializedContextEnvironment $environment
+     * @param UninitializedContextEnvironment $uninitializedEnvironment
      * @param mixed                           $testSubject
      *
      * @return InitializedContextEnvironment
      */
-    public function isolateEnvironment(Environment $environment, $testSubject = null)
+    public function isolateEnvironment(Environment $uninitializedEnvironment, $testSubject = null)
     {
-        $uninitializedPool = $environment->getContextPool();
-        $initializedPool = new InitializedContextPool();
-        $constructorArguments = $uninitializedPool->getConstructorArguments();
+        $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
 
-        foreach ($uninitializedPool->getContextClasses() as $class) {
-            $context = $this->initializeContext($class, $constructorArguments);
-            $initializedPool->registerContext($context);
+        foreach ($uninitializedEnvironment->getContextSignatures() as $class => $arguments) {
+            $arguments = $this->resolveArguments($uninitializedEnvironment, $arguments);
+            $context = $this->initializeContext($class, $arguments);
+            $environment->registerContext($context);
         }
 
-        return new InitializedContextEnvironment($environment->getSuiteName(), $initializedPool);
+        return $environment;
     }
 
     /**
@@ -123,7 +134,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     {
         $context = new $classname($constructorArguments);
 
-        foreach ($this->initializers as $initializer) {
+        foreach ($this->contextInitializers as $initializer) {
             $initializer->initializeContext($context);
         }
 
@@ -131,18 +142,19 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
-     * Returns array of context classes from the suite.
+     * Resolves context constructor arguments using .
      *
-     * @param Suite $suite
+     * @param ContextEnvironment $context
+     * @param mixed[]            $arguments
      *
-     * @return string[]
+     * @return mixed[]
      */
-    private function getContextClasses(Suite $suite)
+    private function resolveArguments(ContextEnvironment $context, array $arguments)
     {
-        if ($suite->hasSetting('context') && null !== $suite->getSetting('context')) {
-            return array($suite->getSetting('context'));
+        foreach ($this->argumentResolvers as $resolver) {
+            $arguments = $resolver->resolveArguments($context, $arguments);
         }
 
-        return $suite->getSetting('contexts');
+        return $arguments;
     }
 }

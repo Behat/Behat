@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Context\Reader;
 
+use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Testwork\Call\Callee;
-use Behat\Testwork\Environment\Environment;
 
 /**
  * Context reader interface.
@@ -25,10 +25,10 @@ interface ContextReader
     /**
      * Reads callees from specific environment & context.
      *
-     * @param Environment $environment
-     * @param string      $contextClassname
+     * @param ContextEnvironment $environment
+     * @param string             $contextClassname
      *
      * @return Callee[]
      */
-    public function readContextCallees(Environment $environment, $contextClassname);
+    public function readContextCallees(ContextEnvironment $environment, $contextClassname);
 }
