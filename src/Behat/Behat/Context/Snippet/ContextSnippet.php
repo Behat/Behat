@@ -33,20 +33,20 @@ class ContextSnippet implements Snippet
     /**
      * @var string[]
      */
-    private $contextClassname = array();
+    private $contextClass = array();
 
     /**
      * Initializes definition snippet.
      *
      * @param StepNode $step
      * @param string   $template
-     * @param string   $contextClassname
+     * @param string   $contextClass
      */
-    public function __construct(StepNode $step, $template, $contextClassname)
+    public function __construct(StepNode $step, $template, $contextClass)
     {
         $this->step = $step;
         $this->template = $template;
-        $this->contextClassname = $contextClassname;
+        $this->contextClass = $contextClass;
     }
 
     /**
@@ -98,6 +98,6 @@ class ContextSnippet implements Snippet
      */
     public function getTarget()
     {
-        return $this->contextClassname;
+        return $this->contextClass;
     }
 }

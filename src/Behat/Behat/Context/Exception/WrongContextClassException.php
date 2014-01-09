@@ -22,17 +22,17 @@ class WrongContextClassException extends InvalidArgumentException implements Con
     /**
      * @var string
      */
-    private $classname;
+    private $class;
 
     /**
      * Initializes exception.
      *
      * @param integer $message
-     * @param string  $classname
+     * @param string  $class
      */
-    public function __construct($message, $classname)
+    public function __construct($message, $class)
     {
-        $this->classname = $classname;
+        $this->class = $class;
 
         parent::__construct($message);
     }
@@ -42,8 +42,8 @@ class WrongContextClassException extends InvalidArgumentException implements Con
      *
      * @return string
      */
-    public function getClassname()
+    public function getClass()
     {
-        return $this->classname;
+        return $this->class;
     }
 }

@@ -81,14 +81,14 @@ class SuiteWithContextsSetup implements SuiteSetup
      */
     public function setupSuite(Suite $suite)
     {
-        foreach ($this->getContextClasses($suite) as $classname) {
-            if (class_exists($classname)) {
+        foreach ($this->getContextClasses($suite) as $class) {
+            if (class_exists($class)) {
                 continue;
             }
 
-            $this->ensureContextDirectory($path = $this->findClassFile($classname));
+            $this->ensureContextDirectory($path = $this->findClassFile($class));
 
-            if ($content = $this->generateClass($suite, $classname)) {
+            if ($content = $this->generateClass($suite, $class)) {
                 $this->createContextFile($path, $content);
             }
         }
@@ -134,7 +134,7 @@ class SuiteWithContextsSetup implements SuiteSetup
      */
     protected function findClassFile($class)
     {
-        list($classpath, $classname) = $this->findClasspathAndClassname($class);
+        list($classpath, $classname) = $this->findClasspathAndClass($class);
         $classpath .= str_replace('_', DIRECTORY_SEPARATOR, $classname) . '.php';
 
         foreach ($this->autoloader->getPrefixes() as $prefix => $dirs) {
@@ -157,16 +157,16 @@ class SuiteWithContextsSetup implements SuiteSetup
      * Generates class using registered class generators.
      *
      * @param Suite  $suite
-     * @param string $classname
+     * @param string $class
      *
      * @return null|string
      */
-    final protected function generateClass(Suite $suite, $classname)
+    final protected function generateClass(Suite $suite, $class)
     {
         $content = null;
         foreach ($this->classGenerators as $generator) {
-            if ($generator->supportsSuiteAndClassname($suite, $classname)) {
-                $content = $generator->generateClass($suite, $classname);
+            if ($generator->supportsSuiteAndClass($suite, $class)) {
+                $content = $generator->generateClass($suite, $class);
             }
         }
 
@@ -192,7 +192,7 @@ class SuiteWithContextsSetup implements SuiteSetup
      *
      * @return array
      */
-    private function findClasspathAndClassname($class)
+    private function findClasspathAndClass($class)
     {
         if (false !== $pos = strrpos($class, '\\')) {
             // namespaced class name

@@ -49,7 +49,7 @@ PHP;
     /**
      * {@inheritdoc}
      */
-    public function supportsSuiteAndClassname(Suite $suite, $classname)
+    public function supportsSuiteAndClass(Suite $suite, $class)
     {
         return true;
     }
@@ -57,21 +57,21 @@ PHP;
     /**
      * {@inheritdoc}
      */
-    public function generateClass(Suite $suite, $classname)
+    public function generateClass(Suite $suite, $class)
     {
-        $fqn = $classname;
+        $fqn = $class;
 
         $namespace = '';
         if (false !== $pos = strrpos($fqn, '\\')) {
             $namespace = 'namespace ' . substr($fqn, 0, $pos) . ";\n\n";
-            $classname = substr($fqn, $pos + 1);
+            $class = substr($fqn, $pos + 1);
         }
 
         return strtr(
             static::$template,
             array(
                 '{namespace}' => $namespace,
-                '{className}' => $classname,
+                '{className}' => $class,
             )
         );
     }

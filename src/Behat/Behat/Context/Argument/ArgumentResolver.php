@@ -26,10 +26,10 @@ interface ArgumentResolver
     /**
      * Resolves context constructor arguments.
      *
-     * @param string $classname
+     * @param string  $class
      * @param mixed[] $arguments
      *
      * @return mixed[]
      */
-    public function resolveArguments($classname, array $arguments);
+    public function resolveArguments($class, array $arguments);
 }

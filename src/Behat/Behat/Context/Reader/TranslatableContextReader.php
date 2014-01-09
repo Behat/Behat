@@ -44,20 +44,20 @@ class TranslatableContextReader implements ContextReader
      * Reads translation resources from contexts that implement TranslatableContext.
      *
      * @param ContextEnvironment $environment
-     * @param string             $contextClassname
+     * @param string             $contextClass
      *
      * @return Callee[]
      *
      * @see TranslatableContext
      */
-    public function readContextCallees(ContextEnvironment $environment, $contextClassname)
+    public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        if (!is_subclass_of($contextClassname, 'Behat\Behat\Context\TranslatableContext')) {
+        if (!is_subclass_of($contextClass, 'Behat\Behat\Context\TranslatableContext')) {
             return array();
         }
 
         $assetsId = $environment->getSuite()->getName();
-        foreach (call_user_func(array($contextClassname, 'getTranslationResources')) as $path) {
+        foreach (call_user_func(array($contextClass, 'getTranslationResources')) as $path) {
             $this->addTranslationResource($path, $assetsId);
         }
 

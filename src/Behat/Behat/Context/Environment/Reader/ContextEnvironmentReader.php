@@ -67,10 +67,10 @@ class ContextEnvironmentReader implements EnvironmentReader
     public function readEnvironmentCallees(Environment $environment)
     {
         $callees = array();
-        foreach ($environment->getContextClasses() as $contextClassname) {
+        foreach ($environment->getContextClasses() as $contextClass) {
             $callees = array_merge(
                 $callees,
-                $this->readContextCallees($environment, $contextClassname)
+                $this->readContextCallees($environment, $contextClass)
             );
         }
 
@@ -81,24 +81,24 @@ class ContextEnvironmentReader implements EnvironmentReader
      * Reads callees from a specific suite's context.
      *
      * @param Environment $environment
-     * @param string      $contextClassname
+     * @param string      $contextClass
      *
      * @return Callee[]
      */
-    protected function readContextCallees(Environment $environment, $contextClassname)
+    protected function readContextCallees(Environment $environment, $contextClass)
     {
-        if (isset($this->callees[$contextClassname])) {
-            return $this->callees[$contextClassname];
+        if (isset($this->callees[$contextClass])) {
+            return $this->callees[$contextClass];
         }
 
         $callees = array();
         foreach ($this->contextReaders as $loader) {
             $callees = array_merge(
                 $callees,
-                $loader->readContextCallees($environment, $contextClassname)
+                $loader->readContextCallees($environment, $contextClass)
             );
         }
 
-        return $this->callees[$contextClassname] = $callees;
+        return $this->callees[$contextClass] = $callees;
     }
 }

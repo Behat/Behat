@@ -56,13 +56,13 @@ class AnnotatedContextReader implements ContextReader
      * Loads annotation-based callees from context.
      *
      * @param ContextEnvironment $environment
-     * @param string             $contextClassname
+     * @param string             $contextClass
      *
      * @return Callee[]
      */
-    public function readContextCallees(ContextEnvironment $environment, $contextClassname)
+    public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        $reflection = new ReflectionClass($contextClassname);
+        $reflection = new ReflectionClass($contextClass);
 
         $callees = array();
         foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {

@@ -26,9 +26,9 @@ interface ContextReader
      * Reads callees from specific environment & context.
      *
      * @param ContextEnvironment $environment
-     * @param string             $contextClassname
+     * @param string             $contextClass
      *
      * @return Callee[]
      */
-    public function readContextCallees(ContextEnvironment $environment, $contextClassname);
+    public function readContextCallees(ContextEnvironment $environment, $contextClass);
 }

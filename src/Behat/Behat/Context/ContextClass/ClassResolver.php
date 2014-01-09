@@ -18,7 +18,7 @@ namespace Behat\Behat\Context\ContextClass;
 interface ClassResolver
 {
     /**
-     * Checks if resolvers supports provided classname.
+     * Checks if resolvers supports provided class.
      *
      * @param string $contextClass
      *
@@ -27,7 +27,7 @@ interface ClassResolver
     public function supportsClass($contextClass);
 
     /**
-     * Resolves context classname.
+     * Resolves context class.
      *
      * @param string $contextClass
      *

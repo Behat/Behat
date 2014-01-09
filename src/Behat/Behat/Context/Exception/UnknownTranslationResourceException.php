@@ -28,11 +28,11 @@ class UnknownTranslationResourceException extends InvalidArgumentException imple
      * Initializes exception.
      *
      * @param string $message
-     * @param string $classname
+     * @param string $class
      */
-    public function __construct($message, $classname)
+    public function __construct($message, $class)
     {
-        $this->resource = $classname;
+        $this->resource = $class;
 
         parent::__construct($message);
     }
