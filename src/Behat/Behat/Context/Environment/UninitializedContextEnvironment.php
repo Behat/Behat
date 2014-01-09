@@ -33,16 +33,6 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
     private $contextClasses = array();
 
     /**
-     * Initializes environment.
-     *
-     * @param Suite $suite
-     */
-    public function __construct(Suite $suite)
-    {
-        parent::__construct($suite);
-    }
-
-    /**
      * Registers context class.
      *
      * @param string $contextClass

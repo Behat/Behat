@@ -10,14 +10,14 @@
 
 namespace Behat\Behat\Context\Argument;
 
-use Behat\Behat\Context\ArgumentHolder;
+use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 
 /**
  * Context constructor argument resolver.
  *
  * Used by ArgumentHolder to resolve specific arguments placeholders.
  *
- * @see ArgumentHolder
+ * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

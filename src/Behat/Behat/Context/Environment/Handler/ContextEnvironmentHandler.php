@@ -10,8 +10,9 @@
 
 namespace Behat\Behat\Context\Environment\Handler;
 
-use Behat\Behat\Context\ArgumentHolder;
+use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Context\ContextClass\ClassResolver;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Context\Environment\UninitializedContextEnvironment;
 use Behat\Behat\Context\Initializer\ContextInitializer;
@@ -29,22 +30,40 @@ use Behat\Testwork\Suite\Suite;
 class ContextEnvironmentHandler implements EnvironmentHandler
 {
     /**
-     * @var ArgumentHolder
+     * @var ClassResolver[]
      */
-    private $argumentHolder;
+    private $classResolvers = array();
+    /**
+     * @var ArgumentResolver[]
+     */
+    private $argumentResolvers = array();
     /**
      * @var ContextInitializer[]
      */
-    private $initializers = array();
+    private $contextInitializers = array();
+    /**
+     * @var mixed[][string]
+     */
+    private $arguments = array();
 
     /**
-     * Initializes environment handler.
+     * Registers context class resolver.
      *
-     * @param ArgumentHolder $holder
+     * @param ClassResolver $resolver
      */
-    public function __construct(ArgumentHolder $holder)
+    public function registerClassResolver(ClassResolver $resolver)
     {
-        $this->argumentHolder = $holder;
+        $this->classResolvers[] = $resolver;
+    }
+
+    /**
+     * Registers context argument resolver.
+     *
+     * @param ArgumentResolver $resolver
+     */
+    public function registerArgumentResolver(ArgumentResolver $resolver)
+    {
+        $this->argumentResolvers[] = $resolver;
     }
 
     /**
@@ -54,7 +73,19 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function registerContextInitializer(ContextInitializer $initializer)
     {
-        $this->initializers[] = $initializer;
+        $this->contextInitializers[] = $initializer;
+    }
+
+    /**
+     * Sets specific context class arguments.
+     *
+     * @param string  $classname
+     * @param mixed[] $arguments
+     */
+    public function setContextArguments($classname, array $arguments)
+    {
+        $classname = $this->resolveClass($classname);
+        $this->arguments[$classname] = $arguments;
     }
 
     /**
@@ -81,6 +112,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     {
         $environment = new UninitializedContextEnvironment($suite);
         foreach ($this->getContextClasses($suite) as $class) {
+            $class = $this->resolveClass($class);
             $environment->registerContextClass($class);
         }
 
@@ -112,11 +144,51 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     {
         $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
         foreach ($uninitializedEnvironment->getContextClasses() as $class) {
-            $context = $this->initializeContext($class, $this->argumentHolder->getContextArguments($class));
+            $arguments = $this->resolveClassArguments($class);
+            $context = $this->initializeContext($class, $arguments);
             $environment->registerContext($context);
         }
 
         return $environment;
+    }
+
+    /**
+     * Resolves class using registered class resolvers.
+     *
+     * @param string $class
+     *
+     * @return string
+     */
+    final protected function resolveClass($class)
+    {
+        foreach ($this->classResolvers as $resolver) {
+            if ($resolver->supportsClass($class)) {
+                return $resolver->resolveClass($class);
+            }
+        }
+
+        return $class;
+    }
+
+    /**
+     * Resolves arguments for a specific class using registered argument resolvers.
+     *
+     * @param string $classname
+     *
+     * @return mixed[]
+     */
+    final protected function resolveClassArguments($classname)
+    {
+        if (!isset($this->arguments[$classname])) {
+            return array();
+        }
+
+        $arguments = $this->arguments[$classname];
+        foreach ($this->argumentResolvers as $resolver) {
+            $arguments = $resolver->resolveArguments($classname, $arguments);
+        }
+
+        return $arguments;
     }
 
     /**
@@ -131,7 +203,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     {
         $context = new $classname($constructorArguments);
 
-        foreach ($this->initializers as $initializer) {
+        foreach ($this->contextInitializers as $initializer) {
             $initializer->initializeContext($context);
         }
 
