@@ -86,6 +86,8 @@ class StepTester
         $beforeHooks = $skip ? new CallResults() : $this->dispatchBeforeHooks($suite, $environment, $feature, $step);
         $this->dispatchBeforeEvent($suite, $environment, $feature, $step, $beforeHooks);
 
+        $skip = $skip || $beforeHooks->hasExceptions();
+
         try {
             $search = $this->searchDefinition($environment, $feature, $step);
             $result = $this->testDefinition($environment, $feature, $step, $search, $beforeHooks, $skip);
@@ -93,7 +95,6 @@ class StepTester
             $result = new StepTestResult(null, $exception, null, $beforeHooks);
         }
 
-        $skip = $skip || TestResult::PASSED < $result->getResultCode();
         $afterHooks = $skip ? new CallResults() : $this->dispatchAfterHooks($suite, $environment, $feature, $step, $result);
         $this->dispatchAfterEvent($suite, $environment, $feature, $step, $result, $afterHooks);
 
