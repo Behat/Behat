@@ -104,6 +104,8 @@ class ContainerLoader
             }
         }
 
+        $this->extensionManager->initializeExtensions();
+
         $container->setParameter('extensions', $this->extensionManager->getExtensionClasses());
 
         return $configs;

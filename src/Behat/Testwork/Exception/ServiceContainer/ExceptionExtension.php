@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Exception\ServiceContainer;
 
 use Behat\Testwork\ServiceContainer\Extension;
+use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -66,6 +67,13 @@ class ExceptionExtension implements Extension
      * @param ArrayNodeDefinition $builder
      */
     public function configure(ArrayNodeDefinition $builder)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initialize(ExtensionManager $extensionManager)
     {
     }
 

@@ -73,6 +73,13 @@ class ExtensionManager
         return $this->extensions[$extension->getConfigKey()] = $extension;
     }
 
+    public function initializeExtensions()
+    {
+        foreach ($this->extensions as $extension) {
+            $extension->initialize($this);
+        }
+    }
+
     /**
      * Returns specific extension by its name.
      *

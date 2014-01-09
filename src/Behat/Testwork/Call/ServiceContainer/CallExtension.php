@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Call\ServiceContainer;
 
 use Behat\Testwork\ServiceContainer\Extension;
+use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -75,6 +76,13 @@ class CallExtension implements Extension
                 ->scalarNode('error_reporting')->defaultValue(E_ALL)
             ->end()
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initialize(ExtensionManager $extensionManager)
+    {
     }
 
     /**
