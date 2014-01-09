@@ -44,7 +44,7 @@ class StaticEnvironmentHandler implements EnvironmentHandler
      */
     public function buildEnvironment(Suite $suite)
     {
-        return new StaticEnvironment($suite->getName());
+        return new StaticEnvironment($suite);
     }
 
     /**

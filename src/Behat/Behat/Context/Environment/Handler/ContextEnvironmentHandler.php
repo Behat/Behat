@@ -64,9 +64,8 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function buildEnvironment(Suite $suite)
     {
-        $suiteName = $suite->getName();
         $constructorArguments = $suite->hasSetting('parameters') ? (array) $suite->getSetting('parameters') : array();
-        $environment = new UninitializedContextEnvironment($suiteName, $constructorArguments);
+        $environment = new UninitializedContextEnvironment($suite, $constructorArguments);
 
         foreach ($this->getContextClasses($suite) as $class) {
             $environment->registerContextClass($class);
@@ -99,7 +98,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     public function isolateEnvironment(Environment $uninitializedEnvironment, $testSubject = null)
     {
         $constructorArguments = $uninitializedEnvironment->getConstructorArguments();
-        $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuiteName());
+        $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
 
         foreach ($uninitializedEnvironment->getContextClasses() as $class) {
             $context = $this->initializeContext($class, $constructorArguments);

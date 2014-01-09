@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Environment;
 
 use Behat\Testwork\Call\Callee;
+use Behat\Testwork\Suite\Suite;
 
 /**
  * Testwork test environment interface.
@@ -22,11 +23,11 @@ use Behat\Testwork\Call\Callee;
 interface Environment
 {
     /**
-     * Returns environment suite name.
+     * Returns environment suite.
      *
-     * @return string
+     * @return Suite
      */
-    public function getSuiteName();
+    public function getSuite();
 
     /**
      * Creates callable using provided Callee.

@@ -14,6 +14,7 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Testwork\Call\Callee;
+use Behat\Testwork\Suite\Suite;
 
 /**
  * Initialized context environment.
@@ -29,7 +30,7 @@ class InitializedContextEnvironment implements ContextEnvironment
     /**
      * @var string
      */
-    private $suiteName;
+    private $suite;
     /**
      * @var Context[]
      */
@@ -38,11 +39,11 @@ class InitializedContextEnvironment implements ContextEnvironment
     /**
      * Initializes environment.
      *
-     * @param string $suiteName
+     * @param Suite $suite
      */
-    public function __construct($suiteName)
+    public function __construct(Suite $suite)
     {
-        $this->suiteName = $suiteName;
+        $this->suite = $suite;
     }
 
     /**
@@ -60,9 +61,9 @@ class InitializedContextEnvironment implements ContextEnvironment
      *
      * @return string
      */
-    public function getSuiteName()
+    public function getSuite()
     {
-        return $this->suiteName;
+        return $this->suite;
     }
 
     /**

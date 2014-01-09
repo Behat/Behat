@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Environment;
 
 use Behat\Testwork\Call\Callee;
+use Behat\Testwork\Suite\Suite;
 
 /**
  * Static calls environment.
@@ -20,28 +21,28 @@ use Behat\Testwork\Call\Callee;
 class StaticEnvironment implements Environment
 {
     /**
-     * @var string
+     * @var Suite
      */
-    private $suiteName;
+    private $suite;
 
     /**
      * Initializes environment.
      *
-     * @param string $suiteName
+     * @param Suite $suite
      */
-    public function __construct($suiteName)
+    public function __construct(Suite $suite)
     {
-        $this->suiteName = $suiteName;
+        $this->suite = $suite;
     }
 
     /**
-     * Returns environment suite name.
+     * Returns environment suite.
      *
-     * @return string
+     * @return Suite
      */
-    public function getSuiteName()
+    public function getSuite()
     {
-        return $this->suiteName;
+        return $this->suite;
     }
 
     /**
