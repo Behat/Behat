@@ -173,12 +173,14 @@ class ProgressFormatter extends TranslatableCliFormatter
             $error = $event->getTestResult()->hasException() ? $this->presentException(
                 $event->getTestResult()->getException()
             ) : null;
-            $stdOut = !$event->getTestResult()->hasSearchException()
-                ? $event->getTestResult()->getCallResult()->getStdOut()
-                : null;
+            $stdOut = null;
 
             if ($event->getTestResult()->getHookCallResults()->hasExceptions()) {
                 $error = null;
+            } else {
+                $stdOut = !$event->getTestResult()->hasSearchException()
+                    ? $event->getTestResult()->getCallResult()->getStdOut()
+                    : null;
             }
 
             $this->failedStepPaths[] = array($text, $path, $error, $stdOut);
