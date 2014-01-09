@@ -75,8 +75,7 @@ class SuiteExtension implements Extension
             ->defaultValue(array('default' => array(
                 'enabled'    => true,
                 'type'       => null,
-                'settings'   => array(),
-                'parameters' => array()
+                'settings'   => array()
             )))
             ->treatNullLike(array())
             ->treatFalseLike(array())

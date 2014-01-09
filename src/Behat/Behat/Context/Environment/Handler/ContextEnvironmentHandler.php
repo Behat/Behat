@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Context\Environment\Handler;
 
+use Behat\Behat\Context\ArgumentHolder;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Context\Environment\UninitializedContextEnvironment;
@@ -28,9 +29,23 @@ use Behat\Testwork\Suite\Suite;
 class ContextEnvironmentHandler implements EnvironmentHandler
 {
     /**
+     * @var ArgumentHolder
+     */
+    private $argumentHolder;
+    /**
      * @var ContextInitializer[]
      */
     private $initializers = array();
+
+    /**
+     * Initializes environment handler.
+     *
+     * @param ArgumentHolder $holder
+     */
+    public function __construct(ArgumentHolder $holder)
+    {
+        $this->argumentHolder = $holder;
+    }
 
     /**
      * Registers context initializer.
@@ -64,9 +79,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function buildEnvironment(Suite $suite)
     {
-        $constructorArguments = $suite->hasSetting('parameters') ? (array) $suite->getSetting('parameters') : array();
-        $environment = new UninitializedContextEnvironment($suite, $constructorArguments);
-
+        $environment = new UninitializedContextEnvironment($suite);
         foreach ($this->getContextClasses($suite) as $class) {
             $environment->registerContextClass($class);
         }
@@ -97,11 +110,9 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function isolateEnvironment(Environment $uninitializedEnvironment, $testSubject = null)
     {
-        $constructorArguments = $uninitializedEnvironment->getConstructorArguments();
         $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
-
         foreach ($uninitializedEnvironment->getContextClasses() as $class) {
-            $context = $this->initializeContext($class, $constructorArguments);
+            $context = $this->initializeContext($class, $this->argumentHolder->getContextArguments($class));
             $environment->registerContext($context);
         }
 
