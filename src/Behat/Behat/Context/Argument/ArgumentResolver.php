@@ -15,7 +15,7 @@ use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 /**
  * Context constructor argument resolver.
  *
- * Used by ArgumentHolder to resolve specific arguments placeholders.
+ * Used by ContextEnvironmentHandler to resolve specific context arguments.
  *
  * @see ContextEnvironmentHandler
  *
