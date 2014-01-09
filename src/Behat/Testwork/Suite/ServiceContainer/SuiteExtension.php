@@ -136,6 +136,7 @@ class SuiteExtension implements Extension
         $this->loadBootstrapController($container);
         $this->loadRegistry($container);
         $this->loadBootstrapper($container);
+        $this->loadGenericSuiteGenerator($container);
     }
 
     /**
@@ -222,6 +223,22 @@ class SuiteExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Suite\SuiteBootstrapper');
         $container->setDefinition(self::BOOTSTRAPPER_ID, $definition);
+    }
+
+    /**
+     * Loads generic suite generator.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadGenericSuiteGenerator(ContainerBuilder $container)
+    {
+        $container->setParameter('suite.generic.default_settings', array());
+
+        $definition = new Definition('Behat\Testwork\Suite\Generator\GenericSuiteGenerator', array(
+            '%suite.generic.default_settings%'
+        ));
+        $definition->addTag(SuiteExtension::GENERATOR_TAG, array('priority' => 50));
+        $container->setDefinition(SuiteExtension::GENERATOR_TAG . '.generic', $definition);
     }
 
     /**
