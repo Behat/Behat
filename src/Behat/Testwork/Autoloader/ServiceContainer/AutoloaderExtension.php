@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Autoloader\ServiceContainer;
 
 use Behat\Testwork\ServiceContainer\Extension;
+use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -59,6 +60,13 @@ class AutoloaderExtension implements Extension
             ->treatFalseLike(array())
             ->prototype('scalar')->end()
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initialize(ExtensionManager $extensionManager)
+    {
     }
 
     /**

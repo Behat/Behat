@@ -14,6 +14,7 @@ use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Extension;
+use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Subject\ServiceContainer\SubjectExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
@@ -86,6 +87,13 @@ class GherkinExtension implements Extension
             )
             ->end()
             ->end();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initialize(ExtensionManager $extensionManager)
+    {
     }
 
     /**

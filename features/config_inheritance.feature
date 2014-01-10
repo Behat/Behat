@@ -88,6 +88,7 @@ Feature: Config inheritance
       use Behat\Behat\Context\Context;
       use Behat\Behat\Context\Initializer\ContextInitializer;
       use Behat\Testwork\ServiceContainer\Extension;
+      use Behat\Testwork\ServiceContainer\ExtensionManager;
       use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
       class CustomInitializer implements ContextInitializer
@@ -121,6 +122,8 @@ Feature: Config inheritance
           {
               $builder->useAttributeAsKey('name')->prototype('variable');
           }
+
+          public function initialize(ExtensionManager $extensionManager) {}
 
           public function load(ContainerBuilder $container, array $config)
           {

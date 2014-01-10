@@ -38,6 +38,16 @@ interface Extension extends CompilerPassInterface
     public function configure(ArrayNodeDefinition $builder);
 
     /**
+     * Initializes other extensions
+     *
+     * This allows extensions to hook into the configuration of other extensions
+     * providing such an extension point.
+     *
+     * @param ExtensionManager $extensionManager
+     */
+    public function initialize(ExtensionManager $extensionManager);
+
+    /**
      * Loads extension services into temporary container.
      *
      * @param ContainerBuilder $container
