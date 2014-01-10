@@ -13,6 +13,7 @@ namespace Behat\Behat\Output;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Output\Printer\ConsoleOutputPrinter;
 use Behat\Behat\Tester\Event\ExampleTested;
+use Behat\Behat\Tester\Event\FeatureTested;
 use Behat\Behat\Tester\Event\ScenarioTested;
 use Behat\Behat\Tester\Event\StepTested;
 use Behat\Behat\Tester\Result\TestResult;
@@ -23,6 +24,7 @@ use Behat\Testwork\Hook\Event\LifecycleEvent;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Output\TranslatableCliFormatter;
 use Behat\Testwork\Tester\Event\ExerciseCompleted;
+use Behat\Testwork\Tester\Event\SuiteTested;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -48,6 +50,10 @@ class ProgressFormatter extends TranslatableCliFormatter
      * @var integer
      */
     private $stepsPrinted = 0;
+    /**
+     * @var string[]
+     */
+    private $failedHookPaths = array();
     /**
      * @var string[]
      */
@@ -101,9 +107,16 @@ class ProgressFormatter extends TranslatableCliFormatter
         return array(
             ExerciseCompleted::BEFORE => array('startExerciseTimer', 999),
             ExerciseCompleted::AFTER  => array('printStatistics', -50),
-            ScenarioTested::AFTER     => array('collectScenarioStats', 999),
-            ExampleTested::AFTER      => array('collectScenarioStats', 999),
-            StepTested::AFTER         => array('printStepCharacter', -50),
+            SuiteTested::BEFORE       => array('collectFailedHooks', 999),
+            SuiteTested::AFTER        => array('collectFailedHooks', 999),
+            FeatureTested::BEFORE     => array('collectFailedHooks', 999),
+            FeatureTested::AFTER      => array('collectFailedHooks', 999),
+            ScenarioTested::BEFORE    => array('collectFailedHooks', 999),
+            ScenarioTested::AFTER     => array(array('collectScenarioStats', 999), array('collectFailedHooks', 999)),
+            ExampleTested::BEFORE     => array('collectFailedHooks', 999),
+            ExampleTested::AFTER      => array(array('collectScenarioStats', 999), array('collectFailedHooks', 999)),
+            StepTested::BEFORE        => array('collectFailedHooks', 999),
+            StepTested::AFTER         => array(array('printStepCharacter', -50), array('collectFailedHooks', 999)),
         );
     }
 
@@ -152,25 +165,54 @@ class ProgressFormatter extends TranslatableCliFormatter
         $this->stepStats[$event->getResultCode()]++;
         if (TestResult::FAILED == $event->getResultCode()) {
             $text = sprintf('%s %s', $event->getStep()->getType(), $event->getStep()->getText());
-            $path = sprintf('%s:%d', $this->relativizePath($event->getFeature()->getFile()), $event->getStep()->getLine());
-            $exception = $event->getTestResult()->hasSearchException()
-                ? $event->getTestResult()->getSearchException()
-                : $event->getTestResult()->getCallResult()->getException();
-            $error = $this->presentException($exception);
-            $stdOut = !$event->getTestResult()->hasSearchException()
-                ? $event->getTestResult()->getCallResult()->getStdOut()
-                : null;
+            $path = sprintf(
+                '%s:%d',
+                $this->relativizePath($event->getFeature()->getFile()),
+                $event->getStep()->getLine()
+            );
+            $error = $event->getTestResult()->hasException() ? $this->presentException(
+                $event->getTestResult()->getException()
+            ) : null;
+            $stdOut = null;
+
+            if ($event->getTestResult()->getHookCallResults()->hasExceptions()) {
+                $error = null;
+            } else {
+                $stdOut = !$event->getTestResult()->hasSearchException()
+                    ? $event->getTestResult()->getCallResult()->getStdOut()
+                    : null;
+            }
 
             $this->failedStepPaths[] = array($text, $path, $error, $stdOut);
         }
 
         if (TestResult::PENDING == $event->getResultCode()) {
             $text = sprintf('%s %s', $event->getStep()->getType(), $event->getStep()->getText());
-            $path = $this->relativizePath($event->getTestResult()->getSearchResult()->getMatchedDefinition()->getPath());
+            $path = $this->relativizePath(
+                $event->getTestResult()->getSearchResult()->getMatchedDefinition()->getPath()
+            );
             $exception = $event->getTestResult()->getCallResult()->getException();
             $error = $this->presentException($exception);
 
             $this->pendingStepPaths[] = array($text, $path, $error);
+        }
+    }
+
+    public function collectFailedHooks($event)
+    {
+        if (!$event->getHookCallResults()->hasExceptions()) {
+            return;
+        }
+
+        foreach ($event->getHookCallResults() as $result) {
+            if ($result->hasException()) {
+                $hook = (string) $result->getCall()->getCallee();
+                $path = $result->getCall()->getCallee()->getPath();
+                $error = $this->presentException($result->getException());
+                $stdOut = $result->getStdOut();
+
+                $this->failedHookPaths[] = array($hook, $path, $error, $stdOut);
+            }
         }
     }
 
@@ -180,7 +222,11 @@ class ProgressFormatter extends TranslatableCliFormatter
         if (TestResult::FAILED === $event->getResultCode()) {
             $feature = $event->getFeature();
             $scenario = $event->getScenario();
-            $this->failedScenarioPaths[] = sprintf('%s:%s', $this->relativizePath($feature->getFile()), $scenario->getLine());
+            $this->failedScenarioPaths[] = sprintf(
+                '%s:%s',
+                $this->relativizePath($feature->getFile()),
+                $scenario->getLine()
+            );
         }
     }
 
@@ -192,6 +238,7 @@ class ProgressFormatter extends TranslatableCliFormatter
 
     public function printCounters()
     {
+        $this->printFailedHookPaths();
         $this->printFailedStepPaths();
         $this->printPendingStepPaths();
 
@@ -208,6 +255,40 @@ class ProgressFormatter extends TranslatableCliFormatter
         $this->writeln(sprintf('%s (%s)', $this->timer, $memoryUsage));
     }
 
+    public function printFailedHookPaths()
+    {
+        if (!count($this->failedHookPaths)) {
+            return;
+        }
+
+        $style = ConsoleOutputPrinter::getStyleForResult(TestResult::FAILED);
+        $this->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $this->translate('failed_hooks_title'), $style));
+        foreach ($this->failedHookPaths as $info) {
+            list($hook, $path, $exception, $stdOut) = $info;
+
+            $this->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $hook, $style, $path));
+
+            $pad = function ($line) {
+                return '      ' . $line;
+            };
+
+            if (null !== $stdOut) {
+                $padText = function ($line) {
+                    return '      │ ' . $line;
+                };
+                $this->writeln(implode("\n", array_map($padText, explode("\n", $stdOut))));
+            }
+
+            if ($exception) {
+                $this->writeln(
+                    sprintf('{+%s}%s{-%s}', $style, implode("\n", array_map($pad, explode("\n", $exception))), $style)
+                );
+            }
+
+            $this->writeln();
+        }
+    }
+
     public function printFailedStepPaths()
     {
         if (!count($this->failedStepPaths)) {
@@ -221,16 +302,25 @@ class ProgressFormatter extends TranslatableCliFormatter
 
             $scenarioPath = $this->failedScenarioPaths[$i];
             $this->writeln(sprintf('    {+%s}%s{-%s}', $style, $scenarioPath, $style));
+
             $this->writeln(sprintf('      {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $text, $style, $path));
 
-            $pad = function ($line) { return '        ' . $line; };
+            $pad = function ($line) {
+                return '        ' . $line;
+            };
 
             if (null !== $stdOut) {
-                $padText = function ($line) { return '        │ ' . $line; };
+                $padText = function ($line) {
+                    return '        │ ' . $line;
+                };
                 $this->writeln(implode("\n", array_map($padText, explode("\n", $stdOut))));
             }
 
-            $this->writeln(sprintf('{+%s}%s{-%s}', $style, implode("\n", array_map($pad, explode("\n", $exception))), $style));
+            if ($exception) {
+                $this->writeln(
+                    sprintf('{+%s}%s{-%s}', $style, implode("\n", array_map($pad, explode("\n", $exception))), $style)
+                );
+            }
 
             $this->writeln();
         }
@@ -249,8 +339,12 @@ class ProgressFormatter extends TranslatableCliFormatter
 
             $this->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $text, $style, $path));
 
-            $pad = function ($line) { return '      ' . $line; };
-            $this->writeln(sprintf('{+%s}%s{-%s}', $style, implode("\n", array_map($pad, explode("\n", $exception))), $style));
+            $pad = function ($line) {
+                return '      ' . $line;
+            };
+            $this->writeln(
+                sprintf('{+%s}%s{-%s}', $style, implode("\n", array_map($pad, explode("\n", $exception))), $style)
+            );
 
             $this->writeln();
         }

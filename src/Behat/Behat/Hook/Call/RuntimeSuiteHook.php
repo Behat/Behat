@@ -39,7 +39,7 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
 
         if ($this->isAnInstanceMethod()) {
             throw new BadCallbackException(sprintf(
-                'Feature hook callback: %s::%s() must be a static method',
+                'Suite hook callback: %s::%s() must be a static method',
                 $callable[0],
                 $callable[1]
             ), $callable);
