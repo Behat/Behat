@@ -73,6 +73,8 @@ Feature: Extensions
               $builder->useAttributeAsKey('name')->prototype('variable');
           }
 
+          public function initialize(Behat\Testwork\ServiceContainer\ExtensionManager $extensionManager) {}
+
           public function load(ContainerBuilder $container, array $config)
           {
               $definition = $container->register('custom_initializer', 'CustomInitializer', array($config));
