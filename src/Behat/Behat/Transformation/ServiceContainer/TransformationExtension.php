@@ -62,7 +62,7 @@ class TransformationExtension implements Extension
      */
     public function getConfigKey()
     {
-        return 'transformation';
+        return 'transformations';
     }
 
     /**

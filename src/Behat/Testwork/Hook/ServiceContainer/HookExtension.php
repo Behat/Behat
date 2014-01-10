@@ -39,7 +39,7 @@ class HookExtension implements Extension
      */
     public function getConfigKey()
     {
-        return 'hook';
+        return 'hooks';
     }
 
     /**

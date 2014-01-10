@@ -56,7 +56,7 @@ class EventDispatcherExtension implements Extension
      */
     public function getConfigKey()
     {
-        return 'event_dispatcher';
+        return 'events';
     }
 
     /**

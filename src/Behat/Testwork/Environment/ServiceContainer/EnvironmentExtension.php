@@ -57,7 +57,7 @@ class EnvironmentExtension implements Extension
      */
     public function getConfigKey()
     {
-        return 'environment';
+        return 'environments';
     }
 
     /**

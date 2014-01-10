@@ -98,7 +98,7 @@ Feature: Error Reporting
     Given a file named "behat.yml" with:
       """
       default:
-        call:
+        calls:
           error_reporting: 32759
       """
     When I run "behat -f progress --no-colors"

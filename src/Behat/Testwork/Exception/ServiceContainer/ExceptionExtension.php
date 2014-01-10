@@ -56,7 +56,7 @@ class ExceptionExtension implements Extension
      */
     public function getConfigKey()
     {
-        return 'exception';
+        return 'exceptions';
     }
 
     /**

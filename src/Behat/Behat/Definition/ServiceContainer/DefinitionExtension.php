@@ -65,7 +65,7 @@ class DefinitionExtension implements Extension
      */
     public function getConfigKey()
     {
-        return 'definition';
+        return 'definitions';
     }
 
     /**

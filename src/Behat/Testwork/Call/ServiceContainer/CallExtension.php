@@ -58,7 +58,7 @@ class CallExtension implements Extension
      */
     public function getConfigKey()
     {
-        return 'call';
+        return 'calls';
     }
 
     /**

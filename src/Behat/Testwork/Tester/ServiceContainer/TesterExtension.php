@@ -44,7 +44,7 @@ abstract class TesterExtension implements Extension
      */
     public function getConfigKey()
     {
-        return 'tester';
+        return 'testers';
     }
 
     /**
