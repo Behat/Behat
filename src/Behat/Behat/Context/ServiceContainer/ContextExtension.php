@@ -59,23 +59,11 @@ class ContextExtension implements Extension
     }
 
     /**
-     * Returns the extension config key.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getConfigKey()
     {
         return 'contexts';
-    }
-
-    /**
-     * Setups configuration for the extension.
-     *
-     * @param ArrayNodeDefinition $builder
-     */
-    public function configure(ArrayNodeDefinition $builder)
-    {
-        $builder->useAttributeAsKey('name')->prototype('variable');
     }
 
     /**
@@ -86,10 +74,15 @@ class ContextExtension implements Extension
     }
 
     /**
-     * Loads extension services into temporary container.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $config
+     * {@inheritdoc}
+     */
+    public function configure(ArrayNodeDefinition $builder)
+    {
+        $builder->useAttributeAsKey('name')->prototype('variable');
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function load(ContainerBuilder $container, array $config)
     {
@@ -103,9 +96,7 @@ class ContextExtension implements Extension
     }
 
     /**
-     * Processes shared container after all extensions loaded.
-     *
-     * @param ContainerBuilder $container
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {

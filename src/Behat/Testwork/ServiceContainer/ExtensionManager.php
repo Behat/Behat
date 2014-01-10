@@ -73,13 +73,6 @@ class ExtensionManager
         return $this->extensions[$extension->getConfigKey()] = $extension;
     }
 
-    public function initializeExtensions()
-    {
-        foreach ($this->extensions as $extension) {
-            $extension->initialize($this);
-        }
-    }
-
     /**
      * Returns specific extension by its name.
      *
@@ -110,6 +103,16 @@ class ExtensionManager
     public function getExtensionClasses()
     {
         return array_map('get_class', array_values($this->extensions));
+    }
+
+    /**
+     * Initializes all activated and predefined extensions.
+     */
+    public function initializeExtensions()
+    {
+        foreach ($this->extensions as $extension) {
+            $extension->initialize($this);
+        }
     }
 
     /**

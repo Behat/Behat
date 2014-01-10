@@ -23,10 +23,7 @@ use Symfony\Component\DependencyInjection\Definition;
 class HookExtension extends BaseExtension
 {
     /**
-     * Loads extension services into temporary container.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $config
+     * {@inheritdoc}
      */
     public function load(ContainerBuilder $container, array $config)
     {

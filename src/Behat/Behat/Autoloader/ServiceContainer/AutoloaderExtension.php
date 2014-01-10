@@ -23,9 +23,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 class AutoloaderExtension extends BaseExtension
 {
     /**
-     * Setups configuration for the extension.
-     *
-     * @param ArrayNodeDefinition $builder
+     * {@inheritdoc}
      */
     public function configure(ArrayNodeDefinition $builder)
     {

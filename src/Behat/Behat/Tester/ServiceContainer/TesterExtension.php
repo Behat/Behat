@@ -42,10 +42,7 @@ class TesterExtension extends BaseExtension
     const STEP_TESTER_ID = 'tester.step';
 
     /**
-     * Loads extension services into temporary container.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $config
+     * {@inheritdoc}
      */
     public function load(ContainerBuilder $container, array $config)
     {

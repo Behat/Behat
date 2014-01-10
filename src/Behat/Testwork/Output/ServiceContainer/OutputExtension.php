@@ -55,9 +55,7 @@ abstract class OutputExtension implements Extension
     }
 
     /**
-     * Returns the extension config key.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getConfigKey()
     {
@@ -65,9 +63,14 @@ abstract class OutputExtension implements Extension
     }
 
     /**
-     * Setups configuration for the extension.
-     *
-     * @param ArrayNodeDefinition $builder
+     * {@inheritdoc}
+     */
+    public function initialize(ExtensionManager $extensionManager)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function configure(ArrayNodeDefinition $builder)
     {
@@ -95,16 +98,6 @@ abstract class OutputExtension implements Extension
     /**
      * {@inheritdoc}
      */
-    public function initialize(ExtensionManager $extensionManager)
-    {
-    }
-
-    /**
-     * Loads extension services into temporary container.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadOutputController($container);
@@ -113,9 +106,7 @@ abstract class OutputExtension implements Extension
     }
 
     /**
-     * Processes shared container after all extensions loaded.
-     *
-     * @param ContainerBuilder $container
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {

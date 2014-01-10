@@ -31,21 +31,23 @@ interface Extension extends CompilerPassInterface
     public function getConfigKey();
 
     /**
+     * Initializes other extensions.
+     *
+     * This method is called immediately after all extensions are activated but
+     * before any extension `configure()` method is called. This allows extensions
+     * to hook into the configuration of other extensions providing such an
+     * extension point.
+     *
+     * @param ExtensionManager $extensionManager
+     */
+    public function initialize(ExtensionManager $extensionManager);
+
+    /**
      * Setups configuration for the extension.
      *
      * @param ArrayNodeDefinition $builder
      */
     public function configure(ArrayNodeDefinition $builder);
-
-    /**
-     * Initializes other extensions
-     *
-     * This allows extensions to hook into the configuration of other extensions
-     * providing such an extension point.
-     *
-     * @param ExtensionManager $extensionManager
-     */
-    public function initialize(ExtensionManager $extensionManager);
 
     /**
      * Loads extension services into temporary container.
