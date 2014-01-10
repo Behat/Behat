@@ -1,3 +1,27 @@
+3.0.0rc2 / 2014-01-10
+=======================
+
+  * Fixed progress formatter hooks support
+  * Reintroduced suite hooks (with an additional functionality of name filtering)
+  * Behat tells about steps that it couldn't generate snippets for
+  * Memory consumption optimizations
+  * Fixed contexts inheritance
+  * New formatter translations
+
+  * Added constructor arguments and class resolving extension points to context creation routine
+  * Simplified and cleaned `Context` package of the Behat
+  * Minor public API changes across the board (simplification)
+  * Optimized subject finding routine and cleaned extension points (`SubjectLocator`)
+  * Both `ExampleTested` and `ScenarioTested` now use same method name - `getScenario()`
+  * Added exception accessors to `StepTestResult`
+  * Renamed `ExerciseTester` to `Exercise`
+  * Added `HookableEvent` to Testwork, which extends `LifecycleEvent`
+  * Made `priority` attribute of a tag optional
+  * Changed all occurrences of `classname` to `class` across public API
+  * Renamed `GherkinSuite` to `GenericSuite` and moved it into the Testwork
+  * Added `initialize` call to extension lifecycle and Extension interface
+  * Renamed some extensions config keys to be more intuitive
+
 3.0.0rc1 / 2014-01-01
 =======================
 
