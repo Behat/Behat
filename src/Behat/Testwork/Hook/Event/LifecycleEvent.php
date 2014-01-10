@@ -17,7 +17,7 @@ use Symfony\Component\EventDispatcher\Event;
 /**
  * Testwork lifecycle event.
  *
- * All hookable events should extend this class.
+ * All tester events should extend this class.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

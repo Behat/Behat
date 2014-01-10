@@ -15,7 +15,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\Hook\Event\HookableEvent;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -23,7 +23,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepTested extends LifecycleEvent
+class StepTested extends HookableEvent
 {
     const BEFORE = 'tester.step_tested.before';
     const AFTER = 'tester.step_tested.after';
@@ -40,10 +40,6 @@ class StepTested extends LifecycleEvent
      * @var StepTestResult
      */
     private $testResult;
-    /**
-     * @var null|CallResults
-     */
-    private $hookCallResults;
 
     /**
      * Initializes event.
@@ -63,12 +59,11 @@ class StepTested extends LifecycleEvent
         StepTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment);
+        parent::__construct($suite, $environment, $hookCallResults);
 
         $this->feature = $feature;
         $this->step = $step;
         $this->testResult = $testResult;
-        $this->hookCallResults = $hookCallResults;
     }
 
     /**
@@ -99,16 +94,6 @@ class StepTested extends LifecycleEvent
     public function getTestResult()
     {
         return $this->testResult;
-    }
-
-    /**
-     * Returns hook call results.
-     *
-     * @return null|CallResults
-     */
-    public function getHookCallResults()
-    {
-        return $this->hookCallResults;
     }
 
     /**

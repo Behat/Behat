@@ -12,7 +12,7 @@ namespace Behat\Testwork\Tester\Event;
 
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\Hook\Event\HookableEvent;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\SuiteTestResult;
 
@@ -21,7 +21,7 @@ use Behat\Testwork\Tester\Result\SuiteTestResult;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteTested extends LifecycleEvent
+class SuiteTested extends HookableEvent
 {
     const BEFORE = 'tester.suite_tested.before';
     const AFTER = 'tester.suite_tested.after';
@@ -30,10 +30,6 @@ class SuiteTested extends LifecycleEvent
      * @var null|SuiteTestResult
      */
     private $testResult;
-    /**
-     * @var null|CallResults
-     */
-    private $hookCallResults;
 
     /**
      * Initializes event.
@@ -49,10 +45,9 @@ class SuiteTested extends LifecycleEvent
         SuiteTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment);
+        parent::__construct($suite, $environment, $hookCallResults);
 
         $this->testResult = $testResult;
-        $this->hookCallResults = $hookCallResults;
     }
 
     /**
@@ -63,16 +58,6 @@ class SuiteTested extends LifecycleEvent
     public function getTestResult()
     {
         return $this->testResult;
-    }
-
-    /**
-     * Returns hook call results.
-     *
-     * @return null|CallResults
-     */
-    public function getHookCallResults()
-    {
-        return $this->hookCallResults;
     }
 
     /**

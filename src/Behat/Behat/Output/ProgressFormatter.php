@@ -20,6 +20,7 @@ use Behat\Behat\Tester\Result\TestResult;
 use Behat\Testwork\Counter\MemoryUsage;
 use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Exception\ExceptionPresenter;
+use Behat\Testwork\Hook\Event\HookableEvent;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Output\TranslatableCliFormatter;
@@ -198,7 +199,7 @@ class ProgressFormatter extends TranslatableCliFormatter
         }
     }
 
-    public function collectFailedHooks($event)
+    public function collectFailedHooks(HookableEvent $event)
     {
         if (!$event->getHookCallResults()->hasExceptions()) {
             return;

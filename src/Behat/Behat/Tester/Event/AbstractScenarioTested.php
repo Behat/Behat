@@ -15,7 +15,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\Hook\Event\HookableEvent;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -23,7 +23,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class AbstractScenarioTested extends LifecycleEvent
+abstract class AbstractScenarioTested extends HookableEvent
 {
     /**
      * @var FeatureNode
@@ -37,20 +37,16 @@ abstract class AbstractScenarioTested extends LifecycleEvent
      * @var StepContainerTestResult
      */
     private $testResult;
-    /**
-     * @var null|CallResults
-     */
-    private $hookCallResults;
 
     /**
      * Initializes event.
      *
-     * @param Suite                   $suite
-     * @param Environment             $environment
-     * @param FeatureNode             $feature
+     * @param Suite                        $suite
+     * @param Environment                  $environment
+     * @param FeatureNode                  $feature
      * @param ScenarioInterface            $scenario
      * @param null|StepContainerTestResult $testResult
-     * @param null|CallResults        $hookCallResults
+     * @param null|CallResults             $hookCallResults
      */
     public function __construct(
         Suite $suite,
@@ -60,12 +56,11 @@ abstract class AbstractScenarioTested extends LifecycleEvent
         StepContainerTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment);
+        parent::__construct($suite, $environment, $hookCallResults);
 
         $this->feature = $feature;
         $this->scenario = $scenario;
         $this->testResult = $testResult;
-        $this->hookCallResults = $hookCallResults;
     }
 
     /**
@@ -96,16 +91,6 @@ abstract class AbstractScenarioTested extends LifecycleEvent
     public function getTestResult()
     {
         return $this->testResult;
-    }
-
-    /**
-     * Returns hook call results.
-     *
-     * @return null|CallResults
-     */
-    public function getHookCallResults()
-    {
-        return $this->hookCallResults;
     }
 
     /**
