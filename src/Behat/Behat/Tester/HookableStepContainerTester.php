@@ -84,7 +84,7 @@ class HookableStepContainerTester extends StepContainerTester
         $beforeHooks = (!$skip && $this->hookDispatcher)
             ? $this->dispatchBeforeHooks($suite, $environment, $feature, $container)
             :  new CallResults();
-        $this->eventDispatcher && $this->dispatchBeforeEvent($suite, $environment, $feature, $container, $beforeHooks);
+        $this->eventDispatcher and $this->dispatchBeforeEvent($suite, $environment, $feature, $container, $beforeHooks);
 
         $skip = $skip || $beforeHooks->hasExceptions();
         $result = parent::testContainer($suite, $environment, $feature, $container, $skip);
@@ -96,7 +96,7 @@ class HookableStepContainerTester extends StepContainerTester
             $result->getStepTestResults(),
             CallResults::merge($beforeHooks, $afterHooks)
         );
-        $this->eventDispatcher && $this->dispatchAfterEvent($suite, $environment, $feature, $container, $result, $afterHooks);
+        $this->eventDispatcher and $this->dispatchAfterEvent($suite, $environment, $feature, $container, $result, $afterHooks);
 
         return $result;
     }

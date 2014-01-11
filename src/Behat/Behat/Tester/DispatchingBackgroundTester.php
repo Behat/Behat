@@ -45,14 +45,14 @@ class DispatchingBackgroundTester extends BackgroundTester
      */
     protected function testBackground(Suite $suite, Environment $environment, FeatureNode $feature, $skip = false)
     {
-        $this->eventDispatcher && $this->eventDispatcher->dispatch(
+        $this->eventDispatcher and $this->eventDispatcher->dispatch(
             BackgroundTested::BEFORE,
             new BackgroundTested($suite, $environment, $feature, $feature->getBackground())
         );
 
         $results = parent::testBackground($suite, $environment, $feature, $skip);
 
-        $this->eventDispatcher && $this->eventDispatcher->dispatch(
+        $this->eventDispatcher and $this->eventDispatcher->dispatch(
             BackgroundTested::AFTER,
             new BackgroundTested($suite, $environment, $feature, $feature->getBackground(), $results)
         );

@@ -66,7 +66,7 @@ class HookableSuiteTester extends SuiteTester
         $beforeHooks = (!$skip && $this->hookDispatcher)
             ? $this->dispatchBeforeHooks($suite, $environment)
             : new CallResults();
-        $this->eventDispatcher && $this->dispatchBeforeEvent($suite, $environment, $beforeHooks);
+        $this->eventDispatcher and $this->dispatchBeforeEvent($suite, $environment, $beforeHooks);
 
         $skip = $skip || $beforeHooks->hasExceptions();
         $result = parent::testSuite($environment, $suite, $iterator, $skip);
@@ -78,7 +78,7 @@ class HookableSuiteTester extends SuiteTester
             $result->getSubjectTestResults(),
             CallResults::merge($beforeHooks, $afterHooks)
         );
-        $this->eventDispatcher && $this->dispatchAfterEvent($suite, $environment, $result, $afterHooks);
+        $this->eventDispatcher and $this->dispatchAfterEvent($suite, $environment, $result, $afterHooks);
 
         return $result;
     }

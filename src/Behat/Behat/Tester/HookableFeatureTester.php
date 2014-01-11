@@ -66,7 +66,7 @@ class HookableFeatureTester extends FeatureTester
         $beforeHooks = (!$skip && $this->hookDispatcher)
             ? $this->dispatchBeforeHooks($suite, $environment, $feature)
             : new CallResults();
-        $this->eventDispatcher && $this->dispatchBeforeEvent($suite, $environment, $feature, $beforeHooks);
+        $this->eventDispatcher and $this->dispatchBeforeEvent($suite, $environment, $feature, $beforeHooks);
 
         $skip = $skip || $beforeHooks->hasExceptions();
         $result = parent::testFeature($suite, $environment, $feature, $skip);
@@ -78,7 +78,7 @@ class HookableFeatureTester extends FeatureTester
             $result->getScenarioTestResults(),
             CallResults::merge($beforeHooks, $afterHooks)
         );
-        $this->eventDispatcher && $this->dispatchAfterEvent($suite, $environment, $feature, $result, $afterHooks);
+        $this->eventDispatcher and $this->dispatchAfterEvent($suite, $environment, $feature, $result, $afterHooks);
 
         return $result;
     }

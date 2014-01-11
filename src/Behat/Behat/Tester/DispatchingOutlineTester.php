@@ -51,14 +51,14 @@ class DispatchingOutlineTester extends OutlineTester
         OutlineNode $outline,
         $skip = false
     ) {
-        $this->eventDispatcher && $this->eventDispatcher->dispatch(
+        $this->eventDispatcher and $this->eventDispatcher->dispatch(
             OutlineTested::BEFORE,
             new OutlineTested($suite, $environment, $feature, $outline)
         );
 
         $result = parent::testOutline($suite, $environment, $feature, $outline, $skip);
 
-        $this->eventDispatcher && $this->eventDispatcher->dispatch(
+        $this->eventDispatcher and $this->eventDispatcher->dispatch(
             OutlineTested::AFTER,
             new OutlineTested($suite, $environment, $feature, $outline, $result)
         );
