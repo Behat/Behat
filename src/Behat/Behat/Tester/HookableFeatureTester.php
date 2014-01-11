@@ -43,7 +43,7 @@ class HookableFeatureTester extends FeatureTester
      *
      * @param HookDispatcher $hookDispatcher
      */
-    public function setHookDispatcher($hookDispatcher)
+    public function setHookDispatcher(HookDispatcher $hookDispatcher)
     {
         $this->hookDispatcher = $hookDispatcher;
     }
@@ -53,7 +53,7 @@ class HookableFeatureTester extends FeatureTester
      *
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function setEventDispatcher($eventDispatcher)
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
     }

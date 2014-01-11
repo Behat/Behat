@@ -44,7 +44,7 @@ class HookableStepTester extends StepTester
      *
      * @param HookDispatcher $hookDispatcher
      */
-    public function setHookDispatcher($hookDispatcher)
+    public function setHookDispatcher(HookDispatcher $hookDispatcher)
     {
         $this->hookDispatcher = $hookDispatcher;
     }
@@ -54,7 +54,7 @@ class HookableStepTester extends StepTester
      *
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function setEventDispatcher($eventDispatcher)
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
     }
