@@ -79,12 +79,18 @@ class TesterExtension extends BaseExtension
      */
     protected function loadSubjectTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\FeatureTester', array(
+        $definition = new Definition('Behat\Behat\Tester\HookableFeatureTester', array(
             new Reference(self::SCENARIO_TESTER_ID),
-            new Reference(self::OUTLINE_TESTER_ID),
-            new Reference(HookExtension::DISPATCHER_ID),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+            new Reference(self::OUTLINE_TESTER_ID)
         ));
+        $definition->addMethodCall(
+            'setHookDispatcher',
+            array(new Reference(HookExtension::DISPATCHER_ID))
+        );
+        $definition->addMethodCall(
+            'setEventDispatcher',
+            array(new Reference(EventDispatcherExtension::DISPATCHER_ID))
+        );
         $container->setDefinition(self::SUBJECT_TESTER_ID, $definition);
 
         $this->loadScenarioTester($container);
@@ -100,14 +106,20 @@ class TesterExtension extends BaseExtension
      */
     protected function loadScenarioTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
+        $definition = new Definition('Behat\Behat\Tester\HookableStepContainerTester', array(
             new Reference(self::STEP_TESTER_ID),
             new Reference(self::BACKGROUND_TESTER_ID),
-            new Reference(EnvironmentExtension::MANAGER_ID),
-            new Reference(HookExtension::DISPATCHER_ID),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID),
-            'Behat\Behat\Tester\Event\ScenarioTested'
+            new Reference(EnvironmentExtension::MANAGER_ID)
+
         ));
+        $definition->addMethodCall(
+            'setHookDispatcherAndEventClass',
+            array(new Reference(HookExtension::DISPATCHER_ID), 'Behat\Behat\Tester\Event\ScenarioTested')
+        );
+        $definition->addMethodCall(
+            'setEventDispatcherAndEventClass',
+            array(new Reference(EventDispatcherExtension::DISPATCHER_ID), 'Behat\Behat\Tester\Event\ScenarioTested')
+        );
         $container->setDefinition(self::SCENARIO_TESTER_ID, $definition);
     }
 
@@ -118,10 +130,13 @@ class TesterExtension extends BaseExtension
      */
     protected function loadOutlineTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\OutlineTester', array(
-            new Reference(self::EXAMPLE_TESTER_ID),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+        $definition = new Definition('Behat\Behat\Tester\DispatchingOutlineTester', array(
+            new Reference(self::EXAMPLE_TESTER_ID)
         ));
+        $definition->addMethodCall(
+            'setEventDispatcher',
+            array(new Reference(EventDispatcherExtension::DISPATCHER_ID))
+        );
         $container->setDefinition(self::OUTLINE_TESTER_ID, $definition);
 
         $this->loadExampleTester($container);
@@ -134,14 +149,19 @@ class TesterExtension extends BaseExtension
      */
     protected function loadExampleTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
+        $definition = new Definition('Behat\Behat\Tester\HookableStepContainerTester', array(
             new Reference(self::STEP_TESTER_ID),
             new Reference(self::BACKGROUND_TESTER_ID),
-            new Reference(EnvironmentExtension::MANAGER_ID),
-            new Reference(HookExtension::DISPATCHER_ID),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID),
-            'Behat\Behat\Tester\Event\ExampleTested'
+            new Reference(EnvironmentExtension::MANAGER_ID)
         ));
+        $definition->addMethodCall(
+            'setHookDispatcherAndEventClass',
+            array(new Reference(HookExtension::DISPATCHER_ID), 'Behat\Behat\Tester\Event\ExampleTested')
+        );
+        $definition->addMethodCall(
+            'setEventDispatcherAndEventClass',
+            array(new Reference(EventDispatcherExtension::DISPATCHER_ID), 'Behat\Behat\Tester\Event\ExampleTested')
+        );
         $container->setDefinition(self::EXAMPLE_TESTER_ID, $definition);
     }
 
@@ -152,10 +172,13 @@ class TesterExtension extends BaseExtension
      */
     protected function loadBackgroundTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\BackgroundTester', array(
-            new Reference(self::STEP_TESTER_ID),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+        $definition = new Definition('Behat\Behat\Tester\DispatchingBackgroundTester', array(
+            new Reference(self::STEP_TESTER_ID)
         ));
+        $definition->addMethodCall(
+            'setEventDispatcher',
+            array(new Reference(EventDispatcherExtension::DISPATCHER_ID))
+        );
         $container->setDefinition(self::BACKGROUND_TESTER_ID, $definition);
     }
 
@@ -166,12 +189,18 @@ class TesterExtension extends BaseExtension
      */
     protected function loadStepTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepTester', array(
+        $definition = new Definition('Behat\Behat\Tester\HookableStepTester', array(
             new Reference(DefinitionExtension::FINDER_ID),
-            new Reference(CallExtension::CALL_CENTER_ID),
-            new Reference(HookExtension::DISPATCHER_ID),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+            new Reference(CallExtension::CALL_CENTER_ID)
         ));
+        $definition->addMethodCall(
+            'setHookDispatcher',
+            array(new Reference(HookExtension::DISPATCHER_ID))
+        );
+        $definition->addMethodCall(
+            'setEventDispatcher',
+            array(new Reference(EventDispatcherExtension::DISPATCHER_ID))
+        );
         $container->setDefinition(self::STEP_TESTER_ID, $definition);
     }
 

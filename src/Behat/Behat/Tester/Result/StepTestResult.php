@@ -14,7 +14,6 @@ use Behat\Behat\Definition\Exception\SearchException;
 use Behat\Behat\Definition\SearchResult;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Testwork\Call\CallResult;
-use Behat\Testwork\Call\CallResults;
 use Exception;
 
 /**
@@ -36,10 +35,6 @@ class StepTestResult extends TestResult
      * @var null|CallResult
      */
     private $callResult;
-    /**
-     * @var CallResults
-     */
-    private $hookCallResults;
 
     /**
      * Initialize test result.
@@ -47,18 +42,15 @@ class StepTestResult extends TestResult
      * @param null|SearchResult    $searchResult
      * @param null|SearchException $searchException
      * @param null|CallResult      $callResult
-     * @param CallResults          $hookCallResults
      */
     public function __construct(
         SearchResult $searchResult = null,
         SearchException $searchException = null,
-        CallResult $callResult = null,
-        CallResults $hookCallResults
+        CallResult $callResult = null
     ) {
         $this->searchResult = $searchResult;
         $this->searchException = $searchException;
         $this->callResult = $callResult;
-        $this->hookCallResults = $hookCallResults;
     }
 
     /**
@@ -92,16 +84,6 @@ class StepTestResult extends TestResult
     }
 
     /**
-     * Returns hooks calls results.
-     *
-     * @return CallResults
-     */
-    public function getHookCallResults()
-    {
-        return $this->hookCallResults;
-    }
-
-    /**
      * Checks if definition search caused exception.
      *
      * @return Boolean
@@ -109,6 +91,32 @@ class StepTestResult extends TestResult
     public function hasSearchException()
     {
         return null !== $this->searchException;
+    }
+
+    /**
+     * Checks if step has produced any exception.
+     *
+     * @return Boolean
+     */
+    public function hasException()
+    {
+        return null !== $this->getException();
+    }
+
+    /**
+     * @return Exception|null
+     */
+    public function getException()
+    {
+        if ($this->searchException) {
+            return $this->searchException;
+        }
+
+        if ($this->callResult->hasException()) {
+            return $this->callResult->getException();
+        }
+
+        return null;
     }
 
     /**
@@ -131,10 +139,6 @@ class StepTestResult extends TestResult
         if ($this->searchException) {
             return static::FAILED;
         }
-        if ($this->hookCallResults->hasExceptions()) {
-            return static::FAILED;
-        }
-
         if (!$this->searchResult->hasMatch()) {
             return static::UNDEFINED;
         }
@@ -149,35 +153,5 @@ class StepTestResult extends TestResult
         }
 
         return static::PASSED;
-    }
-
-    /**
-     * @return Exception|null
-     */
-    public function getException()
-    {
-        if ($this->searchException) {
-            return $this->searchException;
-        }
-
-        foreach ($this->hookCallResults as $callResult) {
-            if ($callResult->hasException()) {
-                return $callResult->getException();
-            }
-        }
-
-        if ($this->callResult->hasException()) {
-            return $this->callResult->getException();
-        }
-
-        return null;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function hasException()
-    {
-        return null !== $this->getException();
     }
 }

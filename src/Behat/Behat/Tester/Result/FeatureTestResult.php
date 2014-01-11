@@ -10,7 +10,6 @@
 
 namespace Behat\Behat\Tester\Result;
 
-use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Tester\Result\TestResults;
 
 /**
@@ -24,21 +23,15 @@ class FeatureTestResult extends TestResult
      * @var TestResults
      */
     private $scenarioTestResults;
-    /**
-     * @var CallResults
-     */
-    private $hookCallResults;
 
     /**
      * Initializes test result.
      *
      * @param TestResults $scenarioTestResults
-     * @param CallResults $hookCallResults
      */
-    public function __construct(TestResults $scenarioTestResults, CallResults $hookCallResults)
+    public function __construct(TestResults $scenarioTestResults)
     {
         $this->scenarioTestResults = $scenarioTestResults;
-        $this->hookCallResults = $hookCallResults;
     }
 
     /**
@@ -52,26 +45,12 @@ class FeatureTestResult extends TestResult
     }
 
     /**
-     * Returns scenarios hooks calls results.
-     *
-     * @return CallResults
-     */
-    public function getHookCallResults()
-    {
-        return $this->hookCallResults;
-    }
-
-    /**
      * Returns tester result status.
      *
      * @return integer
      */
     public function getResultCode()
     {
-        if ($this->hookCallResults->hasExceptions()) {
-            return static::FAILED;
-        }
-
         return $this->scenarioTestResults->getResultCode();
     }
 }

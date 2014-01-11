@@ -10,22 +10,18 @@
 
 namespace Behat\Behat\Tester;
 
-use Behat\Behat\Tester\Event\FeatureTested;
 use Behat\Behat\Tester\Result\FeatureTestResult;
 use Behat\Behat\Tester\Result\OutlineTestResult;
 use Behat\Behat\Tester\Result\StepContainerTestResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\ScenarioInterface;
-use Behat\Gherkin\Node\StepContainerInterface;
-use Behat\Testwork\Call\CallResults;
+use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Hook\HookDispatcher;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\SubjectTester;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Feature tester.
@@ -42,33 +38,17 @@ class FeatureTester implements SubjectTester
      * @var OutlineTester
      */
     private $outlineTester;
-    /**
-     * @var HookDispatcher
-     */
-    private $hookDispatcher;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
 
     /**
      * Initializes tester.
      *
-     * @param StepContainerTester      $scenarioTester
-     * @param OutlineTester            $outlineTester
-     * @param HookDispatcher           $hookDispatcher
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param StepContainerTester $scenarioTester
+     * @param OutlineTester       $outlineTester
      */
-    public function __construct(
-        StepContainerTester $scenarioTester,
-        OutlineTester $outlineTester,
-        HookDispatcher $hookDispatcher,
-        EventDispatcherInterface $eventDispatcher
-    ) {
+    public function __construct(StepContainerTester $scenarioTester, OutlineTester $outlineTester)
+    {
         $this->scenarioTester = $scenarioTester;
         $this->outlineTester = $outlineTester;
-        $this->hookDispatcher = $hookDispatcher;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -83,53 +63,9 @@ class FeatureTester implements SubjectTester
      */
     public function test(Suite $suite, Environment $environment, $feature, $skip = false)
     {
-        $beforeHooks = $skip ? new CallResults() : $this->dispatchBeforeHooks($suite, $environment, $feature);
-        $this->dispatchBeforeEvent($suite, $environment, $feature, $beforeHooks);
-
-        $skip = $skip || $beforeHooks->hasExceptions();
-        $result = $this->testFeature($suite, $environment, $feature, $beforeHooks, $skip);
-
-        $afterHooks = $skip ? new CallResults() : $this->dispatchAfterHooks($suite, $environment, $feature, $result);
-        $this->dispatchAfterEvent($suite, $environment, $feature, $result, $afterHooks);
-
-        $result = new FeatureTestResult($result->getScenarioTestResults(), CallResults::merge($beforeHooks, $afterHooks));
+        $result = $this->testFeature($suite, $environment, $feature, $skip);
 
         return new TestResult($result->getResultCode());
-    }
-
-    /**
-     * Dispatches BEFORE event.
-     *
-     * @param Suite       $suite
-     * @param Environment $environment
-     * @param FeatureNode $feature
-     * @param CallResults $hookCallResults
-     */
-    private function dispatchBeforeEvent(
-        Suite $suite,
-        Environment $environment,
-        FeatureNode $feature,
-        CallResults $hookCallResults
-    ) {
-        $event = new FeatureTested($suite, $environment, $feature, null, $hookCallResults);
-
-        $this->eventDispatcher->dispatch(FeatureTested::BEFORE, $event);
-    }
-
-    /**
-     * Dispatches BEFORE event hooks.
-     *
-     * @param Suite       $suite
-     * @param Environment $environment
-     * @param FeatureNode $feature
-     *
-     * @return CallResults
-     */
-    private function dispatchBeforeHooks(Suite $suite, Environment $environment, FeatureNode $feature)
-    {
-        $event = new FeatureTested($suite, $environment, $feature);
-
-        return $this->hookDispatcher->dispatchEventHooks(FeatureTested::BEFORE, $event);
     }
 
     /**
@@ -138,24 +74,18 @@ class FeatureTester implements SubjectTester
      * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
-     * @param CallResults $hookResults
      * @param Boolean     $skip
      *
      * @return FeatureTestResult
      */
-    private function testFeature(
-        Suite $suite,
-        Environment $environment,
-        FeatureNode $feature,
-        CallResults $hookResults,
-        $skip = false
-    ) {
+    protected function testFeature(Suite $suite, Environment $environment, FeatureNode $feature, $skip = false)
+    {
         $results = array();
         foreach ($feature->getScenarios() as $scenario) {
             $results[] = $this->testScenario($suite, $environment, $feature, $scenario, $skip);
         }
 
-        return new FeatureTestResult(new TestResults($results), $hookResults);
+        return new FeatureTestResult(new TestResults($results));
     }
 
     /**
@@ -207,11 +137,11 @@ class FeatureTester implements SubjectTester
     /**
      * Tests scenario node.
      *
-     * @param Suite                  $suite
-     * @param Environment            $environment
-     * @param FeatureNode            $feature
-     * @param StepContainerInterface $scenario
-     * @param Boolean                $skip
+     * @param Suite        $suite
+     * @param Environment  $environment
+     * @param FeatureNode  $feature
+     * @param ScenarioNode $scenario
+     * @param Boolean      $skip
      *
      * @return StepContainerTestResult
      */
@@ -219,51 +149,9 @@ class FeatureTester implements SubjectTester
         Suite $suite,
         Environment $environment,
         FeatureNode $feature,
-        StepContainerInterface $scenario,
+        ScenarioNode $scenario,
         $skip = false
     ) {
         return $this->scenarioTester->test($suite, $environment, $feature, $scenario, $skip);
-    }
-
-    /**
-     * Dispatches AFTER event hooks.
-     *
-     * @param Suite             $suite
-     * @param Environment       $environment
-     * @param FeatureNode       $feature
-     * @param FeatureTestResult $result
-     *
-     * @return CallResults
-     */
-    private function dispatchAfterHooks(
-        Suite $suite,
-        Environment $environment,
-        FeatureNode $feature,
-        FeatureTestResult $result
-    ) {
-        $event = new FeatureTested($suite, $environment, $feature, $result);
-
-        return $this->hookDispatcher->dispatchEventHooks(FeatureTested::AFTER, $event);
-    }
-
-    /**
-     * Dispatches AFTER event.
-     *
-     * @param Suite             $suite
-     * @param Environment       $environment
-     * @param FeatureNode       $feature
-     * @param FeatureTestResult $result
-     * @param CallResults       $hookCallResults
-     */
-    private function dispatchAfterEvent(
-        Suite $suite,
-        Environment $environment,
-        FeatureNode $feature,
-        FeatureTestResult $result,
-        CallResults $hookCallResults
-    ) {
-        $event = new FeatureTested($suite, $environment, $feature, $result, $hookCallResults);
-
-        $this->eventDispatcher->dispatch(FeatureTested::AFTER, $event);
     }
 }

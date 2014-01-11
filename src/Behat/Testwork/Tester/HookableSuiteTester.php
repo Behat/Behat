@@ -27,7 +27,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DispatchingSuiteTester extends SuiteTester
+class HookableSuiteTester extends SuiteTester
 {
     /**
      * @var HookDispatcher
@@ -74,12 +74,13 @@ class DispatchingSuiteTester extends SuiteTester
         $afterHooks = (!$skip && $this->hookDispatcher)
             ? $this->dispatchAfterHooks($suite, $environment, $result)
             : new CallResults();
-        $this->eventDispatcher && $this->dispatchAfterEvent($suite, $environment, $result, $afterHooks);
-
-        return new HookedSuiteTestResult(
+        $result = new HookedSuiteTestResult(
             $result->getSubjectTestResults(),
             CallResults::merge($beforeHooks, $afterHooks)
         );
+        $this->eventDispatcher && $this->dispatchAfterEvent($suite, $environment, $result, $afterHooks);
+
+        return $result;
     }
 
     /**

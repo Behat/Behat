@@ -148,7 +148,7 @@ abstract class TesterExtension implements Extension
      */
     protected function loadSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\DispatchingSuiteTester', array(
+        $definition = new Definition('Behat\Testwork\Tester\HookableSuiteTester', array(
             new Reference(self::SUBJECT_TESTER_ID),
             new Reference(EnvironmentExtension::MANAGER_ID)
         ));
