@@ -62,14 +62,13 @@ abstract class TesterExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->booleanNode('strict')
-                    ->defaultFalse()
-                ->end()
-                ->booleanNode('skip')
-                    ->defaultFalse()
-                ->end()
+            ->booleanNode('strict')
+            ->defaultFalse()
             ->end()
-        ;
+            ->booleanNode('skip')
+            ->defaultFalse()
+            ->end()
+            ->end();
     }
 
     /**
@@ -132,10 +131,13 @@ abstract class TesterExtension implements Extension
      */
     protected function loadExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Exercise', array(
-            new Reference(self::SUITE_TESTER_ID),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+        $definition = new Definition('Behat\Testwork\Tester\DispatchingExercise', array(
+            new Reference(self::SUITE_TESTER_ID)
         ));
+        $definition->addMethodCall(
+            'setEventDispatcher',
+            array(new Reference(EventDispatcherExtension::DISPATCHER_ID))
+        );
         $container->setDefinition(self::EXERCISE_ID, $definition);
     }
 
@@ -146,12 +148,18 @@ abstract class TesterExtension implements Extension
      */
     protected function loadSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\SuiteTester', array(
+        $definition = new Definition('Behat\Testwork\Tester\DispatchingSuiteTester', array(
             new Reference(self::SUBJECT_TESTER_ID),
-            new Reference(EnvironmentExtension::MANAGER_ID),
-            new Reference(HookExtension::DISPATCHER_ID),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+            new Reference(EnvironmentExtension::MANAGER_ID)
         ));
+        $definition->addMethodCall(
+            'setHookDispatcher',
+            array(new Reference(HookExtension::DISPATCHER_ID))
+        );
+        $definition->addMethodCall(
+            'setEventDispatcher',
+            array(new Reference(EventDispatcherExtension::DISPATCHER_ID))
+        );
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);
     }
 
