@@ -83,8 +83,13 @@ class GroupedSubjectIterator implements SubjectIterator
     public function rewind()
     {
         $this->position = 0;
-        if (isset($this->iterators[$this->position])) {
+        while (isset($this->iterators[$this->position])) {
             $this->iterators[$this->position]->rewind();
+
+            if ($this->iterators[$this->position]->valid()) {
+                break;
+            }
+            $this->position++;
         }
     }
 
@@ -94,12 +99,14 @@ class GroupedSubjectIterator implements SubjectIterator
     public function next()
     {
         $this->iterators[$this->position]->next();
-        if (!$this->iterators[$this->position]->valid()) {
+        while (!$this->iterators[$this->position]->valid()) {
             $this->position++;
 
-            if (isset($this->iterators[$this->position])) {
-                $this->iterators[$this->position]->rewind();
+            if (!isset($this->iterators[$this->position])) {
+                break;
             }
+
+            $this->iterators[$this->position]->rewind();
         }
     }
 
