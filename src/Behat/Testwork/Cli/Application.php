@@ -158,7 +158,7 @@ class Application extends BaseApplication
             return realpath(dirname($configPath));
         }
 
-        return getcwd();
+        return realpath(getcwd());
     }
 
     /**
