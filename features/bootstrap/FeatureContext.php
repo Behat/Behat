@@ -28,6 +28,10 @@ class FeatureContext implements Context
      * @var Process
      */
     private $process;
+    /**
+     * @var string
+     */
+    private $workingDir;
 
     /**
      * Cleans test folders in the temporary directory.
@@ -51,21 +55,13 @@ class FeatureContext implements Context
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR .
             md5(microtime() * rand(0, 10000));
 
-        mkdir($dir, 0777, true);
-        chdir($dir);
-
-        mkdir('features');
-        mkdir('features' . DIRECTORY_SEPARATOR . 'bootstrap');
-        mkdir('features' . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR . 'i18n');
-
-        mkdir('features' . DIRECTORY_SEPARATOR . 'support');
-        mkdir('features' . DIRECTORY_SEPARATOR . 'steps');
-        mkdir('features' . DIRECTORY_SEPARATOR . 'steps' . DIRECTORY_SEPARATOR . 'i18n');
+        mkdir($dir . '/features/bootstrap/i18n', 0777, true);
 
         $phpFinder = new PhpExecutableFinder();
         if (false === $php = $phpFinder->find()) {
             throw new \RuntimeException('Unable to find the PHP executable.');
         }
+        $this->workingDir = $dir;
         $this->phpBin = $php;
         $this->process = new Process(null);
     }
@@ -81,7 +77,7 @@ class FeatureContext implements Context
     public function aFileNamedWith($filename, PyStringNode $content)
     {
         $content = strtr((string) $content, array("'''" => '"""'));
-        $this->createFile($filename, $content);
+        $this->createFile($this->workingDir . '/' . $filename, $content);
     }
 
     /**
@@ -105,7 +101,7 @@ class FeatureContext implements Context
      */
     public function fileShouldExist($path)
     {
-        PHPUnit_Framework_Assert::assertFileExists(getcwd() . DIRECTORY_SEPARATOR . $path);
+        PHPUnit_Framework_Assert::assertFileExists($this->workingDir . DIRECTORY_SEPARATOR . $path);
     }
 
     /**
@@ -131,7 +127,7 @@ class FeatureContext implements Context
     {
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
-        $this->process->setWorkingDirectory(getcwd());
+        $this->process->setWorkingDirectory($this->workingDir);
         $this->process->setCommandLine(
             sprintf(
                 '%s %s %s %s',
@@ -169,6 +165,7 @@ class FeatureContext implements Context
      */
     public function fileShouldContain($path, PyStringNode $text)
     {
+        $path = $this->workingDir . '/' . $path;
         PHPUnit_Framework_Assert::assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
@@ -266,11 +263,12 @@ class FeatureContext implements Context
 
     private function moveToNewPath($path)
     {
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
+        $newWorkingDir = $this->workingDir .'/' . $path;
+        if (!file_exists($newWorkingDir)) {
+            mkdir($newWorkingDir, 0777, true);
         }
 
-        chdir($path);
+        $this->workingDir = $newWorkingDir;
     }
 
     private static function clearDirectory($path)
