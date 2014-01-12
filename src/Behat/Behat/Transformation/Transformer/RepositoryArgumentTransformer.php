@@ -119,24 +119,16 @@ class RepositoryArgumentTransformer implements ArgumentTransformer
             return $value;
         }
 
-        $pattern = $transformation->getPattern();
-
-        if ($this->isTokenAndMatchesPattern($index, $pattern)) {
-            $newValue = $this->execute($definitionCall, $transformation, array($value));
-
-            return $newValue ? : $value;
+        if ($newValue = $this->transformToken($definitionCall, $transformation, $index, $value)) {
+            return $newValue;
         }
 
-        if ($this->isTableAndMatchesPattern($value, $pattern)) {
-            $newValue = $this->execute($definitionCall, $transformation, array($value));
-
-            return $newValue ? : $value;
+        if ($newValue = $this->transformTable($definitionCall, $transformation, $value)) {
+            return $newValue;
         }
 
-        if ($this->isStringAndMatchesPattern($definitionCall, $value, $pattern, $match)) {
-            $newValue = $this->execute($definitionCall, $transformation, array_slice($match, 1));
-
-            return $newValue ? : $value;
+        if ($newValue = $this->transformRegex($definitionCall, $transformation, $value)) {
+            return $newValue;
         }
 
         return $value;
@@ -169,6 +161,61 @@ class RepositoryArgumentTransformer implements ArgumentTransformer
         }
 
         return $result->getReturn();
+    }
+
+    /**
+     * Transforms token argument.
+     *
+     * @param DefinitionCall $definitionCall
+     * @param Transformation $transformation
+     * @param integer|string $index
+     * @param mixed          $value
+     *
+     * @return null|mixed
+     */
+    private function transformToken(DefinitionCall $definitionCall, Transformation $transformation, $index, $value)
+    {
+        if ($this->isTokenAndMatchesPattern($index, $transformation->getPattern())) {
+            return $this->execute($definitionCall, $transformation, array($value));
+        }
+
+        return null;
+    }
+
+    /**
+     * Transforms table argument.
+     *
+     * @param DefinitionCall $definitionCall
+     * @param Transformation $transformation
+     * @param mixed          $value
+     *
+     * @return null|mixed
+     */
+    private function transformTable(DefinitionCall $definitionCall, Transformation $transformation, $value)
+    {
+        if ($this->isTableAndMatchesPattern($value, $transformation->getPattern())) {
+            return $this->execute($definitionCall, $transformation, array($value));
+        }
+
+        return null;
+    }
+
+    /**
+     * Transforms regex argument.
+     *
+     * @param DefinitionCall $definitionCall
+     * @param Transformation $transformation
+     * @param mixed          $value
+     *
+     * @return null|mixed
+     */
+    private function transformRegex(DefinitionCall $definitionCall, Transformation $transformation, $value)
+    {
+        if ($this->isStringAndMatchesPattern($definitionCall, $value, $transformation->getPattern(), $match)) {
+            return $this->execute($definitionCall, $transformation, array_slice($match, 1));
+        }
+
+        return null;
     }
 
     /**
