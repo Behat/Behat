@@ -10,8 +10,6 @@
 
 namespace Behat\Testwork\Tester\Result;
 
-use Behat\Testwork\Call\CallResults;
-
 /**
  * Testwork suite test result.
  *
@@ -23,21 +21,15 @@ class SuiteTestResult extends TestResult
      * @var TestResults
      */
     private $subjectTestResults;
-    /**
-     * @var CallResults
-     */
-    private $hookCallResults;
 
     /**
      * Initializes test result.
      *
      * @param TestResults $subjectTestResults
-     * @param CallResults $hookCallResults
      */
-    public function __construct(TestResults $subjectTestResults, CallResults $hookCallResults)
+    public function __construct(TestResults $subjectTestResults)
     {
         $this->subjectTestResults = $subjectTestResults;
-        $this->hookCallResults = $hookCallResults;
     }
 
     /**
@@ -51,26 +43,12 @@ class SuiteTestResult extends TestResult
     }
 
     /**
-     * Returns scenarios hooks calls results.
-     *
-     * @return CallResults
-     */
-    public function getHookCallResults()
-    {
-        return $this->hookCallResults;
-    }
-
-    /**
      * Returns tester result status.
      *
      * @return integer
      */
     public function getResultCode()
     {
-        if ($this->hookCallResults->hasExceptions()) {
-            return static::FAILED;
-        }
-
         return $this->subjectTestResults->getResultCode();
     }
 }

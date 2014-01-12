@@ -10,7 +10,6 @@
 
 namespace Behat\Behat\Tester\Result;
 
-use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Tester\Result\TestResults;
 
 /**
@@ -24,21 +23,15 @@ class StepContainerTestResult extends TestResult
      * @var TestResults
      */
     private $stepTestResults;
-    /**
-     * @var CallResults
-     */
-    private $hookCallResults;
 
     /**
      * Initializes test result.
      *
      * @param TestResults $stepTestResults
-     * @param CallResults $hookCallResults
      */
-    public function __construct(TestResults $stepTestResults, CallResults $hookCallResults)
+    public function __construct(TestResults $stepTestResults)
     {
         $this->stepTestResults = $stepTestResults;
-        $this->hookCallResults = $hookCallResults;
     }
 
     /**
@@ -52,26 +45,12 @@ class StepContainerTestResult extends TestResult
     }
 
     /**
-     * Returns hooks calls results.
-     *
-     * @return CallResults
-     */
-    public function getHookCallResults()
-    {
-        return $this->hookCallResults;
-    }
-
-    /**
      * Returns tester result status.
      *
      * @return integer
      */
     public function getResultCode()
     {
-        if ($this->hookCallResults->hasExceptions()) {
-            return static::FAILED;
-        }
-
         return $this->stepTestResults->getResultCode();
     }
 }
