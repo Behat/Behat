@@ -1,7 +1,15 @@
-Behat
+behat
 =====
 
-[![3.0 develop](https://secure.travis-ci.org/Behat/Behat.png?branch=3.0)](http://travis-ci.org/Behat/Behat)
+behat is a php framework for testing your business expectations.
+
+Quality
+-------
+
+[![Build Status](https://travis-ci.org/Behat/Behat.png?branch=3.0)](https://travis-ci.org/Behat/Behat)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Behat/Behat/badges/quality-score.png?s=ad84e95fc2405712f88a96d89b4f31dfe5c80fae)](https://scrutinizer-ci.com/g/Behat/Behat/)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/b60eb395-a9b1-4428-bd81-c98a6ac07d66/mini.png)](https://insight.sensiolabs.com/projects/b60eb395-a9b1-4428-bd81-c98a6ac07d66)
+[![Dependency Status](https://www.versioneye.com/user/projects/52d2a08dec1375fded000031/badge.png)](https://www.versioneye.com/user/projects/52d2a08dec1375fded000031)
 
 Useful Links
 ------------
