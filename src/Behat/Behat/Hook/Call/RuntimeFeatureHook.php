@@ -14,6 +14,7 @@ use Behat\Behat\Hook\Exception\BadCallbackException;
 use Behat\Behat\Tester\Event\FeatureTested;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
 
@@ -59,26 +60,60 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
         if (!$event instanceof FeatureTested) {
             return false;
         }
+
         if (null === ($filterString = $this->getFilterString())) {
             return true;
         }
 
-        $feature = $event->getFeature();
+        return $this->isMatch($event->getFeature(), $filterString);
+    }
 
+    /**
+     * @param FeatureNode $feature
+     * @param string $filterString
+     *
+     * @return Boolean
+     */
+    protected function isMatch(FeatureNode $feature, $filterString)
+    {
         if (false !== strpos($filterString, '@')) {
-            $filter = new TagFilter($filterString);
+            return $this->isMatchTagFilter($feature, $filterString);
+        }
 
-            if ($filter->isFeatureMatch($feature)) {
-                return true;
-            }
-        } elseif (!empty($filterString)) {
-            $filter = new NameFilter($filterString);
-
-            if ($filter->isFeatureMatch($feature)) {
-                return true;
-            }
+        if (!empty($filterString)) {
+            return $this->isMatchNameFilter($feature, $filterString);
         }
 
         return false;
+    }
+
+    /**
+     * Checks if feature matches tag filter.
+     *
+     * @param FeatureNode $feature
+     * @param string $filterString
+     *
+     * @return Boolean
+     */
+    protected function isMatchTagFilter(FeatureNode $feature, $filterString)
+    {
+        $filter = new TagFilter($filterString);
+
+        return $filter->isFeatureMatch($feature);
+    }
+
+    /**
+     * Checks if feature matches name filter.
+     *
+     * @param FeatureNode $feature
+     * @param string      $filterString
+     *
+     * @return Boolean
+     */
+    protected function isMatchNameFilter(FeatureNode $feature, $filterString)
+    {
+        $filter = new NameFilter($filterString);
+
+        return $filter->isFeatureMatch($feature);
     }
 }

@@ -41,10 +41,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
             return true;
         }
 
-        $feature = $event->getFeature();
-        $scenario = $event->getScenario();
-
-        return $this->isMatch($feature, $scenario, $filterString);
+        return $this->isMatch($event->getFeature(), $event->getScenario(), $filterString);
     }
 
     /**
@@ -86,11 +83,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
             return true;
         }
 
-        if ($filter->isScenarioMatch($feature, $scenario)) {
-            return true;
-        }
-
-        return false;
+        return $filter->isScenarioMatch($feature, $scenario);
     }
 
     /**
@@ -105,10 +98,6 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
     {
         $filter = new NameFilter($filterString);
 
-        if ($filter->isScenarioMatch($scenario)) {
-            return true;
-        }
-
-        return false;
+        return $filter->isScenarioMatch($scenario);
     }
 }
