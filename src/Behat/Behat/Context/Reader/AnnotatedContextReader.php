@@ -26,6 +26,8 @@ use ReflectionMethod;
  */
 class AnnotatedContextReader implements ContextReader
 {
+    const DOCLINE_TRIMMER_REGEX = '/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/';
+
     /**
      * @var string[]
      */
@@ -115,36 +117,94 @@ class AnnotatedContextReader implements ContextReader
     private function readDocBlockCallees($class, ReflectionMethod $method, $docBlock)
     {
         $description = null;
-
         $callees = array();
-        foreach (explode("\n", $docBlock) as $docLine) {
-            $docLine = preg_replace('/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/', '', $docLine);
 
-            if ('' == $docLine) {
+        foreach (explode("\n", $docBlock) as $docLine) {
+            $docLine = preg_replace(self::DOCLINE_TRIMMER_REGEX, '', $docLine);
+
+            if ($this->isEmpty($docLine)) {
                 continue;
             }
-            if ('' !== $docLine && '@' !== substr($docLine, 0, 1)) {
+
+            if ($this->isNotAnnotation($docLine)) {
                 $description = $docLine;
 
                 continue;
             }
 
-            $lowDocLine = strtolower($docLine);
-            foreach (self::$ignoreAnnotations as $ignoredAnnotation) {
-                if ($ignoredAnnotation == substr($lowDocLine, 0, strlen($ignoredAnnotation))) {
-                    continue 2;
-                }
-            }
-
-            foreach ($this->readers as $reader) {
-                if ($callee = $reader->readCallee($class, $method, $docLine, $description)) {
-                    $callees[] = $callee;
-
-                    break;
-                }
+            if ($callee = $this->readDocLineCallee($class, $method, $docLine, $description)) {
+                $callees[] = $callee;
             }
         }
 
         return $callees;
+    }
+
+    /**
+     * Checks if provided doc lien is empty.
+     *
+     * @param string $docLine
+     *
+     * @return Boolean
+     */
+    private function isEmpty($docLine)
+    {
+        return '' == $docLine;
+    }
+
+    /**
+     * Checks if provided doc line is not an annotation.
+     *
+     * @param string $docLine
+     *
+     * @return Boolean
+     */
+    private function isNotAnnotation($docLine)
+    {
+        return '@' !== substr($docLine, 0, 1);
+    }
+
+    /**
+     * Reads callee from provided doc line using registered annotation readers.
+     *
+     * @param string           $class
+     * @param ReflectionMethod $method
+     * @param string           $docLine
+     * @param null|string      $description
+     *
+     * @return null|Callee
+     */
+    private function readDocLineCallee($class, ReflectionMethod $method, $docLine, $description = null)
+    {
+        if ($this->isIgnoredAnnotation($docLine)) {
+            return null;
+        }
+
+        foreach ($this->readers as $reader) {
+            if ($callee = $reader->readCallee($class, $method, $docLine, $description)) {
+                return $callee;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Checks if provided doc line is one of the ignored annotations.
+     *
+     * @param string $docLine
+     *
+     * @return Boolean
+     */
+    private function isIgnoredAnnotation($docLine)
+    {
+        $lowDocLine = strtolower($docLine);
+        foreach (self::$ignoreAnnotations as $ignoredAnnotation) {
+            if ($ignoredAnnotation == substr($lowDocLine, 0, strlen($ignoredAnnotation))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
