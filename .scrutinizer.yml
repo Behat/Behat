@@ -17,6 +17,7 @@ tools:
                 - 'bin/*'
                 - 'vendor/*'
                 - 'features/*'
+                - 'i18n.php'
 
     # Copy/Paste Detector
     php_cpd:
