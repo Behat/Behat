@@ -16,7 +16,6 @@ use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\Event\HookableEvent;
-use Behat\Testwork\Suite\Suite;
 
 /**
  * Abstract scenario tested event.
