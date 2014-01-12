@@ -31,8 +31,8 @@ class HookAnnotationReader implements AnnotationReader
      * @var string[]
      */
     private static $classes = array(
-        'beforesuite'    => 'Behat\Behat\Hook\Call\BeforeSuite',
-        'aftersuite'     => 'Behat\Behat\Hook\Call\AfterSuite',
+        'beforesuite'    => 'Behat\Testwork\Hook\Call\BeforeSuite',
+        'aftersuite'     => 'Behat\Testwork\Hook\Call\AfterSuite',
         'beforefeature'  => 'Behat\Behat\Hook\Call\BeforeFeature',
         'afterfeature'   => 'Behat\Behat\Hook\Call\AfterFeature',
         'beforescenario' => 'Behat\Behat\Hook\Call\BeforeScenario',

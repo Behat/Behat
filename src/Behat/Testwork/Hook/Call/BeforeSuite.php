@@ -1,14 +1,14 @@
 <?php
 
 /*
- * This file is part of the Behat.
+ * This file is part of the Behat Testwork.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Hook\Call;
+namespace Behat\Testwork\Hook\Call;
 
 use Behat\Testwork\Tester\Event\SuiteTested;
 
