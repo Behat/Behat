@@ -188,11 +188,7 @@ class OutputController implements Controller
      */
     private function configureOutputs(array $formats, array $outputs, $decorated = false)
     {
-        if (!count($outputs)) {
-            return;
-        }
-
-        if (1 == count($outputs) && 'std' !== $outputs[0] && 'null' !== $outputs[0] && 'false' !== $outputs[0]) {
+        if (1 == count($outputs) && !$this->isStandardOutput($outputs[0])) {
             $outputPath = $this->locateOutputPath($outputs[0]);
 
             $this->manager->setFormattersParameter('output_path', $outputPath);
@@ -202,7 +198,7 @@ class OutputController implements Controller
         }
 
         foreach ($outputs as $i => $out) {
-            if ('std' === $out || 'null' === $out || 'false' === $out) {
+            if ($this->isStandardOutput($out)) {
                 continue;
             }
 
@@ -212,6 +208,18 @@ class OutputController implements Controller
                 $this->manager->setFormatterParameter($formats[$i], 'output_decorate', $decorated);
             }
         }
+    }
+
+    /**
+     * Checks if provided output identifier represents standard output.
+     *
+     * @param string $outputId
+     *
+     * @return Boolean
+     */
+    private function isStandardOutput($outputId)
+    {
+        return 'std' === $outputId || 'null' === $outputId || 'false' === $outputId;
     }
 
     /**
@@ -261,7 +269,7 @@ class OutputController implements Controller
      *
      * @param string $jsonSettings
      */
-    protected function loadJsonSettings($jsonSettings)
+    private function loadJsonSettings($jsonSettings)
     {
         $settings = @json_decode($jsonSettings, true);
 
