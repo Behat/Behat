@@ -52,13 +52,6 @@ tools:
     php_mess_detector:
         enabled:              true
         command:              phpmd
-        config:
-            rulesets:
-                - codesize
-                - unusedcode
-                - naming
-                - design
-                - controversial
         filter:
             excluded_paths:
                 - 'bin/*'
