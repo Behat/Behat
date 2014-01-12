@@ -182,12 +182,12 @@ class ConfigurationLoader
      * Loads configs for provided config and profile.
      *
      * @param string $basePath
-     * @param string $config
+     * @param array  $config
      * @param string $profile
      *
      * @return array
      */
-    private function loadConfigs($basePath, $config, $profile)
+    private function loadConfigs($basePath, array $config, $profile)
     {
         $configs = array();
 
