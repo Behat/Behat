@@ -46,9 +46,7 @@ tools:
         excluded_dirs:
             - bin
             - vendor
-            - app
-            - web
-            - spec
+            - features
 
     # PHP Mess Detector (http://phpmd.org).
     php_mess_detector:
