@@ -144,36 +144,65 @@ class ExtensionManager
             return $this->locatedExtensions[$locator];
         }
 
-        $extension = null;
+        $extension = $this->instantiateExtension($locator);
+        $this->validateExtensionInstance($extension, $locator);
+
+        return $this->locatedExtensions[$locator] = $extension;
+    }
+
+    /**
+     * Instantiates extension from its locator.
+     *
+     * @param string $locator
+     *
+     * @return Extension
+     */
+    private function instantiateExtension($locator)
+    {
         if (class_exists($class = $locator)) {
-            $extension = new $class;
-        } elseif (class_exists($class = $this->getFullExtensionClass($locator))) {
-            $extension = new $class;
-        } elseif (file_exists($path = $this->extensionsPath . DIRECTORY_SEPARATOR . $locator)) {
-            $extension = require($path);
-        } else {
-            $extension = require($locator);
+            return new $class;
         }
 
+        if (class_exists($class = $this->getFullExtensionClass($locator))) {
+            return new $class;
+        }
+
+        if (file_exists($path = $this->extensionsPath . DIRECTORY_SEPARATOR . $locator)) {
+            return require($path);
+        }
+
+        return require($locator);
+    }
+
+    /**
+     * Validates extension instance.
+     *
+     * @param Extension $extension
+     * @param string    $locator
+     *
+     * @throws Exception\ExtensionInitializationException
+     */
+    private function validateExtensionInstance($extension, $locator)
+    {
         if (null === $extension) {
             throw new ExtensionInitializationException(sprintf(
                 '`%s` extension could not be found.',
                 $locator
             ), $locator);
         }
+
         if (!is_object($extension)) {
             throw new ExtensionInitializationException(sprintf(
                 '`%s` extension could not be initialized.',
                 $locator
             ), $locator);
         }
+
         if (!$extension instanceof Extension) {
             throw new ExtensionInitializationException(sprintf(
                 '`%s` extension class should implement Testwork Extension interface.',
                 get_class($extension)
             ), $locator);
         }
-
-        return $this->locatedExtensions[$locator] = $extension;
     }
 }
