@@ -14,7 +14,6 @@ use Behat\Behat\Tester\Result\OutlineTestResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 
@@ -43,7 +42,6 @@ class OutlineTester
     /**
      * Tests outline.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param OutlineNode $outline
@@ -51,14 +49,9 @@ class OutlineTester
      *
      * @return TestResult
      */
-    public function test(
-        Suite $suite,
-        Environment $environment,
-        FeatureNode $feature,
-        OutlineNode $outline,
-        $skip = false
-    ) {
-        $result = $this->testOutline($suite, $environment, $feature, $outline, $skip);
+    public function test(Environment $environment, FeatureNode $feature, OutlineNode $outline, $skip = false)
+    {
+        $result = $this->testOutline($environment, $feature, $outline, $skip);
 
         return new TestResult($result->getResultCode());
     }
@@ -66,7 +59,6 @@ class OutlineTester
     /**
      * Tests outline examples.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param OutlineNode $outline
@@ -75,7 +67,6 @@ class OutlineTester
      * @return OutlineTestResult
      */
     protected function testOutline(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         OutlineNode $outline,
@@ -83,7 +74,7 @@ class OutlineTester
     ) {
         $results = array();
         foreach ($outline->getExamples() as $example) {
-            $results[] = $this->exampleTester->test($suite, $environment, $feature, $example, $skip);
+            $results[] = $this->exampleTester->test($environment, $feature, $example, $skip);
         }
 
         return new OutlineTestResult(new TestResults($results));

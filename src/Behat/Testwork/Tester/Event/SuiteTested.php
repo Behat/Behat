@@ -13,7 +13,6 @@ namespace Behat\Testwork\Tester\Event;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\Event\HookableEvent;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\SuiteTestResult;
 
 /**
@@ -34,18 +33,16 @@ class SuiteTested extends HookableEvent
     /**
      * Initializes event.
      *
-     * @param Suite                $suite
      * @param Environment          $environment
      * @param null|SuiteTestResult $testResult
      * @param null|CallResults     $hookCallResults
      */
     public function __construct(
-        Suite $suite,
         Environment $environment,
         SuiteTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment, $hookCallResults);
+        parent::__construct($environment, $hookCallResults);
 
         $this->testResult = $testResult;
     }

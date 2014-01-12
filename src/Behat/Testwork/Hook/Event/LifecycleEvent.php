@@ -24,10 +24,6 @@ use Symfony\Component\EventDispatcher\Event;
 abstract class LifecycleEvent extends Event
 {
     /**
-     * @var Suite
-     */
-    private $suite;
-    /**
      * @var Environment
      */
     private $environment;
@@ -35,12 +31,10 @@ abstract class LifecycleEvent extends Event
     /**
      * Initializes scenario event.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      */
-    public function __construct(Suite $suite, Environment $environment)
+    public function __construct(Environment $environment)
     {
-        $this->suite = $suite;
         $this->environment = $environment;
     }
 
@@ -51,7 +45,7 @@ abstract class LifecycleEvent extends Event
      */
     public function getSuite()
     {
-        return $this->suite;
+        return $this->environment->getSuite();
     }
 
     /**

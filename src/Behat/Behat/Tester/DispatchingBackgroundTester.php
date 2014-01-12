@@ -13,7 +13,6 @@ namespace Behat\Behat\Tester;
 use Behat\Behat\Tester\Event\BackgroundTested;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -43,18 +42,18 @@ class DispatchingBackgroundTester extends BackgroundTester
     /**
      * {@inheritdoc}
      */
-    protected function testBackground(Suite $suite, Environment $environment, FeatureNode $feature, $skip = false)
+    protected function testBackground(Environment $environment, FeatureNode $feature, $skip = false)
     {
         $this->eventDispatcher and $this->eventDispatcher->dispatch(
             BackgroundTested::BEFORE,
-            new BackgroundTested($suite, $environment, $feature, $feature->getBackground())
+            new BackgroundTested($environment, $feature, $feature->getBackground())
         );
 
-        $results = parent::testBackground($suite, $environment, $feature, $skip);
+        $results = parent::testBackground($environment, $feature, $skip);
 
         $this->eventDispatcher and $this->eventDispatcher->dispatch(
             BackgroundTested::AFTER,
-            new BackgroundTested($suite, $environment, $feature, $feature->getBackground(), $results)
+            new BackgroundTested($environment, $feature, $feature->getBackground(), $results)
         );
 
         return $results;

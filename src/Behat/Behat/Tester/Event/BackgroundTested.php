@@ -14,7 +14,6 @@ use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResults;
 
 /**
@@ -43,20 +42,18 @@ class BackgroundTested extends LifecycleEvent
     /**
      * Initializes event.
      *
-     * @param Suite            $suite
      * @param Environment      $environment
      * @param FeatureNode      $feature
      * @param BackgroundNode   $background
      * @param null|TestResults $stepTestResult
      */
     public function __construct(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         BackgroundNode $background,
         TestResults $stepTestResult = null
     ) {
-        parent::__construct($suite, $environment);
+        parent::__construct($environment);
 
         $this->feature = $feature;
         $this->background = $background;

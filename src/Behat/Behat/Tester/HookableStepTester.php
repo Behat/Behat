@@ -18,7 +18,6 @@ use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\HookDispatcher;
-use Behat\Testwork\Suite\Suite;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -62,18 +61,18 @@ class HookableStepTester extends StepTester
     /**
      * {@inheritdoc}
      */
-    protected function testStep(Suite $suite, Environment $environment, FeatureNode $feature, StepNode $step, $skip)
+    protected function testStep(Environment $environment, FeatureNode $feature, StepNode $step, $skip)
     {
         $beforeHooks = (!$skip && $this->hookDispatcher)
-            ? $this->dispatchBeforeHooks($suite, $environment, $feature, $step)
+            ? $this->dispatchBeforeHooks($environment, $feature, $step)
             : new CallResults();
-        $this->eventDispatcher and $this->dispatchBeforeEvent($suite, $environment, $feature, $step, $beforeHooks);
+        $this->eventDispatcher and $this->dispatchBeforeEvent($environment, $feature, $step, $beforeHooks);
 
         $skip = $skip || $beforeHooks->hasExceptions();
-        $result = parent::testStep($suite, $environment, $feature, $step, $skip);
+        $result = parent::testStep($environment, $feature, $step, $skip);
 
         $afterHooks = (!$skip && $this->hookDispatcher)
-            ? $this->dispatchAfterHooks($suite, $environment, $feature, $step, $result)
+            ? $this->dispatchAfterHooks($environment, $feature, $step, $result)
             : new CallResults();
         $result = new HookedStepTestResult(
             $result->getSearchResult(),
@@ -81,7 +80,7 @@ class HookableStepTester extends StepTester
             $result->getCallResult(),
             CallResults::merge($beforeHooks, $afterHooks)
         );
-        $this->eventDispatcher and $this->dispatchAfterEvent($suite, $environment, $feature, $step, $result, $afterHooks);
+        $this->eventDispatcher and $this->dispatchAfterEvent($environment, $feature, $step, $result, $afterHooks);
 
         return $result;
     }
@@ -89,16 +88,15 @@ class HookableStepTester extends StepTester
     /**
      * Dispatches BEFORE event hooks.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param StepNode    $step
      *
      * @return CallResults
      */
-    private function dispatchBeforeHooks(Suite $suite, Environment $environment, FeatureNode $feature, StepNode $step)
+    private function dispatchBeforeHooks(Environment $environment, FeatureNode $feature, StepNode $step)
     {
-        $event = new StepTested($suite, $environment, $feature, $step);
+        $event = new StepTested($environment, $feature, $step);
 
         return $this->hookDispatcher->dispatchEventHooks(StepTested::BEFORE, $event);
     }
@@ -106,20 +104,18 @@ class HookableStepTester extends StepTester
     /**
      * Dispatches BEFORE event.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param StepNode    $step
      * @param CallResults $hookCallResults
      */
     private function dispatchBeforeEvent(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         StepNode $step,
         CallResults $hookCallResults
     ) {
-        $event = new StepTested($suite, $environment, $feature, $step, null, $hookCallResults);
+        $event = new StepTested($environment, $feature, $step, null, $hookCallResults);
 
         $this->eventDispatcher->dispatch(StepTested::BEFORE, $event);
     }
@@ -127,7 +123,6 @@ class HookableStepTester extends StepTester
     /**
      * Dispatches AFTER event hooks.
      *
-     * @param Suite          $suite
      * @param Environment    $environment
      * @param FeatureNode    $feature
      * @param StepNode       $step
@@ -136,13 +131,12 @@ class HookableStepTester extends StepTester
      * @return CallResults
      */
     private function dispatchAfterHooks(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         StepNode $step,
         StepTestResult $result
     ) {
-        $event = new StepTested($suite, $environment, $feature, $step, $result);
+        $event = new StepTested($environment, $feature, $step, $result);
 
         return $this->hookDispatcher->dispatchEventHooks(StepTested::AFTER, $event);
     }
@@ -150,7 +144,6 @@ class HookableStepTester extends StepTester
     /**
      * Dispatches AFTER event.
      *
-     * @param Suite          $suite
      * @param Environment    $environment
      * @param FeatureNode    $feature
      * @param StepNode       $step
@@ -158,14 +151,13 @@ class HookableStepTester extends StepTester
      * @param CallResults    $hookCallResults
      */
     private function dispatchAfterEvent(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         StepNode $step,
         StepTestResult $result,
         CallResults $hookCallResults
     ) {
-        $event = new StepTested($suite, $environment, $feature, $step, $result, $hookCallResults);
+        $event = new StepTested($environment, $feature, $step, $result, $hookCallResults);
 
         $this->eventDispatcher->dispatch(StepTested::AFTER, $event);
     }

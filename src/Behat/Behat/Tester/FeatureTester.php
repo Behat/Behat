@@ -18,7 +18,6 @@ use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\SubjectTester;
@@ -54,16 +53,15 @@ class FeatureTester implements SubjectTester
     /**
      * Tests feature.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param Boolean     $skip
      *
      * @return TestResult
      */
-    public function test(Suite $suite, Environment $environment, $feature, $skip = false)
+    public function test(Environment $environment, $feature, $skip = false)
     {
-        $result = $this->testFeature($suite, $environment, $feature, $skip);
+        $result = $this->testFeature($environment, $feature, $skip);
 
         return new TestResult($result->getResultCode());
     }
@@ -71,18 +69,17 @@ class FeatureTester implements SubjectTester
     /**
      * Tests feature scenarios.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param Boolean     $skip
      *
      * @return FeatureTestResult
      */
-    protected function testFeature(Suite $suite, Environment $environment, FeatureNode $feature, $skip = false)
+    protected function testFeature(Environment $environment, FeatureNode $feature, $skip = false)
     {
         $results = array();
         foreach ($feature->getScenarios() as $scenario) {
-            $results[] = $this->testScenario($suite, $environment, $feature, $scenario, $skip);
+            $results[] = $this->testScenario($environment, $feature, $scenario, $skip);
         }
 
         return new FeatureTestResult(new TestResults($results));
@@ -91,7 +88,6 @@ class FeatureTester implements SubjectTester
     /**
      * Tests any scenario.
      *
-     * @param Suite             $suite
      * @param Environment       $environment
      * @param FeatureNode       $feature
      * @param ScenarioInterface $scenario
@@ -99,24 +95,18 @@ class FeatureTester implements SubjectTester
      *
      * @return TestResult
      */
-    private function testScenario(
-        Suite $suite,
-        Environment $environment,
-        FeatureNode $feature,
-        ScenarioInterface $scenario,
-        $skip = false
-    ) {
+    private function testScenario(Environment $environment, FeatureNode $feature, ScenarioInterface $scenario, $skip = false)
+    {
         if ($scenario instanceof OutlineNode) {
-            return $this->testOutlineNode($suite, $environment, $feature, $scenario, $skip);
+            return $this->testOutlineNode($environment, $feature, $scenario, $skip);
         }
 
-        return $this->testScenarioNode($suite, $environment, $feature, $scenario, $skip);
+        return $this->testScenarioNode($environment, $feature, $scenario, $skip);
     }
 
     /**
      * Tests scenario outline node.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param OutlineNode $scenario
@@ -124,20 +114,14 @@ class FeatureTester implements SubjectTester
      *
      * @return OutlineTestResult
      */
-    private function testOutlineNode(
-        Suite $suite,
-        Environment $environment,
-        FeatureNode $feature,
-        OutlineNode $scenario,
-        $skip = false
-    ) {
-        return $this->outlineTester->test($suite, $environment, $feature, $scenario, $skip);
+    private function testOutlineNode(Environment $environment, FeatureNode $feature, OutlineNode $scenario, $skip = false)
+    {
+        return $this->outlineTester->test($environment, $feature, $scenario, $skip);
     }
 
     /**
      * Tests scenario node.
      *
-     * @param Suite        $suite
      * @param Environment  $environment
      * @param FeatureNode  $feature
      * @param ScenarioNode $scenario
@@ -145,13 +129,8 @@ class FeatureTester implements SubjectTester
      *
      * @return StepContainerTestResult
      */
-    private function testScenarioNode(
-        Suite $suite,
-        Environment $environment,
-        FeatureNode $feature,
-        ScenarioNode $scenario,
-        $skip = false
-    ) {
-        return $this->scenarioTester->test($suite, $environment, $feature, $scenario, $skip);
+    private function testScenarioNode(Environment $environment, FeatureNode $feature, ScenarioNode $scenario, $skip = false)
+    {
+        return $this->scenarioTester->test($environment, $feature, $scenario, $skip);
     }
 }

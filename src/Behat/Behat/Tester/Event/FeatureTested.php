@@ -15,7 +15,6 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\Event\HookableEvent;
-use Behat\Testwork\Suite\Suite;
 
 /**
  * Feature tested event.
@@ -39,20 +38,18 @@ class FeatureTested extends HookableEvent
     /**
      * Initializes event.
      *
-     * @param Suite                  $suite
      * @param Environment            $environment
      * @param FeatureNode            $feature
      * @param null|FeatureTestResult $testResult
      * @param null|CallResults       $hookCallResults
      */
     public function __construct(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         FeatureTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment, $hookCallResults);
+        parent::__construct($environment, $hookCallResults);
 
         $this->feature = $feature;
         $this->testResult = $testResult;

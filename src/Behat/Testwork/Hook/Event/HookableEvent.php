@@ -12,7 +12,6 @@ namespace Behat\Testwork\Hook\Event;
 
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 
 /**
  * Hookable lifecycle event.
@@ -31,13 +30,12 @@ abstract class HookableEvent extends LifecycleEvent
     /**
      * Initializes scenario event.
      *
-     * @param Suite            $suite
      * @param Environment      $environment
      * @param null|CallResults $hookCallResults
      */
-    public function __construct(Suite $suite, Environment $environment, CallResults $hookCallResults = null)
+    public function __construct(Environment $environment, CallResults $hookCallResults = null)
     {
-        parent::__construct($suite, $environment);
+        parent::__construct($environment);
 
         $this->hookCallResults = $hookCallResults;
     }

@@ -12,7 +12,6 @@ namespace Behat\Behat\Tester;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 
@@ -41,16 +40,15 @@ class BackgroundTester
     /**
      * Tests feature backgrounds.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param Boolean     $skip
      *
      * @return TestResults
      */
-    public function test(Suite $suite, Environment $environment, FeatureNode $feature, $skip = false)
+    public function test(Environment $environment, FeatureNode $feature, $skip = false)
     {
-        $results = $this->testBackground($suite, $environment, $feature, $skip);
+        $results = $this->testBackground($environment, $feature, $skip);
 
         return $results;
     }
@@ -58,20 +56,19 @@ class BackgroundTester
     /**
      * Tests background.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param Boolean     $skip
      *
      * @return TestResults
      */
-    protected function testBackground(Suite $suite, Environment $environment, FeatureNode $feature, $skip = false)
+    protected function testBackground(Environment $environment, FeatureNode $feature, $skip = false)
     {
         $background = $feature->getBackground();
 
         $results = array();
         foreach ($background->getSteps() as $step) {
-            $results[] = $lastResult = $this->stepTester->test($suite, $environment, $feature, $step, $skip);
+            $results[] = $lastResult = $this->stepTester->test($environment, $feature, $step, $skip);
             $skip = TestResult::PASSED < $lastResult->getResultCode() ? true : $skip;
         }
 

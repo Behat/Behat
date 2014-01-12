@@ -16,7 +16,6 @@ use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\Event\HookableEvent;
-use Behat\Testwork\Suite\Suite;
 
 /**
  * Step event.
@@ -44,7 +43,6 @@ class StepTested extends HookableEvent
     /**
      * Initializes event.
      *
-     * @param Suite               $suite
      * @param Environment         $environment
      * @param FeatureNode         $feature
      * @param StepNode            $step
@@ -52,14 +50,13 @@ class StepTested extends HookableEvent
      * @param null|CallResults    $hookCallResults
      */
     public function __construct(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         StepNode $step,
         StepTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment, $hookCallResults);
+        parent::__construct($environment, $hookCallResults);
 
         $this->feature = $feature;
         $this->step = $step;

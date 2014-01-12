@@ -41,7 +41,6 @@ abstract class AbstractScenarioTested extends HookableEvent
     /**
      * Initializes event.
      *
-     * @param Suite                        $suite
      * @param Environment                  $environment
      * @param FeatureNode                  $feature
      * @param ScenarioInterface            $scenario
@@ -49,14 +48,13 @@ abstract class AbstractScenarioTested extends HookableEvent
      * @param null|CallResults             $hookCallResults
      */
     public function __construct(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         ScenarioInterface $scenario,
         StepContainerTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct($suite, $environment, $hookCallResults);
+        parent::__construct($environment, $hookCallResults);
 
         $this->feature = $feature;
         $this->scenario = $scenario;

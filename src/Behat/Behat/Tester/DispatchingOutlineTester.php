@@ -14,7 +14,6 @@ use Behat\Behat\Tester\Event\OutlineTested;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -44,23 +43,18 @@ class DispatchingOutlineTester extends OutlineTester
     /**
      * {@inheritdoc}
      */
-    protected function testOutline(
-        Suite $suite,
-        Environment $environment,
-        FeatureNode $feature,
-        OutlineNode $outline,
-        $skip = false
-    ) {
+    protected function testOutline(Environment $environment, FeatureNode $feature, OutlineNode $outline, $skip = false)
+    {
         $this->eventDispatcher and $this->eventDispatcher->dispatch(
             OutlineTested::BEFORE,
-            new OutlineTested($suite, $environment, $feature, $outline)
+            new OutlineTested($environment, $feature, $outline)
         );
 
-        $result = parent::testOutline($suite, $environment, $feature, $outline, $skip);
+        $result = parent::testOutline($environment, $feature, $outline, $skip);
 
         $this->eventDispatcher and $this->eventDispatcher->dispatch(
             OutlineTested::AFTER,
-            new OutlineTested($suite, $environment, $feature, $outline, $result)
+            new OutlineTested($environment, $feature, $outline, $result)
         );
 
         return $result;

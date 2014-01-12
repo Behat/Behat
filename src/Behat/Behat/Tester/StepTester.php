@@ -20,7 +20,6 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 
 /**
  * Step tester.
@@ -53,7 +52,6 @@ class StepTester
     /**
      * Tests step.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param StepNode    $step
@@ -61,15 +59,14 @@ class StepTester
      *
      * @return TestResult
      */
-    public function test(Suite $suite, Environment $environment, FeatureNode $feature, StepNode $step, $skip = false)
+    public function test(Environment $environment, FeatureNode $feature, StepNode $step, $skip = false)
     {
-        $result = $this->testStep($suite, $environment, $feature, $step, $skip);
+        $result = $this->testStep($environment, $feature, $step, $skip);
 
         return new TestResult($result->getResultCode());
     }
 
     /**
-     * @param Suite       $suite
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param StepNode    $step
@@ -77,7 +74,7 @@ class StepTester
      *
      * @return StepTestResult
      */
-    protected function testStep(Suite $suite, Environment $environment, FeatureNode $feature, StepNode $step, $skip)
+    protected function testStep(Environment $environment, FeatureNode $feature, StepNode $step, $skip)
     {
         try {
             $search = $this->searchDefinition($environment, $feature, $step);

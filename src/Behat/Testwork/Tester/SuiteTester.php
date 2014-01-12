@@ -13,7 +13,6 @@ namespace Behat\Testwork\Tester;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Subject\SubjectIterator;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\SuiteTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
@@ -58,9 +57,8 @@ class SuiteTester
      */
     public function test(SubjectIterator $subjectIterator, $skip = false)
     {
-        $suite = $subjectIterator->getSuite();
-        $environment = $this->environmentManager->buildEnvironment($suite);
-        $result = $this->testSuite($environment, $suite, $subjectIterator, $skip);
+        $environment = $this->environmentManager->buildEnvironment($subjectIterator->getSuite());
+        $result = $this->testSuite($environment, $subjectIterator, $skip);
 
         return new TestResult($result->getResultCode());
     }
@@ -69,17 +67,16 @@ class SuiteTester
      * Tests provided test subjects against provided environment.
      *
      * @param Environment     $environment
-     * @param Suite           $suite
      * @param SubjectIterator $iterator
      * @param Boolean         $skip
      *
      * @return SuiteTestResult
      */
-    protected function testSuite(Environment $environment, Suite $suite, SubjectIterator $iterator, $skip = false)
+    protected function testSuite(Environment $environment, SubjectIterator $iterator, $skip = false)
     {
         $results = array();
         foreach ($iterator as $subject) {
-            $results[] = $this->subjectTester->test($suite, $environment, $subject, $skip);
+            $results[] = $this->subjectTester->test($environment, $subject, $skip);
         }
 
         return new SuiteTestResult(new TestResults($results));

@@ -15,7 +15,6 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
-use Behat\Testwork\Suite\Suite;
 
 /**
  * Outline tested event.
@@ -43,20 +42,18 @@ class OutlineTested extends LifecycleEvent
     /**
      * Initializes event.
      *
-     * @param Suite                  $suite
      * @param Environment            $environment
      * @param FeatureNode            $feature
      * @param OutlineNode            $outline
      * @param null|OutlineTestResult $testResult
      */
     public function __construct(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         OutlineNode $outline,
         OutlineTestResult $testResult = null
     ) {
-        parent::__construct($suite, $environment);
+        parent::__construct($environment);
 
         $this->feature = $feature;
         $this->outline = $outline;

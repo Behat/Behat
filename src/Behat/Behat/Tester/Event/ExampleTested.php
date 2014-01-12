@@ -15,7 +15,6 @@ use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 
 /**
  * Outline example tested event.
@@ -27,22 +26,23 @@ class ExampleTested extends AbstractScenarioTested
     const BEFORE = 'tester.example_tested.before';
     const AFTER = 'tester.example_tested.after';
 
+    /**
+     * Initializes event.
+     *
+     * @param Environment             $environment
+     * @param FeatureNode             $feature
+     * @param ExampleNode             $scenario
+     * @param StepContainerTestResult $testResult
+     * @param CallResults             $hookCallResults
+     */
     public function __construct(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         ExampleNode $scenario,
         StepContainerTestResult $testResult = null,
         CallResults $hookCallResults = null
     ) {
-        parent::__construct(
-            $suite,
-            $environment,
-            $feature,
-            $scenario,
-            $testResult,
-            $hookCallResults
-        );
+        parent::__construct($environment, $feature, $scenario, $testResult, $hookCallResults);
     }
 
     /**

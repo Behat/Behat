@@ -15,7 +15,6 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepContainerInterface;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 
@@ -58,7 +57,6 @@ class StepContainerTester
     /**
      * Tests step container.
      *
-     * @param Suite                  $suite
      * @param Environment            $environment
      * @param FeatureNode            $feature
      * @param StepContainerInterface $container
@@ -67,14 +65,13 @@ class StepContainerTester
      * @return TestResult
      */
     public function test(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         StepContainerInterface $container,
         $skip = false
     ) {
         $environment = $this->environmentManager->isolateEnvironment($environment, $feature);
-        $result = $this->testContainer($suite, $environment, $feature, $container, $skip);
+        $result = $this->testContainer($environment, $feature, $container, $skip);
 
         return new TestResult($result->getResultCode());
     }
@@ -82,7 +79,6 @@ class StepContainerTester
     /**
      * Tests container node.
      *
-     * @param Suite                  $suite
      * @param Environment            $environment
      * @param FeatureNode            $feature
      * @param StepContainerInterface $container
@@ -91,7 +87,6 @@ class StepContainerTester
      * @return StepContainerTestResult
      */
     protected function testContainer(
-        Suite $suite,
         Environment $environment,
         FeatureNode $feature,
         StepContainerInterface $container,
@@ -100,13 +95,13 @@ class StepContainerTester
         $results = array();
 
         if ($feature->hasBackground()) {
-            $backgroundResults = $this->backgroundTester->test($suite, $environment, $feature, $skip);
+            $backgroundResults = $this->backgroundTester->test($environment, $feature, $skip);
             $results = $backgroundResults->toArray();
             $skip = TestResult::PASSED < $backgroundResults->getResultCode() ? true : $skip;
         }
 
         foreach ($container->getSteps() as $step) {
-            $results[] = $lastResult = $this->stepTester->test($suite, $environment, $feature, $step, $skip);
+            $results[] = $lastResult = $this->stepTester->test($environment, $feature, $step, $skip);
             $skip = TestResult::PASSED < $lastResult->getResultCode() ? true : $skip;
         }
 

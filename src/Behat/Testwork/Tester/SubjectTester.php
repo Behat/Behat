@@ -11,7 +11,6 @@
 namespace Behat\Testwork\Tester;
 
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -26,12 +25,11 @@ interface SubjectTester
     /**
      * Tests provided subject.
      *
-     * @param Suite       $suite
      * @param Environment $environment
      * @param mixed       $testSubject
      * @param Boolean     $skip
      *
      * @return TestResult
      */
-    public function test(Suite $suite, Environment $environment, $testSubject, $skip = false);
+    public function test(Environment $environment, $testSubject, $skip = false);
 }
