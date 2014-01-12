@@ -8,7 +8,7 @@ tools:
 
     # Code Sniffer
     php_code_sniffer:
-        enabled:              true
+        enabled:              false
         command:              phpcs
         config:
             standard:         PSR2
@@ -30,7 +30,7 @@ tools:
 
     # PHP CS Fixer (http://http://cs.sensiolabs.org/).
     php_cs_fixer:
-        enabled:              true
+        enabled:              false
         command:              php-cs-fixer
         config:
             level:            psr2
