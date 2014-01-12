@@ -16,6 +16,7 @@
     "require": {
         "php":                           ">=5.3.3",
         "behat/gherkin":                 "~4.0",
+        "behat/transliterator":          "~1.0",
         "symfony/console":               "~2.1",
         "symfony/config":                "~2.1",
         "symfony/dependency-injection":  "~2.1",
@@ -38,17 +39,10 @@
 
     "autoload": {
         "psr-0": {
-            "Behat\\Behat":          "src/",
-            "Behat\\Testwork":       "src/",
-            "Behat\\Transliterator": "src/"
+            "Behat\\Behat":    "src/",
+            "Behat\\Testwork": "src/"
         }
     },
 
-    "bin": ["bin/behat"],
-
-    "extra": {
-        "branch-alias": {
-            "dev-develop": "3.0-dev"
-        }
-    }
+    "bin": ["bin/behat"]
 }
