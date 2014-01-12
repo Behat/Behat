@@ -174,6 +174,21 @@ class ConfigurationLoader
 
         $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
         $config = Yaml::parse($configPath);
+
+        return $this->loadConfigs($basePath, $config, $profile);
+    }
+
+    /**
+     * Loads configs for provided config and profile.
+     *
+     * @param string $basePath
+     * @param string $config
+     * @param string $profile
+     *
+     * @return array
+     */
+    private function loadConfigs($basePath, $config, $profile)
+    {
         $configs = array();
 
         // first load default profile from current config, but only if custom profile requested
