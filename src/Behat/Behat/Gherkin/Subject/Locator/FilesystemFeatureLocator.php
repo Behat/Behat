@@ -92,8 +92,6 @@ class FilesystemFeatureLocator implements SubjectLocator
      * @param Suite $suite
      *
      * @return FilterInterface[]
-     *
-     * @throws SuiteConfigurationException If unknown filter type provided
      */
     protected function getFeatureFilters(Suite $suite)
     {
@@ -103,27 +101,43 @@ class FilesystemFeatureLocator implements SubjectLocator
 
         $filters = array();
         foreach ($suite->getSetting('filters') as $type => $filterString) {
-            switch ($type) {
-                case 'role':
-                    $filters[] = new RoleFilter($filterString);
-                    break;
-                case 'name':
-                    $filters[] = new NameFilter($filterString);
-                    break;
-                case 'tags':
-                    $filters[] = new TagFilter($filterString);
-                    break;
-                default:
-                    throw new SuiteConfigurationException(sprintf(
-                        '`%s` filter is not supported by the `%s` suite. Supported types are %s.',
-                        $type,
-                        $suite->getName(),
-                        implode(', ', array('`role`', '`name`', '`tags`'))
-                    ), $suite->getName());
-            }
+            $filters[] = $this->createFilter($type, $filterString, $suite);
         }
 
         return $filters;
+    }
+
+    /**
+     * Creates filter of provided type.
+     *
+     * @param string $type
+     * @param string $filterString
+     * @param Suite  $suite
+     *
+     * @return FilterInterface
+     *
+     * @throws SuiteConfigurationException If filter type is not recognised
+     */
+    protected function createFilter($type, $filterString, Suite $suite)
+    {
+        if ('role' === $type) {
+            return new RoleFilter($filterString);
+        }
+
+        if ('name' === $type) {
+            return new NameFilter($filterString);
+        }
+
+        if ('tags' === $type) {
+            return new TagFilter($filterString);
+        }
+
+        throw new SuiteConfigurationException(sprintf(
+            '`%s` filter is not supported by the `%s` suite. Supported types are %s.',
+            $type,
+            $suite->getName(),
+            implode(', ', array('`role`', '`name`', '`tags`'))
+        ), $suite->getName());
     }
 
     /**
