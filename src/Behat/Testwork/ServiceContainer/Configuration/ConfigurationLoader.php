@@ -183,17 +183,34 @@ class ConfigurationLoader
 
         // then recursively load profiles from imports
         if (isset($config['imports']) && is_array($config['imports'])) {
-            foreach ($config['imports'] as $path) {
-                foreach ($this->parseImport($basePath, $path, $profile) as $importConfig) {
-                    $configs[] = $importConfig;
-                }
-            }
+            $configs = array_merge($configs, $this->loadImports($basePath, $config['imports'], $profile));
         }
 
         // then load specific profile from current config
         if (isset($config[$profile])) {
             $configs[] = $config[$profile];
             $this->profileFound = true;
+        }
+
+        return $configs;
+    }
+
+    /**
+     * Loads all provided imports.
+     *
+     * @param string $basePath
+     * @param array  $paths
+     * @param string $profile
+     *
+     * @return array
+     */
+    private function loadImports($basePath, array $paths, $profile)
+    {
+        $configs = array();
+        foreach ($paths as $path) {
+            foreach ($this->parseImport($basePath, $path, $profile) as $importConfig) {
+                $configs[] = $importConfig;
+            }
         }
 
         return $configs;
