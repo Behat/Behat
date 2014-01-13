@@ -28,6 +28,7 @@
 
     "require-dev": {
         "symfony/process": "~2.1",
+        "phpspec/prophecy-phpunit": "~1.0",
         "phpunit/phpunit": "~3.7.28"
     },
 

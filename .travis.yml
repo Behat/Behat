@@ -31,4 +31,6 @@ before_script:
   - export PATH=./bin:$PATH
   - echo "<?php echo '@php5' . implode(',@php5.', range(3, PHP_MINOR_VERSION));" > php_version_tags.php
 
-script: behat -fprogress --tags '~@php-version,'`php php_version_tags.php`
+script:
+  - phpunit
+  - behat -fprogress --tags '~@php-version,'`php php_version_tags.php`
