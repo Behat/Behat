@@ -393,3 +393,423 @@ Feature: Append snippets option
           }
       }
       """
+
+    Scenario: Append snippets to two contexts
+      Given a file named "features/bootstrap/FirstContext.php" with:
+        """
+        <?php
+
+        use Behat\Behat\Tester\Exception\PendingException;
+        use Behat\Behat\Context\RegexAcceptingContext;
+
+        class FirstContext implements RegexAcceptingContext
+        {
+        }
+        """
+      And a file named "features/bootstrap/SecondContext.php" with:
+        """
+        <?php
+
+        use Behat\Behat\Tester\Exception\PendingException;
+        use Behat\Behat\Context\TurnipAcceptingContext;
+
+        class SecondContext implements TurnipAcceptingContext
+        {
+        }
+        """
+      And a file named "behat.yml" with:
+        """
+        default:
+          suites:
+            first:
+              contexts: [ FirstContext ]
+            second:
+              contexts: [ SecondContext ]
+        """
+      When I run "behat -f progress --append-snippets"
+      Then it should pass with:
+        """
+        UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+
+        14 scenarios (14 undefined)
+        58 steps (58 undefined)
+
+        u features/bootstrap/FirstContext.php - Snippets has been added
+        u features/bootstrap/FirstContext.php - Snippets has been added
+        u features/bootstrap/FirstContext.php - Snippets has been added
+        u features/bootstrap/FirstContext.php - Snippets has been added
+        u features/bootstrap/FirstContext.php - Snippets has been added
+        u features/bootstrap/FirstContext.php - Snippets has been added
+        u features/bootstrap/FirstContext.php - Snippets has been added
+        u features/bootstrap/FirstContext.php - Snippets has been added
+        u features/bootstrap/FirstContext.php - Snippets has been added
+        u features/bootstrap/FirstContext.php - Snippets has been added
+        u features/bootstrap/SecondContext.php - Snippets has been added
+        u features/bootstrap/SecondContext.php - Snippets has been added
+        u features/bootstrap/SecondContext.php - Snippets has been added
+        u features/bootstrap/SecondContext.php - Snippets has been added
+        u features/bootstrap/SecondContext.php - Snippets has been added
+        u features/bootstrap/SecondContext.php - Snippets has been added
+        u features/bootstrap/SecondContext.php - Snippets has been added
+        u features/bootstrap/SecondContext.php - Snippets has been added
+        u features/bootstrap/SecondContext.php - Snippets has been added
+        u features/bootstrap/SecondContext.php - Snippets has been added
+        """
+      And "features/bootstrap/FirstContext.php" file should contain:
+        """
+        <?php
+
+        use Behat\Behat\Tester\Exception\PendingException;
+        use Behat\Behat\Context\RegexAcceptingContext;
+
+        class FirstContext implements RegexAcceptingContext
+        {
+
+            /**
+             * @Given /^I have (\d+) apples$/
+             */
+            public function iHaveApples($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @When /^I ate (\d+) apple$/
+             */
+            public function iAteApple($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Then /^I should have (\d+) apples$/
+             */
+            public function iShouldHaveApples($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @When /^I found (\d+) apples$/
+             */
+            public function iFoundApples($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Given /^do something undefined with \$$/
+             */
+            public function doSomethingUndefinedWith()
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @When /^I ate (\d+) apples$/
+             */
+            public function iAteApples($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Given /^do something undefined with \\(\d+)$/
+             */
+            public function doSomethingUndefinedWith2($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Given /^pystring:$/
+             */
+            public function pystring(PyStringNode $string)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Given /^pystring (\d+):$/
+             */
+            public function pystring2($arg1, PyStringNode $string)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Given /^table:$/
+             */
+            public function table(TableNode $table)
+            {
+                throw new PendingException();
+            }
+        }
+        """
+      And "features/bootstrap/SecondContext.php" file should contain:
+        """
+        <?php
+
+        use Behat\Behat\Tester\Exception\PendingException;
+        use Behat\Behat\Context\TurnipAcceptingContext;
+
+        class SecondContext implements TurnipAcceptingContext
+        {
+
+            /**
+             * @Given I have :arg1 apples
+             */
+            public function iHaveApples($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @When I ate :arg1 apple
+             */
+            public function iAteApple($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Then I should have :arg1 apples
+             */
+            public function iShouldHaveApples($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @When I found :arg1 apples
+             */
+            public function iFoundApples($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Given do something undefined with $
+             */
+            public function doSomethingUndefinedWith()
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @When I ate :arg1 apples
+             */
+            public function iAteApples($arg1)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Given do something undefined with \1
+             */
+            public function doSomethingUndefinedWith2()
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Given pystring:
+             */
+            public function pystring(PyStringNode $string)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Given pystring :arg1:
+             */
+            public function pystring2($arg1, PyStringNode $string)
+            {
+                throw new PendingException();
+            }
+
+            /**
+             * @Given table:
+             */
+            public function table(TableNode $table)
+            {
+                throw new PendingException();
+            }
+        }
+        """
+
+  Scenario: Append snippets to accepting context only
+    Given a file named "features/bootstrap/FirstContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Behat\Context\RegexAcceptingContext;
+
+      class FirstContext implements RegexAcceptingContext
+      {
+      }
+      """
+    And a file named "features/bootstrap/SecondContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Behat\Context\Context;
+
+      class SecondContext implements Context
+      {
+      }
+      """
+    And a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          first:
+            contexts: [ FirstContext ]
+          second:
+            contexts: [ SecondContext ]
+      """
+    When I run "behat -f progress --append-snippets"
+    Then it should pass with:
+      """
+      UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+
+      14 scenarios (14 undefined)
+      58 steps (58 undefined)
+
+      --- Snippets for the following steps in the second suite were not generated (check your configuration):
+
+          Given I have 3 apples
+          When I ate 1 apple
+          Then I should have 3 apples
+          When I found 5 apples
+          Then I should have 8 apples
+          And I found 2 apples
+          Then I should have 5 apples
+          And do something undefined with $
+          When I ate 3 apples
+          And I found 1 apples
+          Then I should have 1 apples
+          And do something undefined with \1
+          When I ate 0 apples
+          And I found 4 apples
+          When I ate 2 apples
+          Given pystring:
+          And pystring 5:
+          And table:
+
+
+      u features/bootstrap/FirstContext.php - Snippets has been added
+      u features/bootstrap/FirstContext.php - Snippets has been added
+      u features/bootstrap/FirstContext.php - Snippets has been added
+      u features/bootstrap/FirstContext.php - Snippets has been added
+      u features/bootstrap/FirstContext.php - Snippets has been added
+      u features/bootstrap/FirstContext.php - Snippets has been added
+      u features/bootstrap/FirstContext.php - Snippets has been added
+      u features/bootstrap/FirstContext.php - Snippets has been added
+      u features/bootstrap/FirstContext.php - Snippets has been added
+      u features/bootstrap/FirstContext.php - Snippets has been added
+      """
+    And "features/bootstrap/FirstContext.php" file should contain:
+      """
+      <?php
+
+      use Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Behat\Context\RegexAcceptingContext;
+
+      class FirstContext implements RegexAcceptingContext
+      {
+
+          /**
+           * @Given /^I have (\d+) apples$/
+           */
+          public function iHaveApples($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^I ate (\d+) apple$/
+           */
+          public function iAteApple($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then /^I should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^I found (\d+) apples$/
+           */
+          public function iFoundApples($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^do something undefined with \$$/
+           */
+          public function doSomethingUndefinedWith()
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^I ate (\d+) apples$/
+           */
+          public function iAteApples($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^do something undefined with \\(\d+)$/
+           */
+          public function doSomethingUndefinedWith2($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^pystring:$/
+           */
+          public function pystring(PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^pystring (\d+):$/
+           */
+          public function pystring2($arg1, PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^table:$/
+           */
+          public function table(TableNode $table)
+          {
+              throw new PendingException();
+          }
+      }
+      """
+    And "features/bootstrap/SecondContext.php" file should contain:
+      """
+      <?php
+
+      use Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Behat\Context\Context;
+
+      class SecondContext implements Context
+      {
+      }
+      """
