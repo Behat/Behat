@@ -140,9 +140,14 @@ class OutputController implements Controller
             }
         }
 
-        if ($input->getOption('verbose')) {
+        if ($input->hasParameterOption('-vvv') || $input->hasParameterOption('--verbose=3') || $input->getParameterOption('--verbose') === 3) {
+            $this->manager->setFormattersParameter('output_verbosity', OutputPrinter::VERBOSITY_DEBUG);
+        } elseif ($input->hasParameterOption('-vv') || $input->hasParameterOption('--verbose=2') || $input->getParameterOption('--verbose') === 2) {
+            $this->manager->setFormattersParameter('output_verbosity', OutputPrinter::VERBOSITY_VERY_VERBOSE);
+        } elseif ($input->hasParameterOption('-v') || $input->hasParameterOption('--verbose=1') || $input->hasParameterOption('--verbose') || $input->getParameterOption('--verbose')) {
             $this->manager->setFormattersParameter('output_verbosity', OutputPrinter::VERBOSITY_VERBOSE);
         }
+
         if ($input->getOption('colors')) {
             $output->setDecorated(true);
             $this->manager->setFormattersParameter('output_decorate', true);

@@ -19,8 +19,10 @@ namespace Behat\Testwork\Output\Printer;
  */
 interface OutputPrinter
 {
-    const VERBOSITY_NORMAL = 1;
-    const VERBOSITY_VERBOSE = 2;
+    const VERBOSITY_NORMAL       = 1;
+    const VERBOSITY_VERBOSE      = 2;
+    const VERBOSITY_VERY_VERBOSE = 3;
+    const VERBOSITY_DEBUG        = 4;
 
     /**
      * Sets output path.
