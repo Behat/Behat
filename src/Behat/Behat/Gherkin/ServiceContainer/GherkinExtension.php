@@ -13,6 +13,7 @@ namespace Behat\Behat\Gherkin\ServiceContainer;
 use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
+use Behat\Testwork\ServiceContainer\Exception\ExtensionException;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -82,13 +83,19 @@ class GherkinExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-            ->scalarNode('cache')
-            ->defaultValue(
-                is_writable(sys_get_temp_dir())
-                    ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gherkin_cache'
-                    : null
-            )
-            ->end()
+                ->scalarNode('cache')
+                    ->defaultValue(
+                        is_writable(sys_get_temp_dir())
+                            ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gherkin_cache'
+                            : null
+                    )
+                ->end()
+                ->arrayNode('filters')
+                    ->defaultValue(array())
+                    ->useAttributeAsKey('name')
+                    ->prototype('scalar')
+                    ->end()
+                ->end()
             ->end();
     }
 
@@ -102,6 +109,7 @@ class GherkinExtension implements Extension
         $this->loadKeywords($container);
         $this->loadParser($container);
         $this->loadDefaultLoaders($container, $config['cache']);
+        $this->loadProfileFilters($container, $config['filters']);
         $this->loadSyntaxController($container);
         $this->loadFilterController($container);
         $this->loadSuiteWithPathsSetup($container);
@@ -217,6 +225,21 @@ class GherkinExtension implements Extension
     }
 
     /**
+     * Loads profile-level gherkin filters.
+     *
+     * @param ContainerBuilder $container
+     * @param array            $filters
+     */
+    protected function loadProfileFilters(ContainerBuilder $container, array $filters)
+    {
+        $gherkin = $container->getDefinition(self::MANAGER_ID);
+        foreach ($filters as $type => $filterString) {
+            $filter = $this->createFilterDefinition($type, $filterString);
+            $gherkin->addMethodCall('addFilter', array($filter));
+        }
+    }
+
+    /**
      * Loads syntax controller.
      *
      * @param ContainerBuilder $container
@@ -288,5 +311,36 @@ class GherkinExtension implements Extension
         foreach ($references as $reference) {
             $definition->addMethodCall('addLoader', array($reference));
         }
+    }
+
+    /**
+     * Creates filter definition of provided type.
+     *
+     * @param string $type
+     * @param string $filterString
+     *
+     * @return Definition
+     *
+     * @throws ExtensionException If filter type is not recognised
+     */
+    protected function createFilterDefinition($type, $filterString)
+    {
+        if ('role' === $type) {
+            return new Definition('Behat\Gherkin\Filter\RoleFilter', array($filterString));
+        }
+
+        if ('name' === $type) {
+            return new Definition('Behat\Gherkin\Filter\NameFilter', array($filterString));
+        }
+
+        if ('tags' === $type) {
+            return new Definition('Behat\Gherkin\Filter\TagFilter', array($filterString));
+        }
+
+        throw new ExtensionException(sprintf(
+            '`%s` filter is not supported by the `filters` option of gherkin extension. Supported types are %s.',
+            $type,
+            implode(', ', array('`role`', '`name`', '`tags`'))
+        ), 'gherkin');
     }
 }
