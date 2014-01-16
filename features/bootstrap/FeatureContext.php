@@ -259,6 +259,11 @@ class FeatureContext implements Context
 
     private function createFile($filename, $content)
     {
+        $path = dirname($filename);
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
         file_put_contents($filename, $content);
     }
 
