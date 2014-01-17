@@ -81,7 +81,7 @@ class ExceptionPresenter
             return trim($this->relativizePaths($exception->getMessage()));
         }
 
-        if (OutputPrinter::VERBOSITY_VERBOSE <= $verbosity) {
+        if (OutputPrinter::VERBOSITY_VERY_VERBOSE <= $verbosity) {
             return $this->relativizePaths(trim($exception));
         }
 

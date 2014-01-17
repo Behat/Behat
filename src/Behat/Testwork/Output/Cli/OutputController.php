@@ -140,9 +140,7 @@ class OutputController implements Controller
             }
         }
 
-        if ($input->getOption('verbose')) {
-            $this->manager->setFormattersParameter('output_verbosity', OutputPrinter::VERBOSITY_VERBOSE);
-        }
+        $this->manager->setFormattersParameter('output_verbosity', $output->getVerbosity());
         if ($input->getOption('colors')) {
             $output->setDecorated(true);
             $this->manager->setFormattersParameter('output_decorate', true);
