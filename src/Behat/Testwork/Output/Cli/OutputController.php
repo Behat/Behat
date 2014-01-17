@@ -140,7 +140,7 @@ class OutputController implements Controller
             }
         }
 
-        $this->manager->setFormattersParameter('output_verbosity', $this->getOutputVerbosity($input));
+        $this->manager->setFormattersParameter('output_verbosity', $output->getVerbosity());
         if ($input->getOption('colors')) {
             $output->setDecorated(true);
             $this->manager->setFormattersParameter('output_decorate', true);
@@ -206,30 +206,6 @@ class OutputController implements Controller
                 $this->manager->setFormatterParameter($formats[$i], 'output_decorate', $decorated);
             }
         }
-    }
-
-    /**
-     * Gets output verbosity level from input.
-     *
-     * @param InputInterface $input
-     *
-     * @return integer
-     */
-    private function getOutputVerbosity(InputInterface $input)
-    {
-        if ($input->hasParameterOption('-vvv') || $input->hasParameterOption('--verbose=3') || $input->getParameterOption('--verbose') === 3) {
-            return OutputPrinter::VERBOSITY_DEBUG;
-        }
-
-        if ($input->hasParameterOption('-vv') || $input->hasParameterOption('--verbose=2') || $input->getParameterOption('--verbose') === 2) {
-            return OutputPrinter::VERBOSITY_VERY_VERBOSE;
-        }
-
-        if ($input->hasParameterOption('-v') || $input->hasParameterOption('--verbose=1') || $input->hasParameterOption('--verbose') || $input->getParameterOption('--verbose')) {
-            return OutputPrinter::VERBOSITY_VERBOSE;
-        }
-
-        return OutputPrinter::VERBOSITY_NORMAL;
     }
 
     /**
