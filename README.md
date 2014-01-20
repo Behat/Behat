@@ -1,6 +1,7 @@
 behat
 =====
 
+[![License](https://poser.pugx.org/behat/behat/license.png)](https://packagist.org/packages/behat/behat)
 [![Build Status](https://travis-ci.org/Behat/Behat.png?branch=3.0)](https://travis-ci.org/Behat/Behat)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Behat/Behat/badges/quality-score.png?s=ad84e95fc2405712f88a96d89b4f31dfe5c80fae)](https://scrutinizer-ci.com/g/Behat/Behat/)
 [![Dependency Status](https://www.versioneye.com/user/projects/52d2a08dec1375fded000031/badge.png)](https://www.versioneye.com/user/projects/52d2a08dec1375fded000031)
