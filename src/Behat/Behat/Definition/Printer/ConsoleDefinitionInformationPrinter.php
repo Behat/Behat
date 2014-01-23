@@ -49,40 +49,90 @@ class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
         $output = array();
 
         foreach ($definitions as $definition) {
-            $lines = array();
             $regex = $this->getDefinitionPattern($suite, $definition);
 
             if (null !== $search && false === mb_strpos($regex, $search, 0, 'utf8')) {
                 continue;
             }
 
-            $lines[] = strtr(
-                '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>', array(
-                    '{suite}' => $suite->getName(),
-                    '{type}'  => $definition->getType(),
-                    '{regex}' => $regex,
-                )
-            );
-
-            if ($definition->getDescription()) {
-                $lines[] = strtr(
-                    '{space}<def_dimmed>|</def_dimmed> {description}', array(
-                        '{space}'       => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
-                        '{description}' => $definition->getDescription()
-                    )
-                );
-            }
-
-            $lines[] = strtr(
-                '{space}<def_dimmed>|</def_dimmed> at `{path}`', array(
-                    '{space}' => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
-                    '{path}'  => $definition->getPath()
-                )
+            $lines = array_merge(
+                $this->extractHeader($suite, $definition),
+                $this->extractDescription($suite, $definition),
+                $this->extractFooter($suite, $definition)
             );
 
             $output[] = implode(PHP_EOL, $lines) . PHP_EOL;
         }
 
         $this->write(rtrim(implode(PHP_EOL, $output)));
+    }
+
+    /**
+     * Extracts the formatted header from the definition.
+     * 
+     * @param Suite      $suite
+     * @param Definition $definition
+     * 
+     * @return string[]
+     */
+    private function extractHeader(Suite $suite, Definition $definition)
+    {
+        $regex = $this->getDefinitionPattern($suite, $definition);
+        $lines = array();
+        $lines[] = strtr(
+            '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>', array(
+                '{suite}' => $suite->getName(),
+                '{type}'  => $definition->getType(),
+                '{regex}' => $regex,
+            )
+        );
+
+        return $lines;
+    }
+
+    /**
+     * Extracts the formatted description from the definition.
+     * 
+     * @param Suite      $suite
+     * @param Definition $definition
+     * 
+     * @return string[]
+     */
+    private function extractDescription(Suite $suite, Definition $definition)
+    {
+        $lines = array();
+        if ($description = $definition->getDescription()) {
+            foreach (explode("\n", $description) as $descriptionLine) {
+                $lines[] = strtr(
+                    '{space}<def_dimmed>|</def_dimmed> {description}', array(
+                        '{space}'       => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
+                        '{description}' => $descriptionLine
+                    )
+                );
+            }
+        }
+
+        return $lines;
+    }
+
+    /**
+     * Extracts the formatted footer from the definition.
+     * 
+     * @param Suite      $suite
+     * @param Definition $definition
+     * 
+     * @return string[]
+     */
+    private function extractFooter(Suite $suite, Definition $definition)
+    {
+        $lines = array();
+        $lines[] = strtr(
+            '{space}<def_dimmed>|</def_dimmed> at `{path}`', array(
+                '{space}' => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
+                '{path}'  => $definition->getPath()
+            )
+        );
+
+        return $lines;
     }
 }
