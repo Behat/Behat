@@ -13,6 +13,13 @@ namespace Behat\Testwork\Subject;
 use ArrayIterator;
 use Behat\Testwork\Suite\Suite;
 
+/**
+ * Testwork array subject iterator.
+ *
+ * Return instance of this class from locator if subjects cannot be searched lazily
+ *
+ * @author Christophe Coevoet <stof@notk.org>
+ */
 class ArraySubjectIterator extends ArrayIterator implements SubjectIterator
 {
     /**
