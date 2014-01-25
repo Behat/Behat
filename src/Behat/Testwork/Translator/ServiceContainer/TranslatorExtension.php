@@ -52,15 +52,17 @@ class TranslatorExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
+        $defaultLanguage = $this->getDefaultLanguage() ?: 'en';
+
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-            ->scalarNode('locale')
-            ->defaultValue('en')
-            ->end()
-            ->scalarNode('fallback_locale')
-            ->defaultValue('en')
-            ->end()
+                ->scalarNode('locale')
+                    ->defaultValue($defaultLanguage)
+                ->end()
+                ->scalarNode('fallback_locale')
+                    ->defaultValue('en')
+                ->end()
             ->end();
     }
 
@@ -132,5 +134,22 @@ class TranslatorExtension implements Extension
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 800));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.translator', $definition);
+    }
+
+    /**
+     * Tries to guess default user cli language.
+     *
+     * @return null|string
+     */
+    protected function getDefaultLanguage()
+    {
+        $defaultLanguage = null;
+        if (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
+            $defaultLanguage = $matches[1];
+
+            return $defaultLanguage;
+        }
+
+        return $defaultLanguage;
     }
 }

@@ -65,27 +65,10 @@ class LanguageController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$input->getOption('lang') && !$this->getDefaultLanguage()) {
+        if (!$input->getOption('lang')) {
             return;
         }
 
-        $this->translator->setLocale($input->getOption('lang') ?: $this->getDefaultLanguage());
-    }
-
-    /**
-     * Tries to guess default user cli language.
-     *
-     * @return null|string
-     */
-    protected function getDefaultLanguage()
-    {
-        $defaultLanguage = null;
-        if (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
-            $defaultLanguage = $matches[1];
-
-            return $defaultLanguage;
-        }
-
-        return $defaultLanguage;
+        $this->translator->setLocale($input->getOption('lang'));
     }
 }
