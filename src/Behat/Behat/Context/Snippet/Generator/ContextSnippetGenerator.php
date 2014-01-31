@@ -171,11 +171,7 @@ TPL;
         }
 
         foreach ($step->getArguments() as $argument) {
-            if ($argument instanceof PyStringNode) {
-                $args[] = 'PyStringNode $string';
-            } elseif ($argument instanceof TableNode) {
-                $args[] = 'TableNode $table';
-            }
+            $args[] = $this->getMethodArgument($argument);
         }
 
         return $args;
@@ -325,5 +321,24 @@ TPL;
     private function markMethodAsAlreadyProposed($contextClass, $stepPattern, $methodName)
     {
         self::$proposedMethods[$contextClass][$stepPattern] = $methodName;
+    }
+
+    /**
+     * Returns method argument.
+     *
+     * @param string $argument
+     *
+     * @return string
+     */
+    private function getMethodArgument($argument)
+    {
+        $arg = '__unknown__';
+        if ($argument instanceof PyStringNode) {
+            $arg = 'PyStringNode $string';
+        } elseif ($argument instanceof TableNode) {
+            $arg = 'TableNode $table';
+        }
+
+        return $arg;
     }
 }
