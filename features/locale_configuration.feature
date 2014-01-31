@@ -8,13 +8,14 @@ Feature: Locale configuration
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
         Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
         Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements RegexAcceptingContext
+      class FeatureContext implements CustomSnippetAcceptingContext
       {
+          public static function getAcceptedSnippetType() { return 'regex'; }
       }
       """
 
