@@ -150,7 +150,7 @@ TPL;
     protected function getMethodName($contextClass, $canonicalText, $pattern)
     {
         $methodName = $this->deduceMethodName($canonicalText);
-        $methodName = $this->ensureMethodNameUniqueness($contextClass, $pattern, $methodName);
+        $methodName = $this->getUniqueMethodName($contextClass, $pattern, $methodName);
 
         return $methodName;
     }
@@ -224,38 +224,80 @@ TPL;
      *
      * @param string $contextClass
      * @param string $stepPattern
-     * @param string $methodName
+     * @param string $name
      *
      * @return string
      */
-    private function ensureMethodNameUniqueness($contextClass, $stepPattern, $methodName)
+    private function getUniqueMethodName($contextClass, $stepPattern, $name)
     {
         $reflection = new ReflectionClass($contextClass);
 
-        // get method number from method name
+        $number = $this->getMethodNumberFromTheMethodName($name);
+        list($name, $number) = $this->getMethodNameNotExistentInContext($reflection, $name, $number);
+        $name = $this->getMethodNameNotProposedEarlier($contextClass, $stepPattern, $name, $number);
+
+        return $name;
+    }
+
+    /**
+     * Tries to deduct method number from the provided method name.
+     *
+     * @param string $methodName
+     *
+     * @return integer
+     */
+    private function getMethodNumberFromTheMethodName($methodName)
+    {
         $methodNumber = 2;
         if (preg_match('/(\d+)$/', $methodName, $matches)) {
             $methodNumber = intval($matches[1]);
         }
 
-        // check that proposed method name isn't already defined in the context
+        return $methodNumber;
+    }
+
+    /**
+     * Tries to guess method name that is not yet defined in the context class.
+     *
+     * @param ReflectionClass $reflection
+     * @param string          $methodName
+     * @param string          $methodNumber
+     *
+     * @return array
+     */
+    private function getMethodNameNotExistentInContext(ReflectionClass $reflection, $methodName, $methodNumber)
+    {
         while ($reflection->hasMethod($methodName)) {
             $methodName = preg_replace('/\d+$/', '', $methodName);
             $methodName .= $methodNumber++;
         }
 
-        // check that proposed method name haven't been proposed earlier
+        return array($methodName, $methodNumber);
+    }
+
+    /**
+     * Tries to guess method name that is not yet proposed to the context class.
+     *
+     * @param string $contextClass
+     * @param string $stepPattern
+     * @param string $name
+     * @param integer $number
+     *
+     * @return string
+     */
+    private function getMethodNameNotProposedEarlier($contextClass, $stepPattern, $name, $number)
+    {
         if (isset(self::$proposedMethods[$contextClass])) {
             foreach (self::$proposedMethods[$contextClass] as $proposedPattern => $proposedMethod) {
                 if ($proposedPattern !== $stepPattern) {
-                    while ($proposedMethod === $methodName) {
-                        $methodName = preg_replace('/\d+$/', '', $methodName);
-                        $methodName .= $methodNumber++;
+                    while ($proposedMethod === $name) {
+                        $name = preg_replace('/\d+$/', '', $name);
+                        $name .= $number++;
                     }
                 }
             }
         }
 
-        return self::$proposedMethods[$contextClass][$stepPattern] = $methodName;
+        return self::$proposedMethods[$contextClass][$stepPattern] = $name;
     }
 }
