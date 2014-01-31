@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Context\ServiceContainer;
 
+use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Testwork\Autoloader\ServiceContainer\AutoloaderExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
@@ -174,13 +175,11 @@ class ContextExtension implements Extension
      */
     protected function loadSnippetGenerators(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Snippet\Generator\ContextTurnipSnippetGenerator');
+        $definition = new Definition('Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator', array(
+            new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID)
+        ));
         $definition->addTag(SnippetExtension::GENERATOR_TAG, array('priority' => 50));
-        $container->setDefinition(SnippetExtension::GENERATOR_TAG . '.context.turnip', $definition);
-
-        $definition = new Definition('Behat\Behat\Context\Snippet\Generator\ContextRegexSnippetGenerator');
-        $definition->addTag(SnippetExtension::GENERATOR_TAG, array('priority' => 50));
-        $container->setDefinition(SnippetExtension::GENERATOR_TAG . '.context.regex', $definition);
+        $container->setDefinition(SnippetExtension::GENERATOR_TAG . '.context', $definition);
     }
 
     /**

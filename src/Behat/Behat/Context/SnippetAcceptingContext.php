@@ -10,17 +10,17 @@
 
 namespace Behat\Behat\Context;
 
-use Behat\Behat\Context\Snippet\Generator\ContextRegexSnippetGenerator;
+use Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator;
 
 /**
- * Regex-accepting context interface.
+ * Snippet-accepting context interface.
  *
- * Context that implements this interface is treated as a regex-friendly context.
+ * Context that implements this interface is treated as a snippet-friendly context.
  *
- * @see ContextRegexSnippetGenerator
+ * @see ContextSnippetGenerator
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface RegexAcceptingContext extends Context
+interface SnippetAcceptingContext extends Context
 {
 }

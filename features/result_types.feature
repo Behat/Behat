@@ -27,12 +27,14 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements RegexAcceptingContext {}
+      class FeatureContext implements CustomSnippetAcceptingContext {
+          public static function getAcceptedSnippetType() { return 'regex'; }
+      }
       """
     When I run "behat --no-colors -f progress features/coffee.feature"
     Then it should pass with:
@@ -122,13 +124,15 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements RegexAcceptingContext
+      class FeatureContext implements CustomSnippetAcceptingContext
       {
+          public static function getAcceptedSnippetType() { return 'regex'; }
+
           /**
            * @Given /^human have ordered very very very hot "([^"]*)"$/
            */

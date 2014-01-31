@@ -8,15 +8,17 @@ Feature: Format options
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements RegexAcceptingContext
+      class FeatureContext implements CustomSnippetAcceptingContext
       {
           private $apples = 0;
           private $parameters;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters) {
               $this->parameters = $parameters;

@@ -8,7 +8,7 @@ Feature: Context consistency
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
@@ -66,21 +66,23 @@ Feature: Context consistency
           }
       }
 
-      class FeatureContext extends CoreContext implements RegexAcceptingContext
+      class FeatureContext extends CoreContext implements CustomSnippetAcceptingContext
       {
+          public static function getAcceptedSnippetType() { return 'regex'; }
       }
       """
     And a file named "features/bootstrap/CustomContext.php" with:
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class CustomContext implements RegexAcceptingContext
+      class CustomContext implements CustomSnippetAcceptingContext
       {
+          public static function getAcceptedSnippetType() { return 'regex'; }
       }
       """
 
