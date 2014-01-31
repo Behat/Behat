@@ -25,14 +25,14 @@ class SimpleClassGenerator implements ClassGenerator
     protected static $template = <<<'PHP'
 <?php
 
-{namespace}use Behat\Behat\Context\TurnipAcceptingContext;
+{namespace}use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 
 /**
  * Behat context class.
  */
-class {className} implements TurnipAcceptingContext
+class {className} implements SnippetAcceptingContext
 {
     /**
      * Initializes context. Every scenario gets it's own context object.
