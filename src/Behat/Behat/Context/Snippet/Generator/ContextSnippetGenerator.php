@@ -114,11 +114,7 @@ TPL;
     protected function getSnippetAcceptingContextClass(ContextEnvironment $environment)
     {
         foreach ($environment->getContextClasses() as $class) {
-            if (in_array(
-                'Behat\Behat\Context\SnippetAcceptingContext',
-                class_implements($class)
-            )
-            ) {
+            if (in_array('Behat\Behat\Context\SnippetAcceptingContext', class_implements($class))) {
                 return $class;
             }
         }
@@ -135,13 +131,11 @@ TPL;
      */
     protected function getPatternType($contextClass)
     {
-        $reflection = new ReflectionClass($contextClass);
-
-        if (!$reflection->implementsInterface('Behat\Behat\Context\CustomSnippetAcceptingContext')) {
+        if (!in_array('Behat\Behat\Context\CustomSnippetAcceptingContext', class_implements($contextClass))) {
             return null;
         }
 
-        return $reflection->getMethod('getAcceptedSnippetType')->invoke(null);
+        return $contextClass::getAcceptedSnippetType();
     }
 
     /**
@@ -173,14 +167,14 @@ TPL;
     {
         $args = array();
         for ($i = 0; $i < $tokenCount; $i++) {
-            $args[] = "\$arg" . ($i + 1);
+            $args[] = '$arg' . ($i + 1);
         }
 
         foreach ($step->getArguments() as $argument) {
             if ($argument instanceof PyStringNode) {
-                $args[] = "PyStringNode \$string";
+                $args[] = 'PyStringNode $string';
             } elseif ($argument instanceof TableNode) {
-                $args[] = "TableNode \$table";
+                $args[] = 'TableNode $table';
             }
         }
 

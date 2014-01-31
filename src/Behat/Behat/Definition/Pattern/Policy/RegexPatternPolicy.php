@@ -54,7 +54,7 @@ class RegexPatternPolicy implements PatternPolicy
      */
     public function supportsPattern($pattern)
     {
-        return '/' === substr($pattern, 0, 1) && '/' === substr($pattern, -1);
+        return false !== @preg_match($pattern, 'anything');
     }
 
     /**
