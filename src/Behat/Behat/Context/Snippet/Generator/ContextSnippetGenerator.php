@@ -278,26 +278,52 @@ TPL;
     /**
      * Tries to guess method name that is not yet proposed to the context class.
      *
-     * @param string $contextClass
-     * @param string $stepPattern
-     * @param string $name
+     * @param string  $contextClass
+     * @param string  $stepPattern
+     * @param string  $name
      * @param integer $number
      *
      * @return string
      */
     private function getMethodNameNotProposedEarlier($contextClass, $stepPattern, $name, $number)
     {
-        if (isset(self::$proposedMethods[$contextClass])) {
-            foreach (self::$proposedMethods[$contextClass] as $proposedPattern => $proposedMethod) {
-                if ($proposedPattern !== $stepPattern) {
-                    while ($proposedMethod === $name) {
-                        $name = preg_replace('/\d+$/', '', $name);
-                        $name .= $number++;
-                    }
-                }
+        foreach ($this->getAlreadyProposedMethods($contextClass) as $proposedPattern => $proposedMethod) {
+            if ($proposedPattern === $stepPattern) {
+                continue;
+            }
+
+            while ($proposedMethod === $name) {
+                $name = preg_replace('/\d+$/', '', $name);
+                $name .= $number++;
             }
         }
 
-        return self::$proposedMethods[$contextClass][$stepPattern] = $name;
+        $this->markMethodAsAlreadyProposed($contextClass, $stepPattern, $name);
+
+        return $name;
+    }
+
+    /**
+     * Returns already proposed method names.
+     *
+     * @param string $contextClass
+     *
+     * @return array
+     */
+    private function getAlreadyProposedMethods($contextClass)
+    {
+        return isset(self::$proposedMethods[$contextClass]) ? self::$proposedMethods[$contextClass] : array();
+    }
+
+    /**
+     * Marks method as proposed one.
+     *
+     * @param string $contextClass
+     * @param string $stepPattern
+     * @param string $methodName
+     */
+    private function markMethodAsAlreadyProposed($contextClass, $stepPattern, $methodName)
+    {
+        self::$proposedMethods[$contextClass][$stepPattern] = $methodName;
     }
 }
