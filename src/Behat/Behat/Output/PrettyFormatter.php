@@ -726,7 +726,7 @@ class PrettyFormatter extends TranslatableCliFormatter
 
     public function colorizeDefinitionArguments($text, Definition $definition, $style)
     {
-        $regex = $this->patternTransformer->toRegex($definition->getPattern());
+        $regex = $this->patternTransformer->transformPatternToRegex($definition->getPattern());
         $paramStyle = $style . '_param';
 
         // If it's just a string - skip

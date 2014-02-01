@@ -286,9 +286,9 @@ class RepositoryArgumentTransformer implements ArgumentTransformer
     {
         $translatedPattern = $this->translator->trans($pattern, array(), $assetsId, $language);
         if ($pattern == $translatedPattern) {
-            return $this->patternTransformer->toRegex($pattern);
+            return $this->patternTransformer->transformPatternToRegex($pattern);
         }
 
-        return $this->patternTransformer->toRegex($translatedPattern);
+        return $this->patternTransformer->transformPatternToRegex($translatedPattern);
     }
 }

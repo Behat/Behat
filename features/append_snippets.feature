@@ -8,15 +8,17 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements RegexAcceptingContext
+      class FeatureContext implements CustomSnippetAcceptingContext
       {
           private $apples = 0;
           private $parameters;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters) {
               $this->parameters = $parameters;
@@ -123,15 +125,17 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements RegexAcceptingContext
+      class FeatureContext implements CustomSnippetAcceptingContext
       {
           private $apples = 0;
           private $parameters;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters) {
               $this->parameters = $parameters;
@@ -229,14 +233,16 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext;
+      use Behat\Behat\Context\CustomSnippetAcceptingContext;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements RegexAcceptingContext
+      class FeatureContext implements CustomSnippetAcceptingContext
       {
           private $apples = 0;
           private $parameters;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters) {
               $this->parameters = $parameters;
@@ -294,14 +300,16 @@ Feature: Append snippets option
       <?php
 
       use Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Behat\Context\RegexAcceptingContext;
+      use Behat\Behat\Context\CustomSnippetAcceptingContext;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements RegexAcceptingContext
+      class FeatureContext implements CustomSnippetAcceptingContext
       {
           private $apples = 0;
           private $parameters;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters) {
               $this->parameters = $parameters;
@@ -400,10 +408,11 @@ Feature: Append snippets option
         <?php
 
         use Behat\Behat\Tester\Exception\PendingException;
-        use Behat\Behat\Context\RegexAcceptingContext;
+        use Behat\Behat\Context\CustomSnippetAcceptingContext;
 
-        class FirstContext implements RegexAcceptingContext
+        class FirstContext implements CustomSnippetAcceptingContext
         {
+            public static function getAcceptedSnippetType() { return 'regex'; }
         }
         """
       And a file named "features/bootstrap/SecondContext.php" with:
@@ -411,9 +420,9 @@ Feature: Append snippets option
         <?php
 
         use Behat\Behat\Tester\Exception\PendingException;
-        use Behat\Behat\Context\TurnipAcceptingContext;
+        use Behat\Behat\Context\SnippetAcceptingContext;
 
-        class SecondContext implements TurnipAcceptingContext
+        class SecondContext implements SnippetAcceptingContext
         {
         }
         """
@@ -460,10 +469,11 @@ Feature: Append snippets option
         <?php
 
         use Behat\Behat\Tester\Exception\PendingException;
-        use Behat\Behat\Context\RegexAcceptingContext;
+        use Behat\Behat\Context\CustomSnippetAcceptingContext;
 
-        class FirstContext implements RegexAcceptingContext
+        class FirstContext implements CustomSnippetAcceptingContext
         {
+            public static function getAcceptedSnippetType() { return 'regex'; }
 
             /**
              * @Given /^I have (\d+) apples$/
@@ -551,9 +561,9 @@ Feature: Append snippets option
         <?php
 
         use Behat\Behat\Tester\Exception\PendingException;
-        use Behat\Behat\Context\TurnipAcceptingContext;
+        use Behat\Behat\Context\SnippetAcceptingContext;
 
-        class SecondContext implements TurnipAcceptingContext
+        class SecondContext implements SnippetAcceptingContext
         {
 
             /**
@@ -644,10 +654,11 @@ Feature: Append snippets option
       <?php
 
       use Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Behat\Context\RegexAcceptingContext;
+      use Behat\Behat\Context\CustomSnippetAcceptingContext;
 
-      class FirstContext implements RegexAcceptingContext
+      class FirstContext implements CustomSnippetAcceptingContext
       {
+          public static function getAcceptedSnippetType() { return 'regex'; }
       }
       """
     And a file named "features/bootstrap/SecondContext.php" with:
@@ -716,10 +727,11 @@ Feature: Append snippets option
       <?php
 
       use Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Behat\Context\RegexAcceptingContext;
+      use Behat\Behat\Context\CustomSnippetAcceptingContext;
 
-      class FirstContext implements RegexAcceptingContext
+      class FirstContext implements CustomSnippetAcceptingContext
       {
+          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given /^I have (\d+) apples$/

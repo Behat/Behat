@@ -44,6 +44,7 @@ class DefinitionExtension implements Extension
      * Available extension points
      */
     const SEARCH_ENGINE_TAG = 'definition.search_engine';
+    const PATTERN_POLICY_TAG = 'definition.pattern_policy';
 
     /**
      * @var ServiceProcessor
@@ -92,6 +93,7 @@ class DefinitionExtension implements Extension
         $this->loadWriter($container);
         $this->loadPatternTransformer($container);
         $this->loadDefaultSearchEngines($container);
+        $this->loadDefaultPatternPolicies($container);
         $this->loadAnnotationReader($container);
         $this->loadDefinitionPrinters($container);
         $this->loadController($container);
@@ -103,6 +105,7 @@ class DefinitionExtension implements Extension
     public function process(ContainerBuilder $container)
     {
         $this->processSearchEngines($container);
+        $this->processPatternPolicies($container);
     }
 
     /**
@@ -150,7 +153,7 @@ class DefinitionExtension implements Extension
      */
     protected function loadPatternTransformer(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Pattern\TurnipPatternTransformer');
+        $definition = new Definition('Behat\Behat\Definition\Pattern\PatternTransformer');
         $container->setDefinition(self::PATTERN_TRANSFORMER_ID, $definition);
     }
 
@@ -168,6 +171,22 @@ class DefinitionExtension implements Extension
         ));
         $definition->addTag(self::SEARCH_ENGINE_TAG, array('priority' => 50));
         $container->setDefinition(self::SEARCH_ENGINE_TAG . '.repository', $definition);
+    }
+
+    /**
+     * Loads default pattern policies.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadDefaultPatternPolicies(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\TurnipPatternPolicy');
+        $definition->addTag(self::PATTERN_POLICY_TAG, array('priority' => 50));
+        $container->setDefinition(self::PATTERN_POLICY_TAG . '.turnip', $definition);
+
+        $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\RegexPatternPolicy');
+        $definition->addTag(self::PATTERN_POLICY_TAG, array('priority' => 50));
+        $container->setDefinition(self::PATTERN_POLICY_TAG . '.regex', $definition);
     }
 
     /**
@@ -233,6 +252,21 @@ class DefinitionExtension implements Extension
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerSearchEngine', array($reference));
+        }
+    }
+
+    /**
+     * Processes all pattern policies.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function processPatternPolicies(ContainerBuilder $container)
+    {
+        $references = $this->processor->findAndSortTaggedServices($container, self::PATTERN_POLICY_TAG);
+        $definition = $container->getDefinition(self::PATTERN_TRANSFORMER_ID);
+
+        foreach ($references as $reference) {
+            $definition->addMethodCall('registerPatternPolicy', array($reference));
         }
     }
 
