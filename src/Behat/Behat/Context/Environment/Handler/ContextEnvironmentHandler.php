@@ -94,14 +94,8 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     public function buildEnvironment(Suite $suite)
     {
         $environment = new UninitializedContextEnvironment($suite);
-        foreach ($suite->getSetting('contexts') as $context) {
-            $class = $context;
-            $arguments = array();
-
-            if (is_array($context)) {
-                $class = current(array_keys($context));
-                $arguments = $context[$class];
-            }
+        foreach ($this->getNormalizedContextSettings($suite) as $context) {
+            list($class, $arguments) = $context;
 
             $class = $this->resolveClass($class);
             $environment->registerContextClass($class, $arguments);
@@ -135,7 +129,6 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     {
         $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
         foreach ($uninitializedEnvironment->getContextClassesWithArguments() as $class => $arguments) {
-            $arguments = $this->resolveClassArguments($class, $arguments);
             $context = $this->initializeContext($class, $arguments);
             $environment->registerContext($context);
         }
@@ -162,6 +155,26 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
+     * Initializes context class and returns new context instance.
+     *
+     * @param string $class
+     * @param array  $arguments
+     *
+     * @return Context
+     */
+    final protected function initializeContext($class, array $arguments)
+    {
+        $arguments = $this->resolveClassArguments($class, $arguments);
+        $context = new $class($arguments);
+
+        foreach ($this->contextInitializers as $initializer) {
+            $initializer->initializeContext($context);
+        }
+
+        return $context;
+    }
+
+    /**
      * Resolves arguments for a specific class using registered argument resolvers.
      *
      * @param string $class
@@ -179,21 +192,27 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
-     * Initializes context class and returns new context instance.
+     * Returns normalized suite context settings.
      *
-     * @param string $class
-     * @param array  $constructorArguments
+     * @param Suite $suite
      *
-     * @return Context
+     * @return array
      */
-    final protected function initializeContext($class, array $constructorArguments)
+    private function getNormalizedContextSettings(Suite $suite)
     {
-        $context = new $class($constructorArguments);
+        return array_map(
+            function ($context) {
+                $class = $context;
+                $arguments = array();
 
-        foreach ($this->contextInitializers as $initializer) {
-            $initializer->initializeContext($context);
-        }
+                if (is_array($context)) {
+                    $class = current(array_keys($context));
+                    $arguments = $context[$class];
+                }
 
-        return $context;
+                return array($class, $arguments);
+            },
+            $suite->getSetting('contexts')
+        );
     }
 }
