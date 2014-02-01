@@ -79,7 +79,6 @@ class ContextExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder->useAttributeAsKey('name')->prototype('variable');
     }
 
     /**
@@ -87,7 +86,7 @@ class ContextExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadEnvironmentHandler($container, $config);
+        $this->loadEnvironmentHandler($container);
         $this->loadEnvironmentReader($container);
         $this->loadSuiteSetup($container);
         $this->loadSnippetAppender($container);
@@ -115,15 +114,10 @@ class ContextExtension implements Extension
      * @param ContainerBuilder $container
      * @param mixed[string]    $contexts
      */
-    protected function loadEnvironmentHandler(ContainerBuilder $container, array $contexts)
+    protected function loadEnvironmentHandler(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler');
         $definition->addTag(EnvironmentExtension::HANDLER_TAG, array('priority' => 50));
-
-        foreach ($contexts as $class => $arguments) {
-            $definition->addMethodCall('setContextArguments', array($class, $arguments));
-        }
-
         $container->setDefinition(self::getEnvironmentHandlerId(), $definition);
     }
 

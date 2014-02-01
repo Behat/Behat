@@ -186,12 +186,14 @@ Feature: Context consistency
     Given a file named "behat.yml" with:
       """
       default:
-        contexts:
-          FeatureContext:
-            parameter1: val_one
-            parameter2:
-              everzet: behat_admin
-              avalanche123: behat_admin
+        suites:
+          default:
+            contexts:
+              - FeatureContext:
+                  parameter1: val_one
+                  parameter2:
+                    everzet: behat_admin
+                    avalanche123: behat_admin
       """
     And a file named "features/params.feature" with:
       """

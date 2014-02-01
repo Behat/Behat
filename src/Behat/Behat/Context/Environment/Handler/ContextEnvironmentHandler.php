@@ -41,10 +41,6 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      * @var ContextInitializer[]
      */
     private $contextInitializers = array();
-    /**
-     * @var mixed[][string]
-     */
-    private $arguments = array();
 
     /**
      * Registers context class resolver.
@@ -77,18 +73,6 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
-     * Sets specific context class arguments.
-     *
-     * @param string  $class
-     * @param mixed[] $arguments
-     */
-    public function setContextArguments($class, array $arguments)
-    {
-        $class = $this->resolveClass($class);
-        $this->arguments[$class] = $arguments;
-    }
-
-    /**
      * Checks if handler supports provided suite.
      *
      * @param Suite $suite
@@ -110,9 +94,17 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     public function buildEnvironment(Suite $suite)
     {
         $environment = new UninitializedContextEnvironment($suite);
-        foreach ($suite->getSetting('contexts') as $class) {
+        foreach ($suite->getSetting('contexts') as $context) {
+            $class = $context;
+            $arguments = array();
+
+            if (is_array($context)) {
+                $class = current(array_keys($context));
+                $arguments = $context[$class];
+            }
+
             $class = $this->resolveClass($class);
-            $environment->registerContextClass($class);
+            $environment->registerContextClass($class, $arguments);
         }
 
         return $environment;
@@ -142,8 +134,8 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     public function isolateEnvironment(Environment $uninitializedEnvironment, $testSubject = null)
     {
         $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
-        foreach ($uninitializedEnvironment->getContextClasses() as $class) {
-            $arguments = $this->resolveClassArguments($class);
+        foreach ($uninitializedEnvironment->getContextClassesWithArguments() as $class => $arguments) {
+            $arguments = $this->resolveClassArguments($class, $arguments);
             $context = $this->initializeContext($class, $arguments);
             $environment->registerContext($context);
         }
@@ -173,13 +165,12 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      * Resolves arguments for a specific class using registered argument resolvers.
      *
      * @param string $class
+     * @param array  $arguments
      *
      * @return mixed[]
      */
-    final protected function resolveClassArguments($class)
+    final protected function resolveClassArguments($class, array $arguments)
     {
-        $arguments = isset($this->arguments[$class]) ? $this->arguments[$class] : array();
-
         foreach ($this->argumentResolvers as $resolver) {
             $arguments = $resolver->resolveArguments($class, $arguments);
         }
