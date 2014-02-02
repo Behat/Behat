@@ -118,16 +118,14 @@ class AvailableDefinitionsController implements Controller
      */
     protected function getDefinitionPrinter($argument)
     {
-        if ('i' === $argument) {
-            return $this->infoPrinter;
+        if ('l' === $argument) {
+            return $this->listPrinter;
         }
 
-        if ('l' !== $argument) {
+        if ('i' !== $argument) {
             $this->infoPrinter->setSearchCriterion($argument);
-
-            return $this->infoPrinter;
         }
 
-        return $this->listPrinter;
+        return $this->infoPrinter;
     }
 }
