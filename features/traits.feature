@@ -6,7 +6,7 @@ Feature: Support php 5.4 traits
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:
-    """
+      """
       <?php
 
       use Behat\Behat\Context\Context;
@@ -17,7 +17,7 @@ Feature: Support php 5.4 traits
       }
       """
     And a file named "features/bootstrap/ApplesDefinitions.php" with:
-    """
+      """
       <?php
 
       trait ApplesDefinitions
@@ -54,7 +54,7 @@ Feature: Support php 5.4 traits
       }
       """
     And a file named "features/apples.feature" with:
-    """
+      """
       Feature: Apples story
         In order to eat apple
         As a little kid
@@ -90,7 +90,7 @@ Feature: Support php 5.4 traits
   Scenario: Run feature with failing scenarios
     When I run "behat --no-colors -f progress"
     Then it should pass with:
-    """
+      """
       .....................
 
       6 scenarios (6 passed)
