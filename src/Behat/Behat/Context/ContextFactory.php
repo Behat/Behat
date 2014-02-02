@@ -13,6 +13,7 @@ namespace Behat\Behat\Context;
 use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Initializer\ContextInitializer;
 use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Behat context factory.
@@ -78,13 +79,41 @@ class ContextFactory
      *
      * @return mixed[]
      */
-    private function resolveArguments($reflection, array $arguments)
+    private function resolveArguments(ReflectionClass $reflection, array $arguments)
     {
         foreach ($this->argumentResolvers as $resolver) {
             $arguments = $resolver->resolveArguments($reflection, $arguments);
         }
 
-        return $arguments;
+        if (!$reflection->hasMethod('__construct') || !count($arguments)) {
+            return $arguments;
+        }
+
+        return $this->orderConstructorArguments($reflection->getConstructor(), $arguments);
+    }
+
+    /**
+     * Orders constructor arguments using their indexes or names.
+     *
+     * @param ReflectionMethod $constructor
+     * @param array            $arguments
+     *
+     * @return array
+     */
+    private function orderConstructorArguments(ReflectionMethod $constructor, array $arguments)
+    {
+        $realArguments = array();
+        foreach ($constructor->getParameters() as $i => $parameter) {
+            if (isset($arguments[$parameter->getName()])) {
+                $realArguments[] = $arguments[$parameter->getName()];
+            } elseif (isset($arguments[$i])) {
+                $realArguments[$i] = $arguments[$i];
+            } else {
+                $realArguments[$i] = null;
+            }
+        }
+
+        return $realArguments;
     }
 
     /**
@@ -98,7 +127,7 @@ class ContextFactory
     private function createInstance(ReflectionClass $reflection, array $arguments)
     {
         if (count($arguments)) {
-            return $reflection->newInstance($arguments);
+            return $reflection->newInstanceArgs($arguments);
         }
 
         return $reflection->newInstance();

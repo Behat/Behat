@@ -35,11 +35,12 @@ use Behat\Gherkin\Node\TableNode;
 class {className} implements SnippetAcceptingContext
 {
     /**
-     * Initializes context. Every scenario gets it's own context object.
+     * Initializes context.
      *
-     * @param array $parameters Suite parameters (set them up through behat.yml)
+     * Every scenario gets it's own context object.
+     * You can also pass arbitrary arguments to the context constructor through behat.yml.
      */
-    public function __construct(array $parameters)
+    public function __construct()
     {
     }
 }

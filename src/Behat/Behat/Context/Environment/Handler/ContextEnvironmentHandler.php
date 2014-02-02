@@ -23,6 +23,8 @@ use Behat\Testwork\Suite\Suite;
  *
  * Handles build and initialisation of context-based environments using registered context initializers.
  *
+ * @see ContextFactory
+ *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class ContextEnvironmentHandler implements EnvironmentHandler

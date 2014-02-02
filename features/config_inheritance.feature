@@ -13,8 +13,7 @@ Feature: Config inheritance
         suites:
           default:
             contexts:
-              - FeatureContext:
-                  param2: val2
+              - FeatureContext: [ { param2: val2 } ]
         extensions:
           custom_extension.php:
             param1: val2
@@ -23,8 +22,7 @@ Feature: Config inheritance
         suites:
           default:
             contexts:
-              - FeatureContext:
-                  param2: val2
+              - FeatureContext: [ { param2: val2 } ]
         extensions:
           custom_extension.php:
             param1: val2
@@ -35,9 +33,7 @@ Feature: Config inheritance
         suites:
           default:
             contexts:
-              - FeatureContext:
-                  param1: val1
-                  param2: val1
+              - FeatureContext: [ { param1: val1, param2: val1 } ]
         extensions:
           custom_extension.php:
             param1: val1
@@ -47,9 +43,7 @@ Feature: Config inheritance
         suites:
           default:
             contexts:
-              - FeatureContext:
-                  param1: val1
-                  param2: val1
+              - FeatureContext: [ { param1: val1, param2: val1 } ]
         extensions:
           custom_extension.php:
             param1: val1
