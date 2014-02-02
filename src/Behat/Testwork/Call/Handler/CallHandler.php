@@ -35,7 +35,7 @@ interface CallHandler
     public function supportsCall(Call $call);
 
     /**
-     * Handles call and returns either new call, call result or a null.
+     * Handles call and returns call result.
      *
      * @param Call $call
      *

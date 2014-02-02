@@ -50,10 +50,7 @@ class RuntimeCallHandler implements CallHandler
     }
 
     /**
-     * Handles call and returns either of:
-     * - Same Call object
-     * - New Call object
-     * - New CallResult object
+     * Handles call and returns call result.
      *
      * @param Call $call
      *
