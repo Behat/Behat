@@ -61,7 +61,6 @@ Feature: Config inheritance
           private $extension;
 
           public function __construct(array $parameters) {
-          var_dump($parameters);
               $this->parameters = $parameters;
           }
 
