@@ -18,7 +18,7 @@ Feature: Context consistency
           protected $apples = 0;
           protected $parameters;
 
-          public function __construct($parameter2, $parameter1) {
+          public function __construct($parameter2 = null, $parameter1 = null) {
               $this->parameters = array('parameter1' => $parameter1, 'parameter2' => $parameter2);
           }
 
