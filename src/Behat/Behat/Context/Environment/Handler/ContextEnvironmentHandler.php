@@ -10,16 +10,13 @@
 
 namespace Behat\Behat\Context\Environment\Handler;
 
-use Behat\Behat\Context\Argument\ArgumentResolver;
-use Behat\Behat\Context\Context;
 use Behat\Behat\Context\ContextClass\ClassResolver;
+use Behat\Behat\Context\ContextFactory;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Context\Environment\UninitializedContextEnvironment;
-use Behat\Behat\Context\Initializer\ContextInitializer;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\Handler\EnvironmentHandler;
 use Behat\Testwork\Suite\Suite;
-use ReflectionClass;
 
 /**
  * Context-based environment handler.
@@ -31,17 +28,23 @@ use ReflectionClass;
 class ContextEnvironmentHandler implements EnvironmentHandler
 {
     /**
+     * @var ContextFactory
+     */
+    private $factory;
+    /**
      * @var ClassResolver[]
      */
     private $classResolvers = array();
+
     /**
-     * @var ArgumentResolver[]
+     * Initializes handler.
+     *
+     * @param ContextFactory $factory
      */
-    private $argumentResolvers = array();
-    /**
-     * @var ContextInitializer[]
-     */
-    private $contextInitializers = array();
+    public function __construct(ContextFactory $factory)
+    {
+        $this->factory = $factory;
+    }
 
     /**
      * Registers context class resolver.
@@ -51,26 +54,6 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     public function registerClassResolver(ClassResolver $resolver)
     {
         $this->classResolvers[] = $resolver;
-    }
-
-    /**
-     * Registers context argument resolver.
-     *
-     * @param ArgumentResolver $resolver
-     */
-    public function registerArgumentResolver(ArgumentResolver $resolver)
-    {
-        $this->argumentResolvers[] = $resolver;
-    }
-
-    /**
-     * Registers context initializer.
-     *
-     * @param ContextInitializer $initializer
-     */
-    public function registerContextInitializer(ContextInitializer $initializer)
-    {
-        $this->contextInitializers[] = $initializer;
     }
 
     /**
@@ -96,10 +79,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     {
         $environment = new UninitializedContextEnvironment($suite);
         foreach ($this->getNormalizedContextSettings($suite) as $context) {
-            list($class, $arguments) = $context;
-
-            $class = $this->resolveClass($class);
-            $environment->registerContextClass($class, $arguments);
+            $environment->registerContextClass($this->resolveClass($context[0]), $context[1]);
         }
 
         return $environment;
@@ -130,72 +110,11 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     {
         $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
         foreach ($uninitializedEnvironment->getContextClassesWithArguments() as $class => $arguments) {
-            $context = $this->initializeContext($class, $arguments);
+            $context = $this->factory->createContext($class, $arguments);
             $environment->registerContext($context);
         }
 
         return $environment;
-    }
-
-    /**
-     * Resolves class using registered class resolvers.
-     *
-     * @param string $class
-     *
-     * @return string
-     */
-    final protected function resolveClass($class)
-    {
-        foreach ($this->classResolvers as $resolver) {
-            if ($resolver->supportsClass($class)) {
-                return $resolver->resolveClass($class);
-            }
-        }
-
-        return $class;
-    }
-
-    /**
-     * Initializes context class and returns new context instance.
-     *
-     * @param string $class
-     * @param array  $arguments
-     *
-     * @return Context
-     */
-    final protected function initializeContext($class, array $arguments)
-    {
-        $reflection = new ReflectionClass($class);
-        $arguments = $this->resolveClassArguments($reflection, $arguments);
-
-        if (count($arguments)) {
-            $context = $reflection->newInstance($arguments);
-        } else {
-            $context = $reflection->newInstance();
-        }
-
-        foreach ($this->contextInitializers as $initializer) {
-            $initializer->initializeContext($context);
-        }
-
-        return $context;
-    }
-
-    /**
-     * Resolves arguments for a specific class using registered argument resolvers.
-     *
-     * @param ReflectionClass $reflection
-     * @param array           $arguments
-     *
-     * @return mixed[]
-     */
-    final protected function resolveClassArguments($reflection, array $arguments)
-    {
-        foreach ($this->argumentResolvers as $resolver) {
-            $arguments = $resolver->resolveArguments($reflection, $arguments);
-        }
-
-        return $arguments;
     }
 
     /**
@@ -221,5 +140,23 @@ class ContextEnvironmentHandler implements EnvironmentHandler
             },
             $suite->getSetting('contexts')
         );
+    }
+
+    /**
+     * Resolves class using registered class resolvers.
+     *
+     * @param string $class
+     *
+     * @return string
+     */
+    private function resolveClass($class)
+    {
+        foreach ($this->classResolvers as $resolver) {
+            if ($resolver->supportsClass($class)) {
+                return $resolver->resolveClass($class);
+            }
+        }
+
+        return $class;
     }
 }
