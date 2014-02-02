@@ -19,6 +19,7 @@ use Behat\Behat\Context\Initializer\ContextInitializer;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\Handler\EnvironmentHandler;
 use Behat\Testwork\Suite\Suite;
+use ReflectionClass;
 
 /**
  * Context-based environment handler.
@@ -164,8 +165,14 @@ class ContextEnvironmentHandler implements EnvironmentHandler
      */
     final protected function initializeContext($class, array $arguments)
     {
-        $arguments = $this->resolveClassArguments($class, $arguments);
-        $context = new $class($arguments);
+        $reflection = new ReflectionClass($class);
+        $arguments = $this->resolveClassArguments($reflection, $arguments);
+
+        if (count($arguments)) {
+            $context = $reflection->newInstance($arguments);
+        } else {
+            $context = $reflection->newInstance();
+        }
 
         foreach ($this->contextInitializers as $initializer) {
             $initializer->initializeContext($context);
@@ -177,15 +184,15 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Resolves arguments for a specific class using registered argument resolvers.
      *
-     * @param string $class
-     * @param array  $arguments
+     * @param ReflectionClass $reflection
+     * @param array           $arguments
      *
      * @return mixed[]
      */
-    final protected function resolveClassArguments($class, array $arguments)
+    final protected function resolveClassArguments($reflection, array $arguments)
     {
         foreach ($this->argumentResolvers as $resolver) {
-            $arguments = $resolver->resolveArguments($class, $arguments);
+            $arguments = $resolver->resolveArguments($reflection, $arguments);
         }
 
         return $arguments;
