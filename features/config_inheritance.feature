@@ -10,17 +10,19 @@ Feature: Config inheritance
         - behat.yml.dist
 
       default:
-        contexts:
-          FeatureContext:
-            param2: val2
+        suites:
+          default:
+            contexts:
+              - FeatureContext: [ { param2: val2 } ]
         extensions:
           custom_extension.php:
             param1: val2
 
       custom_profile:
-        contexts:
-          FeatureContext:
-            param2: val2
+        suites:
+          default:
+            contexts:
+              - FeatureContext: [ { param2: val2 } ]
         extensions:
           custom_extension.php:
             param1: val2
@@ -28,20 +30,20 @@ Feature: Config inheritance
     Given a file named "behat.yml.dist" with:
       """
       default:
-        contexts:
-          FeatureContext:
-            param1: val1
-            param2: val1
+        suites:
+          default:
+            contexts:
+              - FeatureContext: [ { param1: val1, param2: val1 } ]
         extensions:
           custom_extension.php:
             param1: val1
             param2: val1
 
       custom_profile:
-        contexts:
-          FeatureContext:
-            param1: val1
-            param2: val1
+        suites:
+          default:
+            contexts:
+              - FeatureContext: [ { param1: val1, param2: val1 } ]
         extensions:
           custom_extension.php:
             param1: val1

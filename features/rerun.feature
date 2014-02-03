@@ -15,7 +15,7 @@ Feature: Rerun
           private $apples = 0;
           private $parameters;
 
-          public function __construct(array $parameters) {
+          public function __construct(array $parameters = array()) {
               $this->parameters = $parameters;
           }
 

@@ -34,6 +34,11 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class ContextExtension implements Extension
 {
+    /**
+     * Available services
+     */
+    const FACTORY_ID = 'context.factory';
+
     /*
      * Available extension points
      */
@@ -79,7 +84,6 @@ class ContextExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder->useAttributeAsKey('name')->prototype('variable');
     }
 
     /**
@@ -87,7 +91,8 @@ class ContextExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadEnvironmentHandler($container, $config);
+        $this->loadFactory($container);
+        $this->loadEnvironmentHandler($container);
         $this->loadEnvironmentReader($container);
         $this->loadSuiteSetup($container);
         $this->loadSnippetAppender($container);
@@ -110,20 +115,27 @@ class ContextExtension implements Extension
     }
 
     /**
+     * Loads context factory.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadFactory(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Context\ContextFactory');
+        $container->setDefinition(self::FACTORY_ID, $definition);
+    }
+
+    /**
      * Loads context environment handlers.
      *
      * @param ContainerBuilder $container
-     * @param mixed[string]    $contexts
      */
-    protected function loadEnvironmentHandler(ContainerBuilder $container, array $contexts)
+    protected function loadEnvironmentHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler');
+        $definition = new Definition('Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler', array(
+            new Reference(self::FACTORY_ID)
+        ));
         $definition->addTag(EnvironmentExtension::HANDLER_TAG, array('priority' => 50));
-
-        foreach ($contexts as $class => $arguments) {
-            $definition->addMethodCall('setContextArguments', array($class, $arguments));
-        }
-
         $container->setDefinition(self::getEnvironmentHandlerId(), $definition);
     }
 
@@ -235,7 +247,7 @@ class ContextExtension implements Extension
     protected function processArgumentResolvers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ARGUMENT_RESOLVER_TAG);
-        $definition = $container->getDefinition(self::getEnvironmentHandlerId());
+        $definition = $container->getDefinition(self::FACTORY_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerArgumentResolver', array($reference));
@@ -250,7 +262,7 @@ class ContextExtension implements Extension
     protected function processContextInitializers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::INITIALIZER_TAG);
-        $definition = $container->getDefinition(self::getEnvironmentHandlerId());
+        $definition = $container->getDefinition(self::FACTORY_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerContextInitializer', array($reference));

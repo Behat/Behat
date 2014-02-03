@@ -18,8 +18,8 @@ Feature: Context consistency
           protected $apples = 0;
           protected $parameters;
 
-          public function __construct(array $parameters) {
-              $this->parameters = $parameters;
+          public function __construct($parameter2 = null, $parameter1 = null) {
+              $this->parameters = array('parameter1' => $parameter1, 'parameter2' => $parameter2);
           }
 
           /**
@@ -186,12 +186,14 @@ Feature: Context consistency
     Given a file named "behat.yml" with:
       """
       default:
-        contexts:
-          FeatureContext:
-            parameter1: val_one
-            parameter2:
-              everzet: behat_admin
-              avalanche123: behat_admin
+        suites:
+          default:
+            contexts:
+              - FeatureContext:
+                  parameter1: val_one
+                  parameter2:
+                    everzet: behat_admin
+                    avalanche123: behat_admin
       """
     And a file named "features/params.feature" with:
       """

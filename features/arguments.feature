@@ -18,7 +18,7 @@ Feature: Step Arguments
           private $strings = array();
           private $tables = array();
 
-          public function __construct(array $parameters) {
+          public function __construct() {
               $this->strings[1] = "hello,\n  w\n   o\nr\nl\n   d";
               $this->tables[1]  = array(
                 array('item1' => 'super', 'item2' => 'mega', 'item3' => 'extra'),

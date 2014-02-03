@@ -14,12 +14,6 @@ Feature: Support php 5.4 traits
       class FeatureContext implements Context
       {
           use ApplesDefinitions;
-
-          private $parameters;
-
-          public function __construct(array $parameters) {
-              $this->parameters = $parameters;
-          }
       }
       """
     And a file named "features/bootstrap/ApplesDefinitions.php" with:

@@ -34,12 +34,13 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
     /**
      * Registers context class.
      *
-     * @param string $contextClass
+     * @param string     $contextClass
+     * @param null|array $arguments
      *
      * @throws ContextNotFoundException If class does not exist
      * @throws WrongContextClassException if class does not implement Context interface
      */
-    public function registerContextClass($contextClass)
+    public function registerContextClass($contextClass, array $arguments = null)
     {
         if (!class_exists($contextClass)) {
             throw new ContextNotFoundException(sprintf(
@@ -55,7 +56,7 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
             ), $contextClass);
         }
 
-        $this->contextClasses[$contextClass] = true;
+        $this->contextClasses[$contextClass] = $arguments ? : array();
     }
 
     /**
@@ -76,6 +77,16 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
     public function getContextClasses()
     {
         return array_keys($this->contextClasses);
+    }
+
+    /**
+     * Returns context classes with their arguments.
+     *
+     * @return string[]
+     */
+    public function getContextClassesWithArguments()
+    {
+        return $this->contextClasses;
     }
 
     /**
