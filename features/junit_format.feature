@@ -193,99 +193,139 @@ Feature: JUnit Formatter
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Multiple suites
-    Given a file named "features/bootstrap/FeatureContext.php" with:
+    Given a file named "features/bootstrap/SmallKidContext.php" with:
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext;
+      use Behat\Behat\Context\CustomSnippetAcceptingContext;
 
-      class FeatureContext implements RegexAcceptingContext
+      class SmallKidContext implements CustomSnippetAcceptingContext
       {
-          private $value;
+          protected $strongLevel;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
-           * @Given /I have entered (\d+)/
+           * @Given I am not strong
            */
-          public function iHaveEntered($num) {
-              $this->value = $num;
+          public function iAmNotStrong() {
+              $this->strongLevel = 0;
           }
 
           /**
-           * @Then /I must have (\d+)/
+           * @When /I eat an apple/
            */
-          public function iMustHave($num) {
-              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
+          public function iEatAnApple() {
+              $this->strongLevel += 2;
           }
 
           /**
-           * @When /I add (\d+)/
+           * @Then /I will be stronger/
            */
-          public function iAdd($num) {
-              $this->value += $num;
+          public function iWillBeStronger() {
+              PHPUnit_Framework_Assert::assertNotEquals(0, $this->strongLevel);
           }
       }
       """
-    And a file named "features/World.feature" with:
+    And a file named "features/bootstrap/OldManContext.php" with:
+    """
+      <?php
+
+      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+
+      class OldManContext implements CustomSnippetAcceptingContext
+      {
+          protected $strongLevel;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
+
+          /**
+           * @Given I am not strong
+           */
+          public function iAmNotStrong() {
+              $this->strongLevel = 0;
+          }
+
+          /**
+           * @When /I eat an apple/
+           */
+          public function iEatAnApple() { }
+
+          /**
+           * @Then /I will be stronger/
+           */
+          public function iWillBeStronger() {
+              PHPUnit_Framework_Assert::assertNotEquals(0, $this->strongLevel);
+          }
+      }
       """
-      Feature: World consistency
-        In order to maintain stable behaviors
-        As a features developer
-        I want, that "World" flushes between scenarios
+    And a file named "features/apple_eating_smallkid.feature" with:
+      """
+      Feature: Apple Eating
+        In order to be stronger
+        As a small kid
+        I want to get stronger from eating apples
 
         Background:
-          Given I have entered 10
+          Given I am not strong
 
-        Scenario: Passing
-          When I add 10
-          Then I must have 20
+        Scenario: Eating one apple
+          When I eat an apple
+          Then I will be stronger
       """
-    And a file named "features/User.feature" with:
-      """
-      Feature: User consistency
-        In order to maintain stable behaviors
-        As a features developer
-        I want, that "World" flushes between scenarios
+    And a file named "features/apple_eating_oldmen.feature" with:
+    """
+      Feature: Apple Eating
+        In order to be stronger
+        As an old man
+        I want to get stronger from eating apples
 
         Background:
-          Given I have entered 10
+          Given I am not strong
 
-        Scenario: Passing
-          When I add 20
-          Then I must have 30
+        Scenario: Eating one apple
+          When I eat an apple
+          Then I will be stronger
       """
     And a file named "behat.yml" with:
       """
       default:
           suites:
-              world:
-                  context: FeatureContext
-                  path: %paths.base%/features/World.feature
-              user:
-                  context: FeatureContext
-                  path: %paths.base%/features/User.feature
+              small_kid:
+                  contexts: [SmallKidContext]
+                  filters:
+                    role: small kid
+                  path: %paths.base%/features
+              old_man:
+                  contexts: [OldManContext]
+                  path: %paths.base%/features
+                  filters:
+                    role: old man
       """
     When I run "behat --no-colors -f junit -o junit"
-    Then it should pass with no output
-    And "junit/world.xml" file should contain:
+    Then it should fail with no output
+    And "junit/small_kid.xml" file should contain:
       """
       <?xml version="1.0"?>
-      <testsuites name="world">
-        <testsuite name="World consistency" tests="1" failures="0" errors="0">
-          <testcase name="Passing" assertions="3" status="PASSED"/>
+      <testsuites name="small_kid">
+        <testsuite name="Apple Eating" tests="1" failures="0" errors="0">
+          <testcase name="Eating one apple" assertions="3" status="PASSED"/>
         </testsuite>
       </testsuites>
       """
-    And the file "junit/world.xml" should be a valid document according to "junit.xsd"
-    And "junit/user.xml" file should contain:
+    And the file "junit/small_kid.xml" should be a valid document according to "junit.xsd"
+    And "junit/old_man.xml" file should contain:
       """
       <?xml version="1.0"?>
-      <testsuites name="user">
-        <testsuite name="User consistency" tests="1" failures="0" errors="0">
-          <testcase name="Passing" assertions="3" status="PASSED"/>
+      <testsuites name="old_man">
+        <testsuite name="Apple Eating" tests="1" failures="1" errors="0">
+          <testcase name="Eating one apple" assertions="3" status="FAILED">
+            <failure message="Then I will be stronger: Failed asserting that 0 is not equal to 0."/>
+          </testcase>
         </testsuite>
       </testsuites>
       """
-    And the file "junit/user.xml" should be a valid document according to "junit.xsd"
+    And the file "junit/old_man.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Output in hooks and steps
     Given a file named "features/bootstrap/FeatureContext.php" with:

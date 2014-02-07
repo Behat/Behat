@@ -193,7 +193,7 @@ class JUnitFormatter implements Formatter
                 $content = $step->getType().' '.$step->getText().': ';
 
                 $callResult = $event->getTestResult()->getCallResult();
-                if ($callResult->hasException()) {
+                if (null !== $callResult && $callResult->hasException()) {
                     $content .= $this->exceptionPresenter->presentException($callResult->getException());
                 }
                 $failure = $this->currentTestcase->addChild('failure');
