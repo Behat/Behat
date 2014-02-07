@@ -17,6 +17,7 @@ use Behat\Behat\Tester\Event\FeatureTested;
 use Behat\Behat\Tester\Event\OutlineTested;
 use Behat\Behat\Tester\Event\ScenarioTested;
 use Behat\Behat\Tester\Event\BackgroundTested;
+use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Hook\Event\LifecycleEvent;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Event\SuiteTested;
@@ -100,6 +101,7 @@ class JUnitFormatter implements Formatter
             FeatureTested::AFTER    => array('writeTestsuite', -50),
             ScenarioTested::BEFORE  => array('startScenario', -50),
             ScenarioTested::AFTER   => array('writeTestcase', -50),
+            StepTested::BEFORE      => array('startStep', -50),
             StepTested::AFTER       => array('writeStep', -50),
             OutlineTested::BEFORE   => array('startOutline', -50),
             ExampleTested::BEFORE   => array('startExample', -50),
@@ -122,6 +124,8 @@ class JUnitFormatter implements Formatter
         $this->currentTestsuite = $testsuite = $this->xml->addChild('testsuite');
         $testsuite->addAttribute('name', $feature->getTitle());
 
+        $this->createSystemOut($event->getHookCallResults(), $testsuite);
+
         $this->testsuiteStats = array(
             'PASSED' => 0,
             'UNDEFINED' => 0,
@@ -138,6 +142,8 @@ class JUnitFormatter implements Formatter
 
     public function startScenario(ScenarioTested $event)
     {
+        $this->createSystemOut($event->getHookCallResults(), $this->currentTestsuite);
+
         $title = implode(' ', array_map(function ($l) {
             return trim($l);
         }, explode("\n", $event->getScenario()->getTitle())));
@@ -147,13 +153,22 @@ class JUnitFormatter implements Formatter
 
     public function startExample(ExampleTested $event)
     {
+        $this->createSystemOut($event->getHookCallResults(), $this->currentTestsuite);
+
         $this->exampleIndex++;
 
         $this->createTestcase($this->outlineName.' #'.$this->exampleIndex);
     }
 
+    public function startStep(StepTested $event)
+    {
+        $this->createSystemOut($event->getHookCallResults(), $this->currentTestcase);
+    }
+
     public function writeStep(StepTested $event)
     {
+        $this->createSystemOut($event->getHookCallResults(), $this->currentTestcase);
+
         $this->testcaseStats[$event->getResultCode()]++;
         $step = $event->getStep();
 
@@ -185,6 +200,9 @@ class JUnitFormatter implements Formatter
                 $failure->addAttribute('message', $content);
                 break;
         }
+
+        $this->createSystemOut(new CallResults(array($event->getTestResult()->getCallResult())), $this->currentTestcase);
+        
     }
 
     public function writeTestcase(LifecycleEvent $event)
@@ -199,6 +217,8 @@ class JUnitFormatter implements Formatter
 
     public function writeTestsuite(FeatureTested $event)
     {
+        $this->createSystemOut($event->getHookCallResults(), $this->currentTestsuite);
+
         $testResult = $event->getTestResult();
 
         $testsuite = $this->currentTestsuite;
@@ -271,6 +291,31 @@ class JUnitFormatter implements Formatter
             TestResult::UNDEFINED => 0,
             TestResult::FAILED    => 0,
         );
+    }
+
+    protected function createSystemOut(CallResults $hookCallResults, \SimpleXmlElement $node)
+    {
+        if (!$hookCallResults->hasStdOuts() && !$hookCallResults->hasExceptions()) {
+            return;
+        }
+
+        foreach ($hookCallResults as $callResult) {
+            if (!$callResult->hasStdOut() && !$callResult->hasException()) {
+                continue;
+            }
+
+            $resultCode = $callResult->hasException();
+            $hook = $callResult->getCall()->getCallee();
+
+            if ($callResult->hasStdOut()) {
+                $node->addChild('system-out', $callResult->getStdOut());
+            }
+
+            if ($callResult->hasException()) {
+                $exception = $this->exceptionPresenter->presentException($callResult->getException());
+                $node->addChild('system-out', $exception);
+            }
+        }
     }
 
     private function sluggifyName($name)

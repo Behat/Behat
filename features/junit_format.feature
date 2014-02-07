@@ -368,7 +368,7 @@ Feature: JUnit Formatter
       <?xml version="1.0"?>
       <testsuites name="default">
         <testsuite name="World consistency" tests="2" failures="0" errors="0">
-          <system-out>output from beforeFeature hook!</system-out>
+          <system-out>output from hook!</system-out>
           <system-out>output from another hook!</system-out>
           <testcase name="Adding some interesting value" assertions="3" status="PASSED"/>
           <system-out>output from another hook!</system-out>
