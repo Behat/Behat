@@ -8,12 +8,14 @@ Feature: JUnit Formatter
       """
       <?php
 
-      use Behat\Behat\Context\RegexAcceptingContext,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
 
-      class FeatureContext implements RegexAcceptingContext
+      class FeatureContext implements CustomSnippetAcceptingContext
       {
           private $value;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given /I have entered (\d+)/
@@ -290,11 +292,13 @@ Feature: JUnit Formatter
       """
       <?php
 
-      use Behat\Behat\Context\Context;
+      use Behat\Behat\Context\CustomSnippetAcceptingContext;
 
-      class FeatureContext implements Context
+      class FeatureContext implements CustomSnippetAcceptingContext
       {
           private $value;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @BeforeFeature
