@@ -266,12 +266,12 @@ class FeatureContext implements Context
      * @param string $xmlFile
      * @param string $schemaPath relative to features/bootstrap/schema
      */
-    public function itShouldBeValid($xmlFile, $schemaPath)
+    public function xmlShouldBeValid($xmlFile, $schemaPath)
     {
         $dom = new DomDocument();
-        $dom->load($xmlFile);
+        $dom->load($this->workingDir . '/' . $xmlFile);
 
-        $dom->schemaValidate(__DIR__.'/schema/'.$schemaPath);
+        $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);
     }
 
     private function getExitCode()
