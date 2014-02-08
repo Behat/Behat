@@ -12,7 +12,7 @@ namespace Behat\Testwork\Tester;
 
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
-use Behat\Testwork\Subject\SubjectIterator;
+use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\SuiteTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
@@ -20,7 +20,7 @@ use Behat\Testwork\Tester\Result\TestResults;
 /**
  * Testwork suite tester.
  *
- * Tests provided suites. Suite is a named set of test subjects.
+ * Tests provided suites. Suite is a named set of test specifications.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -48,35 +48,35 @@ class SuiteTester
     }
 
     /**
-     * Tests provided suite subjects.
+     * Tests provided suite specifications.
      *
-     * @param SubjectIterator $subjectIterator
-     * @param Boolean         $skip
+     * @param SpecificationIterator $specificationIterator
+     * @param Boolean               $skip
      *
      * @return TestResult
      */
-    public function test(SubjectIterator $subjectIterator, $skip = false)
+    public function test(SpecificationIterator $specificationIterator, $skip = false)
     {
-        $environment = $this->environmentManager->buildEnvironment($subjectIterator->getSuite());
-        $result = $this->testSuite($environment, $subjectIterator, $skip);
+        $environment = $this->environmentManager->buildEnvironment($specificationIterator->getSuite());
+        $result = $this->testSuite($environment, $specificationIterator, $skip);
 
         return new TestResult($result->getResultCode());
     }
 
     /**
-     * Tests provided test subjects against provided environment.
+     * Tests provided test specifications against provided environment.
      *
-     * @param Environment     $environment
-     * @param SubjectIterator $iterator
-     * @param Boolean         $skip
+     * @param Environment           $environment
+     * @param SpecificationIterator $iterator
+     * @param Boolean               $skip
      *
      * @return SuiteTestResult
      */
-    protected function testSuite(Environment $environment, SubjectIterator $iterator, $skip = false)
+    protected function testSuite(Environment $environment, SpecificationIterator $iterator, $skip = false)
     {
         $results = array();
-        foreach ($iterator as $subject) {
-            $results[] = $this->specificationTester->test($environment, $subject, $skip);
+        foreach ($iterator as $specification) {
+            $results[] = $this->specificationTester->test($environment, $specification, $skip);
         }
 
         return new SuiteTestResult(new TestResults($results));

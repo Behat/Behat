@@ -8,25 +8,25 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Subject;
+namespace Behat\Testwork\Specification;
 
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork grouped subject iterator.
+ * Testwork grouped specification iterator.
  *
- * Iterates over subject iterators grouped by their suite.
+ * Iterates over specification iterators grouped by their suite.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GroupedSubjectIterator implements SubjectIterator
+class GroupedSpecificationIterator implements SpecificationIterator
 {
     /**
      * @var Suite
      */
     private $suite;
     /**
-     * @var SubjectIterator[]
+     * @var SpecificationIterator[]
      */
     private $iterators;
     /**
@@ -35,40 +35,41 @@ class GroupedSubjectIterator implements SubjectIterator
     private $position = 0;
 
     /**
-     * Initializes subjects.
+     * Initializes iterator.
      *
-     * @param Suite             $suite
-     * @param SubjectIterator[] $subjectIterators
+     * @param Suite                   $suite
+     * @param SpecificationIterator[] $specificationIterators
      */
-    public function __construct(Suite $suite, array $subjectIterators)
+    public function __construct(Suite $suite, array $specificationIterators)
     {
         $this->suite = $suite;
-        $this->iterators = $subjectIterators;
+        $this->iterators = $specificationIterators;
     }
 
     /**
-     * Groups subjects by their suite.
+     * Groups specifications by their suite.
      *
-     * @param SubjectIterator[] $subjectIterators
+     * @param SpecificationIterator[] $specificationIterators
      *
-     * @return GroupedSubjectIterator[]
+     * @return GroupedSpecificationIterator[]
      */
-    public static function group(array $subjectIterators)
+    public static function group(array $specificationIterators)
     {
-        $groupedSubjects = array();
-        foreach ($subjectIterators as $subjectIterator) {
-            $groupedSubjects[$subjectIterator->getSuite()->getName()][] = $subjectIterator;
+        $groupedSpecifications = array();
+        foreach ($specificationIterators as $specificationIterator) {
+            $groupedSpecifications[$specificationIterator->getSuite()->getName()][] = $specificationIterator;
         }
 
         return array_map(
             function ($iterator) {
-                return new GroupedSubjectIterator($iterator[0]->getSuite(), $iterator);
-            }, $groupedSubjects
+                return new GroupedSpecificationIterator($iterator[0]->getSuite(), $iterator);
+            },
+            $groupedSpecifications
         );
     }
 
     /**
-     * Returns suite that was used to load subjects.
+     * Returns suite that was used to load specifications.
      *
      * @return Suite
      */

@@ -20,26 +20,26 @@ class SuiteTestResult extends TestResult
     /**
      * @var TestResults
      */
-    private $subjectTestResults;
+    private $specificationTestResults;
 
     /**
      * Initializes test result.
      *
-     * @param TestResults $subjectTestResults
+     * @param TestResults $specificationTestResults
      */
-    public function __construct(TestResults $subjectTestResults)
+    public function __construct(TestResults $specificationTestResults)
     {
-        $this->subjectTestResults = $subjectTestResults;
+        $this->specificationTestResults = $specificationTestResults;
     }
 
     /**
-     * Returns all suite subjects tests results.
+     * Returns all suite specification tests results.
      *
      * @return TestResults
      */
-    public function getSubjectTestResults()
+    public function getSpecificationTestResults()
     {
-        return $this->subjectTestResults;
+        return $this->specificationTestResults;
     }
 
     /**
@@ -49,6 +49,6 @@ class SuiteTestResult extends TestResult
      */
     public function getResultCode()
     {
-        return $this->subjectTestResults->getResultCode();
+        return $this->specificationTestResults->getResultCode();
     }
 }

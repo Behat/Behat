@@ -13,7 +13,7 @@ namespace Behat\Testwork\Tester;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\HookDispatcher;
-use Behat\Testwork\Subject\SubjectIterator;
+use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Event\SuiteTested;
 use Behat\Testwork\Tester\Result\HookedSuiteTestResult;
 use Behat\Testwork\Tester\Result\SuiteTestResult;
@@ -60,7 +60,7 @@ class HookableSuiteTester extends SuiteTester
     /**
      * {@inheritdoc}
      */
-    protected function testSuite(Environment $environment, SubjectIterator $iterator, $skip = false)
+    protected function testSuite(Environment $environment, SpecificationIterator $iterator, $skip = false)
     {
         $beforeHooks = (!$skip && $this->hookDispatcher)
             ? $this->dispatchBeforeHooks($environment)
@@ -74,7 +74,7 @@ class HookableSuiteTester extends SuiteTester
             ? $this->dispatchAfterHooks($environment, $result)
             : new CallResults();
         $result = new HookedSuiteTestResult(
-            $result->getSubjectTestResults(),
+            $result->getSpecificationTestResults(),
             CallResults::merge($beforeHooks, $afterHooks)
         );
         $this->eventDispatcher and $this->dispatchAfterEvent($environment, $result, $afterHooks);

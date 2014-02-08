@@ -10,8 +10,8 @@
 
 namespace Behat\Testwork\Tester;
 
-use Behat\Testwork\Subject\GroupedSubjectIterator;
-use Behat\Testwork\Subject\SubjectIterator;
+use Behat\Testwork\Specification\GroupedSpecificationIterator;
+use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\ExerciseTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
@@ -43,8 +43,8 @@ class Exercise
     /**
      * Tests suites subjects.
      *
-     * @param SubjectIterator[] $subjectIterators
-     * @param Boolean           $skip
+     * @param SpecificationIterator[] $subjectIterators
+     * @param Boolean                 $skip
      *
      * @return TestResult
      */
@@ -58,15 +58,15 @@ class Exercise
     /**
      * Tests provided suites.
      *
-     * @param SubjectIterator[] $subjectIterators
-     * @param Boolean           $skip
+     * @param SpecificationIterator[] $subjectIterators
+     * @param Boolean                 $skip
      *
      * @return ExerciseTestResult
      */
     protected function runExercise(array $subjectIterators, $skip = false)
     {
         $results = array();
-        foreach (GroupedSubjectIterator::group($subjectIterators) as $subjectIterator) {
+        foreach (GroupedSpecificationIterator::group($subjectIterators) as $subjectIterator) {
             $results[] = $this->suiteTester->test($subjectIterator, $skip);
         }
 

@@ -8,29 +8,36 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Subject;
+namespace Behat\Testwork\Specification;
 
 use ArrayIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork array subject iterator.
+ * Testwork specification array iterator.
  *
- * Return instance of this class from locator if subjects cannot be searched lazily
+ * Return instance of this class from locator if specifications cannot be searched lazily.
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-class ArraySubjectIterator extends ArrayIterator implements SubjectIterator
+class SpecificationArrayIterator extends ArrayIterator implements SpecificationIterator
 {
     /**
      * @var Suite
      */
     private $suite;
 
-    public function __construct(Suite $suite, $array = array())
+    /**
+     * Initializes iterator.
+     *
+     * @param Suite   $suite
+     * @param mixed[] $specifications
+     */
+    public function __construct(Suite $suite, $specifications = array())
     {
         $this->suite = $suite;
-        parent::__construct($array);
+
+        parent::__construct($specifications);
     }
 
     /**

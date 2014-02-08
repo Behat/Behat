@@ -16,7 +16,7 @@ use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
-use Behat\Testwork\Subject\ServiceContainer\SubjectExtension;
+use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 use Behat\Testwork\Tester\ServiceContainer\TesterExtension as BaseExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -63,7 +63,7 @@ class TesterExtension extends BaseExtension
     {
         $definition = new Definition('Behat\Behat\Tester\Cli\ExerciseController', array(
             new Reference(SuiteExtension::REGISTRY_ID),
-            new Reference(SubjectExtension::FINDER_ID),
+            new Reference(SpecificationExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
             $strict,
             $skip
@@ -73,11 +73,11 @@ class TesterExtension extends BaseExtension
     }
 
     /**
-     * Loads subject tester.
+     * Loads specification tester.
      *
      * @param ContainerBuilder $container
      */
-    protected function loadSubjectTester(ContainerBuilder $container)
+    protected function loadSpecificationTester(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Tester\HookableFeatureTester', array(
             new Reference(self::SCENARIO_TESTER_ID),

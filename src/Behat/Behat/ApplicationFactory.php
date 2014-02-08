@@ -29,7 +29,7 @@ use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
-use Behat\Testwork\Subject\ServiceContainer\SubjectExtension;
+use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 
 /**
@@ -76,11 +76,10 @@ class ApplicationFactory extends BaseFactory
             new CallExtension($processor),
             new SuiteExtension($processor),
             new EnvironmentExtension($processor),
-            new SubjectExtension($processor),
+            new SpecificationExtension($processor),
             new EventDispatcherExtension($processor),
             new FilesystemExtension($processor),
             new ExceptionExtension($processor),
-
             // Behat extensions
             new AutoloaderExtension($processor),
             new TranslatorExtension($processor),

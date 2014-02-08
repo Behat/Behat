@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Subject\ServiceContainer;
+namespace Behat\Testwork\Specification\ServiceContainer;
 
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
@@ -18,23 +18,23 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * Testwork subject extension.
+ * Testwork specification extension.
  *
- * Extends testwork with test subject services.
+ * Extends testwork with test specification services.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SubjectExtension implements Extension
+class SpecificationExtension implements Extension
 {
     /*
      * Available services
      */
-    const FINDER_ID = 'subject.finder';
+    const FINDER_ID = 'specifications.finder';
 
     /*
      * Available extension points
      */
-    const LOCATOR_TAG = 'subject.locator';
+    const LOCATOR_TAG = 'specifications.locator';
 
     /**
      * @var ServiceProcessor
@@ -48,7 +48,7 @@ class SubjectExtension implements Extension
      */
     public function __construct(ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ?: new ServiceProcessor();
+        $this->processor = $processor ? : new ServiceProcessor();
     }
 
     /**
@@ -56,7 +56,7 @@ class SubjectExtension implements Extension
      */
     public function getConfigKey()
     {
-        return 'subjects';
+        return 'specifications';
     }
 
     /**
@@ -90,18 +90,18 @@ class SubjectExtension implements Extension
     }
 
     /**
-     * Loads subject finder.
+     * Loads specification finder.
      *
      * @param ContainerBuilder $container
      */
     protected function loadFinder(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Subject\SubjectFinder');
+        $definition = new Definition('Behat\Testwork\Specification\SpecificationFinder');
         $container->setDefinition(self::FINDER_ID, $definition);
     }
 
     /**
-     * Processes subject locators.
+     * Processes specification locators.
      *
      * @param ContainerBuilder $container
      */
@@ -111,7 +111,7 @@ class SubjectExtension implements Extension
         $definition = $container->getDefinition(self::FINDER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerSubjectLocator', array($reference));
+            $definition->addMethodCall('registerSpecificationLocator', array($reference));
         }
     }
 }

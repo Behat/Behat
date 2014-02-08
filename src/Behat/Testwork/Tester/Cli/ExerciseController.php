@@ -11,8 +11,8 @@
 namespace Behat\Testwork\Tester\Cli;
 
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Subject\SubjectFinder;
-use Behat\Testwork\Subject\SubjectIterator;
+use Behat\Testwork\Specification\SpecificationFinder;
+use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Suite\SuiteRepository;
 use Behat\Testwork\Tester\Exercise;
@@ -35,9 +35,9 @@ class ExerciseController implements Controller
      */
     private $suiteRepository;
     /**
-     * @var SubjectFinder
+     * @var SpecificationFinder
      */
-    private $subjectFinder;
+    private $specificationFinder;
     /**
      * @var Exercise
      */
@@ -54,21 +54,21 @@ class ExerciseController implements Controller
     /**
      * Initializes controller.
      *
-     * @param SuiteRepository $suiteRepository
-     * @param SubjectFinder   $subjectFinder
-     * @param Exercise        $exercise
-     * @param Boolean         $strict
-     * @param Boolean         $skip
+     * @param SuiteRepository     $suiteRepository
+     * @param SpecificationFinder $specificationFinder
+     * @param Exercise            $exercise
+     * @param Boolean             $strict
+     * @param Boolean             $skip
      */
     public function __construct(
         SuiteRepository $suiteRepository,
-        SubjectFinder $subjectFinder,
+        SpecificationFinder $specificationFinder,
         Exercise $exercise,
         $strict = false,
         $skip = false
     ) {
         $this->suiteRepository = $suiteRepository;
-        $this->subjectFinder = $subjectFinder;
+        $this->specificationFinder = $specificationFinder;
         $this->exercise = $exercise;
         $this->strict = $strict;
         $this->skip = $skip;
@@ -83,15 +83,20 @@ class ExerciseController implements Controller
     {
         $command
             ->addArgument(
-                'locator', InputArgument::OPTIONAL,
+                'locator',
+                InputArgument::OPTIONAL,
                 'Optional path to a specific test.'
             )
             ->addOption(
-                '--strict', null, InputOption::VALUE_NONE,
+                '--strict',
+                null,
+                InputOption::VALUE_NONE,
                 'Passes only if all tests are explicitly passing.'
             )
             ->addOption(
-                '--dry-run', null, InputOption::VALUE_NONE,
+                '--dry-run',
+                null,
+                InputOption::VALUE_NONE,
                 'Invokes formatters without executing the steps & hooks.'
             );
     }
@@ -106,35 +111,35 @@ class ExerciseController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $subjects = $this->findSubjects($input);
-        $result = $this->testSubjects($input, $subjects);
+        $specs = $this->findSpecifications($input);
+        $result = $this->testSpecifications($input, $specs);
 
         return $this->interpretResult($input, $result);
     }
 
     /**
-     * Finds exercise subject.
+     * Finds exercise specifications.
      *
      * @param InputInterface $input
      *
-     * @return SubjectIterator[]
+     * @return SpecificationIterator[]
      */
-    protected function findSubjects(InputInterface $input)
+    protected function findSpecifications(InputInterface $input)
     {
-        return $this->findSuitesSubjects($this->getAvailableSuites(), $input->getArgument('locator'));
+        return $this->findSuitesSpecifications($this->getAvailableSuites(), $input->getArgument('locator'));
     }
 
     /**
-     * Tests exercise subjects.
+     * Tests exercise specifications.
      *
-     * @param InputInterface    $input
-     * @param SubjectIterator[] $subjects
+     * @param InputInterface          $input
+     * @param SpecificationIterator[] $specifications
      *
      * @return TestResult
      */
-    protected function testSubjects(InputInterface $input, $subjects)
+    protected function testSpecifications(InputInterface $input, array $specifications)
     {
-        return $this->exercise->run($subjects, $input->getOption('dry-run') || $this->skip);
+        return $this->exercise->run($specifications, $input->getOption('dry-run') || $this->skip);
     }
 
     /**
@@ -165,15 +170,15 @@ class ExerciseController implements Controller
     }
 
     /**
-     * Finds subject iterators for all provided suites using locator.
+     * Finds specification iterators for all provided suites using locator.
      *
      * @param Suite[]     $suites
      * @param null|string $locator
      *
-     * @return SubjectIterator[]
+     * @return SpecificationIterator[]
      */
-    protected function findSuitesSubjects($suites, $locator)
+    protected function findSuitesSpecifications($suites, $locator)
     {
-        return $this->subjectFinder->findSuitesSubjects($suites, $locator);
+        return $this->specificationFinder->findSuitesSpecifications($suites, $locator);
     }
 }
