@@ -20,16 +20,16 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface SubjectTester
+interface SpecificationTester
 {
     /**
      * Tests provided subject.
      *
      * @param Environment $environment
-     * @param mixed       $testSubject
+     * @param mixed       $specification
      * @param Boolean     $skip
      *
      * @return TestResult
      */
-    public function test(Environment $environment, $testSubject, $skip = false);
+    public function test(Environment $environment, $specification, $skip = false);
 }

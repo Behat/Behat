@@ -37,7 +37,7 @@ abstract class TesterExtension implements Extension
      */
     const EXERCISE_ID = 'tester.exercise';
     const SUITE_TESTER_ID = 'tester.suite';
-    const SUBJECT_TESTER_ID = 'tester.subject';
+    const SPECIFICATION_TESTER = 'tester.specification';
 
     /**
      * {@inheritdoc}
@@ -149,7 +149,7 @@ abstract class TesterExtension implements Extension
     protected function loadSuiteTester(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Tester\HookableSuiteTester', array(
-            new Reference(self::SUBJECT_TESTER_ID),
+            new Reference(self::SPECIFICATION_TESTER),
             new Reference(EnvironmentExtension::MANAGER_ID)
         ));
         $definition->addMethodCall(

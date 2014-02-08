@@ -91,7 +91,7 @@ class TesterExtension extends BaseExtension
             'setEventDispatcher',
             array(new Reference(EventDispatcherExtension::DISPATCHER_ID))
         );
-        $container->setDefinition(self::SUBJECT_TESTER_ID, $definition);
+        $container->setDefinition(self::SPECIFICATION_TESTER, $definition);
 
         $this->loadScenarioTester($container);
         $this->loadOutlineTester($container);

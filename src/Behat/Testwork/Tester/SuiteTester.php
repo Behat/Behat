@@ -27,9 +27,9 @@ use Behat\Testwork\Tester\Result\TestResults;
 class SuiteTester
 {
     /**
-     * @var SubjectTester
+     * @var SpecificationTester
      */
-    private $subjectTester;
+    private $specificationTester;
     /**
      * @var EnvironmentManager
      */
@@ -38,12 +38,12 @@ class SuiteTester
     /**
      * Initializes tester.
      *
-     * @param SubjectTester      $subjectTester
-     * @param EnvironmentManager $environmentManager
+     * @param SpecificationTester $specificationTester
+     * @param EnvironmentManager  $environmentManager
      */
-    public function __construct(SubjectTester $subjectTester, EnvironmentManager $environmentManager)
+    public function __construct(SpecificationTester $specificationTester, EnvironmentManager $environmentManager)
     {
-        $this->subjectTester = $subjectTester;
+        $this->specificationTester = $specificationTester;
         $this->environmentManager = $environmentManager;
     }
 
@@ -76,7 +76,7 @@ class SuiteTester
     {
         $results = array();
         foreach ($iterator as $subject) {
-            $results[] = $this->subjectTester->test($environment, $subject, $skip);
+            $results[] = $this->specificationTester->test($environment, $subject, $skip);
         }
 
         return new SuiteTestResult(new TestResults($results));
