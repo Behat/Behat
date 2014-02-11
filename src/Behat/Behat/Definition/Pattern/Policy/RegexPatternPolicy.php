@@ -24,9 +24,9 @@ class RegexPatternPolicy implements PatternPolicy
      * @var string[string]
      */
     private static $replacePatterns = array(
-        "/(?<= |^)\\\'(?:((?!\\').)*)\\\'(?= |$)/" => "\\'([^\']*)\\'", // Single quoted strings
-        '/(?<= |^)\"(?:[^\"]*)\"(?= |$)/'          => "\"([^\"]*)\"", // Double quoted strings
-        '/(\d+)/'                                  => "(\\d+)", // Numbers
+        "/(?<=\W|^)\\\'(?:((?!\\').)*)\\\'(?=\W|$)/" => "'([^']*)'", // Single quoted strings
+        '/(?<=\W|^)\"(?:[^\"]*)\"(?=\W|$)/'          => "\"([^\"]*)\"", // Double quoted strings
+        '/(?<=\W|^)(\d+)(?=\W|$)/'                   => "(\\d+)", // Numbers
     );
 
     /**

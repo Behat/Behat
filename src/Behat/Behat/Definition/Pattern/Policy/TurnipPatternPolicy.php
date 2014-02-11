@@ -28,9 +28,9 @@ class TurnipPatternPolicy implements PatternPolicy
      * @var string[]
      */
     private static $placeholderPatterns = array(
-        "/(?<=\s|^)\"[^\"]+\"(?=\s|$)/",
-        "/(?<=\s|^)'[^']+'(?=\s|$)/",
-        "/(?<=\s|^)\d+/"
+        "/(?<=\W|^)\"[^\"]+\"(?=\W|$)/",
+        "/(?<=\W|^)'[^']+'(?=\W|$)/",
+        "/(?<=\W|^)\d+(?=\W|$)/"
     );
 
     /**
@@ -82,7 +82,7 @@ class TurnipPatternPolicy implements PatternPolicy
             self::PLACEHOLDER_REGEXP,
             function ($match) {
                 return sprintf(
-                    "[\"']?(?P<%s>(?<=\")[^\"]+(?=\")|(?<=')[^']+(?=')|(?<=\s)\w+(?=\s|$))['\"]?",
+                    "[\"']?(?P<%s>(?<=\")[^\"]+(?=\")|(?<=')[^']+(?=')|(?<=\W)\w+(?=\W|$))['\"]?",
                     $match[1]
                 );
             },
