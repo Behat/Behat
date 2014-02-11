@@ -615,9 +615,9 @@ Feature: Append snippets option
             }
 
             /**
-             * @Given do something undefined with \1
+             * @Given do something undefined with \:arg1
              */
-            public function doSomethingUndefinedWith2()
+            public function doSomethingUndefinedWith2($arg1)
             {
                 throw new PendingException();
             }
