@@ -8,22 +8,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Subject;
+namespace Behat\Testwork\Specification;
 
 use Behat\Testwork\Suite\Suite;
 use Iterator;
 
 /**
- * Testwork test subject iterator.
+ * Testwork test specifications iterator.
  *
- * Iterates over test subjects.
+ * Iterates over test specifications.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface SubjectIterator extends Iterator
+interface SpecificationIterator extends Iterator
 {
     /**
-     * Returns suite that was used to load subjects.
+     * Returns suite that was used to load specifications.
      *
      * @return Suite
      */

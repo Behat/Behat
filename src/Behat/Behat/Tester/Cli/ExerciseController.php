@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Tester\Cli;
 
-use Behat\Testwork\Subject\SubjectIterator;
+use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Cli\ExerciseController as BaseController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -33,7 +33,8 @@ class ExerciseController extends BaseController
     {
         $command
             ->addArgument(
-                'features', InputArgument::OPTIONAL,
+                'features',
+                InputArgument::OPTIONAL,
                 "Feature(s) to run. Could be:" . PHP_EOL .
                 "- a dir <comment>(features/)</comment>" . PHP_EOL .
                 "- a feature <comment>(*.feature)</comment>" . PHP_EOL .
@@ -42,11 +43,15 @@ class ExerciseController extends BaseController
                 "- all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>."
             )
             ->addOption(
-                '--strict', null, InputOption::VALUE_NONE,
+                '--strict',
+                null,
+                InputOption::VALUE_NONE,
                 'Fail if there are any undefined or pending steps.'
             )
             ->addOption(
-                '--dry-run', null, InputOption::VALUE_NONE,
+                '--dry-run',
+                null,
+                InputOption::VALUE_NONE,
                 'Invokes formatters without executing the steps & hooks.'
             );
     }
@@ -56,13 +61,13 @@ class ExerciseController extends BaseController
      *
      * @param InputInterface $input
      *
-     * @return SubjectIterator[]
+     * @return SpecificationIterator[]
      */
-    protected function findSubjects(InputInterface $input)
+    protected function findSpecifications(InputInterface $input)
     {
         $subjects = array();
         foreach ($this->getFeatureLocators($input) as $locator) {
-            $subjects = array_merge($subjects, $this->findSuitesSubjects($this->getAvailableSuites(), $locator));
+            $subjects = array_merge($subjects, $this->findSuitesSpecifications($this->getAvailableSuites(), $locator));
         }
 
         return $subjects;

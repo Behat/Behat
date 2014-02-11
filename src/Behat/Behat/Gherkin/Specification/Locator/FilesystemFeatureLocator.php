@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Gherkin\Subject\Locator;
+namespace Behat\Behat\Gherkin\Specification\Locator;
 
-use Behat\Behat\Gherkin\Subject\LazyFeatureIterator;
+use Behat\Behat\Gherkin\Specification\LazyFeatureIterator;
 use Behat\Gherkin\Filter\FilterInterface;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\PathsFilter;
 use Behat\Gherkin\Filter\RoleFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Gherkin;
-use Behat\Testwork\Subject\EmptySubjectIterator;
-use Behat\Testwork\Subject\Locator\SubjectLocator;
+use Behat\Testwork\Specification\Locator\SpecificationLocator;
+use Behat\Testwork\Specification\NoSpecificationsIterator;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
 use RecursiveDirectoryIterator;
@@ -32,7 +32,7 @@ use RegexIterator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FilesystemFeatureLocator implements SubjectLocator
+class FilesystemFeatureLocator implements SpecificationLocator
 {
     /**
      * @var Gherkin
@@ -63,10 +63,10 @@ class FilesystemFeatureLocator implements SubjectLocator
      *
      * @return LazyFeatureIterator
      */
-    public function locateSubjects(Suite $suite, $locator)
+    public function locateSpecifications(Suite $suite, $locator)
     {
         if (!$suite->hasSetting('paths')) {
-            return new EmptySubjectIterator($suite);
+            return new NoSpecificationsIterator($suite);
         }
 
         $suiteLocators = $suite->getSetting('paths');

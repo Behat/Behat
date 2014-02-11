@@ -27,12 +27,12 @@ class HookedSuiteTestResult extends SuiteTestResult
     /**
      * Initializes test result.
      *
-     * @param TestResults $subjectTestResults
+     * @param TestResults $specificationTestResults
      * @param CallResults $hookCallResults
      */
-    public function __construct(TestResults $subjectTestResults, CallResults $hookCallResults)
+    public function __construct(TestResults $specificationTestResults, CallResults $hookCallResults)
     {
-        parent::__construct($subjectTestResults);
+        parent::__construct($specificationTestResults);
 
         $this->hookCallResults = $hookCallResults;
     }

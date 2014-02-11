@@ -70,7 +70,7 @@ class StepContainerTester
         StepContainerInterface $container,
         $skip = false
     ) {
-        $environment = $this->environmentManager->isolateEnvironment($environment, $feature);
+        $environment = $this->environmentManager->isolateEnvironment($environment, $container);
         $result = $this->testContainer($environment, $feature, $container, $skip);
 
         return new TestResult($result->getResultCode());

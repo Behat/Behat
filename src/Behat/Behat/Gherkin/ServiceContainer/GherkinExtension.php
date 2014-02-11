@@ -17,7 +17,7 @@ use Behat\Testwork\ServiceContainer\Exception\ExtensionException;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
-use Behat\Testwork\Subject\ServiceContainer\SubjectExtension;
+use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 use ReflectionClass;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -83,19 +83,19 @@ class GherkinExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('cache')
-                    ->defaultValue(
-                        is_writable(sys_get_temp_dir())
-                            ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gherkin_cache'
-                            : null
-                    )
-                ->end()
-                ->arrayNode('filters')
-                    ->defaultValue(array())
-                    ->useAttributeAsKey('name')
-                    ->prototype('scalar')
-                    ->end()
-                ->end()
+            ->scalarNode('cache')
+            ->defaultValue(
+                is_writable(sys_get_temp_dir())
+                    ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gherkin_cache'
+                    : null
+            )
+            ->end()
+            ->arrayNode('filters')
+            ->defaultValue(array())
+            ->useAttributeAsKey('name')
+            ->prototype('scalar')
+            ->end()
+            ->end()
             ->end();
     }
 
@@ -134,7 +134,8 @@ class GherkinExtension implements Extension
         $container->setParameter('gherkin.paths.lib', $this->getLibPath());
         $container->setParameter('gherkin.paths.i18n', '%gherkin.paths.lib%/i18n.php');
         $container->setParameter(
-            'suite.generic.default_settings', array(
+            'suite.generic.default_settings',
+            array(
                 'paths'    => array('%paths.base%/features'),
                 'contexts' => array('FeatureContext')
             )
@@ -290,12 +291,12 @@ class GherkinExtension implements Extension
      */
     protected function loadFilesystemFeatureLocator(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Gherkin\Subject\Locator\FilesystemFeatureLocator', array(
+        $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemFeatureLocator', array(
             new Reference(self::MANAGER_ID),
             '%paths.base%'
         ));
-        $definition->addTag(SubjectExtension::LOCATOR_TAG, array('priority' => 50));
-        $container->setDefinition(SubjectExtension::LOCATOR_TAG . '.filesystem_feature', $definition);
+        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 50));
+        $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_feature', $definition);
     }
 
     /**

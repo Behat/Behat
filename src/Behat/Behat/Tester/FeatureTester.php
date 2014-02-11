@@ -20,14 +20,14 @@ use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
-use Behat\Testwork\Tester\SubjectTester;
+use Behat\Testwork\Tester\SpecificationTester;
 
 /**
  * Feature tester.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureTester implements SubjectTester
+class FeatureTester implements SpecificationTester
 {
     /**
      * @var StepContainerTester
@@ -95,8 +95,12 @@ class FeatureTester implements SubjectTester
      *
      * @return TestResult
      */
-    private function testScenario(Environment $environment, FeatureNode $feature, ScenarioInterface $scenario, $skip = false)
-    {
+    private function testScenario(
+        Environment $environment,
+        FeatureNode $feature,
+        ScenarioInterface $scenario,
+        $skip = false
+    ) {
         if ($scenario instanceof OutlineNode) {
             return $this->testOutlineNode($environment, $feature, $scenario, $skip);
         }
@@ -114,8 +118,12 @@ class FeatureTester implements SubjectTester
      *
      * @return OutlineTestResult
      */
-    private function testOutlineNode(Environment $environment, FeatureNode $feature, OutlineNode $scenario, $skip = false)
-    {
+    private function testOutlineNode(
+        Environment $environment,
+        FeatureNode $feature,
+        OutlineNode $scenario,
+        $skip = false
+    ) {
         return $this->outlineTester->test($environment, $feature, $scenario, $skip);
     }
 
@@ -129,8 +137,12 @@ class FeatureTester implements SubjectTester
      *
      * @return StepContainerTestResult
      */
-    private function testScenarioNode(Environment $environment, FeatureNode $feature, ScenarioNode $scenario, $skip = false)
-    {
+    private function testScenarioNode(
+        Environment $environment,
+        FeatureNode $feature,
+        ScenarioNode $scenario,
+        $skip = false
+    ) {
         return $this->scenarioTester->test($environment, $feature, $scenario, $skip);
     }
 }

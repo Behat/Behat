@@ -8,19 +8,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Subject;
+namespace Behat\Testwork\Specification;
 
 use Behat\Testwork\Suite\Suite;
 use EmptyIterator;
 
 /**
- * Testwork empty subject iterator.
+ * Testwork no specifications iterator.
  *
- * Return instance of this class from locator if no subjects are found.
+ * Return instance of this class from locator if no specifications are found.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EmptySubjectIterator extends EmptyIterator implements SubjectIterator
+class NoSpecificationsIterator extends EmptyIterator implements SpecificationIterator
 {
     /**
      * @var Suite

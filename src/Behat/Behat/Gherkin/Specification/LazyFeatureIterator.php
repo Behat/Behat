@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Gherkin\Subject;
+namespace Behat\Behat\Gherkin\Specification;
 
 use Behat\Gherkin\Filter\FilterInterface;
 use Behat\Gherkin\Gherkin;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Testwork\Subject\SubjectIterator;
+use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -21,7 +21,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class LazyFeatureIterator implements SubjectIterator
+class LazyFeatureIterator implements SpecificationIterator
 {
     /**
      * @var Suite
@@ -53,7 +53,7 @@ class LazyFeatureIterator implements SubjectIterator
     private $currentFeature;
 
     /**
-     * Initializes subjects.
+     * Initializes specifications.
      *
      * @param Suite             $suite
      * @param Gherkin           $gherkin
@@ -69,7 +69,7 @@ class LazyFeatureIterator implements SubjectIterator
     }
 
     /**
-     * Returns suite that was used to load subjects.
+     * Returns suite that was used to load specifications.
      *
      * @return Suite
      */

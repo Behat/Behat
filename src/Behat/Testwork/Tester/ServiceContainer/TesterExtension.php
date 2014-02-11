@@ -16,7 +16,7 @@ use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\Hook\ServiceContainer\HookExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
-use Behat\Testwork\Subject\ServiceContainer\SubjectExtension;
+use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -37,7 +37,7 @@ abstract class TesterExtension implements Extension
      */
     const EXERCISE_ID = 'tester.exercise';
     const SUITE_TESTER_ID = 'tester.suite';
-    const SUBJECT_TESTER_ID = 'tester.subject';
+    const SPECIFICATION_TESTER = 'tester.specification';
 
     /**
      * {@inheritdoc}
@@ -80,7 +80,7 @@ abstract class TesterExtension implements Extension
         $this->loadSigintController($container);
         $this->loadExercise($container);
         $this->loadSuiteTester($container);
-        $this->loadSubjectTester($container);
+        $this->loadSpecificationTester($container);
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', array(
             new Reference(SuiteExtension::REGISTRY_ID),
-            new Reference(SubjectExtension::FINDER_ID),
+            new Reference(SpecificationExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
             $strict,
             $skip
@@ -149,7 +149,7 @@ abstract class TesterExtension implements Extension
     protected function loadSuiteTester(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Tester\HookableSuiteTester', array(
-            new Reference(self::SUBJECT_TESTER_ID),
+            new Reference(self::SPECIFICATION_TESTER),
             new Reference(EnvironmentExtension::MANAGER_ID)
         ));
         $definition->addMethodCall(
@@ -164,9 +164,9 @@ abstract class TesterExtension implements Extension
     }
 
     /**
-     * Loads subject tester.
+     * Loads specification tester.
      *
      * @param ContainerBuilder $container
      */
-    abstract protected function loadSubjectTester(ContainerBuilder $container);
+    abstract protected function loadSpecificationTester(ContainerBuilder $container);
 }
