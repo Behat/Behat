@@ -227,11 +227,13 @@ class JUnitFormatter extends ConsoleFormatter
     public function afterStep(StepEvent $event)
     {
         if ($event->hasException()) {
-            $this->exceptions[] = $event->getException();
-            $this->exceptionsCount++;
-            if ($event->getResult() === StepEvent::SKIPPED || $event->getResult() === StepEvent::PENDING) {
+            if ($event->getResult() === StepEvent::SKIPPED
+             || $event->getResult() === StepEvent::PENDING
+             || $event->getResult() === StepEvent::UNDEFINED) {
                 $this->pendingCount++;
             } else {
+                $this->exceptions[] = $event->getException();
+                $this->exceptionsCount++;
                 $this->failureCount++;
             }
         }
