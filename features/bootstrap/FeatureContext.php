@@ -192,7 +192,7 @@ class FeatureContext implements Context
 
     private function getExpectedOutput(PyStringNode $expectedText)
     {
-        $text = strtr($expectedText, array('\'\'\'' => '"""'));
+        $text = strtr($expectedText, array('\'\'\'' => '"""', '%%TMP_DIR%%' => sys_get_temp_dir() . DIRECTORY_SEPARATOR));
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
