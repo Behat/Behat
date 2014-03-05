@@ -8,15 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester\Event;
+namespace Behat\Behat\Tester\Exception;
 
 /**
- * Scenario event.
+ * Behat tester exception interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ScenarioTested extends AbstractScenarioTested
+interface TesterException
 {
-    const BEFORE = 'tester.scenario_tested.before';
-    const AFTER = 'tester.scenario_tested.after';
 }

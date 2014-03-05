@@ -10,16 +10,14 @@
 
 namespace Behat\Behat\Tester;
 
-use Behat\Testwork\Tester\SpecificationTester;
-
 /**
- * Behat feature tester interface.
+ * Behat outline example tester interface.
  *
- * This interface defines an API for Tree Feature testers.
- * Behat feature tester is simply a specification tester in Testwork terms.
+ * This interface defines an API for Tree Outline Example testers.
+ * Example tester is basically a scenario tester, because Outline Examples treated exactly like scenarios.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface FeatureTester extends SpecificationTester
+interface ExampleTester extends ScenarioTester
 {
 }

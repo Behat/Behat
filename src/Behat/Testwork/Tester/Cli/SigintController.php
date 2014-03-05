@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Tester\Cli;
 
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Tester\Event\ExerciseCompleted;
+use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

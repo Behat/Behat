@@ -10,34 +10,32 @@
 
 namespace Behat\Behat\Tester;
 
-use Behat\Behat\Tester\Result\OutlineTestResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Result\TestResults;
+use Exception;
 
 /**
- * Outline tester.
+ * Behat outline tester interface.
+ *
+ * This interface defines an API for Tree Outline testers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineTester
+interface OutlineTester
 {
     /**
-     * @var StepContainerTester
-     */
-    private $exampleTester;
-
-    /**
-     * Initializes tester.
+     * Sets up background for a test.
      *
-     * @param StepContainerTester $exampleTester
+     * @param Environment $environment
+     * @param FeatureNode $feature
+     * @param OutlineNode $outline
+     * @param Boolean     $skip
+     *
+     * @throws Exception If something goes wrong. That will cause test to be skipped.
      */
-    public function __construct(StepContainerTester $exampleTester)
-    {
-        $this->exampleTester = $exampleTester;
-    }
+    public function setUp(Environment $environment, FeatureNode $feature, OutlineNode $outline, $skip);
 
     /**
      * Tests outline.
@@ -49,34 +47,24 @@ class OutlineTester
      *
      * @return TestResult
      */
-    public function test(Environment $environment, FeatureNode $feature, OutlineNode $outline, $skip = false)
-    {
-        $result = $this->testOutline($environment, $feature, $outline, $skip);
-
-        return new TestResult($result->getResultCode());
-    }
+    public function test(Environment $environment, FeatureNode $feature, OutlineNode $outline, $skip);
 
     /**
-     * Tests outline examples.
+     * Sets up background for a test.
      *
      * @param Environment $environment
      * @param FeatureNode $feature
      * @param OutlineNode $outline
      * @param Boolean     $skip
+     * @param TestResult  $result
      *
-     * @return OutlineTestResult
+     * @throws Exception If something goes wrong. That will cause all consequent tests to be skipped.
      */
-    protected function testOutline(
+    public function tearDown(
         Environment $environment,
         FeatureNode $feature,
         OutlineNode $outline,
-        $skip = false
-    ) {
-        $results = array();
-        foreach ($outline->getExamples() as $example) {
-            $results[] = $this->exampleTester->test($environment, $feature, $example, $skip);
-        }
-
-        return new OutlineTestResult(new TestResults($results));
-    }
+        $skip,
+        TestResult $result
+    );
 }

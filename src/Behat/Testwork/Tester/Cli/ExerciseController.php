@@ -16,6 +16,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Suite\SuiteRepository;
 use Behat\Testwork\Tester\Exercise;
+use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
+use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -43,6 +45,10 @@ class ExerciseController implements Controller
      */
     private $exercise;
     /**
+     * @var ResultInterpreter
+     */
+    private $resultInterpreter;
+    /**
      * @var Boolean
      */
     private $strict;
@@ -57,6 +63,7 @@ class ExerciseController implements Controller
      * @param SuiteRepository     $suiteRepository
      * @param SpecificationFinder $specificationFinder
      * @param Exercise            $exercise
+     * @param ResultInterpreter   $resultInterpreter
      * @param Boolean             $strict
      * @param Boolean             $skip
      */
@@ -64,12 +71,14 @@ class ExerciseController implements Controller
         SuiteRepository $suiteRepository,
         SpecificationFinder $specificationFinder,
         Exercise $exercise,
+        ResultInterpreter $resultInterpreter,
         $strict = false,
         $skip = false
     ) {
         $this->suiteRepository = $suiteRepository;
         $this->specificationFinder = $specificationFinder;
         $this->exercise = $exercise;
+        $this->resultInterpreter = $resultInterpreter;
         $this->strict = $strict;
         $this->skip = $skip;
     }
@@ -111,10 +120,14 @@ class ExerciseController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($this->strict || $input->getOption('strict')) {
+            $this->resultInterpreter->registerResultInterpretation(new StrictInterpretation());
+        }
+
         $specs = $this->findSpecifications($input);
         $result = $this->testSpecifications($input, $specs);
 
-        return $this->interpretResult($input, $result);
+        return $this->resultInterpreter->interpretResult($result);
     }
 
     /**
@@ -139,24 +152,13 @@ class ExerciseController implements Controller
      */
     protected function testSpecifications(InputInterface $input, array $specifications)
     {
-        return $this->exercise->run($specifications, $input->getOption('dry-run') || $this->skip);
-    }
+        $skip = $input->getOption('dry-run') || $this->skip;
 
-    /**
-     * Transforms test result object into CLI code.
-     *
-     * @param InputInterface $input
-     * @param TestResult     $result
-     *
-     * @return integer
-     */
-    protected function interpretResult(InputInterface $input, TestResult $result)
-    {
-        if ($this->strict || $input->getOption('strict')) {
-            return intval(TestResult::PASSED < $result->getResultCode());
-        }
+        $skip = $skip || $this->exercise->setUp($specifications, $skip);
+        $testResult = $this->exercise->test($specifications, $skip);
+        $this->exercise->tearDown($specifications, $skip, $testResult);
 
-        return intval(TestResult::FAILED === $result->getResultCode());
+        return new TestResult($testResult->getResultCode());
     }
 
     /**

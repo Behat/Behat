@@ -13,9 +13,9 @@ namespace Behat\Testwork\Tester\ServiceContainer;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
-use Behat\Testwork\Hook\ServiceContainer\HookExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -37,7 +37,31 @@ abstract class TesterExtension implements Extension
      */
     const EXERCISE_ID = 'tester.exercise';
     const SUITE_TESTER_ID = 'tester.suite';
-    const SPECIFICATION_TESTER = 'tester.specification';
+    const SPECIFICATION_TESTER_ID = 'tester.specification';
+    const RESULT_INTERPRETER_ID = 'tester.result.interpreter';
+
+    /**
+     * Available extension points
+     */
+    const EXERCISE_WRAPPER_TAG = 'tester.exercise.wrapper';
+    const SUITE_TESTER_WRAPPER_TAG = 'tester.suite.wrapper';
+    const SPECIFICATION_TESTER_WRAPPER_TAG = 'tester.specification.wrapper';
+    const RESULT_INTERPRETATION_TAG = 'test.result.interpretation';
+
+    /**
+     * @var ServiceProcessor
+     */
+    private $processor;
+
+    /**
+     * Initializes extension.
+     *
+     * @param null|ServiceProcessor $processor
+     */
+    public function __construct(ServiceProcessor $processor = null)
+    {
+        $this->processor = $processor ? : new ServiceProcessor();
+    }
 
     /**
      * {@inheritdoc}
@@ -78,6 +102,7 @@ abstract class TesterExtension implements Extension
     {
         $this->loadExerciseController($container, $config['strict'], $config['skip']);
         $this->loadSigintController($container);
+        $this->loadResultInterpreter($container);
         $this->loadExercise($container);
         $this->loadSuiteTester($container);
         $this->loadSpecificationTester($container);
@@ -88,6 +113,10 @@ abstract class TesterExtension implements Extension
      */
     public function process(ContainerBuilder $container)
     {
+        $this->processExerciseWrappers($container);
+        $this->processSuiteTesterWrappers($container);
+        $this->processSpecificationTesterWrappers($container);
+        $this->processResultInterpretations($container);
     }
 
     /**
@@ -103,6 +132,7 @@ abstract class TesterExtension implements Extension
             new Reference(SuiteExtension::REGISTRY_ID),
             new Reference(SpecificationExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
+            new Reference(self::RESULT_INTERPRETER_ID),
             $strict,
             $skip
         ));
@@ -125,19 +155,27 @@ abstract class TesterExtension implements Extension
     }
 
     /**
+     * Loads result interpreter controller
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadResultInterpreter(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Testwork\Tester\Result\ResultInterpreter');
+        $container->setDefinition(self::RESULT_INTERPRETER_ID, $definition);
+    }
+
+    /**
      * Loads exercise tester.
      *
      * @param ContainerBuilder $container
      */
     protected function loadExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\DispatchingExercise', array(
+        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeExercise', array(
+            new Reference(EnvironmentExtension::MANAGER_ID),
             new Reference(self::SUITE_TESTER_ID)
         ));
-        $definition->addMethodCall(
-            'setEventDispatcher',
-            array(new Reference(EventDispatcherExtension::DISPATCHER_ID))
-        );
         $container->setDefinition(self::EXERCISE_ID, $definition);
     }
 
@@ -148,18 +186,9 @@ abstract class TesterExtension implements Extension
      */
     protected function loadSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\HookableSuiteTester', array(
-            new Reference(self::SPECIFICATION_TESTER),
-            new Reference(EnvironmentExtension::MANAGER_ID)
+        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeSuiteTester', array(
+            new Reference(self::SPECIFICATION_TESTER_ID)
         ));
-        $definition->addMethodCall(
-            'setHookDispatcher',
-            array(new Reference(HookExtension::DISPATCHER_ID))
-        );
-        $definition->addMethodCall(
-            'setEventDispatcher',
-            array(new Reference(EventDispatcherExtension::DISPATCHER_ID))
-        );
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);
     }
 
@@ -169,4 +198,73 @@ abstract class TesterExtension implements Extension
      * @param ContainerBuilder $container
      */
     abstract protected function loadSpecificationTester(ContainerBuilder $container);
+
+    /**
+     * Processes all registered exercise wrappers.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function processExerciseWrappers(ContainerBuilder $container)
+    {
+        $references = $this->processor->findAndSortTaggedServices($container, self::EXERCISE_WRAPPER_TAG);
+
+        foreach ($references as $reference) {
+            $wrappedTester = $container->getDefinition(self::EXERCISE_ID);
+            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester->replaceArgument(0, $wrappedTester);
+
+            $container->setDefinition(self::EXERCISE_ID, $wrappingTester);
+        }
+    }
+
+    /**
+     * Processes all registered suite tester wrappers.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function processSuiteTesterWrappers(ContainerBuilder $container)
+    {
+        $references = $this->processor->findAndSortTaggedServices($container, self::SUITE_TESTER_WRAPPER_TAG);
+
+        foreach ($references as $reference) {
+            $wrappedTester = $container->getDefinition(self::SUITE_TESTER_ID);
+            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester->replaceArgument(0, $wrappedTester);
+
+            $container->setDefinition(self::SUITE_TESTER_ID, $wrappingTester);
+        }
+    }
+
+    /**
+     * Processes all registered specification tester wrappers.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function processSpecificationTesterWrappers(ContainerBuilder $container)
+    {
+        $references = $this->processor->findAndSortTaggedServices($container, self::SPECIFICATION_TESTER_WRAPPER_TAG);
+
+        foreach ($references as $reference) {
+            $wrappedTester = $container->getDefinition(self::SPECIFICATION_TESTER_ID);
+            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester->replaceArgument(0, $wrappedTester);
+
+            $container->setDefinition(self::SPECIFICATION_TESTER_ID, $wrappingTester);
+        }
+    }
+
+    /**
+     * Processes all registered result interpretations.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function processResultInterpretations(ContainerBuilder $container)
+    {
+        $references = $this->processor->findAndSortTaggedServices($container, self::RESULT_INTERPRETATION_TAG);
+        $definition = $container->getDefinition(self::RESULT_INTERPRETER_ID);
+
+        foreach ($references as $reference) {
+            $definition->addMethodCall('registerResultInterpretation', array($reference));
+        }
+    }
 }

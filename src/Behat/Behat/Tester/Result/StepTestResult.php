@@ -21,7 +21,7 @@ use Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepTestResult extends TestResult
+class StepTestResult extends BehatTestResult
 {
     /**
      * @var SearchResult
@@ -112,7 +112,7 @@ class StepTestResult extends TestResult
             return $this->searchException;
         }
 
-        if ($this->callResult->hasException()) {
+        if ($this->callResult && $this->callResult->hasException()) {
             return $this->callResult->getException();
         }
 
@@ -138,6 +138,9 @@ class StepTestResult extends TestResult
     {
         if ($this->searchException) {
             return static::FAILED;
+        }
+        if (!$this->searchResult) {
+            return static::SKIPPED;
         }
         if (!$this->searchResult->hasMatch()) {
             return static::UNDEFINED;

@@ -10,14 +10,14 @@
 
 namespace Behat\Behat\Tester\Result;
 
-use Behat\Testwork\Tester\Result\TestResult as BaseTestResult;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * Behat test result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TestResult extends BaseTestResult
+class BehatTestResult extends TestResult
 {
     const UNDEFINED = 30;
 

@@ -10,12 +10,11 @@
 
 namespace Behat\Behat\Tester\Cli;
 
-use Behat\Behat\Tester\Event\AbstractScenarioTested;
-use Behat\Behat\Tester\Event\ExampleTested;
-use Behat\Behat\Tester\Event\ScenarioTested;
-use Behat\Behat\Tester\Result\TestResult;
+use Behat\Behat\EventDispatcher\Event\ExampleTested;
+use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Behat\Behat\Tester\Result\BehatTestResult;
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Tester\Event\ExerciseCompleted;
+use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -77,11 +76,11 @@ class StopOnFailureController implements Controller
     /**
      * Exits if scenario is a failure and if stopper is enabled.
      *
-     * @param AbstractScenarioTested $event
+     * @param \Behat\Behat\EventDispatcher\Event\ScenarioTested $event
      */
-    public function exitOnFailure(AbstractScenarioTested $event)
+    public function exitOnFailure(ScenarioTested $event)
     {
-        if (TestResult::FAILED !== $event->getResultCode()) {
+        if (BehatTestResult::FAILED !== $event->getResultCode()) {
             return;
         }
 

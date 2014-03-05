@@ -11,74 +11,50 @@
 namespace Behat\Testwork\Tester;
 
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Specification\SpecificationIterator;
-use Behat\Testwork\Tester\Result\SuiteTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Result\TestResults;
+use Exception;
 
 /**
- * Testwork suite tester.
+ * Testwork suite tester interface.
  *
- * Tests provided suites. Suite is a named set of test specifications.
+ * This interface defines an API for Testwork suite testers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteTester
+interface SuiteTester
 {
     /**
-     * @var SpecificationTester
-     */
-    private $specificationTester;
-    /**
-     * @var EnvironmentManager
-     */
-    private $environmentManager;
-
-    /**
-     * Initializes tester.
-     *
-     * @param SpecificationTester $specificationTester
-     * @param EnvironmentManager  $environmentManager
-     */
-    public function __construct(SpecificationTester $specificationTester, EnvironmentManager $environmentManager)
-    {
-        $this->specificationTester = $specificationTester;
-        $this->environmentManager = $environmentManager;
-    }
-
-    /**
-     * Tests provided suite specifications.
-     *
-     * @param SpecificationIterator $specificationIterator
-     * @param Boolean               $skip
-     *
-     * @return TestResult
-     */
-    public function test(SpecificationIterator $specificationIterator, $skip = false)
-    {
-        $environment = $this->environmentManager->buildEnvironment($specificationIterator->getSuite());
-        $result = $this->testSuite($environment, $specificationIterator, $skip);
-
-        return new TestResult($result->getResultCode());
-    }
-
-    /**
-     * Tests provided test specifications against provided environment.
+     * Sets up suite for a test.
      *
      * @param Environment           $environment
      * @param SpecificationIterator $iterator
      * @param Boolean               $skip
      *
-     * @return SuiteTestResult
+     * @throws Exception If something goes wrong. That will cause test to be skipped.
      */
-    protected function testSuite(Environment $environment, SpecificationIterator $iterator, $skip = false)
-    {
-        $results = array();
-        foreach ($iterator as $specification) {
-            $results[] = $this->specificationTester->test($environment, $specification, $skip);
-        }
+    public function setUp(Environment $environment, SpecificationIterator $iterator, $skip);
 
-        return new SuiteTestResult(new TestResults($results));
-    }
+    /**
+     * Tests provided suite specifications.
+     *
+     * @param Environment           $environment
+     * @param SpecificationIterator $iterator
+     * @param Boolean               $skip
+     *
+     * @return TestResult
+     */
+    public function test(Environment $environment, SpecificationIterator $iterator, $skip);
+
+    /**
+     * Tears down suite after a test.
+     *
+     * @param Environment           $environment
+     * @param SpecificationIterator $iterator
+     * @param Boolean               $skip
+     * @param TestResult            $result
+     *
+     * @throws Exception If something goes wrong. That will cause all consequent tests to be skipped.
+     */
+    public function tearDown(Environment $environment, SpecificationIterator $iterator, $skip, TestResult $result);
 }
