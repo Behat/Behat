@@ -10,13 +10,13 @@
 
 namespace Behat\Behat\Snippet\Cli;
 
+use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Snippet\Printer\ConsoleSnippetPrinter;
 use Behat\Behat\Snippet\SnippetRegistry;
 use Behat\Behat\Snippet\SnippetWriter;
-use Behat\Behat\Tester\Event\StepTested;
-use Behat\Behat\Tester\Result\TestResult;
+use Behat\Behat\Tester\Result\BehatTestResult;
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Tester\Event\ExerciseCompleted;
+use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -124,7 +124,7 @@ class SnippetsController implements Controller
      */
     public function registerUndefinedStep(StepTested $event)
     {
-        if (TestResult::UNDEFINED === $event->getResultCode()) {
+        if (BehatTestResult::UNDEFINED === $event->getResultCode()) {
             $this->registry->registerUndefinedStep($event->getEnvironment(), $event->getStep());
         }
     }

@@ -13,9 +13,11 @@ namespace Behat\Testwork\EventDispatcher\ServiceContainer;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
+use Behat\Testwork\Tester\ServiceContainer\TesterExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Testwork event dispatcher extension.
@@ -39,7 +41,7 @@ class EventDispatcherExtension implements Extension
     /**
      * @var ServiceProcessor
      */
-    private $processor;
+    protected $processor;
 
     /**
      * Initializes extension.
@@ -79,6 +81,8 @@ class EventDispatcherExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadEventDispatcher($container);
+        $this->loadEventDispatchingExercise($container);
+        $this->loadEventDispatchingSuiteTester($container);
     }
 
     /**
@@ -96,8 +100,38 @@ class EventDispatcherExtension implements Extension
      */
     protected function loadEventDispatcher(ContainerBuilder $container)
     {
-        $definition = new Definition('Symfony\Component\EventDispatcher\EventDispatcher');
+        $definition = new Definition('Behat\Testwork\EventDispatcher\TestworkEventDispatcher');
         $container->setDefinition(self::DISPATCHER_ID, $definition);
+    }
+
+    /**
+     * Loads event-dispatching exercise.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadEventDispatchingExercise(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingExercise', array(
+            new Reference(TesterExtension::EXERCISE_ID),
+            new Reference(self::DISPATCHER_ID)
+        ));
+        $definition->addTag(TesterExtension::EXERCISE_WRAPPER_TAG);
+        $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.event_dispatching', $definition);
+    }
+
+    /**
+     * Loads event-dispatching suite tester.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadEventDispatchingSuiteTester(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingSuiteTester', array(
+            new Reference(TesterExtension::SUITE_TESTER_ID),
+            new Reference(self::DISPATCHER_ID)
+        ));
+        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG);
+        $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
     /**
