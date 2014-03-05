@@ -10,11 +10,11 @@
 
 namespace Behat\Behat\Hook\Call;
 
-use Behat\Behat\Tester\Event\StepTested;
+use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Node\StepNode;
+use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
 
 /**
  * Runtime step hook.
@@ -26,7 +26,7 @@ abstract class RuntimeStepHook extends RuntimeFilterableHook
     /**
      * Checks if provided event matches hook filter.
      *
-     * @param LifecycleEvent $event
+     * @param \Behat\Testwork\EventDispatcher\Event\LifecycleEvent $event
      *
      * @return Boolean
      */

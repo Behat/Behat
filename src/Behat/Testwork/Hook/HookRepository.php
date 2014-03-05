@@ -13,7 +13,7 @@ namespace Behat\Testwork\Hook;
 use Behat\Testwork\Call\Callee;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
  * Testwork hook repository.
@@ -67,7 +67,7 @@ class HookRepository
         return array_filter(
             $this->getEnvironmentHooks($event->getEnvironment()),
             function (Hook $hook) use ($eventName, $event) {
-                if ($eventName !== $hook->getHookedEventName()) {
+                if (!in_array($eventName, $hook->getHookedEventNames())) {
                     return false;
                 }
 

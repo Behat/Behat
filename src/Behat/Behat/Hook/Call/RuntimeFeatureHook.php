@@ -10,13 +10,13 @@
 
 namespace Behat\Behat\Hook\Call;
 
+use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\Hook\Exception\BadCallbackException;
-use Behat\Behat\Tester\Event\FeatureTested;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
 
 /**
  * Runtime feature hook.
@@ -28,16 +28,16 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string      $eventName
+     * @param string[]    $eventNames
      * @param null|string $filterString
      * @param callable    $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
-    public function __construct($eventName, $filterString, $callable, $description = null)
+    public function __construct(array $eventNames, $filterString, $callable, $description = null)
     {
-        parent::__construct($eventName, $filterString, $callable, $description);
+        parent::__construct($eventNames, $filterString, $callable, $description);
 
         if ($this->isAnInstanceMethod()) {
             throw new BadCallbackException(sprintf(
@@ -51,7 +51,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Checks if provided event matches hook filter.
      *
-     * @param LifecycleEvent $event
+     * @param \Behat\Testwork\EventDispatcher\Event\LifecycleEvent $event
      *
      * @return Boolean
      */
@@ -70,7 +70,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
 
     /**
      * @param FeatureNode $feature
-     * @param string $filterString
+     * @param string      $filterString
      *
      * @return Boolean
      */
@@ -91,7 +91,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      * Checks if feature matches tag filter.
      *
      * @param FeatureNode $feature
-     * @param string $filterString
+     * @param string      $filterString
      *
      * @return Boolean
      */

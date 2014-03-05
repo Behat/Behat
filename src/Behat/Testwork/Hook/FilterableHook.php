@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Hook;
 
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
  * Testwork filterable hook interface.

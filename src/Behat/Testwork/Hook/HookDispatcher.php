@@ -13,8 +13,8 @@ namespace Behat\Testwork\Hook;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Call\CallResults;
+use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 use Behat\Testwork\Hook\Call\HookCall;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
 
 /**
  * Testwork hook dispatcher.

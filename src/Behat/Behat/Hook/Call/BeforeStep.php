@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Hook\Call;
 
-use Behat\Behat\Tester\Event\StepTested;
+use Behat\Behat\EventDispatcher\Event\StepTested;
 
 /**
  * Before step hook.
@@ -28,7 +28,7 @@ class BeforeStep extends RuntimeStepHook
      */
     public function __construct($filterString, $callable, $description = null)
     {
-        parent::__construct(StepTested::BEFORE, $filterString, $callable, $description);
+        parent::__construct(array(StepTested::BEFORE), $filterString, $callable, $description);
     }
 
     /**

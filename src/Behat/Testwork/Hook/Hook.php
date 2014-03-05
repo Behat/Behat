@@ -29,11 +29,11 @@ interface Hook extends Callee
     public function getName();
 
     /**
-     * Returns hooked event name.
+     * Returns array of all hooked event names.
      *
-     * @return string
+     * @return string[]
      */
-    public function getHookedEventName();
+    public function getHookedEventNames();
 
     /**
      * Represents hook as a string.

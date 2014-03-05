@@ -11,9 +11,9 @@
 namespace Behat\Testwork\Hook\Call;
 
 use Behat\Testwork\Call\Exception\BadCallbackException;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
+use Behat\Testwork\EventDispatcher\Event\SuiteTested;
 use Behat\Testwork\Suite\Suite;
-use Behat\Testwork\Tester\Event\SuiteTested;
 
 /**
  * Runtime suite hook.
@@ -25,16 +25,16 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string      $eventName
+     * @param string[]    $eventNames
      * @param null|string $filterString
      * @param callable    $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
-    public function __construct($eventName, $filterString, $callable, $description = null)
+    public function __construct(array $eventNames, $filterString, $callable, $description = null)
     {
-        parent::__construct($eventName, $filterString, $callable, $description);
+        parent::__construct($eventNames, $filterString, $callable, $description);
 
         if ($this->isAnInstanceMethod()) {
             throw new BadCallbackException(sprintf(

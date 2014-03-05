@@ -23,32 +23,32 @@ use Behat\Testwork\Hook\Hook;
 abstract class RuntimeHook extends RuntimeCallee implements Hook
 {
     /**
-     * @var string
+     * @var string[]
      */
-    private $eventName;
+    private $eventNames;
 
     /**
      * Initializes hook.
      *
-     * @param string      $eventName
+     * @param string[]    $eventNames
      * @param callable    $callable
      * @param null|string $description
      */
-    public function __construct($eventName, $callable, $description = null)
+    public function __construct(array $eventNames, $callable, $description = null)
     {
-        $this->eventName = $eventName;
+        $this->eventNames = $eventNames;
 
         parent::__construct($callable, $description);
     }
 
     /**
-     * Returns hooked event name.
+     * Returns hooked event names.
      *
-     * @return string
+     * @return string[]
      */
-    final public function getHookedEventName()
+    final public function getHookedEventNames()
     {
-        return $this->eventName;
+        return $this->eventNames;
     }
 
     /**

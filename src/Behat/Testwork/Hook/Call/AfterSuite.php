@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Hook\Call;
 
-use Behat\Testwork\Tester\Event\SuiteTested;
+use Behat\Testwork\EventDispatcher\Event\SuiteTested;
 
 /**
  * After suite hook.
@@ -28,7 +28,7 @@ class AfterSuite extends RuntimeSuiteHook
      */
     public function __construct($filterString, $callable, $description = null)
     {
-        parent::__construct(SuiteTested::AFTER, $filterString, $callable, $description);
+        parent::__construct(array(SuiteTested::AFTER), $filterString, $callable, $description);
     }
 
     /**

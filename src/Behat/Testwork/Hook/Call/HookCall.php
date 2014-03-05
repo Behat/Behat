@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Hook\Call;
 
 use Behat\Testwork\Environment\Call\EnvironmentCall;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 use Behat\Testwork\Hook\Hook;
 
 /**
@@ -24,14 +24,14 @@ use Behat\Testwork\Hook\Hook;
 class HookCall extends EnvironmentCall
 {
     /**
-     * @var LifecycleEvent
+     * @var \Behat\Testwork\EventDispatcher\Event\LifecycleEvent
      */
     private $event;
 
     /**
      * Initializes hook call.
      *
-     * @param LifecycleEvent $event
+     * @param \Behat\Testwork\EventDispatcher\Event\LifecycleEvent $event
      * @param Hook           $hook
      * @param null|integer   $errorReportingLevel
      */
@@ -45,7 +45,7 @@ class HookCall extends EnvironmentCall
     /**
      * Returns hooked event.
      *
-     * @return LifecycleEvent
+     * @return \Behat\Testwork\EventDispatcher\Event\LifecycleEvent
      */
     public function getEvent()
     {
