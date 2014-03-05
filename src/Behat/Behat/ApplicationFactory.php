@@ -13,9 +13,10 @@ namespace Behat\Behat;
 use Behat\Behat\Autoloader\ServiceContainer\AutoloaderExtension;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
+use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
 use Behat\Behat\Hook\ServiceContainer\HookExtension;
-use Behat\Behat\Output\ServiceContainer\OutputExtension;
+use Behat\Behat\Output\ServiceContainer\Formatter\PrettyFormatterFactory;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Behat\Transformation\ServiceContainer\TransformationExtension;
@@ -24,9 +25,9 @@ use Behat\Testwork\ApplicationFactory as BaseFactory;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
-use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
+use Behat\Testwork\Output\ServiceContainer\OutputExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
@@ -77,7 +78,6 @@ class ApplicationFactory extends BaseFactory
             new SuiteExtension($processor),
             new EnvironmentExtension($processor),
             new SpecificationExtension($processor),
-            new EventDispatcherExtension($processor),
             new FilesystemExtension($processor),
             new ExceptionExtension($processor),
             // Behat extensions
@@ -85,9 +85,12 @@ class ApplicationFactory extends BaseFactory
             new TranslatorExtension($processor),
             new GherkinExtension($processor),
             new ContextExtension($processor),
-            new OutputExtension($processor),
+            new OutputExtension('pretty', array(
+                new PrettyFormatterFactory($processor)
+            ), $processor),
             new SnippetExtension($processor),
             new DefinitionExtension($processor),
+            new EventDispatcherExtension($processor),
             new HookExtension($processor),
             new TransformationExtension($processor),
             new TesterExtension($processor),

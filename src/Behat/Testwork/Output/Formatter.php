@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Output;
 
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -36,6 +37,13 @@ interface Formatter extends EventSubscriberInterface
     public function getDescription();
 
     /**
+     * Returns formatter output printer.
+     *
+     * @return OutputPrinter
+     */
+    public function getOutputPrinter();
+
+    /**
      * Sets formatter parameter.
      *
      * @param string $name
@@ -44,7 +52,7 @@ interface Formatter extends EventSubscriberInterface
     public function setParameter($name, $value);
 
     /**
-     * Returns parameter value.
+     * Returns parameter name.
      *
      * @param string $name
      *

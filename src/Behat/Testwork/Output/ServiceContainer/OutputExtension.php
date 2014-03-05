@@ -12,6 +12,7 @@ namespace Behat\Testwork\Output\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -27,7 +28,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class OutputExtension implements Extension
+class OutputExtension implements Extension
 {
     /*
      * Available services
@@ -40,6 +41,14 @@ abstract class OutputExtension implements Extension
     const FORMATTER_TAG = 'output.formatter';
 
     /**
+     * @var string
+     */
+    private $defaultFormatter;
+    /**
+     * @var FormatterFactory[]
+     */
+    private $factories;
+    /**
      * @var ServiceProcessor
      */
     private $processor;
@@ -47,11 +56,25 @@ abstract class OutputExtension implements Extension
     /**
      * Initializes extension.
      *
+     * @param string                $defaultFormatter
+     * @param FormatterFactory[]    $formatterFactories
      * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct($defaultFormatter, array $formatterFactories, ServiceProcessor $processor = null)
     {
+        $this->defaultFormatter = $defaultFormatter;
+        $this->factories = $formatterFactories;
         $this->processor = $processor ? : new ServiceProcessor();
+    }
+
+    /**
+     * Registers formatter factory.
+     *
+     * @param FormatterFactory $factory
+     */
+    public function registerFormatterFactory(FormatterFactory $factory)
+    {
+        $this->factories[] = $factory;
     }
 
     /**
@@ -75,24 +98,28 @@ abstract class OutputExtension implements Extension
     public function configure(ArrayNodeDefinition $builder)
     {
         $builder
-            ->defaultValue(array($this->getDefaultFormatterName() => array('enabled' => true)))
+            ->defaultValue(array($this->defaultFormatter => array('enabled' => true)))
             ->useAttributeAsKey('name')
             ->prototype('array')
-                ->beforeNormalization()
-                    ->ifTrue(function($a) {
-                        return is_array($a) && !isset($a['enabled']);
-                    })
-                    ->then(function($a) { return
+            ->beforeNormalization()
+            ->ifTrue(
+                function ($a) {
+                    return is_array($a) && !isset($a['enabled']);
+                }
+            )
+            ->then(
+                function ($a) {
+                    return
                         array_merge($a, array('enabled' => true));
-                    })
-                ->end()
-                ->useAttributeAsKey('name')
-                ->treatTrueLike(array('enabled' => true))
-                ->treatNullLike(array('enabled' => true))
-                ->treatFalseLike(array('enabled' => false))
-                ->prototype('variable')->end()
+                }
+            )
             ->end()
-        ;
+            ->useAttributeAsKey('name')
+            ->treatTrueLike(array('enabled' => true))
+            ->treatNullLike(array('enabled' => true))
+            ->treatFalseLike(array('enabled' => false))
+            ->prototype('variable')->end()
+            ->end();
     }
 
     /**
@@ -111,6 +138,7 @@ abstract class OutputExtension implements Extension
     public function process(ContainerBuilder $container)
     {
         $this->processFormatters($container);
+        $this->processDynamicallyRegisteredFormatters($container);
     }
 
     /**
@@ -154,27 +182,27 @@ abstract class OutputExtension implements Extension
     }
 
     /**
-     * Loads default formatters.
+     * Loads default formatters using registered factories.
      *
      * @param ContainerBuilder $container
      */
-    abstract protected function loadFormatters(ContainerBuilder $container);
-
-    /**
-     * Returns default formatter name.
-     *
-     * @return string
-     */
-    abstract protected function getDefaultFormatterName();
-
-    /**
-     * Creates output printer definition.
-     *
-     * @return Definition
-     */
-    protected function createOutputPrinterDefinition()
+    protected function loadFormatters(ContainerBuilder $container)
     {
-        return new Definition('Behat\Testwork\Output\Printer\ConsoleOutputPrinter');
+        foreach ($this->factories as $factory) {
+            $factory->buildFormatter($container);
+        }
+    }
+
+    /**
+     * Processes formatters using registered factories.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function processFormatters(ContainerBuilder $container)
+    {
+        foreach ($this->factories as $factory) {
+            $factory->processFormatter($container);
+        }
     }
 
     /**
@@ -182,7 +210,7 @@ abstract class OutputExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processFormatters(ContainerBuilder $container)
+    protected function processDynamicallyRegisteredFormatters(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::FORMATTER_TAG);
         $definition = $container->getDefinition(self::MANAGER_ID);

@@ -135,7 +135,25 @@ class OutputManager
      */
     public function setFormatterParameter($formatter, $parameterName, $parameterValue)
     {
-        $this->getFormatter($formatter)->setParameter($parameterName, $parameterValue);
+        $formatter = $this->getFormatter($formatter);
+        $printer = $formatter->getOutputPrinter();
+
+        switch ($parameterName) {
+            case 'output_verbosity':
+                $printer->setOutputVerbosity($parameterValue);
+                return;
+            case 'output_path':
+                $printer->setOutputPath($parameterValue);
+                return;
+            case 'output_decorate':
+                $printer->setOutputDecorated($parameterValue);
+                return;
+            case 'output_styles':
+                $printer->setOutputStyles($parameterValue);
+                return;
+        }
+
+        $formatter->setParameter($parameterName, $parameterValue);
     }
 
     /**
@@ -159,8 +177,8 @@ class OutputManager
      */
     public function setFormattersParameter($parameterName, $parameterValue)
     {
-        foreach ($this->formatters as $formatter) {
-            $formatter->setParameter($parameterName, $parameterValue);
+        foreach (array_keys($this->formatters) as $formatter) {
+            $this->setFormatterParameter($formatter, $parameterName, $parameterValue);
         }
     }
 

@@ -32,13 +32,18 @@ class ExceptionPresenter
      * @var ExceptionStringer[]
      */
     private $stringers = array();
+    /**
+     * @var integer
+     */
+    private $defaultVerbosity = OutputPrinter::VERBOSITY_NORMAL;
 
     /**
      * Initializes presenter.
      *
-     * @param string $basePath
+     * @param string  $basePath
+     * @param integer $defaultVerbosity
      */
-    public function __construct($basePath = null)
+    public function __construct($basePath = null, $defaultVerbosity = OutputPrinter::VERBOSITY_NORMAL)
     {
         if (null !== $basePath) {
             $realBasePath = realpath($basePath);
@@ -49,6 +54,7 @@ class ExceptionPresenter
         }
 
         $this->basePath = $basePath;
+        $this->defaultVerbosity = $defaultVerbosity;
     }
 
     /**
@@ -62,6 +68,16 @@ class ExceptionPresenter
     }
 
     /**
+     * Sets default verbosity to a specified level.
+     *
+     * @param integer $defaultVerbosity
+     */
+    public function setDefaultVerbosity($defaultVerbosity)
+    {
+        $this->defaultVerbosity = $defaultVerbosity;
+    }
+
+    /**
      * Presents exception as a string.
      *
      * @param Exception $exception
@@ -69,8 +85,10 @@ class ExceptionPresenter
      *
      * @return string
      */
-    public function presentException(Exception $exception, $verbosity = OutputPrinter::VERBOSITY_NORMAL)
+    public function presentException(Exception $exception, $verbosity = null)
     {
+        $verbosity = $verbosity ?: $this->defaultVerbosity;
+
         foreach ($this->stringers as $stringer) {
             if ($stringer->supportsException($exception)) {
                 return $this->relativizePaths($stringer->stringException($exception, $verbosity));
