@@ -78,6 +78,6 @@ class EventDispatchingOutlineTester implements OutlineTester
     ) {
         $event = new OutlineTested($environment, $feature, $outline, $result);
         $this->eventDispatcher->dispatch(OutlineTested::AFTER, $event);
-        $this->baseTester->setUp($environment, $feature, $outline, $skip, $result);
+        $this->baseTester->tearDown($environment, $feature, $outline, $skip, $result);
     }
 }

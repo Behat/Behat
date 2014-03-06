@@ -88,6 +88,6 @@ class EventDispatchingScenarioTester implements ScenarioTester, ExampleTester
         $event = new $eventClass($environment, $feature, $scenario, $result);
         $this->eventDispatcher->dispatch($eventClass::AFTER, $event);
 
-        $this->baseTester->setUp($environment, $feature, $scenario, $skip, $result);
+        $this->baseTester->tearDown($environment, $feature, $scenario, $skip, $result);
     }
 }

@@ -69,6 +69,6 @@ class EventDispatchingFeatureTester implements FeatureTester
     public function tearDown(Environment $environment, $feature, $skip, TestResult $result)
     {
         $this->eventDispatcher->dispatch(FeatureTested::AFTER, new FeatureTested($environment, $feature, $result));
-        $this->baseTester->setUp($environment, $feature, $skip, $result);
+        $this->baseTester->tearDown($environment, $feature, $skip, $result);
     }
 }
