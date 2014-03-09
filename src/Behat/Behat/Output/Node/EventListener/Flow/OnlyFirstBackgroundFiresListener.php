@@ -12,8 +12,8 @@ namespace Behat\Behat\Output\Node\EventListener\Flow;
 
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
+use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
-use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
@@ -44,6 +44,10 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      * @var Boolean
      */
     private $inBackground = false;
+    /**
+     * @var Boolean
+     */
+    private $beforeStepFailed = false;
 
     /**
      * Initializes listener.
@@ -126,19 +130,11 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      */
     private function isSkippableEvent(Event $event)
     {
-        return $this->isConsequentBackgroundEvent($event) || $this->isNonFailingConsequentBackgroundStep($event);
-    }
+        if (!$this->firstBackgroundEnded) {
+            return false;
+        }
 
-    /**
-     * Checks if the provided event is a background event and is for 2+ background.
-     *
-     * @param Event $event
-     *
-     * @return Boolean
-     */
-    private function isConsequentBackgroundEvent(Event $event)
-    {
-        return $event instanceof BackgroundTested && $this->firstBackgroundEnded;
+        return $event instanceof BackgroundTested || $this->isNonFailingConsequentBackgroundStep($event);
     }
 
     /**
@@ -150,9 +146,22 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      */
     private function isNonFailingConsequentBackgroundStep(Event $event)
     {
-        return $this->firstBackgroundEnded
-            && $this->inBackground
-            && $event instanceof AfterStepTested
-            && StepResult::FAILED !== $event->getTestResult()->getResultCode();
+        if (!$this->inBackground) {
+            return false;
+        }
+
+        if ($event instanceof BeforeStepTested && !$event->getSetup()->isSuccessful()) {
+            $this->beforeStepFailed = true;
+
+            return false;
+        }
+
+        if ($event instanceof AfterStepTested && ($this->beforeStepFailed || !$event->getTeardown()->isSuccessful())) {
+            $this->beforeStepFailed = false;
+
+            return false;
+        }
+
+        return $event instanceof AfterStepTested && StepResult::FAILED !== $event->getTestResult()->getResultCode();
     }
 }
