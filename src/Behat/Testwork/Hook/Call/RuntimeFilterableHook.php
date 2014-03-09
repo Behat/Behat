@@ -29,16 +29,16 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHo
     /**
      * Initializes hook.
      *
-     * @param string[]    $eventNames
+     * @param string      $scopeName
      * @param null|string $filterString
      * @param callable    $callable
      * @param null|string $description
      */
-    public function __construct(array $eventNames, $filterString, $callable, $description = null)
+    public function __construct($scopeName, $filterString, $callable, $description = null)
     {
         $this->filterString = $filterString;
 
-        parent::__construct($eventNames, $callable, $description);
+        parent::__construct($scopeName, $callable, $description);
     }
 
     /**

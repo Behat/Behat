@@ -25,30 +25,30 @@ abstract class RuntimeHook extends RuntimeCallee implements Hook
     /**
      * @var string[]
      */
-    private $eventNames;
+    private $scopeName;
 
     /**
      * Initializes hook.
      *
-     * @param string[]    $eventNames
+     * @param string      $scopeName
      * @param callable    $callable
      * @param null|string $description
      */
-    public function __construct(array $eventNames, $callable, $description = null)
+    public function __construct($scopeName, $callable, $description = null)
     {
-        $this->eventNames = $eventNames;
+        $this->scopeName = $scopeName;
 
         parent::__construct($callable, $description);
     }
 
     /**
-     * Returns hooked event names.
+     * Returns hook scope name.
      *
-     * @return string[]
+     * @return string
      */
-    final public function getHookedEventNames()
+    public function getScopeName()
     {
-        return $this->eventNames;
+        return $this->scopeName;
     }
 
     /**

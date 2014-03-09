@@ -33,7 +33,7 @@ interface Hook extends Callee
      *
      * @return string[]
      */
-    public function getHookedEventNames();
+    public function getScopeName();
 
     /**
      * Represents hook as a string.

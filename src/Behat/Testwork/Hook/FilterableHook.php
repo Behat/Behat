@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Hook;
 
-use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
+use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
  * Testwork filterable hook interface.
@@ -22,11 +22,11 @@ use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 interface FilterableHook extends Hook
 {
     /**
-     * Checks that current hook matches provided event object.
+     * Checks that current hook matches provided hook scope.
      *
-     * @param LifecycleEvent $event
+     * @param HookScope $scope
      *
      * @return Boolean
      */
-    public function filterMatches(LifecycleEvent $event);
+    public function filterMatches(HookScope $scope);
 }
