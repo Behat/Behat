@@ -61,12 +61,9 @@ class RuntimeSuiteTester implements SuiteTester
         $results = array();
         foreach ($iterator as $specification) {
             $setup = $this->specTester->setUp($env, $specification, $skip);
-            $skip = $skip || !$setup->isSuccessful();
-
-            $testResult = $this->specTester->test($env, $specification, $skip);
-
-            $teardown = $this->specTester->tearDown($env, $specification, $skip, $testResult);
-            $skip = $skip || !$teardown->isSuccessful();
+            $localSkip = $skip || !$setup->isSuccessful();
+            $testResult = $this->specTester->test($env, $specification, $localSkip);
+            $teardown = $this->specTester->tearDown($env, $specification, $localSkip, $testResult);
 
             $integerResult = new IntegerTestResult($testResult->getResultCode());
             $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
