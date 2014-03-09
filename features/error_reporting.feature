@@ -86,9 +86,8 @@ Feature: Error Reporting
     """
     --- Failed steps:
 
-        features/e_notice_in_scenario.feature:9
-          When I access array index 0 # features/e_notice_in_scenario.feature:10
-            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 24
+        When I access array index 0 # features/e_notice_in_scenario.feature:10
+          Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 24
 
     2 scenarios (1 passed, 1 failed)
     7 steps (5 passed, 1 failed, 1 skipped)

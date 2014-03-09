@@ -13,7 +13,6 @@ namespace Behat\Behat\Tester\Cli;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
-use Behat\Behat\Tester\Result\BehatTestResult;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
@@ -82,10 +81,7 @@ class RerunController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array(
-                $this,
-                'collectFailedScenario'
-            ), -50);
+        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'collectFailedScenario'), -50);
         $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'collectFailedScenario'), -50);
         $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'writeCache'), -50);
         $this->key = $this->generateKey($input);

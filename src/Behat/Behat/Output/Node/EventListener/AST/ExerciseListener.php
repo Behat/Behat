@@ -278,7 +278,6 @@ class ExerciseListener implements EventListener
         }
 
         $this->timer->stop();
-
         $this->statisticsPrinter->printStatistics($formatter, $this->statistics, $this->timer, $this->memory);
     }
 }

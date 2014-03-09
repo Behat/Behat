@@ -90,9 +90,6 @@ class PrettyFormatterFactory implements FormatterFactory
     {
         $definition = new Definition('Behat\Testwork\Output\Node\EventListener\EventListeners', array(
             array(
-                new Definition('Behat\Behat\Output\Node\EventListener\AST\ExerciseListener', array(
-                    new Reference('output.node.printer.pretty.statistics')
-                )),
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\SuiteListener', array(
                     new Reference('output.node.printer.pretty.feature_setup')
                 )),
@@ -180,9 +177,17 @@ class PrettyFormatterFactory implements FormatterFactory
                 'multiline' => true,
             ),
             $this->createOutputPrinterDefinition(),
-            $this->rearrangeBackgroundEvents(
-                new Reference(self::ROOT_LISTENER_ID)
-            ),
+            new Definition('Behat\Testwork\Output\Node\EventListener\EventListeners', array(
+                    array(
+                        $this->rearrangeBackgroundEvents(
+                            new Reference(self::ROOT_LISTENER_ID)
+                        ),
+                        new Definition('Behat\Behat\Output\Node\EventListener\AST\ExerciseListener', array(
+                            new Reference('output.node.printer.pretty.statistics')
+                        )),
+                    )
+                )
+            )
         ));
         $definition->addTag(OutputExtension::FORMATTER_TAG, array('priority' => 100));
         $container->setDefinition(OutputExtension::FORMATTER_TAG . '.pretty', $definition);
