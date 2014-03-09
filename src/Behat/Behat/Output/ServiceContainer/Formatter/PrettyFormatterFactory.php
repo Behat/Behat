@@ -66,6 +66,7 @@ class PrettyFormatterFactory implements FormatterFactory
         $this->loadCorePrinters($container);
         $this->loadTableOutlinePrinter($container);
         $this->loadExpandedOutlinePrinter($container);
+        $this->loadHookPrinters($container);
         $this->loadStatisticsPrinter($container);
         $this->loadPrinterHelpers($container);
 
@@ -116,7 +117,8 @@ class PrettyFormatterFactory implements FormatterFactory
                         new Definition('Behat\Behat\Output\Node\EventListener\AST\ScenarioNodeListener', array(
                             ScenarioTested::BEFORE,
                             ScenarioTested::AFTER,
-                            new Reference('output.node.printer.pretty.scenario')
+                            new Reference('output.node.printer.pretty.scenario'),
+                            new Reference('output.node.printer.pretty.scenario_setup')
                         )),
                         new Definition('Behat\Behat\Output\Node\EventListener\AST\StepListener', array(
                             new Reference('output.node.printer.pretty.step')
@@ -256,6 +258,21 @@ class PrettyFormatterFactory implements FormatterFactory
             8
         ));
         $container->setDefinition('output.node.printer.pretty.example_step', $definition);
+    }
+
+    /**
+     * Loads hook printers.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadHookPrinters(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettySetupPrinter', array(
+            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+            new Reference(ExceptionExtension::PRESENTER_ID),
+            2
+        ));
+        $container->setDefinition('output.node.printer.pretty.scenario_setup', $definition);
     }
 
     /**
