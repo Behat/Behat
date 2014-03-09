@@ -137,6 +137,7 @@ class PrettyFormatterFactory implements FormatterFactory
                             new Definition('Behat\Behat\Output\Node\EventListener\AST\OutlineTableListener', array(
                                 new Reference('output.node.printer.pretty.outline_table'),
                                 new Reference('output.node.printer.pretty.example_row'),
+                                new Reference('output.node.printer.pretty.example_setup'),
                                 new Reference('output.node.printer.pretty.example_step_setup')
                             ))
                         ),
@@ -147,6 +148,7 @@ class PrettyFormatterFactory implements FormatterFactory
                                 new Reference('output.node.printer.pretty.outline'),
                                 new Reference('output.node.printer.pretty.example'),
                                 new Reference('output.node.printer.pretty.example_step'),
+                                new Reference('output.node.printer.pretty.example_setup'),
                                 new Reference('output.node.printer.pretty.example_step_setup')
                             ))
                         )
@@ -291,6 +293,13 @@ class PrettyFormatterFactory implements FormatterFactory
             8
         ));
         $container->setDefinition('output.node.printer.pretty.example_step_setup', $definition);
+
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettySetupPrinter', array(
+            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+            new Reference(ExceptionExtension::PRESENTER_ID),
+            6
+        ));
+        $container->setDefinition('output.node.printer.pretty.example_setup', $definition);
     }
 
     /**

@@ -52,6 +52,10 @@ class OutlineListener implements EventListener
      */
     private $stepSetupPrinter;
     /**
+     * @var SetupPrinter
+     */
+    private $exampleSetupPrinter;
+    /**
      * @var ExampleNode
      */
     private $example;
@@ -62,17 +66,20 @@ class OutlineListener implements EventListener
      * @param OutlinePrinter $outlinePrinter
      * @param ExamplePrinter $examplePrinter
      * @param StepPrinter    $stepPrinter
+     * @param SetupPrinter   $exampleSetupPrinter
      * @param SetupPrinter   $stepSetupPrinter
      */
     public function __construct(
         OutlinePrinter $outlinePrinter,
         ExamplePrinter $examplePrinter,
         StepPrinter $stepPrinter,
+        SetupPrinter $exampleSetupPrinter,
         SetupPrinter $stepSetupPrinter
     ) {
         $this->outlinePrinter = $outlinePrinter;
         $this->examplePrinter = $examplePrinter;
         $this->stepPrinter = $stepPrinter;
+        $this->exampleSetupPrinter = $exampleSetupPrinter;
         $this->stepSetupPrinter = $stepSetupPrinter;
     }
 
@@ -133,6 +140,8 @@ class OutlineListener implements EventListener
         }
 
         $this->example = $event->getScenario();
+
+        $this->exampleSetupPrinter->printSetup($formatter, $event->getSetup());
         $this->examplePrinter->printHeader($formatter, $event->getFeature(), $this->example);
     }
 
@@ -150,6 +159,8 @@ class OutlineListener implements EventListener
         }
 
         $this->examplePrinter->printFooter($formatter, $event->getTestResult());
+        $this->exampleSetupPrinter->printTeardown($formatter, $event->getTeardown());
+
         $this->example = null;
     }
 
