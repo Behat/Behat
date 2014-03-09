@@ -28,6 +28,6 @@ class StrictInterpretation implements ResultInterpretation
      */
     public function isFailure(TestResult $result)
     {
-        return intval(TestResult::PASSED < $result->getResultCode());
+        return !$result->isPassed();
     }
 }
