@@ -22,7 +22,7 @@ use IteratorAggregate;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TestResults extends TestResult implements Countable, IteratorAggregate
+final class TestResults implements TestResult, Countable, IteratorAggregate
 {
     /**
      * @var TestResult[]
@@ -65,6 +65,16 @@ class TestResults extends TestResult implements Countable, IteratorAggregate
         }
 
         return $resultCode;
+    }
+
+    /**
+     * Checks that test has passed.
+     *
+     * @return Boolean
+     */
+    public function isPassed()
+    {
+        return self::PASSED >= $this->getResultCode();
     }
 
     /**

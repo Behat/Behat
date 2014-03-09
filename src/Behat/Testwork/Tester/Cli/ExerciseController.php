@@ -16,6 +16,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Suite\SuiteRepository;
 use Behat\Testwork\Tester\Exercise;
+use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
 use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -154,11 +155,11 @@ class ExerciseController implements Controller
     {
         $skip = $input->getOption('dry-run') || $this->skip;
 
-        $skip = $skip || $this->exercise->setUp($specifications, $skip);
+        $skip = $skip || !$this->exercise->setUp($specifications, $skip)->isSuccessful();
         $testResult = $this->exercise->test($specifications, $skip);
         $this->exercise->tearDown($specifications, $skip, $testResult);
 
-        return new TestResult($testResult->getResultCode());
+        return new IntegerTestResult($testResult->getResultCode());
     }
 
     /**
