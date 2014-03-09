@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
+use Behat\Behat\Output\Node\Printer\Helper\WidthCalculator;
 use Behat\Behat\Output\Node\Printer\ScenarioPrinter;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;

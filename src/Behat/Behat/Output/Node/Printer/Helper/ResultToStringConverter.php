@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Output\Node\Printer;
+namespace Behat\Behat\Output\Node\Printer\Helper;
 
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -18,7 +18,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ResultToStringConverter
+final class ResultToStringConverter
 {
     /**
      * Converts provided test result to a string.

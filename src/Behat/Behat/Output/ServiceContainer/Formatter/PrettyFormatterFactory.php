@@ -280,16 +280,16 @@ class PrettyFormatterFactory implements FormatterFactory
      */
     protected function loadPrinterHelpers(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\WidthCalculator');
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Helper\WidthCalculator');
         $container->setDefinition('output.node.printer.pretty.scenario_width_calculator', $definition);
 
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\StepTextPainter', array(
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Helper\StepTextPainter', array(
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID)
         ));
         $container->setDefinition('output.node.printer.pretty.step_text_painter', $definition);
 
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\ResultToStringConverter');
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter');
         $container->setDefinition(self::RESULT_TO_STRING_CONVERTER_ID, $definition);
     }
 

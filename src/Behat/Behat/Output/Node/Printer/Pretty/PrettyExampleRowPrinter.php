@@ -12,7 +12,7 @@ namespace Behat\Behat\Output\Node\Printer\Pretty;
 
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
-use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
+use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\ExceptionResult;
 use Behat\Behat\Tester\Result\StepResult;
@@ -22,7 +22,6 @@ use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
-use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 
 /**
@@ -35,7 +34,7 @@ use Behat\Testwork\Tester\Result\TestResults;
 class PrettyExampleRowPrinter implements ExampleRowPrinter
 {
     /**
-     * @var ResultToStringConverter
+     * @var \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter
      */
     private $resultConverter;
     /**
@@ -98,7 +97,6 @@ class PrettyExampleRowPrinter implements ExampleRowPrinter
         $resultConverter = $this->resultConverter;
 
         return function ($value, $column) use ($outline, $example, $stepEvents, $resultConverter) {
-
             $results = array();
             foreach ($stepEvents as $event) {
                 $index = array_search($event->getStep(), $example->getSteps());

@@ -24,5 +24,13 @@ use Behat\Testwork\Output\Formatter;
  */
 interface StatisticsPrinter
 {
+    /**
+     * Prints test suite statistics after run.
+     *
+     * @param Formatter  $formatter
+     * @param Statistics $statistics
+     * @param Timer      $timer
+     * @param Memory     $memory
+     */
     public function printStatistics(Formatter $formatter, Statistics $statistics, Timer $timer, Memory $memory);
 }

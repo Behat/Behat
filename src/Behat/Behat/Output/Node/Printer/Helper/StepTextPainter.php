@@ -8,11 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Output\Node\Printer\Pretty;
+namespace Behat\Behat\Output\Node\Printer\Helper;
 
 use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
-use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -29,7 +28,7 @@ class StepTextPainter
      */
     private $patternTransformer;
     /**
-     * @var ResultToStringConverter
+     * @var \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter
      */
     private $resultConverter;
 
@@ -37,7 +36,7 @@ class StepTextPainter
      * Initializes painter.
      *
      * @param PatternTransformer      $patternTransformer
-     * @param ResultToStringConverter $resultConverter
+     * @param \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter $resultConverter
      */
     public function __construct(PatternTransformer $patternTransformer, ResultToStringConverter $resultConverter)
     {

@@ -11,6 +11,7 @@
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
 use Behat\Behat\Output\Node\Printer\ExamplePrinter;
+use Behat\Behat\Output\Node\Printer\Helper\WidthCalculator;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
@@ -42,7 +43,7 @@ class PrettyExamplePrinter implements ExamplePrinter
     /**
      * Initializes printer.
      *
-     * @param WidthCalculator $widthCalculator
+     * @param \Behat\Behat\Output\Node\Printer\Helper\WidthCalculator $widthCalculator
      * @param string          $basePath
      * @param integer         $indentation
      */

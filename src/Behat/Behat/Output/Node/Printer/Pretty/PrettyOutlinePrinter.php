@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
+use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\OutlinePrinter;
-use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\ScenarioPrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Behat\Tester\Result\UndefinedStepResult;
@@ -56,7 +56,7 @@ class PrettyOutlinePrinter implements OutlinePrinter
     /**
      * @param ScenarioPrinter         $scenarioPrinter
      * @param StepPrinter             $stepPrinter
-     * @param ResultToStringConverter $resultConverter
+     * @param \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter $resultConverter
      * @param integer                 $indentation
      * @param integer                 $subIndentation
      */

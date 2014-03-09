@@ -10,7 +10,9 @@
 
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
-use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
+use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
+use Behat\Behat\Output\Node\Printer\Helper\StepTextPainter;
+use Behat\Behat\Output\Node\Printer\Helper\WidthCalculator;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
@@ -57,8 +59,8 @@ class PrettySkippedStepPrinter implements StepPrinter
      * Initializes printer.
      *
      * @param StepTextPainter         $textPainter
-     * @param ResultToStringConverter $resultConverter
-     * @param WidthCalculator         $widthCalculator
+     * @param \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter $resultConverter
+     * @param \Behat\Behat\Output\Node\Printer\Helper\WidthCalculator         $widthCalculator
      * @param integer                 $indentation
      * @param integer                 $subIndentation
      */

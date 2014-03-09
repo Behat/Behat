@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
-use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
+use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\StatisticsPrinter;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Testwork\Counter\Memory;
@@ -28,7 +28,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 class PrettyStatisticsPrinter implements StatisticsPrinter
 {
     /**
-     * @var ResultToStringConverter
+     * @var \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter
      */
     private $resultConverter;
     /**
@@ -43,7 +43,7 @@ class PrettyStatisticsPrinter implements StatisticsPrinter
     /**
      * Initializes printer.
      *
-     * @param ResultToStringConverter $resultConverter
+     * @param \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter $resultConverter
      * @param TranslatorInterface     $translator
      * @param string                  $basePath
      */

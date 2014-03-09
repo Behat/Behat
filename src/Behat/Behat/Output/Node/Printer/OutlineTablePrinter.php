@@ -28,9 +28,9 @@ interface OutlineTablePrinter
     /**
      * Prints outline header using provided printer and first row example step results.
      *
-     * @param Formatter        $formatter
-     * @param FeatureNode      $feature
-     * @param OutlineNode      $outline
+     * @param Formatter    $formatter
+     * @param FeatureNode  $feature
+     * @param OutlineNode  $outline
      * @param StepResult[] $results
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline, array $results);

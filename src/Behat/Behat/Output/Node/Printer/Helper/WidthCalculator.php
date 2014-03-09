@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Output\Node\Printer\Pretty;
+namespace Behat\Behat\Output\Node\Printer\Helper;
 
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
@@ -22,7 +22,7 @@ use Behat\Gherkin\Node\StepNode;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class WidthCalculator
+final class WidthCalculator
 {
     /**
      * Calculates scenario width.
