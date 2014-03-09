@@ -14,9 +14,9 @@ use Behat\Behat\EventDispatcher\Event\AfterOutlineTested;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
+use Behat\Behat\EventDispatcher\Event\BeforeScenarioTested;
 use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
-use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Output\Node\Printer\ExamplePrinter;
 use Behat\Behat\Output\Node\Printer\OutlinePrinter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
@@ -135,7 +135,7 @@ class OutlineListener implements EventListener
      */
     private function printExampleHeaderOnBeforeExampleEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if (!$event instanceof ScenarioTested || ExampleTested::BEFORE !== $eventName) {
+        if (!$event instanceof BeforeScenarioTested || ExampleTested::BEFORE !== $eventName) {
             return;
         }
 
