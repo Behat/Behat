@@ -25,13 +25,17 @@ use Symfony\Component\EventDispatcher\Event;
 class FireOnlySiblingsListener implements EventListener
 {
     /**
-     * @var \Behat\Testwork\Output\Node\EventListener\EventListener
+     * @var string
      */
-    private $descendant;
+    private $beforeEventName;
     /**
      * @var string
      */
-    private $contextEventClass;
+    private $afterEventName;
+    /**
+     * @var EventListener
+     */
+    private $descendant;
     /**
      * @var Boolean
      */
@@ -40,13 +44,15 @@ class FireOnlySiblingsListener implements EventListener
     /**
      * Initializes listener.
      *
-     * @param string        $contextEventClass
-     * @param \Behat\Testwork\Output\Node\EventListener\EventListener $descendant
+     * @param string        $beforeEventName
+     * @param string        $afterEventName
+     * @param EventListener $descendant
      */
-    public function __construct($contextEventClass, EventListener $descendant)
+    public function __construct($beforeEventName, $afterEventName, EventListener $descendant)
     {
+        $this->beforeEventName = $beforeEventName;
+        $this->afterEventName = $afterEventName;
         $this->descendant = $descendant;
-        $this->contextEventClass = $contextEventClass;
     }
 
     /**
@@ -54,30 +60,16 @@ class FireOnlySiblingsListener implements EventListener
      */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if (!$this->isSubclassOfContextEventClass($event) && !$this->inContext) {
-            return;
-        }
-
-        if ($this->isSubclassOfContextEventClass($event) && $event::BEFORE === $eventName) {
+        if ($this->beforeEventName === $eventName) {
             $this->inContext = true;
         }
 
-        if ($this->isSubclassOfContextEventClass($event) && $event::AFTER === $eventName) {
-            $this->inContext = false;
+        if ($this->inContext) {
+            $this->descendant->listenEvent($formatter, $event, $eventName);
         }
 
-        $this->descendant->listenEvent($formatter, $event, $eventName);
-    }
-
-    /**
-     * Checks if provided event is a subclass of context event class.
-     *
-     * @param Event $event
-     *
-     * @return Boolean
-     */
-    private function isSubclassOfContextEventClass(Event $event)
-    {
-        return $this->contextEventClass === get_class($event) || is_subclass_of($event, $this->contextEventClass);
+        if ($this->afterEventName === $eventName) {
+            $this->inContext = false;
+        }
     }
 }

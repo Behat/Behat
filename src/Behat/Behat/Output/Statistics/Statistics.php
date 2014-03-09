@@ -10,7 +10,8 @@
 
 namespace Behat\Behat\Output\Statistics;
 
-use Behat\Behat\Tester\Result\BehatTestResult;
+use Behat\Behat\Tester\Result\StepResult;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * Behat statistics.
@@ -34,11 +35,11 @@ class Statistics
     public function __construct()
     {
         $this->scenarioStats = $this->stepStats = array(
-            BehatTestResult::PASSED    => array(),
-            BehatTestResult::FAILED    => array(),
-            BehatTestResult::UNDEFINED => array(),
-            BehatTestResult::PENDING   => array(),
-            BehatTestResult::SKIPPED   => array()
+            TestResult::PASSED    => array(),
+            TestResult::FAILED    => array(),
+            StepResult::UNDEFINED => array(),
+            TestResult::PENDING   => array(),
+            TestResult::SKIPPED   => array()
         );
     }
 

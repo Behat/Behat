@@ -11,82 +11,32 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Testwork\Environment\Environment;
+use Behat\Gherkin\Node\NodeInterface;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
-use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * Behat feature tested event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureTested extends LifecycleEvent implements GherkinNodeTested
+abstract class FeatureTested extends LifecycleEvent implements GherkinNodeTested
 {
     const BEFORE = 'tester.feature_tested.before';
     const AFTER = 'tester.feature_tested.after';
-
-    /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var null|TestResult
-     */
-    private $testResult;
-
-    /**
-     * Initializes event.
-     *
-     * @param Environment     $environment
-     * @param FeatureNode     $feature
-     * @param null|TestResult $testResult
-     */
-    public function __construct(Environment $environment, FeatureNode $feature, TestResult $testResult = null)
-    {
-        parent::__construct($environment);
-
-        $this->feature = $feature;
-        $this->testResult = $testResult;
-    }
 
     /**
      * Returns feature.
      *
      * @return FeatureNode
      */
-    public function getFeature()
-    {
-        return $this->feature;
-    }
+    abstract public function getFeature();
 
     /**
-     * Returns feature test results (if tested).
+     * Returns node.
      *
-     * @return null|TestResult
+     * @return NodeInterface
      */
-    public function getTestResult()
-    {
-        return $this->testResult;
-    }
-
-    /**
-     * Returns step tester result status.
-     *
-     * @return integer
-     */
-    public function getResultCode()
-    {
-        if (null === $this->testResult) {
-            return null;
-        }
-
-        return $this->testResult->getResultCode();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getNode()
+    final public function getNode()
     {
         return $this->getFeature();
     }

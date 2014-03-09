@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
+use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
+use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Testwork\Output\Formatter;
@@ -49,8 +51,8 @@ class FeatureListener implements EventListener
             return;
         }
 
-        $this->printHeaderOnBeforeEvent($formatter, $event, $eventName);
-        $this->printFooterOnAfterEvent($formatter, $event, $eventName);
+        $this->printHeaderOnBeforeEvent($formatter, $event);
+        $this->printFooterOnAfterEvent($formatter, $event);
     }
 
     /**
@@ -58,11 +60,10 @@ class FeatureListener implements EventListener
      *
      * @param Formatter $formatter
      * @param Event     $event
-     * @param string    $eventName
      */
-    private function printHeaderOnBeforeEvent(Formatter $formatter, Event $event, $eventName)
+    private function printHeaderOnBeforeEvent(Formatter $formatter, Event $event)
     {
-        if (!$event instanceof FeatureTested || FeatureTested::BEFORE !== $eventName) {
+        if (!$event instanceof BeforeFeatureTested) {
             return;
         }
 
@@ -74,11 +75,10 @@ class FeatureListener implements EventListener
      *
      * @param Formatter $formatter
      * @param Event     $event
-     * @param string    $eventName
      */
-    private function printFooterOnAfterEvent(Formatter $formatter, Event $event, $eventName)
+    private function printFooterOnAfterEvent(Formatter $formatter, Event $event)
     {
-        if (!$event instanceof FeatureTested || FeatureTested::AFTER !== $eventName) {
+        if (!$event instanceof AfterFeatureTested) {
             return;
         }
 

@@ -11,10 +11,11 @@
 namespace Behat\Behat\Tester;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\StepContainerInterface;
+use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
-use Exception;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Behat scenario tester interface.
@@ -28,43 +29,37 @@ interface ScenarioTester
     /**
      * Sets up example for a test.
      *
-     * @param Environment            $environment
-     * @param FeatureNode            $feature
-     * @param StepContainerInterface $scenario
-     * @param Boolean                $skip
+     * @param Environment $env
+     * @param FeatureNode $feature
+     * @param Scenario    $scenario
+     * @param Boolean     $skip
      *
-     * @throws Exception If something goes wrong. That will cause test to be skipped.
+     * @return Setup
      */
-    public function setUp(Environment $environment, FeatureNode $feature, StepContainerInterface $scenario, $skip);
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip);
 
     /**
      * Tests example.
      *
-     * @param Environment            $environment
-     * @param FeatureNode            $feature
-     * @param StepContainerInterface $scenario
-     * @param Boolean                $skip
+     * @param Environment $env
+     * @param FeatureNode $feature
+     * @param Scenario    $scenario
+     * @param Boolean     $skip
      *
      * @return TestResult
      */
-    public function test(Environment $environment, FeatureNode $feature, StepContainerInterface $scenario, $skip);
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip);
 
     /**
      * Tears down example after a test.
      *
-     * @param Environment            $environment
-     * @param FeatureNode            $feature
-     * @param StepContainerInterface $example
-     * @param Boolean                $skip
-     * @param TestResult             $result
+     * @param Environment $env
+     * @param FeatureNode $feature
+     * @param Scenario    $scenario
+     * @param Boolean     $skip
+     * @param TestResult  $result
      *
-     * @throws Exception If something goes wrong. That will cause all consequent tests to be skipped.
+     * @return Teardown
      */
-    public function tearDown(
-        Environment $environment,
-        FeatureNode $feature,
-        StepContainerInterface $example,
-        $skip,
-        TestResult $result
-    );
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result);
 }

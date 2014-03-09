@@ -10,10 +10,11 @@
 
 namespace Behat\Behat\EventDispatcher\Tester;
 
-use Behat\Behat\EventDispatcher\Event\FeatureTested;
-use Behat\Behat\Tester\FeatureTester;
+use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
+use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\SpecificationTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -23,10 +24,10 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatchingFeatureTester implements FeatureTester
+class EventDispatchingFeatureTester implements SpecificationTester
 {
     /**
-     * @var FeatureTester
+     * @var SpecificationTester
      */
     private $baseTester;
     /**
@@ -37,10 +38,10 @@ class EventDispatchingFeatureTester implements FeatureTester
     /**
      * Initializes tester.
      *
-     * @param FeatureTester            $baseTester
+     * @param SpecificationTester      $baseTester
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(FeatureTester $baseTester, EventDispatcherInterface $eventDispatcher)
+    public function __construct(SpecificationTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {
         $this->baseTester = $baseTester;
         $this->eventDispatcher = $eventDispatcher;
@@ -49,26 +50,34 @@ class EventDispatchingFeatureTester implements FeatureTester
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $environment, $feature, $skip)
+    public function setUp(Environment $env, $feature, $skip)
     {
-        $this->eventDispatcher->dispatch(FeatureTested::BEFORE, new FeatureTested($environment, $feature));
-        $this->baseTester->setUp($environment, $feature, $skip);
+        $setup = $this->baseTester->setUp($env, $feature, $skip);
+
+        $event = new BeforeFeatureTested($env, $feature, $setup);
+        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
+        return $setup;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $environment, $feature, $skip)
+    public function test(Environment $env, $feature, $skip)
     {
-        return $this->baseTester->test($environment, $feature, $skip);
+        return $this->baseTester->test($env, $feature, $skip);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function tearDown(Environment $environment, $feature, $skip, TestResult $result)
+    public function tearDown(Environment $env, $feature, $skip, TestResult $result)
     {
-        $this->eventDispatcher->dispatch(FeatureTested::AFTER, new FeatureTested($environment, $feature, $result));
-        $this->baseTester->tearDown($environment, $feature, $skip, $result);
+        $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
+
+        $event = new AfterFeatureTested($env, $feature, $result, $teardown);
+        $this->eventDispatcher->dispatch($event::AFTER, $event);
+
+        return $teardown;
     }
 }

@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Output\Node\Printer;
 
-use Behat\Behat\Tester\Result\StepTestResult;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Output\Formatter;
@@ -27,10 +27,10 @@ interface StepPrinter
     /**
      * Prints step using provided printer.
      *
-     * @param Formatter      $formatter
-     * @param Scenario       $scenario
-     * @param StepNode       $step
-     * @param StepTestResult $result
+     * @param Formatter  $formatter
+     * @param Scenario   $scenario
+     * @param StepNode   $step
+     * @param StepResult $result
      */
-    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepTestResult $result = null);
+    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result);
 }

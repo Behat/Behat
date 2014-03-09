@@ -10,10 +10,8 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
-use Behat\Behat\Tester\Result\StepTestResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
@@ -21,93 +19,29 @@ use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepTested extends LifecycleEvent implements GherkinNodeTested
+abstract class StepTested extends LifecycleEvent implements GherkinNodeTested
 {
     const BEFORE = 'tester.step_tested.before';
     const AFTER = 'tester.step_tested.after';
-
-    /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var StepNode
-     */
-    private $step;
-    /**
-     * @var StepTestResult
-     */
-    private $testResult;
-
-    /**
-     * Initializes event.
-     *
-     * @param Environment         $environment
-     * @param FeatureNode         $feature
-     * @param StepNode            $step
-     * @param null|StepTestResult $testResults
-     */
-    public function __construct(
-        Environment $environment,
-        FeatureNode $feature,
-        StepNode $step,
-        StepTestResult $testResults = null
-    ) {
-        parent::__construct($environment);
-
-        $this->feature = $feature;
-        $this->step = $step;
-        $this->testResult = $testResults;
-    }
 
     /**
      * Returns feature.
      *
      * @return FeatureNode
      */
-    public function getFeature()
-    {
-        return $this->feature;
-    }
+    abstract public function getFeature();
 
     /**
      * Returns step node.
      *
      * @return StepNode
      */
-    public function getStep()
-    {
-        return $this->step;
-    }
-
-    /**
-     * Returns step test result.
-     *
-     * @return null|StepTestResult
-     */
-    public function getTestResult()
-    {
-        return $this->testResult;
-    }
-
-    /**
-     * Returns step tester result status.
-     *
-     * @return integer
-     */
-    public function getResultCode()
-    {
-        if (null === $this->testResult) {
-            return null;
-        }
-
-        return $this->testResult->getResultCode();
-    }
+    abstract public function getStep();
 
     /**
      * {@inheritdoc}
      */
-    public function getNode()
+    final public function getNode()
     {
         return $this->getStep();
     }

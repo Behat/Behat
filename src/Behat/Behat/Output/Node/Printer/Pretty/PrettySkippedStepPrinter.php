@@ -10,17 +10,18 @@
 
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
-use Behat\Behat\Output\Node\Printer\SkippedStepPrinter;
-use Behat\Behat\Tester\Result\StepTestResult;
+use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
+use Behat\Behat\Output\Node\Printer\StepPrinter;
+use Behat\Behat\Tester\Result\DefinedStepResult;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
-use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
+use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
-use Prophecy\Doubler\Generator\Node\ArgumentNode;
 
 /**
  * Behat pretty skipped step printer.
@@ -29,12 +30,16 @@ use Prophecy\Doubler\Generator\Node\ArgumentNode;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettySkippedStepPrinter implements SkippedStepPrinter
+class PrettySkippedStepPrinter implements StepPrinter
 {
     /**
      * @var StepTextPainter
      */
     private $textPainter;
+    /**
+     * @var ResultToStringConverter
+     */
+    private $resultConverter;
     /**
      * @var WidthCalculator
      */
@@ -51,18 +56,21 @@ class PrettySkippedStepPrinter implements SkippedStepPrinter
     /**
      * Initializes printer.
      *
-     * @param StepTextPainter $textPainter
-     * @param WidthCalculator $widthCalculator
-     * @param integer         $indentation
-     * @param integer         $subIndentation
+     * @param StepTextPainter         $textPainter
+     * @param ResultToStringConverter $resultConverter
+     * @param WidthCalculator         $widthCalculator
+     * @param integer                 $indentation
+     * @param integer                 $subIndentation
      */
     public function __construct(
         StepTextPainter $textPainter,
+        ResultToStringConverter $resultConverter,
         WidthCalculator $widthCalculator,
         $indentation = 4,
         $subIndentation = 2
     ) {
         $this->textPainter = $textPainter;
+        $this->resultConverter = $resultConverter;
         $this->widthCalculator = $widthCalculator;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
@@ -71,10 +79,8 @@ class PrettySkippedStepPrinter implements SkippedStepPrinter
     /**
      * {@inheritdoc}
      */
-    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepTestResult $result = null)
+    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
-        $result = $result ? : new StepTestResult();
-
         $this->printText($formatter->getOutputPrinter(), $step->getType(), $step->getText(), $result);
 
         if ($formatter->getParameter('paths')) {
@@ -89,18 +95,20 @@ class PrettySkippedStepPrinter implements SkippedStepPrinter
     /**
      * Prints step text.
      *
-     * @param OutputPrinter  $printer
-     * @param string         $stepType
-     * @param string         $stepText
-     * @param StepTestResult $result
+     * @param OutputPrinter $printer
+     * @param string        $stepType
+     * @param string        $stepText
+     * @param StepResult    $result
      */
-    private function printText(OutputPrinter $printer, $stepType, $stepText, StepTestResult $result)
+    private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result)
     {
-        $style = new TestResult(StepTestResult::SKIPPED);
+        $style = $this->resultConverter->convertResultCodeToString(TestResult::SKIPPED);
 
-        if ($result->hasFoundDefinition()) {
-            $definition = $result->getSearchResult()->getMatchedDefinition();
-            $stepText = $this->textPainter->paintText($stepText, $definition, $style);
+        if ($result instanceof DefinedStepResult && $result->getStepDefinition()) {
+            $definition = $result->getStepDefinition();
+            $stepText = $this->textPainter->paintText(
+                $stepText, $definition, new IntegerTestResult(TestResult::SKIPPED)
+            );
         }
 
         $printer->write(sprintf('%s{+%s}%s %s{-%s}', $this->indentText, $style, $stepType, $stepText, $style));
@@ -109,20 +117,20 @@ class PrettySkippedStepPrinter implements SkippedStepPrinter
     /**
      * Prints step definition path (if has one).
      *
-     * @param OutputPrinter  $printer
-     * @param Scenario       $scenario
-     * @param StepNode       $step
-     * @param StepTestResult $result
+     * @param OutputPrinter $printer
+     * @param Scenario      $scenario
+     * @param StepNode      $step
+     * @param StepResult    $result
      */
-    private function printPath(OutputPrinter $printer, Scenario $scenario, StepNode $step, StepTestResult $result)
+    private function printPath(OutputPrinter $printer, Scenario $scenario, StepNode $step, StepResult $result)
     {
-        if (!$result->hasFoundDefinition()) {
+        if (!$result instanceof DefinedStepResult || !$result->getStepDefinition()) {
             $printer->writeln();
 
             return;
         }
 
-        $path = $result->getSearchResult()->getMatchedDefinition()->getPath();
+        $path = $result->getStepDefinition()->getPath();
         $textWidth = $this->widthCalculator->calculateStepWidth($step);
         $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario);
         $spacing = str_repeat(' ', $scenarioWidth - $textWidth);
@@ -138,13 +146,13 @@ class PrettySkippedStepPrinter implements SkippedStepPrinter
      */
     private function printArguments(Formatter $formatter, array $arguments)
     {
-        $result = new TestResult(TestResult::SKIPPED);
+        $style = $this->resultConverter->convertResultCodeToString(TestResult::SKIPPED);
 
         foreach ($arguments as $argument) {
             $text = $this->getArgumentString($argument, !$formatter->getParameter('multiline'));
 
             $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
-            $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $result, $indentedText, $result));
+            $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
         }
     }
 

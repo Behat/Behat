@@ -11,15 +11,15 @@
 namespace Behat\Behat\Tester\Runtime;
 
 use Behat\Behat\Tester\BackgroundTester;
-use Behat\Behat\Tester\Exception\TearDownException;
-use Behat\Behat\Tester\Result\BehatTestResult;
 use Behat\Behat\Tester\StepTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Exception\TestworkException;
+use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
-use Exception;
+use Behat\Testwork\Tester\Result\TestWithSetupResult;
+use Behat\Testwork\Tester\Setup\SuccessfulSetup;
+use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 
 /**
  * Behat in-runtime background tester.
@@ -48,38 +48,31 @@ class RuntimeBackgroundTester implements BackgroundTester
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $environment, FeatureNode $feature, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, $skip)
     {
+        return new SuccessfulSetup();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $environment, FeatureNode $feature, $skip)
+    public function test(Environment $env, FeatureNode $feature, $skip)
     {
         $background = $feature->getBackground();
 
         $results = array();
         foreach ($background->getSteps() as $step) {
-            try {
-                $this->stepTester->setUp($environment, $feature, $step, $skip);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
+            $skip = $skip || !$setup->isSuccessful();
 
-            $testResult = $this->stepTester->test($environment, $feature, $step, $skip);
+            $testResult = $this->stepTester->test($env, $feature, $step, $skip);
+            $skip = $skip || !$testResult->isPassed();
 
-            try {
-                $this->stepTester->tearDown($environment, $feature, $step, $skip, $testResult);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $teardown = $this->stepTester->tearDown($env, $feature, $step, $skip, $testResult);
+            $skip = $skip || !$teardown->isSuccessful();
 
-            $results[] = new TestResult($testResult->getResultCode());
+            $integerResult = new IntegerTestResult($testResult->getResultCode());
+            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
         }
 
         return new TestResults($results);
@@ -88,10 +81,8 @@ class RuntimeBackgroundTester implements BackgroundTester
     /**
      * {@inheritdoc}
      */
-    public function tearDown(Environment $environment, FeatureNode $feature, $skip, TestResults $results)
+    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result)
     {
-        if (BehatTestResult::PASSED < $results->getResultCode()) {
-            throw new TearDownException('Some step tests have failed.');
-        }
+        return new SuccessfulTeardown();
     }
 }

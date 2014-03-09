@@ -10,12 +10,16 @@
 
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
+use Behat\Behat\EventDispatcher\Event\AfterOutlineTested;
+use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
+use Behat\Behat\EventDispatcher\Event\AfterStepTested;
+use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\OutlineTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
 use Behat\Behat\Output\Node\Printer\OutlineTablePrinter;
-use Behat\Behat\Tester\Result\StepTestResult;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
@@ -75,12 +79,12 @@ class OutlineTableListener implements EventListener
             return;
         }
 
-        $this->captureOutlineOnBeforeOutlineEvent($event, $eventName);
+        $this->captureOutlineOnBeforeOutlineEvent($event);
         $this->forgetOutlineOnAfterOutlineEvent($eventName);
 
         $this->printHeaderOnAfterExampleEvent($formatter, $event, $eventName);
         $this->printExampleRowOnAfterExampleEvent($formatter, $event, $eventName);
-        $this->printFooterOnAfterEvent($formatter, $event, $eventName);
+        $this->printFooterOnAfterEvent($formatter, $event);
     }
 
     /**
@@ -96,12 +100,11 @@ class OutlineTableListener implements EventListener
     /**
      * Captures outline into the ivar on outline BEFORE event.
      *
-     * @param Event  $event
-     * @param string $eventName
+     * @param Event $event
      */
-    private function captureOutlineOnBeforeOutlineEvent(Event $event, $eventName)
+    private function captureOutlineOnBeforeOutlineEvent(Event $event)
     {
-        if (!$event instanceof OutlineTested || OutlineTested::BEFORE !== $eventName) {
+        if (!$event instanceof BeforeOutlineTested) {
             return;
         }
 
@@ -132,7 +135,7 @@ class OutlineTableListener implements EventListener
      */
     private function printHeaderOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if (!$event instanceof ExampleTested || ExampleTested::AFTER !== $eventName) {
+        if (!$event instanceof AfterScenarioTested || ExampleTested::AFTER !== $eventName) {
             return;
         }
 
@@ -156,11 +159,11 @@ class OutlineTableListener implements EventListener
      */
     private function printExampleRowOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if (!$event instanceof ExampleTested || ExampleTested::AFTER !== $eventName) {
+        if (!$event instanceof AfterScenarioTested || ExampleTested::AFTER !== $eventName) {
             return;
         }
 
-        $example = $event->getExample();
+        $example = $event->getScenario();
 
         $this->exampleRowPrinter->printExampleRow($formatter, $this->outline, $example, $this->stepTestedEvents);
         $this->stepTestedEvents = array();
@@ -171,11 +174,10 @@ class OutlineTableListener implements EventListener
      *
      * @param Formatter $formatter
      * @param Event     $event
-     * @param string    $eventName
      */
-    private function printFooterOnAfterEvent(Formatter $formatter, Event $event, $eventName)
+    private function printFooterOnAfterEvent(Formatter $formatter, Event $event)
     {
-        if (!$event instanceof OutlineTested || OutlineTested::AFTER !== $eventName) {
+        if (!$event instanceof AfterOutlineTested) {
             return;
         }
 
@@ -189,12 +191,12 @@ class OutlineTableListener implements EventListener
     /**
      * Returns currently captured step events results.
      *
-     * @return StepTestResult[]
+     * @return StepResult[]
      */
     private function getStepTestResults()
     {
         return array_map(
-            function (StepTested $event) {
+            function (AfterStepTested $event) {
                 return $event->getTestResult();
             },
             $this->stepTestedEvents

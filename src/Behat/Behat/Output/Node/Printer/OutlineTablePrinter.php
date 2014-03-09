@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Output\Node\Printer;
 
-use Behat\Behat\Tester\Result\StepTestResult;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Output\Formatter;
@@ -31,7 +31,7 @@ interface OutlineTablePrinter
      * @param Formatter        $formatter
      * @param FeatureNode      $feature
      * @param OutlineNode      $outline
-     * @param StepTestResult[] $results
+     * @param StepResult[] $results
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline, array $results);
 

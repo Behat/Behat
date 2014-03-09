@@ -10,10 +10,11 @@
 
 namespace Behat\Behat\Output\Node\EventListener\Flow;
 
+use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
-use Behat\Behat\Tester\Result\StepTestResult;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
@@ -32,7 +33,7 @@ use Symfony\Component\EventDispatcher\Event;
 class OnlyFirstBackgroundFiresListener implements EventListener
 {
     /**
-     * @var \Behat\Testwork\Output\Node\EventListener\EventListener
+     * @var EventListener
      */
     private $descendant;
     /**
@@ -47,7 +48,7 @@ class OnlyFirstBackgroundFiresListener implements EventListener
     /**
      * Initializes listener.
      *
-     * @param \Behat\Testwork\Output\Node\EventListener\EventListener $descendant
+     * @param EventListener $descendant
      */
     public function __construct(EventListener $descendant)
     {
@@ -151,7 +152,7 @@ class OnlyFirstBackgroundFiresListener implements EventListener
     {
         return $this->firstBackgroundEnded
             && $this->inBackground
-            && $event instanceof StepTested
-            && StepTestResult::FAILED !== $event->getResultCode();
+            && $event instanceof AfterStepTested
+            && StepResult::FAILED !== $event->getTestResult()->getResultCode();
     }
 }

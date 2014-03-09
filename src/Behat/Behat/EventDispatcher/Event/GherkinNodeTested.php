@@ -11,7 +11,6 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\NodeInterface;
-use Behat\Testwork\Tester\Result\TestResults;
 
 /**
  * Behat Gherkin node event interface.
@@ -26,18 +25,4 @@ interface GherkinNodeTested
      * @return NodeInterface
      */
     public function getNode();
-
-    /**
-     * Returns node test result.
-     *
-     * @return null|TestResults
-     */
-    public function getTestResult();
-
-    /**
-     * Returns result code.
-     *
-     * @return integer
-     */
-    public function getResultCode();
 }

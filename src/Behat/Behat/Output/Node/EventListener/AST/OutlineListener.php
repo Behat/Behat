@@ -10,9 +10,12 @@
 
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
+use Behat\Behat\EventDispatcher\Event\AfterOutlineTested;
+use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
+use Behat\Behat\EventDispatcher\Event\AfterStepTested;
+use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
-use Behat\Behat\EventDispatcher\Event\OutlineTested;
-use Behat\Behat\EventDispatcher\Event\StepTested;
+use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Output\Node\Printer\ExamplePrinter;
 use Behat\Behat\Output\Node\Printer\OutlinePrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
@@ -69,11 +72,11 @@ class OutlineListener implements EventListener
      */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
-        $this->printAndCaptureOutlineHeaderOnBeforeEvent($formatter, $event, $eventName);
-        $this->printAndForgetOutlineFooterOnAfterEvent($formatter, $event, $eventName);
+        $this->printAndCaptureOutlineHeaderOnBeforeEvent($formatter, $event);
+        $this->printAndForgetOutlineFooterOnAfterEvent($formatter, $event);
         $this->printExampleHeaderOnBeforeExampleEvent($formatter, $event, $eventName);
         $this->printExampleFooterOnAfterExampleEvent($formatter, $event, $eventName);
-        $this->printStepOnAfterStepEvent($formatter, $event, $eventName);
+        $this->printStepOnAfterStepEvent($formatter, $event);
     }
 
     /**
@@ -81,11 +84,10 @@ class OutlineListener implements EventListener
      *
      * @param Formatter $formatter
      * @param Event     $event
-     * @param string    $eventName
      */
-    private function printAndCaptureOutlineHeaderOnBeforeEvent(Formatter $formatter, Event $event, $eventName)
+    private function printAndCaptureOutlineHeaderOnBeforeEvent(Formatter $formatter, Event $event)
     {
-        if (!$event instanceof OutlineTested || OutlineTested::BEFORE !== $eventName) {
+        if (!$event instanceof BeforeOutlineTested) {
             return;
         }
 
@@ -97,11 +99,10 @@ class OutlineListener implements EventListener
      *
      * @param Formatter $formatter
      * @param Event     $event
-     * @param string    $eventName
      */
-    private function printAndForgetOutlineFooterOnAfterEvent(Formatter $formatter, Event $event, $eventName)
+    private function printAndForgetOutlineFooterOnAfterEvent(Formatter $formatter, Event $event)
     {
-        if (!$event instanceof OutlineTested || OutlineTested::AFTER !== $eventName) {
+        if (!$event instanceof AfterOutlineTested) {
             return;
         }
 
@@ -121,11 +122,11 @@ class OutlineListener implements EventListener
      */
     private function printExampleHeaderOnBeforeExampleEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if (!$event instanceof ExampleTested || ExampleTested::BEFORE !== $eventName) {
+        if (!$event instanceof ScenarioTested || ExampleTested::BEFORE !== $eventName) {
             return;
         }
 
-        $this->example = $event->getExample();
+        $this->example = $event->getScenario();
         $this->examplePrinter->printHeader($formatter, $event->getFeature(), $this->example);
     }
 
@@ -138,7 +139,7 @@ class OutlineListener implements EventListener
      */
     private function printExampleFooterOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if (!$event instanceof ExampleTested || ExampleTested::AFTER !== $eventName) {
+        if (!$event instanceof AfterScenarioTested || ExampleTested::AFTER !== $eventName) {
             return;
         }
 
@@ -151,11 +152,12 @@ class OutlineListener implements EventListener
      *
      * @param Formatter $formatter
      * @param Event     $event
-     * @param string    $eventName
+     *
+     * @internal param string $eventName
      */
-    private function printStepOnAfterStepEvent(Formatter $formatter, Event $event, $eventName)
+    private function printStepOnAfterStepEvent(Formatter $formatter, Event $event)
     {
-        if (!$event instanceof StepTested || StepTested::AFTER !== $eventName) {
+        if (!$event instanceof AfterStepTested) {
             return;
         }
 

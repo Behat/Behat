@@ -8,16 +8,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester;
+namespace Behat\Behat\Tester\Result;
+
+use Behat\Behat\Definition\Definition;
 
 /**
- * Behat outline example tester interface.
- *
- * This interface defines an API for Tree Outline Example testers.
- * Example tester is basically a scenario tester, because Outline Examples treated exactly like scenarios.
+ * Behat defined step result interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ExampleTester extends ScenarioTester
+interface DefinedStepResult extends StepResult
 {
+    /**
+     * Returns found step definition.
+     *
+     * @return null|Definition
+     */
+    public function getStepDefinition();
 }

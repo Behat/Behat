@@ -10,10 +10,12 @@
 
 namespace Behat\Behat\EventDispatcher\Tester;
 
-use Behat\Behat\Tester\ExampleTester;
+use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
+use Behat\Behat\EventDispatcher\Event\BeforeScenarioTested;
+use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Tester\ScenarioTester;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\StepContainerInterface;
+use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -25,7 +27,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatchingScenarioTester implements ScenarioTester, ExampleTester
+class EventDispatchingScenarioTester implements ScenarioTester
 {
     /**
      * @var ScenarioTester
@@ -38,56 +40,63 @@ class EventDispatchingScenarioTester implements ScenarioTester, ExampleTester
     /**
      * @var string
      */
-    private $eventClass;
+    private $beforeEventName;
+    /**
+     * @var string
+     */
+    private $afterEventName;
 
     /**
      * Initializes tester.
      *
      * @param ScenarioTester           $baseTester
      * @param EventDispatcherInterface $eventDispatcher
-     * @param string                   $eventClass
+     * @param string                   $beforeEventName
+     * @param string                   $afterEventName
      */
-    public function __construct(ScenarioTester $baseTester, EventDispatcherInterface $eventDispatcher, $eventClass)
-    {
+    public function __construct(
+        ScenarioTester $baseTester,
+        EventDispatcherInterface $eventDispatcher,
+        $beforeEventName = ScenarioTested::BEFORE,
+        $afterEventName = ScenarioTested::AFTER
+    ) {
         $this->baseTester = $baseTester;
         $this->eventDispatcher = $eventDispatcher;
-        $this->eventClass = $eventClass;
+        $this->beforeEventName = $beforeEventName;
+        $this->afterEventName = $afterEventName;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $environment, FeatureNode $feature, StepContainerInterface $scenario, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
-        $eventClass = $this->eventClass;
-        $event = new $eventClass($environment, $feature, $scenario);
-        $this->eventDispatcher->dispatch($eventClass::BEFORE, $event);
+        $setup = $this->baseTester->setUp($env, $feature, $scenario, $skip);
 
-        $this->baseTester->setUp($environment, $feature, $scenario, $skip);
+        $event = new BeforeScenarioTested($env, $feature, $scenario, $setup);
+        $this->eventDispatcher->dispatch($this->beforeEventName, $event);
+
+        return $setup;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $environment, FeatureNode $feature, StepContainerInterface $scenario, $skip)
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
-        return $this->baseTester->test($environment, $feature, $scenario, $skip);
+        return $this->baseTester->test($env, $feature, $scenario, $skip);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function tearDown(
-        Environment $environment,
-        FeatureNode $feature,
-        StepContainerInterface $scenario,
-        $skip,
-        TestResult $result
-    ) {
-        $eventClass = $this->eventClass;
-        $event = new $eventClass($environment, $feature, $scenario, $result);
-        $this->eventDispatcher->dispatch($eventClass::AFTER, $event);
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
+    {
+        $teardown = $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);
 
-        $this->baseTester->tearDown($environment, $feature, $scenario, $skip, $result);
+        $event = new AfterScenarioTested($env, $feature, $scenario, $result, $teardown);
+        $this->eventDispatcher->dispatch($this->afterEventName, $event);
+
+        return $teardown;
     }
 }

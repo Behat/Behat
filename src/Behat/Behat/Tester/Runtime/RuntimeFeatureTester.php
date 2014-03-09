@@ -10,16 +10,18 @@
 
 namespace Behat\Behat\Tester\Runtime;
 
-use Behat\Behat\Tester\FeatureTester;
 use Behat\Behat\Tester\OutlineTester;
 use Behat\Behat\Tester\ScenarioTester;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
-use Behat\Testwork\Exception\TestworkException;
+use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
-use Exception;
+use Behat\Testwork\Tester\Result\TestWithSetupResult;
+use Behat\Testwork\Tester\Setup\SuccessfulSetup;
+use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
+use Behat\Testwork\Tester\SpecificationTester;
 
 /**
  * Behat in-runtime feature tester.
@@ -28,7 +30,7 @@ use Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeFeatureTester implements FeatureTester
+class RuntimeFeatureTester implements SpecificationTester
 {
     /**
      * @var ScenarioTester
@@ -41,61 +43,53 @@ class RuntimeFeatureTester implements FeatureTester
     /**
      * @var EnvironmentManager
      */
-    private $environmentManager;
+    private $envManager;
 
     /**
      * Initializes tester.
      *
      * @param ScenarioTester     $scenarioTester
      * @param OutlineTester      $outlineTester
-     * @param EnvironmentManager $environmentManager
+     * @param EnvironmentManager $envManager
      */
     public function __construct(
         ScenarioTester $scenarioTester,
         OutlineTester $outlineTester,
-        EnvironmentManager $environmentManager
+        EnvironmentManager $envManager
     ) {
         $this->scenarioTester = $scenarioTester;
         $this->outlineTester = $outlineTester;
-        $this->environmentManager = $environmentManager;
+        $this->envManager = $envManager;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $environment, $specification, $skip)
+    public function setUp(Environment $env, $spec, $skip)
     {
+        return new SuccessfulSetup();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $environment, $feature, $skip = false)
+    public function test(Environment $env, $feature, $skip = false)
     {
         $results = array();
         foreach ($feature->getScenarios() as $scenario) {
-            $isolatedEnvironment = $this->environmentManager->isolateEnvironment($environment, $scenario);
+            $isolatedEnvironment = $this->envManager->isolateEnvironment($env, $scenario);
             $tester = $scenario instanceof OutlineNode ? $this->outlineTester : $this->scenarioTester;
 
-            try {
-                $tester->setUp($isolatedEnvironment, $feature, $scenario, $skip);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $setup = $tester->setUp($isolatedEnvironment, $feature, $scenario, $skip);
+            $skip = $skip || !$setup->isSuccessful();
 
             $testResult = $tester->test($isolatedEnvironment, $feature, $scenario, $skip);
 
-            try {
-                $tester->tearDown($isolatedEnvironment, $feature, $scenario, $skip, $testResult);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $teardown = $tester->tearDown($isolatedEnvironment, $feature, $scenario, $skip, $testResult);
+            $skip = $skip || !$teardown->isSuccessful();
 
-            $results[] = new TestResult($testResult->getResultCode());
+            $integerResult = new IntegerTestResult($testResult->getResultCode());
+            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
         }
 
         return new TestResults($results);
@@ -104,7 +98,8 @@ class RuntimeFeatureTester implements FeatureTester
     /**
      * {@inheritdoc}
      */
-    public function tearDown(Environment $environment, $specification, $skip, TestResult $result)
+    public function tearDown(Environment $env, $spec, $skip, TestResult $result)
     {
+        return new SuccessfulTeardown();
     }
 }

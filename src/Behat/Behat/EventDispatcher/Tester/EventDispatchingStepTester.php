@@ -10,8 +10,9 @@
 
 namespace Behat\Behat\EventDispatcher\Tester;
 
-use Behat\Behat\EventDispatcher\Event\StepTested;
-use Behat\Behat\Tester\Result\StepTestResult;
+use Behat\Behat\EventDispatcher\Event\AfterStepTested;
+use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Behat\Tester\StepTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
@@ -51,33 +52,34 @@ class EventDispatchingStepTester implements StepTester
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $environment, FeatureNode $feature, StepNode $step, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
-        $event = new StepTested($environment, $feature, $step);
-        $this->eventDispatcher->dispatch(StepTested::BEFORE, $event);
-        $this->baseTester->setUp($environment, $feature, $step, $skip);
+        $setup = $this->baseTester->setUp($env, $feature, $step, $skip);
+
+        $event = new BeforeStepTested($env, $feature, $step, $setup);
+        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
+        return $setup;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $environment, FeatureNode $feature, StepNode $step, $skip)
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
-        return $this->baseTester->test($environment, $feature, $step, $skip);
+        return $this->baseTester->test($env, $feature, $step, $skip);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function tearDown(
-        Environment $environment,
-        FeatureNode $feature,
-        StepNode $step,
-        $skip,
-        StepTestResult $result
-    ) {
-        $event = new StepTested($environment, $feature, $step, $result);
-        $this->eventDispatcher->dispatch(StepTested::AFTER, $event);
-        $this->baseTester->tearDown($environment, $feature, $step, $skip, $result);
+    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
+    {
+        $teardown = $this->baseTester->tearDown($env, $feature, $step, $skip, $result);
+
+        $event = new AfterStepTested($env, $feature, $step, $result, $teardown);
+        $this->eventDispatcher->dispatch($event::AFTER, $event);
+
+        return $teardown;
     }
 }

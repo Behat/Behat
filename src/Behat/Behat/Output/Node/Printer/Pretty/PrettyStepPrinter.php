@@ -10,9 +10,12 @@
 
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
+use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Behat\Tester\Exception\PendingException;
-use Behat\Behat\Tester\Result\StepTestResult;
+use Behat\Behat\Tester\Result\DefinedStepResult;
+use Behat\Behat\Tester\Result\ExceptionResult;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
@@ -33,6 +36,10 @@ class PrettyStepPrinter implements StepPrinter
      */
     private $textPainter;
     /**
+     * @var ResultToStringConverter
+     */
+    private $resultConverter;
+    /**
      * @var ExceptionPresenter
      */
     private $exceptionPresenter;
@@ -52,20 +59,23 @@ class PrettyStepPrinter implements StepPrinter
     /**
      * Initializes printer.
      *
-     * @param StepTextPainter    $textPainter
-     * @param ExceptionPresenter $exceptionPresenter
-     * @param WidthCalculator    $widthCalculator
-     * @param integer            $indentation
-     * @param integer            $subIndentation
+     * @param StepTextPainter         $textPainter
+     * @param ResultToStringConverter $resultConverter
+     * @param ExceptionPresenter      $exceptionPresenter
+     * @param WidthCalculator         $widthCalculator
+     * @param integer                 $indentation
+     * @param integer                 $subIndentation
      */
     public function __construct(
         StepTextPainter $textPainter,
+        ResultToStringConverter $resultConverter,
         ExceptionPresenter $exceptionPresenter,
         WidthCalculator $widthCalculator,
         $indentation = 4,
         $subIndentation = 2
     ) {
         $this->textPainter = $textPainter;
+        $this->resultConverter = $resultConverter;
         $this->exceptionPresenter = $exceptionPresenter;
         $this->widthCalculator = $widthCalculator;
         $this->indentText = str_repeat(' ', intval($indentation));
@@ -75,10 +85,8 @@ class PrettyStepPrinter implements StepPrinter
     /**
      * {@inheritdoc}
      */
-    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepTestResult $result = null)
+    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
-        $result = $result ? : new StepTestResult();
-
         $this->printText($formatter->getOutputPrinter(), $step->getType(), $step->getText(), $result);
 
         if ($formatter->getParameter('paths')) {
@@ -94,32 +102,33 @@ class PrettyStepPrinter implements StepPrinter
     /**
      * Prints step text.
      *
-     * @param OutputPrinter  $printer
-     * @param string         $stepType
-     * @param string         $stepText
-     * @param StepTestResult $result
+     * @param OutputPrinter $printer
+     * @param string        $stepType
+     * @param string        $stepText
+     * @param StepResult    $result
      */
-    private function printText(OutputPrinter $printer, $stepType, $stepText, StepTestResult $result)
+    private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result)
     {
-        if ($result->hasFoundDefinition()) {
-            $definition = $result->getSearchResult()->getMatchedDefinition();
+        if ($result && $result instanceof DefinedStepResult && $result->getStepDefinition()) {
+            $definition = $result->getStepDefinition();
             $stepText = $this->textPainter->paintText($stepText, $definition, $result);
         }
 
-        $printer->write(sprintf('%s{+%s}%s %s{-%s}', $this->indentText, $result, $stepType, $stepText, $result));
+        $style = $this->resultConverter->convertResultToString($result);
+        $printer->write(sprintf('%s{+%s}%s %s{-%s}', $this->indentText, $style, $stepType, $stepText, $style));
     }
 
     /**
      * Prints step definition path (if has one).
      *
-     * @param OutputPrinter  $printer
-     * @param Scenario       $scenario
-     * @param StepNode       $step
-     * @param StepTestResult $result
+     * @param OutputPrinter $printer
+     * @param Scenario      $scenario
+     * @param StepNode      $step
+     * @param StepResult    $result
      */
-    private function printPath(OutputPrinter $printer, Scenario $scenario, StepNode $step, StepTestResult $result)
+    private function printPath(OutputPrinter $printer, Scenario $scenario, StepNode $step, StepResult $result)
     {
-        if (!$result->hasFoundDefinition()) {
+        if (!$result instanceof DefinedStepResult) {
             $printer->writeln();
 
             return;
@@ -127,7 +136,7 @@ class PrettyStepPrinter implements StepPrinter
 
         $indentation = mb_strlen($this->indentText, 'utf8');
 
-        $path = $result->getSearchResult()->getMatchedDefinition()->getPath();
+        $path = $result->getStepDefinition()->getPath();
         $textWidth = $this->widthCalculator->calculateStepWidth($step, $indentation);
         $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, $indentation - 2);
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $textWidth));
@@ -140,16 +149,42 @@ class PrettyStepPrinter implements StepPrinter
      *
      * @param Formatter           $formatter
      * @param ArgumentInterface[] $arguments
-     * @param StepTestResult      $result
+     * @param StepResult          $result
      */
-    private function printArguments(Formatter $formatter, array $arguments, StepTestResult $result)
+    private function printArguments(Formatter $formatter, array $arguments, StepResult $result)
     {
+        $style = $this->resultConverter->convertResultToString($result);
+
         foreach ($arguments as $argument) {
             $text = $this->getArgumentString($argument, !$formatter->getParameter('multiline'));
 
             $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
-            $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $result, $indentedText, $result));
+            $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
         }
+    }
+
+    /**
+     * Prints step exception (if has one).
+     *
+     * @param OutputPrinter $printer
+     * @param StepResult    $result
+     */
+    private function printException(OutputPrinter $printer, StepResult $result)
+    {
+        $style = $this->resultConverter->convertResultToString($result);
+
+        if (!$result instanceof ExceptionResult || !$result->hasException()) {
+            return;
+        }
+
+        if ($result->getException() instanceof PendingException) {
+            $text = $result->getException()->getMessage();
+        } else {
+            $text = $this->exceptionPresenter->presentException($result->getException());
+        }
+
+        $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+        $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
     }
 
     /**
@@ -173,28 +208,6 @@ class PrettyStepPrinter implements StepPrinter
         }
 
         return (string)$argument;
-    }
-
-    /**
-     * Prints step exception (if has one).
-     *
-     * @param OutputPrinter  $printer
-     * @param StepTestResult $result
-     */
-    private function printException(OutputPrinter $printer, StepTestResult $result)
-    {
-        if (!$result->hasException()) {
-            return;
-        }
-
-        if ($result->getException() instanceof PendingException) {
-            $text = $result->getException()->getMessage();
-        } else {
-            $text = $this->exceptionPresenter->presentException($result->getException());
-        }
-
-        $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
-        $printer->writeln(sprintf('{+%s}%s{-%s}', $result, $indentedText, $result));
     }
 
     /**

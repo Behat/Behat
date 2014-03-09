@@ -12,7 +12,7 @@ namespace Behat\Behat\Hook\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Output\ServiceContainer\Formatter\PrettyFormatterFactory;
-use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Hook\ServiceContainer\HookExtension as BaseExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -33,7 +33,6 @@ class HookExtension extends BaseExtension
     {
         parent::load($container, $config);
         $this->loadAnnotationReader($container);
-        $this->loadOutputListeners($container);
     }
 
     /**
@@ -49,18 +48,43 @@ class HookExtension extends BaseExtension
     }
 
     /**
-     * Loads hooked events subscriber.
+     * Loads hookable testers.
      *
      * @param ContainerBuilder $container
      */
-    protected function loadHookedEventsSubscriber(ContainerBuilder $container)
+    protected function loadHookableTesters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Hook\EventDispatcher\HookedEventsSubscriber', array(
-            new Reference(self::DISPATCHER_ID),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+        parent::loadHookableTesters($container);
+
+        $definition = new Definition('Behat\Behat\Hook\Tester\HookableFeatureTester', array(
+            new Reference(TesterExtension::SPECIFICATION_TESTER_ID),
+            new Reference(self::DISPATCHER_ID)
         ));
-        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG);
-        $container->setDefinition(self::EVENT_SUBSCRIBER, $definition);
+        $definition->addTag(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG, array('priority' => 9999));
+        $container->setDefinition(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG . '.hookable', $definition);
+
+        $definition = new Definition('Behat\Behat\Hook\Tester\HookableScenarioTester', array(
+                new Reference(TesterExtension::SCENARIO_TESTER_ID),
+                new Reference(self::DISPATCHER_ID)
+            )
+        );
+        $definition->addTag(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG, array('priority' => 9999));
+        $container->setDefinition(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG . '.hookable', $definition);
+
+        $definition = new Definition('Behat\Behat\Hook\Tester\HookableScenarioTester', array(
+                new Reference(TesterExtension::EXAMPLE_TESTER_ID),
+                new Reference(self::DISPATCHER_ID)
+            )
+        );
+        $definition->addTag(TesterExtension::EXAMPLE_TESTER_WRAPPER_TAG, array('priority' => 9999));
+        $container->setDefinition(TesterExtension::EXAMPLE_TESTER_WRAPPER_TAG . '.hookable', $definition);
+
+        $definition = new Definition('Behat\Behat\Hook\Tester\HookableStepTester', array(
+            new Reference(TesterExtension::STEP_TESTER_ID),
+            new Reference(self::DISPATCHER_ID)
+        ));
+        $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG, array('priority' => 9999));
+        $container->setDefinition(TesterExtension::STEP_TESTER_WRAPPER_TAG . '.hookable', $definition);
     }
 
     /**

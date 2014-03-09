@@ -12,14 +12,18 @@ namespace Behat\Behat\Output\Node\Printer\Pretty;
 
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
+use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
 use Behat\Behat\Tester\Exception\PendingException;
-use Behat\Behat\Tester\Result\StepTestResult;
+use Behat\Behat\Tester\Result\ExceptionResult;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\OutlineNode;
+use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Result\TestResults;
 
 /**
  * Behat pretty example row printer.
@@ -30,6 +34,10 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 class PrettyExampleRowPrinter implements ExampleRowPrinter
 {
+    /**
+     * @var ResultToStringConverter
+     */
+    private $resultConverter;
     /**
      * @var ExceptionPresenter
      */
@@ -46,12 +54,18 @@ class PrettyExampleRowPrinter implements ExampleRowPrinter
     /**
      * Initializes printer.
      *
-     * @param ExceptionPresenter $exceptionPresenter
-     * @param integer            $indentation
-     * @param integer            $subIndentation
+     * @param ResultToStringConverter $resultConverter
+     * @param ExceptionPresenter      $exceptionPresenter
+     * @param integer                 $indentation
+     * @param integer                 $subIndentation
      */
-    public function __construct(ExceptionPresenter $exceptionPresenter, $indentation = 6, $subIndentation = 2)
-    {
+    public function __construct(
+        ResultToStringConverter $resultConverter,
+        ExceptionPresenter $exceptionPresenter,
+        $indentation = 6,
+        $subIndentation = 2
+    ) {
+        $this->resultConverter = $resultConverter;
         $this->exceptionPresenter = $exceptionPresenter;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
@@ -73,17 +87,19 @@ class PrettyExampleRowPrinter implements ExampleRowPrinter
     /**
      * Creates wrapper-closure for the example table.
      *
-     * @param OutlineNode  $outline
-     * @param ExampleNode  $example
-     * @param StepTested[] $stepEvents
+     * @param OutlineNode              $outline
+     * @param ExampleNode              $example
+     * @param AfterTested|StepTested[] $stepEvents
      *
      * @return callable
      */
     private function getWrapperClosure(OutlineNode $outline, ExampleNode $example, array $stepEvents)
     {
-        return function ($value, $column) use ($outline, $example, $stepEvents) {
-            $resultCode = StepTestResult::PASSED;
+        $resultConverter = $this->resultConverter;
 
+        return function ($value, $column) use ($outline, $example, $stepEvents, $resultConverter) {
+
+            $results = array();
             foreach ($stepEvents as $event) {
                 $index = array_search($event->getStep(), $example->getSteps());
                 $header = $outline->getExampleTable()->getRow(0);
@@ -91,13 +107,14 @@ class PrettyExampleRowPrinter implements ExampleRowPrinter
                 $outlineStepText = $steps[$index]->getText();
 
                 if (false !== strpos($outlineStepText, '<' . $header[$column] . '>')) {
-                    $resultCode = max($resultCode, $event->getResultCode());
+                    $results[] = $event->getTestResult();
                 }
             }
 
-            $result = new TestResult($resultCode);
+            $result = new TestResults($results);
+            $style = $resultConverter->convertResultToString($result);
 
-            return sprintf('{+%s}%s{-%s}', $result, $value, $result);
+            return sprintf('{+%s}%s{-%s}', $style, $value, $style);
         };
     }
 
@@ -117,12 +134,14 @@ class PrettyExampleRowPrinter implements ExampleRowPrinter
     /**
      * Prints step exception (if has one).
      *
-     * @param OutputPrinter  $printer
-     * @param StepTestResult $result
+     * @param OutputPrinter $printer
+     * @param StepResult    $result
      */
-    private function printStepException(OutputPrinter $printer, StepTestResult $result)
+    private function printStepException(OutputPrinter $printer, StepResult $result)
     {
-        if (!$result->hasException()) {
+        $style = $this->resultConverter->convertResultToString($result);
+
+        if (!$result instanceof ExceptionResult || !$result->hasException()) {
             return;
         }
 
@@ -133,7 +152,7 @@ class PrettyExampleRowPrinter implements ExampleRowPrinter
         }
 
         $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
-        $printer->writeln(sprintf('{+%s}%s{-%s}', $result, $indentedText, $result));
+        $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
     }
 
     /**

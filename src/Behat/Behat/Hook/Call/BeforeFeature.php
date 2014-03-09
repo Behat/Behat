@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Hook\Call;
 
-use Behat\Behat\EventDispatcher\Event\FeatureTested;
+use Behat\Behat\Hook\Scope\FeatureScope;
 
 /**
  * Before feature hook.
@@ -28,7 +28,7 @@ class BeforeFeature extends RuntimeFeatureHook
      */
     public function __construct($filterString, $callable, $description = null)
     {
-        parent::__construct(array(FeatureTested::BEFORE), $filterString, $callable, $description);
+        parent::__construct(FeatureScope::BEFORE, $filterString, $callable, $description);
     }
 
     /**

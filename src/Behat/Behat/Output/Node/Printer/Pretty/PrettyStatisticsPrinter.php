@@ -10,13 +10,14 @@
 
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
+use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\StatisticsPrinter;
 use Behat\Behat\Output\Statistics\Statistics;
-use Behat\Behat\Tester\Result\BehatTestResult;
 use Behat\Testwork\Counter\Memory;
 use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
+use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -26,6 +27,10 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class PrettyStatisticsPrinter implements StatisticsPrinter
 {
+    /**
+     * @var ResultToStringConverter
+     */
+    private $resultConverter;
     /**
      * @var TranslatorInterface
      */
@@ -38,11 +43,13 @@ class PrettyStatisticsPrinter implements StatisticsPrinter
     /**
      * Initializes printer.
      *
-     * @param TranslatorInterface $translator
-     * @param string              $basePath
+     * @param ResultToStringConverter $resultConverter
+     * @param TranslatorInterface     $translator
+     * @param string                  $basePath
      */
-    public function __construct(TranslatorInterface $translator, $basePath)
+    public function __construct(ResultToStringConverter $resultConverter, TranslatorInterface $translator, $basePath)
     {
+        $this->resultConverter = $resultConverter;
         $this->translator = $translator;
         $this->basePath = $basePath;
     }
@@ -54,11 +61,11 @@ class PrettyStatisticsPrinter implements StatisticsPrinter
     {
         $printer = $formatter->getOutputPrinter();
 
-        $scenarioStats = $statistics->getScenarioStatsWithResultCode(BehatTestResult::SKIPPED);
-        $this->printScenariosList($printer, 'skipped_scenarios_title', BehatTestResult::SKIPPED, $scenarioStats);
+        $scenarioStats = $statistics->getScenarioStatsWithResultCode(TestResult::SKIPPED);
+        $this->printScenariosList($printer, 'skipped_scenarios_title', TestResult::SKIPPED, $scenarioStats);
 
-        $scenarioStats = $statistics->getScenarioStatsWithResultCode(BehatTestResult::FAILED);
-        $this->printScenariosList($printer, 'failed_scenarios_title', BehatTestResult::FAILED, $scenarioStats);
+        $scenarioStats = $statistics->getScenarioStatsWithResultCode(TestResult::FAILED);
+        $this->printScenariosList($printer, 'failed_scenarios_title', TestResult::FAILED, $scenarioStats);
 
         $this->printCounters($printer, 'scenarios_count', $statistics->getScenarioStats());
         $this->printCounters($printer, 'steps_count', $statistics->getStepStats());
@@ -79,7 +86,7 @@ class PrettyStatisticsPrinter implements StatisticsPrinter
             return;
         }
 
-        $style = new BehatTestResult($resultCode);
+        $style = $this->resultConverter->convertResultCodeToString($resultCode);
         $intro = $this->translator->trans($intro, array(), 'output');
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
@@ -106,7 +113,7 @@ class PrettyStatisticsPrinter implements StatisticsPrinter
         $detailedStats = array();
         foreach ($stats as $resultCode => $codeStats) {
             $count = count($codeStats);
-            $style = new BehatTestResult($resultCode);
+            $style = $this->resultConverter->convertResultCodeToString($resultCode);
 
             $transId = $style . '_count';
             $message = $this->translator->transChoice($transId, $count, array('%1%' => $count), 'output');

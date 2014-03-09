@@ -11,16 +11,17 @@
 namespace Behat\Behat\Tester\Runtime;
 
 use Behat\Behat\Tester\BackgroundTester;
-use Behat\Behat\Tester\ExampleTester;
 use Behat\Behat\Tester\ScenarioTester;
 use Behat\Behat\Tester\StepTester;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\StepContainerInterface;
+use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Exception\TestworkException;
+use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
-use Exception;
+use Behat\Testwork\Tester\Result\TestWithSetupResult;
+use Behat\Testwork\Tester\Setup\SuccessfulSetup;
+use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 
 /**
  * Behat in-runtime scenario tester.
@@ -29,7 +30,7 @@ use Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeScenarioTester implements ScenarioTester, ExampleTester
+class RuntimeScenarioTester implements ScenarioTester
 {
     /**
      * @var StepTester
@@ -55,59 +56,44 @@ class RuntimeScenarioTester implements ScenarioTester, ExampleTester
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $environment, FeatureNode $feature, StepContainerInterface $example, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $example, $skip)
     {
+        return new SuccessfulSetup();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function test(
-        Environment $environment,
-        FeatureNode $feature,
-        StepContainerInterface $scenario,
-        $skip = false
-    ) {
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip = false)
+    {
         $results = array();
 
         if ($feature->hasBackground()) {
-            try {
-                $this->backgroundTester->setUp($environment, $feature, $skip);
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $setup = $this->backgroundTester->setUp($env, $feature, $skip);
+            $skip = $skip || !$setup->isSuccessful();
 
-            $testResult = $this->backgroundTester->test($environment, $feature, $skip);
+            $testResult = $this->backgroundTester->test($env, $feature, $skip);
+            $skip = $skip || !$testResult->isPassed();
 
-            try {
-                $this->backgroundTester->tearDown($environment, $feature, $skip, $testResult);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $teardown = $this->backgroundTester->tearDown($env, $feature, $skip, $testResult);
+            $skip = $skip || !$teardown->isSuccessful();
 
-            $results = $testResult->toArray();
+            $integerResult = new IntegerTestResult($testResult->getResultCode());
+            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
         }
 
         foreach ($scenario->getSteps() as $step) {
-            try {
-                $this->stepTester->setUp($environment, $feature, $step, $skip);
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
+            $skip = $skip || !$setup->isSuccessful();
 
-            $testResult = $this->stepTester->test($environment, $feature, $step, $skip);
+            $testResult = $this->stepTester->test($env, $feature, $step, $skip);
+            $skip = $skip || !$testResult->isPassed();
 
-            try {
-                $this->stepTester->tearDown($environment, $feature, $step, $skip, $testResult);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $teardown = $this->stepTester->tearDown($env, $feature, $step, $skip, $testResult);
+            $skip = $skip || !$teardown->isSuccessful();
 
-            $results[] = new TestResult($testResult->getResultCode());
+            $integerResult = new IntegerTestResult($testResult->getResultCode());
+            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
         }
 
         return new TestResults($results);
@@ -116,12 +102,8 @@ class RuntimeScenarioTester implements ScenarioTester, ExampleTester
     /**
      * {@inheritdoc}
      */
-    public function tearDown(
-        Environment $environment,
-        FeatureNode $feature,
-        StepContainerInterface $example,
-        $skip,
-        TestResult $result
-    ) {
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
+    {
+        return new SuccessfulTeardown();
     }
 }

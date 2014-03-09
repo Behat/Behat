@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\EventDispatcher\ServiceContainer;
 
+use Behat\Behat\EventDispatcher\Event\ExampleTested;
+use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension as BaseExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -49,7 +51,7 @@ class EventDispatcherExtension extends BaseExtension
             new Reference(TesterExtension::BACKGROUND_TESTER_ID),
             new Reference(self::DISPATCHER_ID)
         ));
-        $definition->addTag(TesterExtension::BACKGROUND_TESTER_WRAPPER_TAG);
+        $definition->addTag(TesterExtension::BACKGROUND_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::BACKGROUND_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
@@ -64,7 +66,7 @@ class EventDispatcherExtension extends BaseExtension
             new Reference(TesterExtension::SPECIFICATION_TESTER_ID),
             new Reference(self::DISPATCHER_ID)
         ));
-        $definition->addTag(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG);
+        $definition->addTag(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
@@ -79,7 +81,7 @@ class EventDispatcherExtension extends BaseExtension
             new Reference(TesterExtension::OUTLINE_TESTER_ID),
             new Reference(self::DISPATCHER_ID)
         ));
-        $definition->addTag(TesterExtension::OUTLINE_TESTER_WRAPPER_TAG);
+        $definition->addTag(TesterExtension::OUTLINE_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::OUTLINE_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
@@ -93,9 +95,10 @@ class EventDispatcherExtension extends BaseExtension
         $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingScenarioTester', array(
             new Reference(TesterExtension::SCENARIO_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
-            'Behat\Behat\EventDispatcher\Event\ScenarioTested'
+            ScenarioTested::BEFORE,
+            ScenarioTested::AFTER
         ));
-        $definition->addTag(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG);
+        $definition->addTag(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
@@ -109,9 +112,10 @@ class EventDispatcherExtension extends BaseExtension
         $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingScenarioTester', array(
             new Reference(TesterExtension::EXAMPLE_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
-            'Behat\Behat\EventDispatcher\Event\ExampleTested'
+            ExampleTested::BEFORE,
+            ExampleTested::AFTER
         ));
-        $definition->addTag(TesterExtension::EXAMPLE_TESTER_WRAPPER_TAG);
+        $definition->addTag(TesterExtension::EXAMPLE_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::EXAMPLE_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
@@ -126,7 +130,7 @@ class EventDispatcherExtension extends BaseExtension
             new Reference(TesterExtension::STEP_TESTER_ID),
             new Reference(self::DISPATCHER_ID)
         ));
-        $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG);
+        $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::STEP_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 }

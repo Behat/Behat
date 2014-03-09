@@ -12,6 +12,7 @@ namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
 use Behat\Behat\Output\Node\Printer\ScenarioPrinter;
+use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
@@ -28,7 +29,11 @@ class ScenarioNodeListener implements EventListener
     /**
      * @var string
      */
-    private $eventClass;
+    private $beforeEventName;
+    /**
+     * @var string
+     */
+    private $afterEventName;
     /**
      * @var ScenarioPrinter
      */
@@ -37,12 +42,14 @@ class ScenarioNodeListener implements EventListener
     /**
      * Initializes listener.
      *
-     * @param string          $eventClass
+     * @param string          $beforeEventName
+     * @param string          $afterEventName
      * @param ScenarioPrinter $scenarioPrinter
      */
-    public function __construct($eventClass, ScenarioPrinter $scenarioPrinter)
+    public function __construct($beforeEventName, $afterEventName, ScenarioPrinter $scenarioPrinter)
     {
-        $this->eventClass = $eventClass;
+        $this->beforeEventName = $beforeEventName;
+        $this->afterEventName = $afterEventName;
         $this->scenarioPrinter = $scenarioPrinter;
     }
 
@@ -51,24 +58,12 @@ class ScenarioNodeListener implements EventListener
      */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if (!$this->isSubclassOEventClass($event)) {
+        if (!$event instanceof ScenarioLikeTested) {
             return;
         }
 
         $this->printHeaderOnBeforeEvent($formatter, $event, $eventName);
         $this->printFooterOnAfterEvent($formatter, $event, $eventName);
-    }
-
-    /**
-     * Checks if provided event is a subclass of expected scenario event.
-     *
-     * @param Event $event
-     *
-     * @return Boolean
-     */
-    private function isSubclassOEventClass(Event $event)
-    {
-        return $this->eventClass === get_class($event) || is_subclass_of($event, $this->eventClass);
     }
 
     /**
@@ -80,8 +75,7 @@ class ScenarioNodeListener implements EventListener
      */
     private function printHeaderOnBeforeEvent(Formatter $formatter, ScenarioLikeTested $event, $eventName)
     {
-        $class = $this->eventClass;
-        if ($class::BEFORE !== $eventName) {
+        if ($this->beforeEventName !== $eventName) {
             return;
         }
 
@@ -97,8 +91,7 @@ class ScenarioNodeListener implements EventListener
      */
     private function printFooterOnAfterEvent(Formatter $formatter, ScenarioLikeTested $event, $eventName)
     {
-        $class = $this->eventClass;
-        if ($class::AFTER !== $eventName) {
+        if ($this->afterEventName !== $eventName || !$event instanceof AfterTested) {
             return;
         }
 

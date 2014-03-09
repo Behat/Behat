@@ -10,7 +10,8 @@
 
 namespace Behat\Behat\EventDispatcher\Tester;
 
-use Behat\Behat\EventDispatcher\Event\OutlineTested;
+use Behat\Behat\EventDispatcher\Event\AfterOutlineTested;
+use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
 use Behat\Behat\Tester\OutlineTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
@@ -51,33 +52,34 @@ class EventDispatchingOutlineTester implements OutlineTester
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $environment, FeatureNode $feature, OutlineNode $outline, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
-        $event = new OutlineTested($environment, $feature, $outline);
-        $this->eventDispatcher->dispatch(OutlineTested::BEFORE, $event);
-        $this->baseTester->setUp($environment, $feature, $outline, $skip);
+        $setup = $this->baseTester->setUp($env, $feature, $outline, $skip);
+
+        $event = new BeforeOutlineTested($env, $feature, $outline, $setup);
+        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
+        return $setup;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $environment, FeatureNode $feature, OutlineNode $outline, $skip)
+    public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
-        return $this->baseTester->test($environment, $feature, $outline, $skip);
+        return $this->baseTester->test($env, $feature, $outline, $skip);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function tearDown(
-        Environment $environment,
-        FeatureNode $feature,
-        OutlineNode $outline,
-        $skip,
-        TestResult $result
-    ) {
-        $event = new OutlineTested($environment, $feature, $outline, $result);
-        $this->eventDispatcher->dispatch(OutlineTested::AFTER, $event);
-        $this->baseTester->tearDown($environment, $feature, $outline, $skip, $result);
+    public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
+    {
+        $teardown = $this->baseTester->tearDown($env, $feature, $outline, $skip, $result);
+
+        $event = new AfterOutlineTested($env, $feature, $outline, $result, $teardown);
+        $this->eventDispatcher->dispatch($event::AFTER, $event);
+
+        return $teardown;
     }
 }

@@ -10,11 +10,11 @@
 
 namespace Behat\Behat\Hook\Call;
 
-use Behat\Behat\EventDispatcher\Event\StepTested;
+use Behat\Behat\Hook\Scope\StepScope;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Node\StepNode;
-use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
+use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
  * Runtime step hook.
@@ -26,15 +26,16 @@ abstract class RuntimeStepHook extends RuntimeFilterableHook
     /**
      * Checks if provided event matches hook filter.
      *
-     * @param \Behat\Testwork\EventDispatcher\Event\LifecycleEvent $event
+     * @param HookScope $scope
      *
      * @return Boolean
      */
-    public function filterMatches(LifecycleEvent $event)
+    public function filterMatches(HookScope $scope)
     {
-        if (!$event instanceof StepTested) {
+        if (!$scope instanceof StepScope) {
             return false;
         }
+
         if (null === ($filterString = $this->getFilterString())) {
             return true;
         }
@@ -42,11 +43,11 @@ abstract class RuntimeStepHook extends RuntimeFilterableHook
         if (!empty($filterString)) {
             $filter = new NameFilter($filterString);
 
-            if ($filter->isFeatureMatch($event->getFeature())) {
+            if ($filter->isFeatureMatch($scope->getFeature())) {
                 return true;
             }
 
-            return $this->isStepMatch($event->getStep(), $filterString);
+            return $this->isStepMatch($scope->getStep(), $filterString);
         }
 
         return false;
@@ -55,7 +56,7 @@ abstract class RuntimeStepHook extends RuntimeFilterableHook
     /**
      * Checks if Feature matches specified filter.
      *
-     * @param StepNode $step Feature instance
+     * @param StepNode $step
      * @param string   $filterString
      *
      * @return Boolean

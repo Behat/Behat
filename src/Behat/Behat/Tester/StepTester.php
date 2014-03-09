@@ -10,11 +10,12 @@
 
 namespace Behat\Behat\Tester;
 
-use Behat\Behat\Tester\Result\StepTestResult;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
-use Exception;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Behat step tester interface.
@@ -28,43 +29,37 @@ interface StepTester
     /**
      * Sets up step for a test.
      *
-     * @param Environment $environment
+     * @param Environment $env
      * @param FeatureNode $feature
      * @param StepNode    $step
      * @param Boolean     $skip
      *
-     * @throws Exception If something goes wrong. That will cause test to be skipped.
+     * @return Setup
      */
-    public function setUp(Environment $environment, FeatureNode $feature, StepNode $step, $skip);
+    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip);
 
     /**
      * Tests step.
      *
-     * @param Environment $environment
+     * @param Environment $env
      * @param FeatureNode $feature
      * @param StepNode    $step
      * @param Boolean     $skip
      *
-     * @return StepTestResult
+     * @return StepResult
      */
-    public function test(Environment $environment, FeatureNode $feature, StepNode $step, $skip);
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip);
 
     /**
      * Tears down step after a test.
      *
-     * @param Environment    $environment
-     * @param FeatureNode    $feature
-     * @param StepNode       $step
-     * @param Boolean        $skip
-     * @param StepTestResult $result
+     * @param Environment $env
+     * @param FeatureNode $feature
+     * @param StepNode    $step
+     * @param Boolean     $skip
+     * @param StepResult  $result
      *
-     * @throws Exception If something goes wrong. That will cause all consequent tests to be skipped.
+     * @return Teardown
      */
-    public function tearDown(
-        Environment $environment,
-        FeatureNode $feature,
-        StepNode $step,
-        $skip,
-        StepTestResult $result
-    );
+    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result);
 }

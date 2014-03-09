@@ -10,15 +10,17 @@
 
 namespace Behat\Behat\Tester\Runtime;
 
-use Behat\Behat\Tester\ExampleTester;
 use Behat\Behat\Tester\OutlineTester;
+use Behat\Behat\Tester\ScenarioTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Exception\TestworkException;
+use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
-use Exception;
+use Behat\Testwork\Tester\Result\TestWithSetupResult;
+use Behat\Testwork\Tester\Setup\SuccessfulSetup;
+use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 
 /**
  * Behat in-runtime outline tester.
@@ -30,53 +32,45 @@ use Exception;
 class RuntimeOutlineTester implements OutlineTester
 {
     /**
-     * @var ExampleTester
+     * @var ScenarioTester
      */
-    private $exampleTester;
+    private $scenarioTester;
 
     /**
      * Initializes tester.
      *
-     * @param ExampleTester $exampleTester
+     * @param ScenarioTester $scenarioTester
      */
-    public function __construct(ExampleTester $exampleTester)
+    public function __construct(ScenarioTester $scenarioTester)
     {
-        $this->exampleTester = $exampleTester;
+        $this->scenarioTester = $scenarioTester;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $environment, FeatureNode $feature, OutlineNode $outline, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
+        return new SuccessfulSetup();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $environment, FeatureNode $feature, OutlineNode $outline, $skip = false)
+    public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip = false)
     {
         $results = array();
         foreach ($outline->getExamples() as $example) {
-            try {
-                $this->exampleTester->setUp($environment, $feature, $example, $skip);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $setup = $this->scenarioTester->setUp($env, $feature, $example, $skip);
+            $skip = $skip || !$setup->isSuccessful();
 
-            $testResult = $this->exampleTester->test($environment, $feature, $example, $skip);
+            $testResult = $this->scenarioTester->test($env, $feature, $example, $skip);
 
-            try {
-                $this->exampleTester->tearDown($environment, $feature, $example, $skip, $testResult);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $teardown = $this->scenarioTester->tearDown($env, $feature, $example, $skip, $testResult);
+            $skip = $skip || !$teardown->isSuccessful();
 
-            $results[] = new TestResult($testResult->getResultCode());
+            $integerResult = new IntegerTestResult($testResult->getResultCode());
+            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
         }
 
         return new TestResults($results);
@@ -85,12 +79,8 @@ class RuntimeOutlineTester implements OutlineTester
     /**
      * {@inheritdoc}
      */
-    public function tearDown(
-        Environment $environment,
-        FeatureNode $feature,
-        OutlineNode $outline,
-        $skip,
-        TestResult $result
-    ) {
+    public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
+    {
+        return new SuccessfulTeardown();
     }
 }

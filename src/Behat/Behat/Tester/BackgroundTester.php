@@ -12,8 +12,9 @@ namespace Behat\Behat\Tester;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Tester\Result\TestResults;
-use Exception;
+use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Behat background tester interface.
@@ -27,34 +28,34 @@ interface BackgroundTester
     /**
      * Sets up background for a test.
      *
-     * @param Environment $environment
+     * @param Environment $env
      * @param FeatureNode $feature
      * @param Boolean     $skip
      *
-     * @throws Exception If something goes wrong. That will cause test to be skipped.
+     * @return Setup
      */
-    public function setUp(Environment $environment, FeatureNode $feature, $skip);
+    public function setUp(Environment $env, FeatureNode $feature, $skip);
 
     /**
      * Tests background.
      *
-     * @param Environment $environment
+     * @param Environment $env
      * @param FeatureNode $feature
      * @param Boolean     $skip
      *
-     * @return TestResults
+     * @return TestResult
      */
-    public function test(Environment $environment, FeatureNode $feature, $skip);
+    public function test(Environment $env, FeatureNode $feature, $skip);
 
     /**
      * Tears down background after a test.
      *
-     * @param Environment $environment
+     * @param Environment $env
      * @param FeatureNode $feature
      * @param Boolean     $skip
-     * @param TestResults $results
+     * @param TestResult  $result
      *
-     * @throws Exception If something goes wrong. That will cause all consequent tests to be skipped.
+     * @return Teardown
      */
-    public function tearDown(Environment $environment, FeatureNode $feature, $skip, TestResults $results);
+    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result);
 }

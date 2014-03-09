@@ -10,11 +10,13 @@
 
 namespace Behat\Behat\EventDispatcher\Tester;
 
+use Behat\Behat\EventDispatcher\Event\AfterBackgroundTested;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
+use Behat\Behat\EventDispatcher\Event\BeforeBackgroundTested;
 use Behat\Behat\Tester\BackgroundTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Tester\Result\TestResults;
+use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -50,28 +52,34 @@ class EventDispatchingBackgroundTester implements BackgroundTester
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $environment, FeatureNode $feature, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, $skip)
     {
-        $event = new BackgroundTested($environment, $feature, $feature->getBackground());
-        $this->eventDispatcher->dispatch(BackgroundTested::BEFORE, $event);
-        $this->baseTester->setUp($environment, $feature, $skip);
+        $setup = $this->baseTester->setUp($env, $feature, $skip);
+
+        $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground(), $setup);
+        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
+        return $setup;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $environment, FeatureNode $feature, $skip)
+    public function test(Environment $env, FeatureNode $feature, $skip)
     {
-        return $this->baseTester->test($environment, $feature, $skip);
+        return $this->baseTester->test($env, $feature, $skip);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function tearDown(Environment $environment, FeatureNode $feature, $skip, TestResults $results)
+    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result)
     {
-        $event = new BackgroundTested($environment, $feature, $feature->getBackground(), $results);
+        $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
+
+        $event = new AfterBackgroundTested($env, $feature, $feature->getBackground(), $result, $teardown);
         $this->eventDispatcher->dispatch(BackgroundTested::AFTER, $event);
-        $this->baseTester->tearDown($environment, $feature, $skip, $results);
+
+        return $teardown;
     }
 }

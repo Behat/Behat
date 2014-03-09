@@ -12,6 +12,7 @@ namespace Behat\Behat\Output\Node\Printer\Pretty;
 
 use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
+use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -27,15 +28,21 @@ class StepTextPainter
      * @var PatternTransformer
      */
     private $patternTransformer;
+    /**
+     * @var ResultToStringConverter
+     */
+    private $resultConverter;
 
     /**
      * Initializes painter.
      *
-     * @param PatternTransformer $patternTransformer
+     * @param PatternTransformer      $patternTransformer
+     * @param ResultToStringConverter $resultConverter
      */
-    public function __construct(PatternTransformer $patternTransformer)
+    public function __construct(PatternTransformer $patternTransformer, ResultToStringConverter $resultConverter)
     {
         $this->patternTransformer = $patternTransformer;
+        $this->resultConverter = $resultConverter;
     }
 
     /**
@@ -50,7 +57,8 @@ class StepTextPainter
     public function paintText($text, Definition $definition, TestResult $result)
     {
         $regex = $this->patternTransformer->transformPatternToRegex($definition->getPattern());
-        $paramStyle = $result . '_param';
+        $style = $this->resultConverter->convertResultToString($result);
+        $paramStyle = $style . '_param';
 
         // If it's just a string - skip
         if ('/' !== substr($regex, 0, 1)) {
@@ -81,7 +89,7 @@ class StepTextPainter
 
             $begin = substr($text, 0, $offset);
             $end = substr($text, $lastReplacementPosition);
-            $format = "{-$result}{+$paramStyle}%s{-$paramStyle}{+$result}";
+            $format = "{-$style}{+$paramStyle}%s{-$paramStyle}{+$style}";
             $text = sprintf("%s{$format}%s", $begin, $value, $end);
 
             // Keep track of how many extra characters are added
@@ -92,7 +100,7 @@ class StepTextPainter
         // Replace "<", ">" with colorized ones
         $text = preg_replace(
             '/(<[^>]+>)/',
-            "{-$result}{+$paramStyle}\$1{-$paramStyle}{+$result}",
+            "{-$style}{+$paramStyle}\$1{-$paramStyle}{+$style}",
             $text
         );
 

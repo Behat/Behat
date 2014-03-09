@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Hook\Call;
 
-use Behat\Behat\EventDispatcher\Event\StepTested;
+use Behat\Behat\Hook\Scope\StepScope;
 
 /**
  * After step hook.
@@ -28,7 +28,7 @@ class AfterStep extends RuntimeStepHook
      */
     public function __construct($filterString, $callable, $description = null)
     {
-        parent::__construct(array(StepTested::AFTER), $filterString, $callable, $description);
+        parent::__construct(StepScope::AFTER, $filterString, $callable, $description);
     }
 
     /**

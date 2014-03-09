@@ -8,15 +8,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester\Exception;
+namespace Behat\Behat\Tester\Result;
 
-use RuntimeException;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat test tearing down exception.
+ * Step test result interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TearDownException extends RuntimeException implements TesterException
+interface StepResult extends TestResult
 {
+    const UNDEFINED = 30;
 }

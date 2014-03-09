@@ -11,8 +11,10 @@
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
 use Behat\Behat\Output\Node\Printer\OutlinePrinter;
+use Behat\Behat\Output\Node\Printer\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\ScenarioPrinter;
-use Behat\Behat\Output\Node\Printer\SkippedStepPrinter;
+use Behat\Behat\Output\Node\Printer\StepPrinter;
+use Behat\Behat\Tester\Result\UndefinedStepResult;
 use Behat\Gherkin\Node\ExampleTableNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
@@ -35,9 +37,13 @@ class PrettyOutlinePrinter implements OutlinePrinter
      */
     private $scenarioPrinter;
     /**
-     * @var SkippedStepPrinter
+     * @var StepPrinter
      */
     private $stepPrinter;
+    /**
+     * @var ResultToStringConverter
+     */
+    private $resultConverter;
     /**
      * @var string
      */
@@ -48,19 +54,22 @@ class PrettyOutlinePrinter implements OutlinePrinter
     private $subIndentText;
 
     /**
-     * @param ScenarioPrinter    $scenarioPrinter
-     * @param SkippedStepPrinter $stepPrinter
-     * @param integer            $indentation
-     * @param integer            $subIndentation
+     * @param ScenarioPrinter         $scenarioPrinter
+     * @param StepPrinter             $stepPrinter
+     * @param ResultToStringConverter $resultConverter
+     * @param integer                 $indentation
+     * @param integer                 $subIndentation
      */
     public function __construct(
         ScenarioPrinter $scenarioPrinter,
-        SkippedStepPrinter $stepPrinter,
+        StepPrinter $stepPrinter,
+        ResultToStringConverter $resultConverter,
         $indentation = 4,
         $subIndentation = 2
     ) {
         $this->scenarioPrinter = $scenarioPrinter;
         $this->stepPrinter = $stepPrinter;
+        $this->resultConverter = $resultConverter;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
@@ -94,7 +103,7 @@ class PrettyOutlinePrinter implements OutlinePrinter
     private function printExamplesSteps(Formatter $formatter, OutlineNode $outline, array $steps)
     {
         foreach ($steps as $step) {
-            $this->stepPrinter->printStep($formatter, $outline, $step);
+            $this->stepPrinter->printStep($formatter, $outline, $step, new UndefinedStepResult());
         }
 
         $formatter->getOutputPrinter()->writeln();
@@ -124,10 +133,10 @@ class PrettyOutlinePrinter implements OutlinePrinter
      */
     private function getWrapperClosure()
     {
-        $result = new TestResult(TestResult::SKIPPED);
+        $style = $this->resultConverter->convertResultCodeToString(TestResult::SKIPPED);
 
-        return function ($col) use ($result) {
-            return sprintf('{+%s_param}%s{-%s_param}', $result, $col, $result);
+        return function ($col) use ($style) {
+            return sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
         };
     }
 }

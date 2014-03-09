@@ -10,11 +10,11 @@
 
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
+use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
-use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Output\Formatter;
@@ -56,7 +56,7 @@ class StepListener implements EventListener
     {
         $this->captureScenarioOnScenarioEvent($event);
         $this->forgetScenarioOnAfterEvent($eventName);
-        $this->printStepOnAfterEvent($formatter, $event, $eventName);
+        $this->printStepOnAfterEvent($formatter, $event);
     }
 
     /**
@@ -92,11 +92,10 @@ class StepListener implements EventListener
      *
      * @param Formatter $formatter
      * @param Event     $event
-     * @param string    $eventName
      */
-    private function printStepOnAfterEvent(Formatter $formatter, Event $event, $eventName)
+    private function printStepOnAfterEvent(Formatter $formatter, Event $event)
     {
-        if (!$event instanceof StepTested || StepTested::AFTER !== $eventName) {
+        if (!$event instanceof AfterStepTested) {
             return;
         }
 

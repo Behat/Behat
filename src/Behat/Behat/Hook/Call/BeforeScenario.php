@@ -10,8 +10,7 @@
 
 namespace Behat\Behat\Hook\Call;
 
-use Behat\Behat\EventDispatcher\Event\ExampleTested;
-use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Behat\Behat\Hook\Scope\ScenarioScope;
 
 /**
  * Before scenario hook.
@@ -29,7 +28,7 @@ class BeforeScenario extends RuntimeScenarioHook
      */
     public function __construct($filterString, $callable, $description = null)
     {
-        parent::__construct(array(ScenarioTested::BEFORE, ExampleTested::BEFORE), $filterString, $callable, $description);
+        parent::__construct(ScenarioScope::BEFORE, $filterString, $callable, $description);
     }
 
     /**

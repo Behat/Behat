@@ -15,7 +15,9 @@ use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Tester\Result\BehatTestResult;
 use Behat\Testwork\Cli\Controller;
+use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
+use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -109,7 +111,7 @@ class RerunController implements Controller
         if (!$this->getFileName()) {
             return;
         }
-        if (BehatTestResult::FAILED !== $event->getResultCode()) {
+        if (!$event instanceof AfterTested || TestResult::FAILED !== $event->getTestResult()->getResultCode()) {
             return;
         }
 
