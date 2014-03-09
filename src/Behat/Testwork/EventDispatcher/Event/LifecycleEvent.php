@@ -31,11 +31,11 @@ abstract class LifecycleEvent extends Event
     /**
      * Initializes scenario event.
      *
-     * @param Environment $environment
+     * @param Environment $env
      */
-    public function __construct(Environment $environment)
+    public function __construct(Environment $env)
     {
-        $this->environment = $environment;
+        $this->environment = $env;
     }
 
     /**
@@ -57,11 +57,4 @@ abstract class LifecycleEvent extends Event
     {
         return $this->environment;
     }
-
-    /**
-     * Returns scenario status.
-     *
-     * @return integer
-     */
-    abstract public function getResultCode();
 }

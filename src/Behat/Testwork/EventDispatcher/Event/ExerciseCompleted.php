@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Specification\SpecificationIterator;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -18,63 +18,15 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExerciseCompleted extends Event
+abstract class ExerciseCompleted extends Event
 {
     const BEFORE = 'tester.exercise_completed.before';
     const AFTER = 'tester.exercise_completed.after';
 
     /**
-     * @var null|TestResult
-     */
-    private $testResult;
-    /**
-     * @var Boolean
-     */
-    private $stopped = false;
-
-    /**
-     * Initializes event.
+     * Returns specification iterators.
      *
-     * @param null|TestResult $testResult
-     * @param Boolean         $stopped
+     * @return SpecificationIterator[]
      */
-    public function __construct(TestResult $testResult = null, $stopped = false)
-    {
-        $this->testResult = $testResult;
-        $this->stopped = $stopped;
-    }
-
-    /**
-     * Checks whether exercise was completed successfully.
-     *
-     * @return Boolean
-     */
-    public function isSuccessfullyCompleted()
-    {
-        return !$this->stopped;
-    }
-
-    /**
-     * Returns exercise test result (if tested).
-     *
-     * @return null|TestResult
-     */
-    public function getTestResult()
-    {
-        return $this->testResult;
-    }
-
-    /**
-     * Returns step tester result status.
-     *
-     * @return integer
-     */
-    public function getResultCode()
-    {
-        if (null === $this->testResult) {
-            return null;
-        }
-
-        return $this->testResult->getResultCode();
-    }
+    abstract public function getSpecificationIterators();
 }

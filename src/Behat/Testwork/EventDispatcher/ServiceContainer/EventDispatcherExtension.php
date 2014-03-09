@@ -130,7 +130,7 @@ class EventDispatcherExtension implements Extension
             new Reference(TesterExtension::SUITE_TESTER_ID),
             new Reference(self::DISPATCHER_ID)
         ));
-        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG);
+        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 

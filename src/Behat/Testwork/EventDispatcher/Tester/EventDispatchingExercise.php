@@ -10,7 +10,8 @@
 
 namespace Behat\Testwork\EventDispatcher\Tester;
 
-use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
+use Behat\Testwork\EventDispatcher\Event\AfterExerciseCompleted;
+use Behat\Testwork\EventDispatcher\Event\BeforeExerciseCompleted;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -50,8 +51,12 @@ class EventDispatchingExercise implements Exercise
      */
     public function setUp(array $iterators, $skip)
     {
-        $this->eventDispatcher->dispatch(ExerciseCompleted::BEFORE, new ExerciseCompleted());
-        $this->baseExercise->setUp($iterators, $skip);
+        $setup = $this->baseExercise->setUp($iterators, $skip);
+
+        $event = new BeforeExerciseCompleted($iterators, $setup);
+        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
+        return $setup;
     }
 
     /**
@@ -67,7 +72,11 @@ class EventDispatchingExercise implements Exercise
      */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
-        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new ExerciseCompleted($result));
-        $this->baseExercise->tearDown($iterators, $skip, $result);
+        $teardown = $this->baseExercise->tearDown($iterators, $skip, $result);
+
+        $event = new AfterExerciseCompleted($iterators, $result, $teardown);
+        $this->eventDispatcher->dispatch($event::AFTER, $event);
+
+        return $teardown;
     }
 }

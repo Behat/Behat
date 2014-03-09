@@ -10,58 +10,22 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
  * Testwork suite tested event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteTested extends LifecycleEvent
+abstract class SuiteTested extends LifecycleEvent
 {
     const BEFORE = 'tester.suite_tested.before';
     const AFTER = 'tester.suite_tested.after';
 
     /**
-     * @var null|TestResult
-     */
-    private $testResult;
-
-    /**
-     * Initializes event.
+     * Returns specification iterator.
      *
-     * @param Environment     $environment
-     * @param null|TestResult $testResult
+     * @return SpecificationIterator
      */
-    public function __construct(Environment $environment, TestResult $testResult = null)
-    {
-        parent::__construct($environment);
-
-        $this->testResult = $testResult;
-    }
-
-    /**
-     * Returns suite test result (if tested).
-     *
-     * @return null|TestResult
-     */
-    public function getTestResult()
-    {
-        return $this->testResult;
-    }
-
-    /**
-     * Returns step tester result status.
-     *
-     * @return integer
-     */
-    public function getResultCode()
-    {
-        if (null === $this->testResult) {
-            return null;
-        }
-
-        return $this->testResult->getResultCode();
-    }
+    abstract public function getSpecificationIterator();
 }
