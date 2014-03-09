@@ -174,6 +174,7 @@ class PrettyFormatterFactory implements FormatterFactory
             'pretty',
             'Prints the feature as is.',
             array(
+                'timer'     => true,
                 'expand'    => false,
                 'paths'     => true,
                 'multiline' => true,

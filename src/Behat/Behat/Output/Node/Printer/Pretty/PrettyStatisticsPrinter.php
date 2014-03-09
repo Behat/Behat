@@ -63,6 +63,8 @@ class PrettyStatisticsPrinter implements StatisticsPrinter
         $this->counterPrinter->printCounters($printer, 'scenarios_count', $statistics->getScenarioStats());
         $this->counterPrinter->printCounters($printer, 'steps_count', $statistics->getStepStats());
 
-        $formatter->getOutputPrinter()->writeln(sprintf('%s (%s)', $timer, $memory));
+        if ($formatter->getParameter('timer')) {
+            $formatter->getOutputPrinter()->writeln(sprintf('%s (%s)', $timer, $memory));
+        }
     }
 }

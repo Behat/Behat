@@ -171,7 +171,7 @@ class ExerciseListener implements EventListener
         $exception = null;
         $stdOut = null;
 
-        if ($result instanceof DefinedStepResult) {
+        if ($result instanceof DefinedStepResult && null !== $result->getStepDefinition()) {
             $path = $result->getStepDefinition()->getPath();
         }
 

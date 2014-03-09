@@ -10,7 +10,6 @@
 
 namespace Behat\Behat\Output\ServiceContainer\Formatter;
 
-use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
@@ -147,7 +146,7 @@ class ProgressFormatterFactory implements FormatterFactory
             'progress',
             'Prints one character per step.',
             array(
-                'paths' => true,
+                'timer' => true
             ),
             $this->createOutputPrinterDefinition(),
             new Reference(self::ROOT_LISTENER_ID)
