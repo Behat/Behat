@@ -11,13 +11,15 @@
 namespace Behat\Testwork\Tester\Runtime;
 
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Exception\TestworkException;
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
+use Behat\Testwork\Tester\Result\TestWithSetupResult;
+use Behat\Testwork\Tester\Setup\SuccessfulSetup;
+use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 use Behat\Testwork\Tester\SpecificationTester;
 use Behat\Testwork\Tester\SuiteTester;
-use Exception;
 
 /**
  * Testwork in-runtime suite tester.
@@ -31,51 +33,43 @@ class RuntimeSuiteTester implements SuiteTester
     /**
      * @var SpecificationTester
      */
-    private $specificationTester;
+    private $specTester;
 
     /**
      * Initializes tester.
      *
-     * @param SpecificationTester $specificationTester
+     * @param SpecificationTester $specTester
      */
-    public function __construct(SpecificationTester $specificationTester)
+    public function __construct(SpecificationTester $specTester)
     {
-        $this->specificationTester = $specificationTester;
+        $this->specTester = $specTester;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $environment, SpecificationIterator $iterator, $skip)
+    public function setUp(Environment $env, SpecificationIterator $iterator, $skip)
     {
+        return new SuccessfulSetup();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $environment, SpecificationIterator $iterator, $skip = false)
+    public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
     {
         $results = array();
         foreach ($iterator as $specification) {
-            try {
-                $this->specificationTester->setUp($environment, $specification, $skip);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $setup = $this->specTester->setUp($env, $specification, $skip);
+            $skip = $skip || !$setup->isSuccessful();
 
-            $testResult = $this->specificationTester->test($environment, $specification, $skip);
+            $testResult = $this->specTester->test($env, $specification, $skip);
 
-            try {
-                $this->specificationTester->tearDown($environment, $specification, $skip, $testResult);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $teardown = $this->specTester->tearDown($env, $specification, $skip, $testResult);
+            $skip = $skip || !$teardown->isSuccessful();
 
-            $results[] = new TestResult($testResult->getResultCode());
+            $integerResult = new IntegerTestResult($testResult->getResultCode());
+            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
         }
 
         return new TestResults($results);
@@ -84,7 +78,8 @@ class RuntimeSuiteTester implements SuiteTester
     /**
      * {@inheritdoc}
      */
-    public function tearDown(Environment $environment, SpecificationIterator $iterator, $skip, TestResult $result)
+    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
+        return new SuccessfulTeardown();
     }
 }

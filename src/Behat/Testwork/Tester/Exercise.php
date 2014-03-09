@@ -12,7 +12,8 @@ namespace Behat\Testwork\Tester;
 
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
-use Exception;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Testwork exercise interface.
@@ -29,7 +30,7 @@ interface Exercise
      * @param SpecificationIterator[] $iterators
      * @param Boolean                 $skip
      *
-     * @throws Exception If something goes wrong. That will cause test to be skipped.
+     * @return Setup
      */
     public function setUp(array $iterators, $skip);
 
@@ -50,7 +51,7 @@ interface Exercise
      * @param Boolean                 $skip
      * @param TestResult              $result
      *
-     * @throws Exception If something goes wrong. That will cause all consequent tests to be skipped.
+     * @return Teardown
      */
     public function tearDown(array $iterators, $skip, TestResult $result);
 }

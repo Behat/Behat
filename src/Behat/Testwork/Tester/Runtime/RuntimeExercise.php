@@ -11,13 +11,15 @@
 namespace Behat\Testwork\Tester\Runtime;
 
 use Behat\Testwork\Environment\EnvironmentManager;
-use Behat\Testwork\Exception\TestworkException;
 use Behat\Testwork\Specification\GroupedSpecificationIterator;
 use Behat\Testwork\Tester\Exercise;
+use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
+use Behat\Testwork\Tester\Result\TestWithSetupResult;
+use Behat\Testwork\Tester\Setup\SuccessfulSetup;
+use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 use Behat\Testwork\Tester\SuiteTester;
-use Exception;
 
 /**
  * Testwork in-runtime exercise.
@@ -31,7 +33,7 @@ class RuntimeExercise implements Exercise
     /**
      * @var EnvironmentManager
      */
-    private $environmentManager;
+    private $envManager;
     /**
      * @var SuiteTester
      */
@@ -40,12 +42,12 @@ class RuntimeExercise implements Exercise
     /**
      * Initializes tester.
      *
-     * @param EnvironmentManager $environmentManager
+     * @param EnvironmentManager $envManager
      * @param SuiteTester        $suiteTester
      */
-    public function __construct(EnvironmentManager $environmentManager, SuiteTester $suiteTester)
+    public function __construct(EnvironmentManager $envManager, SuiteTester $suiteTester)
     {
-        $this->environmentManager = $environmentManager;
+        $this->envManager = $envManager;
         $this->suiteTester = $suiteTester;
     }
 
@@ -54,6 +56,7 @@ class RuntimeExercise implements Exercise
      */
     public function setUp(array $iterators, $skip)
     {
+        return new SuccessfulSetup();
     }
 
     /**
@@ -63,27 +66,18 @@ class RuntimeExercise implements Exercise
     {
         $results = array();
         foreach (GroupedSpecificationIterator::group($iterators) as $iterator) {
-            $environment = $this->environmentManager->buildEnvironment($iterator->getSuite());
+            $environment = $this->envManager->buildEnvironment($iterator->getSuite());
 
-            try {
-                $this->suiteTester->setUp($environment, $iterator, $skip);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $setup = $this->suiteTester->setUp($environment, $iterator, $skip);
+            $skip = $skip || !$setup->isSuccessful();
 
             $testResult = $this->suiteTester->test($environment, $iterator, $skip);
 
-            try {
-                $this->suiteTester->tearDown($environment, $iterator, $skip, $testResult);
-            } catch (TestworkException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                $skip = true;
-            }
+            $teardown = $this->suiteTester->tearDown($environment, $iterator, $skip, $testResult);
+            $skip = $skip || !$teardown->isSuccessful();
 
-            $results[] = new TestResult($testResult->getResultCode());
+            $integerResult = new IntegerTestResult($testResult->getResultCode());
+            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
         }
 
         return new TestResults($results);
@@ -94,5 +88,6 @@ class RuntimeExercise implements Exercise
      */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
+        return new SuccessfulTeardown();
     }
 }

@@ -13,7 +13,8 @@ namespace Behat\Testwork\Tester;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
-use Exception;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Testwork suite tester interface.
@@ -27,34 +28,34 @@ interface SuiteTester
     /**
      * Sets up suite for a test.
      *
-     * @param Environment           $environment
+     * @param Environment           $env
      * @param SpecificationIterator $iterator
      * @param Boolean               $skip
      *
-     * @throws Exception If something goes wrong. That will cause test to be skipped.
+     * @return Setup
      */
-    public function setUp(Environment $environment, SpecificationIterator $iterator, $skip);
+    public function setUp(Environment $env, SpecificationIterator $iterator, $skip);
 
     /**
      * Tests provided suite specifications.
      *
-     * @param Environment           $environment
+     * @param Environment           $env
      * @param SpecificationIterator $iterator
      * @param Boolean               $skip
      *
      * @return TestResult
      */
-    public function test(Environment $environment, SpecificationIterator $iterator, $skip);
+    public function test(Environment $env, SpecificationIterator $iterator, $skip);
 
     /**
      * Tears down suite after a test.
      *
-     * @param Environment           $environment
+     * @param Environment           $env
      * @param SpecificationIterator $iterator
      * @param Boolean               $skip
      * @param TestResult            $result
      *
-     * @throws Exception If something goes wrong. That will cause all consequent tests to be skipped.
+     * @return Teardown
      */
-    public function tearDown(Environment $environment, SpecificationIterator $iterator, $skip, TestResult $result);
+    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result);
 }

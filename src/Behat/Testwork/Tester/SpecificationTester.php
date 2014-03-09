@@ -12,7 +12,8 @@ namespace Behat\Testwork\Tester;
 
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
-use Exception;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Testwork specification tester interface.
@@ -26,34 +27,34 @@ interface SpecificationTester
     /**
      * Sets up specification for a test.
      *
-     * @param Environment $environment
-     * @param mixed       $specification
+     * @param Environment $env
+     * @param mixed       $spec
      * @param Boolean     $skip
      *
-     * @throws Exception If something goes wrong. That will cause test to be skipped.
+     * @return Setup
      */
-    public function setUp(Environment $environment, $specification, $skip);
+    public function setUp(Environment $env, $spec, $skip);
 
     /**
      * Tests provided specification.
      *
-     * @param Environment $environment
-     * @param mixed       $specification
+     * @param Environment $env
+     * @param mixed       $spec
      * @param Boolean     $skip
      *
      * @return TestResult
      */
-    public function test(Environment $environment, $specification, $skip);
+    public function test(Environment $env, $spec, $skip);
 
     /**
      * Tears down specification after a test.
      *
-     * @param Environment $environment
-     * @param mixed       $specification
+     * @param Environment $env
+     * @param mixed       $spec
      * @param Boolean     $skip
      * @param TestResult  $result
      *
-     * @throws Exception If something goes wrong. That will cause all consequent tests to be skipped.
+     * @return Teardown
      */
-    public function tearDown(Environment $environment, $specification, $skip, TestResult $result);
+    public function tearDown(Environment $env, $spec, $skip, TestResult $result);
 }

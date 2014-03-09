@@ -163,6 +163,10 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Tester\Result\ResultInterpreter');
         $container->setDefinition(self::RESULT_INTERPRETER_ID, $definition);
+
+        $definition = new Definition('Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation');
+        $definition->addTag(self::RESULT_INTERPRETATION_TAG);
+        $container->setDefinition(self::RESULT_INTERPRETATION_TAG . '.soft', $definition);
     }
 
     /**
