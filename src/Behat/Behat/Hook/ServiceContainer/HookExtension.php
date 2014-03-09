@@ -86,21 +86,4 @@ class HookExtension extends BaseExtension
         $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG, array('priority' => 9999));
         $container->setDefinition(TesterExtension::STEP_TESTER_WRAPPER_TAG . '.hookable', $definition);
     }
-
-    /**
-     * Loads output listeners.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadOutputListeners(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\Hook\Output\Node\EventListener\InPlaceHookListener', array(
-            new Reference(PrettyFormatterFactory::PRETTY_ROOT_LISTENER_ID),
-            new Definition('Behat\Behat\Hook\Output\Node\Printer\Pretty\PrettyHookPrinter', array(
-                new Reference(ExceptionExtension::PRESENTER_ID)
-            ))
-        ));
-        $definition->addTag(PrettyFormatterFactory::PRETTY_ROOT_LISTENER_WRAPPER_TAG);
-        $container->setDefinition(PrettyFormatterFactory::PRETTY_ROOT_LISTENER_WRAPPER_TAG . '.hooks', $definition);
-    }
 }
