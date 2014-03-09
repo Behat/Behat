@@ -10,13 +10,19 @@
 
 namespace Behat\Behat\Output\Statistics;
 
+use Exception;
+
 /**
  * Behat step stat.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepStat
+final class StepStat
 {
+    /**
+     * @var string
+     */
+    private $text;
     /**
      * @var string
      */
@@ -25,17 +31,41 @@ class StepStat
      * @var integer
      */
     private $resultCode;
+    /**
+     * @var null|Exception
+     */
+    private $exception;
+    /**
+     * @var null|string
+     */
+    private $stdOut;
 
     /**
      * Initializes step stat.
      *
-     * @param string  $path
-     * @param integer $resultCode
+     * @param string         $text
+     * @param string         $path
+     * @param integer        $resultCode
+     * @param null|Exception $exception
+     * @param null|string    $stdOut
      */
-    public function __construct($path, $resultCode)
+    public function __construct($text, $path, $resultCode, Exception $exception = null, $stdOut = null)
     {
+        $this->text = $text;
         $this->path = $path;
         $this->resultCode = $resultCode;
+        $this->exception = $exception;
+        $this->stdOut = $stdOut;
+    }
+
+    /**
+     * Returns step text.
+     *
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
     }
 
     /**
@@ -56,6 +86,26 @@ class StepStat
     public function getResultCode()
     {
         return $this->resultCode;
+    }
+
+    /**
+     * Returns step exception (if has one).
+     *
+     * @return null|Exception
+     */
+    public function getException()
+    {
+        return $this->exception;
+    }
+
+    /**
+     * Returns step output (if has one).
+     *
+     * @return null|string
+     */
+    public function getStdOut()
+    {
+        return $this->stdOut;
     }
 
     /**

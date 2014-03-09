@@ -11,7 +11,6 @@
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
-use Behat\Behat\EventDispatcher\Event\BackgroundTested;
 use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
@@ -41,17 +40,17 @@ class StepListener implements EventListener
      */
     private $scenario;
     /**
-     * @var SetupPrinter
+     * @var null|SetupPrinter
      */
     private $setupPrinter;
 
     /**
      * Initializes listener.
      *
-     * @param StepPrinter  $stepPrinter
-     * @param SetupPrinter $setupPrinter
+     * @param StepPrinter       $stepPrinter
+     * @param null|SetupPrinter $setupPrinter
      */
-    public function __construct(StepPrinter $stepPrinter, SetupPrinter $setupPrinter)
+    public function __construct(StepPrinter $stepPrinter, SetupPrinter $setupPrinter = null)
     {
         $this->stepPrinter = $stepPrinter;
         $this->setupPrinter = $setupPrinter;
@@ -89,7 +88,7 @@ class StepListener implements EventListener
      */
     private function forgetScenarioOnAfterEvent($eventName)
     {
-        if (!in_array($eventName, array(BackgroundTested::AFTER, ScenarioTested::AFTER, ExampleTested::AFTER))) {
+        if (!in_array($eventName, array(ScenarioTested::AFTER, ExampleTested::AFTER))) {
             return;
         }
 
@@ -102,7 +101,9 @@ class StepListener implements EventListener
             return;
         }
 
-        $this->setupPrinter->printSetup($formatter, $event->getSetup());
+        if ($this->setupPrinter) {
+            $this->setupPrinter->printSetup($formatter, $event->getSetup());
+        }
     }
 
     /**
@@ -118,6 +119,9 @@ class StepListener implements EventListener
         }
 
         $this->stepPrinter->printStep($formatter, $this->scenario, $event->getStep(), $event->getTestResult());
-        $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
+
+        if ($this->setupPrinter) {
+            $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
+        }
     }
 }

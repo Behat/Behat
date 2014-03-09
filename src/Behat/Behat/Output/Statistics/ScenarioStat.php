@@ -15,7 +15,7 @@ namespace Behat\Behat\Output\Statistics;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ScenarioStat
+final class ScenarioStat
 {
     /**
      * @var string

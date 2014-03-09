@@ -28,6 +28,10 @@ class Statistics
      * @var StepStat[]
      */
     private $stepStats = array();
+    /**
+     * @var FailedHookStat[]
+     */
+    private $hookStats = array();
 
     /**
      * Initializes statistics.
@@ -61,6 +65,16 @@ class Statistics
     public function registerStepStat(StepStat $stat)
     {
         $this->stepStats[$stat->getResultCode()][] = $stat;
+    }
+
+    /**
+     * Registers failed hook stat.
+     *
+     * @param FailedHookStat $stat
+     */
+    public function registerFailedHookStat(FailedHookStat $stat)
+    {
+        $this->hookStats[] = $stat;
     }
 
     /**
@@ -105,5 +119,15 @@ class Statistics
     public function getStepStatsWithResultCode($resultCode)
     {
         return $this->stepStats[$resultCode];
+    }
+
+    /**
+     * Returns failed hook stats.
+     *
+     * @return FailedHookStat[]
+     */
+    public function getFailedHookStats()
+    {
+        return $this->hookStats;
     }
 }

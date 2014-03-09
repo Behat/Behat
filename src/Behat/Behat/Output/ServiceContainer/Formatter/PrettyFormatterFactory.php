@@ -38,13 +38,13 @@ class PrettyFormatterFactory implements FormatterFactory
     /*
      * Available services
      */
-    const PRETTY_ROOT_LISTENER_ID = 'output.node.listener.pretty';
+    const ROOT_LISTENER_ID = 'output.node.listener.pretty';
     const RESULT_TO_STRING_CONVERTER_ID = 'output.node.printer.result_to_string';
 
     /*
      * Available extension points
      */
-    const PRETTY_ROOT_LISTENER_WRAPPER_TAG = 'output.node.listener.pretty.wrapper';
+    const ROOT_LISTENER_WRAPPER_TAG = 'output.node.listener.pretty.wrapper';
 
     /**
      * Initializes extension.
@@ -160,7 +160,7 @@ class PrettyFormatterFactory implements FormatterFactory
                 ),
             )
         ));
-        $container->setDefinition(self::PRETTY_ROOT_LISTENER_ID, $definition);
+        $container->setDefinition(self::ROOT_LISTENER_ID, $definition);
     }
 
     /**
@@ -180,7 +180,7 @@ class PrettyFormatterFactory implements FormatterFactory
             ),
             $this->createOutputPrinterDefinition(),
             $this->rearrangeBackgroundEvents(
-                new Reference(self::PRETTY_ROOT_LISTENER_ID)
+                new Reference(self::ROOT_LISTENER_ID)
             ),
         ));
         $definition->addTag(OutputExtension::FORMATTER_TAG, array('priority' => 100));
@@ -320,10 +320,23 @@ class PrettyFormatterFactory implements FormatterFactory
      */
     protected function loadStatisticsPrinter(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyStatisticsPrinter', array(
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\CounterPrinter', array(
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
+        ));
+        $container->setDefinition('output.node.printer.counter', $definition);
+
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\ListPrinter', array(
+            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+            new Reference(ExceptionExtension::PRESENTER_ID),
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
             '%paths.base%'
+        ));
+        $container->setDefinition('output.node.printer.list', $definition);
+
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyStatisticsPrinter', array(
+            new Reference('output.node.printer.counter'),
+            new Reference('output.node.printer.list')
         ));
         $container->setDefinition('output.node.printer.pretty.statistics', $definition);
     }
@@ -417,14 +430,14 @@ class PrettyFormatterFactory implements FormatterFactory
      */
     protected function processListenerWrappers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::PRETTY_ROOT_LISTENER_WRAPPER_TAG);
+        $references = $this->processor->findAndSortTaggedServices($container, self::ROOT_LISTENER_WRAPPER_TAG);
 
         foreach ($references as $reference) {
-            $wrappedTester = $container->getDefinition(self::PRETTY_ROOT_LISTENER_ID);
+            $wrappedTester = $container->getDefinition(self::ROOT_LISTENER_ID);
             $wrappingTester = $container->getDefinition((string)$reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
-            $container->setDefinition(self::PRETTY_ROOT_LISTENER_ID, $wrappingTester);
+            $container->setDefinition(self::ROOT_LISTENER_ID, $wrappingTester);
         }
     }
 }
