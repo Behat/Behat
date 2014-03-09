@@ -115,12 +115,12 @@ class RuntimeStepTester implements StepTester
      */
     private function testDefinition(Environment $env, FeatureNode $feature, StepNode $step, SearchResult $search, $skip)
     {
-        if ($skip) {
-            return new SkippedStepResult($search);
-        }
-
         if (!$search->hasMatch()) {
             return new UndefinedStepResult();
+        }
+
+        if ($skip) {
+            return new SkippedStepResult($search);
         }
 
         $call = $this->createDefinitionCall($env, $feature, $search, $step);

@@ -57,12 +57,6 @@ class ProgressStatisticsPrinter implements StatisticsPrinter
         $printer->writeln();
         $printer->writeln();
 
-        $scenarioStats = $statistics->getScenarioStatsWithResultCode(TestResult::SKIPPED);
-        $this->listPrinter->printScenariosList($printer, 'skipped_scenarios_title', TestResult::SKIPPED, $scenarioStats);
-
-        $scenarioStats = $statistics->getScenarioStatsWithResultCode(TestResult::FAILED);
-        $this->listPrinter->printScenariosList($printer, 'failed_scenarios_title', TestResult::FAILED, $scenarioStats);
-
         $hookStats = $statistics->getFailedHookStats();
         $this->listPrinter->printFailedHooksList($printer, 'failed_hooks_title', $hookStats);
 

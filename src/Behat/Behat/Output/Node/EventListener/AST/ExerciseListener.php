@@ -19,6 +19,7 @@ use Behat\Behat\Output\Statistics\FailedHookStat;
 use Behat\Behat\Output\Statistics\ScenarioStat;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Behat\Output\Statistics\StepStat;
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\ExceptionResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
@@ -166,8 +167,10 @@ class ExerciseListener implements EventListener
         }
 
         $result = $event->getTestResult();
-        $text = sprintf('%s %s', $event->getStep()->getType(), $event->getStep()->getText());
-        $path = sprintf('%s:%d', $this->currentFeaturePath, $event->getStep()->getLine());
+        $step = $event->getStep();
+        $text = sprintf('%s %s', $step->getType(), $step->getText());
+        $path = sprintf('%s:%d', $this->currentFeaturePath, $step->getLine());
+
         $exception = null;
         $stdOut = null;
 
@@ -177,6 +180,10 @@ class ExerciseListener implements EventListener
 
         if ($result instanceof ExecutedStepResult) {
             $stdOut = $result->getCallResult()->getStdOut();
+        }
+
+        if ($exception && $exception instanceof PendingException) {
+            $path = $event->getTestResult()->getStepDefinition()->getPath();
         }
 
         $resultCode = $result->getResultCode();
