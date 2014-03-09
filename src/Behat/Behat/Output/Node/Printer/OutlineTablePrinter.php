@@ -38,10 +38,8 @@ interface OutlineTablePrinter
     /**
      * Prints outline footer using provided printer.
      *
-     * @param Formatter   $formatter
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
-     * @param TestResult  $result
+     * @param Formatter  $formatter
+     * @param TestResult $result
      */
-    public function printFooter(Formatter $formatter, FeatureNode $feature, OutlineNode $outline, TestResult $result);
+    public function printFooter(Formatter $formatter, TestResult $result);
 }

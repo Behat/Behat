@@ -58,7 +58,7 @@ class PrettyFeaturePrinter implements FeaturePrinter
     /**
      * {@inheritdoc}
      */
-    public function printFooter(Formatter $formatter, FeatureNode $feature, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result)
     {
     }
 

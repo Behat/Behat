@@ -56,7 +56,7 @@ class PrettyOutlinePrinter implements OutlinePrinter
     /**
      * @param ScenarioPrinter         $scenarioPrinter
      * @param StepPrinter             $stepPrinter
-     * @param \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter $resultConverter
+     * @param ResultToStringConverter $resultConverter
      * @param integer                 $indentation
      * @param integer                 $subIndentation
      */
@@ -88,7 +88,7 @@ class PrettyOutlinePrinter implements OutlinePrinter
     /**
      * {@inheritdoc}
      */
-    public function printFooter(Formatter $formatter, FeatureNode $feature, OutlineNode $outline, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result)
     {
         $formatter->getOutputPrinter()->writeln();
     }

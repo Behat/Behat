@@ -34,9 +34,8 @@ interface FeaturePrinter
     /**
      * Prints feature footer using provided printer.
      *
-     * @param Formatter   $formatter
-     * @param FeatureNode $feature
-     * @param TestResult  $result
+     * @param Formatter  $formatter
+     * @param TestResult $result
      */
-    public function printFooter(Formatter $formatter, FeatureNode $feature, TestResult $result);
+    public function printFooter(Formatter $formatter, TestResult $result);
 }

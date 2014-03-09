@@ -185,7 +185,7 @@ class OutlineTableListener implements EventListener
         $outline = $event->getOutline();
         $result = $event->getTestResult();
 
-        $this->tablePrinter->printFooter($formatter, $feature, $outline, $result);
+        $this->tablePrinter->printFooter($formatter, $result);
     }
 
     /**

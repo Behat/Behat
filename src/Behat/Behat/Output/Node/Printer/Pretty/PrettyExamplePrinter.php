@@ -43,7 +43,7 @@ class PrettyExamplePrinter implements ExamplePrinter
     /**
      * Initializes printer.
      *
-     * @param \Behat\Behat\Output\Node\Printer\Helper\WidthCalculator $widthCalculator
+     * @param WidthCalculator $widthCalculator
      * @param string          $basePath
      * @param integer         $indentation
      */
@@ -71,7 +71,7 @@ class PrettyExamplePrinter implements ExamplePrinter
     /**
      * {@inheritdoc}
      */
-    public function printFooter(Formatter $formatter, FeatureNode $feature, ExampleNode $example, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result)
     {
     }
 

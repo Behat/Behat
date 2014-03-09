@@ -36,10 +36,8 @@ interface ExamplePrinter
     /**
      * Prints example footer using provided printer.
      *
-     * @param Formatter   $formatter
-     * @param FeatureNode $feature
-     * @param ExampleNode $example
-     * @param TestResult  $result
+     * @param Formatter  $formatter
+     * @param TestResult $result
      */
-    public function printFooter(Formatter $formatter, FeatureNode $feature, ExampleNode $example, TestResult $result);
+    public function printFooter(Formatter $formatter, TestResult $result);
 }

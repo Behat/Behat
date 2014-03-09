@@ -99,6 +99,6 @@ class ScenarioNodeListener implements EventListener
         $scenario = $event->getScenario();
         $result = $event->getTestResult();
 
-        $this->scenarioPrinter->printFooter($formatter, $feature, $scenario, $result);
+        $this->scenarioPrinter->printFooter($formatter, $result);
     }
 }

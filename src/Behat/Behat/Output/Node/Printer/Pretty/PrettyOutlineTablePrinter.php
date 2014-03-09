@@ -41,7 +41,7 @@ class PrettyOutlineTablePrinter implements OutlineTablePrinter
      */
     private $stepPrinter;
     /**
-     * @var \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter
+     * @var ResultToStringConverter
      */
     private $resultConverter;
     /**
@@ -58,7 +58,7 @@ class PrettyOutlineTablePrinter implements OutlineTablePrinter
      *
      * @param ScenarioPrinter         $scenarioPrinter
      * @param StepPrinter             $stepPrinter
-     * @param \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter $resultConverter
+     * @param ResultToStringConverter $resultConverter
      * @param integer                 $indentation
      * @param integer                 $subIndentation
      */
@@ -90,7 +90,7 @@ class PrettyOutlineTablePrinter implements OutlineTablePrinter
     /**
      * {@inheritdoc}
      */
-    public function printFooter(Formatter $formatter, FeatureNode $feature, OutlineNode $outline, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result)
     {
         $formatter->getOutputPrinter()->writeln();
     }

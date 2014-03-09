@@ -62,9 +62,9 @@ class PrettyStepPrinter implements StepPrinter
      * Initializes printer.
      *
      * @param StepTextPainter         $textPainter
-     * @param \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter $resultConverter
+     * @param ResultToStringConverter $resultConverter
      * @param ExceptionPresenter      $exceptionPresenter
-     * @param \Behat\Behat\Output\Node\Printer\Helper\WidthCalculator         $widthCalculator
+     * @param WidthCalculator         $widthCalculator
      * @param integer                 $indentation
      * @param integer                 $subIndentation
      */

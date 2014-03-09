@@ -82,6 +82,6 @@ class FeatureListener implements EventListener
             return;
         }
 
-        $this->featurePrinter->printFooter($formatter, $event->getFeature(), $event->getTestResult());
+        $this->featurePrinter->printFooter($formatter, $event->getTestResult());
     }
 }

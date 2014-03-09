@@ -28,7 +28,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 class PrettyStatisticsPrinter implements StatisticsPrinter
 {
     /**
-     * @var \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter
+     * @var ResultToStringConverter
      */
     private $resultConverter;
     /**
@@ -43,7 +43,7 @@ class PrettyStatisticsPrinter implements StatisticsPrinter
     /**
      * Initializes printer.
      *
-     * @param \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter $resultConverter
+     * @param ResultToStringConverter $resultConverter
      * @param TranslatorInterface     $translator
      * @param string                  $basePath
      */

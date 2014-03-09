@@ -89,7 +89,7 @@ class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * {@inheritdoc}
      */
-    public function printFooter(Formatter $formatter, FeatureNode $feature, Scenario $scenario, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result)
     {
         $formatter->getOutputPrinter()->writeln();
     }

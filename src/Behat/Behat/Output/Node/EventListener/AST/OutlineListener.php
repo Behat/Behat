@@ -110,7 +110,7 @@ class OutlineListener implements EventListener
         $outline = $event->getOutline();
         $result = $event->getTestResult();
 
-        $this->outlinePrinter->printFooter($formatter, $feature, $outline, $result);
+        $this->outlinePrinter->printFooter($formatter, $result);
     }
 
     /**
@@ -143,7 +143,7 @@ class OutlineListener implements EventListener
             return;
         }
 
-        $this->examplePrinter->printFooter($formatter, $event->getFeature(), $this->example, $event->getTestResult());
+        $this->examplePrinter->printFooter($formatter, $event->getTestResult());
         $this->example = null;
     }
 
