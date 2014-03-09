@@ -14,12 +14,13 @@ use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
+use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Behat pretty feature listener.
+ * Behat feature listener.
  *
  * Listens to feature events and calls appropriate printers.
  *
@@ -31,15 +32,21 @@ class FeatureListener implements EventListener
      * @var FeaturePrinter
      */
     private $featurePrinter;
+    /**
+     * @var SetupPrinter
+     */
+    private $setupPrinter;
 
     /**
      * Initializes listener.
      *
      * @param FeaturePrinter $featurePrinter
+     * @param SetupPrinter   $setupPrinter
      */
-    public function __construct(FeaturePrinter $featurePrinter)
+    public function __construct(FeaturePrinter $featurePrinter, SetupPrinter $setupPrinter)
     {
         $this->featurePrinter = $featurePrinter;
+        $this->setupPrinter = $setupPrinter;
     }
 
     /**
@@ -67,6 +74,7 @@ class FeatureListener implements EventListener
             return;
         }
 
+        $this->setupPrinter->printSetup($formatter, $event->getSetup());
         $this->featurePrinter->printHeader($formatter, $event->getFeature());
     }
 
@@ -82,6 +90,7 @@ class FeatureListener implements EventListener
             return;
         }
 
+        $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
         $this->featurePrinter->printFooter($formatter, $event->getTestResult());
     }
 }

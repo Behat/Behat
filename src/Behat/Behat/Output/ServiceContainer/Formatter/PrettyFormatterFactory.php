@@ -93,8 +93,12 @@ class PrettyFormatterFactory implements FormatterFactory
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\ExerciseListener', array(
                     new Reference('output.node.printer.pretty.statistics')
                 )),
+                new Definition('Behat\Behat\Output\Node\EventListener\AST\SuiteListener', array(
+                    new Reference('output.node.printer.pretty.feature_setup')
+                )),
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\FeatureListener', array(
-                    new Reference('output.node.printer.pretty.feature')
+                    new Reference('output.node.printer.pretty.feature'),
+                    new Reference('output.node.printer.pretty.feature_setup')
                 )),
                 $this->proxySiblingEvents(
                     BackgroundTested::BEFORE,
@@ -273,6 +277,13 @@ class PrettyFormatterFactory implements FormatterFactory
      */
     protected function loadHookPrinters(ContainerBuilder $container)
     {
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettySetupPrinter', array(
+            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+            new Reference(ExceptionExtension::PRESENTER_ID),
+            0
+        ));
+        $container->setDefinition('output.node.printer.pretty.feature_setup', $definition);
+
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettySetupPrinter', array(
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(ExceptionExtension::PRESENTER_ID),

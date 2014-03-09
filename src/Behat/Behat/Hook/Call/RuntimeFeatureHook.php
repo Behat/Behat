@@ -28,14 +28,14 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string[]    $scopeName
+     * @param string      $scopeName
      * @param null|string $filterString
      * @param callable    $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
-    public function __construct(array $scopeName, $filterString, $callable, $description = null)
+    public function __construct($scopeName, $filterString, $callable, $description = null)
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 
