@@ -14,11 +14,13 @@ use Behat\Behat\EventDispatcher\Event\AfterOutlineTested;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
+use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\OutlineTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
 use Behat\Behat\Output\Node\Printer\OutlineTablePrinter;
+use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Output\Formatter;
@@ -42,7 +44,10 @@ class OutlineTableListener implements EventListener
      * @var ExampleRowPrinter
      */
     private $exampleRowPrinter;
-
+    /**
+     * @var SetupPrinter
+     */
+    private $stepSetupPrinter;
     /**
      * @var OutlineNode
      */
@@ -52,20 +57,29 @@ class OutlineTableListener implements EventListener
      */
     private $headerPrinted = false;
     /**
-     * @var StepTested[]
+     * @var BeforeStepTested[]
      */
-    private $stepTestedEvents = array();
+    private $stepBeforeTestedEvents = array();
+    /**
+     * @var AfterStepTested[]
+     */
+    private $stepAfterTestedEvents = array();
 
     /**
      * Initializes listener.
      *
      * @param OutlineTablePrinter $tablePrinter
      * @param ExampleRowPrinter   $exampleRowPrinter
+     * @param SetupPrinter        $stepSetupPrinter
      */
-    public function __construct(OutlineTablePrinter $tablePrinter, ExampleRowPrinter $exampleRowPrinter)
-    {
+    public function __construct(
+        OutlineTablePrinter $tablePrinter,
+        ExampleRowPrinter $exampleRowPrinter,
+        SetupPrinter $stepSetupPrinter
+    ) {
         $this->tablePrinter = $tablePrinter;
         $this->exampleRowPrinter = $exampleRowPrinter;
+        $this->stepSetupPrinter = $stepSetupPrinter;
     }
 
     /**
@@ -73,7 +87,7 @@ class OutlineTableListener implements EventListener
      */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if ($event instanceof StepTested && StepTested::AFTER === $eventName) {
+        if ($event instanceof StepTested) {
             $this->captureStepEvent($event);
 
             return;
@@ -94,7 +108,11 @@ class OutlineTableListener implements EventListener
      */
     private function captureStepEvent(StepTested $event)
     {
-        $this->stepTestedEvents[$event->getStep()->getLine()] = $event;
+        if ($event instanceof BeforeStepTested) {
+            $this->stepBeforeTestedEvents[$event->getStep()->getLine()] = $event;
+        } else {
+            $this->stepAfterTestedEvents[$event->getStep()->getLine()] = $event;
+        }
     }
 
     /**
@@ -165,8 +183,18 @@ class OutlineTableListener implements EventListener
 
         $example = $event->getScenario();
 
-        $this->exampleRowPrinter->printExampleRow($formatter, $this->outline, $example, $this->stepTestedEvents);
-        $this->stepTestedEvents = array();
+        foreach ($this->stepBeforeTestedEvents as $beforeEvent) {
+            $this->stepSetupPrinter->printSetup($formatter, $beforeEvent->getSetup());
+        }
+
+        $this->exampleRowPrinter->printExampleRow($formatter, $this->outline, $example, $this->stepAfterTestedEvents);
+
+        foreach ($this->stepAfterTestedEvents as $afterEvent) {
+            $this->stepSetupPrinter->printTeardown($formatter, $afterEvent->getTeardown());
+        }
+
+        $this->stepBeforeTestedEvents = array();
+        $this->stepAfterTestedEvents = array();
     }
 
     /**
@@ -181,11 +209,7 @@ class OutlineTableListener implements EventListener
             return;
         }
 
-        $feature = $event->getFeature();
-        $outline = $event->getOutline();
-        $result = $event->getTestResult();
-
-        $this->tablePrinter->printFooter($formatter, $result);
+        $this->tablePrinter->printFooter($formatter, $event->getTestResult());
     }
 
     /**
@@ -199,7 +223,7 @@ class OutlineTableListener implements EventListener
             function (AfterStepTested $event) {
                 return $event->getTestResult();
             },
-            $this->stepTestedEvents
+            $this->stepAfterTestedEvents
         );
     }
 }

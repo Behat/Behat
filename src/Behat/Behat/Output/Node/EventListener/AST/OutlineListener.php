@@ -14,10 +14,12 @@ use Behat\Behat\EventDispatcher\Event\AfterOutlineTested;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
+use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Output\Node\Printer\ExamplePrinter;
 use Behat\Behat\Output\Node\Printer\OutlinePrinter;
+use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Testwork\Output\Formatter;
@@ -46,6 +48,10 @@ class OutlineListener implements EventListener
      */
     private $stepPrinter;
     /**
+     * @var SetupPrinter
+     */
+    private $stepSetupPrinter;
+    /**
      * @var ExampleNode
      */
     private $example;
@@ -56,15 +62,18 @@ class OutlineListener implements EventListener
      * @param OutlinePrinter $outlinePrinter
      * @param ExamplePrinter $examplePrinter
      * @param StepPrinter    $stepPrinter
+     * @param SetupPrinter   $stepSetupPrinter
      */
     public function __construct(
         OutlinePrinter $outlinePrinter,
         ExamplePrinter $examplePrinter,
-        StepPrinter $stepPrinter
+        StepPrinter $stepPrinter,
+        SetupPrinter $stepSetupPrinter
     ) {
         $this->outlinePrinter = $outlinePrinter;
         $this->examplePrinter = $examplePrinter;
         $this->stepPrinter = $stepPrinter;
+        $this->stepSetupPrinter = $stepSetupPrinter;
     }
 
     /**
@@ -76,6 +85,7 @@ class OutlineListener implements EventListener
         $this->printAndForgetOutlineFooterOnAfterEvent($formatter, $event);
         $this->printExampleHeaderOnBeforeExampleEvent($formatter, $event, $eventName);
         $this->printExampleFooterOnAfterExampleEvent($formatter, $event, $eventName);
+        $this->printStepSetupOnBeforeStepEvent($formatter, $event);
         $this->printStepOnAfterStepEvent($formatter, $event);
     }
 
@@ -106,11 +116,7 @@ class OutlineListener implements EventListener
             return;
         }
 
-        $feature = $event->getFeature();
-        $outline = $event->getOutline();
-        $result = $event->getTestResult();
-
-        $this->outlinePrinter->printFooter($formatter, $result);
+        $this->outlinePrinter->printFooter($formatter, $event->getTestResult());
     }
 
     /**
@@ -148,12 +154,25 @@ class OutlineListener implements EventListener
     }
 
     /**
+     * Prints step setup on step BEFORE event.
+     *
+     * @param Formatter $formatter
+     * @param Event     $event
+     */
+    private function printStepSetupOnBeforeStepEvent(Formatter $formatter, Event $event)
+    {
+        if (!$event instanceof BeforeStepTested) {
+            return;
+        }
+
+        $this->stepSetupPrinter->printSetup($formatter, $event->getSetup());
+    }
+
+    /**
      * Prints example step on step AFTER event.
      *
      * @param Formatter $formatter
      * @param Event     $event
-     *
-     * @internal param string $eventName
      */
     private function printStepOnAfterStepEvent(Formatter $formatter, Event $event)
     {
@@ -162,5 +181,6 @@ class OutlineListener implements EventListener
         }
 
         $this->stepPrinter->printStep($formatter, $this->example, $event->getStep(), $event->getTestResult());
+        $this->stepSetupPrinter->printTeardown($formatter, $event->getTeardown());
     }
 }

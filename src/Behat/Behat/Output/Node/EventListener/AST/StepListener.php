@@ -12,9 +12,11 @@ namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
+use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Output\Formatter;
@@ -38,15 +40,21 @@ class StepListener implements EventListener
      * @var ScenarioLikeInterface
      */
     private $scenario;
+    /**
+     * @var SetupPrinter
+     */
+    private $setupPrinter;
 
     /**
      * Initializes listener.
      *
-     * @param StepPrinter $stepPrinter
+     * @param StepPrinter  $stepPrinter
+     * @param SetupPrinter $setupPrinter
      */
-    public function __construct(StepPrinter $stepPrinter)
+    public function __construct(StepPrinter $stepPrinter, SetupPrinter $setupPrinter)
     {
         $this->stepPrinter = $stepPrinter;
+        $this->setupPrinter = $setupPrinter;
     }
 
     /**
@@ -56,6 +64,7 @@ class StepListener implements EventListener
     {
         $this->captureScenarioOnScenarioEvent($event);
         $this->forgetScenarioOnAfterEvent($eventName);
+        $this->printStepSetupOnBeforeEvent($formatter, $event);
         $this->printStepOnAfterEvent($formatter, $event);
     }
 
@@ -87,6 +96,15 @@ class StepListener implements EventListener
         $this->scenario = null;
     }
 
+    private function printStepSetupOnBeforeEvent(Formatter $formatter, Event $event)
+    {
+        if (!$event instanceof BeforeStepTested) {
+            return;
+        }
+
+        $this->setupPrinter->printSetup($formatter, $event->getSetup());
+    }
+
     /**
      * Prints step on AFTER event.
      *
@@ -100,5 +118,6 @@ class StepListener implements EventListener
         }
 
         $this->stepPrinter->printStep($formatter, $this->scenario, $event->getStep(), $event->getTestResult());
+        $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
     }
 }
