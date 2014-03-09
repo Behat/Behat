@@ -55,6 +55,10 @@ class HookableSuiteTester implements SuiteTester
     {
         $setup = $this->baseTester->setUp($env, $iterator, $skip);
 
+        if ($skip) {
+            return $setup;
+        }
+
         $scope = new BeforeSuiteScope($env, $iterator);
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);
 
@@ -75,6 +79,10 @@ class HookableSuiteTester implements SuiteTester
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);
+
+        if ($skip) {
+            return $teardown;
+        }
 
         $scope = new AfterSuiteScope($env, $iterator, $result);
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);

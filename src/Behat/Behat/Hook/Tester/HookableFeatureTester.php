@@ -54,6 +54,10 @@ class HookableFeatureTester implements SpecificationTester
     {
         $setup = $this->baseTester->setUp($env, $spec, $skip);
 
+        if ($skip) {
+            return $setup;
+        }
+
         $scope = new BeforeFeatureScope($env, $spec);
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);
 
@@ -74,6 +78,10 @@ class HookableFeatureTester implements SpecificationTester
     public function tearDown(Environment $env, $spec, $skip, TestResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $spec, $skip, $result);
+
+        if ($skip) {
+            return $teardown;
+        }
 
         $scope = new AfterFeatureScope($env, $spec, $result);
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);

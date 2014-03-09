@@ -50,6 +50,10 @@ class HookableStepTester implements StepTester
     {
         $setup = $this->baseTester->setUp($env, $feature, $step, $skip);
 
+        if ($skip) {
+            return $setup;
+        }
+
         $scope = new BeforeStepScope($env, $feature, $step);
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);
 
@@ -70,6 +74,10 @@ class HookableStepTester implements StepTester
     public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $feature, $step, $skip, $result);
+
+        if ($skip) {
+            return $teardown;
+        }
 
         $scope = new AfterStepScope($env, $feature, $step, $result);
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);

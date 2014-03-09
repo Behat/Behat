@@ -56,6 +56,10 @@ class HookableScenarioTester implements ScenarioTester
     {
         $setup = $this->baseTester->setUp($env, $feature, $scenario, $skip);
 
+        if ($skip) {
+            return $setup;
+        }
+
         $scope = new BeforeScenarioScope($env, $feature, $scenario);
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);
 
@@ -76,6 +80,10 @@ class HookableScenarioTester implements ScenarioTester
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);
+
+        if ($skip) {
+            return $teardown;
+        }
 
         $scope = new AfterScenarioScope($env, $feature, $scenario, $result);
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);
