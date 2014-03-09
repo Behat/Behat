@@ -10,12 +10,11 @@
 
 namespace Behat\Testwork\Hook\ServiceContainer;
 
+use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
-use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
-use Behat\Testwork\Tester\ServiceContainer\TesterExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -66,8 +65,7 @@ class HookExtension implements Extension
     {
         $this->loadDispatcher($container);
         $this->loadRepository($container);
-        $this->loadHookedEventsSubscriber($container);
-        $this->loadHookedResultInterpretation($container);
+        $this->loadHookableTesters($container);
     }
 
     /**
@@ -105,30 +103,17 @@ class HookExtension implements Extension
     }
 
     /**
-     * Loads hooked events subscriber.
+     * Loads hookable testers.
      *
      * @param ContainerBuilder $container
      */
-    protected function loadHookedEventsSubscriber(ContainerBuilder $container)
+    protected function loadHookableTesters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\EventDispatcher\HookedEventsSubscriber', array(
-            new Reference(self::DISPATCHER_ID),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+        $definition = new Definition('Behat\Testwork\Hook\Tester\HookableSuiteTester', array(
+            new Reference(TesterExtension::SUITE_TESTER_ID),
+            new Reference(self::DISPATCHER_ID)
         ));
-        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG);
-        $container->setDefinition(self::EVENT_SUBSCRIBER, $definition);
-    }
-
-    /**
-     * Loads hooked result interpreter.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadHookedResultInterpretation($container)
-    {
-        $definition = new Definition('Behat\Testwork\Hook\Output\Result\Interpretation\HookedResultInterpretation');
-        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG);
-        $definition->addTag(TesterExtension::RESULT_INTERPRETATION_TAG);
-        $container->setDefinition(TesterExtension::RESULT_INTERPRETATION_TAG . '.hooked', $definition);
+        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => 9999));
+        $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.hookable', $definition);
     }
 }
