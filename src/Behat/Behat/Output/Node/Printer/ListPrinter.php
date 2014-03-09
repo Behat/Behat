@@ -115,7 +115,7 @@ final class ListPrinter
             $stdOut = $stepStat->getStdOut();
             $exception = $stepStat->getException();
 
-            $this->printHookStat($printer, $name, $path, $style, $stdOut, $exception);
+            $this->printStat($printer, $name, $path, $style, $stdOut, $exception);
         }
     }
 
@@ -142,7 +142,7 @@ final class ListPrinter
             $stdOut = $hookStat->getStdOut();
             $exception = $hookStat->getException();
 
-            $this->printHookStat($printer, $name, $path, $style, $stdOut, $exception);
+            $this->printStat($printer, $name, $path, $style, $stdOut, $exception);
         }
     }
 
@@ -156,8 +156,9 @@ final class ListPrinter
      * @param null|string    $stdOut
      * @param null|Exception $exception
      */
-    private function printHookStat(OutputPrinter $printer, $name, $path, $style, $stdOut, Exception $exception)
+    private function printStat(OutputPrinter $printer, $name, $path, $style, $stdOut, Exception $exception)
     {
+        $path = $this->relativizePaths($path);
         $printer->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $name, $style, $path));
 
         $pad = function ($line) { return '      ' . $line; };

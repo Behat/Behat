@@ -167,13 +167,9 @@ class ExerciseListener implements EventListener
 
         $result = $event->getTestResult();
         $text = sprintf('%s %s', $event->getStep()->getType(), $event->getStep()->getText());
-        $path = null;
+        $path = sprintf('%s:%d', $this->currentFeaturePath, $event->getStep()->getLine());
         $exception = null;
         $stdOut = null;
-
-        if ($result instanceof DefinedStepResult && null !== $result->getStepDefinition()) {
-            $path = $result->getStepDefinition()->getPath();
-        }
 
         if ($result instanceof ExceptionResult) {
             $exception = $result->getException();
