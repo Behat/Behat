@@ -12,7 +12,6 @@ namespace Behat\Testwork\Tester\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
-use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -101,7 +100,6 @@ abstract class TesterExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadExerciseController($container, $config['strict'], $config['skip']);
-        $this->loadSigintController($container);
         $this->loadResultInterpreter($container);
         $this->loadExercise($container);
         $this->loadSuiteTester($container);
@@ -138,20 +136,6 @@ abstract class TesterExtension implements Extension
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
-    }
-
-    /**
-     * Loads sigint controller
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadSigintController(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\SigintController', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 50));
-        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.sigint', $definition);
     }
 
     /**

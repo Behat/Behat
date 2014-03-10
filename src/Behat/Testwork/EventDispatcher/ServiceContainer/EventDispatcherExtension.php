@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\EventDispatcher\ServiceContainer;
 
+use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -80,6 +81,7 @@ class EventDispatcherExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
+        $this->loadSigintController($container);
         $this->loadEventDispatcher($container);
         $this->loadEventDispatchingExercise($container);
         $this->loadEventDispatchingSuiteTester($container);
@@ -91,6 +93,20 @@ class EventDispatcherExtension implements Extension
     public function process(ContainerBuilder $container)
     {
         $this->processSubscribers($container);
+    }
+
+    /**
+     * Loads sigint controller
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadSigintController(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Cli\SigintController', array(
+            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+        ));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 50));
+        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.sigint', $definition);
     }
 
     /**

@@ -8,9 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Tester\Cli;
+namespace Behat\Testwork\EventDispatcher\Cli;
 
 use Behat\Testwork\Cli\Controller;
+use Behat\Testwork\EventDispatcher\Event\AfterExerciseAborted;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -69,7 +70,7 @@ class SigintController implements Controller
      */
     public function abortExercise()
     {
-        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new ExerciseCompleted(null, true));
+        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new AfterExerciseAborted());
 
         exit(1);
     }
