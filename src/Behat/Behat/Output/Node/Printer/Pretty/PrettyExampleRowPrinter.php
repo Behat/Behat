@@ -15,6 +15,7 @@ use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\ExceptionResult;
+use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\OutlineNode;
@@ -34,7 +35,7 @@ use Behat\Testwork\Tester\Result\TestResults;
 class PrettyExampleRowPrinter implements ExampleRowPrinter
 {
     /**
-     * @var \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter
+     * @var ResultToStringConverter
      */
     private $resultConverter;
     /**
@@ -80,7 +81,7 @@ class PrettyExampleRowPrinter implements ExampleRowPrinter
         $row = $outline->getExampleTable()->getRowAsStringWithWrappedValues($rowNum, $wrapper);
 
         $formatter->getOutputPrinter()->writeln(sprintf('%s%s', $this->indentText, $row));
-        $this->printStepExceptions($formatter->getOutputPrinter(), $events);
+        $this->printStepExceptionsAndStdOut($formatter->getOutputPrinter(), $events);
     }
 
     /**
@@ -120,11 +121,12 @@ class PrettyExampleRowPrinter implements ExampleRowPrinter
      * Prints step events exceptions (if has some).
      *
      * @param OutputPrinter $printer
-     * @param StepTested[]  $events
+     * @param AfterTested[] $events
      */
-    private function printStepExceptions(OutputPrinter $printer, array $events)
+    private function printStepExceptionsAndStdOut(OutputPrinter $printer, array $events)
     {
         foreach ($events as $event) {
+            $this->printStepStdOut($printer, $event->getTestResult());
             $this->printStepException($printer, $event->getTestResult());
         }
     }
@@ -151,6 +153,30 @@ class PrettyExampleRowPrinter implements ExampleRowPrinter
 
         $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
         $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
+    }
+
+    /**
+     * Prints step output (if has one).
+     *
+     * @param OutputPrinter $printer
+     * @param StepResult    $result
+     */
+    private function printStepStdOut(OutputPrinter $printer, StepResult $result)
+    {
+        if (!$result instanceof ExecutedStepResult || null === $result->getCallResult()->getStdOut()) {
+            return;
+        }
+
+        $callResult = $result->getCallResult();
+        $indentedText = $this->subIndentText;
+
+        $pad = function ($line) use ($indentedText) {
+            return sprintf(
+                '%s│ {+stdout}%s{-stdout}', $indentedText, $line
+            );
+        };
+
+        $printer->writeln(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
     }
 
     /**

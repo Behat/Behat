@@ -17,6 +17,7 @@ use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\ExceptionResult;
+use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
@@ -98,6 +99,7 @@ class PrettyStepPrinter implements StepPrinter
         }
 
         $this->printArguments($formatter, $step->getArguments(), $result);
+        $this->printStdOut($formatter->getOutputPrinter(), $result);
         $this->printException($formatter->getOutputPrinter(), $result);
     }
 
@@ -163,6 +165,30 @@ class PrettyStepPrinter implements StepPrinter
             $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
             $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
         }
+    }
+
+    /**
+     * Prints step output (if has one).
+     *
+     * @param OutputPrinter $printer
+     * @param StepResult    $result
+     */
+    private function printStdOut(OutputPrinter $printer, StepResult $result)
+    {
+        if (!$result instanceof ExecutedStepResult || null === $result->getCallResult()->getStdOut()) {
+            return;
+        }
+
+        $callResult = $result->getCallResult();
+        $indentedText = $this->subIndentText;
+
+        $pad = function ($line) use ($indentedText) {
+            return sprintf(
+                '%s│ {+stdout}%s{-stdout}', $indentedText, $line
+            );
+        };
+
+        $printer->writeln(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
     }
 
     /**
