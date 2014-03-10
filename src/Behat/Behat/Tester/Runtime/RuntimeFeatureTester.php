@@ -81,7 +81,7 @@ class RuntimeFeatureTester implements SpecificationTester
             $tester = $scenario instanceof OutlineNode ? $this->outlineTester : $this->scenarioTester;
 
             $setup = $tester->setUp($isolatedEnvironment, $feature, $scenario, $skip);
-            $localSkip = $skip || !$setup->isSuccessful();
+            $localSkip = !$setup->isSuccessful() || $skip;
             $testResult = $tester->test($isolatedEnvironment, $feature, $scenario, $localSkip);
             $teardown = $tester->tearDown($isolatedEnvironment, $feature, $scenario, $localSkip, $testResult);
 

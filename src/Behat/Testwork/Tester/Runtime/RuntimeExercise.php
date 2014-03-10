@@ -69,7 +69,7 @@ class RuntimeExercise implements Exercise
             $environment = $this->envManager->buildEnvironment($iterator->getSuite());
 
             $setup = $this->suiteTester->setUp($environment, $iterator, $skip);
-            $localSkip = $skip || !$setup->isSuccessful();
+            $localSkip = !$setup->isSuccessful() || $skip;
             $testResult = $this->suiteTester->test($environment, $iterator, $localSkip);
             $teardown = $this->suiteTester->tearDown($environment, $iterator, $localSkip, $testResult);
 

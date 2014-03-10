@@ -20,6 +20,7 @@ use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
 use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Result\TestWithSetupResult;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -155,11 +156,14 @@ class ExerciseController implements Controller
     {
         $skip = $input->getOption('dry-run') || $this->skip;
 
-        $skip = $skip || !$this->exercise->setUp($specifications, $skip)->isSuccessful();
+        $setup = $this->exercise->setUp($specifications, $skip);
+        $skip = !$setup->isSuccessful() || $skip;
         $testResult = $this->exercise->test($specifications, $skip);
-        $this->exercise->tearDown($specifications, $skip, $testResult);
+        $teardown = $this->exercise->tearDown($specifications, $skip, $testResult);
 
-        return new IntegerTestResult($testResult->getResultCode());
+        $result = new IntegerTestResult($testResult->getResultCode());
+
+        return new TestWithSetupResult($setup, $result, $teardown);
     }
 
     /**

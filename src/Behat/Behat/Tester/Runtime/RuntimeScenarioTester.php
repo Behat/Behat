@@ -70,13 +70,13 @@ class RuntimeScenarioTester implements ScenarioTester
 
         if ($feature->hasBackground()) {
             $setup = $this->backgroundTester->setUp($env, $feature, $skip);
-            $skip = $skip || !$setup->isSuccessful();
+            $skip = !$setup->isSuccessful() || $skip;
 
             $testResult = $this->backgroundTester->test($env, $feature, $skip);
-            $skip = $skip || !$testResult->isPassed();
+            $skip = !$testResult->isPassed() || $skip;
 
             $teardown = $this->backgroundTester->tearDown($env, $feature, $skip, $testResult);
-            $skip = $skip || !$teardown->isSuccessful();
+            $skip = !$teardown->isSuccessful() || $skip;
 
             $integerResult = new IntegerTestResult($testResult->getResultCode());
             $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
@@ -84,13 +84,13 @@ class RuntimeScenarioTester implements ScenarioTester
 
         foreach ($scenario->getSteps() as $step) {
             $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
-            $skip = $skip || !$setup->isSuccessful();
+            $skip = !$setup->isSuccessful() || $skip;
 
             $testResult = $this->stepTester->test($env, $feature, $step, $skip);
-            $skip = $skip || !$testResult->isPassed();
+            $skip = !$testResult->isPassed() || $skip;
 
             $teardown = $this->stepTester->tearDown($env, $feature, $step, $skip, $testResult);
-            $skip = $skip || !$teardown->isSuccessful();
+            $skip = !$teardown->isSuccessful() || $skip;
 
             $integerResult = new IntegerTestResult($testResult->getResultCode());
             $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);

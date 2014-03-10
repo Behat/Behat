@@ -62,7 +62,7 @@ class RuntimeOutlineTester implements OutlineTester
         $results = array();
         foreach ($outline->getExamples() as $example) {
             $setup = $this->scenarioTester->setUp($env, $feature, $example, $skip);
-            $localSkip = $skip || !$setup->isSuccessful();
+            $localSkip = !$setup->isSuccessful() || $skip;
             $testResult = $this->scenarioTester->test($env, $feature, $example, $localSkip);
             $teardown = $this->scenarioTester->tearDown($env, $feature, $example, $localSkip, $testResult);
 
