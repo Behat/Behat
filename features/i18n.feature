@@ -94,8 +94,8 @@ Feature: I18n
         Как разработчик функционала
         Я хочу чтобы Мир сбрасывался между сценариями
 
-        Предыстория:                    # features/World.feature:7
-          Если Я ввел 10                # FeatureContext::iHaveEntered()
+        Предыстория:     # features/World.feature:7
+          Если Я ввел 10 # FeatureContext::iHaveEntered()
 
         Сценарий: Неопределен           # features/World.feature:10
           То Я должен иметь 10          # FeatureContext::iShouldHave()
@@ -154,17 +154,14 @@ Feature: I18n
 
       --- Проваленные шаги:
 
-          features/World.feature:20
-            То Я должен иметь 13 # features/World.feature:22
-              Failed asserting that 14 matches expected 13.
+          То Я должен иметь 13 # features/World.feature:22
+            Failed asserting that 14 matches expected 13.
 
-          features/World.feature:31
-            То Я должен иметь 16 # features/World.feature:27
-              Failed asserting that 15 matches expected 16.
+          То Я должен иметь 16 # features/World.feature:27
+            Failed asserting that 15 matches expected 16.
 
-          features/World.feature:33
-            То Я должен иметь 32 # features/World.feature:27
-              Failed asserting that 33 matches expected 32.
+          То Я должен иметь 32 # features/World.feature:27
+            Failed asserting that 33 matches expected 32.
 
       --- Шаги в ожидании:
 
@@ -193,17 +190,14 @@ Feature: I18n
 
       --- Failed steps:
 
-          features/World.feature:20
-            То Я должен иметь 13 # features/World.feature:22
-              Failed asserting that 14 matches expected 13.
+          То Я должен иметь 13 # features/World.feature:22
+            Failed asserting that 14 matches expected 13.
 
-          features/World.feature:31
-            То Я должен иметь 16 # features/World.feature:27
-              Failed asserting that 15 matches expected 16.
+          То Я должен иметь 16 # features/World.feature:27
+            Failed asserting that 15 matches expected 16.
 
-          features/World.feature:33
-            То Я должен иметь 32 # features/World.feature:27
-              Failed asserting that 33 matches expected 32.
+          То Я должен иметь 32 # features/World.feature:27
+            Failed asserting that 33 matches expected 32.
 
       --- Pending steps:
 
@@ -232,17 +226,14 @@ Feature: I18n
 
       --- Failed steps:
 
-          features/World.feature:20
-            То Я должен иметь 13 # features/World.feature:22
-              Failed asserting that 14 matches expected 13.
+          То Я должен иметь 13 # features/World.feature:22
+            Failed asserting that 14 matches expected 13.
 
-          features/World.feature:31
-            То Я должен иметь 16 # features/World.feature:27
-              Failed asserting that 15 matches expected 16.
+          То Я должен иметь 16 # features/World.feature:27
+            Failed asserting that 15 matches expected 16.
 
-          features/World.feature:33
-            То Я должен иметь 32 # features/World.feature:27
-              Failed asserting that 33 matches expected 32.
+          То Я должен иметь 32 # features/World.feature:27
+            Failed asserting that 33 matches expected 32.
 
       --- Pending steps:
 
