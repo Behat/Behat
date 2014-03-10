@@ -10,13 +10,11 @@
 
 namespace Behat\Behat\Tester\Cli;
 
+use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
-use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
-use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -84,6 +82,7 @@ class RerunController implements Controller
         $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'collectFailedScenario'), -50);
         $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'collectFailedScenario'), -50);
         $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'writeCache'), -50);
+
         $this->key = $this->generateKey($input);
 
         if (!$input->getOption('rerun')) {
@@ -100,14 +99,15 @@ class RerunController implements Controller
     /**
      * Records scenario if it is failed.
      *
-     * @param ScenarioLikeTested $event
+     * @param AfterScenarioTested $event
      */
-    public function collectFailedScenario(ScenarioLikeTested $event)
+    public function collectFailedScenario(AfterScenarioTested $event)
     {
         if (!$this->getFileName()) {
             return;
         }
-        if (!$event instanceof AfterTested || TestResult::FAILED !== $event->getTestResult()->getResultCode()) {
+
+        if ($event->getTestResult()->isPassed()) {
             return;
         }
 

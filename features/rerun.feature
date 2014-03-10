@@ -105,13 +105,11 @@ Feature: Rerun
 
       --- Failed steps:
 
-          features/apples.feature:9
-            Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+          Then I should have 3 apples # features/apples.feature:11
+            Failed asserting that 2 matches expected 3.
 
-          features/apples.feature:29
-            Then I should have 8 apples # features/apples.feature:24
-              Failed asserting that 7 matches expected 8.
+          Then I should have 8 apples # features/apples.feature:24
+            Failed asserting that 7 matches expected 8.
 
       6 scenarios (4 passed, 2 failed)
       21 steps (19 passed, 2 failed)
@@ -126,13 +124,11 @@ Feature: Rerun
 
     --- Failed steps:
 
-        features/apples.feature:9
-          Then I should have 3 apples # features/apples.feature:11
-            Failed asserting that 2 matches expected 3.
+        Then I should have 3 apples # features/apples.feature:11
+          Failed asserting that 2 matches expected 3.
 
-        features/apples.feature:29
-          Then I should have 8 apples # features/apples.feature:24
-            Failed asserting that 7 matches expected 8.
+        Then I should have 8 apples # features/apples.feature:24
+          Failed asserting that 7 matches expected 8.
 
     2 scenarios (2 failed)
     7 steps (5 passed, 2 failed)
@@ -181,9 +177,8 @@ Feature: Rerun
 
     --- Failed steps:
 
-        features/apples.feature:9
-          Then I should have 3 apples # features/apples.feature:11
-            Failed asserting that 2 matches expected 3.
+        Then I should have 3 apples # features/apples.feature:11
+          Failed asserting that 2 matches expected 3.
 
     1 scenario (1 failed)
     3 steps (2 passed, 1 failed)
