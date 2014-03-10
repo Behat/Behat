@@ -12,6 +12,7 @@ namespace Behat\Behat\Output\Node\Printer\Pretty;
 
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\TaggedNodeInterface;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -51,6 +52,10 @@ class PrettyFeaturePrinter implements FeaturePrinter
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature)
     {
+        if ($feature instanceof TaggedNodeInterface) {
+            $this->printTags($formatter->getOutputPrinter(), $feature->getTags());
+        }
+
         $this->printTitle($formatter->getOutputPrinter(), $feature);
         $this->printDescription($formatter->getOutputPrinter(), $feature);
     }
@@ -60,6 +65,22 @@ class PrettyFeaturePrinter implements FeaturePrinter
      */
     public function printFooter(Formatter $formatter, TestResult $result)
     {
+    }
+
+    /**
+     * Prints feature tags.
+     *
+     * @param OutputPrinter $printer
+     * @param string[]      $tags
+     */
+    private function printTags(OutputPrinter $printer, array $tags)
+    {
+        if (!count($tags)) {
+            return;
+        }
+
+        $tags = array_map(array($this, 'prependTagWithTagSign'), $tags);
+        $printer->writeln(sprintf('%s{+tag}%s{-tag}', $this->indentText, implode(' ', $tags)));
     }
 
     /**
@@ -87,10 +108,28 @@ class PrettyFeaturePrinter implements FeaturePrinter
      */
     private function printDescription(OutputPrinter $printer, FeatureNode $feature)
     {
+        if (!$feature->getDescription()) {
+            $printer->writeln();
+
+            return;
+        }
+
         foreach (explode("\n", $feature->getDescription()) as $descriptionLine) {
             $printer->writeln(sprintf('%s%s', $this->subIndentText, $descriptionLine));
         }
 
         $printer->writeln();
+    }
+
+    /**
+     * Prepends tags string with tag-sign.
+     *
+     * @param string $tag
+     *
+     * @return string
+     */
+    private function prependTagWithTagSign($tag)
+    {
+        return '@' . $tag;
     }
 }

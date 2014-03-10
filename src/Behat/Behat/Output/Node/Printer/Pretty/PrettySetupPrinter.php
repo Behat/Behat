@@ -41,6 +41,14 @@ class PrettySetupPrinter implements SetupPrinter
      * @var string
      */
     private $indentText;
+    /**
+     * @var bool
+     */
+    private $newlineBefore;
+    /**
+     * @var bool
+     */
+    private $newlineAfter;
 
     /**
      * Initializes printer.
@@ -48,15 +56,21 @@ class PrettySetupPrinter implements SetupPrinter
      * @param ResultToStringConverter $resultConverter
      * @param ExceptionPresenter      $exceptionPresenter
      * @param integer                 $indentation
+     * @param Boolean                 $newlineBefore
+     * @param Boolean                 $newlineAfter
      */
     public function __construct(
         ResultToStringConverter $resultConverter,
         ExceptionPresenter $exceptionPresenter,
-        $indentation = 0
+        $indentation = 0,
+        $newlineBefore = false,
+        $newlineAfter = false
     ) {
         $this->resultConverter = $resultConverter;
         $this->exceptionPresenter = $exceptionPresenter;
         $this->indentText = str_repeat(' ', intval($indentation));
+        $this->newlineBefore = $newlineBefore;
+        $this->newlineAfter = $newlineAfter;
     }
 
     /**
@@ -90,8 +104,8 @@ class PrettySetupPrinter implements SetupPrinter
     /**
      * Prints setup hook call result.
      *
-     * @param OutputPrinter  $printer
-     * @param CallResult $callResult
+     * @param OutputPrinter $printer
+     * @param CallResult    $callResult
      */
     private function printSetupHookCallResult(OutputPrinter $printer, CallResult $callResult)
     {
@@ -112,13 +126,17 @@ class PrettySetupPrinter implements SetupPrinter
 
         $this->printHookCallStdOut($printer, $callResult, $this->indentText);
         $this->printHookCallException($printer, $callResult, $this->indentText);
+
+        if ($this->newlineBefore) {
+            $printer->writeln();
+        }
     }
 
     /**
      * Prints teardown hook call result.
      *
-     * @param OutputPrinter  $printer
-     * @param CallResult $callResult
+     * @param OutputPrinter $printer
+     * @param CallResult    $callResult
      */
     private function printTeardownHookCallResult(OutputPrinter $printer, CallResult $callResult)
     {
@@ -139,6 +157,10 @@ class PrettySetupPrinter implements SetupPrinter
         $printer->writeln(
             sprintf('%s└─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hook, $style, $path)
         );
+
+        if ($this->newlineAfter) {
+            $printer->writeln();
+        }
     }
 
     /**
