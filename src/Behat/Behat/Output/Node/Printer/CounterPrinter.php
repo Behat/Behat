@@ -52,7 +52,12 @@ final class CounterPrinter
     public function printCounters(OutputPrinter $printer, $intro, array $stats)
     {
         $stats = array_filter($stats, function ($stats) { return 0 !== count($stats); });
-        $totalCount = count(call_user_func_array('array_merge', array_values($stats)));
+
+        if (0 === count($stats)) {
+            $totalCount = 0;
+        } else {
+            $totalCount = count(call_user_func_array('array_merge', array_values($stats)));
+        }
 
         $detailedStats = array();
         foreach ($stats as $resultCode => $codeStats) {
