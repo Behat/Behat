@@ -43,6 +43,15 @@ final class NodeEventListeningFormatter implements Formatter
      */
     private $description;
 
+    /**
+     * Initializes formatter.
+     *
+     * @param string        $name
+     * @param string        $description
+     * @param array         $parameters
+     * @param OutputPrinter $printer
+     * @param EventListener $listener
+     */
     public function __construct($name, $description, array $parameters, OutputPrinter $printer, EventListener $listener)
     {
         $this->name = $name;
@@ -118,11 +127,16 @@ final class NodeEventListeningFormatter implements Formatter
     /**
      * Proxies event to the listener.
      *
-     * @param Event  $event
-     * @param string $eventName
+     * @param Event $event
      */
-    public function listenEvent(Event $event, $eventName)
+    public function listenEvent(Event $event)
     {
+        if (1 < func_num_args()) {
+            $eventName = func_get_arg(1);
+        } else {
+            $eventName = $event->getName();
+        }
+
         $this->listener->listenEvent($this, $event, $eventName);
     }
 }

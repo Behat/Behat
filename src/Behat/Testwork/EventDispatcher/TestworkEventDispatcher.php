@@ -34,6 +34,10 @@ class TestworkEventDispatcher extends EventDispatcher
             $event = new Event();
         }
 
+        if (method_exists($event, 'setName')) {
+            $event->setName($eventName);
+        }
+
         $this->doDispatch($this->getListeners($eventName), $eventName, $event);
 
         return $event;
