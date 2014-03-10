@@ -121,7 +121,7 @@ Feature: Multiple formats
         As a little kid
         I need to have an apple in my pocket
 
-        Background:            # features/apples.feature:6
+        Background:             # features/apples.feature:6
           Given I have 3 apples # FeatureContext::iHaveApples()
       .
         Scenario: I'm little hungry   # features/apples.feature:9
@@ -212,7 +212,7 @@ Feature: Multiple formats
         As a little kid
         I need to have an apple in my pocket
 
-        Background:            # features/apples.feature:6
+        Background:             # features/apples.feature:6
           Given I have 3 apples # FeatureContext::iHaveApples()
       .
         Scenario: I'm little hungry   # features/apples.feature:9
