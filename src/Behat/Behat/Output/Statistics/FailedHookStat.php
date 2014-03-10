@@ -30,7 +30,7 @@ final class FailedHookStat
     /**
      * @var Exception
      */
-    private $exception;
+    private $error;
     /**
      * @var string
      */
@@ -41,14 +41,14 @@ final class FailedHookStat
      *
      * @param string      $name
      * @param string      $path
-     * @param Exception   $exception
+     * @param string      $error
      * @param null|string $stdOut
      */
-    public function __construct($name, $path, Exception $exception, $stdOut = null)
+    public function __construct($name, $path, $error, $stdOut = null)
     {
         $this->name = $name;
         $this->path = $path;
-        $this->exception = $exception;
+        $this->error = $error;
         $this->stdOut = $stdOut;
     }
 
@@ -75,11 +75,11 @@ final class FailedHookStat
     /**
      * Returns hook exception.
      *
-     * @return Exception
+     * @return string
      */
-    public function getException()
+    public function getError()
     {
-        return $this->exception;
+        return $this->error;
     }
 
     /**

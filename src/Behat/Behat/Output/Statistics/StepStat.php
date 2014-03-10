@@ -34,7 +34,7 @@ final class StepStat
     /**
      * @var null|Exception
      */
-    private $exception;
+    private $error;
     /**
      * @var null|string
      */
@@ -43,18 +43,18 @@ final class StepStat
     /**
      * Initializes step stat.
      *
-     * @param string         $text
-     * @param string         $path
-     * @param integer        $resultCode
-     * @param null|Exception $exception
-     * @param null|string    $stdOut
+     * @param string      $text
+     * @param string      $path
+     * @param integer     $resultCode
+     * @param null|string $error
+     * @param null|string $stdOut
      */
-    public function __construct($text, $path, $resultCode, Exception $exception = null, $stdOut = null)
+    public function __construct($text, $path, $resultCode, $error = null, $stdOut = null)
     {
         $this->text = $text;
         $this->path = $path;
         $this->resultCode = $resultCode;
-        $this->exception = $exception;
+        $this->error = $error;
         $this->stdOut = $stdOut;
     }
 
@@ -89,13 +89,13 @@ final class StepStat
     }
 
     /**
-     * Returns step exception (if has one).
+     * Returns step error (if has one).
      *
-     * @return null|Exception
+     * @return null|string
      */
-    public function getException()
+    public function getError()
     {
-        return $this->exception;
+        return $this->error;
     }
 
     /**

@@ -84,7 +84,8 @@ class ProgressFormatterFactory implements FormatterFactory
                     new Reference('output.node.printer.progress.step')
                 )),
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\ExerciseListener', array(
-                    new Reference('output.node.printer.progress.statistics')
+                    new Reference('output.node.printer.progress.statistics'),
+                    new Reference(ExceptionExtension::PRESENTER_ID)
                 ))
             )
         ));

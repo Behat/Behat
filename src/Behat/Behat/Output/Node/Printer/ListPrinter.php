@@ -13,11 +13,9 @@ namespace Behat\Behat\Output\Node\Printer;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Statistics\FailedHookStat;
 use Behat\Behat\Output\Statistics\StepStat;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
-use Exception;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -113,9 +111,9 @@ final class ListPrinter
             $name = $stepStat->getText();
             $path = $stepStat->getPath();
             $stdOut = $stepStat->getStdOut();
-            $exception = $stepStat->getException();
+            $error = $stepStat->getError();
 
-            $this->printStat($printer, $name, $path, $style, $stdOut, $exception);
+            $this->printStat($printer, $name, $path, $style, $stdOut, $error);
         }
     }
 
@@ -140,23 +138,23 @@ final class ListPrinter
             $name = $hookStat->getName();
             $path = $hookStat->getPath();
             $stdOut = $hookStat->getStdOut();
-            $exception = $hookStat->getException();
+            $error = $hookStat->getError();
 
-            $this->printStat($printer, $name, $path, $style, $stdOut, $exception);
+            $this->printStat($printer, $name, $path, $style, $stdOut, $error);
         }
     }
 
     /**
      * Prints hook stat.
      *
-     * @param OutputPrinter  $printer
-     * @param string         $name
-     * @param string         $path
-     * @param string         $style
-     * @param null|string    $stdOut
-     * @param null|Exception $exception
+     * @param OutputPrinter $printer
+     * @param string        $name
+     * @param string        $path
+     * @param string        $style
+     * @param null|string   $stdOut
+     * @param null|string   $error
      */
-    private function printStat(OutputPrinter $printer, $name, $path, $style, $stdOut, Exception $exception)
+    private function printStat(OutputPrinter $printer, $name, $path, $style, $stdOut, $error)
     {
         $path = $this->relativizePaths($path);
         $printer->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $name, $style, $path));
@@ -169,14 +167,8 @@ final class ListPrinter
             $printer->writeln(implode("\n", $stdOutString));
         }
 
-        if ($exception) {
-            if ($exception instanceof PendingException) {
-                $exception = $exception->getMessage();
-            } else {
-                $exception = $this->exceptionPresenter->presentException($exception);
-            }
-
-            $exceptionString = implode("\n", array_map($pad, explode("\n", $exception)));
+        if ($error) {
+            $exceptionString = implode("\n", array_map($pad, explode("\n", $error)));
             $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $exceptionString, $style));
         }
 
