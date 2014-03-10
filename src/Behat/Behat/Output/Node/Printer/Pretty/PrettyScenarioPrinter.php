@@ -132,7 +132,9 @@ class PrettyScenarioPrinter implements ScenarioPrinter
         $description = explode("\n", $longTitle);
         $title = array_shift($description);
 
-        $printer->write(sprintf(' %s', $title));
+        if ('' !== $title) {
+            $printer->write(sprintf(' %s', $title));
+        }
     }
 
     /**
