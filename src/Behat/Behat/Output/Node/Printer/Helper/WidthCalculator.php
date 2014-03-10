@@ -86,7 +86,7 @@ final class WidthCalculator
             $header = sprintf('%s%s: %s', $indentText, $scenario->getKeyword(), array_shift($lines));
         }
 
-        return mb_strlen($header, 'utf8');
+        return mb_strlen(rtrim($header), 'utf8');
     }
 
     /**
