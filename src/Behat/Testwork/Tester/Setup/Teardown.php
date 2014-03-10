@@ -23,4 +23,11 @@ interface Teardown
      * @return Boolean
      */
     public function isSuccessful();
+
+    /**
+     * Checks if tear down has produced any output.
+     *
+     * @return Boolean
+     */
+    public function hasOutput();
 }

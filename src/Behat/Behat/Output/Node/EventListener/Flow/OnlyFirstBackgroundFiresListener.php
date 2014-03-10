@@ -14,6 +14,7 @@ use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
 use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
+use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
@@ -47,7 +48,7 @@ class OnlyFirstBackgroundFiresListener implements EventListener
     /**
      * @var Boolean
      */
-    private $beforeStepFailed = false;
+    private $stepSetupHadOutput = false;
 
     /**
      * Initializes listener.
@@ -150,18 +151,99 @@ class OnlyFirstBackgroundFiresListener implements EventListener
             return false;
         }
 
-        if ($event instanceof BeforeStepTested && !$event->getSetup()->isSuccessful()) {
-            $this->beforeStepFailed = true;
+        return !$this->isStepEventWithOutput($event) && !$this->isStepEventWithSetupOrTeardownOutput($event);
+    }
 
+    /**
+     * Checks if provided event is a step event that produced any output.
+     *
+     * @param Event $event
+     *
+     * @return Boolean
+     */
+    private function isStepEventWithOutput(Event $event)
+    {
+        return $this->isAfterStepWithCallOutput($event) || $this->isAfterStepWithError($event);
+    }
+
+    /**
+     * Checks if provided event is a step event which setup or teardown produced any output.
+     *
+     * @param Event $event
+     *
+     * @return Boolean
+     */
+    private function isStepEventWithSetupOrTeardownOutput(Event $event)
+    {
+        return $this->isBeforeStepEventWithSetupOutput($event) || $this->isAfterStepWithTeardownOutput($event);
+    }
+
+    /**
+     * Checks if provided event is a BEFORE step with setup that produced output.
+     *
+     * @param Event $event
+     *
+     * @return Boolean
+     */
+    private function isBeforeStepEventWithSetupOutput(Event $event)
+    {
+        if ($event instanceof BeforeStepTested && $event->getSetup()->hasOutput()) {
+            $this->stepSetupHadOutput = true;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if provided event is an AFTER step with teardown that produced output.
+     *
+     * @param Event $event
+     *
+     * @return Boolean
+     */
+    private function isAfterStepWithTeardownOutput(Event $event)
+    {
+        if ($event instanceof AfterStepTested && ($this->stepSetupHadOutput || $event->getTeardown()->hasOutput())) {
+            $this->stepSetupHadOutput = false;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if provided event is an AFTER step for a step with output.
+     *
+     * @param Event $event
+     *
+     * @return Boolean
+     */
+    private function isAfterStepWithCallOutput(Event $event)
+    {
+        if (!$event instanceof AfterStepTested) {
             return false;
         }
 
-        if ($event instanceof AfterStepTested && ($this->beforeStepFailed || !$event->getTeardown()->isSuccessful())) {
-            $this->beforeStepFailed = false;
-
+        $result = $event->getTestResult();
+        if (!$result instanceof ExecutedStepResult) {
             return false;
         }
 
-        return $event instanceof AfterStepTested && StepResult::FAILED !== $event->getTestResult()->getResultCode();
+        return $result->getCallResult()->hasStdOut();
+    }
+
+    /**
+     * Checks if provided event is an AFTER step for a failed step.
+     *
+     * @param Event $event
+     *
+     * @return Boolean
+     */
+    private function isAfterStepWithError(Event $event)
+    {
+        return $event instanceof AfterStepTested && StepResult::FAILED === $event->getTestResult()->getResultCode();
     }
 }

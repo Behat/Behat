@@ -56,6 +56,16 @@ final class HookedTeardown implements Teardown
     }
 
     /**
+     * Checks if tear down has produced any output.
+     *
+     * @return Boolean
+     */
+    public function hasOutput()
+    {
+        return $this->hookCallResults->hasStdOuts() || $this->hookCallResults->hasExceptions();
+    }
+
+    /**
      * Returns hook call results.
      *
      * @return CallResults

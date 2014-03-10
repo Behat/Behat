@@ -45,7 +45,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
     /**
      * Initializes listener.
      *
-     * @param \Behat\Testwork\Output\Node\EventListener\EventListener $descendant
+     * @param EventListener $descendant
      */
     public function __construct(EventListener $descendant)
     {

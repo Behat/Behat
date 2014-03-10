@@ -102,8 +102,6 @@ Feature: Dry run
         │  HOOK: before scenario
         │
         Scenario: I'm little hungry
-          Given I have 3 apples
-            │ STEP: I have 3 apples
           When I ate 1 apple
             │ STEP: I ate 1 apples
           Then I should have 3 apples

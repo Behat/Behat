@@ -23,4 +23,11 @@ interface Setup
      * @return Boolean
      */
     public function isSuccessful();
+
+    /**
+     * Checks if setup has produced any output.
+     *
+     * @return Boolean
+     */
+    public function hasOutput();
 }

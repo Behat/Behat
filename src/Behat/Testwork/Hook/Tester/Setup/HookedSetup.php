@@ -56,6 +56,16 @@ final class HookedSetup implements Setup
     }
 
     /**
+     * Checks if setup has produced any output.
+     *
+     * @return Boolean
+     */
+    public function hasOutput()
+    {
+        return $this->hookCallResults->hasStdOuts() || $this->hookCallResults->hasExceptions();
+    }
+
+    /**
      * Returns hook call results.
      *
      * @return CallResults

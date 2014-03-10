@@ -26,4 +26,14 @@ final class SuccessfulTeardown implements Teardown
     {
         return true;
     }
+
+    /**
+     * Checks if tear down has produced any output.
+     *
+     * @return Boolean
+     */
+    public function hasOutput()
+    {
+        return false;
+    }
 }

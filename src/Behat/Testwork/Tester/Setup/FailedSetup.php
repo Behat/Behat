@@ -26,4 +26,14 @@ final class FailedSetup implements Setup
     {
         return false;
     }
+
+    /**
+     * Checks if setup has produced any output.
+     *
+     * @return Boolean
+     */
+    public function hasOutput()
+    {
+        return false;
+    }
 }
