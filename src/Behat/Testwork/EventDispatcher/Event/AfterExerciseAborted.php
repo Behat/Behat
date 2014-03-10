@@ -1,0 +1,31 @@
+<?php
+
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Behat\Testwork\EventDispatcher\Event;
+
+use Behat\Testwork\Specification\SpecificationIterator;
+
+/**
+ * Testwork after exercise aborted event.
+ *
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ */
+final class AfterExerciseAborted extends ExerciseCompleted
+{
+    /**
+     * Returns specification iterators.
+     *
+     * @return SpecificationIterator[]
+     */
+    public function getSpecificationIterators()
+    {
+        return array();
+    }
+}

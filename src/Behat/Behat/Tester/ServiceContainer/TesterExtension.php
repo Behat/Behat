@@ -74,7 +74,6 @@ class TesterExtension extends BaseExtension
     {
         parent::load($container, $config);
 
-        $this->loadStopOnFailureController($container);
         $this->loadRerunController($container);
     }
 
@@ -202,20 +201,6 @@ class TesterExtension extends BaseExtension
             new Reference(CallExtension::CALL_CENTER_ID)
         ));
         $container->setDefinition(self::STEP_TESTER_ID, $definition);
-    }
-
-    /**
-     * Loads stop on failure controller.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadStopOnFailureController(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\Tester\Cli\StopOnFailureController', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 20));
-        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.stop_on_failure', $definition);
     }
 
     /**

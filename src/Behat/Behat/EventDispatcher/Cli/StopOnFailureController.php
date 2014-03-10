@@ -8,13 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester\Cli;
+namespace Behat\Behat\EventDispatcher\Cli;
 
+use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
-use Behat\Behat\Tester\Result\BehatTestResult;
 use Behat\Testwork\Cli\Controller;
+use Behat\Testwork\EventDispatcher\Event\AfterExerciseAborted;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
+use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -76,15 +78,15 @@ class StopOnFailureController implements Controller
     /**
      * Exits if scenario is a failure and if stopper is enabled.
      *
-     * @param \Behat\Behat\EventDispatcher\Event\ScenarioTested $event
+     * @param AfterScenarioTested $event
      */
-    public function exitOnFailure(ScenarioTested $event)
+    public function exitOnFailure(AfterScenarioTested $event)
     {
-        if (BehatTestResult::FAILED !== $event->getResultCode()) {
+        if (TestResult::FAILED !== $event->getTestResult()->getResultCode()) {
             return;
         }
 
-        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new ExerciseCompleted(null, false));
+        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new AfterExerciseAborted());
 
         exit(1);
     }
