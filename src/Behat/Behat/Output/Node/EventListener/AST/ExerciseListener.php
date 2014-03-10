@@ -184,6 +184,10 @@ class ExerciseListener implements EventListener
             $error = $result->getException();
         }
 
+        if ($error && $error instanceof PendingException) {
+            $path = $event->getTestResult()->getStepDefinition()->getPath();
+        }
+
         if ($error instanceof PendingException) {
             $error = $error->getMessage();
         } elseif ($error) {
@@ -192,10 +196,6 @@ class ExerciseListener implements EventListener
 
         if ($result instanceof ExecutedStepResult) {
             $stdOut = $result->getCallResult()->getStdOut();
-        }
-
-        if ($error && $error instanceof PendingException) {
-            $path = $event->getTestResult()->getStepDefinition()->getPath();
         }
 
         $resultCode = $result->getResultCode();
