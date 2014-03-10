@@ -13,7 +13,7 @@ namespace Behat\Testwork\Hook\Scope;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Testwork after test scope interface.
+ * Represents a hook scope for After* hooks.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

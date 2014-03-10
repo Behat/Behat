@@ -16,7 +16,7 @@ use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
- * Testwork hook repository.
+ * Finds hooks using provided environments or scopes.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

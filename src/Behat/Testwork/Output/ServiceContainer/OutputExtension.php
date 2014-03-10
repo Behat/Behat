@@ -22,8 +22,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Testwork output extension.
- *
  * Provides output management services for testwork.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
@@ -101,25 +99,21 @@ class OutputExtension implements Extension
             ->defaultValue(array($this->defaultFormatter => array('enabled' => true)))
             ->useAttributeAsKey('name')
             ->prototype('array')
-            ->beforeNormalization()
-            ->ifTrue(
-                function ($a) {
-                    return is_array($a) && !isset($a['enabled']);
-                }
-            )
-            ->then(
-                function ($a) {
-                    return
+                ->beforeNormalization()
+                    ->ifTrue(function($a) {
+                        return is_array($a) && !isset($a['enabled']);
+                    })
+                    ->then(function($a) { return
                         array_merge($a, array('enabled' => true));
-                }
-            )
+                    })
+                ->end()
+                ->useAttributeAsKey('name')
+                ->treatTrueLike(array('enabled' => true))
+                ->treatNullLike(array('enabled' => true))
+                ->treatFalseLike(array('enabled' => false))
+                ->prototype('variable')->end()
             ->end()
-            ->useAttributeAsKey('name')
-            ->treatTrueLike(array('enabled' => true))
-            ->treatNullLike(array('enabled' => true))
-            ->treatFalseLike(array('enabled' => false))
-            ->prototype('variable')->end()
-            ->end();
+        ;
     }
 
     /**
@@ -221,6 +215,7 @@ class OutputExtension implements Extension
         foreach ($references as $reference) {
             $definition->addMethodCall('registerFormatter', array($reference));
         }
+
         foreach ($previousCalls as $call) {
             $definition->addMethodCall($call[0], $call[1]);
         }

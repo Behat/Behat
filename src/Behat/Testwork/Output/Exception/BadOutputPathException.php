@@ -13,7 +13,7 @@ namespace Behat\Testwork\Output\Exception;
 use InvalidArgumentException;
 
 /**
- * Bad output path exception.
+ * Represents an exception thrown because user provided bad output path.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

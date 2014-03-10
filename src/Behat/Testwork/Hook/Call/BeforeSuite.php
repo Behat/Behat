@@ -13,7 +13,7 @@ namespace Behat\Testwork\Hook\Call;
 use Behat\Testwork\Hook\Scope\SuiteScope;
 
 /**
- * Before suite hook.
+ * Represents BeforeSuite hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

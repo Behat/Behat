@@ -14,8 +14,6 @@ use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\CallResult;
 
 /**
- * Testwork call result filter interface.
- *
  * Filters call results and produces new ones.
  *
  * @see CallCenter

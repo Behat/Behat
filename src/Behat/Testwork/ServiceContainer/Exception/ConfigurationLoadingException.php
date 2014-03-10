@@ -13,7 +13,7 @@ namespace Behat\Testwork\ServiceContainer\Exception;
 use InvalidArgumentException;
 
 /**
- * Testwork configuration loading exception.
+ * Represents exception thrown during configuration load.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

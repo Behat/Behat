@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Testwork suite initialization controller.
+ * Initializes registered test suites.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -47,25 +47,17 @@ class InitializationController implements Controller
     }
 
     /**
-     * Configures command to be executable by the controller.
-     *
-     * @param Command $command
+     * {@inheritdoc}
      */
     public function configure(Command $command)
     {
-        $command->addOption(
-            '--init', null, InputOption::VALUE_NONE,
+        $command->addOption('--init', null, InputOption::VALUE_NONE,
             'Initialize all registered test suites.'
         );
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

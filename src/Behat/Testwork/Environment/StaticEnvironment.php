@@ -14,7 +14,7 @@ use Behat\Testwork\Call\Callee;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Static calls environment.
+ * Represents static calls environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

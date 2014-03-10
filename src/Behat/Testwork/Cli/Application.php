@@ -23,8 +23,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Testwork console application.
- *
  * Extends Symfony console application with testwork functionality.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

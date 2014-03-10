@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Suite\Exception;
 
 /**
- * Suite setup exception.
+ * Represents a suite exception thrown during a suite setup phase.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

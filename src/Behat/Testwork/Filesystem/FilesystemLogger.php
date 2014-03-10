@@ -11,9 +11,7 @@
 namespace Behat\Testwork\Filesystem;
 
 /**
- * Testwork filesystem operations logger interface.
- *
- * Implement this interface in order to be able to log FS operations that testwork does.
+ * Logs filesystem operations.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -18,8 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- * Testwork language controller.
- *
  * Configures translator service.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
@@ -42,26 +40,17 @@ class LanguageController implements Controller
     }
 
     /**
-     * Configures command to be executable by the controller.
-     *
-     * @param Command $command
+     * {@inheritdoc}
      */
     public function configure(Command $command)
     {
-        $command
-            ->addOption(
-                '--lang', null, InputOption::VALUE_REQUIRED,
-                'Print output in particular language.'
-            );
+        $command->addOption('--lang', null, InputOption::VALUE_REQUIRED,
+            'Print output in particular language.'
+        );
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

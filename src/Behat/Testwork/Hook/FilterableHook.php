@@ -13,9 +13,7 @@ namespace Behat\Testwork\Hook;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
- * Testwork filterable hook interface.
- *
- * Filterable hooks must implement this interface.
+ * Represents hook that is filterable by the provided scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

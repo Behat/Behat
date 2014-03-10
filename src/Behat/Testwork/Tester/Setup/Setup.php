@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Tester\Setup;
 
 /**
- * Testwork setup interface.
+ * Represents a result of test setUp action.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

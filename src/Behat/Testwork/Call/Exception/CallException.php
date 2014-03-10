@@ -10,13 +10,13 @@
 
 namespace Behat\Testwork\Call\Exception;
 
-use Behat\Testwork\Exception\TestworkException as BaseException;
+use Behat\Testwork\Exception\TestworkException;
 
 /**
- * Core call exception interface.
+ * All call exceptions should implement this interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface CallException extends BaseException
+interface CallException extends TestworkException
 {
 }

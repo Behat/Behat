@@ -13,7 +13,7 @@ namespace Behat\Testwork\Suite\Generator;
 use Behat\Testwork\Suite\GenericSuite;
 
 /**
- * Generic suite generator.
+ * Generates generic test suites.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -35,12 +35,7 @@ class GenericSuiteGenerator implements SuiteGenerator
     }
 
     /**
-     * Checks if generator support provided suite type and settings.
-     *
-     * @param string $type
-     * @param array  $settings
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsTypeAndSettings($type, array $settings)
     {

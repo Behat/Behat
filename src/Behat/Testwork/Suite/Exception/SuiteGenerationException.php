@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Suite\Exception;
 
 /**
- * Testwork suite generation exception.
+ * Represents a suite exception thrown during suite generation phase.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

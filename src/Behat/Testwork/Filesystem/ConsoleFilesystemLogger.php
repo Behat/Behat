@@ -13,7 +13,7 @@ namespace Behat\Testwork\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Testwork console filesystem operations logger.
+ * Logs filesystem operations to the console.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -41,10 +41,7 @@ class ConsoleFilesystemLogger implements FilesystemLogger
     }
 
     /**
-     * Logs directory creation.
-     *
-     * @param string $path
-     * @param string $reason
+     * {@inheritdoc}
      */
     public function directoryCreated($path, $reason)
     {
@@ -58,10 +55,7 @@ class ConsoleFilesystemLogger implements FilesystemLogger
     }
 
     /**
-     * Logs file creation.
-     *
-     * @param string $path
-     * @param string $reason
+     * {@inheritdoc}
      */
     public function fileCreated($path, $reason)
     {
@@ -75,10 +69,7 @@ class ConsoleFilesystemLogger implements FilesystemLogger
     }
 
     /**
-     * Logs file update.
-     *
-     * @param string $path
-     * @param string $reason
+     * {@inheritdoc}
      */
     public function fileUpdated($path, $reason)
     {

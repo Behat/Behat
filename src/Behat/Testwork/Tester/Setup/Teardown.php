@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Tester\Setup;
 
 /**
- * Testwork teardown interface.
+ * Represents a result of test tearDown action.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

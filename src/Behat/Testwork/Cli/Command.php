@@ -15,9 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Testwork console command.
- *
- * Extends Symfony console command with controller-based delegation.
+ * Extends Symfony console command with a controller-based delegation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

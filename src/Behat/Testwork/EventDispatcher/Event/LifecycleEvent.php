@@ -15,9 +15,7 @@ use Behat\Testwork\Suite\Suite;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Testwork lifecycle event.
- *
- * All tester events except exercise should extend this class.
+ * Represents an event which holds references to current suite and environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

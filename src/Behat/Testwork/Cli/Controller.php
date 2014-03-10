@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Testwork console controller interface.
+ * Represents Testwork Console Controller.
  *
  * All testwork console controllers should implement this interface.
  *

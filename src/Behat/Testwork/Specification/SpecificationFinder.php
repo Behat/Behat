@@ -14,8 +14,6 @@ use Behat\Testwork\Specification\Locator\SpecificationLocator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork test specification finder.
- *
  * Finds test specifications for provided suites using registered locators.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

@@ -14,7 +14,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Testwork test with setup result.
+ * Represents a test result with both setup and teardown attached.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -48,9 +48,15 @@ final class TestWithSetupResult implements TestResult
     }
 
     /**
-     * Returns tester result code.
-     *
-     * @return integer
+     * {@inheritdoc}
+     */
+    public function isPassed()
+    {
+        return self::PASSED >= $this->getResultCode();
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getResultCode()
     {
@@ -63,15 +69,5 @@ final class TestWithSetupResult implements TestResult
         }
 
         return $this->result->getResultCode();
-    }
-
-    /**
-     * Checks that test has passed.
-     *
-     * @return Boolean
-     */
-    public function isPassed()
-    {
-        return self::PASSED >= $this->getResultCode();
     }
 }

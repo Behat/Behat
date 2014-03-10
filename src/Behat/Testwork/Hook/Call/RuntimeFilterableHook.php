@@ -13,9 +13,7 @@ namespace Behat\Testwork\Hook\Call;
 use Behat\Testwork\Hook\FilterableHook;
 
 /**
- * Testwork runtime filterable hook class.
- *
- * Runtime hook, filterable by filter string.
+ * Represents runtime hook, filterable by filter string.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -52,9 +50,7 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHo
     }
 
     /**
-     * Represents hook as a string.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function __toString()
     {

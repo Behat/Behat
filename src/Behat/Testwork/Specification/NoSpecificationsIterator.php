@@ -14,9 +14,9 @@ use Behat\Testwork\Suite\Suite;
 use EmptyIterator;
 
 /**
- * Testwork no specifications iterator.
+ * Represents empty specification iterator.
  *
- * Return instance of this class from locator if no specifications are found.
+ * Return an instance of this class from locator if no specifications are found.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -14,7 +14,7 @@ use ArrayIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork specification array iterator.
+ * Iterates over specifications array.
  *
  * Return instance of this class from locator if specifications cannot be searched lazily.
  *

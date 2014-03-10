@@ -15,8 +15,6 @@ use PHPUnit_Framework_Exception;
 use PHPUnit_Framework_TestFailure;
 
 /**
- * PHPUnit exception stringer.
- *
  * Strings PHPUnit assertion exceptions.
  *
  * @see ExceptionPresenter
@@ -26,11 +24,7 @@ use PHPUnit_Framework_TestFailure;
 class PHPUnitExceptionStringer implements ExceptionStringer
 {
     /**
-     * Checks if stringer supports provided exception.
-     *
-     * @param Exception $exception
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsException(Exception $exception)
     {
@@ -38,12 +32,7 @@ class PHPUnitExceptionStringer implements ExceptionStringer
     }
 
     /**
-     * Strings provided exception.
-     *
-     * @param Exception $exception
-     * @param integer   $verbosity
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function stringException(Exception $exception, $verbosity)
     {

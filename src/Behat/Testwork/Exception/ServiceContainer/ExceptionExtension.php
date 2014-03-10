@@ -21,8 +21,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Testwork autoloader extension.
- *
  * Provides exception handling services.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

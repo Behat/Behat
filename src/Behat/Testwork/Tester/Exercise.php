@@ -16,9 +16,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Testwork exercise interface.
- *
- * This interface defines an API for Testwork exercise testers.
+ * Prepares and tests provided exercise.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

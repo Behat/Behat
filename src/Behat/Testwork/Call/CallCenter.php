@@ -17,8 +17,6 @@ use Behat\Testwork\Call\Handler\CallHandler;
 use Exception;
 
 /**
- * Testwork call center.
- *
  * Makes calls and handles results using registered handlers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

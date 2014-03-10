@@ -14,7 +14,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Testwork exercise completed event.
+ * Represents an exercise event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

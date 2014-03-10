@@ -13,7 +13,7 @@ namespace Behat\Testwork\ServiceContainer\Exception;
 use RuntimeException;
 
 /**
- * Testwork extension exception.
+ * Extension exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

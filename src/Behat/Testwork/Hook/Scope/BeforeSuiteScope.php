@@ -15,7 +15,7 @@ use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Testwork before suite hook scope.
+ * Represents a scope for BeforeSuite hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -43,9 +43,7 @@ final class BeforeSuiteScope implements SuiteScope
     }
 
     /**
-     * Returns hook scope name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -53,9 +51,7 @@ final class BeforeSuiteScope implements SuiteScope
     }
 
     /**
-     * Returns hook suite.
-     *
-     * @return Suite
+     * {@inheritdoc}
      */
     public function getSuite()
     {
@@ -63,9 +59,7 @@ final class BeforeSuiteScope implements SuiteScope
     }
 
     /**
-     * Returns hook environment.
-     *
-     * @return Environment
+     * {@inheritdoc}
      */
     public function getEnvironment()
     {
@@ -73,9 +67,7 @@ final class BeforeSuiteScope implements SuiteScope
     }
 
     /**
-     * Returns specification iterator.
-     *
-     * @return SpecificationIterator
+     * {@inheritdoc}
      */
     public function getSpecificationIterator()
     {

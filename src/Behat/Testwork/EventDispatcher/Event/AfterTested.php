@@ -14,7 +14,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Testwork after tested event interface.
+ * Represents an event in which test was completed.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

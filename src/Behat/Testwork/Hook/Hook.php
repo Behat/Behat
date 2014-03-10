@@ -13,9 +13,7 @@ namespace Behat\Testwork\Hook;
 use Behat\Testwork\Call\Callee;
 
 /**
- * Testwork hook interface.
- *
- * All testwork test hooks should implement this interface.
+ * Represents a Testwork hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

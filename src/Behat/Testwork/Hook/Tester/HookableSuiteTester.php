@@ -21,7 +21,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SuiteTester;
 
 /**
- * Testwork hookable suite tester.
+ * Suite tester which dispatched BEFORE/AFTER hooks during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

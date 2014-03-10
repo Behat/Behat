@@ -16,9 +16,7 @@ use Iterator;
 use IteratorAggregate;
 
 /**
- * Testwork call results collection.
- *
- * Aggregates multiple call results into a collection and provides informational API on top of that.
+ * Aggregates multiple call results into a collection and provides an informational API on top of that.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

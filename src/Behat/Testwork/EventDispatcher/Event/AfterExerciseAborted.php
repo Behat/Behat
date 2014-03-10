@@ -10,19 +10,15 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Specification\SpecificationIterator;
-
 /**
- * Testwork after exercise aborted event.
+ * Represents an event in which exercise was aborted.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 final class AfterExerciseAborted extends ExerciseCompleted
 {
     /**
-     * Returns specification iterators.
-     *
-     * @return SpecificationIterator[]
+     * {@inheritdoc}
      */
     public function getSpecificationIterators()
     {

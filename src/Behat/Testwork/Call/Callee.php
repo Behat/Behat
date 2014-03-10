@@ -14,9 +14,7 @@ use ReflectionFunction;
 use ReflectionMethod;
 
 /**
- * Testwork callee interface.
- *
- * Represents callable objects.
+ * Represents callable object.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

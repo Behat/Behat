@@ -20,8 +20,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Testwork suite extension.
- *
  * Extends testwork with suite-related services.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

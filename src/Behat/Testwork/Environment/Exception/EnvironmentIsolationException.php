@@ -14,7 +14,7 @@ use Behat\Testwork\Environment\Environment;
 use RuntimeException;
 
 /**
- * Test environment isolation exception.
+ * Represents exception thrown during environment isolation process.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

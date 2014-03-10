@@ -15,11 +15,9 @@ use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork test specification locator interface.
+ * Provides a custom way to locate specification by provided suite and locator string.
  *
- * Used by SpecificationFinder.
- *
- * @see    SpecificationFinder
+ * @see SpecificationFinder
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

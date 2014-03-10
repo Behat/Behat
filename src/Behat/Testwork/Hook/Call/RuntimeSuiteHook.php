@@ -16,7 +16,7 @@ use Behat\Testwork\Hook\Scope\SuiteScope;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Runtime suite hook.
+ * Represents suite hook executed in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -46,11 +46,7 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     }
 
     /**
-     * Checks if provided event matches hook filter.
-     *
-     * @param HookScope $scope
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function filterMatches(HookScope $scope)
     {

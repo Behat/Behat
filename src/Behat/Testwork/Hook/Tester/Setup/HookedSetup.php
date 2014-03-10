@@ -14,7 +14,7 @@ use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Testwork hooked test setup.
+ * Represents hooked test setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -42,9 +42,7 @@ final class HookedSetup implements Setup
     }
 
     /**
-     * Returns true if fixtures have been handled successfully.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isSuccessful()
     {
@@ -56,9 +54,7 @@ final class HookedSetup implements Setup
     }
 
     /**
-     * Checks if setup has produced any output.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function hasOutput()
     {

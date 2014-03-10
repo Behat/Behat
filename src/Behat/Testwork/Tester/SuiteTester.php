@@ -17,9 +17,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Testwork suite tester interface.
- *
- * This interface defines an API for Testwork suite testers.
+ * Prepares and tests provided suite object.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

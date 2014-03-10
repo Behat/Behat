@@ -23,8 +23,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Testwork tester extension.
- *
  * Provides tester services.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

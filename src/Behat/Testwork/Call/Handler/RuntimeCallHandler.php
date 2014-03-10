@@ -16,11 +16,11 @@ use Behat\Testwork\Call\Exception\CallErrorException;
 use Exception;
 
 /**
- * Runtime call handler.
+ * Handles calls in teh current runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeCallHandler implements CallHandler
+final class RuntimeCallHandler implements CallHandler
 {
     /**
      * @var integer
@@ -38,11 +38,7 @@ class RuntimeCallHandler implements CallHandler
     }
 
     /**
-     * Checks if handler supports call.
-     *
-     * @param Call $call
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsCall(Call $call)
     {
@@ -50,11 +46,7 @@ class RuntimeCallHandler implements CallHandler
     }
 
     /**
-     * Handles call and returns call result.
-     *
-     * @param Call $call
-     *
-     * @return CallResult
+     * {@inheritdoc}
      */
     public function handleCall(Call $call)
     {
@@ -66,9 +58,7 @@ class RuntimeCallHandler implements CallHandler
     }
 
     /**
-     * Custom error handler.
-     *
-     * This method used as custom error handler when step is running.
+     * Used as a custom error handler when step is running.
      *
      * @see set_error_handler()
      *
@@ -98,7 +88,7 @@ class RuntimeCallHandler implements CallHandler
      *
      * @return CallResult
      */
-    protected function executeCall(Call $call)
+    private function executeCall(Call $call)
     {
         $callable = $call->getBoundCallable();
         $arguments = $call->getArguments();
@@ -121,7 +111,7 @@ class RuntimeCallHandler implements CallHandler
      *
      * @return null|string
      */
-    final protected function getBufferedStdOut()
+    private function getBufferedStdOut()
     {
         return ob_get_length() ? ob_get_contents() : null;
     }

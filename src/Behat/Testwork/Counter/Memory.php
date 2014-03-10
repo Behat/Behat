@@ -11,8 +11,6 @@
 namespace Behat\Testwork\Counter;
 
 /**
- * Memory usage.
- *
  * Counts amount of system memory being used.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

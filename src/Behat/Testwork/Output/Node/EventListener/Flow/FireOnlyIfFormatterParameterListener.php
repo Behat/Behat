@@ -15,10 +15,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Behat fire only if formatter parameter listener.
- *
- * Catches all events, but proxies them only if formatter has specific parameter
- * set to a specific value.
+ * Catches all events, but proxies them only if formatter has specific parameter set to a specific value.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

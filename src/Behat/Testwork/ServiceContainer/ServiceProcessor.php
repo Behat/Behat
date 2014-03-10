@@ -14,8 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Testwork service processor.
- *
  * Provides additional service finding functionality.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

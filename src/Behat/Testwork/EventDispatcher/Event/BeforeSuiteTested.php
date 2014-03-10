@@ -15,7 +15,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Testwork before suite tested event.
+ * Represents an event in which suite is prepared to be tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -11,11 +11,12 @@
 namespace Behat\Testwork\Suite\Setup;
 
 use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Suite\SuiteBootstrapper;
 
 /**
- * Testwork suite setup interface.
+ * Sets up supported test suite.
  *
- * Sets up provided suites.
+ * @see SuiteBootstrapper
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -15,7 +15,7 @@ use Exception;
 use InvalidArgumentException;
 
 /**
- * Core suite exception.
+ * Represents a suite exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

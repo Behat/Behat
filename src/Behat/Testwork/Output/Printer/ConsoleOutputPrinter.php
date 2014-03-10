@@ -17,9 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
- * Testwork console printer.
- *
- * Symfony Console based printer.
+ * Symfony2\Console-based output printer.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

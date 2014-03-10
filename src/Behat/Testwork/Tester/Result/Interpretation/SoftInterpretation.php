@@ -13,18 +13,14 @@ namespace Behat\Testwork\Tester\Result\Interpretation;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Testwork basic result interpretation.
+ * Interprets test results softly - everything that is not an explicit failure is a pass.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class SoftInterpretation implements ResultInterpretation
 {
     /**
-     * Checks if provided test result should be considered as a failure.
-     *
-     * @param TestResult $result
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isFailure(TestResult $result)
     {

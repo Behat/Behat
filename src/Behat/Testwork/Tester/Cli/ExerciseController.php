@@ -28,7 +28,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Testwork exercise controller.
+ * Executes exercise.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -86,39 +86,24 @@ class ExerciseController implements Controller
     }
 
     /**
-     * Configures command to be executable by the controller.
-     *
-     * @param Command $command
+     * {@inheritdoc}
      */
     public function configure(Command $command)
     {
         $command
-            ->addArgument(
-                'locator',
-                InputArgument::OPTIONAL,
+            ->addArgument('locator', null, InputArgument::OPTIONAL,
                 'Optional path to a specific test.'
             )
-            ->addOption(
-                '--strict',
-                null,
-                InputOption::VALUE_NONE,
+            ->addOption('--strict', null, InputOption::VALUE_NONE,
                 'Passes only if all tests are explicitly passing.'
             )
-            ->addOption(
-                '--dry-run',
-                null,
-                InputOption::VALUE_NONE,
+            ->addOption('--dry-run', null, InputOption::VALUE_NONE,
                 'Invokes formatters without executing the steps & hooks.'
             );
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

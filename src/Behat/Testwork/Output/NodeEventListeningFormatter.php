@@ -16,7 +16,7 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Testwork EventListener-based pretty formatter.
+ * Formatter built around the idea of event delegation and composition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -72,59 +72,6 @@ final class NodeEventListeningFormatter implements Formatter
     }
 
     /**
-     * Returns formatter name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Returns formatter description.
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Returns formatter output printer.
-     *
-     * @return OutputPrinter
-     */
-    public function getOutputPrinter()
-    {
-        return $this->printer;
-    }
-
-    /**
-     * Sets formatter parameter.
-     *
-     * @param string $name
-     * @param mixed  $value
-     */
-    public function setParameter($name, $value)
-    {
-        $this->parameters[$name] = $value;
-    }
-
-    /**
-     * Returns parameter name.
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function getParameter($name)
-    {
-        return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
-    }
-
-    /**
      * Proxies event to the listener.
      *
      * @param Event $event
@@ -138,5 +85,45 @@ final class NodeEventListeningFormatter implements Formatter
         }
 
         $this->listener->listenEvent($this, $event, $eventName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOutputPrinter()
+    {
+        return $this->printer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParameter($name, $value)
+    {
+        $this->parameters[$name] = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameter($name)
+    {
+        return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
     }
 }

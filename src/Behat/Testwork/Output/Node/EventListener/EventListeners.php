@@ -17,8 +17,6 @@ use IteratorAggregate;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Behat node event listeners collection.
- *
  * Used to compose formatter event listeners.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

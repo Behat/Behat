@@ -22,8 +22,6 @@ use Behat\Testwork\Tester\SpecificationTester;
 use Behat\Testwork\Tester\SuiteTester;
 
 /**
- * Testwork in-runtime suite tester.
- *
  * Tester executing suite tests in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

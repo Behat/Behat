@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Output\Exception;
 
 /**
- * Core printer exception interface.
+ * Represents a printer exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

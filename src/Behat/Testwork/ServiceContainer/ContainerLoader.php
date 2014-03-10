@@ -17,8 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
- * Testwork DI container loader.
- *
  * Loads Symfony DI container with testwork extension services.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

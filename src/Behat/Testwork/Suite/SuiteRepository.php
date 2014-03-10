@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Suite;
 
 /**
- * Testwork suite repository interface.
+ * Represents a way to retrieve suites.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

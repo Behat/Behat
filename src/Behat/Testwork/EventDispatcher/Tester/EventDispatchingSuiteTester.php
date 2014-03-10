@@ -19,7 +19,7 @@ use Behat\Testwork\Tester\SuiteTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Testwork event-dispatching suite tester.
+ * Suite tester dispatching BEFORE/AFTER events during testing.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

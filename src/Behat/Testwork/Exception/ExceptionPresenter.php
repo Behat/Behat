@@ -16,8 +16,6 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Exception;
 
 /**
- * Testwork exception presenter.
- *
  * Presents exceptions as strings using registered stringers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

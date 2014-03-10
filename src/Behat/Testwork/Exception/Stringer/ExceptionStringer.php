@@ -14,11 +14,9 @@ use Behat\Testwork\Exception\ExceptionPresenter;
 use Exception;
 
 /**
- * Testwork exception stringer interface.
+ * Finds a best way to present as a string particular.
  *
- * Finds a best way to present particular exception as a string.
- *
- * @see    ExceptionPresenter
+ * @see ExceptionPresenter
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -13,9 +13,7 @@ namespace Behat\Testwork\Counter;
 use Behat\Testwork\Counter\Exception\TimerException;
 
 /**
- * Testwork timer.
- *
- * Provides timer functionality.
+ * Provides time counting functionality.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

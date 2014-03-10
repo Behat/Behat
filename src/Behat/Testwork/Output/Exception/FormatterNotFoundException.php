@@ -13,7 +13,7 @@ namespace Behat\Testwork\Output\Exception;
 use InvalidArgumentException;
 
 /**
- * Formatter not registered exception.
+ * Represents an exception thrown because requested formatter is not found.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -14,9 +14,7 @@ use Behat\Testwork\Output\Formatter;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Behat node event listener interface.
- *
- * Used to compose formatter event listeners.
+ * Used to define formatter event listeners.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

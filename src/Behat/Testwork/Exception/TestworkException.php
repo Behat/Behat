@@ -11,8 +11,6 @@
 namespace Behat\Testwork\Exception;
 
 /**
- * Core testwork exception interface.
- *
  * All testwork exceptions implement this interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

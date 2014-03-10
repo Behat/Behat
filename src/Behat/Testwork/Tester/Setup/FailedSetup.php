@@ -11,16 +11,14 @@
 namespace Behat\Testwork\Tester\Setup;
 
 /**
- * Testwork failed setup.
+ * Represents a failed setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 final class FailedSetup implements Setup
 {
     /**
-     * Returns true if fixtures have been handled successfully.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isSuccessful()
     {
@@ -28,9 +26,7 @@ final class FailedSetup implements Setup
     }
 
     /**
-     * Checks if setup has produced any output.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function hasOutput()
     {

@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Suite\Exception;
 
 /**
- * Testwork suite parameter not found exception.
+ * Represents an exception thrown when user tries to access non-existent suite parameter.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

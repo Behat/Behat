@@ -15,8 +15,6 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\NodeInterface;
 
 /**
- * Testwork configuration tree.
- *
  * Builds configuration tree using provided lists of core and custom extensions.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

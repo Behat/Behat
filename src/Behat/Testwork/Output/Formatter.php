@@ -14,9 +14,9 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Testwork formatter interface.
+ * Represents Testwork output formatter.
  *
- * All testwork formatters should implement this interface.
+ * @see OutputManager
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
