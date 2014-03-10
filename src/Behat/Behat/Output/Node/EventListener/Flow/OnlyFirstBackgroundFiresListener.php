@@ -14,8 +14,6 @@ use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
 use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
-use Behat\Behat\Tester\Result\ExecutedStepResult;
-use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
@@ -151,19 +149,7 @@ class OnlyFirstBackgroundFiresListener implements EventListener
             return false;
         }
 
-        return !$this->isStepEventWithOutput($event) && !$this->isStepEventWithSetupOrTeardownOutput($event);
-    }
-
-    /**
-     * Checks if provided event is a step event that produced any output.
-     *
-     * @param Event $event
-     *
-     * @return Boolean
-     */
-    private function isStepEventWithOutput(Event $event)
-    {
-        return $this->isAfterStepWithCallOutput($event) || $this->isAfterStepWithError($event);
+        return !$this->isStepEventWithOutput($event);
     }
 
     /**
@@ -173,9 +159,9 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      *
      * @return Boolean
      */
-    private function isStepEventWithSetupOrTeardownOutput(Event $event)
+    private function isStepEventWithOutput(Event $event)
     {
-        return $this->isBeforeStepEventWithSetupOutput($event) || $this->isAfterStepWithTeardownOutput($event);
+        return $this->isBeforeStepEventWithOutput($event) || $this->isAfterStepWithOutput($event);
     }
 
     /**
@@ -185,9 +171,9 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      *
      * @return Boolean
      */
-    private function isBeforeStepEventWithSetupOutput(Event $event)
+    private function isBeforeStepEventWithOutput(Event $event)
     {
-        if ($event instanceof BeforeStepTested && $event->getSetup()->hasOutput()) {
+        if ($event instanceof BeforeStepTested && $event->hasOutput()) {
             $this->stepSetupHadOutput = true;
 
             return true;
@@ -203,47 +189,14 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      *
      * @return Boolean
      */
-    private function isAfterStepWithTeardownOutput(Event $event)
+    private function isAfterStepWithOutput(Event $event)
     {
-        if ($event instanceof AfterStepTested && ($this->stepSetupHadOutput || $event->getTeardown()->hasOutput())) {
+        if ($event instanceof AfterStepTested && ($this->stepSetupHadOutput || $event->hasOutput())) {
             $this->stepSetupHadOutput = false;
 
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * Checks if provided event is an AFTER step for a step with output.
-     *
-     * @param Event $event
-     *
-     * @return Boolean
-     */
-    private function isAfterStepWithCallOutput(Event $event)
-    {
-        if (!$event instanceof AfterStepTested) {
-            return false;
-        }
-
-        $result = $event->getTestResult();
-        if (!$result instanceof ExecutedStepResult) {
-            return false;
-        }
-
-        return $result->getCallResult()->hasStdOut();
-    }
-
-    /**
-     * Checks if provided event is an AFTER step for a failed step.
-     *
-     * @param Event $event
-     *
-     * @return Boolean
-     */
-    private function isAfterStepWithError(Event $event)
-    {
-        return $event instanceof AfterStepTested && StepResult::FAILED === $event->getTestResult()->getResultCode();
     }
 }

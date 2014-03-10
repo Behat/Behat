@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
+use Behat\Behat\Tester\Result\ExceptionResult;
+use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
@@ -104,5 +106,49 @@ final class AfterStepTested extends StepTested implements AfterTested
     public function getTeardown()
     {
         return $this->teardown;
+    }
+
+    /**
+     * Checks if step call, setup or teardown produced any output (stdOut or exception).
+     *
+     * @return Boolean
+     */
+    public function hasOutput()
+    {
+        return $this->isTeardownHasOutput() || $this->isResultHasException() || $this->isResultCallHasOutput();
+    }
+
+    /**
+     * Checks if step teardown has output.
+     *
+     * @return Boolean
+     */
+    private function isTeardownHasOutput()
+    {
+        return $this->teardown->hasOutput();
+    }
+
+    /**
+     * Checks if result has produced exception.
+     *
+     * @return Boolean
+     */
+    private function isResultHasException()
+    {
+        return $this->result instanceof ExceptionResult && $this->result->getException();
+    }
+
+    /**
+     * Checks if result is executed and call result has produced exception or stdOut.
+     *
+     * @return Boolean
+     */
+    private function isResultCallHasOutput()
+    {
+        if (!$this->result instanceof ExecutedStepResult) {
+            return false;
+        }
+
+        return $this->result->getCallResult()->hasStdOut() || $this->result->getCallResult()->hasException();
     }
 }

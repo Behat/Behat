@@ -82,4 +82,14 @@ final class BeforeStepTested extends StepTested implements BeforeTested
     {
         return $this->setup;
     }
+
+    /**
+     * Checks if step call, setup or teardown produced any output (stdOut or exception).
+     *
+     * @return Boolean
+     */
+    public function hasOutput()
+    {
+        return $this->setup->hasOutput();
+    }
 }

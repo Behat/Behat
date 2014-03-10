@@ -39,6 +39,13 @@ abstract class StepTested extends LifecycleEvent implements GherkinNodeTested
     abstract public function getStep();
 
     /**
+     * Checks if step call, setup or teardown produced any output (stdOut or exception).
+     *
+     * @return Boolean
+     */
+    abstract public function hasOutput();
+
+    /**
      * {@inheritdoc}
      */
     final public function getNode()
