@@ -77,9 +77,9 @@ Feature: Name filters
         Background:                  # features/feature2.feature:3
           Given Some normal step N21 # FeatureContext::someNormalStepN()
 
-        Scenario: First Scenario     # features/feature2.feature:6
-          Given Some slow step N22   # FeatureContext::someSlowStepN()
-          And Some fast step N23     # FeatureContext::someFastStepN()
+        Scenario: First Scenario   # features/feature2.feature:6
+          Given Some slow step N22 # FeatureContext::someSlowStepN()
+          And Some fast step N23   # FeatureContext::someFastStepN()
 
       3 scenarios (3 passed)
       8 steps (8 passed)
