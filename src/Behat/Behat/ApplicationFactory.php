@@ -28,6 +28,7 @@ use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
+use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -86,10 +87,7 @@ class ApplicationFactory extends BaseFactory
             new TranslatorExtension($processor),
             new GherkinExtension($processor),
             new ContextExtension($processor),
-            new OutputExtension('pretty', array(
-                new PrettyFormatterFactory($processor),
-                new ProgressFormatterFactory($processor),
-            ), $processor),
+            new OutputExtension('pretty', $this->getDefaultFormatterFactories($processor), $processor),
             new SnippetExtension($processor),
             new DefinitionExtension($processor),
             new EventDispatcherExtension($processor),
@@ -132,5 +130,20 @@ class ApplicationFactory extends BaseFactory
         }
 
         return null;
+    }
+
+    /**
+     * Returns default formatter factories.
+     *
+     * @param ServiceProcessor $processor
+     *
+     * @return FormatterFactory[]
+     */
+    protected function getDefaultFormatterFactories(ServiceProcessor $processor)
+    {
+        return array(
+            new PrettyFormatterFactory($processor),
+            new ProgressFormatterFactory($processor),
+        );
     }
 }
