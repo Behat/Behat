@@ -138,8 +138,8 @@ Feature: Profiles
       """
       Feature: Math
 
-        Background:                          # features/math.feature:2
-          Given I have basic calculator      # FeatureContext::iHaveBasicCalculator()
+        Background:                     # features/math.feature:2
+          Given I have basic calculator # FeatureContext::iHaveBasicCalculator()
 
         Scenario Outline:                    # features/math.feature:5
           Given I have entered <number1>     # FeatureContext::iHaveEntered()
