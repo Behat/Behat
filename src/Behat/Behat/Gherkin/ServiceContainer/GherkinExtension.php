@@ -114,6 +114,7 @@ class GherkinExtension implements Extension
         $this->loadFilterController($container);
         $this->loadSuiteWithPathsSetup($container);
         $this->loadFilesystemFeatureLocator($container);
+        $this->loadFilesystemScenariosListLocator($container);
     }
 
     /**
@@ -297,6 +298,20 @@ class GherkinExtension implements Extension
         ));
         $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 50));
         $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_feature', $definition);
+    }
+
+    /**
+     * Loads filesystem scenarios list locator.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadFilesystemScenariosListLocator(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemScenariosListLocator', array(
+            new Reference(self::MANAGER_ID)
+        ));
+        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 50));
+        $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_scenarios_list', $definition);
     }
 
     /**
