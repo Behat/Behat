@@ -24,6 +24,13 @@ use Behat\Testwork\Suite\Suite;
 interface SpecificationLocator
 {
     /**
+     * Returns array of strings representing examples of supported specification locators.
+     *
+     * @return string[]
+     */
+    public function getLocatorExamples();
+
+    /**
      * Locates specifications and wraps them into iterator.
      *
      * @param Suite  $suite

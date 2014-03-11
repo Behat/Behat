@@ -36,6 +36,21 @@ final class SpecificationFinder
     }
 
     /**
+     * Returns array of strings representing examples of supported specification locators.
+     *
+     * @return string[]
+     */
+    public function getExampleLocators()
+    {
+        $examples = array();
+        foreach ($this->specificationLocators as $locator) {
+            $examples = array_merge($examples, $locator->getLocatorExamples());
+        }
+
+        return $examples;
+    }
+
+    /**
      * Finds all specifications for all provided suites matching provided locator and wraps them into a spec iterator.
      *
      * @param Suite[]     $suites

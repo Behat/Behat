@@ -31,7 +31,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExerciseController implements Controller
+final class ExerciseController implements Controller
 {
     /**
      * @var SuiteRepository
@@ -82,9 +82,15 @@ class ExerciseController implements Controller
      */
     public function configure(Command $command)
     {
+        $locatorsExamples = implode(PHP_EOL, array_map(
+            function ($locator) {
+                return '- ' . $locator;
+            }, $this->specificationFinder->getExampleLocators()
+        ));
+
         $command
             ->addArgument('paths', InputArgument::OPTIONAL,
-                'Optional path to a specific test.'
+                'Optional path(es) to execute. Could be:' . PHP_EOL . $locatorsExamples
             )
             ->addOption('--dry-run', null, InputOption::VALUE_NONE,
                 'Invokes formatters without executing the tests and hooks.'

@@ -16,8 +16,6 @@ use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
-use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
-use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 use Behat\Testwork\Tester\ServiceContainer\TesterExtension as BaseExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -89,25 +87,6 @@ class TesterExtension extends BaseExtension
         $this->processExampleTesterWrappers($container);
         $this->processBackgroundTesterWrappers($container);
         $this->processStepTesterWrappers($container);
-    }
-
-    /**
-     * Loads exercise controller.
-     *
-     * @param ContainerBuilder $container
-     * @param Boolean          $skip
-     */
-    protected function loadExerciseController(ContainerBuilder $container, $skip = false)
-    {
-        $definition = new Definition('Behat\Behat\Tester\Cli\ExerciseController', array(
-            new Reference(SuiteExtension::REGISTRY_ID),
-            new Reference(SpecificationExtension::FINDER_ID),
-            new Reference(self::EXERCISE_ID),
-            new Reference(self::RESULT_INTERPRETER_ID),
-            $skip
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
-        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
     }
 
     /**
@@ -226,7 +205,7 @@ class TesterExtension extends BaseExtension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::SCENARIO_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
+            $wrappingTester = $container->getDefinition((string)$reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::SCENARIO_TESTER_ID, $wrappingTester);
@@ -244,7 +223,7 @@ class TesterExtension extends BaseExtension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::OUTLINE_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
+            $wrappingTester = $container->getDefinition((string)$reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::OUTLINE_TESTER_ID, $wrappingTester);
@@ -262,7 +241,7 @@ class TesterExtension extends BaseExtension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::EXAMPLE_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
+            $wrappingTester = $container->getDefinition((string)$reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::EXAMPLE_TESTER_ID, $wrappingTester);
@@ -280,7 +259,7 @@ class TesterExtension extends BaseExtension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::BACKGROUND_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
+            $wrappingTester = $container->getDefinition((string)$reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::BACKGROUND_TESTER_ID, $wrappingTester);
@@ -298,7 +277,7 @@ class TesterExtension extends BaseExtension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::STEP_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
+            $wrappingTester = $container->getDefinition((string)$reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::STEP_TESTER_ID, $wrappingTester);

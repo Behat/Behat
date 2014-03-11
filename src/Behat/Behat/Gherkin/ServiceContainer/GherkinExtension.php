@@ -296,7 +296,7 @@ class GherkinExtension implements Extension
             new Reference(self::MANAGER_ID),
             '%paths.base%'
         ));
-        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 50));
+        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 60));
         $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_feature', $definition);
     }
 
