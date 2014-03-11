@@ -12,6 +12,7 @@ namespace Behat\Testwork\Cli;
 
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationTree;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper;
 use Symfony\Component\Config\Definition\ReferenceDumper;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,7 +31,13 @@ class DumpReferenceCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dumper = new ReferenceDumper();
+        if (class_exists('Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper')) {
+            $dumper = new YamlReferenceDumper();
+        } else {
+            // Support Symfony Config 2.3
+            $dumper = new ReferenceDumper();
+        }
+
         $configTree = new ConfigurationTree();
 
         $output->writeln($dumper->dumpNode($configTree->getConfigTree($this->extensionManager->getExtensions())));
