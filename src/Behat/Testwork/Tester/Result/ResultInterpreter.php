@@ -17,7 +17,7 @@ use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ResultInterpreter
+final class ResultInterpreter
 {
     /**
      * @var ResultInterpretation[]

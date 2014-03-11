@@ -17,7 +17,7 @@ use Behat\Testwork\Suite\GenericSuite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GenericSuiteGenerator implements SuiteGenerator
+final class GenericSuiteGenerator implements SuiteGenerator
 {
     /**
      * @var array

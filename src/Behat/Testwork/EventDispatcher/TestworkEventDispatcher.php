@@ -18,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TestworkEventDispatcher extends EventDispatcher
+final class TestworkEventDispatcher extends EventDispatcher
 {
     const BEFORE_ALL_EVENTS = '*~';
     const AFTER_ALL_EVENTS = '~*';

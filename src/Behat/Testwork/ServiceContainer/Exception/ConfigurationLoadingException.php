@@ -17,6 +17,6 @@ use InvalidArgumentException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConfigurationLoadingException extends InvalidArgumentException implements ServiceContainerException
+final class ConfigurationLoadingException extends InvalidArgumentException implements ServiceContainerException
 {
 }

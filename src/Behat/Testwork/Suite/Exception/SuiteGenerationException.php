@@ -15,6 +15,6 @@ namespace Behat\Testwork\Suite\Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteGenerationException extends SuiteException
+final class SuiteGenerationException extends SuiteException
 {
 }

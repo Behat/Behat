@@ -22,7 +22,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EnvironmentManager
+final class EnvironmentManager
 {
     /**
      * @var EnvironmentHandler[]

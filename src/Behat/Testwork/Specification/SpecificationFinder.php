@@ -18,7 +18,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SpecificationFinder
+final class SpecificationFinder
 {
     /**
      * @var SpecificationLocator[]

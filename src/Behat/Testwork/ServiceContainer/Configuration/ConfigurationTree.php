@@ -19,7 +19,7 @@ use Symfony\Component\Config\Definition\NodeInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConfigurationTree
+final class ConfigurationTree
 {
     /**
      * Generates the configuration tree.

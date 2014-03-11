@@ -15,7 +15,7 @@ namespace Behat\Testwork\Counter;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Memory
+final class Memory
 {
     /**
      * @var string[]

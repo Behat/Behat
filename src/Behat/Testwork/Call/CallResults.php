@@ -20,7 +20,7 @@ use IteratorAggregate;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CallResults implements Countable, IteratorAggregate
+final class CallResults implements Countable, IteratorAggregate
 {
     /**
      * @var CallResult[]

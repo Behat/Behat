@@ -17,7 +17,7 @@ use InvalidArgumentException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BadCallbackException extends InvalidArgumentException implements CallException
+final class BadCallbackException extends InvalidArgumentException implements CallException
 {
     /**
      * @var callable

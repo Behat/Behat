@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Command extends BaseCommand
+final class Command extends BaseCommand
 {
     /**
      * @var Controller[]
@@ -42,7 +42,7 @@ class Command extends BaseCommand
     /**
      * Configures the command by running controllers prepare().
      */
-    final protected function configure()
+    protected function configure()
     {
         foreach ($this->controllers as $controller) {
             $controller->configure($this);
@@ -57,7 +57,7 @@ class Command extends BaseCommand
      *
      * @return integer Return code of one of the processors or 0 if none of them returned integer
      */
-    final protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         foreach ($this->controllers as $controller) {
             if (is_int($return = $controller->execute($input, $output))) {

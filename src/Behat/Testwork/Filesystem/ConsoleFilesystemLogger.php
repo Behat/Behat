@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConsoleFilesystemLogger implements FilesystemLogger
+final class ConsoleFilesystemLogger implements FilesystemLogger
 {
     /**
      * @var string

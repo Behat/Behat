@@ -20,7 +20,7 @@ use Behat\Testwork\Hook\Scope\HookScope;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookRepository
+final class HookRepository
 {
     /**
      * @var EnvironmentManager

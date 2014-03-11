@@ -17,7 +17,7 @@ use Behat\Testwork\Hook\Scope\SuiteScope;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BeforeSuite extends RuntimeSuiteHook
+final class BeforeSuite extends RuntimeSuiteHook
 {
     /**
      * Initializes hook.

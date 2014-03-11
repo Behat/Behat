@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class InitializationController implements Controller
+final class InitializationController implements Controller
 {
     /**
      * @var SuiteRepository

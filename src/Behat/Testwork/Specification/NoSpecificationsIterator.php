@@ -20,7 +20,7 @@ use EmptyIterator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class NoSpecificationsIterator extends EmptyIterator implements SpecificationIterator
+final class NoSpecificationsIterator extends EmptyIterator implements SpecificationIterator
 {
     /**
      * @var Suite

@@ -19,7 +19,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StaticEnvironmentHandler implements EnvironmentHandler
+final class StaticEnvironmentHandler implements EnvironmentHandler
 {
     /**
      * {@inheritdoc}

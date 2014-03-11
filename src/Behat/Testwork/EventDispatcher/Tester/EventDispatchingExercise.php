@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatchingExercise implements Exercise
+final class EventDispatchingExercise implements Exercise
 {
     /**
      * @var Exercise

@@ -18,6 +18,6 @@ use LogicException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TimerException extends LogicException implements TestworkException
+final class TimerException extends LogicException implements TestworkException
 {
 }

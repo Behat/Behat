@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteController implements Controller
+final class SuiteController implements Controller
 {
     /**
      * @var SuiteRegistry

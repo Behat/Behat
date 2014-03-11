@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ServiceProcessor
+final class ServiceProcessor
 {
     /**
      * Finds and sorts (by priority) service references by provided tag.

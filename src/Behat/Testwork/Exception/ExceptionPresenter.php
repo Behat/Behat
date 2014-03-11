@@ -20,7 +20,7 @@ use Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExceptionPresenter
+final class ExceptionPresenter
 {
     /**
      * @var string

@@ -19,7 +19,7 @@ use Behat\Testwork\Hook\Scope\HookScope;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookCall extends EnvironmentCall
+final class HookCall extends EnvironmentCall
 {
     /**
      * @var HookScope

@@ -18,7 +18,7 @@ use RuntimeException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EnvironmentIsolationException extends RuntimeException implements EnvironmentException
+final class EnvironmentIsolationException extends RuntimeException implements EnvironmentException
 {
     /**
      * @var Environment

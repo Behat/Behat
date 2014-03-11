@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContainerLoader
+final class ContainerLoader
 {
     /**
      * @var ExtensionManager

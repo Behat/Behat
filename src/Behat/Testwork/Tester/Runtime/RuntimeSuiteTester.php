@@ -26,7 +26,7 @@ use Behat\Testwork\Tester\SuiteTester;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeSuiteTester implements SuiteTester
+final class RuntimeSuiteTester implements SuiteTester
 {
     /**
      * @var SpecificationTester

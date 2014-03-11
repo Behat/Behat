@@ -15,6 +15,6 @@ namespace Behat\Testwork\ServiceContainer\Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExtensionInitializationException extends ExtensionException
+final class ExtensionInitializationException extends ExtensionException
 {
 }

@@ -17,7 +17,7 @@ use Behat\Testwork\Suite\Setup\SuiteSetup;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteBootstrapper
+final class SuiteBootstrapper
 {
     /**
      * @var SuiteSetup[]

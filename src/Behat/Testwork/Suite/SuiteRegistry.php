@@ -20,7 +20,7 @@ use Behat\Testwork\Suite\Generator\SuiteGenerator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteRegistry implements SuiteRepository
+final class SuiteRegistry implements SuiteRepository
 {
     /**
      * @var Boolean

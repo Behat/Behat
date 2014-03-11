@@ -20,7 +20,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-class SpecificationArrayIterator extends ArrayIterator implements SpecificationIterator
+final class SpecificationArrayIterator extends ArrayIterator implements SpecificationIterator
 {
     /**
      * @var Suite

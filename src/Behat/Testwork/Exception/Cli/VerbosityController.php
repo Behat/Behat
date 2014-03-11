@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class VerbosityController implements Controller
+final class VerbosityController implements Controller
 {
     /**
      * @var ExceptionPresenter

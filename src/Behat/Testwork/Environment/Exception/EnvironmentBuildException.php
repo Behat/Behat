@@ -18,7 +18,7 @@ use RuntimeException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EnvironmentBuildException extends RuntimeException implements EnvironmentException
+final class EnvironmentBuildException extends RuntimeException implements EnvironmentException
 {
     /**
      * @var Suite

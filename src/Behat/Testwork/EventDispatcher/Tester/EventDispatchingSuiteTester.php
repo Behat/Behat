@@ -23,7 +23,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatchingSuiteTester implements SuiteTester
+final class EventDispatchingSuiteTester implements SuiteTester
 {
     /**
      * @var SuiteTester

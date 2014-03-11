@@ -26,7 +26,7 @@ use Behat\Testwork\Tester\SuiteTester;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeExercise implements Exercise
+final class RuntimeExercise implements Exercise
 {
     /**
      * @var EnvironmentManager

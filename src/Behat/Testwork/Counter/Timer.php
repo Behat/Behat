@@ -17,7 +17,7 @@ use Behat\Testwork\Counter\Exception\TimerException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Timer
+final class Timer
 {
     /**
      * @var null|float

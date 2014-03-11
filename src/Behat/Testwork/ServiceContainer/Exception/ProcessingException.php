@@ -17,6 +17,6 @@ use RuntimeException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ProcessingException extends RuntimeException implements ServiceContainerException
+final class ProcessingException extends RuntimeException implements ServiceContainerException
 {
 }

@@ -15,7 +15,7 @@ namespace Behat\Testwork\Suite\Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ParameterNotFoundException extends SuiteException
+final class ParameterNotFoundException extends SuiteException
 {
     /**
      * @var string

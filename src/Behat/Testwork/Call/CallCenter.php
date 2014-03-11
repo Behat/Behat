@@ -21,7 +21,7 @@ use Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CallCenter
+final class CallCenter
 {
     /**
      * @var CallFilter[]

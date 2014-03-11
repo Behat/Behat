@@ -17,7 +17,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GroupedSpecificationIterator implements SpecificationIterator
+final class GroupedSpecificationIterator implements SpecificationIterator
 {
     /**
      * @var Suite

@@ -21,7 +21,7 @@ use PHPUnit_Framework_TestFailure;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PHPUnitExceptionStringer implements ExceptionStringer
+final class PHPUnitExceptionStringer implements ExceptionStringer
 {
     /**
      * {@inheritdoc}

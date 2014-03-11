@@ -25,7 +25,7 @@ use Behat\Testwork\Tester\SuiteTester;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookableSuiteTester implements SuiteTester
+final class HookableSuiteTester implements SuiteTester
 {
     /**
      * @var SuiteTester

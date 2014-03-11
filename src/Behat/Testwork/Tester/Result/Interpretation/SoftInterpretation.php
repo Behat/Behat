@@ -17,7 +17,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SoftInterpretation implements ResultInterpretation
+final class SoftInterpretation implements ResultInterpretation
 {
     /**
      * {@inheritdoc}

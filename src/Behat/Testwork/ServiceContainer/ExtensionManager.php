@@ -17,7 +17,7 @@ use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExtensionManager
+final class ExtensionManager
 {
     /**
      * @var string

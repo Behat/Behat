@@ -23,7 +23,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SigintController implements Controller
+final class SigintController implements Controller
 {
     /**
      * @var EventDispatcherInterface

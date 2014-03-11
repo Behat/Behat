@@ -17,7 +17,7 @@ use Behat\Testwork\Suite\Exception\ParameterNotFoundException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GenericSuite implements Suite
+final class GenericSuite implements Suite
 {
     /**
      * @var string

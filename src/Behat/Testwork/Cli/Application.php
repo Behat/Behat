@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Application extends BaseApplication
+final class Application extends BaseApplication
 {
     /**
      * @var ConfigurationLoader

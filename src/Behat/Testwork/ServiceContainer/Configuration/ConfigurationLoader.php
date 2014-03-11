@@ -18,7 +18,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConfigurationLoader
+final class ConfigurationLoader
 {
     /**
      * @var null|string

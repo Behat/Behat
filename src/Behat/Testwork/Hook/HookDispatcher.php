@@ -21,7 +21,7 @@ use Behat\Testwork\Hook\Scope\HookScope;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookDispatcher
+final class HookDispatcher
 {
     /**
      * @var HookRepository
