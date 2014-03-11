@@ -20,7 +20,6 @@ use Behat\Behat\Output\Statistics\ScenarioStat;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Behat\Tester\Exception\PendingException;
-use Behat\Behat\Tester\Result\ExceptionResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Counter\Memory;
@@ -33,6 +32,7 @@ use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
+use Behat\Testwork\Tester\Result\ExceptionResult;
 use Symfony\Component\EventDispatcher\Event;
 
 /**

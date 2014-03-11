@@ -14,7 +14,6 @@ use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Tester\Exception\PendingException;
-use Behat\Behat\Tester\Result\ExceptionResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ExampleNode;
@@ -23,6 +22,7 @@ use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
+use Behat\Testwork\Tester\Result\ExceptionResult;
 use Behat\Testwork\Tester\Result\TestResults;
 
 /**

@@ -16,7 +16,6 @@ use Behat\Behat\Output\Node\Printer\Helper\WidthCalculator;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\DefinedStepResult;
-use Behat\Behat\Tester\Result\ExceptionResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ArgumentInterface;
@@ -26,6 +25,7 @@ use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
+use Behat\Testwork\Tester\Result\ExceptionResult;
 
 /**
  * Behat step printer.

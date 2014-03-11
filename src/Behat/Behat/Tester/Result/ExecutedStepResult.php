@@ -14,6 +14,7 @@ use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\SearchResult;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Testwork\Call\CallResult;
+use Behat\Testwork\Tester\Result\ExceptionResult;
 use Exception;
 
 /**

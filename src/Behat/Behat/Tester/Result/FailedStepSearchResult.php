@@ -11,6 +11,7 @@
 namespace Behat\Behat\Tester\Result;
 
 use Behat\Behat\Definition\Exception\SearchException;
+use Behat\Testwork\Tester\Result\ExceptionResult;
 use Exception;
 
 /**
