@@ -166,7 +166,7 @@ final class Application extends BaseApplication
      *
      * @return string The command name
      */
-    final protected function getCommandName(InputInterface $input)
+    protected function getCommandName(InputInterface $input)
     {
         return $this->getName();
     }
