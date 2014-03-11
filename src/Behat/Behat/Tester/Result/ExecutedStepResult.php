@@ -90,7 +90,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
      */
     public function getException()
     {
-        return $this->callResult->hasException() ? $this->callResult->getException() : null;
+        return $this->callResult->getException();
     }
 
     /**
