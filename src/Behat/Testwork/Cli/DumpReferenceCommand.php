@@ -13,11 +13,11 @@ namespace Behat\Testwork\Cli;
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationTree;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\ReferenceDumper;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DumpReferenceCommand extends Command
+class DumpReferenceCommand extends BaseCommand
 {
     private $extensionManager;
 
