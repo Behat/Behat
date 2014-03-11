@@ -115,7 +115,7 @@ final class AfterStepTested extends StepTested implements AfterTested
      */
     public function hasOutput()
     {
-        return $this->isTeardownHasOutput() || $this->isResultHasException() || $this->isResultCallHasOutput();
+        return $this->teardownHasOutput() || $this->resultHasException() || $this->resultCallHasOutput();
     }
 
     /**
@@ -123,7 +123,7 @@ final class AfterStepTested extends StepTested implements AfterTested
      *
      * @return Boolean
      */
-    private function isTeardownHasOutput()
+    private function teardownHasOutput()
     {
         return $this->teardown->hasOutput();
     }
@@ -133,7 +133,7 @@ final class AfterStepTested extends StepTested implements AfterTested
      *
      * @return Boolean
      */
-    private function isResultHasException()
+    private function resultHasException()
     {
         return $this->result instanceof ExceptionResult && $this->result->getException();
     }
@@ -143,7 +143,7 @@ final class AfterStepTested extends StepTested implements AfterTested
      *
      * @return Boolean
      */
-    private function isResultCallHasOutput()
+    private function resultCallHasOutput()
     {
         if (!$this->result instanceof ExecutedStepResult) {
             return false;
