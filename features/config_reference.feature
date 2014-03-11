@@ -34,7 +34,7 @@ Feature: Config reference
               locale:               en
               fallback_locale:      en
           gherkin:
-              cache:                '%%TMP_DIR%%gherkin_cache'
+              cache:                %%TMP_DIR%%gherkin_cache
               filters:
 
                   # Prototype
@@ -121,7 +121,7 @@ Feature: Config reference
               locale:               en
               fallback_locale:      en
           gherkin:
-              cache:                '%%TMP_DIR%%gherkin_cache'
+              cache:                %%TMP_DIR%%gherkin_cache
               filters:
 
                   # Prototype
