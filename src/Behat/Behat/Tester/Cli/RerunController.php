@@ -63,8 +63,7 @@ class RerunController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption(
-            '--rerun', null, InputOption::VALUE_NONE,
+        $command->addOption('--rerun', null, InputOption::VALUE_NONE,
             'Re-run scenarios that failed during last execution.'
         );
     }
@@ -93,7 +92,7 @@ class RerunController implements Controller
             return;
         }
 
-        $input->setArgument('features', $this->getFileName());
+        $input->setArgument('paths', $this->getFileName());
     }
 
     /**
@@ -168,7 +167,7 @@ class RerunController implements Controller
             implode(' ', $input->getOption('name')) .
             implode(' ', $input->getOption('tags')) .
             $input->getOption('role') .
-            $input->getArgument('features')
+            $input->getArgument('paths')
         );
     }
 

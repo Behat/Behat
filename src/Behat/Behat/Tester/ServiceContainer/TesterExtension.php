@@ -95,17 +95,15 @@ class TesterExtension extends BaseExtension
      * Loads exercise controller.
      *
      * @param ContainerBuilder $container
-     * @param Boolean          $strict
      * @param Boolean          $skip
      */
-    protected function loadExerciseController(ContainerBuilder $container, $strict = false, $skip = false)
+    protected function loadExerciseController(ContainerBuilder $container, $skip = false)
     {
         $definition = new Definition('Behat\Behat\Tester\Cli\ExerciseController', array(
             new Reference(SuiteExtension::REGISTRY_ID),
             new Reference(SpecificationExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
             new Reference(self::RESULT_INTERPRETER_ID),
-            $strict,
             $skip
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));

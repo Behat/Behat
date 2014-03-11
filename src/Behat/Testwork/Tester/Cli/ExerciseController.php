@@ -17,7 +17,6 @@ use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Suite\SuiteRepository;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
-use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
 use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestWithSetupResult;
@@ -53,10 +52,6 @@ class ExerciseController implements Controller
     /**
      * @var Boolean
      */
-    private $strict;
-    /**
-     * @var Boolean
-     */
     private $skip;
 
     /**
@@ -66,7 +61,6 @@ class ExerciseController implements Controller
      * @param SpecificationFinder $specificationFinder
      * @param Exercise            $exercise
      * @param ResultInterpreter   $resultInterpreter
-     * @param Boolean             $strict
      * @param Boolean             $skip
      */
     public function __construct(
@@ -74,14 +68,12 @@ class ExerciseController implements Controller
         SpecificationFinder $specificationFinder,
         Exercise $exercise,
         ResultInterpreter $resultInterpreter,
-        $strict = false,
         $skip = false
     ) {
         $this->suiteRepository = $suiteRepository;
         $this->specificationFinder = $specificationFinder;
         $this->exercise = $exercise;
         $this->resultInterpreter = $resultInterpreter;
-        $this->strict = $strict;
         $this->skip = $skip;
     }
 
@@ -91,14 +83,11 @@ class ExerciseController implements Controller
     public function configure(Command $command)
     {
         $command
-            ->addArgument('locator', InputArgument::OPTIONAL,
+            ->addArgument('paths', InputArgument::OPTIONAL,
                 'Optional path to a specific test.'
             )
-            ->addOption('--strict', null, InputOption::VALUE_NONE,
-                'Passes only if all tests are explicitly passing.'
-            )
             ->addOption('--dry-run', null, InputOption::VALUE_NONE,
-                'Invokes formatters without executing the steps & hooks.'
+                'Invokes formatters without executing the tests and hooks.'
             );
     }
 
@@ -107,10 +96,6 @@ class ExerciseController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->strict || $input->getOption('strict')) {
-            $this->resultInterpreter->registerResultInterpretation(new StrictInterpretation());
-        }
-
         $specs = $this->findSpecifications($input);
         $result = $this->testSpecifications($input, $specs);
 
@@ -124,9 +109,9 @@ class ExerciseController implements Controller
      *
      * @return SpecificationIterator[]
      */
-    protected function findSpecifications(InputInterface $input)
+    private function findSpecifications(InputInterface $input)
     {
-        return $this->findSuitesSpecifications($this->getAvailableSuites(), $input->getArgument('locator'));
+        return $this->findSuitesSpecifications($this->getAvailableSuites(), $input->getArgument('paths'));
     }
 
     /**
@@ -137,7 +122,7 @@ class ExerciseController implements Controller
      *
      * @return TestResult
      */
-    protected function testSpecifications(InputInterface $input, array $specifications)
+    private function testSpecifications(InputInterface $input, array $specifications)
     {
         $skip = $input->getOption('dry-run') || $this->skip;
 
@@ -156,7 +141,7 @@ class ExerciseController implements Controller
      *
      * @return Suite[]
      */
-    protected function getAvailableSuites()
+    private function getAvailableSuites()
     {
         return $this->suiteRepository->getSuites();
     }
@@ -169,7 +154,7 @@ class ExerciseController implements Controller
      *
      * @return SpecificationIterator[]
      */
-    protected function findSuitesSpecifications($suites, $locator)
+    private function findSuitesSpecifications($suites, $locator)
     {
         return $this->specificationFinder->findSuitesSpecifications($suites, $locator);
     }

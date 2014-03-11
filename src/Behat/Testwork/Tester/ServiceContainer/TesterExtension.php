@@ -97,7 +97,8 @@ abstract class TesterExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadExerciseController($container, $config['strict'], $config['skip']);
+        $this->loadExerciseController($container, $config['skip']);
+        $this->loadStrictController($container, $config['strict']);
         $this->loadResultInterpreter($container);
         $this->loadExercise($container);
         $this->loadSuiteTester($container);
@@ -119,21 +120,35 @@ abstract class TesterExtension implements Extension
      * Loads exercise cli controllers.
      *
      * @param ContainerBuilder $container
-     * @param Boolean          $strict
      * @param Boolean          $skip
      */
-    protected function loadExerciseController(ContainerBuilder $container, $strict = false, $skip = false)
+    protected function loadExerciseController(ContainerBuilder $container, $skip = false)
     {
         $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', array(
             new Reference(SuiteExtension::REGISTRY_ID),
             new Reference(SpecificationExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
             new Reference(self::RESULT_INTERPRETER_ID),
-            $strict,
             $skip
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
+    }
+
+    /**
+     * Loads exercise cli controllers.
+     *
+     * @param ContainerBuilder $container
+     * @param Boolean          $strict
+     */
+    protected function loadStrictController(ContainerBuilder $container, $strict = false)
+    {
+        $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', array(
+            new Reference(self::RESULT_INTERPRETER_ID),
+            $strict
+        ));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 10));
+        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
     }
 
     /**
