@@ -91,7 +91,7 @@ class ExerciseController implements Controller
     public function configure(Command $command)
     {
         $command
-            ->addArgument('locator', null, InputArgument::OPTIONAL,
+            ->addArgument('locator', InputArgument::OPTIONAL,
                 'Optional path to a specific test.'
             )
             ->addOption('--strict', null, InputOption::VALUE_NONE,
