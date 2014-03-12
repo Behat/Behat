@@ -61,17 +61,7 @@ final class DefinitionArgumentsTransformer implements CallFilter
         $newArguments = array();
         $transformed = false;
         foreach ($definitionCall->getArguments() as $index => $value) {
-            $newValue = $value;
-
-            foreach ($this->argumentTransformers as $transformer) {
-                if (!$transformer->supportsDefinitionAndArgument($definitionCall, $index, $newValue)) {
-                    continue;
-                }
-
-                $newValue = $transformer->transformArgument($definitionCall, $index, $newValue);
-
-                break;
-            }
+            $newValue = $this->transformArgument($definitionCall, $index, $value);
 
             if ($newValue !== $value) {
                 $transformed = true;
@@ -92,5 +82,27 @@ final class DefinitionArgumentsTransformer implements CallFilter
             $newArguments,
             $definitionCall->getErrorReportingLevel()
         );
+    }
+
+    /**
+     * Transforms call argument using registered transformers.
+     *
+     * @param Call           $definitionCall
+     * @param integer|string $index
+     * @param string         $value
+     *
+     * @return mixed
+     */
+    private function transformArgument(Call $definitionCall, $index, $value)
+    {
+        foreach ($this->argumentTransformers as $transformer) {
+            if (!$transformer->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
+                continue;
+            }
+
+            return $transformer->transformArgument($definitionCall, $index, $value);
+        }
+
+        return $value;
     }
 }
