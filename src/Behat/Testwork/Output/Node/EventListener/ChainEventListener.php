@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventListeners implements EventListener, Countable, IteratorAggregate
+class ChainEventListener implements EventListener, Countable, IteratorAggregate
 {
     /**
      * @var EventListener[]

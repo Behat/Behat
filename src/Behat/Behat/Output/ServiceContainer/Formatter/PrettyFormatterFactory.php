@@ -88,7 +88,7 @@ class PrettyFormatterFactory implements FormatterFactory
      */
     protected function loadRootNodeListener(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Output\Node\EventListener\EventListeners', array(
+        $definition = new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
             array(
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\SuiteListener', array(
                     new Reference('output.node.printer.pretty.suite_setup')
@@ -177,7 +177,7 @@ class PrettyFormatterFactory implements FormatterFactory
                 'multiline' => true,
             ),
             $this->createOutputPrinterDefinition(),
-            new Definition('Behat\Testwork\Output\Node\EventListener\EventListeners', array(
+            new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
                     array(
                         $this->rearrangeBackgroundEvents(
                             new Reference(self::ROOT_LISTENER_ID)
@@ -420,7 +420,7 @@ class PrettyFormatterFactory implements FormatterFactory
             array(
                 $beforeEventName,
                 $afterEventName,
-                new Definition('Behat\Testwork\Output\Node\EventListener\EventListeners', array($listeners))
+                new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array($listeners))
             )
         );
     }
