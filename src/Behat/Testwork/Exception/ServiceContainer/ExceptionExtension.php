@@ -21,8 +21,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Testwork autoloader extension.
- *
  * Provides exception handling services.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
@@ -124,6 +122,10 @@ class ExceptionExtension implements Extension
         $definition = new Definition('Behat\Testwork\Exception\Stringer\PHPUnitExceptionStringer');
         $definition->addTag(self::STRINGER_TAG, array('priority' => 50));
         $container->setDefinition(self::STRINGER_TAG . '.phpunit', $definition);
+
+        $definition = new Definition('Behat\Testwork\Exception\Stringer\TestworkExceptionStringer');
+        $definition->addTag(self::STRINGER_TAG, array('priority' => 50));
+        $container->setDefinition(self::STRINGER_TAG . '.testwork', $definition);
     }
 
     /**

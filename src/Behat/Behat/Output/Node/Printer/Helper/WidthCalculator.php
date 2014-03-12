@@ -15,10 +15,7 @@ use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
 
 /**
- * Behat scenario width calculator.
- *
- * Calculates width of scenario. Width of scenario = max width of scenario
- * title and scenario step texts.
+ * Calculates width of scenario. Width of scenario = max width of scenario title and scenario step texts.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

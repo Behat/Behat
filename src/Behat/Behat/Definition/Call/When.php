@@ -11,11 +11,11 @@
 namespace Behat\Behat\Definition\Call;
 
 /**
- * When-step definition.
+ * When steps definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class When extends RuntimeDefinition
+final class When extends RuntimeDefinition
 {
     /**
      * Initializes definition.

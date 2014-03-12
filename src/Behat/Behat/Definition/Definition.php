@@ -13,7 +13,7 @@ namespace Behat\Behat\Definition;
 use Behat\Testwork\Call\Callee;
 
 /**
- * Step definition interface.
+ * Represents a step definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -14,8 +14,6 @@ use Behat\Testwork\Suite\Suite;
 use Iterator;
 
 /**
- * Testwork test specifications iterator.
- *
  * Iterates over test specifications.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

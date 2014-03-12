@@ -13,18 +13,14 @@ namespace Behat\Testwork\Tester\Result\Interpretation;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Testwork strict result interpretation.
+ * Interprets test results strictly - everything that is not an explicit pass is a failure.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StrictInterpretation implements ResultInterpretation
+final class StrictInterpretation implements ResultInterpretation
 {
     /**
-     * Checks if provided test result should be considered as a failure.
-     *
-     * @param TestResult $result
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isFailure(TestResult $result)
     {

@@ -14,8 +14,6 @@ use Behat\Behat\Snippet\AggregateSnippet;
 use Behat\Behat\Snippet\SnippetWriter;
 
 /**
- * Snippet appender interface.
- *
  * Appends snippets to its targets. Used by SnippetWriter.
  *
  * @see SnippetWriter

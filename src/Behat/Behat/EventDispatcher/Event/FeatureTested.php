@@ -15,7 +15,7 @@ use Behat\Gherkin\Node\NodeInterface;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
- * Behat feature tested event.
+ * Represents a feature event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -78,7 +78,7 @@ class ProgressFormatterFactory implements FormatterFactory
      */
     protected function loadRootNodeListener(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Output\Node\EventListener\EventListeners', array(
+        $definition = new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
             array(
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\StepListener', array(
                     new Reference('output.node.printer.progress.step')

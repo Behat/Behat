@@ -13,7 +13,7 @@ namespace Behat\Testwork\Environment\Exception;
 use Behat\Testwork\Exception\TestworkException;
 
 /**
- * Core test environment exception interface.
+ * All environment exceptions should implement this interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

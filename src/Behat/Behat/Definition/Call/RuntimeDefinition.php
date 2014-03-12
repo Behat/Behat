@@ -14,9 +14,7 @@ use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Call\RuntimeCallee;
 
 /**
- * Runtime definition.
- *
- * Definition created and executed in the runtime.
+ * Represents a step definition created and executed in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -48,9 +46,7 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
     }
 
     /**
-     * Returns definition type (Given|When|Then).
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {
@@ -58,9 +54,7 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
     }
 
     /**
-     * Returns step pattern exactly as it was defined.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getPattern()
     {
@@ -68,9 +62,7 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
     }
 
     /**
-     * Represents definition as a string.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function __toString()
     {

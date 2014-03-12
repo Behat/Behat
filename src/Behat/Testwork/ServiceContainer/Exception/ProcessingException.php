@@ -13,10 +13,10 @@ namespace Behat\Testwork\ServiceContainer\Exception;
 use RuntimeException;
 
 /**
- * Testwork processing exception.
+ * Represents an exception thrown during processing phase.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ProcessingException extends RuntimeException implements ServiceContainerException
+final class ProcessingException extends RuntimeException implements ServiceContainerException
 {
 }

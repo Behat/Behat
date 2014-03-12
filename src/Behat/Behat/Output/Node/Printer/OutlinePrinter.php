@@ -16,8 +16,6 @@ use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat outline printer interface.
- *
  * Prints outline headers and footers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

@@ -13,13 +13,11 @@ namespace Behat\Testwork\Suite;
 use Behat\Testwork\Suite\Setup\SuiteSetup;
 
 /**
- * Testwork suite bootstrapper.
- *
  * Configures provided suites using registered suite setups.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteBootstrapper
+final class SuiteBootstrapper
 {
     /**
      * @var SuiteSetup[]

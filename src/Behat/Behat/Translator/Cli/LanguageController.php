@@ -16,13 +16,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- * Behat language controller.
- *
  * Configures translator service and loads default translations.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class LanguageController extends BaseController
+final class LanguageController extends BaseController
 {
     /**
      * @var Translator
@@ -42,12 +40,7 @@ class LanguageController extends BaseController
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

@@ -10,11 +10,10 @@
 
 namespace Behat\Behat\Tester\Result;
 
-use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\SearchResult;
 
 /**
- * Behat undefined step result.
+ * Represents a skipped step result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -36,9 +35,7 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
     }
 
     /**
-     * Returns found step definition.
-     *
-     * @return null|Definition
+     * {@inheritdoc}
      */
     public function getStepDefinition()
     {
@@ -46,9 +43,7 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
     }
 
     /**
-     * Checks that test has passed.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isPassed()
     {
@@ -56,9 +51,7 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
     }
 
     /**
-     * Returns tester result code.
-     *
-     * @return integer
+     * {@inheritdoc}
      */
     public function getResultCode()
     {

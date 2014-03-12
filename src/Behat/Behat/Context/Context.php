@@ -11,9 +11,7 @@
 namespace Behat\Behat\Context;
 
 /**
- * Context interface.
- *
- * Marks custom user-defined class as a Behat context.
+ * Marks a custom user-defined class as a behat context.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

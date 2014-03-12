@@ -20,13 +20,11 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Behat feature listener.
- *
  * Listens to feature events and calls appropriate printers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureListener implements EventListener
+final class FeatureListener implements EventListener
 {
     /**
      * @var FeaturePrinter

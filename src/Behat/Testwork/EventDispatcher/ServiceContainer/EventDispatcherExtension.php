@@ -21,8 +21,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Testwork event dispatcher extension.
- *
  * Provides event dispatching service.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

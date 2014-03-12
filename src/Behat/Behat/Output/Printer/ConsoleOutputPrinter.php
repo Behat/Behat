@@ -15,20 +15,18 @@ use Behat\Testwork\Output\Printer\ConsoleOutputPrinter as BasePrinter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 /**
- * Behat cli printer.
- *
  * Extends default printer with default styles.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConsoleOutputPrinter extends BasePrinter
+final class ConsoleOutputPrinter extends BasePrinter
 {
     /**
      * Creates output formatter that is used to create a console.
      *
      * @return ConsoleFormatter
      */
-    final protected function createOutputFormatter()
+    protected function createOutputFormatter()
     {
         $formatter = new ConsoleFormatter($this->isOutputDecorated());
 
@@ -44,7 +42,7 @@ class ConsoleOutputPrinter extends BasePrinter
      *
      * @return OutputFormatterStyle[string]
      */
-    protected function getDefaultStyles()
+    private function getDefaultStyles()
     {
         return array(
             'keyword'       => new OutputFormatterStyle(null, null, array('bold')),

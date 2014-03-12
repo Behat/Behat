@@ -11,11 +11,12 @@
 namespace Behat\Testwork\Suite\Generator;
 
 use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Suite\SuiteRegistry;
 
 /**
- * Testwork suite generator interface.
+ * Generates a suite using provided name, settings and parameters.
  *
- * Generates suite using provided name, settings and parameters.
+ * @see SuiteRegistry
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

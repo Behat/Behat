@@ -11,16 +11,14 @@
 namespace Behat\Behat\Tester\Result;
 
 /**
- * Behat undefined step result.
+ * Represents an undefined step result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 final class UndefinedStepResult implements StepResult
 {
     /**
-     * Checks that test has passed.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isPassed()
     {
@@ -28,9 +26,7 @@ final class UndefinedStepResult implements StepResult
     }
 
     /**
-     * Returns tester result code.
-     *
-     * @return integer
+     * {@inheritdoc}
      */
     public function getResultCode()
     {

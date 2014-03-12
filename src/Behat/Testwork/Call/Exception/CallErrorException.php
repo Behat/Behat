@@ -13,13 +13,11 @@ namespace Behat\Testwork\Call\Exception;
 use ErrorException;
 
 /**
- * Call error exception.
- *
  * Represents catchable errors raised during call execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CallErrorException extends ErrorException
+final class CallErrorException extends ErrorException
 {
     private $levels = array(
         E_WARNING           => 'Warning',

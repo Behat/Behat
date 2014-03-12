@@ -13,13 +13,11 @@ namespace Behat\Testwork\Call;
 use Exception;
 
 /**
- * Testwork call result.
- *
- * Represents result of a call.
+ * Represents result of the call.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CallResult
+final class CallResult
 {
     /**
      * @var Call

@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Tester\Result;
 
 /**
- * Testwork test result.
+ * Represents a test result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

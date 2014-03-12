@@ -13,11 +13,11 @@ namespace Behat\Behat\Hook\Call;
 use Behat\Behat\Hook\Scope\StepScope;
 
 /**
- * After step hook.
+ * Represents an AfterStep hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AfterStep extends RuntimeStepHook
+final class AfterStep extends RuntimeStepHook
 {
     /**
      * Initializes hook.
@@ -32,9 +32,7 @@ class AfterStep extends RuntimeStepHook
     }
 
     /**
-     * Returns hook name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

@@ -11,11 +11,11 @@
 namespace Behat\Behat\Definition;
 
 /**
- * Definition search result.
+ * Step definition search result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SearchResult
+final class SearchResult
 {
     /**
      * @var null|Definition

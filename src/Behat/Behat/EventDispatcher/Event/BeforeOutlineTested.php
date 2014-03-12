@@ -17,7 +17,7 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Behat before outline tested event.
+ * Represents a BeforeOutlineTested event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

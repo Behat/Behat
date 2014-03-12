@@ -14,9 +14,7 @@ use Behat\Testwork\Call\Callee;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork test environment interface.
- *
- * All testwork test environments should implement this interface.
+ * Represents Testwork test environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

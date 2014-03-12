@@ -16,8 +16,6 @@ use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Output\Formatter;
 
 /**
- * Behat outline example row printer interface.
- *
  * Prints outline example row results.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

@@ -15,7 +15,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Testwork after exercise event.
+ * Represents an event in which exercise was completed.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -13,7 +13,7 @@ namespace Behat\Testwork\EventDispatcher\Event;
 use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
- * Testwork suite tested event.
+ * Represents a suite event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

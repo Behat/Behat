@@ -11,16 +11,14 @@
 namespace Behat\Testwork\Tester\Setup;
 
 /**
- * Testwork successful teardown.
+ * Represents successful teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 final class SuccessfulTeardown implements Teardown
 {
     /**
-     * Returns true if fixtures have been teared down successfully.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isSuccessful()
     {
@@ -28,9 +26,7 @@ final class SuccessfulTeardown implements Teardown
     }
 
     /**
-     * Checks if tear down has produced any output.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function hasOutput()
     {

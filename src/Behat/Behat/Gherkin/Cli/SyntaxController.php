@@ -20,13 +20,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Behat gherkin syntax controller.
- *
  * Prints example of the feature to present all available syntax keywords.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SyntaxController implements Controller
+final class SyntaxController implements Controller
 {
     /**
      * @var KeywordsDumper

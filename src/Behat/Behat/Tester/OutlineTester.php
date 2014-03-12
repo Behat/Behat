@@ -18,9 +18,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Behat outline tester interface.
- *
- * This interface defines an API for Tree Outline testers.
+ * Prepares and tests provided outline object against provided environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

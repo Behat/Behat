@@ -16,7 +16,7 @@ use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
- * Behat outline tested event.
+ * Represents an outline event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

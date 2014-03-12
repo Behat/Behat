@@ -11,18 +11,17 @@
 namespace Behat\Behat\Transformation\Call\Filter;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Transformation\Exception\UnsupportedCallException;
 use Behat\Behat\Transformation\Transformer\ArgumentTransformer;
 use Behat\Testwork\Call\Call;
 use Behat\Testwork\Call\Filter\CallFilter;
 
 /**
- * Definition arguments transformer handler.
- *
  * Handles definition calls by intercepting them and transforming their arguments using transformations.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionArgumentsTransformer implements CallFilter
+final class DefinitionArgumentsTransformer implements CallFilter
 {
     /**
      * @var ArgumentTransformer[]
@@ -40,11 +39,7 @@ class DefinitionArgumentsTransformer implements CallFilter
     }
 
     /**
-     * Checks if handler supports call.
-     *
-     * @param Call $call
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsCall(Call $call)
     {
@@ -52,28 +47,21 @@ class DefinitionArgumentsTransformer implements CallFilter
     }
 
     /**
-     * Filters call and a new one.
-     *
-     * @param DefinitionCall $definitionCall
-     *
-     * @return DefinitionCall
+     * {@inheritdoc}
      */
     public function filterCall(Call $definitionCall)
     {
+        if (!$definitionCall instanceof DefinitionCall) {
+            throw new UnsupportedCallException(sprintf(
+                'DefinitionArgumentTransformer can not filter `%s` call.',
+                get_class($definitionCall)
+            ), $definitionCall);
+        }
+
         $newArguments = array();
         $transformed = false;
         foreach ($definitionCall->getArguments() as $index => $value) {
-            $newValue = $value;
-
-            foreach ($this->argumentTransformers as $transformer) {
-                if (!$transformer->supportsDefinitionAndArgument($definitionCall, $index, $newValue)) {
-                    continue;
-                }
-
-                $newValue = $transformer->transformArgument($definitionCall, $index, $newValue);
-
-                break;
-            }
+            $newValue = $this->transformArgument($definitionCall, $index, $value);
 
             if ($newValue !== $value) {
                 $transformed = true;
@@ -94,5 +82,27 @@ class DefinitionArgumentsTransformer implements CallFilter
             $newArguments,
             $definitionCall->getErrorReportingLevel()
         );
+    }
+
+    /**
+     * Transforms call argument using registered transformers.
+     *
+     * @param Call           $definitionCall
+     * @param integer|string $index
+     * @param string         $value
+     *
+     * @return mixed
+     */
+    private function transformArgument(Call $definitionCall, $index, $value)
+    {
+        foreach ($this->argumentTransformers as $transformer) {
+            if (!$transformer->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
+                continue;
+            }
+
+            return $transformer->transformArgument($definitionCall, $index, $value);
+        }
+
+        return $value;
     }
 }

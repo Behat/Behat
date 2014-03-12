@@ -12,19 +12,16 @@ namespace Behat\Testwork\Exception\Cli;
 
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\Exception\ExceptionPresenter;
-use Behat\Testwork\Output\Printer\OutputPrinter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Testwork exception verbosity controller.
- *
- * Controls exception verbosity level.
+ * Controls exception default verbosity level.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class VerbosityController implements Controller
+final class VerbosityController implements Controller
 {
     /**
      * @var ExceptionPresenter
@@ -60,12 +57,8 @@ class VerbosityController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->hasParameterOption('-vvv') || $input->hasParameterOption('--verbose=3') || $input->getParameterOption('--verbose') === 3) {
-            $this->exceptionPresenter->setDefaultVerbosity(OutputPrinter::VERBOSITY_DEBUG);
-        } elseif ($input->hasParameterOption('-vv') || $input->hasParameterOption('--verbose=2') || $input->getParameterOption('--verbose') === 2) {
-            $this->exceptionPresenter->setDefaultVerbosity(OutputPrinter::VERBOSITY_VERY_VERBOSE);
-        } elseif ($input->hasParameterOption('-v') || $input->hasParameterOption('--verbose=1') || $input->hasParameterOption('--verbose') || $input->getParameterOption('--verbose')) {
-            $this->exceptionPresenter->setDefaultVerbosity(OutputPrinter::VERBOSITY_VERBOSE);
+        if ($output->getVerbosity() !== OutputInterface::VERBOSITY_NORMAL) {
+            $this->exceptionPresenter->setDefaultVerbosity($output->getVerbosity());
         }
     }
 }

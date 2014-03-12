@@ -14,13 +14,11 @@ use Behat\Testwork\Call\Call;
 use RuntimeException;
 
 /**
- * Call handling exception.
- *
  * Represents exceptions thrown during call handling phase.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CallHandlingException extends RuntimeException implements CallException
+final class CallHandlingException extends RuntimeException implements CallException
 {
     /**
      * @var Call

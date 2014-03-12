@@ -15,14 +15,12 @@ use Behat\Testwork\Suite\Exception\SuiteGenerationException;
 use Behat\Testwork\Suite\Generator\SuiteGenerator;
 
 /**
- * Testwork suite registry.
- *
  * Acts like a suite repository by auto-generating suites for registered suite configurations using registered
  * generators.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteRegistry implements SuiteRepository
+final class SuiteRegistry implements SuiteRepository
 {
     /**
      * @var Boolean

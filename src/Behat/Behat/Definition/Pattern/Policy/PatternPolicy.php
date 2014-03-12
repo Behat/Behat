@@ -11,9 +11,12 @@
 namespace Behat\Behat\Definition\Pattern\Policy;
 
 use Behat\Behat\Definition\Pattern\Pattern;
+use Behat\Behat\Definition\Pattern\PatternTransformer;
 
 /**
- * Behat pattern policy interface.
+ * Defines a way to handle custom definition patterns.
+ *
+ * @see PatternTransformer
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

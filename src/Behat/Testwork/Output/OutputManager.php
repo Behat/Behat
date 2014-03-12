@@ -14,13 +14,11 @@ use Behat\Testwork\Output\Exception\FormatterNotFoundException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Testwork output manager.
- *
  * Manages formatters and their configuration.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutputManager
+final class OutputManager
 {
     /**
      * @var EventDispatcherInterface

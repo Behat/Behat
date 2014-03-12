@@ -18,7 +18,7 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Behat before scenario tested.
+ * Represents a BeforeScenarioTested event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

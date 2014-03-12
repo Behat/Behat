@@ -19,11 +19,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Testwork suite controller.
+ * Sets up registered test suites.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteController implements Controller
+final class SuiteController implements Controller
 {
     /**
      * @var SuiteRegistry
@@ -47,27 +47,17 @@ class SuiteController implements Controller
     }
 
     /**
-     * Configures command to be executable by the controller.
-     *
-     * @param Command $command
+     * {@inheritdoc}
      */
     public function configure(Command $command)
     {
-        $command->addOption(
-            '--suite', '-s', InputOption::VALUE_REQUIRED,
+        $command->addOption('--suite', '-s', InputOption::VALUE_REQUIRED,
             'Only execute a specific suite.'
         );
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
-     *
-     * @throws SuiteNotFoundException
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

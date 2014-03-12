@@ -15,13 +15,11 @@ use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat step text painter.
- *
  * Paints step text (with tokens) according to found definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepTextPainter
+final class StepTextPainter
 {
     /**
      * @var PatternTransformer

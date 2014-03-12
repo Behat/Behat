@@ -15,9 +15,10 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Testwork extension interface.
+ * Represents Testwork extension mechanism.
  *
- * All testwork extensions should implement this interface.
+ * Extensions are the core entities in Testwork. Almost all framework functionality in Testwork and its different
+ * implementations is provided through extensions.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

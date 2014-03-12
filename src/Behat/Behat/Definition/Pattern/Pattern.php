@@ -11,11 +11,11 @@
 namespace Behat\Behat\Definition\Pattern;
 
 /**
- * Behat definition pattern.
+ * Step definition pattern.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Pattern
+final class Pattern
 {
     /**
      * @var string

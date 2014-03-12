@@ -13,7 +13,7 @@ namespace Behat\Testwork\Output\Exception;
 use Behat\Testwork\Exception\TestworkException;
 
 /**
- * Core output exception interface.
+ * Represents an output exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

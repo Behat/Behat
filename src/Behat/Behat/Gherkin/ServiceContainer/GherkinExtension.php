@@ -26,8 +26,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Behat gherkin extension.
- *
  * Extends Behat with gherkin suites and features.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
@@ -114,6 +112,7 @@ class GherkinExtension implements Extension
         $this->loadFilterController($container);
         $this->loadSuiteWithPathsSetup($container);
         $this->loadFilesystemFeatureLocator($container);
+        $this->loadFilesystemScenariosListLocator($container);
     }
 
     /**
@@ -295,8 +294,22 @@ class GherkinExtension implements Extension
             new Reference(self::MANAGER_ID),
             '%paths.base%'
         ));
-        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 50));
+        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 60));
         $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_feature', $definition);
+    }
+
+    /**
+     * Loads filesystem scenarios list locator.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadFilesystemScenariosListLocator(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemScenariosListLocator', array(
+            new Reference(self::MANAGER_ID)
+        ));
+        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 50));
+        $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_scenarios_list', $definition);
     }
 
     /**

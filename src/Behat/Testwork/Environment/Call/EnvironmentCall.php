@@ -15,9 +15,7 @@ use Behat\Testwork\Call\Callee;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Testwork environment call.
- *
- * Implements environment-based call.
+ * Represents environment-based call.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -65,47 +63,39 @@ class EnvironmentCall implements Call
      *
      * @return Environment
      */
-    public function getEnvironment()
+    final public function getEnvironment()
     {
         return $this->environment;
     }
 
     /**
-     * Returns callee.
-     *
-     * @return Callee
+     * {@inheritdoc}
      */
-    public function getCallee()
+    final public function getCallee()
     {
         return $this->callee;
     }
 
     /**
-     * Returns callable bound to environment.
-     *
-     * @return callable
+     * {@inheritdoc}
      */
-    public function getBoundCallable()
+    final public function getBoundCallable()
     {
         return $this->environment->bindCallee($this->callee);
     }
 
     /**
-     * Returns call arguments.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getArguments()
+    final public function getArguments()
     {
         return $this->arguments;
     }
 
     /**
-     * Returns call error reporting level.
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
-    public function getErrorReportingLevel()
+    final public function getErrorReportingLevel()
     {
         return $this->errorReportingLevel;
     }

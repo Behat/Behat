@@ -21,8 +21,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Testwork hook extension.
- *
  * Provides test hooking services for testwork.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
@@ -34,7 +32,6 @@ class HookExtension implements Extension
      */
     const DISPATCHER_ID = 'hook.dispatcher';
     const REPOSITORY_ID = 'hook.repository';
-    const EVENT_SUBSCRIBER = 'hook.event_subscriber';
 
     /**
      * {@inheritdoc}

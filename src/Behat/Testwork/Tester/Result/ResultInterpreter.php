@@ -13,11 +13,11 @@ namespace Behat\Testwork\Tester\Result;
 use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
 
 /**
- * Testwork test result interpreter.
+ * Interprets provided test result (as 1 or 0) using registered interpretations.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ResultInterpreter
+final class ResultInterpreter
 {
     /**
      * @var ResultInterpretation[]

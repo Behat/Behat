@@ -16,8 +16,6 @@ use Iterator;
 use IteratorAggregate;
 
 /**
- * Testwork test results collection.
- *
  * Aggregates multiple test results into a collection and provides informational API on top of that.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
@@ -53,9 +51,15 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
     }
 
     /**
-     * Returns test results.
-     *
-     * @return integer
+     * {@inheritdoc}
+     */
+    public function isPassed()
+    {
+        return self::PASSED >= $this->getResultCode();
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getResultCode()
     {
@@ -68,19 +72,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
     }
 
     /**
-     * Checks that test has passed.
-     *
-     * @return Boolean
-     */
-    public function isPassed()
-    {
-        return self::PASSED >= $this->getResultCode();
-    }
-
-    /**
-     * Returns amount of results.
-     *
-     * @return integer
+     * {@inheritdoc}
      */
     public function count()
     {
@@ -88,9 +80,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
     }
 
     /**
-     * Returns collection iterator.
-     *
-     * @return Iterator
+     * {@inheritdoc}
      */
     public function getIterator()
     {

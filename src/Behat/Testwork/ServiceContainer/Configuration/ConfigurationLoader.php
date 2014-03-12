@@ -14,13 +14,11 @@ use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Testwork services configuration loader.
- *
  * Loads configuration from different sources.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConfigurationLoader
+final class ConfigurationLoader
 {
     /**
      * @var null|string

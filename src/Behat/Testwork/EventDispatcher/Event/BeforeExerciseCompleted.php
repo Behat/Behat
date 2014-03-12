@@ -14,7 +14,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Testwork before exercise event.
+ * Represents an event in which exercise is prepared to be executed.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

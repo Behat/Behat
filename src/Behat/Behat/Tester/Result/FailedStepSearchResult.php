@@ -12,10 +12,9 @@ namespace Behat\Behat\Tester\Result;
 
 use Behat\Behat\Definition\Exception\SearchException;
 use Behat\Testwork\Tester\Result\ExceptionResult;
-use Exception;
 
 /**
- * Behat failed step search result.
+ * Represents a step test result with a failed definition search.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -37,9 +36,7 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
     }
 
     /**
-     * Checks that the test result has exception.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function hasException()
     {
@@ -47,9 +44,7 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
     }
 
     /**
-     * Returns exception that test result has.
-     *
-     * @return null|Exception
+     * {@inheritdoc}
      */
     public function getException()
     {
@@ -57,9 +52,7 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
     }
 
     /**
-     * Checks that test has passed.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isPassed()
     {
@@ -67,9 +60,7 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
     }
 
     /**
-     * Returns tester result code.
-     *
-     * @return integer
+     * {@inheritdoc}
      */
     public function getResultCode()
     {

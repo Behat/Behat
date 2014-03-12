@@ -14,11 +14,11 @@ use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat statistics.
+ * Collects and provided exercise statistics.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Statistics
+final class Statistics
 {
     /**
      * @var ScenarioStat[]

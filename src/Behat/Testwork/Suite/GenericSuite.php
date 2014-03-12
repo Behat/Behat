@@ -13,11 +13,11 @@ namespace Behat\Testwork\Suite;
 use Behat\Testwork\Suite\Exception\ParameterNotFoundException;
 
 /**
- * Behat Gherkin suite.
+ * Represents generic (no specific attributes) test suite.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GenericSuite implements Suite
+final class GenericSuite implements Suite
 {
     /**
      * @var string

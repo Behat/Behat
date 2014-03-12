@@ -16,9 +16,7 @@ use ReflectionFunctionAbstract;
 use ReflectionMethod;
 
 /**
- * Testwork runtime callee.
- *
- * Callee created and executed in the runtime.
+ * Represents callee created and executed in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

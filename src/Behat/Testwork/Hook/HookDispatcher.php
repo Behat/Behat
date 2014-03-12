@@ -17,13 +17,11 @@ use Behat\Testwork\Hook\Call\HookCall;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
- * Testwork hook dispatcher.
- *
  * Dispatches registered hooks for provided events.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookDispatcher
+final class HookDispatcher
 {
     /**
      * @var HookRepository

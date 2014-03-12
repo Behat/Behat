@@ -15,13 +15,11 @@ use Behat\Testwork\Hook\Hook;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
- * Testwork hook call.
- *
- * Implements hook call.
+ * Represents a hook call.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookCall extends EnvironmentCall
+final class HookCall extends EnvironmentCall
 {
     /**
      * @var HookScope

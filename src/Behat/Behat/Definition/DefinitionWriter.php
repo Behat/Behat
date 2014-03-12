@@ -15,13 +15,11 @@ use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Definition writer.
- *
  * Prints definitions using provided printer.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionWriter
+final class DefinitionWriter
 {
     /**
      * @var EnvironmentManager

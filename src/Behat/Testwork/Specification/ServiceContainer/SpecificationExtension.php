@@ -18,8 +18,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * Testwork specification extension.
- *
  * Extends testwork with test specification services.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

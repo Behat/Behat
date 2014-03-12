@@ -11,7 +11,7 @@
 namespace Behat\Behat\Snippet;
 
 /**
- * Snippet repository interface.
+ * Provides snippets.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

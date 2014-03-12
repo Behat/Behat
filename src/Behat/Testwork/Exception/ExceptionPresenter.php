@@ -10,19 +10,16 @@
 
 namespace Behat\Testwork\Exception;
 
-use Behat\Testwork\Call\Exception\CallErrorException;
 use Behat\Testwork\Exception\Stringer\ExceptionStringer;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Exception;
 
 /**
- * Testwork exception presenter.
- *
  * Presents exceptions as strings using registered stringers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExceptionPresenter
+final class ExceptionPresenter
 {
     /**
      * @var string
@@ -94,10 +91,6 @@ class ExceptionPresenter
             if ($stringer->supportsException($exception)) {
                 return $this->relativizePaths($stringer->stringException($exception, $verbosity));
             }
-        }
-
-        if ($exception instanceof TestworkException || $exception instanceof CallErrorException) {
-            return trim($this->relativizePaths($exception->getMessage()));
         }
 
         if (OutputPrinter::VERBOSITY_VERY_VERBOSE <= $verbosity) {

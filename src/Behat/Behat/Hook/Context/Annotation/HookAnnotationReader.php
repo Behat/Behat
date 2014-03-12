@@ -15,13 +15,11 @@ use Behat\Testwork\Hook\Call\RuntimeHook;
 use ReflectionMethod;
 
 /**
- * Hook annotation reader.
- *
  * Reads hook callees from context method annotations.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookAnnotationReader implements AnnotationReader
+final class HookAnnotationReader implements AnnotationReader
 {
     /**
      * @var string

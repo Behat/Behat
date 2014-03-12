@@ -14,10 +14,10 @@ use Behat\Testwork\Exception\TestworkException;
 use LogicException;
 
 /**
- * Testwork timer exception.
+ * Represents exception caused by timer handling.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TimerException extends LogicException implements TestworkException
+final class TimerException extends LogicException implements TestworkException
 {
 }

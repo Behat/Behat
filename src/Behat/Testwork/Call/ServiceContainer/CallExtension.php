@@ -18,8 +18,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * Testwork call extension.
- *
  * Provides call services for testwork.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

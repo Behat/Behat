@@ -14,9 +14,7 @@ use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Context-based environment interface.
- *
- * Test environment based on a context objects.
+ * Represents test environment based on a collection of contexts.
  *
  * @see ContextEnvironmentHandler
  *

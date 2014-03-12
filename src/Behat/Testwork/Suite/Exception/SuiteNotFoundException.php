@@ -11,10 +11,10 @@
 namespace Behat\Testwork\Suite\Exception;
 
 /**
- * Testwork suite not found exception.
+ * Represents an exception thrown when trying to access non-registered suite.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteNotFoundException extends SuiteException
+final class SuiteNotFoundException extends SuiteException
 {
 }

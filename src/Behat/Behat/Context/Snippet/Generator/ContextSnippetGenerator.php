@@ -14,7 +14,6 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Snippet\ContextSnippet;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Snippet\Generator\SnippetGenerator;
-use Behat\Behat\Snippet\Snippet;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\TableNode;
@@ -22,13 +21,11 @@ use Behat\Testwork\Environment\Environment;
 use ReflectionClass;
 
 /**
- * Context snippet generator.
- *
  * Generates snippets for a context class.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextSnippetGenerator implements SnippetGenerator
+final class ContextSnippetGenerator implements SnippetGenerator
 {
     /**
      * @var string[string]
@@ -62,12 +59,7 @@ TPL;
     }
 
     /**
-     * Checks if generator supports search query.
-     *
-     * @param Environment $environment
-     * @param StepNode    $step
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsEnvironmentAndStep(Environment $environment, StepNode $step)
     {
@@ -83,12 +75,7 @@ TPL;
     }
 
     /**
-     * Generates snippet from search.
-     *
-     * @param Environment $environment
-     * @param StepNode    $step
-     *
-     * @return Snippet
+     * {@inheritdoc}
      */
     public function generateSnippet(Environment $environment, StepNode $step)
     {
@@ -111,7 +98,7 @@ TPL;
      *
      * @return null|string
      */
-    protected function getSnippetAcceptingContextClass(ContextEnvironment $environment)
+    private function getSnippetAcceptingContextClass(ContextEnvironment $environment)
     {
         foreach ($environment->getContextClasses() as $class) {
             if (in_array('Behat\Behat\Context\SnippetAcceptingContext', class_implements($class))) {
@@ -129,7 +116,7 @@ TPL;
      *
      * @return null|string
      */
-    protected function getPatternType($contextClass)
+    private function getPatternType($contextClass)
     {
         if (!in_array('Behat\Behat\Context\CustomSnippetAcceptingContext', class_implements($contextClass))) {
             return null;
@@ -147,7 +134,7 @@ TPL;
      *
      * @return string
      */
-    protected function getMethodName($contextClass, $canonicalText, $pattern)
+    private function getMethodName($contextClass, $canonicalText, $pattern)
     {
         $methodName = $this->deduceMethodName($canonicalText);
         $methodName = $this->getUniqueMethodName($contextClass, $pattern, $methodName);
@@ -163,7 +150,7 @@ TPL;
      *
      * @return string[]
      */
-    protected function getMethodArguments(StepNode $step, $tokenCount)
+    private function getMethodArguments(StepNode $step, $tokenCount)
     {
         $args = array();
         for ($i = 0; $i < $tokenCount; $i++) {
@@ -186,7 +173,7 @@ TPL;
      *
      * @return string
      */
-    protected function getSnippetTemplate($pattern, $methodName, array $methodArguments)
+    private function getSnippetTemplate($pattern, $methodName, array $methodArguments)
     {
         return sprintf(
             self::$templateTemplate,

@@ -22,13 +22,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Available definitions controller.
- *
  * Shows all currently available definitions to the user.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AvailableDefinitionsController implements Controller
+final class AvailableDefinitionsController implements Controller
 {
     /**
      * @var SuiteRepository
@@ -68,32 +66,21 @@ class AvailableDefinitionsController implements Controller
     }
 
     /**
-     * Configures command to be executable by the controller.
-     *
-     * @param Command $command
+     * {@inheritdoc}
      */
     public function configure(Command $command)
     {
-        $command
-            ->addOption(
-                '--definitions',
-                '-d',
-                InputOption::VALUE_REQUIRED,
-                "Print all available step definitions:" . PHP_EOL .
-                "- use <info>-dl</info> to just list definition expressions." . PHP_EOL .
-                "- use <info>-di</info> to show definitions with extended info." . PHP_EOL .
-                "- use <info>-d 'needle'</info> to find specific definitions." . PHP_EOL .
-                "Use <info>--lang</info> to see definitions in specific language."
-            );
+        $command->addOption('--definitions', '-d', InputOption::VALUE_REQUIRED,
+            "Print all available step definitions:" . PHP_EOL .
+            "- use <info>-dl</info> to just list definition expressions." . PHP_EOL .
+            "- use <info>-di</info> to show definitions with extended info." . PHP_EOL .
+            "- use <info>-d 'needle'</info> to find specific definitions." . PHP_EOL .
+            "Use <info>--lang</info> to see definitions in specific language."
+        );
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -116,7 +103,7 @@ class AvailableDefinitionsController implements Controller
      *
      * @return DefinitionPrinter
      */
-    protected function getDefinitionPrinter($argument)
+    private function getDefinitionPrinter($argument)
     {
         if ('l' === $argument) {
             return $this->listPrinter;

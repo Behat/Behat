@@ -13,7 +13,7 @@ namespace Behat\Behat\Snippet;
 use Behat\Gherkin\Node\StepNode;
 
 /**
- * Snippet interface.
+ * Step definition snippet.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

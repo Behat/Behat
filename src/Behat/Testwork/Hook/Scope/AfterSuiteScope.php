@@ -16,7 +16,7 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Testwork after suite hook scope.
+ * Represents a scope for AfterSuite hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -50,9 +50,7 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
     }
 
     /**
-     * Returns hook scope name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -60,9 +58,7 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
     }
 
     /**
-     * Returns hook suite.
-     *
-     * @return Suite
+     * {@inheritdoc}
      */
     public function getSuite()
     {
@@ -70,9 +66,7 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
     }
 
     /**
-     * Returns hook environment.
-     *
-     * @return Environment
+     * {@inheritdoc}
      */
     public function getEnvironment()
     {
@@ -80,9 +74,7 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
     }
 
     /**
-     * Returns specification iterator.
-     *
-     * @return SpecificationIterator
+     * {@inheritdoc}
      */
     public function getSpecificationIterator()
     {
@@ -90,9 +82,7 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
     }
 
     /**
-     * Returns test result.
-     *
-     * @return TestResult
+     * {@inheritdoc}
      */
     public function getTestResult()
     {

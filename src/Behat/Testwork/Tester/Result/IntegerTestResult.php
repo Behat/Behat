@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Tester\Result;
 
 /**
- * Testwork integer test result.
+ * Represents an integer test result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -33,22 +33,18 @@ final class IntegerTestResult implements TestResult
     }
 
     /**
-     * Returns tester result code.
-     *
-     * @return integer
-     */
-    public function getResultCode()
-    {
-        return $this->resultCode;
-    }
-
-    /**
-     * Checks that test has passed.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isPassed()
     {
         return self::PASSED >= $this->getResultCode();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResultCode()
+    {
+        return $this->resultCode;
     }
 }

@@ -14,13 +14,11 @@ use Behat\Testwork\Specification\Locator\SpecificationLocator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork test specification finder.
- *
  * Finds test specifications for provided suites using registered locators.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SpecificationFinder
+final class SpecificationFinder
 {
     /**
      * @var SpecificationLocator[]
@@ -35,6 +33,21 @@ class SpecificationFinder
     public function registerSpecificationLocator(SpecificationLocator $locator)
     {
         $this->specificationLocators[] = $locator;
+    }
+
+    /**
+     * Returns array of strings representing examples of supported specification locators.
+     *
+     * @return string[]
+     */
+    public function getExampleLocators()
+    {
+        $examples = array();
+        foreach ($this->specificationLocators as $locator) {
+            $examples = array_merge($examples, $locator->getLocatorExamples());
+        }
+
+        return $examples;
     }
 
     /**

@@ -14,7 +14,7 @@ use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Testwork hooked test teardown.
+ * Represents hooked test teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -42,9 +42,7 @@ final class HookedTeardown implements Teardown
     }
 
     /**
-     * Returns true if fixtures have been handled successfully.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isSuccessful()
     {
@@ -56,9 +54,7 @@ final class HookedTeardown implements Teardown
     }
 
     /**
-     * Checks if tear down has produced any output.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function hasOutput()
     {

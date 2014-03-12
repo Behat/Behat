@@ -11,8 +11,6 @@
 namespace Behat\Testwork\Call;
 
 /**
- * Testwork call interface.
- *
  * Represents any call made inside testwork.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

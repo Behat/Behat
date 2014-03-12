@@ -11,17 +11,14 @@
 namespace Behat\Behat\Definition\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
-use Behat\Behat\Definition\Call\RuntimeDefinition;
 use ReflectionMethod;
 
 /**
- * Step definition annotation reader.
- *
- * Reads definition annotations of context class.
+ * Reads definition annotations from the context class.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionAnnotationReader implements AnnotationReader
+final class DefinitionAnnotationReader implements AnnotationReader
 {
     /**
      * @var string
@@ -37,14 +34,7 @@ class DefinitionAnnotationReader implements AnnotationReader
     );
 
     /**
-     * Loads step callees (if exist) associated with specific method.
-     *
-     * @param string           $contextClass
-     * @param ReflectionMethod $method
-     * @param string           $docLine
-     * @param string           $description
-     *
-     * @return null|RuntimeDefinition
+     * {@inheritdoc}
      */
     public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description)
     {

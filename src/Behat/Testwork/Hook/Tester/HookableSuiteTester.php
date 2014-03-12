@@ -21,11 +21,11 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SuiteTester;
 
 /**
- * Testwork hookable suite tester.
+ * Suite tester which dispatches hooks during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookableSuiteTester implements SuiteTester
+final class HookableSuiteTester implements SuiteTester
 {
     /**
      * @var SuiteTester

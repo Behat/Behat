@@ -13,13 +13,11 @@ namespace Behat\Testwork\Specification;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork grouped specification iterator.
- *
  * Iterates over specification iterators grouped by their suite.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GroupedSpecificationIterator implements SpecificationIterator
+final class GroupedSpecificationIterator implements SpecificationIterator
 {
     /**
      * @var Suite
@@ -69,9 +67,7 @@ class GroupedSpecificationIterator implements SpecificationIterator
     }
 
     /**
-     * Returns suite that was used to load specifications.
-     *
-     * @return Suite
+     * {@inheritdoc}
      */
     public function getSuite()
     {
@@ -79,7 +75,7 @@ class GroupedSpecificationIterator implements SpecificationIterator
     }
 
     /**
-     * Rewinds the Iterator to the first element.
+     * {@inheritdoc}
      */
     public function rewind()
     {
@@ -95,7 +91,7 @@ class GroupedSpecificationIterator implements SpecificationIterator
     }
 
     /**
-     * Moves forward to the next element.
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -112,9 +108,7 @@ class GroupedSpecificationIterator implements SpecificationIterator
     }
 
     /**
-     * Checks if current position is valid.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function valid()
     {
@@ -122,9 +116,7 @@ class GroupedSpecificationIterator implements SpecificationIterator
     }
 
     /**
-     * Returns the current element.
-     *
-     * @return null|mixed
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -132,9 +124,7 @@ class GroupedSpecificationIterator implements SpecificationIterator
     }
 
     /**
-     * Returns the key of the current element.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function key()
     {

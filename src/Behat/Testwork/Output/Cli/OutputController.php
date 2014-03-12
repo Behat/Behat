@@ -13,15 +13,12 @@ namespace Behat\Testwork\Output\Cli;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\OutputManager;
-use Behat\Testwork\Output\Printer\OutputPrinter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Testwork output controller.
- *
  * Configures formatters based on user input.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
@@ -44,9 +41,7 @@ class OutputController implements Controller
     }
 
     /**
-     * Configures command to be executable by the controller.
-     *
-     * @param Command $command
+     * {@inheritdoc}
      */
     public function configure(Command $command)
     {
@@ -80,12 +75,7 @@ class OutputController implements Controller
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

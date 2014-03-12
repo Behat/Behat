@@ -26,13 +26,11 @@ use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat pretty skipped step printer.
- *
  * Prints steps as skipped.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettySkippedStepPrinter implements StepPrinter
+final class PrettySkippedStepPrinter implements StepPrinter
 {
     /**
      * @var StepTextPainter

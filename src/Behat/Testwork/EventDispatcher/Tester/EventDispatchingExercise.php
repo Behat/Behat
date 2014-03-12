@@ -17,13 +17,11 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Testwork event-dispatching exercise.
- *
- * Exercise dispatching BEFORE/AFTER events during run.
+ * Exercise dispatching BEFORE/AFTER events during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatchingExercise implements Exercise
+final class EventDispatchingExercise implements Exercise
 {
     /**
      * @var Exercise

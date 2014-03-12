@@ -19,7 +19,7 @@ use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat after step hook scope.
+ * Represents an AfterStep hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

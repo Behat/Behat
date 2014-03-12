@@ -15,20 +15,14 @@ use Behat\Testwork\Environment\StaticEnvironment;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Static test environment handler.
- *
- * Environment handler based on static calls (no isolation).
+ * Represents environment handler based on static calls (without any isolation).
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StaticEnvironmentHandler implements EnvironmentHandler
+final class StaticEnvironmentHandler implements EnvironmentHandler
 {
     /**
-     * Checks if handler supports provided suite.
-     *
-     * @param Suite $suite
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsSuite(Suite $suite)
     {
@@ -36,11 +30,7 @@ class StaticEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
-     * Builds environment object based on provided suite.
-     *
-     * @param Suite $suite
-     *
-     * @return Environment
+     * {@inheritdoc}
      */
     public function buildEnvironment(Suite $suite)
     {
@@ -48,12 +38,7 @@ class StaticEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
-     * Checks if handler supports provided environment.
-     *
-     * @param Environment $environment
-     * @param mixed       $testSubject
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null)
     {
@@ -61,12 +46,7 @@ class StaticEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
-     * Isolates provided environment.
-     *
-     * @param Environment $environment
-     * @param mixed       $testSubject
-     *
-     * @return Environment
+     * {@inheritdoc}
      */
     public function isolateEnvironment(Environment $environment, $testSubject = null)
     {

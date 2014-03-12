@@ -22,8 +22,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Snippet extension.
- *
  * Provides snippet generation, printing and appending functionality.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

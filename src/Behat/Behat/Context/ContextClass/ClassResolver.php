@@ -10,8 +10,12 @@
 
 namespace Behat\Behat\Context\ContextClass;
 
+use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
+
 /**
- * Context class resolver.
+ * Resolves arbitrary context strings into a context classes.
+ *
+ * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -20,11 +24,11 @@ interface ClassResolver
     /**
      * Checks if resolvers supports provided class.
      *
-     * @param string $contextClass
+     * @param string $contextString
      *
      * @return Boolean
      */
-    public function supportsClass($contextClass);
+    public function supportsClass($contextString);
 
     /**
      * Resolves context class.

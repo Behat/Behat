@@ -27,13 +27,11 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Behat expanded outline listener.
- *
  * Listens to expanded outline events and calls appropriate printers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineListener implements EventListener
+final class OutlineListener implements EventListener
 {
     /**
      * @var OutlinePrinter

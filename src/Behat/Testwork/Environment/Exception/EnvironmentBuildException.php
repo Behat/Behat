@@ -14,11 +14,11 @@ use Behat\Testwork\Suite\Suite;
 use RuntimeException;
 
 /**
- * Test environment build exception.
+ * Represents exception thrown during an environment build process.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EnvironmentBuildException extends RuntimeException implements EnvironmentException
+final class EnvironmentBuildException extends RuntimeException implements EnvironmentException
 {
     /**
      * @var Suite

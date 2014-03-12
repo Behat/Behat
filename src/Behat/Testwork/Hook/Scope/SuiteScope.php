@@ -13,7 +13,7 @@ namespace Behat\Testwork\Hook\Scope;
 use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
- * Testwork suite hook scope interface.
+ * Represents a suite hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

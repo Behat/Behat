@@ -17,8 +17,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Behat translator extension.
- *
  * Provides translator service.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

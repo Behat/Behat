@@ -11,9 +11,7 @@
 namespace Behat\Testwork\Suite;
 
 /**
- * Testwork suite interface.
- *
- * All testwork suites should implement this interface.
+ * Represents a Testwork suite. Suite is a collection of tests.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

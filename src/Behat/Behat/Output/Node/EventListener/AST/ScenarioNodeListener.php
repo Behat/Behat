@@ -20,13 +20,11 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Behat scenario node listener.
- *
  * Listens to scenario events and calls appropriate printers (header/footer).
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ScenarioNodeListener implements EventListener
+final class ScenarioNodeListener implements EventListener
 {
     /**
      * @var string

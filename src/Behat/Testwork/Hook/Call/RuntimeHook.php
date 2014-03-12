@@ -14,16 +14,14 @@ use Behat\Testwork\Call\RuntimeCallee;
 use Behat\Testwork\Hook\Hook;
 
 /**
- * Testwork runtime hook.
- *
- * Hook created and executed during runtime.
+ * Represents a hook executed during the execution runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class RuntimeHook extends RuntimeCallee implements Hook
 {
     /**
-     * @var string[]
+     * @var string
      */
     private $scopeName;
 
@@ -42,9 +40,7 @@ abstract class RuntimeHook extends RuntimeCallee implements Hook
     }
 
     /**
-     * Returns hook scope name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getScopeName()
     {
@@ -52,9 +48,7 @@ abstract class RuntimeHook extends RuntimeCallee implements Hook
     }
 
     /**
-     * Represents hook as a string.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function __toString()
     {

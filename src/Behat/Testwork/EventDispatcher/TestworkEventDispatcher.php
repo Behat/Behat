@@ -14,19 +14,17 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
- * Testwork event dispatcher.
- *
  * Extends Symfony2 event dispatcher with catch-all listeners.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TestworkEventDispatcher extends EventDispatcher
+final class TestworkEventDispatcher extends EventDispatcher
 {
     const BEFORE_ALL_EVENTS = '*~';
     const AFTER_ALL_EVENTS = '~*';
 
     /**
-     * @see EventDispatcherInterface::dispatch
+     * {@inheritdoc}
      */
     public function dispatch($eventName, Event $event = null)
     {
@@ -44,7 +42,7 @@ class TestworkEventDispatcher extends EventDispatcher
     }
 
     /**
-     * @see EventDispatcherInterface::getListeners
+     * {@inheritdoc}
      */
     public function getListeners($eventName = null)
     {

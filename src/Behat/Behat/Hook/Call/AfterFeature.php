@@ -13,11 +13,11 @@ namespace Behat\Behat\Hook\Call;
 use Behat\Behat\Hook\Scope\FeatureScope;
 
 /**
- * After feature hook.
+ * Represents an AfterFeature hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AfterFeature extends RuntimeFeatureHook
+final class AfterFeature extends RuntimeFeatureHook
 {
     /**
      * Initializes hook.
@@ -32,9 +32,7 @@ class AfterFeature extends RuntimeFeatureHook
     }
 
     /**
-     * Returns hook name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

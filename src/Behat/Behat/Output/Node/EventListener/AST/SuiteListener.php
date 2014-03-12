@@ -22,7 +22,7 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteListener implements EventListener
+final class SuiteListener implements EventListener
 {
     /**
      * @var SetupPrinter

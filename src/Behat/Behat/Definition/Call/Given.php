@@ -11,11 +11,11 @@
 namespace Behat\Behat\Definition\Call;
 
 /**
- * Given-step definition.
+ * Given steps definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Given extends RuntimeDefinition
+final class Given extends RuntimeDefinition
 {
     /**
      * Initializes definition.

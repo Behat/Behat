@@ -11,8 +11,6 @@
 namespace Behat\Testwork\Output\Printer;
 
 /**
- * Testwork printer interface.
- *
  * Isolates all console/filesystem writing.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

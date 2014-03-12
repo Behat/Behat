@@ -22,11 +22,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Behat rerun controller.
+ * Caches failed scenarios and reruns only them if `--rerun` option provided.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RerunController implements Controller
+final class RerunController implements Controller
 {
     /**
      * @var EventDispatcherInterface
@@ -63,8 +63,7 @@ class RerunController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption(
-            '--rerun', null, InputOption::VALUE_NONE,
+        $command->addOption('--rerun', null, InputOption::VALUE_NONE,
             'Re-run scenarios that failed during last execution.'
         );
     }
@@ -93,7 +92,7 @@ class RerunController implements Controller
             return;
         }
 
-        $input->setArgument('features', $this->getFileName());
+        $input->setArgument('paths', $this->getFileName());
     }
 
     /**
@@ -140,7 +139,7 @@ class RerunController implements Controller
      *
      * @return null|string
      */
-    protected function getCacheDirectory()
+    private function getCacheDirectory()
     {
         $directory = is_writable(sys_get_temp_dir())
             ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat_rerun_cache'
@@ -160,7 +159,7 @@ class RerunController implements Controller
      *
      * @return string
      */
-    protected function generateKey(InputInterface $input)
+    private function generateKey(InputInterface $input)
     {
         return md5(
             $input->getParameterOption(array('--profile', '-p')) .
@@ -168,7 +167,7 @@ class RerunController implements Controller
             implode(' ', $input->getOption('name')) .
             implode(' ', $input->getOption('tags')) .
             $input->getOption('role') .
-            $input->getArgument('features')
+            $input->getArgument('paths')
         );
     }
 

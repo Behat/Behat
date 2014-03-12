@@ -19,18 +19,14 @@ use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
- * Runtime scenario hook.
+ * Represents a scenario hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class RuntimeScenarioHook extends RuntimeFilterableHook
 {
     /**
-     * Checks if provided event matches hook filter.
-     *
-     * @param HookScope $scope
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function filterMatches(HookScope $scope)
     {

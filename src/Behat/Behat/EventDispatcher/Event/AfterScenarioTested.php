@@ -19,7 +19,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Behat after scenario tested event.
+ * Represents an AfterScenarioTested event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

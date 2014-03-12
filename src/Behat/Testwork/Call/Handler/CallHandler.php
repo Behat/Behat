@@ -15,8 +15,6 @@ use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\CallResult;
 
 /**
- * Testwork call handler interface.
- *
  * Handles calls and produces call results.
  *
  * @see CallCenter

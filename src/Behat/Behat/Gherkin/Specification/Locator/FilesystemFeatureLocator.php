@@ -11,28 +11,21 @@
 namespace Behat\Behat\Gherkin\Specification\Locator;
 
 use Behat\Behat\Gherkin\Specification\LazyFeatureIterator;
-use Behat\Gherkin\Filter\FilterInterface;
-use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\PathsFilter;
-use Behat\Gherkin\Filter\RoleFilter;
-use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Gherkin;
 use Behat\Testwork\Specification\Locator\SpecificationLocator;
 use Behat\Testwork\Specification\NoSpecificationsIterator;
-use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
 
 /**
- * Gherkin feature loader.
- *
  * Loads gherkin features from the filesystem using gherkin parser.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FilesystemFeatureLocator implements SpecificationLocator
+final class FilesystemFeatureLocator implements SpecificationLocator
 {
     /**
      * @var Gherkin
@@ -56,12 +49,21 @@ class FilesystemFeatureLocator implements SpecificationLocator
     }
 
     /**
-     * Loads feature iterator using provided suite & locator.
-     *
-     * @param Suite  $suite
-     * @param string $locator
-     *
-     * @return LazyFeatureIterator
+     * {@inheritdoc}
+     */
+    public function getLocatorExamples()
+    {
+        return array(
+            "a dir <comment>(features/)</comment>",
+            "a feature <comment>(*.feature)</comment>",
+            "a scenario at specific line <comment>(*.feature:10)</comment>.",
+            "all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.",
+            "all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>."
+        );
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function locateSpecifications(Suite $suite, $locator)
     {
@@ -70,12 +72,11 @@ class FilesystemFeatureLocator implements SpecificationLocator
         }
 
         $suiteLocators = $suite->getSetting('paths');
-        $suiteFilters = $this->getFeatureFilters($suite);
 
         if ($locator) {
-            $suiteFilters[] = new PathsFilter($suiteLocators);
+            $filters = array(new PathsFilter($suiteLocators));
 
-            return new LazyFeatureIterator($suite, $this->gherkin, $this->findFeatureFiles($locator), $suiteFilters);
+            return new LazyFeatureIterator($suite, $this->gherkin, $this->findFeatureFiles($locator), $filters);
         }
 
         $featurePaths = array();
@@ -83,61 +84,7 @@ class FilesystemFeatureLocator implements SpecificationLocator
             $featurePaths = array_merge($featurePaths, $this->findFeatureFiles($suiteLocator));
         }
 
-        return new LazyFeatureIterator($suite, $this->gherkin, $featurePaths, $suiteFilters);
-    }
-
-    /**
-     * Returns list of filters from suite settings.
-     *
-     * @param Suite $suite
-     *
-     * @return FilterInterface[]
-     */
-    protected function getFeatureFilters(Suite $suite)
-    {
-        if (!$suite->hasSetting('filters') || !is_array($suite->getSetting('filters'))) {
-            return array();
-        }
-
-        $filters = array();
-        foreach ($suite->getSetting('filters') as $type => $filterString) {
-            $filters[] = $this->createFilter($type, $filterString, $suite);
-        }
-
-        return $filters;
-    }
-
-    /**
-     * Creates filter of provided type.
-     *
-     * @param string $type
-     * @param string $filterString
-     * @param Suite  $suite
-     *
-     * @return FilterInterface
-     *
-     * @throws SuiteConfigurationException If filter type is not recognised
-     */
-    protected function createFilter($type, $filterString, Suite $suite)
-    {
-        if ('role' === $type) {
-            return new RoleFilter($filterString);
-        }
-
-        if ('name' === $type) {
-            return new NameFilter($filterString);
-        }
-
-        if ('tags' === $type) {
-            return new TagFilter($filterString);
-        }
-
-        throw new SuiteConfigurationException(sprintf(
-            '`%s` filter is not supported by the `%s` suite. Supported types are %s.',
-            $type,
-            $suite->getName(),
-            implode(', ', array('`role`', '`name`', '`tags`'))
-        ), $suite->getName());
+        return new LazyFeatureIterator($suite, $this->gherkin, $featurePaths);
     }
 
     /**
@@ -147,7 +94,7 @@ class FilesystemFeatureLocator implements SpecificationLocator
      *
      * @return string[]
      */
-    protected function findFeatureFiles($path)
+    private function findFeatureFiles($path)
     {
         $absolutePath = $this->findAbsolutePath($path);
 
@@ -178,7 +125,7 @@ class FilesystemFeatureLocator implements SpecificationLocator
      *
      * @return string
      */
-    protected function findAbsolutePath($path)
+    private function findAbsolutePath($path)
     {
         if (is_file($path) || is_dir($path)) {
             return realpath($path);

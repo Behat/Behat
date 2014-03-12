@@ -13,7 +13,7 @@ namespace Behat\Testwork\Output\ServiceContainer\Formatter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Testwork formatter factory.
+ * Provides a way to easily define custom formatters.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -13,17 +13,14 @@ namespace Behat\Behat\Context\Reader;
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Exception\UnknownTranslationResourceException;
 use Behat\Behat\Context\TranslatableContext;
-use Behat\Testwork\Call\Callee;
 use Symfony\Component\Translation\Translator;
 
 /**
- * Translatable context reader.
- *
  * Reads translation resources from translatable contexts.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TranslatableContextReader implements ContextReader
+final class TranslatableContextReader implements ContextReader
 {
     /**
      * @var Translator
@@ -41,12 +38,7 @@ class TranslatableContextReader implements ContextReader
     }
 
     /**
-     * Reads translation resources from contexts that implement TranslatableContext.
-     *
-     * @param ContextEnvironment $environment
-     * @param string             $contextClass
-     *
-     * @return Callee[]
+     * {@inheritdoc}
      *
      * @see TranslatableContext
      */
@@ -72,7 +64,7 @@ class TranslatableContextReader implements ContextReader
      *
      * @throws UnknownTranslationResourceException
      */
-    protected function addTranslationResource($path, $assetsId)
+    private function addTranslationResource($path, $assetsId)
     {
         switch ($ext = pathinfo($path, PATHINFO_EXTENSION)) {
             case 'yml':

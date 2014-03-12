@@ -24,8 +24,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Behat definition extension.
- *
  * Extends Behat with definition services.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

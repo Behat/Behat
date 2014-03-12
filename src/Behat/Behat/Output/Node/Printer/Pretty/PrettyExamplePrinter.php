@@ -19,13 +19,11 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat pretty example printer.
- *
  * Prints example header (usually simply an example row) and footer.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettyExamplePrinter implements ExamplePrinter
+final class PrettyExamplePrinter implements ExamplePrinter
 {
     /**
      * @var WidthCalculator

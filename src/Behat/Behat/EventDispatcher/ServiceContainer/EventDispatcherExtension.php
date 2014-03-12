@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Behat event dispatcher extension.
+ * Extends Testwork EventDispatcherExtension with additional event-dispatching testers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

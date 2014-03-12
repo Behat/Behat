@@ -15,7 +15,7 @@ use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
- * Behat scenario tested event.
+ * Represents a scenario event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

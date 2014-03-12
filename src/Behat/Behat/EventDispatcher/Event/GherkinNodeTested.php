@@ -13,7 +13,7 @@ namespace Behat\Behat\EventDispatcher\Event;
 use Behat\Gherkin\Node\NodeInterface;
 
 /**
- * Behat Gherkin node event interface.
+ * Represents a Gherkin node based event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

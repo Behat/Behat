@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Behat console-based definition printer.
+ * Represents console-based definition printer.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -63,7 +63,7 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      *
      * @param string $text
      */
-    protected function write($text)
+    final protected function write($text)
     {
         $this->output->writeln($text);
         $this->output->writeln('');
@@ -77,7 +77,7 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      *
      * @return string
      */
-    protected function getDefinitionPattern(Suite $suite, Definition $definition)
+    final protected function getDefinitionPattern(Suite $suite, Definition $definition)
     {
         return $this->translator->trans($definition->getPattern(), array(), $suite->getName());
     }

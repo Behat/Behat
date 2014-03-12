@@ -15,16 +15,21 @@ use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork test specification locator interface.
+ * Provides a custom way to locate specification by provided suite and locator string.
  *
- * Used by SpecificationFinder.
- *
- * @see    SpecificationFinder
+ * @see SpecificationFinder
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface SpecificationLocator
 {
+    /**
+     * Returns array of strings representing examples of supported specification locators.
+     *
+     * @return string[]
+     */
+    public function getLocatorExamples();
+
     /**
      * Locates specifications and wraps them into iterator.
      *

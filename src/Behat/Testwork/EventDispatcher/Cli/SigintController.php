@@ -19,11 +19,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Testwork SIGINT controller.
+ * Aborts exercise on SIGINT signal.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SigintController implements Controller
+final class SigintController implements Controller
 {
     /**
      * @var EventDispatcherInterface
@@ -41,21 +41,14 @@ class SigintController implements Controller
     }
 
     /**
-     * Configures command to be executable by the controller.
-     *
-     * @param Command $command
+     * {@inheritdoc}
      */
     public function configure(Command $command)
     {
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

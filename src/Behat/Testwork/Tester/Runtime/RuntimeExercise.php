@@ -22,13 +22,11 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 use Behat\Testwork\Tester\SuiteTester;
 
 /**
- * Testwork in-runtime exercise.
- *
  * Tester executing exercises in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeExercise implements Exercise
+final class RuntimeExercise implements Exercise
 {
     /**
      * @var EnvironmentManager

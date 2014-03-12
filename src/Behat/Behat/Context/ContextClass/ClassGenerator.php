@@ -14,9 +14,7 @@ use Behat\Behat\Context\Suite\Setup\SuiteWithContextsSetup;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Context class generator interface.
- *
- * Used by context suite setup to generate context classes.
+ * Generates context classes (as a string).
  *
  * @see SuiteWithContextsSetup
  *

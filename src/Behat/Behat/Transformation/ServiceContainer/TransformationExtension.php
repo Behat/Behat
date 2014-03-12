@@ -24,8 +24,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Transformation extension.
- *
  * Provides definition arguments transformation functionality.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

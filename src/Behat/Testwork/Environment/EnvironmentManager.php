@@ -18,13 +18,11 @@ use Behat\Testwork\Environment\Reader\EnvironmentReader;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Testwork test environment manager.
- *
  * Builds, isolates and reads environments using registered handlers and readers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EnvironmentManager
+final class EnvironmentManager
 {
     /**
      * @var EnvironmentHandler[]

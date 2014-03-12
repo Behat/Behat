@@ -18,7 +18,7 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Behat before background tested event.
+ * Represents a BeforeBackgroundTested event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

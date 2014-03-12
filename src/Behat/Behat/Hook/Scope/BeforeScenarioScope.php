@@ -16,7 +16,7 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Behat before scenario hook scope.
+ * Represents a BeforeScenario hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

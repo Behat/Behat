@@ -13,9 +13,7 @@ namespace Behat\Testwork\Hook;
 use Behat\Testwork\Call\Callee;
 
 /**
- * Testwork hook interface.
- *
- * All testwork test hooks should implement this interface.
+ * Represents a Testwork hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -29,9 +27,9 @@ interface Hook extends Callee
     public function getName();
 
     /**
-     * Returns array of all hooked event names.
+     * Returns hook scope name.
      *
-     * @return string[]
+     * @return string
      */
     public function getScopeName();
 

@@ -23,13 +23,11 @@ use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 
 /**
- * Behat in-runtime outline tester.
- *
- * Outline tester executing outline tests in the runtime.
+ * Tester executing outline tests in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeOutlineTester implements OutlineTester
+final class RuntimeOutlineTester implements OutlineTester
 {
     /**
      * @var ScenarioTester

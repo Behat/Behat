@@ -16,7 +16,7 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Testwork EventListener-based pretty formatter.
+ * Formatter built around the idea of event delegation and composition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -35,11 +35,11 @@ final class NodeEventListeningFormatter implements Formatter
      */
     private $listener;
     /**
-     * @var
+     * @var string
      */
     private $name;
     /**
-     * @var
+     * @var string
      */
     private $description;
 
@@ -72,9 +72,20 @@ final class NodeEventListeningFormatter implements Formatter
     }
 
     /**
-     * Returns formatter name.
+     * Proxies event to the listener.
      *
-     * @return string
+     * @param Event       $event
+     * @param null|string $eventName
+     */
+    public function listenEvent(Event $event, $eventName = null)
+    {
+        $eventName = $eventName ?: $event->getName();
+
+        $this->listener->listenEvent($this, $event, $eventName);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -82,9 +93,7 @@ final class NodeEventListeningFormatter implements Formatter
     }
 
     /**
-     * Returns formatter description.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -92,9 +101,7 @@ final class NodeEventListeningFormatter implements Formatter
     }
 
     /**
-     * Returns formatter output printer.
-     *
-     * @return OutputPrinter
+     * {@inheritdoc}
      */
     public function getOutputPrinter()
     {
@@ -102,10 +109,7 @@ final class NodeEventListeningFormatter implements Formatter
     }
 
     /**
-     * Sets formatter parameter.
-     *
-     * @param string $name
-     * @param mixed  $value
+     * {@inheritdoc}
      */
     public function setParameter($name, $value)
     {
@@ -113,30 +117,10 @@ final class NodeEventListeningFormatter implements Formatter
     }
 
     /**
-     * Returns parameter name.
-     *
-     * @param string $name
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getParameter($name)
     {
         return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
-    }
-
-    /**
-     * Proxies event to the listener.
-     *
-     * @param Event $event
-     */
-    public function listenEvent(Event $event)
-    {
-        if (1 < func_num_args()) {
-            $eventName = func_get_arg(1);
-        } else {
-            $eventName = $event->getName();
-        }
-
-        $this->listener->listenEvent($this, $event, $eventName);
     }
 }

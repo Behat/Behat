@@ -18,7 +18,7 @@ use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat after scenario hook scope.
+ * Represents an AfterScenario hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

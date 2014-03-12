@@ -17,7 +17,7 @@ use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat after feature hook scope.
+ * Represents an AfterFeature hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

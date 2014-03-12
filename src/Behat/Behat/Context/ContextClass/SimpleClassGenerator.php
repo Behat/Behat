@@ -13,11 +13,11 @@ namespace Behat\Behat\Context\ContextClass;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Simple context class generator.
+ * Generates basic PHP 5.3+ class with an optional namespace.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SimpleClassGenerator implements ClassGenerator
+final class SimpleClassGenerator implements ClassGenerator
 {
     /**
      * @var string

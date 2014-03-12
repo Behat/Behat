@@ -14,7 +14,7 @@ use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat result code to string converter.
+ * Converts result objects into a string representation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

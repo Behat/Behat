@@ -13,7 +13,7 @@ namespace Behat\Testwork\EventDispatcher\Event;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Testwork before tested event interface.
+ * Represents an event right before a test.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

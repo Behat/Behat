@@ -18,13 +18,11 @@ use Behat\Testwork\Suite\Suite;
 use Symfony\Component\ClassLoader\ClassLoader;
 
 /**
- * Context-based suite setup.
- *
- * Generates classes for all suite contexts using autoloader.
+ * Generates classes for all contexts in the suite using autoloader.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteWithContextsSetup implements SuiteSetup
+final class SuiteWithContextsSetup implements SuiteSetup
 {
     /**
      * @var ClassLoader
@@ -62,11 +60,7 @@ class SuiteWithContextsSetup implements SuiteSetup
     }
 
     /**
-     * Checks if setup supports provided suite.
-     *
-     * @param Suite $suite
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsSuite(Suite $suite)
     {
@@ -74,9 +68,7 @@ class SuiteWithContextsSetup implements SuiteSetup
     }
 
     /**
-     * Sets up provided suite.
-     *
-     * @param Suite $suite
+     * {@inheritdoc}
      */
     public function setupSuite(Suite $suite)
     {
@@ -98,7 +90,7 @@ class SuiteWithContextsSetup implements SuiteSetup
      *
      * @param string $path
      */
-    protected function createContextDirectory($path)
+    private function createContextDirectory($path)
     {
         mkdir($path, 0777, true);
 
@@ -113,7 +105,7 @@ class SuiteWithContextsSetup implements SuiteSetup
      * @param string $path
      * @param string $content
      */
-    protected function createContextFile($path, $content)
+    private function createContextFile($path, $content)
     {
         file_put_contents($path, $content);
 
@@ -131,7 +123,7 @@ class SuiteWithContextsSetup implements SuiteSetup
      *
      * @throws ContextNotFoundException If class file could not be determined
      */
-    protected function findClassFile($class)
+    private function findClassFile($class)
     {
         list($classpath, $classname) = $this->findClasspathAndClass($class);
         $classpath .= str_replace('_', DIRECTORY_SEPARATOR, $classname) . '.php';
@@ -160,7 +152,7 @@ class SuiteWithContextsSetup implements SuiteSetup
      *
      * @return null|string
      */
-    final protected function generateClass(Suite $suite, $class)
+    private function generateClass(Suite $suite, $class)
     {
         $content = null;
         foreach ($this->classGenerators as $generator) {

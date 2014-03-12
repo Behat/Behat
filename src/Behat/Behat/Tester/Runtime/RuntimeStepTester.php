@@ -28,13 +28,11 @@ use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 
 /**
- * Behat in-runtime step tester.
- *
- * Step tester executing step tests in the runtime.
+ * Tester executing step tests in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeStepTester implements StepTester
+final class RuntimeStepTester implements StepTester
 {
     /**
      * @var DefinitionFinder

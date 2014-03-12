@@ -14,13 +14,11 @@ use Behat\Behat\Snippet\Snippet;
 use Behat\Gherkin\Node\StepNode;
 
 /**
- * Context-based step definition snippet.
- *
- * Represents context step snippet.
+ * Represents a definition snippet for a context class.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextSnippet implements Snippet
+final class ContextSnippet implements Snippet
 {
     /**
      * @var StepNode
@@ -50,9 +48,7 @@ class ContextSnippet implements Snippet
     }
 
     /**
-     * Returns snippet type.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {
@@ -60,9 +56,7 @@ class ContextSnippet implements Snippet
     }
 
     /**
-     * Returns snippet unique hash (ignoring step type).
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getHash()
     {
@@ -70,9 +64,7 @@ class ContextSnippet implements Snippet
     }
 
     /**
-     * Returns definition snippet text.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getSnippet()
     {
@@ -82,9 +74,7 @@ class ContextSnippet implements Snippet
     }
 
     /**
-     * Returns step which asked for this snippet.
-     *
-     * @return StepNode
+     * {@inheritdoc}
      */
     public function getStep()
     {
@@ -92,9 +82,7 @@ class ContextSnippet implements Snippet
     }
 
     /**
-     * Returns text representations of snippet targets (for printing).
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTarget()
     {

@@ -13,7 +13,7 @@ namespace Behat\Testwork\ServiceContainer\Exception;
 use Behat\Testwork\Exception\TestworkException;
 
 /**
- * Core service container exception interface.
+ * Represents service container exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

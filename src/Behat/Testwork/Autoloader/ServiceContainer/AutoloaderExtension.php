@@ -17,8 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * Testwork autoloader extension.
- *
  * Extends testwork with class-loading services.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

@@ -10,10 +10,13 @@
 
 namespace Behat\Testwork\Tester\Result\Interpretation;
 
+use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Testwork result interpretation interface.
+ * Interprets particular test result by saying if it's failure or not.
+ *
+ * @see ResultInterpreter
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

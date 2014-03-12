@@ -16,9 +16,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Testwork specification tester interface.
- *
- * This interface defines an API for Testwork specification testers.
+ * Prepares and tests provided specification against provided environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

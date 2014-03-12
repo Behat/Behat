@@ -19,8 +19,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Testwork filesystem extension.
- *
  * Provides filesystem services for testwork.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

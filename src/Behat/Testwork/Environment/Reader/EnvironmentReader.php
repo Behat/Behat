@@ -12,11 +12,12 @@ namespace Behat\Testwork\Environment\Reader;
 
 use Behat\Testwork\Call\Callee;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\Environment\EnvironmentManager;
 
 /**
- * Testwork test environment reader interface.
- *
  * Reads callees from a provided environment.
+ *
+ * @see EnvironmentManager
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

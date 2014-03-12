@@ -13,13 +13,11 @@ namespace Behat\Testwork\ServiceContainer;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 
 /**
- * Testwork extension manager.
- *
  * Manages both default and 3rd-party extensions.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExtensionManager
+final class ExtensionManager
 {
     /**
      * @var string

@@ -14,13 +14,11 @@ use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Undefined step.
- *
- * Represents undefined step in specific environment.
+ * Represents an undefined step in a specific environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class UndefinedStep
+final class UndefinedStep
 {
     /**
      * @var Environment

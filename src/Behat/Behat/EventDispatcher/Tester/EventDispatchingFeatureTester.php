@@ -18,13 +18,11 @@ use Behat\Testwork\Tester\SpecificationTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Behat event-dispatching feature tester.
- *
  * Feature tester dispatching BEFORE/AFTER events during tests.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatchingFeatureTester implements SpecificationTester
+final class EventDispatchingFeatureTester implements SpecificationTester
 {
     /**
      * @var SpecificationTester

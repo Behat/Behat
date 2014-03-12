@@ -13,7 +13,7 @@ namespace Behat\Behat\Context\Exception;
 use Behat\Testwork\Exception\TestworkException;
 
 /**
- * Core context exception interface.
+ * Represents an exception thrown during context handling.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

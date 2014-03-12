@@ -24,13 +24,11 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 use Behat\Testwork\Tester\SpecificationTester;
 
 /**
- * Behat in-runtime feature tester.
- *
- * Feature tester executing feature tests in the runtime.
+ * Tester executing feature tests in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeFeatureTester implements SpecificationTester
+final class RuntimeFeatureTester implements SpecificationTester
 {
     /**
      * @var ScenarioTester

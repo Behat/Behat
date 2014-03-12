@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Behat hook extension.
+ * Extends Testwork HookExtension with additional behat services.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

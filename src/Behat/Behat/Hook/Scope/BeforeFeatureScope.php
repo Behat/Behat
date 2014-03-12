@@ -15,7 +15,7 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Behat before feature hook scope.
+ * Represents a BeforeFeature hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

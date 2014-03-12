@@ -11,10 +11,10 @@
 namespace Behat\Testwork\ServiceContainer\Exception;
 
 /**
- * Testwork extension initialization exception.
+ * Represents exception thrown during extension initialization phase.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExtensionInitializationException extends ExtensionException
+final class ExtensionInitializationException extends ExtensionException
 {
 }

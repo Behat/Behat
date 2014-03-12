@@ -14,13 +14,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Testwork service processor.
- *
  * Provides additional service finding functionality.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ServiceProcessor
+final class ServiceProcessor
 {
     /**
      * Finds and sorts (by priority) service references by provided tag.

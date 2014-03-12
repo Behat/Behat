@@ -24,13 +24,11 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat pretty outline printer.
- *
  * Prints outline header with outline steps and table header.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettyOutlinePrinter implements OutlinePrinter
+final class PrettyOutlinePrinter implements OutlinePrinter
 {
     /**
      * @var ScenarioPrinter

@@ -23,13 +23,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Testwork console application.
- *
  * Extends Symfony console application with testwork functionality.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Application extends BaseApplication
+final class Application extends BaseApplication
 {
     /**
      * @var ConfigurationLoader
@@ -168,7 +166,7 @@ class Application extends BaseApplication
      *
      * @return string The command name
      */
-    final protected function getCommandName(InputInterface $input)
+    protected function getCommandName(InputInterface $input)
     {
         return $this->getName();
     }
