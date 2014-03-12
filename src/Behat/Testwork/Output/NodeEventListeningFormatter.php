@@ -74,15 +74,12 @@ final class NodeEventListeningFormatter implements Formatter
     /**
      * Proxies event to the listener.
      *
-     * @param Event $event
+     * @param Event       $event
+     * @param null|string $eventName
      */
-    public function listenEvent(Event $event)
+    public function listenEvent(Event $event, $eventName = null)
     {
-        if (1 < func_num_args()) {
-            $eventName = func_get_arg(1);
-        } else {
-            $eventName = $event->getName();
-        }
+        $eventName = $eventName ?: $event->getName();
 
         $this->listener->listenEvent($this, $event, $eventName);
     }
