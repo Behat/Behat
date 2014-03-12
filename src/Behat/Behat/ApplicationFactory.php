@@ -30,7 +30,6 @@ use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
-use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
@@ -40,14 +39,12 @@ use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ApplicationFactory extends BaseFactory
+final class ApplicationFactory extends BaseFactory
 {
     const VERSION = '3.0-dev';
 
     /**
-     * Returns application name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     protected function getName()
     {
@@ -55,9 +52,7 @@ class ApplicationFactory extends BaseFactory
     }
 
     /**
-     * Returns current application version.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     protected function getVersion()
     {
@@ -65,9 +60,7 @@ class ApplicationFactory extends BaseFactory
     }
 
     /**
-     * Returns list of extensions enabled by default.
-     *
-     * @return Extension[]
+     * {@inheritdoc}
      */
     protected function getDefaultExtensions()
     {
@@ -82,6 +75,7 @@ class ApplicationFactory extends BaseFactory
             new SpecificationExtension($processor),
             new FilesystemExtension($processor),
             new ExceptionExtension($processor),
+
             // Behat extensions
             new AutoloaderExtension($processor),
             new TranslatorExtension($processor),
@@ -98,9 +92,7 @@ class ApplicationFactory extends BaseFactory
     }
 
     /**
-     * Returns the name of configuration environment variable.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     protected function getEnvironmentVariableName()
     {
@@ -108,9 +100,7 @@ class ApplicationFactory extends BaseFactory
     }
 
     /**
-     * Returns user config path.
-     *
-     * @return null|string
+     * {@inheritdoc}
      */
     protected function getConfigPath()
     {
@@ -139,7 +129,7 @@ class ApplicationFactory extends BaseFactory
      *
      * @return FormatterFactory[]
      */
-    protected function getDefaultFormatterFactories(ServiceProcessor $processor)
+    private function getDefaultFormatterFactories(ServiceProcessor $processor)
     {
         return array(
             new PrettyFormatterFactory($processor),
