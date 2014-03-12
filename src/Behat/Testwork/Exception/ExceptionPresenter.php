@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\Exception;
 
-use Behat\Testwork\Call\Exception\CallErrorException;
 use Behat\Testwork\Exception\Stringer\ExceptionStringer;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Exception;
@@ -92,10 +91,6 @@ final class ExceptionPresenter
             if ($stringer->supportsException($exception)) {
                 return $this->relativizePaths($stringer->stringException($exception, $verbosity));
             }
-        }
-
-        if ($exception instanceof TestworkException || $exception instanceof CallErrorException) {
-            return trim($this->relativizePaths($exception->getMessage()));
         }
 
         if (OutputPrinter::VERBOSITY_VERY_VERBOSE <= $verbosity) {

@@ -122,6 +122,10 @@ class ExceptionExtension implements Extension
         $definition = new Definition('Behat\Testwork\Exception\Stringer\PHPUnitExceptionStringer');
         $definition->addTag(self::STRINGER_TAG, array('priority' => 50));
         $container->setDefinition(self::STRINGER_TAG . '.phpunit', $definition);
+
+        $definition = new Definition('Behat\Testwork\Exception\Stringer\TestworkExceptionStringer');
+        $definition->addTag(self::STRINGER_TAG, array('priority' => 50));
+        $container->setDefinition(self::STRINGER_TAG . '.testwork', $definition);
     }
 
     /**
