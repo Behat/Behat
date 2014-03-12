@@ -35,7 +35,7 @@ use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 
 /**
- * Behat application factory.
+ * Defines the way behat is created.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

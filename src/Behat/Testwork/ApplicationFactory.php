@@ -16,7 +16,7 @@ use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 
 /**
- * Testwork application factory.
+ * Defines the way application is created.
  *
  * Extend and implement this class to create an entry point for your framework.
  *
