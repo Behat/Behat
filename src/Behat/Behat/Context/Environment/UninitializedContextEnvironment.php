@@ -25,7 +25,7 @@ use Behat\Testwork\Environment\StaticEnvironment;
 final class UninitializedContextEnvironment extends StaticEnvironment implements ContextEnvironment
 {
     /**
-     * @var string[]
+     * @var array[]
      */
     private $contextClasses = array();
 
