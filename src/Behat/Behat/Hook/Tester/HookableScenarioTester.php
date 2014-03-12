@@ -22,11 +22,11 @@ use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat hookable scenario tester.
+ * Scenario tester which dispatches hooks during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookableScenarioTester implements ScenarioTester
+final class HookableScenarioTester implements ScenarioTester
 {
     /**
      * @var ScenarioTester

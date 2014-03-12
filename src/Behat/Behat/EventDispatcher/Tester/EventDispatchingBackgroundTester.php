@@ -20,13 +20,11 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Behat event-dispatching background tester.
- *
  * Background tester dispatching BEFORE/AFTER events.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatchingBackgroundTester implements BackgroundTester
+final class EventDispatchingBackgroundTester implements BackgroundTester
 {
     /**
      * @var BackgroundTester

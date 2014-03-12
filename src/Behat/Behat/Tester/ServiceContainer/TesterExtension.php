@@ -22,8 +22,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Behat tester extension.
- *
  * Provides gherkin testers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

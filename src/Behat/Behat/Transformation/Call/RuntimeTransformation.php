@@ -14,13 +14,11 @@ use Behat\Behat\Transformation\Transformation;
 use Behat\Testwork\Call\RuntimeCallee;
 
 /**
- * Runtime step transformation.
- *
  * Transformation that is created and executed in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeTransformation extends RuntimeCallee implements Transformation
+final class RuntimeTransformation extends RuntimeCallee implements Transformation
 {
     /**
      * @var string
@@ -42,9 +40,7 @@ class RuntimeTransformation extends RuntimeCallee implements Transformation
     }
 
     /**
-     * Returns transformation pattern exactly as it was defined.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getPattern()
     {
@@ -52,9 +48,7 @@ class RuntimeTransformation extends RuntimeCallee implements Transformation
     }
 
     /**
-     * Represents transformation as a string.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function __toString()
     {

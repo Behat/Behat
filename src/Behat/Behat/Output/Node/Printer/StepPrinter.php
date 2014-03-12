@@ -16,8 +16,6 @@ use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Output\Formatter;
 
 /**
- * Behat step printer.
- *
  * Prints step with optional results.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

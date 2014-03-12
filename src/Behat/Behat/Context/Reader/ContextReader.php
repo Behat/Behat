@@ -14,8 +14,6 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Testwork\Call\Callee;
 
 /**
- * Context reader interface.
- *
  * Reads callees from a context class.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

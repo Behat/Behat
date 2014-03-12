@@ -17,11 +17,11 @@ use Behat\Testwork\Specification\NoSpecificationsIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Behat filesystem scenarios list locator.
+ * Loads gherkin features using a file with the list of scenarios.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FilesystemScenariosListLocator implements SpecificationLocator
+final class FilesystemScenariosListLocator implements SpecificationLocator
 {
     /**
      * @var Gherkin
@@ -39,9 +39,7 @@ class FilesystemScenariosListLocator implements SpecificationLocator
     }
 
     /**
-     * Returns array of strings representing examples of supported specification locators.
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getLocatorExamples()
     {

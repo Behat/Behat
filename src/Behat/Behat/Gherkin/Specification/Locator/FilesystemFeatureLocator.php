@@ -21,13 +21,11 @@ use RecursiveIteratorIterator;
 use RegexIterator;
 
 /**
- * Gherkin feature loader.
- *
  * Loads gherkin features from the filesystem using gherkin parser.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FilesystemFeatureLocator implements SpecificationLocator
+final class FilesystemFeatureLocator implements SpecificationLocator
 {
     /**
      * @var Gherkin
@@ -51,9 +49,7 @@ class FilesystemFeatureLocator implements SpecificationLocator
     }
 
     /**
-     * Returns array of strings representing examples of supported specification locators.
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getLocatorExamples()
     {
@@ -67,12 +63,7 @@ class FilesystemFeatureLocator implements SpecificationLocator
     }
 
     /**
-     * Loads feature iterator using provided suite & locator.
-     *
-     * @param Suite  $suite
-     * @param string $locator
-     *
-     * @return LazyFeatureIterator
+     * {@inheritdoc}
      */
     public function locateSpecifications(Suite $suite, $locator)
     {
@@ -103,7 +94,7 @@ class FilesystemFeatureLocator implements SpecificationLocator
      *
      * @return string[]
      */
-    protected function findFeatureFiles($path)
+    private function findFeatureFiles($path)
     {
         $absolutePath = $this->findAbsolutePath($path);
 
@@ -134,7 +125,7 @@ class FilesystemFeatureLocator implements SpecificationLocator
      *
      * @return string
      */
-    protected function findAbsolutePath($path)
+    private function findAbsolutePath($path)
     {
         if (is_file($path) || is_dir($path)) {
             return realpath($path);

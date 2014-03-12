@@ -17,15 +17,13 @@ use Behat\Testwork\Call\Callee;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Initialized context environment.
- *
- * Environment based on initialized context objects.
+ * Context environment based on a list of instantiated context objects.
  *
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class InitializedContextEnvironment implements ContextEnvironment
+final class InitializedContextEnvironment implements ContextEnvironment
 {
     /**
      * @var string
@@ -57,9 +55,7 @@ class InitializedContextEnvironment implements ContextEnvironment
     }
 
     /**
-     * Returns unique ID used for reading and caching of environment assets (callees).
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getSuite()
     {
@@ -67,9 +63,7 @@ class InitializedContextEnvironment implements ContextEnvironment
     }
 
     /**
-     * Checks if environment has any contexts registered.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function hasContexts()
     {
@@ -77,9 +71,7 @@ class InitializedContextEnvironment implements ContextEnvironment
     }
 
     /**
-     * Returns list of registered context classes.
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getContextClasses()
     {
@@ -87,11 +79,7 @@ class InitializedContextEnvironment implements ContextEnvironment
     }
 
     /**
-     * Checks if environment contains context with specified class name.
-     *
-     * @param string $class
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function hasContextClass($class)
     {
@@ -130,11 +118,7 @@ class InitializedContextEnvironment implements ContextEnvironment
     }
 
     /**
-     * Creates callable using provided Callee and context environment in hand.
-     *
-     * @param Callee $callee
-     *
-     * @return callable
+     * {@inheritdoc}
      */
     public function bindCallee(Callee $callee)
     {

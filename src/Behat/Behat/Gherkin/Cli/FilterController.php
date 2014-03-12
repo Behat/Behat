@@ -21,13 +21,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Behat filter controller.
- *
- * Configure default gherkin filters.
+ * Configures default Gherkin filters.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FilterController implements Controller
+final class FilterController implements Controller
 {
     /**
      * @var Gherkin

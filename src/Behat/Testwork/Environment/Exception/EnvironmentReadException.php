@@ -8,56 +8,43 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Snippet;
+namespace Behat\Testwork\Environment\Exception;
 
-use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
+use RuntimeException;
 
 /**
- * Represents an undefined step in a specific environment.
+ * Represents exception thrown during an environment read.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class UndefinedStep
+final class EnvironmentReadException extends RuntimeException implements EnvironmentException
 {
     /**
      * @var Environment
      */
     private $environment;
-    /**
-     * @var StepNode
-     */
-    private $step;
 
     /**
-     * Initializes undefined step.
+     * Initializes exception.
      *
+     * @param string      $message
      * @param Environment $environment
-     * @param StepNode    $step
      */
-    public function __construct(Environment $environment, StepNode $step)
+    public function __construct($message, Environment $environment)
     {
         $this->environment = $environment;
-        $this->step = $step;
+
+        parent::__construct($message);
     }
 
     /**
-     * Returns environment that needs this step.
+     * Returns environment that caused exception.
      *
      * @return Environment
      */
     public function getEnvironment()
     {
         return $this->environment;
-    }
-
-    /**
-     * Returns undefined step node.
-     *
-     * @return StepNode
-     */
-    public function getStep()
-    {
-        return $this->step;
     }
 }

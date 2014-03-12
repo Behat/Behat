@@ -14,11 +14,9 @@ use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 use ReflectionClass;
 
 /**
- * Context constructor argument resolver.
+ * Resolves arguments of context constructors.
  *
- * Used by ContextEnvironmentHandler to resolve specific context arguments.
- *
- * @see    ContextEnvironmentHandler
+ * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

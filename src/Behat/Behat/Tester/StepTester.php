@@ -18,9 +18,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Behat step tester interface.
- *
- * This interface defines an API for Tree Step testers.
+ * Prepares and tests provided step object against provided environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

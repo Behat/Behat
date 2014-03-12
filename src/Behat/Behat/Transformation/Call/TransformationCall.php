@@ -16,13 +16,11 @@ use Behat\Testwork\Environment\Call\EnvironmentCall;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Transformation call.
- *
  * Call extended with transformation information.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TransformationCall extends EnvironmentCall
+final class TransformationCall extends EnvironmentCall
 {
     /**
      * @var Definition

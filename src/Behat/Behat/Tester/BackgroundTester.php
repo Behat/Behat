@@ -17,9 +17,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Behat background tester interface.
- *
- * This interface defines an API for Tree Background testers.
+ * Prepares and tests background from a provided feature object against provided environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -14,8 +14,6 @@ use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Definition printer.
- *
  * Prints provided definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

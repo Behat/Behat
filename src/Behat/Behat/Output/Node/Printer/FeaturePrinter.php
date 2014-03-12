@@ -15,8 +15,6 @@ use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat feature printer.
- *
  * Prints feature headers and footers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

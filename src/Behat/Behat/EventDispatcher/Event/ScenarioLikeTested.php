@@ -14,7 +14,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 
 /**
- * Behat scenario-like tested interface.
+ * Represents an event of scenario-like structure (Scenario, Background, Example).
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

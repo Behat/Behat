@@ -10,16 +10,16 @@
 
 namespace Behat\Behat\Hook\Call;
 
-use Behat\Behat\Hook\Exception\BadCallbackException;
 use Behat\Behat\Hook\Scope\FeatureScope;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Testwork\Call\Exception\BadCallbackException;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
- * Runtime feature hook.
+ * Represents a feature hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -49,11 +49,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     }
 
     /**
-     * Checks if provided event matches hook filter.
-     *
-     * @param HookScope $scope
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function filterMatches(HookScope $scope)
     {
@@ -74,7 +70,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      *
      * @return Boolean
      */
-    protected function isMatch(FeatureNode $feature, $filterString)
+    private function isMatch(FeatureNode $feature, $filterString)
     {
         if (false !== strpos($filterString, '@')) {
             return $this->isMatchTagFilter($feature, $filterString);
@@ -95,7 +91,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      *
      * @return Boolean
      */
-    protected function isMatchTagFilter(FeatureNode $feature, $filterString)
+    private function isMatchTagFilter(FeatureNode $feature, $filterString)
     {
         $filter = new TagFilter($filterString);
 
@@ -110,7 +106,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      *
      * @return Boolean
      */
-    protected function isMatchNameFilter(FeatureNode $feature, $filterString)
+    private function isMatchNameFilter(FeatureNode $feature, $filterString)
     {
         $filter = new NameFilter($filterString);
 

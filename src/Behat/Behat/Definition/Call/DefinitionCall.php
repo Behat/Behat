@@ -17,13 +17,11 @@ use Behat\Testwork\Environment\Call\EnvironmentCall;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Definition call.
- *
  * Enhances environment call with definition information.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionCall extends EnvironmentCall
+final class DefinitionCall extends EnvironmentCall
 {
     /**
      * @var FeatureNode

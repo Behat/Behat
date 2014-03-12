@@ -13,9 +13,7 @@ namespace Behat\Behat\Transformation\Transformer;
 use Behat\Behat\Definition\Call\DefinitionCall;
 
 /**
- * Argument transformer interface.
- *
- * Transforms single argument value.
+ * Transforms a single argument value.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

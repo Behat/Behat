@@ -16,13 +16,11 @@ use Behat\Testwork\Filesystem\FilesystemLogger;
 use ReflectionClass;
 
 /**
- * Context snippet appender.
- *
  * Appends context-related snippets to their context classes.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextSnippetAppender implements SnippetAppender
+final class ContextSnippetAppender implements SnippetAppender
 {
     /**
      * @const PendingException class
@@ -45,11 +43,7 @@ class ContextSnippetAppender implements SnippetAppender
     }
 
     /**
-     * Checks if appender supports snippet.
-     *
-     * @param AggregateSnippet $snippet
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsSnippet(AggregateSnippet $snippet)
     {
@@ -57,9 +51,7 @@ class ContextSnippetAppender implements SnippetAppender
     }
 
     /**
-     * Appends snippet to the source.
-     *
-     * @param AggregateSnippet $snippet
+     * {@inheritdoc}
      */
     public function appendSnippet(AggregateSnippet $snippet)
     {

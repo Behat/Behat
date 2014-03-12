@@ -13,7 +13,7 @@ namespace Behat\Behat\Tester\Result;
 use Behat\Behat\Definition\Definition;
 
 /**
- * Behat defined step result interface.
+ * Represents a step result that contains step definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

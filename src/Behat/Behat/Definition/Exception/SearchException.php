@@ -11,7 +11,7 @@
 namespace Behat\Behat\Definition\Exception;
 
 /**
- * Definition search exception interface.
+ * Represents an exception caused by a definition search.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

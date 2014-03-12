@@ -25,13 +25,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Snippets controller.
- *
  * Appends and prints snippets.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SnippetsController implements Controller
+final class SnippetsController implements Controller
 {
     /**
      * @var SnippetRegistry

@@ -21,11 +21,11 @@ use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Behat lazy feature iterator.
+ * Lazily iterates (parses one-by-one) over features.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class LazyFeatureIterator implements SpecificationIterator
+final class LazyFeatureIterator implements SpecificationIterator
 {
     /**
      * @var Suite
@@ -73,9 +73,7 @@ class LazyFeatureIterator implements SpecificationIterator
     }
 
     /**
-     * Returns suite that was used to load specifications.
-     *
-     * @return Suite
+     * {@inheritdoc}
      */
     public function getSuite()
     {
@@ -83,7 +81,7 @@ class LazyFeatureIterator implements SpecificationIterator
     }
 
     /**
-     * Rewinds the Iterator to the first element.
+     * {@inheritdoc}
      */
     public function rewind()
     {
@@ -92,7 +90,7 @@ class LazyFeatureIterator implements SpecificationIterator
     }
 
     /**
-     * Moves forward to the next element.
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -100,9 +98,7 @@ class LazyFeatureIterator implements SpecificationIterator
     }
 
     /**
-     * Checks if current position is valid.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function valid()
     {
@@ -110,9 +106,7 @@ class LazyFeatureIterator implements SpecificationIterator
     }
 
     /**
-     * Returns the key of the current element.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -120,9 +114,7 @@ class LazyFeatureIterator implements SpecificationIterator
     }
 
     /**
-     * Returns the current element.
-     *
-     * @return null|FeatureNode
+     * {@inheritdoc}
      */
     public function current()
     {

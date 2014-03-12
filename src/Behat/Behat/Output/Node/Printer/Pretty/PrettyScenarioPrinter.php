@@ -20,13 +20,11 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat scenario printer.
- *
  * Prints scenario headers (with tags, keyword and long title) and footers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettyScenarioPrinter implements ScenarioPrinter
+final class PrettyScenarioPrinter implements ScenarioPrinter
 {
     /**
      * @var WidthCalculator

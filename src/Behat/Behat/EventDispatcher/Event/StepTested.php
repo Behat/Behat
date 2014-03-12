@@ -15,7 +15,7 @@ use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
- * Behat step tested event.
+ * Represents a step event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -20,13 +20,11 @@ use Behat\Testwork\Environment\Environment;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Behat event-dispatching step tester.
- *
  * Step tester dispatching BEFORE/AFTER events during tests.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatchingStepTester implements StepTester
+final class EventDispatchingStepTester implements StepTester
 {
     /**
      * @var StepTester

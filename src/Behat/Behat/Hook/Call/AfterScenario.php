@@ -13,11 +13,11 @@ namespace Behat\Behat\Hook\Call;
 use Behat\Behat\Hook\Scope\ScenarioScope;
 
 /**
- * After scenario hook.
+ * Represents an AfterScenario hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AfterScenario extends RuntimeScenarioHook
+final class AfterScenario extends RuntimeScenarioHook
 {
     /**
      * Initializes hook.
@@ -32,9 +32,7 @@ class AfterScenario extends RuntimeScenarioHook
     }
 
     /**
-     * Returns hook name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

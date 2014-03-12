@@ -63,7 +63,7 @@ class EnvironmentCall implements Call
      *
      * @return Environment
      */
-    public function getEnvironment()
+    final public function getEnvironment()
     {
         return $this->environment;
     }
@@ -71,7 +71,7 @@ class EnvironmentCall implements Call
     /**
      * {@inheritdoc}
      */
-    public function getCallee()
+    final public function getCallee()
     {
         return $this->callee;
     }
@@ -79,7 +79,7 @@ class EnvironmentCall implements Call
     /**
      * {@inheritdoc}
      */
-    public function getBoundCallable()
+    final public function getBoundCallable()
     {
         return $this->environment->bindCallee($this->callee);
     }
@@ -87,7 +87,7 @@ class EnvironmentCall implements Call
     /**
      * {@inheritdoc}
      */
-    public function getArguments()
+    final public function getArguments()
     {
         return $this->arguments;
     }
@@ -95,7 +95,7 @@ class EnvironmentCall implements Call
     /**
      * {@inheritdoc}
      */
-    public function getErrorReportingLevel()
+    final public function getErrorReportingLevel()
     {
         return $this->errorReportingLevel;
     }

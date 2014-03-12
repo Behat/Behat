@@ -21,13 +21,11 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Behat event-dispatching scenario tester.
- *
  * Scenario tester dispatching BEFORE/AFTER events during tests.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatchingScenarioTester implements ScenarioTester
+final class EventDispatchingScenarioTester implements ScenarioTester
 {
     /**
      * @var ScenarioTester

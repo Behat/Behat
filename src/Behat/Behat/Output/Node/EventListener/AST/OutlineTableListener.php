@@ -30,13 +30,11 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Behat outline table listener.
- *
  * Listens to outline table events and calls appropriate printers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutlineTableListener implements EventListener
+final class OutlineTableListener implements EventListener
 {
     /**
      * @var OutlineTablePrinter

@@ -13,8 +13,6 @@ namespace Behat\Behat\Context;
 use Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator;
 
 /**
- * Custom-snippet-accepting context interface.
- *
  * Context that implements this interface is treated as a custom-snippet-friendly context.
  *
  * @see ContextSnippetGenerator

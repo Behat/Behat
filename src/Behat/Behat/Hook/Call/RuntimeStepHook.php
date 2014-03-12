@@ -17,18 +17,14 @@ use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
- * Runtime step hook.
+ * Represents a step hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class RuntimeStepHook extends RuntimeFilterableHook
 {
     /**
-     * Checks if provided event matches hook filter.
-     *
-     * @param HookScope $scope
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function filterMatches(HookScope $scope)
     {

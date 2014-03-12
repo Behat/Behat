@@ -24,11 +24,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Behat stop on failure controller.
+ * Stops tests on first scenario failure.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StopOnFailureController implements Controller
+final class StopOnFailureController implements Controller
 {
     /**
      * @var EventDispatcherInterface

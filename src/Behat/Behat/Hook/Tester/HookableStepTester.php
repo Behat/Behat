@@ -22,11 +22,11 @@ use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 
 /**
- * Behat hookable step tester.
+ * Step tester which dispatches hooks during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookableStepTester implements StepTester
+final class HookableStepTester implements StepTester
 {
     /**
      * @var StepTester
@@ -37,6 +37,12 @@ class HookableStepTester implements StepTester
      */
     private $hookDispatcher;
 
+    /**
+     * Initializes tester.
+     *
+     * @param StepTester     $baseTester
+     * @param HookDispatcher $hookDispatcher
+     */
     public function __construct(StepTester $baseTester, HookDispatcher $hookDispatcher)
     {
         $this->baseTester = $baseTester;

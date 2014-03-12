@@ -16,9 +16,7 @@ use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Output\Formatter;
 
 /**
- * Behat statistics printer interface.
- *
- * Responsible to print exercise statistics.
+ * Prints exercise statistics.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

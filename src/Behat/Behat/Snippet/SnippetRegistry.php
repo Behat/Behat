@@ -15,13 +15,11 @@ use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Snippet registry.
- *
  * Acts like a snippet repository by producing snippets from registered undefined steps using snippet generators.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SnippetRegistry implements SnippetRepository
+final class SnippetRegistry implements SnippetRepository
 {
     /**
      * @var SnippetGenerator[]

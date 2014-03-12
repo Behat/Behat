@@ -14,11 +14,11 @@ use Behat\Behat\Definition\Pattern\Pattern;
 use Behat\Transliterator\Transliterator;
 
 /**
- * Behat turnip pattern policy.
+ * Defines a way to handle turnip patterns.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TurnipPatternPolicy implements PatternPolicy
+final class TurnipPatternPolicy implements PatternPolicy
 {
     const PLACEHOLDER_REGEXP = "/\\\:(\w+)/";
     const OPTIONAL_WORD_REGEXP = '/(\s)?\\\\\(([^\\\]+)\\\\\)(\s)?/';

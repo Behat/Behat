@@ -13,11 +13,11 @@ namespace Behat\Behat\Context\Exception;
 use InvalidArgumentException;
 
 /**
- * Wrong context class exception.
+ * Represents an exception when provided class exists, but is not an acceptable as a context.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class WrongContextClassException extends InvalidArgumentException implements ContextException
+final class WrongContextClassException extends InvalidArgumentException implements ContextException
 {
     /**
      * @var string

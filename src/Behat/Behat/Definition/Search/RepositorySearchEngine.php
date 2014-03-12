@@ -21,13 +21,13 @@ use Behat\Testwork\Environment\Environment;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Repository search engine.
+ * Searches for a step definition using definition repository.
  *
- * Repository-based definition search engine.
+ * @see DefinitionRepository
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RepositorySearchEngine implements SearchEngine
+final class RepositorySearchEngine implements SearchEngine
 {
     /**
      * @var DefinitionRepository
@@ -60,13 +60,7 @@ class RepositorySearchEngine implements SearchEngine
     }
 
     /**
-     * Searches definition.
-     *
-     * @param Environment $environment
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     *
-     * @return null|SearchResult
+     * {@inheritdoc}
      *
      * @throws AmbiguousMatchException
      */

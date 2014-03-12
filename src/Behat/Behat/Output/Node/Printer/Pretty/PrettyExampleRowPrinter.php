@@ -26,13 +26,11 @@ use Behat\Testwork\Tester\Result\ExceptionResult;
 use Behat\Testwork\Tester\Result\TestResults;
 
 /**
- * Behat pretty example row printer.
- *
  * Prints example results in form of a table row.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettyExampleRowPrinter implements ExampleRowPrinter
+final class PrettyExampleRowPrinter implements ExampleRowPrinter
 {
     /**
      * @var ResultToStringConverter

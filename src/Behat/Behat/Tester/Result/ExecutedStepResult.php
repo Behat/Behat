@@ -10,15 +10,13 @@
 
 namespace Behat\Behat\Tester\Result;
 
-use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\SearchResult;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Tester\Result\ExceptionResult;
-use Exception;
 
 /**
- * Step test result.
+ * Represents an executed (successfully or not) step result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -66,9 +64,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
     }
 
     /**
-     * Returns found step definition.
-     *
-     * @return null|Definition
+     * {@inheritdoc}
      */
     public function getStepDefinition()
     {
@@ -76,9 +72,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
     }
 
     /**
-     * Checks if step has produced any exception.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function hasException()
     {
@@ -86,7 +80,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
     }
 
     /**
-     * @return Exception|null
+     * {@inheritdoc}
      */
     public function getException()
     {
@@ -94,9 +88,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
     }
 
     /**
-     * Returns tester result status.
-     *
-     * @return integer
+     * {@inheritdoc}
      */
     public function getResultCode()
     {
@@ -112,9 +104,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
     }
 
     /**
-     * Checks that test has passed.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function isPassed()
     {

@@ -16,13 +16,11 @@ use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Definition finder.
- *
- * Finds specific definition in environment using registered search engines.
+ * Finds specific step definition in environment using registered search engines.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionFinder
+final class DefinitionFinder
 {
     /**
      * @var SearchEngine[]

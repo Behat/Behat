@@ -13,8 +13,6 @@ namespace Behat\Behat\Context;
 use Behat\Behat\Context\Reader\TranslatableContextReader;
 
 /**
- * Translatable context interface.
- *
  * Context that implements this interface is also treated as a translation provider for all it's callees.
  *
  * @see TranslatableContextReader

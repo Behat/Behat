@@ -23,11 +23,11 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Behat pretty setup printer.
+ * Prints hooks in a pretty fashion.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettySetupPrinter implements SetupPrinter
+final class PrettySetupPrinter implements SetupPrinter
 {
     /**
      * @var ResultToStringConverter

@@ -21,7 +21,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Behat after step tested event.
+ * Represents an AfterStepTested event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -36,23 +36,17 @@ class StaticEnvironment implements Environment
     }
 
     /**
-     * Returns environment suite.
-     *
-     * @return Suite
+     * {@inheritdoc}
      */
-    public function getSuite()
+    final public function getSuite()
     {
         return $this->suite;
     }
 
     /**
-     * Creates callable using provided Callee.
-     *
-     * @param Callee $callee
-     *
-     * @return callable
+     * {@inheritdoc}
      */
-    public function bindCallee(Callee $callee)
+    final public function bindCallee(Callee $callee)
     {
         return $callee->getCallable();
     }

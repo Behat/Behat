@@ -16,7 +16,7 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Behat before step hook scope.
+ * Represents a BeforeStep hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

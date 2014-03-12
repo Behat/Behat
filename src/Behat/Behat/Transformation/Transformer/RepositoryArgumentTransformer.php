@@ -22,13 +22,11 @@ use Exception;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Repository argument transformer.
- *
  * Argument transformer based on transformations repository.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RepositoryArgumentTransformer implements ArgumentTransformer
+final class RepositoryArgumentTransformer implements ArgumentTransformer
 {
     /**
      * @var TransformationRepository
@@ -68,13 +66,7 @@ class RepositoryArgumentTransformer implements ArgumentTransformer
     }
 
     /**
-     * Checks if transformer supports argument.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param integer|string $argumentIndex
-     * @param mixed          $argumentValue
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
@@ -82,13 +74,7 @@ class RepositoryArgumentTransformer implements ArgumentTransformer
     }
 
     /**
-     * Transforms argument value using transformation and returns a new one.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param integer|string $argumentIndex
-     * @param mixed          $argumentValue
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
@@ -113,7 +99,7 @@ class RepositoryArgumentTransformer implements ArgumentTransformer
      *
      * @return mixed
      */
-    protected function transform(DefinitionCall $definitionCall, Transformation $transformation, $index, $value)
+    private function transform(DefinitionCall $definitionCall, Transformation $transformation, $index, $value)
     {
         if (is_object($value) && !$value instanceof ArgumentInterface) {
             return $value;

@@ -11,13 +11,14 @@
 namespace Behat\Behat\Snippet\Generator;
 
 use Behat\Behat\Snippet\Snippet;
+use Behat\Behat\Snippet\SnippetRegistry;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Snippet generator interface.
- *
  * Generates snippet for a specific step in a specific environment.
+ *
+ * @see SnippetRegistry
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

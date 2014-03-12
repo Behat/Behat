@@ -13,7 +13,7 @@ namespace Behat\Behat\Definition\Exception;
 use Behat\Testwork\Exception\TestworkException;
 
 /**
- * Definition exception interface.
+ * Represents an exception thrown during step definition handling.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -20,11 +20,11 @@ use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat pretty statistics printer.
+ * Prints exercise statistics.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettyStatisticsPrinter implements StatisticsPrinter
+final class PrettyStatisticsPrinter implements StatisticsPrinter
 {
     /**
      * @var CounterPrinter

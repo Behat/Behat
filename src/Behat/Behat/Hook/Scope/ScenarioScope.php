@@ -15,7 +15,7 @@ use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
- * Behat scenario hook scope interface.
+ * Represents a scenario hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

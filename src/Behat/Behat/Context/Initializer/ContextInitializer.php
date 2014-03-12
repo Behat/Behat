@@ -13,9 +13,7 @@ namespace Behat\Behat\Context\Initializer;
 use Behat\Behat\Context\Context;
 
 /**
- * Context initializer interface.
- *
- * Initializes custom contexts.
+ * Initializes contexts using custom logic.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

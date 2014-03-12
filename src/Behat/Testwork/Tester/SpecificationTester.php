@@ -16,7 +16,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Prepares and tests provided specification.
+ * Prepares and tests provided specification against provided environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

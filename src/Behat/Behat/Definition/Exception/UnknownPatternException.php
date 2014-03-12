@@ -13,11 +13,11 @@ namespace Behat\Behat\Definition\Exception;
 use InvalidArgumentException;
 
 /**
- * Behat unknown pattern exception.
+ * Represents an exception caused by an unrecognised definition pattern.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class UnknownPatternException extends InvalidArgumentException implements DefinitionException
+final class UnknownPatternException extends InvalidArgumentException implements DefinitionException
 {
     /**
      * @var string

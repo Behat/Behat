@@ -16,15 +16,13 @@ use Behat\Behat\Context\Exception\WrongContextClassException;
 use Behat\Testwork\Environment\StaticEnvironment;
 
 /**
- * Uninitialized context environment.
- *
- * Environment based on uninitialized context objects (classes).
+ * Context environment based on a list of context classes.
  *
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class UninitializedContextEnvironment extends StaticEnvironment implements ContextEnvironment
+final class UninitializedContextEnvironment extends StaticEnvironment implements ContextEnvironment
 {
     /**
      * @var string[]
@@ -60,9 +58,7 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
     }
 
     /**
-     * Checks if environment has any contexts registered.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function hasContexts()
     {
@@ -70,13 +66,19 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
     }
 
     /**
-     * Returns list of registered context classes.
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getContextClasses()
     {
         return array_keys($this->contextClasses);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasContextClass($class)
+    {
+        return isset($this->contextClasses[$class]);
     }
 
     /**
@@ -87,17 +89,5 @@ class UninitializedContextEnvironment extends StaticEnvironment implements Conte
     public function getContextClassesWithArguments()
     {
         return $this->contextClasses;
-    }
-
-    /**
-     * Checks if environment contains context with specified class name.
-     *
-     * @param string $class
-     *
-     * @return Boolean
-     */
-    public function hasContextClass($class)
-    {
-        return isset($this->contextClasses[$class]);
     }
 }

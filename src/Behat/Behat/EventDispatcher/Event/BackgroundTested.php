@@ -17,7 +17,7 @@ use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
- * Behat background tested event.
+ * Represents a background event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

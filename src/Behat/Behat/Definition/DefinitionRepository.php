@@ -15,11 +15,11 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
 
 /**
- * Definition repository.
+ * Provides step definitions using environment manager.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionRepository
+final class DefinitionRepository
 {
     /**
      * @var EnvironmentManager

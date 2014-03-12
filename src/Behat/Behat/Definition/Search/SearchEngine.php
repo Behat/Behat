@@ -10,15 +10,16 @@
 
 namespace Behat\Behat\Definition\Search;
 
+use Behat\Behat\Definition\DefinitionFinder;
 use Behat\Behat\Definition\SearchResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Definition search engine.
- *
  * Searches for a step definition in a specific environment.
+ *
+ * @see DefinitionFinder
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

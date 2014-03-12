@@ -22,13 +22,11 @@ use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 
 /**
- * Behat in-runtime background tester.
- *
- * Background tester executing background tests in the runtime.
+ * Tester executing background tests in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeBackgroundTester implements BackgroundTester
+final class RuntimeBackgroundTester implements BackgroundTester
 {
     /**
      * @var StepTester

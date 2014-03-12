@@ -14,11 +14,14 @@ use Behat\Behat\Definition\Definition;
 use RuntimeException;
 
 /**
- * Ambiguous step match exception.
+ * Represents an exception caused by an ambiguous step definition match.
+ *
+ * If multiple definitions match the same step, behat is not able to determine which one is better and thus this
+ * exception is thrown and test suite is stopped.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AmbiguousMatchException extends RuntimeException implements SearchException
+final class AmbiguousMatchException extends RuntimeException implements SearchException
 {
     /**
      * @var string

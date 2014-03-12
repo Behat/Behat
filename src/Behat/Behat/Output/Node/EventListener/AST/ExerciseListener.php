@@ -36,13 +36,11 @@ use Behat\Testwork\Tester\Result\ExceptionResult;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Behat exercise listener.
- *
  * Listens to entire exercise, collects statistics and then delegates it to the printer.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExerciseListener implements EventListener
+final class ExerciseListener implements EventListener
 {
     /**
      * @var StatisticsPrinter

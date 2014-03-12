@@ -24,13 +24,11 @@ use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 
 /**
- * Behat in-runtime scenario tester.
- *
- * Scenario tester executing scenario and outline example tests in the runtime.
+ * Tester executing scenario or example tests in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RuntimeScenarioTester implements ScenarioTester
+final class RuntimeScenarioTester implements ScenarioTester
 {
     /**
      * @var StepTester

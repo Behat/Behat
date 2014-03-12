@@ -13,11 +13,11 @@ namespace Behat\Behat\Hook\Call;
 use Behat\Behat\Hook\Scope\FeatureScope;
 
 /**
- * Before feature hook.
+ * Represents a BeforeFeature hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BeforeFeature extends RuntimeFeatureHook
+final class BeforeFeature extends RuntimeFeatureHook
 {
     /**
      * Initializes hook.
@@ -32,9 +32,7 @@ class BeforeFeature extends RuntimeFeatureHook
     }
 
     /**
-     * Returns hook name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

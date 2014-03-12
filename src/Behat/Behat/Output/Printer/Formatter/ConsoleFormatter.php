@@ -13,11 +13,11 @@ namespace Behat\Behat\Output\Printer\Formatter;
 use Symfony\Component\Console\Formatter\OutputFormatter as BaseOutputFormatter;
 
 /**
- * Behat console output formatter.
+ * Symfony2 Console output formatter extended with custom highlighting tokens support.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConsoleFormatter extends BaseOutputFormatter
+final class ConsoleFormatter extends BaseOutputFormatter
 {
     const CUSTOM_PATTERN = '/{\+([a-z-_]+)}(.*?){\-\\1}/si';
 

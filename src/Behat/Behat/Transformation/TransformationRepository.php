@@ -15,11 +15,11 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
 
 /**
- * Transformation repository.
+ * Provides transofmrations using environment manager.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TransformationRepository
+final class TransformationRepository
 {
     /**
      * @var EnvironmentManager

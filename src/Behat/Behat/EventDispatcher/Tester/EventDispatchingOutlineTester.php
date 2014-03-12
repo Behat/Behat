@@ -20,13 +20,11 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Behat event-dispatching outline tester.
- *
  * Outline tester dispatching BEFORE/AFTER events during tests.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatchingOutlineTester implements OutlineTester
+final class EventDispatchingOutlineTester implements OutlineTester
 {
     /**
      * @var OutlineTester

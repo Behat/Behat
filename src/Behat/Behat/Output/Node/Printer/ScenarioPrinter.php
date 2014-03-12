@@ -16,8 +16,6 @@ use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat scenario printer.
- *
  * Prints scenario headers and footers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

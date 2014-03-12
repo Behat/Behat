@@ -16,7 +16,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Prepares and tests provided exercise.
+ * Prepares and tests provided exercise specifications.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

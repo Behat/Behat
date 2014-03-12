@@ -14,7 +14,7 @@ use Behat\Testwork\Output\Exception\OutputException;
 use InvalidArgumentException;
 
 /**
- * Behat node visitor exception.
+ * Represents an exception caused by a request for non-existent node visitor.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

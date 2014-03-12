@@ -11,11 +11,11 @@
 namespace Behat\Behat\Definition\Call;
 
 /**
- * Then-step definition.
+ * Then steps definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Then extends RuntimeDefinition
+final class Then extends RuntimeDefinition
 {
     /**
      * Initializes definition.

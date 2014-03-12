@@ -14,13 +14,11 @@ use Behat\Behat\Snippet\Appender\SnippetAppender;
 use Behat\Behat\Snippet\Printer\SnippetPrinter;
 
 /**
- * Snippet writer.
- *
  * Prints or appends snippets to a specific environment using registered appenders and printers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SnippetWriter
+final class SnippetWriter
 {
     /**
      * @var SnippetAppender[]

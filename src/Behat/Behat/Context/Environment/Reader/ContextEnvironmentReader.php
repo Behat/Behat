@@ -14,16 +14,15 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Reader\ContextReader;
 use Behat\Testwork\Call\Callee;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\Environment\Exception\EnvironmentReadException;
 use Behat\Testwork\Environment\Reader\EnvironmentReader;
 
 /**
- * Context-based environment reader.
- *
- * Reads context environment callees using registered context loaders.
+ * Reads context-based environment callees using registered context loaders.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextEnvironmentReader implements EnvironmentReader
+final class ContextEnvironmentReader implements EnvironmentReader
 {
     /**
      * @var ContextReader[]
@@ -46,11 +45,7 @@ class ContextEnvironmentReader implements EnvironmentReader
     }
 
     /**
-     * Checks if reader supports an environment.
-     *
-     * @param Environment $environment
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsEnvironment(Environment $environment)
     {
@@ -58,14 +53,17 @@ class ContextEnvironmentReader implements EnvironmentReader
     }
 
     /**
-     * Reads callees from an environment.
-     *
-     * @param ContextEnvironment $environment
-     *
-     * @return Callee[]
+     * {@inheritdoc}
      */
     public function readEnvironmentCallees(Environment $environment)
     {
+        if (!$environment instanceof ContextEnvironment) {
+            throw new EnvironmentReadException(sprintf(
+                'ContextEnvironmentReader does not support `%s` environment.',
+                get_class($environment)
+            ), $environment);
+        }
+
         $callees = array();
         foreach ($environment->getContextClasses() as $contextClass) {
             $callees = array_merge(

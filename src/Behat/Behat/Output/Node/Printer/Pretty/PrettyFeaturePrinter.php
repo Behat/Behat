@@ -18,13 +18,11 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Behat pretty feature printer.
- *
  * Prints feature header and footer.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettyFeaturePrinter implements FeaturePrinter
+final class PrettyFeaturePrinter implements FeaturePrinter
 {
     /**
      * @var string

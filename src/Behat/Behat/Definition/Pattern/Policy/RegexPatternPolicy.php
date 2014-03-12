@@ -14,11 +14,11 @@ use Behat\Behat\Definition\Pattern\Pattern;
 use Behat\Transliterator\Transliterator;
 
 /**
- * Behat regex pattern policy.
+ * Defines a way to handle regex patterns.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RegexPatternPolicy implements PatternPolicy
+final class RegexPatternPolicy implements PatternPolicy
 {
     /**
      * @var string[string]

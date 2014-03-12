@@ -23,13 +23,11 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Behat step listener.
- *
  * Listens to step events and call appropriate printers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepListener implements EventListener
+final class StepListener implements EventListener
 {
     /**
      * @var StepPrinter

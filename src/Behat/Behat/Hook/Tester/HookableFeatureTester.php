@@ -20,11 +20,11 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SpecificationTester;
 
 /**
- * Behat hookable feature tester.
+ * Feature tester which dispatches hooks during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookableFeatureTester implements SpecificationTester
+final class HookableFeatureTester implements SpecificationTester
 {
     /**
      * @var SpecificationTester

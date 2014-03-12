@@ -15,13 +15,11 @@ use Behat\Testwork\Suite\Setup\SuiteSetup;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Suite with paths setup.
- *
  * Sets up gherkin suite in the filesystem (creates feature folders).
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteWithPathsSetup implements SuiteSetup
+final class SuiteWithPathsSetup implements SuiteSetup
 {
     /**
      * @var string
@@ -45,11 +43,7 @@ class SuiteWithPathsSetup implements SuiteSetup
     }
 
     /**
-     * Checks if setup supports provided suite.
-     *
-     * @param Suite $suite
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsSuite(Suite $suite)
     {
@@ -57,9 +51,7 @@ class SuiteWithPathsSetup implements SuiteSetup
     }
 
     /**
-     * Sets up provided suite.
-     *
-     * @param Suite $suite
+     * {@inheritdoc}
      */
     public function setupSuite(Suite $suite)
     {
@@ -75,7 +67,7 @@ class SuiteWithPathsSetup implements SuiteSetup
      *
      * @param string $path
      */
-    protected function createFeatureDirectory($path)
+    private function createFeatureDirectory($path)
     {
         mkdir($path, 0777, true);
 

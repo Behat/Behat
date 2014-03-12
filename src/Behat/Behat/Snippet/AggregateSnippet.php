@@ -13,12 +13,11 @@ namespace Behat\Behat\Snippet;
 use Behat\Gherkin\Node\StepNode;
 
 /**
- * Aggregate snippet.
  * Aggregates multiple similar snippets with different targets and steps.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AggregateSnippet
+final class AggregateSnippet
 {
     /**
      * @var Snippet[]

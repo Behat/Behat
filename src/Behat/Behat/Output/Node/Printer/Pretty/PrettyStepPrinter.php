@@ -28,11 +28,11 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\ExceptionResult;
 
 /**
- * Behat step printer.
+ * Prints step.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettyStepPrinter implements StepPrinter
+final class PrettyStepPrinter implements StepPrinter
 {
     /**
      * @var StepTextPainter

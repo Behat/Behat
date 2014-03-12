@@ -26,8 +26,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Behat gherkin extension.
- *
  * Extends Behat with gherkin suites and features.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

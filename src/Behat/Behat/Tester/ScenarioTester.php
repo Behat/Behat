@@ -18,9 +18,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Behat scenario tester interface.
- *
- * This interface defines an API for Tree Scenario testers.
+ * Prepares and tests provided scenario object against provided environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

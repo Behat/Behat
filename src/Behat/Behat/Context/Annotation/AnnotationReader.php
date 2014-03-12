@@ -15,9 +15,7 @@ use Behat\Testwork\Call\Callee;
 use ReflectionMethod;
 
 /**
- * Context annotation reader interface.
- *
- * Reads custom annotation of a provided context method into a Callee. Used by AnnotatedContextReader.
+ * Reads custom annotation of a provided context method into a Callee.
  *
  * @see AnnotatedContextReader
  *
@@ -26,7 +24,7 @@ use ReflectionMethod;
 interface AnnotationReader
 {
     /**
-     * Loads custom callees associated with a provided method.
+     * Reads all callees associated with a provided method.
      *
      * @param string           $contextClass
      * @param ReflectionMethod $method

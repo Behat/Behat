@@ -14,8 +14,6 @@ use Behat\Behat\Snippet\AggregateSnippet;
 use Behat\Gherkin\Node\StepNode;
 
 /**
- * Snippet printer interface.
- *
  * Prints all snippets for a target.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

@@ -14,13 +14,11 @@ use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Behat console-based definition information printer.
- *
  * Prints definitions with full information about them.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
+final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
 {
     /**
      * @var null|string
@@ -38,10 +36,7 @@ class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
     }
 
     /**
-     * Prints definition.
-     *
-     * @param Suite        $suite
-     * @param Definition[] $definitions
+     * {@inheritdoc}
      */
     public function printDefinitions(Suite $suite, $definitions)
     {
@@ -69,10 +64,10 @@ class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
 
     /**
      * Extracts the formatted header from the definition.
-     * 
+     *
      * @param Suite      $suite
      * @param Definition $definition
-     * 
+     *
      * @return string[]
      */
     private function extractHeader(Suite $suite, Definition $definition)
@@ -92,10 +87,10 @@ class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
 
     /**
      * Extracts the formatted description from the definition.
-     * 
+     *
      * @param Suite      $suite
      * @param Definition $definition
-     * 
+     *
      * @return string[]
      */
     private function extractDescription(Suite $suite, Definition $definition)
@@ -117,10 +112,10 @@ class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
 
     /**
      * Extracts the formatted footer from the definition.
-     * 
+     *
      * @param Suite      $suite
      * @param Definition $definition
-     * 
+     *
      * @return string[]
      */
     private function extractFooter(Suite $suite, Definition $definition)

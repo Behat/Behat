@@ -8,15 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Hook\Exception;
+namespace Behat\Behat\Transformation\Exception;
 
-use Behat\Testwork\Call\Exception\BadCallbackException as BaseException;
+use Behat\Testwork\Exception\TestworkException;
 
 /**
- * Bad callback exception.
+ * Represents an exception caused by a transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BadCallbackException extends BaseException implements HookException
+interface TransformationException extends TestworkException
 {
 }

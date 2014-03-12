@@ -11,15 +11,15 @@
 namespace Behat\Behat\Definition\Pattern;
 
 use Behat\Behat\Definition\Exception\UnknownPatternException;
-use Behat\Behat\Definition\Exception\UnknownPatternTypeException;
+use Behat\Behat\Definition\Exception\UnsupportedPatternTypeException;
 use Behat\Behat\Definition\Pattern\Policy\PatternPolicy;
 
 /**
- * Pattern transformer.
+ * Transforms patterns using registered policies.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PatternTransformer
+final class PatternTransformer
 {
     /**
      * @var PatternPolicy[]
@@ -44,7 +44,7 @@ class PatternTransformer
      *
      * @return Pattern
      *
-     * @throws UnknownPatternTypeException
+     * @throws UnsupportedPatternTypeException
      */
     public function generatePattern($type, $stepText)
     {
@@ -54,7 +54,7 @@ class PatternTransformer
             }
         }
 
-        throw new UnknownPatternTypeException(sprintf('Can not find policy for a pattern type "%s".', $type), $type);
+        throw new UnsupportedPatternTypeException(sprintf('Can not find policy for a pattern type "%s".', $type), $type);
     }
 
     /**

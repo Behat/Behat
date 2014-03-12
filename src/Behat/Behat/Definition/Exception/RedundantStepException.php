@@ -14,11 +14,14 @@ use Behat\Behat\Definition\Definition;
 use RuntimeException;
 
 /**
- * Redundant step exception.
+ * Represents an exception caused by a redundant step definition.
+ *
+ * If multiple step definitions in the boundaries of the same suite use same regular expression, behat is not able
+ * to determine which one is better and thus this exception is thrown and test suite is stopped.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class RedundantStepException extends RuntimeException implements SearchException
+final class RedundantStepException extends RuntimeException implements SearchException
 {
     /**
      * Initializes redundant exception.

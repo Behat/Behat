@@ -15,7 +15,7 @@ use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
- * Behat step hook scope interface.
+ * Represents a step hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

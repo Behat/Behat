@@ -13,7 +13,7 @@ namespace Behat\Behat\Tester\Result;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Step test result interface.
+ * Extends Testwork test result with support for undefined status.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

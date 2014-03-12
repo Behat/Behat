@@ -11,7 +11,7 @@
 namespace Behat\Behat\Tester\Exception;
 
 /**
- * Behat tester exception interface.
+ * Represents an exception caused by a tester.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

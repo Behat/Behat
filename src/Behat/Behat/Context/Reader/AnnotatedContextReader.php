@@ -18,13 +18,11 @@ use ReflectionException;
 use ReflectionMethod;
 
 /**
- * Annotated context reader.
- *
  * Reads context callees by annotations using registered annotation readers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AnnotatedContextReader implements ContextReader
+final class AnnotatedContextReader implements ContextReader
 {
     const DOCLINE_TRIMMER_REGEX = '/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/';
 
@@ -55,12 +53,7 @@ class AnnotatedContextReader implements ContextReader
     }
 
     /**
-     * Loads annotation-based callees from context.
-     *
-     * @param ContextEnvironment $environment
-     * @param string             $contextClass
-     *
-     * @return Callee[]
+     * {@inheritdoc}
      */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {

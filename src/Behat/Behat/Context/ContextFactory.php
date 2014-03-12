@@ -16,13 +16,11 @@ use ReflectionClass;
 use ReflectionMethod;
 
 /**
- * Behat context factory.
- *
- * Creates contexts using registered argument resolvers and context initializers.
+ * Instantiates contexts using registered argument resolvers and context initializers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextFactory
+final class ContextFactory
 {
     /**
      * @var ArgumentResolver[]

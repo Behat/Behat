@@ -15,19 +15,18 @@ use Behat\Behat\Context\ContextFactory;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Context\Environment\UninitializedContextEnvironment;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\Environment\Exception\EnvironmentIsolationException;
 use Behat\Testwork\Environment\Handler\EnvironmentHandler;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Context-based environment handler.
- *
- * Handles build and initialisation of context-based environments using registered context initializers.
+ * Handles build and initialisation of the context-based environments.
  *
  * @see ContextFactory
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextEnvironmentHandler implements EnvironmentHandler
+final class ContextEnvironmentHandler implements EnvironmentHandler
 {
     /**
      * @var ContextFactory
@@ -59,11 +58,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
-     * Checks if handler supports provided suite.
-     *
-     * @param Suite $suite
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsSuite(Suite $suite)
     {
@@ -71,11 +66,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
-     * Builds environment object based on provided suite.
-     *
-     * @param Suite $suite
-     *
-     * @return UninitializedContextEnvironment
+     * {@inheritdoc}
      */
     public function buildEnvironment(Suite $suite)
     {
@@ -88,12 +79,7 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
-     * Checks if handler supports provided environment.
-     *
-     * @param Environment $environment
-     * @param mixed       $testSubject
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null)
     {
@@ -101,15 +87,17 @@ class ContextEnvironmentHandler implements EnvironmentHandler
     }
 
     /**
-     * Isolates provided environment.
-     *
-     * @param UninitializedContextEnvironment $uninitializedEnvironment
-     * @param mixed                           $testSubject
-     *
-     * @return InitializedContextEnvironment
+     * {@inheritdoc}
      */
     public function isolateEnvironment(Environment $uninitializedEnvironment, $testSubject = null)
     {
+        if (!$uninitializedEnvironment instanceof UninitializedContextEnvironment) {
+            throw new EnvironmentIsolationException(sprintf(
+                'ContextEnvironmentHandler does not support isolation of `%s` environment.',
+                get_class($uninitializedEnvironment)
+            ), $uninitializedEnvironment);
+        }
+
         $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
         foreach ($uninitializedEnvironment->getContextClassesWithArguments() as $class => $arguments) {
             $context = $this->factory->createContext($class, $arguments);

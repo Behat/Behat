@@ -14,7 +14,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
- * Behat feature hook scope interface.
+ * Represents a feature hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

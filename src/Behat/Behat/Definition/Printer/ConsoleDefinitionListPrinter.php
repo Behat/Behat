@@ -10,23 +10,17 @@
 
 namespace Behat\Behat\Definition\Printer;
 
-use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Behat console-based definition list printer.
- *
  * Prints simple definitions list.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConsoleDefinitionListPrinter extends ConsoleDefinitionPrinter
+final class ConsoleDefinitionListPrinter extends ConsoleDefinitionPrinter
 {
     /**
-     * Prints definition.
-     *
-     * @param Suite        $suite
-     * @param Definition[] $definitions
+     * {@inheritdoc}
      */
     public function printDefinitions(Suite $suite, $definitions)
     {
