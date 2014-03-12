@@ -32,7 +32,6 @@ class HookExtension implements Extension
      */
     const DISPATCHER_ID = 'hook.dispatcher';
     const REPOSITORY_ID = 'hook.repository';
-    const EVENT_SUBSCRIBER = 'hook.event_subscriber';
 
     /**
      * {@inheritdoc}
