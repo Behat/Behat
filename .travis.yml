@@ -33,4 +33,4 @@ before_script:
 
 script:
   - phpunit
-  - behat -fprogress --tags '~@php-version,'`php php_version_tags.php`
+  - behat -fprogress --strict --tags '~@php-version,'`php php_version_tags.php`
