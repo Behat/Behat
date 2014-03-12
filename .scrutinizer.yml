@@ -11,7 +11,7 @@ tools:
         enabled:              true
         command:              phpcs
         config:
-            standard:         PSR2
+            standard:         PSR1
         filter:
             excluded_paths:
                 - 'bin/*'
@@ -33,7 +33,7 @@ tools:
         enabled:              true
         command:              php-cs-fixer
         config:
-            level:            psr2
+            level:            psr1
         filter:
             excluded_paths:
                 - 'bin/*'
