@@ -35,11 +35,11 @@ final class NodeEventListeningFormatter implements Formatter
      */
     private $listener;
     /**
-     * @var
+     * @var string
      */
     private $name;
     /**
-     * @var
+     * @var string
      */
     private $description;
 
