@@ -70,7 +70,10 @@ final class ContextSnippetAppender implements SnippetAppender
             file_put_contents($path, $content);
 
             if ($this->logger) {
-                $this->logger->fileUpdated($path, 'Snippets has been added');
+                $steps = $snippet->getSteps();
+                $reason = sprintf("`<comment>%s</comment>` definition added", $steps[0]->getText());
+
+                $this->logger->fileUpdated($path, $reason);
             }
         }
     }

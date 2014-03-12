@@ -47,7 +47,7 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
     {
         $this->output->writeln(
             sprintf(
-                '<info>+d</info> %s <comment>- %s</comment>',
+                '<info>+d</info> %s - %s',
                 str_replace($this->basePath . DIRECTORY_SEPARATOR, '', realpath($path)),
                 $reason
             )
@@ -61,7 +61,7 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
     {
         $this->output->writeln(
             sprintf(
-                '<info>+f</info> %s <comment>- %s</comment>',
+                '<info>+f</info> %s - %s',
                 str_replace($this->basePath . DIRECTORY_SEPARATOR, '', realpath($path)),
                 $reason
             )
@@ -75,7 +75,7 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
     {
         $this->output->writeln(
             sprintf(
-                '<info>u</info> %s <comment>- %s</comment>',
+                '<info>u</info> %s - %s',
                 str_replace($this->basePath . DIRECTORY_SEPARATOR, '', realpath($path)),
                 $reason
             )
