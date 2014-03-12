@@ -103,8 +103,8 @@ class OutputExtension implements Extension
                     ->ifTrue(function($a) {
                         return is_array($a) && !isset($a['enabled']);
                     })
-                    ->then(function($a) { return
-                        array_merge($a, array('enabled' => true));
+                    ->then(function($a) {
+                        return array_merge($a, array('enabled' => true));
                     })
                 ->end()
                 ->useAttributeAsKey('name')
