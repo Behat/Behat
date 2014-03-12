@@ -84,7 +84,7 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
     /**
      * Returns context classes with their arguments.
      *
-     * @return string[]
+     * @return string[][]
      */
     public function getContextClassesWithArguments()
     {
