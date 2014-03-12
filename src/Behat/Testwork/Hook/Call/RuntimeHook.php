@@ -21,7 +21,7 @@ use Behat\Testwork\Hook\Hook;
 abstract class RuntimeHook extends RuntimeCallee implements Hook
 {
     /**
-     * @var string[]
+     * @var string
      */
     private $scopeName;
 
@@ -40,9 +40,7 @@ abstract class RuntimeHook extends RuntimeCallee implements Hook
     }
 
     /**
-     * Returns hook scope name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getScopeName()
     {

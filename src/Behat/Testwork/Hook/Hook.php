@@ -27,9 +27,9 @@ interface Hook extends Callee
     public function getName();
 
     /**
-     * Returns array of all hooked event names.
+     * Returns hook scope name.
      *
-     * @return string[]
+     * @return string
      */
     public function getScopeName();
 
