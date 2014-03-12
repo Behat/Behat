@@ -1,35 +1,36 @@
 <?php return array(
-    'en' => array(
-        'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> has missing steps. Define them with these snippets:</snippet_undefined>',
-        'snippet_missing_title'  => '<snippet_undefined>Snippets for the following steps in the <snippet_keyword>%1%</snippet_keyword> suite were not generated (check your configuration):</snippet_undefined>',
-        'failed_scenarios_title' => 'Failed scenarios:',
-        'failed_hooks_title'     => 'Failed hooks:',
-        'failed_steps_title'     => 'Failed steps:',
-        'pending_steps_title'    => 'Pending steps:',
-        'scenarios_count'        => '{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios',
-        'steps_count'            => '{0} No steps|{1} 1 step|]1,Inf] %1% steps',
-        'passed_count'           => '[1,Inf] %1% passed',
-        'failed_count'           => '[1,Inf] %1% failed',
-        'pending_count'          => '[1,Inf] %1% pending',
-        'undefined_count'        => '[1,Inf] %1% undefined',
-        'skipped_count'          => '[1,Inf] %1% skipped',
+    'en'    => array(
+        'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> has missing steps. Define them with these snippets:</snippet_undefined>',
+        'snippet_missing_title'   => '<snippet_undefined>Snippets for the following steps in the <snippet_keyword>%1%</snippet_keyword> suite were not generated (check your configuration):</snippet_undefined>',
+        'skipped_scenarios_title' => 'Skipped scenarios:',
+        'failed_scenarios_title'  => 'Failed scenarios:',
+        'failed_hooks_title'      => 'Failed hooks:',
+        'failed_steps_title'      => 'Failed steps:',
+        'pending_steps_title'     => 'Pending steps:',
+        'scenarios_count'         => '{0} No scenarios|{1} 1 scenario|]1,Inf] %1% scenarios',
+        'steps_count'             => '{0} No steps|{1} 1 step|]1,Inf] %1% steps',
+        'passed_count'            => '[1,Inf] %1% passed',
+        'failed_count'            => '[1,Inf] %1% failed',
+        'pending_count'           => '[1,Inf] %1% pending',
+        'undefined_count'         => '[1,Inf] %1% undefined',
+        'skipped_count'           => '[1,Inf] %1% skipped',
     ),
-    'cs' => array(
+    'cs'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> obsahuje chybné kroky. Definujte je za použití následujícího kódu:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Snippety pro následující kroky v sadě <snippet_keyword>%1%</snippet_keyword> nebyly vygenerovány (zkontrolujte správnost konfigurace):</snippet_undefined>',
         'failed_scenarios_title' => 'Chybné scénáře:',
         'failed_hooks_title'     => 'Chybné hooky:',
         'failed_steps_title'     => 'Chybné kroky:',
         'pending_steps_title'    => 'Čekající kroky:',
-        'scenarios_count'     => '{0} Žádný scénář|{1} 1 scénář|{2,3,4} %1% scénáře|]4,Inf] %1% scénářů',
-        'steps_count'         => '{0} Žádné kroky|{1} 1 krok|{2,3,4} %1% kroky|]4,Inf] %1% kroků',
-        'passed_count'        => '{1} %1% prošel|{2,3,4} %1% prošly|]4,Inf] %1% prošlo',
-        'failed_count'        => '{1} %1% selhal|{2,3,4} %1% selhaly|]4,Inf] %1% selhalo',
-        'pending_count'       => '{1} %1% čeká|{2,3,4} %1% čekají|]4,Inf] %1% čeká',
-        'undefined_count'     => '{1} %1% nedefinován|{2,3,4} %1% nedefinovány|]4,Inf] %1% nedefinováno',
-        'skipped_count'       => '{1} %1% přeskočen|{2,3,4} %1% přeskočeny|]4,Inf] %1% přeskočeno',
+        'scenarios_count'        => '{0} Žádný scénář|{1} 1 scénář|{2,3,4} %1% scénáře|]4,Inf] %1% scénářů',
+        'steps_count'            => '{0} Žádné kroky|{1} 1 krok|{2,3,4} %1% kroky|]4,Inf] %1% kroků',
+        'passed_count'           => '{1} %1% prošel|{2,3,4} %1% prošly|]4,Inf] %1% prošlo',
+        'failed_count'           => '{1} %1% selhal|{2,3,4} %1% selhaly|]4,Inf] %1% selhalo',
+        'pending_count'          => '{1} %1% čeká|{2,3,4} %1% čekají|]4,Inf] %1% čeká',
+        'undefined_count'        => '{1} %1% nedefinován|{2,3,4} %1% nedefinovány|]4,Inf] %1% nedefinováno',
+        'skipped_count'          => '{1} %1% přeskočen|{2,3,4} %1% přeskočeny|]4,Inf] %1% přeskočeno',
     ),
-    'de' => array(
+    'de'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> hat fehlende Schritte. Definiere diese mit den folgenden Snippets:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Snippets für die folgenden Schritte in der <snippet_keyword>%1%</snippet_keyword> Suite wurden nicht generiert (Konfiguration überprüfen):</snippet_undefined>',
         'failed_scenarios_title' => 'Fehlgeschlagene Szenarien:',
@@ -44,7 +45,7 @@
         'undefined_count'        => '[1,Inf] %1% nicht definiert',
         'skipped_count'          => '[1,Inf] %1% übersprungen',
     ),
-    'es' => array(
+    'es'    => array(
         'snippet_proposal_title' => '<snippet_undefined>A <snippet_keyword>%1%</snippet_keyword> le faltan pasos. Defínelos con estos pasos:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Las plantillas para los siguientes pasos en <snippet_keyword>%1%</snippet_keyword> no fueron generadas (revisa tu configuración):</snippet_undefined>',
         'failed_scenarios_title' => 'Escenarios fallidos:',
@@ -59,7 +60,7 @@
         'undefined_count'        => '[1,Inf] %1% por definir',
         'skipped_count'          => '[1,Inf] %1% salteadas',
     ),
-    'fr' => array(
+    'fr'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> a des étapes manquantes. Définissez-les avec les modèles suivants :</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Les modèles des étapes de la suite <snippet_keyword>%1%</snippet_keyword> n\'ont pas été générés (vérifiez votre configuration):</snippet_undefined>',
         'failed_scenarios_title' => 'Scénarios échoués:',
@@ -74,7 +75,7 @@
         'undefined_count'        => '[1,Inf] %1% indéfinis',
         'skipped_count'          => '[1,Inf] %1% ignorés',
     ),
-    'it' => array(
+    'it'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> ha dei passaggi mancanti. Definiscili con questi snippet:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Gli snippet per i seguenti passaggi della suite <snippet_keyword>%1%</snippet_keyword> non sono stati generati (verifica la configurazione):</snippet_undefined>',
         'failed_scenarios_title' => 'Scenari falliti:',
@@ -89,7 +90,7 @@
         'undefined_count'        => '{1} 1 non definito|]1,Inf] %1% non definiti',
         'skipped_count'          => '{1} 1 ignorato|]1,Inf] %1% ignorati',
     ),
-    'nl' => array(
+    'nl'    => array(
         'snippet_proposal_title' => '<snippet_undefined>Ontbrekende stappen in <snippet_keyword>%1%</snippet_keyword>. Definieer ze met de volgende fragmenten:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Fragmenten voor de volgende stappen in de <snippet_keyword>%1%</snippet_keyword> suite werden niet gegenereerd (controleer de configuratie):</snippet_undefined>',
         'failed_scenarios_title' => 'Gefaalde scenario\'s:',
@@ -104,7 +105,7 @@
         'undefined_count'        => '[1,Inf] %1% niet gedefinieerd',
         'skipped_count'          => '[1,Inf] %1% overgeslagen',
     ),
-    'no' => array(
+    'no'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> mangler steg. Definer dem med disse snuttene:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Snutter for de følgende stegene i <snippet_keyword>%1%</snippet_keyword>-samlingen ble ikke laget. (Sjekk konfigurasjonen din.):</snippet_undefined>',
         'failed_scenarios_title' => 'Feilende scenarier:',
@@ -119,7 +120,7 @@
         'undefined_count'        => '[1,Inf] %1% ikke definert',
         'skipped_count'          => '[1,Inf] %1% hoppet over',
     ),
-    'pl' => array (
+    'pl'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> zawiera brakujące kroki. Utwórz je korzystając z tych fragmentów kodu:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Fragmenty kodu dla następujących kroków <snippet_keyword>%1%</snippet_keyword> nie zostały wygenerowane (sprawdź swoją konfigurację):</snippet_undefined>',
         'failed_scenarios_title' => 'Nieudane scenariusze:',
@@ -134,7 +135,7 @@
         'undefined_count'        => '{1} %1% niezdefiniowany|{2,3,4,22,23,24,32,33,34,42,43,44} %1% niezdefiniowane|]4,Inf] %1% niezdefiniowanych',
         'skipped_count'          => '{1} %1% pominięty|{2,3,4,22,23,24,32,33,34,42,43,44} %1% pominięte|]4,Inf] %1% pominiętych',
     ),
-    'pt' => array(
+    'pt'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> contém definições em falta. Defina-as com estes exemplos:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Os exemplos para as seguintes definições da suite <snippet_keyword>%1%</snippet_keyword> não foram gerados (verifique a configuração):</snippet_undefined>',
         'failed_scenarios_title' => 'Cenários que falharam:',
@@ -164,19 +165,20 @@
         'undefined_count'        => '[1,Inf] %1% indefinido',
         'skipped_count'          => '[1,Inf] %1% pulado',
     ),
-    'ru' => array(
-        'snippet_proposal_title' => '<snippet_keyword>%1%</snippet_keyword> <snippet_undefined>не содержит необходимых определений. Вы можете добавить их используя шаблоны:</snippet_undefined>',
-        'snippet_missing_title'  => '<snippet_undefined>Шаблоны для следующих шагов в среде <snippet_keyword>%1%</snippet_keyword> не были сгенерированы (проверьте ваши настройки):</snippet_undefined>',
-        'failed_scenarios_title' => 'Проваленные сценарии:',
-        'failed_hooks_title'     => 'Проваленные хуки:',
-        'failed_steps_title'     => 'Проваленные шаги:',
-        'pending_steps_title'    => 'Шаги в ожидании:',
-        'scenarios_count'        => '{0} Нет сценариев|{1,21,31} %1% сценарий|{2,3,4,22,23,24} %1% сценария|]4,Inf] %1% сценариев',
-        'steps_count'            => '{0} Нет шагов|{1,21,31} %1% шаг|{2,3,4,22,23,24} %1% шага|]4,Inf] %1% шагов',
-        'passed_count'           => '{1,21,31} %1% пройден|]1,Inf] %1% пройдено',
-        'failed_count'           => '{1,21,31} %1% провален|]1,Inf] %1% провалено',
-        'pending_count'          => '[1,Inf] %1% в ожидании',
-        'undefined_count'        => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
-        'skipped_count'          => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
+    'ru'    => array(
+        'snippet_proposal_title'  => '<snippet_keyword>%1%</snippet_keyword> <snippet_undefined>не содержит необходимых определений. Вы можете добавить их используя шаблоны:</snippet_undefined>',
+        'snippet_missing_title'   => '<snippet_undefined>Шаблоны для следующих шагов в среде <snippet_keyword>%1%</snippet_keyword> не были сгенерированы (проверьте ваши настройки):</snippet_undefined>',
+        'skipped_scenarios_title' => 'Пропущенные сценарии:',
+        'failed_scenarios_title'  => 'Проваленные сценарии:',
+        'failed_hooks_title'      => 'Проваленные хуки:',
+        'failed_steps_title'      => 'Проваленные шаги:',
+        'pending_steps_title'     => 'Шаги в ожидании:',
+        'scenarios_count'         => '{0} Нет сценариев|{1,21,31} %1% сценарий|{2,3,4,22,23,24} %1% сценария|]4,Inf] %1% сценариев',
+        'steps_count'             => '{0} Нет шагов|{1,21,31} %1% шаг|{2,3,4,22,23,24} %1% шага|]4,Inf] %1% шагов',
+        'passed_count'            => '{1,21,31} %1% пройден|]1,Inf] %1% пройдено',
+        'failed_count'            => '{1,21,31} %1% провален|]1,Inf] %1% провалено',
+        'pending_count'           => '[1,Inf] %1% в ожидании',
+        'undefined_count'         => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
+        'skipped_count'           => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
     ),
 );

@@ -11,74 +11,51 @@
 namespace Behat\Testwork\Tester;
 
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Specification\SpecificationIterator;
-use Behat\Testwork\Tester\Result\SuiteTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Result\TestResults;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Testwork suite tester.
+ * Testwork suite tester interface.
  *
- * Tests provided suites. Suite is a named set of test specifications.
+ * This interface defines an API for Testwork suite testers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteTester
+interface SuiteTester
 {
     /**
-     * @var SpecificationTester
-     */
-    private $specificationTester;
-    /**
-     * @var EnvironmentManager
-     */
-    private $environmentManager;
-
-    /**
-     * Initializes tester.
+     * Sets up suite for a test.
      *
-     * @param SpecificationTester $specificationTester
-     * @param EnvironmentManager  $environmentManager
+     * @param Environment           $env
+     * @param SpecificationIterator $iterator
+     * @param Boolean               $skip
+     *
+     * @return Setup
      */
-    public function __construct(SpecificationTester $specificationTester, EnvironmentManager $environmentManager)
-    {
-        $this->specificationTester = $specificationTester;
-        $this->environmentManager = $environmentManager;
-    }
+    public function setUp(Environment $env, SpecificationIterator $iterator, $skip);
 
     /**
      * Tests provided suite specifications.
      *
-     * @param SpecificationIterator $specificationIterator
+     * @param Environment           $env
+     * @param SpecificationIterator $iterator
      * @param Boolean               $skip
      *
      * @return TestResult
      */
-    public function test(SpecificationIterator $specificationIterator, $skip = false)
-    {
-        $environment = $this->environmentManager->buildEnvironment($specificationIterator->getSuite());
-        $result = $this->testSuite($environment, $specificationIterator, $skip);
-
-        return new TestResult($result->getResultCode());
-    }
+    public function test(Environment $env, SpecificationIterator $iterator, $skip);
 
     /**
-     * Tests provided test specifications against provided environment.
+     * Tears down suite after a test.
      *
-     * @param Environment           $environment
+     * @param Environment           $env
      * @param SpecificationIterator $iterator
      * @param Boolean               $skip
+     * @param TestResult            $result
      *
-     * @return SuiteTestResult
+     * @return Teardown
      */
-    protected function testSuite(Environment $environment, SpecificationIterator $iterator, $skip = false)
-    {
-        $results = array();
-        foreach ($iterator as $specification) {
-            $results[] = $this->specificationTester->test($environment, $specification, $skip);
-        }
-
-        return new SuiteTestResult(new TestResults($results));
-    }
+    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result);
 }

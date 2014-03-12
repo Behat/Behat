@@ -10,66 +10,48 @@
 
 namespace Behat\Testwork\Tester;
 
-use Behat\Testwork\Specification\GroupedSpecificationIterator;
 use Behat\Testwork\Specification\SpecificationIterator;
-use Behat\Testwork\Tester\Result\ExerciseTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Result\TestResults;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Testwork exercise.
+ * Testwork exercise interface.
  *
- * Runs tests against all provided suites.
+ * This interface defines an API for Testwork exercise testers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class Exercise
+interface Exercise
 {
     /**
-     * @var SuiteTester
+     * Sets up exercise for a test.
+     *
+     * @param SpecificationIterator[] $iterators
+     * @param Boolean                 $skip
+     *
+     * @return Setup
      */
-    private $suiteTester;
+    public function setUp(array $iterators, $skip);
 
     /**
-     * Initializes tester.
+     * Tests suites specifications.
      *
-     * @param SuiteTester $suiteTester
-     */
-    public function __construct(SuiteTester $suiteTester)
-    {
-        $this->suiteTester = $suiteTester;
-    }
-
-    /**
-     * Tests suites subjects.
-     *
-     * @param SpecificationIterator[] $subjectIterators
+     * @param SpecificationIterator[] $iterators
      * @param Boolean                 $skip
      *
      * @return TestResult
      */
-    public function run(array $subjectIterators, $skip = false)
-    {
-        $result = $this->runExercise($subjectIterators, $skip);
-
-        return new TestResult($result->getResultCode());
-    }
+    public function test(array $iterators, $skip);
 
     /**
-     * Tests provided suites.
+     * Tears down exercise after a test.
      *
-     * @param SpecificationIterator[] $subjectIterators
+     * @param SpecificationIterator[] $iterators
      * @param Boolean                 $skip
+     * @param TestResult              $result
      *
-     * @return ExerciseTestResult
+     * @return Teardown
      */
-    protected function runExercise(array $subjectIterators, $skip = false)
-    {
-        $results = array();
-        foreach (GroupedSpecificationIterator::group($subjectIterators) as $subjectIterator) {
-            $results[] = $this->suiteTester->test($subjectIterator, $skip);
-        }
-
-        return new ExerciseTestResult(new TestResults($results));
-    }
+    public function tearDown(array $iterators, $skip, TestResult $result);
 }

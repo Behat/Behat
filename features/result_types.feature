@@ -249,13 +249,11 @@ Feature: Different result types
 
       --- Failed steps:
 
-          features/coffee.feature:9
-            Then I should see 12$ on the screen # features/coffee.feature:10
-              Failed asserting that 10 matches expected '12'.
+          Then I should see 12$ on the screen # features/coffee.feature:10
+            Failed asserting that 10 matches expected '12'.
 
-          features/coffee.feature:12
-            Then I should see 31$ on the screen # features/coffee.feature:14
-              Failed asserting that 30 matches expected '31'.
+          Then I should see 31$ on the screen # features/coffee.feature:14
+            Failed asserting that 30 matches expected '31'.
 
       2 scenarios (2 failed)
       6 steps (3 passed, 2 failed, 1 skipped)
@@ -337,13 +335,11 @@ Feature: Different result types
 
       --- Failed steps:
 
-          features/coffee.feature:9
-            Given I have no water # features/coffee.feature:10
-              NO water in coffee machine!!! (Exception)
+          Given I have no water # features/coffee.feature:10
+            NO water in coffee machine!!! (Exception)
 
-          features/coffee.feature:15
-            And I have no electricity # features/coffee.feature:17
-              NO electricity in coffee machine!!! (Exception)
+          And I have no electricity # features/coffee.feature:17
+            NO electricity in coffee machine!!! (Exception)
 
       2 scenarios (2 failed)
       10 steps (3 passed, 2 failed, 5 skipped)
@@ -397,11 +393,10 @@ Feature: Different result types
 
       --- Failed steps:
 
-          features/coffee.feature:6
-            Given human have chosen "Latte" # features/coffee.feature:7
-              Ambiguous match of "human have chosen "Latte"":
-              to `/^human have chosen "([^"]*)"$/` from FeatureContext::chosen()
-              to `/^human have chosen "Latte"$/` from FeatureContext::chosenLatte()
+          Given human have chosen "Latte" # features/coffee.feature:7
+            Ambiguous match of "human have chosen "Latte"":
+            to `/^human have chosen "([^"]*)"$/` from FeatureContext::chosen()
+            to `/^human have chosen "Latte"$/` from FeatureContext::chosenLatte()
 
       1 scenario (1 failed)
       2 steps (1 failed, 1 skipped)
@@ -490,9 +485,8 @@ Feature: Different result types
 
       --- Failed steps:
 
-          features/coffee.feature:6
-            Given customer bought coffee # features/coffee.feature:7
-              User Error: some error in features/bootstrap/FeatureContext.php line 12
+          Given customer bought coffee # features/coffee.feature:7
+            User Error: some error in features/bootstrap/FeatureContext.php line 12
 
       1 scenario (1 failed)
       2 steps (1 failed, 1 skipped)

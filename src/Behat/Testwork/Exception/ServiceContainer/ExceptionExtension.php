@@ -10,12 +10,15 @@
 
 namespace Behat\Testwork\Exception\ServiceContainer;
 
+use Behat\Testwork\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Testwork autoloader extension.
@@ -71,6 +74,11 @@ class ExceptionExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
+        $builder
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->scalarNode('verbosity')
+            ->defaultValue(OutputPrinter::VERBOSITY_NORMAL);
     }
 
     /**
@@ -78,8 +86,9 @@ class ExceptionExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadPresenter($container);
+        $this->loadPresenter($container, $config['verbosity']);
         $this->loadDefaultStringers($container);
+        $this->loadVerbosityController($container);
     }
 
     /**
@@ -94,10 +103,14 @@ class ExceptionExtension implements Extension
      * Loads exception presenter.
      *
      * @param ContainerBuilder $container
+     * @param integer          $verbosity
      */
-    protected function loadPresenter(ContainerBuilder $container)
+    protected function loadPresenter(ContainerBuilder $container, $verbosity)
     {
-        $definition = new Definition('Behat\Testwork\Exception\ExceptionPresenter', array('%paths.base%'));
+        $definition = new Definition('Behat\Testwork\Exception\ExceptionPresenter', array(
+            '%paths.base%',
+            $verbosity
+        ));
         $container->setDefinition(self::PRESENTER_ID, $definition);
     }
 
@@ -126,5 +139,19 @@ class ExceptionExtension implements Extension
         foreach ($references as $reference) {
             $definition->addMethodCall('registerExceptionStringer', array($reference));
         }
+    }
+
+    /**
+     * Loads verbosity controller.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadVerbosityController($container)
+    {
+        $definition = new Definition('Behat\Testwork\Exception\Cli\VerbosityController', array(
+            new Reference(self::PRESENTER_ID)
+        ));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 1000));
+        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exception_verbosity', $definition);
     }
 }

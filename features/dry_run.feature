@@ -93,14 +93,14 @@ Feature: Dry run
         As a little kid
         I need to have an apple in my pocket
 
-        ┌─ @BeforeScenario # FeatureContext::beforeScenario()
-        │
-        │  HOOK: before scenario
-        │
         Background:
           Given I have 3 apples
             │ STEP: I have 3 apples
 
+        ┌─ @BeforeScenario # FeatureContext::beforeScenario()
+        │
+        │  HOOK: before scenario
+        │
         Scenario: I'm little hungry
           When I ate 1 apple
             │ STEP: I ate 1 apples
@@ -112,6 +112,8 @@ Feature: Dry run
         │  HOOK: before scenario
         │
         Scenario: Found more apples
+          Given I have 3 apples
+            │ STEP: I have 3 apples
           When I found 5 apples
             │ STEP: I found 5 apples
           Then I should have 8 apples
@@ -122,6 +124,8 @@ Feature: Dry run
         │  HOOK: before scenario
         │
         Scenario: Found more apples
+          Given I have 3 apples
+            │ STEP: I have 3 apples
           When I found 2 apples
             │ STEP: I found 2 apples
           Then I should have 5 apples
@@ -175,8 +179,8 @@ Feature: Dry run
         As a little kid
         I need to have an apple in my pocket
 
-        Background:                   # features/apples.feature:6
-          Given I have 3 apples       # FeatureContext::iHaveApples()
+        Background:             # features/apples.feature:6
+          Given I have 3 apples # FeatureContext::iHaveApples()
 
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
@@ -200,6 +204,15 @@ Feature: Dry run
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
             | 2   | 2     | 3      |
+
+      --- Skipped scenarios:
+
+          features/apples.feature:9
+          features/apples.feature:13
+          features/apples.feature:17
+          features/apples.feature:28
+          features/apples.feature:29
+          features/apples.feature:30
 
       6 scenarios (6 skipped)
       21 steps (21 skipped)

@@ -10,12 +10,11 @@
 
 namespace Behat\Behat\Tester\Cli;
 
-use Behat\Behat\Tester\Event\AbstractScenarioTested;
-use Behat\Behat\Tester\Event\ExampleTested;
-use Behat\Behat\Tester\Event\ScenarioTested;
-use Behat\Behat\Tester\Result\TestResult;
+use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
+use Behat\Behat\EventDispatcher\Event\ExampleTested;
+use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\Tester\Event\ExerciseCompleted;
+use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -80,12 +79,10 @@ class RerunController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array(
-                $this,
-                'collectFailedScenario'
-            ), -50);
+        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'collectFailedScenario'), -50);
         $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'collectFailedScenario'), -50);
         $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'writeCache'), -50);
+
         $this->key = $this->generateKey($input);
 
         if (!$input->getOption('rerun')) {
@@ -102,14 +99,15 @@ class RerunController implements Controller
     /**
      * Records scenario if it is failed.
      *
-     * @param AbstractScenarioTested $event
+     * @param AfterScenarioTested $event
      */
-    public function collectFailedScenario(AbstractScenarioTested $event)
+    public function collectFailedScenario(AfterScenarioTested $event)
     {
         if (!$this->getFileName()) {
             return;
         }
-        if (TestResult::FAILED !== $event->getResultCode()) {
+
+        if ($event->getTestResult()->isPassed()) {
             return;
         }
 

@@ -11,7 +11,6 @@
 namespace Behat\Behat\Output\Printer;
 
 use Behat\Behat\Output\Printer\Formatter\ConsoleFormatter;
-use Behat\Behat\Tester\Result\TestResult;
 use Behat\Testwork\Output\Printer\ConsoleOutputPrinter as BasePrinter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
@@ -24,29 +23,6 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  */
 class ConsoleOutputPrinter extends BasePrinter
 {
-    /**
-     * Converts result code to style name.
-     *
-     * @param integer $resultCode
-     *
-     * @return string passed|pending|skipped|undefined|failed
-     */
-    public static function getStyleForResult($resultCode)
-    {
-        switch ($resultCode) {
-            case TestResult::SKIPPED:
-                return 'skipped';
-            case TestResult::PENDING:
-                return 'pending';
-            case TestResult::UNDEFINED:
-                return 'undefined';
-            case TestResult::FAILED:
-                return 'failed';
-        }
-
-        return 'passed';
-    }
-
     /**
      * Creates output formatter that is used to create a console.
      *

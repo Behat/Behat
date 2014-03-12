@@ -14,7 +14,7 @@ use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Hook\Call\HookCall;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
  * Testwork hook dispatcher.
@@ -49,16 +49,15 @@ class HookDispatcher
     /**
      * Dispatches hooks for a specified event.
      *
-     * @param string         $eventName
-     * @param LifecycleEvent $event
+     * @param HookScope $scope
      *
      * @return CallResults
      */
-    public function dispatchEventHooks($eventName, LifecycleEvent $event)
+    public function dispatchScopeHooks(HookScope $scope)
     {
         $results = array();
-        foreach ($this->repository->getEventHooks($eventName, $event) as $hook) {
-            $results[] = $this->dispatchEventHook($event, $hook);
+        foreach ($this->repository->getScopeHooks($scope) as $hook) {
+            $results[] = $this->dispatchHook($scope, $hook);
         }
 
         return new CallResults($results);
@@ -67,13 +66,13 @@ class HookDispatcher
     /**
      * Dispatches single event hook.
      *
-     * @param LifecycleEvent $event
-     * @param Hook           $hook
+     * @param HookScope $scope
+     * @param Hook      $hook
      *
      * @return CallResult
      */
-    private function dispatchEventHook(LifecycleEvent $event, Hook $hook)
+    private function dispatchHook(HookScope $scope, Hook $hook)
     {
-        return $this->callCenter->makeCall(new HookCall($event, $hook));
+        return $this->callCenter->makeCall(new HookCall($scope, $hook));
     }
 }

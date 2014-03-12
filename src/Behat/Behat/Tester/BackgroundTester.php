@@ -13,65 +13,49 @@ namespace Behat\Behat\Tester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Result\TestResults;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Background tester.
+ * Behat background tester interface.
+ *
+ * This interface defines an API for Tree Background testers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BackgroundTester
+interface BackgroundTester
 {
     /**
-     * @var StepTester
-     */
-    private $stepTester;
-
-    /**
-     * Initializes tester.
+     * Sets up background for a test.
      *
-     * @param StepTester $stepTester
-     */
-    public function __construct(StepTester $stepTester)
-    {
-        $this->stepTester = $stepTester;
-    }
-
-    /**
-     * Tests feature backgrounds.
-     *
-     * @param Environment $environment
+     * @param Environment $env
      * @param FeatureNode $feature
      * @param Boolean     $skip
      *
-     * @return TestResults
+     * @return Setup
      */
-    public function test(Environment $environment, FeatureNode $feature, $skip = false)
-    {
-        $results = $this->testBackground($environment, $feature, $skip);
-
-        return $results;
-    }
+    public function setUp(Environment $env, FeatureNode $feature, $skip);
 
     /**
      * Tests background.
      *
-     * @param Environment $environment
+     * @param Environment $env
      * @param FeatureNode $feature
      * @param Boolean     $skip
      *
-     * @return TestResults
+     * @return TestResult
      */
-    protected function testBackground(Environment $environment, FeatureNode $feature, $skip = false)
-    {
-        $background = $feature->getBackground();
+    public function test(Environment $env, FeatureNode $feature, $skip);
 
-        $results = array();
-        foreach ($background->getSteps() as $step) {
-            $results[] = $lastResult = $this->stepTester->test($environment, $feature, $step, $skip);
-            $skip = TestResult::PASSED < $lastResult->getResultCode() ? true : $skip;
-        }
-
-        return new TestResults($results);
-    }
+    /**
+     * Tears down background after a test.
+     *
+     * @param Environment $env
+     * @param FeatureNode $feature
+     * @param Boolean     $skip
+     * @param TestResult  $result
+     *
+     * @return Teardown
+     */
+    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result);
 }

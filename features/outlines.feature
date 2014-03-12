@@ -200,21 +200,17 @@ Feature: Scenario Outlines
 
       --- Failed steps:
 
-          features/math.feature:14
-            Then The result should be 15 # features/math.feature:9
-              Failed asserting that 20 matches expected 15.
+          Then The result should be 15 # features/math.feature:9
+            Failed asserting that 20 matches expected 15.
 
-          features/math.feature:16
-            Then The result should be 7 # features/math.feature:20
-              Failed asserting that 6 matches expected 7.
+          Then The result should be 7 # features/math.feature:20
+            Failed asserting that 6 matches expected 7.
 
-          features/math.feature:31
-            Then The result should be 2 # features/math.feature:26
-              Failed asserting that 5 matches expected 2.
+          Then The result should be 2 # features/math.feature:26
+            Failed asserting that 5 matches expected 2.
 
-          features/math.feature:32
-            Then The result should be 4 # features/math.feature:26
-              Failed asserting that 5 matches expected 4.
+          Then The result should be 4 # features/math.feature:26
+            Failed asserting that 5 matches expected 4.
 
       6 scenarios (2 passed, 4 failed)
       30 steps (26 passed, 4 failed)

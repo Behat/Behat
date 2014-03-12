@@ -10,7 +10,6 @@
 
 namespace Behat\Behat\Tester\Exception;
 
-use Behat\Testwork\Exception\TestworkException;
 use RuntimeException;
 
 /**
@@ -18,15 +17,15 @@ use RuntimeException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PendingException extends RuntimeException implements TestworkException
+class PendingException extends RuntimeException implements TesterException
 {
     /**
      * Initializes pending exception.
      *
      * @param string $text
      */
-    public function __construct($text = 'write pending definition')
+    public function __construct($text = 'TODO: write pending definition')
     {
-        parent::__construct(sprintf('TODO: %s', $text));
+        parent::__construct($text);
     }
 }

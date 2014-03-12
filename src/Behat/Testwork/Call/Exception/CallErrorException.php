@@ -19,7 +19,7 @@ use ErrorException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CallErrorException extends ErrorException implements CallException
+class CallErrorException extends ErrorException
 {
     private $levels = array(
         E_WARNING           => 'Warning',

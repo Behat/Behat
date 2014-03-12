@@ -121,8 +121,8 @@ Feature: Multiple formats
         As a little kid
         I need to have an apple in my pocket
 
-        Background:                   # features/apples.feature:6
-          Given I have 3 apples       # FeatureContext::iHaveApples()
+        Background:             # features/apples.feature:6
+          Given I have 3 apples # FeatureContext::iHaveApples()
       .
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
@@ -138,8 +138,8 @@ Feature: Multiple formats
       .    Then I should have 5 apples # FeatureContext::iShouldHaveApples()
       .    And do something undefined
       U
-        Scenario Outline: Other situations   # features/apples.feature:22
-      ....    When I ate <ate> apples            # FeatureContext::iAteApples()
+      ....  Scenario Outline: Other situations   # features/apples.feature:22
+          When I ate <ate> apples            # FeatureContext::iAteApples()
           And I found <found> apples         # FeatureContext::iFoundApples()
           Then I should have <result> apples # FeatureContext::iShouldHaveApples()
 
@@ -150,7 +150,7 @@ Feature: Multiple formats
               Failed asserting that 7 matches expected 8.
       ....      | 2   | 2     | 3      |
 
-        Scenario: Multilines    # features/apples.feature:33
+        Scenario: Multilines # features/apples.feature:33
       .    Given pystring:
             ...
       U    And table:
@@ -167,13 +167,11 @@ Feature: Multiple formats
 
       --- Failed steps:
 
-          features/apples.feature:9
-            Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+          Then I should have 3 apples # features/apples.feature:11
+            Failed asserting that 2 matches expected 3.
 
-          features/apples.feature:30
-            Then I should have 8 apples # features/apples.feature:25
-              Failed asserting that 7 matches expected 8.
+          Then I should have 8 apples # features/apples.feature:25
+            Failed asserting that 7 matches expected 8.
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -214,8 +212,8 @@ Feature: Multiple formats
         As a little kid
         I need to have an apple in my pocket
 
-        Background:                   # features/apples.feature:6
-          Given I have 3 apples       # FeatureContext::iHaveApples()
+        Background:             # features/apples.feature:6
+          Given I have 3 apples # FeatureContext::iHaveApples()
       .
         Scenario: I'm little hungry   # features/apples.feature:9
           When I ate 1 apple          # FeatureContext::iAteApples()
@@ -231,8 +229,8 @@ Feature: Multiple formats
       .    Then I should have 5 apples # FeatureContext::iShouldHaveApples()
       .    And do something undefined
       U
-        Scenario Outline: Other situations   # features/apples.feature:22
-      ....    When I ate <ate> apples            # FeatureContext::iAteApples()
+      ....  Scenario Outline: Other situations   # features/apples.feature:22
+          When I ate <ate> apples            # FeatureContext::iAteApples()
           And I found <found> apples         # FeatureContext::iFoundApples()
           Then I should have <result> apples # FeatureContext::iShouldHaveApples()
 
@@ -243,7 +241,7 @@ Feature: Multiple formats
               Failed asserting that 7 matches expected 8.
       ....      | 2   | 2     | 3      |
 
-        Scenario: Multilines    # features/apples.feature:33
+        Scenario: Multilines # features/apples.feature:33
       .    Given pystring:
             ...
       U    And table:
@@ -260,13 +258,11 @@ Feature: Multiple formats
 
       --- Failed steps:
 
-          features/apples.feature:9
-            Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+          Then I should have 3 apples # features/apples.feature:11
+            Failed asserting that 2 matches expected 3.
 
-          features/apples.feature:30
-            Then I should have 8 apples # features/apples.feature:25
-              Failed asserting that 7 matches expected 8.
+          Then I should have 8 apples # features/apples.feature:25
+            Failed asserting that 7 matches expected 8.
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -306,13 +302,11 @@ Feature: Multiple formats
 
       --- Failed steps:
 
-          features/apples.feature:9
-            Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+          Then I should have 3 apples # features/apples.feature:11
+            Failed asserting that 2 matches expected 3.
 
-          features/apples.feature:30
-            Then I should have 8 apples # features/apples.feature:25
-              Failed asserting that 7 matches expected 8.
+          Then I should have 8 apples # features/apples.feature:25
+            Failed asserting that 7 matches expected 8.
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -478,13 +472,11 @@ Feature: Multiple formats
 
       --- Failed steps:
 
-          features/apples.feature:9
-            Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+          Then I should have 3 apples # features/apples.feature:11
+            Failed asserting that 2 matches expected 3.
 
-          features/apples.feature:30
-            Then I should have 8 apples # features/apples.feature:25
-              Failed asserting that 7 matches expected 8.
+          Then I should have 8 apples # features/apples.feature:25
+            Failed asserting that 7 matches expected 8.
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -576,13 +568,11 @@ Feature: Multiple formats
 
       --- Failed steps:
 
-          features/apples.feature:9
-            Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+          Then I should have 3 apples # features/apples.feature:11
+            Failed asserting that 2 matches expected 3.
 
-          features/apples.feature:30
-            Then I should have 8 apples # features/apples.feature:25
-              Failed asserting that 7 matches expected 8.
+          Then I should have 8 apples # features/apples.feature:25
+            Failed asserting that 7 matches expected 8.
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)

@@ -10,143 +10,56 @@
 
 namespace Behat\Behat\Tester;
 
-use Behat\Behat\Definition\Call\DefinitionCall;
-use Behat\Behat\Definition\DefinitionFinder;
-use Behat\Behat\Definition\Exception\SearchException;
-use Behat\Behat\Definition\SearchResult;
-use Behat\Behat\Tester\Result\StepTestResult;
-use Behat\Behat\Tester\Result\TestResult;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
-use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Step tester.
+ * Behat step tester interface.
+ *
+ * This interface defines an API for Tree Step testers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepTester
+interface StepTester
 {
     /**
-     * @var DefinitionFinder
-     */
-    private $definitionFinder;
-    /**
-     * @var CallCenter
-     */
-    private $callCenter;
-
-    /**
-     * Initialize tester.
+     * Sets up step for a test.
      *
-     * @param DefinitionFinder $definitionFinder
-     * @param CallCenter       $callCenter
-     */
-    public function __construct(DefinitionFinder $definitionFinder, CallCenter $callCenter)
-    {
-        $this->definitionFinder = $definitionFinder;
-        $this->callCenter = $callCenter;
-    }
-
-    /**
-     * Tests step.
-     *
-     * @param Environment $environment
+     * @param Environment $env
      * @param FeatureNode $feature
      * @param StepNode    $step
      * @param Boolean     $skip
      *
-     * @return TestResult
+     * @return Setup
      */
-    public function test(Environment $environment, FeatureNode $feature, StepNode $step, $skip = false)
-    {
-        $result = $this->testStep($environment, $feature, $step, $skip);
-
-        return new TestResult($result->getResultCode());
-    }
+    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip);
 
     /**
-     * @param Environment $environment
+     * Tests step.
+     *
+     * @param Environment $env
      * @param FeatureNode $feature
      * @param StepNode    $step
-     * @param             $skip
+     * @param Boolean     $skip
      *
-     * @return StepTestResult
+     * @return StepResult
      */
-    protected function testStep(Environment $environment, FeatureNode $feature, StepNode $step, $skip)
-    {
-        try {
-            $search = $this->searchDefinition($environment, $feature, $step);
-            $result = $this->testDefinition($environment, $feature, $step, $search, $skip);
-        } catch (SearchException $exception) {
-            $result = new StepTestResult(null, $exception, null);
-        }
-
-        return $result;
-    }
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip);
 
     /**
-     * Searches for a definition.
+     * Tears down step after a test.
      *
-     * @param Environment $environment
+     * @param Environment $env
      * @param FeatureNode $feature
      * @param StepNode    $step
+     * @param Boolean     $skip
+     * @param StepResult  $result
      *
-     * @return SearchResult
+     * @return Teardown
      */
-    private function searchDefinition(Environment $environment, FeatureNode $feature, StepNode $step)
-    {
-        return $this->definitionFinder->findDefinition($environment, $feature, $step);
-    }
-
-    /**
-     * Tests found definition.
-     *
-     * @param Environment  $environment
-     * @param FeatureNode  $feature
-     * @param StepNode     $step
-     * @param SearchResult $search
-     * @param Boolean      $skip
-     *
-     * @return StepTestResult
-     */
-    private function testDefinition(
-        Environment $environment,
-        FeatureNode $feature,
-        StepNode $step,
-        SearchResult $search,
-        $skip = false
-    ) {
-        if ($skip || !$search->hasMatch()) {
-            return new StepTestResult($search, null, null);
-        }
-
-        $call = $this->createDefinitionCall($environment, $feature, $search, $step);
-        $result = $this->callCenter->makeCall($call);
-
-        return new StepTestResult($search, null, $result);
-    }
-
-    /**
-     * Creates definition call.
-     *
-     * @param Environment  $environment
-     * @param FeatureNode  $feature
-     * @param SearchResult $search
-     * @param StepNode     $step
-     *
-     * @return DefinitionCall
-     */
-    private function createDefinitionCall(
-        Environment $environment,
-        FeatureNode $feature,
-        SearchResult $search,
-        StepNode $step
-    ) {
-        $definition = $search->getMatchedDefinition();
-        $arguments = $search->getMatchedArguments();
-
-        return new DefinitionCall($environment, $feature, $step, $definition, $arguments);
-    }
+    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result);
 }

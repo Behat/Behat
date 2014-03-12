@@ -12,24 +12,49 @@ namespace Behat\Testwork\Tester;
 
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Testwork test subject tester.
+ * Testwork specification tester interface.
  *
- * Implement this interface with custom tester.
+ * This interface defines an API for Testwork specification testers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface SpecificationTester
 {
     /**
-     * Tests provided subject.
+     * Sets up specification for a test.
      *
-     * @param Environment $environment
-     * @param mixed       $specification
+     * @param Environment $env
+     * @param mixed       $spec
+     * @param Boolean     $skip
+     *
+     * @return Setup
+     */
+    public function setUp(Environment $env, $spec, $skip);
+
+    /**
+     * Tests provided specification.
+     *
+     * @param Environment $env
+     * @param mixed       $spec
      * @param Boolean     $skip
      *
      * @return TestResult
      */
-    public function test(Environment $environment, $specification, $skip = false);
+    public function test(Environment $env, $spec, $skip);
+
+    /**
+     * Tears down specification after a test.
+     *
+     * @param Environment $env
+     * @param mixed       $spec
+     * @param Boolean     $skip
+     * @param TestResult  $result
+     *
+     * @return Teardown
+     */
+    public function tearDown(Environment $env, $spec, $skip, TestResult $result);
 }

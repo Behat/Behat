@@ -233,6 +233,7 @@ Feature: hooks
       │  = do something AFTER EVERY FEATURE
       │
       └─ @AfterFeature # FeatureContext::doSomethingAfterFeature()
+
       │
       │  = do something after SOME feature
       │
@@ -262,8 +263,8 @@ Feature: hooks
       │
       Feature:
 
-        Background:               # features/background.feature:2
-          Given I must have 50    # FeatureContext::iMustHave()
+        Background:            # features/background.feature:2
+          Given I must have 50 # FeatureContext::iMustHave()
 
         Scenario:                 # features/background.feature:5
           Given I have entered 12 # FeatureContext::iHaveEntered()
@@ -338,11 +339,11 @@ Feature: hooks
       │
       └─ @AfterFeature # FeatureContext::doSomethingAfterFeature()
 
-      --- Failed scenarios:
+      --- Skipped scenarios:
 
           features/background.feature:4
           features/background.feature:11
 
-      4 scenarios (2 passed, 2 failed)
+      4 scenarios (2 passed, 2 skipped)
       7 steps (3 passed, 4 skipped)
       """

@@ -11,12 +11,12 @@
 namespace Behat\Behat\Hook\Call;
 
 use Behat\Behat\Hook\Exception\BadCallbackException;
-use Behat\Behat\Tester\Event\FeatureTested;
+use Behat\Behat\Hook\Scope\FeatureScope;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
  * Runtime feature hook.
@@ -28,16 +28,16 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string      $eventName
+     * @param string      $scopeName
      * @param null|string $filterString
      * @param callable    $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
-    public function __construct($eventName, $filterString, $callable, $description = null)
+    public function __construct($scopeName, $filterString, $callable, $description = null)
     {
-        parent::__construct($eventName, $filterString, $callable, $description);
+        parent::__construct($scopeName, $filterString, $callable, $description);
 
         if ($this->isAnInstanceMethod()) {
             throw new BadCallbackException(sprintf(
@@ -51,13 +51,13 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Checks if provided event matches hook filter.
      *
-     * @param LifecycleEvent $event
+     * @param HookScope $scope
      *
      * @return Boolean
      */
-    public function filterMatches(LifecycleEvent $event)
+    public function filterMatches(HookScope $scope)
     {
-        if (!$event instanceof FeatureTested) {
+        if (!$scope instanceof FeatureScope) {
             return false;
         }
 
@@ -65,12 +65,12 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
             return true;
         }
 
-        return $this->isMatch($event->getFeature(), $filterString);
+        return $this->isMatch($scope->getFeature(), $filterString);
     }
 
     /**
      * @param FeatureNode $feature
-     * @param string $filterString
+     * @param string      $filterString
      *
      * @return Boolean
      */
@@ -91,7 +91,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      * Checks if feature matches tag filter.
      *
      * @param FeatureNode $feature
-     * @param string $filterString
+     * @param string      $filterString
      *
      * @return Boolean
      */

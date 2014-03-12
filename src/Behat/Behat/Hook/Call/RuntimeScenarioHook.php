@@ -10,13 +10,13 @@
 
 namespace Behat\Behat\Hook\Call;
 
-use Behat\Behat\Tester\Event\AbstractScenarioTested;
+use Behat\Behat\Hook\Scope\ScenarioScope;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
  * Runtime scenario hook.
@@ -28,20 +28,21 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
     /**
      * Checks if provided event matches hook filter.
      *
-     * @param LifecycleEvent $event
+     * @param HookScope $scope
      *
      * @return Boolean
      */
-    public function filterMatches(LifecycleEvent $event)
+    public function filterMatches(HookScope $scope)
     {
-        if (!$event instanceof AbstractScenarioTested) {
+        if (!$scope instanceof ScenarioScope) {
             return false;
         }
+
         if (null === ($filterString = $this->getFilterString())) {
             return true;
         }
 
-        return $this->isMatch($event->getFeature(), $event->getScenario(), $filterString);
+        return $this->isMatch($scope->getFeature(), $scope->getScenario(), $filterString);
     }
 
     /**

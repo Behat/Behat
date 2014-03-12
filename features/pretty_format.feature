@@ -94,10 +94,10 @@ Feature: Pretty Formatter
         Background:               # features/World.feature:6
           Given I have entered 10 # FeatureContext::iHaveEntered()
 
-        Scenario: Undefined       # features/World.feature:9
-          Then I must have 10     # FeatureContext::iMustHave()
+        Scenario: Undefined   # features/World.feature:9
+          Then I must have 10 # FeatureContext::iMustHave()
           And Something new
-          Then I must have 10     # FeatureContext::iMustHave()
+          Then I must have 10 # FeatureContext::iMustHave()
 
         Scenario: Pending            # features/World.feature:14
           Then I must have 10        # FeatureContext::iMustHave()
@@ -105,9 +105,9 @@ Feature: Pretty Formatter
             TODO: write pending definition
           Then I must have 10        # FeatureContext::iMustHave()
 
-        Scenario: Failed          # features/World.feature:19
-          When I add 4            # FeatureContext::iAdd()
-          Then I must have 13     # FeatureContext::iMustHave()
+        Scenario: Failed      # features/World.feature:19
+          When I add 4        # FeatureContext::iAdd()
+          Then I must have 13 # FeatureContext::iMustHave()
             Failed asserting that 14 matches expected '13'.
 
         Scenario Outline: Passed & Failed # features/World.feature:23
@@ -210,8 +210,8 @@ Feature: Pretty Formatter
         As a features developer
         I want, that "World" flushes between scenarios
 
-        Background:                       # features/World.feature:6
-          Given I have entered 10         # FeatureContext::iHaveEntered()
+        Background:               # features/World.feature:6
+          Given I have entered 10 # FeatureContext::iHaveEntered()
 
         Scenario: Adding some interesting # features/World.feature:9
                   value
@@ -299,7 +299,7 @@ Feature: Pretty Formatter
           As a UNIX user
           I need to be able to list the current directory's contents
 
-          Background:                           # features/ls.feature:6
+          Background:                       # features/ls.feature:6
             Given I have a file named "foo"
 
           Scenario: List 2 files in a directory # features/ls.feature:9
@@ -391,7 +391,7 @@ Feature: Pretty Formatter
           multiple lines
           Given I have entered 10
 
-        Scenario: Undefined         # features/World.feature:13
+        Scenario: Undefined   # features/World.feature:13
                   scenario or
                   whatever
           Then I must have 10

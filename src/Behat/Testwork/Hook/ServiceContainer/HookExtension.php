@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Hook\ServiceContainer;
 
+use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -33,6 +34,7 @@ class HookExtension implements Extension
      */
     const DISPATCHER_ID = 'hook.dispatcher';
     const REPOSITORY_ID = 'hook.repository';
+    const EVENT_SUBSCRIBER = 'hook.event_subscriber';
 
     /**
      * {@inheritdoc}
@@ -63,6 +65,7 @@ class HookExtension implements Extension
     {
         $this->loadDispatcher($container);
         $this->loadRepository($container);
+        $this->loadHookableTesters($container);
     }
 
     /**
@@ -97,5 +100,20 @@ class HookExtension implements Extension
             new Reference(EnvironmentExtension::MANAGER_ID)
         ));
         $container->setDefinition(self::REPOSITORY_ID, $definition);
+    }
+
+    /**
+     * Loads hookable testers.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadHookableTesters(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Testwork\Hook\Tester\HookableSuiteTester', array(
+            new Reference(TesterExtension::SUITE_TESTER_ID),
+            new Reference(self::DISPATCHER_ID)
+        ));
+        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => 9999));
+        $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.hookable', $definition);
     }
 }

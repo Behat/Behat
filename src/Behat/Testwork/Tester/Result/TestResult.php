@@ -15,7 +15,7 @@ namespace Behat\Testwork\Tester\Result;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TestResult
+interface TestResult
 {
     const PASSED = 0;
     const SKIPPED = 10;
@@ -23,58 +23,16 @@ class TestResult
     const FAILED = 99;
 
     /**
-     * @var integer
-     */
-    private $resultCode;
-
-    /**
-     * Initializes test result.
+     * Checks that test has passed.
      *
-     * @param integer $resultCode
+     * @return Boolean
      */
-    public function __construct($resultCode)
-    {
-        $this->resultCode = $resultCode;
-    }
-
-    /**
-     * Converts result code into a string representation.
-     *
-     * @param integer $resultCode
-     *
-     * @return string
-     */
-    public static function codeToString($resultCode)
-    {
-        switch ($resultCode) {
-            case self::SKIPPED:
-                return 'skipped';
-            case self::PENDING:
-                return 'pending';
-            case self::FAILED:
-                return 'failed';
-        }
-
-        return 'passed';
-    }
+    public function isPassed();
 
     /**
      * Returns tester result code.
      *
      * @return integer
      */
-    public function getResultCode()
-    {
-        return $this->resultCode;
-    }
-
-    /**
-     * Converts test result into string.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return static::codeToString($this->getResultCode());
-    }
+    public function getResultCode();
 }

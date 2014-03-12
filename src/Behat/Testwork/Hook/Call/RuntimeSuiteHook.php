@@ -11,9 +11,9 @@
 namespace Behat\Testwork\Hook\Call;
 
 use Behat\Testwork\Call\Exception\BadCallbackException;
-use Behat\Testwork\Hook\Event\LifecycleEvent;
+use Behat\Testwork\Hook\Scope\HookScope;
+use Behat\Testwork\Hook\Scope\SuiteScope;
 use Behat\Testwork\Suite\Suite;
-use Behat\Testwork\Tester\Event\SuiteTested;
 
 /**
  * Runtime suite hook.
@@ -25,16 +25,16 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string      $eventName
+     * @param string      $scopeName
      * @param null|string $filterString
      * @param callable    $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
-    public function __construct($eventName, $filterString, $callable, $description = null)
+    public function __construct($scopeName, $filterString, $callable, $description = null)
     {
-        parent::__construct($eventName, $filterString, $callable, $description);
+        parent::__construct($scopeName, $filterString, $callable, $description);
 
         if ($this->isAnInstanceMethod()) {
             throw new BadCallbackException(sprintf(
@@ -48,13 +48,13 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     /**
      * Checks if provided event matches hook filter.
      *
-     * @param LifecycleEvent $event
+     * @param HookScope $scope
      *
      * @return Boolean
      */
-    public function filterMatches(LifecycleEvent $event)
+    public function filterMatches(HookScope $scope)
     {
-        if (!$event instanceof SuiteTested) {
+        if (!$scope instanceof SuiteScope) {
             return false;
         }
         if (null === ($filterString = $this->getFilterString())) {
@@ -62,7 +62,7 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
         }
 
         if (!empty($filterString)) {
-            return $this->isSuiteMatch($event->getSuite(), $filterString);
+            return $this->isSuiteMatch($scope->getSuite(), $filterString);
         }
 
         return false;
