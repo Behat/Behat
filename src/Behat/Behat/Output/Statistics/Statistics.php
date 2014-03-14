@@ -11,6 +11,8 @@
 namespace Behat\Behat\Output\Statistics;
 
 use Behat\Behat\Tester\Result\StepResult;
+use Behat\Testwork\Counter\Memory;
+use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -20,6 +22,14 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class Statistics
 {
+    /**
+     * @var Timer
+     */
+    private $timer;
+    /**
+     * @var Memory
+     */
+    private $memory;
     /**
      * @var ScenarioStat[]
      */
@@ -45,6 +55,45 @@ final class Statistics
             TestResult::PENDING   => array(),
             TestResult::SKIPPED   => array()
         );
+
+        $this->timer = new Timer();
+        $this->memory = new Memory();
+    }
+
+    /**
+     * Starts timer.
+     */
+    public function startTimer()
+    {
+        $this->timer->start();
+    }
+
+    /**
+     * Stops timer.
+     */
+    public function stopTimer()
+    {
+        $this->timer->stop();
+    }
+
+    /**
+     * Returns timer object.
+     *
+     * @return Timer
+     */
+    public function getTimer()
+    {
+        return $this->timer;
+    }
+
+    /**
+     * Returns memory usage object.
+     *
+     * @return Memory
+     */
+    public function getMemory()
+    {
+        return $this->memory;
     }
 
     /**

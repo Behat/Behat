@@ -11,8 +11,6 @@
 namespace Behat\Behat\Output\Node\Printer;
 
 use Behat\Behat\Output\Statistics\Statistics;
-use Behat\Testwork\Counter\Memory;
-use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Output\Formatter;
 
 /**
@@ -27,8 +25,6 @@ interface StatisticsPrinter
      *
      * @param Formatter  $formatter
      * @param Statistics $statistics
-     * @param Timer      $timer
-     * @param Memory     $memory
      */
-    public function printStatistics(Formatter $formatter, Statistics $statistics, Timer $timer, Memory $memory);
+    public function printStatistics(Formatter $formatter, Statistics $statistics);
 }
