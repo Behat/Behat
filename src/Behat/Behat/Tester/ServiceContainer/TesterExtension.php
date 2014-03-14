@@ -15,6 +15,7 @@ use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Tester\ServiceContainer\TesterExtension as BaseExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -71,6 +72,7 @@ class TesterExtension extends BaseExtension
         parent::load($container, $config);
 
         $this->loadRerunController($container);
+        $this->loadPendingExceptionStringer($container);
     }
 
     /**
@@ -190,6 +192,18 @@ class TesterExtension extends BaseExtension
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 40));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.rerun', $definition);
+    }
+
+    /**
+     * Loads pending exception stringer.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadPendingExceptionStringer(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Tester\Exception\Stringer\PendingExceptionStringer');
+        $definition->addTag(ExceptionExtension::STRINGER_TAG);
+        $container->setDefinition(ExceptionExtension::STRINGER_TAG . '.pending', $definition);
     }
 
     /**

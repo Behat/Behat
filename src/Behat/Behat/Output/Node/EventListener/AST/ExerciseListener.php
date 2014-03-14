@@ -14,7 +14,6 @@ use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
-use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\StatisticsPrinter;
 use Behat\Behat\Output\Statistics\FailedHookStat;
 use Behat\Behat\Output\Statistics\ScenarioStat;
@@ -173,9 +172,7 @@ final class ExerciseListener implements EventListener
             $path = $event->getTestResult()->getStepDefinition()->getPath();
         }
 
-        if ($error instanceof PendingException) {
-            $error = $error->getMessage();
-        } elseif ($error) {
+        if ($error) {
             $error = $this->exceptionPresenter->presentException($error);
         }
 

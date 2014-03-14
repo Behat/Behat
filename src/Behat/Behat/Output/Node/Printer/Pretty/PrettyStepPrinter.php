@@ -14,7 +14,6 @@ use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\Helper\StepTextPainter;
 use Behat\Behat\Output\Node\Printer\Helper\WidthCalculator;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
@@ -205,12 +204,7 @@ final class PrettyStepPrinter implements StepPrinter
             return;
         }
 
-        if ($result->getException() instanceof PendingException) {
-            $text = $result->getException()->getMessage();
-        } else {
-            $text = $this->exceptionPresenter->presentException($result->getException());
-        }
-
+        $text = $this->exceptionPresenter->presentException($result->getException());
         $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
         $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
     }
