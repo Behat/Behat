@@ -12,6 +12,7 @@ namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
+use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\StatisticsPrinter;
@@ -22,8 +23,6 @@ use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Testwork\Call\CallResult;
-use Behat\Testwork\Counter\Memory;
-use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
@@ -55,14 +54,6 @@ final class ExerciseListener implements EventListener
      */
     private $statistics;
     /**
-     * @var Timer
-     */
-    private $timer;
-    /**
-     * @var Memory
-     */
-    private $memory;
-    /**
      * @var string
      */
     private $currentFeaturePath;
@@ -85,10 +76,10 @@ final class ExerciseListener implements EventListener
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->startTimerOnBeforeExercise($eventName);
-        $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event, $eventName);
+        $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
         $this->forgetCurrentFeaturePathOnAfterFeatureEvent($eventName);
         $this->captureScenarioOrExampleStatsOnAfterEvent($event);
-        $this->captureStepStatsOnAfterEvent($event, $eventName);
+        $this->captureStepStatsOnAfterEvent($event);
         $this->captureHookStatsOnEvent($event);
 
         $this->printStatisticsOnAfterExerciseEvent($formatter, $eventName);
@@ -105,21 +96,18 @@ final class ExerciseListener implements EventListener
             return;
         }
 
-        $this->timer = new Timer();
-        $this->timer->start();
-        $this->memory = new Memory();
         $this->statistics = new Statistics();
+        $this->statistics->startTimer();
     }
 
     /**
      * Captures current feature file path to the ivar on feature BEFORE event.
      *
-     * @param Event  $event
-     * @param string $eventName
+     * @param Event $event
      */
-    private function captureCurrentFeaturePathOnBeforeFeatureEvent(Event $event, $eventName)
+    private function captureCurrentFeaturePathOnBeforeFeatureEvent(Event $event)
     {
-        if (!$event instanceof FeatureTested || FeatureTested::BEFORE !== $eventName) {
+        if (!$event instanceof BeforeFeatureTested) {
             return;
         }
 
@@ -161,12 +149,11 @@ final class ExerciseListener implements EventListener
     /**
      * Captures step stats on step AFTER event.
      *
-     * @param Event  $event
-     * @param string $eventName
+     * @param Event $event
      */
-    private function captureStepStatsOnAfterEvent(Event $event, $eventName)
+    private function captureStepStatsOnAfterEvent(Event $event)
     {
-        if (!$event instanceof AfterStepTested || StepTested::AFTER !== $eventName) {
+        if (!$event instanceof AfterStepTested) {
             return;
         }
 
@@ -290,7 +277,7 @@ final class ExerciseListener implements EventListener
             return;
         }
 
-        $this->timer->stop();
-        $this->statisticsPrinter->printStatistics($formatter, $this->statistics, $this->timer, $this->memory);
+        $this->statistics->stopTimer();
+        $this->statisticsPrinter->printStatistics($formatter, $this->statistics);
     }
 }

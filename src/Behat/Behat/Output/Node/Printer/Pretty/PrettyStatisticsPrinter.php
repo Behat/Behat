@@ -50,7 +50,7 @@ final class PrettyStatisticsPrinter implements StatisticsPrinter
     /**
      * {@inheritdoc}
      */
-    public function printStatistics(Formatter $formatter, Statistics $statistics, Timer $timer, Memory $memory)
+    public function printStatistics(Formatter $formatter, Statistics $statistics)
     {
         $printer = $formatter->getOutputPrinter();
 
@@ -64,6 +64,9 @@ final class PrettyStatisticsPrinter implements StatisticsPrinter
         $this->counterPrinter->printCounters($printer, 'steps_count', $statistics->getStepStats());
 
         if ($formatter->getParameter('timer')) {
+            $timer = $statistics->getTimer();
+            $memory = $statistics->getMemory();
+
             $formatter->getOutputPrinter()->writeln(sprintf('%s (%s)', $timer, $memory));
         }
     }
