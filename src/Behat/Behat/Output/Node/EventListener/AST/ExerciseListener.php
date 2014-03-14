@@ -21,6 +21,7 @@ use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeTested;
@@ -31,6 +32,7 @@ use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Tester\Result\ExceptionResult;
+use Exception;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -159,26 +161,11 @@ final class ExerciseListener implements EventListener
         $result = $event->getTestResult();
         $step = $event->getStep();
         $text = sprintf('%s %s', $step->getType(), $step->getText());
-        $path = sprintf('%s:%d', $this->currentFeaturePath, $step->getLine());
+        $exception = $this->getStepException($result);
 
-        $error = null;
-        $stdOut = null;
-
-        if ($result instanceof ExceptionResult) {
-            $error = $result->getException();
-        }
-
-        if ($error && $error instanceof PendingException) {
-            $path = $event->getTestResult()->getStepDefinition()->getPath();
-        }
-
-        if ($error) {
-            $error = $this->exceptionPresenter->presentException($error);
-        }
-
-        if ($result instanceof ExecutedStepResult) {
-            $stdOut = $result->getCallResult()->getStdOut();
-        }
+        $path = $this->getStepPath($event, $exception);
+        $error = $exception ? $this->exceptionPresenter->presentException($exception) : null;
+        $stdOut = $result instanceof ExecutedStepResult ? $result->getCallResult()->getStdOut() : null;
 
         $resultCode = $result->getResultCode();
         $stat = new StepStat($text, $path, $resultCode, $error, $stdOut);
@@ -253,10 +240,9 @@ final class ExerciseListener implements EventListener
         $hook = (string)$callee;
         $path = $callee->getPath();
         $stdOut = $hookCallResult->getStdOut();
-        $error = null;
-        if ($hookCallResult->getException()) {
-            $error = $this->exceptionPresenter->presentException($hookCallResult->getException());
-        }
+        $error = $hookCallResult->getException()
+            ? $this->exceptionPresenter->presentException($hookCallResult->getException())
+            : null;
 
         $stat = new FailedHookStat($hook, $path, $error, $stdOut);
         $this->statistics->registerFailedHookStat($stat);
@@ -276,5 +262,40 @@ final class ExerciseListener implements EventListener
 
         $this->statistics->stopTimer();
         $this->statisticsPrinter->printStatistics($formatter, $this->statistics);
+    }
+
+    /**
+     * Gets exception from the step test results.
+     *
+     * @param StepResult $result
+     *
+     * @return null|Exception
+     */
+    private function getStepException(StepResult $result)
+    {
+        if ($result instanceof ExceptionResult) {
+            return $result->getException();
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets step path from the AFTER test event and exception.
+     *
+     * @param AfterStepTested $event
+     * @param null|Exception  $exception
+     *
+     * @return string
+     */
+    private function getStepPath(AfterStepTested $event, Exception $exception = null)
+    {
+        $path = sprintf('%s:%d', $this->currentFeaturePath, $event->getStep()->getLine());
+
+        if ($exception && $exception instanceof PendingException) {
+            $path = $event->getTestResult()->getStepDefinition()->getPath();
+        }
+
+        return $path;
     }
 }
