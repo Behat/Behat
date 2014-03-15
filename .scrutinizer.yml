@@ -33,7 +33,7 @@ tools:
         enabled:              true
         command:              php-cs-fixer
         config:
-            level:            psr1
+            level:            all
         filter:
             excluded_paths:
                 - 'bin/*'

@@ -1,7 +1,7 @@
 {
     "name":         "behat/behat",
     "description":  "Scenario-oriented BDD framework for PHP 5.3",
-    "keywords":     ["BDD", "Behat", "Symfony2"],
+    "keywords":     ["BDD", "ScenarioBDD", "StoryBDD", "Examples", "Scrum", "Agile", "User story", "Symfony", "business", "development", "testing", "documentation"],
     "homepage":     "http://behat.org/",
     "type":         "library",
     "license":      "MIT",
@@ -28,8 +28,8 @@
 
     "require-dev": {
         "symfony/process": "~2.1",
-        "phpspec/prophecy-phpunit": "~1.0",
-        "phpunit/phpunit": "~3.7.28"
+        "phpspec/prophecy-phpunit": "~1.0.1",
+        "phpunit/phpunit": "~4.0.7"
     },
 
     "suggest": {
