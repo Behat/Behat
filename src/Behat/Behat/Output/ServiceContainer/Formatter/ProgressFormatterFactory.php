@@ -78,16 +78,8 @@ class ProgressFormatterFactory implements FormatterFactory
      */
     protected function loadRootNodeListener(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
-            array(
-                new Definition('Behat\Behat\Output\Node\EventListener\AST\StepListener', array(
-                    new Reference('output.node.printer.progress.step')
-                )),
-                new Definition('Behat\Behat\Output\Node\EventListener\AST\ExerciseListener', array(
-                    new Reference('output.node.printer.progress.statistics'),
-                    new Reference(ExceptionExtension::PRESENTER_ID)
-                ))
-            )
+        $definition = new Definition('Behat\Behat\Output\Node\EventListener\AST\StepListener', array(
+            new Reference('output.node.printer.progress.step')
         ));
         $container->setDefinition(self::ROOT_LISTENER_ID, $definition);
     }
@@ -150,7 +142,16 @@ class ProgressFormatterFactory implements FormatterFactory
                 'timer' => true
             ),
             $this->createOutputPrinterDefinition(),
-            new Reference(self::ROOT_LISTENER_ID)
+            new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
+                    array(
+                        new Reference(self::ROOT_LISTENER_ID),
+                        new Definition('Behat\Behat\Output\Node\EventListener\AST\ExerciseListener', array(
+                            new Reference('output.node.printer.progress.statistics'),
+                            new Reference(ExceptionExtension::PRESENTER_ID)
+                        ))
+                    )
+                )
+            )
         ));
         $definition->addTag(OutputExtension::FORMATTER_TAG, array('priority' => 100));
         $container->setDefinition(OutputExtension::FORMATTER_TAG . '.progress', $definition);
