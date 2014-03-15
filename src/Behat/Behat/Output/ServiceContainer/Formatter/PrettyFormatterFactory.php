@@ -185,16 +185,16 @@ class PrettyFormatterFactory implements FormatterFactory
                         $this->rearrangeBackgroundEvents(
                             new Reference(self::ROOT_LISTENER_ID)
                         ),
-                        new Definition('Behat\Behat\Output\Node\EventListener\AST\ExerciseListener', array(
-                            new Reference('output.pretty.statistics'),
-                            new Reference(ExceptionExtension::PRESENTER_ID)
-                        )),
                         new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StatisticsListener', array(
                             new Reference('output.pretty.statistics'),
                             new Reference('output.node.printer.pretty.statistics')
                         )),
                         new Definition('Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener', array(
                             new Reference('output.pretty.statistics')
+                        )),
+                        new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StepStatsListener', array(
+                            new Reference('output.pretty.statistics'),
+                            new Reference(ExceptionExtension::PRESENTER_ID)
                         )),
                     )
                 )

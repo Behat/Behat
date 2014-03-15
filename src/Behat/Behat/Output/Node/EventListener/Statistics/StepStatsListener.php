@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Output\Node\EventListener\AST;
+namespace Behat\Behat\Output\Node\EventListener\Statistics;
 
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
@@ -30,20 +30,20 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ExerciseListener implements EventListener
+final class StepStatsListener implements EventListener
 {
     /**
      * @var Statistics
      */
     private $statistics;
     /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-    /**
      * @var string
      */
     private $currentFeaturePath;
+    /**
+     * @var ExceptionPresenter
+     */
+    private $exceptionPresenter;
 
     /**
      * Initializes listener.
