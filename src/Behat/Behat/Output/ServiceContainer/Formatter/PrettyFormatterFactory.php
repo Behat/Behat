@@ -193,6 +193,9 @@ class PrettyFormatterFactory implements FormatterFactory
                             new Reference('output.pretty.statistics'),
                             new Reference('output.node.printer.pretty.statistics')
                         )),
+                        new Definition('Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener', array(
+                            new Reference('output.pretty.statistics')
+                        )),
                     )
                 )
             )

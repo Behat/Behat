@@ -10,12 +10,10 @@
 
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
-use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\Output\Statistics\FailedHookStat;
-use Behat\Behat\Output\Statistics\ScenarioStat;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Behat\Tester\Exception\PendingException;
@@ -72,7 +70,6 @@ final class ExerciseListener implements EventListener
     {
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
         $this->forgetCurrentFeaturePathOnAfterFeatureEvent($eventName);
-        $this->captureScenarioOrExampleStatsOnAfterEvent($event);
         $this->captureStepStatsOnAfterEvent($event);
         $this->captureHookStatsOnEvent($event);
     }
@@ -103,24 +100,6 @@ final class ExerciseListener implements EventListener
         }
 
         $this->currentFeaturePath = null;
-    }
-
-    /**
-     * Captures scenario or example stats on their AFTER event.
-     *
-     * @param Event $event
-     */
-    private function captureScenarioOrExampleStatsOnAfterEvent(Event $event)
-    {
-        if (!$event instanceof AfterScenarioTested) {
-            return;
-        }
-
-        $line = $event->getScenario()->getLine();
-        $resultCode = $event->getTestResult()->getResultCode();
-        $stat = new ScenarioStat($this->currentFeaturePath, $line, $resultCode);
-
-        $this->statistics->registerScenarioStat($stat);
     }
 
     /**
