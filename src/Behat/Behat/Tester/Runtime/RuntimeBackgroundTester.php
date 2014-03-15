@@ -11,6 +11,7 @@
 namespace Behat\Behat\Tester\Runtime;
 
 use Behat\Behat\Tester\BackgroundTester;
+use Behat\Behat\Tester\Exception\FeatureHasNoBackgroundException;
 use Behat\Behat\Tester\StepContainerTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
@@ -54,7 +55,16 @@ final class RuntimeBackgroundTester implements BackgroundTester
      */
     public function test(Environment $env, FeatureNode $feature, $skip)
     {
-        $results = $this->containerTester->test($env, $feature, $feature->getBackground(), $skip);
+        $background = $feature->getBackground();
+
+        if (null === $background) {
+            throw new FeatureHasNoBackgroundException(sprintf(
+                'Feature `%s` has not background that could be tested.',
+                $feature->getFile()
+            ), $feature);
+        }
+
+        $results = $this->containerTester->test($env, $feature, $background, $skip);
 
         return new TestResults($results);
     }
