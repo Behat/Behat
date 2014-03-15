@@ -26,7 +26,7 @@ use Exception;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Listens to entire exercise, collects statistics and then delegates it to the printer.
+ * Listens and records step events to statistics.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
