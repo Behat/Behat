@@ -443,26 +443,26 @@ Feature: Append snippets option
         14 scenarios (14 undefined)
         58 steps (58 undefined)
 
-        u features/bootstrap/FirstContext.php - Snippets has been added
-        u features/bootstrap/FirstContext.php - Snippets has been added
-        u features/bootstrap/FirstContext.php - Snippets has been added
-        u features/bootstrap/FirstContext.php - Snippets has been added
-        u features/bootstrap/FirstContext.php - Snippets has been added
-        u features/bootstrap/FirstContext.php - Snippets has been added
-        u features/bootstrap/FirstContext.php - Snippets has been added
-        u features/bootstrap/FirstContext.php - Snippets has been added
-        u features/bootstrap/FirstContext.php - Snippets has been added
-        u features/bootstrap/FirstContext.php - Snippets has been added
-        u features/bootstrap/SecondContext.php - Snippets has been added
-        u features/bootstrap/SecondContext.php - Snippets has been added
-        u features/bootstrap/SecondContext.php - Snippets has been added
-        u features/bootstrap/SecondContext.php - Snippets has been added
-        u features/bootstrap/SecondContext.php - Snippets has been added
-        u features/bootstrap/SecondContext.php - Snippets has been added
-        u features/bootstrap/SecondContext.php - Snippets has been added
-        u features/bootstrap/SecondContext.php - Snippets has been added
-        u features/bootstrap/SecondContext.php - Snippets has been added
-        u features/bootstrap/SecondContext.php - Snippets has been added
+        u features/bootstrap/FirstContext.php - `I have 3 apples` definition added
+        u features/bootstrap/FirstContext.php - `I ate 1 apple` definition added
+        u features/bootstrap/FirstContext.php - `I should have 3 apples` definition added
+        u features/bootstrap/FirstContext.php - `I found 5 apples` definition added
+        u features/bootstrap/FirstContext.php - `do something undefined with $` definition added
+        u features/bootstrap/FirstContext.php - `I ate 3 apples` definition added
+        u features/bootstrap/FirstContext.php - `do something undefined with \1` definition added
+        u features/bootstrap/FirstContext.php - `pystring:` definition added
+        u features/bootstrap/FirstContext.php - `pystring 5:` definition added
+        u features/bootstrap/FirstContext.php - `table:` definition added
+        u features/bootstrap/SecondContext.php - `I have 3 apples` definition added
+        u features/bootstrap/SecondContext.php - `I ate 1 apple` definition added
+        u features/bootstrap/SecondContext.php - `I should have 3 apples` definition added
+        u features/bootstrap/SecondContext.php - `I found 5 apples` definition added
+        u features/bootstrap/SecondContext.php - `do something undefined with $` definition added
+        u features/bootstrap/SecondContext.php - `I ate 3 apples` definition added
+        u features/bootstrap/SecondContext.php - `do something undefined with \1` definition added
+        u features/bootstrap/SecondContext.php - `pystring:` definition added
+        u features/bootstrap/SecondContext.php - `pystring 5:` definition added
+        u features/bootstrap/SecondContext.php - `table:` definition added
         """
       And "features/bootstrap/FirstContext.php" file should contain:
         """
@@ -711,16 +711,16 @@ Feature: Append snippets option
           And table:
 
 
-      u features/bootstrap/FirstContext.php - Snippets has been added
-      u features/bootstrap/FirstContext.php - Snippets has been added
-      u features/bootstrap/FirstContext.php - Snippets has been added
-      u features/bootstrap/FirstContext.php - Snippets has been added
-      u features/bootstrap/FirstContext.php - Snippets has been added
-      u features/bootstrap/FirstContext.php - Snippets has been added
-      u features/bootstrap/FirstContext.php - Snippets has been added
-      u features/bootstrap/FirstContext.php - Snippets has been added
-      u features/bootstrap/FirstContext.php - Snippets has been added
-      u features/bootstrap/FirstContext.php - Snippets has been added
+      u features/bootstrap/FirstContext.php - `I have 3 apples` definition added
+      u features/bootstrap/FirstContext.php - `I ate 1 apple` definition added
+      u features/bootstrap/FirstContext.php - `I should have 3 apples` definition added
+      u features/bootstrap/FirstContext.php - `I found 5 apples` definition added
+      u features/bootstrap/FirstContext.php - `do something undefined with $` definition added
+      u features/bootstrap/FirstContext.php - `I ate 3 apples` definition added
+      u features/bootstrap/FirstContext.php - `do something undefined with \1` definition added
+      u features/bootstrap/FirstContext.php - `pystring:` definition added
+      u features/bootstrap/FirstContext.php - `pystring 5:` definition added
+      u features/bootstrap/FirstContext.php - `table:` definition added
       """
     And "features/bootstrap/FirstContext.php" file should contain:
       """

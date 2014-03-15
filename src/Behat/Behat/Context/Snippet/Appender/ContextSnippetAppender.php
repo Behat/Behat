@@ -69,9 +69,7 @@ final class ContextSnippetAppender implements SnippetAppender
 
             file_put_contents($path, $content);
 
-            if ($this->logger) {
-                $this->logger->fileUpdated($path, 'Snippets has been added');
-            }
+            $this->logSnippetAddition($snippet, $path);
         }
     }
 
@@ -104,5 +102,23 @@ final class ContextSnippetAppender implements SnippetAppender
         $replaceWith = "\$1" . 'use ' . self::PENDING_EXCEPTION_CLASS . ";\n\$2;";
 
         return preg_replace('@^(.*)(use\s+[^;]*);@m', $replaceWith, $contextFileContent, 1);
+    }
+
+    /**
+     * Logs snippet addition to the provided path (if logger is given).
+     *
+     * @param AggregateSnippet $snippet
+     * @param string           $path
+     */
+    private function logSnippetAddition(AggregateSnippet $snippet, $path)
+    {
+        if (!$this->logger) {
+            return;
+        }
+
+        $steps = $snippet->getSteps();
+        $reason = sprintf("`<comment>%s</comment>` definition added", $steps[0]->getText());
+
+        $this->logger->fileUpdated($path, $reason);
     }
 }

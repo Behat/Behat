@@ -77,7 +77,8 @@ final class AggregateSnippet
                     return $snippet->getStep();
                 },
                 $this->snippets
-            )
+            ),
+            SORT_REGULAR
         );
     }
 
