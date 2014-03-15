@@ -10,7 +10,6 @@
 
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
-use Behat\Behat\Output\Node\Printer\Helper\WidthCalculator;
 use Behat\Behat\Output\Node\Printer\ScenarioPrinter;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
@@ -27,13 +26,9 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class PrettyScenarioPrinter implements ScenarioPrinter
 {
     /**
-     * @var WidthCalculator
+     * @var PrettyPathPrinter
      */
-    private $widthCalculator;
-    /**
-     * @var string
-     */
-    private $basePath;
+    private $pathPrinter;
     /**
      * @var string
      */
@@ -46,19 +41,13 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Initializes printer.
      *
-     * @param WidthCalculator $widthCalculator
-     * @param string          $basePath
-     * @param integer         $indentation
-     * @param integer         $subIndentation
+     * @param PrettyPathPrinter $pathPrinter
+     * @param integer           $indentation
+     * @param integer           $subIndentation
      */
-    public function __construct(
-        WidthCalculator $widthCalculator,
-        $basePath,
-        $indentation = 2,
-        $subIndentation = 2
-    ) {
-        $this->widthCalculator = $widthCalculator;
-        $this->basePath = $basePath;
+    public function __construct(PrettyPathPrinter $pathPrinter, $indentation = 2, $subIndentation = 2)
+    {
+        $this->pathPrinter = $pathPrinter;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
@@ -74,13 +63,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
 
         $this->printKeyword($formatter->getOutputPrinter(), $scenario->getKeyword());
         $this->printTitle($formatter->getOutputPrinter(), $scenario->getTitle());
-
-        if ($formatter->getParameter('paths')) {
-            $this->printPath($formatter->getOutputPrinter(), $feature, $scenario);
-        } else {
-            $formatter->getOutputPrinter()->writeln();
-        }
-
+        $this->pathPrinter->printScenarioPath($formatter, $feature, $scenario, mb_strlen($this->indentText, 'utf8'));
         $this->printDescription($formatter->getOutputPrinter(), $scenario->getTitle());
     }
 
@@ -136,23 +119,6 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     }
 
     /**
-     * Prints scenario path comment.
-     *
-     * @param OutputPrinter $printer
-     * @param FeatureNode   $feature
-     * @param Scenario      $scenario
-     */
-    private function printPath(OutputPrinter $printer, FeatureNode $feature, Scenario $scenario)
-    {
-        $fileAndLine = sprintf('%s:%s', $this->relativizePaths($feature->getFile()), $scenario->getLine());
-        $headerWidth = $this->widthCalculator->calculateScenarioHeaderWidth($scenario, 2);
-        $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, 2, 2);
-        $spacing = str_repeat(' ', max(0, $scenarioWidth - $headerWidth));
-
-        $printer->writeln(sprintf('%s {+comment}# %s{-comment}', $spacing, $fileAndLine));
-    }
-
-    /**
      * Prints scenario description (other lines of long title).
      *
      * @param OutputPrinter $printer
@@ -178,21 +144,5 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     private function prependTagWithTagSign($tag)
     {
         return '@' . $tag;
-    }
-
-    /**
-     * Transforms path to relative.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    private function relativizePaths($path)
-    {
-        if (!$this->basePath) {
-            return $path;
-        }
-
-        return str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $path);
     }
 }

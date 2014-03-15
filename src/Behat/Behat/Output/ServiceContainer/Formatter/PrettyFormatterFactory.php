@@ -205,13 +205,13 @@ class PrettyFormatterFactory implements FormatterFactory
         $container->setDefinition('output.node.printer.pretty.feature', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyPathPrinter', array(
-            new Reference('output.node.printer.pretty.width_calculator')
+            new Reference('output.node.printer.pretty.width_calculator'),
+            '%paths.base%'
         ));
         $container->setDefinition('output.node.printer.pretty.path', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyScenarioPrinter', array(
-            new Reference('output.node.printer.pretty.width_calculator'),
-            '%paths.base%'
+            new Reference('output.node.printer.pretty.path'),
         ));
         $container->setDefinition('output.node.printer.pretty.scenario', $definition);
 
@@ -267,8 +267,7 @@ class PrettyFormatterFactory implements FormatterFactory
         $container->setDefinition('output.node.printer.pretty.outline', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyExamplePrinter', array(
-            new Reference('output.node.printer.pretty.width_calculator'),
-            '%paths.base%'
+            new Reference('output.node.printer.pretty.path'),
         ));
         $container->setDefinition('output.node.printer.pretty.example', $definition);
 

@@ -13,6 +13,7 @@ namespace Behat\Behat\Output\Node\Printer\Pretty;
 use Behat\Behat\Output\Node\Printer\Helper\WidthCalculator;
 use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Output\Formatter;
@@ -29,19 +30,51 @@ final class PrettyPathPrinter
      * @var WidthCalculator
      */
     private $widthCalculator;
+    /**
+     * @var string
+     */
+    private $basePath;
 
     /**
      * Initializes printer.
      *
      * @param WidthCalculator $widthCalculator
+     * @param string          $basePath
      */
-    public function __construct(WidthCalculator $widthCalculator)
+    public function __construct(WidthCalculator $widthCalculator, $basePath)
     {
         $this->widthCalculator = $widthCalculator;
+        $this->basePath = $basePath;
     }
 
     /**
-     * Prints step path.
+     * Prints scenario path comment.
+     *
+     * @param Formatter   $formatter
+     * @param FeatureNode $feature
+     * @param Scenario    $scenario
+     * @param integer     $indentation
+     */
+    public function printScenarioPath(Formatter $formatter, FeatureNode $feature, Scenario $scenario, $indentation)
+    {
+        $printer = $formatter->getOutputPrinter();
+
+        if (!$formatter->getParameter('paths')) {
+            $printer->writeln();
+
+            return;
+        }
+
+        $fileAndLine = sprintf('%s:%s', $this->relativizePaths($feature->getFile()), $scenario->getLine());
+        $headerWidth = $this->widthCalculator->calculateScenarioHeaderWidth($scenario, $indentation);
+        $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, $indentation, 2);
+        $spacing = str_repeat(' ', max(0, $scenarioWidth - $headerWidth));
+
+        $printer->writeln(sprintf('%s {+comment}# %s{-comment}', $spacing, $fileAndLine));
+    }
+
+    /**
+     * Prints step path comment.
      *
      * @param Formatter  $formatter
      * @param Scenario   $scenario
@@ -96,5 +129,21 @@ final class PrettyPathPrinter
         $spacing = str_repeat(' ', $scenarioWidth - $stepWidth);
 
         $printer->writeln(sprintf('%s {+comment}# %s{-comment}', $spacing, $path));
+    }
+
+    /**
+     * Transforms path to relative.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private function relativizePaths($path)
+    {
+        if (!$this->basePath) {
+            return $path;
+        }
+
+        return str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $path);
     }
 }
