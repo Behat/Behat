@@ -159,6 +159,10 @@ class ProgressFormatterFactory implements FormatterFactory
                         new Definition('Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener', array(
                             new Reference('output.progress.statistics')
                         )),
+                        new Definition('Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener', array(
+                            new Reference('output.progress.statistics'),
+                            new Reference(ExceptionExtension::PRESENTER_ID)
+                        )),
                     )
                 )
             )

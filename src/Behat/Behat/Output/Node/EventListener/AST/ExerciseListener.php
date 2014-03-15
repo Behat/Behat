@@ -13,18 +13,12 @@ namespace Behat\Behat\Output\Node\EventListener\AST;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
-use Behat\Behat\Output\Statistics\FailedHookStat;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
-use Behat\Testwork\Call\CallResult;
-use Behat\Testwork\EventDispatcher\Event\AfterTested;
-use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
-use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
-use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Tester\Result\ExceptionResult;
@@ -71,7 +65,6 @@ final class ExerciseListener implements EventListener
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
         $this->forgetCurrentFeaturePathOnAfterFeatureEvent($eventName);
         $this->captureStepStatsOnAfterEvent($event);
-        $this->captureHookStatsOnEvent($event);
     }
 
     /**
@@ -126,81 +119,6 @@ final class ExerciseListener implements EventListener
         $stat = new StepStat($text, $path, $resultCode, $error, $stdOut);
 
         $this->statistics->registerStepStat($stat);
-    }
-
-    /**
-     * Captures hook stats on hooked event.
-     *
-     * @param Event $event
-     */
-    private function captureHookStatsOnEvent(Event $event)
-    {
-        if ($event instanceof BeforeTested && $event->getSetup() instanceof HookedSetup) {
-            $this->captureBeforeHookStats($event->getSetup());
-        }
-
-        if ($event instanceof AfterTested && $event->getTeardown() instanceof HookedTeardown) {
-            $this->captureAfterHookStats($event->getTeardown());
-        }
-    }
-
-    /**
-     * Captures before hook stats.
-     *
-     * @param HookedSetup $setup
-     */
-    private function captureBeforeHookStats(HookedSetup $setup)
-    {
-        $hookCallResults = $setup->getHookCallResults();
-
-        if (!$hookCallResults->hasExceptions()) {
-            return;
-        }
-
-        foreach ($hookCallResults as $hookCallResult) {
-            $this->captureHookStat($hookCallResult);
-        }
-    }
-
-    /**
-     * Captures before hook stats.
-     *
-     * @param HookedTeardown $teardown
-     */
-    private function captureAfterHookStats(HookedTeardown $teardown)
-    {
-        $hookCallResults = $teardown->getHookCallResults();
-
-        if (!$hookCallResults->hasExceptions()) {
-            return;
-        }
-
-        foreach ($hookCallResults as $hookCallResult) {
-            $this->captureHookStat($hookCallResult);
-        }
-    }
-
-    /**
-     * Captures hook call result.
-     *
-     * @param CallResult $hookCallResult
-     */
-    private function captureHookStat(CallResult $hookCallResult)
-    {
-        if (!$hookCallResult->hasException()) {
-            return;
-        }
-
-        $callee = $hookCallResult->getCall()->getCallee();
-        $hook = (string)$callee;
-        $path = $callee->getPath();
-        $stdOut = $hookCallResult->getStdOut();
-        $error = $hookCallResult->getException()
-            ? $this->exceptionPresenter->presentException($hookCallResult->getException())
-            : null;
-
-        $stat = new FailedHookStat($hook, $path, $error, $stdOut);
-        $this->statistics->registerFailedHookStat($stat);
     }
 
     /**
