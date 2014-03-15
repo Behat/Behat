@@ -97,7 +97,7 @@ final class PrettyExamplePrinter implements ExamplePrinter
 
         $fileAndLine = sprintf('%s:%s', $this->relativizePaths($feature->getFile()), $example->getLine());
         $headerWidth = $this->widthCalculator->calculateScenarioHeaderWidth($example, $indentation);
-        $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($example, $indentation);
+        $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($example, $indentation, 2);
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $headerWidth));
 
         $printer->writeln(sprintf('%s {+comment}# %s{-comment}', $spacing, $fileAndLine));

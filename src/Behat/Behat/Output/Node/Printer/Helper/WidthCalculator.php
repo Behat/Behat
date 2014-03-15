@@ -30,7 +30,7 @@ final class WidthCalculator
      *
      * @return integer
      */
-    public function calculateScenarioWidth(Scenario $scenario, $indentation = 2, $subIndentation = 2)
+    public function calculateScenarioWidth(Scenario $scenario, $indentation, $subIndentation)
     {
         $length = $this->calculateScenarioHeaderWidth($scenario, $indentation);
 
@@ -51,7 +51,7 @@ final class WidthCalculator
      *
      * @return integer
      */
-    public function calculateExampleWidth(ExampleNode $example, $indentation = 4, $subIndentation = 6)
+    public function calculateExampleWidth(ExampleNode $example, $indentation, $subIndentation)
     {
         $length = $this->calculateScenarioHeaderWidth($example, $indentation);
 
@@ -71,7 +71,7 @@ final class WidthCalculator
      *
      * @return integer
      */
-    public function calculateScenarioHeaderWidth(Scenario $scenario, $indentation = 2)
+    public function calculateScenarioHeaderWidth(Scenario $scenario, $indentation)
     {
         $indentText = str_repeat(' ', intval($indentation));
 
@@ -94,7 +94,7 @@ final class WidthCalculator
      *
      * @return integer
      */
-    public function calculateStepWidth(StepNode $step, $indentation = 4)
+    public function calculateStepWidth(StepNode $step, $indentation)
     {
         $indentText = str_repeat(' ', intval($indentation));
 

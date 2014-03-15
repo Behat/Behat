@@ -141,7 +141,7 @@ final class PrettyStepPrinter implements StepPrinter
 
         $path = $result->getStepDefinition()->getPath();
         $textWidth = $this->widthCalculator->calculateStepWidth($step, $indentation);
-        $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, $indentation - 2);
+        $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, $indentation - 2, 2);
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $textWidth));
 
         $printer->writeln(sprintf('%s {+comment}# %s{-comment}', $spacing, $path));

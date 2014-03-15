@@ -145,8 +145,8 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     private function printPath(OutputPrinter $printer, FeatureNode $feature, Scenario $scenario)
     {
         $fileAndLine = sprintf('%s:%s', $this->relativizePaths($feature->getFile()), $scenario->getLine());
-        $headerWidth = $this->widthCalculator->calculateScenarioHeaderWidth($scenario);
-        $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario);
+        $headerWidth = $this->widthCalculator->calculateScenarioHeaderWidth($scenario, 2);
+        $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, 2, 2);
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $headerWidth));
 
         $printer->writeln(sprintf('%s {+comment}# %s{-comment}', $spacing, $fileAndLine));
