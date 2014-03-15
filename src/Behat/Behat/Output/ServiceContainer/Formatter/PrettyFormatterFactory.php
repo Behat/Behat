@@ -204,8 +204,13 @@ class PrettyFormatterFactory implements FormatterFactory
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyFeaturePrinter');
         $container->setDefinition('output.node.printer.pretty.feature', $definition);
 
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyPathPrinter', array(
+            new Reference('output.node.printer.pretty.width_calculator')
+        ));
+        $container->setDefinition('output.node.printer.pretty.path', $definition);
+
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyScenarioPrinter', array(
-            new Reference('output.node.printer.pretty.scenario_width_calculator'),
+            new Reference('output.node.printer.pretty.width_calculator'),
             '%paths.base%'
         ));
         $container->setDefinition('output.node.printer.pretty.scenario', $definition);
@@ -213,15 +218,15 @@ class PrettyFormatterFactory implements FormatterFactory
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyStepPrinter', array(
             new Reference('output.node.printer.pretty.step_text_painter'),
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
-            new Reference(ExceptionExtension::PRESENTER_ID),
-            new Reference('output.node.printer.pretty.scenario_width_calculator')
+            new Reference('output.node.printer.pretty.path'),
+            new Reference(ExceptionExtension::PRESENTER_ID)
         ));
         $container->setDefinition('output.node.printer.pretty.step', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettySkippedStepPrinter', array(
             new Reference('output.node.printer.pretty.step_text_painter'),
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
-            new Reference('output.node.printer.pretty.scenario_width_calculator')
+            new Reference('output.node.printer.pretty.path'),
         ));
         $container->setDefinition('output.node.printer.pretty.skipped_step', $definition);
     }
@@ -262,7 +267,7 @@ class PrettyFormatterFactory implements FormatterFactory
         $container->setDefinition('output.node.printer.pretty.outline', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyExamplePrinter', array(
-            new Reference('output.node.printer.pretty.scenario_width_calculator'),
+            new Reference('output.node.printer.pretty.width_calculator'),
             '%paths.base%'
         ));
         $container->setDefinition('output.node.printer.pretty.example', $definition);
@@ -270,8 +275,8 @@ class PrettyFormatterFactory implements FormatterFactory
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyStepPrinter', array(
             new Reference('output.node.printer.pretty.step_text_painter'),
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+            new Reference('output.node.printer.pretty.path'),
             new Reference(ExceptionExtension::PRESENTER_ID),
-            new Reference('output.node.printer.pretty.scenario_width_calculator'),
             8
         ));
         $container->setDefinition('output.node.printer.pretty.example_step', $definition);
@@ -367,7 +372,7 @@ class PrettyFormatterFactory implements FormatterFactory
     protected function loadPrinterHelpers(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Helper\WidthCalculator');
-        $container->setDefinition('output.node.printer.pretty.scenario_width_calculator', $definition);
+        $container->setDefinition('output.node.printer.pretty.width_calculator', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Helper\StepTextPainter', array(
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),

@@ -41,9 +41,9 @@ final class PrettySkippedStepPrinter implements StepPrinter
      */
     private $resultConverter;
     /**
-     * @var WidthCalculator
+     * @var PrettyPathPrinter
      */
-    private $widthCalculator;
+    private $pathPrinter;
     /**
      * @var string
      */
@@ -58,20 +58,20 @@ final class PrettySkippedStepPrinter implements StepPrinter
      *
      * @param StepTextPainter         $textPainter
      * @param ResultToStringConverter $resultConverter
-     * @param WidthCalculator         $widthCalculator
+     * @param PrettyPathPrinter       $pathPrinter
      * @param integer                 $indentation
      * @param integer                 $subIndentation
      */
     public function __construct(
         StepTextPainter $textPainter,
         ResultToStringConverter $resultConverter,
-        WidthCalculator $widthCalculator,
+        PrettyPathPrinter $pathPrinter,
         $indentation = 4,
         $subIndentation = 2
     ) {
         $this->textPainter = $textPainter;
         $this->resultConverter = $resultConverter;
-        $this->widthCalculator = $widthCalculator;
+        $this->pathPrinter = $pathPrinter;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
@@ -82,13 +82,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
         $this->printText($formatter->getOutputPrinter(), $step->getType(), $step->getText(), $result);
-
-        if ($formatter->getParameter('paths')) {
-            $this->printPath($formatter->getOutputPrinter(), $scenario, $step, $result);
-        } else {
-            $formatter->getOutputPrinter()->writeln();
-        }
-
+        $this->pathPrinter->printStepPath($formatter, $scenario, $step, $result, mb_strlen($this->indentText, 'utf8'));
         $this->printArguments($formatter, $step->getArguments());
     }
 
@@ -112,30 +106,6 @@ final class PrettySkippedStepPrinter implements StepPrinter
         }
 
         $printer->write(sprintf('%s{+%s}%s %s{-%s}', $this->indentText, $style, $stepType, $stepText, $style));
-    }
-
-    /**
-     * Prints step definition path (if has one).
-     *
-     * @param OutputPrinter $printer
-     * @param Scenario      $scenario
-     * @param StepNode      $step
-     * @param StepResult    $result
-     */
-    private function printPath(OutputPrinter $printer, Scenario $scenario, StepNode $step, StepResult $result)
-    {
-        if (!$result instanceof DefinedStepResult || !$result->getStepDefinition()) {
-            $printer->writeln();
-
-            return;
-        }
-
-        $path = $result->getStepDefinition()->getPath();
-        $textWidth = $this->widthCalculator->calculateStepWidth($step, 4);
-        $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, 2, 2);
-        $spacing = str_repeat(' ', $scenarioWidth - $textWidth);
-
-        $printer->writeln(sprintf('%s {+comment}# %s{-comment}', $spacing, $path));
     }
 
     /**
