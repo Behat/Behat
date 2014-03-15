@@ -11,13 +11,11 @@
 namespace Behat\Behat\Tester\Runtime;
 
 use Behat\Behat\Tester\BackgroundTester;
-use Behat\Behat\Tester\StepTester;
+use Behat\Behat\Tester\StepContainerTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
-use Behat\Testwork\Tester\Result\TestWithSetupResult;
 use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 
@@ -29,18 +27,18 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 final class RuntimeBackgroundTester implements BackgroundTester
 {
     /**
-     * @var StepTester
+     * @var StepContainerTester
      */
-    private $stepTester;
+    private $containerTester;
 
     /**
      * Initializes tester.
      *
-     * @param StepTester $stepTester
+     * @param StepContainerTester $containerTester
      */
-    public function __construct(StepTester $stepTester)
+    public function __construct(StepContainerTester $containerTester)
     {
-        $this->stepTester = $stepTester;
+        $this->containerTester = $containerTester;
     }
 
     /**
@@ -56,22 +54,7 @@ final class RuntimeBackgroundTester implements BackgroundTester
      */
     public function test(Environment $env, FeatureNode $feature, $skip)
     {
-        $background = $feature->getBackground();
-
-        $results = array();
-        foreach ($background->getSteps() as $step) {
-            $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
-            $skip = !$setup->isSuccessful() || $skip;
-
-            $testResult = $this->stepTester->test($env, $feature, $step, $skip);
-            $skip = !$testResult->isPassed() || $skip;
-
-            $teardown = $this->stepTester->tearDown($env, $feature, $step, $skip, $testResult);
-            $skip = !$teardown->isSuccessful() || $skip;
-
-            $integerResult = new IntegerTestResult($testResult->getResultCode());
-            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
-        }
+        $results = $this->containerTester->test($env, $feature, $feature->getBackground(), $skip);
 
         return new TestResults($results);
     }
