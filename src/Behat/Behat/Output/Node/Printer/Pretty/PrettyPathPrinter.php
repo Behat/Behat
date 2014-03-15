@@ -91,7 +91,7 @@ final class PrettyPathPrinter
     ) {
         $printer = $formatter->getOutputPrinter();
 
-        if (!$formatter->getParameter('paths') || !$this->resultHasDefinition($result)) {
+        if (!$result instanceof DefinedStepResult || !$result->getStepDefinition() || !$formatter->getParameter('paths')) {
             $printer->writeln();
 
             return;
@@ -101,18 +101,6 @@ final class PrettyPathPrinter
         $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, $indentation - 2, 2);
 
         $this->printDefinedStepPath($printer, $result, $scenarioWidth, $textWidth);
-    }
-
-    /**
-     * Checks if result has step definition.
-     *
-     * @param StepResult $result
-     *
-     * @return Boolean
-     */
-    private function resultHasDefinition(StepResult $result)
-    {
-        return $result instanceof DefinedStepResult && $result->getStepDefinition();
     }
 
     /**
