@@ -11,8 +11,8 @@
 namespace Behat\Behat\Tester\Runtime;
 
 use Behat\Behat\Tester\BackgroundTester;
+use Behat\Behat\Tester\StepContainerTester;
 use Behat\Behat\Tester\ScenarioTester;
-use Behat\Behat\Tester\StepTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Testwork\Environment\Environment;
@@ -31,9 +31,9 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 final class RuntimeScenarioTester implements ScenarioTester
 {
     /**
-     * @var StepTester
+     * @var StepContainerTester
      */
-    private $stepTester;
+    private $containerTester;
     /**
      * @var BackgroundTester
      */
@@ -42,12 +42,12 @@ final class RuntimeScenarioTester implements ScenarioTester
     /**
      * Initializes tester.
      *
-     * @param StepTester       $stepTester
-     * @param BackgroundTester $backgroundTester
+     * @param StepContainerTester $containerTester
+     * @param BackgroundTester           $backgroundTester
      */
-    public function __construct(StepTester $stepTester, BackgroundTester $backgroundTester)
+    public function __construct(StepContainerTester $containerTester, BackgroundTester $backgroundTester)
     {
-        $this->stepTester = $stepTester;
+        $this->containerTester = $containerTester;
         $this->backgroundTester = $backgroundTester;
     }
 
@@ -80,19 +80,7 @@ final class RuntimeScenarioTester implements ScenarioTester
             $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
         }
 
-        foreach ($scenario->getSteps() as $step) {
-            $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
-            $skip = !$setup->isSuccessful() || $skip;
-
-            $testResult = $this->stepTester->test($env, $feature, $step, $skip);
-            $skip = !$testResult->isPassed() || $skip;
-
-            $teardown = $this->stepTester->tearDown($env, $feature, $step, $skip, $testResult);
-            $skip = !$teardown->isSuccessful() || $skip;
-
-            $integerResult = new IntegerTestResult($testResult->getResultCode());
-            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
-        }
+        $results = array_merge($results, $this->containerTester->test($env, $feature, $scenario, $skip));
 
         return new TestResults($results);
     }

@@ -116,8 +116,13 @@ class TesterExtension extends BaseExtension
      */
     protected function loadScenarioTester(ContainerBuilder $container)
     {
+        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
+            new Reference(self::STEP_TESTER_ID)
+        ));
+        $container->setDefinition('tester.step_container', $definition);
+
         $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', array(
-            new Reference(self::STEP_TESTER_ID),
+            new Reference('tester.step_container'),
             new Reference(self::BACKGROUND_TESTER_ID)
 
         ));
@@ -146,8 +151,13 @@ class TesterExtension extends BaseExtension
      */
     protected function loadExampleTester(ContainerBuilder $container)
     {
+        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
+            new Reference(self::STEP_TESTER_ID)
+        ));
+        $container->setDefinition('tester.step_container', $definition);
+
         $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', array(
-            new Reference(self::STEP_TESTER_ID),
+            new Reference('tester.step_container'),
             new Reference(self::BACKGROUND_TESTER_ID)
         ));
         $container->setDefinition(self::EXAMPLE_TESTER_ID, $definition);
@@ -160,8 +170,13 @@ class TesterExtension extends BaseExtension
      */
     protected function loadBackgroundTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeBackgroundTester', array(
+        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
             new Reference(self::STEP_TESTER_ID)
+        ));
+        $container->setDefinition('tester.step_container', $definition);
+
+        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeBackgroundTester', array(
+            new Reference('tester.step_container')
         ));
         $container->setDefinition(self::BACKGROUND_TESTER_ID, $definition);
     }
