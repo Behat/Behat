@@ -31,7 +31,7 @@ final class PrettyExamplePrinter implements ExamplePrinter
     /**
      * @var string
      */
-    private $basePath;
+    private $indentText;
 
     /**
      * Initializes printer.
