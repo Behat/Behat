@@ -14,7 +14,6 @@ use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
-use Behat\Behat\Output\Node\Printer\StatisticsPrinter;
 use Behat\Behat\Output\Statistics\FailedHookStat;
 use Behat\Behat\Output\Statistics\ScenarioStat;
 use Behat\Behat\Output\Statistics\Statistics;
@@ -25,7 +24,6 @@ use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeTested;
-use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
@@ -43,17 +41,13 @@ use Symfony\Component\EventDispatcher\Event;
 final class ExerciseListener implements EventListener
 {
     /**
-     * @var StatisticsPrinter
+     * @var Statistics
      */
-    private $statisticsPrinter;
+    private $statistics;
     /**
      * @var ExceptionPresenter
      */
     private $exceptionPresenter;
-    /**
-     * @var Statistics
-     */
-    private $statistics;
     /**
      * @var string
      */
@@ -62,12 +56,12 @@ final class ExerciseListener implements EventListener
     /**
      * Initializes listener.
      *
-     * @param StatisticsPrinter  $statisticsPrinter
+     * @param Statistics         $statistics
      * @param ExceptionPresenter $exceptionPresenter
      */
-    public function __construct(StatisticsPrinter $statisticsPrinter, ExceptionPresenter $exceptionPresenter)
+    public function __construct(Statistics $statistics, ExceptionPresenter $exceptionPresenter)
     {
-        $this->statisticsPrinter = $statisticsPrinter;
+        $this->statistics = $statistics;
         $this->exceptionPresenter = $exceptionPresenter;
     }
 
@@ -76,29 +70,11 @@ final class ExerciseListener implements EventListener
      */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
-        $this->startTimerOnBeforeExercise($eventName);
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
         $this->forgetCurrentFeaturePathOnAfterFeatureEvent($eventName);
         $this->captureScenarioOrExampleStatsOnAfterEvent($event);
         $this->captureStepStatsOnAfterEvent($event);
         $this->captureHookStatsOnEvent($event);
-
-        $this->printStatisticsOnAfterExerciseEvent($formatter, $eventName);
-    }
-
-    /**
-     * Starts timer on exercise BEFORE event.
-     *
-     * @param string $eventName
-     */
-    private function startTimerOnBeforeExercise($eventName)
-    {
-        if (ExerciseCompleted::BEFORE !== $eventName) {
-            return;
-        }
-
-        $this->statistics = new Statistics();
-        $this->statistics->startTimer();
     }
 
     /**
@@ -246,22 +222,6 @@ final class ExerciseListener implements EventListener
 
         $stat = new FailedHookStat($hook, $path, $error, $stdOut);
         $this->statistics->registerFailedHookStat($stat);
-    }
-
-    /**
-     * Prints statistics on after exercise event.
-     *
-     * @param Formatter $formatter
-     * @param string    $eventName
-     */
-    private function printStatisticsOnAfterExerciseEvent(Formatter $formatter, $eventName)
-    {
-        if (ExerciseCompleted::AFTER !== $eventName) {
-            return;
-        }
-
-        $this->statistics->stopTimer();
-        $this->statisticsPrinter->printStatistics($formatter, $this->statistics);
     }
 
     /**

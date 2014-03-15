@@ -167,6 +167,9 @@ class PrettyFormatterFactory implements FormatterFactory
      */
     protected function loadFormatter(ContainerBuilder $container)
     {
+        $definition = new Definition('Behat\Behat\Output\Statistics\Statistics');
+        $container->setDefinition('output.pretty.statistics', $definition);
+
         $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', array(
             'pretty',
             'Prints the feature as is.',
@@ -183,8 +186,12 @@ class PrettyFormatterFactory implements FormatterFactory
                             new Reference(self::ROOT_LISTENER_ID)
                         ),
                         new Definition('Behat\Behat\Output\Node\EventListener\AST\ExerciseListener', array(
-                            new Reference('output.node.printer.pretty.statistics'),
+                            new Reference('output.pretty.statistics'),
                             new Reference(ExceptionExtension::PRESENTER_ID)
+                        )),
+                        new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StatisticsListener', array(
+                            new Reference('output.pretty.statistics'),
+                            new Reference('output.node.printer.pretty.statistics')
                         )),
                     )
                 )
