@@ -41,7 +41,7 @@ use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
  */
 final class ApplicationFactory extends BaseFactory
 {
-    const VERSION = '3.0-dev';
+    const VERSION = '3.0.0rc3 (gold)';
 
     /**
      * {@inheritdoc}
