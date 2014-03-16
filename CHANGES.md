@@ -1,3 +1,17 @@
+3.0.0rc3 / 2014-03-16
+=======================
+
+  * Multiline step description support ([082da36b7db2525700287616babe982e485330d1](https://github.com/Behat/Behat/commit/082da36b7db2525700287616babe982e485330d1))
+  * Added ability to choose all 3 verbosity levels and moved stack traces to the 2nd one ([d550f72d6aa49f0f87a6ce0e50721356a5d04c45](https://github.com/Behat/Behat/commit/d550f72d6aa49f0f87a6ce0e50721356a5d04c45))
+  * Renamed Subject to Specification ([#447](https://github.com/Behat/Behat/pull/447))
+  * Refactored ContextSnippetGenerator ([#445](https://github.com/Behat/Behat/pull/445))
+  * Refactored context arguments handling ([#446](https://github.com/Behat/Behat/pull/446))
+  * Refactored testers to use composition over inheritance and added setUp/tearDown phase to them ([#457](https://github.com/Behat/Behat/pull/457))
+  * Refactored output formatters to be chain of event listeners
+  * Refactored hooks to use [scopes](https://github.com/Behat/Behat/tree/3.0/src/Behat/Behat/Hook/Scope) instead of events
+  * Fixed the GroupedSubjectIterator when dealing with an empty iterator ([2c1312780d610f01116ac42fb958c0c09a64c041](https://github.com/Behat/Behat/commit/2c1312780d610f01116ac42fb958c0c09a64c041))
+  * Forced the paths.base to use a real path all the time ([b4477d7cf3f9550874c609d4edc5a4f55390672c](https://github.com/Behat/Behat/commit/b4477d7cf3f9550874c609d4edc5a4f55390672c))
+
 3.0.0rc2 / 2014-01-10
 =======================
 
