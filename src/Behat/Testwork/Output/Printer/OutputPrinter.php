@@ -79,21 +79,21 @@ interface OutputPrinter
     public function getOutputVerbosity();
 
     /**
-     * Writes message(s) to output console.
+     * Writes message(s) to output stream.
      *
      * @param string|array $messages message or array of messages
      */
     public function write($messages);
 
     /**
-     * Writes newlined message(s) to output console.
+     * Writes newlined message(s) to output stream.
      *
      * @param string|array $messages message or array of messages
      */
     public function writeln($messages = '');
 
     /**
-     * Clear output console, so on next write formatter will need to init (create) it again.
+     * Clear output stream, so on next write formatter will need to init (create) it again.
      */
     public function flush();
 }
