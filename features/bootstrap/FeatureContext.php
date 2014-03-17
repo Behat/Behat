@@ -157,6 +157,24 @@ class FeatureContext implements Context
     }
 
     /**
+     * Checks whether previously runned command passes|failes with no output.
+     *
+     * @Then /^it should (fail|pass) with no output$/
+     *
+     * @param string $success "fail" or "pass"
+     */
+    public function itShouldPassWithNoOutput($success)
+    {
+        $this->itShouldFail($success);
+
+        try {
+            PHPUnit_Framework_Assert::assertEmpty($this->getOutput());
+        } catch (PHPUnit_Framework_ExpectationFailedException $e) {
+            throw new PHPUnit_Framework_ExpectationFailedException('Failed asserting that the output is empty'.PHP_EOL.'Actual output:'.PHP_EOL.$this->getOutput());
+        }
+    }
+
+    /**
      * Checks whether specified file exists and contains specified string.
      *
      * @Then /^"([^"]*)" file should contain:$/
@@ -197,7 +215,7 @@ class FeatureContext implements Context
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
-                '/ features\/[^\n ]+/', function ($matches) {
+                '/[ "]features\/[^\n "]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 }, $text
             );
@@ -238,6 +256,22 @@ class FeatureContext implements Context
 
             PHPUnit_Framework_Assert::assertEquals(0, $this->getExitCode());
         }
+    }
+
+    /**
+     * Checks whether the file is validate according to an XML schema.
+     *
+     * @Then /^the file "([^"]+)" should be a valid document according to "([^"]+)"$/
+     *
+     * @param string $xmlFile
+     * @param string $schemaPath relative to features/bootstrap/schema
+     */
+    public function xmlShouldBeValid($xmlFile, $schemaPath)
+    {
+        $dom = new DomDocument();
+        $dom->load($this->workingDir . '/' . $xmlFile);
+
+        $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);
     }
 
     private function getExitCode()
