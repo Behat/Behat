@@ -190,7 +190,7 @@ class ConsoleOutputPrinter implements OutputPrinter
      *
      * @throws BadOutputPathException
      */
-    final protected function createOutputStream()
+    protected function createOutputStream()
     {
         if (null === $this->outputPath) {
             $stream = fopen('php://stdout', 'w');
