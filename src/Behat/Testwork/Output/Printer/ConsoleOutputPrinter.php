@@ -199,7 +199,6 @@ class ConsoleOutputPrinter implements OutputPrinter
         } else {
             throw new BadOutputPathException(sprintf(
                 'Filename expected as `output_path` parameter, but got `%s`.',
-                basename(str_replace('\\', '/', get_class($this))),
                 $this->outputPath
             ), $this->outputPath);
         }
