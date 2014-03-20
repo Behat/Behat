@@ -38,7 +38,7 @@ final class ContextNotFoundException extends InvalidArgumentException implements
     }
 
     /**
-     * Returns not found classname.
+     * Returns not found class name.
      *
      * @return string
      */
