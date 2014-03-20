@@ -38,7 +38,7 @@ final class WrongContextClassException extends InvalidArgumentException implemen
     }
 
     /**
-     * Returns not found classname.
+     * Returns not found class name.
      *
      * @return string
      */
