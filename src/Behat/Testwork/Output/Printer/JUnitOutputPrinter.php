@@ -217,7 +217,7 @@ class JUnitOutputPrinter extends StreamOutputPrinter
         }
 
         if (null === $this->fileName) {
-            throw new 
+            throw new \LogicException('Unable to create file, no file name specified');
         }
 
         $filePath = $this->outputPath.'/'.$this->fileName;

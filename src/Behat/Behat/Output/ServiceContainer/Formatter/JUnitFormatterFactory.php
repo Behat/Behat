@@ -67,6 +67,8 @@ class JUnitFormatterFactory implements FormatterFactory
      */
     protected function createOutputPrinterDefinition()
     {
-        return new Definition('Behat\Behat\Output\Printer\ConsoleOutputPrinter');
+        return new Definition('Behat\Testwork\Output\Printer\JUnitOutputPrinter', array(
+            new Definition('Behat\Testwork\Output\Printer\Helper\JUnitXsdChecker'),
+        ));
     }
 }

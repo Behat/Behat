@@ -36,7 +36,7 @@ class JUnitXsdChecker
      *
      * @see checkAttributes
      */
-    public function validateTestsuitesAttributes(array $attributes)
+    public function validateTestsuiteAttributes(array $attributes)
     {
         $this->checkAttributes($attributes, array('name', 'tests', 'failures', 'errors', 'time', 'disabled', 'skipped', 'timestamp', 'hostname', 'id', 'package'), 'testsuite');
     }

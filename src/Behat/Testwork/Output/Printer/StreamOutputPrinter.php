@@ -15,7 +15,6 @@ use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Symfony2\Console-based output printer for printing to streams.
