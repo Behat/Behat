@@ -58,7 +58,7 @@
         'failed_count'           => '[1,Inf] %1% fallaron',
         'pending_count'          => '[1,Inf] %1% pendientes',
         'undefined_count'        => '[1,Inf] %1% por definir',
-        'skipped_count'          => '[1,Inf] %1% salteadas',
+        'skipped_count'          => '[1,Inf] %1% saltadas',
     ),
     'fr'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> a des étapes manquantes. Définissez-les avec les modèles suivants :</snippet_undefined>',
