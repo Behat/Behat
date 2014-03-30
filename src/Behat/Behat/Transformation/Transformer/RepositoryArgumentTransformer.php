@@ -105,15 +105,15 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             return $value;
         }
 
-        if ($newValue = $this->transformToken($definitionCall, $transformation, $index, $value)) {
+        if (null !== $newValue = $this->transformToken($definitionCall, $transformation, $index, $value)) {
             return $newValue;
         }
 
-        if ($newValue = $this->transformTable($definitionCall, $transformation, $value)) {
+        if (null !== $newValue = $this->transformTable($definitionCall, $transformation, $value)) {
             return $newValue;
         }
 
-        if ($newValue = $this->transformRegex($definitionCall, $transformation, $value)) {
+        if (null !== $newValue = $this->transformRegex($definitionCall, $transformation, $value)) {
             return $newValue;
         }
 

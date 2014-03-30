@@ -61,6 +61,13 @@ Feature: Step Arguments Transformations
           }
 
           /**
+           * @Transform /^(yes|no)$/
+           */
+          public function castEinenOrKeinenToBoolean($expected) {
+              return 'yes' === $expected;
+          }
+
+          /**
            * @Given /I am (".*" user)/
            * @Given I am user:
            * @Given I am :user
@@ -83,6 +90,13 @@ Feature: Step Arguments Transformations
               PHPUnit_Framework_Assert::assertEquals($age, $this->user->getAge());
               PHPUnit_Framework_Assert::assertInternalType('int', $age);
           }
+
+          /**
+           * @Then /^the boolean (no) should be transformed to false$/
+           */
+          public function theBooleanShouldBeTransformed($boolean) {
+              PHPUnit_Framework_Assert::assertSame(false, $boolean);
+          }
       }
     """
 
@@ -94,6 +108,7 @@ Feature: Step Arguments Transformations
           Given I am "everzet" user
           Then Username must be "everzet"
           And Age must be 20
+          And the boolean no should be transformed to false
 
         Scenario:
           Given I am "antono - 29" user
@@ -103,10 +118,10 @@ Feature: Step Arguments Transformations
     When I run "behat -f progress --no-colors"
     Then it should pass with:
       """
-      ......
+      .......
 
       2 scenarios (2 passed)
-      6 steps (6 passed)
+      7 steps (7 passed)
       """
 
   Scenario: Table Arguments Transformations
