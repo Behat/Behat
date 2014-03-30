@@ -20,6 +20,10 @@ final class ScenarioStat
     /**
      * @var string
      */
+    private $title;
+    /**
+     * @var string
+     */
     private $file;
     /**
      * @var integer
@@ -33,15 +37,27 @@ final class ScenarioStat
     /**
      * Initializes scenario stat.
      *
+     * @param string  $title
      * @param string  $file
      * @param integer $line
      * @param integer $resultCode
      */
-    public function __construct($file, $line, $resultCode)
+    public function __construct($title, $file, $line, $resultCode)
     {
+        $this->title = $title;
         $this->file = $file;
         $this->line = $line;
         $this->resultCode = $resultCode;
+    }
+
+    /**
+     * Returns scenario title.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     /**
