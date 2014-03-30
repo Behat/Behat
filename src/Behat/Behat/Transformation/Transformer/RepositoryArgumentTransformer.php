@@ -244,12 +244,8 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
      *
      * @return Boolean
      */
-    private function isStringAndMatchesPattern(
-        DefinitionCall $definitionCall,
-        $argumentValue,
-        $pattern,
-        &$match
-    ) {
+    private function isStringAndMatchesPattern(DefinitionCall $definitionCall, $argumentValue, $pattern, &$match)
+    {
         $regex = $this->getRegex(
             $definitionCall->getEnvironment()->getSuite()->getName(),
             $pattern,
