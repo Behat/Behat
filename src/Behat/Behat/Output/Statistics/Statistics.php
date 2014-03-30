@@ -197,7 +197,7 @@ final class Statistics
     /**
      * Returns failed hook stats.
      *
-     * @return FailedHookStat[]
+     * @return HookStat[]
      */
     public function getFailedHookStats()
     {

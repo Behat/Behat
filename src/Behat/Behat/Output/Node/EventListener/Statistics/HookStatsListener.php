@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Output\Node\EventListener\Statistics;
 
-use Behat\Behat\Output\Statistics\FailedHookStat;
+use Behat\Behat\Output\Statistics\HookStat;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
@@ -23,11 +23,11 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Listens and records failed hook stats.
+ * Listens and records hook stats.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class FailedHookStatsListener implements EventListener
+final class HookStatsListener implements EventListener
 {
     /**
      * @var Statistics
@@ -83,10 +83,6 @@ final class FailedHookStatsListener implements EventListener
     {
         $hookCallResults = $setup->getHookCallResults();
 
-        if (!$hookCallResults->hasExceptions()) {
-            return;
-        }
-
         foreach ($hookCallResults as $hookCallResult) {
             $this->captureHookStat($hookCallResult);
         }
@@ -101,10 +97,6 @@ final class FailedHookStatsListener implements EventListener
     {
         $hookCallResults = $teardown->getHookCallResults();
 
-        if (!$hookCallResults->hasExceptions()) {
-            return;
-        }
-
         foreach ($hookCallResults as $hookCallResult) {
             $this->captureHookStat($hookCallResult);
         }
@@ -117,10 +109,6 @@ final class FailedHookStatsListener implements EventListener
      */
     private function captureHookStat(CallResult $hookCallResult)
     {
-        if (!$hookCallResult->hasException()) {
-            return;
-        }
-
         $callee = $hookCallResult->getCall()->getCallee();
         $hook = (string)$callee;
         $path = $callee->getPath();
@@ -129,7 +117,7 @@ final class FailedHookStatsListener implements EventListener
             ? $this->exceptionPresenter->presentException($hookCallResult->getException())
             : null;
 
-        $stat = new FailedHookStat($hook, $path, $error, $stdOut);
+        $stat = new HookStat($hook, $path, $error, $stdOut);
         $this->statistics->registerHookStat($stat);
     }
 }

@@ -10,24 +10,91 @@
 
 namespace Behat\Behat\Output\Statistics;
 
+use Exception;
+
 /**
  * Represents hook stat.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface HookStat
+final class HookStat
 {
     /**
-     * Returns hook name.
+     * @var string
+     */
+    private $name;
+    /**
+     * @var string
+     */
+    private $path;
+    /**
+     * @var Exception
+     */
+    private $error;
+    /**
+     * @var string
+     */
+    private $stdOut;
+
+    /**
+     * Initializes hook stat.
+     *
+     * @param string      $name
+     * @param string      $path
+     * @param null|string $error
+     * @param null|string $stdOut
+     */
+    public function __construct($name, $path, $error = null, $stdOut = null)
+    {
+        $this->name = $name;
+        $this->path = $path;
+        $this->error = $error;
+        $this->stdOut = $stdOut;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSuccessful()
+    {
+        return null === $this->error;
+    }
+
+    /**
+     * Returns hook standard output (if has some).
+     *
+     * @return null|string
+     */
+    public function getStdOut()
+    {
+        return $this->stdOut;
+    }
+
+    /**
+     * Returns hook exception.
      *
      * @return string
      */
-    public function getName();
+    public function getError()
+    {
+        return $this->error;
+    }
 
     /**
-     * Checks if hook was successful.
+     * Returns hook path.
      *
-     * @return Boolean
+     * @return string
      */
-    public function isSuccessful();
+    public function getPath()
+    {
+        return $this->path;
+    }
 }
