@@ -12,7 +12,6 @@ namespace Behat\Testwork\Tester\Result;
 
 use ArrayIterator;
 use Countable;
-use Iterator;
 use IteratorAggregate;
 
 /**
