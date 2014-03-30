@@ -31,29 +31,45 @@ final class Statistics
      */
     private $memory;
     /**
+     * @var array
+     */
+    private $scenarioCounters = array();
+    /**
+     * @var array
+     */
+    private $stepCounters = array();
+    /**
      * @var ScenarioStat[]
      */
-    private $scenarioStats = array();
+    private $failedScenarioStats = array();
+    /**
+     * @var ScenarioStat[]
+     */
+    private $skippedScenarioStats = array();
     /**
      * @var StepStat[]
      */
-    private $stepStats = array();
+    private $failedStepStats = array();
+    /**
+     * @var StepStat[]
+     */
+    private $pendingStepStats = array();
     /**
      * @var HookStat[]
      */
-    private $hookStats = array();
+    private $failedHookStats = array();
 
     /**
      * Initializes statistics.
      */
     public function __construct()
     {
-        $this->scenarioStats = $this->stepStats = array(
-            TestResult::PASSED    => array(),
-            TestResult::FAILED    => array(),
-            StepResult::UNDEFINED => array(),
-            TestResult::PENDING   => array(),
-            TestResult::SKIPPED   => array()
+        $this->scenarioCounters = $this->stepCounters = array(
+            TestResult::PASSED    => 0,
+            TestResult::FAILED    => 0,
+            StepResult::UNDEFINED => 0,
+            TestResult::PENDING   => 0,
+            TestResult::SKIPPED   => 0
         );
 
         $this->timer = new Timer();
@@ -103,7 +119,15 @@ final class Statistics
      */
     public function registerScenarioStat(ScenarioStat $stat)
     {
-        $this->scenarioStats[$stat->getResultCode()][] = $stat;
+        $this->scenarioCounters[$stat->getResultCode()]++;
+
+        if (TestResult::FAILED === $stat->getResultCode()) {
+            $this->failedScenarioStats[] = $stat;
+        }
+
+        if (TestResult::SKIPPED === $stat->getResultCode()) {
+            $this->skippedScenarioStats[] = $stat;
+        }
     }
 
     /**
@@ -113,7 +137,15 @@ final class Statistics
      */
     public function registerStepStat(StepStat $stat)
     {
-        $this->stepStats[$stat->getResultCode()][] = $stat;
+        $this->stepCounters[$stat->getResultCode()]++;
+
+        if (TestResult::FAILED === $stat->getResultCode()) {
+            $this->failedStepStats[] = $stat;
+        }
+
+        if (TestResult::PENDING === $stat->getResultCode()) {
+            $this->pendingStepStats[] = $stat;
+        }
     }
 
     /**
@@ -123,7 +155,11 @@ final class Statistics
      */
     public function registerHookStat(HookStat $stat)
     {
-        $this->hookStats[] = $stat;
+        if ($stat->isSuccessful()) {
+            return;
+        }
+
+        $this->failedHookStats[] = $stat;
     }
 
     /**
@@ -133,11 +169,7 @@ final class Statistics
      */
     public function getScenarioStatCounts()
     {
-        return array_map(
-            function (array $stats) {
-                return count($stats);
-            }, $this->scenarioStats
-        );
+        return $this->scenarioCounters;
     }
 
     /**
@@ -147,7 +179,7 @@ final class Statistics
      */
     public function getSkippedScenarios()
     {
-        return $this->scenarioStats[TestResult::SKIPPED];
+        return $this->skippedScenarioStats;
     }
 
     /**
@@ -157,7 +189,7 @@ final class Statistics
      */
     public function getFailedScenarios()
     {
-        return $this->scenarioStats[TestResult::FAILED];
+        return $this->failedScenarioStats;
     }
 
     /**
@@ -167,11 +199,7 @@ final class Statistics
      */
     public function getStepStatCounts()
     {
-        return array_map(
-            function (array $stats) {
-                return count($stats);
-            }, $this->stepStats
-        );
+        return $this->stepCounters;
     }
 
     /**
@@ -181,7 +209,7 @@ final class Statistics
      */
     public function getFailedSteps()
     {
-        return $this->stepStats[TestResult::FAILED];
+        return $this->failedStepStats;
     }
 
     /**
@@ -191,7 +219,7 @@ final class Statistics
      */
     public function getPendingSteps()
     {
-        return $this->stepStats[TestResult::PENDING];
+        return $this->pendingStepStats;
     }
 
     /**
@@ -201,10 +229,6 @@ final class Statistics
      */
     public function getFailedHookStats()
     {
-        return array_filter(
-            $this->hookStats, function (HookStat $stat) {
-                return !$stat->isSuccessful();
-            }
-        );
+        return $this->failedHookStats;
     }
 }
