@@ -179,6 +179,85 @@ Feature: Suites
       6 steps (6 passed)
       """
 
+  Scenario: Suite with `paths` set to string instead of an array
+    Given a file named "features/bootstrap/FirstContext.php" with:
+      """
+      <?php
+
+      class FirstContext implements \Behat\Behat\Context\Context
+      {
+          /** @Given I have :count apple(s) */
+          public function iHaveApples($count) { }
+
+          /** @When I ate :count apple(s) */
+          public function iAteApples($count) { }
+
+          /** @Then I should have :count apple(s) */
+          public function iShouldHaveApples($count) { }
+      }
+      """
+    And a file named "features/bootstrap/SecondContext.php" with:
+      """
+      <?php
+
+      class SecondContext implements \Behat\Behat\Context\Context
+      {
+          /** @Given I have :count apple(s) */
+          public function iHaveApples($count) { }
+
+          /** @When I ate :count apple(s) */
+          public function iAteApples($count) { }
+
+          /** @Then I should have :count apple(s) */
+          public function iShouldHaveApples($count) { }
+      }
+      """
+    And a file named "features/first/my.feature" with:
+      """
+      Feature: Apples story #1
+        In order to eat apple
+        As a little kid
+        I need to have an apple in my pocket
+
+        Scenario: I'm little hungry
+          Given I have 3 apples
+          When I ate 1 apple
+          Then I should have 2 apples
+      """
+    And a file named "features/second/my.feature" with:
+      """
+      Feature: Apples story #2
+        In order to eat apple
+        As a little kid
+        I need to have an apple in my pocket
+
+        Scenario: I'm little hungry
+          Given I have 30 apples
+          When I ate 10 apple
+          Then I should have 20 apples
+      """
+    And a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          first:
+            paths:    %paths.base%/features/first
+            contexts: [ FirstContext ]
+          second:
+            paths:    [ %paths.base%/features/second ]
+            contexts: [ SecondContext ]
+      """
+    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    Then it should fail with:
+      """
+      Behat\Testwork\Suite\Exception\SuiteConfigurationException]
+        `paths` setting of the "first" suite is expected to be an array, string given.
+
+
+
+      behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--colors] [--no-colors] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--rerun] [--stop-on-failure] [--strict] [--dry-run] [paths]
+      """
+
   Scenario: Role-based suites
     Given a file named "features/bootstrap/LittleKidContext.php" with:
       """

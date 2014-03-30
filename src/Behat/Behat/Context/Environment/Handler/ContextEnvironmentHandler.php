@@ -17,6 +17,7 @@ use Behat\Behat\Context\Environment\UninitializedContextEnvironment;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\Exception\EnvironmentIsolationException;
 use Behat\Testwork\Environment\Handler\EnvironmentHandler;
+use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -62,7 +63,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
      */
     public function supportsSuite(Suite $suite)
     {
-        return $suite->hasSetting('contexts') && is_array($suite->getSetting('contexts'));
+        return $suite->hasSetting('contexts');
     }
 
     /**
@@ -128,8 +129,32 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
 
                 return array($class, $arguments);
             },
-            $suite->getSetting('contexts')
+            $this->getSuiteContexts($suite)
         );
+    }
+
+    /**
+     * Returns array of context classes configured for the provided suite.
+     *
+     * @param Suite $suite
+     *
+     * @return string[]
+     *
+     * @throws SuiteConfigurationException If `contexts` setting is not an array
+     */
+    private function getSuiteContexts(Suite $suite)
+    {
+        if (!is_array($suite->getSetting('contexts'))) {
+            throw new SuiteConfigurationException(
+                sprintf('`contexts` setting of the "%s" suite is expected to be an array, %s given.',
+                    $suite->getName(),
+                    gettype($suite->getSetting('contexts'))
+                ),
+                $suite->getName()
+            );
+        }
+
+        return $suite->getSetting('contexts');
     }
 
     /**

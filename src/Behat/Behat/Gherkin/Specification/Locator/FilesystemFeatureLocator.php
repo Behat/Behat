@@ -15,6 +15,7 @@ use Behat\Gherkin\Filter\PathsFilter;
 use Behat\Gherkin\Gherkin;
 use Behat\Testwork\Specification\Locator\SpecificationLocator;
 use Behat\Testwork\Specification\NoSpecificationsIterator;
+use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -71,7 +72,7 @@ final class FilesystemFeatureLocator implements SpecificationLocator
             return new NoSpecificationsIterator($suite);
         }
 
-        $suiteLocators = $suite->getSetting('paths');
+        $suiteLocators = $this->getSuitePaths($suite);
 
         if ($locator) {
             $filters = array(new PathsFilter($suiteLocators));
@@ -85,6 +86,30 @@ final class FilesystemFeatureLocator implements SpecificationLocator
         }
 
         return new LazyFeatureIterator($suite, $this->gherkin, $featurePaths);
+    }
+
+    /**
+     * Returns array of feature paths configured for the provided suite.
+     *
+     * @param Suite $suite
+     *
+     * @return string[]
+     *
+     * @throws SuiteConfigurationException If `paths` setting is not an array
+     */
+    private function getSuitePaths(Suite $suite)
+    {
+        if (!is_array($suite->getSetting('paths'))) {
+            throw new SuiteConfigurationException(
+                sprintf('`paths` setting of the "%s" suite is expected to be an array, %s given.',
+                    $suite->getName(),
+                    gettype($suite->getSetting('paths'))
+                ),
+                $suite->getName()
+            );
+        }
+
+        return $suite->getSetting('paths');
     }
 
     /**
