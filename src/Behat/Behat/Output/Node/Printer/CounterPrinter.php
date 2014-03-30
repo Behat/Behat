@@ -51,17 +51,16 @@ final class CounterPrinter
      */
     public function printCounters(OutputPrinter $printer, $intro, array $stats)
     {
-        $stats = array_filter($stats, function ($stats) { return 0 !== count($stats); });
+        $stats = array_filter($stats, function ($count) { return 0 !== $count; });
 
         if (0 === count($stats)) {
             $totalCount = 0;
         } else {
-            $totalCount = count(call_user_func_array('array_merge', array_values($stats)));
+            $totalCount = array_sum($stats);
         }
 
         $detailedStats = array();
-        foreach ($stats as $resultCode => $codeStats) {
-            $count = count($codeStats);
+        foreach ($stats as $resultCode => $count) {
             $style = $this->resultConverter->convertResultCodeToString($resultCode);
 
             $transId = $style . '_count';

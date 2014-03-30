@@ -127,13 +127,17 @@ final class Statistics
     }
 
     /**
-     * Returns all captured scenario stats associated by result code.
+     * Returns counters for different scenario result codes.
      *
-     * @return ScenarioStat[]
+     * @return array[]
      */
-    public function getScenarioStats()
+    public function getScenarioStatCounts()
     {
-        return $this->scenarioStats;
+        return array_map(
+            function (array $stats) {
+                return count($stats);
+            }, $this->scenarioStats
+        );
     }
 
     /**
@@ -157,13 +161,17 @@ final class Statistics
     }
 
     /**
-     * Returns all captured step stats associated by result code.
+     * Returns counters for different step result codes.
      *
-     * @return StepStat[]
+     * @return array[]
      */
-    public function getStepStats()
+    public function getStepStatCounts()
     {
-        return $this->stepStats;
+        return array_map(
+            function (array $stats) {
+                return count($stats);
+            }, $this->stepStats
+        );
     }
 
     /**
