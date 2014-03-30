@@ -59,7 +59,7 @@ final class RuntimeBackgroundTester implements BackgroundTester
 
         if (null === $background) {
             throw new FeatureHasNoBackgroundException(sprintf(
-                'Feature `%s` has not background that could be tested.',
+                'Feature `%s` has no background that could be tested.',
                 $feature->getFile()
             ), $feature);
         }
