@@ -23,11 +23,11 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Listens and records hook stats.
+ * Listens and records failed hook stats.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class HookStatsListener implements EventListener
+final class FailedHookStatsListener implements EventListener
 {
     /**
      * @var Statistics
