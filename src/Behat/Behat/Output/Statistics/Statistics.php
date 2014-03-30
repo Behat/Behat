@@ -137,15 +137,23 @@ final class Statistics
     }
 
     /**
-     * Returns all scenario stats matching provided result code.
-     *
-     * @param integer $resultCode
+     * Returns skipped scenario stats.
      *
      * @return ScenarioStat[]
      */
-    public function getScenarioStatsWithResultCode($resultCode)
+    public function getSkippedScenarios()
     {
-        return $this->scenarioStats[$resultCode];
+        return $this->scenarioStats[TestResult::SKIPPED];
+    }
+
+    /**
+     * Returns failed scenario stats.
+     *
+     * @return ScenarioStat[]
+     */
+    public function getFailedScenarios()
+    {
+        return $this->scenarioStats[TestResult::FAILED];
     }
 
     /**
@@ -159,15 +167,23 @@ final class Statistics
     }
 
     /**
-     * Returns all step stats matching provided result code.
-     *
-     * @param integer $resultCode
+     * Returns failed step stats.
      *
      * @return StepStat[]
      */
-    public function getStepStatsWithResultCode($resultCode)
+    public function getFailedSteps()
     {
-        return $this->stepStats[$resultCode];
+        return $this->stepStats[TestResult::FAILED];
+    }
+
+    /**
+     * Returns pending step stats.
+     *
+     * @return StepStat[]
+     */
+    public function getPendingSteps()
+    {
+        return $this->stepStats[TestResult::PENDING];
     }
 
     /**

@@ -54,10 +54,10 @@ final class PrettyStatisticsPrinter implements StatisticsPrinter
     {
         $printer = $formatter->getOutputPrinter();
 
-        $scenarioStats = $statistics->getScenarioStatsWithResultCode(TestResult::SKIPPED);
+        $scenarioStats = $statistics->getSkippedScenarios();
         $this->listPrinter->printScenariosList($printer, 'skipped_scenarios_title', TestResult::SKIPPED, $scenarioStats);
 
-        $scenarioStats = $statistics->getScenarioStatsWithResultCode(TestResult::FAILED);
+        $scenarioStats = $statistics->getFailedScenarios();
         $this->listPrinter->printScenariosList($printer, 'failed_scenarios_title', TestResult::FAILED, $scenarioStats);
 
         $this->counterPrinter->printCounters($printer, 'scenarios_count', $statistics->getScenarioStats());
