@@ -11,7 +11,7 @@
 namespace Behat\Behat\Output\Node\Printer;
 
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
-use Behat\Behat\Output\Statistics\FailedHookStat;
+use Behat\Behat\Output\Statistics\HookStat;
 use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
@@ -120,9 +120,9 @@ final class ListPrinter
     /**
      * Prints failed hooks list.
      *
-     * @param OutputPrinter    $printer
-     * @param string           $intro
-     * @param FailedHookStat[] $failedHookStats
+     * @param OutputPrinter $printer
+     * @param string        $intro
+     * @param HookStat[]    $failedHookStats
      */
     public function printFailedHooksList(OutputPrinter $printer, $intro, array $failedHookStats)
     {
