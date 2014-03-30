@@ -18,7 +18,7 @@ Feature: Context consistency
           protected $apples = 0;
           protected $parameters;
 
-          public function __construct($parameter2 = null, $parameter1 = null) {
+          public function __construct($parameter2 = 'val2_default', $parameter1 = 'val1_default') {
               $this->parameters = array('parameter1' => $parameter1, 'parameter2' => $parameter2);
           }
 
@@ -210,6 +210,36 @@ Feature: Context consistency
     1 scenario (1 passed)
     2 steps (2 passed)
     """
+
+  Scenario: Context parameters including optional
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FeatureContext:
+                  parameter1: val_one
+      """
+    And a file named "features/params.feature" with:
+      """
+      Feature: Context parameters
+        In order to run a browser
+        As feature runner
+        I need to be able to configure behat context
+
+        Scenario: I'm little hungry
+          Then context parameter "parameter1" should be equal to "val_one"
+          Then context parameter "parameter2" should be equal to "val2_default"
+      """
+    When I run "behat --no-colors -f progress features/params.feature"
+    Then it should pass with:
+      """
+      ..
+
+      1 scenario (1 passed)
+      2 steps (2 passed)
+      """
 
   Scenario: Existing custom context class
     Given a file named "behat.yml" with:

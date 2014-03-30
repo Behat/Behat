@@ -14,6 +14,7 @@ use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Initializer\ContextInitializer;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionParameter;
 
 /**
  * Instantiates contexts using registered argument resolvers and context initializers.
@@ -107,11 +108,23 @@ final class ContextFactory
             } elseif (isset($arguments[$i])) {
                 $realArguments[$i] = $arguments[$i];
             } else {
-                $realArguments[$i] = null;
+                $realArguments[$i] = $this->getArgumentDefault($parameter);
             }
         }
 
         return $realArguments;
+    }
+
+    /**
+     * Returns default value for the argument.
+     *
+     * @param ReflectionParameter $parameter
+     *
+     * @return mixed
+     */
+    private function getArgumentDefault(ReflectionParameter $parameter)
+    {
+        return $parameter->isOptional() ? $parameter->getDefaultValue() : null;
     }
 
     /**
