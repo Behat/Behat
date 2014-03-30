@@ -37,7 +37,7 @@ final class IntegerTestResult implements TestResult
      */
     public function isPassed()
     {
-        return self::PASSED >= $this->getResultCode();
+        return self::PASSED == $this->getResultCode();
     }
 
     /**

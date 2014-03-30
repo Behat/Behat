@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester\Exception;
+namespace Behat\Testwork\Tester\Exception;
 
 /**
  * Represents an exception caused by a tester.

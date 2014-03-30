@@ -15,10 +15,12 @@ use Behat\Testwork\Specification\SpecificationFinder;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Suite\SuiteRepository;
+use Behat\Testwork\Tester\Exception\WrongPathsException;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\Result\TestWithSetupResult;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -90,7 +92,7 @@ final class ExerciseController implements Controller
 
         $command
             ->addArgument('paths', InputArgument::OPTIONAL,
-                'Optional path(es) to execute. Could be:' . PHP_EOL . $locatorsExamples
+                'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples
             )
             ->addOption('--dry-run', null, InputOption::VALUE_NONE,
                 'Invokes formatters without executing the tests and hooks.'
@@ -104,6 +106,13 @@ final class ExerciseController implements Controller
     {
         $specs = $this->findSpecifications($input);
         $result = $this->testSpecifications($input, $specs);
+
+        if ($input->getArgument('paths') && TestResults::NO_TESTS === $result->getResultCode()) {
+            throw new WrongPathsException(
+                sprintf('No specifications found at path(s) `%s`.', $input->getArgument('paths')),
+                $input->getArgument('paths')
+            );
+        }
 
         return $this->resultInterpreter->interpretResult($result);
     }

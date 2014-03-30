@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Tester\Exception;
 
+use Behat\Testwork\Tester\Exception\TesterException;
 use RuntimeException;
 
 /**
