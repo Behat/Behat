@@ -39,7 +39,7 @@ final class Statistics
      */
     private $stepStats = array();
     /**
-     * @var FailedHookStat[]
+     * @var HookStat[]
      */
     private $hookStats = array();
 
@@ -117,11 +117,11 @@ final class Statistics
     }
 
     /**
-     * Registers failed hook stat.
+     * Registers hook stat.
      *
-     * @param FailedHookStat $stat
+     * @param HookStat $stat
      */
-    public function registerFailedHookStat(FailedHookStat $stat)
+    public function registerHookStat(HookStat $stat)
     {
         $this->hookStats[] = $stat;
     }
@@ -177,6 +177,10 @@ final class Statistics
      */
     public function getFailedHookStats()
     {
-        return $this->hookStats;
+        return array_filter(
+            $this->hookStats, function (HookStat $stat) {
+                return !$stat->isSuccessful();
+            }
+        );
     }
 }

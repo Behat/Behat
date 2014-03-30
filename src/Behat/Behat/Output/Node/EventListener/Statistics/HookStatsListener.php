@@ -130,6 +130,6 @@ final class HookStatsListener implements EventListener
             : null;
 
         $stat = new FailedHookStat($hook, $path, $error, $stdOut);
-        $this->statistics->registerFailedHookStat($stat);
+        $this->statistics->registerHookStat($stat);
     }
 }

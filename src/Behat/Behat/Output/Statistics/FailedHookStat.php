@@ -13,11 +13,11 @@ namespace Behat\Behat\Output\Statistics;
 use Exception;
 
 /**
- * Behat hook stat.
+ * Represents failed hook stat.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class FailedHookStat
+final class FailedHookStat implements HookStat
 {
     /**
      * @var string
@@ -53,13 +53,19 @@ final class FailedHookStat
     }
 
     /**
-     * Returns hook name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSuccessful()
+    {
+        return false;
     }
 
     /**
