@@ -24,11 +24,7 @@ final class ScenarioStat
     /**
      * @var string
      */
-    private $file;
-    /**
-     * @var integer
-     */
-    private $line;
+    private $path;
     /**
      * @var integer
      */
@@ -38,15 +34,13 @@ final class ScenarioStat
      * Initializes scenario stat.
      *
      * @param string  $title
-     * @param string  $file
-     * @param integer $line
+     * @param string        $path
      * @param integer $resultCode
      */
-    public function __construct($title, $file, $line, $resultCode)
+    public function __construct($title, $path, $resultCode)
     {
         $this->title = $title;
-        $this->file = $file;
-        $this->line = $line;
+        $this->path = $path;
         $this->resultCode = $resultCode;
     }
 
@@ -67,7 +61,7 @@ final class ScenarioStat
      */
     public function getPath()
     {
-        return sprintf('%s:%d', $this->file, $this->line);
+        return $this->path;
     }
 
     /**

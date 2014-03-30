@@ -96,11 +96,10 @@ final class ScenarioStatsListener implements EventListener
 
         $scenario = $event->getScenario();
         $title = $scenario->getTitle();
-        $file = $this->currentFeaturePath;
-        $line = $scenario->getLine();
+        $path = sprintf('%s:%d', $this->currentFeaturePath, $scenario->getLine());
         $resultCode = $event->getTestResult()->getResultCode();
 
-        $stat = new ScenarioStat($title, $file, $line, $resultCode);
+        $stat = new ScenarioStat($title, $path, $resultCode);
         $this->statistics->registerScenarioStat($stat);
     }
 }
