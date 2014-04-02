@@ -27,20 +27,6 @@ abstract class BackgroundTested extends LifecycleEvent implements ScenarioLikeTe
     const AFTER = 'tester.background_tested.after';
 
     /**
-     * Returns feature.
-     *
-     * @return FeatureNode
-     */
-    abstract public function getFeature();
-
-    /**
-     * Returns scenario node.
-     *
-     * @return ScenarioInterface
-     */
-    abstract public function getScenario();
-
-    /**
      * Returns background node.
      *
      * @return BackgroundNode
