@@ -44,7 +44,9 @@ final class TranslatableContextReader implements ContextReader
      */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        if (!is_subclass_of($contextClass, 'Behat\Behat\Context\TranslatableContext')) {
+        $reflClass = new \ReflectionClass($contextClass);
+
+        if (!$reflClass->implementsInterface('Behat\Behat\Context\TranslatableContext')) {
             return array();
         }
 
