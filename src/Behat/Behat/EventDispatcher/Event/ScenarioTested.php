@@ -25,20 +25,6 @@ abstract class ScenarioTested extends LifecycleEvent implements ScenarioLikeTest
     const AFTER = 'tester.scenario_tested.after';
 
     /**
-     * Returns feature.
-     *
-     * @return FeatureNode
-     */
-    abstract public function getFeature();
-
-    /**
-     * Returns scenario node.
-     *
-     * @return ScenarioNode
-     */
-    abstract public function getScenario();
-
-    /**
      * {@inheritdoc}
      */
     final public function getNode()

@@ -57,11 +57,4 @@ interface Extension extends CompilerPassInterface
      * @param array            $config
      */
     public function load(ContainerBuilder $container, array $config);
-
-    /**
-     * Processes shared container after all extensions loaded.
-     *
-     * @param ContainerBuilder $container
-     */
-    public function process(ContainerBuilder $container);
 }
