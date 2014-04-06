@@ -254,6 +254,9 @@ class FeatureContext implements Context
             $output = str_replace(PHP_EOL, "\n", $output);
         }
 
+        // Replace wrong warning message of HHVM
+        $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);
+
         return trim(preg_replace("/ +$/m", '', $output));
     }
 

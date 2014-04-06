@@ -9,8 +9,6 @@ branches:
     - /^optimization\/.*$/
 
 matrix:
-  allow_failures:
-    - php: hhvm
   include:
     - php: 5.5
       env: SYMFONY_VERSION='2.1.*'
