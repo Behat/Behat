@@ -73,19 +73,19 @@ final class ApplicationFactory extends BaseFactory
             new SuiteExtension($processor),
             new EnvironmentExtension($processor),
             new SpecificationExtension($processor),
-            new FilesystemExtension($processor),
+            new FilesystemExtension(),
             new ExceptionExtension($processor),
 
             // Behat extensions
-            new AutoloaderExtension($processor),
-            new TranslatorExtension($processor),
+            new AutoloaderExtension(),
+            new TranslatorExtension(),
             new GherkinExtension($processor),
             new ContextExtension($processor),
             new OutputExtension('pretty', $this->getDefaultFormatterFactories($processor), $processor),
             new SnippetExtension($processor),
             new DefinitionExtension($processor),
             new EventDispatcherExtension($processor),
-            new HookExtension($processor),
+            new HookExtension(),
             new TransformationExtension($processor),
             new TesterExtension($processor),
         );
