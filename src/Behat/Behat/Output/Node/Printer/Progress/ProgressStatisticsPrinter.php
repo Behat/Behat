@@ -14,8 +14,6 @@ use Behat\Behat\Output\Node\Printer\CounterPrinter;
 use Behat\Behat\Output\Node\Printer\ListPrinter;
 use Behat\Behat\Output\Node\Printer\StatisticsPrinter;
 use Behat\Behat\Output\Statistics\Statistics;
-use Behat\Testwork\Counter\Memory;
-use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Result\TestResult;
 

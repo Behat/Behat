@@ -207,8 +207,8 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
     /**
      * Checks if argument is a token and matches pattern.
      *
-     * @param $argumentIndex
-     * @param $pattern
+     * @param integer|string $argumentIndex
+     * @param string         $pattern
      *
      * @return Boolean
      */
@@ -220,8 +220,8 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
     /**
      * Checks if argument is a table and matches pattern.
      *
-     * @param $argumentValue
-     * @param $pattern
+     * @param mixed  $argumentValue
+     * @param string $pattern
      *
      * @return Boolean
      */
@@ -252,7 +252,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             $definitionCall->getFeature()->getLanguage()
         );
 
-        return preg_match($regex, $argumentValue, $match);
+        return (bool) preg_match($regex, $argumentValue, $match);
     }
 
     /**
