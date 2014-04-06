@@ -15,6 +15,7 @@ use Behat\Behat\Definition\DefinitionRepository;
 use Behat\Behat\Definition\Exception\AmbiguousMatchException;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\SearchResult;
+use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
@@ -116,9 +117,9 @@ final class RepositorySearchEngine implements SearchEngine
     /**
      * Prepares definition arguments.
      *
-     * @param Definition $definition
-     * @param array      $match
-     * @param array      $multiline
+     * @param Definition          $definition
+     * @param string[]            $match
+     * @param ArgumentInterface[] $multiline
      *
      * @return array
      */

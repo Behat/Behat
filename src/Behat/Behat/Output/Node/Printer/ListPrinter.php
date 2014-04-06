@@ -12,6 +12,7 @@ namespace Behat\Behat\Output\Node\Printer;
 
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Statistics\HookStat;
+use Behat\Behat\Output\Statistics\ScenarioStat;
 use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
@@ -65,10 +66,10 @@ final class ListPrinter
     /**
      * Prints scenarios list.
      *
-     * @param OutputPrinter $printer
-     * @param string        $intro
-     * @param integer       $resultCode
-     * @param array         $scenarioStats
+     * @param OutputPrinter  $printer
+     * @param string         $intro
+     * @param integer        $resultCode
+     * @param ScenarioStat[] $scenarioStats
      */
     public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats)
     {

@@ -244,7 +244,7 @@ TPL;
      *
      * @param ReflectionClass $reflection
      * @param string          $methodName
-     * @param string          $methodNumber
+     * @param integer         $methodNumber
      *
      * @return array
      */
@@ -291,7 +291,7 @@ TPL;
      *
      * @param string $contextClass
      *
-     * @return array
+     * @return string[]
      */
     private function getAlreadyProposedMethods($contextClass)
     {

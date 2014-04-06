@@ -10,8 +10,6 @@
 
 namespace Behat\Behat\Output\Statistics;
 
-use Exception;
-
 /**
  * Represents hook stat.
  *
@@ -28,11 +26,11 @@ final class HookStat
      */
     private $path;
     /**
-     * @var Exception
+     * @var string|null
      */
     private $error;
     /**
-     * @var string
+     * @var string|null
      */
     private $stdOut;
 

@@ -159,7 +159,7 @@ final class OutlineTableListener implements EventListener
     /**
      * Removes outline from the ivar on outline AFTER event.
      *
-     * @param $eventName
+     * @param string $eventName
      */
     private function forgetOutlineOnAfterOutlineEvent($eventName)
     {

@@ -10,8 +10,6 @@
 
 namespace Behat\Behat\Output\Statistics;
 
-use Exception;
-
 /**
  * Behat step stat.
  *
@@ -32,7 +30,7 @@ final class StepStat
      */
     private $resultCode;
     /**
-     * @var null|Exception
+     * @var null|string
      */
     private $error;
     /**

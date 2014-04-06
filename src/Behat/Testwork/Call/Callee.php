@@ -10,8 +10,7 @@
 
 namespace Behat\Testwork\Call;
 
-use ReflectionFunction;
-use ReflectionMethod;
+use ReflectionFunctionAbstract;
 
 /**
  * Represents callable object.
@@ -58,7 +57,7 @@ interface Callee
     /**
      * Returns callable reflection.
      *
-     * @return ReflectionFunction|ReflectionMethod
+     * @return ReflectionFunctionAbstract
      */
     public function getReflection();
 }
