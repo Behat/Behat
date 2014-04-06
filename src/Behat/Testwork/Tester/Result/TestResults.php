@@ -48,7 +48,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
      */
     public static function merge(TestResults $first, TestResults $second)
     {
-        return new static($first->toArray(), $second->toArray());
+        return new static(array_merge($first->toArray(), $second->toArray()));
     }
 
     /**
