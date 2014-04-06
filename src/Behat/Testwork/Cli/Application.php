@@ -14,7 +14,7 @@ use Behat\Testwork\ServiceContainer\Configuration\ConfigurationLoader;
 use Behat\Testwork\ServiceContainer\ContainerLoader;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Console\Application as BaseApplication;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -110,7 +110,7 @@ final class Application extends BaseApplication
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return Command
+     * @return SymfonyCommand
      */
     private function createCommand(InputInterface $input, OutputInterface $output)
     {

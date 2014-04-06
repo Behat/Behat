@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Cli;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -26,9 +26,9 @@ interface Controller
     /**
      * Configures command to be executable by the controller.
      *
-     * @param Command $command
+     * @param SymfonyCommand $command
      */
-    public function configure(Command $command);
+    public function configure(SymfonyCommand $command);
 
     /**
      * Executes controller.
