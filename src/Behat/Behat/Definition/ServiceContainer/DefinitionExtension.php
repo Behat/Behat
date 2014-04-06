@@ -183,7 +183,7 @@ class DefinitionExtension implements Extension
         $container->setDefinition(self::PATTERN_POLICY_TAG . '.turnip', $definition);
 
         $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\RegexPatternPolicy');
-        $definition->addTag(self::PATTERN_POLICY_TAG, array('priority' => 50));
+        $definition->addTag(self::PATTERN_POLICY_TAG, array('priority' => 60));
         $container->setDefinition(self::PATTERN_POLICY_TAG . '.regex', $definition);
     }
 
