@@ -30,7 +30,7 @@ class AutoloaderExtension extends BaseExtension
         $builder
             ->beforeNormalization()
             ->ifString()
-                ->then(function($path) {
+                ->then(function ($path) {
                     return array('' => $path);
                 })
             ->end()

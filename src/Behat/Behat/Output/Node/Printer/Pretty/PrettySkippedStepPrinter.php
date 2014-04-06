@@ -12,7 +12,6 @@ namespace Behat\Behat\Output\Node\Printer\Pretty;
 
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\Helper\StepTextPainter;
-use Behat\Behat\Output\Node\Printer\Helper\WidthCalculator;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
@@ -146,7 +145,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
             return $text;
         }
 
-        return (string)$argument;
+        return (string) $argument;
     }
 
     /**

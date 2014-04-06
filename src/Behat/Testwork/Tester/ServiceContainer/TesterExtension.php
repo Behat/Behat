@@ -211,7 +211,7 @@ abstract class TesterExtension implements Extension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::EXERCISE_ID);
-            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester = $container->getDefinition((string) $reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::EXERCISE_ID, $wrappingTester);
@@ -229,7 +229,7 @@ abstract class TesterExtension implements Extension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::SUITE_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester = $container->getDefinition((string) $reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::SUITE_TESTER_ID, $wrappingTester);
@@ -247,7 +247,7 @@ abstract class TesterExtension implements Extension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::SPECIFICATION_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester = $container->getDefinition((string) $reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::SPECIFICATION_TESTER_ID, $wrappingTester);

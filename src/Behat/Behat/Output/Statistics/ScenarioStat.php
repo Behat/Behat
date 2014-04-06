@@ -34,7 +34,7 @@ final class ScenarioStat
      * Initializes scenario stat.
      *
      * @param string  $title
-     * @param string        $path
+     * @param string  $path
      * @param integer $resultCode
      */
     public function __construct($title, $path, $resultCode)

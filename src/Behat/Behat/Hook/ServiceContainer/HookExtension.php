@@ -11,9 +11,7 @@
 namespace Behat\Behat\Hook\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
-use Behat\Behat\Output\ServiceContainer\Formatter\PrettyFormatterFactory;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
-use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Hook\ServiceContainer\HookExtension as BaseExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

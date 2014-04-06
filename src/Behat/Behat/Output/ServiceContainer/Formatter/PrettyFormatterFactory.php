@@ -466,7 +466,7 @@ class PrettyFormatterFactory implements FormatterFactory
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::ROOT_LISTENER_ID);
-            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester = $container->getDefinition((string) $reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::ROOT_LISTENER_ID, $wrappingTester);

@@ -134,28 +134,28 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * Extracts a description from the provided docblock,
      * with support for multiline descriptions.
-     * 
-     * @param string           $docBlock
-     * 
+     *
+     * @param string $docBlock
+     *
      * @return string
      */
     private function readDescription($docBlock)
     {
         // Remove indentation
         $description = preg_replace('/^[\s\t]*/m', '', $docBlock);
-        
+
         // Remove block comment syntax
         $description = preg_replace('/^\/\*\*\s*|^\s*\*\s|^\s*\*\/$/m', '', $description);
-        
+
         // Remove annotations
         $description = preg_replace('/^@.*$/m', '', $description);
-        
+
         // Ignore docs after a "--" separator
         if (preg_match('/^--.*$/m', $description)) {
             $descriptionParts = preg_split('/^--.*$/m', $description);
             $description = array_shift($descriptionParts);
         }
-        
+
         // Trim leading and trailing newlines
         $description = trim($description, "\r\n");
 

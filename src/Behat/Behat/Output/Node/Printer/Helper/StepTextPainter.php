@@ -26,7 +26,7 @@ final class StepTextPainter
      */
     private $patternTransformer;
     /**
-     * @var \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter
+     * @var ResultToStringConverter
      */
     private $resultConverter;
 
@@ -34,7 +34,7 @@ final class StepTextPainter
      * Initializes painter.
      *
      * @param PatternTransformer      $patternTransformer
-     * @param \Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter $resultConverter
+     * @param ResultToStringConverter $resultConverter
      */
     public function __construct(PatternTransformer $patternTransformer, ResultToStringConverter $resultConverter)
     {

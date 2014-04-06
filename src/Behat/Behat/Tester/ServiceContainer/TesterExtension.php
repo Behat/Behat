@@ -232,7 +232,7 @@ class TesterExtension extends BaseExtension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::SCENARIO_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester = $container->getDefinition((string) $reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::SCENARIO_TESTER_ID, $wrappingTester);
@@ -250,7 +250,7 @@ class TesterExtension extends BaseExtension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::OUTLINE_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester = $container->getDefinition((string) $reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::OUTLINE_TESTER_ID, $wrappingTester);
@@ -268,7 +268,7 @@ class TesterExtension extends BaseExtension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::EXAMPLE_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester = $container->getDefinition((string) $reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::EXAMPLE_TESTER_ID, $wrappingTester);
@@ -286,7 +286,7 @@ class TesterExtension extends BaseExtension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::BACKGROUND_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester = $container->getDefinition((string) $reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::BACKGROUND_TESTER_ID, $wrappingTester);
@@ -304,7 +304,7 @@ class TesterExtension extends BaseExtension
 
         foreach ($references as $reference) {
             $wrappedTester = $container->getDefinition(self::STEP_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string)$reference);
+            $wrappingTester = $container->getDefinition((string) $reference);
             $wrappingTester->replaceArgument(0, $wrappedTester);
 
             $container->setDefinition(self::STEP_TESTER_ID, $wrappingTester);

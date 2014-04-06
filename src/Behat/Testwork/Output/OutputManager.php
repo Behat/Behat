@@ -139,15 +139,19 @@ final class OutputManager
         switch ($parameterName) {
             case 'output_verbosity':
                 $printer->setOutputVerbosity($parameterValue);
+
                 return;
             case 'output_path':
                 $printer->setOutputPath($parameterValue);
+
                 return;
             case 'output_decorate':
                 $printer->setOutputDecorated($parameterValue);
+
                 return;
             case 'output_styles':
                 $printer->setOutputStyles($parameterValue);
+
                 return;
         }
 

@@ -11,9 +11,7 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\BackgroundNode;
-use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\NodeInterface;
-use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**

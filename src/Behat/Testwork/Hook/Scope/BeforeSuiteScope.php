@@ -11,7 +11,6 @@
 namespace Behat\Testwork\Hook\Scope;
 
 use Behat\Testwork\Specification\SpecificationIterator;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Environment\Environment;
 
 /**

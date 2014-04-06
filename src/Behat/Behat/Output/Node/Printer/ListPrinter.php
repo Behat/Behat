@@ -81,7 +81,7 @@ final class ListPrinter
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
         foreach ($scenarioStats as $stat) {
-            $path = $this->relativizePaths((string)$stat);
+            $path = $this->relativizePaths((string) $stat);
             $printer->writeln(sprintf('    {+%s}%s{-%s}', $style, $path, $style));
         }
 

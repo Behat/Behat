@@ -35,7 +35,7 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
      * @param string     $contextClass
      * @param null|array $arguments
      *
-     * @throws ContextNotFoundException If class does not exist
+     * @throws ContextNotFoundException   If class does not exist
      * @throws WrongContextClassException if class does not implement Context interface
      */
     public function registerContextClass($contextClass, array $arguments = null)

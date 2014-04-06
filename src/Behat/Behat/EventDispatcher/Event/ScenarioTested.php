@@ -10,8 +10,6 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
-use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**

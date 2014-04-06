@@ -39,7 +39,6 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
         // PHPUnit assertion exceptions do not include expected / observed info in their
         // messages, but expect the test listeners to format that info like the following
         // (see e.g. PHPUnit_TextUI_ResultPrinter::printDefectTrace)
-
         return trim(PHPUnit_Framework_TestFailure::exceptionToString($exception));
     }
 }

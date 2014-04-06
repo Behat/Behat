@@ -84,10 +84,10 @@ class SuiteExtension implements Extension
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->beforeNormalization()
-                    ->ifTrue(function($suite) {
+                    ->ifTrue(function ($suite) {
                         return is_array($suite) && count($suite);
                     })
-                    ->then(function($suite) {
+                    ->then(function ($suite) {
                         $suite['settings'] = isset($suite['settings'])
                             ? $suite['settings']
                             : array();
