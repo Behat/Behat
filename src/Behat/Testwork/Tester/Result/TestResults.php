@@ -39,19 +39,6 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
     }
 
     /**
-     * Merges results from provided collection into the current one.
-     *
-     * @param TestResults $first
-     * @param TestResults $second
-     *
-     * @return TestResults
-     */
-    public static function merge(TestResults $first, TestResults $second)
-    {
-        return new static($first->toArray(), $second->toArray());
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function isPassed()
