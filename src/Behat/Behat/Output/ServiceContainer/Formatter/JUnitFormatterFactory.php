@@ -11,7 +11,9 @@
 namespace Behat\Behat\Output\ServiceContainer\Formatter;
 
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
+use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -22,11 +24,20 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class JUnitFormatterFactory implements FormatterFactory
 {
+    /*
+     * Available services
+     */
+    const ROOT_LISTENER_ID = 'output.node.listener.junit';
+
     /**
      * {@inheritdoc}
      */
     public function buildFormatter(ContainerBuilder $container)
     {
+        $this->loadRootNodeListener($container);
+
+        $this->loadCorePrinters($container);
+
         $this->loadFormatter($container);
     }
 
@@ -37,6 +48,33 @@ class JUnitFormatterFactory implements FormatterFactory
     {
     }
 
+    protected function loadCorePrinters(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitSuitePrinter');
+        $container->setDefinition('output.node.printer.junit.suite', $definition);
+
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitFeaturePrinter', array(
+            new Reference('output.junit.statistics'),
+        ));
+        $container->setDefinition('output.node.printer.junit.feature', $definition);
+    }
+
+    protected function loadRootNodeListener(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
+            array(
+                new Definition('Behat\Behat\Output\Node\EventListener\AST\SuiteListener', array(
+                    null,
+                    new Reference('output.node.printer.junit.suite')
+                )),
+                new Definition('Behat\Behat\Output\Node\EventListener\AST\CapturingFeatureListener', array(
+                    new Reference('output.node.printer.junit.feature')
+                )),
+            ),
+        ));
+        $container->setDefinition(self::ROOT_LISTENER_ID, $definition);
+    }
+
     /**
      * Loads formatter itself.
      *
@@ -45,15 +83,33 @@ class JUnitFormatterFactory implements FormatterFactory
     public function loadFormatter(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Output\Statistics\Statistics');
-        $container->setDefinition('output.progress.statistics', $definition);
+        $container->setDefinition('output.junit.statistics', $definition);
 
         $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', array(
             'junit',
             'Outputs the failures in JUnit compatible files.',
-            array(),
+            array(
+                'timer' => true,
+            ),
             $this->createOutputPrinterDefinition(),
             new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
-                array(),
+                array(
+                    new Reference(self::ROOT_LISTENER_ID),
+                    new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StatisticsListener', array(
+                        new Reference('output.junit.statistics'),
+                    )),
+                    new Definition('Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener', array(
+                        new Reference('output.junit.statistics')
+                    )),
+                    new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StepStatsListener', array(
+                        new Reference('output.junit.statistics'),
+                        new Reference(ExceptionExtension::PRESENTER_ID)
+                    )),
+                    new Definition('Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener', array(
+                        new Reference('output.junit.statistics'),
+                        new Reference(ExceptionExtension::PRESENTER_ID)
+                    )),
+                ),
             )),
         ));
         $definition->addTag(OutputExtension::FORMATTER_TAG, array('priority' => 100));

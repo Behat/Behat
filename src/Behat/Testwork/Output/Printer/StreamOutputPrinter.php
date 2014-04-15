@@ -26,7 +26,7 @@ class StreamOutputPrinter implements OutputPrinter
     /**
      * @var null|string
      */
-    private $outputPath;
+    protected $outputPath;
     /**
      * @var array
      */
@@ -215,7 +215,7 @@ class StreamOutputPrinter implements OutputPrinter
      *
      * @uses createOutputStream()
      */
-    final protected function createOutput($stream = null)
+    protected function createOutput($stream = null)
     {
         $stream = $stream ? : $this->createOutputStream();
         $format = $this->createOutputFormatter();

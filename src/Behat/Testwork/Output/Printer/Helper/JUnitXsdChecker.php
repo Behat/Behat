@@ -103,7 +103,7 @@ class JUnitXsdChecker
     {
         $invalidAttributes = array();
         foreach ($actualAttributes as $attributeName => $attributeValue) {
-            if (!in_array($attribute)) {
+            if (!in_array($attributeName, $supportedAttributes)) {
                 $invalidAttributes[] = $attributeName;
             }
         }

@@ -95,26 +95,26 @@ Feature: JUnit Formatter
       """
     And "junit/default.xml" file should contain:
       """
-      <?xml version="1.0"?>
+      <?xml version="1.0" encoding="UTF-8" ?>
       <testsuites name="default">
-        <testsuite name="World consistency" tests="6" failures="3" errors="2">
-          <testcase name="Undefined" assertions="4" status="UNDEFINED">
-            <error type="undefined">And Something new</error>
-          </testcase>
-          <testcase name="Pending" assertions="4" status="PENDING">
-            <error type="pending" message="TODO: write pending definition">And Something not done yet</error>
-          </testcase>
-          <testcase name="Failed" assertions="3" status="FAILED">
-            <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
-          </testcase>
-          <testcase name="Passed &amp; Failed #1" assertions="3" status="FAILED">
-            <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
-          </testcase>
-          <testcase name="Passed &amp; Failed #2" assertions="3" status="PASSED"/>
-          <testcase name="Passed &amp; Failed #3" assertions="3" status="FAILED">
-            <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
-          </testcase>
-        </testsuite>
+          <testsuite name="World consistency" tests="6" failures="3" errors="2">
+              <testcase name="Undefined" assertions="4" status="UNDEFINED">
+                  <error type="undefined">And Something new</error>
+              </testcase>
+              <testcase name="Pending" assertions="4" status="PENDING">
+                  <error type="pending" message="TODO: write pending definition">And Something not done yet</error>
+              </testcase>
+              <testcase name="Failed" assertions="3" status="FAILED">
+                  <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
+              </testcase>
+              <testcase name="Passed &amp; Failed #1" assertions="3" status="FAILED">
+                  <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
+              </testcase>
+              <testcase name="Passed &amp; Failed #2" assertions="3" status="PASSED"/>
+              <testcase name="Passed &amp; Failed #3" assertions="3" status="FAILED">
+                  <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
+              </testcase>
+          </testsuite>
       </testsuites>
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
@@ -182,12 +182,12 @@ Feature: JUnit Formatter
     Then it should pass with no output
     And "junit/default.xml" file should contain:
       """
-      <?xml version="1.0"?>
+      <?xml version="1.0" encoding="UTF-8" ?>
       <testsuites name="default">
-        <testsuite name="World consistency" tests="2" failures="0" errors="0">
-          <testcase name="Adding some interesting value" assertions="4" status="PASSED"/>
-          <testcase name="Subtracting some value" assertions="4" status="PASSED"/>
-        </testsuite>
+          <testsuite name="World consistency" tests="2" failures="0" errors="0">
+              <testcase name="Adding some interesting value" assertions="4" status="PASSED"/>
+              <testcase name="Subtracting some value" assertions="4" status="PASSED"/>
+          </testsuite>
       </testsuites>
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
@@ -306,23 +306,23 @@ Feature: JUnit Formatter
     Then it should fail with no output
     And "junit/small_kid.xml" file should contain:
       """
-      <?xml version="1.0"?>
+      <?xml version="1.0" encoding="UTF-8" ?>
       <testsuites name="small_kid">
-        <testsuite name="Apple Eating" tests="1" failures="0" errors="0">
-          <testcase name="Eating one apple" assertions="3" status="PASSED"/>
-        </testsuite>
+          <testsuite name="Apple Eating" tests="1" failures="0" errors="0">
+              <testcase name="Eating one apple" assertions="3" status="PASSED"/>
+          </testsuite>
       </testsuites>
       """
     And the file "junit/small_kid.xml" should be a valid document according to "junit.xsd"
     And "junit/old_man.xml" file should contain:
       """
-      <?xml version="1.0"?>
+      <?xml version="1.0" encoding="UTF-8" ?>
       <testsuites name="old_man">
-        <testsuite name="Apple Eating" tests="1" failures="1" errors="0">
-          <testcase name="Eating one apple" assertions="3" status="FAILED">
-            <failure message="Then I will be stronger: Failed asserting that 0 is not equal to 0."/>
-          </testcase>
-        </testsuite>
+          <testsuite name="Apple Eating" tests="1" failures="1" errors="0">
+              <testcase name="Eating one apple" assertions="3" status="FAILED">
+                  <failure message="Then I will be stronger: Failed asserting that 0 is not equal to 0."/>
+              </testcase>
+          </testsuite>
       </testsuites>
       """
     And the file "junit/old_man.xml" should be a valid document according to "junit.xsd"
@@ -409,17 +409,17 @@ Feature: JUnit Formatter
     Then it should pass with no output
     And "junit/default.xml" file should contain:
       """
-      <?xml version="1.0"?>
+      <?xml version="1.0" encoding="UTF-8" ?>
       <testsuites name="default">
-        <testsuite name="World consistency" tests="2" failures="0" errors="0">
-          <system-out>output from hook!</system-out>
-          <system-out>output from another hook!</system-out>
-          <testcase name="Adding some interesting value" assertions="3" status="PASSED"/>
-          <system-out>output from another hook!</system-out>
-          <testcase name="Subtracting some value" assertions="4" status="PASSED">
-            <system-out>output from step!</system-out>
-          </testcase>
-        </testsuite>
+          <testsuite name="World consistency" tests="2" failures="0" errors="0">
+              <system-out>output from hook!</system-out>
+              <system-out>output from another hook!</system-out>
+              <testcase name="Adding some interesting value" assertions="3" status="PASSED"/>
+              <system-out>output from another hook!</system-out>
+              <testcase name="Subtracting some value" assertions="4" status="PASSED">
+                  <system-out>output from step!</system-out>
+              </testcase>
+          </testsuite>
       </testsuites>
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"

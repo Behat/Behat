@@ -199,21 +199,25 @@ class JUnitOutputPrinter extends StreamOutputPrinter
      */
     protected function printAttributes(array $attributes, $prefixWithSpace = true)
     {
-        return ($prefixWithSpace ? ' ' : '') . implode(' ', array_walk($attributes, function ($value, $name) {
-            return $name . '=' . $value;
-        }));
+        $renderedAttributes = array();
+        foreach ($attributes as $name => $value) {
+            $renderedAttributes[] = $name.'="'.addslashes($value).'"';
+        }
+
+        return ($prefixWithSpace ? ' ' : '') . implode(' ', $renderedAttributes);
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function createOutputStream()
+    protected function createOutput($stream = null)
     {
         if (!is_dir($this->outputPath)) {
-            throw new BadOutputPathException(sprintf(
+            mkdir($this->outputPath, 0777, true);
+            /*throw new BadOutputPathException(sprintf(
                 'Directory expected for the `output_path` option, given `%s`.',
                 $this->outputPath
-            ), $this->outputPath);
+            ), $this->outputPath);*/
         }
 
         if (null === $this->fileName) {
