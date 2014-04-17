@@ -10,7 +10,6 @@
 
 namespace Behat\Behat;
 
-use Behat\Behat\Autoloader\ServiceContainer\AutoloaderExtension;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -23,6 +22,7 @@ use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Behat\Transformation\ServiceContainer\TransformationExtension;
 use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
 use Behat\Testwork\ApplicationFactory as BaseFactory;
+use Behat\Testwork\Autoloader\ServiceContainer\AutoloaderExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
@@ -73,15 +73,15 @@ final class ApplicationFactory extends BaseFactory
             new SuiteExtension($processor),
             new EnvironmentExtension($processor),
             new SpecificationExtension($processor),
-            new FilesystemExtension(),
+            new OutputExtension('pretty', $this->getDefaultFormatterFactories($processor), $processor),
             new ExceptionExtension($processor),
+            new FilesystemExtension(),
+            new AutoloaderExtension(array('' => '%paths.base%/features/bootstrap')),
 
             // Behat extensions
-            new AutoloaderExtension(),
             new TranslatorExtension(),
             new GherkinExtension($processor),
             new ContextExtension($processor),
-            new OutputExtension('pretty', $this->getDefaultFormatterFactories($processor), $processor),
             new SnippetExtension($processor),
             new DefinitionExtension($processor),
             new EventDispatcherExtension($processor),

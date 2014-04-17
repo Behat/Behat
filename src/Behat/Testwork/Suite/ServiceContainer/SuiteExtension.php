@@ -180,7 +180,7 @@ class SuiteExtension implements Extension
             new Reference(self::REGISTRY_ID),
             '%suite.configurations%'
         ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 1000));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 1100));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.suite', $definition);
     }
 
