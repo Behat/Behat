@@ -98,3 +98,27 @@ Feature: Extensions
   Scenario: Extension should be successfully loaded
     When I run "behat -f progress --append-snippets"
     Then it should pass
+
+  Scenario: Instantiating inexistent extension file
+    Given a file named "behat.yml" with:
+      """
+      default:
+        extensions:
+          inexistent_extension: ~
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+      }
+      """
+    When I run "behat -f progress"
+    Then it should fail with:
+      """
+      [Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException]
+        `inexistent_extension` extension file or class could not be located.
+      """

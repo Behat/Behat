@@ -154,6 +154,8 @@ final class ExtensionManager
      * @param string $locator
      *
      * @return Extension
+     *
+     * @throws ExtensionInitializationException
      */
     private function instantiateExtension($locator)
     {
@@ -165,11 +167,18 @@ final class ExtensionManager
             return new $class;
         }
 
+        if (file_exists($locator)) {
+            return require($locator);
+        }
+
         if (file_exists($path = $this->extensionsPath . DIRECTORY_SEPARATOR . $locator)) {
             return require($path);
         }
 
-        return require($locator);
+        throw new ExtensionInitializationException(sprintf(
+            '`%s` extension file or class could not be located.',
+            $locator
+        ), $locator);
     }
 
     /**
@@ -178,7 +187,7 @@ final class ExtensionManager
      * @param Extension $extension
      * @param string    $locator
      *
-     * @throws Exception\ExtensionInitializationException
+     * @throws ExtensionInitializationException
      */
     private function validateExtensionInstance($extension, $locator)
     {
