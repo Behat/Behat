@@ -75,8 +75,18 @@ class ExceptionExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-            ->scalarNode('verbosity')
-            ->defaultValue(OutputPrinter::VERBOSITY_NORMAL);
+                ->scalarNode('verbosity')
+                    ->info('Output verbosity')
+                    ->example(sprintf('%d, %d, %d, %d',
+                        OutputPrinter::VERBOSITY_NORMAL,
+                        OutputPrinter::VERBOSITY_VERBOSE,
+                        OutputPrinter::VERBOSITY_VERY_VERBOSE,
+                        OutputPrinter::VERBOSITY_DEBUG
+                    ))
+                    ->defaultValue(OutputPrinter::VERBOSITY_NORMAL)
+                ->end()
+            ->end()
+        ;
     }
 
     /**
