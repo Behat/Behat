@@ -13,6 +13,7 @@ namespace Behat\Behat\Context\Snippet\Generator;
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Snippet\ContextSnippet;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
+use Behat\Behat\Snippet\Exception\EnvironmentSnippetGenerationException;
 use Behat\Behat\Snippet\Generator\SnippetGenerator;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\StepNode;
@@ -79,6 +80,13 @@ TPL;
      */
     public function generateSnippet(Environment $environment, StepNode $step)
     {
+        if (!$environment instanceof ContextEnvironment) {
+            throw new EnvironmentSnippetGenerationException(sprintf(
+                'ContextSnippetGenerator does not support `%s` environment.',
+                get_class($environment)
+            ), $environment);
+        }
+
         $contextClass = $this->getSnippetAcceptingContextClass($environment);
         $patternType = $this->getPatternType($contextClass);
         $stepText = $step->getText();
