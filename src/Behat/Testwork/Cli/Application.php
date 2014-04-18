@@ -15,6 +15,7 @@ use Behat\Testwork\ServiceContainer\ContainerLoader;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -48,10 +49,10 @@ final class Application extends BaseApplication
      */
     public function __construct($name, $version, ConfigurationLoader $configLoader, ExtensionManager $extensionManager)
     {
-        parent::__construct($name, $version);
-
         $this->configurationLoader = $configLoader;
         $this->extensionManager = $extensionManager;
+
+        parent::__construct($name, $version);
     }
 
     /**
@@ -66,6 +67,7 @@ final class Application extends BaseApplication
             new InputOption('--config', '-c', InputOption::VALUE_REQUIRED, 'Specify config file to use.'),
             new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of exceptions.'),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
+            new InputOption('--config-reference', null, InputOption::VALUE_NONE, 'Display the configuration reference.'),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
         ));
@@ -87,7 +89,20 @@ final class Application extends BaseApplication
 
         $this->add($this->createCommand($input, $output));
 
-        return BaseApplication::doRun($input, $output);
+        if ($input->hasParameterOption(array('--config-reference'))) {
+            $input = new ArrayInput(array('--config-reference' => true));
+        }
+
+        return parent::doRun($input, $output);
+    }
+
+    protected function getDefaultCommands()
+    {
+        $commands = parent::getDefaultCommands();
+
+        $commands[] = new DumpReferenceCommand($this->extensionManager);
+
+        return $commands;
     }
 
     /**
@@ -168,6 +183,10 @@ final class Application extends BaseApplication
      */
     protected function getCommandName(InputInterface $input)
     {
+        if ($input->hasParameterOption(array('--config-reference'))) {
+            return 'dump-reference';
+        }
+
         return $this->getName();
     }
 }
