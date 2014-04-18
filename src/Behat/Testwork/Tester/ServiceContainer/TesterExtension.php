@@ -83,13 +83,16 @@ abstract class TesterExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-            ->booleanNode('strict')
-            ->defaultFalse()
+                ->booleanNode('strict')
+                    ->info('Sets the strict mode for result interpretation')
+                    ->defaultFalse()
+                ->end()
+                ->booleanNode('skip')
+                    ->info('Tells tester to skip all tests')
+                    ->defaultFalse()
+                ->end()
             ->end()
-            ->booleanNode('skip')
-            ->defaultFalse()
-            ->end()
-            ->end();
+        ;
     }
 
     /**

@@ -56,9 +56,11 @@ class TranslatorExtension implements Extension
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('locale')
+                    ->info('Sets output locale for the tester')
                     ->defaultValue($defaultLanguage)
                 ->end()
                 ->scalarNode('fallback_locale')
+                    ->info('Sets fallback output locale for the tester')
                     ->defaultValue('en')
                 ->end()
             ->end();

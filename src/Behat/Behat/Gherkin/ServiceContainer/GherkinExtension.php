@@ -81,20 +81,22 @@ class GherkinExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-            ->scalarNode('cache')
-            ->defaultValue(
-                is_writable(sys_get_temp_dir())
-                    ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gherkin_cache'
-                    : null
-            )
+                ->scalarNode('cache')
+                    ->info('Sets the gherkin parser cache folder')
+                    ->defaultValue(
+                        is_writable(sys_get_temp_dir())
+                            ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gherkin_cache'
+                            : null
+                    )
+                ->end()
+                ->arrayNode('filters')
+                    ->info('Sets the gherkin filters')
+                    ->defaultValue(array())
+                    ->useAttributeAsKey('name')
+                    ->prototype('scalar')->end()
+                ->end()
             ->end()
-            ->arrayNode('filters')
-            ->defaultValue(array())
-            ->useAttributeAsKey('name')
-            ->prototype('scalar')
-            ->end()
-            ->end()
-            ->end();
+        ;
     }
 
     /**

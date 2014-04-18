@@ -67,27 +67,24 @@ final class ApplicationFactory extends BaseFactory
         $processor = new ServiceProcessor();
 
         return array(
-            // Testwork extensions
-            new CliExtension($processor),
-            new CallExtension($processor),
+            new AutoloaderExtension(array('' => '%paths.base%/features/bootstrap')),
             new SuiteExtension($processor),
-            new EnvironmentExtension($processor),
-            new SpecificationExtension($processor),
             new OutputExtension('pretty', $this->getDefaultFormatterFactories($processor), $processor),
             new ExceptionExtension($processor),
-            new FilesystemExtension(),
-            new AutoloaderExtension(array('' => '%paths.base%/features/bootstrap')),
-
-            // Behat extensions
-            new TranslatorExtension(),
             new GherkinExtension($processor),
+            new CallExtension($processor),
+            new TranslatorExtension(),
+            new TesterExtension($processor),
+            new CliExtension($processor),
+            new EnvironmentExtension($processor),
+            new SpecificationExtension($processor),
+            new FilesystemExtension(),
             new ContextExtension($processor),
             new SnippetExtension($processor),
             new DefinitionExtension($processor),
             new EventDispatcherExtension($processor),
             new HookExtension(),
             new TransformationExtension($processor),
-            new TesterExtension($processor),
         );
     }
 
