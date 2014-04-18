@@ -163,7 +163,7 @@ class ExceptionExtension implements Extension
         $definition = new Definition('Behat\Testwork\Exception\Cli\VerbosityController', array(
             new Reference(self::PRESENTER_ID)
         ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 1000));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exception_verbosity', $definition);
     }
 }

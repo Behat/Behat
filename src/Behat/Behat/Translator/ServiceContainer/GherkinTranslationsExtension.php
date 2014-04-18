@@ -73,7 +73,7 @@ final class GherkinTranslationsExtension implements Extension
         $definition = new Definition('Behat\Behat\Translator\Cli\GherkinTranslationsController', array(
             new Reference(TranslatorExtension::TRANSLATOR_ID)
         ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 850));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.gherkin_translations', $definition);
     }
 }

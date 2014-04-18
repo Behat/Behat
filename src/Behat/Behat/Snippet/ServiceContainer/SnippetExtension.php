@@ -113,7 +113,7 @@ class SnippetExtension implements Extension
             new Reference('snippet.printer'),
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
         ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 200));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 400));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.snippet', $definition);
     }
 

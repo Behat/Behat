@@ -103,7 +103,7 @@ class EventDispatcherExtension implements Extension
         $definition = new Definition('Behat\Testwork\EventDispatcher\Cli\SigintController', array(
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
         ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 50));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.sigint', $definition);
     }
 
