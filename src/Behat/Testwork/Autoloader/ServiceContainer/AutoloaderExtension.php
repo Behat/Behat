@@ -73,10 +73,12 @@ class AutoloaderExtension implements Extension
                     return array('' => $path);
                 })
             ->end()
+
             ->defaultValue($this->defaultPaths)
             ->treatTrueLike($this->defaultPaths)
-            ->treatNullLike($this->defaultPaths)
+            ->treatNullLike(array())
             ->treatFalseLike(array())
+
             ->prototype('scalar')->end()
         ;
     }

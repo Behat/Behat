@@ -74,7 +74,10 @@ class CallExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('error_reporting')->defaultValue(E_ALL | E_STRICT)
+                ->scalarNode('error_reporting')
+                    ->info('Call executor will catch exceptions matching this level')
+                    ->defaultValue(E_ALL | E_STRICT)
+                ->end()
             ->end()
         ;
     }
