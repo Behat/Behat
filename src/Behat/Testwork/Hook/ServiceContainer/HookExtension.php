@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class HookExtension implements Extension
+class HookExtension implements Extension
 {
     /*
      * Available services
