@@ -20,7 +20,7 @@ use Behat\Behat\Output\ServiceContainer\Formatter\ProgressFormatterFactory;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Behat\Transformation\ServiceContainer\TransformationExtension;
-use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
+use Behat\Behat\Translator\ServiceContainer\GherkinTranslationsExtension;
 use Behat\Testwork\ApplicationFactory as BaseFactory;
 use Behat\Testwork\Autoloader\ServiceContainer\AutoloaderExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
@@ -33,6 +33,7 @@ use Behat\Testwork\Output\ServiceContainer\OutputExtension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
+use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
 
 /**
  * Defines the way behat is created.
@@ -74,6 +75,7 @@ final class ApplicationFactory extends BaseFactory
             new GherkinExtension($processor),
             new CallExtension($processor),
             new TranslatorExtension(),
+            new GherkinTranslationsExtension(),
             new TesterExtension($processor),
             new CliExtension($processor),
             new EnvironmentExtension($processor),

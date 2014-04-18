@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SpecificationExtension implements Extension
+final class SpecificationExtension implements Extension
 {
     /*
      * Available services
@@ -92,7 +92,7 @@ class SpecificationExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadFinder(ContainerBuilder $container)
+    private function loadFinder(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Specification\SpecificationFinder');
         $container->setDefinition(self::FINDER_ID, $definition);
@@ -103,7 +103,7 @@ class SpecificationExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processLocators(ContainerBuilder $container)
+    private function processLocators(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::LOCATOR_TAG);
         $definition = $container->getDefinition(self::FINDER_ID);

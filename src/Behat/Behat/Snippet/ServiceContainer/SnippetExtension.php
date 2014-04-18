@@ -10,12 +10,12 @@
 
 namespace Behat\Behat\Snippet\ServiceContainer;
 
-use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
+use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -113,7 +113,7 @@ class SnippetExtension implements Extension
             new Reference('snippet.printer'),
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
         ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 200));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 400));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.snippet', $definition);
     }
 

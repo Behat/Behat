@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutputExtension implements Extension
+final class OutputExtension implements Extension
 {
     /*
      * Available services
@@ -140,7 +140,7 @@ class OutputExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadOutputController(ContainerBuilder $container)
+    private function loadOutputController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Output\Cli\OutputController', array(
             new Reference(self::MANAGER_ID)
@@ -155,7 +155,7 @@ class OutputExtension implements Extension
      * @param ContainerBuilder $container
      * @param array            $formatters
      */
-    protected function loadManager(ContainerBuilder $container, array $formatters)
+    private function loadManager(ContainerBuilder $container, array $formatters)
     {
         $definition = new Definition('Behat\Testwork\Output\OutputManager', array(
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
@@ -180,7 +180,7 @@ class OutputExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadFormatters(ContainerBuilder $container)
+    private function loadFormatters(ContainerBuilder $container)
     {
         foreach ($this->factories as $factory) {
             $factory->buildFormatter($container);
@@ -192,7 +192,7 @@ class OutputExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processFormatters(ContainerBuilder $container)
+    private function processFormatters(ContainerBuilder $container)
     {
         foreach ($this->factories as $factory) {
             $factory->processFormatter($container);
@@ -204,7 +204,7 @@ class OutputExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processDynamicallyRegisteredFormatters(ContainerBuilder $container)
+    private function processDynamicallyRegisteredFormatters(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::FORMATTER_TAG);
         $definition = $container->getDefinition(self::MANAGER_ID);
