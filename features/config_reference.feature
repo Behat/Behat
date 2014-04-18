@@ -5,52 +5,14 @@ Feature: Config reference
 
   Scenario: Reference of defaults extension
     When I run "behat --no-colors --config-reference -v"
-    Then it should pass with:
+    Then it should pass
+    And the output should contain:
       """
-      testwork:
-          cli:                  []
-          calls:
-              error_reporting:      32767
-          suites:
-
-              # Prototype
-              name:
-                  enabled:              true
-                  type:                 null
-                  settings:
-
-                      # Prototype
-                      name:                 ~
-          environments:         []
-          specifications:       []
-          events:               []
-          filesystem:           []
-          exceptions:           []
-          autoload:
-
-              # Default:
-              :                    %paths.base%/features/bootstrap
-          translation:
-              locale:               en
-              fallback_locale:      en
-          gherkin:
-              cache:                %%TMP_DIR%%gherkin_cache
-              filters:
-
-                  # Prototype
-                  name:                 ~
-          contexts:             []
-          formatters:
-
-              # Prototype
-              name:                 []
-          snippets:             []
-          definitions:          []
-          hooks:                []
-          transformations:      []
-          testers:
-              strict:               false
-              skip:                 false
+      suites:
+      """
+    And the output should contain:
+      """
+      exceptions:
       """
 
   Scenario: Custom extension
@@ -92,55 +54,20 @@ Feature: Config reference
       return new CustomExtension;
       """
     When I run "behat --no-colors --config-reference"
-    Then it should pass with:
+    Then it should pass
+    And the output should contain:
       """
-      testwork:
-          cli:                  []
-          calls:
-              error_reporting:      32767
-          suites:
-
-              # Prototype
-              name:
-                  enabled:              true
-                  type:                 null
-                  settings:
-
-                      # Prototype
-                      name:                 ~
-          environments:         []
-          specifications:       []
-          events:               []
-          filesystem:           []
-          exceptions:           []
-          autoload:
-
-              # Default:
-              :                    %paths.base%/features/bootstrap
-          translation:
-              locale:               en
-              fallback_locale:      en
-          gherkin:
-              cache:                %%TMP_DIR%%gherkin_cache
-              filters:
-
-                  # Prototype
-                  name:                 ~
-          contexts:             []
-          formatters:
-
-              # Prototype
-              name:                 []
-          snippets:             []
-          definitions:          []
-          hooks:                []
-          transformations:      []
-          testers:
-              strict:               false
-              skip:                 false
           custom_extension:
 
               # A child node
               child:                ~
               test:                 true
+      """
+    And the output should contain:
+      """
+      # A child node
+      """
+    And the output should contain:
+      """
+      test:                 true
       """
