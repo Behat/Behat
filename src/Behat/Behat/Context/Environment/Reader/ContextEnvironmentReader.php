@@ -78,12 +78,12 @@ final class ContextEnvironmentReader implements EnvironmentReader
     /**
      * Reads callees from a specific suite's context.
      *
-     * @param Environment $environment
-     * @param string      $contextClass
+     * @param ContextEnvironment $environment
+     * @param string             $contextClass
      *
      * @return Callee[]
      */
-    protected function readContextCallees(Environment $environment, $contextClass)
+    private function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
         if (isset($this->callees[$contextClass])) {
             return $this->callees[$contextClass];
