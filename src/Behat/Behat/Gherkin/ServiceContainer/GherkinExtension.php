@@ -10,7 +10,6 @@
 
 namespace Behat\Behat\Gherkin\ServiceContainer;
 
-use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionException;
@@ -19,6 +18,7 @@ use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
+use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
 use ReflectionClass;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,7 +30,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class GherkinExtension implements Extension
+final class GherkinExtension implements Extension
 {
     /*
      * Available services
@@ -130,7 +130,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadParameters(ContainerBuilder $container)
+    private function loadParameters(ContainerBuilder $container)
     {
         $container->setParameter('gherkin.paths.lib', $this->getLibPath());
         $container->setParameter('gherkin.paths.i18n', '%gherkin.paths.lib%/i18n.php');
@@ -148,7 +148,7 @@ class GherkinExtension implements Extension
      *
      * @return string
      */
-    protected function getLibPath()
+    private function getLibPath()
     {
         $reflection = new ReflectionClass('Behat\Gherkin\Gherkin');
         $libPath = rtrim(dirname($reflection->getFilename()) . '/../../../', DIRECTORY_SEPARATOR);
@@ -161,7 +161,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadGherkin(ContainerBuilder $container)
+    private function loadGherkin(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Gherkin\Gherkin');
         $container->setDefinition(self::MANAGER_ID, $definition);
@@ -172,7 +172,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadKeywords(ContainerBuilder $container)
+    private function loadKeywords(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Gherkin\Keywords\CachedArrayKeywords', array(
             '%gherkin.paths.i18n%'
@@ -190,7 +190,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadParser(ContainerBuilder $container)
+    private function loadParser(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Gherkin\Parser', array(
             new Reference('gherkin.lexer')
@@ -209,7 +209,7 @@ class GherkinExtension implements Extension
      * @param ContainerBuilder $container
      * @param string           $cachePath
      */
-    protected function loadDefaultLoaders(ContainerBuilder $container, $cachePath)
+    private function loadDefaultLoaders(ContainerBuilder $container, $cachePath)
     {
         $definition = new Definition('Behat\Gherkin\Loader\GherkinFileLoader', array(
             new Reference('gherkin.parser')
@@ -232,7 +232,7 @@ class GherkinExtension implements Extension
      * @param ContainerBuilder $container
      * @param array            $filters
      */
-    protected function loadProfileFilters(ContainerBuilder $container, array $filters)
+    private function loadProfileFilters(ContainerBuilder $container, array $filters)
     {
         $gherkin = $container->getDefinition(self::MANAGER_ID);
         foreach ($filters as $type => $filterString) {
@@ -246,7 +246,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadSyntaxController(ContainerBuilder $container)
+    private function loadSyntaxController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Gherkin\Cli\SyntaxController', array(
             new Reference(self::KEYWORDS_DUMPER_ID),
@@ -261,7 +261,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadFilterController(ContainerBuilder $container)
+    private function loadFilterController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Gherkin\Cli\FilterController', array(
             new Reference(self::MANAGER_ID)
@@ -275,7 +275,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadSuiteWithPathsSetup(ContainerBuilder $container)
+    private function loadSuiteWithPathsSetup(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Gherkin\Suite\Setup\SuiteWithPathsSetup', array(
             '%paths.base%',
@@ -290,7 +290,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadFilesystemFeatureLocator(ContainerBuilder $container)
+    private function loadFilesystemFeatureLocator(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemFeatureLocator', array(
             new Reference(self::MANAGER_ID),
@@ -305,7 +305,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadFilesystemScenariosListLocator(ContainerBuilder $container)
+    private function loadFilesystemScenariosListLocator(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemScenariosListLocator', array(
             new Reference(self::MANAGER_ID)
@@ -319,7 +319,7 @@ class GherkinExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processLoaders(ContainerBuilder $container)
+    private function processLoaders(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::LOADER_TAG);
         $definition = $container->getDefinition(self::MANAGER_ID);
@@ -339,7 +339,7 @@ class GherkinExtension implements Extension
      *
      * @throws ExtensionException If filter type is not recognised
      */
-    protected function createFilterDefinition($type, $filterString)
+    private function createFilterDefinition($type, $filterString)
     {
         if ('role' === $type) {
             return new Definition('Behat\Gherkin\Filter\RoleFilter', array($filterString));

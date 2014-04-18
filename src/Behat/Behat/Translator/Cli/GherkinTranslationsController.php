@@ -10,7 +10,8 @@
 
 namespace Behat\Behat\Translator\Cli;
 
-use Behat\Testwork\Translator\Cli\LanguageController as BaseController;
+use Behat\Testwork\Cli\Controller;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\Translator;
@@ -20,7 +21,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class LanguageController extends BaseController
+final class GherkinTranslationsController implements Controller
 {
     /**
      * @var Translator
@@ -35,8 +36,13 @@ final class LanguageController extends BaseController
     public function __construct(Translator $translator)
     {
         $this->translator = $translator;
+    }
 
-        parent::__construct($translator);
+    /**
+     * {@inheritdoc}
+     */
+    public function configure(SymfonyCommand $command)
+    {
     }
 
     /**
@@ -49,7 +55,5 @@ final class LanguageController extends BaseController
         foreach (require($i18nPath) as $lang => $messages) {
             $this->translator->addResource('array', $messages, $lang, 'output');
         }
-
-        parent::execute($input, $output);
     }
 }

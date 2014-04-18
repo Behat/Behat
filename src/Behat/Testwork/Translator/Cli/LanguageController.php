@@ -18,11 +18,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- * Configures translator service.
+ * Configures translator service to use custom locale.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class LanguageController implements Controller
+final class LanguageController implements Controller
 {
     /**
      * @var Translator

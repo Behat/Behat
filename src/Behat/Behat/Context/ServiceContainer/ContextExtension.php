@@ -32,7 +32,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ContextExtension implements Extension
+final class ContextExtension implements Extension
 {
     /**
      * Available services
@@ -119,7 +119,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadFactory(ContainerBuilder $container)
+    private function loadFactory(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\ContextFactory');
         $container->setDefinition(self::FACTORY_ID, $definition);
@@ -130,7 +130,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadEnvironmentHandler(ContainerBuilder $container)
+    private function loadEnvironmentHandler(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler', array(
             new Reference(self::FACTORY_ID)
@@ -144,7 +144,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadEnvironmentReader(ContainerBuilder $container)
+    private function loadEnvironmentReader(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Environment\Reader\ContextEnvironmentReader');
         $definition->addTag(EnvironmentExtension::READER_TAG, array('priority' => 50));
@@ -156,7 +156,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadSuiteSetup(ContainerBuilder $container)
+    private function loadSuiteSetup(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Suite\Setup\SuiteWithContextsSetup', array(
             new Reference(AutoloaderExtension::CLASS_LOADER_ID),
@@ -171,7 +171,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadSnippetAppender(ContainerBuilder $container)
+    private function loadSnippetAppender(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Snippet\Appender\ContextSnippetAppender', array(
             new Reference(FilesystemExtension::LOGGER_ID)
@@ -185,7 +185,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadSnippetGenerators(ContainerBuilder $container)
+    private function loadSnippetGenerators(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator', array(
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID)
@@ -199,7 +199,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadDefaultClassGenerators(ContainerBuilder $container)
+    private function loadDefaultClassGenerators(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\ContextClass\SimpleClassGenerator');
         $definition->addTag(self::CLASS_GENERATOR_TAG, array('priority' => 50));
@@ -211,7 +211,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadDefaultContextReaders(ContainerBuilder $container)
+    private function loadDefaultContextReaders(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Reader\AnnotatedContextReader');
         $definition->addTag(self::READER_TAG, array('priority' => 50));
@@ -229,7 +229,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processClassResolvers(ContainerBuilder $container)
+    private function processClassResolvers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::CLASS_RESOLVER_TAG);
         $definition = $container->getDefinition(self::getEnvironmentHandlerId());
@@ -244,7 +244,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processArgumentResolvers(ContainerBuilder $container)
+    private function processArgumentResolvers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ARGUMENT_RESOLVER_TAG);
         $definition = $container->getDefinition(self::FACTORY_ID);
@@ -259,7 +259,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processContextInitializers(ContainerBuilder $container)
+    private function processContextInitializers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::INITIALIZER_TAG);
         $definition = $container->getDefinition(self::FACTORY_ID);
@@ -274,7 +274,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processContextReaders(ContainerBuilder $container)
+    private function processContextReaders(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::READER_TAG);
         $definition = $container->getDefinition(self::getEnvironmentReaderId());
@@ -289,7 +289,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processClassGenerators(ContainerBuilder $container)
+    private function processClassGenerators(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::CLASS_GENERATOR_TAG);
         $definition = $container->getDefinition(self::getSuiteSetupId());
@@ -304,7 +304,7 @@ class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processAnnotationReaders(ContainerBuilder $container)
+    private function processAnnotationReaders(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ANNOTATION_READER_TAG);
         $definition = $container->getDefinition(self::getAnnotatedContextReaderId());

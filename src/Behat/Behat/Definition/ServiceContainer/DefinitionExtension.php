@@ -11,13 +11,13 @@
 namespace Behat\Behat\Definition\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
-use Behat\Behat\Translator\ServiceContainer\TranslatorExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
+use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionExtension implements Extension
+final class DefinitionExtension implements Extension
 {
     /*
      * Available services
@@ -111,7 +111,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadFinder(ContainerBuilder $container)
+    private function loadFinder(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\DefinitionFinder');
         $container->setDefinition(self::FINDER_ID, $definition);
@@ -122,7 +122,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadRepository(ContainerBuilder $container)
+    private function loadRepository(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\DefinitionRepository', array(
             new Reference(EnvironmentExtension::MANAGER_ID)
@@ -135,7 +135,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadWriter(ContainerBuilder $container)
+    private function loadWriter(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\DefinitionWriter', array(
             new Reference(EnvironmentExtension::MANAGER_ID),
@@ -149,7 +149,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadPatternTransformer(ContainerBuilder $container)
+    private function loadPatternTransformer(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\Pattern\PatternTransformer');
         $container->setDefinition(self::PATTERN_TRANSFORMER_ID, $definition);
@@ -160,7 +160,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadDefaultSearchEngines(ContainerBuilder $container)
+    private function loadDefaultSearchEngines(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\Search\RepositorySearchEngine', array(
             new Reference(self::REPOSITORY_ID),
@@ -176,7 +176,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadDefaultPatternPolicies(ContainerBuilder $container)
+    private function loadDefaultPatternPolicies(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\TurnipPatternPolicy');
         $definition->addTag(self::PATTERN_POLICY_TAG, array('priority' => 50));
@@ -192,7 +192,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadAnnotationReader(ContainerBuilder $container)
+    private function loadAnnotationReader(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\Context\Annotation\DefinitionAnnotationReader');
         $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, array('priority' => 50));
@@ -204,7 +204,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadDefinitionPrinters(ContainerBuilder $container)
+    private function loadDefinitionPrinters(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter', array(
             new Reference(CliExtension::OUTPUT_ID),
@@ -226,7 +226,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadController(ContainerBuilder $container)
+    private function loadController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\Cli\AvailableDefinitionsController', array(
             new Reference(SuiteExtension::REGISTRY_ID),
@@ -243,7 +243,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processSearchEngines(ContainerBuilder $container)
+    private function processSearchEngines(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::SEARCH_ENGINE_TAG);
         $definition = $container->getDefinition(self::FINDER_ID);
@@ -258,7 +258,7 @@ class DefinitionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function processPatternPolicies(ContainerBuilder $container)
+    private function processPatternPolicies(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::PATTERN_POLICY_TAG);
         $definition = $container->getDefinition(self::PATTERN_TRANSFORMER_ID);
@@ -273,7 +273,7 @@ class DefinitionExtension implements Extension
      *
      * @return string
      */
-    protected function getListPrinterId()
+    private function getListPrinterId()
     {
         return 'definition.list_printer';
     }
@@ -283,7 +283,7 @@ class DefinitionExtension implements Extension
      *
      * @return string
      */
-    protected function getInformationPrinterId()
+    private function getInformationPrinterId()
     {
         return 'definition.information_printer';
     }
