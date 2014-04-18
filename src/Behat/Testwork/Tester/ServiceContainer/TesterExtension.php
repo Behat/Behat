@@ -150,7 +150,7 @@ abstract class TesterExtension implements Extension
             new Reference(self::RESULT_INTERPRETER_ID),
             $strict
         ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 10));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
     }
 

@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class HookExtension extends BaseExtension
+final class HookExtension extends BaseExtension
 {
     /**
      * {@inheritdoc}
@@ -30,19 +30,8 @@ class HookExtension extends BaseExtension
     public function load(ContainerBuilder $container, array $config)
     {
         parent::load($container, $config);
-        $this->loadAnnotationReader($container);
-    }
 
-    /**
-     * Loads hook annotation reader.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadAnnotationReader(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\Hook\Context\Annotation\HookAnnotationReader');
-        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, array('priority' => 50));
-        $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.hook', $definition);
+        $this->loadAnnotationReader($container);
     }
 
     /**
@@ -83,5 +72,17 @@ class HookExtension extends BaseExtension
         ));
         $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG, array('priority' => 9999));
         $container->setDefinition(TesterExtension::STEP_TESTER_WRAPPER_TAG . '.hookable', $definition);
+    }
+
+    /**
+     * Loads hook annotation reader.
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadAnnotationReader(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Hook\Context\Annotation\HookAnnotationReader');
+        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, array('priority' => 50));
+        $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.hook', $definition);
     }
 }

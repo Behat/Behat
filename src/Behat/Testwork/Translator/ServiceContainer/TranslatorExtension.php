@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TranslatorExtension implements Extension
+final class TranslatorExtension implements Extension
 {
     /*
      * Available services
@@ -89,7 +89,7 @@ class TranslatorExtension implements Extension
      * @param string           $locale
      * @param string           $fallbackLocale
      */
-    protected function loadTranslator(ContainerBuilder $container, $locale, $fallbackLocale)
+    private function loadTranslator(ContainerBuilder $container, $locale, $fallbackLocale)
     {
         $definition = new Definition('Symfony\Component\Translation\Translator', array($locale));
         $container->setDefinition(self::TRANSLATOR_ID, $definition);
@@ -127,7 +127,7 @@ class TranslatorExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadController(ContainerBuilder $container)
+    private function loadController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Translator\Cli\LanguageController', array(
             new Reference(self::TRANSLATOR_ID)
@@ -141,7 +141,7 @@ class TranslatorExtension implements Extension
      *
      * @return null|string
      */
-    protected function getDefaultLanguage()
+    private function getDefaultLanguage()
     {
         $defaultLanguage = null;
         if (($locale = getenv('LANG')) && preg_match('/^([a-z]{2})/', $locale, $matches)) {
