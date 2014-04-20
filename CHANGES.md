@@ -1,3 +1,22 @@
+3.0.0 / 2014-04-20
+==================
+
+  * Brand new highly extendable and clear architecture
+  * Support for multiple suites per profile
+  * Support for multiple contexts per suite
+  * Support for multiple feature paths per suite
+  * Support for filtered suites
+  * Support for unique context constructor parameters
+  * Hooks are first class citizens and thus have their own error and output buffering
+  * Turnip syntax in definitions
+  * Reworked formatters with improved error and output buffering
+  * Rerun does not require precache run
+  * New gherkin role filter
+  * Improved error handling with 3 levels of error reporting (-v, -vv, -vvv)
+  * Dropped subcontexts
+  * Dropped chained steps
+  * Dropped closured definitions
+
 3.0.0rc3 / 2014-03-16
 =======================
 
