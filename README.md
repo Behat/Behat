@@ -8,6 +8,7 @@ behat
 [![Latest Stable Version](https://poser.pugx.org/behat/behat/v/stable.png)](https://packagist.org/packages/behat/behat)
 [![Latest Unstable Version](https://poser.pugx.org/behat/behat/v/unstable.png)](https://packagist.org/packages/behat/behat)
 [![Total Downloads](https://poser.pugx.org/behat/behat/downloads.png)](https://packagist.org/packages/behat/behat)
+[![HHVM Status](http://hhvm.h4cc.de/badge/behat/behat.png?branch=3.0.x-dev)](http://hhvm.h4cc.de/package/behat/behat)
 
 behat is a php framework for testing your business expectations.
 
