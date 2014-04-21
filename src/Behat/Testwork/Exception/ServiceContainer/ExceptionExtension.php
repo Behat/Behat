@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ExceptionExtension implements Extension
+final class ExceptionExtension implements Extension
 {
     /*
      * Available services

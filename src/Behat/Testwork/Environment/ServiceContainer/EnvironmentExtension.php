@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\Definition;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EnvironmentExtension implements Extension
+final class EnvironmentExtension implements Extension
 {
     /*
      * Available services

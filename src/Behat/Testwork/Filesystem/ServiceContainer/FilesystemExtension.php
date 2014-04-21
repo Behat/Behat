@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FilesystemExtension implements Extension
+final class FilesystemExtension implements Extension
 {
     /*
      * Available services

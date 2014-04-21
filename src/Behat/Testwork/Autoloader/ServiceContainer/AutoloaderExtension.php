@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AutoloaderExtension implements Extension
+final class AutoloaderExtension implements Extension
 {
     /*
      * Available services

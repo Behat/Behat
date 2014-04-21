@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class CliExtension implements Extension
+final class CliExtension implements Extension
 {
     /*
      * Available services
