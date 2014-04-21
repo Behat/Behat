@@ -146,9 +146,6 @@ final class AutoloaderExtension implements Extension
     private function processLoaderPrefixes(ContainerBuilder $container)
     {
         $loaderDefinition = $container->getDefinition(self::CLASS_LOADER_ID);
-
-        foreach ($container->getParameter('class_loader.prefixes') as $prefix => $path) {
-            $loaderDefinition->addMethodCall('addPrefix', array($prefix, $path));
-        }
+        $loaderDefinition->addMethodCall('addPrefixes', array($container->getParameter('class_loader.prefixes')));
     }
 }

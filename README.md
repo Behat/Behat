@@ -3,10 +3,9 @@ behat
 
 [![License](https://poser.pugx.org/behat/behat/license.png)](https://packagist.org/packages/behat/behat)
 [![Build Status](https://travis-ci.org/Behat/Behat.png?branch=3.0)](https://travis-ci.org/Behat/Behat)
+[![HHVM Status](http://hhvm.h4cc.de/badge/behat/behat.png?branch=3.0.x-dev)](http://hhvm.h4cc.de/package/behat/behat)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Behat/Behat/badges/quality-score.png?s=ad84e95fc2405712f88a96d89b4f31dfe5c80fae)](https://scrutinizer-ci.com/g/Behat/Behat/)
-[![Dependency Status](https://www.versioneye.com/user/projects/52d2a08dec1375fded000031/badge.png)](https://www.versioneye.com/user/projects/52d2a08dec1375fded000031)
 [![Latest Stable Version](https://poser.pugx.org/behat/behat/v/stable.png)](https://packagist.org/packages/behat/behat)
-[![Latest Unstable Version](https://poser.pugx.org/behat/behat/v/unstable.png)](https://packagist.org/packages/behat/behat)
 [![Total Downloads](https://poser.pugx.org/behat/behat/downloads.png)](https://packagist.org/packages/behat/behat)
 
 behat is a php framework for testing your business expectations.
