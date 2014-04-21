@@ -18,10 +18,23 @@ use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DumpReferenceCommand extends BaseCommand
+/**
+ * Extends Symfony console application with testwork functionality.
+ *
+ * @author Christophe Coevoet <stof>
+ */
+final class DumpReferenceCommand extends BaseCommand
 {
+    /**
+     * @var ExtensionManager
+     */
     private $extensionManager;
 
+    /**
+     * Initializes dumper.
+     *
+     * @param ExtensionManager $extensionManager
+     */
     public function __construct(ExtensionManager $extensionManager)
     {
         $this->extensionManager = $extensionManager;
@@ -29,6 +42,9 @@ class DumpReferenceCommand extends BaseCommand
         parent::__construct('dump-reference');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (class_exists('Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper')) {
