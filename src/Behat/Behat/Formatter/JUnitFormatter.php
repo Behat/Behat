@@ -142,7 +142,7 @@ class JUnitFormatter extends ConsoleFormatter
     {
         $feature = $event->getFeature();
         $replace = array(
-            $this->getParameter('features_path') => '',
+            realpath($this->getParameter('features_path')) => '',
             DIRECTORY_SEPARATOR => '-',
             '.feature' => '.xml'
         );
