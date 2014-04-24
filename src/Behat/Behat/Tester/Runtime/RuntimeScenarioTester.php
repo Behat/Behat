@@ -98,8 +98,9 @@ final class RuntimeScenarioTester implements ScenarioTester
     private function testBackground(Environment $env, FeatureNode $feature, $skip)
     {
         $setup = $this->backgroundTester->setUp($env, $feature, $skip);
-        $testResult = $this->backgroundTester->test($env, $feature, !$setup->isSuccessful() || $skip);
-        $teardown = $this->backgroundTester->tearDown($env, $feature, !$testResult->isPassed() || $skip, $testResult);
+        $skipSetup = !$setup->isSuccessful() || $skip;
+        $testResult = $this->backgroundTester->test($env, $feature, $skipSetup);
+        $teardown = $this->backgroundTester->tearDown($env, $feature, $skipSetup, $testResult);
 
         $integerResult = new IntegerTestResult($testResult->getResultCode());
 
