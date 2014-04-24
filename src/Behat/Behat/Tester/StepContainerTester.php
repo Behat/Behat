@@ -56,7 +56,7 @@ final class StepContainerTester
             $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
             $skipSetup = !$setup->isSuccessful() || $skip;
 
-            $testResult = $this->stepTester->test($env, $feature, $step, $skip || $skipSetup);
+            $testResult = $this->stepTester->test($env, $feature, $step, $skipSetup);
             $skip = !$testResult->isPassed() || $skip;
 
             $teardown = $this->stepTester->tearDown($env, $feature, $step, $skipSetup, $testResult);

@@ -67,17 +67,10 @@ final class RuntimeScenarioTester implements ScenarioTester
         $results = array();
 
         if ($feature->hasBackground()) {
-            $setup = $this->backgroundTester->setUp($env, $feature, $skip);
-            $skipSetup = !$setup->isSuccessful() || $skip;
+            $backgroundResult = $this->testBackground($env, $feature, $skip);
+            $skip = !$backgroundResult->isPassed() || $skip;
 
-            $testResult = $this->backgroundTester->test($env, $feature, $skip || $skipSetup);
-            $skip = !$testResult->isPassed() || $skip;
-
-            $teardown = $this->backgroundTester->tearDown($env, $feature, $skip, $testResult);
-            $skip = $skip || $skipSetup || !$teardown->isSuccessful();
-
-            $integerResult = new IntegerTestResult($testResult->getResultCode());
-            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
+            $results[] = $backgroundResult;
         }
 
         $results = array_merge($results, $this->containerTester->test($env, $feature, $scenario, $skip));
@@ -91,5 +84,25 @@ final class RuntimeScenarioTester implements ScenarioTester
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
         return new SuccessfulTeardown();
+    }
+
+    /**
+     * Tests background of the provided feature against provided environment.
+     *
+     * @param Environment $env
+     * @param FeatureNode $feature
+     * @param Boolean     $skip
+     *
+     * @return TestResult
+     */
+    private function testBackground(Environment $env, FeatureNode $feature, $skip)
+    {
+        $setup = $this->backgroundTester->setUp($env, $feature, $skip);
+        $testResult = $this->backgroundTester->test($env, $feature, !$setup->isSuccessful() || $skip);
+        $teardown = $this->backgroundTester->tearDown($env, $feature, !$testResult->isPassed() || $skip, $testResult);
+
+        $integerResult = new IntegerTestResult($testResult->getResultCode());
+
+        return new TestWithSetupResult($setup, $integerResult, $teardown);
     }
 }
