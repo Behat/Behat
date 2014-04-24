@@ -68,13 +68,13 @@ final class RuntimeScenarioTester implements ScenarioTester
 
         if ($feature->hasBackground()) {
             $setup = $this->backgroundTester->setUp($env, $feature, $skip);
-            $skip = !$setup->isSuccessful() || $skip;
+            $skipSetup = !$setup->isSuccessful() || $skip;
 
-            $testResult = $this->backgroundTester->test($env, $feature, $skip);
+            $testResult = $this->backgroundTester->test($env, $feature, $skip || $skipSetup);
             $skip = !$testResult->isPassed() || $skip;
 
             $teardown = $this->backgroundTester->tearDown($env, $feature, $skip, $testResult);
-            $skip = !$teardown->isSuccessful() || $skip;
+            $skip = $skip || $skipSetup || !$teardown->isSuccessful();
 
             $integerResult = new IntegerTestResult($testResult->getResultCode());
             $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);

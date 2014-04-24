@@ -54,13 +54,13 @@ final class StepContainerTester
         $results = array();
         foreach ($container->getSteps() as $step) {
             $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
-            $skip = !$setup->isSuccessful() || $skip;
+            $skipSetup = !$setup->isSuccessful() || $skip;
 
-            $testResult = $this->stepTester->test($env, $feature, $step, $skip);
+            $testResult = $this->stepTester->test($env, $feature, $step, $skip || $skipSetup);
             $skip = !$testResult->isPassed() || $skip;
 
-            $teardown = $this->stepTester->tearDown($env, $feature, $step, $skip, $testResult);
-            $skip = !$teardown->isSuccessful() || $skip;
+            $teardown = $this->stepTester->tearDown($env, $feature, $step, $skipSetup, $testResult);
+            $skip = $skip || $skipSetup || !$teardown->isSuccessful();
 
             $integerResult = new IntegerTestResult($testResult->getResultCode());
             $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
