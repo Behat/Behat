@@ -12,11 +12,16 @@
             "homepage":  "http://everzet.com"
         }
     ],
-
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/kibao/Gherkin"
+        }
+    ],
     "require": {
         "php":                           ">=5.3.3",
         "ext-mbstring":                  "*",
-        "behat/gherkin":                 "~4.1",
+        "behat/gherkin":                 "dev-feature/step-node-localized-keyword",
         "behat/transliterator":          "~1.0",
         "symfony/console":               "~2.1",
         "symfony/config":                "~2.3",
