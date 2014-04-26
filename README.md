@@ -13,12 +13,13 @@ behat is a php framework for testing your business expectations.
 Versioning
 ----------
 
-Starting from `v3.0.1`, Behat is following [Semantiv Versioning v2.0.0](http://semver.org/spec/v2.0.0.html).
+Starting from `v3.0.1`, Behat is following [Semantic Versioning v2.0.0](http://semver.org/spec/v2.0.0.html).
 Public API of Behat consists of all Behat and Testwork interfaces and service constants. This
 basically means that if all you do is implement interfaces (like [this one](https://github.com/Behat/Behat/blob/3.0/src/Behat/Behat/Context/ContextClass/ClassResolver.php#L15-L22))
-and use service constants (like [this one](https://github.com/Behat/Behat/blob/3.0/src/Behat/Behat/Context/ServiceContainer/ContextExtension.php#L45))
-you would not have any backwards compatibility issues with Behat up until `v4.0.0` is released.
-Exception could be an extremely rare cases where BC break is introduced as a measure to fix a serious issue.
+and use service constants (like [this one](https://github.com/Behat/Behat/blob/3.0/src/Behat/Behat/Context/ServiceContainer/ContextExtension.php#L45)),
+you would not have any backwards compatibility issues with Behat up until `v4.0.0` (or later major)
+is released. Exception could be an extremely rare case where BC break is introduced as a measure
+to fix a serious issue.
 
 Useful Links
 ------------
