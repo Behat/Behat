@@ -171,7 +171,7 @@ Feature: Pretty Formatter
           /**
            * @When /I (add|subtract) the value (\d+)/
            */
-          public function iAddOrSubstact($op, $num) {
+          public function iAddOrSubtract($op, $num) {
               if ($op == 'add')
                 $this->value += $num;
               elseif ($op == 'subtract')
@@ -216,14 +216,14 @@ Feature: Pretty Formatter
         Scenario: Adding some interesting # features/World.feature:9
                   value
           Then I must have 10             # FeatureContext::iMustHave()
-          And I add the value 6           # FeatureContext::iAddOrSubstact()
+          And I add the value 6           # FeatureContext::iAddOrSubtract()
           Then I must have 16             # FeatureContext::iMustHave()
 
         Scenario: Subtracting        # features/World.feature:15
                   some
                   value
           Then I must have 10        # FeatureContext::iMustHave()
-          And I subtract the value 6 # FeatureContext::iAddOrSubstact()
+          And I subtract the value 6 # FeatureContext::iAddOrSubtract()
           Then I must have 4         # FeatureContext::iMustHave()
 
       2 scenarios (2 passed)

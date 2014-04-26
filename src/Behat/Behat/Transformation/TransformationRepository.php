@@ -15,7 +15,7 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
 
 /**
- * Provides transofmrations using environment manager.
+ * Provides transformations using environment manager.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
