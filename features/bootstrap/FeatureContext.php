@@ -1,7 +1,6 @@
 <?php
 
-use Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\PyStringNode;
 
 // order of autoloading is undefined, so we should
 // require parent class explicitly here
@@ -130,6 +129,9 @@ class FeatureContext extends BaseFeaturesContext
         $this->command = 'behat ' . $argumentsString;
         $this->output  = trim(implode("\n", $output));
         $this->return  = $return;
+
+        // Replace wrong warning message of HHVM
+        $this->output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $this->output);
     }
 
     /**

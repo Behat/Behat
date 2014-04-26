@@ -1,8 +1,6 @@
 <?php
 
 use Behat\Behat\Context\BehatContext;
-use Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode;
 
 /*
  * This file is part of the Behat.
@@ -47,7 +45,7 @@ class Hooks extends BehatContext
      *
      * Prepares test folders in the temporary directory.
      */
-    public function prepareTestFolders($event)
+    public function prepareTestFolders()
     {
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR .
                md5(microtime() * rand(0, 10000));
