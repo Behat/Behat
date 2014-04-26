@@ -42,4 +42,27 @@ final class ServiceProcessor
 
         return $serviceReferences;
     }
+
+    /**
+     * Processes wrappers of a service, found by provided tag.
+     *
+     * The wrappers are applied by descending priority.
+     * The first argument of the wrapper service receives the inner service.
+     *
+     * @param ContainerBuilder $container
+     * @param string           $target     The id of the service being decorated
+     * @param string           $wrapperTag The tag used by wrappers
+     */
+    public function processWrapperServices(ContainerBuilder $container, $target, $wrapperTag)
+    {
+        $references = $this->findAndSortTaggedServices($container, $wrapperTag);
+
+        foreach ($references as $reference) {
+            $wrappedService = $container->getDefinition($target);
+            $wrappingService = $container->getDefinition((string) $reference);
+            $wrappingService->replaceArgument(0, $wrappedService);
+
+            $container->setDefinition($target, $wrappingService);
+        }
+    }
 }

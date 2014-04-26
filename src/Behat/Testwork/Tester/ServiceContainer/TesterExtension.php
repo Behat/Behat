@@ -210,15 +210,7 @@ abstract class TesterExtension implements Extension
      */
     protected function processExerciseWrappers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::EXERCISE_WRAPPER_TAG);
-
-        foreach ($references as $reference) {
-            $wrappedTester = $container->getDefinition(self::EXERCISE_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
-            $wrappingTester->replaceArgument(0, $wrappedTester);
-
-            $container->setDefinition(self::EXERCISE_ID, $wrappingTester);
-        }
+        $this->processor->processWrapperServices($container, self::EXERCISE_ID, self::EXERCISE_WRAPPER_TAG);
     }
 
     /**
@@ -228,15 +220,7 @@ abstract class TesterExtension implements Extension
      */
     protected function processSuiteTesterWrappers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::SUITE_TESTER_WRAPPER_TAG);
-
-        foreach ($references as $reference) {
-            $wrappedTester = $container->getDefinition(self::SUITE_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
-            $wrappingTester->replaceArgument(0, $wrappedTester);
-
-            $container->setDefinition(self::SUITE_TESTER_ID, $wrappingTester);
-        }
+        $this->processor->processWrapperServices($container, self::SUITE_TESTER_ID, self::SUITE_TESTER_WRAPPER_TAG);
     }
 
     /**
@@ -246,15 +230,7 @@ abstract class TesterExtension implements Extension
      */
     protected function processSpecificationTesterWrappers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::SPECIFICATION_TESTER_WRAPPER_TAG);
-
-        foreach ($references as $reference) {
-            $wrappedTester = $container->getDefinition(self::SPECIFICATION_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
-            $wrappingTester->replaceArgument(0, $wrappedTester);
-
-            $container->setDefinition(self::SPECIFICATION_TESTER_ID, $wrappingTester);
-        }
+        $this->processor->processWrapperServices($container, self::SPECIFICATION_TESTER_ID, self::SPECIFICATION_TESTER_WRAPPER_TAG);
     }
 
     /**
