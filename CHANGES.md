@@ -1,3 +1,10 @@
+3.0.1 / 2014-04-26
+==================
+
+  * Make sure that `AfterStep` hook is running even if step is failed
+    ([504](https://github.com/Behat/Behat/issues/504))
+  * Optimised the way service wrappers are registered (thanks @stof)
+
 3.0.0 / 2014-04-20
 ==================
 
