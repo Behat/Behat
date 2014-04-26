@@ -62,15 +62,6 @@ class OutputController implements Controller
                 '--format-settings', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Set formatters parameters using json object.' . PHP_EOL .
                 'Keys are parameter names, values are values.'
-            )
-            ->addOption(
-                '--colors', null, InputOption::VALUE_NONE,
-                'Force ANSI color in the output. By default color support is' . PHP_EOL .
-                'guessed based on your platform and the output if not specified.'
-            )
-            ->addOption(
-                '--no-colors', null, InputOption::VALUE_NONE,
-                'Force no ANSI color in the output.'
             );
     }
 
@@ -83,7 +74,7 @@ class OutputController implements Controller
         $outputs = $input->getOption('out');
 
         $this->configureFormatters($formats, $input, $output);
-        $this->configureOutputs($formats, $outputs, !$input->getOption('no-colors'));
+        $this->configureOutputs($formats, $outputs, $output->isDecorated());
     }
 
     /**
@@ -128,15 +119,6 @@ class OutputController implements Controller
             foreach ($input->getOption('format-settings') as $jsonSettings) {
                 $this->loadJsonSettings($jsonSettings);
             }
-        }
-
-        if ($input->getOption('colors')) {
-            $output->setDecorated(true);
-            $this->manager->setFormattersParameter('output_decorate', true);
-        }
-        if ($input->getOption('no-colors')) {
-            $output->setDecorated(false);
-            $this->manager->setFormattersParameter('output_decorate', false);
         }
     }
 

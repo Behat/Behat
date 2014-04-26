@@ -70,6 +70,12 @@ final class Application extends BaseApplication
             new InputOption('--config-reference', null, InputOption::VALUE_NONE, 'Display the configuration reference.'),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
+            new InputOption(
+                '--colors', null, InputOption::VALUE_NONE,
+                'Force ANSI color in the output. By default color support is' . PHP_EOL .
+                'guessed based on your platform and the output if not specified.'
+            ),
+            new InputOption('--no-colors', null, InputOption::VALUE_NONE, 'Force no ANSI color in the output.'),
         ));
     }
 
@@ -188,5 +194,16 @@ final class Application extends BaseApplication
         }
 
         return $this->getName();
+    }
+
+    protected function configureIO(InputInterface $input, OutputInterface $output)
+    {
+        if (true === $input->hasParameterOption(array('--colors'))) {
+            $output->setDecorated(true);
+        } elseif (true === $input->hasParameterOption(array('--no-colors'))) {
+            $output->setDecorated(false);
+        }
+
+        parent::configureIO($input, $output);
     }
 }

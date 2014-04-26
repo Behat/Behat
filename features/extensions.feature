@@ -116,7 +116,7 @@ Feature: Extensions
       {
       }
       """
-    When I run "behat -f progress"
+    When I run "behat -f progress --no-colors"
     Then it should fail with:
       """
       [Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException]

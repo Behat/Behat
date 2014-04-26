@@ -435,7 +435,7 @@ Feature: Append snippets option
             second:
               contexts: [ SecondContext ]
         """
-      When I run "behat -f progress --append-snippets"
+      When I run "behat -f progress --append-snippets --no-colors"
       Then it should pass with:
         """
         UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
@@ -681,7 +681,7 @@ Feature: Append snippets option
           second:
             contexts: [ SecondContext ]
       """
-    When I run "behat -f progress --append-snippets"
+    When I run "behat -f progress --append-snippets --no-colors"
     Then it should pass with:
       """
       UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU

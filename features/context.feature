@@ -314,7 +314,7 @@ Feature: Context consistency
 
 
 
-      behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--colors] [--no-colors] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--rerun] [--stop-on-failure] [--dry-run] [paths]
+      behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--rerun] [--stop-on-failure] [--dry-run] [paths]
       """
 
   Scenario: Unexisting custom context class
@@ -344,5 +344,5 @@ Feature: Context consistency
 
 
 
-    behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--colors] [--no-colors] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--rerun] [--stop-on-failure] [--dry-run] [paths]
+    behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--rerun] [--stop-on-failure] [--dry-run] [paths]
     """
