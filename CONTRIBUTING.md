@@ -15,6 +15,18 @@ feel free to do this, but remember to follow this few simple rules:
 - __Remember__: when you create Pull Request, always select `3.0` branch as
   target, otherwise it will be closed.
 
+Backwards compatibility
+-----------------------
+
+Starting from `v3.0.1`, Behat is following [Semantiv Versioning v2.0.0](http://semver.org/spec/v2.0.0.html).
+This means that we take backwards compatibility of public API very seriously. Public API of Behat
+consists of all Behat and Testwork interfaces (like [this one](https://github.com/Behat/Behat/blob/3.0/src/Behat/Behat/Context/ContextClass/ClassResolver.php#L15-L22))
+and service constants (like [this one](https://github.com/Behat/Behat/blob/3.0/src/Behat/Behat/Context/ServiceContainer/ContextExtension.php#L45)).
+So unless you want your PR to start a new major version of Behat (`v4.0.0` for example), you need
+to make sure that either you do not change existing interfaces and their usage across the system or
+that you at least introduce backwards compatiblity layer together with your change. Not following
+these rules will cause rejection of your PR.
+
 Contributing to Formatter Translations
 --------------------------------------
 
