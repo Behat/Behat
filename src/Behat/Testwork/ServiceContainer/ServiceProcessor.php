@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\ServiceContainer;
 
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -17,6 +18,7 @@ use Symfony\Component\DependencyInjection\Reference;
  * Provides additional service finding functionality.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Christophe Coevoet <stof@notk.org>
  */
 final class ServiceProcessor
 {
@@ -58,11 +60,28 @@ final class ServiceProcessor
         $references = $this->findAndSortTaggedServices($container, $wrapperTag);
 
         foreach ($references as $reference) {
-            $wrappedService = $container->getDefinition($target);
-            $wrappingService = $container->getDefinition((string) $reference);
-            $wrappingService->replaceArgument(0, $wrappedService);
+            $id = (string) $reference;
+            $renamedId = $id . '.inner';
 
-            $container->setDefinition($target, $wrappingService);
+            // This logic is based on Symfony\Component\DependencyInjection\Compiler\DecoratorServicePass
+
+            // we create a new alias/service for the service we are replacing
+            // to be able to reference it in the new one
+            if ($container->hasAlias($target)) {
+                $alias = $container->getAlias($target);
+                $public = $alias->isPublic();
+                $container->setAlias($renamedId, new Alias((string) $alias, false));
+            } else {
+                $definition = $container->getDefinition($target);
+                $public = $definition->isPublic();
+                $definition->setPublic(false);
+                $container->setDefinition($renamedId, $definition);
+            }
+
+            $container->setAlias($target, new Alias($id, $public));
+            // Replace the reference so that users don't need to bother about the way the inner service is referenced
+            $wrappingService = $container->getDefinition($id);
+            $wrappingService->replaceArgument(0, new Reference($renamedId));
         }
     }
 }
