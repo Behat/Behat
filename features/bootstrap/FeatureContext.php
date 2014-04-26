@@ -143,7 +143,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * Checks whether previously runned command passes|failes with provided output.
+     * Checks whether previously ran command passes|fails with provided output.
      *
      * @Then /^it should (fail|pass) with:$/
      *
@@ -217,7 +217,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * Checks whether previously runned command failed|passed.
+     * Checks whether previously ran command failed|passed.
      *
      * @Then /^it should (fail|pass)$/
      *

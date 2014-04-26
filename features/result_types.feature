@@ -10,7 +10,7 @@ Feature: Different result types
         In order to make clients happy
         As a coffee machine factory
         We need to be able to tell customers
-        about what coffe type is supported
+        about what coffee type is supported
 
         Background:
           Given I have magically created 10$
@@ -345,15 +345,15 @@ Feature: Different result types
       10 steps (3 passed, 2 failed, 5 skipped)
       """
 
-  Scenario: Ambigious steps
+  Scenario: Ambiguous steps
     Given a file named "features/coffee.feature" with:
       """
-      Feature: Ambigious orders in coffee menu
+      Feature: Ambiguous orders in coffee menu
         In order to be able to chose concrete coffee type
         As a coffee buyer
-        I need to be able to know about ambigious decisions
+        I need to be able to know about ambiguous decisions
 
-        Scenario: Ambigious coffee type
+        Scenario: Ambiguous coffee type
           Given human have chosen "Latte"
           Then I should make him "Latte"
       """
