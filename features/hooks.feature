@@ -347,3 +347,170 @@ Feature: hooks
       4 scenarios (2 passed, 2 skipped)
       7 steps (3 passed, 4 skipped)
       """
+
+  Scenario: Step state doesn't affect after hooks
+    Given a file named "features/test.feature" with:
+      """
+      Feature:
+
+        Scenario:
+          Given passing step
+
+        Scenario:
+          Given failing step
+
+        Scenario:
+          Given passing step with failing hook
+
+        @failing-before-hook
+        Scenario:
+          Given passing step
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /** @BeforeScenario */
+          public function passingBeforeScenarioHook()
+          {
+              echo 'Is passing';
+          }
+
+          /** @BeforeScenario @failing-before-hook */
+          public function failingBeforeScenarioHook()
+          {
+              throw new \RuntimeException('Is failing');
+          }
+
+          /** @AfterScenario */
+          public function passingAfterScenarioHook()
+          {
+              echo 'Is passing';
+          }
+
+          /** @BeforeStep */
+          public function passingBeforeStep()
+          {
+              echo 'Is passing';
+          }
+
+          /** @BeforeStep passing step with failing hook */
+          public function failingBeforeStep()
+          {
+              throw new \RuntimeException('Is failing');
+          }
+
+          /** @AfterStep */
+          public function passingAfterStep()
+          {
+              echo 'Is passing';
+          }
+
+          /**
+           * @Given passing step
+           * @Given passing step with failing hook
+           */
+          public function passingStep()
+          {
+              echo 'Is passing';
+          }
+
+          /** @Given failing step */
+          public function failingStep()
+          {
+              throw new \RuntimeException('Failing');
+          }
+      }
+      """
+    When I run "behat --no-colors -f pretty"
+    Then it should fail with:
+      """
+      Feature:
+
+        ┌─ @BeforeScenario # FeatureContext::passingBeforeScenarioHook()
+        │
+        │  Is passing
+        │
+        Scenario:            # features/test.feature:3
+          ┌─ @BeforeStep # FeatureContext::passingBeforeStep()
+          │
+          │  Is passing
+          │
+          Given passing step # FeatureContext::passingStep()
+            │ Is passing
+          │
+          │  Is passing
+          │
+          └─ @AfterStep # FeatureContext::passingAfterStep()
+        │
+        │  Is passing
+        │
+        └─ @AfterScenario # FeatureContext::passingAfterScenarioHook()
+
+        ┌─ @BeforeScenario # FeatureContext::passingBeforeScenarioHook()
+        │
+        │  Is passing
+        │
+        Scenario:            # features/test.feature:6
+          ┌─ @BeforeStep # FeatureContext::passingBeforeStep()
+          │
+          │  Is passing
+          │
+          Given failing step # FeatureContext::failingStep()
+            Failing (RuntimeException)
+          │
+          │  Is passing
+          │
+          └─ @AfterStep # FeatureContext::passingAfterStep()
+        │
+        │  Is passing
+        │
+        └─ @AfterScenario # FeatureContext::passingAfterScenarioHook()
+
+        ┌─ @BeforeScenario # FeatureContext::passingBeforeScenarioHook()
+        │
+        │  Is passing
+        │
+        Scenario:                              # features/test.feature:9
+          ┌─ @BeforeStep # FeatureContext::passingBeforeStep()
+          │
+          │  Is passing
+          │
+          ┌─ @BeforeStep passing step with failing hook # FeatureContext::failingBeforeStep()
+          │
+          ╳  Is failing (RuntimeException)
+          │
+          Given passing step with failing hook # FeatureContext::passingStep()
+        │
+        │  Is passing
+        │
+        └─ @AfterScenario # FeatureContext::passingAfterScenarioHook()
+
+        ┌─ @BeforeScenario # FeatureContext::passingBeforeScenarioHook()
+        │
+        │  Is passing
+        │
+        ┌─ @BeforeScenario @failing-before-hook # FeatureContext::failingBeforeScenarioHook()
+        │
+        ╳  Is failing (RuntimeException)
+        │
+        @failing-before-hook
+        Scenario:            # features/test.feature:13
+          Given passing step # FeatureContext::passingStep()
+
+      --- Skipped scenarios:
+
+          features/test.feature:13
+
+      --- Failed scenarios:
+
+          features/test.feature:6
+          features/test.feature:9
+
+      4 scenarios (1 passed, 2 failed, 1 skipped)
+      4 steps (1 passed, 1 failed, 2 skipped)
+      """
