@@ -188,14 +188,6 @@ class ProgressFormatterFactory implements FormatterFactory
      */
     protected function processListenerWrappers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::ROOT_LISTENER_WRAPPER_TAG);
-
-        foreach ($references as $reference) {
-            $wrappedTester = $container->getDefinition(self::ROOT_LISTENER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
-            $wrappingTester->replaceArgument(0, $wrappedTester);
-
-            $container->setDefinition(self::ROOT_LISTENER_ID, $wrappingTester);
-        }
+        $this->processor->processWrapperServices($container, self::ROOT_LISTENER_ID, self::ROOT_LISTENER_WRAPPER_TAG);
     }
 }

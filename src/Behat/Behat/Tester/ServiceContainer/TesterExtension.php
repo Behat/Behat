@@ -228,15 +228,7 @@ class TesterExtension extends BaseExtension
      */
     protected function processScenarioTesterWrappers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::SCENARIO_TESTER_WRAPPER_TAG);
-
-        foreach ($references as $reference) {
-            $wrappedTester = $container->getDefinition(self::SCENARIO_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
-            $wrappingTester->replaceArgument(0, $wrappedTester);
-
-            $container->setDefinition(self::SCENARIO_TESTER_ID, $wrappingTester);
-        }
+        $this->processor->processWrapperServices($container, self::SCENARIO_TESTER_ID, self::SCENARIO_TESTER_WRAPPER_TAG);
     }
 
     /**
@@ -246,15 +238,7 @@ class TesterExtension extends BaseExtension
      */
     protected function processOutlineTesterWrappers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::OUTLINE_TESTER_WRAPPER_TAG);
-
-        foreach ($references as $reference) {
-            $wrappedTester = $container->getDefinition(self::OUTLINE_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
-            $wrappingTester->replaceArgument(0, $wrappedTester);
-
-            $container->setDefinition(self::OUTLINE_TESTER_ID, $wrappingTester);
-        }
+        $this->processor->processWrapperServices($container, self::OUTLINE_TESTER_ID, self::OUTLINE_TESTER_WRAPPER_TAG);
     }
 
     /**
@@ -264,15 +248,7 @@ class TesterExtension extends BaseExtension
      */
     protected function processExampleTesterWrappers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::EXAMPLE_TESTER_WRAPPER_TAG);
-
-        foreach ($references as $reference) {
-            $wrappedTester = $container->getDefinition(self::EXAMPLE_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
-            $wrappingTester->replaceArgument(0, $wrappedTester);
-
-            $container->setDefinition(self::EXAMPLE_TESTER_ID, $wrappingTester);
-        }
+        $this->processor->processWrapperServices($container, self::EXAMPLE_TESTER_ID, self::EXAMPLE_TESTER_WRAPPER_TAG);
     }
 
     /**
@@ -282,15 +258,7 @@ class TesterExtension extends BaseExtension
      */
     protected function processBackgroundTesterWrappers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::BACKGROUND_TESTER_WRAPPER_TAG);
-
-        foreach ($references as $reference) {
-            $wrappedTester = $container->getDefinition(self::BACKGROUND_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
-            $wrappingTester->replaceArgument(0, $wrappedTester);
-
-            $container->setDefinition(self::BACKGROUND_TESTER_ID, $wrappingTester);
-        }
+        $this->processor->processWrapperServices($container, self::BACKGROUND_TESTER_ID, self::BACKGROUND_TESTER_WRAPPER_TAG);
     }
 
     /**
@@ -300,14 +268,6 @@ class TesterExtension extends BaseExtension
      */
     protected function processStepTesterWrappers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::STEP_TESTER_WRAPPER_TAG);
-
-        foreach ($references as $reference) {
-            $wrappedTester = $container->getDefinition(self::STEP_TESTER_ID);
-            $wrappingTester = $container->getDefinition((string) $reference);
-            $wrappingTester->replaceArgument(0, $wrappedTester);
-
-            $container->setDefinition(self::STEP_TESTER_ID, $wrappingTester);
-        }
+        $this->processor->processWrapperServices($container, self::STEP_TESTER_ID, self::STEP_TESTER_WRAPPER_TAG);
     }
 }
