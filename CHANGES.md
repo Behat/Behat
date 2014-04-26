@@ -1,3 +1,21 @@
+2.5.3 / 2014-04-26
+==================
+
+  * Fixed the JUnit file names on windows (thanks @dakota)
+
+2.5.2 / 2014-02-12
+==================
+
+  * Fixed the rendering of undefined steps in the JUnit format
+
+2.5.1 / 2013-11-24
+==================
+
+  * Simplified the JUnit file names (thanks @fureev)
+  * Fixed the transformation of PyStringNode (thanks @bookvik)
+  * Added the number of scenarios and steps in the JUnit output (thanks @rande)
+  * Added Danish translations (thanks @mandarille)
+
 2.5.0 / 2013-08-11
 ==================
 
