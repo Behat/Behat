@@ -50,7 +50,7 @@ Feature: Step Arguments Transformations
               return new User($username, $age);
           }
 
-          /** @Transform /^(\d+)$/ */
+          /** @Transform /^\d+$/ */
           public function castToNumber($number) {
               return intval($number);
           }
