@@ -91,6 +91,7 @@ final class GherkinExtension implements Extension
                 ->end()
                 ->arrayNode('filters')
                     ->info('Sets the gherkin filters')
+                    ->performNoDeepMerging()
                     ->defaultValue(array())
                     ->useAttributeAsKey('name')
                     ->prototype('scalar')->end()
