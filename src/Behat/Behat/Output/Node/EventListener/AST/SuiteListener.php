@@ -11,6 +11,7 @@
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
+use Behat\Behat\Output\Node\Printer\SuitePrinter;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\Output\Formatter;
@@ -28,15 +29,21 @@ final class SuiteListener implements EventListener
      * @var SetupPrinter
      */
     private $setupPrinter;
+    /**
+     * @var null|SuitePrinter
+     */
+    private $suitePrinter;
 
     /**
      * Initializes listener.
      *
      * @param SetupPrinter $setupPrinter
+     * @param SuitePrinter $suitePrinter
      */
-    public function __construct(SetupPrinter $setupPrinter)
+    public function __construct(SetupPrinter $setupPrinter = null, SuitePrinter $suitePrinter = null)
     {
         $this->setupPrinter = $setupPrinter;
+        $this->suitePrinter = $suitePrinter;
     }
 
     /**
@@ -45,11 +52,23 @@ final class SuiteListener implements EventListener
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         if ($event instanceof BeforeSuiteTested) {
-            $this->setupPrinter->printSetup($formatter, $event->getSetup());
+            if ($this->setupPrinter) {
+                $this->setupPrinter->printSetup($formatter, $event->getSetup());
+            }
+
+            if ($this->suitePrinter) {
+                $this->suitePrinter->printHeader($formatter, $event->getSuite());
+            }
         }
 
         if ($event instanceof AfterSuiteTested) {
-            $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
+            if ($this->setupPrinter) {
+                $this->setupPrinter->printTeardown($formatter, $event->getTeardown(), $event->getEnvironment()->getSuite());
+            }
+
+            if ($this->suitePrinter) {
+                $this->suitePrinter->printFooter($formatter, $event->getSuite());
+            }
         }
     }
 }
