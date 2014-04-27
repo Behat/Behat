@@ -198,7 +198,12 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
     private function transformRegex(DefinitionCall $definitionCall, Transformation $transformation, $value)
     {
         if ($this->isStringAndMatchesPattern($definitionCall, $value, $transformation->getPattern(), $match)) {
-            return $this->execute($definitionCall, $transformation, array_slice($match, 1));
+            // take arguments from capture groups if there are some
+            if (count($match) > 1) {
+                $match = array_slice($match, 1);
+            }
+
+            return $this->execute($definitionCall, $transformation, $match);
         }
 
         return null;
