@@ -207,3 +207,57 @@ Feature: Filters
       4 scenarios (4 passed)
       10 steps (10 passed)
       """
+
+  Scenario: Filters override
+    Given a file named "features/wip.feature" with:
+      """
+      @tag1 @wip
+      Feature: A simple feature
+        In order to ...
+        As a first user
+        I need to ...
+
+        Background:
+          Given Some slow step N11
+
+        Scenario:
+          Given Some slow step N12
+          And Some normal step N13
+
+        Scenario:
+          Given Some fast step N14
+      """
+    Given a file named "behat.yml" with:
+      """
+      default:
+        gherkin:
+          filters:
+            tags: ~@wip
+
+      wip:
+        gherkin:
+          filters:
+            name: A simple feature
+      """
+    When I run "behat --no-colors -f pretty -p wip features/wip.feature"
+    Then it should pass with:
+      """
+      @tag1 @wip
+      Feature: A simple feature
+        In order to ...
+        As a first user
+        I need to ...
+
+        Background:                # features/wip.feature:7
+          Given Some slow step N11 # FeatureContext::someSlowStepN()
+
+        Scenario:                  # features/wip.feature:10
+          Given Some slow step N12 # FeatureContext::someSlowStepN()
+          And Some normal step N13 # FeatureContext::someNormalStepN()
+
+        Scenario:                  # features/wip.feature:14
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+
+      2 scenarios (2 passed)
+      5 steps (5 passed)
+      """
