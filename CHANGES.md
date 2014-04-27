@@ -1,3 +1,11 @@
+3.0.3 / 2014-04-27
+==================
+
+  * Support definition transformations without capture groups
+  * Override gherkin filters in custom profiles instead of merging them
+  * Refactored the handling of colors to set them earlier
+    ([#513](https://github.com/Behat/Behat/pull/513) thanks to @stof)
+
 3.0.2 / 2014-04-26
 ==================
 
