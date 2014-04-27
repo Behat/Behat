@@ -96,7 +96,9 @@ final class ContextSnippet implements Snippet
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the classes used in the snippet which should be imported.
+     *
+     * @return string[]
      */
     public function getUsedClasses()
     {

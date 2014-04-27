@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Snippet;
 
+use Behat\Behat\Context\Snippet\ContextSnippet;
 use Behat\Gherkin\Node\StepNode;
 
 /**
@@ -115,6 +116,10 @@ final class AggregateSnippet
                 'array_merge',
                 array_map(
                     function (Snippet $snippet) {
+                        if (!$snippet instanceof ContextSnippet) {
+                            return array();
+                        }
+
                         return $snippet->getUsedClasses();
                     },
                     $this->snippets
