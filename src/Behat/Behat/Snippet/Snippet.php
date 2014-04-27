@@ -53,4 +53,11 @@ interface Snippet
      * @return string
      */
     public function getTarget();
+
+    /**
+     * Returns the classes used in the snippet which should be imported.
+     *
+     * @return string[]
+     */
+    public function getUsedClasses();
 }

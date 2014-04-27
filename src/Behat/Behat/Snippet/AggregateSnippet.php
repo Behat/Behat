@@ -98,4 +98,28 @@ final class AggregateSnippet
             )
         );
     }
+
+    /**
+     * Returns the classes used in the snippet which should be imported.
+     *
+     * @return string[]
+     */
+    public function getUsedClasses()
+    {
+        if (empty($this->snippets)) {
+            return array();
+        }
+
+        return array_unique(
+            call_user_func_array(
+                'array_merge',
+                array_map(
+                    function (Snippet $snippet) {
+                        return $snippet->getUsedClasses();
+                    },
+                    $this->snippets
+                )
+            )
+        );
+    }
 }
