@@ -29,9 +29,9 @@ final class ContextSnippet implements Snippet
      */
     private $template;
     /**
-     * @var string[]
+     * @var string
      */
-    private $contextClass = array();
+    private $contextClass;
 
     /**
      * Initializes definition snippet.
