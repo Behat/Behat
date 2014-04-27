@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Definition\Pattern\Policy;
 
+use Behat\Behat\Definition\Exception\InvalidPatternException;
 use Behat\Behat\Definition\Pattern\Pattern;
 use Behat\Transliterator\Transliterator;
 
@@ -54,7 +55,7 @@ final class RegexPatternPolicy implements PatternPolicy
      */
     public function supportsPattern($pattern)
     {
-        return false !== @preg_match($pattern, 'anything');
+        return (bool) preg_match('/^(?:\\{.*\\}|([~\\/#`]).*\1)[imsxADSUXJu]*$/s', $pattern);
     }
 
     /**
@@ -62,6 +63,13 @@ final class RegexPatternPolicy implements PatternPolicy
      */
     public function transformPatternToRegex($pattern)
     {
+        if (false === @preg_match($pattern, 'anything')) {
+            $error = error_get_last();
+            $errorMessage = isset($error['message']) ? $error['message'] : '';
+
+            throw new InvalidPatternException(sprintf('The regex `%s` is invalid: %s', $pattern, $errorMessage));
+        }
+
         return $pattern;
     }
 
