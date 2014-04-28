@@ -14,16 +14,15 @@ use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\AfterTested;
+use Behat\Testwork\EventDispatcher\Event\BeforeTeardown;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Represents an event in which background was tested.
+ * Represents an event right before background teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AfterBackgroundTested extends BackgroundTested implements AfterTested
+final class BeforeBackgroundTeardown extends BackgroundTested implements BeforeTeardown
 {
     /**
      * @var FeatureNode
@@ -37,10 +36,6 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
      * @var TestResult
      */
     private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
 
     /**
      * Initializes event.
@@ -49,21 +44,18 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
      * @param FeatureNode    $feature
      * @param BackgroundNode $background
      * @param TestResult     $result
-     * @param Teardown       $teardown
      */
     public function __construct(
         Environment $env,
         FeatureNode $feature,
         BackgroundNode $background,
-        TestResult $result,
-        Teardown $teardown
+        TestResult $result
     ) {
         parent::__construct($env);
 
         $this->feature = $feature;
         $this->background = $background;
         $this->result = $result;
-        $this->teardown = $teardown;
     }
 
     /**
@@ -104,15 +96,5 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
     public function getTestResult()
     {
         return $this->result;
-    }
-
-    /**
-     * Returns current test teardown.
-     *
-     * @return Teardown
-     */
-    public function getTeardown()
-    {
-        return $this->teardown;
     }
 }
