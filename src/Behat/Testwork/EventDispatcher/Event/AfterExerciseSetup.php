@@ -10,21 +10,20 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Represents an event in which suite is prepared to be tested.
+ * Represents an event in which exercise is prepared to be executed.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeSuiteTested extends SuiteTested implements AfterSetup
+final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
 {
     /**
-     * @var SpecificationIterator
+     * @var SpecificationIterator[]
      */
-    private $iterator;
+    private $specificationIterators;
     /**
      * @var Setup
      */
@@ -33,30 +32,27 @@ final class BeforeSuiteTested extends SuiteTested implements AfterSetup
     /**
      * Initializes event.
      *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
-     * @param Setup                 $setup
+     * @param SpecificationIterator[] $specificationIterators
+     * @param Setup                   $setup
      */
-    public function __construct(Environment $env, SpecificationIterator $iterator, Setup $setup)
+    public function __construct(array $specificationIterators, Setup $setup)
     {
-        parent::__construct($env);
-
-        $this->iterator = $iterator;
+        $this->specificationIterators = $specificationIterators;
         $this->setup = $setup;
     }
 
     /**
-     * Returns specification iterator.
+     * Returns specification iterators.
      *
-     * @return SpecificationIterator
+     * @return SpecificationIterator[]
      */
-    public function getSpecificationIterator()
+    public function getSpecificationIterators()
     {
-        return $this->iterator;
+        return $this->specificationIterators;
     }
 
     /**
-     * Returns current test setup.
+     * Returns exercise setup result.
      *
      * @return Setup
      */

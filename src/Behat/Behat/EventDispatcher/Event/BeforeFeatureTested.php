@@ -12,7 +12,7 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\BeforeTested;
+use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
@@ -20,7 +20,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeFeatureTested extends FeatureTested implements BeforeTested
+final class BeforeFeatureTested extends FeatureTested implements AfterSetup
 {
     /**
      * @var FeatureNode

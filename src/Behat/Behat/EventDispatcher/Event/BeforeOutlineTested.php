@@ -13,7 +13,7 @@ namespace Behat\Behat\EventDispatcher\Event;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\BeforeTested;
+use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
@@ -21,7 +21,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeOutlineTested extends OutlineTested implements BeforeTested
+final class BeforeOutlineTested extends OutlineTested implements AfterSetup
 {
     /**
      * @var FeatureNode

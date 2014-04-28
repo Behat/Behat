@@ -13,8 +13,8 @@ namespace Behat\Behat\Output\Node\EventListener\Statistics;
 use Behat\Behat\Output\Statistics\HookStat;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Testwork\Call\CallResult;
+use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
-use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
@@ -65,7 +65,7 @@ final class HookStatsListener implements EventListener
      */
     private function captureHookStatsOnEvent(Event $event)
     {
-        if ($event instanceof BeforeTested && $event->getSetup() instanceof HookedSetup) {
+        if ($event instanceof AfterSetup && $event->getSetup() instanceof HookedSetup) {
             $this->captureBeforeHookStats($event->getSetup());
         }
 

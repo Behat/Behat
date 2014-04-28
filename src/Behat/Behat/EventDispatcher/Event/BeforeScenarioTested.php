@@ -14,7 +14,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\BeforeTested;
+use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
@@ -22,7 +22,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
+final class BeforeScenarioTested extends ScenarioTested implements AfterSetup
 {
     /**
      * @var FeatureNode

@@ -11,27 +11,34 @@
 namespace Behat\Testwork\EventDispatcher\Event;
 
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Represents an event in which exercise is prepared to be executed.
+ * Represents an event right before exercise teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeExerciseCompleted extends ExerciseCompleted implements BeforeTested
+final class BeforeExerciseTeardown extends ExerciseCompleted implements BeforeTeardown
 {
     /**
      * @var SpecificationIterator[]
      */
     private $specificationIterators;
+    /**
+     * @var TestResult
+     */
+    private $result;
 
     /**
      * Initializes event.
      *
      * @param SpecificationIterator[] $specificationIterators
+     * @param TestResult              $result
      */
-    public function __construct(array $specificationIterators)
+    public function __construct(array $specificationIterators, TestResult $result)
     {
         $this->specificationIterators = $specificationIterators;
+        $this->result = $result;
     }
 
     /**
@@ -42,5 +49,15 @@ final class BeforeExerciseCompleted extends ExerciseCompleted implements BeforeT
     public function getSpecificationIterators()
     {
         return $this->specificationIterators;
+    }
+
+    /**
+     * Returns exercise test result.
+     *
+     * @return TestResult
+     */
+    public function getTestResult()
+    {
+        return $this->result;
     }
 }
