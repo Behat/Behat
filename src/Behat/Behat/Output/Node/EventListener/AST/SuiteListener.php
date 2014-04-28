@@ -11,8 +11,8 @@
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
+use Behat\Testwork\EventDispatcher\Event\AfterSuiteSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
-use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
@@ -44,7 +44,7 @@ final class SuiteListener implements EventListener
      */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if ($event instanceof BeforeSuiteTested) {
+        if ($event instanceof AfterSuiteSetup) {
             $this->setupPrinter->printSetup($formatter, $event->getSetup());
         }
 
