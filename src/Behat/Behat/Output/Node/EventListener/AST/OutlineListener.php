@@ -13,9 +13,9 @@ namespace Behat\Behat\Output\Node\EventListener\AST;
 use Behat\Behat\EventDispatcher\Event\AfterOutlineTested;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioSetup;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
+use Behat\Behat\EventDispatcher\Event\AfterStepSetup;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
-use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\Output\Node\Printer\ExamplePrinter;
 use Behat\Behat\Output\Node\Printer\OutlinePrinter;
@@ -169,7 +169,7 @@ final class OutlineListener implements EventListener
      */
     private function printStepSetupOnBeforeStepEvent(Formatter $formatter, Event $event)
     {
-        if (!$event instanceof BeforeStepTested) {
+        if (!$event instanceof AfterStepSetup) {
             return;
         }
 

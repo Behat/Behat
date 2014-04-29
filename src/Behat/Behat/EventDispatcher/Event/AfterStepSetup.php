@@ -13,14 +13,15 @@ namespace Behat\Behat\EventDispatcher\Event;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\BeforeTested;
+use Behat\Testwork\EventDispatcher\Event\AfterSetup;
+use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Represents an event before step test.
+ * Represents an event after step setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeStepTested extends StepTested implements BeforeTested
+final class AfterStepSetup extends StepTested implements AfterSetup
 {
     /**
      * @var FeatureNode
@@ -30,6 +31,10 @@ final class BeforeStepTested extends StepTested implements BeforeTested
      * @var StepNode
      */
     private $step;
+    /**
+     * @var Setup
+     */
+    private $setup;
 
     /**
      * Initializes event.
@@ -37,13 +42,15 @@ final class BeforeStepTested extends StepTested implements BeforeTested
      * @param Environment $env
      * @param FeatureNode $feature
      * @param StepNode    $step
+     * @param Setup       $setup
      */
-    public function __construct(Environment $env, FeatureNode $feature, StepNode $step)
+    public function __construct(Environment $env, FeatureNode $feature, StepNode $step, Setup $setup)
     {
         parent::__construct($env);
 
         $this->feature = $feature;
         $this->step = $step;
+        $this->setup = $setup;
     }
 
     /**
@@ -64,5 +71,25 @@ final class BeforeStepTested extends StepTested implements BeforeTested
     public function getStep()
     {
         return $this->step;
+    }
+
+    /**
+     * Returns current test setup.
+     *
+     * @return Setup
+     */
+    public function getSetup()
+    {
+        return $this->setup;
+    }
+
+    /**
+     * Checks if step call, setup or teardown produced any output (stdOut or exception).
+     *
+     * @return Boolean
+     */
+    public function hasOutput()
+    {
+        return $this->setup->hasOutput();
     }
 }

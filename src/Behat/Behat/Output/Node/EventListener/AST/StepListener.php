@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
+use Behat\Behat\EventDispatcher\Event\AfterStepSetup;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
-use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
@@ -95,7 +95,7 @@ final class StepListener implements EventListener
 
     private function printStepSetupOnBeforeEvent(Formatter $formatter, Event $event)
     {
-        if (!$event instanceof BeforeStepTested) {
+        if (!$event instanceof AfterStepSetup) {
             return;
         }
 
