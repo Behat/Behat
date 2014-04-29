@@ -1,3 +1,10 @@
+3.0.4 / 2014-04-29
+==================
+
+  * Make sure that `Before*Tested` is always executed before `Before*` hooks
+  * Introduce additional `After*Setup` and `Before*Teardown` events
+  * Improved the error reporting for invalid regexes in step definitions (thanks @stof)
+
 3.0.3 / 2014-04-27
 ==================
 
