@@ -117,7 +117,7 @@ class PrettyFormatterFactory implements FormatterFactory
                     ScenarioTested::AFTER,
                     array(
                         new Definition('Behat\Behat\Output\Node\EventListener\AST\ScenarioNodeListener', array(
-                            ScenarioTested::BEFORE,
+                            ScenarioTested::AFTER_SETUP,
                             ScenarioTested::AFTER,
                             new Reference('output.node.printer.pretty.scenario'),
                             new Reference('output.node.printer.pretty.scenario_setup')

@@ -112,6 +112,8 @@ class EventDispatcherExtension extends BaseExtension
             new Reference(TesterExtension::SCENARIO_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
             ScenarioTested::BEFORE,
+            ScenarioTested::AFTER_SETUP,
+            ScenarioTested::BEFORE_TEARDOWN,
             ScenarioTested::AFTER
         ));
         $definition->addTag(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG, array('priority' => -9999));
@@ -129,6 +131,8 @@ class EventDispatcherExtension extends BaseExtension
             new Reference(TesterExtension::EXAMPLE_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
             ExampleTested::BEFORE,
+            ExampleTested::AFTER_SETUP,
+            ExampleTested::BEFORE_TEARDOWN,
             ExampleTested::AFTER
         ));
         $definition->addTag(TesterExtension::EXAMPLE_TESTER_WRAPPER_TAG, array('priority' => -9999));

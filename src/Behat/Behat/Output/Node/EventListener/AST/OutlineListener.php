@@ -11,10 +11,10 @@
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\EventDispatcher\Event\AfterOutlineTested;
+use Behat\Behat\EventDispatcher\Event\AfterScenarioSetup;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
-use Behat\Behat\EventDispatcher\Event\BeforeScenarioTested;
 use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\Output\Node\Printer\ExamplePrinter;
@@ -88,7 +88,7 @@ final class OutlineListener implements EventListener
     {
         $this->printAndCaptureOutlineHeaderOnBeforeEvent($formatter, $event);
         $this->printAndForgetOutlineFooterOnAfterEvent($formatter, $event);
-        $this->printExampleHeaderOnBeforeExampleEvent($formatter, $event, $eventName);
+        $this->printExampleHeaderOnBeforeExampleEvent($formatter, $event);
         $this->printExampleFooterOnAfterExampleEvent($formatter, $event, $eventName);
         $this->printStepSetupOnBeforeStepEvent($formatter, $event);
         $this->printStepOnAfterStepEvent($formatter, $event);
@@ -129,11 +129,10 @@ final class OutlineListener implements EventListener
      *
      * @param Formatter $formatter
      * @param Event     $event
-     * @param string    $eventName
      */
-    private function printExampleHeaderOnBeforeExampleEvent(Formatter $formatter, Event $event, $eventName)
+    private function printExampleHeaderOnBeforeExampleEvent(Formatter $formatter, Event $event)
     {
-        if (!$event instanceof BeforeScenarioTested || ExampleTested::BEFORE !== $eventName) {
+        if (!$event instanceof AfterScenarioSetup) {
             return;
         }
 

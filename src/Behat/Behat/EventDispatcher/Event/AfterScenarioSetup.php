@@ -14,16 +14,15 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\AfterTested;
-use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Setup\Teardown;
+use Behat\Testwork\EventDispatcher\Event\AfterSetup;
+use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Represents an event after scenario has been tested.
+ * Represents an event after scenario setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AfterScenarioTested extends ScenarioTested implements AfterTested
+final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
 {
     /**
      * @var FeatureNode
@@ -34,13 +33,9 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
      */
     private $scenario;
     /**
-     * @var TestResult
+     * @var Setup
      */
-    private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
+    private $setup;
 
     /**
      * Initializes event
@@ -48,22 +43,15 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
      * @param Environment $env
      * @param FeatureNode $feature
      * @param Scenario    $scenario
-     * @param TestResult  $result
-     * @param Teardown    $teardown
+     * @param Setup       $setup
      */
-    public function __construct(
-        Environment $env,
-        FeatureNode $feature,
-        Scenario $scenario,
-        TestResult $result,
-        Teardown $teardown
-    ) {
+    public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario, Setup $setup)
+    {
         parent::__construct($env);
 
         $this->feature = $feature;
         $this->scenario = $scenario;
-        $this->result = $result;
-        $this->teardown = $teardown;
+        $this->setup = $setup;
     }
 
     /**
@@ -87,22 +75,12 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
     }
 
     /**
-     * Returns current test result.
+     * Returns current test setup.
      *
-     * @return TestResult
+     * @return Setup
      */
-    public function getTestResult()
+    public function getSetup()
     {
-        return $this->result;
-    }
-
-    /**
-     * Returns current test teardown.
-     *
-     * @return Teardown
-     */
-    public function getTeardown()
-    {
-        return $this->teardown;
+        return $this->setup;
     }
 }

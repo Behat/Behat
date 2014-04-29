@@ -14,16 +14,15 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\AfterTested;
+use Behat\Testwork\EventDispatcher\Event\BeforeTeardown;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Represents an event after scenario has been tested.
+ * Represents an event before scenario teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AfterScenarioTested extends ScenarioTested implements AfterTested
+final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeardown
 {
     /**
      * @var FeatureNode
@@ -37,10 +36,6 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
      * @var TestResult
      */
     private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
 
     /**
      * Initializes event
@@ -49,21 +44,18 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
      * @param FeatureNode $feature
      * @param Scenario    $scenario
      * @param TestResult  $result
-     * @param Teardown    $teardown
      */
     public function __construct(
         Environment $env,
         FeatureNode $feature,
         Scenario $scenario,
-        TestResult $result,
-        Teardown $teardown
+        TestResult $result
     ) {
         parent::__construct($env);
 
         $this->feature = $feature;
         $this->scenario = $scenario;
         $this->result = $result;
-        $this->teardown = $teardown;
     }
 
     /**
@@ -94,15 +86,5 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
     public function getTestResult()
     {
         return $this->result;
-    }
-
-    /**
-     * Returns current test teardown.
-     *
-     * @return Teardown
-     */
-    public function getTeardown()
-    {
-        return $this->teardown;
     }
 }
