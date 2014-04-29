@@ -13,14 +13,15 @@ namespace Behat\Behat\EventDispatcher\Event;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\BeforeTested;
+use Behat\Testwork\EventDispatcher\Event\AfterSetup;
+use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Represents an event before outline is tested.
+ * Represents an event right after outline setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeOutlineTested extends OutlineTested implements BeforeTested
+final class AfterOutlineSetup extends OutlineTested implements AfterSetup
 {
     /**
      * @var FeatureNode
@@ -30,6 +31,10 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
      * @var OutlineNode
      */
     private $outline;
+    /**
+     * @var Setup
+     */
+    private $setup;
 
     /**
      * Initializes event.
@@ -37,13 +42,15 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
      * @param Environment $env
      * @param FeatureNode $feature
      * @param OutlineNode $outline
+     * @param Setup       $setup
      */
-    public function __construct(Environment $env, FeatureNode $feature, OutlineNode $outline)
+    public function __construct(Environment $env, FeatureNode $feature, OutlineNode $outline, Setup $setup)
     {
         parent::__construct($env);
 
         $this->feature = $feature;
         $this->outline = $outline;
+        $this->setup = $setup;
     }
 
     /**
@@ -64,5 +71,15 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
     public function getOutline()
     {
         return $this->outline;
+    }
+
+    /**
+     * Returns current test setup.
+     *
+     * @return Setup
+     */
+    public function getSetup()
+    {
+        return $this->setup;
     }
 }

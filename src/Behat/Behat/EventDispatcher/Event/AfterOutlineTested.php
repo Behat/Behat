@@ -18,7 +18,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Represents an AfterOutlineTested event.
+ * Represents an event after outline was tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
