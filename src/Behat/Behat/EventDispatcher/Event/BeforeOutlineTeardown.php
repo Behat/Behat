@@ -13,14 +13,15 @@ namespace Behat\Behat\EventDispatcher\Event;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\BeforeTested;
+use Behat\Testwork\EventDispatcher\Event\BeforeTeardown;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Represents an event before outline is tested.
+ * Represents an event right before outline teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeOutlineTested extends OutlineTested implements BeforeTested
+final class BeforeOutlineTeardown extends OutlineTested implements BeforeTeardown
 {
     /**
      * @var FeatureNode
@@ -30,6 +31,10 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
      * @var OutlineNode
      */
     private $outline;
+    /**
+     * @var TestResult
+     */
+    private $result;
 
     /**
      * Initializes event.
@@ -37,13 +42,19 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
      * @param Environment $env
      * @param FeatureNode $feature
      * @param OutlineNode $outline
+     * @param TestResult  $result
      */
-    public function __construct(Environment $env, FeatureNode $feature, OutlineNode $outline)
-    {
+    public function __construct(
+        Environment $env,
+        FeatureNode $feature,
+        OutlineNode $outline,
+        TestResult $result
+    ) {
         parent::__construct($env);
 
         $this->feature = $feature;
         $this->outline = $outline;
+        $this->result = $result;
     }
 
     /**
@@ -64,5 +75,15 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
     public function getOutline()
     {
         return $this->outline;
+    }
+
+    /**
+     * Returns current test result.
+     *
+     * @return TestResult
+     */
+    public function getTestResult()
+    {
+        return $this->result;
     }
 }

@@ -11,7 +11,9 @@
 namespace Behat\Testwork\EventDispatcher\Tester;
 
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\EventDispatcher\Event\AfterSuiteSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
+use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTeardown;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -51,10 +53,13 @@ final class EventDispatchingSuiteTester implements SuiteTester
      */
     public function setUp(Environment $env, SpecificationIterator $iterator, $skip)
     {
+        $event = new BeforeSuiteTested($env, $iterator);
+        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
         $setup = $this->baseTester->setUp($env, $iterator, $skip);
 
-        $event = new BeforeSuiteTested($env, $iterator, $setup);
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        $event = new AfterSuiteSetup($env, $iterator, $setup);
+        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
 
         return $setup;
     }
@@ -72,6 +77,9 @@ final class EventDispatchingSuiteTester implements SuiteTester
      */
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
+        $event = new BeforeSuiteTeardown($env, $iterator, $result);
+        $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);
 
         $event = new AfterSuiteTested($env, $iterator, $result, $teardown);

@@ -20,6 +20,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
 abstract class SuiteTested extends LifecycleEvent
 {
     const BEFORE = 'tester.suite_tested.before';
+    const AFTER_SETUP = 'tester.suite_tested.after_setup';
+    const BEFORE_TEARDOWN = 'tester.suite_tested.before_teardown';
     const AFTER = 'tester.suite_tested.after';
 
     /**

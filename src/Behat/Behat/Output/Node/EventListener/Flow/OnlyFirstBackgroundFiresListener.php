@@ -10,9 +10,9 @@
 
 namespace Behat\Behat\Output\Node\EventListener\Flow;
 
+use Behat\Behat\EventDispatcher\Event\AfterStepSetup;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
-use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
@@ -173,7 +173,7 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      */
     private function isBeforeStepEventWithOutput(Event $event)
     {
-        if ($event instanceof BeforeStepTested && $event->hasOutput()) {
+        if ($event instanceof AfterStepSetup && $event->hasOutput()) {
             $this->stepSetupHadOutput = true;
 
             return true;

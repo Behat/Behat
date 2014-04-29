@@ -12,30 +12,37 @@ namespace Behat\Testwork\EventDispatcher\Event;
 
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Represents an event in which suite is prepared to be tested.
+ * Represents an event right before suite teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeSuiteTested extends SuiteTested implements BeforeTested
+final class BeforeSuiteTeardown extends SuiteTested implements BeforeTeardown
 {
     /**
      * @var SpecificationIterator
      */
     private $iterator;
+    /**
+     * @var TestResult
+     */
+    private $result;
 
     /**
      * Initializes event.
      *
      * @param Environment           $env
      * @param SpecificationIterator $iterator
+     * @param TestResult            $result
      */
-    public function __construct(Environment $env, SpecificationIterator $iterator)
+    public function __construct(Environment $env, SpecificationIterator $iterator, TestResult $result)
     {
         parent::__construct($env);
 
         $this->iterator = $iterator;
+        $this->result = $result;
     }
 
     /**
@@ -46,5 +53,15 @@ final class BeforeSuiteTested extends SuiteTested implements BeforeTested
     public function getSpecificationIterator()
     {
         return $this->iterator;
+    }
+
+    /**
+     * Returns current test result.
+     *
+     * @return TestResult
+     */
+    public function getTestResult()
+    {
+        return $this->result;
     }
 }

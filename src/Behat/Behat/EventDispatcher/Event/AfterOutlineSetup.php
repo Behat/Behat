@@ -11,39 +11,46 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\StepNode;
+use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\BeforeTested;
+use Behat\Testwork\EventDispatcher\Event\AfterSetup;
+use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Represents an event before step test.
+ * Represents an event right after outline setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeStepTested extends StepTested implements BeforeTested
+final class AfterOutlineSetup extends OutlineTested implements AfterSetup
 {
     /**
      * @var FeatureNode
      */
     private $feature;
     /**
-     * @var StepNode
+     * @var OutlineNode
      */
-    private $step;
+    private $outline;
+    /**
+     * @var Setup
+     */
+    private $setup;
 
     /**
      * Initializes event.
      *
      * @param Environment $env
      * @param FeatureNode $feature
-     * @param StepNode    $step
+     * @param OutlineNode $outline
+     * @param Setup       $setup
      */
-    public function __construct(Environment $env, FeatureNode $feature, StepNode $step)
+    public function __construct(Environment $env, FeatureNode $feature, OutlineNode $outline, Setup $setup)
     {
         parent::__construct($env);
 
         $this->feature = $feature;
-        $this->step = $step;
+        $this->outline = $outline;
+        $this->setup = $setup;
     }
 
     /**
@@ -57,12 +64,22 @@ final class BeforeStepTested extends StepTested implements BeforeTested
     }
 
     /**
-     * Returns step node.
+     * Returns outline node.
      *
-     * @return StepNode
+     * @return OutlineNode
      */
-    public function getStep()
+    public function getOutline()
     {
-        return $this->step;
+        return $this->outline;
+    }
+
+    /**
+     * Returns current test setup.
+     *
+     * @return Setup
+     */
+    public function getSetup()
+    {
+        return $this->setup;
     }
 }

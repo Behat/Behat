@@ -11,11 +11,11 @@
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\EventDispatcher\Event\AfterOutlineTested;
+use Behat\Behat\EventDispatcher\Event\AfterScenarioSetup;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
+use Behat\Behat\EventDispatcher\Event\AfterStepSetup;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
-use Behat\Behat\EventDispatcher\Event\BeforeScenarioTested;
-use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\OutlineTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
@@ -65,7 +65,7 @@ final class OutlineTableListener implements EventListener
      */
     private $headerPrinted = false;
     /**
-     * @var BeforeStepTested[]
+     * @var AfterStepSetup[]
      */
     private $stepBeforeTestedEvents = array();
     /**
@@ -120,7 +120,7 @@ final class OutlineTableListener implements EventListener
      */
     private function captureStepEvent(StepTested $event)
     {
-        if ($event instanceof BeforeStepTested) {
+        if ($event instanceof AfterStepSetup) {
             $this->stepBeforeTestedEvents[$event->getStep()->getLine()] = $event;
         } else {
             $this->stepAfterTestedEvents[$event->getStep()->getLine()] = $event;
@@ -149,7 +149,7 @@ final class OutlineTableListener implements EventListener
      */
     private function captureExampleSetupOnBeforeEvent(Event $event)
     {
-        if (!$event instanceof BeforeScenarioTested) {
+        if (!$event instanceof AfterScenarioSetup) {
             return;
         }
 

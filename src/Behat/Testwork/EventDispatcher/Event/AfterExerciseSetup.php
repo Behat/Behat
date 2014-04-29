@@ -11,27 +11,34 @@
 namespace Behat\Testwork\EventDispatcher\Event;
 
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Tester\Setup\Setup;
 
 /**
  * Represents an event in which exercise is prepared to be executed.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeExerciseCompleted extends ExerciseCompleted implements BeforeTested
+final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
 {
     /**
      * @var SpecificationIterator[]
      */
     private $specificationIterators;
+    /**
+     * @var Setup
+     */
+    private $setup;
 
     /**
      * Initializes event.
      *
      * @param SpecificationIterator[] $specificationIterators
+     * @param Setup                   $setup
      */
-    public function __construct(array $specificationIterators)
+    public function __construct(array $specificationIterators, Setup $setup)
     {
         $this->specificationIterators = $specificationIterators;
+        $this->setup = $setup;
     }
 
     /**
@@ -42,5 +49,15 @@ final class BeforeExerciseCompleted extends ExerciseCompleted implements BeforeT
     public function getSpecificationIterators()
     {
         return $this->specificationIterators;
+    }
+
+    /**
+     * Returns exercise setup result.
+     *
+     * @return Setup
+     */
+    public function getSetup()
+    {
+        return $this->setup;
     }
 }

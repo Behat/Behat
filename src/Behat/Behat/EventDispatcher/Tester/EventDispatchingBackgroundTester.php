@@ -10,8 +10,10 @@
 
 namespace Behat\Behat\EventDispatcher\Tester;
 
+use Behat\Behat\EventDispatcher\Event\AfterBackgroundSetup;
 use Behat\Behat\EventDispatcher\Event\AfterBackgroundTested;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
+use Behat\Behat\EventDispatcher\Event\BeforeBackgroundTeardown;
 use Behat\Behat\EventDispatcher\Event\BeforeBackgroundTested;
 use Behat\Behat\Tester\BackgroundTester;
 use Behat\Gherkin\Node\FeatureNode;
@@ -52,10 +54,13 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
      */
     public function setUp(Environment $env, FeatureNode $feature, $skip)
     {
+        $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground());
+        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
         $setup = $this->baseTester->setUp($env, $feature, $skip);
 
-        $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground(), $setup);
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        $event = new AfterBackgroundSetup($env, $feature, $feature->getBackground(), $setup);
+        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
 
         return $setup;
     }
@@ -73,6 +78,9 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
      */
     public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result)
     {
+        $event = new BeforeBackgroundTeardown($env, $feature, $feature->getBackground(), $result);
+        $this->eventDispatcher->dispatch(BackgroundTested::BEFORE_TEARDOWN, $event);
+
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
 
         $event = new AfterBackgroundTested($env, $feature, $feature->getBackground(), $result, $teardown);

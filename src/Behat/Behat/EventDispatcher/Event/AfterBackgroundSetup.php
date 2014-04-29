@@ -14,16 +14,15 @@ use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\AfterTested;
-use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Setup\Teardown;
+use Behat\Testwork\EventDispatcher\Event\AfterSetup;
+use Behat\Testwork\Tester\Setup\Setup;
 
 /**
- * Represents an event in which background was tested.
+ * Represents an event right after background was setup for testing.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AfterBackgroundTested extends BackgroundTested implements AfterTested
+final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
 {
     /**
      * @var FeatureNode
@@ -34,13 +33,9 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
      */
     private $background;
     /**
-     * @var TestResult
+     * @var Setup
      */
-    private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
+    private $setup;
 
     /**
      * Initializes event.
@@ -48,22 +43,15 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
      * @param Environment    $env
      * @param FeatureNode    $feature
      * @param BackgroundNode $background
-     * @param TestResult     $result
-     * @param Teardown       $teardown
+     * @param Setup          $setup
      */
-    public function __construct(
-        Environment $env,
-        FeatureNode $feature,
-        BackgroundNode $background,
-        TestResult $result,
-        Teardown $teardown
-    ) {
+    public function __construct(Environment $env, FeatureNode $feature, BackgroundNode $background, Setup $setup)
+    {
         parent::__construct($env);
 
         $this->feature = $feature;
         $this->background = $background;
-        $this->result = $result;
-        $this->teardown = $teardown;
+        $this->setup = $setup;
     }
 
     /**
@@ -97,22 +85,12 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
     }
 
     /**
-     * Returns current test result.
+     * Returns current test setup.
      *
-     * @return TestResult
+     * @return Setup
      */
-    public function getTestResult()
+    public function getSetup()
     {
-        return $this->result;
-    }
-
-    /**
-     * Returns current test teardown.
-     *
-     * @return Teardown
-     */
-    public function getTeardown()
-    {
-        return $this->teardown;
+        return $this->setup;
     }
 }

@@ -12,31 +12,38 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\BeforeTested;
+use Behat\Testwork\EventDispatcher\Event\BeforeTeardown;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Represents an event before feature tested.
+ * Represents an event right before feature is teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeFeatureTested extends FeatureTested implements BeforeTested
+final class BeforeFeatureTeardown extends FeatureTested implements BeforeTeardown
 {
     /**
      * @var FeatureNode
      */
     private $feature;
+    /**
+     * @var TestResult
+     */
+    private $result;
 
     /**
      * Initializes event.
      *
      * @param Environment $env
      * @param FeatureNode $feature
+     * @param TestResult  $result
      */
-    public function __construct(Environment $env, FeatureNode $feature)
+    public function __construct(Environment $env, FeatureNode $feature, TestResult $result)
     {
         parent::__construct($env);
 
         $this->feature = $feature;
+        $this->result = $result;
     }
 
     /**
@@ -47,5 +54,15 @@ final class BeforeFeatureTested extends FeatureTested implements BeforeTested
     public function getFeature()
     {
         return $this->feature;
+    }
+
+    /**
+     * Returns current test result.
+     *
+     * @return TestResult
+     */
+    public function getTestResult()
+    {
+        return $this->result;
     }
 }

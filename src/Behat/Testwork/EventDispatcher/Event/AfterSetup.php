@@ -10,11 +10,19 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
+use Behat\Testwork\Tester\Setup\Setup;
+
 /**
- * Represents an event just before test setup is started.
+ * Represents an event right after a test setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface BeforeTested
+interface AfterSetup
 {
+    /**
+     * Returns current test setup.
+     *
+     * @return Setup
+     */
+    public function getSetup();
 }

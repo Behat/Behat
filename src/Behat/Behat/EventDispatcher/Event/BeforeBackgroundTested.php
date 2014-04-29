@@ -15,7 +15,6 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\BeforeTested;
-use Behat\Testwork\Tester\Setup\Setup;
 
 /**
  * Represents a BeforeBackgroundTested event.
@@ -32,10 +31,6 @@ final class BeforeBackgroundTested extends BackgroundTested implements BeforeTes
      * @var BackgroundNode
      */
     private $background;
-    /**
-     * @var Setup
-     */
-    private $setup;
 
     /**
      * Initializes event.
@@ -43,15 +38,13 @@ final class BeforeBackgroundTested extends BackgroundTested implements BeforeTes
      * @param Environment    $env
      * @param FeatureNode    $feature
      * @param BackgroundNode $background
-     * @param Setup          $setup
      */
-    public function __construct(Environment $env, FeatureNode $feature, BackgroundNode $background, Setup $setup)
+    public function __construct(Environment $env, FeatureNode $feature, BackgroundNode $background)
     {
         parent::__construct($env);
 
         $this->feature = $feature;
         $this->background = $background;
-        $this->setup = $setup;
     }
 
     /**
@@ -82,15 +75,5 @@ final class BeforeBackgroundTested extends BackgroundTested implements BeforeTes
     public function getBackground()
     {
         return $this->background;
-    }
-
-    /**
-     * Returns current test setup.
-     *
-     * @return Setup
-     */
-    public function getSetup()
-    {
-        return $this->setup;
     }
 }

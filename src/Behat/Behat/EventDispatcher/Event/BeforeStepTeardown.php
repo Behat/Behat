@@ -15,17 +15,16 @@ use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\AfterTested;
+use Behat\Testwork\EventDispatcher\Event\BeforeTeardown;
 use Behat\Testwork\Tester\Result\ExceptionResult;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Represents an event after step has been tested.
+ * Represents an event before step teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AfterStepTested extends StepTested implements AfterTested
+final class BeforeStepTeardown extends StepTested implements BeforeTeardown
 {
     /**
      * @var FeatureNode
@@ -39,10 +38,6 @@ final class AfterStepTested extends StepTested implements AfterTested
      * @var StepResult
      */
     private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
 
     /**
      * Initializes event.
@@ -51,21 +46,18 @@ final class AfterStepTested extends StepTested implements AfterTested
      * @param FeatureNode $feature
      * @param StepNode    $step
      * @param StepResult  $result
-     * @param Teardown    $teardown
      */
     public function __construct(
         Environment $env,
         FeatureNode $feature,
         StepNode $step,
-        StepResult $result,
-        Teardown $teardown
+        StepResult $result
     ) {
         parent::__construct($env);
 
         $this->feature = $feature;
         $this->step = $step;
         $this->result = $result;
-        $this->teardown = $teardown;
     }
 
     /**
@@ -99,33 +91,13 @@ final class AfterStepTested extends StepTested implements AfterTested
     }
 
     /**
-     * Returns current test teardown.
-     *
-     * @return Teardown
-     */
-    public function getTeardown()
-    {
-        return $this->teardown;
-    }
-
-    /**
-     * Checks if step call, setup or teardown produced any output (stdOut or exception).
+     * Checks if step call produced any output (stdOut or exception).
      *
      * @return Boolean
      */
     public function hasOutput()
     {
-        return $this->teardownHasOutput() || $this->resultHasException() || $this->resultCallHasOutput();
-    }
-
-    /**
-     * Checks if step teardown has output.
-     *
-     * @return Boolean
-     */
-    private function teardownHasOutput()
-    {
-        return $this->teardown->hasOutput();
+        return $this->resultHasException() || $this->resultCallHasOutput();
     }
 
     /**

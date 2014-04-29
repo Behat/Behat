@@ -22,6 +22,8 @@ use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 abstract class BackgroundTested extends LifecycleEvent implements ScenarioLikeTested
 {
     const BEFORE = 'tester.background_tested.before';
+    const AFTER_SETUP = 'tester.background_tested.after_setup';
+    const BEFORE_TEARDOWN = 'tester.background_tested.before_teardown';
     const AFTER = 'tester.background_tested.after';
 
     /**

@@ -10,60 +10,52 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
+use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
-use Behat\Gherkin\Node\ScenarioNode;
+use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\Event\AfterTested;
+use Behat\Testwork\EventDispatcher\Event\BeforeTeardown;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Represents an event after scenario has been tested.
+ * Represents an event right before background teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AfterScenarioTested extends ScenarioTested implements AfterTested
+final class BeforeBackgroundTeardown extends BackgroundTested implements BeforeTeardown
 {
     /**
      * @var FeatureNode
      */
     private $feature;
     /**
-     * @var Scenario
+     * @var BackgroundNode
      */
-    private $scenario;
+    private $background;
     /**
      * @var TestResult
      */
     private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
 
     /**
-     * Initializes event
+     * Initializes event.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param TestResult  $result
-     * @param Teardown    $teardown
+     * @param Environment    $env
+     * @param FeatureNode    $feature
+     * @param BackgroundNode $background
+     * @param TestResult     $result
      */
     public function __construct(
         Environment $env,
         FeatureNode $feature,
-        Scenario $scenario,
-        TestResult $result,
-        Teardown $teardown
+        BackgroundNode $background,
+        TestResult $result
     ) {
         parent::__construct($env);
 
         $this->feature = $feature;
-        $this->scenario = $scenario;
+        $this->background = $background;
         $this->result = $result;
-        $this->teardown = $teardown;
     }
 
     /**
@@ -79,11 +71,21 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
     /**
      * Returns scenario node.
      *
-     * @return ScenarioNode
+     * @return ScenarioInterface
      */
     public function getScenario()
     {
-        return $this->scenario;
+        return $this->background;
+    }
+
+    /**
+     * Returns background node.
+     *
+     * @return BackgroundNode
+     */
+    public function getBackground()
+    {
+        return $this->background;
     }
 
     /**
@@ -94,15 +96,5 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
     public function getTestResult()
     {
         return $this->result;
-    }
-
-    /**
-     * Returns current test teardown.
-     *
-     * @return Teardown
-     */
-    public function getTeardown()
-    {
-        return $this->teardown;
     }
 }

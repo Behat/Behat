@@ -21,6 +21,8 @@ use Symfony\Component\EventDispatcher\Event;
 abstract class ExerciseCompleted extends Event
 {
     const BEFORE = 'tester.exercise_completed.before';
+    const AFTER_SETUP = 'tester.exercise_completed.after_setup';
+    const BEFORE_TEARDOWN = 'tester.exercise_completed.before_teardown';
     const AFTER = 'tester.exercise_completed.after';
 
     /**
