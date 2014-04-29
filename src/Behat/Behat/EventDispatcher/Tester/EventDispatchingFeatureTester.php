@@ -10,7 +10,9 @@
 
 namespace Behat\Behat\EventDispatcher\Tester;
 
+use Behat\Behat\EventDispatcher\Event\AfterFeatureSetup;
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
+use Behat\Behat\EventDispatcher\Event\BeforeFeatureTeardown;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -50,10 +52,13 @@ final class EventDispatchingFeatureTester implements SpecificationTester
      */
     public function setUp(Environment $env, $feature, $skip)
     {
+        $event = new BeforeFeatureTested($env, $feature);
+        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
         $setup = $this->baseTester->setUp($env, $feature, $skip);
 
-        $event = new BeforeFeatureTested($env, $feature, $setup);
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        $event = new AfterFeatureSetup($env, $feature, $setup);
+        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
 
         return $setup;
     }
@@ -71,6 +76,9 @@ final class EventDispatchingFeatureTester implements SpecificationTester
      */
     public function tearDown(Environment $env, $feature, $skip, TestResult $result)
     {
+        $event = new BeforeFeatureTeardown($env, $feature, $result);
+        $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
 
         $event = new AfterFeatureTested($env, $feature, $result, $teardown);

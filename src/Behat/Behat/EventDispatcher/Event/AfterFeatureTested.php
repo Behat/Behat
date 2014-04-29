@@ -17,7 +17,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Represents an AfterFeatureTested event.
+ * Represents an event right after feature was tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
