@@ -1,3 +1,11 @@
+3.0.5 / 2014-05-06
+==================
+
+  * Fix a suite initialization bug when suite contexts have arguments
+  * Fix wrong handling of an empty `behat.yml`
+  * Explicitly fail when provided context argument is not supported by constructor
+  * Fix extension registration shortcut for 3rd-part plugins
+
 3.0.4 / 2014-04-29
 ==================
 
