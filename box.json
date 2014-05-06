@@ -8,7 +8,7 @@
     "finder": [
         {
             "name": ["*.php", "*.xsd", "LICENSE"],
-            "exclude": ["Tests", "tests", "phpunit", "process", "filesystem"],
+            "exclude": ["Tests", "tests", "sebastian", "phpunit", "phpspec", "process", "filesystem"],
             "in": "vendor"
         }
     ],
