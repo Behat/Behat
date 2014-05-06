@@ -59,3 +59,24 @@ Feature: Init
       """
     And file "contexts/Custom1Context.php" should exist
     And file "contexts/Custom2Context.php" should exist
+
+  Scenario: Contexts with arguments
+    Given I am in the "init_test2" path
+    And a file named "behat.yml" with:
+      """
+      default:
+        autoload: %paths.base%/supp
+        suites:
+          default:
+            paths:    [ %paths.base%/scenarios ]
+            contexts:
+              - CustomContext: [ 'a', 'b' ]
+      """
+    When I run "behat --no-colors --init"
+    Then it should pass with:
+      """
+      +d scenarios - place your *.feature files here
+      +d supp - place your context classes here
+      +f supp/CustomContext.php - place your definitions, transformations and hooks here
+      """
+    And file "supp/CustomContext.php" should exist

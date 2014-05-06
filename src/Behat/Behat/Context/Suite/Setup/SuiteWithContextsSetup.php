@@ -13,6 +13,7 @@ namespace Behat\Behat\Context\Suite\Setup;
 use Behat\Behat\Context\ContextClass\ClassGenerator;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Testwork\Filesystem\FilesystemLogger;
+use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Setup\SuiteSetup;
 use Behat\Testwork\Suite\Suite;
 use Symfony\Component\ClassLoader\ClassLoader;
@@ -64,7 +65,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      */
     public function supportsSuite(Suite $suite)
     {
-        return $suite->hasSetting('contexts') && is_array($suite->getSetting('contexts'));
+        return $suite->hasSetting('contexts');
     }
 
     /**
@@ -72,7 +73,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      */
     public function setupSuite(Suite $suite)
     {
-        foreach ($suite->getSetting('contexts') as $class) {
+        foreach ($this->getNormalizedContextClasses($suite) as $class) {
             if (class_exists($class)) {
                 continue;
             }
@@ -83,6 +84,49 @@ final class SuiteWithContextsSetup implements SuiteSetup
                 $this->createContextFile($path, $content);
             }
         }
+    }
+
+    /**
+     * Returns normalized context classes.
+     *
+     * @param Suite $suite
+     *
+     * @return string[]
+     */
+    private function getNormalizedContextClasses(Suite $suite)
+    {
+        return array_map(
+            function ($context) {
+                return is_array($context) ? current(array_keys($context)) : $context;
+            },
+            $this->getSuiteContexts($suite)
+        );
+    }
+
+    /**
+     * Returns array of context classes configured for the provided suite.
+     *
+     * @param Suite $suite
+     *
+     * @return string[]
+     *
+     * @throws SuiteConfigurationException If `contexts` setting is not an array
+     */
+    private function getSuiteContexts(Suite $suite)
+    {
+        $contexts = $suite->getSetting('contexts');
+
+        if (!is_array($contexts)) {
+            throw new SuiteConfigurationException(
+                sprintf('`contexts` setting of the "%s" suite is expected to be an array, %s given.',
+                    $suite->getName(),
+                    gettype($contexts)
+                ),
+                $suite->getName()
+            );
+        }
+
+        return $contexts;
     }
 
     /**
