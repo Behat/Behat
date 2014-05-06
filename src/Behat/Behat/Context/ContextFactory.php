@@ -11,6 +11,7 @@
 namespace Behat\Behat\Context;
 
 use Behat\Behat\Context\Argument\ArgumentResolver;
+use Behat\Behat\Context\Exception\WrongContextArgumentException;
 use Behat\Behat\Context\Initializer\ContextInitializer;
 use ReflectionClass;
 use ReflectionMethod;
@@ -101,18 +102,48 @@ final class ContextFactory
      */
     private function orderConstructorArguments(ReflectionMethod $constructor, array $arguments)
     {
+        $this->verifyThatAllProvidedArgumentsExist($constructor, $arguments);
+
         $realArguments = array();
         foreach ($constructor->getParameters() as $i => $parameter) {
             if (isset($arguments[$parameter->getName()])) {
                 $realArguments[] = $arguments[$parameter->getName()];
             } elseif (isset($arguments[$i])) {
-                $realArguments[$i] = $arguments[$i];
+                $realArguments[] = $arguments[$i];
             } else {
-                $realArguments[$i] = $this->getArgumentDefault($parameter);
+                $realArguments[] = $this->getArgumentDefault($parameter);
             }
         }
 
         return $realArguments;
+    }
+
+    /**
+     * Checks that all provided constructor arguments are presented in the constructor.
+     *
+     * @param ReflectionMethod $constructor
+     * @param array            $arguments
+     *
+     * @throws WrongContextArgumentException
+     */
+    private function verifyThatAllProvidedArgumentsExist(ReflectionMethod $constructor, array $arguments)
+    {
+        $argumentNames = array_filter(array_keys($arguments), 'is_string');
+        $parameterNames = array_map(function (ReflectionParameter $parameter) {
+            return $parameter->getName();
+        }, $constructor->getParameters());
+        $missingParameters = array_diff($argumentNames, $parameterNames);
+
+        if (!count($missingParameters)) {
+            return;
+        }
+
+        throw new WrongContextArgumentException(
+            sprintf('`%s::__construct()` does not expect argument(s) named %s.',
+                $constructor->getDeclaringClass()->getName(),
+                implode(', ', $missingParameters)
+            )
+        );
     }
 
     /**

@@ -346,3 +346,35 @@ Feature: Context consistency
 
     behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--rerun] [--stop-on-failure] [--dry-run] [paths]
     """
+
+  Scenario: Unexisting context argument
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FeatureContext:
+                  unexistingParam: 'value'
+      """
+    And a file named "features/params.feature" with:
+      """
+      Feature: Context parameters
+        In order to run a browser
+        As feature runner
+        I need to be able to configure behat context
+
+        Scenario: I'm little hungry
+          Then context parameter "parameter1" should be equal to "val_one"
+          And context parameter "parameter2" should be array with 2 elements
+      """
+    When I run "behat --no-colors -f progress features/params.feature"
+    Then it should fail with:
+      """
+      [Behat\Behat\Context\Exception\WrongContextArgumentException]
+        `CoreContext::__construct()` does not expect argument(s) named unexistingParam.
+
+
+
+      behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--rerun] [--stop-on-failure] [--dry-run] [paths]
+      """
