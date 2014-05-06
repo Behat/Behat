@@ -1,3 +1,8 @@
+3.0.6 / 2014-05-06
+==================
+
+  * Fix a small extension registration shortcut issue introduced in previous release (thanks @FrenkyNet)
+
 3.0.5 / 2014-05-06
 ==================
 
