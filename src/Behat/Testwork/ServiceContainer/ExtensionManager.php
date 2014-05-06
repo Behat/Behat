@@ -123,7 +123,7 @@ final class ExtensionManager
     private function getFullExtensionClass($locator)
     {
         $parts = explode('\\', $locator);
-        $name = rtrim(end($parts), 'Extension') . 'Extension';
+        $name = preg_replace('/Extension$/', '', end($parts)) . 'Extension';
 
         return $locator . '\\ServiceContainer\\' . $name;
     }
