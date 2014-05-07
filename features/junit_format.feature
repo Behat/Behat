@@ -548,11 +548,4 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0" encoding="UTF-8" ?>
       <testsuites name="default">
-          <testsuite name="World consistency" tests="1" failures="1" errors="0">
-              <testcase name="Failed" status="failed">
-                  <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
-              </testcase>
-          </testsuite>
-      </testsuites>
       """
-    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
