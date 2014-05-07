@@ -26,17 +26,12 @@ use Behat\Behat\Output\Statistics\Statistics;
 final class JUnitScenarioPrinter implements ScenarioElementPrinter
 {
     /**
-     * @var Statistics
-     */
-    private $statistics;
-    /**
      * @var ResultToStringConverter
      */
     private $resultConverter;
 
-    public function __construct(Statistics $statistics, ResultToStringConverter $resultConverter)
+    public function __construct(ResultToStringConverter $resultConverter)
     {
-        $this->statistics = $statistics;
         $this->resultConverter = $resultConverter;
     }
 
@@ -45,21 +40,12 @@ final class JUnitScenarioPrinter implements ScenarioElementPrinter
      */
     public function printOpenTag(Formatter $formatter, FeatureNode $feature, Scenario $scenario, TestResult $result)
     {
-        $stats = $this->statistics->getStepStatCounts();
-
-        if (0 === count($stats)) {
-            $totalCount = 0;
-        } else {
-            $totalCount = array_sum($stats);
-        }
-
         $name = implode(' ', array_map(function ($l) {
             return trim($l);
         }, explode("\n", $scenario->getTitle())));
 
         $formatter->getOutputPrinter()->addTestcase(array(
             'name' => $name,
-            'assertions' => $totalCount,
             'status' => $this->resultConverter->convertResultToString($result)
         ));
     }
