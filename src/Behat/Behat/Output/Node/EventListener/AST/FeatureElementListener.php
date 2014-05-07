@@ -12,10 +12,8 @@ namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
-use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
-use Behat\Behat\EventDispatcher\Event\BeforeStepTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
@@ -32,7 +30,7 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
-final class CapturingFeatureListener implements EventListener
+final class FeatureElementListener implements EventListener
 {
     /**
      * @var FeaturePrinter

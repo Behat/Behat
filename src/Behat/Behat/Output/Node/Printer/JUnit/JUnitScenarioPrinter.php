@@ -12,12 +12,9 @@ namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\ScenarioElementPrinter;
-use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Testwork\Output\Formatter;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Behat\Output\Statistics\Statistics;
 
