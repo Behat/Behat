@@ -56,7 +56,7 @@ class JUnitXsdChecker
     /**
      * Validates the children elements of the <testcase> element.
      *
-     * @param array $nodeName
+     * @param string $nodeName
      *
      * @throws \Logicexception When the nodename is invalid
      */

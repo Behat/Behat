@@ -62,7 +62,7 @@ final class SuiteListener implements EventListener
 
         if ($event instanceof AfterSuiteTested) {
             if ($this->setupPrinter) {
-                $this->setupPrinter->printTeardown($formatter, $event->getTeardown(), $event->getEnvironment()->getSuite());
+                $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
             }
 
             if ($this->suitePrinter) {
