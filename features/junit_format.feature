@@ -85,7 +85,7 @@ Feature: JUnit Formatter
       """
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /*
+          /**
            * @Given /^Something new$/
            */
           public function somethingNew()
@@ -98,20 +98,20 @@ Feature: JUnit Formatter
       <?xml version="1.0" encoding="UTF-8" ?>
       <testsuites name="default">
           <testsuite name="World consistency" tests="6" failures="3" errors="2">
-              <testcase name="Undefined" assertions="4" status="undefined">
+              <testcase name="Undefined" status="undefined">
                   <error type="undefined" message="And Something new"/>
               </testcase>
-              <testcase name="Pending" assertions="4" status="pending">
+              <testcase name="Pending" status="pending">
                   <error type="pending" message="And Something not done yet; TODO: write pending definition"/>
               </testcase>
-              <testcase name="Failed" assertions="3" status="failed">
+              <testcase name="Failed" status="failed">
                   <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
               </testcase>
-              <testcase name="Passed &amp; Failed #1" assertions="3" status="failed">
+              <testcase name="Passed &amp; Failed #1" status="failed">
                   <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
               </testcase>
-              <testcase name="Passed &amp; Failed #2" assertions="3" status="passed"/>
-              <testcase name="Passed &amp; Failed #3" assertions="3" status="failed">
+              <testcase name="Passed &amp; Failed #2" status="passed"/>
+              <testcase name="Passed &amp; Failed #3" status="failed">
                   <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
               </testcase>
           </testsuite>
@@ -185,8 +185,8 @@ Feature: JUnit Formatter
       <?xml version="1.0" encoding="UTF-8" ?>
       <testsuites name="default">
           <testsuite name="World consistency" tests="2" failures="0" errors="0">
-              <testcase name="Adding some interesting value" assertions="4" status="passed"/>
-              <testcase name="Subtracting some value" assertions="4" status="passed"/>
+              <testcase name="Adding some interesting value" status="passed"/>
+              <testcase name="Subtracting some value" status="passed"/>
           </testsuite>
       </testsuites>
       """
@@ -309,7 +309,7 @@ Feature: JUnit Formatter
       <?xml version="1.0" encoding="UTF-8" ?>
       <testsuites name="small_kid">
           <testsuite name="Apple Eating" tests="1" failures="0" errors="0">
-              <testcase name="Eating one apple" assertions="3" status="passed"/>
+              <testcase name="Eating one apple" status="passed"/>
           </testsuite>
       </testsuites>
       """
@@ -319,7 +319,7 @@ Feature: JUnit Formatter
       <?xml version="1.0" encoding="UTF-8" ?>
       <testsuites name="old_man">
           <testsuite name="Apple Eating" tests="1" failures="1" errors="0">
-              <testcase name="Eating one apple" assertions="3" status="failed">
+              <testcase name="Eating one apple" status="failed">
                   <failure message="Then I will be stronger: Failed asserting that 0 is not equal to 0."/>
               </testcase>
           </testsuite>
@@ -414,9 +414,9 @@ Feature: JUnit Formatter
           <testsuite name="World consistency" tests="2" failures="0" errors="0">
               <system-out>output from hook!</system-out>
               <system-out>output from another hook!</system-out>
-              <testcase name="Adding some interesting value" assertions="3" status="passed"/>
+              <testcase name="Adding some interesting value" status="passed"/>
               <system-out>output from another hook!</system-out>
-              <testcase name="Subtracting some value" assertions="4" status="passed">
+              <testcase name="Subtracting some value" status="passed">
                   <system-out>output from step!</system-out>
               </testcase>
           </testsuite>

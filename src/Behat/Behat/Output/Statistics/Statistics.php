@@ -73,13 +73,7 @@ final class Statistics
 
     public function resetAllCounters()
     {
-        $this->resetStepCounter();
-        $this->scenarioCounters = $this->stepCounters;
-    }
-
-    public function resetStepCounter()
-    {
-        $this->stepCounters = array(
+        $this->scenarioCounters = $this->stepCounters = array(
             TestResult::PASSED    => 0,
             TestResult::FAILED    => 0,
             StepResult::UNDEFINED => 0,

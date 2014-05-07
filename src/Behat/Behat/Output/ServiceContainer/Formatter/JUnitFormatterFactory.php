@@ -72,7 +72,6 @@ class JUnitFormatterFactory implements FormatterFactory
         $container->setDefinition('output.node.printer.junit.feature', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter', array(
-            new Reference('output.junit.statistics'),
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID)
         ));
         $container->setDefinition('output.node.printer.junit.scenario', $definition);
@@ -130,9 +129,6 @@ class JUnitFormatterFactory implements FormatterFactory
                     new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StepStatsListener', array(
                         new Reference('output.junit.statistics'),
                         new Reference(ExceptionExtension::PRESENTER_ID)
-                    )),
-                    new Definition('Behat\Behat\Output\Node\EventListener\Statistics\ResettingStepStatsListener', array(
-                        new Reference('output.junit.statistics'),
                     )),
                     new Definition('Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener', array(
                         new Reference('output.junit.statistics'),
