@@ -12,7 +12,6 @@ namespace Behat\Behat\Output\Node\Printer;
 
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Suite\Suite;
-use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * Prints suite headers and footers.

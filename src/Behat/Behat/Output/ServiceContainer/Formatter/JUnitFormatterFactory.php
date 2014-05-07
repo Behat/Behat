@@ -91,7 +91,7 @@ class JUnitFormatterFactory implements FormatterFactory
                     null,
                     new Reference('output.node.printer.junit.suite')
                 )),
-                new Definition('Behat\Behat\Output\Node\EventListener\AST\CapturingFeatureListener', array(
+                new Definition('Behat\Behat\Output\Node\EventListener\AST\FeatureElementListener', array(
                     new Reference('output.node.printer.junit.feature'),
                     new Reference('output.node.printer.junit.scenario'),
                     new Reference('output.node.printer.junit.step'),
