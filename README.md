@@ -1,5 +1,6 @@
-behat
-=====
+![Behat](https://dl.dropboxusercontent.com/u/282797/behat/behat.png)
+
+Behat is a BDD framework for PHP to help you test business expectations.
 
 [![License](https://poser.pugx.org/behat/behat/license.png)](https://packagist.org/packages/behat/behat)
 [![Build Status](https://travis-ci.org/Behat/Behat.png?branch=master)](https://travis-ci.org/Behat/Behat)
@@ -8,7 +9,42 @@ behat
 [![Latest Stable Version](https://poser.pugx.org/behat/behat/v/stable.png)](https://packagist.org/packages/behat/behat)
 [![Total Downloads](https://poser.pugx.org/behat/behat/downloads.png)](https://packagist.org/packages/behat/behat)
 
-behat is a php framework for testing your business expectations.
+Installing Behat
+----------------
+
+The easiest way to install Behat is by using [Composer](http://getcomposer.org):
+
+```bash
+$> curl -s https://getcomposer.org/installer | php
+$> php composer.phar require behat/behat='~3.0.6'
+```
+
+After that you'll be able to run Behat via:
+
+```bash
+$> vendor/bin/behat
+```
+
+Installing Development Version
+------------------------------
+
+Clone the repository and install dependencies via [Composer](http://getcomposer.org):
+
+```bash
+$> curl -s https://getcomposer.org/installer | php
+$> php composer.phar install
+```
+
+After that you will be able to run development version of Behat via:
+
+```bash
+$> bin/behat
+```
+
+Contributing
+------------
+
+Before contributing to Behat, please take a look at the [CONTRIBUTING.md](CONTRIBUTING.md) document.
 
 Versioning
 ----------
@@ -29,21 +65,6 @@ Useful Links
 - Official Google Group is at [http://groups.google.com/group/behat](http://groups.google.com/group/behat)
 - IRC channel on [#freenode](http://freenode.net/) is `#behat`
 - [Note on Patches/Pull Requests](CONTRIBUTING.md)
-
-Installing Dependencies
------------------------
-
-```bash
-$> curl -s https://getcomposer.org/installer | php
-$> php composer.phar install
-```
-
-Running
--------
-
-```bash
-$> bin/behat -h
-```
 
 Contributors
 ------------
