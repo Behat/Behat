@@ -423,3 +423,136 @@ Feature: JUnit Formatter
       </testsuites>
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+
+  Scenario: Stop on Failure
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
+
+      class FeatureContext implements CustomSnippetAcceptingContext
+      {
+          private $value;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
+
+          /**
+           * @Given /I have entered (\d+)/
+           */
+          public function iHaveEntered($num) {
+              $this->value = $num;
+          }
+
+          /**
+           * @Then /I must have (\d+)/
+           */
+          public function iMustHave($num) {
+              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
+          }
+
+          /**
+           * @When /I add (\d+)/
+           */
+          public function iAdd($num) {
+              $this->value += $num;
+          }
+      }
+      """
+    And a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background:
+          Given I have entered 10
+
+        Scenario: Failed
+          When I add 4
+          Then I must have 13
+      """
+    When I run "behat --no-colors -f junit -o junit"
+    Then it should fail with no output
+    And "junit/default.xml" file should contain:
+      """
+      <?xml version="1.0" encoding="UTF-8" ?>
+      <testsuites name="default">
+          <testsuite name="World consistency" tests="1" failures="1" errors="0">
+              <testcase name="Failed" status="failed">
+                  <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
+              </testcase>
+          </testsuite>
+      </testsuites>
+      """
+    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+
+  Scenario: Aborting due to PHP error
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
+
+      class FeatureContext implements CustomSnippetAcceptingContext
+      {
+          private $value;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
+
+          /**
+           * @Given /I have entered (\d+)/
+           */
+          public function iHaveEntered($num) {
+              $this->value = $num;
+          }
+
+          /**
+           * @Then /I must have (\d+)/
+           */
+          public function iMustHave($num) {
+              PHPUnit_Framework_Assert::assertEqual($num, $this->value);
+          }
+
+          /**
+           * @When /I add (\d+)/
+           */
+          public function iAdd($num) {
+              $this->value += $num;
+          }
+      }
+      """
+    And a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background:
+          Given I have entered 10
+
+        Scenario: Failed
+          When I add 4
+          Then I must have 14
+      """
+    When I run "behat --no-colors -f junit -o junit"
+    Then it should fail with:
+      """
+      Call to undefined method PHPUnit_Framework_Assert::assertEqual()
+      """
+    And "junit/default.xml" file should contain:
+      """
+      <?xml version="1.0" encoding="UTF-8" ?>
+      <testsuites name="default">
+          <testsuite name="World consistency" tests="1" failures="1" errors="0">
+              <testcase name="Failed" status="failed">
+                  <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
+              </testcase>
+          </testsuite>
+      </testsuites>
+      """
+    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
