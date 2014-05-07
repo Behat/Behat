@@ -17,10 +17,8 @@ use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
-use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Behat\Output\Node\Printer\ScenarioElementPrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
-use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
@@ -41,21 +39,17 @@ final class FeatureElementListener implements EventListener
      */
     private $scenarioPrinter;
     /**
-     * @var SetupPrinter
-     */
-    private $setupPrinter;
-    /**
      * @var StepPrinter
      */
     private $stepPrinter;
     /**
+     * @var BeforeFeatureTested
+     */
+    private $beforeFeatureTestedEvent;
+    /**
      * @var AfterScenarioTested[]
      */
     private $afterScenarioTestedEvents = array();
-    /**
-     * @var FeatureNode
-     */
-    private $feature;
     /**
      * @var AfterStepTested[]
      */
@@ -66,13 +60,11 @@ final class FeatureElementListener implements EventListener
      *
      * @param FeaturePrinter         $featurePrinter
      * @param ScenarioElementPrinter $scenarioPrinter
-     * @param SetupPrinter           $setupPrinter
      */
-    public function __construct(FeaturePrinter $featurePrinter, ScenarioElementPrinter $scenarioPrinter, StepPrinter $stepPrinter, SetupPrinter $setupPrinter = null)
+    public function __construct(FeaturePrinter $featurePrinter, ScenarioElementPrinter $scenarioPrinter, StepPrinter $stepPrinter)
     {
         $this->featurePrinter = $featurePrinter;
         $this->scenarioPrinter = $scenarioPrinter;
-        $this->setupPrinter = $setupPrinter;
         $this->stepPrinter = $stepPrinter;
     }
 
@@ -121,7 +113,7 @@ final class FeatureElementListener implements EventListener
             return;
         }
 
-        $this->featureBeforeTestedEvent = $event->getFeature();
+        $this->beforeFeatureTestedEvent = $event->getFeature();
     }
 
     /**
@@ -148,7 +140,7 @@ final class FeatureElementListener implements EventListener
             return;
         }
 
-        $this->featurePrinter->printHeader($formatter, $this->featureBeforeTestedEvent);
+        $this->featurePrinter->printHeader($formatter, $this->beforeFeatureTestedEvent);
 
         foreach ($this->afterScenarioTestedEvents as $afterScenario) {
             $afterScenarioTested = $afterScenario['event'];
