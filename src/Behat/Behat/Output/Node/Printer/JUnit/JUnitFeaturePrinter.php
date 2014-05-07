@@ -14,7 +14,6 @@ use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Behat\Output\Statistics\Statistics;
 
