@@ -23,7 +23,7 @@ Feature: Extensions
           private $extension;
 
           public function setExtensionParameters(array $parameters) {
-              $this->extension = $parameters;var_dump($parameters);
+              $this->extension = $parameters;
           }
 
           /** @When this scenario executes */
