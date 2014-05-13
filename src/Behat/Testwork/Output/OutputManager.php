@@ -103,6 +103,15 @@ final class OutputManager
      */
     public function enableFormatter($formatter)
     {
+        if (!$this->isFormatterRegistered($formatter) && class_exists($formatter)) {
+            $formatterInstance = new $formatter();
+            $formatter = $formatterInstance->getName();
+
+            if (!$this->isFormatterRegistered($formatter)) {
+                $this->registerFormatter($formatterInstance);
+            }
+        }
+
         $this->eventDispatcher->addSubscriber($this->getFormatter($formatter));
     }
 
