@@ -126,6 +126,20 @@ final class Application extends BaseApplication
     }
 
     /**
+     * Sets container parameters
+     *
+     * @param ContainerInterface $container
+     */
+    private function loadParameters(ContainerInterface $container)
+    {
+        $parameters = $this->configurationLoader->loadParameters();
+
+        foreach ($parameters as $name => $value) {
+            $container->setParameter($name, $value);
+        }
+    }
+
+    /**
      * Creates main command for application.
      *
      * @param InputInterface  $input
@@ -154,6 +168,7 @@ final class Application extends BaseApplication
 
         $container->setParameter('cli.command.name', $this->getName());
         $container->setParameter('paths.base', $basePath);
+        $this->loadParameters($container);
 
         $container->set('cli.input', $input);
         $container->set('cli.output', $output);

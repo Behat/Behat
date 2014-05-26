@@ -123,6 +123,25 @@ final class ConfigurationLoader
     }
 
     /**
+     * Returns array of parameters
+     *
+     * @return array
+     */
+    public function loadParameters()
+    {
+        $parametersPath = dirname($this->configurationPath) . DIRECTORY_SEPARATOR . 'behat_parameters.yml';
+        if (file_exists($parametersPath)) {
+            $config = (array) Yaml::parse($parametersPath);
+
+            if (array_key_exists('parameters', $config)) {
+                return $config['parameters'];
+            }
+        }
+
+        return array();
+    }
+
+    /**
      * Loads information from environment variable.
      *
      * @return array
