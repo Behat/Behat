@@ -1,3 +1,10 @@
+3.0.7 / 2014-05-27
+==================
+
+  * Properly generate keywords in snippets for non-english and `And`, `But` steps (thanks @kibao)
+  * Fix regex check bug with transformations that return objects (thanks @vaidasm)
+  * Return ability to use custom formatters by specifiying their class names
+
 3.0.6 / 2014-05-06
 ==================
 
