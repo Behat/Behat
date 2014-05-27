@@ -86,7 +86,7 @@ Feature: Snippets
           }
 
           /**
-           * @Given /^I should get a '([^']*)':$/
+           * @Then /^I should get a '([^']*)':$/
            */
           public function iShouldGetASuperString($arg1, PyStringNode $string)
           {
@@ -94,7 +94,7 @@ Feature: Snippets
           }
 
           /**
-           * @Given /^I should get a simple string:$/
+           * @Then /^I should get a simple string:$/
            */
           public function iShouldGetASimpleString(PyStringNode $string)
           {
@@ -110,7 +110,7 @@ Feature: Snippets
           }
 
           /**
-           * @Given /^do something undefined with \\(\d+)$/
+           * @When /^do something undefined with \\(\d+)$/
            */
           public function doSomethingUndefinedWith($arg1)
           {
@@ -126,7 +126,7 @@ Feature: Snippets
           }
 
           /**
-           * @Given /^I should get a "([^"]*)":$/
+           * @Then /^I should get a "([^"]*)":$/
            */
           public function iShouldGetA($arg1, PyStringNode $string)
           {
@@ -213,7 +213,7 @@ Feature: Snippets
           }
 
           /**
-           * @Given I should get a :arg1:
+           * @Then I should get a :arg1:
            */
           public function iShouldGetA($arg1, PyStringNode $string)
           {
@@ -221,7 +221,7 @@ Feature: Snippets
           }
 
           /**
-           * @Given I should get a simple string:
+           * @Then I should get a simple string:
            */
           public function iShouldGetASimpleString(PyStringNode $string)
           {
@@ -229,7 +229,7 @@ Feature: Snippets
           }
 
           /**
-           * @Given do something undefined with \:arg1
+           * @When do something undefined with \:arg1
            */
           public function doSomethingUndefinedWith($arg1)
           {

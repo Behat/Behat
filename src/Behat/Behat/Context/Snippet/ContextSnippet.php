@@ -68,9 +68,7 @@ final class ContextSnippet implements Snippet
      */
     public function getSnippet()
     {
-        $type = in_array($this->step->getType(), array('Given', 'When', 'Then')) ? $this->step->getType() : 'Given';
-
-        return sprintf($this->template, $type);
+        return sprintf($this->template, $this->step->getKeywordType());
     }
 
     /**

@@ -135,7 +135,7 @@ Feature: Pretty Formatter
       --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
-           * @Given /^Something new$/
+           * @Then /^Something new$/
            */
           public function somethingNew()
           {

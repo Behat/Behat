@@ -187,7 +187,7 @@ Feature: Append snippets option
           private function doSomethingUndefinedWith() {}
 
           /**
-           * @Given /^do something undefined with \$$/
+           * @Then /^do something undefined with \$$/
            */
           public function doSomethingUndefinedWith2()
           {
@@ -195,7 +195,7 @@ Feature: Append snippets option
           }
 
           /**
-           * @Given /^do something undefined with \\(\d+)$/
+           * @Then /^do something undefined with \\(\d+)$/
            */
           public function doSomethingUndefinedWith3($arg1)
           {
@@ -361,7 +361,7 @@ Feature: Append snippets option
           private function doSomethingUndefinedWith() {}
 
           /**
-           * @Given /^do something undefined with \$$/
+           * @Then /^do something undefined with \$$/
            */
           public function doSomethingUndefinedWith2()
           {
@@ -369,7 +369,7 @@ Feature: Append snippets option
           }
 
           /**
-           * @Given /^do something undefined with \\(\d+)$/
+           * @Then /^do something undefined with \\(\d+)$/
            */
           public function doSomethingUndefinedWith3($arg1)
           {
@@ -508,7 +508,7 @@ Feature: Append snippets option
             }
 
             /**
-             * @Given /^do something undefined with \$$/
+             * @Then /^do something undefined with \$$/
              */
             public function doSomethingUndefinedWith()
             {
@@ -524,7 +524,7 @@ Feature: Append snippets option
             }
 
             /**
-             * @Given /^do something undefined with \\(\d+)$/
+             * @Then /^do something undefined with \\(\d+)$/
              */
             public function doSomethingUndefinedWith2($arg1)
             {
@@ -599,7 +599,7 @@ Feature: Append snippets option
             }
 
             /**
-             * @Given do something undefined with $
+             * @Then do something undefined with $
              */
             public function doSomethingUndefinedWith()
             {
@@ -615,7 +615,7 @@ Feature: Append snippets option
             }
 
             /**
-             * @Given do something undefined with \:arg1
+             * @Then do something undefined with \:arg1
              */
             public function doSomethingUndefinedWith2($arg1)
             {
@@ -766,7 +766,7 @@ Feature: Append snippets option
           }
 
           /**
-           * @Given /^do something undefined with \$$/
+           * @Then /^do something undefined with \$$/
            */
           public function doSomethingUndefinedWith()
           {
@@ -782,7 +782,7 @@ Feature: Append snippets option
           }
 
           /**
-           * @Given /^do something undefined with \\(\d+)$/
+           * @Then /^do something undefined with \\(\d+)$/
            */
           public function doSomethingUndefinedWith2($arg1)
           {
