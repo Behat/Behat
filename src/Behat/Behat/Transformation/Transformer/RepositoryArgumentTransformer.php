@@ -257,7 +257,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             $definitionCall->getFeature()->getLanguage()
         );
 
-        return is_string($argumentValue) ? (bool) preg_match($regex, $argumentValue, $match) : false;
+        return is_string($argumentValue) && preg_match($regex, $argumentValue, $match);
     }
 
     /**
