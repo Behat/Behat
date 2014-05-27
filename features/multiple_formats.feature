@@ -179,7 +179,7 @@ Feature: Multiple formats
       --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
-           * @Given /^do something undefined$/
+           * @Then /^do something undefined$/
            */
           public function doSomethingUndefined()
           {
@@ -270,7 +270,7 @@ Feature: Multiple formats
       --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
-           * @Given /^do something undefined$/
+           * @Then /^do something undefined$/
            */
           public function doSomethingUndefined()
           {
@@ -314,7 +314,7 @@ Feature: Multiple formats
       --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
-           * @Given /^do something undefined$/
+           * @Then /^do something undefined$/
            */
           public function doSomethingUndefined()
           {
@@ -443,7 +443,7 @@ Feature: Multiple formats
       --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
-           * @Given /^do something undefined$/
+           * @Then /^do something undefined$/
            */
           public function doSomethingUndefined()
           {
@@ -489,7 +489,7 @@ Feature: Multiple formats
       --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
-           * @Given /^do something undefined$/
+           * @Then /^do something undefined$/
            */
           public function doSomethingUndefined()
           {

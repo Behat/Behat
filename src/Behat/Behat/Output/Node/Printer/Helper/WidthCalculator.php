@@ -98,7 +98,7 @@ final class WidthCalculator
     {
         $indentText = str_repeat(' ', intval($indentation));
 
-        $text = sprintf('%s%s %s', $indentText, $step->getType(), $step->getText());
+        $text = sprintf('%s%s %s', $indentText, $step->getKeyword(), $step->getText());
 
         return mb_strlen($text, 'utf8');
     }

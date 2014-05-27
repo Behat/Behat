@@ -279,7 +279,7 @@ Feature: Context consistency
         }
 
         /**
-         * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
+         * @Then /^context parameter "([^"]*)" should be array with (\d+) elements$/
          */
         public function contextParameterShouldBeArrayWithElements($arg1, $arg2)
         {

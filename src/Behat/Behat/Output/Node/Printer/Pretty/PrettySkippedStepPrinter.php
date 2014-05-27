@@ -80,7 +80,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
      */
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
-        $this->printText($formatter->getOutputPrinter(), $step->getType(), $step->getText(), $result);
+        $this->printText($formatter->getOutputPrinter(), $step->getKeyword(), $step->getText(), $result);
         $this->pathPrinter->printStepPath($formatter, $scenario, $step, $result, mb_strlen($this->indentText, 'utf8'));
         $this->printArguments($formatter, $step->getArguments());
     }
