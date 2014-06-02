@@ -61,7 +61,8 @@ You can read detailed guidance on what BC means in [Symfony2 BC guide](http://sy
 Useful Links
 ------------
 
-- The main website with documentation is at [http://behat.org](http://behat.org)
+- The main website is at [http://behat.org](http://behat.org)
+- The documentation is at [http://behat.readthedocs.org](http://behat.readthedocs.org)
 - Official Google Group is at [http://groups.google.com/group/behat](http://groups.google.com/group/behat)
 - IRC channel on [#freenode](http://freenode.net/) is `#behat`
 - [Note on Patches/Pull Requests](CONTRIBUTING.md)
