@@ -37,7 +37,7 @@ class {className} implements SnippetAcceptingContext
     /**
      * Initializes context.
      *
-     * Every scenario gets it's own context object.
+     * Every scenario gets its own context object.
      * You can also pass arbitrary arguments to the context constructor through behat.yml.
      */
     public function __construct()
