@@ -35,7 +35,7 @@ final class RerunController implements Controller
     /**
      * @var null|string
      */
-    private $cache;
+    private $cachePath;
     /**
      * @var string
      */
@@ -49,11 +49,12 @@ final class RerunController implements Controller
      * Initializes controller.
      *
      * @param EventDispatcherInterface $eventDispatcher
+     * @param null|string              $cachePath
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(EventDispatcherInterface $eventDispatcher, $cachePath)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->cache = $this->getCacheDirectory();
+        $this->cachePath = null !== $cachePath ? rtrim($cachePath, DIRECTORY_SEPARATOR) : null;
     }
 
     /**
@@ -125,31 +126,15 @@ final class RerunController implements Controller
             return;
         }
 
-        if (0 === count($this->lines) && file_exists($this->getFileName())) {
+        if (file_exists($this->getFileName())) {
             unlink($this->getFileName());
+        }
 
+        if (0 === count($this->lines)) {
             return;
         }
 
         file_put_contents($this->getFileName(), trim(implode("\n", $this->lines)));
-    }
-
-    /**
-     * Returns cache directory.
-     *
-     * @return null|string
-     */
-    private function getCacheDirectory()
-    {
-        $directory = is_writable(sys_get_temp_dir())
-            ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat_rerun_cache'
-            : null;
-
-        if (!$directory) {
-            return null;
-        }
-
-        return rtrim($directory, DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -178,14 +163,14 @@ final class RerunController implements Controller
      */
     private function getFileName()
     {
-        if (null === $this->cache || null === $this->key) {
+        if (null === $this->cachePath || null === $this->key) {
             return null;
         }
 
-        if (!is_dir($this->cache)) {
-            mkdir($this->cache, 0777);
+        if (!is_dir($this->cachePath)) {
+            mkdir($this->cachePath, 0777);
         }
 
-        return $this->cache . DIRECTORY_SEPARATOR . $this->key . '.scenarios';
+        return $this->cachePath . DIRECTORY_SEPARATOR . $this->key . '.scenarios';
     }
 }

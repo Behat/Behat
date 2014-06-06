@@ -18,6 +18,7 @@ use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Tester\ServiceContainer\TesterExtension as BaseExtension;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -67,11 +68,32 @@ class TesterExtension extends BaseExtension
     /**
      * {@inheritdoc}
      */
+    public function configure(ArrayNodeDefinition $builder)
+    {
+        parent::configure($builder);
+
+        $builder
+            ->children()
+                ->scalarNode('rerun_cache')
+                    ->info('Sets the rerun cache path')
+                    ->defaultValue(
+                        is_writable(sys_get_temp_dir())
+                            ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat_rerun_cache'
+                            : null
+                    )
+                ->end()
+            ->end()
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function load(ContainerBuilder $container, array $config)
     {
         parent::load($container, $config);
 
-        $this->loadRerunController($container);
+        $this->loadRerunController($container, $config['rerun_cache']);
         $this->loadPendingExceptionStringer($container);
     }
 
@@ -199,11 +221,13 @@ class TesterExtension extends BaseExtension
      * Loads rerun controller.
      *
      * @param ContainerBuilder $container
+     * @param null|string      $cachePath
      */
-    protected function loadRerunController(ContainerBuilder $container)
+    protected function loadRerunController(ContainerBuilder $container, $cachePath)
     {
         $definition = new Definition('Behat\Behat\Tester\Cli\RerunController', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+            new Reference(EventDispatcherExtension::DISPATCHER_ID),
+            $cachePath
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 200));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.rerun', $definition);
