@@ -27,7 +27,7 @@ Feature: Tags
            */
           public function someFastStepN($num) {}
       }
-    """
+      """
     And a file named "features/feature1.feature" with:
       """
       @slow
@@ -241,4 +241,65 @@ Feature: Tags
       """
       9 scenarios (9 passed)
       22 steps (22 passed)
+      """
+
+
+  Scenario: Overriding behat.yml filters with CLI options
+    Given a file named "behat.yml" with:
+      """
+      default:
+        gherkin:
+          filters:
+            tags: ~@slow
+      """
+    When I run "behat --no-colors -f pretty --tags '@slow' --format-settings='{\"paths\": false}'"
+    Then it should pass
+    And the output should contain:
+      """
+      @slow
+      Feature: Feature N1
+
+        Background:
+          Given Some slow step N11
+
+        Scenario:
+          Given Some slow step N12
+          And Some normal step N13
+
+        @fast
+        Scenario:
+          Given Some fast step N14
+      """
+    And the output should contain:
+      """
+      Feature: Feature N2
+
+        Background:
+          Given Some normal step N21
+
+        @slow @fast
+        Scenario:
+          Given Some slow step N22
+          And Some fast step N23
+      """
+    And the output should contain:
+      """
+      Feature: Feature N3
+
+        Background:
+          Given Some normal step N21
+
+        @slow
+        Scenario Outline:
+          Given Some slow step N<num>
+
+          Examples:
+            | num |
+            | 31  |
+            | 32  |
+      """
+    And the output should contain:
+      """
+      5 scenarios (5 passed)
+      12 steps (12 passed)
       """
