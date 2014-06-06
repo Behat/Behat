@@ -1,3 +1,12 @@
+3.0.8 / 2014-06-06
+==================
+
+  * Profile level Gherkin filters are now overridable by CLI filter options
+  * Rerun cache path is now configurable
+  * Fix turnip-based step definitions starting from token
+  * Fix token-based transformations interfering with regex-based ones
+  * Rerun cache dump have been optimised
+
 3.0.7 / 2014-05-27
 ==================
 
