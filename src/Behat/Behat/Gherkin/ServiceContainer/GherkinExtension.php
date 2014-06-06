@@ -90,7 +90,7 @@ final class GherkinExtension implements Extension
                     )
                 ->end()
                 ->arrayNode('filters')
-                    ->info('Sets the gherkin filters')
+                    ->info('Sets the gherkin filters (overridable by CLI options)')
                     ->performNoDeepMerging()
                     ->defaultValue(array())
                     ->useAttributeAsKey('name')

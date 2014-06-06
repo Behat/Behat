@@ -77,15 +77,22 @@ final class FilterController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $filters = array();
+
         foreach ($input->getOption('name') as $name) {
-            $this->gherkin->addFilter(new NameFilter($name));
+            $filters[] = new NameFilter($name);
         }
+
         foreach ($input->getOption('tags') as $tags) {
-            $this->gherkin->addFilter(new TagFilter($tags));
+            $filters[] = new TagFilter($tags);
         }
 
         if ($role = $input->getOption('role')) {
-            $this->gherkin->addFilter(new RoleFilter($role));
+            $filters[] = new RoleFilter($role);
+        }
+
+        if (count($filters)) {
+            $this->gherkin->setFilters($filters);
         }
     }
 }
