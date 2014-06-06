@@ -161,11 +161,15 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
      */
     private function transformToken(DefinitionCall $definitionCall, Transformation $transformation, $index, $value)
     {
-        if ($this->isTokenAndMatchesPattern($index, $transformation->getPattern())) {
+        if (!$this->isTokenTransformation($transformation)) {
+            return null;
+        }
+
+        if ($this->isIndexMatchesTokenPattern($index, $transformation->getPattern())) {
             return $this->execute($definitionCall, $transformation, array($value));
         }
 
-        return null;
+        return $value;
     }
 
     /**
@@ -210,16 +214,28 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
     }
 
     /**
-     * Checks if argument is a token and matches pattern.
+     * Checks if provided transformation is token-based.
+     *
+     * @param Transformation $transformation
+     *
+     * @return Boolean
+     */
+    private function isTokenTransformation(Transformation $transformation)
+    {
+        return 1 === preg_match('/^\:\w+$/', $transformation->getPattern());
+    }
+
+    /**
+     * Checks if argument index matches token pattern.
      *
      * @param integer|string $argumentIndex
      * @param string         $pattern
      *
      * @return Boolean
      */
-    private function isTokenAndMatchesPattern($argumentIndex, $pattern)
+    private function isIndexMatchesTokenPattern($argumentIndex, $pattern)
     {
-        return is_string($argumentIndex) && (':' . $argumentIndex === $pattern);
+        return ':' . $argumentIndex === $pattern;
     }
 
     /**
