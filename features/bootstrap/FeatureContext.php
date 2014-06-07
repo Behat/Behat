@@ -135,7 +135,7 @@ class FeatureContext implements Context
                 $this->phpBin,
                 escapeshellarg(BEHAT_BIN_PATH),
                 $argumentsString,
-                strtr('--format-settings=\'{"timer": false}\'', array('\'' => '"', '"' => '\"'))
+                strtr('--format-settings=\'{"timer": false}\' --lang=en', array('\'' => '"', '"' => '\"'))
             )
         );
         $this->process->start();
