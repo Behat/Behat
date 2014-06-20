@@ -20,7 +20,7 @@ final class Memory
     /**
      * @var string[]
      */
-    private $units = array('B', 'Kb', 'Mb', 'Gb');
+    private $units = array('B', 'Kb', 'Mb', 'Gb', 'Tb');
 
     /**
      * Returns current memory usage.
@@ -45,14 +45,18 @@ final class Memory
     /**
      * Humanizes usage information.
      *
-     * @param integer $usage
+     * @param integer $bytes
      *
      * @return string
      */
-    private function humanize($usage)
+    private function humanize($bytes)
     {
-        $sub = intval(floor(log($usage, 1024)));
+        $e = intval(floor(log($bytes) / log(1024)));
 
-        return @round($usage / pow(1024, $sub), 2) . $this->units[$sub];
+        if (!isset($this->units[$e])) {
+            return 'Can not calculate memory usage';
+        }
+
+        return sprintf('%.2f%s', ($bytes / pow(1024, floor($e))), $this->units[$e]);
     }
 }
