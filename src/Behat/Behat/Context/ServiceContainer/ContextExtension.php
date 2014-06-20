@@ -214,14 +214,24 @@ final class ContextExtension implements Extension
     private function loadDefaultContextReaders(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Reader\AnnotatedContextReader');
-        $definition->addTag(self::READER_TAG, array('priority' => 50));
         $container->setDefinition(self::getAnnotatedContextReaderId(), $definition);
+
+        $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerContext', array(
+            new Reference(self::getAnnotatedContextReaderId())
+        ));
+        $definition->addTag(self::READER_TAG, array('priority' => 50));
+        $container->setDefinition(self::getAnnotatedContextReaderId() . '.cached', $definition);
 
         $definition = new Definition('Behat\Behat\Context\Reader\TranslatableContextReader', array(
             new Reference(TranslatorExtension::TRANSLATOR_ID)
         ));
-        $definition->addTag(self::READER_TAG, array('priority' => 50));
         $container->setDefinition(self::READER_TAG . '.translatable', $definition);
+
+        $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerSuite', array(
+            new Reference(self::READER_TAG . '.translatable')
+        ));
+        $definition->addTag(self::READER_TAG, array('priority' => 50));
+        $container->setDefinition(self::READER_TAG . '.translatable.cached', $definition);
     }
 
     /**
