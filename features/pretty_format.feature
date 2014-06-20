@@ -414,3 +414,71 @@ Feature: Pretty Formatter
       4 scenarios (4 undefined)
       16 steps (16 undefined)
       """
+
+  Scenario: Background with failing step and 2 scenarios
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+      use Behat\Behat\Tester\Exception\PendingException;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given /^.*$/
+           */
+          public function anything() {
+              throw new PendingException();
+          }
+      }
+      """
+    And a file named "features/test.feature" with:
+      """
+      Feature: Customer can see the cost of their purchase in basket
+        In order to see the cost of my purchase
+        As a customer
+        I need to see the totals of my basket
+
+        Background:
+          Given there are the following products in the catalog
+            | name     | price |
+            | trousers | 12    |
+
+        Scenario: £12 delivery £3
+          Given I have an empty basket
+          When I add the product "trousers" to my basket
+
+        Scenario: £12 delivery £3
+          Given I have an empty basket
+          When I add the product "trousers" to my basket
+      """
+    When I run "behat --no-colors -f pretty --no-snippets"
+    Then it should pass with:
+      """
+      Feature: Customer can see the cost of their purchase in basket
+        In order to see the cost of my purchase
+        As a customer
+        I need to see the totals of my basket
+
+        Background:                                             # features/test.feature:6
+          Given there are the following products in the catalog # FeatureContext::anything()
+            | name     | price |
+            | trousers | 12    |
+            TODO: write pending definition
+
+        Scenario: £12 delivery £3                        # features/test.feature:11
+          Given I have an empty basket                   # FeatureContext::anything()
+          When I add the product "trousers" to my basket # FeatureContext::anything()
+
+        Scenario: £12 delivery £3                        # features/test.feature:15
+          Given there are the following products in the catalog # FeatureContext::anything()
+            | name     | price |
+            | trousers | 12    |
+            TODO: write pending definition
+          Given I have an empty basket                   # FeatureContext::anything()
+          When I add the product "trousers" to my basket # FeatureContext::anything()
+
+      2 scenarios (2 pending)
+      6 steps (2 pending, 4 skipped)
+      """
