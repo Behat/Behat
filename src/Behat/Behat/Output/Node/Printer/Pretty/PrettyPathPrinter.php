@@ -114,7 +114,7 @@ final class PrettyPathPrinter
     private function printDefinedStepPath(OutputPrinter $printer, DefinedStepResult $result, $scenarioWidth, $stepWidth)
     {
         $path = $result->getStepDefinition()->getPath();
-        $spacing = str_repeat(' ', $scenarioWidth - $stepWidth);
+        $spacing = str_repeat(' ', max(0, $scenarioWidth - $stepWidth));
 
         $printer->writeln(sprintf('%s {+comment}# %s{-comment}', $spacing, $path));
     }
