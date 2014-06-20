@@ -1,3 +1,10 @@
+3.0.9 / 2014-06-20
+==================
+
+  * Fix definition translations reading bug with multi-suite configurations (thanks @WouterJ for reporting)
+  * Fix pretty printer bug with failing background and 2 scenarios (thanks @andytson for reporting)
+  * Fix memory footprint calculation (thanks @dready for reporting)
+
 3.0.8 / 2014-06-06
 ==================
 
