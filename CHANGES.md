@@ -35,6 +35,7 @@
 3.0.9 / 2014-06-20
 ==================
 
+  * [BC break] Added `KeywordsInterface` as second parameter to `ConsoleDefinitionPrinter`
   * Fix definition translations reading bug with multi-suite configurations (thanks @WouterJ for reporting)
   * Fix pretty printer bug with failing background and 2 scenarios (thanks @andytson for reporting)
   * Fix memory footprint calculation (thanks @dready for reporting)

@@ -37,6 +37,7 @@ final class GherkinExtension implements Extension
      */
     const MANAGER_ID = 'gherkin';
     const KEYWORDS_DUMPER_ID = 'gherkin.keywords_dumper';
+    const KEYWORDS_ID = 'gherkin.keywords';
 
     /*
      * Available extension points
@@ -178,10 +179,10 @@ final class GherkinExtension implements Extension
         $definition = new Definition('Behat\Gherkin\Keywords\CachedArrayKeywords', array(
             '%gherkin.paths.i18n%'
         ));
-        $container->setDefinition('gherkin.keywords', $definition);
+        $container->setDefinition(self::KEYWORDS_ID, $definition);
 
         $definition = new Definition('Behat\Gherkin\Keywords\KeywordsDumper', array(
-            new Reference('gherkin.keywords')
+            new Reference(self::KEYWORDS_ID)
         ));
         $container->setDefinition(self::KEYWORDS_DUMPER_ID, $definition);
     }

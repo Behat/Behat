@@ -12,6 +12,7 @@ namespace Behat\Behat\Definition\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
+use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -225,6 +226,7 @@ final class DefinitionExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter', array(
             new Reference(CliExtension::OUTPUT_ID),
+            new Reference(GherkinExtension::KEYWORDS_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID)
         ));
@@ -232,6 +234,7 @@ final class DefinitionExtension implements Extension
 
         $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionListPrinter', array(
             new Reference(CliExtension::OUTPUT_ID),
+            new Reference(GherkinExtension::KEYWORDS_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID)
         ));
