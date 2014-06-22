@@ -226,17 +226,17 @@ final class DefinitionExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter', array(
             new Reference(CliExtension::OUTPUT_ID),
-            new Reference(GherkinExtension::KEYWORDS_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
-            new Reference(self::DEFINITION_TRANSLATOR_ID)
+            new Reference(self::DEFINITION_TRANSLATOR_ID),
+            new Reference(GherkinExtension::KEYWORDS_ID)
         ));
         $container->setDefinition($this->getInformationPrinterId(), $definition);
 
         $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionListPrinter', array(
             new Reference(CliExtension::OUTPUT_ID),
-            new Reference(GherkinExtension::KEYWORDS_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
-            new Reference(self::DEFINITION_TRANSLATOR_ID)
+            new Reference(self::DEFINITION_TRANSLATOR_ID),
+            new Reference(GherkinExtension::KEYWORDS_ID)
         ));
         $container->setDefinition($this->getListPrinterId(), $definition);
     }

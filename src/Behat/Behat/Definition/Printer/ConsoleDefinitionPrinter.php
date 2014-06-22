@@ -57,9 +57,9 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
         KeywordsInterface $keywords
     ) {
         $this->output = $output;
-        $this->keywords = $keywords;
         $this->patternTransformer = $patternTransformer;
         $this->translator = $translator;
+        $this->keywords = $keywords;
 
         $output->getFormatter()->setStyle('def_regex', new OutputFormatterStyle('yellow'));
         $output->getFormatter()->setStyle(
@@ -83,13 +83,19 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
         $this->output->writeln('');
     }
 
-    final protected function getDefinitionType(Definition $definition)
+    final protected function getDefinitionType(Definition $definition, $onlyOne = false)
     {
         $this->keywords->setLanguage($this->translator->getLocale());
 
         $method = 'get'.ucfirst($definition->getType()).'Keywords';
 
-        return $this->keywords->$method();
+        $keywords = explode('|', $this->keywords->$method());
+
+        if ($onlyOne) {
+            return current($keywords);
+        }
+
+        return 1 < count($keywords) ? '['.implode('|', $keywords).']' : implode('|', $keywords);
     }
 
     /**

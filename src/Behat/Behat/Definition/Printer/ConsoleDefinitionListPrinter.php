@@ -32,7 +32,7 @@ final class ConsoleDefinitionListPrinter extends ConsoleDefinitionPrinter
             $output[] = strtr(
                 '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>', array(
                     '{suite}' => $suite->getName(),
-                    '{type}'  => $this->getDefinitionType($definition),
+                    '{type}'  => $this->getDefinitionType($definition, true),
                     '{regex}' => $definition->getPattern(),
                 )
             );

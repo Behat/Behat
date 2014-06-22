@@ -189,10 +189,10 @@ Feature: Syntax helpers
     When I run "behat --no-colors -dl --lang=ru"
     Then the output should contain:
       """
-      default | Допустим|Пусть|Дано /^у меня (\d+) яблоко?$/
-      default | Когда|Если /^I ate (\d+) apples?$/
-      default | Когда|Если /^Я нашел (\d+) яблоко?$/
-      default | Тогда|То /^I should have (\d+) apples$/
+      default | Допустим /^у меня (\d+) яблоко?$/
+      default | Когда /^I ate (\d+) apples?$/
+      default | Когда /^Я нашел (\d+) яблоко?$/
+      default | Тогда /^I should have (\d+) apples$/
       """
 
   Scenario: Print extended definitions info
@@ -328,6 +328,6 @@ Feature: Syntax helpers
     When I run "behat --no-colors --lang=ru -d 'нашел'"
     Then the output should contain:
       """
-      default | Когда|Если /^Я нашел (\d+) яблоко?$/
+      default | [Когда|Если] /^Я нашел (\d+) яблоко?$/
               | at `FeatureContext::iFoundApples()`
       """
