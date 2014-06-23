@@ -161,6 +161,53 @@ Feature: Filters
       5 steps (5 passed)
       """
 
+  Scenario: Narrative Filter 
+    Given a file named "behat.yml" with:
+      """
+      default:
+        gherkin:
+          filters:
+            narrative: /As a (?:second|third) user/
+      """
+    When I run "behat --no-colors -f pretty"
+    Then it should pass with:
+      """
+      @tag2
+      Feature: Second feature
+        In order to ...
+        As a second user
+        I need to ...
+
+        Background:                # features/feature2.feature:7
+          Given Some slow step N11 # FeatureContext::someSlowStepN()
+
+        Scenario:                  # features/feature2.feature:10
+          Given Some slow step N12 # FeatureContext::someSlowStepN()
+          And Some normal step N13 # FeatureContext::someNormalStepN()
+
+        Scenario:                  # features/feature2.feature:14
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+
+      @tag2
+      Feature: A bit less simple feature
+        In order to ...
+        As a third user
+        I need to ...
+
+        Background:                # features/feature3.feature:7
+          Given Some slow step N11 # FeatureContext::someSlowStepN()
+
+        Scenario:                  # features/feature3.feature:10
+          Given Some slow step N12 # FeatureContext::someSlowStepN()
+          And Some normal step N13 # FeatureContext::someNormalStepN()
+
+        Scenario:                  # features/feature3.feature:14
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+
+      4 scenarios (4 passed)
+      10 steps (10 passed)
+      """
+
   Scenario: Name filters
     Given a file named "behat.yml" with:
       """
