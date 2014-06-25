@@ -13,6 +13,7 @@ namespace Behat\Behat\Definition\Search;
 use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\DefinitionRepository;
 use Behat\Behat\Definition\Exception\AmbiguousMatchException;
+use Behat\Behat\Definition\Exception\UnknownParameterValueException;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\SearchResult;
 use Behat\Gherkin\Node\ArgumentInterface;
@@ -125,17 +126,42 @@ final class RepositorySearchEngine implements SearchEngine
      */
     private function getArguments(Definition $definition, array $match, array $multiline)
     {
+        reset($multiline);
+        $namedMatches = count($match) > count(array_filter(array_keys($match), 'is_numeric'));
+
         $arguments = array();
         foreach ($definition->getReflection()->getParameters() as $num => $parameter) {
-            if (isset($match[$parameter->getName()])) {
-                $arguments[$parameter->getName()] = $match[$parameter->getName()];
+            $class = $parameter->getClass();
+            if (null !== $class && $class->implementsInterface('Behat\Gherkin\Node\ArgumentInterface')) {
+                $arguments[] = current($multiline);
+                next($multiline);
+
+                continue;
+            }
+
+            if ($namedMatches) {
+                if (isset($match[$parameter->getName()])) {
+                    $arguments[$parameter->getName()] = $match[$parameter->getName()];
+                } elseif ($parameter->isDefaultValueAvailable()) {
+                    $arguments[$parameter->getName()] = $parameter->getDefaultValue();
+                } else {
+                    throw new UnknownParameterValueException(sprintf(
+                        'The value of parameter `%s` of method `%s#%s` cannot be determined.',
+                        $parameter->getName(),
+                        $definition->getReflection()->getDeclaringClass()->getName(),
+                        $definition->getReflection()->getName()
+                    ));
+                }
             } elseif (isset($match[$num])) {
                 $arguments[$num] = $match[$num];
+            } else {
+                throw new UnknownParameterValueException(sprintf(
+                    'The value of parameter `%s` of method `%s#%s` cannot be determined.',
+                    $parameter->getName(),
+                    $definition->getReflection()->getDeclaringClass()->getName(),
+                    $definition->getReflection()->getName()
+                ));
             }
-        }
-
-        foreach ($multiline as $argument) {
-            $arguments[] = $argument;
         }
 
         return $arguments;
