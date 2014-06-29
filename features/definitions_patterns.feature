@@ -144,3 +144,36 @@ Feature: Step Definition Pattern
       [Behat\Behat\Definition\Exception\InvalidPatternException]
         The regex `/I am (foo/` is invalid:
       """
+
+  Scenario: Pattern with default values
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given only second :second
+           */
+          public function invalidRegex($first = 'foo', $second = 'fiz') {
+            PHPUnit_Framework_Assert::assertEquals('foo', $first);
+            PHPUnit_Framework_Assert::assertEquals('bar', $second);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given only second "bar"
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
