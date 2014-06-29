@@ -1,3 +1,9 @@
+3.0.10 / 2014-06-29
+===================
+
+  * Fix argument resolution when named arguments used and method has defaults (thanks @WouterJ)
+  * Fix support for decimal numbers in turnip placeholders
+
 3.0.9 / 2014-06-20
 ==================
 
