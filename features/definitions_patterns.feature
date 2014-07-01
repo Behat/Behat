@@ -177,3 +177,36 @@ Feature: Step Definition Pattern
       1 scenario (1 passed)
       1 step (1 passed)
       """
+
+  Scenario: Definition parameter with default null value
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+    """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I don't provide parameter
+           * @Given I can provide parameter :param
+           */
+          public function parameterCouldBeNull($param = null) {
+            PHPUnit_Framework_Assert::assertNull($param);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given I don't provide parameter
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
