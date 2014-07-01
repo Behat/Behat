@@ -81,7 +81,7 @@ final class TurnipPatternPolicy implements PatternPolicy
         $regex = $this->replaceTurnipOptionalEndingWithRegex($regex);
         $regex = $this->replaceTurnipAlternativeWordsWithRegex($regex);
 
-        return '/^' . $regex . '$/';
+        return '/^' . $regex . '$/i';
     }
 
     /**
