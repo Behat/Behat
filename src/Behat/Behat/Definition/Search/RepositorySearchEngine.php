@@ -221,6 +221,26 @@ final class RepositorySearchEngine implements SearchEngine
                 continue;
             }
 
+            // Enable with and without TableNode/PyStringNode parameter, eg:
+            //  /** @Then /^I should get an email on "(?P<email>[^"]+)"(?:| with:)$/ */
+            //  public function iShouldGetAnEmail($email, PyStringNode $text = null)
+            //  {
+            //      //...
+            //      if ($text) {
+            //          // Check the content also if it is set
+            //      }
+            //  }
+            // ---
+            // Then I should get an email on "test1@mail.com"
+            // #...
+            // Then I should get an email on "test2@mail.com" with:
+            //  """
+            //  This is a test mail!
+            //  """
+            if ($parameter->allowsNull()) {
+                continue;
+            }
+
             throw new UnknownParameterValueException(sprintf(
                 'Can not find a matching value for an argument `%s` of the method `%s`.',
                 $name,
