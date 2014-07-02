@@ -217,7 +217,7 @@ final class RepositorySearchEngine implements SearchEngine
         foreach ($parameters as $num => $parameter) {
             $name = $parameter->getName();
 
-            if (isset($arguments[$num]) || isset($arguments[$name])) {
+            if (array_key_exists($num, $arguments) || array_key_exists($name, $arguments)) {
                 continue;
             }
 
