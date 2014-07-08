@@ -11,11 +11,9 @@
 namespace Behat\Behat\Context;
 
 use Behat\Behat\Context\Argument\ArgumentResolver;
-use Behat\Behat\Context\Exception\WrongContextArgumentException;
 use Behat\Behat\Context\Initializer\ContextInitializer;
+use Behat\Testwork\Call\FunctionArgumentResolver;
 use ReflectionClass;
-use ReflectionMethod;
-use ReflectionParameter;
 
 /**
  * Instantiates contexts using registered argument resolvers and context initializers.
@@ -25,6 +23,10 @@ use ReflectionParameter;
 final class ContextFactory
 {
     /**
+     * @var FunctionArgumentResolver
+     */
+    private $functionArgumentResolver;
+    /**
      * @var ArgumentResolver[]
      */
     private $argumentResolvers = array();
@@ -32,6 +34,16 @@ final class ContextFactory
      * @var ContextInitializer[]
      */
     private $contextInitializers = array();
+
+    /**
+     * Initialises factory.
+     *
+     * @param FunctionArgumentResolver $functionArgumentResolver
+     */
+    public function __construct(FunctionArgumentResolver $functionArgumentResolver)
+    {
+        $this->functionArgumentResolver = $functionArgumentResolver;
+    }
 
     /**
      * Registers context argument resolver.
@@ -89,73 +101,10 @@ final class ContextFactory
             return $arguments;
         }
 
-        return $this->orderConstructorArguments($reflection->getConstructor(), $arguments);
-    }
-
-    /**
-     * Orders constructor arguments using their indexes or names.
-     *
-     * @param ReflectionMethod $constructor
-     * @param array            $arguments
-     *
-     * @return array
-     */
-    private function orderConstructorArguments(ReflectionMethod $constructor, array $arguments)
-    {
-        $this->verifyThatAllProvidedArgumentsExist($constructor, $arguments);
-
-        $realArguments = array();
-        foreach ($constructor->getParameters() as $i => $parameter) {
-            if (isset($arguments[$parameter->getName()])) {
-                $realArguments[] = $arguments[$parameter->getName()];
-            } elseif (isset($arguments[$i])) {
-                $realArguments[] = $arguments[$i];
-            } else {
-                $realArguments[] = $this->getArgumentDefault($parameter);
-            }
-        }
-
-        return $realArguments;
-    }
-
-    /**
-     * Checks that all provided constructor arguments are presented in the constructor.
-     *
-     * @param ReflectionMethod $constructor
-     * @param array            $arguments
-     *
-     * @throws WrongContextArgumentException
-     */
-    private function verifyThatAllProvidedArgumentsExist(ReflectionMethod $constructor, array $arguments)
-    {
-        $argumentNames = array_filter(array_keys($arguments), 'is_string');
-        $parameterNames = array_map(function (ReflectionParameter $parameter) {
-            return $parameter->getName();
-        }, $constructor->getParameters());
-        $missingParameters = array_diff($argumentNames, $parameterNames);
-
-        if (!count($missingParameters)) {
-            return;
-        }
-
-        throw new WrongContextArgumentException(
-            sprintf('`%s::__construct()` does not expect argument(s) named %s.',
-                $constructor->getDeclaringClass()->getName(),
-                implode(', ', $missingParameters)
-            )
+        return $this->functionArgumentResolver->resolveArguments(
+            $reflection->getConstructor(),
+            $arguments
         );
-    }
-
-    /**
-     * Returns default value for the argument.
-     *
-     * @param ReflectionParameter $parameter
-     *
-     * @return mixed
-     */
-    private function getArgumentDefault(ReflectionParameter $parameter)
-    {
-        return $parameter->isOptional() ? $parameter->getDefaultValue() : null;
     }
 
     /**

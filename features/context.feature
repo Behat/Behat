@@ -371,8 +371,8 @@ Feature: Context consistency
     When I run "behat --no-colors -f progress features/params.feature"
     Then it should fail with:
       """
-      [Behat\Behat\Context\Exception\WrongContextArgumentException]
-        `CoreContext::__construct()` does not expect argument(s) named unexistingParam.
+      [Behat\Testwork\Call\Exception\UnknownParameterValueException]
+        `CoreContext::__construct()` does not expect argument `$unexistingParam`.
 
 
 
