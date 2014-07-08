@@ -10,11 +10,13 @@
 
 namespace Behat\Behat\Definition\Search;
 
+use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\DefinitionRepository;
 use Behat\Behat\Definition\Exception\AmbiguousMatchException;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\SearchResult;
 use Behat\Behat\Definition\Translator\DefinitionTranslator;
+use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Call\FunctionArgumentResolver;
@@ -49,10 +51,10 @@ final class RepositorySearchEngine implements SearchEngine
     /**
      * Initializes search engine.
      *
-     * @param DefinitionRepository $repository
-     * @param PatternTransformer   $patternTransformer
-     * @param DefinitionTranslator $translator
-     * @param FunctionArgumentResolver     $argumentResolver
+     * @param DefinitionRepository     $repository
+     * @param PatternTransformer       $patternTransformer
+     * @param DefinitionTranslator     $translator
+     * @param FunctionArgumentResolver $argumentResolver
      */
     public function __construct(
         DefinitionRepository $repository,
@@ -86,19 +88,13 @@ final class RepositorySearchEngine implements SearchEngine
 
         foreach ($this->repository->getEnvironmentDefinitions($environment) as $definition) {
             $definition = $this->translator->translateDefinition($suite, $definition, $language);
-            $regex = $this->patternTransformer->transformPatternToRegex($definition->getPattern());
 
-            if (!preg_match($regex, $stepText, $match)) {
+            if (!$newResult = $this->match($definition, $stepText, $multi)) {
                 continue;
             }
 
-            $definitions[] = $definition;
-
-            $function = $definition->getReflection();
-            $arguments = array_slice($match, 1);
-            $arguments = $this->argumentResolver->resolveArguments($function, $arguments, $multi);
-
-            $result = new SearchResult($definition, $stepText, $arguments);
+            $result = $newResult;
+            $definitions[] = $newResult->getMatchedDefinition();
         }
 
         if (count($definitions) > 1) {
@@ -106,5 +102,29 @@ final class RepositorySearchEngine implements SearchEngine
         }
 
         return $result;
+    }
+
+    /**
+     * Attempts to match provided definition against a step text.
+     *
+     * @param Definition          $definition
+     * @param string              $stepText
+     * @param ArgumentInterface[] $multiline
+     *
+     * @return null|SearchResult
+     */
+    private function match(Definition $definition, $stepText, array $multiline)
+    {
+        $regex = $this->patternTransformer->transformPatternToRegex($definition->getPattern());
+
+        if (!preg_match($regex, $stepText, $match)) {
+            return null;
+        }
+
+        $function = $definition->getReflection();
+        $arguments = array_slice($match, 1);
+        $arguments = $this->argumentResolver->resolveArguments($function, $arguments, $multiline);
+
+        return new SearchResult($definition, $stepText, $arguments);
     }
 }
