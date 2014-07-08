@@ -16,12 +16,12 @@ use Behat\Behat\Definition\Exception\AmbiguousMatchException;
 use Behat\Behat\Definition\Exception\UnknownParameterValueException;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\SearchResult;
+use Behat\Behat\Definition\Translator\DefinitionTranslator;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
 use ReflectionParameter;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Searches for a step definition using definition repository.
@@ -41,7 +41,7 @@ final class RepositorySearchEngine implements SearchEngine
      */
     private $patternTransformer;
     /**
-     * @var TranslatorInterface
+     * @var DefinitionTranslator
      */
     private $translator;
 
@@ -50,12 +50,12 @@ final class RepositorySearchEngine implements SearchEngine
      *
      * @param DefinitionRepository $repository
      * @param PatternTransformer   $patternTransformer
-     * @param TranslatorInterface  $translator
+     * @param DefinitionTranslator $translator
      */
     public function __construct(
         DefinitionRepository $repository,
         PatternTransformer $patternTransformer,
-        TranslatorInterface $translator
+        DefinitionTranslator $translator
     ) {
         $this->repository = $repository;
         $this->patternTransformer = $patternTransformer;
@@ -67,8 +67,12 @@ final class RepositorySearchEngine implements SearchEngine
      *
      * @throws AmbiguousMatchException
      */
-    public function searchDefinition(Environment $environment, FeatureNode $feature, StepNode $step)
-    {
+    public function searchDefinition(
+        Environment $environment,
+        FeatureNode $feature,
+        StepNode $step
+    ) {
+        $suite = $environment->getSuite();
         $language = $feature->getLanguage();
         $stepText = $step->getText();
         $stepArgs = $step->getArguments();
@@ -77,7 +81,10 @@ final class RepositorySearchEngine implements SearchEngine
         $result = null;
 
         foreach ($this->repository->getEnvironmentDefinitions($environment) as $definition) {
-            if (!preg_match($this->getRegex($environment, $definition, $language), $stepText, $match)) {
+            $definition = $this->translator->translateDefinition($suite, $definition, $language);
+            $regex = $this->patternTransformer->transformPatternToRegex($definition->getPattern());
+
+            if (!preg_match($regex, $stepText, $match)) {
                 continue;
             }
 
@@ -92,28 +99,6 @@ final class RepositorySearchEngine implements SearchEngine
         }
 
         return $result;
-    }
-
-    /**
-     * Returns definition regex.
-     *
-     * @param Environment $environment
-     * @param Definition  $definition
-     * @param string      $language
-     *
-     * @return string
-     */
-    private function getRegex(Environment $environment, Definition $definition, $language)
-    {
-        $assetsId = $environment->getSuite()->getName();
-        $pattern = $definition->getPattern();
-
-        $translatedPattern = $this->translator->trans($pattern, array(), $assetsId, $language);
-        if ($pattern == $translatedPattern) {
-            return $this->patternTransformer->transformPatternToRegex($pattern);
-        }
-
-        return $this->patternTransformer->transformPatternToRegex($translatedPattern);
     }
 
     /**
@@ -151,7 +136,8 @@ final class RepositorySearchEngine implements SearchEngine
         return array_map(
             function (ReflectionParameter $parameter) {
                 return $parameter->getName();
-            }, $parameters
+            },
+            $parameters
         );
     }
 
@@ -168,7 +154,10 @@ final class RepositorySearchEngine implements SearchEngine
         $arguments = array();
 
         $names = $this->getParameterNames($parameters);
-        list($numArguments, $nameArguments) = $this->splitNumberedAndNamedArguments($match, $names);
+        list($numArguments, $nameArguments) = $this->splitNumberedAndNamedArguments(
+            $match,
+            $names
+        );
 
         foreach ($parameters as $num => $parameter) {
             $name = $parameter->getName();
@@ -194,8 +183,11 @@ final class RepositorySearchEngine implements SearchEngine
      *
      * @return mixed[]
      */
-    private function appendMultilineArguments(array $multiline, array $parameters, array $arguments)
-    {
+    private function appendMultilineArguments(
+        array $multiline,
+        array $parameters,
+        array $arguments
+    ) {
         foreach (array_values($multiline) as $num => $argument) {
             $arguments[count($parameters) - 1 - $num] = $argument;
         }
