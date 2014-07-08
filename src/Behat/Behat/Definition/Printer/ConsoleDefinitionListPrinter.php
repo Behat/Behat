@@ -27,11 +27,13 @@ final class ConsoleDefinitionListPrinter extends ConsoleDefinitionPrinter
         $output = array();
 
         foreach ($definitions as $definition) {
+            $definition = $this->translateDefinition($suite, $definition);
+
             $output[] = strtr(
                 '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>', array(
                     '{suite}' => $suite->getName(),
                     '{type}'  => str_pad($definition->getType(), 5, ' ', STR_PAD_LEFT),
-                    '{regex}' => $this->getDefinitionPattern($suite, $definition),
+                    '{regex}' => $definition->getPattern(),
                 )
             );
         }

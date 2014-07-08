@@ -44,9 +44,10 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
         $output = array();
 
         foreach ($definitions as $definition) {
-            $regex = $this->getDefinitionPattern($suite, $definition);
+            $definition = $this->translateDefinition($suite, $definition);
+            $pattern = $definition->getPattern();
 
-            if (null !== $search && false === mb_strpos($regex, $search, 0, 'utf8')) {
+            if (null !== $search && false === mb_strpos($pattern, $search, 0, 'utf8')) {
                 continue;
             }
 
@@ -72,13 +73,13 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
      */
     private function extractHeader(Suite $suite, Definition $definition)
     {
-        $regex = $this->getDefinitionPattern($suite, $definition);
+        $pattern = $definition->getPattern();
         $lines = array();
         $lines[] = strtr(
             '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>', array(
                 '{suite}' => $suite->getName(),
                 '{type}'  => $definition->getType(),
-                '{regex}' => $regex,
+                '{regex}' => $pattern,
             )
         );
 
@@ -95,6 +96,8 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
      */
     private function extractDescription(Suite $suite, Definition $definition)
     {
+        $definition = $this->translateDefinition($suite, $definition);
+
         $lines = array();
         if ($description = $definition->getDescription()) {
             foreach (explode("\n", $description) as $descriptionLine) {
