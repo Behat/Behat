@@ -11,6 +11,7 @@
 namespace Behat\Behat\Definition\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
+use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -180,7 +181,8 @@ final class DefinitionExtension implements Extension
         $definition = new Definition('Behat\Behat\Definition\Search\RepositorySearchEngine', array(
             new Reference(self::REPOSITORY_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
-            new Reference(self::DEFINITION_TRANSLATOR_ID)
+            new Reference(self::DEFINITION_TRANSLATOR_ID),
+            new Reference(CallExtension::FUNCTION_ARGUMENT_RESOLVER_ID)
         ));
         $definition->addTag(self::SEARCH_ENGINE_TAG, array('priority' => 50));
         $container->setDefinition(self::SEARCH_ENGINE_TAG . '.repository', $definition);
