@@ -13,11 +13,9 @@ namespace Behat\Testwork\Call\Exception;
 use BadMethodCallException;
 
 /**
- * Represents an exception caused by an unknown parameter value.
+ * Represents an exception caused by an unknown function parameter value.
  *
- * If the value of a parameter is not inside the matches and the parameter does 
- * not have a default value, behat is not able to determine the value of the 
- * parameter and  thus this exception is thrown and test suite is stopped.
+ * Exception is thrown if provided function parameter value is unknown or missing.
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
