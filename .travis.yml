@@ -12,6 +12,8 @@ matrix:
   include:
     - php: 5.5
       env: SYMFONY_VERSION='2.3.*'
+    - php: 5.5
+      env: SYMFONY_VERSION='2.4.*'
 
 before_script:
   - sh -c 'if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;'
