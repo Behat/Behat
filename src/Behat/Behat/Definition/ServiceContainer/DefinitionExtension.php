@@ -11,6 +11,7 @@
 namespace Behat\Behat\Definition\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
+use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -37,6 +38,7 @@ final class DefinitionExtension implements Extension
     const REPOSITORY_ID = 'definition.repository';
     const PATTERN_TRANSFORMER_ID = 'definition.pattern_transformer';
     const WRITER_ID = 'definition.writer';
+    const DEFINITION_TRANSLATOR_ID = 'definition.translator';
 
     /*
      * Available extension points
@@ -90,6 +92,7 @@ final class DefinitionExtension implements Extension
         $this->loadRepository($container);
         $this->loadWriter($container);
         $this->loadPatternTransformer($container);
+        $this->loadDefinitionTranslator($container);
         $this->loadDefaultSearchEngines($container);
         $this->loadDefaultPatternPolicies($container);
         $this->loadAnnotationReader($container);
@@ -156,6 +159,19 @@ final class DefinitionExtension implements Extension
     }
 
     /**
+     * Loads definition translator.
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadDefinitionTranslator(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Definition\Translator\DefinitionTranslator', array(
+            new Reference(TranslatorExtension::TRANSLATOR_ID)
+        ));
+        $container->setDefinition(self::DEFINITION_TRANSLATOR_ID, $definition);
+    }
+
+    /**
      * Loads default search engines.
      *
      * @param ContainerBuilder $container
@@ -165,7 +181,8 @@ final class DefinitionExtension implements Extension
         $definition = new Definition('Behat\Behat\Definition\Search\RepositorySearchEngine', array(
             new Reference(self::REPOSITORY_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
+            new Reference(self::DEFINITION_TRANSLATOR_ID),
+            new Reference(CallExtension::FUNCTION_ARGUMENT_RESOLVER_ID)
         ));
         $definition->addTag(self::SEARCH_ENGINE_TAG, array('priority' => 50));
         $container->setDefinition(self::SEARCH_ENGINE_TAG . '.repository', $definition);
@@ -209,14 +226,14 @@ final class DefinitionExtension implements Extension
         $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter', array(
             new Reference(CliExtension::OUTPUT_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
+            new Reference(self::DEFINITION_TRANSLATOR_ID)
         ));
         $container->setDefinition($this->getInformationPrinterId(), $definition);
 
         $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionListPrinter', array(
             new Reference(CliExtension::OUTPUT_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
+            new Reference(self::DEFINITION_TRANSLATOR_ID)
         ));
         $container->setDefinition($this->getListPrinterId(), $definition);
     }

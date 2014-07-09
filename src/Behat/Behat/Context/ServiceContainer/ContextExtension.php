@@ -13,6 +13,7 @@ namespace Behat\Behat\Context\ServiceContainer;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Testwork\Autoloader\ServiceContainer\AutoloaderExtension;
+use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -121,7 +122,9 @@ final class ContextExtension implements Extension
      */
     private function loadFactory(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\ContextFactory');
+        $definition = new Definition('Behat\Behat\Context\ContextFactory', array(
+            new Reference(CallExtension::FUNCTION_ARGUMENT_RESOLVER_ID)
+        ));
         $container->setDefinition(self::FACTORY_ID, $definition);
     }
 

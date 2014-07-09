@@ -12,10 +12,10 @@ namespace Behat\Behat\Definition\Printer;
 
 use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
+use Behat\Behat\Definition\Translator\DefinitionTranslator;
 use Behat\Testwork\Suite\Suite;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Represents console-based definition printer.
@@ -33,29 +33,35 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      */
     private $patternTransformer;
     /**
-     * @var TranslatorInterface
+     * @var DefinitionTranslator
      */
     private $translator;
 
     /**
      * Initializes printer.
      *
-     * @param OutputInterface     $output
-     * @param PatternTransformer  $patternTransformer
-     * @param TranslatorInterface $translator
+     * @param OutputInterface      $output
+     * @param PatternTransformer   $patternTransformer
+     * @param DefinitionTranslator $translator
      */
     public function __construct(
         OutputInterface $output,
         PatternTransformer $patternTransformer,
-        TranslatorInterface $translator
+        DefinitionTranslator $translator
     ) {
         $this->output = $output;
         $this->patternTransformer = $patternTransformer;
         $this->translator = $translator;
 
         $output->getFormatter()->setStyle('def_regex', new OutputFormatterStyle('yellow'));
-        $output->getFormatter()->setStyle('def_regex_capture', new OutputFormatterStyle('yellow', null, array('bold')));
-        $output->getFormatter()->setStyle('def_dimmed', new OutputFormatterStyle('black', null, array('bold')));
+        $output->getFormatter()->setStyle(
+            'def_regex_capture',
+            new OutputFormatterStyle('yellow', null, array('bold'))
+        );
+        $output->getFormatter()->setStyle(
+            'def_dimmed',
+            new OutputFormatterStyle('black', null, array('bold'))
+        );
     }
 
     /**
@@ -70,15 +76,15 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
     }
 
     /**
-     * Returns definition regex translated into provided language.
+     * Translates definition using translator.
      *
      * @param Suite      $suite
      * @param Definition $definition
      *
-     * @return string
+     * @return Definition
      */
-    final protected function getDefinitionPattern(Suite $suite, Definition $definition)
+    final protected function translateDefinition(Suite $suite, Definition $definition)
     {
-        return $this->translator->trans($definition->getPattern(), array(), $suite->getName());
+        return $this->translator->translateDefinition($suite, $definition);
     }
 }

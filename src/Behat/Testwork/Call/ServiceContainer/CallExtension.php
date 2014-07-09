@@ -28,6 +28,7 @@ final class CallExtension implements Extension
      * Available services
      */
     const CALL_CENTER_ID = 'call.center';
+    const FUNCTION_ARGUMENT_RESOLVER_ID = 'call.function_argument_resolver';
 
     /*
      * Available extension points
@@ -89,6 +90,7 @@ final class CallExtension implements Extension
     {
         $this->loadCallCenter($container);
         $this->loadCallHandlers($container, $config['error_reporting']);
+        $this->loadFunctionArgumentResolver($container);
     }
 
     /**
@@ -123,6 +125,17 @@ final class CallExtension implements Extension
         $definition = new Definition('Behat\Testwork\Call\Handler\RuntimeCallHandler', array($errorReporting));
         $definition->addTag(self::CALL_HANDLER_TAG, array('priority' => 50));
         $container->setDefinition(self::CALL_HANDLER_TAG . '.runtime', $definition);
+    }
+
+    /**
+     * Loads function argument resolver.
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadFunctionArgumentResolver(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Testwork\Call\FunctionArgumentResolver');
+        $container->setDefinition(self::FUNCTION_ARGUMENT_RESOLVER_ID, $definition);
     }
 
     /**
