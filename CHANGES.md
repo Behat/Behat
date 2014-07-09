@@ -1,3 +1,11 @@
+3.0.11 / 2014-07-09
+===================
+
+  * Fix argument resolution for functions with default values (thanks @alesblaznik)
+  * Fix step colouring of internationalised definitions
+  * Refactor `ContextFactory` and `RepositorySearchEngine` arguments resolution into the new
+    Testwork component - `ArgumentResolver`
+
 3.0.10 / 2014-06-29
 ===================
 
