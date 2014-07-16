@@ -9,7 +9,7 @@ tools:
     php_code_sniffer:
         config: { standard: 'PSR1' }
     php_changetracking: true
-    php_sim: true
+    php_cpd: true
     php_cs_fixer:
         config: { level: 'psr1' }
     php_mess_detector: true
