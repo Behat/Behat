@@ -22,6 +22,7 @@ use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Behat\Transformation\ServiceContainer\TransformationExtension;
 use Behat\Behat\Translator\ServiceContainer\GherkinTranslationsExtension;
 use Behat\Testwork\ApplicationFactory as BaseFactory;
+use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Autoloader\ServiceContainer\AutoloaderExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
@@ -68,6 +69,7 @@ final class ApplicationFactory extends BaseFactory
         $processor = new ServiceProcessor();
 
         return array(
+            new ArgumentExtension(),
             new AutoloaderExtension(array('' => '%paths.base%/features/bootstrap')),
             new SuiteExtension($processor),
             new OutputExtension('pretty', $this->getDefaultFormatterFactories($processor), $processor),
