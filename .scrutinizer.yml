@@ -1,81 +1,21 @@
+checks:
+    php:
+        code_rating: true
+        duplication: true
+
 tools:
-    # Code Coverage
-    external_code_coverage:
-        enabled:              false
-
-    php_code_coverage:
-        enabled:              false
-
-    # Code Sniffer
+    external_code_coverage: false
+    php_code_coverage:      false
     php_code_sniffer:
-        enabled:              true
-        command:              phpcs
-        config:
-            standard:         PSR1
-        filter:
-            excluded_paths:
-                - 'bin/*'
-                - 'vendor/*'
-                - 'features/*'
-                - 'i18n.php'
-
-    # Copy/Paste Detector
-    php_cpd:
-        enabled:              true
-        command:              phpcpd
-        excluded_dirs:
-            - 'bin/*'
-            - 'vendor/*'
-            - 'features/*'
-
-    # PHP CS Fixer (http://http://cs.sensiolabs.org/).
+        config: { standard: 'PSR1' }
+    php_changetracking: true
+    php_cpd: true
     php_cs_fixer:
-        enabled:              true
-        command:              php-cs-fixer
-        config:
-            level:            all
-        filter:
-            excluded_paths:
-                - 'bin/*'
-                - 'vendor/*'
-                - 'features/*'
-
-    # Analyzes the size and structure of a PHP project.
-    php_loc:
-        enabled:              true
-        command:              phploc
-        excluded_dirs:
-            - bin
-            - vendor
-            - features
-
-    # PHP Mess Detector (http://phpmd.org).
-    php_mess_detector:
-        enabled:              true
-        command:              phpmd
-        filter:
-            excluded_paths:
-                - 'bin/*'
-                - 'vendor/*'
-                - 'features/*'
-
-    # Analyzes the size and structure of a PHP project.
-    php_pdepend:
-        enabled:              true
-        command:              pdepend
-        excluded_dirs:
-            - bin
-            - vendor
-            - features
-
-    # Runs Scrutinizer's PHP Analyzer Tool
-    php_analyzer:
-        enabled:              true
-        filter:
-            excluded_paths:
-                - 'bin/*'
-                - 'vendor/*'
-                - 'features/*'
-
-    # Security Advisory Checker
+        config: { level: 'psr1' }
+    php_mess_detector: true
+    php_pdepend: true
+    php_analyzer: true
     sensiolabs_security_checker: true
+
+filter:
+    paths: [ 'src/*' ]
