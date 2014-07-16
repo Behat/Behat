@@ -180,7 +180,7 @@ Feature: Step Definition Pattern
 
   Scenario: Definition parameter with default null value
     Given a file named "features/bootstrap/FeatureContext.php" with:
-    """
+      """
       <?php
 
       use Behat\Behat\Context\Context;
@@ -201,6 +201,144 @@ Feature: Step Definition Pattern
       Feature: Step Pattern
         Scenario:
           Given I don't provide parameter
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
+
+  Scenario: Definition parameter with ordered values
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I can provide parameters :someParam and :someParam2
+           */
+          public function multipleWrongNamedParameters($param1, $param2) {
+            PHPUnit_Framework_Assert::assertEquals('one', $param1);
+            PHPUnit_Framework_Assert::assertEquals('two', $param2);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+    """
+      Feature: Step Pattern
+        Scenario:
+          Given I can provide parameters "one" and two
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
+
+  Scenario: Definition parameter with both ordered and named values
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I can provide parameters :someParam and :someParam2
+           */
+          public function multipleWrongNamedParameters($param1, $someParam) {
+            PHPUnit_Framework_Assert::assertEquals('two', $param1);
+            PHPUnit_Framework_Assert::assertEquals('one', $someParam);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given I can provide parameters "one" and two
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
+
+  Scenario: Definition parameter with hard mixture of ordered and named values
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I can provide :count parameters :firstParam and :otherParam
+           */
+          public function multipleWrongNamedParameters($param1, $firstParam, $count) {
+            PHPUnit_Framework_Assert::assertEquals('two', $param1);
+            PHPUnit_Framework_Assert::assertEquals('one', $firstParam);
+            PHPUnit_Framework_Assert::assertEquals(2, $count);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given I can provide 2 parameters "one" and two
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
+
+  Scenario: Definition parameter with hard mixture of ordered, named values and multiline argument
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I can provide :count parameters :firstParam and :otherParam with:
+           */
+          public function multipleWrongNamedParameters($param1, $firstParam, $count, $string) {
+            PHPUnit_Framework_Assert::assertEquals('two', $param1);
+            PHPUnit_Framework_Assert::assertEquals('one', $firstParam);
+            PHPUnit_Framework_Assert::assertEquals(2, $count);
+            PHPUnit_Framework_Assert::assertEquals("Test", (string) $string);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given I can provide 2 parameters "one" and two with:
+            '''
+            Test
+            '''
       """
     When I run "behat -f progress --no-colors"
     Then it should pass with:
