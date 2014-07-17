@@ -12,7 +12,7 @@ namespace Behat\Behat\Context;
 
 use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Initializer\ContextInitializer;
-use Behat\Testwork\Call\FunctionArgumentResolver;
+use Behat\Testwork\Argument\ArgumentOrganiser;
 use ReflectionClass;
 
 /**
@@ -23,9 +23,9 @@ use ReflectionClass;
 final class ContextFactory
 {
     /**
-     * @var FunctionArgumentResolver
+     * @var ArgumentOrganiser
      */
-    private $functionArgumentResolver;
+    private $argumentOrganiser;
     /**
      * @var ArgumentResolver[]
      */
@@ -38,11 +38,11 @@ final class ContextFactory
     /**
      * Initialises factory.
      *
-     * @param FunctionArgumentResolver $functionArgumentResolver
+     * @param ArgumentOrganiser $argumentOrganiser
      */
-    public function __construct(FunctionArgumentResolver $functionArgumentResolver)
+    public function __construct(ArgumentOrganiser $argumentOrganiser)
     {
-        $this->functionArgumentResolver = $functionArgumentResolver;
+        $this->argumentOrganiser = $argumentOrganiser;
     }
 
     /**
@@ -76,7 +76,7 @@ final class ContextFactory
     public function createContext($class, array $arguments = array())
     {
         $reflection = new ReflectionClass($class);
-        $arguments = $this->resolveArguments($reflection, $arguments);
+        $arguments = $this->createArguments($reflection, $arguments);
         $context = $this->createInstance($reflection, $arguments);
         $this->initializeInstance($context);
 
@@ -91,7 +91,7 @@ final class ContextFactory
      *
      * @return mixed[]
      */
-    private function resolveArguments(ReflectionClass $reflection, array $arguments)
+    private function createArguments(ReflectionClass $reflection, array $arguments)
     {
         foreach ($this->argumentResolvers as $resolver) {
             $arguments = $resolver->resolveArguments($reflection, $arguments);
@@ -101,10 +101,9 @@ final class ContextFactory
             return $arguments;
         }
 
-        return $this->functionArgumentResolver->resolveArguments(
-            $reflection->getConstructor(),
-            $arguments
-        );
+        $constructor = $reflection->getConstructor();
+
+        return $this->argumentOrganiser->organiseArguments($constructor, $arguments);
     }
 
     /**

@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Call\Exception;
+namespace Behat\Testwork\Argument\Exception;
 
 use BadMethodCallException;
 
@@ -19,6 +19,6 @@ use BadMethodCallException;
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
-final class UnknownParameterValueException extends BadMethodCallException implements CallException
+final class UnknownParameterValueException extends BadMethodCallException implements ArgumentException
 {
 }

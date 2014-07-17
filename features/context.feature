@@ -202,14 +202,14 @@ Feature: Context consistency
           Then context parameter "parameter1" should be equal to "val_one"
           And context parameter "parameter2" should be array with 2 elements
       """
-  When I run "behat --no-colors -f progress features/params.feature"
-  Then it should pass with:
-    """
-    ..
+    When I run "behat --no-colors -f progress features/params.feature"
+    Then it should pass with:
+      """
+      ..
 
-    1 scenario (1 passed)
-    2 steps (2 passed)
-    """
+      1 scenario (1 passed)
+      2 steps (2 passed)
+      """
 
   Scenario: Context parameters including optional
     Given a file named "behat.yml" with:
@@ -371,7 +371,7 @@ Feature: Context consistency
     When I run "behat --no-colors -f progress features/params.feature"
     Then it should fail with:
       """
-      [Behat\Testwork\Call\Exception\UnknownParameterValueException]
+      [Behat\Testwork\Argument\Exception\UnknownParameterValueException]
         `CoreContext::__construct()` does not expect argument `$unexistingParam`.
 
 

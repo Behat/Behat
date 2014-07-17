@@ -19,7 +19,7 @@ use Behat\Behat\Definition\Translator\DefinitionTranslator;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
-use Behat\Testwork\Call\FunctionArgumentResolver;
+use Behat\Testwork\Argument\ArgumentOrganiser;
 use Behat\Testwork\Environment\Environment;
 
 /**
@@ -44,28 +44,28 @@ final class RepositorySearchEngine implements SearchEngine
      */
     private $translator;
     /**
-     * @var FunctionArgumentResolver
+     * @var ArgumentOrganiser
      */
-    private $argumentResolver;
+    private $argumentOrganiser;
 
     /**
      * Initializes search engine.
      *
-     * @param DefinitionRepository     $repository
-     * @param PatternTransformer       $patternTransformer
-     * @param DefinitionTranslator     $translator
-     * @param FunctionArgumentResolver $argumentResolver
+     * @param DefinitionRepository $repository
+     * @param PatternTransformer   $patternTransformer
+     * @param DefinitionTranslator $translator
+     * @param ArgumentOrganiser    $argumentOrganiser
      */
     public function __construct(
         DefinitionRepository $repository,
         PatternTransformer $patternTransformer,
         DefinitionTranslator $translator,
-        FunctionArgumentResolver $argumentResolver
+        ArgumentOrganiser $argumentOrganiser
     ) {
         $this->repository = $repository;
         $this->patternTransformer = $patternTransformer;
         $this->translator = $translator;
-        $this->argumentResolver = $argumentResolver;
+        $this->argumentOrganiser = $argumentOrganiser;
     }
 
     /**
@@ -122,8 +122,8 @@ final class RepositorySearchEngine implements SearchEngine
         }
 
         $function = $definition->getReflection();
-        $arguments = array_slice($match, 1);
-        $arguments = $this->argumentResolver->resolveArguments($function, $arguments, $multiline);
+        $match = array_merge($match, array_values($multiline));
+        $arguments = $this->argumentOrganiser->organiseArguments($function, $match);
 
         return new SearchResult($definition, $stepText, $arguments);
     }
