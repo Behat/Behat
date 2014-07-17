@@ -1,3 +1,9 @@
+3.0.12 / 2014-07-17
+===================
+
+  * Fix remaining issues with the definition arguments parsing
+  * Introduce `Testwork\Argument` component
+
 3.0.11 / 2014-07-09
 ===================
 
