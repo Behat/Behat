@@ -78,8 +78,8 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks if key at provided index is a string and next key in the array is an integer.
      *
-     * @param integer  $keyIndex
-     * @param string[] $keys
+     * @param integer $keyIndex
+     * @param mixed[] $keys
      *
      * @return Boolean
      */

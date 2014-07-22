@@ -70,7 +70,7 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
      */
     private function validateArguments(
         ReflectionMethod $constructor,
-        $passedArguments,
+        array $passedArguments,
         array $organisedArguments
     ) {
         foreach ($passedArguments as $key => $val) {
