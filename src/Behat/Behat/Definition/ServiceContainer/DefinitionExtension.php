@@ -12,7 +12,6 @@ namespace Behat\Behat\Definition\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
-use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\ServiceContainer\Extension;

@@ -14,7 +14,6 @@ use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Autoloader\ServiceContainer\AutoloaderExtension;
-use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Extension;
