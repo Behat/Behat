@@ -64,7 +64,7 @@ final class ContextSnippetAppender implements SnippetAppender
             }
 
             $generated = rtrim(strtr($snippet->getSnippet(), array('\\' => '\\\\', '$' => '\\$')));
-            $content = preg_replace('/}[ \n]*$/', "\n" . $generated . "\n}\n", $content);
+            $content = preg_replace('/}\s*$/', "\n" . $generated . "\n}\n", $content);
             $path = $reflection->getFileName();
 
             file_put_contents($path, $content);
