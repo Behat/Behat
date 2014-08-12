@@ -28,4 +28,12 @@ class NullPrioritiser implements Prioritiser
     {
         return $scenarioIterators;
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'null';
+    }
 }

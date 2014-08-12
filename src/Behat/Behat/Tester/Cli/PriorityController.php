@@ -13,6 +13,7 @@ namespace Behat\Behat\Tester\Cli;
 use Behat\Behat\Tester\Exception\BadPriorityException;
 use Behat\Behat\Tester\Priority\Exercise;
 use Behat\Behat\Tester\Priority\Prioritiser\ReversePrioritiser;
+use Behat\Behat\Tester\Priority\Prioritiser;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,6 +37,10 @@ final class PriorityController implements Controller
      * @var Exercise
      */
     private $exercise;
+    /**
+     * @var array
+     */
+    private $prioritisers = array();
 
     /**
      * Initializes controller.
@@ -70,17 +75,27 @@ final class PriorityController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $priority = $input->getOption('priority');
+        $prioritiser = $input->getOption('priority');
 
-        if (!$priority) {
+        if (!$prioritiser) {
             return;
         }
 
-        if ($priority != 'reverse') {
-           throw new BadPriorityException(sprintf("Priority option '%s' was not recognised", $priority));
+        if (!array_key_exists($prioritiser, $this->prioritisers)) {
+           throw new BadPriorityException(sprintf("Priority option '%s' was not recognised", $prioritiser));
         }
 
-        $this->exercise->setPrioritiser(new ReversePrioritiser());
+        $this->exercise->setPrioritiser($this->prioritisers[$prioritiser]);
+    }
+
+    /**
+     * Register a new available controller
+     *
+     * @param Prioritiser $prioritiser
+     */
+    public function registerPrioritiser(Prioritiser $prioritiser)
+    {
+        $this->prioritisers[$prioritiser->getName()] = $prioritiser;
     }
 
 }

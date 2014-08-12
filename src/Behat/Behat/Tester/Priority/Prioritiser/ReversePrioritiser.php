@@ -59,4 +59,12 @@ class ReversePrioritiser implements Prioritiser
     {
         return array_reverse($prioritisedSuites);
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'reverse';
+    }
 }
