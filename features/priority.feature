@@ -20,47 +20,44 @@ Feature: Prioritisation
            public function iHaveOranges($num){}
       }
       """
-    And a file named "features/order.feature" with:
+    And a file named "features/order1.feature" with:
     """
-      Feature: Ordered feature
+      Feature: Feature 1
 
         Scenario:
           Given I have 1 orange
           Then I have 1 orange
+      """
+    And a file named "features/order2.feature" with:
+    """
+      Feature: Feature 2
 
         Scenario:
           Given I have 2 oranges
           Then I have 2 oranges
-
-        Scenario:
-          Given I have 3 oranges
-          Then I have 3 oranges
       """
 
   Scenario: No priority specified
     When I run "behat -fpretty"
     Then it should pass with:
       """
-      Feature: Ordered feature
+      Feature: Feature 1
 
-        Scenario:               # features/order.feature:3
+        Scenario:               # features/order1.feature:3
           Given I have 1 orange # FeatureContext::iHaveOranges()
           Then I have 1 orange  # FeatureContext::iHaveOranges()
 
-        Scenario:                # features/order.feature:7
+      Feature: Feature 2
+
+        Scenario:                # features/order2.feature:3
           Given I have 2 oranges # FeatureContext::iHaveOranges()
           Then I have 2 oranges  # FeatureContext::iHaveOranges()
 
-        Scenario:                # features/order.feature:11
-          Given I have 3 oranges # FeatureContext::iHaveOranges()
-          Then I have 3 oranges  # FeatureContext::iHaveOranges()
-
-      3 scenarios (3 passed)
-      6 steps (6 passed)
+      2 scenarios (2 passed)
+      4 steps (4 passed)
       """
 
     Scenario: Unknown priority
-
       When I run "behat -fpretty --priority=foo"
       Then it should fail with:
       """
@@ -70,4 +67,24 @@ Feature: Prioritisation
 
 
       behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--priority="..."] [--rerun] [--stop-on-failure] [--dry-run] [paths]
+      """
+
+  Scenario: Reverse priority
+    When I run "behat -fpretty --priority=reverse"
+    Then it should pass with:
+      """
+      Feature: Feature 2
+
+        Scenario:                # features/order2.feature:3
+          Given I have 2 oranges # FeatureContext::iHaveOranges()
+          Then I have 2 oranges  # FeatureContext::iHaveOranges()
+
+      Feature: Feature 1
+
+        Scenario:               # features/order1.feature:3
+          Given I have 1 orange # FeatureContext::iHaveOranges()
+          Then I have 1 orange  # FeatureContext::iHaveOranges()
+
+      2 scenarios (2 passed)
+      4 steps (4 passed)
       """

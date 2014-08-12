@@ -11,6 +11,8 @@
 namespace Behat\Behat\Tester\Cli;
 
 use Behat\Behat\Tester\Exception\BadPriorityException;
+use Behat\Behat\Tester\Priority\Exercise;
+use Behat\Behat\Tester\Priority\Prioritiser\ReversePrioritiser;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,15 +32,20 @@ final class PriorityController implements Controller
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+    /**
+     * @var Exercise
+     */
+    private $exercise;
 
     /**
      * Initializes controller.
      *
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(EventDispatcherInterface $eventDispatcher, Exercise $exercise)
     {
         $this->eventDispatcher = $eventDispatcher;
+        $this->exercise = $exercise;
     }
 
     /**
@@ -63,9 +70,17 @@ final class PriorityController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if (($priority = $input->getOption('priority'))) {
-            throw new BadPriorityException(sprintf("Priority option '%s' was not recognised", $priority));
+        $priority = $input->getOption('priority');
+
+        if (!$priority) {
+            return;
         }
+
+        if ($priority != 'reverse') {
+           throw new BadPriorityException(sprintf("Priority option '%s' was not recognised", $priority));
+        }
+
+        $this->exercise->setPrioritiser(new ReversePrioritiser());
     }
 
-} 
+}
