@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Tester\Cli;
 
+use Behat\Behat\Tester\Exception\BadPriorityException;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -62,6 +63,9 @@ final class PriorityController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        if (($priority = $input->getOption('priority'))) {
+            throw new BadPriorityException(sprintf("Priority option '%s' was not recognised", $priority));
+        }
     }
 
 } 
