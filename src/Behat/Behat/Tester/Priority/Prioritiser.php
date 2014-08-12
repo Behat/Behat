@@ -24,4 +24,9 @@ interface Prioritiser
      * @return SpecificationIterator[]
      */
     public function prioritise(array $scenarioIterators);
+
+    /**
+     * @return string
+     */
+    public function getName();
 }

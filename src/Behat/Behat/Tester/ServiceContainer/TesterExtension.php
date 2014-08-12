@@ -48,6 +48,8 @@ class TesterExtension extends BaseExtension
     const BACKGROUND_TESTER_WRAPPER_TAG = 'tester.background.wrapper';
     const STEP_TESTER_WRAPPER_TAG = 'tester.step.wrapper';
 
+    const PRIORITISER_TAG = 'tester.prioritiser';
+
     /**
      * @var ServiceProcessor
      */
@@ -96,6 +98,7 @@ class TesterExtension extends BaseExtension
         $this->loadRerunController($container, $config['rerun_cache']);
         $this->loadPriorityController($container);
         $this->loadPrioritisingExercise($container);
+        $this->loadDefaultPrioritisers($container);
         $this->loadPendingExceptionStringer($container);
     }
 
@@ -111,6 +114,7 @@ class TesterExtension extends BaseExtension
         $this->processExampleTesterWrappers($container);
         $this->processBackgroundTesterWrappers($container);
         $this->processStepTesterWrappers($container);
+        $this->processPrioritisers($container);
     }
 
     /**
@@ -258,10 +262,37 @@ class TesterExtension extends BaseExtension
     protected function loadPrioritisingExercise(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Tester\Priority\Exercise', array(
-            new Reference(self::EXERCISE_ID),
+            new Reference(self::EXERCISE_ID)
         ));
         $definition->addTag(self::EXERCISE_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(self::EXERCISE_WRAPPER_TAG . '.prioritising', $definition);
+    }
+
+    /**
+     * Defines default prioritisers
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadDefaultPrioritisers(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Tester\Priority\Prioritiser\ReversePrioritiser');
+        $definition->addTag(self::PRIORITISER_TAG, array('priority' => -9999));
+        $container->setDefinition(self::EXERCISE_WRAPPER_TAG . '.reverse', $definition);
+    }
+
+    /**
+     * Dynamically registers tagged prioritisers
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function processPrioritisers(ContainerBuilder $container)
+    {
+        $definition = $container->getDefinition(CliExtension::CONTROLLER_TAG . '.priority');
+        $references = $this->processor->findAndSortTaggedServices($container, self::PRIORITISER_TAG);
+
+        foreach ($references as $reference) {
+            $definition->addMethodCall('registerPrioritiser', array($reference));
+        }
     }
 
     /**
