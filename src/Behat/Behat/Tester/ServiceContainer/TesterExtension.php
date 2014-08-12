@@ -95,6 +95,7 @@ class TesterExtension extends BaseExtension
 
         $this->loadRerunController($container, $config['rerun_cache']);
         $this->loadPriorityController($container);
+        $this->loadPrioritisingExercise($container);
         $this->loadPendingExceptionStringer($container);
     }
 
@@ -234,7 +235,6 @@ class TesterExtension extends BaseExtension
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.rerun', $definition);
     }
 
-
     /**
      * Loads priority controller.
      *
@@ -243,12 +243,26 @@ class TesterExtension extends BaseExtension
     protected function loadPriorityController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Tester\Cli\PriorityController', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+            new Reference(EventDispatcherExtension::DISPATCHER_ID),
+            new Reference(self::EXERCISE_WRAPPER_TAG . '.prioritising')
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 250));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.priority', $definition);
     }
 
+    /**
+     * Loads exercise wrapper that enables prioritisation
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadPrioritisingExercise(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Tester\Priority\Exercise', array(
+            new Reference(self::EXERCISE_ID),
+        ));
+        $definition->addTag(self::EXERCISE_WRAPPER_TAG, array('priority' => -9999));
+        $container->setDefinition(self::EXERCISE_WRAPPER_TAG . '.prioritising', $definition);
+    }
 
     /**
      * Loads pending exception stringer.

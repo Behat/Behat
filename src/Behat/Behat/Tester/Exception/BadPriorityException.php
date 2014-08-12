@@ -14,11 +14,10 @@ use Behat\Testwork\Exception\TestworkException;
 use RuntimeException;
 
 /**
- * Represents exception throw during attempt to prioritise execution with a non-existent algoritm
+ * Represents exception throw during attempt to prioritise execution with a non-existent algorithm
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
 final class BadPriorityException extends RuntimeException implements TestworkException
 {
-
-} 
+}
