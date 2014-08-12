@@ -88,3 +88,7 @@ Feature: Prioritisation
       2 scenarios (2 passed)
       4 steps (4 passed)
       """
+
+  Scenario: Reverse priority
+    When I run "behat -fpretty --priority=random"
+    Then it should pass

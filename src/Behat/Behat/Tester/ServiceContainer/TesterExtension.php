@@ -278,6 +278,11 @@ class TesterExtension extends BaseExtension
         $definition = new Definition('Behat\Behat\Tester\Priority\Prioritiser\ReversePrioritiser');
         $definition->addTag(self::PRIORITISER_TAG, array('priority' => -9999));
         $container->setDefinition(self::EXERCISE_WRAPPER_TAG . '.reverse', $definition);
+
+
+        $definition = new Definition('Behat\Behat\Tester\Priority\Prioritiser\RandomPrioritiser');
+        $definition->addTag(self::PRIORITISER_TAG, array('priority' => -9999));
+        $container->setDefinition(self::EXERCISE_WRAPPER_TAG . '.random', $definition);
     }
 
     /**
