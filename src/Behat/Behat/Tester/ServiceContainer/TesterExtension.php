@@ -94,6 +94,7 @@ class TesterExtension extends BaseExtension
         parent::load($container, $config);
 
         $this->loadRerunController($container, $config['rerun_cache']);
+        $this->loadPriorityController($container);
         $this->loadPendingExceptionStringer($container);
     }
 
@@ -232,6 +233,22 @@ class TesterExtension extends BaseExtension
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 200));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.rerun', $definition);
     }
+
+
+    /**
+     * Loads priority controller.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadPriorityController(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Tester\Cli\PriorityController', array(
+            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+        ));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 250));
+        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.priority', $definition);
+    }
+
 
     /**
      * Loads pending exception stringer.
