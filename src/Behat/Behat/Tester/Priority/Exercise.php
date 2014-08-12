@@ -37,7 +37,7 @@ class Exercise implements BaseExercise
     /**
      * @param BaseExercise $decoratedExercise
      */
-    function __construct(BaseExercise $decoratedExercise)
+    public function __construct(BaseExercise $decoratedExercise)
     {
         $this->prioritiser = new NullPrioritiser();
         $this->decoratedExercise = $decoratedExercise;

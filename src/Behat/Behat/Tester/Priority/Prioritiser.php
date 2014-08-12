@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Tester\Priority;
 
-use Behat\Behat\Tester\Priority\Prioritiser\SpecificationIterator;
+use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
  * Algorithm for prioritising Specification execution
