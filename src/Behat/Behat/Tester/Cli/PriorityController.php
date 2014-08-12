@@ -12,7 +12,6 @@ namespace Behat\Behat\Tester\Cli;
 
 use Behat\Behat\Tester\Exception\BadPriorityException;
 use Behat\Behat\Tester\Priority\Exercise;
-use Behat\Behat\Tester\Priority\Prioritiser\NullPrioritiser;
 use Behat\Behat\Tester\Priority\Prioritiser\ReversePrioritiser;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;

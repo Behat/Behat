@@ -19,5 +19,4 @@ use RuntimeException;
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
 final class BadPriorityException extends RuntimeException implements TestworkException
-{
-}
+{}

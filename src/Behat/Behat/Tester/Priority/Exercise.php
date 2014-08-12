@@ -92,4 +92,4 @@ class Exercise implements BaseExercise
     {
         $this->prioritiser = $prioritiser;
     }
-} 
+}

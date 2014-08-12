@@ -28,4 +28,4 @@ class NullPrioritiser implements Prioritiser
     {
         return $scenarioIterators;
     }
-} 
+}
