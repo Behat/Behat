@@ -11,7 +11,6 @@
 namespace Behat\Testwork\Output\Printer;
 
 use Behat\Testwork\Output\Printer\Helper\JUnitXsdChecker;
-use Behat\Testwork\Output\Exception\BadOutputPathException;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
@@ -27,30 +26,22 @@ class JUnitOutputPrinter extends StreamOutputPrinter
      */
     private $fileName;
     /**
-     * @var JUnitXsdChecker
+     * @var \DOMDocument
      */
-    private $xsdChecker;
+    private $domDocument;
     /**
-     * @var boolean
+     * @var \DOMElement
      */
-    private $testsuitesNodeOpen = false;
+    private $currentTestsuite;
     /**
-     * @var boolean
+     * @var \DOMElement
      */
-    private $testsuiteNodeOpen = false;
+    private $currentTestcase;
     /**
-     * @var boolean
+     * @var \DOMElement
      */
-    private $testcaseNodeOpen = false;
-    /**
-     * @var boolean
-     */
-    private $testcaseNodeHasChildren = false;
+    private $testSuites;
 
-    public function __construct(JUnitXsdChecker $xsdChecker)
-    {
-        $this->xsdChecker = $xsdChecker;
-    }
 
     /**
      * Creates a new JUnit file.
@@ -62,28 +53,15 @@ class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function createNewFile($name, array $testsuitesAttributes = array())
     {
-        $this->flush();
-
         $this->setFileName(strtolower(trim(preg_replace('/[^[:alnum:]_]+/', '_', $name), '_')));
 
-        $this->xsdChecker->validateTestsuitesAttributes($testsuitesAttributes);
+        $this->domDocument = new \DOMDocument('1.0', 'UTF-8');
+        $this->domDocument->formatOutput = true;
 
-        $this->getWritingStream()->writeln(array(
-            '<?xml version="1.0" encoding="UTF-8" ?>',
-            sprintf(
-                '<testsuites%s>',
-                $this->printAttributes(array_merge(array('name' => $name), $testsuitesAttributes))
-            ),
-        ));
-
-        $this->testsuitesNodeOpen = true;
-    }
-
-    public function closeOpenTestsuites()
-    {
-        if ($this->testsuitesNodeOpen) {
-            $this->getWritingStream()->writeln('</testsuites>');
-        }
+        $this->testSuites = $this->domDocument->createElement('testsuites');
+        $this->domDocument->appendChild($this->testSuites);
+        $this->addAttributesToNode($this->testSuites, array_merge(array('name' => $name), $testsuitesAttributes));
+        $this->flush();
     }
 
     /**
@@ -93,24 +71,11 @@ class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function addTestsuite(array $testsuiteAttributes = array())
     {
-        $this->closeOpenTestsuite();
-
-        $this->xsdChecker->validateTestsuiteAttributes($testsuiteAttributes);
-
-        $this->getWritingStream()->writeln(sprintf(
-            '    <testsuite%s>',
-            $this->printAttributes($testsuiteAttributes)
-        ));
-
-        $this->testsuiteNodeOpen = true;
+        $this->currentTestsuite = $this->domDocument->createElement('testsuite');
+        $this->testSuites->appendChild($this->currentTestsuite);
+        $this->addAttributesToNode($this->currentTestsuite, $testsuiteAttributes);
     }
 
-    public function closeOpenTestsuite()
-    {
-        if ($this->testsuiteNodeOpen) {
-            $this->getWritingStream()->writeln('    </testsuite>');
-        }
-    }
 
     /**
      * Adds a new <testcase> node.
@@ -119,31 +84,9 @@ class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function addTestcase(array $testcaseAttributes = array())
     {
-        $this->closeOpenTestcase();
-
-        $this->xsdChecker->validateTestcaseAttributes($testcaseAttributes);
-
-        // no new line, since it may have no content
-        $this->getWritingStream()->write(sprintf(
-            '        <testcase%s',
-            $this->printAttributes($testcaseAttributes)
-        ));
-
-        $this->testcaseNodeHasChildren = false;
-        $this->testcaseNodeOpen = true;
-    }
-
-    public function closeOpenTestcase()
-    {
-        if ($this->testcaseNodeOpen) {
-            if ($this->testcaseNodeHasChildren) {
-                $this->getWritingStream()->writeln(array(
-                    '        </testcase>'
-                ));
-            } else {
-                $this->getWritingStream()->writeln('/>');
-            }
-        }
+        $this->currentTestcase = $this->domDocument->createElement('testcase');
+        $this->currentTestsuite->appendChild($this->currentTestcase);
+        $this->addAttributesToNode($this->currentTestcase, $testcaseAttributes);
     }
 
     /**
@@ -155,20 +98,18 @@ class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function addTestcaseChild($nodeName, array $nodeAttributes = array(), $nodeValue = null)
     {
-        $this->xsdChecker->validateTestcaseChildNodeName($nodeName);
-        $this->xsdChecker->validateTestcaseChildNodeValue($nodeName, $nodeValue);
-        $this->xsdChecker->validateTestcaseChildAttributes($nodeName, $nodeAttributes);
-
-        if (!$this->testcaseNodeHasChildren) {
-            $this->getWritingStream()->writeln('>');
-        }
-
-        $this->getWritingStream()->writeln(
-            '            <'.$nodeName.$this->printAttributes($nodeAttributes).(null === $nodeValue ? '/>' : '>').$nodeValue.(null === $nodeValue ? null : '</'.$nodeName.'>')
-        );
-
-        $this->testcaseNodeHasChildren = true;
+        $childNode = $this->domDocument->createElement($nodeName, $nodeValue);
+        $this->currentTestcase->appendChild($childNode);
+        $this->addAttributesToNode($childNode, $nodeAttributes);
     }
+
+    public function addAttributesToNode(\DOMElement $node, $attributes)
+    {
+        foreach ($attributes as $name => $value){
+            $node->setAttribute($name, $value);
+        }
+    }
+
 
     /**
      * Sets file name.
@@ -185,30 +126,6 @@ class JUnitOutputPrinter extends StreamOutputPrinter
         $this->fileName = $fileName;
     }
 
-    public function closeAllOpenElements()
-    {
-        $this->closeOpenTestcase();
-        $this->closeOpenTestsuite();
-        $this->closeOpenTestsuites();
-    }
-
-    /**
-     * Prints the attributes in a XML valid way.
-     *
-     * @param array   $attributes
-     * @param boolean $prefixWithSpace
-     *
-     * @return string
-     */
-    protected function printAttributes(array $attributes, $prefixWithSpace = true)
-    {
-        $renderedAttributes = array();
-        foreach ($attributes as $name => $value) {
-            $renderedAttributes[] = $name.'="'.str_replace('"', '\"', $value).'"';
-        }
-
-        return ($prefixWithSpace ? ' ' : '') . implode(' ', $renderedAttributes);
-    }
 
     /**
      * {@inheritDoc}
@@ -244,12 +161,10 @@ class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function flush()
     {
-        $this->closeAllOpenElements();
-        parent::flush();
+        if($this->domDocument instanceof \DOMDocument){
+            $this->getWritingStream()->write($this->domDocument->saveXML());
+        }
 
-        $this->testsuitesNodeOpen = false;
-        $this->testsuiteNodeOpen = false;
-        $this->testcaseNodeOpen = false;
-        $this->testcaseNodeHasChildren = false;
+        parent::flush();
     }
 }

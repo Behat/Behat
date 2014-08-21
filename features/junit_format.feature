@@ -95,26 +95,26 @@ Feature: JUnit Formatter
       """
     And "junit/default.xml" file should contain:
       """
-      <?xml version="1.0" encoding="UTF-8" ?>
+      <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-          <testsuite name="World consistency" tests="6" failures="3" errors="2">
-              <testcase name="Undefined" status="undefined">
-                  <error type="undefined" message="And Something new"/>
-              </testcase>
-              <testcase name="Pending" status="pending">
-                  <error type="pending" message="And Something not done yet; TODO: write pending definition"/>
-              </testcase>
-              <testcase name="Failed" status="failed">
-                  <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
-              </testcase>
-              <testcase name="Passed &amp; Failed #1" status="failed">
-                  <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
-              </testcase>
-              <testcase name="Passed &amp; Failed #2" status="passed"/>
-              <testcase name="Passed &amp; Failed #3" status="failed">
-                  <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
-              </testcase>
-          </testsuite>
+        <testsuite name="World consistency" tests="6" failures="3" errors="2">
+          <testcase name="Undefined" status="undefined">
+            <error type="undefined" message="And Something new"/>
+          </testcase>
+          <testcase name="Pending" status="pending">
+            <error type="pending" message="And Something not done yet; TODO: write pending definition"/>
+          </testcase>
+          <testcase name="Failed" status="failed">
+            <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
+          </testcase>
+          <testcase name="Passed &amp; Failed #1" status="failed">
+            <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
+          </testcase>
+          <testcase name="Passed &amp; Failed #2" status="passed"/>
+          <testcase name="Passed &amp; Failed #3" status="failed">
+            <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
+          </testcase>
+        </testsuite>
       </testsuites>
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
@@ -182,12 +182,12 @@ Feature: JUnit Formatter
     Then it should pass with no output
     And "junit/default.xml" file should contain:
       """
-      <?xml version="1.0" encoding="UTF-8" ?>
+      <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-          <testsuite name="World consistency" tests="2" failures="0" errors="0">
-              <testcase name="Adding some interesting value" status="passed"/>
-              <testcase name="Subtracting some value" status="passed"/>
-          </testsuite>
+        <testsuite name="World consistency" tests="2" failures="0" errors="0">
+          <testcase name="Adding some interesting value" status="passed"/>
+          <testcase name="Subtracting some value" status="passed"/>
+        </testsuite>
       </testsuites>
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
@@ -306,23 +306,23 @@ Feature: JUnit Formatter
     Then it should fail with no output
     And "junit/small_kid.xml" file should contain:
       """
-      <?xml version="1.0" encoding="UTF-8" ?>
+      <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="small_kid">
-          <testsuite name="Apple Eating" tests="1" failures="0" errors="0">
-              <testcase name="Eating one apple" status="passed"/>
-          </testsuite>
+        <testsuite name="Apple Eating" tests="1" failures="0" errors="0">
+          <testcase name="Eating one apple" status="passed"/>
+        </testsuite>
       </testsuites>
       """
     And the file "junit/small_kid.xml" should be a valid document according to "junit.xsd"
     And "junit/old_man.xml" file should contain:
       """
-      <?xml version="1.0" encoding="UTF-8" ?>
+      <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="old_man">
-          <testsuite name="Apple Eating" tests="1" failures="1" errors="0">
-              <testcase name="Eating one apple" status="failed">
-                  <failure message="Then I will be stronger: Failed asserting that 0 is not equal to 0."/>
-              </testcase>
-          </testsuite>
+        <testsuite name="Apple Eating" tests="1" failures="1" errors="0">
+          <testcase name="Eating one apple" status="failed">
+            <failure message="Then I will be stronger: Failed asserting that 0 is not equal to 0."/>
+          </testcase>
+        </testsuite>
       </testsuites>
       """
     And the file "junit/old_man.xml" should be a valid document according to "junit.xsd"
@@ -381,13 +381,13 @@ Feature: JUnit Formatter
     Then it should fail with no output
     And "junit/default.xml" file should contain:
       """
-      <?xml version="1.0" encoding="UTF-8" ?>
+      <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-          <testsuite name="World consistency" tests="1" failures="1" errors="0">
-              <testcase name="Failed" status="failed">
-                  <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
-              </testcase>
-          </testsuite>
+        <testsuite name="World consistency" tests="1" failures="1" errors="0">
+          <testcase name="Failed" status="failed">
+            <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
+          </testcase>
+        </testsuite>
       </testsuites>
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
@@ -449,6 +449,6 @@ Feature: JUnit Formatter
       """
     And "junit/default.xml" file should contain:
       """
-      <?xml version="1.0" encoding="UTF-8" ?>
-      <testsuites name="default">
+      <?xml version="1.0" encoding="UTF-8"?>
+      <testsuites name="default"/>
       """
