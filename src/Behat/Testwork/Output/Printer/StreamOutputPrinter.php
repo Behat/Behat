@@ -169,7 +169,7 @@ class StreamOutputPrinter implements OutputPrinter
     /**
      * Configure output stream parameters.
      *
-     * @param StreamOutput $output
+     * @param OutputInterface $output
      */
     protected function configureOutputStream(OutputInterface $output)
     {
