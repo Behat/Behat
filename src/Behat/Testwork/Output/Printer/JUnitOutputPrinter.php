@@ -10,17 +10,21 @@
 
 namespace Behat\Testwork\Output\Printer;
 
-use Behat\Testwork\Output\Printer\Helper\JUnitXsdChecker;
+use Behat\Testwork\Output\Exception\BadOutputPathException;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
- * A convient wrapper around the StreamOutputPrinter to write valid JUnit 
+ * A convenient wrapper around the StreamOutputPrinter to write valid JUnit
  * reports.
  *
  * @author Wouter J <wouter@wouterj.nl>
+ * @author James Watson <james@sitepulse.org>
  */
 class JUnitOutputPrinter extends StreamOutputPrinter
 {
+    const XML_VERSION  = '1.0';
+    const XML_ENCODING = 'UTF-8';
+
     /**
      * @var null|string
      */
@@ -55,7 +59,7 @@ class JUnitOutputPrinter extends StreamOutputPrinter
     {
         $this->setFileName(strtolower(trim(preg_replace('/[^[:alnum:]_]+/', '_', $name), '_')));
 
-        $this->domDocument = new \DOMDocument('1.0', 'UTF-8');
+        $this->domDocument = new \DOMDocument(self::XML_VERSION, self::XML_ENCODING);
         $this->domDocument->formatOutput = true;
 
         $this->testSuites = $this->domDocument->createElement('testsuites');
@@ -110,7 +114,6 @@ class JUnitOutputPrinter extends StreamOutputPrinter
         }
     }
 
-
     /**
      * Sets file name.
      *
@@ -133,11 +136,10 @@ class JUnitOutputPrinter extends StreamOutputPrinter
     protected function createOutput($stream = null)
     {
         if (!is_dir($this->outputPath)) {
-            mkdir($this->outputPath, 0777, true);
-            /*throw new BadOutputPathException(sprintf(
+            throw new BadOutputPathException(sprintf(
                 'Directory expected for the `output_path` option, given `%s`.',
                 $this->outputPath
-            ), $this->outputPath);*/
+            ), $this->outputPath);
         }
 
         if (null === $this->fileName) {
