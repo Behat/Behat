@@ -72,7 +72,8 @@ class JUnitFormatterFactory implements FormatterFactory
         $container->setDefinition('output.node.printer.junit.feature', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter', array(
-            new Reference(self::RESULT_TO_STRING_CONVERTER_ID)
+            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+            new Reference('output.node.listener.junit.outline'),
         ));
         $container->setDefinition('output.node.printer.junit.scenario', $definition);
 
@@ -84,12 +85,18 @@ class JUnitFormatterFactory implements FormatterFactory
 
     protected function loadRootNodeListener(ContainerBuilder $container)
     {
+
+        $definition = new Definition('Behat\Behat\Output\Node\EventListener\JUnit\OutlineListener');
+        $container->setDefinition('output.node.listener.junit.outline', $definition);
+
+
         $definition = new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
             array(
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\SuiteListener', array(
                     null,
                     new Reference('output.node.printer.junit.suite')
                 )),
+                new Reference('output.node.listener.junit.outline'),
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\FeatureElementListener', array(
                     new Reference('output.node.printer.junit.feature'),
                     new Reference('output.node.printer.junit.scenario'),
