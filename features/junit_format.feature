@@ -80,13 +80,14 @@ Feature: JUnit Formatter
             |  10   | 20     |
             |  23   | 32     |
       """
+    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with:
       """
       --- FeatureContext has missing steps. Define them with these snippets:
 
           /**
-           * @Given /^Something new$/
+           * @Then /^Something new$/
            */
           public function somethingNew()
           {
@@ -178,6 +179,7 @@ Feature: JUnit Formatter
           And I subtract the value 6
           Then I must have 4
       """
+    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should pass with no output
     And "junit/default.xml" file should contain:
@@ -302,6 +304,7 @@ Feature: JUnit Formatter
                   filters:
                     role: old man
       """
+    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with no output
     And "junit/small_kid.xml" file should contain:
@@ -377,6 +380,7 @@ Feature: JUnit Formatter
           When I add 4
           Then I must have 13
       """
+    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with no output
     And "junit/default.xml" file should contain:
@@ -442,6 +446,7 @@ Feature: JUnit Formatter
           When I add 4
           Then I must have 14
       """
+    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with:
       """
