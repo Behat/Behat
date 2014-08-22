@@ -10,13 +10,15 @@
 
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
+use Behat\Behat\Output\Node\EventListener\JUnit\OutlineListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\ScenarioElementPrinter;
+use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Behat\Output\Statistics\Statistics;
 
 /**
  * Prints the <testcase> element.
@@ -30,9 +32,25 @@ final class JUnitScenarioPrinter implements ScenarioElementPrinter
      */
     private $resultConverter;
 
-    public function __construct(ResultToStringConverter $resultConverter)
+    /**
+     * @var OutlineListener
+     */
+    private $outlineListener;
+
+    /**
+     * @var OutlineNode
+     */
+    private $lastOutline;
+
+    /**
+     * @var int
+     */
+    private $outlineStepCount;
+
+    public function __construct(ResultToStringConverter $resultConverter, OutlineListener $outlineListener)
     {
         $this->resultConverter = $resultConverter;
+        $this->outlineListener = $outlineListener;
     }
 
     /**
@@ -43,6 +61,10 @@ final class JUnitScenarioPrinter implements ScenarioElementPrinter
         $name = implode(' ', array_map(function ($l) {
             return trim($l);
         }, explode("\n", $scenario->getTitle())));
+
+        if($scenario instanceof ExampleNode){
+            $name = $this->buildExampleName();
+        }
 
         $formatter->getOutputPrinter()->addTestcase(array(
             'name' => $name,
@@ -55,5 +77,22 @@ final class JUnitScenarioPrinter implements ScenarioElementPrinter
      */
     public function printCloseTag(Formatter $formatter)
     {
+    }
+
+    /**
+     * @return string
+     */
+    private function buildExampleName()
+    {
+        $currentOutline = $this->outlineListener->getCurrentOutline();
+        if ($currentOutline === $this->lastOutline) {
+            $this->outlineStepCount++;
+        } else {
+            $this->lastOutline = $currentOutline;
+            $this->outlineStepCount = 1;
+        }
+
+        $name = $currentOutline->getTitle() . ' #' . $this->outlineStepCount;
+        return $name;
     }
 }
