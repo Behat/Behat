@@ -26,7 +26,6 @@ interface SetupPrinter
      *
      * @param Formatter $formatter
      * @param Setup     $setup
-     * @param Suite     $suite
      */
     public function printSetup(Formatter $formatter, Setup $setup);
 
@@ -35,7 +34,6 @@ interface SetupPrinter
      *
      * @param Formatter $formatter
      * @param Teardown  $teardown
-     * @param Suite     $suite
      */
     public function printTeardown(Formatter $formatter, Teardown $teardown);
 }
