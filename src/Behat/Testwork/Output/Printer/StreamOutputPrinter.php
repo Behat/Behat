@@ -194,11 +194,11 @@ class StreamOutputPrinter implements OutputPrinter
     {
         if (null === $this->outputPath) {
             $stream = fopen('php://stdout', 'w');
-        } elseif (file_exists($this->outputPath)) {
+        } elseif (!is_dir($this->outputPath)) {
             $stream = fopen($this->outputPath, 'w');
         } else {
             throw new BadOutputPathException(sprintf(
-                'Filename expected as outputPath parameter, but got `%s`.',
+                'Filename expected as `output_path` parameter, but got `%s`.',
                 $this->outputPath
             ), $this->outputPath);
         }
