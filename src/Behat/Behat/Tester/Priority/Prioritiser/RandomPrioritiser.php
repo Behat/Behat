@@ -27,9 +27,9 @@ class RandomPrioritiser implements Prioritiser
     public function prioritise(array $scenarioIterators)
     {
         $prioritisedFeatures = $this->prioritiseFeatures($scenarioIterators);
-        $prioritisedSuites = $this->prioritiseSuites($prioritisedFeatures);
+        shuffle($prioritisedFeatures);
 
-        return $prioritisedSuites;
+        return $prioritisedFeatures;
     }
 
     /**
@@ -48,17 +48,6 @@ class RandomPrioritiser implements Prioritiser
                 $prioritisedSpecifications
             );
         }
-
-        return $prioritisedSuites;
-    }
-
-    /**
-     * @param array $prioritisedSuites
-     * @return array
-     */
-    private function prioritiseSuites($prioritisedSuites)
-    {
-        shuffle($prioritisedSuites);
 
         return $prioritisedSuites;
     }
