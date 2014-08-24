@@ -8,25 +8,32 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Ordering;
+namespace Behat\Testwork\Ordering\Orderer;
 
 use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
- * Algorithm for prioritising Specification execution
+ * Null implementation of Orderer that does no ordering
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-interface Prioritiser
+class NullOrderer implements Orderer
 {
+
     /**
      * @param SpecificationIterator[] $scenarioIterators
      * @return SpecificationIterator[]
      */
-    public function prioritise(array $scenarioIterators);
+    public function order(array $scenarioIterators)
+    {
+        return $scenarioIterators;
+    }
 
     /**
      * @return string
      */
-    public function getName();
+    public function getName()
+    {
+        return 'null';
+    }
 }

@@ -10,7 +10,8 @@
 
 namespace Behat\Testwork\Ordering;
 
-use Behat\Testwork\Ordering\Prioritiser\NullPrioritiser;
+use Behat\Testwork\Ordering\Orderer\NullOrderer;
+use Behat\Testwork\Ordering\Orderer\Orderer;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Exercise as BaseExercise;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -18,16 +19,16 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Exercise that is prioritised according to a specified algorithm
+ * Exercise that is ordered according to a specified algorithm
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-class Exercise implements BaseExercise
+class OrderedExercise implements BaseExercise
 {
     /**
-     * @var Prioritiser
+     * @var Orderer
      */
-    private $prioritiser;
+    private $orderer;
 
     /**
      * @var BaseExercise
@@ -39,7 +40,7 @@ class Exercise implements BaseExercise
      */
     public function __construct(BaseExercise $decoratedExercise)
     {
-        $this->prioritiser = new NullPrioritiser();
+        $this->orderer = new NullOrderer();
         $this->decoratedExercise = $decoratedExercise;
     }
 
@@ -53,7 +54,7 @@ class Exercise implements BaseExercise
      */
     public function setUp(array $iterators, $skip)
     {
-        return $this->decoratedExercise->setUp($this->prioritiser->prioritise($iterators), $skip);
+        return $this->decoratedExercise->setUp($this->orderer->order($iterators), $skip);
     }
 
     /**
@@ -66,7 +67,7 @@ class Exercise implements BaseExercise
      */
     public function test(array $iterators, $skip)
     {
-        return $this->decoratedExercise->test($this->prioritiser->prioritise($iterators), $skip);
+        return $this->decoratedExercise->test($this->orderer->order($iterators), $skip);
     }
 
     /**
@@ -80,16 +81,16 @@ class Exercise implements BaseExercise
      */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
-        return $this->decoratedExercise->tearDown($this->prioritiser->prioritise($iterators), $skip, $result);
+        return $this->decoratedExercise->tearDown($this->orderer->order($iterators), $skip, $result);
     }
 
     /**
      * Replace the algorithm being used for prioritisation
      *
-     * @param Prioritiser $prioritiser
+     * @param Orderer $orderer
      */
-    public function setPrioritiser(Prioritiser $prioritiser)
+    public function setOrderer(Orderer $orderer)
     {
-        $this->prioritiser = $prioritiser;
+        $this->orderer = $orderer;
     }
 }

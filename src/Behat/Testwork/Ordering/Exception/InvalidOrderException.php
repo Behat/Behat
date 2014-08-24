@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester\Exception;
+namespace Behat\Testwork\Ordering\Exception;
 
 use Behat\Testwork\Exception\TestworkException;
 use RuntimeException;
@@ -18,5 +18,5 @@ use RuntimeException;
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-final class BadPriorityException extends RuntimeException implements TestworkException
+final class InvalidOrderException extends RuntimeException implements TestworkException
 {}

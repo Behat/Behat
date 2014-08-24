@@ -1,4 +1,4 @@
-Feature: Prioritisation
+Feature: Setting order of execution
   As a scenario writer
   In order to detect dependencies between my scenarios
   I should be able to specify the order in which they are run
@@ -37,7 +37,7 @@ Feature: Prioritisation
           Then I have 2 oranges
       """
 
-  Scenario: No priority specified
+  Scenario: No order specified
     When I run "behat -fpretty"
     Then it should pass with:
       """
@@ -57,20 +57,20 @@ Feature: Prioritisation
       4 steps (4 passed)
       """
 
-    Scenario: Unknown priority
-      When I run "behat -fpretty --priority=foo"
+    Scenario: Unknown order
+      When I run "behat -fpretty --order=foo"
       Then it should fail with:
       """
-      [Behat\Behat\Tester\Exception\BadPriorityException]
-        Priority option 'foo' was not recognised
+      [Behat\Testwork\Ordering\Exception\InvalidOrderException]
+        Order option 'foo' was not recognised
 
 
 
-      behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--priority="..."] [--rerun] [--stop-on-failure] [--dry-run] [paths]
+      behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--order="..."] [--rerun] [--stop-on-failure] [--dry-run] [paths]
       """
 
-  Scenario: Reverse priority
-    When I run "behat -fpretty --priority=reverse"
+  Scenario: Reverse order
+    When I run "behat -fpretty --order=reverse"
     Then it should pass with:
       """
       Feature: Feature 2
@@ -89,6 +89,6 @@ Feature: Prioritisation
       4 steps (4 passed)
       """
 
-  Scenario: Random priority
-    When I run "behat -fpretty --priority=random"
+  Scenario: Random order
+    When I run "behat -fpretty --order=random"
     Then it should pass

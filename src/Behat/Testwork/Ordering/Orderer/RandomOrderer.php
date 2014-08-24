@@ -8,9 +8,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Ordering\Prioritiser;
+namespace Behat\Testwork\Ordering\Orderer;
 
-use Behat\Testwork\Ordering\Prioritiser;
 use Behat\Testwork\Specification\SpecificationArrayIterator;
 
 /**
@@ -18,38 +17,38 @@ use Behat\Testwork\Specification\SpecificationArrayIterator;
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-class RandomPrioritiser implements Prioritiser
+class RandomOrderer implements Orderer
 {
     /**
      * @param SpecificationIterator[] $scenarioIterators
      * @return SpecificationIterator[]
      */
-    public function prioritise(array $scenarioIterators)
+    public function order(array $scenarioIterators)
     {
-        $prioritisedFeatures = $this->prioritiseFeatures($scenarioIterators);
-        shuffle($prioritisedFeatures);
+        $orderedFeatures = $this->orderFeatures($scenarioIterators);
+        shuffle($orderedFeatures);
 
-        return $prioritisedFeatures;
+        return $orderedFeatures;
     }
 
     /**
      * @param array $scenarioIterators
      * @return array
      */
-    private function prioritiseFeatures(array $scenarioIterators)
+    private function orderFeatures(array $scenarioIterators)
     {
-        $prioritisedSuites = array();
+        $orderedSuites = array();
 
         foreach ($scenarioIterators as $scenarioIterator) {
-            $prioritisedSpecifications = iterator_to_array($scenarioIterator);
-            shuffle($prioritisedSpecifications);
-            $prioritisedSuites[] = new SpecificationArrayIterator(
+            $orderedSpecifications = iterator_to_array($scenarioIterator);
+            shuffle($orderedSpecifications);
+            $orderedSuites[] = new SpecificationArrayIterator(
                 $scenarioIterator->getSuite(),
-                $prioritisedSpecifications
+                $orderedSpecifications
             );
         }
 
-        return $prioritisedSuites;
+        return $orderedSuites;
     }
 
     /**

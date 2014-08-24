@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class OrderingExtension implements Extension
 {
-    const PRIORITISER_TAG = 'tester.prioritiser';
+    const ORDERER_TAG = 'tester.orderer';
 
     /**
      * @var ServiceProcessor
@@ -54,11 +54,11 @@ class OrderingExtension implements Extension
      */
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition(CliExtension::CONTROLLER_TAG . '.priority');
-        $references = $this->processor->findAndSortTaggedServices($container, self::PRIORITISER_TAG);
+        $definition = $container->getDefinition(CliExtension::CONTROLLER_TAG . '.order');
+        $references = $this->processor->findAndSortTaggedServices($container, self::ORDERER_TAG);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerPrioritiser', array($reference));
+            $definition->addMethodCall('registerOrderer', array($reference));
         }
     }
 
@@ -103,54 +103,54 @@ class OrderingExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadPriorityController($container);
-        $this->loadPrioritisingExercise($container);
-        $this->loadDefaultPrioritisers($container);
+        $this->loadOrderController($container);
+        $this->loadOrderedExercise($container);
+        $this->loadDefaultOrderers($container);
     }
 
     /**
-     * Loads priority controller.
+     * Loads order controller.
      *
      * @param ContainerBuilder $container
      */
-    protected function loadPriorityController(ContainerBuilder $container)
+    protected function loadOrderController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Ordering\Cli\PriorityController', array(
+        $definition = new Definition('Behat\Testwork\Ordering\Cli\OrderController', array(
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
-            new Reference(TesterExtension::EXERCISE_WRAPPER_TAG . '.prioritising')
+            new Reference(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering')
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 250));
-        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.priority', $definition);
+        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.order', $definition);
     }
 
     /**
-     * Loads exercise wrapper that enables prioritisation
+     * Loads exercise wrapper that enables ordering
      *
      * @param ContainerBuilder $container
      */
-    protected function loadPrioritisingExercise(ContainerBuilder $container)
+    protected function loadOrderedExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Ordering\Exercise', array(
+        $definition = new Definition('Behat\Testwork\Ordering\OrderedExercise', array(
             new Reference(TesterExtension::EXERCISE_ID)
         ));
         $definition->addTag(TesterExtension::EXERCISE_WRAPPER_TAG, array('priority' => -9999));
-        $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.prioritising', $definition);
+        $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering', $definition);
     }
 
     /**
-     * Defines default prioritisers
+     * Defines default orderers
      *
      * @param ContainerBuilder $container
      */
-    protected function loadDefaultPrioritisers(ContainerBuilder $container)
+    protected function loadDefaultOrderers(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Ordering\Prioritiser\ReversePrioritiser');
-        $definition->addTag(self::PRIORITISER_TAG, array('priority' => -9999));
-        $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.reverse', $definition);
+        $definition = new Definition('Behat\Testwork\Ordering\Orderer\ReverseOrderer');
+        $definition->addTag(self::ORDERER_TAG, array('priority' => -9999));
+        $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering.reverse', $definition);
 
 
-        $definition = new Definition('Behat\Testwork\Ordering\Prioritiser\RandomPrioritiser');
-        $definition->addTag(self::PRIORITISER_TAG, array('priority' => -9999));
-        $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.random', $definition);
+        $definition = new Definition('Behat\Testwork\Ordering\Orderer\RandomOrderer');
+        $definition->addTag(self::ORDERER_TAG, array('priority' => -9999));
+        $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering.random', $definition);
     }
 }

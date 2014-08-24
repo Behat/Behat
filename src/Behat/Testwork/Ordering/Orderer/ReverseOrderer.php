@@ -8,56 +8,56 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Ordering\Prioritiser;
+namespace Behat\Testwork\Ordering\Orderer;
 
-use Behat\Testwork\Ordering\Prioritiser;
 use Behat\Testwork\Specification\SpecificationArrayIterator;
+use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
  * Prioritises Suites and Features into reverse order
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-class ReversePrioritiser implements Prioritiser
+class ReverseOrderer implements Orderer
 {
     /**
      * @param SpecificationIterator[] $scenarioIterators
      * @return SpecificationIterator[]
      */
-    public function prioritise(array $scenarioIterators)
+    public function order(array $scenarioIterators)
     {
-        $prioritisedFeatures = $this->prioritiseFeatures($scenarioIterators);
-        $prioritisedSuites = $this->prioritiseSuites($prioritisedFeatures);
+        $orderedFeatures = $this->orderFeatures($scenarioIterators);
+        $orderedSuites = $this->orderSuites($orderedFeatures);
 
-        return $prioritisedSuites;
+        return $orderedSuites;
     }
 
     /**
      * @param array $scenarioIterators
      * @return array
      */
-    private function prioritiseFeatures(array $scenarioIterators)
+    private function orderFeatures(array $scenarioIterators)
     {
-        $prioritisedSuites = array();
+        $orderedSuites = array();
 
         foreach ($scenarioIterators as $scenarioIterator) {
-            $prioritisedSpecifications = array_reverse(iterator_to_array($scenarioIterator));
-            $prioritisedSuites[] = new SpecificationArrayIterator(
+            $orderedSpecifications = array_reverse(iterator_to_array($scenarioIterator));
+            $orderedSuites[] = new SpecificationArrayIterator(
                 $scenarioIterator->getSuite(),
-                $prioritisedSpecifications
+                $orderedSpecifications
             );
         }
 
-        return $prioritisedSuites;
+        return $orderedSuites;
     }
 
     /**
-     * @param $prioritisedSuites
+     * @param $orderedSuites
      * @return array
      */
-    private function prioritiseSuites($prioritisedSuites)
+    private function orderSuites($orderedSuites)
     {
-        return array_reverse($prioritisedSuites);
+        return array_reverse($orderedSuites);
     }
 
     /**

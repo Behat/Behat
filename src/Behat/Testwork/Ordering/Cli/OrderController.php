@@ -10,44 +10,42 @@
 
 namespace Behat\Testwork\Ordering\Cli;
 
-use Behat\Behat\Tester\Exception\BadPriorityException;
-use Behat\Testwork\Ordering\Exercise;
-use Behat\Testwork\Ordering\Prioritiser\ReversePrioritiser;
-use Behat\Testwork\Ordering\Prioritiser;
+use Behat\Testwork\Ordering\Exception\InvalidOrderException;
+use Behat\Testwork\Ordering\OrderedExercise;
+use Behat\Testwork\Ordering\Orderer\Orderer;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Process\Exception\InvalidArgumentException;
 
 /**
- * Preloads scenarios and then modifies the order when --priority is passed
+ * Preloads scenarios and then modifies the order when --order is passed
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-final class PriorityController implements Controller
+final class OrderController implements Controller
 {
     /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
     /**
-     * @var Exercise
+     * @var OrderedExercise
      */
     private $exercise;
     /**
      * @var array
      */
-    private $prioritisers = array();
+    private $orderers = array();
 
     /**
      * Initializes controller.
      *
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, Exercise $exercise)
+    public function __construct(EventDispatcherInterface $eventDispatcher, OrderedExercise $exercise)
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->exercise = $exercise;
@@ -60,8 +58,8 @@ final class PriorityController implements Controller
      */
     public function configure(SymfonyCommand $command)
     {
-        $command->addOption('--priority', null, InputOption::VALUE_REQUIRED,
-            'Set a priority algorithm for the scenario execution.'
+        $command->addOption('--order', null, InputOption::VALUE_REQUIRED,
+            'Set an order in which to execute the specifications.'
         );
     }
 
@@ -75,27 +73,27 @@ final class PriorityController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $prioritiser = $input->getOption('priority');
+        $orderer = $input->getOption('order');
 
-        if (!$prioritiser) {
+        if (!$orderer) {
             return;
         }
 
-        if (!array_key_exists($prioritiser, $this->prioritisers)) {
-           throw new BadPriorityException(sprintf("Priority option '%s' was not recognised", $prioritiser));
+        if (!array_key_exists($orderer, $this->orderers)) {
+           throw new InvalidOrderException(sprintf("Order option '%s' was not recognised", $orderer));
         }
 
-        $this->exercise->setPrioritiser($this->prioritisers[$prioritiser]);
+        $this->exercise->setOrderer($this->orderers[$orderer]);
     }
 
     /**
      * Register a new available controller
      *
-     * @param Prioritiser $prioritiser
+     * @param Orderer $orderer
      */
-    public function registerPrioritiser(Prioritiser $prioritiser)
+    public function registerOrderer(Orderer $orderer)
     {
-        $this->prioritisers[$prioritiser->getName()] = $prioritiser;
+        $this->orderers[$orderer->getName()] = $orderer;
     }
 
 }
