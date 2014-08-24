@@ -44,6 +44,7 @@ final class OrderController implements Controller
      * Initializes controller.
      *
      * @param EventDispatcherInterface $eventDispatcher
+     * @param OrderedExercise $exercise
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, OrderedExercise $exercise)
     {
@@ -95,5 +96,4 @@ final class OrderController implements Controller
     {
         $this->orderers[$orderer->getName()] = $orderer;
     }
-
 }
