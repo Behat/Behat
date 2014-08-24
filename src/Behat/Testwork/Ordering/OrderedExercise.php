@@ -31,6 +31,16 @@ class OrderedExercise implements BaseExercise
     private $orderer;
 
     /**
+     * @var SpecificationIterator[]
+     */
+    private $unordered = null;
+
+    /**
+     * @var SpecificationIterator[]
+     */
+    private $ordered = null;
+
+    /**
      * @var BaseExercise
      */
     private $decoratedExercise;
@@ -54,7 +64,7 @@ class OrderedExercise implements BaseExercise
      */
     public function setUp(array $iterators, $skip)
     {
-        return $this->decoratedExercise->setUp($this->orderer->order($iterators), $skip);
+        return $this->decoratedExercise->setUp($this->order($iterators), $skip);
     }
 
     /**
@@ -67,7 +77,7 @@ class OrderedExercise implements BaseExercise
      */
     public function test(array $iterators, $skip)
     {
-        return $this->decoratedExercise->test($this->orderer->order($iterators), $skip);
+        return $this->decoratedExercise->test($this->order($iterators), $skip);
     }
 
     /**
@@ -81,7 +91,7 @@ class OrderedExercise implements BaseExercise
      */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
-        return $this->decoratedExercise->tearDown($this->orderer->order($iterators), $skip, $result);
+        return $this->decoratedExercise->tearDown($this->order($iterators), $skip, $result);
     }
 
     /**
@@ -92,5 +102,19 @@ class OrderedExercise implements BaseExercise
     public function setOrderer(Orderer $orderer)
     {
         $this->orderer = $orderer;
+    }
+
+    /**
+     * @param array $iterators
+     * @return SpecificationIterator[]
+     */
+    private function order(array $iterators)
+    {
+        if (!$this->ordered || $this->unordered != $iterators) {
+            $this->unordered = $iterators;
+            $this->ordered = $this->orderer->order($iterators);
+        }
+
+        return $this->ordered;
     }
 }
