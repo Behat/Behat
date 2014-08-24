@@ -8,25 +8,32 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester\Priority;
+namespace Behat\Testwork\Ordering\Prioritiser;
 
-use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Ordering\Prioritiser;
 
 /**
- * Algorithm for prioritising Specification execution
+ * Null implementation of Prioritiser that does no prioritisation
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-interface Prioritiser
+class NullPrioritiser implements Prioritiser
 {
+
     /**
      * @param SpecificationIterator[] $scenarioIterators
      * @return SpecificationIterator[]
      */
-    public function prioritise(array $scenarioIterators);
+    public function prioritise(array $scenarioIterators)
+    {
+        return $scenarioIterators;
+    }
 
     /**
      * @return string
      */
-    public function getName();
+    public function getName()
+    {
+        return 'null';
+    }
 }

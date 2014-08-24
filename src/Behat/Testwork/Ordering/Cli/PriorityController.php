@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester\Cli;
+namespace Behat\Testwork\Ordering\Cli;
 
 use Behat\Behat\Tester\Exception\BadPriorityException;
-use Behat\Behat\Tester\Priority\Exercise;
-use Behat\Behat\Tester\Priority\Prioritiser\ReversePrioritiser;
-use Behat\Behat\Tester\Priority\Prioritiser;
+use Behat\Testwork\Ordering\Exercise;
+use Behat\Testwork\Ordering\Prioritiser\ReversePrioritiser;
+use Behat\Testwork\Ordering\Prioritiser;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;

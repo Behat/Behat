@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester\Priority\Prioritiser;
+namespace Behat\Testwork\Ordering\Prioritiser;
 
-use Behat\Behat\Tester\Priority\Prioritiser;
+use Behat\Testwork\Ordering\Prioritiser;
 use Behat\Testwork\Specification\SpecificationArrayIterator;
 
 /**

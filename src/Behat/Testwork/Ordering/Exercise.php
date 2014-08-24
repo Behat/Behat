@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester\Priority;
+namespace Behat\Testwork\Ordering;
 
-use Behat\Behat\Tester\Priority\Prioritiser\NullPrioritiser;
+use Behat\Testwork\Ordering\Prioritiser\NullPrioritiser;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Exercise as BaseExercise;
 use Behat\Testwork\Tester\Result\TestResult;
