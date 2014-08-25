@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-class OrderedExercise implements Exercise
+final class OrderedExercise implements Exercise
 {
     /**
      * @var Orderer

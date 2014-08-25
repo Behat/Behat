@@ -18,7 +18,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-class ReverseOrderer implements Orderer
+final class ReverseOrderer implements Orderer
 {
     /**
      * @param SpecificationIterator[] $scenarioIterators

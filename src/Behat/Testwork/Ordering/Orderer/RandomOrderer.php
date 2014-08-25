@@ -17,7 +17,7 @@ use Behat\Testwork\Specification\SpecificationArrayIterator;
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-class RandomOrderer implements Orderer
+final class RandomOrderer implements Orderer
 {
     /**
      * @param SpecificationIterator[] $scenarioIterators

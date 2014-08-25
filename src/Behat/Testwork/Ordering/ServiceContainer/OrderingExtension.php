@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-class OrderingExtension implements Extension
+final class OrderingExtension implements Extension
 {
     const ORDERER_TAG = 'tester.orderer';
 
@@ -113,7 +113,7 @@ class OrderingExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadOrderController(ContainerBuilder $container)
+    private function loadOrderController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Ordering\Cli\OrderController', array(
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
@@ -128,7 +128,7 @@ class OrderingExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadOrderedExercise(ContainerBuilder $container)
+    private function loadOrderedExercise(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Ordering\OrderedExercise', array(
             new Reference(TesterExtension::EXERCISE_ID)
@@ -142,7 +142,7 @@ class OrderingExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadDefaultOrderers(ContainerBuilder $container)
+    private function loadDefaultOrderers(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Ordering\Orderer\ReverseOrderer');
         $definition->addTag(self::ORDERER_TAG, array('priority' => -9999));
