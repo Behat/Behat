@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Ordering;
 
-use Behat\Testwork\Ordering\Orderer\NullOrderer;
+use Behat\Testwork\Ordering\Orderer\NoopOrderer;
 use Behat\Testwork\Ordering\Orderer\Orderer;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Exercise;
@@ -50,7 +50,7 @@ class OrderedExercise implements Exercise
      */
     public function __construct(Exercise $decoratedExercise)
     {
-        $this->orderer = new NullOrderer();
+        $this->orderer = new NoopOrderer();
         $this->decoratedExercise = $decoratedExercise;
     }
 

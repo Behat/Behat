@@ -17,7 +17,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-class NullOrderer implements Orderer
+class NoopOrderer implements Orderer
 {
 
     /**
