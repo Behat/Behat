@@ -13,7 +13,7 @@ namespace Behat\Testwork\Ordering;
 use Behat\Testwork\Ordering\Orderer\NullOrderer;
 use Behat\Testwork\Ordering\Orderer\Orderer;
 use Behat\Testwork\Specification\SpecificationIterator;
-use Behat\Testwork\Tester\Exercise as BaseExercise;
+use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
-class OrderedExercise implements BaseExercise
+class OrderedExercise implements Exercise
 {
     /**
      * @var Orderer
@@ -33,22 +33,22 @@ class OrderedExercise implements BaseExercise
     /**
      * @var SpecificationIterator[]
      */
-    private $unordered = null;
+    private $unordered;
 
     /**
      * @var SpecificationIterator[]
      */
-    private $ordered = null;
+    private $ordered;
 
     /**
-     * @var BaseExercise
+     * @var Exercise
      */
     private $decoratedExercise;
 
     /**
-     * @param BaseExercise $decoratedExercise
+     * @param Exercise $decoratedExercise
      */
-    public function __construct(BaseExercise $decoratedExercise)
+    public function __construct(Exercise $decoratedExercise)
     {
         $this->orderer = new NullOrderer();
         $this->decoratedExercise = $decoratedExercise;
@@ -105,7 +105,7 @@ class OrderedExercise implements BaseExercise
     }
 
     /**
-     * @param array $iterators
+     * @param SpecificationIterator[] $iterators
      * @return SpecificationIterator[]
      */
     private function order(array $iterators)
