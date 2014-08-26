@@ -13,6 +13,7 @@ namespace Behat\Behat\Output\Node\Printer\JUnit;
 use Behat\Behat\Output\Node\Printer\SuitePrinter;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -41,7 +42,9 @@ final class JUnitSuitePrinter implements SuitePrinter
             $this->statistics->resetAllCounters();
         }
 
-        $formatter->getOutputPrinter()->createNewFile($suite->getName());
+        /** @var JUnitOutputPrinter $outputPrinter */
+        $outputPrinter = $formatter->getOutputPrinter();
+        $outputPrinter->createNewFile($suite->getName());
     }
 
     /**

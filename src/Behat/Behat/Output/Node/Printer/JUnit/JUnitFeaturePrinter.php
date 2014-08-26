@@ -14,6 +14,7 @@ use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Behat\Output\Statistics\Statistics;
 
@@ -47,7 +48,10 @@ final class JUnitFeaturePrinter implements FeaturePrinter
             $totalCount = array_sum($stats);
         }
 
-        $formatter->getOutputPrinter()->addTestsuite(array(
+        /** @var JUnitOutputPrinter $outputPrinter */
+        $outputPrinter = $formatter->getOutputPrinter();
+
+        $outputPrinter->addTestsuite(array(
             'name' => $feature->getTitle(),
             'tests' => $totalCount,
             'failures' => $stats[TestResult::FAILED],
