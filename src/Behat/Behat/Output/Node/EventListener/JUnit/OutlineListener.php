@@ -36,7 +36,7 @@ class OutlineListener implements EventListener
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureOutlineOnBeforeOutlineEvent($event);
-        $this->forgetOutlineOnAfterOutlineEvent($event);
+        $this->forgetOutlineOnAfterOutlineEvent($eventName);
     }
 
     /**
