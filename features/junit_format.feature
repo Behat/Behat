@@ -457,3 +457,23 @@ Feature: JUnit Formatter
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default"/>
       """
+
+  Scenario: Aborting due missing output folder
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
+
+      class FeatureContext implements CustomSnippetAcceptingContext
+      {
+        public static function getAcceptedSnippetType() { return 'regex'; }
+      }
+      """
+    When I run "behat --no-colors -f junit -o /nofolder"
+    Then it should fail with:
+      """
+      [Behat\Testwork\Output\Exception\BadOutputPathException]
+        Directory expected for the `output_path` option, given `/nofolder`.
+      """
