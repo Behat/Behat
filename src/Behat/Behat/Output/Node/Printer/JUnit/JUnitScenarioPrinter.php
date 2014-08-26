@@ -18,6 +18,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -66,7 +67,10 @@ final class JUnitScenarioPrinter implements ScenarioElementPrinter
             $name = $this->buildExampleName();
         }
 
-        $formatter->getOutputPrinter()->addTestcase(array(
+        /** @var JUnitOutputPrinter $outputPrinter */
+        $outputPrinter = $formatter->getOutputPrinter();
+
+        $outputPrinter->addTestcase(array(
             'name' => $name,
             'status' => $this->resultConverter->convertResultToString($result)
         ));

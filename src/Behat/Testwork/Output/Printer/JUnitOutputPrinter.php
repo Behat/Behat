@@ -78,6 +78,7 @@ class JUnitOutputPrinter extends StreamOutputPrinter
         $this->currentTestsuite = $this->domDocument->createElement('testsuite');
         $this->testSuites->appendChild($this->currentTestsuite);
         $this->addAttributesToNode($this->currentTestsuite, $testsuiteAttributes);
+        $this->flush();
     }
 
 
@@ -91,6 +92,7 @@ class JUnitOutputPrinter extends StreamOutputPrinter
         $this->currentTestcase = $this->domDocument->createElement('testcase');
         $this->currentTestsuite->appendChild($this->currentTestcase);
         $this->addAttributesToNode($this->currentTestcase, $testcaseAttributes);
+        $this->flush();
     }
 
     /**
@@ -105,6 +107,7 @@ class JUnitOutputPrinter extends StreamOutputPrinter
         $childNode = $this->domDocument->createElement($nodeName, $nodeValue);
         $this->currentTestcase->appendChild($childNode);
         $this->addAttributesToNode($childNode, $nodeAttributes);
+        $this->flush();
     }
 
     public function addAttributesToNode(\DOMElement $node, $attributes)
