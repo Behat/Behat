@@ -209,6 +209,29 @@ class FeatureContext implements Context
     }
 
     /**
+     * Checks whether specified content and structure of the xml is correct without worrying about layout.
+     *
+     * @Then /^"([^"]*)" file xml should be like:$/
+     *
+     * @param   string       $path file path
+     * @param   PyStringNode $text file content
+     */
+    public function fileXmlShouldBeLike($path, PyStringNode $text)
+    {
+        $path = $this->workingDir . '/' . $path;
+        PHPUnit_Framework_Assert::assertFileExists($path);
+
+        $fileContent = trim(file_get_contents($path));
+
+        $dom = new DOMDocument();
+        $dom->loadXML($text);
+        $dom->formatOutput = true;
+
+        PHPUnit_Framework_Assert::assertEquals(trim($dom->saveXML()), trim($fileContent));
+    }
+
+
+    /**
      * Checks whether last command output contains provided string.
      *
      * @Then the output should contain:
@@ -324,7 +347,9 @@ class FeatureContext implements Context
     private function moveToNewPath($path)
     {
         $newWorkingDir = $this->workingDir .'/' . $path;
-        $this->createDirectory($path);
+        if (!file_exists($newWorkingDir)) {
+            mkdir($newWorkingDir, 0777, true);
+        }
 
         $this->workingDir = $newWorkingDir;
     }
