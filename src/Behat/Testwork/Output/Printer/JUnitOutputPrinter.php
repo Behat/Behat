@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Output\Printer;
 
 use Behat\Testwork\Output\Exception\BadOutputPathException;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
@@ -46,7 +47,6 @@ class JUnitOutputPrinter extends ConsoleOutputPrinter
      */
     private $testSuites;
 
-
     /**
      * Creates a new JUnit file.
      *
@@ -78,7 +78,6 @@ class JUnitOutputPrinter extends ConsoleOutputPrinter
         $this->currentTestsuite = $this->domDocument->createElement('testsuite');
         $this->testSuites->appendChild($this->currentTestsuite);
         $this->addAttributesToNode($this->currentTestsuite, $testsuiteAttributes);
-        $this->flush();
     }
 
 
@@ -92,7 +91,6 @@ class JUnitOutputPrinter extends ConsoleOutputPrinter
         $this->currentTestcase = $this->domDocument->createElement('testcase');
         $this->currentTestsuite->appendChild($this->currentTestcase);
         $this->addAttributesToNode($this->currentTestcase, $testcaseAttributes);
-        $this->flush();
     }
 
     /**
@@ -107,7 +105,6 @@ class JUnitOutputPrinter extends ConsoleOutputPrinter
         $childNode = $this->domDocument->createElement($nodeName, $nodeValue);
         $this->currentTestcase->appendChild($childNode);
         $this->addAttributesToNode($childNode, $nodeAttributes);
-        $this->flush();
     }
 
     public function addAttributesToNode(\DOMElement $node, $attributes)
@@ -162,12 +159,16 @@ class JUnitOutputPrinter extends ConsoleOutputPrinter
     }
 
     /**
-     * {@inheritDoc}
+     * Generate XML from the DOMDocument and parse to the the writing stream
      */
     public function flush()
     {
         if($this->domDocument instanceof \DOMDocument){
-            $this->getWritingStream()->write($this->domDocument->saveXML());
+            $this->getWritingStream()->write(
+                $this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG),
+                false,
+                OutputInterface::OUTPUT_RAW
+            );
         }
 
         parent::flush();
