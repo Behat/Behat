@@ -94,7 +94,7 @@ Feature: JUnit Formatter
               throw new PendingException();
           }
       """
-    And "junit/default.xml" file should contain:
+    And "junit/default.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
@@ -103,7 +103,7 @@ Feature: JUnit Formatter
             <error type="undefined" message="And Something new"/>
           </testcase>
           <testcase name="Pending" status="pending">
-            <error type="pending" message="And Something not done yet; TODO: write pending definition"/>
+            <error type="pending" message="And Something not done yet; TODO: write pending definition" />
           </testcase>
           <testcase name="Failed" status="failed">
             <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
@@ -182,7 +182,7 @@ Feature: JUnit Formatter
     And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should pass with no output
-    And "junit/default.xml" file should contain:
+    And "junit/default.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
@@ -307,7 +307,7 @@ Feature: JUnit Formatter
     And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with no output
-    And "junit/small_kid.xml" file should contain:
+    And "junit/small_kid.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="small_kid">
@@ -317,7 +317,7 @@ Feature: JUnit Formatter
       </testsuites>
       """
     And the file "junit/small_kid.xml" should be a valid document according to "junit.xsd"
-    And "junit/old_man.xml" file should contain:
+    And "junit/old_man.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="old_man">
@@ -383,7 +383,7 @@ Feature: JUnit Formatter
     And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with no output
-    And "junit/default.xml" file should contain:
+    And "junit/default.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
@@ -452,7 +452,7 @@ Feature: JUnit Formatter
       """
       Call to undefined method PHPUnit_Framework_Assert::assertEqual()
       """
-    And "junit/default.xml" file should contain:
+    And "junit/default.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default"/>
