@@ -334,3 +334,40 @@ Feature: Snippets
               throw new PendingException();
           }
       """
+
+  Scenario: Step with slashes
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+      use Behat\Behat\Context\SnippetAcceptingContext;
+
+      class FeatureContext implements Context, SnippetAcceptingContext
+      {
+      }
+      """
+    And a file named "features/coffee.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Then images should be uploaded to web/uploads/media/default/0001/01/
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      U
+
+      1 scenario (1 undefined)
+      1 step (1 undefined)
+
+      --- FeatureContext has missing steps. Define them with these snippets:
+
+          /**
+           * @Then images should be uploaded to web\/uploads\/media\/default\/:arg1\/:arg2\/
+           */
+          public function imagesShouldBeUploadedToWebUploadsMediaDefault($arg1, $arg2)
+          {
+              throw new PendingException();
+          }
+      """

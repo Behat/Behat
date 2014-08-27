@@ -449,3 +449,36 @@ Feature: Step Definition Pattern
       1 scenario (1 passed)
       1 step (1 passed)
       """
+
+  Scenario: UNIX path as parameter
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Then images should be uploaded to web\/uploads\/media\/default\/:arg1\/:arg2\/
+           */
+          public function multipleWrongNamedParameters($arg1, $arg2) {
+          PHPUnit_Framework_Assert::assertEquals('0001', $arg1);
+          PHPUnit_Framework_Assert::assertEquals('01', $arg2);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Then images should be uploaded to web/uploads/media/default/0001/01/
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
