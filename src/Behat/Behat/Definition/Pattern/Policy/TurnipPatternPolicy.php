@@ -20,7 +20,7 @@ use Behat\Transliterator\Transliterator;
  */
 final class TurnipPatternPolicy implements PatternPolicy
 {
-    const TOKEN_REGEX = "[\"']?(?P<%s>(?<=\")[^\"]+(?=\")|(?<=')[^']+(?=')|[\w\.\,]+)['\"]?";
+    const TOKEN_REGEX = "[\"']?(?P<%s>(?<=\")[^\"]*(?=\")|(?<=')[^']*(?=')|[\w\.\,]+)['\"]?";
 
     const PLACEHOLDER_REGEXP = "/\\\:(\w+)/";
     const OPTIONAL_WORD_REGEXP = '/(\s)?\\\\\(([^\\\]+)\\\\\)(\s)?/';
