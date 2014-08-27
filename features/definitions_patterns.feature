@@ -348,3 +348,40 @@ Feature: Step Definition Pattern
       1 scenario (1 passed)
       1 step (1 passed)
       """
+
+  Scenario: Definition parameter followed by colon
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I can provide :count parameters for :name:
+           */
+          public function multipleWrongNamedParameters($count, $name, $string) {
+          PHPUnit_Framework_Assert::assertEquals('2', $count);
+            PHPUnit_Framework_Assert::assertEquals('thing', $name);
+            PHPUnit_Framework_Assert::assertEquals("Test", (string) $string);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given I can provide 2 parameters for "thing":
+            '''
+            Test
+            '''
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
