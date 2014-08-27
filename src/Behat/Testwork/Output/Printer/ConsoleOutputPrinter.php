@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\StreamOutput;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StreamOutputPrinter implements OutputPrinter
+class ConsoleOutputPrinter implements OutputPrinter
 {
     /**
      * @var null|string
