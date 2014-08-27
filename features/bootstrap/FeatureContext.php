@@ -309,24 +309,22 @@ class FeatureContext implements Context
     private function createFile($filename, $content)
     {
         $path = dirname($filename);
-        if (!is_dir($path)) {
-            $this->createDirectory($path);
-        }
+        $this->createDirectory($path);
 
         file_put_contents($filename, $content);
     }
 
     private function createDirectory($path)
     {
-        mkdir($path, 0777, true);
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
     }
 
     private function moveToNewPath($path)
     {
         $newWorkingDir = $this->workingDir .'/' . $path;
-        if (!file_exists($newWorkingDir)) {
-            mkdir($newWorkingDir, 0777, true);
-        }
+        $this->createDirectory($path);
 
         $this->workingDir = $newWorkingDir;
     }
