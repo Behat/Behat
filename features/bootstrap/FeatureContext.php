@@ -186,12 +186,7 @@ class FeatureContext implements Context
     public function itShouldPassWithNoOutput($success)
     {
         $this->itShouldFail($success);
-
-        try {
-            PHPUnit_Framework_Assert::assertEmpty($this->getOutput());
-        } catch (PHPUnit_Framework_ExpectationFailedException $e) {
-            throw new PHPUnit_Framework_ExpectationFailedException('Failed asserting that the output is empty'.PHP_EOL.'Actual output:'.PHP_EOL.$this->getOutput());
-        }
+        PHPUnit_Framework_Assert::assertEmpty($this->getOutput());
     }
 
     /**
@@ -235,7 +230,7 @@ class FeatureContext implements Context
         $dom->loadXML($text);
         $dom->formatOutput = true;
 
-        PHPUnit_Framework_Assert::assertEquals(trim($dom->saveXML()), trim($fileContent));
+        PHPUnit_Framework_Assert::assertEquals(trim($dom->saveXML()), $fileContent);
     }
 
 
@@ -302,7 +297,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * Checks whether the file is validate according to an XML schema.
+     * Checks whether the file is valid according to an XML schema.
      *
      * @Then /^the file "([^"]+)" should be a valid document according to "([^"]+)"$/
      *
