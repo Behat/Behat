@@ -417,3 +417,35 @@ Feature: Step Definition Pattern
       1 scenario (1 passed)
       1 step (1 passed)
       """
+
+  Scenario: Empty parameter value
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @When I enter the string :input
+           */
+          public function multipleWrongNamedParameters($input) {
+          PHPUnit_Framework_Assert::assertEquals('', $input);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          When I enter the string ""
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
