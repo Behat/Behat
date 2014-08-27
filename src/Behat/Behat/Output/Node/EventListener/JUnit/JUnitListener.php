@@ -16,7 +16,6 @@ use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Output\Formatter;
-use Behat\Behat\EventDispatcher\Event\OutlineTested;
 use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
 use Behat\Gherkin\Node\OutlineNode;
 
