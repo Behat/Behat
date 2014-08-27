@@ -222,7 +222,7 @@ class FeatureContext implements Context
         $dom->loadXML($text);
         $dom->formatOutput = true;
 
-        PHPUnit_Framework_Assert::assertEquals(trim($dom->saveXML()), $fileContent);
+        PHPUnit_Framework_Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
     }
 
 
