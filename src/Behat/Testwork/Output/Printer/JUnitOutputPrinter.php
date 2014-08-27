@@ -167,7 +167,7 @@ class JUnitOutputPrinter extends ConsoleOutputPrinter
     public function flush()
     {
         if($this->domDocument instanceof \DOMDocument){
-            $this->getWritingStream()->write($this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG));
+            $this->getWritingStream()->write($this->domDocument->saveXML());
         }
 
         parent::flush();
