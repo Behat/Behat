@@ -86,16 +86,15 @@ class JUnitFormatterFactory implements FormatterFactory
     protected function loadRootNodeListener(ContainerBuilder $container)
     {
 
-        $definition = new Definition('Behat\Behat\Output\Node\EventListener\JUnit\OutlineListener');
+        $definition = new Definition('Behat\Behat\Output\Node\EventListener\JUnit\JUnitListener', array(
+                new Reference('output.node.printer.junit.suite')
+            )
+        );
         $container->setDefinition('output.node.listener.junit.outline', $definition);
 
 
         $definition = new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
             array(
-                new Definition('Behat\Behat\Output\Node\EventListener\AST\SuiteListener', array(
-                    null,
-                    new Reference('output.node.printer.junit.suite')
-                )),
                 new Reference('output.node.listener.junit.outline'),
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\FeatureElementListener', array(
                     new Reference('output.node.printer.junit.feature'),
@@ -127,9 +126,6 @@ class JUnitFormatterFactory implements FormatterFactory
             new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
                 array(
                     new Reference(self::ROOT_LISTENER_ID),
-                    new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StatisticsListener', array(
-                        new Reference('output.junit.statistics'),
-                    )),
                     new Definition('Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener', array(
                         new Reference('output.junit.statistics')
                     )),

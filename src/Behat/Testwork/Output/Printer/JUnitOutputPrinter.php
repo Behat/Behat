@@ -14,13 +14,13 @@ use Behat\Testwork\Output\Exception\BadOutputPathException;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
- * A convenient wrapper around the StreamOutputPrinter to write valid JUnit
+ * A convenient wrapper around the ConsoleOutputPrinter to write valid JUnit
  * reports.
  *
  * @author Wouter J <wouter@wouterj.nl>
  * @author James Watson <james@sitepulse.org>
  */
-class JUnitOutputPrinter extends StreamOutputPrinter
+class JUnitOutputPrinter extends ConsoleOutputPrinter
 {
     const XML_VERSION  = '1.0';
     const XML_ENCODING = 'UTF-8';
@@ -167,7 +167,7 @@ class JUnitOutputPrinter extends StreamOutputPrinter
     public function flush()
     {
         if($this->domDocument instanceof \DOMDocument){
-            $this->getWritingStream()->write($this->domDocument->saveXML());
+            $this->getWritingStream()->write($this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG));
         }
 
         parent::flush();
