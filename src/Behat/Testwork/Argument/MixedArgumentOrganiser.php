@@ -137,7 +137,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks if value matches typehint of provided parameter.
      *
-     * @param mixed               $value
+     * @param object              $value
      * @param ReflectionParameter $parameter
      *
      * @return Boolean
