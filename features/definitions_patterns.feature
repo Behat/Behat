@@ -386,6 +386,59 @@ Feature: Step Definition Pattern
       1 step (1 passed)
       """
 
+  Scenario: Definition parameter with optional parameters
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+      use Behat\Gherkin\Node\PyStringNode;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Then /^the (?:JSON|json)(?: response)?(?: at "(?<path>.*)")? should(?<isNegative> not)? be:$/
+           */
+          public function checkEquality($path = null, $isNegative = null, PyStringNode $json = null)
+          {
+              PHPUnit_Framework_Assert::assertNull($path);
+              PHPUnit_Framework_Assert::assertNull($isNegative);
+              PHPUnit_Framework_Assert::assertNotNull($json);
+          }
+
+          /**
+           * @Then /^the other (?:JSON|json)(?: response)?(?: at "(?<path>.*)")? should(?<isNegative> not)? be:$/
+           */
+          public function checkEquality2($json = null, $path = null, $isNegative = null)
+          {
+              PHPUnit_Framework_Assert::assertNull($path);
+              PHPUnit_Framework_Assert::assertNull($isNegative);
+              PHPUnit_Framework_Assert::assertNotNull($json);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Then the JSON should be:
+            '''
+            Test
+            '''
+          And the other JSON should be:
+            '''
+            Test
+            '''
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ..
+
+      1 scenario (1 passed)
+      2 steps (2 passed)
+      """
+
   Scenario: Definition parameter with decimal number following string
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
