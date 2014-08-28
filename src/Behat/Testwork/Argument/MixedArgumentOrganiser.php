@@ -126,14 +126,13 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
             return null;
         }
 
-        $refl = new ReflectionObject($value);
         foreach ($parameters as $num => $parameter) {
-            if (!$parameter->getClass()) {
+            $typehintRefl = $parameter->getClass();
+            if (!$typehintRefl) {
                 continue;
             }
 
-            $typehintClass = $parameter->getClass()->getName();
-            if ($refl->isSubclassOf($typehintClass) || $refl->getName() == $typehintClass) {
+            if ($typehintRefl->isInstance($value)) {
                 return $num;
             }
         }
