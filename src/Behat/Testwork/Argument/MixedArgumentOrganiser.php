@@ -13,7 +13,6 @@ namespace Behat\Testwork\Argument;
 use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
-use ReflectionObject;
 use ReflectionParameter;
 
 /**
@@ -127,15 +126,27 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         }
 
         foreach ($parameters as $num => $parameter) {
-            $typehintRefl = $parameter->getClass();
-            if (!$typehintRefl || !$typehintRefl->isInstance($value)) {
-                continue;
+            if ($this->isValueMatchesTypehintedParameter($value, $parameter)) {
+                return $num;
             }
-
-            return $num;
         }
 
         return null;
+    }
+
+    /**
+     * Checks if value matches typehint of provided parameter.
+     *
+     * @param mixed               $value
+     * @param ReflectionParameter $parameter
+     *
+     * @return Boolean
+     */
+    private function isValueMatchesTypehintedParameter($value, ReflectionParameter $parameter)
+    {
+        $typehintRefl = $parameter->getClass();
+
+        return $typehintRefl && $typehintRefl->isInstance($value);
     }
 
     /**
