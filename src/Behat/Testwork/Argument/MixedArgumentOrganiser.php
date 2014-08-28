@@ -128,13 +128,11 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         foreach ($parameters as $num => $parameter) {
             $typehintRefl = $parameter->getClass();
-            if (!$typehintRefl) {
+            if (!$typehintRefl || !$typehintRefl->isInstance($value)) {
                 continue;
             }
 
-            if ($typehintRefl->isInstance($value)) {
-                return $num;
-            }
+            return $num;
         }
 
         return null;
