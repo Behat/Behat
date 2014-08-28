@@ -1,3 +1,12 @@
+3.0.13 / 2014-08-28
+===================
+
+  * Add support for typehinted parameters
+  * Allow any whitespace characters at the end of context class
+  * Fix scenario with decimal number following string in Turnip pattern
+  * Fix scenario with empty string in step with Turnip pattern
+  * Fix scenario where step has slashes in Turnip pattern
+
 3.0.12 / 2014-07-17
 ===================
 
