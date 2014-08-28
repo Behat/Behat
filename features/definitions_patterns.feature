@@ -348,3 +348,137 @@ Feature: Step Definition Pattern
       1 scenario (1 passed)
       1 step (1 passed)
       """
+
+  Scenario: Definition parameter followed by colon
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I can provide :count parameters for :name:
+           */
+          public function multipleWrongNamedParameters($count, $name, $string) {
+          PHPUnit_Framework_Assert::assertEquals('2', $count);
+            PHPUnit_Framework_Assert::assertEquals('thing', $name);
+            PHPUnit_Framework_Assert::assertEquals("Test", (string) $string);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given I can provide 2 parameters for "thing":
+            '''
+            Test
+            '''
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
+
+  Scenario: Definition parameter with decimal number following string
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I have a package v:version
+           */
+          public function multipleWrongNamedParameters($version) {
+          PHPUnit_Framework_Assert::assertEquals('2.5', $version);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given I have a package v2.5
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
+
+  Scenario: Empty parameter value
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @When I enter the string :input
+           */
+          public function multipleWrongNamedParameters($input) {
+          PHPUnit_Framework_Assert::assertEquals('', $input);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          When I enter the string ""
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
+
+  Scenario: UNIX path as parameter
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Then images should be uploaded to web\/uploads\/media\/default\/:arg1\/:arg2\/
+           */
+          public function multipleWrongNamedParameters($arg1, $arg2) {
+          PHPUnit_Framework_Assert::assertEquals('0001', $arg1);
+          PHPUnit_Framework_Assert::assertEquals('01', $arg2);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Then images should be uploaded to web/uploads/media/default/0001/01/
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """

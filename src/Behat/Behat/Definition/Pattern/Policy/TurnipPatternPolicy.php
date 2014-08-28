@@ -20,7 +20,7 @@ use Behat\Transliterator\Transliterator;
  */
 final class TurnipPatternPolicy implements PatternPolicy
 {
-    const TOKEN_REGEX = "[\"']?(?P<%s>(?<=\")[^\"]+(?=\")|(?<=')[^']+(?=')|(?<=\W|^)\w+(?:[\.\,]\w+)?(?=\W|$))['\"]?";
+    const TOKEN_REGEX = "[\"']?(?P<%s>(?<=\")[^\"]*(?=\")|(?<=')[^']*(?=')|[\w\.\,]+)['\"]?";
 
     const PLACEHOLDER_REGEXP = "/\\\:(\w+)/";
     const OPTIONAL_WORD_REGEXP = '/(\s)?\\\\\(([^\\\]+)\\\\\)(\s)?/';
@@ -30,9 +30,9 @@ final class TurnipPatternPolicy implements PatternPolicy
      * @var string[]
      */
     private static $placeholderPatterns = array(
-        "/(?<=\W|^)\"[^\"]+\"(?=\W|$)/",
-        "/(?<=\W|^)'[^']+'(?=\W|$)/",
-        "/(?<=\W|^)\d+(?:[\.\,]\d+)?(?=\W|$)/"
+        "/(?<!\w)\"[^\"]+\"(?!\w)/",
+        "/(?<!\w)'[^']+'(?!\w)/",
+        "/(?<!\w|\.|\,)\d+(?:[\.\,]\d+)?(?!\w|\.|\,)/"
     );
 
     /**
@@ -57,6 +57,7 @@ final class TurnipPatternPolicy implements PatternPolicy
                 $pattern
             );
         }
+        $pattern = $this->escapeAlternationSyntax($pattern);
         $canonicalText = $this->generateCanonicalText($stepText);
 
         return new Pattern($canonicalText, $pattern, $count);
@@ -140,6 +141,43 @@ final class TurnipPatternPolicy implements PatternPolicy
      */
     private function replaceTurnipAlternativeWordsWithRegex($regex)
     {
-        return preg_replace(self::ALTERNATIVE_WORD_REGEXP, '(?:\1|\2)', $regex);
+        $regex = preg_replace(self::ALTERNATIVE_WORD_REGEXP, '(?:\1|\2)', $regex);
+        $regex = $this->removeEscapingOfAlternationSyntax($regex);
+
+        return $regex;
+    }
+
+    /**
+     * Adds escaping to alternation syntax in pattern.
+     *
+     * By default, Turnip treats `/` as alternation syntax. Meaning `one/two` for Turnip
+     * means either `one` or `two`. Sometimes though you'll want to use slash character
+     * with different purpose (URL, UNIX paths). In this case, you would escape slashes
+     * with backslash.
+     *
+     * This method adds escaping to all slashes in generated snippets.
+     *
+     * @param string $pattern
+     *
+     * @return string
+     */
+    private function escapeAlternationSyntax($pattern)
+    {
+        return str_replace('/', '\/', $pattern);
+    }
+
+    /**
+     * Removes escaping of alternation syntax from regex.
+     *
+     * This method removes those escaping backslashes from your slashes, so your steps
+     * could be matched against your escaped definitions.
+     *
+     * @param string $regex
+     *
+     * @return string
+     */
+    private function removeEscapingOfAlternationSyntax($regex)
+    {
+        return str_replace('\\\/', '/', $regex);
     }
 }
