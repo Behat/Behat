@@ -13,6 +13,7 @@ namespace Behat\Testwork\Argument;
 use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
+use ReflectionObject;
 use ReflectionParameter;
 
 /**
@@ -54,18 +55,19 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     {
         $this->markAllArgumentsUndefined();
 
-        list($numberedArgs, $namedArgs) = $this->splitArguments($parameters, $arguments);
+        list($named, $typehinted, $numbered) = $this->splitArguments($parameters, $arguments);
 
         $arguments =
-            $this->getNamedArguments($parameters, $namedArgs) +
-            $this->getNumberedArguments($parameters, $numberedArgs) +
-            $this->getDefaultArguments($parameters);
+            $this->prepareNamedArguments($parameters, $named) +
+            $typehinted +
+            $this->prepareNumberedArguments($parameters, $numbered) +
+            $this->prepareDefaultArguments($parameters);
 
         return $this->reorderArguments($parameters, $arguments);
     }
 
     /**
-     * Splits arguments into two separate arrays - numbered and named.
+     * Splits arguments into three separate arrays - named, numbered and typehinted.
      *
      * @param ReflectionParameter[] $parameters
      * @param mixed[]               $arguments
@@ -83,15 +85,60 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         $namedArguments = array();
         $numberedArguments = array();
+        $typehintedArguments = array();
         foreach ($arguments as $key => $val) {
-            if (is_string($key) && in_array($key, $parameterNames)) {
+            if ($this->isStringKeyAndExistsInParameters($key, $parameterNames)) {
                 $namedArguments[$key] = $val;
+            } elseif ($num = $this->getParameterNumberWithTypehintingValue($parameters, $val)) {
+                $typehintedArguments[$num] = $val;
             } else {
                 $numberedArguments[] = $val;
             }
         }
 
-        return array($numberedArguments, $namedArguments);
+        return array($namedArguments, $typehintedArguments, $numberedArguments);
+    }
+
+    /**
+     * Checks that provided argument key is a string and it matches some parameter name.
+     *
+     * @param mixed    $argumentKey
+     * @param string[] $parameterNames
+     *
+     * @return Boolean
+     */
+    private function isStringKeyAndExistsInParameters($argumentKey, $parameterNames)
+    {
+        return is_string($argumentKey) && in_array($argumentKey, $parameterNames);
+    }
+
+    /**
+     * Tries to find a parameter number, which typehints provided value.
+     *
+     * @param ReflectionParameter[] $parameters
+     * @param mixed                 $value
+     *
+     * @return null|integer
+     */
+    private function getParameterNumberWithTypehintingValue(array $parameters, $value)
+    {
+        if (!is_object($value)) {
+            return null;
+        }
+
+        $refl = new ReflectionObject($value);
+        foreach ($parameters as $num => $parameter) {
+            if (!$parameter->getClass()) {
+                continue;
+            }
+
+            $typehintClass = $parameter->getClass()->getName();
+            if ($refl->isSubclassOf($typehintClass) || $refl->getName() == $typehintClass) {
+                return $num;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -102,7 +149,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @return mixed[]
      */
-    private function getNamedArguments(array $parameters, array $namedArguments)
+    private function prepareNamedArguments(array $parameters, array $namedArguments)
     {
         $arguments = array();
 
@@ -126,7 +173,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @return mixed[]
      */
-    private function getNumberedArguments(array $parameters, array $numberedArguments)
+    private function prepareNumberedArguments(array $parameters, array $numberedArguments)
     {
         $arguments = array();
 
@@ -152,7 +199,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @return mixed[]
      */
-    private function getDefaultArguments(array $parameters)
+    private function prepareDefaultArguments(array $parameters)
     {
         $arguments = array();
 
