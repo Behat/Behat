@@ -29,17 +29,17 @@ final class StatisticsListener implements EventListener
      */
     private $statistics;
     /**
-     * @var StatisticsPrinter
+     * @var null|StatisticsPrinter
      */
     private $printer;
 
     /**
      * Initializes listener.
      *
-     * @param Statistics        $statistics
-     * @param StatisticsPrinter $statisticsPrinter
+     * @param Statistics             $statistics
+     * @param null|StatisticsPrinter $statisticsPrinter
      */
-    public function __construct(Statistics $statistics, StatisticsPrinter $statisticsPrinter)
+    public function __construct(Statistics $statistics, StatisticsPrinter $statisticsPrinter = null)
     {
         $this->statistics = $statistics;
         $this->printer = $statisticsPrinter;
@@ -81,6 +81,9 @@ final class StatisticsListener implements EventListener
         }
 
         $this->statistics->stopTimer();
-        $this->printer->printStatistics($formatter, $this->statistics);
+
+        if ($this->printer) {
+            $this->printer->printStatistics($formatter, $this->statistics);
+        }
     }
 }
