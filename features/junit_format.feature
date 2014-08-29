@@ -450,7 +450,7 @@ Feature: JUnit Formatter
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with:
       """
-      Call to undefined method PHPUnit_Framework_Assert::assertEqual()
+      Call to undefined method PHPUnit_Framework_Assert::assertEqual
       """
     And "junit/default.xml" file xml should be like:
       """
