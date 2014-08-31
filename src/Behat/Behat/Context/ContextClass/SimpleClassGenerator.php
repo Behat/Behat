@@ -25,20 +25,22 @@ final class SimpleClassGenerator implements ClassGenerator
     protected static $template = <<<'PHP'
 <?php
 
-{namespace}use Behat\Behat\Context\SnippetAcceptingContext;
+{namespace}use Behat\Behat\Context\Context;
+use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 
 /**
- * Behat context class.
+ * Defines application features from the specific context.
  */
-class {className} implements SnippetAcceptingContext
+class {className} implements Context, SnippetAcceptingContext
 {
     /**
      * Initializes context.
      *
-     * Every scenario gets its own context object.
-     * You can also pass arbitrary arguments to the context constructor through behat.yml.
+     * Every scenario gets its own context instance.
+     * You can also pass arbitrary arguments to the
+     * context constructor through behat.yml.
      */
     public function __construct()
     {
