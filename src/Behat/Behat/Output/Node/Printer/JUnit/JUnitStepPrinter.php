@@ -50,37 +50,27 @@ class JUnitStepPrinter implements StepPrinter
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
+        $message = $step->getKeyword() . ' ' . $step->getText();
+
+        if ($result instanceof ExceptionResult && $result->hasException()) {
+            $message .= ': ' . $this->exceptionPresenter->presentException($result->getException());
+        }
+
+        $attributes = array('message' => $message);
+
         switch ($result->getResultCode()) {
             case TestResult::FAILED:
-                $message = $step->getKeyword().' '.$step->getText();
-
-                if ($result instanceof ExceptionResult && $result->hasException()) {
-                    $message .= ': '.$this->exceptionPresenter->presentException($result->getException());
-                }
-
-                $outputPrinter->addTestcaseChild('failure', array(
-                    'message' => $message,
-                ));
+                $outputPrinter->addTestcaseChild('failure', $attributes);
                 break;
 
             case TestResult::PENDING:
-                $message = $step->getKeyword().' '.$step->getText();
-
-                if ($result instanceof ExceptionResult && $result->hasException()) {
-                    $message .= '; '.$this->exceptionPresenter->presentException($result->getException());
-                }
-
-                $outputPrinter->addTestcaseChild('error', array(
-                    'type' => 'pending',
-                    'message' => $message,
-                ));
+                $attributes['type'] = 'pending';
+                $outputPrinter->addTestcaseChild('error', $attributes);
                 break;
 
             case StepResult::UNDEFINED:
-                $outputPrinter->addTestcaseChild('error', array(
-                    'type'    => 'undefined',
-                    'message' => $step->getKeyword().' '.$step->getText(),
-                ));
+                $attributes['type'] = 'undefined';
+                $outputPrinter->addTestcaseChild('error', $attributes);
                 break;
         }
     }
