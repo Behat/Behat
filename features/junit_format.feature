@@ -100,10 +100,10 @@ Feature: JUnit Formatter
       <testsuites name="default">
         <testsuite name="World consistency" tests="6" failures="3" errors="2">
           <testcase name="Undefined" status="undefined">
-            <error type="undefined" message="And Something new"/>
+            <error message="And Something new" type="undefined"/>
           </testcase>
           <testcase name="Pending" status="pending">
-            <error type="pending" message="And Something not done yet; TODO: write pending definition" />
+            <error message="And Something not done yet: TODO: write pending definition" type="pending"/>
           </testcase>
           <testcase name="Failed" status="failed">
             <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
