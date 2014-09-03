@@ -57,7 +57,7 @@ final class ConsoleOutputPrinter extends BasePrinter
             'passed_param'  => new OutputFormatterStyle('green', null, array('bold')),
             'skipped'       => new OutputFormatterStyle('cyan'),
             'skipped_param' => new OutputFormatterStyle('cyan', null, array('bold')),
-            'comment'       => new OutputFormatterStyle('black'),
+            'comment'       => new OutputFormatterStyle('magenta'),
             'tag'           => new OutputFormatterStyle('cyan')
         );
     }
