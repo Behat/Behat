@@ -3,52 +3,47 @@ Feature: Digest Formatter
   As a feature writer
   I need to have digest formatter
 
-  Scenario: Complex
-    Given a file named "features/World.feature" with:
+  Scenario: Simple
+    Given a file named "features/bootstrap/FeatureContext.php" with:
       """
-      Feature: World consistency
-        In order to maintain stable behaviors
+      <?php
+
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
+
+      class FeatureContext implements CustomSnippetAcceptingContext
+      {
+          public static function getAcceptedSnippetType() { return 'regex'; }
+      }
+      """
+    Given a file named "features/digest.feature" with:
+      """
+      Feature: Provide a digest of my features
+        In order to easily browse my application's features
         As a features developer
-        I want, that "World" flushes between scenarios
+        I want to have access to a digest of my features
 
-        Background:
-          Given I have entered 10
+        Scenario: It starts here
+          Given something
+          When something new
+          Then something should have happened
 
-        Scenario: Undefined
-          Then I must have 10
-          And Something new
-          Then I must have 10
+        Scenario: It continues here
+          Given something doesn't exist
+          When something else
+          Then something or not
 
-        Scenario: Pending
-          Then I must have 10
-          And Something not done yet
-          Then I must have 10
-
-        Scenario: Failed
-          When I add 4
-          Then I must have 13
-
-        Scenario Outline: Passed & Failed
-          Given I must have 10
-          When I add <value>
-          Then I must have <result>
-
-          Examples:
-            | value | result |
-            |  5    | 16     |
-            |  10   | 20     |
-            |  23   | 32     |
+        Scenario: It ends here
+          When nothing
+          Then void
       """
-    When I run "behat --no-colors -f digest"
+    When I run "behat --no-colors -f digest --no-snippets"
     Then it should pass with:
       """
-      Feature: World consistency
-        In order to maintain stable behaviors
-        As a features developer
-        I want, that "World" flushes between scenarios
-
-        Scenario: Undefined       # features/World.feature:9
-        Scenario: Pending         # features/World.feature:14
-        Scenario: Failed          # features/World.feature:19
-        Scenario: Passed & Failed # features/World.feature:23
+      Feature Provide a digest of my features features/digest.feature
+       6 It starts here
+       11 It continues here
+       16 It ends here
       """
