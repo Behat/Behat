@@ -126,7 +126,9 @@ class DigestFormatterFactory implements FormatterFactory
      */
     protected function loadCorePrinters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\Digest\DigestFeaturePrinter');
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Digest\DigestFeaturePrinter', array(
+            '%paths.base%'
+        ));
         $container->setDefinition('output.node.printer.digest.feature', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Digest\DigestSetupPrinter', array(
