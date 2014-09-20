@@ -1,7 +1,7 @@
 Feature: Empty feature
   In order to follow BDD practice without a hassle
   As a BDD practitioner
-  I need to be able to leave scenario titles without steps for time being
+  I need to be able to leave scenario titles without steps for the time being
 
   Scenario: Empty scenario
     Given a file named "features/bootstrap/FeatureContext.php" with:

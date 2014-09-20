@@ -1,7 +1,7 @@
 Feature: Parameters
   In order to support different setups
   As a tester
-  I need to be able to configure Behat through environment variable
+  I need to be able to configure Behat through an environment variable
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:

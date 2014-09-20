@@ -1,5 +1,5 @@
 Feature: Suites
-  In order to use specific set of contexts against specific set of features in single run
+  In order to use a specific set of contexts against a specific set of features in single run
   As a feature tester
   I need to be able to use suites
 

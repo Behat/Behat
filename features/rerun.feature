@@ -1,7 +1,7 @@
 Feature: Rerun
   In order to test only failed scenarios
   As a feature developer
-  I need to have an ability to rerun failed previously scenarios
+  I need to have the ability to rerun previously failed scenarios
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:

@@ -1,7 +1,7 @@
 Feature: Snippets
   In order to not manually write definitions every time
   As a feature tester
-  I need tool to generate snippets for me
+  I need a tool to generate snippets for me
 
   Background:
     Given a file named "features/coffee.feature" with:
