@@ -10,9 +10,9 @@ feel free to do this, but remember to follow this few simple rules:
 - Add `*.features` for those changes (please look into `features/` folder for
   some examples). This is important so we don't break it in a future version
   unintentionally,
-- Commit your code, but do not mess with `BehatApplication` version, or
+- Commit your code, but do not mess with `ApplicationFactory` version, or
   `CHANGES.md` one,
-- __Remember__: when you create Pull Request, always select `master` branch as
+- __Remember__: when you create a Pull Request, always select `master` branch as
   target, otherwise it will be closed (this is selected by default).
 
 Backwards compatibility
@@ -32,7 +32,7 @@ Contributing to Formatter Translations
 
 Almost any output message (except exceptions and custom output) printed by Behat
 formatters could be translated into your language with `--lang` option. In order
-to fix/add translation, edit the appropriate section of the `i18n.php` file.
+to fix/add a translation, edit the appropriate section of the `i18n.php` file.
 
 Running tests
 -------------
@@ -43,4 +43,3 @@ suite with your locale set to english:
 ```bash
 $> LANG=C bin/behat
 ```
-

@@ -1,7 +1,7 @@
 Feature: Locale configuration
-  In order to display feature in custom language
+  In order to display features in custom language
   As a feature writer
-  I need to be able to the locale inside the configuration file
+  I need to be able to set the locale inside the configuration file
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:

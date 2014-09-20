@@ -1,7 +1,7 @@
 Feature: Pretty Formatter
   In order to debug features
   As a feature writer
-  I need to have pretty formatter
+  I need to have a pretty formatter
 
   Scenario: Complex
     Given a file named "features/bootstrap/FeatureContext.php" with:

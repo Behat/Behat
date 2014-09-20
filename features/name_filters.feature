@@ -1,7 +1,7 @@
 Feature: Name filters
   In order to run only needed features
   As a Behat user
-  I need to Behat support features & scenario/outline names filtering
+  I need Behat to support features & scenario/outline names filtering
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:

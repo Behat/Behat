@@ -194,7 +194,7 @@ Feature: Format options
           }
       """
 
-  Scenario: --no-paths option
+  Scenario: no paths option
     When I run "behat --no-colors --format-settings='{\"paths\": false}'"
     Then it should fail with:
       """
@@ -332,7 +332,7 @@ Feature: Format options
       25 steps (20 passed, 2 failed, 3 undefined)
       """
 
-  Scenario: --expand option
+  Scenario: expand enabled option
     When I run "behat --no-colors --format-settings='{\"expand\": true}'"
     Then it should fail with:
       """
@@ -423,7 +423,7 @@ Feature: Format options
           }
       """
 
-  Scenario: --no-multiline option
+  Scenario: no multiline option
     When I run "behat --no-colors --format-settings='{\"multiline\": false}'"
     Then it should fail with:
       """
