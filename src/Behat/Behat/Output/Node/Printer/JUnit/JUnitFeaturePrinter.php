@@ -54,6 +54,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
         $outputPrinter->addTestsuite(array(
             'name' => $feature->getTitle(),
             'tests' => $totalCount,
+            'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[StepResult::UNDEFINED],
         ));
