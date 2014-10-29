@@ -120,6 +120,82 @@ Feature: JUnit Formatter
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
 
+  Scenario: Multiple Features
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+    """
+      <?php
+
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
+
+      class FeatureContext implements CustomSnippetAcceptingContext
+      {
+          private $value;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
+
+          /**
+           * @Given /I have entered (\d+)/
+           */
+          public function iHaveEntered($num) {
+              $this->value = $num;
+          }
+
+          /**
+           * @Then /I must have (\d+)/
+           */
+          public function iMustHave($num) {
+              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
+          }
+
+          /**
+           * @When /I add (\d+)/
+           */
+          public function iAdd($num) {
+              $this->value += $num;
+          }
+      }
+      """
+    And a file named "features/adding_feature_1.feature" with:
+      """
+      Feature: Adding Feature 1
+        In order to add number together
+        As a mathematician
+        I want, something that acts like a calculator
+
+        Scenario: Adding 4 to 10
+          Given I have entered 10
+          When I add 4
+          Then I must have 14
+      """
+    And a file named "features/adding_feature_2.feature" with:
+      """
+      Feature: Adding Feature 2
+        In order to add number together
+        As a mathematician
+        I want, something that acts like a calculator
+
+        Scenario: Adding 8 to 10
+          Given I have entered 10
+          When I add 8
+          Then I must have 18
+      """
+    And there is a folder named "junit"
+    When I run "behat --no-colors -f junit -o junit"
+    And "junit/default.xml" file xml should be like:
+      """
+      <?xml version="1.0" encoding="UTF-8"?>
+      <testsuites name="default">
+        <testsuite name="Adding Feature 1" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="Adding 4 to 10" status="passed"></testcase>
+        </testsuite>
+        <testsuite name="Adding Feature 2" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="Adding 8 to 10" status="passed"></testcase>
+        </testsuite>
+      </testsuites>
+      """
+    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+
   Scenario: Multiline titles
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """

@@ -58,6 +58,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[StepResult::UNDEFINED],
         ));
+        $this->statistics->resetAllCounters();
     }
 
     /**

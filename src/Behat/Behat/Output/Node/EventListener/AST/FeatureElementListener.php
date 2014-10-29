@@ -156,5 +156,6 @@ final class FeatureElementListener implements EventListener
         }
 
         $this->featurePrinter->printFooter($formatter, $event->getTestResult());
+        $this->afterScenarioTestedEvents = array();
     }
 }
