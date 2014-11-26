@@ -28,11 +28,11 @@ class BadOutputPathException extends InvalidArgumentException implements Printer
      * Initializes exception.
      *
      * @param string $message
-     * @param string $path
+     * @param string $context
      */
-    public function __construct($message, $path)
+    public function __construct($message, $context)
     {
-        $this->path = $path;
+        $this->path = $context;
 
         parent::__construct($message);
     }
