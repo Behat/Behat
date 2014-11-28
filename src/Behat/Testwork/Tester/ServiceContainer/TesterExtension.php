@@ -249,53 +249,33 @@ abstract class TesterExtension implements Extension
     }
 
     /**
+     * Processes all tester wrappers depending on their interface.
+     *
      * @param ContainerBuilder $container
-     * @param                  $testerId
-     * @param                  $wrapperTag
+     * @param string           $testerId
+     * @param string           $wrapperTag
      */
     protected function processTesterWrappers(ContainerBuilder $container, $testerId, $wrapperTag)
     {
         $refs = $this->processor->findAndSortTaggedServices($container, $wrapperTag);
+        list($arrangingRefs, $basicRefs) = $this->processor->splitServices($container, $refs,
+            'Behat\Testwork\Tester\Arranging\ArrangingTester'
+        );
 
-        $arrangingRefs = array();
-        $basicRefs = array();
-
-        foreach ($refs as $reference) {
-            $definition = $container->getDefinition('' . $reference);
-            $reflection = new \ReflectionClass($definition->getClass());
-
-            if ($reflection->implementsInterface(
-                'Behat\Testwork\Tester\Arranging\ArrangingTester'
-            )
-            ) {
-                $arrangingRefs[] = $reference;
-            } else {
-                $basicRefs[] = $reference;
-            }
-        }
-
-        // Convert the tester to ArrangingTester
-        $this->processor->wrapServiceInClass(
-            $container,
-            $testerId,
+        // Adapt the tester to ArrangingTester interface
+        $this->processor->wrapServiceInClass($container, $testerId,
             'Behat\Testwork\Tester\Arranging\BasicTesterAdapter'
         );
 
-        // Apply ArrangingTester decorators
-        foreach ($arrangingRefs as $reference) {
-            $this->processor->wrapService($container, $testerId, $reference);
-        }
+        // Apply ArrangingTester decorators to the tester
+        $this->processor->wrapServiceInReferences($container, $testerId, $arrangingRefs);
 
-        // Convert the tester to Tester
-        $this->processor->wrapServiceInClass(
-            $container,
-            $testerId,
+        // Adapt the tester back to Tester interface
+        $this->processor->wrapServiceInClass($container, $testerId,
             'Behat\Testwork\Tester\Arranging\ArrangingTesterAdapter'
         );
 
-        // Apply Tester decorators
-        foreach ($basicRefs as $reference) {
-            $this->processor->wrapService($container, $testerId, $reference);
-        }
+        // Apply Tester decorators to the tester
+        $this->processor->wrapServiceInReferences($container, $testerId, $basicRefs);
     }
 }

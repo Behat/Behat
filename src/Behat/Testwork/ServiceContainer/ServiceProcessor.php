@@ -53,6 +53,34 @@ final class ServiceProcessor
     }
 
     /**
+     * Splits references based on the provided interface.
+     *
+     * References to services that implement interface go into the 1st collection, others into 2nd.
+     *
+     * @param ContainerBuilder $container
+     * @param Reference[]      $references
+     * @param string           $interface
+     *
+     * @return array
+     */
+    public function splitServices(ContainerBuilder $container, array $references, $interface)
+    {
+        $collection1 = array();
+        $collection2 = array();
+
+        foreach ($references as $reference) {
+            $definition = $container->getDefinition($reference);
+            if (is_subclass_of($definition->getClass(), $interface)) {
+                $collection1[] = $reference;
+            } else {
+                $collection2[] = $reference;
+            }
+        }
+
+        return array($collection1, $collection2);
+    }
+
+    /**
      * Processes wrappers of a service, found by provided tag.
      *
      * The wrappers are applied by descending priority.
@@ -64,7 +92,23 @@ final class ServiceProcessor
      */
     public function processWrapperServices(ContainerBuilder $container, $target, $wrapperTag)
     {
-        foreach ($this->findAndSortTaggedServices($container, $wrapperTag) as $reference) {
+        $wrapperReferences = $this->findAndSortTaggedServices($container, $wrapperTag);
+        $this->wrapServiceInReferences($container, $target, $wrapperReferences);
+    }
+
+    /**
+     * Wraps service with provided ID into stack of decorator references.
+     *
+     * @param ContainerBuilder $container
+     * @param string           $target
+     * @param Reference[]      $references
+     */
+    public function wrapServiceInReferences(
+        ContainerBuilder $container,
+        $target,
+        array $references
+    ) {
+        foreach ($references as $reference) {
             $this->wrapService($container, $target, $reference);
         }
     }
