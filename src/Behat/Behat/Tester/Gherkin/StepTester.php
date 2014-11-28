@@ -102,7 +102,7 @@ final class StepTester implements Tester
             return new UndefinedStepResult();
         }
 
-        if ($ctrl->isSkipEnforced()) {
+        if ($ctrl->isSkip()) {
             return new SkippedStepResult($search);
         }
 

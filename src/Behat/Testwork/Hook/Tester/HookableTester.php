@@ -67,7 +67,7 @@ final class HookableTester implements ArrangingTester
     {
         $setup = $this->decoratedTester->setUp($context, $control);
 
-        if ($control->isSkipEnforced()) {
+        if ($control->isSkip()) {
             return $setup;
         }
 
@@ -96,7 +96,7 @@ final class HookableTester implements ArrangingTester
     {
         $teardown = $this->decoratedTester->tearDown($context, $control, $result);
 
-        if ($control->isSkipEnforced()) {
+        if ($control->isSkip()) {
             return $teardown;
         }
 

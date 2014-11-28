@@ -56,7 +56,7 @@ final class StepContainerTester implements Tester
             $stepContext = $context->createStepContext($step);
             $stepResult = $this->stepTester->test($stepContext, $control);
             $results[] = $stepResult;
-            $control->enforceSkip($control->isSkipEnforced() || !$stepResult->isPassed());
+            $control = !$stepResult->isPassed() ? RunControl::skip() : $control;
         }
 
         return new TestResults($results);

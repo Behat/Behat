@@ -19,24 +19,47 @@ namespace Behat\Testwork\Tester;
  */
 final class RunControl
 {
+    /**
+     * @var Boolean
+     */
     private $skip = false;
 
     /**
-     * Forces tests to be skipped.
-     *
-     * @param Boolean $skip
+     * Private constructor - use named constructors instead.
      */
-    public function enforceSkip($skip = true)
+    private function __construct()
     {
-        $this->skip = (bool)$skip;
     }
 
     /**
-     * Checks if tests should be skipped.
+     * Creates a new run control, that tells testers to run all tests.
+     *
+     * @return RunControl
+     */
+    public static function runAll()
+    {
+        return new RunControl();
+    }
+
+    /**
+     * Creates a new run control, that enforces skipping of all tests and testing routines.
+     *
+     * @return RunControl
+     */
+    public static function skip()
+    {
+        $control = new RunControl();
+        $control->skip = true;
+
+        return $control;
+    }
+
+    /**
+     * Checks if testing routines should be skipped.
      *
      * @return Boolean
      */
-    public function isSkipEnforced()
+    public function isSkip()
     {
         return $this->skip;
     }

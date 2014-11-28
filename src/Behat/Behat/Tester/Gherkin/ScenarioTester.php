@@ -53,16 +53,15 @@ final class ScenarioTester implements Tester
     {
         $results = array();
         $scenarioContext = $this->castContext($context);
-        $scenarioControl = clone $control;
 
         if ($scenarioContext->hasBackground()) {
             $backgroundContext = $scenarioContext->createBackgroundContext();
-            $backgroundResult = $this->backgroundTester->test($backgroundContext, $scenarioControl);
-            $scenarioControl->enforceSkip($scenarioControl->isSkipEnforced() || !$backgroundResult->isPassed());
+            $backgroundResult = $this->backgroundTester->test($backgroundContext, $control);
+            $control = !$backgroundResult->isPassed() ? RunControl::skip() : $control;
             $results[] = new IntegerTestResult($backgroundResult->getResultCode());
         }
 
-        $scenarioResult = $this->containerTester->test($scenarioContext, $scenarioControl);
+        $scenarioResult = $this->containerTester->test($scenarioContext, $control);
         $results[] = new IntegerTestResult($scenarioResult->getResultCode());
 
         return new TestResults($results);
