@@ -15,13 +15,14 @@ use Behat\Testwork\Specification\SpecificationFinder;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Suite\SuiteRepository;
+use Behat\Testwork\Tester\Context\ExerciseContext;
 use Behat\Testwork\Tester\Exception\WrongPathsException;
 use Behat\Testwork\Tester\Exercise;
-use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
-use Behat\Testwork\Tester\Result\TestWithSetupResult;
+use Behat\Testwork\Tester\RunControl;
+use Behat\Testwork\Tester\Tester;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -44,9 +45,9 @@ final class ExerciseController implements Controller
      */
     private $specificationFinder;
     /**
-     * @var Exercise
+     * @var Tester
      */
-    private $exercise;
+    private $exerciseTester;
     /**
      * @var ResultInterpreter
      */
@@ -61,20 +62,20 @@ final class ExerciseController implements Controller
      *
      * @param SuiteRepository     $suiteRepository
      * @param SpecificationFinder $specificationFinder
-     * @param Exercise            $exercise
+     * @param Tester              $exerciseTester
      * @param ResultInterpreter   $resultInterpreter
      * @param Boolean             $skip
      */
     public function __construct(
         SuiteRepository $suiteRepository,
         SpecificationFinder $specificationFinder,
-        Exercise $exercise,
+        Tester $exerciseTester,
         ResultInterpreter $resultInterpreter,
         $skip = false
     ) {
         $this->suiteRepository = $suiteRepository;
         $this->specificationFinder = $specificationFinder;
-        $this->exercise = $exercise;
+        $this->exerciseTester = $exerciseTester;
         $this->resultInterpreter = $resultInterpreter;
         $this->skip = $skip;
     }
@@ -84,17 +85,26 @@ final class ExerciseController implements Controller
      */
     public function configure(Command $command)
     {
-        $locatorsExamples = implode(PHP_EOL, array_map(
-            function ($locator) {
-                return '- ' . $locator;
-            }, $this->specificationFinder->getExampleLocators()
-        ));
+        $locatorsExamples = implode(
+            PHP_EOL,
+            array_map(
+                function ($locator) {
+                    return '- ' . $locator;
+                },
+                $this->specificationFinder->getExampleLocators()
+            )
+        );
 
         $command
-            ->addArgument('paths', InputArgument::OPTIONAL,
+            ->addArgument(
+                'paths',
+                InputArgument::OPTIONAL,
                 'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples
             )
-            ->addOption('--dry-run', null, InputOption::VALUE_NONE,
+            ->addOption(
+                '--dry-run',
+                null,
+                InputOption::VALUE_NONE,
                 'Invokes formatters without executing the tests and hooks.'
             );
     }
@@ -126,7 +136,10 @@ final class ExerciseController implements Controller
      */
     private function findSpecifications(InputInterface $input)
     {
-        return $this->findSuitesSpecifications($this->getAvailableSuites(), $input->getArgument('paths'));
+        return $this->findSuitesSpecifications(
+            $this->getAvailableSuites(),
+            $input->getArgument('paths')
+        );
     }
 
     /**
@@ -139,16 +152,10 @@ final class ExerciseController implements Controller
      */
     private function testSpecifications(InputInterface $input, array $specifications)
     {
-        $skip = $input->getOption('dry-run') || $this->skip;
+        $context = new ExerciseContext($specifications);
+        $control = new RunControl($input->getOption('dry-run') || $this->skip);
 
-        $setup = $this->exercise->setUp($specifications, $skip);
-        $skip = !$setup->isSuccessful() || $skip;
-        $testResult = $this->exercise->test($specifications, $skip);
-        $teardown = $this->exercise->tearDown($specifications, $skip, $testResult);
-
-        $result = new IntegerTestResult($testResult->getResultCode());
-
-        return new TestWithSetupResult($setup, $result, $teardown);
+        return $this->exerciseTester->test($context, $control);
     }
 
     /**
