@@ -43,9 +43,6 @@ final class StepContainerTester implements Tester
 
     /**
      * {@inheritdoc}
-     *
-     * This method might introduce side-effects into the run control.
-     * If step tests fail, the further tests skipping will be enforced.
      */
     public function test(Context $context, RunControl $control)
     {
