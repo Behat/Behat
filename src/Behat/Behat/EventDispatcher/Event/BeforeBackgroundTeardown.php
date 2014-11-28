@@ -53,6 +53,14 @@ final class BeforeBackgroundTeardown extends BackgroundTested implements BeforeT
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

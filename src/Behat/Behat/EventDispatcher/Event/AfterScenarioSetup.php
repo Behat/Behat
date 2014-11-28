@@ -22,7 +22,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
+class AfterScenarioSetup extends ScenarioTested implements AfterSetup
 {
     /**
      * @var FeatureNode
@@ -50,6 +50,14 @@ final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
         $this->feature = $context->getFeature();
         $this->scenario = $context->getScenario();
         $this->setup = $setup;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER_SETUP;
     }
 
     /**

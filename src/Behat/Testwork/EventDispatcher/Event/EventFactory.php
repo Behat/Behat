@@ -14,7 +14,6 @@ use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Result\TestResult as Result;
 use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Represents a factory interface for events creation.

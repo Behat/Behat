@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AfterScenarioTested extends ScenarioTested implements AfterTested
+class AfterScenarioTested extends ScenarioTested implements AfterTested
 {
     /**
      * @var FeatureNode
@@ -57,6 +57,14 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
         $this->scenario = $context->getScenario();
         $this->result = $result;
         $this->teardown = $teardown;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER;
     }
 
     /**

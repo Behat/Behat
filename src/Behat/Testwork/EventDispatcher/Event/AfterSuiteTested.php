@@ -52,6 +52,14 @@ final class AfterSuiteTested extends SuiteTested implements AfterTested
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER;
+    }
+
+    /**
      * Returns specification iterator.
      *
      * @return SpecificationIterator

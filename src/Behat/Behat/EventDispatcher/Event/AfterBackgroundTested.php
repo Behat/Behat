@@ -60,6 +60,14 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

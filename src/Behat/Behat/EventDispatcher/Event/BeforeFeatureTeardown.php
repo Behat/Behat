@@ -46,6 +46,14 @@ final class BeforeFeatureTeardown extends FeatureTested implements BeforeTeardow
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

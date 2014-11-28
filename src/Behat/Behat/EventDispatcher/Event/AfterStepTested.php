@@ -62,6 +62,14 @@ final class AfterStepTested extends StepTested implements AfterTested
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

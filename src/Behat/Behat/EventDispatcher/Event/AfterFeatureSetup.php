@@ -46,6 +46,14 @@ final class AfterFeatureSetup extends FeatureTested implements AfterSetup
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER_SETUP;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

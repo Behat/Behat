@@ -10,9 +10,6 @@
 
 namespace Behat\Testwork\EventDispatcher\Tester;
 
-use Behat\Behat\EventDispatcher\Event\ExampleTested;
-use Behat\Behat\Tester\Context\ScenarioContext;
-use Behat\Gherkin\Node\ExampleNode;
 use Behat\Testwork\EventDispatcher\Event\EventFactory;
 use Behat\Testwork\Tester\Arranging\ArrangingTester;
 use Behat\Testwork\Tester\Context\Context;
@@ -67,20 +64,12 @@ final class EventDispatchingTester implements ArrangingTester
     public function setUp(Context $context, RunControl $control)
     {
         $event = $this->eventFactory->createBeforeTestedEvent($context);
-        if ($context instanceof ScenarioContext && $context->getScenario() instanceof ExampleNode) {
-            $this->eventDispatcher->dispatch(ExampleTested::BEFORE, $event);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE, $event);
-        }
+        $this->eventDispatcher->dispatch($event->getEventName(), $event);
 
         $setup = $this->decoratedTester->setUp($context, $control);
 
         $event = $this->eventFactory->createAfterSetupEvent($context, $setup);
-        if ($context instanceof ScenarioContext && $context->getScenario() instanceof ExampleNode) {
-            $this->eventDispatcher->dispatch(ExampleTested::AFTER_SETUP, $event);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
-        }
+        $this->eventDispatcher->dispatch($event->getEventName(), $event);
 
         return $setup;
     }
@@ -103,20 +92,12 @@ final class EventDispatchingTester implements ArrangingTester
     public function tearDown(Context $context, RunControl $control, TestResult $result)
     {
         $event = $this->eventFactory->createBeforeTeardownEvent($context, $result);
-        if ($context instanceof ScenarioContext && $context->getScenario() instanceof ExampleNode) {
-            $this->eventDispatcher->dispatch(ExampleTested::BEFORE_TEARDOWN, $event);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
-        }
+        $this->eventDispatcher->dispatch($event->getEventName(), $event);
 
         $teardown = $this->decoratedTester->tearDown($context, $control, $result);
 
         $event = $this->eventFactory->createAfterTestedEvent($context, $result, $teardown);
-        if ($context instanceof ScenarioContext && $context->getScenario() instanceof ExampleNode) {
-            $this->eventDispatcher->dispatch(ExampleTested::AFTER, $event);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER, $event);
-        }
+        $this->eventDispatcher->dispatch($event->getEventName(), $event);
 
         return $teardown;
     }

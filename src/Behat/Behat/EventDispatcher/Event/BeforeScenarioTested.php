@@ -21,7 +21,7 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
+class BeforeScenarioTested extends ScenarioTested implements BeforeTested
 {
     /**
      * @var FeatureNode
@@ -43,6 +43,14 @@ final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
 
         $this->feature = $context->getFeature();
         $this->scenario = $context->getScenario();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE;
     }
 
     /**

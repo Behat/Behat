@@ -55,6 +55,14 @@ final class BeforeStepTeardown extends StepTested implements BeforeTeardown
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

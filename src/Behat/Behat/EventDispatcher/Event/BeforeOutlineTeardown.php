@@ -52,6 +52,14 @@ final class BeforeOutlineTeardown extends OutlineTested implements BeforeTeardow
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

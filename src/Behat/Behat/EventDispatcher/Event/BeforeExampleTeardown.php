@@ -8,28 +8,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\EventDispatcher\Event;
+namespace Behat\Behat\EventDispatcher\Event;
 
 /**
- * Represents an event in which exercise was aborted.
+ * Represents an event before example teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AfterExerciseAborted extends ExerciseCompleted
+final class BeforeExampleTeardown extends BeforeScenarioTeardown
 {
     /**
      * {@inheritdoc}
      */
     public function getEventName()
     {
-        return self::AFTER;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSpecificationIterators()
-    {
-        return array();
+        return ExampleTested::BEFORE_TEARDOWN;
     }
 }

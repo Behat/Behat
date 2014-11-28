@@ -22,7 +22,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeardown
+class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeardown
 {
     /**
      * @var FeatureNode
@@ -50,6 +50,14 @@ final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeard
         $this->feature = $context->getFeature();
         $this->scenario = $context->getScenario();
         $this->result = $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
     }
 
     /**

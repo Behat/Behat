@@ -45,6 +45,14 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

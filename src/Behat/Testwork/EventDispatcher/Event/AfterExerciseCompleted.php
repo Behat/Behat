@@ -50,6 +50,14 @@ final class AfterExerciseCompleted extends ExerciseCompleted implements AfterTes
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER;
+    }
+
+    /**
      * Returns specification iterators.
      *
      * @return GroupedSpecificationIterator[]

@@ -45,6 +45,14 @@ final class BeforeSuiteTeardown extends SuiteTested implements BeforeTeardown
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
+    }
+
+    /**
      * Returns specification iterator.
      *
      * @return SpecificationIterator

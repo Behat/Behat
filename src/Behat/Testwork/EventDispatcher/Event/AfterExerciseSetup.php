@@ -43,6 +43,14 @@ final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER_SETUP;
+    }
+
+    /**
      * Returns specification iterators.
      *
      * @return GroupedSpecificationIterator[]

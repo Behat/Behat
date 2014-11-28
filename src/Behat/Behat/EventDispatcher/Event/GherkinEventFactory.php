@@ -59,6 +59,9 @@ final class GherkinEventFactory implements EventFactory
             case ($context instanceof ScenarioContext && $context->isOutline()):
                 return new BeforeOutlineTested($context);
 
+            case ($context instanceof ScenarioContext && $context->isExample()):
+                return new BeforeExampleTested($context);
+
             case $context instanceof ScenarioContext:
                 return new BeforeScenarioTested($context);
 
@@ -83,6 +86,9 @@ final class GherkinEventFactory implements EventFactory
 
             case ($context instanceof ScenarioContext && $context->isOutline()):
                 return new AfterOutlineSetup($context, $setup);
+
+            case ($context instanceof ScenarioContext && $context->isExample()):
+                return new AfterExampleSetup($context, $setup);
 
             case $context instanceof ScenarioContext:
                 return new AfterScenarioSetup($context, $setup);
@@ -109,6 +115,9 @@ final class GherkinEventFactory implements EventFactory
             case ($context instanceof ScenarioContext && $context->isOutline()):
                 return new BeforeOutlineTeardown($context, $result);
 
+            case ($context instanceof ScenarioContext && $context->isExample()):
+                return new BeforeExampleTeardown($context, $result);
+
             case $context instanceof ScenarioContext:
                 return new BeforeScenarioTeardown($context, $result);
 
@@ -133,6 +142,9 @@ final class GherkinEventFactory implements EventFactory
 
             case ($context instanceof ScenarioContext && $context->isOutline()):
                 return new AfterOutlineTested($context, $result, $teardown);
+
+            case ($context instanceof ScenarioContext && $context->isExample()):
+                return new AfterExampleTested($context, $result, $teardown);
 
             case $context instanceof ScenarioContext:
                 return new AfterScenarioTested($context, $result, $teardown);

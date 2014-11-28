@@ -52,6 +52,14 @@ final class AfterStepSetup extends StepTested implements AfterSetup
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER_SETUP;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

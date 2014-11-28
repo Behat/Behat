@@ -45,6 +45,14 @@ final class BeforeStepTested extends StepTested implements BeforeTested
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

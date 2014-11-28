@@ -118,6 +118,16 @@ final class ScenarioContext implements StepContainerContext
     }
 
     /**
+     * Checks if scenario is actually an outline example.
+     *
+     * @return Boolean
+     */
+    public function isExample()
+    {
+        return $this->scenario instanceof ExampleNode;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getFeature()

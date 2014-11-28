@@ -39,6 +39,14 @@ final class BeforeFeatureTested extends FeatureTested implements BeforeTested
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

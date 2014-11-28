@@ -36,6 +36,14 @@ final class BeforeExerciseCompleted extends ExerciseCompleted implements BeforeT
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE;
+    }
+
+    /**
      * Returns specification iterators.
      *
      * @return GroupedSpecificationIterator[]

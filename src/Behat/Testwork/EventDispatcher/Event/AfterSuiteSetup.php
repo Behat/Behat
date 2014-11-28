@@ -45,6 +45,14 @@ final class AfterSuiteSetup extends SuiteTested implements AfterSetup
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER_SETUP;
+    }
+
+    /**
      * Returns specification iterator.
      *
      * @return SpecificationIterator

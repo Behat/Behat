@@ -43,6 +43,14 @@ final class BeforeExerciseTeardown extends ExerciseCompleted implements BeforeTe
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
+    }
+
+    /**
      * Returns specification iterators.
      *
      * @return GroupedSpecificationIterator[]

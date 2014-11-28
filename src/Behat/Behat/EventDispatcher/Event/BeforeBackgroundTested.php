@@ -46,6 +46,14 @@ final class BeforeBackgroundTested extends BackgroundTested implements BeforeTes
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE;
+    }
+
+    /**
      * Returns feature.
      *
      * @return FeatureNode

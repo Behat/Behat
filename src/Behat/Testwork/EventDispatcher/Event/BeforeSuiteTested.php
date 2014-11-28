@@ -38,6 +38,14 @@ final class BeforeSuiteTested extends SuiteTested implements BeforeTested
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE;
+    }
+
+    /**
      * Returns specification iterator.
      *
      * @return SpecificationIterator
