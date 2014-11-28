@@ -44,7 +44,7 @@ final class ArrangingTesterAdapter implements Tester
     public function test(Context $context, RunControl $control)
     {
         $setup = $this->arrangingTester->setUp($context, $control);
-        $control = !$setup->isSuccessful() ? RunControl::skip() : $control;
+        $control = $setup->isSuccessful() ? $control : RunControl::skip();
         $testResult = $this->arrangingTester->test($context, $control);
         $teardown = $this->arrangingTester->tearDown($context, $control, $testResult);
 
