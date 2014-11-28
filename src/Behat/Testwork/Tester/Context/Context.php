@@ -13,7 +13,7 @@ namespace Behat\Testwork\Tester\Context;
 /**
  * Represents a test context.
  *
- * Provides contextual data for testers.
+ * Provides a contextual data for testers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

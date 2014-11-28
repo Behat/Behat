@@ -18,7 +18,9 @@ use Behat\Testwork\Tester\RunControl;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface as EventDispatcher;
 
 /**
- * Adds event dispatching to any arranging tester.
+ * Makes any ArrangingTester to produce an events during the test lifecycle.
+ *
+ * With a help of BasicTesterAdapter can also add events support to basic Tester instances.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -55,6 +57,8 @@ final class EventDispatchingTester implements ArrangingTester
     }
 
     /**
+     * Dispatches `beforeTested` event before setUp and `afterSetup` immediately after it.
+     *
      * {@inheritdoc}
      */
     public function setUp(Context $context, RunControl $control)
@@ -71,6 +75,8 @@ final class EventDispatchingTester implements ArrangingTester
     }
 
     /**
+     * Just proxies call to the decorated tester.
+     *
      * {@inheritdoc}
      */
     public function test(Context $context, RunControl $control)
@@ -79,6 +85,8 @@ final class EventDispatchingTester implements ArrangingTester
     }
 
     /**
+     * Dispatches `beforeTeardown` event before tearDown and `afterTested` immediately after it.
+     *
      * {@inheritdoc}
      */
     public function tearDown(Context $context, RunControl $control, TestResult $result)

@@ -18,7 +18,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
 use Behat\Testwork\Tester\Tester;
 
 /**
- * Sets up and tears down provided context, preparing for a test.
+ * Represents a tester that requires arrange actions (setUp, tearDown).
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -15,14 +15,14 @@ use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- * Defines a factory interface for hook scopes.
+ * Represents a factory interface for creation of hook scopes.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface ScopeFactory
 {
     /**
-     * Creates `before` hook scope for provided context.
+     * Creates a `before` hook scope for the context.
      *
      * @param Context $context
      *
@@ -33,7 +33,7 @@ interface ScopeFactory
     public function createBeforeHookScope(Context $context);
 
     /**
-     * Creates `after` hook scope for provided context.
+     * Creates an `after` hook scope for the context and the result.
      *
      * @param Context    $context
      * @param TestResult $result

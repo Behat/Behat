@@ -20,7 +20,9 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\RunControl;
 
 /**
- * Adds hooks support to any arranging tester.
+ * Adds hooking points to any ArrangingTester.
+ *
+ * With a help of BasicTesterAdapter can also add hooks to basic Tester instances.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -57,6 +59,8 @@ final class HookableTester implements ArrangingTester
     }
 
     /**
+     * Dispatches a `before` hook according to ScopeFactory.
+     *
      * {@inheritdoc}
      */
     public function setUp(Context $context, RunControl $control)
@@ -74,6 +78,8 @@ final class HookableTester implements ArrangingTester
     }
 
     /**
+     * Just proxies call to the decorated tester.
+     *
      * {@inheritdoc}
      */
     public function test(Context $context, RunControl $control)
@@ -82,6 +88,8 @@ final class HookableTester implements ArrangingTester
     }
 
     /**
+     * Dispatches an `after` hook according to ScopeFactory.
+     *
      * {@inheritdoc}
      */
     public function tearDown(Context $context, RunControl $control, TestResult $result)

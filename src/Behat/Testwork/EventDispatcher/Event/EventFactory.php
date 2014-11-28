@@ -13,17 +13,18 @@ namespace Behat\Testwork\EventDispatcher\Event;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Result\TestResult as Result;
 use Behat\Testwork\Tester\Setup\Setup;
-use Behat\Testwork\Tester\Setup\Teardown;use Symfony\Component\EventDispatcher\Event;
+use Behat\Testwork\Tester\Setup\Teardown;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Defines a factory interface for events.
+ * Represents a factory interface for events creation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface EventFactory
 {
     /**
-     * Creates an event just before the testing starts.
+     * Creates a `beforeTested` event just before the testing starts.
      *
      * @param Context $context
      *
@@ -32,7 +33,7 @@ interface EventFactory
     public function createBeforeTestedEvent(Context $context);
 
     /**
-     * Creates an event just after the set up, but before actual testing.
+     * Creates an `afterSetup` event just after the setUp, but before actual testing.
      *
      * @param Context $context
      * @param Setup   $setup
@@ -42,7 +43,7 @@ interface EventFactory
     public function createAfterSetupEvent(Context $context, Setup $setup);
 
     /**
-     * Creates an event after testing happened, but before tear down commenced.
+     * Creates a `beforeTeardown` event after testing happened, but before tearDown commenced.
      *
      * @param Context $context
      * @param Result  $result
@@ -52,7 +53,7 @@ interface EventFactory
     public function createBeforeTeardownEvent(Context $context, Result $result);
 
     /**
-     * Creates an event after all testing routines finished.
+     * Creates an `afterTested` event after all testing routines finished.
      *
      * @param Context  $context
      * @param Result   $result

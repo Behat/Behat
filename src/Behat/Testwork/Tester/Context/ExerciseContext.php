@@ -14,7 +14,7 @@ use Behat\Testwork\Specification\GroupedSpecificationIterator;
 use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
- * Represents a context for specification tests.
+ * Encapsulates an exercise context.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -13,7 +13,7 @@ namespace Behat\Testwork\Tester\Context;
 use Behat\Testwork\Environment\Environment;
 
 /**
- * Represents a context for specification tests.
+ * Encapsulates a specification context.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

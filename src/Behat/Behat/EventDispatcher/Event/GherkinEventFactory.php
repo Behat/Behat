@@ -50,8 +50,11 @@ final class GherkinEventFactory implements EventFactory
     public function createBeforeTestedEvent(Context $context)
     {
         switch (true) {
-            case $context instanceof SpecificationContext:
-                return new BeforeFeatureTested($context);
+            case $context instanceof StepContext:
+                return new BeforeStepTested($context);
+
+            case $context instanceof BackgroundContext:
+                return new BeforeBackgroundTested($context);
 
             case ($context instanceof ScenarioContext && $context->isOutline()):
                 return new BeforeOutlineTested($context);
@@ -59,11 +62,8 @@ final class GherkinEventFactory implements EventFactory
             case $context instanceof ScenarioContext:
                 return new BeforeScenarioTested($context);
 
-            case $context instanceof BackgroundContext:
-                return new BeforeBackgroundTested($context);
-
-            case $context instanceof StepContext:
-                return new BeforeStepTested($context);
+            case $context instanceof SpecificationContext:
+                return new BeforeFeatureTested($context);
         }
 
         return $this->exerciseFactory->createBeforeTestedEvent($context);
@@ -75,8 +75,11 @@ final class GherkinEventFactory implements EventFactory
     public function createAfterSetupEvent(Context $context, Setup $setup)
     {
         switch (true) {
-            case $context instanceof SpecificationContext:
-                return new AfterFeatureSetup($context, $setup);
+            case $context instanceof StepContext:
+                return new AfterStepSetup($context, $setup);
+
+            case $context instanceof BackgroundContext:
+                return new AfterBackgroundSetup($context, $setup);
 
             case ($context instanceof ScenarioContext && $context->isOutline()):
                 return new AfterOutlineSetup($context, $setup);
@@ -84,11 +87,8 @@ final class GherkinEventFactory implements EventFactory
             case $context instanceof ScenarioContext:
                 return new AfterScenarioSetup($context, $setup);
 
-            case $context instanceof BackgroundContext:
-                return new AfterBackgroundSetup($context, $setup);
-
-            case $context instanceof StepContext:
-                return new AfterStepSetup($context, $setup);
+            case $context instanceof SpecificationContext:
+                return new AfterFeatureSetup($context, $setup);
         }
 
         return $this->exerciseFactory->createAfterSetupEvent($context, $setup);
@@ -100,8 +100,11 @@ final class GherkinEventFactory implements EventFactory
     public function createBeforeTeardownEvent(Context $context, Result $result)
     {
         switch (true) {
-            case $context instanceof SpecificationContext:
-                return new BeforeFeatureTeardown($context, $result);
+            case ($context instanceof StepContext && $result instanceof StepResult):
+                return new BeforeStepTeardown($context, $result);
+
+            case $context instanceof BackgroundContext:
+                return new BeforeBackgroundTeardown($context, $result);
 
             case ($context instanceof ScenarioContext && $context->isOutline()):
                 return new BeforeOutlineTeardown($context, $result);
@@ -109,11 +112,8 @@ final class GherkinEventFactory implements EventFactory
             case $context instanceof ScenarioContext:
                 return new BeforeScenarioTeardown($context, $result);
 
-            case $context instanceof BackgroundContext:
-                return new BeforeBackgroundTeardown($context, $result);
-
-            case ($context instanceof StepContext && $result instanceof StepResult):
-                return new BeforeStepTeardown($context, $result);
+            case $context instanceof SpecificationContext:
+                return new BeforeFeatureTeardown($context, $result);
         }
 
         return $this->exerciseFactory->createBeforeTeardownEvent($context, $result);
@@ -125,8 +125,11 @@ final class GherkinEventFactory implements EventFactory
     public function createAfterTestedEvent(Context $context, Result $result, Teardown $teardown)
     {
         switch (true) {
-            case $context instanceof SpecificationContext:
-                return new AfterFeatureTested($context, $result, $teardown);
+            case ($context instanceof StepContext && $result instanceof StepResult):
+                return new AfterStepTested($context, $result, $teardown);
+
+            case $context instanceof BackgroundContext:
+                return new AfterBackgroundTested($context, $result, $teardown);
 
             case ($context instanceof ScenarioContext && $context->isOutline()):
                 return new AfterOutlineTested($context, $result, $teardown);
@@ -134,11 +137,8 @@ final class GherkinEventFactory implements EventFactory
             case $context instanceof ScenarioContext:
                 return new AfterScenarioTested($context, $result, $teardown);
 
-            case $context instanceof BackgroundContext:
-                return new AfterBackgroundTested($context, $result, $teardown);
-
-            case ($context instanceof StepContext && $result instanceof StepResult):
-                return new AfterStepTested($context, $result, $teardown);
+            case $context instanceof SpecificationContext:
+                return new AfterFeatureTested($context, $result, $teardown);
         }
 
         return $this->exerciseFactory->createAfterTestedEvent($context, $result, $teardown);

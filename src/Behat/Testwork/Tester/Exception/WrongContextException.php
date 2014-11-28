@@ -14,7 +14,7 @@ use Behat\Testwork\Tester\Context\Context;
 use RuntimeException;
 
 /**
- * Represents exception caused by a wrong paths argument.
+ * Represents an exception caused by a wrong context instance being used.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

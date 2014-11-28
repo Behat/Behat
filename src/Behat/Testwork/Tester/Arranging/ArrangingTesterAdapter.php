@@ -17,7 +17,7 @@ use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
 
 /**
- * Adapts instances of ArrangingTester to the basic Tester.
+ * Adapts instances of ArrangingTester to the basic Tester interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

@@ -18,7 +18,7 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 use Behat\Testwork\Tester\Tester;
 
 /**
- * Adapts instances of Tester to ArrangingTester.
+ * Adapts instances of basic Tester to the ArrangingTester interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

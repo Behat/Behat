@@ -31,11 +31,11 @@ final class ExerciseEventFactory implements EventFactory
     public function createBeforeTestedEvent(Context $context)
     {
         switch (true) {
-            case $context instanceof ExerciseContext:
-                return new BeforeExerciseCompleted($context);
-
             case $context instanceof SuiteContext:
                 return new BeforeSuiteTested($context);
+
+            case $context instanceof ExerciseContext:
+                return new BeforeExerciseCompleted($context);
         }
 
         throw new UnsupportedContextException(
@@ -52,11 +52,11 @@ final class ExerciseEventFactory implements EventFactory
     public function createAfterSetupEvent(Context $context, Setup $setup)
     {
         switch (true) {
-            case $context instanceof ExerciseContext:
-                return new AfterExerciseSetup($context, $setup);
-
             case $context instanceof SuiteContext:
                 return new AfterSuiteSetup($context, $setup);
+
+            case $context instanceof ExerciseContext:
+                return new AfterExerciseSetup($context, $setup);
         }
 
         throw new UnsupportedContextException(
@@ -74,11 +74,11 @@ final class ExerciseEventFactory implements EventFactory
     public function createBeforeTeardownEvent(Context $context, Result $result)
     {
         switch (true) {
-            case $context instanceof ExerciseContext:
-                return new BeforeExerciseTeardown($context, $result);
-
             case $context instanceof SuiteContext:
                 return new BeforeSuiteTeardown($context, $result);
+
+            case $context instanceof ExerciseContext:
+                return new BeforeExerciseTeardown($context, $result);
         }
 
         throw new UnsupportedContextException(
@@ -96,11 +96,11 @@ final class ExerciseEventFactory implements EventFactory
     public function createAfterTestedEvent(Context $context, Result $result, Teardown $teardown)
     {
         switch (true) {
-            case $context instanceof ExerciseContext:
-                return new AfterExerciseCompleted($context, $result, $teardown);
-
             case $context instanceof SuiteContext:
                 return new AfterSuiteTested($context, $result, $teardown);
+
+            case $context instanceof ExerciseContext:
+                return new AfterExerciseCompleted($context, $result, $teardown);
         }
 
         throw new UnsupportedContextException(

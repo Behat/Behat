@@ -15,7 +15,7 @@ use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Specification\GroupedSpecificationIterator as Iterator;
 
 /**
- * Represents a context for specification suite tests.
+ * Encapsulates a suite context.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

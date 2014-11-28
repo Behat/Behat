@@ -21,7 +21,9 @@ use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
 
 /**
- * Tests provided exercise.
+ * Tests exercises.
+ *
+ * Exercise is a collection of test suites.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

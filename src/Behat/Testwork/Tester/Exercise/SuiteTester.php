@@ -20,7 +20,9 @@ use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
 
 /**
- * Tests provided suite of specifications.
+ * Tests specification suites.
+ *
+ * Suites are dynamic collections of specifications.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
