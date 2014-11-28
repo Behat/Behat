@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Hook\Scope;
 
+use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Testwork\Environment\Environment;
@@ -23,10 +24,6 @@ use Behat\Testwork\Suite\Suite;
 final class BeforeScenarioScope implements ScenarioScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
      * @var FeatureNode
      */
     private $feature;
@@ -34,19 +31,21 @@ final class BeforeScenarioScope implements ScenarioScope
      * @var Scenario
      */
     private $scenario;
+    /**
+     * @var Environment
+     */
+    private $environment;
 
     /**
      * Initializes scope.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
+     * @param ScenarioContext $context
      */
-    public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario)
+    public function __construct(ScenarioContext $context)
     {
-        $this->environment = $env;
-        $this->feature = $feature;
-        $this->scenario = $scenario;
+        $this->feature = $context->getFeature();
+        $this->scenario = $context->getScenario();
+        $this->environment = $context->getEnvironment();
     }
 
     /**
