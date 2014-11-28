@@ -11,7 +11,8 @@
 namespace Behat\Testwork\Tester\Context;
 
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Environment\EnvironmentManager;
+use Behat\Testwork\Specification\GroupedSpecificationIterator as Iterator;
 
 /**
  * Represents a context for specification suite tests.
@@ -21,7 +22,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
 final class SuiteContext implements Context
 {
     /**
-     * @var SpecificationIterator
+     * @var Iterator
      */
     private $iterator;
     /**
@@ -32,19 +33,34 @@ final class SuiteContext implements Context
     /**
      * Initializes context.
      *
-     * @param SpecificationIterator $iterator
-     * @param Environment           $environment
+     * @param Iterator    $iterator
+     * @param Environment $environment
      */
-    public function __construct(SpecificationIterator $iterator, Environment $environment)
+    public function __construct(Iterator $iterator, Environment $environment)
     {
         $this->iterator = $iterator;
         $this->environment = $environment;
     }
 
     /**
+     * Creates new suite context using provided environment manager.
+     *
+     * @param Iterator           $iterator
+     * @param EnvironmentManager $manager
+     *
+     * @return SuiteContext
+     */
+    public static function createUsingManager(Iterator $iterator, EnvironmentManager $manager)
+    {
+        $environment = $manager->buildEnvironment($iterator->getSuite());
+
+        return new SuiteContext($iterator, $environment);
+    }
+
+    /**
      * Returns specification iterator.
      *
-     * @return SpecificationIterator
+     * @return Iterator
      */
     public function getSpecificationIterator()
     {

@@ -1,58 +1,62 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Tester\Exercise;
+namespace Behat\Behat\Tester\Gherkin;
 
+use Behat\Behat\Tester\Context\StepContainerContext;
 use Behat\Testwork\Tester\Context\Context;
-use Behat\Testwork\Tester\Context\SpecificationContext;
-use Behat\Testwork\Tester\Context\SuiteContext;
 use Behat\Testwork\Tester\Exception\WrongContextException;
-use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
 
 /**
- * Tests provided suite of specifications.
+ * Tests all steps in provided Gherkin step container.
+ *
+ * This tester is used to test Gherkin backgrounds, scenarios and examples.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class SuiteTester implements Tester
+final class StepContainerTester implements Tester
 {
     /**
      * @var Tester
      */
-    private $specificationTester;
+    private $stepTester;
 
     /**
      * Initializes tester.
      *
-     * @param Tester $specificationTester
+     * @param Tester $stepTester
      */
-    public function __construct(Tester $specificationTester)
+    public function __construct(Tester $stepTester)
     {
-        $this->specificationTester = $specificationTester;
+        $this->stepTester = $stepTester;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * This method might introduce side-effects into the run control.
+     * If step tests fail, the further tests skipping will be enforced.
      */
     public function test(Context $context, RunControl $control)
     {
         $context = $this->castContext($context);
         $results = array();
 
-        foreach ($context->getSpecificationIterator() as $specification) {
-            $specContext = new SpecificationContext($specification, $context->getEnvironment());
-            $testResult = $this->specificationTester->test($specContext, $control);
-            $results[] = new IntegerTestResult($testResult->getResultCode());
+        foreach ($context->getSteps() as $step) {
+            $stepContext = $context->createStepContext($step);
+            $stepResult = $this->stepTester->test($stepContext, $control);
+            $results[] = $stepResult;
+            $control->enforceSkip(!$stepResult->isPassed() || $control->isSkipEnforced());
         }
 
         return new TestResults($results);
@@ -63,19 +67,19 @@ final class SuiteTester implements Tester
      *
      * @param Context $context
      *
-     * @return SuiteContext
+     * @return StepContainerContext
      *
      * @throws WrongContextException
      */
     private function castContext(Context $context)
     {
-        if ($context instanceof SuiteContext) {
+        if ($context instanceof StepContainerContext) {
             return $context;
         }
 
         throw new WrongContextException(
             sprintf(
-                'SuiteTester tests instances of SuiteContext only, but %s given.',
+                'StepContainerTester tests instances of StepContainerContext only, but %s given.',
                 get_class($context)
             ), $context
         );

@@ -8,12 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Tester;
+namespace Behat\Testwork\Tester\Adapter;
 
+use Behat\Testwork\Tester\ArrangingTester;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
+use Behat\Testwork\Tester\Tester;
 
 /**
  * Adapts instances of Tester to ArrangingTester.

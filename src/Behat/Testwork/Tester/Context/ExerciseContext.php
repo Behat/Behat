@@ -24,6 +24,10 @@ final class ExerciseContext implements Context
      * @var SpecificationIterator[]
      */
     private $iterators;
+    /**
+     * @var GroupedSpecificationIterator[]
+     */
+    private $grouped;
 
     /**
      * Initializes context.
@@ -42,6 +46,7 @@ final class ExerciseContext implements Context
      */
     public function getGroupedSpecificationIterators()
     {
-        return GroupedSpecificationIterator::group($this->iterators);
+        return $this->grouped = $this->grouped
+            ?: GroupedSpecificationIterator::group($this->iterators);
     }
 }

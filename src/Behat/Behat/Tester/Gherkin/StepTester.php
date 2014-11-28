@@ -8,31 +8,30 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Tester\Runtime;
+namespace Behat\Behat\Tester\Gherkin;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Definition\DefinitionFinder;
 use Behat\Behat\Definition\Exception\SearchException;
 use Behat\Behat\Definition\SearchResult;
+use Behat\Behat\Tester\Context\StepContext;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\FailedStepSearchResult;
 use Behat\Behat\Tester\Result\SkippedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Behat\Tester\Result\UndefinedStepResult;
-use Behat\Behat\Tester\StepTester;
-use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Call\CallCenter;
-use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Tester\Setup\SuccessfulSetup;
-use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
+use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Exception\WrongContextException;
+use Behat\Testwork\Tester\RunControl;
+use Behat\Testwork\Tester\Tester;
 
 /**
- * Tester executing step tests in the runtime.
+ * Tests provided Gherkin step.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class RuntimeStepTester implements StepTester
+final class StepTester implements Tester
 {
     /**
      * @var DefinitionFinder
@@ -58,19 +57,13 @@ final class RuntimeStepTester implements StepTester
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)
+    public function test(Context $context, RunControl $control)
     {
-        return new SuccessfulSetup();
-    }
+        $context = $this->castContext($context);
 
-    /**
-     * {@inheritdoc}
-     */
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip = false)
-    {
         try {
-            $search = $this->searchDefinition($env, $feature, $step);
-            $result = $this->testDefinition($env, $feature, $step, $search, $skip);
+            $search = $this->searchDefinition($context);
+            $result = $this->testDefinition($context, $control, $search);
         } catch (SearchException $exception) {
             $result = new FailedStepSearchResult($exception);
         }
@@ -79,49 +72,41 @@ final class RuntimeStepTester implements StepTester
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
-    {
-        return new SuccessfulTeardown();
-    }
-
-    /**
      * Searches for a definition.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
+     * @param StepContext $ctx
      *
      * @return SearchResult
      */
-    private function searchDefinition(Environment $env, FeatureNode $feature, StepNode $step)
+    private function searchDefinition(StepContext $ctx)
     {
-        return $this->definitionFinder->findDefinition($env, $feature, $step);
+        return $this->definitionFinder->findDefinition(
+            $ctx->getEnvironment(),
+            $ctx->getFeature(),
+            $ctx->getStep()
+        );
     }
 
     /**
      * Tests found definition.
      *
-     * @param Environment  $env
-     * @param FeatureNode  $feature
-     * @param StepNode     $step
+     * @param StepContext  $ctx
+     * @param RunControl   $ctrl
      * @param SearchResult $search
-     * @param Boolean      $skip
      *
      * @return StepResult
      */
-    private function testDefinition(Environment $env, FeatureNode $feature, StepNode $step, SearchResult $search, $skip)
+    private function testDefinition(StepContext $ctx, RunControl $ctrl, SearchResult $search)
     {
         if (!$search->hasMatch()) {
             return new UndefinedStepResult();
         }
 
-        if ($skip) {
+        if ($ctrl->isSkipEnforced()) {
             return new SkippedStepResult($search);
         }
 
-        $call = $this->createDefinitionCall($env, $feature, $search, $step);
+        $call = $this->createDefinitionCall($ctx, $search);
         $result = $this->callCenter->makeCall($call);
 
         return new ExecutedStepResult($search, $result);
@@ -130,18 +115,43 @@ final class RuntimeStepTester implements StepTester
     /**
      * Creates definition call.
      *
-     * @param Environment  $env
-     * @param FeatureNode  $feature
+     * @param StepContext  $ctx
      * @param SearchResult $search
-     * @param StepNode     $step
      *
      * @return DefinitionCall
      */
-    private function createDefinitionCall(Environment $env, FeatureNode $feature, SearchResult $search, StepNode $step)
+    private function createDefinitionCall(StepContext $ctx, SearchResult $search)
     {
         $definition = $search->getMatchedDefinition();
         $arguments = $search->getMatchedArguments();
 
-        return new DefinitionCall($env, $feature, $step, $definition, $arguments);
+        return new DefinitionCall(
+            $ctx->getEnvironment(), $ctx->getFeature(), $ctx->getStep(),
+            $definition,
+            $arguments
+        );
+    }
+
+    /**
+     * Casts provided context to the expected one.
+     *
+     * @param Context $context
+     *
+     * @return StepContext
+     *
+     * @throws WrongContextException
+     */
+    private function castContext(Context $context)
+    {
+        if ($context instanceof StepContext) {
+            return $context;
+        }
+
+        throw new WrongContextException(
+            sprintf(
+                'StepTester tests instances of StepContext only, but %s given.',
+                get_class($context)
+            ), $context
+        );
     }
 }

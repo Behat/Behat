@@ -57,11 +57,8 @@ final class ExerciseTester implements Tester
         $results = array();
 
         foreach ($context->getGroupedSpecificationIterators() as $iterator) {
-            $environment = $this->environmentManager->buildEnvironment($iterator->getSuite());
-            $localContext = new SuiteContext($iterator, $environment);
-            $localControl = clone $control;
-
-            $testResult = $this->suiteTester->test($localContext, $localControl);
+            $suiteContext = SuiteContext::createUsingManager($iterator, $this->environmentManager);
+            $testResult = $this->suiteTester->test($suiteContext, $control);
             $results[] = new IntegerTestResult($testResult->getResultCode());
         }
 
@@ -69,7 +66,7 @@ final class ExerciseTester implements Tester
     }
 
     /**
-     * Cats provided context to the expected one.
+     * Casts provided context to the expected one.
      *
      * @param Context $context
      *

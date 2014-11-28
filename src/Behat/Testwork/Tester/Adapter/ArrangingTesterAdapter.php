@@ -8,12 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Tester;
+namespace Behat\Testwork\Tester\Adapter;
 
+use Behat\Testwork\Tester\ArrangingTester;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestWithSetupResult;
-use Behat\Testwork\Tester\Setup\SuccessfulSetup;
+use Behat\Testwork\Tester\RunControl;
+use Behat\Testwork\Tester\Tester;
 
 /**
  * Adapts instances of ArrangingTester to the basic Tester.
@@ -42,12 +44,12 @@ final class ArrangingTesterAdapter implements Tester
      */
     public function test(Context $context, RunControl $control)
     {
-        $setup = $this->arrangingTester->setUp($context, $control);
-        $control->enforceSkip(!$setup->isSuccessful() || $control->isSkipEnforced());
-        $setup = new SuccessfulSetup();
+        $localControl = clone $control;
 
-        $testResult = $this->arrangingTester->test($context, $control);
-        $teardown = $this->arrangingTester->tearDown($context, $control, $testResult);
+        $setup = $this->arrangingTester->setUp($context, $localControl);
+        $localControl->enforceSkip(!$setup->isSuccessful() || $control->isSkipEnforced());
+        $testResult = $this->arrangingTester->test($context, $localControl);
+        $teardown = $this->arrangingTester->tearDown($context, $localControl, $testResult);
 
         $integerResult = new IntegerTestResult($testResult->getResultCode());
 
