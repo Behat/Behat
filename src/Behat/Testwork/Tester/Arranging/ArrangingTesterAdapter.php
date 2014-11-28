@@ -8,9 +8,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Tester\Adapter;
+namespace Behat\Testwork\Tester\Arranging;
 
-use Behat\Testwork\Tester\ArrangingTester;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestWithSetupResult;

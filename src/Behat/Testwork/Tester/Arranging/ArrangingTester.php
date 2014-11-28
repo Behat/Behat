@@ -8,12 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Tester;
+namespace Behat\Testwork\Tester\Arranging;
 
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
+use Behat\Testwork\Tester\Tester;
 
 /**
  * Sets up and tears down provided context, preparing for a test.

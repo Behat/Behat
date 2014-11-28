@@ -8,9 +8,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Tester\Adapter;
+namespace Behat\Testwork\Tester\Arranging;
 
-use Behat\Testwork\Tester\ArrangingTester;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\RunControl;
@@ -23,7 +22,7 @@ use Behat\Testwork\Tester\Tester;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TesterAdapter implements ArrangingTester
+final class BasicTesterAdapter implements ArrangingTester
 {
     /**
      * @var Tester
