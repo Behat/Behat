@@ -153,7 +153,8 @@ final class ExerciseController implements Controller
     private function testSpecifications(InputInterface $input, array $specifications)
     {
         $context = new ExerciseContext($specifications);
-        $control = new RunControl($input->getOption('dry-run') || $this->skip);
+        $control = new RunControl();
+        $control->enforceSkip($input->getOption('dry-run') || $this->skip);
 
         return $this->exerciseTester->test($context, $control);
     }

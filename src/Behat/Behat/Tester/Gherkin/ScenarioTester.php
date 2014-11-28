@@ -58,6 +58,7 @@ final class ScenarioTester implements Tester
         if ($scenarioContext->hasBackground()) {
             $backgroundContext = $scenarioContext->createBackgroundContext();
             $backgroundResult = $this->backgroundTester->test($backgroundContext, $scenarioControl);
+            $scenarioControl->enforceSkip($scenarioControl->isSkipEnforced() || !$backgroundResult->isPassed());
             $results[] = new IntegerTestResult($backgroundResult->getResultCode());
         }
 
