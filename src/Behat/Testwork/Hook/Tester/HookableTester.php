@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the behat.
+ * This file is part of the Behat Testwork.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,7 +20,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\RunControl;
 
 /**
- * behat HookableTester.
+ * Adds hooks support to any arranging tester.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

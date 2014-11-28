@@ -34,7 +34,7 @@ final class SuiteScopeFactory implements ScopeFactory
 
         throw new UnsupportedContextException(
             sprintf(
-                'Can not create a hook scope for context `%s`.',
+                'Can not create a Before hook scope for the context `%s`.',
                 get_class($context)
             ), $context
         );
@@ -52,7 +52,7 @@ final class SuiteScopeFactory implements ScopeFactory
 
         throw new UnsupportedContextException(
             sprintf(
-                'Can not create a hook scope for context class `%s` and result class `%s`.',
+                'Can not create an After hook scope for the context `%s` and the result `%s`.',
                 get_class($context),
                 get_class($result)
             ), $context

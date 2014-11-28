@@ -11,8 +11,8 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
+use Behat\Testwork\Tester\Context\SpecificationContext;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
 
@@ -39,16 +39,18 @@ final class AfterFeatureTested extends FeatureTested implements AfterTested
     /**
      * Initializes event.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param TestResult  $result
-     * @param Teardown    $teardown
+     * @param SpecificationContext $context
+     * @param TestResult           $result
+     * @param Teardown             $teardown
      */
-    public function __construct(Environment $env, FeatureNode $feature, TestResult $result, Teardown $teardown)
-    {
-        parent::__construct($env);
+    public function __construct(
+        SpecificationContext $context,
+        TestResult $result,
+        Teardown $teardown
+    ) {
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
+        $this->feature = $context->getSpecification();
         $this->result = $result;
         $this->teardown = $teardown;
     }

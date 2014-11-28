@@ -13,13 +13,10 @@ namespace Behat\Behat\Hook\Scope;
 use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Behat\Tester\Context\StepContext;
 use Behat\Behat\Tester\Result\StepResult;
-use Behat\Testwork\Hook\Exception\UnsupportedContextException;
-use Behat\Testwork\Hook\Scope\AfterSuiteScope;
-use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Hook\Scope\ScopeFactory;
+use Behat\Testwork\Hook\Scope\SuiteScopeFactory;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Context\SpecificationContext;
-use Behat\Testwork\Tester\Context\SuiteContext;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -30,14 +27,26 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class GherkinScopeFactory implements ScopeFactory
 {
     /**
+     * @var SuiteScopeFactory
+     */
+    private $suiteFactory;
+
+    /**
+     * Initializes factory.
+     *
+     * @param SuiteScopeFactory $suiteFactory
+     */
+    public function __construct(SuiteScopeFactory $suiteFactory)
+    {
+        $this->suiteFactory = $suiteFactory;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function createBeforeHookScope(Context $context)
     {
         switch (true) {
-            case $context instanceof SuiteContext:
-                return new BeforeSuiteScope($context);
-
             case $context instanceof SpecificationContext:
                 return new BeforeFeatureScope($context);
 
@@ -48,12 +57,7 @@ final class GherkinScopeFactory implements ScopeFactory
                 return new BeforeStepScope($context);
         }
 
-        throw new UnsupportedContextException(
-            sprintf(
-                'Can not create a hook scope for context `%s`.',
-                get_class($context)
-            ), $context
-        );
+        return $this->suiteFactory->createBeforeHookScope($context);
     }
 
     /**
@@ -62,9 +66,6 @@ final class GherkinScopeFactory implements ScopeFactory
     public function createAfterHookScope(Context $context, TestResult $result)
     {
         switch (true) {
-            case $context instanceof SuiteContext:
-                return new AfterSuiteScope($context, $result);
-
             case $context instanceof SpecificationContext:
                 return new AfterFeatureScope($context, $result);
 
@@ -75,12 +76,6 @@ final class GherkinScopeFactory implements ScopeFactory
                 return new AfterStepScope($context, $result);
         }
 
-        throw new UnsupportedContextException(
-            sprintf(
-                'Can not create a hook scope for context class `%s` and result class `%s`.',
-                get_class($context),
-                get_class($result)
-            ), $context
-        );
+        return $this->suiteFactory->createAfterHookScope($context, $result);
     }
 }

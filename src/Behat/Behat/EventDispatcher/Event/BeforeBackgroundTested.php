@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
+use Behat\Behat\Tester\Context\BackgroundContext;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 
 /**
@@ -35,16 +35,14 @@ final class BeforeBackgroundTested extends BackgroundTested implements BeforeTes
     /**
      * Initializes event.
      *
-     * @param Environment    $env
-     * @param FeatureNode    $feature
-     * @param BackgroundNode $background
+     * @param BackgroundContext $context
      */
-    public function __construct(Environment $env, FeatureNode $feature, BackgroundNode $background)
+    public function __construct(BackgroundContext $context)
     {
-        parent::__construct($env);
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
-        $this->background = $background;
+        $this->feature = $context->getFeature();
+        $this->background = $context->getBackground();
     }
 
     /**

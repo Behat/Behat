@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
+use Behat\Behat\Tester\Context\BackgroundContext;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
@@ -45,23 +45,16 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
     /**
      * Initializes event.
      *
-     * @param Environment    $env
-     * @param FeatureNode    $feature
-     * @param BackgroundNode $background
-     * @param TestResult     $result
-     * @param Teardown       $teardown
+     * @param BackgroundContext $context
+     * @param TestResult        $result
+     * @param Teardown          $teardown
      */
-    public function __construct(
-        Environment $env,
-        FeatureNode $feature,
-        BackgroundNode $background,
-        TestResult $result,
-        Teardown $teardown
-    ) {
-        parent::__construct($env);
+    public function __construct(BackgroundContext $context, TestResult $result, Teardown $teardown)
+    {
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
-        $this->background = $background;
+        $this->feature = $context->getFeature();
+        $this->background = $context->getBackground();
         $this->result = $result;
         $this->teardown = $teardown;
     }

@@ -10,7 +10,8 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Specification\GroupedSpecificationIterator;
+use Behat\Testwork\Tester\Context\ExerciseContext;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
@@ -21,7 +22,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
 {
     /**
-     * @var SpecificationIterator[]
+     * @var GroupedSpecificationIterator[]
      */
     private $specificationIterators;
     /**
@@ -32,19 +33,19 @@ final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
     /**
      * Initializes event.
      *
-     * @param SpecificationIterator[] $specificationIterators
-     * @param Setup                   $setup
+     * @param ExerciseContext $context
+     * @param Setup           $setup
      */
-    public function __construct(array $specificationIterators, Setup $setup)
+    public function __construct(ExerciseContext $context, Setup $setup)
     {
-        $this->specificationIterators = $specificationIterators;
+        $this->specificationIterators = $context->getGroupedSpecificationIterators();
         $this->setup = $setup;
     }
 
     /**
      * Returns specification iterators.
      *
-     * @return SpecificationIterator[]
+     * @return GroupedSpecificationIterator[]
      */
     public function getSpecificationIterators()
     {

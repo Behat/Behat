@@ -8,8 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Hook\Exception;
+namespace Behat\Testwork\EventDispatcher\Exception;
 
+use Behat\Testwork\Hook\Exception\EventException;
 use Behat\Testwork\Tester\Context\Context;
 use LogicException;
 
@@ -18,7 +19,7 @@ use LogicException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class UnsupportedContextException extends LogicException implements HookException
+final class UnsupportedContextException extends LogicException implements EventException
 {
     /**
      * @var Context

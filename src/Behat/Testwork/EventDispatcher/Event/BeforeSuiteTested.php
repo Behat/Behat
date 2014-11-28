@@ -10,8 +10,8 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Tester\Context\SuiteContext;
 
 /**
  * Represents an event in which suite is prepared to be tested.
@@ -28,14 +28,13 @@ final class BeforeSuiteTested extends SuiteTested implements BeforeTested
     /**
      * Initializes event.
      *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
+     * @param SuiteContext $context
      */
-    public function __construct(Environment $env, SpecificationIterator $iterator)
+    public function __construct(SuiteContext $context)
     {
-        parent::__construct($env);
+        parent::__construct($context->getEnvironment());
 
-        $this->iterator = $iterator;
+        $this->iterator = $context->getSpecificationIterator();
     }
 
     /**
