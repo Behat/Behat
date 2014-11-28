@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester\Gherkin;
 
 use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Context\SpecificationContext;
 use Behat\Testwork\Tester\Exception\WrongContextException;
@@ -31,15 +32,21 @@ final class FeatureTester implements Tester
      * @var Tester
      */
     private $scenarioTester;
+    /**
+     * @var EnvironmentManager
+     */
+    private $environmentManager;
 
     /**
      * Initializes tester.
      *
-     * @param Tester $scenarioTester
+     * @param Tester             $scenarioTester
+     * @param EnvironmentManager $environmentManager
      */
-    public function __construct(Tester $scenarioTester)
+    public function __construct(Tester $scenarioTester, EnvironmentManager $environmentManager)
     {
         $this->scenarioTester = $scenarioTester;
+        $this->environmentManager = $environmentManager;
     }
 
     /**
@@ -55,6 +62,7 @@ final class FeatureTester implements Tester
 
         foreach ($feature->getScenarios() as $scenario) {
             $scenarioContext = new ScenarioContext($feature, $scenario, $environment);
+            $scenarioContext = $scenarioContext->createIsolatedContext($this->environmentManager);
             $scenarioResult = $this->scenarioTester->test($scenarioContext, $control);
             $results[] = new IntegerTestResult($scenarioResult->getResultCode());
         }

@@ -122,7 +122,8 @@ class TesterExtension extends BaseExtension
             new Definition('Behat\Behat\Tester\Gherkin\MediatingScenarioTester', array(
                 new Reference(self::SCENARIO_TESTER_ID),
                 new Reference(self::OUTLINE_TESTER_ID)
-            ))
+            )),
+            new Reference(EnvironmentExtension::MANAGER_ID)
         ));
         $container->setDefinition(self::SPECIFICATION_TESTER_ID, $definition);
 
@@ -146,8 +147,7 @@ class TesterExtension extends BaseExtension
 
         $definition = new Definition('Behat\Behat\Tester\Gherkin\ScenarioTester', array(
             new Reference('tester.step_container'),
-            new Reference(self::BACKGROUND_TESTER_ID),
-            new Reference(EnvironmentExtension::MANAGER_ID)
+            new Reference(self::BACKGROUND_TESTER_ID)
         ));
         $container->setDefinition(self::SCENARIO_TESTER_ID, $definition);
     }
@@ -176,8 +176,7 @@ class TesterExtension extends BaseExtension
     {
         $definition = new Definition('Behat\Behat\Tester\Gherkin\ScenarioTester', array(
             new Reference('tester.step_container'),
-            new Reference(self::BACKGROUND_TESTER_ID),
-            new Reference(EnvironmentExtension::MANAGER_ID)
+            new Reference(self::BACKGROUND_TESTER_ID)
         ));
         $container->setDefinition(self::EXAMPLE_TESTER_ID, $definition);
     }

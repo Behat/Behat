@@ -11,7 +11,6 @@
 namespace Behat\Behat\Tester\Gherkin;
 
 use Behat\Behat\Tester\Context\ScenarioContext;
-use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Exception\WrongContextException;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
@@ -34,26 +33,17 @@ final class ScenarioTester implements Tester
      * @var Tester
      */
     private $backgroundTester;
-    /**
-     * @var EnvironmentManager
-     */
-    private $environmentManager;
 
     /**
      * Initializes tester.
      *
-     * @param Tester             $containerTester
-     * @param Tester             $backgroundTester
-     * @param EnvironmentManager $environmentManager
+     * @param Tester $containerTester
+     * @param Tester $backgroundTester
      */
-    public function __construct(
-        Tester $containerTester,
-        Tester $backgroundTester,
-        EnvironmentManager $environmentManager
-    ) {
+    public function __construct(Tester $containerTester, Tester $backgroundTester)
+    {
         $this->containerTester = $containerTester;
         $this->backgroundTester = $backgroundTester;
-        $this->environmentManager = $environmentManager;
     }
 
     /**
@@ -62,9 +52,7 @@ final class ScenarioTester implements Tester
     public function test(Context $context, RunControl $control)
     {
         $results = array();
-        $context = $this->castContext($context);
-
-        $scenarioContext = $context->createIsolatedContext($this->environmentManager);
+        $scenarioContext = $this->castContext($context);
         $scenarioControl = clone $control;
 
         if ($scenarioContext->hasBackground()) {
