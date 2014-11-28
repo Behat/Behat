@@ -14,7 +14,7 @@
     ],
 
     "require": {
-        "php":                           ">=5.3.3",
+        "php":                           ">=5.3.7",
         "ext-mbstring":                  "*",
         "behat/gherkin":                 "~4.3",
         "behat/transliterator":          "~1.0",
