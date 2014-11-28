@@ -11,9 +11,11 @@ branches:
 matrix:
   include:
     - php: 5.5
-      env: SYMFONY_VERSION='2.3.*'
+      env: SYMFONY_VERSION='2.3.*' # LTS - Remove in May 2013
     - php: 5.5
-      env: SYMFONY_VERSION='2.4.*'
+      env: SYMFONY_VERSION='2.4.*' # Remove in January 2015
+    - php: 5.5
+      env: SYMFONY_VERSION='2.5.*' # Remove in July 2015
 
 before_script:
   - sh -c 'if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;'
