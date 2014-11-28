@@ -47,8 +47,8 @@ final class FeatureTester implements Tester
      */
     public function test(Context $context, RunControl $control)
     {
-        $context = $this->castContext($context);
         $results = array();
+        $context = $this->castContext($context);
 
         $feature = $this->extractFeatureNode($context);
         $environment = $context->getEnvironment();
