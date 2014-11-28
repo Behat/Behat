@@ -118,10 +118,11 @@ class TesterExtension extends BaseExtension
      */
     protected function loadSpecificationTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeFeatureTester', array(
-            new Reference(self::SCENARIO_TESTER_ID),
-            new Reference(self::OUTLINE_TESTER_ID),
-            new Reference(EnvironmentExtension::MANAGER_ID)
+        $definition = new Definition('Behat\Behat\Tester\Gherkin\FeatureTester', array(
+            new Definition('Behat\Behat\Tester\Gherkin\MediatingScenarioTester', array(
+                new Reference(self::SCENARIO_TESTER_ID),
+                new Reference(self::OUTLINE_TESTER_ID)
+            ))
         ));
         $container->setDefinition(self::SPECIFICATION_TESTER_ID, $definition);
 
@@ -138,15 +139,15 @@ class TesterExtension extends BaseExtension
      */
     protected function loadScenarioTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
+        $definition = new Definition('Behat\Behat\Tester\Gherkin\StepContainerTester', array(
             new Reference(self::STEP_TESTER_ID)
         ));
         $container->setDefinition('tester.step_container', $definition);
 
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', array(
+        $definition = new Definition('Behat\Behat\Tester\Gherkin\ScenarioTester', array(
             new Reference('tester.step_container'),
-            new Reference(self::BACKGROUND_TESTER_ID)
-
+            new Reference(self::BACKGROUND_TESTER_ID),
+            new Reference(EnvironmentExtension::MANAGER_ID)
         ));
         $container->setDefinition(self::SCENARIO_TESTER_ID, $definition);
     }
@@ -158,7 +159,7 @@ class TesterExtension extends BaseExtension
      */
     protected function loadOutlineTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeOutlineTester', array(
+        $definition = new Definition('Behat\Behat\Tester\Gherkin\OutlineTester', array(
             new Reference(self::EXAMPLE_TESTER_ID)
         ));
         $container->setDefinition(self::OUTLINE_TESTER_ID, $definition);
@@ -173,14 +174,10 @@ class TesterExtension extends BaseExtension
      */
     protected function loadExampleTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
-            new Reference(self::STEP_TESTER_ID)
-        ));
-        $container->setDefinition('tester.step_container', $definition);
-
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', array(
+        $definition = new Definition('Behat\Behat\Tester\Gherkin\ScenarioTester', array(
             new Reference('tester.step_container'),
-            new Reference(self::BACKGROUND_TESTER_ID)
+            new Reference(self::BACKGROUND_TESTER_ID),
+            new Reference(EnvironmentExtension::MANAGER_ID)
         ));
         $container->setDefinition(self::EXAMPLE_TESTER_ID, $definition);
     }
@@ -192,13 +189,8 @@ class TesterExtension extends BaseExtension
      */
     protected function loadBackgroundTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
+        $definition = new Definition('Behat\Behat\Tester\Gherkin\StepContainerTester', array(
             new Reference(self::STEP_TESTER_ID)
-        ));
-        $container->setDefinition('tester.step_container', $definition);
-
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeBackgroundTester', array(
-            new Reference('tester.step_container')
         ));
         $container->setDefinition(self::BACKGROUND_TESTER_ID, $definition);
     }
@@ -210,7 +202,7 @@ class TesterExtension extends BaseExtension
      */
     protected function loadStepTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeStepTester', array(
+        $definition = new Definition('Behat\Behat\Tester\Gherkin\StepTester', array(
             new Reference(DefinitionExtension::FINDER_ID),
             new Reference(CallExtension::CALL_CENTER_ID)
         ));
@@ -252,7 +244,7 @@ class TesterExtension extends BaseExtension
      */
     protected function processScenarioTesterWrappers(ContainerBuilder $container)
     {
-        $this->processor->processWrapperServices($container, self::SCENARIO_TESTER_ID, self::SCENARIO_TESTER_WRAPPER_TAG);
+        $this->processTesterWrappers($container, self::SCENARIO_TESTER_ID, self::SCENARIO_TESTER_WRAPPER_TAG);
     }
 
     /**
@@ -262,7 +254,7 @@ class TesterExtension extends BaseExtension
      */
     protected function processOutlineTesterWrappers(ContainerBuilder $container)
     {
-        $this->processor->processWrapperServices($container, self::OUTLINE_TESTER_ID, self::OUTLINE_TESTER_WRAPPER_TAG);
+        $this->processTesterWrappers($container, self::OUTLINE_TESTER_ID, self::OUTLINE_TESTER_WRAPPER_TAG);
     }
 
     /**
@@ -272,7 +264,7 @@ class TesterExtension extends BaseExtension
      */
     protected function processExampleTesterWrappers(ContainerBuilder $container)
     {
-        $this->processor->processWrapperServices($container, self::EXAMPLE_TESTER_ID, self::EXAMPLE_TESTER_WRAPPER_TAG);
+        $this->processTesterWrappers($container, self::EXAMPLE_TESTER_ID, self::EXAMPLE_TESTER_WRAPPER_TAG);
     }
 
     /**
@@ -282,7 +274,7 @@ class TesterExtension extends BaseExtension
      */
     protected function processBackgroundTesterWrappers(ContainerBuilder $container)
     {
-        $this->processor->processWrapperServices($container, self::BACKGROUND_TESTER_ID, self::BACKGROUND_TESTER_WRAPPER_TAG);
+        $this->processTesterWrappers($container, self::BACKGROUND_TESTER_ID, self::BACKGROUND_TESTER_WRAPPER_TAG);
     }
 
     /**
@@ -292,6 +284,6 @@ class TesterExtension extends BaseExtension
      */
     protected function processStepTesterWrappers(ContainerBuilder $container)
     {
-        $this->processor->processWrapperServices($container, self::STEP_TESTER_ID, self::STEP_TESTER_WRAPPER_TAG);
+        $this->processTesterWrappers($container, self::STEP_TESTER_ID, self::STEP_TESTER_WRAPPER_TAG);
     }
 }

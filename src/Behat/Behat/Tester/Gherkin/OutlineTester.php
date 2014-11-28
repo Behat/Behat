@@ -29,16 +29,16 @@ final class OutlineTester implements Tester
     /**
      * @var Tester
      */
-    private $scenarioTester;
+    private $exampleTester;
 
     /**
      * Initializes tester.
      *
-     * @param Tester $scenarioTester
+     * @param Tester $exampleTester
      */
-    public function __construct(Tester $scenarioTester)
+    public function __construct(Tester $exampleTester)
     {
-        $this->scenarioTester = $scenarioTester;
+        $this->exampleTester = $exampleTester;
     }
 
     /**
@@ -52,7 +52,7 @@ final class OutlineTester implements Tester
 
         foreach ($outline->getExamples() as $example) {
             $exampleContext = $context->createExampleContext($example);
-            $exampleResult = $this->scenarioTester->test($exampleContext, $control);
+            $exampleResult = $this->exampleTester->test($exampleContext, $control);
             $results[] = new IntegerTestResult($exampleResult->getResultCode());
         }
 

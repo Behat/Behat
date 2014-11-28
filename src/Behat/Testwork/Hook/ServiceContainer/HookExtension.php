@@ -32,6 +32,7 @@ class HookExtension implements Extension
      */
     const DISPATCHER_ID = 'hook.dispatcher';
     const REPOSITORY_ID = 'hook.repository';
+    const SCOPE_FACTORY_ID = 'hook.scope_factory';
 
     /**
      * {@inheritdoc}
@@ -62,6 +63,7 @@ class HookExtension implements Extension
     {
         $this->loadDispatcher($container);
         $this->loadRepository($container);
+        $this->loadScopeFactory($container);
         $this->loadHookableTesters($container);
     }
 
@@ -100,14 +102,26 @@ class HookExtension implements Extension
     }
 
     /**
+     * Loads hook scope factory.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadScopeFactory(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Testwork\Hook\Scope\SuiteScopeFactory');
+        $container->setDefinition(self::SCOPE_FACTORY_ID, $definition);
+    }
+
+    /**
      * Loads hookable testers.
      *
      * @param ContainerBuilder $container
      */
     protected function loadHookableTesters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\Tester\HookableSuiteTester', array(
+        $definition = new Definition('Behat\Testwork\Hook\Tester\HookableTester', array(
             new Reference(TesterExtension::SUITE_TESTER_ID),
+            new Reference(self::SCOPE_FACTORY_ID),
             new Reference(self::DISPATCHER_ID)
         ));
         $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => 9999));

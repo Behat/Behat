@@ -34,12 +34,6 @@ class EventDispatcherExtension extends BaseExtension
         parent::load($container, $config);
 
         $this->loadStopOnFailureController($container);
-        $this->loadEventDispatchingBackgroundTester($container);
-        $this->loadEventDispatchingFeatureTester($container);
-        $this->loadEventDispatchingOutlineTester($container);
-        $this->loadEventDispatchingScenarioTester($container);
-        $this->loadEventDispatchingExampleTester($container);
-        $this->loadEventDispatchingStepTester($container);
     }
 
     /**
@@ -57,97 +51,70 @@ class EventDispatcherExtension extends BaseExtension
     }
 
     /**
-     * Loads event-dispatching background tester.
+     * Loads event factory.
      *
      * @param ContainerBuilder $container
      */
-    protected function loadEventDispatchingBackgroundTester(ContainerBuilder $container)
+    protected function loadEventFactory(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingBackgroundTester', array(
+        $definition = new Definition('Behat\Behat\EventDispatcher\Event\GherkinEventFactory', array(
+            new Definition('Behat\Testwork\EventDispatcher\Event\ExerciseEventFactory')
+        ));
+        $container->setDefinition(self::EVENT_FACTORY_ID, $definition);
+    }
+
+    /**
+     * Loads event-dispatching tester.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadEventDispatchingTesters(ContainerBuilder $container)
+    {
+        parent::loadEventDispatchingTesters($container);
+
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingTester', array(
             new Reference(TesterExtension::BACKGROUND_TESTER_ID),
+            new Reference(self::EVENT_FACTORY_ID),
             new Reference(self::DISPATCHER_ID)
         ));
         $definition->addTag(TesterExtension::BACKGROUND_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::BACKGROUND_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
-    }
 
-    /**
-     * Loads event-dispatching feature tester.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadEventDispatchingFeatureTester(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingFeatureTester', array(
-            new Reference(TesterExtension::SPECIFICATION_TESTER_ID),
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingTester', array(
+            new Reference(TesterExtension::BACKGROUND_TESTER_ID),
+            new Reference(self::EVENT_FACTORY_ID),
             new Reference(self::DISPATCHER_ID)
         ));
         $definition->addTag(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
-    }
 
-    /**
-     * Loads event-dispatching outline tester.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadEventDispatchingOutlineTester(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingOutlineTester', array(
-            new Reference(TesterExtension::OUTLINE_TESTER_ID),
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingTester', array(
+            new Reference(TesterExtension::BACKGROUND_TESTER_ID),
+            new Reference(self::EVENT_FACTORY_ID),
             new Reference(self::DISPATCHER_ID)
         ));
         $definition->addTag(TesterExtension::OUTLINE_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::OUTLINE_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
-    }
 
-    /**
-     * Loads event-dispatching scenario tester.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadEventDispatchingScenarioTester(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingScenarioTester', array(
-            new Reference(TesterExtension::SCENARIO_TESTER_ID),
-            new Reference(self::DISPATCHER_ID),
-            ScenarioTested::BEFORE,
-            ScenarioTested::AFTER_SETUP,
-            ScenarioTested::BEFORE_TEARDOWN,
-            ScenarioTested::AFTER
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingTester', array(
+            new Reference(TesterExtension::BACKGROUND_TESTER_ID),
+            new Reference(self::EVENT_FACTORY_ID),
+            new Reference(self::DISPATCHER_ID)
         ));
         $definition->addTag(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
-    }
 
-    /**
-     * Loads event-dispatching example tester.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadEventDispatchingExampleTester(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingScenarioTester', array(
-            new Reference(TesterExtension::EXAMPLE_TESTER_ID),
-            new Reference(self::DISPATCHER_ID),
-            ExampleTested::BEFORE,
-            ExampleTested::AFTER_SETUP,
-            ExampleTested::BEFORE_TEARDOWN,
-            ExampleTested::AFTER
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingTester', array(
+            new Reference(TesterExtension::BACKGROUND_TESTER_ID),
+            new Reference(self::EVENT_FACTORY_ID),
+            new Reference(self::DISPATCHER_ID)
         ));
         $definition->addTag(TesterExtension::EXAMPLE_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::EXAMPLE_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
-    }
 
-    /**
-     * Loads event-dispatching step tester.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadEventDispatchingStepTester(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingStepTester', array(
-            new Reference(TesterExtension::STEP_TESTER_ID),
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingTester', array(
+            new Reference(TesterExtension::BACKGROUND_TESTER_ID),
+            new Reference(self::EVENT_FACTORY_ID),
             new Reference(self::DISPATCHER_ID)
         ));
         $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG, array('priority' => -9999));

@@ -76,7 +76,7 @@ final class FeatureTester implements Tester
         $specification = $context->getSpecification();
 
         if ($specification instanceof FeatureNode) {
-            return $context;
+            return $specification;
         }
 
         throw new WrongContextException(

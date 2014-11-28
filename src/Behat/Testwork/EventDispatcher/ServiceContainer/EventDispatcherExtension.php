@@ -31,6 +31,7 @@ class EventDispatcherExtension implements Extension
      * Available services
      */
     const DISPATCHER_ID = 'event_dispatcher';
+    const EVENT_FACTORY_ID = 'event_dispatcher.factory';
 
     /*
      * Available extension points
@@ -81,8 +82,8 @@ class EventDispatcherExtension implements Extension
     {
         $this->loadSigintController($container);
         $this->loadEventDispatcher($container);
-        $this->loadEventDispatchingExercise($container);
-        $this->loadEventDispatchingSuiteTester($container);
+        $this->loadEventFactory($container);
+        $this->loadEventDispatchingTesters($container);
     }
 
     /**
@@ -119,29 +120,34 @@ class EventDispatcherExtension implements Extension
     }
 
     /**
-     * Loads event-dispatching exercise.
+     * Loads event factory.
      *
      * @param ContainerBuilder $container
      */
-    protected function loadEventDispatchingExercise(ContainerBuilder $container)
+    protected function loadEventFactory(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingExercise', array(
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Event\ExerciseEventFactory');
+        $container->setDefinition(self::EVENT_FACTORY_ID, $definition);
+    }
+
+    /**
+     * Loads event-dispatching testers.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadEventDispatchingTesters(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingTester', array(
             new Reference(TesterExtension::EXERCISE_ID),
+            new Reference(self::EVENT_FACTORY_ID),
             new Reference(self::DISPATCHER_ID)
         ));
         $definition->addTag(TesterExtension::EXERCISE_WRAPPER_TAG);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.event_dispatching', $definition);
-    }
 
-    /**
-     * Loads event-dispatching suite tester.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function loadEventDispatchingSuiteTester(ContainerBuilder $container)
-    {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingSuiteTester', array(
-            new Reference(TesterExtension::SUITE_TESTER_ID),
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingTester', array(
+            new Reference(TesterExtension::EXERCISE_ID),
+            new Reference(self::EVENT_FACTORY_ID),
             new Reference(self::DISPATCHER_ID)
         ));
         $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => -9999));
