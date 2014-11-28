@@ -215,3 +215,59 @@ Feature: Scenario Outlines
       6 scenarios (2 passed, 4 failed)
       30 steps (26 passed, 4 failed)
       """
+
+  Scenario: Examples isolation
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          private $value = 0;
+
+          /**
+           * @Given /^the default value$/
+           */
+           public function theDefaultValue() {
+              PHPUnit_Framework_Assert::assertEquals(0, $this->value);
+           }
+
+           /**
+            * @When /^I add (\d+)$/
+            */
+           public function iAdd($number) {
+              $this->value += intval($number);
+           }
+
+           /**
+            * @Then /^I should have (\d+)$/
+            */
+           public function iShouldHave($result) {
+              PHPUnit_Framework_Assert::assertEquals(intval($result), $this->value);
+           }
+      }
+      """
+    And a file named "features/math.feature" with:
+      """
+      Feature: Math
+
+        Scenario Outline:
+          Given the default value
+          When I add <number>
+          Then I should have <result>
+
+          Examples:
+            | number | result |
+            | 10     | 10     |
+            | 5      | 5      |
+      """
+    When I run "behat --no-colors -f progress features/math.feature"
+    Then it should pass with:
+      """
+      ......
+
+      2 scenarios (2 passed)
+      6 steps (6 passed)
+      """
