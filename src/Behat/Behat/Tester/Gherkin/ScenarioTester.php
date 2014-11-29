@@ -13,6 +13,7 @@ namespace Behat\Behat\Tester\Gherkin;
 use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Exception\WrongContextException;
+use Behat\Testwork\Tester\Exercise\BasicRunControl;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\RunControl;
@@ -58,7 +59,7 @@ final class ScenarioTester implements Tester
             $backgroundContext = $scenarioContext->createBackgroundContext();
             $backgroundResult = $this->backgroundTester->test($backgroundContext, $control);
             $results[] = new IntegerTestResult($backgroundResult->getResultCode());
-            $control = $backgroundResult->isPassed() ? $control : RunControl::skipAll();
+            $control = $backgroundResult->isPassed() ? $control : BasicRunControl::skipAll();
         }
 
         $scenarioResult = $this->containerTester->test($scenarioContext, $control);

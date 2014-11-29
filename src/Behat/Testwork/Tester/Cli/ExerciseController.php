@@ -18,10 +18,10 @@ use Behat\Testwork\Suite\SuiteRepository;
 use Behat\Testwork\Tester\Context\ExerciseContext;
 use Behat\Testwork\Tester\Exception\WrongPathsException;
 use Behat\Testwork\Tester\Exercise;
+use Behat\Testwork\Tester\Exercise\BasicRunControl;
 use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
-use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -85,26 +85,16 @@ final class ExerciseController implements Controller
      */
     public function configure(Command $command)
     {
-        $locatorsExamples = implode(
-            PHP_EOL,
-            array_map(
-                function ($locator) {
-                    return '- ' . $locator;
-                },
-                $this->specificationFinder->getExampleLocators()
-            )
-        );
+        $locatorsExamples = implode(PHP_EOL, array_map(
+            function ($locator) { return '- ' . $locator; },
+            $this->specificationFinder->getExampleLocators()
+        ));
 
         $command
-            ->addArgument(
-                'paths',
-                InputArgument::OPTIONAL,
+            ->addArgument('paths', InputArgument::OPTIONAL,
                 'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples
             )
-            ->addOption(
-                '--dry-run',
-                null,
-                InputOption::VALUE_NONE,
+            ->addOption('--dry-run', null, InputOption::VALUE_NONE,
                 'Invokes formatters without executing the tests and hooks.'
             );
     }
@@ -154,8 +144,8 @@ final class ExerciseController implements Controller
     {
         $context = new ExerciseContext($specifications);
         $control = $input->getOption('dry-run') || $this->skip
-            ? RunControl::skipAll()
-            : RunControl::runAll();
+            ? BasicRunControl::skipAll()
+            : BasicRunControl::runAll();
 
         return $this->exerciseTester->test($context, $control);
     }

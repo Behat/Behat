@@ -13,6 +13,7 @@ namespace Behat\Behat\Tester\Gherkin;
 use Behat\Behat\Tester\Context\StepContainerContext;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Exception\WrongContextException;
+use Behat\Testwork\Tester\Exercise\BasicRunControl;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
@@ -53,7 +54,7 @@ final class StepContainerTester implements Tester
             $stepContext = $context->createStepContext($step);
             $stepResult = $this->stepTester->test($stepContext, $control);
             $results[] = $stepResult;
-            $control = $stepResult->isPassed() ? $control : RunControl::skipAll();
+            $control = $stepResult->isPassed() ? $control : BasicRunControl::skipAll();
         }
 
         return new TestResults($results);

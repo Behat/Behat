@@ -10,57 +10,23 @@
 
 namespace Behat\Testwork\Tester;
 
+use Behat\Testwork\Tester\Context\Context;
+
 /**
  * Represents a run control for tests.
  *
- * This object controls test execution flow.
+ * This object controls the test execution flow.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class RunControl
+interface RunControl
 {
     /**
-     * @var Boolean
-     */
-    private $skip = false;
-
-    /**
-     * Private constructor - use named constructors instead.
-     */
-    private function __construct()
-    {
-    }
-
-    /**
-     * Creates a new run control, that tells testers to run all tests.
+     * Checks if provided context testable or should be skipped.
      *
-     * @return RunControl
-     */
-    public static function runAll()
-    {
-        return new RunControl();
-    }
-
-    /**
-     * Creates a new run control, that enforces skipping of all tests and testing routines.
-     *
-     * @return RunControl
-     */
-    public static function skipAll()
-    {
-        $control = new RunControl();
-        $control->skip = true;
-
-        return $control;
-    }
-
-    /**
-     * Checks if testing routines should be skipped.
+     * @param Context $context
      *
      * @return Boolean
      */
-    public function isSkip()
-    {
-        return $this->skip;
-    }
+    public function isContextTestable(Context $context);
 }
