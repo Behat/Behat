@@ -156,6 +156,14 @@ final class ScenarioContext implements StepContainerContext
     /**
      * {@inheritdoc}
      */
+    public function getContainer()
+    {
+        return $this->getScenario();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSteps()
     {
         return $this->scenario->getSteps();

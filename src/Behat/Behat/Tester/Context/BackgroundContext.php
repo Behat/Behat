@@ -97,6 +97,14 @@ final class BackgroundContext implements StepContainerContext
     /**
      * {@inheritdoc}
      */
+    public function getContainer()
+    {
+        return $this->getBackground();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSteps()
     {
         return $this->getBackground()->getSteps();

@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester\Context;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Gherkin\Node\StepContainerInterface;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Context\Context;
@@ -45,6 +46,13 @@ interface StepContainerContext extends Context
      * @return ScenarioInterface
      */
     public function getScenario();
+
+    /**
+     * Returns the actual step container.
+     *
+     * @return StepContainerInterface
+     */
+    public function getContainer();
 
     /**
      * Returns an array of contained step nodes.
