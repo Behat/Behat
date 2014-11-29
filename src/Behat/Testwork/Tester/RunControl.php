@@ -46,7 +46,7 @@ final class RunControl
      *
      * @return RunControl
      */
-    public static function skip()
+    public static function skipAll()
     {
         $control = new RunControl();
         $control->skip = true;

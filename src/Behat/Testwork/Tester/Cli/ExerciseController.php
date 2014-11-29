@@ -154,7 +154,7 @@ final class ExerciseController implements Controller
     {
         $context = new ExerciseContext($specifications);
         $control = $input->getOption('dry-run') || $this->skip
-            ? RunControl::skip()
+            ? RunControl::skipAll()
             : RunControl::runAll();
 
         return $this->exerciseTester->test($context, $control);

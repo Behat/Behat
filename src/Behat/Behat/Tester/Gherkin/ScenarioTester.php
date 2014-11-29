@@ -58,7 +58,7 @@ final class ScenarioTester implements Tester
             $backgroundContext = $scenarioContext->createBackgroundContext();
             $backgroundResult = $this->backgroundTester->test($backgroundContext, $control);
             $results[] = new IntegerTestResult($backgroundResult->getResultCode());
-            $control = $backgroundResult->isPassed() ? $control : RunControl::skip();
+            $control = $backgroundResult->isPassed() ? $control : RunControl::skipAll();
         }
 
         $scenarioResult = $this->containerTester->test($scenarioContext, $control);
