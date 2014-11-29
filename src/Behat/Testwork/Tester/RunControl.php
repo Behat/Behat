@@ -15,14 +15,14 @@ use Behat\Testwork\Tester\Context\Context;
 /**
  * Represents a run control for tests.
  *
- * This object controls the test execution flow.
+ * Controls the test execution flow.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 interface RunControl
 {
     /**
-     * Checks if provided context testable or should be skipped.
+     * Checks if provided context is testable or should be skipped.
      *
      * @param Context $context
      *
