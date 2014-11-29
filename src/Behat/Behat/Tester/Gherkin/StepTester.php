@@ -122,13 +122,12 @@ final class StepTester implements Tester
      */
     private function createDefinitionCall(StepContext $ctx, SearchResult $search)
     {
-        $definition = $search->getMatchedDefinition();
-        $arguments = $search->getMatchedArguments();
-
         return new DefinitionCall(
-            $ctx->getEnvironment(), $ctx->getFeature(), $ctx->getStep(),
-            $definition,
-            $arguments
+            $ctx->getEnvironment(),
+            $ctx->getFeature(),
+            $ctx->getStep(),
+            $search->getMatchedDefinition(),
+            $search->getMatchedArguments()
         );
     }
 
