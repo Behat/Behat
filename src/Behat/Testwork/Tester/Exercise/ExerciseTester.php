@@ -20,7 +20,7 @@ use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\Tester;
 
 /**
- * Tests exercises.
+ * Tests an exercise.
  *
  * Exercise is a collection of test suites.
  *
