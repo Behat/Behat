@@ -12,7 +12,7 @@ namespace Behat\Behat\Tester\Gherkin;
 
 use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Testwork\Environment\EnvironmentManager;
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Exception\WrongContextException;
 use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
@@ -48,7 +48,7 @@ final class ScenarioIsolatingTester implements Tester
     /**
      * {@inheritdoc}
      */
-    public function test(Context $context, RunControl $control)
+    public function test(TestContext $context, RunControl $control)
     {
         $context = $this->castContext($context);
         $context = $context->createIsolatedContext($this->environmentManager);
@@ -59,13 +59,13 @@ final class ScenarioIsolatingTester implements Tester
     /**
      * Casts provided context to the expected one.
      *
-     * @param Context $context
+     * @param TestContext $context
      *
      * @return ScenarioContext
      *
      * @throws WrongContextException
      */
-    private function castContext(Context $context)
+    private function castContext(TestContext $context)
     {
         if ($context instanceof ScenarioContext) {
             return $context;

@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Tester\Exercise;
 
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\RunControl;
 
 /**
@@ -58,7 +58,7 @@ final class BasicRunControl implements RunControl
     /**
      * {@inheritdoc}
      */
-    public function isContextTestable(Context $context)
+    public function isContextTestable(TestContext $context)
     {
         return $this->runAll;
     }

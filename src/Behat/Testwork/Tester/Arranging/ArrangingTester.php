@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Tester\Arranging;
 
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Setup\Setup;
@@ -27,21 +27,21 @@ interface ArrangingTester extends Tester
     /**
      * Sets up test for a provided context according to the run control.
      *
-     * @param Context    $context
+     * @param TestContext    $context
      * @param RunControl $control
      *
      * @return Setup
      */
-    public function setUp(Context $context, RunControl $control);
+    public function setUp(TestContext $context, RunControl $control);
 
     /**
      * Tears down test for a provided context according to the run control.
      *
-     * @param Context    $context
+     * @param TestContext    $context
      * @param RunControl $control
      * @param TestResult $result
      *
      * @return Teardown
      */
-    public function tearDown(Context $context, RunControl $control, TestResult $result);
+    public function tearDown(TestContext $context, RunControl $control, TestResult $result);
 }

@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Result\TestResult as Result;
 use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
@@ -25,40 +25,40 @@ interface EventFactory
     /**
      * Creates a `beforeTested` event just before the testing starts.
      *
-     * @param Context $context
+     * @param TestContext $context
      *
      * @return BeforeTested|Event
      */
-    public function createBeforeTestedEvent(Context $context);
+    public function createBeforeTestedEvent(TestContext $context);
 
     /**
      * Creates an `afterSetup` event just after the setUp, but before actual testing.
      *
-     * @param Context $context
+     * @param TestContext $context
      * @param Setup   $setup
      *
      * @return AfterSetup|Event
      */
-    public function createAfterSetupEvent(Context $context, Setup $setup);
+    public function createAfterSetupEvent(TestContext $context, Setup $setup);
 
     /**
      * Creates a `beforeTeardown` event after testing happened, but before tearDown commenced.
      *
-     * @param Context $context
+     * @param TestContext $context
      * @param Result  $result
      *
      * @return BeforeTeardown|Event
      */
-    public function createBeforeTeardownEvent(Context $context, Result $result);
+    public function createBeforeTeardownEvent(TestContext $context, Result $result);
 
     /**
      * Creates an `afterTested` event after all testing routines finished.
      *
-     * @param Context  $context
+     * @param TestContext  $context
      * @param Result   $result
      * @param Teardown $teardown
      *
      * @return AfterTested|Event
      */
-    public function createAfterTestedEvent(Context $context, Result $result, Teardown $teardown);
+    public function createAfterTestedEvent(TestContext $context, Result $result, Teardown $teardown);
 }

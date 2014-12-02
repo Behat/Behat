@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Tester\Arranging;
 
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Exercise\BasicRunControl;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestWithSetupResult;
@@ -42,7 +42,7 @@ final class ArrangingTesterAdapter implements Tester
     /**
      * {@inheritdoc}
      */
-    public function test(Context $context, RunControl $control)
+    public function test(TestContext $context, RunControl $control)
     {
         $setup = $this->arrangingTester->setUp($context, $control);
         $control = $setup->isSuccessful() ? $control : BasicRunControl::skipAll();

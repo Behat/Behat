@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Hook\Scope;
 
 use Behat\Testwork\Hook\Exception\UnsupportedContextException;
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Context\SuiteContext;
 use Behat\Testwork\Tester\Result\TestResult;
 
@@ -25,7 +25,7 @@ final class SuiteScopeFactory implements ScopeFactory
     /**
      * {@inheritdoc}
      */
-    public function createBeforeHookScope(Context $context)
+    public function createBeforeHookScope(TestContext $context)
     {
         switch (true) {
             case $context instanceof SuiteContext:
@@ -43,7 +43,7 @@ final class SuiteScopeFactory implements ScopeFactory
     /**
      * {@inheritdoc}
      */
-    public function createAfterHookScope(Context $context, TestResult $result)
+    public function createAfterHookScope(TestContext $context, TestResult $result)
     {
         switch (true) {
             case $context instanceof SuiteContext:

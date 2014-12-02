@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Tester;
 
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -25,10 +25,10 @@ interface Tester
     /**
      * Tests provided context according to the run control.
      *
-     * @param Context    $context
-     * @param RunControl $control
+     * @param TestContext $context
+     * @param RunControl  $control
      *
      * @return TestResult
      */
-    public function test(Context $context, RunControl $control);
+    public function test(TestContext $context, RunControl $control);
 }

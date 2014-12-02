@@ -11,7 +11,7 @@
 namespace Behat\Testwork\EventDispatcher\Event;
 
 use Behat\Testwork\EventDispatcher\Exception\UnsupportedContextException;
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Context\ExerciseContext;
 use Behat\Testwork\Tester\Context\SuiteContext;
 use Behat\Testwork\Tester\Result\TestResult as Result;
@@ -28,7 +28,7 @@ final class ExerciseEventFactory implements EventFactory
     /**
      * {@inheritdoc}
      */
-    public function createBeforeTestedEvent(Context $context)
+    public function createBeforeTestedEvent(TestContext $context)
     {
         switch (true) {
             case $context instanceof SuiteContext:
@@ -49,7 +49,7 @@ final class ExerciseEventFactory implements EventFactory
     /**
      * {@inheritdoc}
      */
-    public function createAfterSetupEvent(Context $context, Setup $setup)
+    public function createAfterSetupEvent(TestContext $context, Setup $setup)
     {
         switch (true) {
             case $context instanceof SuiteContext:
@@ -71,7 +71,7 @@ final class ExerciseEventFactory implements EventFactory
     /**
      * {@inheritdoc}
      */
-    public function createBeforeTeardownEvent(Context $context, Result $result)
+    public function createBeforeTeardownEvent(TestContext $context, Result $result)
     {
         switch (true) {
             case $context instanceof SuiteContext:
@@ -93,7 +93,7 @@ final class ExerciseEventFactory implements EventFactory
     /**
      * {@inheritdoc}
      */
-    public function createAfterTestedEvent(Context $context, Result $result, Teardown $teardown)
+    public function createAfterTestedEvent(TestContext $context, Result $result, Teardown $teardown)
     {
         switch (true) {
             case $context instanceof SuiteContext:

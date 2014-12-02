@@ -17,6 +17,6 @@ namespace Behat\Testwork\Tester\Context;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface Context
+interface TestContext
 {
 }

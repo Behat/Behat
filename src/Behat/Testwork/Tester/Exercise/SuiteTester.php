@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Tester\Exercise;
 
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Context\SpecificationContext;
 use Behat\Testwork\Tester\Context\SuiteContext;
 use Behat\Testwork\Tester\Exception\WrongContextException;
@@ -45,7 +45,7 @@ final class SuiteTester implements Tester
     /**
      * {@inheritdoc}
      */
-    public function test(Context $context, RunControl $control)
+    public function test(TestContext $context, RunControl $control)
     {
         $results = array();
         $context = $this->castContext($context);
@@ -61,13 +61,13 @@ final class SuiteTester implements Tester
     /**
      * Casts provided context to the expected one.
      *
-     * @param Context $context
+     * @param TestContext $context
      *
      * @return SuiteContext
      *
      * @throws WrongContextException
      */
-    private function castContext(Context $context)
+    private function castContext(TestContext $context)
     {
         if ($context instanceof SuiteContext) {
             return $context;

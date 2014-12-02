@@ -21,7 +21,7 @@ use Behat\Behat\Tester\Result\SkippedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Behat\Tester\Result\UndefinedStepResult;
 use Behat\Testwork\Call\CallCenter;
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Exception\WrongContextException;
 use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
@@ -57,7 +57,7 @@ final class StepTester implements Tester
     /**
      * {@inheritdoc}
      */
-    public function test(Context $context, RunControl $control)
+    public function test(TestContext $context, RunControl $control)
     {
         $context = $this->castContext($context);
 
@@ -134,13 +134,13 @@ final class StepTester implements Tester
     /**
      * Casts provided context to the expected one.
      *
-     * @param Context $context
+     * @param TestContext $context
      *
      * @return StepContext
      *
      * @throws WrongContextException
      */
-    private function castContext(Context $context)
+    private function castContext(TestContext $context)
     {
         if ($context instanceof StepContext) {
             return $context;

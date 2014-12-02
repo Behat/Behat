@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Hook\Scope;
 
 use Behat\Testwork\Hook\Exception\UnsupportedContextException;
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -24,23 +24,23 @@ interface ScopeFactory
     /**
      * Creates a `before` hook scope for the context.
      *
-     * @param Context $context
+     * @param TestContext $context
      *
      * @return HookScope
      *
      * @throws UnsupportedContextException If provided context is unsupported by factory
      */
-    public function createBeforeHookScope(Context $context);
+    public function createBeforeHookScope(TestContext $context);
 
     /**
      * Creates an `after` hook scope for the context and the result.
      *
-     * @param Context    $context
+     * @param TestContext    $context
      * @param TestResult $result
      *
      * @return HookScope
      *
      * @throws UnsupportedContextException If provided context is unsupported by factory
      */
-    public function createAfterHookScope(Context $context, TestResult $result);
+    public function createAfterHookScope(TestContext $context, TestResult $result);
 }

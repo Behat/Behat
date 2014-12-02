@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Hook\Exception;
 
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use LogicException;
 
 /**
@@ -21,7 +21,7 @@ use LogicException;
 final class UnsupportedContextException extends LogicException implements HookException
 {
     /**
-     * @var Context
+     * @var TestContext
      */
     private $context;
 
@@ -29,9 +29,9 @@ final class UnsupportedContextException extends LogicException implements HookEx
      * Initializes exception.
      *
      * @param string  $message
-     * @param Context $context
+     * @param TestContext $context
      */
-    public function __construct($message, Context $context)
+    public function __construct($message, TestContext $context)
     {
         parent::__construct($message);
 
@@ -41,7 +41,7 @@ final class UnsupportedContextException extends LogicException implements HookEx
     /**
      * Returns context that caused exception.
      *
-     * @return Context
+     * @return TestContext
      */
     public function getContext()
     {

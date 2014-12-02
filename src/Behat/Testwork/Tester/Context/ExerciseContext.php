@@ -18,7 +18,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ExerciseContext implements Context
+final class ExerciseContext implements TestContext
 {
     /**
      * @var SpecificationIterator[]

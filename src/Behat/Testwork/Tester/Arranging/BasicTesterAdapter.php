@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Tester\Arranging;
 
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Setup\SuccessfulSetup;
@@ -42,7 +42,7 @@ final class BasicTesterAdapter implements ArrangingTester
     /**
      * {@inheritdoc}
      */
-    public function setUp(Context $context, RunControl $ctrl)
+    public function setUp(TestContext $context, RunControl $ctrl)
     {
         return new SuccessfulSetup();
     }
@@ -50,7 +50,7 @@ final class BasicTesterAdapter implements ArrangingTester
     /**
      * {@inheritdoc}
      */
-    public function test(Context $context, RunControl $control)
+    public function test(TestContext $context, RunControl $control)
     {
         return $this->tester->test($context, $control);
     }
@@ -58,7 +58,7 @@ final class BasicTesterAdapter implements ArrangingTester
     /**
      * {@inheritdoc}
      */
-    public function tearDown(Context $context, RunControl $control, TestResult $result)
+    public function tearDown(TestContext $context, RunControl $control, TestResult $result)
     {
         return new SuccessfulTeardown();
     }

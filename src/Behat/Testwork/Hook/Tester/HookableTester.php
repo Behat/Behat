@@ -15,7 +15,7 @@ use Behat\Testwork\Hook\Scope\ScopeFactory;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Tester\Arranging\ArrangingTester;
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\RunControl;
 
@@ -63,7 +63,7 @@ final class HookableTester implements ArrangingTester
      *
      * {@inheritdoc}
      */
-    public function setUp(Context $context, RunControl $control)
+    public function setUp(TestContext $context, RunControl $control)
     {
         $setup = $this->decoratedTester->setUp($context, $control);
 
@@ -82,7 +82,7 @@ final class HookableTester implements ArrangingTester
      *
      * {@inheritdoc}
      */
-    public function test(Context $context, RunControl $control)
+    public function test(TestContext $context, RunControl $control)
     {
         return $this->decoratedTester->test($context, $control);
     }
@@ -92,7 +92,7 @@ final class HookableTester implements ArrangingTester
      *
      * {@inheritdoc}
      */
-    public function tearDown(Context $context, RunControl $control, TestResult $result)
+    public function tearDown(TestContext $context, RunControl $control, TestResult $result)
     {
         $teardown = $this->decoratedTester->tearDown($context, $control, $result);
 

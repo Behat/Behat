@@ -12,7 +12,7 @@ namespace Behat\Testwork\EventDispatcher\Tester;
 
 use Behat\Testwork\EventDispatcher\Event\EventFactory;
 use Behat\Testwork\Tester\Arranging\ArrangingTester;
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\RunControl;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface as EventDispatcher;
@@ -61,7 +61,7 @@ final class EventDispatchingTester implements ArrangingTester
      *
      * {@inheritdoc}
      */
-    public function setUp(Context $context, RunControl $control)
+    public function setUp(TestContext $context, RunControl $control)
     {
         $event = $this->eventFactory->createBeforeTestedEvent($context);
         $this->eventDispatcher->dispatch($event->getEventName(), $event);
@@ -79,7 +79,7 @@ final class EventDispatchingTester implements ArrangingTester
      *
      * {@inheritdoc}
      */
-    public function test(Context $context, RunControl $control)
+    public function test(TestContext $context, RunControl $control)
     {
         return $this->decoratedTester->test($context, $control);
     }
@@ -89,7 +89,7 @@ final class EventDispatchingTester implements ArrangingTester
      *
      * {@inheritdoc}
      */
-    public function tearDown(Context $context, RunControl $control, TestResult $result)
+    public function tearDown(TestContext $context, RunControl $control, TestResult $result)
     {
         $event = $this->eventFactory->createBeforeTeardownEvent($context, $result);
         $this->eventDispatcher->dispatch($event->getEventName(), $event);

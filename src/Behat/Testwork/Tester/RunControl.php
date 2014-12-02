@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Tester;
 
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 
 /**
  * Represents a run control for tests.
@@ -24,9 +24,9 @@ interface RunControl
     /**
      * Checks if provided context is testable or should be skipped.
      *
-     * @param Context $context
+     * @param TestContext $context
      *
      * @return Boolean
      */
-    public function isContextTestable(Context $context);
+    public function isContextTestable(TestContext $context);
 }

@@ -19,7 +19,7 @@ use Behat\Testwork\Specification\GroupedSpecificationIterator as Iterator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class SuiteContext implements Context
+final class SuiteContext implements TestContext
 {
     /**
      * @var Iterator

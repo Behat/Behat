@@ -15,7 +15,7 @@ use Behat\Behat\Tester\Context\StepContext;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Hook\Scope\ScopeFactory;
 use Behat\Testwork\Hook\Scope\SuiteScopeFactory;
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Context\SpecificationContext;
 use Behat\Testwork\Tester\Result\TestResult;
 
@@ -44,7 +44,7 @@ final class GherkinScopeFactory implements ScopeFactory
     /**
      * {@inheritdoc}
      */
-    public function createBeforeHookScope(Context $context)
+    public function createBeforeHookScope(TestContext $context)
     {
         switch (true) {
             case $context instanceof SpecificationContext:
@@ -63,7 +63,7 @@ final class GherkinScopeFactory implements ScopeFactory
     /**
      * {@inheritdoc}
      */
-    public function createAfterHookScope(Context $context, TestResult $result)
+    public function createAfterHookScope(TestContext $context, TestResult $result)
     {
         switch (true) {
             case $context instanceof SpecificationContext:

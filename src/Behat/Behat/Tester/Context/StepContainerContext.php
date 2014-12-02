@@ -15,14 +15,14 @@ use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Gherkin\Node\StepContainerInterface;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 
 /**
  * Represents a context for a step container tests.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface StepContainerContext extends Context
+interface StepContainerContext extends TestContext
 {
     /**
      * Creates new step context.

@@ -17,7 +17,7 @@ use Behat\Testwork\Environment\Environment;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class SpecificationContext implements Context
+final class SpecificationContext implements TestContext
 {
     /**
      * @var mixed

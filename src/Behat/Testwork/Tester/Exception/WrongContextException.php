@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Tester\Exception;
 
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use RuntimeException;
 
 /**
@@ -21,7 +21,7 @@ use RuntimeException;
 final class WrongContextException extends RuntimeException implements TesterException
 {
     /**
-     * @var Context
+     * @var TestContext
      */
     private $context;
 
@@ -29,9 +29,9 @@ final class WrongContextException extends RuntimeException implements TesterExce
      * Initializes exception.
      *
      * @param string  $message
-     * @param Context $context
+     * @param TestContext $context
      */
-    public function __construct($message, Context $context)
+    public function __construct($message, TestContext $context)
     {
         parent::__construct($message);
 
@@ -41,7 +41,7 @@ final class WrongContextException extends RuntimeException implements TesterExce
     /**
      * Returns context that caused exception.
      *
-     * @return Context
+     * @return TestContext
      */
     public function getContext()
     {

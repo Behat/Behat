@@ -12,7 +12,7 @@ namespace Behat\Behat\Tester\Gherkin;
 
 use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Testwork\Tester\Context\Context;
+use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Context\SpecificationContext;
 use Behat\Testwork\Tester\Exception\WrongContextException;
 use Behat\Testwork\Tester\Result\TestResults;
@@ -44,7 +44,7 @@ final class FeatureTester implements Tester
     /**
      * {@inheritdoc}
      */
-    public function test(Context $context, RunControl $control)
+    public function test(TestContext $context, RunControl $control)
     {
         $results = array();
         $context = $this->castContext($context);
@@ -87,13 +87,13 @@ final class FeatureTester implements Tester
     /**
      * Casts provided context to the expected one.
      *
-     * @param Context $context
+     * @param TestContext $context
      *
      * @return SpecificationContext
      *
      * @throws WrongContextException
      */
-    private function castContext(Context $context)
+    private function castContext(TestContext $context)
     {
         if ($context instanceof SpecificationContext) {
             return $context;
