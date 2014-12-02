@@ -15,7 +15,6 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Context\SpecificationContext;
 use Behat\Testwork\Tester\Exception\WrongContextException;
-use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
@@ -49,14 +48,12 @@ final class FeatureTester implements Tester
     {
         $results = array();
         $context = $this->castContext($context);
-
         $feature = $this->extractFeatureNode($context);
         $environment = $context->getEnvironment();
 
         foreach ($feature->getScenarios() as $scenario) {
             $scenarioContext = new ScenarioContext($feature, $scenario, $environment);
-            $scenarioResult = $this->scenarioTester->test($scenarioContext, $control);
-            $results[] = new IntegerTestResult($scenarioResult->getResultCode());
+            $results[] = $this->scenarioTester->test($scenarioContext, $control);
         }
 
         return new TestResults($results);

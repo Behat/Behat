@@ -47,14 +47,13 @@ final class StepContainerTester implements Tester
      */
     public function test(Context $context, RunControl $control)
     {
-        $context = $this->castContext($context);
         $results = array();
+        $context = $this->castContext($context);
 
         foreach ($context->getSteps() as $step) {
             $stepContext = $context->createStepContext($step);
-            $stepResult = $this->stepTester->test($stepContext, $control);
-            $results[] = $stepResult;
-            $control = $stepResult->isPassed() ? $control : BasicRunControl::skipAll();
+            $results[] = $result = $this->stepTester->test($stepContext, $control);
+            $control = $result->isPassed() ? $control : BasicRunControl::skipAll();
         }
 
         return new TestResults($results);

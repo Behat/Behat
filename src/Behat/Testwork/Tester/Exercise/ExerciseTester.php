@@ -15,7 +15,6 @@ use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Context\ExerciseContext;
 use Behat\Testwork\Tester\Context\SuiteContext;
 use Behat\Testwork\Tester\Exception\WrongContextException;
-use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
@@ -55,13 +54,12 @@ final class ExerciseTester implements Tester
      */
     public function test(Context $context, RunControl $control)
     {
-        $context = $this->castContext($context);
         $results = array();
+        $context = $this->castContext($context);
 
         foreach ($context->getGroupedSpecificationIterators() as $iterator) {
             $suiteContext = SuiteContext::createUsingManager($iterator, $this->environmentManager);
-            $testResult = $this->suiteTester->test($suiteContext, $control);
-            $results[] = new IntegerTestResult($testResult->getResultCode());
+            $results[] = $this->suiteTester->test($suiteContext, $control);
         }
 
         return new TestResults($results);

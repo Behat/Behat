@@ -14,7 +14,6 @@ use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Exception\WrongContextException;
 use Behat\Testwork\Tester\Exercise\BasicRunControl;
-use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
@@ -57,13 +56,11 @@ final class ScenarioTester implements Tester
 
         if ($scenarioContext->hasBackground()) {
             $backgroundContext = $scenarioContext->createBackgroundContext();
-            $backgroundResult = $this->backgroundTester->test($backgroundContext, $control);
-            $results[] = new IntegerTestResult($backgroundResult->getResultCode());
-            $control = $backgroundResult->isPassed() ? $control : BasicRunControl::skipAll();
+            $results[] = $result = $this->backgroundTester->test($backgroundContext, $control);
+            $control = $result->isPassed() ? $control : BasicRunControl::skipAll();
         }
 
-        $scenarioResult = $this->containerTester->test($scenarioContext, $control);
-        $results[] = new IntegerTestResult($scenarioResult->getResultCode());
+        $results[] = $this->containerTester->test($scenarioContext, $control);
 
         return new TestResults($results);
     }

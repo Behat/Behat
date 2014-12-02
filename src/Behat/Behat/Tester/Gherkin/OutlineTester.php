@@ -14,7 +14,6 @@ use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Tester\Context\Context;
 use Behat\Testwork\Tester\Exception\WrongContextException;
-use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
@@ -52,8 +51,7 @@ final class OutlineTester implements Tester
 
         foreach ($outline->getExamples() as $example) {
             $exampleContext = $context->createExampleContext($example);
-            $exampleResult = $this->exampleTester->test($exampleContext, $control);
-            $results[] = new IntegerTestResult($exampleResult->getResultCode());
+            $results[] = $this->exampleTester->test($exampleContext, $control);
         }
 
         return new TestResults($results);
