@@ -8,10 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Tester\Exercise;
+namespace Behat\Testwork\Tester\Control;
 
 use Behat\Testwork\Tester\Context\TestContext;
-use Behat\Testwork\Tester\RunControl;
 
 /**
  * Very basic run-control that can either force all tests to run or force them all to skip.

@@ -11,12 +11,12 @@
 namespace Behat\Testwork\Tester\Exercise;
 
 use Behat\Testwork\Environment\EnvironmentManager;
-use Behat\Testwork\Tester\Context\TestContext;
 use Behat\Testwork\Tester\Context\ExerciseContext;
 use Behat\Testwork\Tester\Context\SuiteContext;
+use Behat\Testwork\Tester\Context\TestContext;
+use Behat\Testwork\Tester\Control\RunControl;
 use Behat\Testwork\Tester\Exception\WrongContextException;
 use Behat\Testwork\Tester\Result\TestResults;
-use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
 
 /**

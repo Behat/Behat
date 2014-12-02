@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Tester;
 
 use Behat\Testwork\Tester\Context\TestContext;
+use Behat\Testwork\Tester\Control\RunControl;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**

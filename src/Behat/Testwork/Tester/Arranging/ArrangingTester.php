@@ -11,8 +11,8 @@
 namespace Behat\Testwork\Tester\Arranging;
 
 use Behat\Testwork\Tester\Context\TestContext;
+use Behat\Testwork\Tester\Control\RunControl;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 use Behat\Testwork\Tester\Tester;
@@ -27,8 +27,8 @@ interface ArrangingTester extends Tester
     /**
      * Sets up test for a provided context according to the run control.
      *
-     * @param TestContext    $context
-     * @param RunControl $control
+     * @param TestContext $context
+     * @param RunControl  $control
      *
      * @return Setup
      */
@@ -37,9 +37,9 @@ interface ArrangingTester extends Tester
     /**
      * Tears down test for a provided context according to the run control.
      *
-     * @param TestContext    $context
-     * @param RunControl $control
-     * @param TestResult $result
+     * @param TestContext $context
+     * @param RunControl  $control
+     * @param TestResult  $result
      *
      * @return Teardown
      */

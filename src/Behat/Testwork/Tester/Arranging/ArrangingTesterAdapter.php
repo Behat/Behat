@@ -11,10 +11,10 @@
 namespace Behat\Testwork\Tester\Arranging;
 
 use Behat\Testwork\Tester\Context\TestContext;
-use Behat\Testwork\Tester\Exercise\BasicRunControl;
+use Behat\Testwork\Tester\Control\BasicRunControl;
+use Behat\Testwork\Tester\Control\RunControl;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestWithSetupResult;
-use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
 
 /**

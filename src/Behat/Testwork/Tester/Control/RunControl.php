@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Testwork\Tester;
+namespace Behat\Testwork\Tester\Control;
 
 use Behat\Testwork\Tester\Context\TestContext;
 

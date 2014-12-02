@@ -22,8 +22,8 @@ use Behat\Behat\Tester\Result\StepResult;
 use Behat\Behat\Tester\Result\UndefinedStepResult;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Tester\Context\TestContext;
+use Behat\Testwork\Tester\Control\RunControl;
 use Behat\Testwork\Tester\Exception\WrongContextException;
-use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
 
 /**

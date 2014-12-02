@@ -11,8 +11,8 @@
 namespace Behat\Testwork\Tester\Arranging;
 
 use Behat\Testwork\Tester\Context\TestContext;
+use Behat\Testwork\Tester\Control\RunControl;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 use Behat\Testwork\Tester\Tester;

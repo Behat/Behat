@@ -16,8 +16,8 @@ use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Tester\Arranging\ArrangingTester;
 use Behat\Testwork\Tester\Context\TestContext;
+use Behat\Testwork\Tester\Control\RunControl;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\RunControl;
 
 /**
  * Adds hooking points to any ArrangingTester.

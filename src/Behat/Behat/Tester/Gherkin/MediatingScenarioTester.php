@@ -12,8 +12,8 @@ namespace Behat\Behat\Tester\Gherkin;
 
 use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Testwork\Tester\Context\TestContext;
+use Behat\Testwork\Tester\Control\RunControl;
 use Behat\Testwork\Tester\Exception\WrongContextException;
-use Behat\Testwork\Tester\RunControl;
 use Behat\Testwork\Tester\Tester;
 
 /**

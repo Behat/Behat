@@ -13,8 +13,8 @@ namespace Behat\Testwork\EventDispatcher\Tester;
 use Behat\Testwork\EventDispatcher\Event\EventFactory;
 use Behat\Testwork\Tester\Arranging\ArrangingTester;
 use Behat\Testwork\Tester\Context\TestContext;
+use Behat\Testwork\Tester\Control\RunControl;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\RunControl;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface as EventDispatcher;
 
 /**
