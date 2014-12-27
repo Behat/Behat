@@ -43,11 +43,8 @@ final class AfterFeatureTested extends FeatureTested implements AfterTested
      * @param TestResult           $result
      * @param Teardown             $teardown
      */
-    public function __construct(
-        SpecificationContext $context,
-        TestResult $result,
-        Teardown $teardown
-    ) {
+    public function __construct(SpecificationContext $context, TestResult $result, Teardown $teardown)
+    {
         parent::__construct($context->getEnvironment());
 
         $this->feature = $context->getSpecification();
