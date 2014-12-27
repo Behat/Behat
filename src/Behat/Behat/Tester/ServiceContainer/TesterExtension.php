@@ -120,7 +120,7 @@ class TesterExtension extends BaseExtension
     {
         $definition = new Definition('Behat\Behat\Tester\Gherkin\FeatureTester', array(
             new Definition('Behat\Behat\Tester\Gherkin\MediatingScenarioTester', array(
-                new Definition('Behat\Behat\Tester\Gherkin\ScenarioIsolatingTester', array(
+                new Definition('Behat\Testwork\Environment\Tester\EnvironmentIsolatingTester', array(
                     new Reference(self::SCENARIO_TESTER_ID),
                     new Reference(EnvironmentExtension::MANAGER_ID)
                 )),
@@ -162,7 +162,7 @@ class TesterExtension extends BaseExtension
     protected function loadOutlineTester(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Tester\Gherkin\OutlineTester', array(
-            new Definition('Behat\Behat\Tester\Gherkin\ScenarioIsolatingTester', array(
+            new Definition('Behat\Testwork\Environment\Tester\EnvironmentIsolatingTester', array(
                 new Reference(self::EXAMPLE_TESTER_ID),
                 new Reference(EnvironmentExtension::MANAGER_ID)
             ))

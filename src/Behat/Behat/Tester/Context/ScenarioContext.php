@@ -16,6 +16,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
+use Behat\Testwork\Environment\Context\EnvironmentIsolatingContext;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
 
@@ -24,7 +25,7 @@ use Behat\Testwork\Environment\EnvironmentManager;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ScenarioContext implements StepContainerContext
+final class ScenarioContext implements StepContainerContext, EnvironmentIsolatingContext
 {
     /**
      * @var FeatureNode
@@ -54,11 +55,7 @@ final class ScenarioContext implements StepContainerContext
     }
 
     /**
-     * Creates a new context instance with provided environment.
-     *
-     * @param EnvironmentManager $environmentManager
-     *
-     * @return ScenarioContext
+     * {@inheritdoc}
      */
     public function createIsolatedContext(EnvironmentManager $environmentManager)
     {
