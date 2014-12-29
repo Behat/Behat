@@ -69,8 +69,7 @@ final class ServiceProcessor
         $collection2 = array();
 
         foreach ($references as $reference) {
-            $definition = $container->getDefinition($reference);
-            if (is_subclass_of($definition->getClass(), $interface)) {
+            if ($this->isServiceImplements($container, $reference, $interface)) {
                 $collection1[] = $reference;
             } else {
                 $collection2[] = $reference;
@@ -78,6 +77,22 @@ final class ServiceProcessor
         }
 
         return array($collection1, $collection2);
+    }
+
+    /**
+     * Checks if provided service implements provided interface.
+     *
+     * @param ContainerBuilder $container
+     * @param Reference        $reference
+     * @param string           $interface
+     *
+     * @return Boolean
+     */
+    public function isServiceImplements(ContainerBuilder $container, Reference $reference, $interface)
+    {
+        $definition = $container->getDefinition($reference);
+
+        return is_subclass_of($definition->getClass(), $interface);
     }
 
     /**
@@ -100,13 +115,13 @@ final class ServiceProcessor
      * Wraps service with provided ID into stack of decorator references.
      *
      * @param ContainerBuilder $container
-     * @param string           $target
+     * @param string           $serviceId
      * @param Reference[]      $references
      */
-    public function wrapServiceInReferences(ContainerBuilder $container, $target, array $references)
+    public function wrapServiceInReferences(ContainerBuilder $container, $serviceId, array $references)
     {
         foreach ($references as $reference) {
-            $this->wrapService($container, $target, $reference);
+            $this->wrapService($container, $serviceId, $reference);
         }
     }
 
