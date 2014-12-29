@@ -59,9 +59,9 @@ final class FeatureElementListener implements EventListener
     /**
      * Initializes listener.
      *
-     * @param FeaturePrinter $featurePrinter
+     * @param FeaturePrinter         $featurePrinter
      * @param ScenarioElementPrinter $scenarioPrinter
-     * @param \Behat\Behat\Output\Node\Printer\StepPrinter $stepPrinter
+     * @param StepPrinter            $stepPrinter
      */
     public function __construct(FeaturePrinter $featurePrinter, ScenarioElementPrinter $scenarioPrinter, StepPrinter $stepPrinter)
     {

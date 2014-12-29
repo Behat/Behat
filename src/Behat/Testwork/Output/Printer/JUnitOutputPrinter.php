@@ -129,24 +129,23 @@ class JUnitOutputPrinter extends ConsoleOutputPrinter
         $this->fileName = $fileName;
     }
 
-
     /**
      * {@inheritDoc}
      */
     protected function createOutput($stream = null)
     {
-        if (!is_dir($this->outputPath)) {
+        if (!is_dir($this->getOutputPath())) {
             throw new BadOutputPathException(sprintf(
                 'Directory expected for the `output_path` option, given `%s`.',
-                $this->outputPath
-            ), $this->outputPath);
+                $this->getOutputPath()
+            ), $this->getOutputPath());
         }
 
         if (null === $this->fileName) {
             throw new \LogicException('Unable to create file, no file name specified');
         }
 
-        $filePath = $this->outputPath.'/'.$this->fileName;
+        $filePath = $this->getOutputPath().'/'.$this->fileName;
 
         $stream = new StreamOutput(
             fopen($filePath, 'w'),

@@ -26,7 +26,7 @@ class ConsoleOutputPrinter implements OutputPrinter
     /**
      * @var null|string
      */
-    protected $outputPath;
+    private $outputPath;
     /**
      * @var array
      */
