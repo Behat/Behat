@@ -116,13 +116,20 @@ class FeatureContext extends BaseFeaturesContext
             $argumentsString .= ' 2>&1';
         }
 
+        $langReset = '';
+
+        // Don't reset the LANG variable on HHVM, because it breaks HHVM itself
+        if (!defined('HHVM_VERSION')) {
+            $langReset = 'LANG=en '; // Ensures that the default language is en, whatever the OS locale is.
+        }
+
         if ($this->env) {
-            exec($command = sprintf('BEHAT_PARAMS=\'%s\' %s %s %s',
-                $this->env, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
+            exec($command = sprintf('%sBEHAT_PARAMS=\'%s\' %s %s %s',
+                $langReset, $this->env, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
             ), $output, $return);
         } else {
-            exec($command = sprintf('%s %s %s --no-time',
-                BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
+            exec($command = sprintf('%s%s %s %s --no-time',
+                $langReset, BEHAT_PHP_BIN_PATH, escapeshellarg(BEHAT_BIN_PATH), $argumentsString
             ), $output, $return);
         }
 
