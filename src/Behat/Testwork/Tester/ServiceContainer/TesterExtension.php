@@ -262,18 +262,20 @@ abstract class TesterExtension implements Extension
             'Behat\Testwork\Tester\Arranging\ArrangingTester'
         );
 
-        // Adapt the tester to ArrangingTester interface
-        $this->processor->wrapServiceInClass($container, $testerId,
-            'Behat\Testwork\Tester\Arranging\BasicTesterAdapter'
-        );
+        if (0 < count($arrangingRefs)) {
+            // Adapt the tester to ArrangingTester interface
+            $this->processor->wrapServiceInClass(
+                $container, $testerId, 'Behat\Testwork\Tester\Arranging\BasicTesterAdapter'
+            );
 
-        // Apply ArrangingTester decorators to the tester
-        $this->processor->wrapServiceInReferences($container, $testerId, $arrangingRefs);
+            // Apply ArrangingTester decorators to the tester
+            $this->processor->wrapServiceInReferences($container, $testerId, $arrangingRefs);
 
-        // Adapt the tester back to Tester interface
-        $this->processor->wrapServiceInClass($container, $testerId,
-            'Behat\Testwork\Tester\Arranging\ArrangingTesterAdapter'
-        );
+            // Adapt the tester back to Tester interface
+            $this->processor->wrapServiceInClass(
+                $container, $testerId, 'Behat\Testwork\Tester\Arranging\ArrangingTesterAdapter'
+            );
+        }
 
         // Apply Tester decorators to the tester
         $this->processor->wrapServiceInReferences($container, $testerId, $basicRefs);
