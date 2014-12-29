@@ -23,7 +23,8 @@ use Behat\Testwork\Tester\Result\ExceptionResult;
 /**
  * Prints step with optional results.
  *
- * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ * @author Wouter J <wouter@wouterj.nl>
+ * @author James Watson <james@sitepulse.org>
  */
 class JUnitStepPrinter implements StepPrinter
 {
