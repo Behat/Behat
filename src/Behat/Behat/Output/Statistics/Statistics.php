@@ -65,6 +65,14 @@ final class Statistics
      */
     public function __construct()
     {
+        $this->resetAllCounters();
+
+        $this->timer = new Timer();
+        $this->memory = new Memory();
+    }
+
+    public function resetAllCounters()
+    {
         $this->scenarioCounters = $this->stepCounters = array(
             TestResult::PASSED    => 0,
             TestResult::FAILED    => 0,
@@ -72,9 +80,6 @@ final class Statistics
             TestResult::PENDING   => 0,
             TestResult::SKIPPED   => 0
         );
-
-        $this->timer = new Timer();
-        $this->memory = new Memory();
     }
 
     /**

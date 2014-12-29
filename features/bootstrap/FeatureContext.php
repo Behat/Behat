@@ -82,6 +82,18 @@ class FeatureContext implements Context
     }
 
     /**
+     * Creates a directory with specified name in current workdir.
+     *
+     * @Given /^(?:there is )?a folder named "([^"]*)"$/
+     *
+     * @param   string       $folderName name of the folder
+     */
+    public function aFolderNamedWith($folderName)
+    {
+        $this->createDirectory($this->workingDir . '/' . $folderName);
+    }
+
+    /**
      * Moves user to the specified path.
      *
      * @Given /^I am in the "([^"]*)" path$/
@@ -165,6 +177,19 @@ class FeatureContext implements Context
     }
 
     /**
+     * Checks whether previously runned command passes|failes with no output.
+     *
+     * @Then /^it should (fail|pass) with no output$/
+     *
+     * @param string $success "fail" or "pass"
+     */
+    public function itShouldPassWithNoOutput($success)
+    {
+        $this->itShouldFail($success);
+        PHPUnit_Framework_Assert::assertEmpty($this->getOutput());
+    }
+
+    /**
      * Checks whether specified file exists and contains specified string.
      *
      * @Then /^"([^"]*)" file should contain:$/
@@ -187,6 +212,29 @@ class FeatureContext implements Context
     }
 
     /**
+     * Checks whether specified content and structure of the xml is correct without worrying about layout.
+     *
+     * @Then /^"([^"]*)" file xml should be like:$/
+     *
+     * @param   string       $path file path
+     * @param   PyStringNode $text file content
+     */
+    public function fileXmlShouldBeLike($path, PyStringNode $text)
+    {
+        $path = $this->workingDir . '/' . $path;
+        PHPUnit_Framework_Assert::assertFileExists($path);
+
+        $fileContent = trim(file_get_contents($path));
+
+        $dom = new DOMDocument();
+        $dom->loadXML($text);
+        $dom->formatOutput = true;
+
+        PHPUnit_Framework_Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
+    }
+
+
+    /**
      * Checks whether last command output contains provided string.
      *
      * @Then the output should contain:
@@ -205,7 +253,7 @@ class FeatureContext implements Context
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
-                '/ features\/[^\n ]+/', function ($matches) {
+                '/[ "]features\/[^\n "]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 }, $text
             );
@@ -248,6 +296,22 @@ class FeatureContext implements Context
         }
     }
 
+    /**
+     * Checks whether the file is valid according to an XML schema.
+     *
+     * @Then /^the file "([^"]+)" should be a valid document according to "([^"]+)"$/
+     *
+     * @param string $xmlFile
+     * @param string $schemaPath relative to features/bootstrap/schema
+     */
+    public function xmlShouldBeValid($xmlFile, $schemaPath)
+    {
+        $dom = new DomDocument();
+        $dom->load($this->workingDir . '/' . $xmlFile);
+
+        $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);
+    }
+
     private function getExitCode()
     {
         return $this->process->getExitCode();
@@ -271,11 +335,16 @@ class FeatureContext implements Context
     private function createFile($filename, $content)
     {
         $path = dirname($filename);
+        $this->createDirectory($path);
+
+        file_put_contents($filename, $content);
+    }
+
+    private function createDirectory($path)
+    {
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
-
-        file_put_contents($filename, $content);
     }
 
     private function moveToNewPath($path)

@@ -22,9 +22,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 final class ConsoleOutputPrinter extends BasePrinter
 {
     /**
-     * Creates output formatter that is used to create a console.
-     *
-     * @return ConsoleFormatter
+     * {@inheritDoc}
      */
     protected function createOutputFormatter()
     {

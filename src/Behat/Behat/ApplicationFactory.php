@@ -15,6 +15,7 @@ use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
 use Behat\Behat\Hook\ServiceContainer\HookExtension;
+use Behat\Behat\Output\ServiceContainer\Formatter\JUnitFormatterFactory;
 use Behat\Behat\Output\ServiceContainer\Formatter\PrettyFormatterFactory;
 use Behat\Behat\Output\ServiceContainer\Formatter\ProgressFormatterFactory;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
@@ -135,6 +136,7 @@ final class ApplicationFactory extends BaseFactory
         return array(
             new PrettyFormatterFactory($processor),
             new ProgressFormatterFactory($processor),
+            new JUnitFormatterFactory(),
         );
     }
 }
