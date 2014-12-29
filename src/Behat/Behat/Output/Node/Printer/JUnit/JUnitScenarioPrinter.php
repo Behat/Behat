@@ -26,7 +26,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
-final class JUnitScenarioPrinter implements ScenarioElementPrinter
+final class JUnitScenarioPrinter
 {
     /**
      * @var ResultToStringConverter
