@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Output\Node\EventListener\AST;
+namespace Behat\Behat\Output\Node\EventListener\JUnit;
 
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
@@ -17,7 +17,7 @@ use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
-use Behat\Behat\Output\Node\Printer\ScenarioElementPrinter;
+use Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
@@ -29,14 +29,14 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
-final class FeatureElementListener implements EventListener
+final class JUnitFeatureElementListener implements EventListener
 {
     /**
      * @var FeaturePrinter
      */
     private $featurePrinter;
     /**
-     * @var ScenarioElementPrinter
+     * @var JUnitScenarioPrinter
      */
     private $scenarioPrinter;
     /**
@@ -59,11 +59,11 @@ final class FeatureElementListener implements EventListener
     /**
      * Initializes listener.
      *
-     * @param FeaturePrinter         $featurePrinter
-     * @param ScenarioElementPrinter $scenarioPrinter
-     * @param StepPrinter            $stepPrinter
+     * @param FeaturePrinter       $featurePrinter
+     * @param JUnitScenarioPrinter $scenarioPrinter
+     * @param StepPrinter          $stepPrinter
      */
-    public function __construct(FeaturePrinter $featurePrinter, ScenarioElementPrinter $scenarioPrinter, StepPrinter $stepPrinter)
+    public function __construct(FeaturePrinter $featurePrinter, JUnitScenarioPrinter $scenarioPrinter, StepPrinter $stepPrinter)
     {
         $this->featurePrinter = $featurePrinter;
         $this->scenarioPrinter = $scenarioPrinter;
