@@ -69,7 +69,7 @@ final class ServiceProcessor
         $collection2 = array();
 
         foreach ($references as $reference) {
-            if ($this->isServiceImplements($container, $reference, $interface)) {
+            if ($this->serviceImplements($container, $reference, $interface)) {
                 $collection1[] = $reference;
             } else {
                 $collection2[] = $reference;
@@ -88,11 +88,12 @@ final class ServiceProcessor
      *
      * @return Boolean
      */
-    public function isServiceImplements(ContainerBuilder $container, Reference $reference, $interface)
+    public function serviceImplements(ContainerBuilder $container, Reference $reference, $interface)
     {
         $definition = $container->getDefinition($reference);
+        $reflection = new \ReflectionClass($definition->getClass());
 
-        return is_subclass_of($definition->getClass(), $interface);
+        return $reflection->implementsInterface($interface);
     }
 
     /**
@@ -167,7 +168,7 @@ final class ServiceProcessor
      */
     public function wrapServiceInClass(ContainerBuilder $container, $serviceId, $wrapperClass)
     {
-        $wrapperId = $serviceId . '.wrapper.' . md5($wrapperClass);
+        $wrapperId = $serviceId . '.wrapper.' . md5($wrapperClass . microtime() . uniqid());
         $container->setDefinition($wrapperId, new Definition($wrapperClass, array(
             new Reference($serviceId)
         )));
