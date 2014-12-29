@@ -86,7 +86,7 @@ class JUnitFormatterFactory implements FormatterFactory
     protected function loadRootNodeListener(ContainerBuilder $container)
     {
 
-        $definition = new Definition('Behat\Behat\Output\Node\EventListener\JUnit\JUnitListener', array(
+        $definition = new Definition('Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener', array(
                 new Reference('output.node.printer.junit.suite')
             )
         );

@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
-use Behat\Behat\Output\Node\EventListener\JUnit\JUnitListener;
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\ScenarioElementPrinter;
 use Behat\Gherkin\Node\ExampleNode;
@@ -34,9 +34,9 @@ final class JUnitScenarioPrinter implements ScenarioElementPrinter
     private $resultConverter;
 
     /**
-     * @var JUnitListener
+     * @var JUnitOutlineStoreListener
      */
-    private $junitListener;
+    private $outlineStoreListener;
 
     /**
      * @var OutlineNode
@@ -48,10 +48,10 @@ final class JUnitScenarioPrinter implements ScenarioElementPrinter
      */
     private $outlineStepCount;
 
-    public function __construct(ResultToStringConverter $resultConverter, JUnitListener $outlineListener)
+    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener)
     {
         $this->resultConverter = $resultConverter;
-        $this->junitListener = $outlineListener;
+        $this->outlineStoreListener = $outlineListener;
     }
 
     /**
@@ -88,7 +88,7 @@ final class JUnitScenarioPrinter implements ScenarioElementPrinter
      */
     private function buildExampleName()
     {
-        $currentOutline = $this->junitListener->getCurrentOutline();
+        $currentOutline = $this->outlineStoreListener->getCurrentOutline();
         if ($currentOutline === $this->lastOutline) {
             $this->outlineStepCount++;
         } else {

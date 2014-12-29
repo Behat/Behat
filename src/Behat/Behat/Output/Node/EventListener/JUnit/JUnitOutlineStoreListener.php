@@ -24,7 +24,7 @@ use Behat\Gherkin\Node\OutlineNode;
  *
  * @author James Watson <james@sitepulse.org>
  */
-final class JUnitListener implements EventListener
+final class JUnitOutlineStoreListener implements EventListener
 {
 
     /**
