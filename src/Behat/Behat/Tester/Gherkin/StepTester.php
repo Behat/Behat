@@ -74,39 +74,39 @@ final class StepTester implements Tester
     /**
      * Searches for a definition.
      *
-     * @param StepContext $ctx
+     * @param StepContext $context
      *
      * @return SearchResult
      */
-    private function searchDefinition(StepContext $ctx)
+    private function searchDefinition(StepContext $context)
     {
         return $this->definitionFinder->findDefinition(
-            $ctx->getEnvironment(),
-            $ctx->getFeature(),
-            $ctx->getStep()
+            $context->getEnvironment(),
+            $context->getFeature(),
+            $context->getStep()
         );
     }
 
     /**
      * Tests found definition.
      *
-     * @param StepContext  $ctx
-     * @param RunControl   $ctrl
+     * @param StepContext  $context
+     * @param RunControl   $control
      * @param SearchResult $search
      *
      * @return StepResult
      */
-    private function testDefinition(StepContext $ctx, RunControl $ctrl, SearchResult $search)
+    private function testDefinition(StepContext $context, RunControl $control, SearchResult $search)
     {
         if (!$search->hasMatch()) {
             return new UndefinedStepResult();
         }
 
-        if (!$ctrl->isContextTestable($ctx)) {
+        if (!$control->isContextTestable($context)) {
             return new SkippedStepResult($search);
         }
 
-        $call = $this->createDefinitionCall($ctx, $search);
+        $call = $this->createDefinitionCall($context, $search);
         $result = $this->callCenter->makeCall($call);
 
         return new ExecutedStepResult($search, $result);
@@ -115,17 +115,17 @@ final class StepTester implements Tester
     /**
      * Creates definition call.
      *
-     * @param StepContext  $ctx
+     * @param StepContext  $context
      * @param SearchResult $search
      *
      * @return DefinitionCall
      */
-    private function createDefinitionCall(StepContext $ctx, SearchResult $search)
+    private function createDefinitionCall(StepContext $context, SearchResult $search)
     {
         return new DefinitionCall(
-            $ctx->getEnvironment(),
-            $ctx->getFeature(),
-            $ctx->getStep(),
+            $context->getEnvironment(),
+            $context->getFeature(),
+            $context->getStep(),
             $search->getMatchedDefinition(),
             $search->getMatchedArguments()
         );

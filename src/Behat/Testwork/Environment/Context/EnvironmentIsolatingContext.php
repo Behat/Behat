@@ -25,7 +25,7 @@ interface EnvironmentIsolatingContext extends TestContext
      *
      * @param EnvironmentManager $environmentManager
      *
-     * @return EnvironmentIsolatingContext
+     * @return TestContext
      */
     public function createIsolatedContext(EnvironmentManager $environmentManager);
 }

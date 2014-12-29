@@ -48,11 +48,8 @@ final class HookableTester implements ArrangingTester
      * @param ScopeFactory    $scopeFactory
      * @param HookDispatcher  $hookDispatcher
      */
-    public function __construct(
-        ArrangingTester $decoratedTester,
-        ScopeFactory $scopeFactory,
-        HookDispatcher $hookDispatcher
-    ) {
+    public function __construct(ArrangingTester $decoratedTester, ScopeFactory $scopeFactory, HookDispatcher $hookDispatcher)
+    {
         $this->decoratedTester = $decoratedTester;
         $this->scopeFactory = $scopeFactory;
         $this->hookDispatcher = $hookDispatcher;

@@ -103,11 +103,8 @@ final class ServiceProcessor
      * @param string           $target
      * @param Reference[]      $references
      */
-    public function wrapServiceInReferences(
-        ContainerBuilder $container,
-        $target,
-        array $references
-    ) {
+    public function wrapServiceInReferences(ContainerBuilder $container, $target, array $references)
+    {
         foreach ($references as $reference) {
             $this->wrapService($container, $target, $reference);
         }

@@ -12,7 +12,7 @@ namespace Behat\Testwork\Tester\Context;
 
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
-use Behat\Testwork\Specification\GroupedSpecificationIterator as Iterator;
+use Behat\Testwork\Specification\GroupedSpecificationIterator;
 
 /**
  * Encapsulates a suite context.
@@ -22,7 +22,7 @@ use Behat\Testwork\Specification\GroupedSpecificationIterator as Iterator;
 final class SuiteContext implements TestContext
 {
     /**
-     * @var Iterator
+     * @var GroupedSpecificationIterator
      */
     private $iterator;
     /**
@@ -33,10 +33,10 @@ final class SuiteContext implements TestContext
     /**
      * Initializes context.
      *
-     * @param Iterator    $iterator
-     * @param Environment $environment
+     * @param GroupedSpecificationIterator $iterator
+     * @param Environment                  $environment
      */
-    public function __construct(Iterator $iterator, Environment $environment)
+    public function __construct(GroupedSpecificationIterator $iterator, Environment $environment)
     {
         $this->iterator = $iterator;
         $this->environment = $environment;
@@ -45,12 +45,12 @@ final class SuiteContext implements TestContext
     /**
      * Creates new suite context using provided environment manager.
      *
-     * @param Iterator           $iterator
-     * @param EnvironmentManager $manager
+     * @param GroupedSpecificationIterator $iterator
+     * @param EnvironmentManager           $manager
      *
      * @return SuiteContext
      */
-    public static function createUsingManager(Iterator $iterator, EnvironmentManager $manager)
+    public static function createUsingManager(GroupedSpecificationIterator $iterator, EnvironmentManager $manager)
     {
         $environment = $manager->buildEnvironment($iterator->getSuite());
 
@@ -60,7 +60,7 @@ final class SuiteContext implements TestContext
     /**
      * Returns specification iterator.
      *
-     * @return Iterator
+     * @return GroupedSpecificationIterator
      */
     public function getSpecificationIterator()
     {

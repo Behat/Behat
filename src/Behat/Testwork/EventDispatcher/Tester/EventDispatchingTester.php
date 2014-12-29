@@ -46,11 +46,8 @@ final class EventDispatchingTester implements ArrangingTester
      * @param EventFactory    $eventFactory
      * @param EventDispatcher $eventDispatcher
      */
-    public function __construct(
-        ArrangingTester $decoratedTester,
-        EventFactory $eventFactory,
-        EventDispatcher $eventDispatcher
-    ) {
+    public function __construct(ArrangingTester $decoratedTester, EventFactory $eventFactory, EventDispatcher $eventDispatcher)
+    {
         $this->decoratedTester = $decoratedTester;
         $this->eventFactory = $eventFactory;
         $this->eventDispatcher = $eventDispatcher;
