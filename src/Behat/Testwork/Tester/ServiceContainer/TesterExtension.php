@@ -84,14 +84,14 @@ abstract class TesterExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-            ->booleanNode('strict')
-            ->info('Sets the strict mode for result interpretation')
-            ->defaultFalse()
-            ->end()
-            ->booleanNode('skip')
-            ->info('Tells tester to skip all tests')
-            ->defaultFalse()
-            ->end()
+                ->booleanNode('strict')
+                    ->info('Sets the strict mode for result interpretation')
+                    ->defaultFalse()
+                ->end()
+                ->booleanNode('skip')
+                    ->info('Tells tester to skip all tests')
+                    ->defaultFalse()
+                ->end()
             ->end();
     }
 
@@ -129,12 +129,12 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition(
             'Behat\Testwork\Tester\Cli\ExerciseController', array(
-            new Reference(SuiteExtension::REGISTRY_ID),
-            new Reference(SpecificationExtension::FINDER_ID),
-            new Reference(self::EXERCISE_ID),
-            new Reference(self::RESULT_INTERPRETER_ID),
-            $skip
-        )
+                new Reference(SuiteExtension::REGISTRY_ID),
+                new Reference(SpecificationExtension::FINDER_ID),
+                new Reference(self::EXERCISE_ID),
+                new Reference(self::RESULT_INTERPRETER_ID),
+                $skip
+            )
         );
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
@@ -150,9 +150,9 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition(
             'Behat\Testwork\Tester\Cli\StrictController', array(
-            new Reference(self::RESULT_INTERPRETER_ID),
-            $strict
-        )
+                new Reference(self::RESULT_INTERPRETER_ID),
+                $strict
+            )
         );
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
@@ -184,9 +184,9 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition(
             'Behat\Testwork\Tester\Exercise\ExerciseTester', array(
-            new Reference(self::SUITE_TESTER_ID),
-            new Reference(EnvironmentExtension::MANAGER_ID)
-        )
+                new Reference(self::SUITE_TESTER_ID),
+                new Reference(EnvironmentExtension::MANAGER_ID)
+            )
         );
         $container->setDefinition(self::EXERCISE_ID, $definition);
     }
@@ -200,8 +200,8 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition(
             'Behat\Testwork\Tester\Exercise\SuiteTester', array(
-            new Reference(self::SPECIFICATION_TESTER_ID)
-        )
+                new Reference(self::SPECIFICATION_TESTER_ID)
+            )
         );
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);
     }
