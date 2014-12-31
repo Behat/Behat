@@ -22,7 +22,7 @@
         "symfony/config":                "~2.3",
         "symfony/dependency-injection":  "~2.1",
         "symfony/event-dispatcher":      "~2.1",
-        "symfony/translation":           "~2.1",
+        "symfony/translation":           "~2.3",
         "symfony/yaml":                  "~2.1",
         "symfony/class-loader":          "~2.1"
     },
