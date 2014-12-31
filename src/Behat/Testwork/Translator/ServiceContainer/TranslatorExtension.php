@@ -94,7 +94,7 @@ final class TranslatorExtension implements Extension
         $definition = new Definition('Symfony\Component\Translation\Translator', array($locale));
         $container->setDefinition(self::TRANSLATOR_ID, $definition);
 
-        $definition->addMethodCall('setFallbackLocale', array($fallbackLocale));
+        $definition->addMethodCall('setFallbackLocales', array(array($fallbackLocale)));
         $definition->addMethodCall(
             'addLoader', array(
                 'xliff',
