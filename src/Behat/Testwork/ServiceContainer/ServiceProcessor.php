@@ -90,7 +90,7 @@ final class ServiceProcessor
      */
     public function serviceImplements(ContainerBuilder $container, Reference $reference, $interface)
     {
-        $definition = $container->getDefinition($reference);
+        $definition = $container->findDefinition((string) $reference);
         $reflection = new \ReflectionClass($definition->getClass());
 
         return $reflection->implementsInterface($interface);
@@ -103,7 +103,7 @@ final class ServiceProcessor
      * The first argument of the wrapper service receives the inner service.
      *
      * @param ContainerBuilder $container
-     * @param string           $target The id of the service being decorated
+     * @param string           $target     The id of the service being decorated
      * @param string           $wrapperTag The tag used by wrappers
      */
     public function processWrapperServices(ContainerBuilder $container, $target, $wrapperTag)
@@ -155,7 +155,7 @@ final class ServiceProcessor
 
         $container->setAlias($serviceId, new Alias($id, $public));
         // Replace the reference so that users don't need to bother about the way the inner service is referenced
-        $wrappingService = $container->getDefinition($id);
+        $wrappingService = $container->findDefinition($id);
         $wrappingService->replaceArgument(0, new Reference($renamedId));
     }
 
