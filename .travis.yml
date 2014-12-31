@@ -24,6 +24,7 @@ matrix:
       env: DEPENDENCIES='low'
 
 before_script:
+  - composer selfupdate
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
