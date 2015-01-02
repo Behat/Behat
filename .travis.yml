@@ -2,6 +2,12 @@ language: php
 
 php: [5.3, 5.4, 5.5, 5.6, 5.3.3, hhvm]
 
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 branches:
   except:
     - /^bugfix\/.*$/
@@ -13,11 +19,15 @@ matrix:
     - php: 5.5
       env: SYMFONY_VERSION='2.3.*'
     - php: 5.5
-      env: SYMFONY_VERSION='2.4.*'
+      env: SYMFONY_VERSION='2.5.*'
+    - php: 5.3.3
+      env: DEPENDENCIES='low'
 
 before_script:
-  - sh -c 'if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;'
-  - composer install --dev --prefer-source
+  - composer selfupdate
+  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;
+  - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
+  - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
   - export PATH=./bin:$PATH
   - echo "<?php echo '@php5' . implode(',@php5.', range(3, PHP_MINOR_VERSION));" > php_version_tags.php
 
