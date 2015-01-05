@@ -103,7 +103,7 @@ class Loader
         }
 
         $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
-        $config   = Yaml::parse($configPath);
+        $config   = Yaml::parse(file_get_contents($configPath));
         $configs  = array();
 
         // first load default profile from current config, but only if custom profile requested
