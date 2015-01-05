@@ -305,8 +305,10 @@
                 <service class="%behat.translator.message_selector.class%" />
             </argument>
 
-            <call method="setFallbackLocale">
-                <argument>en</argument>
+            <call method="setFallbackLocales">
+                <argument type="collection">
+                    <argument>en</argument>
+                </argument>
             </call>
 
             <!-- Translation loaders -->
