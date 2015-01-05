@@ -1,0 +1,162 @@
+<?php
+
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Behat\Behat\Output\Node\Printer\Html;
+
+use Behat\Behat\EventDispatcher\Event\AfterStepTested;
+use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
+use Behat\Behat\Output\Node\Printer\Helper\HtmlPrinter;
+use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
+use Behat\Behat\Tester\Result\ExecutedStepResult;
+use Behat\Behat\Tester\Result\StepResult;
+use Behat\Gherkin\Node\ExampleNode;
+use Behat\Gherkin\Node\OutlineNode;
+use Behat\Testwork\EventDispatcher\Event\AfterTested;
+use Behat\Testwork\Exception\ExceptionPresenter;
+use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
+use Behat\Testwork\Tester\Result\ExceptionResult;
+use Behat\Testwork\Tester\Result\TestResults;
+
+/**
+ * Prints example results in form of a table row.
+ *
+ * @author Ali Bahman <abn@webit4.me>
+ */
+final class HtmlExampleRowPrinter extends AbstractHtmlPrinter implements ExampleRowPrinter
+{
+    /**
+     * @var ResultToStringConverter
+     */
+    private $resultConverter;
+    /**
+     * @var ExceptionPresenter
+     */
+    private $exceptionPresenter;
+
+    /**
+     * Initializes printer.
+     *
+     * @param HtmlPrinter $htmlPrinter
+     * @param ResultToStringConverter $resultConverter
+     * @param ExceptionPresenter $exceptionPresenter
+     */
+    public function __construct(
+        HtmlPrinter $htmlPrinter,
+        ResultToStringConverter $resultConverter,
+        ExceptionPresenter $exceptionPresenter
+    ) {
+        $this->setHtmlPrinter($htmlPrinter);
+        $this->resultConverter = $resultConverter;
+        $this->exceptionPresenter = $exceptionPresenter;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleNode $example, array $events)
+    {
+        $rowNum = array_search($example, $outline->getExamples()) + 1;
+        $wrapper = $this->getWrapperClosure($outline, $example, $events);
+        $row = $outline->getExampleTable()->getRowAsStringWithWrappedValues($rowNum, $wrapper);
+
+        $formatter->getOutputPrinter()->writeln(sprintf('%s', $row));
+        $this->printStepExceptionsAndStdOut($formatter->getOutputPrinter(), $events);
+    }
+
+    /**
+     * Creates wrapper-closure for the example table.
+     *
+     * @param OutlineNode $outline
+     * @param ExampleNode $example
+     * @param AfterStepTested[] $stepEvents
+     *
+     * @return callable
+     */
+    private function getWrapperClosure(OutlineNode $outline, ExampleNode $example, array $stepEvents)
+    {
+        $resultConverter = $this->resultConverter;
+
+        return function ($value, $column) use ($outline, $example, $stepEvents, $resultConverter) {
+            $results = array();
+            foreach ($stepEvents as $event) {
+                $index = array_search($event->getStep(), $example->getSteps());
+                $header = $outline->getExampleTable()->getRow(0);
+                $steps = $outline->getSteps();
+                $outlineStepText = $steps[$index]->getText();
+
+                if (false !== strpos($outlineStepText, '<' . $header[$column] . '>')) {
+                    $results[] = $event->getTestResult();
+                }
+            }
+
+            $result = new TestResults($results);
+
+            return sprintf($value);
+        };
+    }
+
+    /**
+     * Prints step events exceptions (if has some).
+     *
+     * @param OutputPrinter $printer
+     * @param AfterTested[] $events
+     */
+    private function printStepExceptionsAndStdOut(OutputPrinter $printer, array $events)
+    {
+        foreach ($events as $event) {
+            $this->printStepStdOut($printer, $event->getTestResult());
+            $this->printStepException($printer, $event->getTestResult());
+        }
+    }
+
+    /**
+     * Prints step exception (if has one).
+     *
+     * @param OutputPrinter $printer
+     * @param StepResult $result
+     */
+    private function printStepException(OutputPrinter $printer, StepResult $result)
+    {
+        if (!$result instanceof ExceptionResult || !$result->hasException()) {
+            return;
+        }
+
+        $text = $this->exceptionPresenter->presentException($result->getException());
+        $printer->writeln($text);
+    }
+
+    /**
+     * Prints step output (if has one).
+     *
+     * @param OutputPrinter $printer
+     * @param StepResult $result
+     */
+    private function printStepStdOut(OutputPrinter $printer, StepResult $result)
+    {
+        if (!$result instanceof ExecutedStepResult || null === $result->getCallResult()->getStdOut()) {
+            return;
+        }
+
+        $callResult = $result->getCallResult();
+        $indentedText = $this->subIndentText;
+
+        $pad = function ($line) use ($indentedText) {
+            return sprintf(
+                '%s│ {+stdout}%s{-stdout}',
+                $indentedText,
+                $line
+            );
+        };
+
+        $printer->writeln(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
+    }
+
+}
