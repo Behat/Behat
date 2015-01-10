@@ -117,7 +117,7 @@ final class SuiteRegistry implements SuiteRepository
         }
 
         throw new SuiteGenerationException(sprintf(
-            'Can not find suite generator for a suite "%s" of type "%s".',
+            'Can not find suite generator for a suite `%s` of type `%s`.',
             $name,
             $type
         ), $name);

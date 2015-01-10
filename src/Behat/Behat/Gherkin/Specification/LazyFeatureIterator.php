@@ -168,10 +168,10 @@ final class LazyFeatureIterator implements SpecificationIterator
         }
 
         throw new SuiteConfigurationException(sprintf(
-            '`%s` filter is not supported by the `%s` suite. Supported types are %s.',
+            '`%s` filter is not supported by the `%s` suite. Supported types are `%s`.',
             $type,
             $suite->getName(),
-            implode(', ', array('`role`', '`name`', '`tags`'))
+            implode('`, `', array('role', 'name', 'tags'))
         ), $suite->getName());
     }
 

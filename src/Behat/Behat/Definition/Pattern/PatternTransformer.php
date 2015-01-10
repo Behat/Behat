@@ -54,7 +54,7 @@ final class PatternTransformer
             }
         }
 
-        throw new UnsupportedPatternTypeException(sprintf('Can not find policy for a pattern type "%s".', $type), $type);
+        throw new UnsupportedPatternTypeException(sprintf('Can not find policy for a pattern type `%s`.', $type), $type);
     }
 
     /**
@@ -74,6 +74,6 @@ final class PatternTransformer
             }
         }
 
-        throw new UnknownPatternException(sprintf('Can not find policy for a pattern "%s".', $pattern), $pattern);
+        throw new UnknownPatternException(sprintf('Can not find policy for a pattern `%s`.', $pattern), $pattern);
     }
 }
