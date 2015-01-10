@@ -42,6 +42,13 @@ class JUnitFormatterFactory implements FormatterFactory
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function processFormatter(ContainerBuilder $container)
+    {
+    }
+
+    /**
      * Loads printer helpers.
      *
      * @param ContainerBuilder $container
@@ -50,13 +57,6 @@ class JUnitFormatterFactory implements FormatterFactory
     {
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter');
         $container->setDefinition(self::RESULT_TO_STRING_CONVERTER_ID, $definition);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function processFormatter(ContainerBuilder $container)
-    {
     }
 
     protected function loadCorePrinters(ContainerBuilder $container)
@@ -111,7 +111,7 @@ class JUnitFormatterFactory implements FormatterFactory
      *
      * @param ContainerBuilder $container
      */
-    public function loadFormatter(ContainerBuilder $container)
+    protected function loadFormatter(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Output\Statistics\Statistics');
         $container->setDefinition('output.junit.statistics', $definition);

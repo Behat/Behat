@@ -72,8 +72,8 @@ class FeatureContext implements Context
      *
      * @Given /^(?:there is )?a file named "([^"]*)" with:$/
      *
-     * @param   string       $filename name of the file (relative path)
-     * @param   PyStringNode $content  PyString string instance
+     * @param string       $filename name of the file (relative path)
+     * @param PyStringNode $content  PyString string instance
      */
     public function aFileNamedWith($filename, PyStringNode $content)
     {
@@ -86,9 +86,9 @@ class FeatureContext implements Context
      *
      * @Given /^(?:there is )?a folder named "([^"]*)"$/
      *
-     * @param   string       $folderName name of the folder
+     * @param string $folderName name of the folder
      */
-    public function aFolderNamedWith($folderName)
+    public function aFolderNamed($folderName)
     {
         $this->createDirectory($this->workingDir . '/' . $folderName);
     }
@@ -98,7 +98,7 @@ class FeatureContext implements Context
      *
      * @Given /^I am in the "([^"]*)" path$/
      *
-     * @param   string $path
+     * @param string $path
      */
     public function iAmInThePath($path)
     {
@@ -134,7 +134,7 @@ class FeatureContext implements Context
      *
      * @When /^I run "behat(?: ((?:\"|[^"])*))?"$/
      *
-     * @param   string $argumentsString
+     * @param string $argumentsString
      */
     public function iRunBehat($argumentsString = '')
     {
@@ -167,8 +167,8 @@ class FeatureContext implements Context
      *
      * @Then /^it should (fail|pass) with:$/
      *
-     * @param   string       $success "fail" or "pass"
-     * @param   PyStringNode $text    PyString text instance
+     * @param string       $success "fail" or "pass"
+     * @param PyStringNode $text    PyString text instance
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
@@ -194,8 +194,8 @@ class FeatureContext implements Context
      *
      * @Then /^"([^"]*)" file should contain:$/
      *
-     * @param   string       $path file path
-     * @param   PyStringNode $text file content
+     * @param string       $path file path
+     * @param PyStringNode $text file content
      */
     public function fileShouldContain($path, PyStringNode $text)
     {
@@ -216,8 +216,8 @@ class FeatureContext implements Context
      *
      * @Then /^"([^"]*)" file xml should be like:$/
      *
-     * @param   string       $path file path
-     * @param   PyStringNode $text file content
+     * @param string       $path file path
+     * @param PyStringNode $text file content
      */
     public function fileXmlShouldBeLike($path, PyStringNode $text)
     {
@@ -239,7 +239,7 @@ class FeatureContext implements Context
      *
      * @Then the output should contain:
      *
-     * @param   PyStringNode $text PyString text instance
+     * @param PyStringNode $text PyString text instance
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
@@ -277,7 +277,7 @@ class FeatureContext implements Context
      *
      * @Then /^it should (fail|pass)$/
      *
-     * @param   string $success "fail" or "pass"
+     * @param string $success "fail" or "pass"
      */
     public function itShouldFail($success)
     {

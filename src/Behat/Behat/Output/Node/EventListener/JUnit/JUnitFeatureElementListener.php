@@ -151,8 +151,6 @@ final class JUnitFeatureElementListener implements EventListener
             foreach ($afterScenario['step_events'] as $afterStepTested) {
                 $this->stepPrinter->printStep($formatter, $afterScenarioTested->getScenario(), $afterStepTested->getStep(), $afterStepTested->getTestResult());
             }
-
-            $this->scenarioPrinter->printCloseTag($formatter);
         }
 
         $this->featurePrinter->printFooter($formatter, $event->getTestResult());

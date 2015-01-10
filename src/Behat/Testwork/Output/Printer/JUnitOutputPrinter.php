@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\StreamOutput;
  * @author Wouter J <wouter@wouterj.nl>
  * @author James Watson <james@sitepulse.org>
  */
-class JUnitOutputPrinter extends ConsoleOutputPrinter
+final class JUnitOutputPrinter extends ConsoleOutputPrinter
 {
     const XML_VERSION  = '1.0';
     const XML_ENCODING = 'UTF-8';

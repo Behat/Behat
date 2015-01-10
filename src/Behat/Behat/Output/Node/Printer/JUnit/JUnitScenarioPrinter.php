@@ -12,11 +12,10 @@ namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
-use Behat\Behat\Output\Node\Printer\ScenarioElementPrinter;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
-use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
+use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -57,7 +56,7 @@ final class JUnitScenarioPrinter
     /**
      * {@inheritDoc}
      */
-    public function printOpenTag(Formatter $formatter, FeatureNode $feature, Scenario $scenario, TestResult $result)
+    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result)
     {
         $name = implode(' ', array_map(function ($l) {
             return trim($l);
@@ -74,13 +73,6 @@ final class JUnitScenarioPrinter
             'name' => $name,
             'status' => $this->resultConverter->convertResultToString($result)
         ));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function printCloseTag(Formatter $formatter)
-    {
     }
 
     /**
