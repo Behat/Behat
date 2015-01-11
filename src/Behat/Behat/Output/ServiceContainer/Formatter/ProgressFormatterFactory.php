@@ -178,7 +178,9 @@ class ProgressFormatterFactory implements FormatterFactory
      */
     protected function createOutputPrinterDefinition()
     {
-        return new Definition('Behat\Behat\Output\Printer\ConsoleOutputPrinter');
+        return new Definition('Behat\Testwork\Output\Printer\StreamOutputPrinter', array(
+            new Definition('Behat\Behat\Output\Printer\ConsoleOutputFactory'),
+        ));
     }
 
     /**

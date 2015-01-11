@@ -17,9 +17,21 @@ namespace Behat\Testwork\Output\Printer;
  */
 interface OutputPrinter
 {
+    /**
+     * @deprecated since 3.1, to be removed in 4.0
+     */
     const VERBOSITY_NORMAL       = 1;
+    /**
+     * @deprecated since 3.1, to be removed in 4.0
+     */
     const VERBOSITY_VERBOSE      = 2;
+    /**
+     * @deprecated since 3.1, to be removed in 4.0
+     */
     const VERBOSITY_VERY_VERBOSE = 3;
+    /**
+     * @deprecated since 3.1, to be removed in 4.0
+     */
     const VERBOSITY_DEBUG        = 4;
 
     /**
@@ -33,6 +45,8 @@ interface OutputPrinter
      * Returns output path.
      *
      * @return null|string
+     *
+     * @deprecated since 3.1, to be removed in 4.0
      */
     public function getOutputPath();
 
@@ -47,6 +61,8 @@ interface OutputPrinter
      * Returns output styles.
      *
      * @return array
+     *
+     * @deprecated since 3.1, to be removed in 4.0
      */
     public function getOutputStyles();
 
@@ -61,6 +77,8 @@ interface OutputPrinter
      * Returns output decoration status.
      *
      * @return null|Boolean
+     *
+     * @deprecated since 3.1, to be removed in 4.0
      */
     public function isOutputDecorated();
 
@@ -75,6 +93,8 @@ interface OutputPrinter
      * Returns output verbosity level.
      *
      * @return integer
+     *
+     * @deprecated since 3.1, to be removed in 4.0
      */
     public function getOutputVerbosity();
 

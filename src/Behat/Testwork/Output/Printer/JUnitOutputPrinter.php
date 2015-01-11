@@ -10,9 +10,8 @@
 
 namespace Behat\Testwork\Output\Printer;
 
-use Behat\Testwork\Output\Exception\BadOutputPathException;
+use Behat\Testwork\Output\Printer\Factory\FilesystemOutputFactory;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\StreamOutput;
 
 /**
  * A convenient wrapper around the ConsoleOutputPrinter to write valid JUnit
@@ -21,15 +20,11 @@ use Symfony\Component\Console\Output\StreamOutput;
  * @author Wouter J <wouter@wouterj.nl>
  * @author James Watson <james@sitepulse.org>
  */
-final class JUnitOutputPrinter extends ConsoleOutputPrinter
+final class JUnitOutputPrinter extends StreamOutputPrinter
 {
     const XML_VERSION  = '1.0';
     const XML_ENCODING = 'UTF-8';
 
-    /**
-     * @var null|string
-     */
-    private $fileName;
     /**
      * @var \DOMDocument
      */
@@ -46,6 +41,11 @@ final class JUnitOutputPrinter extends ConsoleOutputPrinter
      * @var \DOMElement
      */
     private $testSuites;
+
+    public function __construct(FilesystemOutputFactory $outputFactory)
+    {
+        parent::__construct($outputFactory);
+    }
 
     /**
      * Creates a new JUnit file.
@@ -126,35 +126,8 @@ final class JUnitOutputPrinter extends ConsoleOutputPrinter
             $fileName .= '.'.$extension;
         }
 
-        $this->fileName = $fileName;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function createOutput($stream = null)
-    {
-        if (!is_dir($this->getOutputPath())) {
-            throw new BadOutputPathException(sprintf(
-                'Directory expected for the `output_path` option, given `%s`.',
-                $this->getOutputPath()
-            ), $this->getOutputPath());
-        }
-
-        if (null === $this->fileName) {
-            throw new \LogicException('Unable to create file, no file name specified');
-        }
-
-        $filePath = $this->getOutputPath().'/'.$this->fileName;
-
-        $stream = new StreamOutput(
-            fopen($filePath, 'w'),
-            StreamOutput::VERBOSITY_NORMAL,
-            false // a file is never decorated
-        );
-        $this->configureOutputStream($stream);
-
-        return $stream;
+        $this->getOutputFactory($fileName)->setFileName($fileName);
+        $this->flush();
     }
 
     /**
