@@ -78,8 +78,9 @@ final class OutputManager
     {
         if (!$this->isFormatterRegistered($name)) {
             throw new FormatterNotFoundException(sprintf(
-                '`%s` formatter is not found or has not been properly registered.',
-                $name
+                '`%s` formatter is not found or has not been properly registered. Registered formatters: `%s`.',
+                $name,
+                implode('`, `', array_keys($this->formatters))
             ), $name);
         }
 

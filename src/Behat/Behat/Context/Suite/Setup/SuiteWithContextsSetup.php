@@ -118,7 +118,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
         if (!is_array($contexts)) {
             throw new SuiteConfigurationException(
-                sprintf('`contexts` setting of the "%s" suite is expected to be an array, %s given.',
+                sprintf('`contexts` setting of the "%s" suite is expected to be an array, `%s` given.',
                     $suite->getName(),
                     gettype($contexts)
                 ),
