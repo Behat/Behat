@@ -13,7 +13,7 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
- *
+ * A helper to facilitate rendering required DOMs on the HTML report
  */
 class HtmlPrinter
 {

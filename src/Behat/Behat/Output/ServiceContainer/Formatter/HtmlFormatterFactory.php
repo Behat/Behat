@@ -54,7 +54,7 @@ class HtmlFormatterFactory implements FormatterFactory
      */
     public function __construct(ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -177,9 +177,9 @@ class HtmlFormatterFactory implements FormatterFactory
             'html',
             'Prints the feature as is.',
             array(
-                'timer'     => true,
-                'expand'    => false,
-                'paths'     => true,
+                'timer' => true,
+                'expand' => false,
+                'paths' => true,
                 'multiline' => true,
             ),
             $this->createOutputPrinterDefinition(),
@@ -214,7 +214,7 @@ class HtmlFormatterFactory implements FormatterFactory
      */
     protected function loadCorePrinters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\Html\HtmlFeaturePrinter',array(
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Html\HtmlFeaturePrinter', array(
             new Reference(self::HTML_PRINTER_ID),
         ));
         $container->setDefinition('output.node.printer.html.feature', $definition);
@@ -293,10 +293,10 @@ class HtmlFormatterFactory implements FormatterFactory
      */
     protected function loadHookPrinters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\Html\HtmlSuiteSetupPrinter',array(
+        $definition = new Definition('Behat\Behat\Output\Node\Printer\Html\HtmlSuiteSetupPrinter', array(
             new Reference(self::HTML_PRINTER_ID)
         ));
-        $container->setDefinition('output.node.printer.html.suite_setup',$definition);
+        $container->setDefinition('output.node.printer.html.suite_setup', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Html\HtmlSetupPrinter', array(
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
@@ -415,8 +415,8 @@ class HtmlFormatterFactory implements FormatterFactory
     /**
      * Creates contextual proxy listener.
      *
-     * @param string       $beforeEventName
-     * @param string       $afterEventName
+     * @param string $beforeEventName
+     * @param string $afterEventName
      * @param Definition[] $listeners
      *
      * @return Definition
@@ -436,8 +436,8 @@ class HtmlFormatterFactory implements FormatterFactory
      * Creates contextual proxy listener.
      *
      * @param string $name
-     * @param mixed  $value
-     * @param mixed  $listener
+     * @param mixed $value
+     * @param mixed $listener
      *
      * @return Definition
      */
