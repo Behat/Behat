@@ -57,4 +57,9 @@ final class DefinitionTranslator
 
         return $definition;
     }
+
+    public function getLocale()
+    {
+        return $this->translator->getLocale();
+    }
 }
