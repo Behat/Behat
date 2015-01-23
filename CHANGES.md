@@ -1,3 +1,9 @@
+2.5.4 / 2015-01-23
+==================
+
+  * Fixed an infinite loop when reading annotations from trait methods
+  * Removed usage of a deprecated Yaml usage
+
 2.5.3 / 2014-04-26
 ==================
 
