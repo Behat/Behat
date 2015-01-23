@@ -159,28 +159,8 @@ class FeatureContext extends BaseFeaturesContext
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
-        if ('fail' === $success) {
-            \PHPUnit_Framework_Assert::assertNotEquals(0, $this->return);
-        } else {
-            \PHPUnit_Framework_Assert::assertEquals(0, $this->return);
-        }
-
-        $text = strtr($text, array('\'\'\'' => '"""', '%PATH%' => realpath(getcwd())));
-
-        // windows path fix
-        if ('/' !== DIRECTORY_SEPARATOR) {
-            $text = preg_replace_callback('/ features\/[^\n ]+/', function($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string) $text);
-            $text = preg_replace_callback('/\<span class\="path"\>features\/[^\<]+/', function($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string) $text);
-            $text = preg_replace_callback('/\+[fd] [^ ]+/', function($matches) {
-                return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-            }, (string) $text);
-        }
-
-        \PHPUnit_Framework_Assert::assertEquals((string) $text, $this->output);
+        $this->itShouldFail($success);
+        $this->theOutputShouldContain($text);
     }
 
     /**
@@ -231,7 +211,17 @@ class FeatureContext extends BaseFeaturesContext
             }, (string) $text);
         }
 
-        \PHPUnit_Framework_Assert::assertContains((string) $text, $this->output);
+        if ('' === $text) {
+            \PHPUnit_Framework_Assert::assertEquals($text, $this->output);
+
+            return;
+        }
+
+        // Normalize the way to reset Console styles because of changes in Symfony 2.5
+        $output = str_replace(array('[39m', '[39;49m'), '[0m', $this->output);
+        $output = preg_replace('/\[39;2(?:2|4|5|7|8)m/', '[0m', $output);
+
+        \PHPUnit_Framework_Assert::assertContains((string) $text, $output);
     }
 
     /**
