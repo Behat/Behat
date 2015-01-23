@@ -217,7 +217,11 @@ class FeatureContext extends BaseFeaturesContext
             return;
         }
 
-        \PHPUnit_Framework_Assert::assertContains((string) $text, $this->output);
+        // Normalize the way to reset Console styles because of changes in Symfony 2.5
+        $output = str_replace(array('[39m', '[39;49m'), '[0m', $this->output);
+        $output = preg_replace('/\[39;2(?:2|4|5|7|8)m/', '[0m', $output);
+
+        \PHPUnit_Framework_Assert::assertContains((string) $text, $output);
     }
 
     /**
