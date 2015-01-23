@@ -7,8 +7,7 @@ use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Definition\DefinitionInterface,
     Behat\Behat\Definition\TransformationInterface,
     Behat\Behat\Hook\HookDispatcher,
-    Behat\Behat\Hook\HookInterface,
-    Behat\Behat\Annotation\AnnotationInterface;
+    Behat\Behat\Hook\HookInterface;
 
 /*
  * This file is part of the Behat.
@@ -93,7 +92,7 @@ class AnnotatedLoader implements LoaderInterface
     /**
      * Reads all supported method annotations.
      *
-     * @param stirng            $className
+     * @param string            $className
      * @param \ReflectionMethod $method
      *
      * @return array
@@ -105,7 +104,11 @@ class AnnotatedLoader implements LoaderInterface
         // read parent annotations
         try {
             $prototype = $method->getPrototype();
-            $annotations = array_merge($annotations, $this->readMethodAnnotations($className, $prototype));
+
+            // error occurs on PHP 5.4.11+ when the same trait is used by a parent and the child class
+            if ($prototype->getDeclaringClass()->getName() !== $method->getDeclaringClass()->getName()) {
+                $annotations = array_merge($annotations, $this->readMethodAnnotations($className, $prototype));
+            }
         } catch (\ReflectionException $e) {}
 
         // read method annotations
