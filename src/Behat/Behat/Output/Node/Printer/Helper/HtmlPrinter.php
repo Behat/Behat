@@ -55,8 +55,8 @@ class HtmlPrinter
             $this->getTemplate(
                 'feature-header',
                 array(
-                    '{title}' => $feature->getTitle(),
-                    '{description}' => $feature->getDescription(),
+                    '{title}' => htmlspecialchars($feature->getTitle()),
+                    '{description}' => htmlspecialchars($feature->getDescription()),
                     '{tags}' => $tags
                 )
             )
@@ -79,8 +79,8 @@ class HtmlPrinter
             $this->getTemplate(
                 'scenario-header',
                 array(
-                    '{title}' => $scenario->getTitle(),
-                    '{keyword}' => $scenario->getKeyword(),
+                    '{title}' => htmlspecialchars($scenario->getTitle()),
+                    '{keyword}' => htmlspecialchars($scenario->getKeyword()),
                     '{tags}' => $tags
                 )
             )
@@ -108,7 +108,7 @@ class HtmlPrinter
         if (empty($error)) {
             $vars['{err}'] = '';
         } else {
-            $vars['{err}'] = $this->getTemplate('error', array('{error}' => $error));
+            $vars['{err}'] = $this->getTemplate('error', array('{error}' => htmlspecialchars($error)));
         }
 
         $this->getPrinter()->writeln($this->getTemplate('step', $vars));
@@ -219,7 +219,7 @@ class HtmlPrinter
         return $this->getTemplate(
             'stepArgument',
             array(
-                '{arguments}' => $args
+                '{arguments}' => htmlspecialchars($args)
             )
         );
 
@@ -235,7 +235,7 @@ class HtmlPrinter
 
         if (method_exists($object,'getTags')) {
             foreach ($object->getTags() as $tag) {
-                $tags .= $this->getTemplate('tag', array('{tag}' => $tag));
+                $tags .= $this->getTemplate('tag', array('{tag}' => htmlspecialchars($tag)));
             }
         }
 
@@ -253,7 +253,6 @@ class HtmlPrinter
         }
 
         return $template;
-
     }
 
     private function resultToStyle($resultCode)
