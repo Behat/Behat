@@ -29,8 +29,13 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @author Ali Bahman <abn@webit4.me>
  */
-final class HtmlOutlineTablePrinter extends AbstractHtmlPrinter implements OutlineTablePrinter
+final class HtmlOutlineTablePrinter implements OutlineTablePrinter
 {
+    /**
+     * @var HtmlPrinter
+     */
+    private $htmlPrinter;
+
     /**
      * @var ScenarioPrinter
      */
@@ -137,5 +142,25 @@ final class HtmlOutlineTablePrinter extends AbstractHtmlPrinter implements Outli
         }
 
         $printer->writeln('</table>');
+    }
+
+    /**
+     * @param OutputPrinter $printer
+     * @return HtmlPrinter
+     */
+    protected function getHtmlPrinter(OutputPrinter $printer)
+    {
+        $this->htmlPrinter->setOutputPrinter($printer);
+        return $this->htmlPrinter;
+    }
+
+    /**
+     * @param HtmlPrinter $htmlPrinter
+     * @return $this
+     */
+    protected function setHtmlPrinter(HtmlPrinter $htmlPrinter)
+    {
+        $this->htmlPrinter = $htmlPrinter;
+        return $this;
     }
 }

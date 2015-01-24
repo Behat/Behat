@@ -32,6 +32,11 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class HtmlOutlinePrinter implements OutlinePrinter
 {
     /**
+     * @var HtmlPrinter
+     */
+    private $htmlPrinter;
+
+    /**
      * @var ScenarioPrinter
      */
     private $scenarioPrinter;
@@ -128,5 +133,25 @@ final class HtmlOutlinePrinter implements OutlinePrinter
         return function ($col) use ($style) {
             return sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
         };
+    }
+
+    /**
+     * @param OutputPrinter $printer
+     * @return HtmlPrinter
+     */
+    protected function getHtmlPrinter(OutputPrinter $printer)
+    {
+        $this->htmlPrinter->setOutputPrinter($printer);
+        return $this->htmlPrinter;
+    }
+
+    /**
+     * @param HtmlPrinter $htmlPrinter
+     * @return $this
+     */
+    protected function setHtmlPrinter(HtmlPrinter $htmlPrinter)
+    {
+        $this->htmlPrinter = $htmlPrinter;
+        return $this;
     }
 }

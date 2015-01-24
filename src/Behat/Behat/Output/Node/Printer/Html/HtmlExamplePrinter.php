@@ -23,8 +23,12 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @author Ali Bahman <abn@webit4.me>
  */
-final class HtmlExamplePrinter extends AbstractHtmlPrinter implements ExamplePrinter
+final class HtmlExamplePrinter implements ExamplePrinter
 {
+    /**
+     * @var HtmlPrinter
+     */
+    private $htmlPrinter;
 
     /**
      * Initializes printer.
@@ -60,5 +64,25 @@ final class HtmlExamplePrinter extends AbstractHtmlPrinter implements ExamplePri
     private function printTitle(OutputPrinter $printer, ExampleNode $example)
     {
         $printer->write(sprintf('%s', $example->getTitle()));
+    }
+
+    /**
+     * @param OutputPrinter $printer
+     * @return HtmlPrinter
+     */
+    protected function getHtmlPrinter(OutputPrinter $printer)
+    {
+        $this->htmlPrinter->setOutputPrinter($printer);
+        return $this->htmlPrinter;
+    }
+
+    /**
+     * @param HtmlPrinter $htmlPrinter
+     * @return $this
+     */
+    protected function setHtmlPrinter(HtmlPrinter $htmlPrinter)
+    {
+        $this->htmlPrinter = $htmlPrinter;
+        return $this;
     }
 }

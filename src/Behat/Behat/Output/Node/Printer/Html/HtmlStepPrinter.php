@@ -17,6 +17,7 @@ use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\ExceptionResult;
 
 /**
@@ -24,8 +25,13 @@ use Behat\Testwork\Tester\Result\ExceptionResult;
  *
  * @author Ali Bahman <abn@webit4.me>
  */
-final class HtmlStepPrinter extends AbstractHtmlPrinter implements StepPrinter
+final class HtmlStepPrinter implements StepPrinter
 {
+    /**
+     * @var HtmlPrinter
+     */
+    private $htmlPrinter;
+
     /**
      * @var ExceptionPresenter
      */
@@ -59,4 +65,23 @@ final class HtmlStepPrinter extends AbstractHtmlPrinter implements StepPrinter
         $this->getHtmlPrinter($formatter->getOutputPrinter())->openStep($step, $result, $error);
     }
 
+    /**
+     * @param OutputPrinter $printer
+     * @return HtmlPrinter
+     */
+    protected function getHtmlPrinter(OutputPrinter $printer)
+    {
+        $this->htmlPrinter->setOutputPrinter($printer);
+        return $this->htmlPrinter;
+    }
+
+    /**
+     * @param HtmlPrinter $htmlPrinter
+     * @return $this
+     */
+    protected function setHtmlPrinter(HtmlPrinter $htmlPrinter)
+    {
+        $this->htmlPrinter = $htmlPrinter;
+        return $this;
+    }
 }

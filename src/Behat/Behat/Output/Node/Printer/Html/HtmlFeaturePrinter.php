@@ -14,6 +14,7 @@ use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Behat\Output\Node\Printer\Helper\HtmlPrinter;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -21,8 +22,13 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @author Ali Bahman <abn@webit4.me>
  */
-final class HtmlFeaturePrinter extends AbstractHtmlPrinter implements FeaturePrinter
+final class HtmlFeaturePrinter implements FeaturePrinter
 {
+    /**
+     * @var HtmlPrinter
+     */
+    private $htmlPrinter;
+
     /**
      * @param HtmlPrinter $htmlPrinter
      */
@@ -47,4 +53,23 @@ final class HtmlFeaturePrinter extends AbstractHtmlPrinter implements FeaturePri
         $this->getHtmlPrinter($formatter->getOutputPrinter())->closeFeature($result);
     }
 
+    /**
+     * @param OutputPrinter $printer
+     * @return HtmlPrinter
+     */
+    protected function getHtmlPrinter(OutputPrinter $printer)
+    {
+        $this->htmlPrinter->setOutputPrinter($printer);
+        return $this->htmlPrinter;
+    }
+
+    /**
+     * @param HtmlPrinter $htmlPrinter
+     * @return $this
+     */
+    protected function setHtmlPrinter(HtmlPrinter $htmlPrinter)
+    {
+        $this->htmlPrinter = $htmlPrinter;
+        return $this;
+    }
 }

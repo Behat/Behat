@@ -16,14 +16,20 @@ use Behat\Behat\Output\Node\Printer\ListPrinter;
 use Behat\Behat\Output\Node\Printer\StatisticsPrinter;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 
 /**
  * Prints exercise statistics.
  *
  * @author Ali Bahman <abn@webit4.me>
  */
-final class HtmlStatisticsPrinter extends AbstractHtmlPrinter implements StatisticsPrinter
+final class HtmlStatisticsPrinter implements StatisticsPrinter
 {
+    /**
+     * @var HtmlPrinter
+     */
+    private $htmlPrinter;
+
     /**
      * @var CounterPrinter
      */
@@ -51,4 +57,23 @@ final class HtmlStatisticsPrinter extends AbstractHtmlPrinter implements Statist
         $this->getHtmlPrinter($formatter->getOutputPrinter())->addNavigator($statistics);
     }
 
+    /**
+     * @param OutputPrinter $printer
+     * @return HtmlPrinter
+     */
+    protected function getHtmlPrinter(OutputPrinter $printer)
+    {
+        $this->htmlPrinter->setOutputPrinter($printer);
+        return $this->htmlPrinter;
+    }
+
+    /**
+     * @param HtmlPrinter $htmlPrinter
+     * @return $this
+     */
+    protected function setHtmlPrinter(HtmlPrinter $htmlPrinter)
+    {
+        $this->htmlPrinter = $htmlPrinter;
+        return $this;
+    }
 }

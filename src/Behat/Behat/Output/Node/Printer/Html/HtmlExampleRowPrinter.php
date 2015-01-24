@@ -30,8 +30,13 @@ use Behat\Testwork\Tester\Result\TestResults;
  *
  * @author Ali Bahman <abn@webit4.me>
  */
-final class HtmlExampleRowPrinter extends AbstractHtmlPrinter implements ExampleRowPrinter
+final class HtmlExampleRowPrinter implements ExampleRowPrinter
 {
+    /**
+     * @var HtmlPrinter
+     */
+    private $htmlPrinter;
+
     /**
      * @var ResultToStringConverter
      */
@@ -159,4 +164,23 @@ final class HtmlExampleRowPrinter extends AbstractHtmlPrinter implements Example
         $printer->writeln(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
     }
 
+    /**
+     * @param OutputPrinter $printer
+     * @return HtmlPrinter
+     */
+    protected function getHtmlPrinter(OutputPrinter $printer)
+    {
+        $this->htmlPrinter->setOutputPrinter($printer);
+        return $this->htmlPrinter;
+    }
+
+    /**
+     * @param HtmlPrinter $htmlPrinter
+     * @return $this
+     */
+    protected function setHtmlPrinter(HtmlPrinter $htmlPrinter)
+    {
+        $this->htmlPrinter = $htmlPrinter;
+        return $this;
+    }
 }

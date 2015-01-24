@@ -16,14 +16,20 @@ use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 
 /**
  * Prints steps as skipped.
  *
  * @author Ali Bahman <abn@webit4.me>
  */
-final class HtmlSkippedStepPrinter extends AbstractHtmlPrinter implements StepPrinter
+final class HtmlSkippedStepPrinter implements StepPrinter
 {
+    /**
+     * @var HtmlPrinter
+     */
+    private $htmlPrinter;
+
     /**
      * Initializes printer.
      *
@@ -40,5 +46,25 @@ final class HtmlSkippedStepPrinter extends AbstractHtmlPrinter implements StepPr
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
         $this->getHtmlPrinter($formatter->getOutputPrinter())->openStep($step, $result);
+    }
+
+    /**
+     * @param OutputPrinter $printer
+     * @return HtmlPrinter
+     */
+    protected function getHtmlPrinter(OutputPrinter $printer)
+    {
+        $this->htmlPrinter->setOutputPrinter($printer);
+        return $this->htmlPrinter;
+    }
+
+    /**
+     * @param HtmlPrinter $htmlPrinter
+     * @return $this
+     */
+    protected function setHtmlPrinter(HtmlPrinter $htmlPrinter)
+    {
+        $this->htmlPrinter = $htmlPrinter;
+        return $this;
     }
 }

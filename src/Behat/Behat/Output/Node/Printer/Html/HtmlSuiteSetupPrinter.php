@@ -15,6 +15,7 @@ use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
@@ -23,8 +24,13 @@ use Behat\Testwork\Tester\Setup\Teardown;
  *
  * @author Ali Bahman <abn@webit4.me>
  */
-final class HtmlSuiteSetupPrinter extends AbstractHtmlPrinter implements SetupPrinter
+final class HtmlSuiteSetupPrinter implements SetupPrinter
 {
+    /**
+     * @var HtmlPrinter
+     */
+    private $htmlPrinter;
+
     /**
      * Initializes printer.
      *
@@ -57,5 +63,25 @@ final class HtmlSuiteSetupPrinter extends AbstractHtmlPrinter implements SetupPr
         }
 
         $this->getHtmlPrinter($formatter->getOutputPrinter())->printHtmlFooter();
+    }
+
+    /**
+     * @param OutputPrinter $printer
+     * @return HtmlPrinter
+     */
+    protected function getHtmlPrinter(OutputPrinter $printer)
+    {
+        $this->htmlPrinter->setOutputPrinter($printer);
+        return $this->htmlPrinter;
+    }
+
+    /**
+     * @param HtmlPrinter $htmlPrinter
+     * @return $this
+     */
+    protected function setHtmlPrinter(HtmlPrinter $htmlPrinter)
+    {
+        $this->htmlPrinter = $htmlPrinter;
+        return $this;
     }
 }

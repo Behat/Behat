@@ -15,6 +15,7 @@ use Behat\Behat\Output\Node\Printer\ScenarioPrinter;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -22,8 +23,13 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @author Ali Bahman <abn@webit4.me>
  */
-final class HtmlScenarioPrinter extends AbstractHtmlPrinter implements ScenarioPrinter
+final class HtmlScenarioPrinter implements ScenarioPrinter
 {
+    /**
+     * @var HtmlPrinter
+     */
+    private $htmlPrinter;
+
     /**
      * @param HtmlPrinter $htmlPrinter
      */
@@ -49,4 +55,23 @@ final class HtmlScenarioPrinter extends AbstractHtmlPrinter implements ScenarioP
             ->closeScenario($result);
     }
 
+    /**
+     * @param OutputPrinter $printer
+     * @return HtmlPrinter
+     */
+    protected function getHtmlPrinter(OutputPrinter $printer)
+    {
+        $this->htmlPrinter->setOutputPrinter($printer);
+        return $this->htmlPrinter;
+    }
+
+    /**
+     * @param HtmlPrinter $htmlPrinter
+     * @return $this
+     */
+    protected function setHtmlPrinter(HtmlPrinter $htmlPrinter)
+    {
+        $this->htmlPrinter = $htmlPrinter;
+        return $this;
+    }
 }

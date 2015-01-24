@@ -4,7 +4,6 @@ namespace Behat\Behat\Output\Node\Printer\Helper;
 
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Behat\Tester\Result\StepResult;
-use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
