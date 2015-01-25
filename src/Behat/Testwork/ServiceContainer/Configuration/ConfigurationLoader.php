@@ -171,7 +171,7 @@ final class ConfigurationLoader
         }
 
         $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
-        $config = (array) Yaml::parse($configPath);
+        $config = (array) Yaml::parse(file_get_contents($configPath));
 
         return $this->loadConfigs($basePath, $config, $profile);
     }

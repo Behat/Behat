@@ -23,7 +23,7 @@ Feature: Config
         Scenario:
           When this scenario executes
       """
-    When I run "behat -f progress --append-snippets"
+    When I run "behat -f progress --no-colors --append-snippets"
     Then it should pass with:
       """
       U

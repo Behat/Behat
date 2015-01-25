@@ -355,9 +355,9 @@ final class GherkinExtension implements Extension
         }
 
         throw new ExtensionException(sprintf(
-            '`%s` filter is not supported by the `filters` option of gherkin extension. Supported types are %s.',
+            '`%s` filter is not supported by the `filters` option of gherkin extension. Supported types are `%s`.',
             $type,
-            implode(', ', array('`role`', '`name`', '`tags`'))
+            implode('`, `', array('role', 'name', 'tags'))
         ), 'gherkin');
     }
 }
