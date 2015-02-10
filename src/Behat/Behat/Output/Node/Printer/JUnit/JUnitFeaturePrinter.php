@@ -11,12 +11,12 @@
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
+use Behat\Behat\Output\Statistics\PhaseStatistics;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Behat\Output\Statistics\Statistics;
 
 /**
  * Prints the <testsuite> element.
@@ -26,11 +26,11 @@ use Behat\Behat\Output\Statistics\Statistics;
 final class JUnitFeaturePrinter implements FeaturePrinter
 {
     /**
-     * @var Statistics
+     * @var PhaseStatistics
      */
     private $statistics;
 
-    public function __construct(Statistics $statistics)
+    public function __construct(PhaseStatistics $statistics)
     {
         $this->statistics = $statistics;
     }
@@ -58,7 +58,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[StepResult::UNDEFINED],
         ));
-        $this->statistics->resetAllCounters();
+        $this->statistics->reset();
     }
 
     /**

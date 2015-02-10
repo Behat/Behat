@@ -113,7 +113,7 @@ class JUnitFormatterFactory implements FormatterFactory
      */
     protected function loadFormatter(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Statistics\Statistics');
+        $definition = new Definition('Behat\Behat\Output\Statistics\PhaseStatistics');
         $container->setDefinition('output.junit.statistics', $definition);
 
         $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', array(

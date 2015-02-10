@@ -1,4 +1,4 @@
-Feature: JUnit Formatter
+  Feature: JUnit Formatter
   In order integrate with other development tools
   As a developer
   I need to be able to generate a JUnit-compatible report
