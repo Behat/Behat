@@ -121,35 +121,6 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
     }
 
     /**
-     * Executes transformation.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param Transformation $transformation
-     * @param array          $arguments
-     *
-     * @return mixed
-     *
-     * @throws Exception If transformation call throws one
-     */
-    private function execute(DefinitionCall $definitionCall, Transformation $transformation, array $arguments)
-    {
-        $call = new TransformationCall(
-            $definitionCall->getEnvironment(),
-            $definitionCall->getCallee(),
-            $transformation,
-            $arguments
-        );
-
-        $result = $this->callCenter->makeCall($call);
-
-        if ($result->hasException()) {
-            throw $result->getException();
-        }
-
-        return $result->getReturn();
-    }
-
-    /**
      * Transforms token argument.
      *
      * @param DefinitionCall $definitionCall
@@ -293,5 +264,34 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
         }
 
         return $this->patternTransformer->transformPatternToRegex($translatedPattern);
+    }
+
+    /**
+     * Executes transformation.
+     *
+     * @param DefinitionCall $definitionCall
+     * @param Transformation $transformation
+     * @param array          $arguments
+     *
+     * @return mixed
+     *
+     * @throws Exception If transformation call throws one
+     */
+    private function execute(DefinitionCall $definitionCall, Transformation $transformation, array $arguments)
+    {
+        $call = new TransformationCall(
+            $definitionCall->getEnvironment(),
+            $definitionCall->getCallee(),
+            $transformation,
+            $arguments
+        );
+
+        $result = $this->callCenter->makeCall($call);
+
+        if ($result->hasException()) {
+            throw $result->getException();
+        }
+
+        return $result->getReturn();
     }
 }
