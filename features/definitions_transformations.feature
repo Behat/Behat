@@ -153,7 +153,7 @@ Feature: Step Arguments Transformations
 
   Scenario: Named Arguments Transformations
     Given a file named "features/step_arguments.feature" with:
-    """
+      """
       Feature: Step Arguments
         Scenario:
           Given I am "everzet"
@@ -170,4 +170,82 @@ Feature: Step Arguments Transformations
 
       2 scenarios (2 passed)
       4 steps (4 passed)
+      """
+
+  Scenario: Transforming different types
+    Given a file named "features/to_null.feature" with:
+      """
+      Feature: I should be able to transform values into different types for testing
+
+      Scenario Outline: Converting different types
+        Given I have the value "<value>"
+        Then it should be of type "<type>"
+
+        Examples:
+            | value      | type       |
+            | "soeuhtou" | string     |
+            | 34         | integer    |
+            | null       | NULL       |
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      class FeatureContext implements Behat\Behat\Context\Context
+      {
+          public function __construct()
+          {
+              unset($this->value);
+          }
+
+          /**
+           * @Transform /^".*"$/
+           */
+          public function transformString($string)
+          {
+              return strval($string);
+          }
+
+          /**
+           * @Transform /^\d+$/
+           */
+          public function transformInt($int)
+          {
+              return intval($int);
+          }
+
+          /**
+           * @Transform /^null/
+           */
+          public function transformNull($null)
+          {
+              return null;
+          }
+
+          /**
+           * @Given I have the value ":value"
+           */
+          public function iHaveTheValue($value)
+          {
+              $this->value = $value;
+          }
+
+          /**
+           * @Then it should be of type :type
+           */
+          public function itShouldBeOfType($type)
+          {
+              if (gettype($this->value) != $type) {
+                  throw new Exception("Expected " . $type . ", got " . gettype($this->value) . " (value: " . $this->value . ")");
+              }
+          }
+      }
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ......
+
+      3 scenarios (3 passed)
+      6 steps (6 passed)
       """

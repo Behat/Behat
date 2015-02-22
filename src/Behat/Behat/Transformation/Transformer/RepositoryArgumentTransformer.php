@@ -105,19 +105,155 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             return $value;
         }
 
-        if (null !== $newValue = $this->transformToken($definitionCall, $transformation, $index, $value)) {
-            return $newValue;
+        if ($this->isApplicableTokenTransformation($transformation)) {
+            return $this->applyTokenTransformation($definitionCall, $transformation, $index, $value);
         }
 
-        if (null !== $newValue = $this->transformTable($definitionCall, $transformation, $value)) {
-            return $newValue;
+        if ($this->isApplicableTableTransformation($transformation, $value)) {
+            return $this->applyTableTransformation($definitionCall, $transformation, $value);
         }
 
-        if (null !== $newValue = $this->transformRegex($definitionCall, $transformation, $value)) {
-            return $newValue;
+        if ($this->isApplicablePatternTransformation($definitionCall, $transformation, $value, $arguments)) {
+            return $this->applyPatternTransformation($definitionCall, $transformation, $arguments);
         }
 
         return $value;
+    }
+
+    /**
+     * Checks if provided transformation is token-based.
+     *
+     * @param Transformation $transformation
+     *
+     * @return Boolean
+     */
+    private function isApplicableTokenTransformation(Transformation $transformation)
+    {
+        return 1 === preg_match('/^\:\w+$/', $transformation->getPattern());
+    }
+
+    /**
+     * Applies provided token transformation.
+     *
+     * @param DefinitionCall $definitionCall
+     * @param Transformation $transformation
+     * @param integer|string $index
+     * @param mixed          $value
+     *
+     * @return mixed
+     */
+    private function applyTokenTransformation(DefinitionCall $definitionCall, Transformation $transformation, $index, $value)
+    {
+        return $this->isArgumentIndexMatchesTokenPattern($index, $transformation->getPattern())
+            ? $this->execute($definitionCall, $transformation, array($value))
+            : $value;
+    }
+
+    /**
+     * Checks if argument index matches token pattern.
+     *
+     * @param integer|string $index
+     * @param string         $pattern
+     *
+     * @return Boolean
+     */
+    private function isArgumentIndexMatchesTokenPattern($index, $pattern)
+    {
+        return ':' . $index === $pattern;
+    }
+
+    /**
+     * Checks if provided transformation is applicable table transformation.
+     *
+     * @param Transformation $transformation
+     * @param mixed          $value
+     *
+     * @return Boolean
+     */
+    private function isApplicableTableTransformation(Transformation $transformation, $value)
+    {
+        if (!$value instanceof TableNode) {
+            return false;
+        };
+
+        return $transformation->getPattern() === 'table:' . implode(',', $value->getRow(0));
+    }
+
+    /**
+     * Applies provided table transformation.
+     *
+     * @param DefinitionCall $definitionCall
+     * @param Transformation $transformation
+     * @param mixed          $value
+     *
+     * @return mixed
+     */
+    private function applyTableTransformation(DefinitionCall $definitionCall, Transformation $transformation, $value)
+    {
+        return $this->execute($definitionCall, $transformation, array($value));
+    }
+
+    /**
+     * Checks if provided transformation is applicable pattern transformation.
+     *
+     * @param DefinitionCall        $definitionCall
+     * @param Transformation|string $transformation
+     * @param mixed                 $value
+     * @param array                 $match
+     *
+     * @return Boolean
+     */
+    private function isApplicablePatternTransformation(DefinitionCall $definitionCall, Transformation $transformation, $value, &$match)
+    {
+        $regex = $this->getRegex(
+            $definitionCall->getEnvironment()->getSuite()->getName(),
+            $transformation->getPattern(),
+            $definitionCall->getFeature()->getLanguage()
+        );
+
+        if (is_string($value) && preg_match($regex, $value, $match)) {
+            // take arguments from capture groups if there are some
+            if (count($match) > 1) {
+                $match = array_slice($match, 1);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns transformation regex.
+     *
+     * @param string $assetsId
+     * @param string $pattern
+     * @param string $language
+     *
+     * @return string
+     */
+    private function getRegex($assetsId, $pattern, $language)
+    {
+        $translatedPattern = $this->translator->trans($pattern, array(), $assetsId, $language);
+        if ($pattern == $translatedPattern) {
+            return $this->patternTransformer->transformPatternToRegex($pattern);
+        }
+
+        return $this->patternTransformer->transformPatternToRegex($translatedPattern);
+    }
+
+    /**
+     * Applies provided pattern transformation.
+     *
+     * @param DefinitionCall $definitionCall
+     * @param Transformation $transformation
+     * @param array          $arguments
+     *
+     * @return mixed
+     */
+    private function applyPatternTransformation(DefinitionCall $definitionCall, Transformation $transformation, array $arguments)
+    {
+        return $this->execute($definitionCall, $transformation, $arguments);
     }
 
     /**
@@ -147,151 +283,5 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
         }
 
         return $result->getReturn();
-    }
-
-    /**
-     * Transforms token argument.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param Transformation $transformation
-     * @param integer|string $index
-     * @param mixed          $value
-     *
-     * @return null|mixed
-     */
-    private function transformToken(DefinitionCall $definitionCall, Transformation $transformation, $index, $value)
-    {
-        if (!$this->isTokenTransformation($transformation)) {
-            return null;
-        }
-
-        if ($this->isIndexMatchesTokenPattern($index, $transformation->getPattern())) {
-            return $this->execute($definitionCall, $transformation, array($value));
-        }
-
-        return $value;
-    }
-
-    /**
-     * Transforms table argument.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param Transformation $transformation
-     * @param mixed          $value
-     *
-     * @return null|mixed
-     */
-    private function transformTable(DefinitionCall $definitionCall, Transformation $transformation, $value)
-    {
-        if ($this->isTableAndMatchesPattern($value, $transformation->getPattern())) {
-            return $this->execute($definitionCall, $transformation, array($value));
-        }
-
-        return null;
-    }
-
-    /**
-     * Transforms regex argument.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param Transformation $transformation
-     * @param mixed          $value
-     *
-     * @return null|mixed
-     */
-    private function transformRegex(DefinitionCall $definitionCall, Transformation $transformation, $value)
-    {
-        if ($this->isStringAndMatchesPattern($definitionCall, $value, $transformation->getPattern(), $match)) {
-            // take arguments from capture groups if there are some
-            if (count($match) > 1) {
-                $match = array_slice($match, 1);
-            }
-
-            return $this->execute($definitionCall, $transformation, $match);
-        }
-
-        return null;
-    }
-
-    /**
-     * Checks if provided transformation is token-based.
-     *
-     * @param Transformation $transformation
-     *
-     * @return Boolean
-     */
-    private function isTokenTransformation(Transformation $transformation)
-    {
-        return 1 === preg_match('/^\:\w+$/', $transformation->getPattern());
-    }
-
-    /**
-     * Checks if argument index matches token pattern.
-     *
-     * @param integer|string $argumentIndex
-     * @param string         $pattern
-     *
-     * @return Boolean
-     */
-    private function isIndexMatchesTokenPattern($argumentIndex, $pattern)
-    {
-        return ':' . $argumentIndex === $pattern;
-    }
-
-    /**
-     * Checks if argument is a table and matches pattern.
-     *
-     * @param mixed  $argumentValue
-     * @param string $pattern
-     *
-     * @return Boolean
-     */
-    private function isTableAndMatchesPattern($argumentValue, $pattern)
-    {
-        if (!$argumentValue instanceof TableNode) {
-            return false;
-        };
-
-        return $pattern === 'table:' . implode(',', $argumentValue->getRow(0));
-    }
-
-    /**
-     * Checks if argument is a string and matches pattern.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param mixed          $argumentValue
-     * @param string         $pattern
-     * @param array          $match
-     *
-     * @return Boolean
-     */
-    private function isStringAndMatchesPattern(DefinitionCall $definitionCall, $argumentValue, $pattern, &$match)
-    {
-        $regex = $this->getRegex(
-            $definitionCall->getEnvironment()->getSuite()->getName(),
-            $pattern,
-            $definitionCall->getFeature()->getLanguage()
-        );
-
-        return is_string($argumentValue) && preg_match($regex, $argumentValue, $match);
-    }
-
-    /**
-     * Returns transformation regex.
-     *
-     * @param string $assetsId
-     * @param string $pattern
-     * @param string $language
-     *
-     * @return string
-     */
-    private function getRegex($assetsId, $pattern, $language)
-    {
-        $translatedPattern = $this->translator->trans($pattern, array(), $assetsId, $language);
-        if ($pattern == $translatedPattern) {
-            return $this->patternTransformer->transformPatternToRegex($pattern);
-        }
-
-        return $this->patternTransformer->transformPatternToRegex($translatedPattern);
     }
 }
