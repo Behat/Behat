@@ -1,3 +1,9 @@
+3.0.15 / 2015-02-22
+===================
+
+  * Fix broken null-transformations (Issue #669)
+  * Improve exception messages (thanks @dantleech)
+
 3.0.14 / 2014-09-23
 ===================
 
