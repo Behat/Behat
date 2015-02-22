@@ -185,7 +185,7 @@ Feature: Step Arguments Transformations
             | value      | type       |
             | "soeuhtou" | string     |
             | 34         | integer    |
-            | NULL       | null       |
+            | null       | NULL       |
       """
     And a file named "features/bootstrap/FeatureContext.php" with:
       """
@@ -215,7 +215,7 @@ Feature: Step Arguments Transformations
           }
 
           /**
-           * @Transform /^NULL$/i
+           * @Transform /^null/
            */
           public function transformNull($null)
           {
