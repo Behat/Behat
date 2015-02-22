@@ -1,0 +1,20 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            {scenario-Sum} scenarios ({scenario-Passed} Passed, {scenario-Failed} Failed, {scenario-Undefined} Undefined, {scenario-Pending} Pending, {scenario-Skipped} Skipped)
+            <br>
+            {step-Sum} steps ({step-Passed} Passed, {step-Failed} Failed, {step-Undefined} Undefined, {step-Pending} Pending, {step-Skipped} Skipped)
+            <br>
+            {timer} ({memory})
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    <input type="text" id="txt-search"placeholder="Search" class="form-control">
+                </div>
+                <button id="btn-search" class="btn btn-success">Go</button>
+            </form>
+        </div>
+        <!--/.navbar-collapse -->
+    </div>
+</nav>

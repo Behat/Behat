@@ -1,0 +1,103 @@
+</div><!-- /suite -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+
+        toggle = function ($target) {
+            if (($target).is(':visible')) {
+                $target.fadeOut();
+            } else {
+                $target.fadeIn();
+            }
+        }
+
+        removeAllColorClasses = function ($target) {
+            $target.removeClass('panel-default');
+            $target.removeClass('panel-primary');
+            $target.removeClass('panel-success');
+            $target.removeClass('panel-info');
+            $target.removeClass('panel-warning');
+            $target.removeClass('panel-danger');
+        }
+
+        mark = function ($target, $class) {
+
+            removeAllColorClasses($target);
+            $target.addClass('panel-' + $class);
+
+            if ($target.hasClass('feature')) {
+                if ($class != 'success')
+                    $target.find(".feature-body").show();
+            }
+            if ($target.hasClass('scenario')) {
+                if ($class != 'success')
+                    $target.find(".scenario-body").show();
+            }
+        }
+
+        $(".feature").each(function (index) {
+            if ($(this).find('.btn-danger').length > 0) {
+                mark($(this), 'danger');
+                return;
+            }
+            if ($(this).find('.btn-warning').length > 0) {
+                mark($(this), 'warning');
+                return;
+            }
+            if ($(this).find('.btn-default').length > 0) {
+                mark($(this), 'default');
+                return;
+            }
+            if ($(this).find('.btn-info').length > 0) {
+                mark($(this), 'info');
+                return;
+            }
+            mark($(this), 'success');
+        });
+
+        $(".scenario").each(function (index) {
+            if ($(this).find('.btn-danger').length > 0) {
+                mark($(this), 'danger');
+                return;
+            }
+            if ($(this).find('.btn-warning').length > 0) {
+                mark($(this), 'warning');
+                return;
+            }
+            if ($(this).find('.btn-default').length > 0) {
+                mark($(this), 'default');
+                return;
+            }
+            if ($(this).find('.btn-info').length > 0) {
+                mark($(this), 'info');
+                return;
+            }
+            mark($(this), 'success');
+        });
+
+
+        $(".feature-heading").click(function () {
+            toggle($(this).parent().find(".feature-body"));
+        });
+
+        $(".scenario-heading").click(function () {
+            toggle($(this).parent().find(".scenario-body"));
+        });
+
+
+        $('#btn-search').click(function (event) {
+            event.preventDefault();
+
+            $('.feature').hide();
+            $(".feature:contains(" + $('#txt-search').val() + ")").show();
+        });
+    });
+
+</script>
+
+</body>
+</html>
