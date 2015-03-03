@@ -82,18 +82,6 @@ class FeatureContext implements Context
     }
 
     /**
-     * Creates a directory with specified name in current workdir.
-     *
-     * @Given /^(?:there is )?a folder named "([^"]*)"$/
-     *
-     * @param string $folderName name of the folder
-     */
-    public function aFolderNamed($folderName)
-    {
-        $this->createDirectory($this->workingDir . '/' . $folderName);
-    }
-
-    /**
      * Moves user to the specified path.
      *
      * @Given /^I am in the "([^"]*)" path$/

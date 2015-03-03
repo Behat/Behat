@@ -80,7 +80,6 @@
             |  10   | 20     |
             |  23   | 32     |
       """
-    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with:
       """
@@ -180,7 +179,6 @@
           When I add 8
           Then I must have 18
       """
-    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     And "junit/default.xml" file xml should be like:
       """
@@ -255,7 +253,6 @@
           And I subtract the value 6
           Then I must have 4
       """
-    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should pass with no output
     And "junit/default.xml" file xml should be like:
@@ -380,7 +377,6 @@
                   filters:
                     role: old man
       """
-    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with no output
     And "junit/small_kid.xml" file xml should be like:
@@ -453,7 +449,6 @@
           Then I must have 10
 
       """
-    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     And "junit/default.xml" file xml should be like:
       """
@@ -517,7 +512,6 @@
           When I add 4
           Then I must have 13
       """
-    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with no output
     And "junit/default.xml" file xml should be like:
@@ -583,7 +577,6 @@
           When I add 4
           Then I must have 14
       """
-    And there is a folder named "junit"
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with:
       """

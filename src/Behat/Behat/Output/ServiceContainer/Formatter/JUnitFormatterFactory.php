@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
-class JUnitFormatterFactory implements FormatterFactory
+final class JUnitFormatterFactory implements FormatterFactory
 {
     /*
      * Available services
@@ -53,13 +53,18 @@ class JUnitFormatterFactory implements FormatterFactory
      *
      * @param ContainerBuilder $container
      */
-    protected function loadPrinterHelpers(ContainerBuilder $container)
+    private function loadPrinterHelpers(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter');
         $container->setDefinition(self::RESULT_TO_STRING_CONVERTER_ID, $definition);
     }
 
-    protected function loadCorePrinters(ContainerBuilder $container)
+    /**
+     * Loads the printers used to print the basic JUnit report.
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadCorePrinters(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitSuitePrinter', array(
             new Reference('output.junit.statistics'),
@@ -83,7 +88,12 @@ class JUnitFormatterFactory implements FormatterFactory
         $container->setDefinition('output.node.printer.junit.step', $definition);
     }
 
-    protected function loadRootNodeListener(ContainerBuilder $container)
+    /**
+     * Loads the node listeners required for JUnit printers to work.
+     * 
+     * @param ContainerBuilder $container
+     */
+    private function loadRootNodeListener(ContainerBuilder $container)
     {
 
         $definition = new Definition('Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener', array(
@@ -111,7 +121,7 @@ class JUnitFormatterFactory implements FormatterFactory
      *
      * @param ContainerBuilder $container
      */
-    protected function loadFormatter(ContainerBuilder $container)
+    private function loadFormatter(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Output\Statistics\PhaseStatistics');
         $container->setDefinition('output.junit.statistics', $definition);
@@ -149,7 +159,7 @@ class JUnitFormatterFactory implements FormatterFactory
      *
      * @return Definition
      */
-    protected function createOutputPrinterDefinition()
+    private function createOutputPrinterDefinition()
     {
         return new Definition('Behat\Testwork\Output\Printer\JUnitOutputPrinter', array(
             new Definition('Behat\Testwork\Output\Printer\Factory\FilesystemOutputFactory'),

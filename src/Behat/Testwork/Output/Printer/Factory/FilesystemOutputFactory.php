@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Behat\Testwork\Output\Printer\Factory;
 
 use Behat\Testwork\Output\Exception\BadOutputPathException;
@@ -37,10 +45,7 @@ class FilesystemOutputFactory extends OutputFactory
     public function createOutput($stream = null)
     {
         if (!is_dir($this->getOutputPath())) {
-            throw new BadOutputPathException(sprintf(
-                'Directory expected for the `output_path` option, given `%s`.',
-                $this->getOutputPath()
-            ), $this->getOutputPath());
+            mkdir($this->getOutputPath(), 0777, true);
         }
 
         if (null === $this->fileName) {
