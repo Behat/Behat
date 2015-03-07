@@ -57,6 +57,7 @@ class FeatureContext implements Context
             md5(microtime() * rand(0, 10000));
 
         mkdir($dir . '/features/bootstrap/i18n', 0777, true);
+        mkdir($dir . '/junit');
 
         $phpFinder = new PhpExecutableFinder();
         if (false === $php = $phpFinder->find()) {

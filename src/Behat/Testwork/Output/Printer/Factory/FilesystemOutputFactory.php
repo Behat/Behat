@@ -44,7 +44,12 @@ class FilesystemOutputFactory extends OutputFactory
      */
     public function createOutput($stream = null)
     {
-        if (!is_dir($this->getOutputPath())) {
+        if (is_file($this->getOutputPath())) {
+            throw new BadOutputPathException(
+                'Directory expected for the `output_path` option, but a filename was given.',
+                $this->getOutputPath()
+            );
+        } elseif (!is_dir($this->getOutputPath())) {
             mkdir($this->getOutputPath(), 0777, true);
         }
 

@@ -24,7 +24,7 @@ interface SuitePrinter
      * Prints suite header using provided formatter.
      *
      * @param Formatter $formatter
-     * @param Suite     $feature
+     * @param Suite     $suite
      */
     public function printHeader(Formatter $formatter, Suite $suite);
 
@@ -32,7 +32,7 @@ interface SuitePrinter
      * Prints suite footer using provided printer.
      *
      * @param Formatter $formatter
-     * @param Suite     $result
+     * @param Suite     $suite
      */
     public function printFooter(Formatter $formatter, Suite $suite);
 }

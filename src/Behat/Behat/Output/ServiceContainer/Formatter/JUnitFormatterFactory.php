@@ -90,7 +90,7 @@ final class JUnitFormatterFactory implements FormatterFactory
 
     /**
      * Loads the node listeners required for JUnit printers to work.
-     * 
+     *
      * @param ContainerBuilder $container
      */
     private function loadRootNodeListener(ContainerBuilder $container)

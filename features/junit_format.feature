@@ -588,7 +588,7 @@
       <testsuites name="default"/>
       """
 
-  Scenario: Aborting due missing output folder
+  Scenario: Aborting due invalid output path
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
@@ -601,9 +601,12 @@
         public static function getAcceptedSnippetType() { return 'regex'; }
       }
       """
-    When I run "behat --no-colors -f junit -o /nofolder"
+    And a file named "junit.txt" with:
+      """
+      """
+    When I run "behat --no-colors -f junit -o junit.txt"
     Then it should fail with:
       """
       [Behat\Testwork\Output\Exception\BadOutputPathException]
-        Directory expected for the `output_path` option, given `/nofolder`.
+        Directory expected for the `output_path` option, but a filename was given.
       """
