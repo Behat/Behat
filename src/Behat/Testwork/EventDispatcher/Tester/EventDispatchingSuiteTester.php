@@ -67,9 +67,9 @@ final class EventDispatchingSuiteTester implements SuiteTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
+    public function test(Environment $env, SpecificationIterator $iterator, $skip = false, $batch)
     {
-        return $this->baseTester->test($env, $iterator, $skip);
+        return $this->baseTester->test($env, $iterator, $skip, $batch);
     }
 
     /**

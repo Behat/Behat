@@ -43,7 +43,7 @@ interface SuiteTester
      *
      * @return TestResult
      */
-    public function test(Environment $env, SpecificationIterator $iterator, $skip);
+    public function test(Environment $env, SpecificationIterator $iterator, $skip, $batch);
 
     /**
      * Tears down suite after a test.

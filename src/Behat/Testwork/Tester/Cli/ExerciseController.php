@@ -140,10 +140,15 @@ final class ExerciseController implements Controller
     private function testSpecifications(InputInterface $input, array $specifications)
     {
         $skip = $input->getOption('dry-run') || $this->skip;
+        $batch = true;
+
+        if (!empty($input->getArgument('paths'))) {
+            $batch = false;
+        }
 
         $setup = $this->exercise->setUp($specifications, $skip);
         $skip = !$setup->isSuccessful() || $skip;
-        $testResult = $this->exercise->test($specifications, $skip);
+        $testResult = $this->exercise->test($specifications, $skip, $batch);
         $teardown = $this->exercise->tearDown($specifications, $skip, $testResult);
 
         $result = new IntegerTestResult($testResult->getResultCode());
