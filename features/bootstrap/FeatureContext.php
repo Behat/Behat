@@ -57,6 +57,7 @@ class FeatureContext implements Context
             md5(microtime() * rand(0, 10000));
 
         mkdir($dir . '/features/bootstrap/i18n', 0777, true);
+        mkdir($dir . '/junit');
 
         $phpFinder = new PhpExecutableFinder();
         if (false === $php = $phpFinder->find()) {
@@ -72,8 +73,8 @@ class FeatureContext implements Context
      *
      * @Given /^(?:there is )?a file named "([^"]*)" with:$/
      *
-     * @param   string       $filename name of the file (relative path)
-     * @param   PyStringNode $content  PyString string instance
+     * @param string       $filename name of the file (relative path)
+     * @param PyStringNode $content  PyString string instance
      */
     public function aFileNamedWith($filename, PyStringNode $content)
     {
@@ -86,7 +87,7 @@ class FeatureContext implements Context
      *
      * @Given /^I am in the "([^"]*)" path$/
      *
-     * @param   string $path
+     * @param string $path
      */
     public function iAmInThePath($path)
     {
@@ -122,7 +123,7 @@ class FeatureContext implements Context
      *
      * @When /^I run "behat(?: ((?:\"|[^"])*))?"$/
      *
-     * @param   string $argumentsString
+     * @param string $argumentsString
      */
     public function iRunBehat($argumentsString = '')
     {
@@ -155,8 +156,8 @@ class FeatureContext implements Context
      *
      * @Then /^it should (fail|pass) with:$/
      *
-     * @param   string       $success "fail" or "pass"
-     * @param   PyStringNode $text    PyString text instance
+     * @param string       $success "fail" or "pass"
+     * @param PyStringNode $text    PyString text instance
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
@@ -165,12 +166,25 @@ class FeatureContext implements Context
     }
 
     /**
+     * Checks whether previously runned command passes|failes with no output.
+     *
+     * @Then /^it should (fail|pass) with no output$/
+     *
+     * @param string $success "fail" or "pass"
+     */
+    public function itShouldPassWithNoOutput($success)
+    {
+        $this->itShouldFail($success);
+        PHPUnit_Framework_Assert::assertEmpty($this->getOutput());
+    }
+
+    /**
      * Checks whether specified file exists and contains specified string.
      *
      * @Then /^"([^"]*)" file should contain:$/
      *
-     * @param   string       $path file path
-     * @param   PyStringNode $text file content
+     * @param string       $path file path
+     * @param PyStringNode $text file content
      */
     public function fileShouldContain($path, PyStringNode $text)
     {
@@ -187,11 +201,34 @@ class FeatureContext implements Context
     }
 
     /**
+     * Checks whether specified content and structure of the xml is correct without worrying about layout.
+     *
+     * @Then /^"([^"]*)" file xml should be like:$/
+     *
+     * @param string       $path file path
+     * @param PyStringNode $text file content
+     */
+    public function fileXmlShouldBeLike($path, PyStringNode $text)
+    {
+        $path = $this->workingDir . '/' . $path;
+        PHPUnit_Framework_Assert::assertFileExists($path);
+
+        $fileContent = trim(file_get_contents($path));
+
+        $dom = new DOMDocument();
+        $dom->loadXML($text);
+        $dom->formatOutput = true;
+
+        PHPUnit_Framework_Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
+    }
+
+
+    /**
      * Checks whether last command output contains provided string.
      *
      * @Then the output should contain:
      *
-     * @param   PyStringNode $text PyString text instance
+     * @param PyStringNode $text PyString text instance
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
@@ -205,7 +242,7 @@ class FeatureContext implements Context
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
-                '/ features\/[^\n ]+/', function ($matches) {
+                '/[ "]features\/[^\n "]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 }, $text
             );
@@ -229,7 +266,7 @@ class FeatureContext implements Context
      *
      * @Then /^it should (fail|pass)$/
      *
-     * @param   string $success "fail" or "pass"
+     * @param string $success "fail" or "pass"
      */
     public function itShouldFail($success)
     {
@@ -246,6 +283,22 @@ class FeatureContext implements Context
 
             PHPUnit_Framework_Assert::assertEquals(0, $this->getExitCode());
         }
+    }
+
+    /**
+     * Checks whether the file is valid according to an XML schema.
+     *
+     * @Then /^the file "([^"]+)" should be a valid document according to "([^"]+)"$/
+     *
+     * @param string $xmlFile
+     * @param string $schemaPath relative to features/bootstrap/schema
+     */
+    public function xmlShouldBeValid($xmlFile, $schemaPath)
+    {
+        $dom = new DomDocument();
+        $dom->load($this->workingDir . '/' . $xmlFile);
+
+        $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);
     }
 
     private function getExitCode()
@@ -271,11 +324,16 @@ class FeatureContext implements Context
     private function createFile($filename, $content)
     {
         $path = dirname($filename);
+        $this->createDirectory($path);
+
+        file_put_contents($filename, $content);
+    }
+
+    private function createDirectory($path)
+    {
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
-
-        file_put_contents($filename, $content);
     }
 
     private function moveToNewPath($path)

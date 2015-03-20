@@ -11,7 +11,7 @@
 namespace Behat\Behat\Output\Printer;
 
 use Behat\Behat\Output\Printer\Formatter\ConsoleFormatter;
-use Behat\Testwork\Output\Printer\ConsoleOutputPrinter as BasePrinter;
+use Behat\Testwork\Output\Printer\Factory\ConsoleOutputFactory as BaseFactory;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 /**
@@ -19,12 +19,10 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ConsoleOutputPrinter extends BasePrinter
+final class ConsoleOutputFactory extends BaseFactory
 {
     /**
-     * Creates output formatter that is used to create a console.
-     *
-     * @return ConsoleFormatter
+     * {@inheritDoc}
      */
     protected function createOutputFormatter()
     {
