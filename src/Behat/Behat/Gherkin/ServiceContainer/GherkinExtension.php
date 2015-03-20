@@ -354,10 +354,14 @@ final class GherkinExtension implements Extension
             return new Definition('Behat\Gherkin\Filter\TagFilter', array($filterString));
         }
 
+        if ('narrative' === $type) {
+            return new Definition('Behat\Gherkin\Filter\NarrativeFilter', array($filterString));
+        }
+
         throw new ExtensionException(sprintf(
             '`%s` filter is not supported by the `filters` option of gherkin extension. Supported types are `%s`.',
             $type,
-            implode('`, `', array('role', 'name', 'tags'))
+            implode('`, `', array('narrative', 'role', 'name', 'tags'))
         ), 'gherkin');
     }
 }
