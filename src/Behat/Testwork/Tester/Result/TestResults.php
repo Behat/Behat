@@ -21,7 +21,6 @@ use IteratorAggregate;
  */
 final class TestResults implements TestResult, Countable, IteratorAggregate
 {
-    const NO_TESTS = -100;
 
     /**
      * @var TestResult[]
@@ -43,7 +42,8 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
      */
     public function isPassed()
     {
-        return self::PASSED == $this->getResultCode();
+        return self::PASSED == $this->getResultCode() ||
+          self::NO_TESTS == $this->getResultCode();
     }
 
     /**
