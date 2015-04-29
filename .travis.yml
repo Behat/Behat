@@ -13,12 +13,6 @@ matrix:
     - php: hhvm
   include:
     - php: 5.5
-      env: SYMFONY_VERSION='2.0.*'
-    - php: 5.5
-      env: SYMFONY_VERSION='2.1.*'
-    - php: 5.5
-      env: SYMFONY_VERSION='2.2.*'
-    - php: 5.5
       env: SYMFONY_VERSION='2.3.*'
 
 before_script:
