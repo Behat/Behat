@@ -14,6 +14,7 @@ use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Definition\DefinitionFinder;
 use Behat\Behat\Definition\Exception\SearchException;
 use Behat\Behat\Definition\SearchResult;
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\FailedStepSearchResult;
 use Behat\Behat\Tester\Result\SkippedStepResult;
@@ -23,6 +24,7 @@ use Behat\Behat\Tester\StepTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Call\CallCenter;
+use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
@@ -34,6 +36,9 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
  */
 final class RuntimeStepTester implements StepTester
 {
+    /** Number of seconds to attempt "Then" steps before accepting a failure */
+    const TIMEOUT = 5;
+
     /**
      * @var DefinitionFinder
      */
@@ -42,6 +47,9 @@ final class RuntimeStepTester implements StepTester
      * @var CallCenter
      */
     private $callCenter;
+
+    /** @var string The last "Given", "When", or "Then" keyword encountered */
+    protected $lastKeyword;
 
     /**
      * Initialize tester.
@@ -113,6 +121,13 @@ final class RuntimeStepTester implements StepTester
      */
     private function testDefinition(Environment $env, FeatureNode $feature, StepNode $step, SearchResult $search, $skip)
     {
+        $keyword = $step->getKeyword();
+        if (in_array($keyword, ['Given', 'When', 'Then'])) {
+          // We've entered a new major keyword block. Record the keyword.
+          // This allows us to know where we are when processing And or But steps
+          $this->lastKeyword = $keyword;
+        }
+
         if (!$search->hasMatch()) {
             return new UndefinedStepResult();
         }
@@ -122,9 +137,45 @@ final class RuntimeStepTester implements StepTester
         }
 
         $call = $this->createDefinitionCall($env, $feature, $search, $step);
-        $result = $this->callCenter->makeCall($call);
+
+        $lambda = function() use ($call) {
+          return $this->callCenter->makeCall($call);
+        };
+
+        // @todo We can only "spin" if we are interacting with a remote browser. If the browser is
+        // running in the same thread as this test (such as with Goutte or Zombie), then spinning
+        // will only prevent that process from continuing, and the test will either pass immediately,
+        // or not at all. We need to find out how to check what Driver we're using...
+
+        // if we're in a Then (assertion) block, we need to spin
+        $result = $this->lastKeyword == 'Then' ? $this->spin($lambda) : $lambda();
 
         return new ExecutedStepResult($search, $result);
+    }
+
+    /**
+     * Continually calls an assertion until it passes or the timeout is reached.
+     *
+     * @param  callable   $lambda The lambda assertion to call. Must take no arguments and return
+     *                            a CallResult.
+     * @return CallResult
+     */
+    protected function spin(callable $lambda)
+    {
+      $lastError = null;
+
+      $start = microtime(true);
+
+      while (microtime(true) - $start < self::TIMEOUT) {
+        /** @var $result CallResult */
+        $result = $lambda();
+
+        if (!$result->hasException() || ($result->getException() instanceof PendingException)) {
+          return $result;
+        }
+      }
+
+      return $result;
     }
 
     /**
