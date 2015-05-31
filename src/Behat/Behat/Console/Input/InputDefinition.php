@@ -20,11 +20,9 @@ use Symfony\Component\Console\Input\InputDefinition as BaseDefinition;
 class InputDefinition extends BaseDefinition
 {
     /**
-     * Gets the synopsis.
-     *
-     * @return string The synopsis
+     * {@inheritdoc}
      */
-    public function getSynopsis()
+    public function getSynopsis($short = false)
     {
         $elements = array();
         $isSwitch = false;
