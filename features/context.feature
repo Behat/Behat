@@ -311,10 +311,6 @@ Feature: Context consistency
       """
       [Behat\Testwork\Suite\Exception\SuiteConfigurationException]
         `contexts` setting of the "default" suite is expected to be an array, string given.
-
-
-
-      behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--rerun] [--stop-on-failure] [--dry-run] [paths]
       """
 
   Scenario: Unexisting custom context class
@@ -341,10 +337,6 @@ Feature: Context consistency
     """
     [Behat\Behat\Context\Exception\ContextNotFoundException]
       `UnexistentContext` context class not found and can not be used.
-
-
-
-    behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--rerun] [--stop-on-failure] [--dry-run] [paths]
     """
 
   Scenario: Unexisting context argument
@@ -373,10 +365,6 @@ Feature: Context consistency
       """
       [Behat\Testwork\Argument\Exception\UnknownParameterValueException]
         `CoreContext::__construct()` does not expect argument `$unexistingParam`.
-
-
-
-      behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--rerun] [--stop-on-failure] [--dry-run] [paths]
       """
 
   Scenario: Suite without contexts and FeatureContext available
