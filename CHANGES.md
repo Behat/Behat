@@ -1,3 +1,9 @@
+2.5.5 / 2015-06-01
+==================
+
+  * Fixed the compatibility with Symfony Console 2.7 (thanks @weaverryan)
+  * Removed usage of a deprecated Translator usage (thanks @chillu)
+
 2.5.4 / 2015-01-23
 ==================
 
