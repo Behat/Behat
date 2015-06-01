@@ -89,6 +89,16 @@ final class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
+        // xdebug's default nesting level of 100 is not enough
+        if (extension_loaded('xdebug')
+            && false === strpos(ini_get('disable_functions'), 'ini_set')
+        ) {
+            $oldValue = ini_get('xdebug.max_nesting_level');
+            if ($oldValue === false || $oldValue < 256) {
+                ini_set('xdebug.max_nesting_level', 256);
+            }
+        }
+
         if (is_file($path = $input->getParameterOption(array('--config', '-c')))) {
             $this->configurationLoader->setConfigurationFilePath($path);
         }
