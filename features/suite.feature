@@ -252,10 +252,6 @@ Feature: Suites
       """
       Behat\Testwork\Suite\Exception\SuiteConfigurationException]
         `paths` setting of the "first" suite is expected to be an array, string given.
-
-
-
-      behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--rerun] [--stop-on-failure] [--dry-run] [paths]
       """
 
   Scenario: Role-based suites
