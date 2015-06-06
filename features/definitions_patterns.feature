@@ -535,3 +535,35 @@ Feature: Step Definition Pattern
       1 scenario (1 passed)
       1 step (1 passed)
       """
+
+  Scenario: Negative number parameters without quotes
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I have a negative number :num
+           */
+          public function multipleWrongNamedParameters($num) {
+          PHPUnit_Framework_Assert::assertEquals('-3', $num);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given I have a negative number -3
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
