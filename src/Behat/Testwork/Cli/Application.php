@@ -12,6 +12,7 @@ namespace Behat\Testwork\Cli;
 
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationLoader;
 use Behat\Testwork\ServiceContainer\ContainerLoader;
+use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
@@ -99,7 +100,12 @@ final class Application extends BaseApplication
             }
         }
 
-        if (is_file($path = $input->getParameterOption(array('--config', '-c')))) {
+        // Check the requested config file exists
+        if ($path = $input->getParameterOption(array('--config', '-c'))) {
+            if (!is_file($path)) {
+                throw new ConfigurationLoadingException("The requested config file does not exist");
+            }
+
             $this->configurationLoader->setConfigurationFilePath($path);
         }
 
