@@ -133,7 +133,9 @@ final class RuntimeCallHandler implements CallHandler
      */
     private function stopErrorAndOutputBuffering()
     {
-        if (ob_get_length()) ob_end_clean();
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
         restore_error_handler();
     }
 }
