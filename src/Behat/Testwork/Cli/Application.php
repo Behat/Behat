@@ -65,7 +65,11 @@ final class Application extends BaseApplication
         return new InputDefinition(array(
             new InputOption('--profile', '-p', InputOption::VALUE_REQUIRED, 'Specify config profile to use.'),
             new InputOption('--config', '-c', InputOption::VALUE_REQUIRED, 'Specify config file to use.'),
-            new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of exceptions.'),
+            new InputOption(
+                '--verbose', '-v', InputOption::VALUE_OPTIONAL,
+                'Increase verbosity of exceptions.' . PHP_EOL .
+                'Use -vv or --verbose=2 to display backtraces in addition to exceptions.'
+            ),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
             new InputOption('--config-reference', null, InputOption::VALUE_NONE, 'Display the configuration reference.'),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
