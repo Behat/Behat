@@ -100,6 +100,11 @@ final class Application extends BaseApplication
             }
         }
 
+        // Ignore all other inputs if config-reference is set:
+        if ($input->hasParameterOption(array('--config-reference'))) {
+            $input = new ArrayInput(array('--config-reference' => true));
+        }
+
         // Check the requested config file exists
         if ($path = $input->getParameterOption(array('--config', '-c'))) {
             if (!is_file($path)) {
@@ -110,10 +115,6 @@ final class Application extends BaseApplication
         }
 
         $this->add($this->createCommand($input, $output));
-
-        if ($input->hasParameterOption(array('--config-reference'))) {
-            $input = new ArrayInput(array('--config-reference' => true));
-        }
 
         return parent::doRun($input, $output);
     }
