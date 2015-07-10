@@ -100,12 +100,10 @@ final class Application extends BaseApplication
             }
         }
 
-        // Ignore all other inputs if config-reference is set:
         if ($input->hasParameterOption(array('--config-reference'))) {
             $input = new ArrayInput(array('--config-reference' => true));
         }
 
-        // Check the requested config file exists
         if ($path = $input->getParameterOption(array('--config', '-c'))) {
             if (!is_file($path)) {
                 throw new ConfigurationLoadingException("The requested config file does not exist");

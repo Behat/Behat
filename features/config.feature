@@ -8,7 +8,7 @@ Feature: Config
       """
       """
     And a file named "features/bootstrap/FeatureContext.php" with:
-    """
+      """
       <?php
 
       use Behat\Behat\Context\Context;
@@ -18,7 +18,7 @@ Feature: Config
       }
       """
     And a file named "features/config.feature" with:
-    """
+      """
       Feature:
         Scenario:
           When this scenario executes
@@ -38,10 +38,10 @@ Feature: Config
 
   Scenario: Alternative configuration file
     Given a file named "alternative-behat.yml" with:
-    """
+      """
       """
     And a file named "features/bootstrap/FeatureContext.php" with:
-    """
+      """
       <?php
 
       use Behat\Behat\Context\Context;
@@ -51,7 +51,7 @@ Feature: Config
       }
       """
     And a file named "features/config.feature" with:
-    """
+      """
       Feature:
         Scenario:
           When this scenario executes
@@ -71,7 +71,7 @@ Feature: Config
 
   Scenario: Alternative configuration file could not be found
     Given a file named "features/bootstrap/FeatureContext.php" with:
-    """
+      """
       <?php
 
       use Behat\Behat\Context\Context;
@@ -81,13 +81,13 @@ Feature: Config
       }
       """
     And a file named "features/config.feature" with:
-    """
+      """
       Feature:
         Scenario:
           When this scenario executes
       """
     When I run "behat -f progress --no-colors --append-snippets --config=missing-behat.yml"
     Then it should fail with:
-    """
+      """
       The requested config file does not exist
       """
