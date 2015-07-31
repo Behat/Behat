@@ -61,17 +61,17 @@ class JUnitStepPrinter implements StepPrinter
 
         switch ($result->getResultCode()) {
             case TestResult::FAILED:
-                $outputPrinter->addTestcaseChild('failure', $attributes);
+                $outputPrinter->addTestcaseChild('failure', $attributes, $message);
                 break;
 
             case TestResult::PENDING:
                 $attributes['type'] = 'pending';
-                $outputPrinter->addTestcaseChild('error', $attributes);
+                $outputPrinter->addTestcaseChild('error', $attributes, $message);
                 break;
 
             case StepResult::UNDEFINED:
                 $attributes['type'] = 'undefined';
-                $outputPrinter->addTestcaseChild('error', $attributes);
+                $outputPrinter->addTestcaseChild('error', $attributes, $message);
                 break;
         }
     }
