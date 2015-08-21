@@ -29,7 +29,7 @@ final class TurnipPatternPolicy implements PatternPolicy
     /**
      * @var string[]
      */
-    private $regexCache = [];
+    private $regexCache = array();
 
     /**
      * @var string[]
