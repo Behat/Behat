@@ -103,6 +103,7 @@ final class SuiteExtension implements Extension
                         return $suite;
                     })
                 ->end()
+                ->normalizeKeys(false)
                 ->addDefaultsIfNotSet()
                 ->treatTrueLike(array('enabled' => true))
                 ->treatNullLike(array('enabled' => true))
