@@ -23,12 +23,11 @@ matrix:
     - php: 5.3.3
       env: DEPENDENCIES='low'
     - php: 5.6
-      env: DEPENDENCIES='dev' SYMFONY_VERSION=2.8.*@dev
+      env: DEPENDENCIES='dev'
     - php: 5.6
-      env: DEPENDENCIES='dev' SYMFONY_VERSION="3.0.x-dev as 2.8"
+      env: DEPENDENCIES='dev' SYMFONY_VERSION="3.0.*@dev"
   allow_failures:
-    - env: DEPENDENCIES='dev' SYMFONY_VERSION=2.8.*@dev
-    - env: DEPENDENCIES='dev' SYMFONY_VERSION="3.0.x-dev as 2.8"
+    - env: DEPENDENCIES='dev' SYMFONY_VERSION="3.0.*@dev"
 
 before_script:
   - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
