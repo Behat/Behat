@@ -22,10 +22,17 @@ matrix:
       env: SYMFONY_VERSION='2.5.*'
     - php: 5.3.3
       env: DEPENDENCIES='low'
+    - php: 5.6
+      env: SYMFONY_VERSION=2.8.*@dev
+    - php: 5.6
+      env: SYMFONY_VERSION="3.0.x-dev as 2.8"
+  allow_failures:
+    - env: SYMFONY_VERSION=2.8.*@dev
+    - env: SYMFONY_VERSION="3.0.x-dev as 2.8"
 
 before_script:
   - composer selfupdate
-  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;
+  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"; fi;
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
   - export PATH=./bin:$PATH
