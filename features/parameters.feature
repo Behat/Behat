@@ -102,7 +102,7 @@ Feature: Parameters
       default:
         formatters: ~
       """
-    When I run "behat --no-colors -c unexistent"
+    When I run "behat --no-colors"
     Then it should pass with:
       """
       Feature: Math
@@ -136,7 +136,7 @@ Feature: Parameters
       default:
         formatters: ~
       """
-    When I run "behat --no-colors -c unexistent"
+    When I run "behat --no-colors"
     Then it should pass with:
       """
       Feature: Math
