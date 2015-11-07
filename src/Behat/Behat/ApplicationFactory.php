@@ -30,6 +30,7 @@ use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
+use Behat\Testwork\Ordering\ServiceContainer\OrderingExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -90,6 +91,7 @@ final class ApplicationFactory extends BaseFactory
             new EventDispatcherExtension($processor),
             new HookExtension(),
             new TransformationExtension($processor),
+            new OrderingExtension($processor)
         );
     }
 
