@@ -50,6 +50,15 @@ Feature: Step Arguments Transformations
               return new User($username, $age);
           }
 
+          /** @Transform rowtable:username,age */
+          public function createUserFromRowTable(TableNode $table) {
+              $hash     = $table->getRowsHash();
+              $username = $hash['username'];
+              $age      = $hash['age'];
+
+              return new User($username, $age);
+          }
+
           /** @Transform /^\d+$/ */
           public function castToNumber($number) {
               return intval($number);
@@ -139,6 +148,32 @@ Feature: Step Arguments Transformations
           Given I am user:
             | username | age |
             | vasiljev | 30  |
+          Then Username must be "vasiljev"
+          And Age must be 30
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ......
+
+      2 scenarios (2 passed)
+      6 steps (6 passed)
+      """
+  Scenario: Row Table Arguments Transformations
+    Given a file named "features/row_table_arguments.feature" with:
+      """
+      Feature: Step Arguments
+        Scenario:
+          Given I am user:
+            | username | ever.zet |
+            | age      | 22       |
+          Then Username must be "ever.zet"
+          And Age must be 22
+
+        Scenario:
+          Given I am user:
+            | username | vasiljev |
+            | age      | 30       |
           Then Username must be "vasiljev"
           And Age must be 30
       """

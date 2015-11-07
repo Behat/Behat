@@ -15,6 +15,7 @@ use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Transformation\TransformationRepository;
+use Behat\Gherkin\Exception\NodeException;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
@@ -165,6 +166,8 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
     /**
      * Checks if provided transformation is applicable table transformation.
      *
+     * Supports both tables with columns as the headings and rows as the headings.
+     *
      * @param Transformation $transformation
      * @param mixed          $value
      *
@@ -172,11 +175,61 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
      */
     private function isApplicableTableTransformation(Transformation $transformation, $value)
     {
+        if ($this->isApplicableColumnTableTransformation($transformation, $value)) {
+            return true;
+        }
+
+        return $this->isApplicableRowTableTransformation($transformation, $value);
+    }
+
+    /**
+     * Checks if provided transformation is applicable column table transformation.
+     *
+     * @param Transformation $transformation
+     * @param mixed          $value
+     *
+     * @return Boolean
+     */
+    private function isApplicableColumnTableTransformation(Transformation $transformation, $value)
+    {
         if (!$value instanceof TableNode) {
             return false;
         };
 
         return $transformation->getPattern() === 'table:' . implode(',', $value->getRow(0));
+    }
+
+    /**
+     * Checks if provided transformation is applicable row table transformation.
+     *
+     * @param Transformation $transformation
+     * @param mixed          $value
+     *
+     * @return Boolean
+     */
+    private function isApplicableRowTableTransformation(Transformation $transformation, $value)
+    {
+        if (!$value instanceof TableNode) {
+            return false;
+        };
+
+        // What we're doing here is checking that we have a 2 column table.
+        // This bit checks we have two columns
+        try {
+            $value->getColumn(1);
+        } catch (NodeException $e) {
+            return false;
+        }
+
+        // And here we check we don't have a 3rd column
+        try {
+            $value->getColumn(2);
+        } catch (NodeException $e) {
+            // Once we know the table could be a row table, we check against the pattern.
+            return $transformation->getPattern() === 'rowtable:' . implode(',', $value->getColumn(0));
+        }
+
+        return false;
     }
 
     /**
