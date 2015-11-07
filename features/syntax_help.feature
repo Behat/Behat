@@ -119,9 +119,9 @@ Feature: Syntax helpers
     Then the output should contain:
       """
       default | Given /^(?:I|We) have (\d+) apples?$/
-      default |  When /^(?:I|We) ate (\d+) apples?$/
-      default |  When /^(?:I|We) found (\d+) apples?$/
-      default |  Then /^(?:I|We) should have (\d+) apples$/
+      default | When /^(?:I|We) ate (\d+) apples?$/
+      default | When /^(?:I|We) found (\d+) apples?$/
+      default | Then /^(?:I|We) should have (\d+) apples$/
       """
 
   Scenario: Print available definitions in native language
@@ -189,10 +189,10 @@ Feature: Syntax helpers
     When I run "behat --no-colors -dl --lang=ru"
     Then the output should contain:
       """
-      default | Given /^у меня (\d+) яблоко?$/
-      default |  When /^I ate (\d+) apples?$/
-      default |  When /^Я нашел (\d+) яблоко?$/
-      default |  Then /^I should have (\d+) apples$/
+      default | Допустим /^у меня (\d+) яблоко?$/
+      default | Когда /^I ate (\d+) apples?$/
+      default | Когда /^Я нашел (\d+) яблоко?$/
+      default | Тогда /^I should have (\d+) apples$/
       """
 
   Scenario: Print extended definitions info
@@ -328,6 +328,6 @@ Feature: Syntax helpers
     When I run "behat --no-colors --lang=ru -d 'нашел'"
     Then the output should contain:
       """
-      default | When /^Я нашел (\d+) яблоко?$/
+      default | [Когда|Если] /^Я нашел (\d+) яблоко?$/
               | at `FeatureContext::iFoundApples()`
       """

@@ -78,7 +78,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
         $lines[] = strtr(
             '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>', array(
                 '{suite}' => $suite->getName(),
-                '{type}'  => $definition->getType(),
+                '{type}'  => $this->getDefinitionType($definition),
                 '{regex}' => $pattern,
             )
         );
