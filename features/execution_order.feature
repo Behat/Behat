@@ -63,10 +63,6 @@ Feature: Setting order of execution
       """
       [Behat\Testwork\Ordering\Exception\InvalidOrderException]
         Order option 'foo' was not recognised
-
-
-
-      behat [-s|--suite="..."] [-f|--format="..."] [-o|--out="..."] [--format-settings="..."] [--init] [--lang="..."] [--name="..."] [--tags="..."] [--role="..."] [--story-syntax] [-d|--definitions="..."] [--append-snippets] [--no-snippets] [--strict] [--order="..."] [--rerun] [--stop-on-failure] [--dry-run] [paths]
       """
 
   Scenario: Reverse order
