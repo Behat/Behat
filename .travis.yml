@@ -24,10 +24,6 @@ matrix:
       env: DEPENDENCIES='low'
     - php: 5.6
       env: DEPENDENCIES='dev'
-    - php: 5.6
-      env: DEPENDENCIES='dev' SYMFONY_VERSION="3.0.*@dev"
-  allow_failures:
-    - env: DEPENDENCIES='dev' SYMFONY_VERSION="3.0.*@dev"
 
 before_script:
   - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
