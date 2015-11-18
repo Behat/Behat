@@ -155,6 +155,19 @@
         'undefined_count'     => '{1} %1% indefinido|]1,Inf] %1% indefinidos',
         'skipped_count'       => '{1} %1% ignorado|]1,Inf] %1% ignorados',
     ),
+    'ro' =>
+        array (
+            'proposal_title'      => 'Puteți implementa pașii nedefiniți cu ajutorul acestor fragmente de cod:',
+            'failed_steps_title'  => 'pași esuați',
+            'pending_steps_title' => 'pași in așteptare',
+            'scenarios_count'     => '{0} Niciun scenariu|{1} 1 scenariu|]1,Inf] %1% scenarii',
+            'steps_count'         => '{0} Niciun pas|{1} 1 pas|]1,Inf] %1% pași',
+            'passed_count'        => '[1,Inf] %1% cu succes',
+            'failed_count'        => '[1,Inf] %1% fara succes',
+            'pending_count'       => '[1,Inf] %1% in așteptare',
+            'undefined_count'     => '[1,Inf] %1% fara implementare',
+            'skipped_count'       => '{1} %1% omis|]1,Inf] %1% omiși',
+    ),
     'ru' =>
     array (
         'proposal_title'      => 'Вы можете реализовать определения для новых шагов с помощью этих шаблонов:',
