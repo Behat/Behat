@@ -11,11 +11,11 @@
 namespace Behat\Behat\Output\Node\EventListener\JUnit;
 
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
-use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
-use Behat\Behat\EventDispatcher\Event\StepTested;
+use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
@@ -95,7 +95,7 @@ final class JUnitFeatureElementListener implements EventListener
     private function captureScenarioEvent(ScenarioTested $event)
     {
         if ($event instanceof AfterScenarioTested) {
-            $this->afterScenarioTestedEvents[$event->getScenario()->getTitle()] = array(
+            $this->afterScenarioTestedEvents[$event->getScenario()->getLine()] = array(
                 'event' => $event,
                 'step_events' => $this->afterStepTestedEvents,
             );
