@@ -1,6 +1,6 @@
 language: php
 
-php: [5.3, 5.4, 5.5, 5.6, 5.3.3, hhvm]
+php: [5.3, 5.4, 5.5, 5.6, 7.0, 5.3.3, hhvm]
 
 sudo: false
 
@@ -23,6 +23,8 @@ matrix:
     - php: 5.3.3
       env: DEPENDENCIES='low'
     - php: 5.6
+      env: DEPENDENCIES='dev'
+    - php: 7.0
       env: DEPENDENCIES='dev'
 
 before_script:
