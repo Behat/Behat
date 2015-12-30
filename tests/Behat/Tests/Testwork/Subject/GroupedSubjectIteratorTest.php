@@ -5,9 +5,8 @@ namespace Behat\Tests\Testwork\Subject;
 use Behat\Testwork\Specification\GroupedSpecificationIterator;
 use Behat\Testwork\Specification\NoSpecificationsIterator;
 use Behat\Testwork\Specification\SpecificationArrayIterator;
-use Prophecy\PhpUnit\ProphecyTestCase;
 
-class GroupedSubjectIteratorTest extends ProphecyTestCase
+class GroupedSubjectIteratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testIterationWithEmptyAtBeginning()
     {
