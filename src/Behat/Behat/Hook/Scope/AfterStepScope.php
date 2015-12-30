@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Hook\Scope;
 
+use Behat\Behat\Tester\Context\StepContext;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
@@ -26,10 +27,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class AfterStepScope implements StepScope, AfterTestScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
      * @var FeatureNode
      */
     private $feature;
@@ -38,6 +35,10 @@ final class AfterStepScope implements StepScope, AfterTestScope
      */
     private $step;
     /**
+     * @var Environment
+     */
+    private $environment;
+    /**
      * @var StepResult
      */
     private $result;
@@ -45,16 +46,14 @@ final class AfterStepScope implements StepScope, AfterTestScope
     /**
      * Initializes scope.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
+     * @param StepContext $context
      * @param StepResult  $result
      */
-    public function __construct(Environment $env, FeatureNode $feature, StepNode $step, StepResult $result)
+    public function __construct(StepContext $context, StepResult $result)
     {
-        $this->environment = $env;
-        $this->feature = $feature;
-        $this->step = $step;
+        $this->feature = $context->getFeature();
+        $this->step = $context->getStep();
+        $this->environment = $context->getEnvironment();
         $this->result = $result;
     }
 

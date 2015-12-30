@@ -10,11 +10,11 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
+use Behat\Behat\Tester\Context\StepContext;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\BeforeTeardown;
 use Behat\Testwork\Tester\Result\ExceptionResult;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -42,22 +42,24 @@ final class BeforeStepTeardown extends StepTested implements BeforeTeardown
     /**
      * Initializes event.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
+     * @param StepContext $context
      * @param StepResult  $result
      */
-    public function __construct(
-        Environment $env,
-        FeatureNode $feature,
-        StepNode $step,
-        StepResult $result
-    ) {
-        parent::__construct($env);
+    public function __construct(StepContext $context, StepResult $result)
+    {
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
-        $this->step = $step;
+        $this->feature = $context->getFeature();
+        $this->step = $context->getStep();
         $this->result = $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
     }
 
     /**

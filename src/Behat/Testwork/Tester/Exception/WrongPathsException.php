@@ -13,7 +13,7 @@ namespace Behat\Testwork\Tester\Exception;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 /**
- * Represents exception caused by a wrong paths argument.
+ * Represents an exception caused by a wrong paths argument provided.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

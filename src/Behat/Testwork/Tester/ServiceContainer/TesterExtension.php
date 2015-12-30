@@ -18,6 +18,7 @@ use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -57,7 +58,7 @@ abstract class TesterExtension implements Extension
      */
     public function __construct(ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -91,8 +92,7 @@ abstract class TesterExtension implements Extension
                     ->info('Tells tester to skip all tests')
                     ->defaultFalse()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     /**
@@ -103,7 +103,7 @@ abstract class TesterExtension implements Extension
         $this->loadExerciseController($container, $config['skip']);
         $this->loadStrictController($container, $config['strict']);
         $this->loadResultInterpreter($container);
-        $this->loadExercise($container);
+        $this->loadExerciseTester($container);
         $this->loadSuiteTester($container);
         $this->loadSpecificationTester($container);
     }
@@ -127,13 +127,15 @@ abstract class TesterExtension implements Extension
      */
     protected function loadExerciseController(ContainerBuilder $container, $skip = false)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', array(
-            new Reference(SuiteExtension::REGISTRY_ID),
-            new Reference(SpecificationExtension::FINDER_ID),
-            new Reference(self::EXERCISE_ID),
-            new Reference(self::RESULT_INTERPRETER_ID),
-            $skip
-        ));
+        $definition = new Definition(
+            'Behat\Testwork\Tester\Cli\ExerciseController', array(
+                new Reference(SuiteExtension::REGISTRY_ID),
+                new Reference(SpecificationExtension::FINDER_ID),
+                new Reference(self::EXERCISE_ID),
+                new Reference(self::RESULT_INTERPRETER_ID),
+                $skip
+            )
+        );
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
     }
@@ -146,10 +148,12 @@ abstract class TesterExtension implements Extension
      */
     protected function loadStrictController(ContainerBuilder $container, $strict = false)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', array(
-            new Reference(self::RESULT_INTERPRETER_ID),
-            $strict
-        ));
+        $definition = new Definition(
+            'Behat\Testwork\Tester\Cli\StrictController', array(
+                new Reference(self::RESULT_INTERPRETER_ID),
+                $strict
+            )
+        );
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
     }
@@ -164,7 +168,9 @@ abstract class TesterExtension implements Extension
         $definition = new Definition('Behat\Testwork\Tester\Result\ResultInterpreter');
         $container->setDefinition(self::RESULT_INTERPRETER_ID, $definition);
 
-        $definition = new Definition('Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation');
+        $definition = new Definition(
+            'Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation'
+        );
         $definition->addTag(self::RESULT_INTERPRETATION_TAG);
         $container->setDefinition(self::RESULT_INTERPRETATION_TAG . '.soft', $definition);
     }
@@ -174,12 +180,14 @@ abstract class TesterExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadExercise(ContainerBuilder $container)
+    protected function loadExerciseTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeExercise', array(
-            new Reference(EnvironmentExtension::MANAGER_ID),
-            new Reference(self::SUITE_TESTER_ID)
-        ));
+        $definition = new Definition(
+            'Behat\Testwork\Tester\Exercise\ExerciseTester', array(
+                new Reference(self::SUITE_TESTER_ID),
+                new Reference(EnvironmentExtension::MANAGER_ID)
+            )
+        );
         $container->setDefinition(self::EXERCISE_ID, $definition);
     }
 
@@ -190,9 +198,11 @@ abstract class TesterExtension implements Extension
      */
     protected function loadSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeSuiteTester', array(
-            new Reference(self::SPECIFICATION_TESTER_ID)
-        ));
+        $definition = new Definition(
+            'Behat\Testwork\Tester\Exercise\SuiteTester', array(
+                new Reference(self::SPECIFICATION_TESTER_ID)
+            )
+        );
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);
     }
 
@@ -210,7 +220,7 @@ abstract class TesterExtension implements Extension
      */
     protected function processExerciseWrappers(ContainerBuilder $container)
     {
-        $this->processor->processWrapperServices($container, self::EXERCISE_ID, self::EXERCISE_WRAPPER_TAG);
+        $this->processTesterWrappers($container, self::EXERCISE_ID, self::EXERCISE_WRAPPER_TAG);
     }
 
     /**
@@ -220,7 +230,9 @@ abstract class TesterExtension implements Extension
      */
     protected function processSuiteTesterWrappers(ContainerBuilder $container)
     {
-        $this->processor->processWrapperServices($container, self::SUITE_TESTER_ID, self::SUITE_TESTER_WRAPPER_TAG);
+        $this->processTesterWrappers(
+            $container, self::SUITE_TESTER_ID, self::SUITE_TESTER_WRAPPER_TAG
+        );
     }
 
     /**
@@ -230,7 +242,9 @@ abstract class TesterExtension implements Extension
      */
     protected function processSpecificationTesterWrappers(ContainerBuilder $container)
     {
-        $this->processor->processWrapperServices($container, self::SPECIFICATION_TESTER_ID, self::SPECIFICATION_TESTER_WRAPPER_TAG);
+        $this->processTesterWrappers(
+            $container, self::SPECIFICATION_TESTER_ID, self::SPECIFICATION_TESTER_WRAPPER_TAG
+        );
     }
 
     /**
@@ -240,11 +254,67 @@ abstract class TesterExtension implements Extension
      */
     protected function processResultInterpretations(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, self::RESULT_INTERPRETATION_TAG);
+        $references = $this->processor->findAndSortTaggedServices(
+            $container, self::RESULT_INTERPRETATION_TAG
+        );
         $definition = $container->getDefinition(self::RESULT_INTERPRETER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerResultInterpretation', array($reference));
         }
+    }
+
+    /**
+     * Processes all tester wrappers depending on their interface.
+     *
+     * @param ContainerBuilder $container
+     * @param string           $testerId
+     * @param string           $wrapperTag
+     */
+    protected function processTesterWrappers(ContainerBuilder $container, $testerId, $wrapperTag)
+    {
+        $references = $this->processor->findAndSortTaggedServices($container, $wrapperTag);
+        $testerIsArranging = $this->serviceIsArrangingTester($container, new Reference($testerId));
+
+        foreach ($references as $wrapperReference) {
+            $wrapperIsArranging = $this->serviceIsArrangingTester($container, $wrapperReference);
+
+            if (!$testerIsArranging && $wrapperIsArranging) {
+                $this->makeTesterArranging($container, $testerId);
+                $testerIsArranging = true;
+            }
+
+            if ($testerIsArranging && !$wrapperIsArranging) {
+                $this->makeTesterBasic($container, $testerId);
+                $testerIsArranging = false;
+            }
+
+            $this->processor->wrapService($container, $testerId, $wrapperReference);
+        }
+
+        if ($testerIsArranging) {
+            $this->makeTesterBasic($container, $testerId);
+        }
+    }
+
+    private function serviceIsArrangingTester(ContainerBuilder $container, Reference $reference)
+    {
+        return $this->processor->serviceImplements(
+            $container, $reference, 'Behat\Testwork\Tester\Arranging\ArrangingTester'
+        );
+    }
+
+    private function makeTesterArranging(ContainerBuilder $container, $testerId)
+    {
+        $this->processor->wrapServiceInClass(
+            $container, $testerId, 'Behat\Testwork\Tester\Arranging\BasicTesterAdapter'
+        );
+    }
+
+    private function makeTesterBasic(ContainerBuilder $container, $testerId)
+    {
+        $this->processor->wrapServiceInClass(
+            $container, $testerId, 'Behat\Testwork\Tester\Arranging\ArrangingTesterAdapter'
+        );
     }
 }

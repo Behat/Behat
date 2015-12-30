@@ -11,8 +11,8 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
+use Behat\Testwork\Tester\Context\SpecificationContext;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
@@ -34,16 +34,23 @@ final class AfterFeatureSetup extends FeatureTested implements AfterSetup
     /**
      * Initializes event.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Setup       $setup
+     * @param SpecificationContext $context
+     * @param Setup                $setup
      */
-    public function __construct(Environment $env, FeatureNode $feature, Setup $setup)
+    public function __construct(SpecificationContext $context, Setup $setup)
     {
-        parent::__construct($env);
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
+        $this->feature = $context->getSpecification();
         $this->setup = $setup;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER_SETUP;
     }
 
     /**

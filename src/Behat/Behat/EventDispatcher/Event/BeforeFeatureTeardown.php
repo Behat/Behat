@@ -11,8 +11,8 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\BeforeTeardown;
+use Behat\Testwork\Tester\Context\SpecificationContext;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -34,16 +34,23 @@ final class BeforeFeatureTeardown extends FeatureTested implements BeforeTeardow
     /**
      * Initializes event.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param TestResult  $result
+     * @param SpecificationContext $context
+     * @param TestResult           $result
      */
-    public function __construct(Environment $env, FeatureNode $feature, TestResult $result)
+    public function __construct(SpecificationContext $context, TestResult $result)
     {
-        parent::__construct($env);
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
+        $this->feature = $context->getSpecification();
         $this->result = $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
     }
 
     /**

@@ -10,8 +10,8 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Tester\Context\SuiteContext;
 use Behat\Testwork\Tester\Setup\Setup;
 
 /**
@@ -33,16 +33,23 @@ final class AfterSuiteSetup extends SuiteTested implements AfterSetup
     /**
      * Initializes event.
      *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
-     * @param Setup                 $setup
+     * @param SuiteContext $context
+     * @param Setup        $setup
      */
-    public function __construct(Environment $env, SpecificationIterator $iterator, Setup $setup)
+    public function __construct(SuiteContext $context, Setup $setup)
     {
-        parent::__construct($env);
+        parent::__construct($context->getEnvironment());
 
-        $this->iterator = $iterator;
+        $this->iterator = $context->getSpecificationIterator();
         $this->setup = $setup;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER_SETUP;
     }
 
     /**

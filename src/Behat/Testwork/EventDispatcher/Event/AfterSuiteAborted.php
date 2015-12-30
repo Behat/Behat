@@ -22,6 +22,14 @@ final class AfterSuiteAborted extends SuiteTested
     /**
      * {@inheritdoc}
      */
+    public function getEventName()
+    {
+        return self::AFTER;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSpecificationIterator()
     {
         return new NoSpecificationsIterator($this->getSuite());

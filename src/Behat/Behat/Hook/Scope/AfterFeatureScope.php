@@ -14,6 +14,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\Scope\AfterTestScope;
 use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Tester\Context\SpecificationContext;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -24,13 +25,13 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class AfterFeatureScope implements FeatureScope, AfterTestScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
      * @var FeatureNode
      */
     private $feature;
+    /**
+     * @var Environment
+     */
+    private $environment;
     /**
      * @var TestResult
      */
@@ -39,14 +40,13 @@ final class AfterFeatureScope implements FeatureScope, AfterTestScope
     /**
      * Initializes scope.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param TestResult  $result
+     * @param SpecificationContext $context
+     * @param TestResult           $result
      */
-    public function __construct(Environment $env, FeatureNode $feature, TestResult $result)
+    public function __construct(SpecificationContext $context, TestResult $result)
     {
-        $this->environment = $env;
-        $this->feature = $feature;
+        $this->feature = $context->getSpecification();
+        $this->environment = $context->getEnvironment();
         $this->result = $result;
     }
 

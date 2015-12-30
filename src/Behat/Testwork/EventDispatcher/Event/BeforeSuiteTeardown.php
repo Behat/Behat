@@ -10,8 +10,8 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Tester\Context\SuiteContext;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -33,16 +33,23 @@ final class BeforeSuiteTeardown extends SuiteTested implements BeforeTeardown
     /**
      * Initializes event.
      *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
-     * @param TestResult            $result
+     * @param SuiteContext $context
+     * @param TestResult   $result
      */
-    public function __construct(Environment $env, SpecificationIterator $iterator, TestResult $result)
+    public function __construct(SuiteContext $context, TestResult $result)
     {
-        parent::__construct($env);
+        parent::__construct($context->getEnvironment());
 
-        $this->iterator = $iterator;
+        $this->iterator = $context->getSpecificationIterator();
         $this->result = $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
     }
 
     /**

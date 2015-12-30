@@ -11,8 +11,8 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\BeforeTested;
+use Behat\Testwork\Tester\Context\SpecificationContext;
 
 /**
  * Represents an event before feature tested.
@@ -29,14 +29,21 @@ final class BeforeFeatureTested extends FeatureTested implements BeforeTested
     /**
      * Initializes event.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
+     * @param SpecificationContext $context
      */
-    public function __construct(Environment $env, FeatureNode $feature)
+    public function __construct(SpecificationContext $context)
     {
-        parent::__construct($env);
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
+        $this->feature = $context->getSpecification();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE;
     }
 
     /**

@@ -10,8 +10,8 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Tester\Context\SuiteContext;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
 
@@ -38,22 +38,25 @@ final class AfterSuiteTested extends SuiteTested implements AfterTested
     /**
      * Initializes event.
      *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
-     * @param TestResult            $result
-     * @param Teardown              $teardown
+     * @param SuiteContext $context
+     * @param TestResult   $result
+     * @param Teardown     $teardown
      */
-    public function __construct(
-        Environment $env,
-        SpecificationIterator $iterator,
-        TestResult $result,
-        Teardown $teardown
-    ) {
-        parent::__construct($env);
+    public function __construct(SuiteContext $context, TestResult $result, Teardown $teardown)
+    {
+        parent::__construct($context->getEnvironment());
 
-        $this->iterator = $iterator;
+        $this->iterator = $context->getSpecificationIterator();
         $this->result = $result;
         $this->teardown = $teardown;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER;
     }
 
     /**

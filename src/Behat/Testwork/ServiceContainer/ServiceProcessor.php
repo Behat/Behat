@@ -12,6 +12,7 @@ namespace Behat\Testwork\ServiceContainer;
 
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -39,10 +40,60 @@ final class ServiceProcessor
             $serviceTags[] = array_merge(array('priority' => 0), $firstTags, array('id' => $id));
         }
 
-        usort($serviceTags, function ($tag1, $tag2) { return $tag2['priority'] - $tag1['priority']; });
-        $serviceReferences = array_map(function ($tag) { return new Reference($tag['id']); }, $serviceTags);
+        usort(
+            $serviceTags,
+            function ($tag1, $tag2) { return $tag2['priority'] - $tag1['priority']; }
+        );
+        $serviceReferences = array_map(
+            function ($tag) { return new Reference($tag['id']); },
+            $serviceTags
+        );
 
         return $serviceReferences;
+    }
+
+    /**
+     * Splits references based on the provided interface.
+     *
+     * References to services that implement interface go into the 1st collection, others into 2nd.
+     *
+     * @param ContainerBuilder $container
+     * @param Reference[]      $references
+     * @param string           $interface
+     *
+     * @return array
+     */
+    public function splitServices(ContainerBuilder $container, array $references, $interface)
+    {
+        $collection1 = array();
+        $collection2 = array();
+
+        foreach ($references as $reference) {
+            if ($this->serviceImplements($container, $reference, $interface)) {
+                $collection1[] = $reference;
+            } else {
+                $collection2[] = $reference;
+            }
+        }
+
+        return array($collection1, $collection2);
+    }
+
+    /**
+     * Checks if provided service implements provided interface.
+     *
+     * @param ContainerBuilder $container
+     * @param Reference        $reference
+     * @param string           $interface
+     *
+     * @return Boolean
+     */
+    public function serviceImplements(ContainerBuilder $container, Reference $reference, $interface)
+    {
+        $definition = $container->findDefinition((string) $reference);
+        $reflection = new \ReflectionClass($definition->getClass());
+
+        return $reflection->implementsInterface($interface);
     }
 
     /**
@@ -57,31 +108,70 @@ final class ServiceProcessor
      */
     public function processWrapperServices(ContainerBuilder $container, $target, $wrapperTag)
     {
-        $references = $this->findAndSortTaggedServices($container, $wrapperTag);
+        $wrapperReferences = $this->findAndSortTaggedServices($container, $wrapperTag);
+        $this->wrapServiceInReferences($container, $target, $wrapperReferences);
+    }
 
+    /**
+     * Wraps service with provided ID into stack of decorator references.
+     *
+     * @param ContainerBuilder $container
+     * @param string           $serviceId
+     * @param Reference[]      $references
+     */
+    public function wrapServiceInReferences(ContainerBuilder $container, $serviceId, array $references)
+    {
         foreach ($references as $reference) {
-            $id = (string) $reference;
-            $renamedId = $id . '.inner';
-
-            // This logic is based on Symfony\Component\DependencyInjection\Compiler\DecoratorServicePass
-
-            // we create a new alias/service for the service we are replacing
-            // to be able to reference it in the new one
-            if ($container->hasAlias($target)) {
-                $alias = $container->getAlias($target);
-                $public = $alias->isPublic();
-                $container->setAlias($renamedId, new Alias((string) $alias, false));
-            } else {
-                $definition = $container->getDefinition($target);
-                $public = $definition->isPublic();
-                $definition->setPublic(false);
-                $container->setDefinition($renamedId, $definition);
-            }
-
-            $container->setAlias($target, new Alias($id, $public));
-            // Replace the reference so that users don't need to bother about the way the inner service is referenced
-            $wrappingService = $container->getDefinition($id);
-            $wrappingService->replaceArgument(0, new Reference($renamedId));
+            $this->wrapService($container, $serviceId, $reference);
         }
+    }
+
+    /**
+     * Wraps service with ID in provided container with provided wrapper.
+     *
+     * @param ContainerBuilder $container
+     * @param string           $serviceId
+     * @param Reference        $wrapper
+     */
+    public function wrapService(ContainerBuilder $container, $serviceId, Reference $wrapper)
+    {
+        $id = (string)$wrapper;
+        $renamedId = $id . '.inner';
+
+        // This logic is based on Symfony\Component\DependencyInjection\Compiler\DecoratorServicePass
+
+        // we create a new alias/service for the service we are replacing
+        // to be able to reference it in the new one
+        if ($container->hasAlias($serviceId)) {
+            $alias = $container->getAlias($serviceId);
+            $public = $alias->isPublic();
+            $container->setAlias($renamedId, new Alias((string)$alias, false));
+        } else {
+            $definition = $container->getDefinition($serviceId);
+            $public = $definition->isPublic();
+            $definition->setPublic(false);
+            $container->setDefinition($renamedId, $definition);
+        }
+
+        $container->setAlias($serviceId, new Alias($id, $public));
+        // Replace the reference so that users don't need to bother about the way the inner service is referenced
+        $wrappingService = $container->findDefinition($id);
+        $wrappingService->replaceArgument(0, new Reference($renamedId));
+    }
+
+    /**
+     * Wraps service with ID in provided container with provided wrapper.
+     *
+     * @param ContainerBuilder $container
+     * @param string           $serviceId
+     * @param string           $wrapperClass
+     */
+    public function wrapServiceInClass(ContainerBuilder $container, $serviceId, $wrapperClass)
+    {
+        $wrapperId = $serviceId . '.wrapper.' . md5($wrapperClass . microtime() . uniqid());
+        $container->setDefinition($wrapperId, new Definition($wrapperClass, array(
+            new Reference($serviceId)
+        )));
+        $this->wrapService($container, $serviceId, new Reference($wrapperId));
     }
 }

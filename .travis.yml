@@ -17,9 +17,9 @@ branches:
 matrix:
   include:
     - php: 5.5
-      env: SYMFONY_VERSION='2.3.*'
+      env: SYMFONY_VERSION='2.5.*' # Remove in July 2015
     - php: 5.5
-      env: SYMFONY_VERSION='2.5.*'
+      env: SYMFONY_VERSION='2.3.*' # LTS - Remove in May 2013
     - php: 5.3.3
       env: DEPENDENCIES='low'
     - php: 5.6

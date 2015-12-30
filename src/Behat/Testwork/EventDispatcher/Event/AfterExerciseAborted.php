@@ -20,6 +20,14 @@ final class AfterExerciseAborted extends ExerciseCompleted
     /**
      * {@inheritdoc}
      */
+    public function getEventName()
+    {
+        return self::AFTER;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSpecificationIterators()
     {
         return array();

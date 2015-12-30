@@ -10,9 +10,9 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
+use Behat\Behat\Tester\Context\StepContext;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\Tester\Setup\Setup;
 
@@ -39,18 +39,24 @@ final class AfterStepSetup extends StepTested implements AfterSetup
     /**
      * Initializes event.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
+     * @param StepContext $context
      * @param Setup       $setup
      */
-    public function __construct(Environment $env, FeatureNode $feature, StepNode $step, Setup $setup)
+    public function __construct(StepContext $context, Setup $setup)
     {
-        parent::__construct($env);
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
-        $this->step = $step;
+        $this->feature = $context->getFeature();
+        $this->step = $context->getStep();
         $this->setup = $setup;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER_SETUP;
     }
 
     /**

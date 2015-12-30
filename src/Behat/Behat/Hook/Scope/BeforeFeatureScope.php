@@ -13,6 +13,7 @@ namespace Behat\Behat\Hook\Scope;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Tester\Context\SpecificationContext;
 
 /**
  * Represents a BeforeFeature hook scope.
@@ -22,24 +23,23 @@ use Behat\Testwork\Suite\Suite;
 final class BeforeFeatureScope implements FeatureScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
      * @var FeatureNode
      */
     private $feature;
+    /**
+     * @var Environment
+     */
+    private $environment;
 
     /**
      * Initializes scope.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
+     * @param SpecificationContext $context
      */
-    public function __construct(Environment $env, FeatureNode $feature)
+    public function __construct(SpecificationContext $context)
     {
-        $this->environment = $env;
-        $this->feature = $feature;
+        $this->feature = $context->getSpecification();
+        $this->environment = $context->getEnvironment();
     }
 
     /**

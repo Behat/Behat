@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
+use Behat\Behat\Tester\Context\BackgroundContext;
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\Tester\Setup\Setup;
 
@@ -40,18 +40,24 @@ final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
     /**
      * Initializes event.
      *
-     * @param Environment    $env
-     * @param FeatureNode    $feature
-     * @param BackgroundNode $background
-     * @param Setup          $setup
+     * @param BackgroundContext $context
+     * @param Setup             $setup
      */
-    public function __construct(Environment $env, FeatureNode $feature, BackgroundNode $background, Setup $setup)
+    public function __construct(BackgroundContext $context, Setup $setup)
     {
-        parent::__construct($env);
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
-        $this->background = $background;
+        $this->feature = $context->getFeature();
+        $this->background = $context->getBackground();
         $this->setup = $setup;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER_SETUP;
     }
 
     /**

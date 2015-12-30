@@ -10,9 +10,9 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
+use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\BeforeTeardown;
 use Behat\Testwork\Tester\Result\TestResult;
 
@@ -39,22 +39,24 @@ final class BeforeOutlineTeardown extends OutlineTested implements BeforeTeardow
     /**
      * Initializes event.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
-     * @param TestResult  $result
+     * @param ScenarioContext $context
+     * @param TestResult      $result
      */
-    public function __construct(
-        Environment $env,
-        FeatureNode $feature,
-        OutlineNode $outline,
-        TestResult $result
-    ) {
-        parent::__construct($env);
+    public function __construct(ScenarioContext $context, TestResult $result)
+    {
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
-        $this->outline = $outline;
+        $this->feature = $context->getFeature();
+        $this->outline = $context->getScenario();
         $this->result = $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::BEFORE_TEARDOWN;
     }
 
     /**

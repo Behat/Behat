@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
+use Behat\Behat\Tester\Context\ScenarioContext;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\ScenarioNode;
-use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AfterScenarioTested extends ScenarioTested implements AfterTested
+class AfterScenarioTested extends ScenarioTested implements AfterTested
 {
     /**
      * @var FeatureNode
@@ -45,25 +45,26 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
     /**
      * Initializes event
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param TestResult  $result
-     * @param Teardown    $teardown
+     * @param ScenarioContext $context
+     * @param TestResult      $result
+     * @param Teardown        $teardown
      */
-    public function __construct(
-        Environment $env,
-        FeatureNode $feature,
-        Scenario $scenario,
-        TestResult $result,
-        Teardown $teardown
-    ) {
-        parent::__construct($env);
+    public function __construct(ScenarioContext $context, TestResult $result, Teardown $teardown)
+    {
+        parent::__construct($context->getEnvironment());
 
-        $this->feature = $feature;
-        $this->scenario = $scenario;
+        $this->feature = $context->getFeature();
+        $this->scenario = $context->getScenario();
         $this->result = $result;
         $this->teardown = $teardown;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventName()
+    {
+        return self::AFTER;
     }
 
     /**
