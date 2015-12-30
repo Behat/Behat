@@ -31,7 +31,7 @@ Feature: Config
       1 scenario (1 undefined)
       1 step (1 undefined)
 
-      --- Snippets for the following steps in the default suite were not generated (check your configuration):
+      --- Snippets for the following steps in the default suite were not generated (does your context implement SnippetAcceptingContext interface?):
 
           When this scenario executes
       """
@@ -64,7 +64,7 @@ Feature: Config
       1 scenario (1 undefined)
       1 step (1 undefined)
 
-      --- Snippets for the following steps in the default suite were not generated (check your configuration):
+      --- Snippets for the following steps in the default suite were not generated (does your context implement SnippetAcceptingContext interface?):
 
           When this scenario executes
       """
