@@ -5,15 +5,20 @@ Upcoming
   * Add ability to specify execution order of suite (thanks @ciaranmcnulty)
   * Add translated keywords in definition printer (thanks @WouterJ)
   * Add 'rowtable' transformations (thanks @PurpleBooth)
-  * Handle case when non-existent config file is used (thanks @watermanio)
-  * Added Japanese translation (thanks @SNakano)
-  * Fix output buffering errors (thanks @tscheepers)
-  * Allow --verbose flag at CLI (thanks @pfrenssen)
-  * Allow hyphens in suite names (thanks @WouterJ)
-  * Improve performance of Turnip parsing (thanks @Sam-Burns)
-  * Fix xdebug maximum nesting level errors (thanks @WorkingDevel)
   * Add 'narrative' filters (thanks @WouterJ)
   * Add JUnit formatter (thanks @WouterJ and @james75)
+  * Add Japanese translation (thanks @SNakano)
+  * Add romanian translation for formatters (thanks @Chriton)
+  * Add table row transformations (thanks @ciaranmcnulty)
+  * Add support for negative numbers without surrounding quotes (thanks @ryancookdev)
+  * Handle case when non-existent config file is used (thanks @watermanio)
+  * Fix output buffering errors (thanks @tscheepers)
+  * Fix xdebug maximum nesting level errors (thanks @WorkingDevel)
+  * Allow --verbose flag at CLI (thanks @pfrenssen)
+  * Allow hyphens in suite names (thanks @WouterJ)
+  * Allow suite settings with null values to exist (thanks @docteurklein)
+  * Improve performance of Turnip parsing (thanks @Sam-Burns)
+  * Improve the snippet generation by auto-importing needed classes (thanks @stof)
 
 3.0.15 / 2015-02-22
 ===================
@@ -432,7 +437,7 @@ Upcoming
   * Rerun functionality refactored to use `failed` formatter internally
   * Overall code refactoring and cleaning
   * Polish translation added (Joseph Bielawski)
-  * Spanish translation updated (Andrés Botero)
+  * Spanish translation updated (Andrés Botero)
   * Locale autodetect
 
 2.1.3 / 2011-11-04
