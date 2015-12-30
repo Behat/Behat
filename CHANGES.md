@@ -1,5 +1,5 @@
-Upcoming
-========
+3.1.0 / 2016-01-xx
+==================
 
   * Add support for Symfony 3 (thanks @benji07)
   * Add ability to specify execution order of suite (thanks @ciaranmcnulty)
@@ -12,11 +12,14 @@ Upcoming
   * Add table row transformations (thanks @ciaranmcnulty)
   * Add support for negative numbers without surrounding quotes (thanks @ryancookdev)
   * Handle case when non-existent config file is used (thanks @watermanio)
+  * Handle non-default `error_reporting()`
   * Fix output buffering errors (thanks @tscheepers)
   * Fix xdebug maximum nesting level errors (thanks @WorkingDevel)
+  * Fix weird edge case in GroupedSpecificationIterator
   * Allow --verbose flag at CLI (thanks @pfrenssen)
   * Allow hyphens in suite names (thanks @WouterJ)
   * Allow suite settings with null values to exist (thanks @docteurklein)
+  * Improve "can not generate snippets" message
   * Improve performance of Turnip parsing (thanks @Sam-Burns)
   * Improve the snippet generation by auto-importing needed classes (thanks @stof)
 
