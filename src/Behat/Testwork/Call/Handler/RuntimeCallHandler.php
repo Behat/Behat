@@ -73,12 +73,11 @@ final class RuntimeCallHandler implements CallHandler
      */
     public function handleError($level, $message, $file, $line)
     {
-        if (0 !== error_reporting()) {
-            throw new CallErrorException($level, $message, $file, $line);
+        if ($this->errorLevelIsNotReportable($level)) {
+            return false;
         }
 
-        // error reporting turned off or more likely suppressed with @
-        return false;
+        throw new CallErrorException($level, $message, $file, $line);
     }
 
     /**
@@ -137,5 +136,17 @@ final class RuntimeCallHandler implements CallHandler
             ob_end_clean();
         }
         restore_error_handler();
+    }
+
+    /**
+     * Checks if provided error level is not reportable.
+     *
+     * @param integer $level
+     *
+     * @return Boolean
+     */
+    private function errorLevelIsNotReportable($level)
+    {
+        return !(error_reporting() & $level);
     }
 }
