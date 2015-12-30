@@ -65,7 +65,6 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
         $this->testSuites = $this->domDocument->createElement('testsuites');
         $this->domDocument->appendChild($this->testSuites);
         $this->addAttributesToNode($this->testSuites, array_merge(array('name' => $name), $testsuitesAttributes));
-        $this->flush();
     }
 
     /**
