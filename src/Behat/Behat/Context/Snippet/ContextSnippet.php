@@ -32,6 +32,10 @@ final class ContextSnippet implements Snippet
      * @var string
      */
     private $contextClass;
+    /**
+     * @var string[]
+     */
+    private $usedClasses;
 
     /**
      * Initializes definition snippet.
@@ -39,12 +43,14 @@ final class ContextSnippet implements Snippet
      * @param StepNode $step
      * @param string   $template
      * @param string   $contextClass
+     * @param string[] $usedClasses
      */
-    public function __construct(StepNode $step, $template, $contextClass)
+    public function __construct(StepNode $step, $template, $contextClass, array $usedClasses = array())
     {
         $this->step = $step;
         $this->template = $template;
         $this->contextClass = $contextClass;
+        $this->usedClasses = $usedClasses;
     }
 
     /**
@@ -85,5 +91,15 @@ final class ContextSnippet implements Snippet
     public function getTarget()
     {
         return $this->contextClass;
+    }
+
+    /**
+     * Returns the classes used in the snippet which should be imported.
+     *
+     * @return string[]
+     */
+    public function getUsedClasses()
+    {
+        return $this->usedClasses;
     }
 }

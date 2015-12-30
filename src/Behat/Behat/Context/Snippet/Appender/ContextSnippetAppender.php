@@ -59,8 +59,10 @@ final class ContextSnippetAppender implements SnippetAppender
             $reflection = new ReflectionClass($contextClass);
             $content = file_get_contents($reflection->getFileName());
 
-            if (!$this->isPendingExceptionImported($content)) {
-                $content = $this->importPendingException($content);
+            foreach ($snippet->getUsedClasses() as $class) {
+                if (!$this->isClassImported($class, $content)) {
+                    $content = $this->importClass($class, $content);
+                }
             }
 
             $generated = rtrim(strtr($snippet->getSnippet(), array('\\' => '\\\\', '$' => '\\$')));
@@ -74,32 +76,34 @@ final class ContextSnippetAppender implements SnippetAppender
     }
 
     /**
-     * Checks if context file already has pending exception in it.
+     * Checks if context file already has class in it.
      *
+     * @param string $class
      * @param string $contextFileContent
      *
      * @return Boolean
      */
-    private function isPendingExceptionImported($contextFileContent)
+    private function isClassImported($class, $contextFileContent)
     {
-        $pendingExceptionImportRegex = sprintf(
+        $classImportRegex = sprintf(
             '@use[^;]*%s.*;@ms',
-            preg_quote(self::PENDING_EXCEPTION_CLASS, '@')
+            preg_quote($class, '@')
         );
 
-        return 1 === preg_match($pendingExceptionImportRegex, $contextFileContent);
+        return 1 === preg_match($classImportRegex, $contextFileContent);
     }
 
     /**
-     * Adds use-block for pending exception.
+     * Adds use-block for class.
      *
+     * @param string $class
      * @param string $contextFileContent
      *
      * @return string
      */
-    private function importPendingException($contextFileContent)
+    private function importClass($class, $contextFileContent)
     {
-        $replaceWith = "\$1" . 'use ' . self::PENDING_EXCEPTION_CLASS . ";\n\$2;";
+        $replaceWith = "\$1" . 'use ' . $class . ";\n\$2;";
 
         return preg_replace('@^(.*)(use\s+[^;]*);@m', $replaceWith, $contextFileContent, 1);
     }
