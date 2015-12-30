@@ -1,3 +1,20 @@
+Upcoming
+========
+
+  * Add support for Symfony 3 (thanks @benji07)
+  * Add ability to specify execution order of suite (thanks @ciaranmcnulty)
+  * Add translated keywords in definition printer (thanks @WouterJ)
+  * Add 'rowtable' transformations (thanks @PurpleBooth)
+  * Handle case when non-existent config file is used (thanks @watermanio)
+  * Added Japanese translation (thanks @SNakano)
+  * Fix output buffering errors (thanks @tscheepers)
+  * Allow --verbose flag at CLI (thanks @pfrenssen)
+  * Allow hyphens in suite names (thanks @WouterJ)
+  * Improve performance of Turnip parsing (thanks @Sam-Burns)
+  * Fix xdebug maximum nesting level errors (thanks @WorkingDevel)
+  * Add 'narrative' filters (thanks @WouterJ)
+  * Add JUnit formatter (thanks @WouterJ and @james75)
+
 3.0.15 / 2015-02-22
 ===================
 
