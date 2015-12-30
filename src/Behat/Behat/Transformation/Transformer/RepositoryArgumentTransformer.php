@@ -114,6 +114,15 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             return $this->applyTableTransformation($definitionCall, $transformation, $value);
         }
 
+        if ($this->isApplicableTableRowTransformation($transformation, $value)) {
+            $rows = array();
+            foreach ($value as $row) {
+                $rows[] = $this->applyTableTransformation($definitionCall, $transformation, $row);
+            }
+
+            return $rows;
+        }
+
         if ($this->isApplicablePatternTransformation($definitionCall, $transformation, $value, $arguments)) {
             return $this->applyPatternTransformation($definitionCall, $transformation, $arguments);
         }
@@ -230,6 +239,21 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
         }
 
         return false;
+    }
+
+    /**
+     * @param Transformation $transformation
+     * @param mixed          $value
+     *
+     * @return Boolean
+     */
+    private function isApplicableTableRowTransformation(Transformation $transformation, $value)
+    {
+        if (!$value instanceof TableNode) {
+            return false;
+        };
+
+        return $transformation->getPattern() === 'row:' . implode(',', $value->getRow(0));
     }
 
     /**
