@@ -106,6 +106,14 @@ final class ApplicationFactory extends BaseFactory
     /**
      * {@inheritdoc}
      */
+    protected function getEnvironmentPrecedenceVariableName()
+    {
+        return 'BEHAT_ENV_PRECEDENCE';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getConfigPath()
     {
         $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR);
