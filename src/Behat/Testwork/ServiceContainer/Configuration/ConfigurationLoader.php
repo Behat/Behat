@@ -148,14 +148,12 @@ final class ConfigurationLoader
             ));
         }
 
-        // should env configs takes precedence over file configs, or the opposite ?
+        // should env configs takes precedence over file configs ?
         if (getenv($this->environmentPrecedenceVariable) == 1) {
-            $configs = array_merge($envConfigs, $fileConfigs);
-        } else {
-            $configs = array_merge($fileConfigs, $envConfigs);
+            return array_merge($envConfigs, $fileConfigs);
         }
 
-        return $configs;
+        return array_merge($fileConfigs, $envConfigs);
     }
 
     /**
