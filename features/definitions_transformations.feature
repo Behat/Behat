@@ -171,6 +171,69 @@ Feature: Step Arguments Transformations
       2 scenarios (2 passed)
       6 steps (6 passed)
       """
+
+  Scenario: Table Arguments Regex Transformations
+    And a file named "features/bootstrap/FeatureContext.php" with:
+    """
+      <?php
+
+      use Behat\Behat\Context\Context;
+      use Behat\Gherkin\Node\TableNode;
+
+      class FeatureContext implements Context
+      {
+          private $user;
+
+          /** @Transform /^table:(.*)/ */
+          public function toUpperCase(TableNode $table) {
+              $rows = $table->getRows();
+              $upperCaseRows = array();
+              foreach ($rows as $row) {
+                  $upperCaseRows[] = array_map('strtoupper', $row);
+              }
+              return new TableNode($upperCaseRows);
+          }
+
+          /** @Transform table:USERNAME */
+          public function createUserFromTable(TableNode $table) {
+              $hash     = $table->getHash();
+              $username = $hash[0]['USERNAME'];
+
+              return new User($username);
+          }
+
+          /**
+           * @Given I am user:
+           */
+          public function iAmUser(User $user) {
+              $this->user = $user;
+          }
+
+          /**
+           * @Then /Username must be "([^"]+)"/
+           */
+          public function usernameMustBe($username) {
+              PHPUnit_Framework_Assert::assertEquals($username, $this->user->getUsername());
+          }
+      }
+    """
+    Given a file named "features/table_arguments_by_regex.feature" with:
+    """
+      Feature: Step Arguments
+        Scenario:
+          Given I am user:
+            | username |
+            | ever.zet |
+          Then Username must be "EVER.ZET"
+    """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+    """
+    ..
+
+    1 scenario (1 passed)
+    """
+
   Scenario: Row Table Arguments Transformations
     Given a file named "features/row_table_arguments.feature" with:
       """
