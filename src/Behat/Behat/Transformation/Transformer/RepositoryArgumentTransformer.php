@@ -205,7 +205,10 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             return false;
         };
 
-        return $transformation->getPattern() === 'table:' . implode(',', $value->getRow(0));
+        $tableMatching = 'table:' . implode(',', $value->getRow(0));
+
+        return $transformation->getPattern() === $tableMatching
+            || preg_match($transformation->getPattern(), $tableMatching);
     }
 
     /**
