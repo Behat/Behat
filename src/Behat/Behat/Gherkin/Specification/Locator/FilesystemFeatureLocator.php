@@ -131,13 +131,19 @@ final class FilesystemFeatureLocator implements SpecificationLocator
             return array($absolutePath);
         }
 
-        $iterator = new RegexIterator(
-            new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($absolutePath)
-            ), '/^.+\.feature$/i',
+        $RDI = new RecursiveDirectoryIterator(
+            $absolutePath,
+            RecursiveDirectoryIterator::FOLLOW_SYMLINKS |
+            RecursiveDirectoryIterator::SKIP_DOTS
+        );
+        $RII = new recursiveIteratorIterator($RDI);
+        $REX = new RegexIterator(
+            $RII,
+            '/^.+\.feature$/i',
             RegexIterator::MATCH
         );
-        $paths = array_map('strval', iterator_to_array($iterator));
+
+        $paths = array_map('strval', iterator_to_array($REX));
         uasort($paths, 'strnatcasecmp');
 
         return $paths;
