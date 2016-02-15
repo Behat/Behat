@@ -11,10 +11,12 @@
 namespace Behat\Testwork\Call;
 
 use Behat\Testwork\Call\Exception\CallHandlingException;
+use Behat\Testwork\Call\Exception\FatalThrowableError;
 use Behat\Testwork\Call\Filter\CallFilter;
 use Behat\Testwork\Call\Filter\ResultFilter;
 use Behat\Testwork\Call\Handler\CallHandler;
 use Exception;
+use Throwable;
 
 /**
  * Makes calls and handles results using registered handlers.
@@ -81,6 +83,8 @@ final class CallCenter
             $filteredResult = $this->filterResult($result);
         } catch (Exception $e) {
             return new CallResult($call, null, $e, null);
+        } catch (Throwable $e) {
+            return new CallResult($call, null, new FatalThrowableError($e), null);
         }
 
         return $filteredResult;
