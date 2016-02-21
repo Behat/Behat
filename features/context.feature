@@ -409,3 +409,61 @@ Feature: Context consistency
           When I ate 1 apple
           Then I should have 2 apples
       """
+
+  Scenario: Suite with custom context and FeatureContext available
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          first:
+            contexts:
+              - CustomContext
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context {
+          /** @BeforeScenario */
+          public function beforeScenario() {
+              echo "Setting up";
+          }
+
+          /** @Given step */
+          public function step() {}
+      }
+      """
+    And a file named "features/bootstrap/CustomContext.php" with:
+      """
+      <?php class CustomContext extends FeatureContext {}
+      """
+    And a file named "features/some.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given step
+        Scenario:
+          Given step
+      """
+    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    Then it should pass with:
+      """
+      Feature:
+
+        ┌─ @BeforeScenario # CustomContext::beforeScenario()
+        │
+        │  Setting up
+        │
+        Scenario:    # features/some.feature:2
+          Given step # CustomContext::step()
+
+        ┌─ @BeforeScenario # CustomContext::beforeScenario()
+        │
+        │  Setting up
+        │
+        Scenario:    # features/some.feature:4
+          Given step # CustomContext::step()
+
+      2 scenarios (2 passed)
+      2 steps (2 passed)
+      """
