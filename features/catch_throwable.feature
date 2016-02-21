@@ -51,7 +51,7 @@ Feature: Support PHP 7 Throwable
       """
         Scenario: Handling of a fatal error        # features/fatal_errors.feature:6
           When I have some code with a fatal error # FeatureContext::iHaveSomeCodeWithFatalError()
-            Fatal error: Call to a member function method() on string (Behat\Testwork\Exception\FatalThrowableError)
+            Fatal error: Call to a member function method() on string (Behat\Testwork\Call\Exception\FatalThrowableError)
           Then I should be skipped                 # FeatureContext::iShouldBeSkipped()
 
       --- Failed scenarios:
