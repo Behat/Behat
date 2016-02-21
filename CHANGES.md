@@ -1,4 +1,4 @@
-3.1.0 / 2016-01-xx
+3.1.0 / 2016-02-xx
 ==================
 
   * Add support for Symfony 3 (thanks @benji07)
@@ -13,6 +13,9 @@
   * Add support for negative numbers without surrounding quotes (thanks @ryancookdev)
   * Handle case when non-existent config file is used (thanks @watermanio)
   * Handle non-default `error_reporting()`
+  * Handle PHP7 errors implementing `Throwable`
+  * Fix autoloading from the global installation (thanks @sroze)
+  * Fix scenario scope naming (thanks @Taluu)
   * Fix output buffering errors (thanks @tscheepers)
   * Fix xdebug maximum nesting level errors (thanks @WorkingDevel)
   * Fix weird edge case in GroupedSpecificationIterator
