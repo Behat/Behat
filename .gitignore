@@ -1,5 +1,6 @@
 *.tgz
 *.phar
+php_version_tags.php
 behat.yml
 vendor
 composer.lock
