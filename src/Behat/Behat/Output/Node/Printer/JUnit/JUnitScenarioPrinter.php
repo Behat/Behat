@@ -63,7 +63,7 @@ final class JUnitScenarioPrinter
         }, explode("\n", $scenario->getTitle())));
 
         if ($scenario instanceof ExampleNode) {
-            $name = $this->buildExampleName();
+            $name = $this->buildExampleName($scenario);
         }
 
         /** @var JUnitOutputPrinter $outputPrinter */
@@ -76,11 +76,12 @@ final class JUnitScenarioPrinter
     }
 
     /**
+     * @param ExampleNode $scenario
      * @return string
      */
-    private function buildExampleName()
+    private function buildExampleName(ExampleNode $scenario)
     {
-        $currentOutline = $this->outlineStoreListener->getCurrentOutline();
+        $currentOutline = $this->outlineStoreListener->getCurrentOutline($scenario);
         if ($currentOutline === $this->lastOutline) {
             $this->outlineStepCount++;
         } else {

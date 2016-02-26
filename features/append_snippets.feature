@@ -402,6 +402,178 @@ Feature: Append snippets option
       }
       """
 
+  Scenario: Append snippets to main context with auto use PendingException
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+
+      class FeatureContext implements CustomSnippetAcceptingContext
+      {
+          private $apples = 0;
+          private $parameters;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
+
+          public function __construct(array $parameters = array()) {
+              $this->parameters = $parameters;
+          }
+
+          /**
+           * @Given /^I have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              $this->apples = intval($count);
+          }
+
+          /**
+           * @When /^I ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              $this->apples -= intval($count);
+          }
+
+          /**
+           * @When /^I found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              $this->apples += intval($count);
+          }
+
+          /**
+           * @Then /^I should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              \PHPUnit_Framework_Assert::assertEquals(intval($count), $this->apples);
+          }
+
+          /**
+           * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
+           */
+          public function contextParameterShouldBeEqualTo($key, $val) {
+              \PHPUnit_Framework_Assert::assertEquals($val, $this->parameters[$key]);
+          }
+
+          /**
+           * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
+           */
+          public function contextParameterShouldBeArrayWithElements($key, $count) {
+              \PHPUnit_Framework_Assert::assertInternalType('array', $this->parameters[$key]);
+              \PHPUnit_Framework_Assert::assertEquals(2, count($this->parameters[$key]));
+          }
+
+          private function doSomethingUndefinedWith() {}
+      }
+      """
+    When I run "behat -f progress --append-snippets"
+    Then "features/bootstrap/FeatureContext.php" file should contain:
+      """
+      <?php
+
+      use Behat\Gherkin\Node\TableNode;
+      use Behat\Gherkin\Node\PyStringNode;
+      use Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+
+      class FeatureContext implements CustomSnippetAcceptingContext
+      {
+          private $apples = 0;
+          private $parameters;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
+
+          public function __construct(array $parameters = array()) {
+              $this->parameters = $parameters;
+          }
+
+          /**
+           * @Given /^I have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              $this->apples = intval($count);
+          }
+
+          /**
+           * @When /^I ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              $this->apples -= intval($count);
+          }
+
+          /**
+           * @When /^I found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              $this->apples += intval($count);
+          }
+
+          /**
+           * @Then /^I should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              \PHPUnit_Framework_Assert::assertEquals(intval($count), $this->apples);
+          }
+
+          /**
+           * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
+           */
+          public function contextParameterShouldBeEqualTo($key, $val) {
+              \PHPUnit_Framework_Assert::assertEquals($val, $this->parameters[$key]);
+          }
+
+          /**
+           * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
+           */
+          public function contextParameterShouldBeArrayWithElements($key, $count) {
+              \PHPUnit_Framework_Assert::assertInternalType('array', $this->parameters[$key]);
+              \PHPUnit_Framework_Assert::assertEquals(2, count($this->parameters[$key]));
+          }
+
+          private function doSomethingUndefinedWith() {}
+
+          /**
+           * @Then /^do something undefined with \$$/
+           */
+          public function doSomethingUndefinedWith2()
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then /^do something undefined with \\(\d+)$/
+           */
+          public function doSomethingUndefinedWith3($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^pystring:$/
+           */
+          public function pystring(PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^pystring (\d+):$/
+           */
+          public function pystring2($arg1, PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Given /^table:$/
+           */
+          public function table(TableNode $table)
+          {
+              throw new PendingException();
+          }
+      }
+      """
+
     Scenario: Append snippets to two contexts
       Given a file named "features/bootstrap/FirstContext.php" with:
         """
@@ -409,6 +581,8 @@ Feature: Append snippets option
 
         use Behat\Behat\Tester\Exception\PendingException;
         use Behat\Behat\Context\CustomSnippetAcceptingContext;
+        use Behat\Gherkin\Node\TableNode;
+        use Behat\Gherkin\Node\PyStringNode;
 
         class FirstContext implements CustomSnippetAcceptingContext
         {
@@ -421,6 +595,8 @@ Feature: Append snippets option
 
         use Behat\Behat\Tester\Exception\PendingException;
         use Behat\Behat\Context\SnippetAcceptingContext;
+        use Behat\Gherkin\Node\TableNode;
+        use Behat\Gherkin\Node\PyStringNode;
 
         class SecondContext implements SnippetAcceptingContext
         {
@@ -470,6 +646,8 @@ Feature: Append snippets option
 
         use Behat\Behat\Tester\Exception\PendingException;
         use Behat\Behat\Context\CustomSnippetAcceptingContext;
+        use Behat\Gherkin\Node\TableNode;
+        use Behat\Gherkin\Node\PyStringNode;
 
         class FirstContext implements CustomSnippetAcceptingContext
         {
@@ -562,6 +740,8 @@ Feature: Append snippets option
 
         use Behat\Behat\Tester\Exception\PendingException;
         use Behat\Behat\Context\SnippetAcceptingContext;
+        use Behat\Gherkin\Node\TableNode;
+        use Behat\Gherkin\Node\PyStringNode;
 
         class SecondContext implements SnippetAcceptingContext
         {
@@ -655,6 +835,8 @@ Feature: Append snippets option
 
       use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Behat\Context\CustomSnippetAcceptingContext;
+      use Behat\Gherkin\Node\TableNode;
+      use Behat\Gherkin\Node\PyStringNode;
 
       class FirstContext implements CustomSnippetAcceptingContext
       {
@@ -689,7 +871,7 @@ Feature: Append snippets option
       14 scenarios (14 undefined)
       58 steps (58 undefined)
 
-      --- Snippets for the following steps in the second suite were not generated (check your configuration):
+      --- Snippets for the following steps in the second suite were not generated (does your context implement SnippetAcceptingContext interface?):
 
           Given I have 3 apples
           When I ate 1 apple
@@ -728,6 +910,8 @@ Feature: Append snippets option
 
       use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Behat\Context\CustomSnippetAcceptingContext;
+      use Behat\Gherkin\Node\TableNode;
+      use Behat\Gherkin\Node\PyStringNode;
 
       class FirstContext implements CustomSnippetAcceptingContext
       {

@@ -69,7 +69,7 @@ final class GenericSuite implements Suite
      */
     public function hasSetting($key)
     {
-        return isset($this->settings[$key]);
+        return array_key_exists($key, $this->settings);
     }
 
     /**

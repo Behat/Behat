@@ -11,14 +11,15 @@
 
 define('BEHAT_BIN_PATH',     __FILE__);
 
-function includeIfExists($file)
-{
-    if (file_exists($file)) {
-        return include $file;
-    }
+if (is_file($autoload = getcwd() . '/vendor/autoload.php')) {
+    require $autoload;
 }
 
-if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) && (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))) {
+if (is_file($autoload = __DIR__ . '/../vendor/autoload.php')) {
+    require($autoload);
+} elseif (is_file($autoload = __DIR__ . '/../../../autoload.php')) {
+    require($autoload);
+} else {
     fwrite(STDERR,
         'You must set up the project dependencies, run the following commands:'.PHP_EOL.
         'curl -s http://getcomposer.org/installer | php'.PHP_EOL.

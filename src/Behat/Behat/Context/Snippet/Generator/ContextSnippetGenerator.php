@@ -96,7 +96,9 @@ TPL;
         $methodArguments = $this->getMethodArguments($step, $pattern->getPlaceholderCount());
         $snippetTemplate = $this->getSnippetTemplate($pattern->getPattern(), $methodName, $methodArguments);
 
-        return new ContextSnippet($step, $snippetTemplate, $contextClass);
+        $usedClasses = $this->getUsedClasses($step);
+
+        return new ContextSnippet($step, $snippetTemplate, $contextClass, $usedClasses);
     }
 
     /**
@@ -170,6 +172,28 @@ TPL;
         }
 
         return $args;
+    }
+
+    /**
+     * Returns an array of classes used by the snippet template
+     *
+     * @param StepNode $step
+     *
+     * @return string[]
+     */
+    private function getUsedClasses(StepNode $step)
+    {
+        $usedClasses = array('Behat\Behat\Tester\Exception\PendingException');
+
+        foreach ($step->getArguments() as $argument) {
+            if ($argument instanceof TableNode) {
+                $usedClasses[] = 'Behat\Gherkin\Node\TableNode';
+            } elseif ($argument instanceof PyStringNode) {
+                $usedClasses[] = 'Behat\Gherkin\Node\PyStringNode';
+            }
+        }
+
+        return $usedClasses;
     }
 
     /**

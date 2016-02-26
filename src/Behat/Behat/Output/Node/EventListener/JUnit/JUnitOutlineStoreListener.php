@@ -10,14 +10,15 @@
 
 namespace Behat\Behat\Output\Node\EventListener\JUnit;
 
-use Symfony\Component\EventDispatcher\Event;
+use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
 use Behat\Behat\Output\Node\Printer\SuitePrinter;
+use Behat\Gherkin\Node\ExampleNode;
+use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
-use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Output\Formatter;
-use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
-use Behat\Gherkin\Node\OutlineNode;
+use Behat\Testwork\Output\Node\EventListener\EventListener;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Listens for Outline events store the current one
@@ -28,14 +29,14 @@ final class JUnitOutlineStoreListener implements EventListener
 {
 
     /**
-     * @var OutlineNode
-     */
-    private $outline;
-
-    /**
      * @var SuitePrinter
      */
     private $suitePrinter;
+
+    /**
+     * @var array
+     */
+    private $lineScenarioMap = array();
 
     /**
      * Initializes listener.
@@ -69,7 +70,10 @@ final class JUnitOutlineStoreListener implements EventListener
             return;
         }
 
-        $this->outline = $event->getOutline();
+        $outline = $event->getOutline();
+        foreach ($outline->getExamples() as $example) {
+            $this->lineScenarioMap[$example->getLine()] = $outline;
+        }
     }
 
     /**
@@ -97,10 +101,11 @@ final class JUnitOutlineStoreListener implements EventListener
     }
 
     /**
+     * @param ExampleNode $scenario
      * @return OutlineNode
      */
-    public function getCurrentOutline()
+    public function getCurrentOutline(ExampleNode $scenario)
     {
-        return $this->outline;
+        return $this->lineScenarioMap[$scenario->getLine()];
     }
 }

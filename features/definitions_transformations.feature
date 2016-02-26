@@ -59,6 +59,11 @@ Feature: Step Arguments Transformations
               return new User($username, $age);
           }
 
+          /** @Transform row:username */
+          public function createUserNamesFromTable($tableRow) {
+              return $tableRow['username'];
+          }
+
           /** @Transform /^\d+$/ */
           public function castToNumber($number) {
               return intval($number);
@@ -98,6 +103,13 @@ Feature: Step Arguments Transformations
           public function ageMustBe($age) {
               PHPUnit_Framework_Assert::assertEquals($age, $this->user->getAge());
               PHPUnit_Framework_Assert::assertInternalType('int', $age);
+          }
+
+          /**
+           * @Then the Usernames must be:
+           */
+          public function usernamesMustBe(array $usernames) {
+              PHPUnit_Framework_Assert::assertEquals($usernames[0], $this->user->getUsername());
           }
 
           /**
@@ -184,6 +196,26 @@ Feature: Step Arguments Transformations
 
       2 scenarios (2 passed)
       6 steps (6 passed)
+      """
+  Scenario: Table Row Arguments Transformations
+    Given a file named "features/table_row_arguments.feature" with:
+      """
+      Feature: Step Arguments
+        Scenario:
+          Given I am user:
+            | username | age |
+            | ever.zet | 22  |
+          Then the Usernames must be:
+            | username |
+            | ever.zet |
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ..
+
+      1 scenario (1 passed)
+      2 steps (2 passed)
       """
 
   Scenario: Named Arguments Transformations

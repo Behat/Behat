@@ -79,6 +79,15 @@
             |  5    | 16     |
             |  10   | 20     |
             |  23   | 32     |
+
+      Scenario Outline: Another Outline
+        When I add <value>
+        Then I must have <result>
+
+        Examples:
+          | value | result |
+          | 5     | 15     |
+          | 10    | 20     |
       """
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with:
@@ -97,7 +106,7 @@
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="World consistency" tests="6" skipped="0" failures="3" errors="2">
+        <testsuite name="World consistency" tests="8" skipped="0" failures="3" errors="2">
           <testcase name="Undefined" status="undefined">
             <error message="And Something new" type="undefined"/>
           </testcase>
@@ -114,6 +123,8 @@
           <testcase name="Passed &amp; Failed #3" status="failed">
             <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
           </testcase>
+          <testcase name="Another Outline #1" status="passed"/>
+          <testcase name="Another Outline #2" status="passed"/>
         </testsuite>
       </testsuites>
       """
@@ -527,6 +538,7 @@
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
 
+  @php-version @php5.3 @php5.4
   Scenario: Aborting due to PHP error
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """

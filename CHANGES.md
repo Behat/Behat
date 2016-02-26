@@ -1,3 +1,31 @@
+3.1.0 / 2016-02-xx
+==================
+
+  * Add support for Symfony 3 (thanks @benji07)
+  * Add ability to specify execution order of suite (thanks @ciaranmcnulty)
+  * Add translated keywords in definition printer (thanks @WouterJ)
+  * Add 'rowtable' transformations (thanks @PurpleBooth)
+  * Add 'narrative' filters (thanks @WouterJ)
+  * Add JUnit formatter (thanks @WouterJ and @james75)
+  * Add Japanese translation (thanks @SNakano)
+  * Add romanian translation for formatters (thanks @Chriton)
+  * Add table row transformations (thanks @ciaranmcnulty)
+  * Add support for negative numbers without surrounding quotes (thanks @ryancookdev)
+  * Handle case when non-existent config file is used (thanks @watermanio)
+  * Handle non-default `error_reporting()`
+  * Handle PHP7 errors implementing `Throwable`
+  * Fix autoloading from the global installation (thanks @sroze)
+  * Fix scenario scope naming (thanks @Taluu)
+  * Fix output buffering errors (thanks @tscheepers)
+  * Fix xdebug maximum nesting level errors (thanks @WorkingDevel)
+  * Fix weird edge case in GroupedSpecificationIterator
+  * Allow --verbose flag at CLI (thanks @pfrenssen)
+  * Allow hyphens in suite names (thanks @WouterJ)
+  * Allow suite settings with null values to exist (thanks @docteurklein)
+  * Improve "can not generate snippets" message
+  * Improve performance of Turnip parsing (thanks @Sam-Burns)
+  * Improve the snippet generation by auto-importing needed classes (thanks @stof)
+
 3.0.15 / 2015-02-22
 ===================
 
@@ -415,7 +443,7 @@
   * Rerun functionality refactored to use `failed` formatter internally
   * Overall code refactoring and cleaning
   * Polish translation added (Joseph Bielawski)
-  * Spanish translation updated (Andrés Botero)
+  * Spanish translation updated (Andrés Botero)
   * Locale autodetect
 
 2.1.3 / 2011-11-04
