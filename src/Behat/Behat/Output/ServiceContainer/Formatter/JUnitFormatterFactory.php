@@ -10,12 +10,12 @@
 
 namespace Behat\Behat\Output\ServiceContainer\Formatter;
 
-use Behat\Testwork\Output\ServiceContainer\OutputExtension;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\Definition;
+use Behat\Testwork\Output\ServiceContainer\OutputExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Behat junit formatter factory.
@@ -86,6 +86,13 @@ final class JUnitFormatterFactory implements FormatterFactory
             new Reference(ExceptionExtension::PRESENTER_ID),
         ));
         $container->setDefinition('output.node.printer.junit.step', $definition);
+
+        $definition = new Definition(
+            'Behat\Behat\Output\Node\Printer\JUnit\JUnitSetupPrinter', array(
+            new Reference(ExceptionExtension::PRESENTER_ID),
+        )
+        );
+        $container->setDefinition('output.node.printer.junit.setup', $definition);
     }
 
     /**
@@ -110,6 +117,7 @@ final class JUnitFormatterFactory implements FormatterFactory
                     new Reference('output.node.printer.junit.feature'),
                     new Reference('output.node.printer.junit.scenario'),
                     new Reference('output.node.printer.junit.step'),
+                    new Reference('output.node.printer.junit.setup'),
                 )),
             ),
         ));
