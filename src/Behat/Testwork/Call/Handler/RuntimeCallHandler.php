@@ -27,6 +27,12 @@ final class RuntimeCallHandler implements CallHandler
      */
     private $errorReportingLevel;
 
+
+    /**
+     * @var bool
+     */
+    private $obStarted = false;
+
     /**
      * Initializes executor.
      *
@@ -124,7 +130,7 @@ final class RuntimeCallHandler implements CallHandler
     {
         $errorReporting = $call->getErrorReportingLevel() ? : $this->errorReportingLevel;
         set_error_handler(array($this, 'handleError'), $errorReporting);
-        ob_start();
+        $this->obStarted = ob_start();
     }
 
     /**
@@ -132,7 +138,7 @@ final class RuntimeCallHandler implements CallHandler
      */
     private function stopErrorAndOutputBuffering()
     {
-        if (ob_get_length()) {
+        if ($this->obStarted) {
             ob_end_clean();
         }
         restore_error_handler();
