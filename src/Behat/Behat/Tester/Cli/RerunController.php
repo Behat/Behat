@@ -15,6 +15,7 @@ use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
+use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -113,7 +114,7 @@ final class RerunController implements Controller
             return;
         }
 
-        if ($event->getTestResult()->isPassed()) {
+        if ($event->getTestResult()->getResultCode() != TestResult::FAILED) {
             return;
         }
 
