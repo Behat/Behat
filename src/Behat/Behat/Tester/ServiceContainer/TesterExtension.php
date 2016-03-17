@@ -227,7 +227,8 @@ class TesterExtension extends BaseExtension
     {
         $definition = new Definition('Behat\Behat\Tester\Cli\RerunController', array(
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
-            $cachePath
+            $cachePath,
+            $container->getParameter('paths.base')
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 200));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.rerun', $definition);

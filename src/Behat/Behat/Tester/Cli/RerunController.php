@@ -44,17 +44,23 @@ final class RerunController implements Controller
      * @var string[]
      */
     private $lines = array();
+    /**
+     * @var string
+     */
+    private $basepath;
 
     /**
      * Initializes controller.
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param null|string              $cachePath
+     * @param string                   $basepath
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, $cachePath)
+    public function __construct(EventDispatcherInterface $eventDispatcher, $cachePath, $basepath)
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->cachePath = null !== $cachePath ? rtrim($cachePath, DIRECTORY_SEPARATOR) : null;
+        $this->basepath = $basepath;
     }
 
     /**
@@ -152,7 +158,8 @@ final class RerunController implements Controller
             implode(' ', $input->getOption('name')) .
             implode(' ', $input->getOption('tags')) .
             $input->getOption('role') .
-            $input->getArgument('paths')
+            $input->getArgument('paths') .
+            $this->basepath
         );
     }
 
