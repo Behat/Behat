@@ -1,4 +1,4 @@
-3.1.0 / 2016-02-xx
+3.1.0 / 2016-03-28
 ==================
 
   * Add support for Symfony 3 (thanks @benji07)
