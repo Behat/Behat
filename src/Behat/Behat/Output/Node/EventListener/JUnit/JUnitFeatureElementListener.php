@@ -12,14 +12,17 @@ namespace Behat\Behat\Output\Node\EventListener\JUnit;
 
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
+use Behat\Behat\EventDispatcher\Event\AfterStepSetup;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter;
+use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
@@ -44,6 +47,10 @@ final class JUnitFeatureElementListener implements EventListener
      */
     private $stepPrinter;
     /**
+     * @var SetupPrinter
+     */
+    private $setupPrinter;
+    /**
      * @var FeatureNode
      */
     private $beforeFeatureTestedEvent;
@@ -55,19 +62,28 @@ final class JUnitFeatureElementListener implements EventListener
      * @var AfterStepTested[]
      */
     private $afterStepTestedEvents = array();
+    /**
+     * @var AfterSetup[]
+     */
+    private $afterStepSetupEvents = array();
 
     /**
      * Initializes listener.
      *
-     * @param FeaturePrinter       $featurePrinter
+     * @param FeaturePrinter $featurePrinter
      * @param JUnitScenarioPrinter $scenarioPrinter
-     * @param StepPrinter          $stepPrinter
+     * @param StepPrinter $stepPrinter
+     * @param SetupPrinter $setupPrinter
      */
-    public function __construct(FeaturePrinter $featurePrinter, JUnitScenarioPrinter $scenarioPrinter, StepPrinter $stepPrinter)
+    public function __construct(FeaturePrinter $featurePrinter,
+                                JUnitScenarioPrinter $scenarioPrinter,
+                                StepPrinter $stepPrinter,
+                                SetupPrinter $setupPrinter)
     {
         $this->featurePrinter = $featurePrinter;
         $this->scenarioPrinter = $scenarioPrinter;
         $this->stepPrinter = $stepPrinter;
+        $this->setupPrinter = $setupPrinter;
     }
 
     /**
@@ -79,7 +95,9 @@ final class JUnitFeatureElementListener implements EventListener
             $this->captureScenarioEvent($event);
         }
 
-        if ($event instanceof StepTested) {
+        if ($event instanceof StepTested
+            || $event instanceof AfterStepSetup
+        ) {
             $this->captureStepEvent($event);
         }
 
@@ -96,11 +114,13 @@ final class JUnitFeatureElementListener implements EventListener
     {
         if ($event instanceof AfterScenarioTested) {
             $this->afterScenarioTestedEvents[$event->getScenario()->getLine()] = array(
-                'event' => $event,
-                'step_events' => $this->afterStepTestedEvents,
+                'event'             => $event,
+                'step_events'       => $this->afterStepTestedEvents,
+                'step_setup_events' => $this->afterStepSetupEvents,
             );
 
             $this->afterStepTestedEvents = array();
+            $this->afterStepSetupEvents = array();
         }
     }
 
@@ -121,12 +141,15 @@ final class JUnitFeatureElementListener implements EventListener
     /**
      * Captures step tested event.
      *
-     * @param StepTested $event
+     * @param Event $event
      */
-    private function captureStepEvent(StepTested $event)
+    private function captureStepEvent(Event $event)
     {
         if ($event instanceof AfterStepTested) {
             $this->afterStepTestedEvents[$event->getStep()->getLine()] = $event;
+        }
+        if ($event instanceof AfterStepSetup) {
+            $this->afterStepSetupEvents[$event->getStep()->getLine()] = $event;
         }
     }
 
@@ -148,8 +171,13 @@ final class JUnitFeatureElementListener implements EventListener
             $afterScenarioTested = $afterScenario['event'];
             $this->scenarioPrinter->printOpenTag($formatter, $afterScenarioTested->getFeature(), $afterScenarioTested->getScenario(), $afterScenarioTested->getTestResult());
 
+            /** @var AfterStepSetup $afterStepSetup */
+            foreach ($afterScenario['step_setup_events'] as $afterStepSetup) {
+                $this->setupPrinter->printSetup($formatter, $afterStepSetup->getSetup());
+            }
             foreach ($afterScenario['step_events'] as $afterStepTested) {
                 $this->stepPrinter->printStep($formatter, $afterScenarioTested->getScenario(), $afterStepTested->getStep(), $afterStepTested->getTestResult());
+                $this->setupPrinter->printTeardown($formatter, $afterStepTested->getTeardown());
             }
         }
 

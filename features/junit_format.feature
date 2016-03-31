@@ -622,3 +622,119 @@
       [Behat\Testwork\Output\Exception\BadOutputPathException]
         Directory expected for the `output_path` option, but a filename was given.
       """
+
+  Scenario: Include BeforeStep Failures
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
+
+      class FeatureContext implements CustomSnippetAcceptingContext
+      {
+          private $value;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
+
+          /**
+           * @BeforeStep
+           */
+          public function setup() {
+            throw new \Exception('failure');
+          }
+
+          /**
+           * @Given /I have entered (\d+)/
+           * @Then /^I must have (\d+)$/
+           */
+          public function action($num)
+          {
+          }
+      }
+      """
+    And a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background:
+          Given I have entered 10
+
+        Scenario: Failed
+          Then I must have 10
+
+      """
+    When I run "behat --no-colors -f junit -o junit"
+    And "junit/default.xml" file xml should be like:
+      """
+      <?xml version="1.0" encoding="UTF-8"?>
+      <testsuites name="default">
+        <testsuite name="World consistency" tests="1" skipped="0" failures="1" errors="0">
+          <testcase name="Failed" status="failed">
+            <failure message="Given I have entered 10: failure (Exception)" type="setup"></failure>
+          </testcase>
+        </testsuite>
+      </testsuites>
+      """
+    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+
+  Scenario: Include AfterStep Failures
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+          Behat\Behat\Tester\Exception\PendingException;
+
+      class FeatureContext implements CustomSnippetAcceptingContext
+      {
+          private $value;
+
+          public static function getAcceptedSnippetType() { return 'regex'; }
+
+          /**
+           * @AfterStep
+           */
+          public function setup() {
+            throw new \Exception('failure');
+          }
+
+          /**
+           * @Given /I have entered (\d+)/
+           * @Then /^I must have (\d+)$/
+           */
+          public function action($num)
+          {
+          }
+      }
+      """
+    And a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+
+        Background:
+          Given I have entered 10
+
+        Scenario: Failed
+          Then I must have 10
+
+      """
+    When I run "behat --no-colors -f junit -o junit"
+    And "junit/default.xml" file xml should be like:
+      """
+      <?xml version="1.0" encoding="UTF-8"?>
+      <testsuites name="default">
+        <testsuite name="World consistency" tests="1" skipped="0" failures="1" errors="0">
+          <testcase name="Failed" status="failed">
+            <failure message="Given I have entered 10: failure (Exception)" type="teardown"></failure>
+          </testcase>
+        </testsuite>
+      </testsuites>
+      """
+    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
