@@ -18,13 +18,13 @@
         "ext-mbstring":                  "*",
         "behat/gherkin":                 "~4.4",
         "behat/transliterator":          "~1.0",
-        "symfony/console":               "~2.1|~3.0",
-        "symfony/config":                "~2.3|~3.0",
-        "symfony/dependency-injection":  "~2.1|~3.0",
-        "symfony/event-dispatcher":      "~2.1|~3.0",
-        "symfony/translation":           "~2.3|~3.0",
-        "symfony/yaml":                  "~2.1|~3.0",
-        "symfony/class-loader":          "~2.1|~3.0"
+        "symfony/console":               "~2.1||~3.0",
+        "symfony/config":                "~2.3||~3.0",
+        "symfony/dependency-injection":  "~2.1||~3.0",
+        "symfony/event-dispatcher":      "~2.1||~3.0",
+        "symfony/translation":           "~2.3||~3.0",
+        "symfony/yaml":                  "~2.1||~3.0",
+        "symfony/class-loader":          "~2.1||~3.0"
     },
 
     "require-dev": {
