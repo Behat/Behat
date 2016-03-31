@@ -33,6 +33,16 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
     {
         $this->searchResult = $searchResult;
     }
+    
+    /**
+     * Returns definition search result.
+     *
+     * @return SearchResult
+     */
+    public function getSearchResult()
+    {
+        return $this->searchResult;
+    }
 
     /**
      * {@inheritdoc}
