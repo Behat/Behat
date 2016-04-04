@@ -35,6 +35,9 @@ matrix:
       env: DEPENDENCIES='dev'
     - php: hhvm
       env: XDEBUG_DISABLE=''
+  exclude:
+    - php: hhvm
+      env: XDEBUG_DISABLE='phpenv config-rm xdebug.ini'
   fast_finish: true
 
 before_install:
