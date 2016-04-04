@@ -15,10 +15,6 @@ branches:
     - /^feature\/.*$/
     - /^optimization\/.*$/
 
-env:
-  global:
-    - XDEBUG_DISABLE='phpenv config-rm xdebug.ini'
-
 matrix:
   include:
     - php: 5.3
@@ -34,13 +30,11 @@ matrix:
     - php: 7.0
       env: DEPENDENCIES='dev'
     - php: hhvm
-      env: XDEBUG_DISABLE=''
-  exclude:
-    - php: hhvm
   fast_finish: true
 
 before_install:
-  - eval "$XDEBUG_DISABLE"
+# Remove xdebug as per https://getcomposer.org/doc/articles/troubleshooting.md#xdebug-impact-on-composer
+  - if ["$TRAVIS_PHP_VERSION" = 'hhvm']; then phpenv config-rm xdebug.ini; fi
 
 before_script:
   - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
