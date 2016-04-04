@@ -30,6 +30,7 @@ matrix:
       env: DEPENDENCIES='dev'
 
 before_install:
+  # Remove xdebug as per https://getcomposer.org/doc/articles/troubleshooting.md#xdebug-impact-on-composer
   - phpenv config-rm xdebug.ini
 
 before_script:
