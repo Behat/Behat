@@ -33,7 +33,7 @@ matrix:
 
 before_install:
 # Remove xdebug as per https://getcomposer.org/doc/articles/troubleshooting.md#xdebug-impact-on-composer
-  - if ["$TRAVIS_PHP_VERSION" = 'hhvm']; then phpenv config-rm xdebug.ini; fi
+  - if [ "$TRAVIS_PHP_VERSION" = 'hhvm' ]; then phpenv config-rm xdebug.ini; fi
 
 before_script:
   - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
