@@ -1,3 +1,4 @@
+---
 language: php
 
 php: [5.3, 5.4, 5.5, 5.6, 7.0, hhvm]
@@ -29,6 +30,10 @@ matrix:
     - php: 7.0
       env: DEPENDENCIES='dev'
 
+before_install:
+# Remove xdebug as per https://getcomposer.org/doc/articles/troubleshooting.md#xdebug-impact-on-composer
+  - if [ "$TRAVIS_PHP_VERSION" != 'hhvm' ]; then phpenv config-rm xdebug.ini; fi
+
 before_script:
   - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
   - composer selfupdate
@@ -41,3 +46,4 @@ before_script:
 script:
   - phpunit
   - behat -fprogress --strict --tags '~@php-version,'`php php_version_tags.php`
+...
