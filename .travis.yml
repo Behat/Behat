@@ -17,7 +17,7 @@ branches:
 
 env:
   global:
-    - XDEBUG_DISABLE=phpenv config-rm xdebug.ini
+    - XDEBUG_DISABLE='phpenv config-rm xdebug.ini'
 
 matrix:
   include:
