@@ -14,6 +14,9 @@ branches:
     - /^feature\/.*$/
     - /^optimization\/.*$/
 
+env:
+  - XDEBUG_DISABLE='phpenv config-rm xdebug.ini'
+
 matrix:
   include:
     - php: 5.3
@@ -28,10 +31,12 @@ matrix:
       env: SYMFONY_VERSION='3.0.*'
     - php: 7.0
       env: DEPENDENCIES='dev'
+    - php: hhvm
+      env: XDEBUG_DISABLE=''
 
 before_install:
   # Remove xdebug as per https://getcomposer.org/doc/articles/troubleshooting.md#xdebug-impact-on-composer
-  - phpenv config-rm xdebug.ini
+  - eval "$XDEBUG_DISABLE"
 
 before_script:
   - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
