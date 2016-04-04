@@ -29,7 +29,6 @@ matrix:
       env: SYMFONY_VERSION='3.0.*'
     - php: 7.0
       env: DEPENDENCIES='dev'
-    - php: hhvm
   fast_finish: true
 
 before_install:
