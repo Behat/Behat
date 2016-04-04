@@ -19,22 +19,28 @@ matrix:
   include:
     - php: 5.3
       env: DEPENDENCIES='low'
-      before_install: phpenv config-rm xdebug.ini
+      before_install:
+        - phpenv config-rm xdebug.ini
     - php: 5.6
       env: SYMFONY_VERSION='2.3.*'
-      before_install: phpenv config-rm xdebug.ini
+      before_install:
+        - phpenv config-rm xdebug.ini
     - php: 5.6
       env: SYMFONY_VERSION='2.7.*'
-      before_install: phpenv config-rm xdebug.ini
+      before_install:
+        - phpenv config-rm xdebug.ini
     - php: 5.6
       env: SYMFONY_VERSION='2.8.*'
-      before_install: phpenv config-rm xdebug.ini
+      before_install:
+        - phpenv config-rm xdebug.ini
     - php: 7.0
       env: SYMFONY_VERSION='3.0.*'
-      before_install: phpenv config-rm xdebug.ini
+      before_install:
+        - phpenv config-rm xdebug.ini
     - php: 7.0
       env: DEPENDENCIES='dev'
-      before_install: phpenv config-rm xdebug.ini
+      before_install:
+        - phpenv config-rm xdebug.ini
     - php: hhvm
 
 before_script:
