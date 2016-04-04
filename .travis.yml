@@ -29,7 +29,6 @@ matrix:
       env: SYMFONY_VERSION='3.0.*'
     - php: 7.0
       env: DEPENDENCIES='dev'
-  fast_finish: true
 
 before_install:
 # Remove xdebug as per https://getcomposer.org/doc/articles/troubleshooting.md#xdebug-impact-on-composer
