@@ -29,6 +29,9 @@ matrix:
     - php: 7.0
       env: DEPENDENCIES='dev'
 
+before_install:
+  - phpenv config-rm xdebug.ini
+
 before_script:
   - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
   - composer selfupdate
