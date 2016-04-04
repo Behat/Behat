@@ -15,33 +15,30 @@ branches:
     - /^feature\/.*$/
     - /^optimization\/.*$/
 
+env:
+  global:
+    - XDEBUG_DISABLE=phpenv config-rm xdebug.ini
+
 matrix:
   include:
     - php: 5.3
       env: DEPENDENCIES='low'
-      before_install:
-        - phpenv config-rm xdebug.ini
     - php: 5.6
       env: SYMFONY_VERSION='2.3.*'
-      before_install:
-        - phpenv config-rm xdebug.ini
     - php: 5.6
       env: SYMFONY_VERSION='2.7.*'
-      before_install:
-        - phpenv config-rm xdebug.ini
     - php: 5.6
       env: SYMFONY_VERSION='2.8.*'
-      before_install:
-        - phpenv config-rm xdebug.ini
     - php: 7.0
       env: SYMFONY_VERSION='3.0.*'
-      before_install:
-        - phpenv config-rm xdebug.ini
     - php: 7.0
       env: DEPENDENCIES='dev'
-      before_install:
-        - phpenv config-rm xdebug.ini
     - php: hhvm
+        env: XDEBUG_DISABLE=''
+  fast_finish: true
+
+before_install:
+  - eval "$XDEBUG_DISABLE"
 
 before_script:
   - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
