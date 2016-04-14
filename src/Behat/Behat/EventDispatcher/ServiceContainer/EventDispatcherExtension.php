@@ -40,6 +40,7 @@ class EventDispatcherExtension extends BaseExtension
         $this->loadEventDispatchingScenarioTester($container);
         $this->loadEventDispatchingExampleTester($container);
         $this->loadEventDispatchingStepTester($container);
+        $this->loadTickingStepTester($container);
     }
 
     /**
@@ -152,5 +153,23 @@ class EventDispatcherExtension extends BaseExtension
         ));
         $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG, array('priority' => -9999));
         $container->setDefinition(TesterExtension::STEP_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
+    }
+
+    /**
+     * Loads ticking step tester.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadTickingStepTester(ContainerBuilder $container)
+    {
+        if (!function_exists('pcntl_signal')) {
+            return;
+        }
+
+        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\TickingStepTester', array(
+            new Reference(TesterExtension::STEP_TESTER_ID)
+        ));
+        $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG, array('priority' => 9999));
+        $container->setDefinition(TesterExtension::STEP_TESTER_WRAPPER_TAG . '.ticking', $definition);
     }
 }
