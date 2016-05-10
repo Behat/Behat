@@ -221,8 +221,10 @@ final class ConfigurationLoader
     {
         $configs = array();
         foreach ($paths as $path) {
-            foreach ($this->parseImport($basePath, $path, $profile) as $importConfig) {
-                $configs[] = $importConfig;
+            foreach (glob($path) as $matchedPath) {
+                foreach ($this->parseImport($basePath, $matchedPath, $profile) as $importConfig) {
+                    $configs[] = $importConfig;
+                }
             }
         }
 
