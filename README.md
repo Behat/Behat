@@ -50,8 +50,8 @@ Versioning
 ----------
 
 Starting from `v3.0.0`, Behat is following [Semantic Versioning v2.0.0](http://semver.org/spec/v2.0.0.html).
-This basically means that if all you do is implement interfaces (like [this one](https://github.com/Behat/Behat/blob/master/src/Behat/Behat/Context/ContextClass/ClassResolver.php#L15-L22))
-and use service constants (like [this one](https://github.com/Behat/Behat/blob/master/src/Behat/Behat/Context/ServiceContainer/ContextExtension.php#L45)),
+This basically means that if all you do is implement interfaces (like [this one](https://github.com/Behat/Behat/blob/v3.1.0/src/Behat/Behat/Context/ContextClass/ClassResolver.php#L15-L22))
+and use service constants (like [this one](https://github.com/Behat/Behat/blob/v3.1.0/src/Behat/Behat/Context/ServiceContainer/ContextExtension.php#L46)),
 you would not have any backwards compatibility issues with Behat up until `v4.0.0` (or later major)
 is released. Exception could be an extremely rare case where BC break is introduced as a measure
 to fix a serious issue.
