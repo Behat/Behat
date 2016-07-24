@@ -114,7 +114,7 @@ final class RerunController implements Controller
             return;
         }
 
-        if ($event->getTestResult()->getResultCode() != TestResult::FAILED) {
+        if ($event->getTestResult()->getResultCode() !== TestResult::FAILED) {
             return;
         }
 
