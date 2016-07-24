@@ -239,6 +239,47 @@ Feature: Step Definition Pattern
         Token name should not exceed 32 characters, but `too1234567891123456789012345678901` was used.
       """
 
+  Scenario: Multiline definitions
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I don't provide \
+           *      parameter
+           * @Given I can provide \
+           *        parameter :param
+           */
+          public function parameterCouldBeNull($param = null) {
+            PHPUnit_Framework_Assert::assertNull($param);
+          }
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given I don't provide parameter
+          And I can provide parameter 2
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should fail with:
+      """
+      .F
+
+      --- Failed steps:
+
+          And I can provide parameter 2 # features/step_patterns.feature:4
+            Failed asserting that '2' is null.
+
+      1 scenario (1 failed)
+      2 steps (1 passed, 1 failed)
+      """
+
   Scenario: Definition parameter with ordered values
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
