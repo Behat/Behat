@@ -211,6 +211,34 @@ Feature: Step Definition Pattern
       1 step (1 passed)
       """
 
+  Scenario: Using too long token names
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given I provide parameter :too1234567891123456789012345678901
+           */
+          public function parameterCouldBeNull($param) {}
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given I provide parameter 123
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should fail with:
+      """
+      [Behat\Behat\Definition\Exception\InvalidPatternException]
+        Token name should not exceed 32 characters, but `too1234567891123456789012345678901` was used.
+      """
+
   Scenario: Definition parameter with ordered values
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
