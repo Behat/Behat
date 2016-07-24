@@ -109,7 +109,10 @@ final class ExerciseController implements Controller
 
         if ($input->getArgument('paths') && TestResults::NO_TESTS === $result->getResultCode()) {
             throw new WrongPathsException(
-                sprintf('No specifications found at path(s) `%s`.', $input->getArgument('paths')),
+                sprintf(
+                    'No specifications found at path(s) `%s`. This might be because of incorrect paths configuration in your `suites`.',
+                    $input->getArgument('paths')
+                ),
                 $input->getArgument('paths')
             );
         }
