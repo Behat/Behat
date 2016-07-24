@@ -111,6 +111,7 @@ final class AnnotatedContextReader implements ContextReader
     {
         $callees = array();
         $description = $this->readDescription($docBlock);
+        $docBlock = $this->mergeMultilines($docBlock);
 
         foreach (explode("\n", $docBlock) as $docLine) {
             $docLine = preg_replace(self::DOCLINE_TRIMMER_REGEX, '', $docLine);
@@ -129,6 +130,18 @@ final class AnnotatedContextReader implements ContextReader
         }
 
         return $callees;
+    }
+
+    /**
+     * Merges multiline strings (strings ending with "\")
+     *
+     * @param string $docBlock
+     *
+     * @return string
+     */
+    private function mergeMultilines($docBlock)
+    {
+        return preg_replace("#\\\\$\s*\*\s*([^\\\\$]+)#m", '$1', $docBlock);
     }
 
     /**
