@@ -8,9 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Transformation\Call;
+namespace Behat\Behat\Transformation\Transformation;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
@@ -103,6 +104,6 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      */
     public function __toString()
     {
-        return 'TableRowTransform ' . $this->getPattern();
+        return 'TableRowTransform ' . $this->pattern;
     }
 }

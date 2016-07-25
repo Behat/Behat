@@ -8,27 +8,28 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Transformation\Call;
+namespace Behat\Behat\Transformation\Transformation;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
+use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 
 /**
- * Token name based transformation.
+ * Column-based table transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TokenNameTransformation extends RuntimeCallee implements SimpleArgumentTransformation
+final class ColumnBasedTableTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    const PATTERN_REGEX = '/^\:\w+$/';
+    const PATTERN_REGEX = '/^table\:[\w\s,]+$/';
 
     /**
      * @var string
      */
     private $pattern;
-
 
     /**
      * {@inheritdoc}
@@ -57,7 +58,11 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
      */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        return ':' . $argumentIndex === $this->pattern;
+        if (!$argumentValue instanceof TableNode) {
+            return false;
+        };
+
+        return $this->pattern === 'table:' . implode(',', $argumentValue->getRow(0));
     }
 
     /**
@@ -94,6 +99,6 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
      */
     public function __toString()
     {
-        return 'TokenNameTransform ' . $this->getPattern();
+        return 'ColumnTableTransform ' . $this->pattern;
     }
 }

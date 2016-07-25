@@ -11,7 +11,7 @@
 namespace Behat\Behat\Transformation\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
-use Behat\Behat\Transformation\Call\PatternTransformation;
+use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\Transformation;
 use ReflectionMethod;
 
@@ -65,10 +65,10 @@ class TransformationAnnotationReader implements AnnotationReader
     private function simpleTransformations()
     {
         return array(
-            'Behat\Behat\Transformation\Call\RowBasedTableTransformation',
-            'Behat\Behat\Transformation\Call\ColumnBasedTableTransformation',
-            'Behat\Behat\Transformation\Call\TableRowTransformation',
-            'Behat\Behat\Transformation\Call\TokenNameTransformation',
+            'Behat\Behat\Transformation\Transformation\RowBasedTableTransformation',
+            'Behat\Behat\Transformation\Transformation\ColumnBasedTableTransformation',
+            'Behat\Behat\Transformation\Transformation\TableRowTransformation',
+            'Behat\Behat\Transformation\Transformation\TokenNameTransformation',
         );
     }
 }

@@ -22,6 +22,8 @@ interface Transformation extends Callee
     /**
      * Returns transformation pattern exactly as it was defined.
      *
+     * @deprecated Will be removed in 4.0.
+     *
      * @return string
      */
     public function getPattern();

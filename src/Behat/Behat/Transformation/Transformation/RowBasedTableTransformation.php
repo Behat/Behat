@@ -8,9 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Transformation\Call;
+namespace Behat\Behat\Transformation\Transformation;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Gherkin\Exception\NodeException;
 use Behat\Gherkin\Node\TableNode;
@@ -115,6 +116,6 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
      */
     public function __toString()
     {
-        return 'RowTableTransform ' . $this->getPattern();
+        return 'RowTableTransform ' . $this->pattern;
     }
 }

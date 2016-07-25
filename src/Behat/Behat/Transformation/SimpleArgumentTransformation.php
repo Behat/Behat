@@ -14,7 +14,7 @@ use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Testwork\Call\CallCenter;
 
 /**
- * Represents a single transformation capable of changing single argument.
+ * Represents a simple self-contained transformation capable of changing a single argument.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

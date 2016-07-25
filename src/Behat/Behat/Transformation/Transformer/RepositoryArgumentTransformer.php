@@ -13,7 +13,7 @@ namespace Behat\Behat\Transformation\Transformer;
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
-use Behat\Behat\Transformation\Call\PatternTransformation;
+use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\RegexGenerator;
 use Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Transformation\TransformationRepository;
