@@ -13,12 +13,12 @@ namespace Behat\Behat\Transformation\Transformer;
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Transformation\ArgumentTransformation;
-use Behat\Behat\Transformation\Call\TransformationCall;
+use Behat\Behat\Transformation\Call\PatternTransformation;
+use Behat\Behat\Transformation\RegexGenerator;
 use Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Transformation\TransformationRepository;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Testwork\Call\CallCenter;
-use Exception;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -26,7 +26,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class RepositoryArgumentTransformer implements ArgumentTransformer
+final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexGenerator
 {
     /**
      * @var TransformationRepository
@@ -70,7 +70,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
      */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        return true;
+        return count($this->repository->getEnvironmentTransformations($definitionCall->getEnvironment())) > 0;
     }
 
     /**
@@ -105,124 +105,29 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             return $value;
         }
 
-        if ($transformation instanceof ArgumentTransformation) {
-            if (!$transformation->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
-                return $value;
-            }
-
+        if ($transformation instanceof ArgumentTransformation &&
+            $transformation->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
             return $transformation->transformArgument($this->callCenter, $definitionCall, $index, $value);
         }
 
-        if ($this->isApplicablePatternTransformation($definitionCall, $transformation, $value, $arguments)) {
-            return $this->applyPatternTransformation($definitionCall, $transformation, $arguments);
+        if ($transformation instanceof PatternTransformation &&
+            $transformation->supportsDefinitionAndArgument($this, $definitionCall, $value)) {
+            return $transformation->transformArgument($this, $this->callCenter, $definitionCall, $value);
         }
 
         return $value;
     }
 
     /**
-     * Checks if provided transformation is applicable pattern transformation.
-     *
-     * @param DefinitionCall        $definitionCall
-     * @param Transformation|string $transformation
-     * @param mixed                 $value
-     * @param array                 $match
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
-    private function isApplicablePatternTransformation(DefinitionCall $definitionCall, Transformation $transformation, $value, &$match)
+    public function generateRegex($suiteName, $pattern, $language)
     {
-        $regex = $this->getRegex(
-            $definitionCall->getEnvironment()->getSuite()->getName(),
-            $transformation->getPattern(),
-            $definitionCall->getFeature()->getLanguage()
-        );
-
-        if (is_string($value) && preg_match($regex, $value, $match)) {
-            // take arguments from capture groups if there are some
-            if (count($match) > 1) {
-                $match = array_slice($match, 1);
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns transformation regex.
-     *
-     * @param string $assetsId
-     * @param string $pattern
-     * @param string $language
-     *
-     * @return string
-     */
-    private function getRegex($assetsId, $pattern, $language)
-    {
-        $translatedPattern = $this->translator->trans($pattern, array(), $assetsId, $language);
+        $translatedPattern = $this->translator->trans($pattern, array(), $suiteName, $language);
         if ($pattern == $translatedPattern) {
             return $this->patternTransformer->transformPatternToRegex($pattern);
         }
 
         return $this->patternTransformer->transformPatternToRegex($translatedPattern);
-    }
-
-    /**
-     * Applies provided pattern transformation.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param Transformation $transformation
-     * @param array          $arguments
-     *
-     * @return mixed
-     */
-    private function applyPatternTransformation(DefinitionCall $definitionCall, Transformation $transformation, array $arguments)
-    {
-        return $this->execute($definitionCall, $transformation, $arguments);
-    }
-
-    /**
-     * Executes transformation.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param Transformation $transformation
-     * @param array          $arguments
-     *
-     * @return mixed
-     *
-     * @throws Exception If transformation call throws one
-     */
-    private function execute(DefinitionCall $definitionCall, Transformation $transformation, array $arguments)
-    {
-        $call = new TransformationCall(
-            $definitionCall->getEnvironment(),
-            $definitionCall->getCallee(),
-            $transformation,
-            $arguments
-        );
-
-        return $this->executeTransformationCall($call);
-    }
-
-    /**
-     * Executes transformation call.
-     *
-     * @param TransformationCall $call
-     *
-     * @return mixed
-     *
-     * @throws Exception If transformation call throws one
-     */
-    private function executeTransformationCall(TransformationCall $call)
-    {
-        $result = $this->callCenter->makeCall($call);
-
-        if ($result->hasException()) {
-            throw $result->getException();
-        }
-
-        return $result->getReturn();
     }
 }
