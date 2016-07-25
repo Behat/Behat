@@ -11,7 +11,7 @@
 namespace Behat\Behat\Transformation\Call;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
-use Behat\Behat\Transformation\ArgumentTransformation;
+use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
@@ -21,7 +21,7 @@ use Behat\Testwork\Call\RuntimeCallee;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TableRowTransformation extends RuntimeCallee implements ArgumentTransformation
+final class TableRowTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
     const PATTERN_REGEX = '/^row\:[\w\s,]+$/';
 
@@ -29,6 +29,14 @@ final class TableRowTransformation extends RuntimeCallee implements ArgumentTran
      * @var string
      */
     private $pattern;
+
+    /**
+     * {@inheritdoc}
+     */
+    static public function supportsPattern($pattern)
+    {
+        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
+    }
 
     /**
      * Initializes transformation.

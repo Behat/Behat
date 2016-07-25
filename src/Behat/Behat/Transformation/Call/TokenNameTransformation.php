@@ -11,7 +11,7 @@
 namespace Behat\Behat\Transformation\Call;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
-use Behat\Behat\Transformation\ArgumentTransformation;
+use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 
@@ -20,7 +20,7 @@ use Behat\Testwork\Call\RuntimeCallee;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TokenNameTransformation extends RuntimeCallee implements ArgumentTransformation
+final class TokenNameTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
     const PATTERN_REGEX = '/^\:\w+$/';
 
@@ -28,6 +28,15 @@ final class TokenNameTransformation extends RuntimeCallee implements ArgumentTra
      * @var string
      */
     private $pattern;
+
+
+    /**
+     * {@inheritdoc}
+     */
+    static public function supportsPattern($pattern)
+    {
+        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
+    }
 
     /**
      * Initializes transformation.
