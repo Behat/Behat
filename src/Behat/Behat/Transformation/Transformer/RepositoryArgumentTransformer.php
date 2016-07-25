@@ -12,6 +12,7 @@ namespace Behat\Behat\Transformation\Transformer;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
+use Behat\Behat\Transformation\ArgumentTransformation;
 use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Transformation\TransformationRepository;
@@ -106,8 +107,14 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             return $value;
         }
 
-        if ($this->isApplicableTokenTransformation($transformation)) {
-            return $this->applyTokenTransformation($definitionCall, $transformation, $index, $value);
+        if ($transformation instanceof ArgumentTransformation) {
+            if (!$transformation->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
+                return $value;
+            }
+
+            return $this->executeTransformationCall(
+                $transformation->createTransformationCall($definitionCall, $index, $value)
+            );
         }
 
         if ($this->isApplicableTableTransformation($transformation, $value)) {
@@ -128,48 +135,6 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
         }
 
         return $value;
-    }
-
-    /**
-     * Checks if provided transformation is token-based.
-     *
-     * @param Transformation $transformation
-     *
-     * @return Boolean
-     */
-    private function isApplicableTokenTransformation(Transformation $transformation)
-    {
-        return 1 === preg_match('/^\:\w+$/', $transformation->getPattern());
-    }
-
-    /**
-     * Applies provided token transformation.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param Transformation $transformation
-     * @param integer|string $index
-     * @param mixed          $value
-     *
-     * @return mixed
-     */
-    private function applyTokenTransformation(DefinitionCall $definitionCall, Transformation $transformation, $index, $value)
-    {
-        return $this->isArgumentIndexMatchesTokenPattern($index, $transformation->getPattern())
-            ? $this->execute($definitionCall, $transformation, array($value))
-            : $value;
-    }
-
-    /**
-     * Checks if argument index matches token pattern.
-     *
-     * @param integer|string $index
-     * @param string         $pattern
-     *
-     * @return Boolean
-     */
-    private function isArgumentIndexMatchesTokenPattern($index, $pattern)
-    {
-        return ':' . $index === $pattern;
     }
 
     /**
@@ -353,6 +318,20 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             $arguments
         );
 
+        return $this->executeTransformationCall($call);
+    }
+
+    /**
+     * Executes transformation call.
+     *
+     * @param TransformationCall $call
+     *
+     * @return mixed
+     *
+     * @throws Exception If transformation call throws one
+     */
+    private function executeTransformationCall(TransformationCall $call)
+    {
         $result = $this->callCenter->makeCall($call);
 
         if ($result->hasException()) {

@@ -12,6 +12,8 @@ namespace Behat\Behat\Transformation\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
 use Behat\Behat\Transformation\Call\RuntimeTransformation;
+use Behat\Behat\Transformation\Call\TokenNameTransformation;
+use Behat\Behat\Transformation\Transformation;
 use ReflectionMethod;
 
 /**
@@ -36,7 +38,7 @@ class TransformationAnnotationReader implements AnnotationReader
      * @param string           $docLine
      * @param string           $description
      *
-     * @return null|RuntimeTransformation
+     * @return null|Transformation
      */
     public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description)
     {
@@ -46,6 +48,10 @@ class TransformationAnnotationReader implements AnnotationReader
 
         $pattern = $match[1];
         $callable = array($contextClass, $method->getName());
+
+        if (1 === preg_match(TokenNameTransformation::PATTERN_REGEX, $pattern)) {
+            return new TokenNameTransformation($pattern, $callable, $description);
+        }
 
         return new RuntimeTransformation($pattern, $callable, $description);
     }
