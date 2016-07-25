@@ -12,17 +12,18 @@ namespace Behat\Behat\Transformation\Call;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Transformation\ArgumentTransformation;
+use Behat\Gherkin\Exception\NodeException;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\RuntimeCallee;
 
 /**
- * Column-based table transformation.
+ * Row-based table transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ColumnBasedTableTransformation extends RuntimeCallee implements ArgumentTransformation
+final class RowBasedTableTransformation extends RuntimeCallee implements ArgumentTransformation
 {
-    const PATTERN_REGEX = '/^table\:[\w\s,]+$/';
+    const PATTERN_REGEX = '/^rowtable\:[\w\s,]+$/';
 
     /**
      * @var string
@@ -46,13 +47,29 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Argu
     /**
      * {@inheritdoc}
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $value)
     {
-        if (!$argumentValue instanceof TableNode) {
+        if (!$value instanceof TableNode) {
             return false;
         };
 
-        return $this->pattern === 'table:' . implode(',', $argumentValue->getRow(0));
+        // What we're doing here is checking that we have a 2 column table.
+        // This bit checks we have two columns
+        try {
+            $value->getColumn(1);
+        } catch (NodeException $e) {
+            return false;
+        }
+
+        // And here we check we don't have a 3rd column
+        try {
+            $value->getColumn(2);
+        } catch (NodeException $e) {
+            // Once we know the table could be a row table, we check against the pattern.
+            return $this->pattern === 'rowtable:' . implode(',', $value->getColumn(0));
+        }
+
+        return false;
     }
 
     /**
@@ -81,6 +98,6 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Argu
      */
     public function __toString()
     {
-        return 'ColumnTableTransform ' . $this->getPattern();
+        return 'RowTableTransform ' . $this->getPattern();
     }
 }

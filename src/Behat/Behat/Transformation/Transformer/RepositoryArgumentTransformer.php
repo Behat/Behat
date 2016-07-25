@@ -117,10 +117,6 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             );
         }
 
-        if ($this->isApplicableTableTransformation($transformation, $value)) {
-            return $this->applyTableTransformation($definitionCall, $transformation, $value);
-        }
-
         if ($this->isApplicableTableRowTransformation($transformation, $value)) {
             $rows = array();
             foreach ($value as $row) {
@@ -135,54 +131,6 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
         }
 
         return $value;
-    }
-
-    /**
-     * Checks if provided transformation is applicable table transformation.
-     *
-     * Supports both tables with columns as the headings and rows as the headings.
-     *
-     * @param Transformation $transformation
-     * @param mixed          $value
-     *
-     * @return Boolean
-     */
-    private function isApplicableTableTransformation(Transformation $transformation, $value)
-    {
-        return $this->isApplicableRowTableTransformation($transformation, $value);
-    }
-
-    /**
-     * Checks if provided transformation is applicable row table transformation.
-     *
-     * @param Transformation $transformation
-     * @param mixed          $value
-     *
-     * @return Boolean
-     */
-    private function isApplicableRowTableTransformation(Transformation $transformation, $value)
-    {
-        if (!$value instanceof TableNode) {
-            return false;
-        };
-
-        // What we're doing here is checking that we have a 2 column table.
-        // This bit checks we have two columns
-        try {
-            $value->getColumn(1);
-        } catch (NodeException $e) {
-            return false;
-        }
-
-        // And here we check we don't have a 3rd column
-        try {
-            $value->getColumn(2);
-        } catch (NodeException $e) {
-            // Once we know the table could be a row table, we check against the pattern.
-            return $transformation->getPattern() === 'rowtable:' . implode(',', $value->getColumn(0));
-        }
-
-        return false;
     }
 
     /**

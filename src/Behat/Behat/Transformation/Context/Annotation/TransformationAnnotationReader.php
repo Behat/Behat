@@ -11,6 +11,7 @@
 namespace Behat\Behat\Transformation\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
+use Behat\Behat\Transformation\Call\RowBasedTableTransformation;
 use Behat\Behat\Transformation\Call\RuntimeTransformation;
 use Behat\Behat\Transformation\Call\ColumnBasedTableTransformation;
 use Behat\Behat\Transformation\Call\TokenNameTransformation;
@@ -56,6 +57,10 @@ class TransformationAnnotationReader implements AnnotationReader
 
         if (1 === preg_match(ColumnBasedTableTransformation::PATTERN_REGEX, $pattern)) {
             return new ColumnBasedTableTransformation($pattern, $callable, $description);
+        }
+
+        if (1 === preg_match(RowBasedTableTransformation::PATTERN_REGEX, $pattern)) {
+            return new RowBasedTableTransformation($pattern, $callable, $description);
         }
 
         return new RuntimeTransformation($pattern, $callable, $description);
