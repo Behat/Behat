@@ -16,9 +16,7 @@ use Behat\Behat\Transformation\ArgumentTransformation;
 use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Transformation\TransformationRepository;
-use Behat\Gherkin\Exception\NodeException;
 use Behat\Gherkin\Node\ArgumentInterface;
-use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Exception;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -115,49 +113,11 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
             return $transformation->transformArgument($this->callCenter, $definitionCall, $index, $value);
         }
 
-        if ($this->isApplicableTableRowTransformation($transformation, $value)) {
-            $rows = array();
-            foreach ($value as $row) {
-                $rows[] = $this->applyTableTransformation($definitionCall, $transformation, $row);
-            }
-
-            return $rows;
-        }
-
         if ($this->isApplicablePatternTransformation($definitionCall, $transformation, $value, $arguments)) {
             return $this->applyPatternTransformation($definitionCall, $transformation, $arguments);
         }
 
         return $value;
-    }
-
-    /**
-     * @param Transformation $transformation
-     * @param mixed          $value
-     *
-     * @return Boolean
-     */
-    private function isApplicableTableRowTransformation(Transformation $transformation, $value)
-    {
-        if (!$value instanceof TableNode) {
-            return false;
-        };
-
-        return $transformation->getPattern() === 'row:' . implode(',', $value->getRow(0));
-    }
-
-    /**
-     * Applies provided table transformation.
-     *
-     * @param DefinitionCall $definitionCall
-     * @param Transformation $transformation
-     * @param mixed          $value
-     *
-     * @return mixed
-     */
-    private function applyTableTransformation(DefinitionCall $definitionCall, Transformation $transformation, $value)
-    {
-        return $this->execute($definitionCall, $transformation, array($value));
     }
 
     /**
