@@ -112,9 +112,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
                 return $value;
             }
 
-            return $this->executeTransformationCall(
-                $transformation->createTransformationCall($definitionCall, $index, $value)
-            );
+            return $transformation->transformArgument($this->callCenter, $definitionCall, $index, $value);
         }
 
         if ($this->isApplicableTableRowTransformation($transformation, $value)) {

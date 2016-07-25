@@ -12,6 +12,7 @@ namespace Behat\Behat\Transformation;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Transformation\Call\TransformationCall;
+use Behat\Testwork\Call\CallCenter;
 
 /**
  * Represents a single transformation capable of changing single argument.
@@ -34,11 +35,12 @@ interface ArgumentTransformation extends Transformation
     /**
      * Transforms argument value using transformation and returns a new one.
      *
+     * @param CallCenter     $callCenter
      * @param DefinitionCall $definitionCall
      * @param integer|string $argumentIndex
      * @param mixed          $argumentValue
      *
      * @return TransformationCall
      */
-    public function createTransformationCall(DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
 }

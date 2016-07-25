@@ -12,6 +12,7 @@ namespace Behat\Behat\Transformation\Call;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Transformation\ArgumentTransformation;
+use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 
 /**
@@ -53,14 +54,22 @@ final class TokenNameTransformation extends RuntimeCallee implements ArgumentTra
     /**
      * {@inheritdoc}
      */
-    public function createTransformationCall(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        return new TransformationCall(
+        $call = new TransformationCall(
             $definitionCall->getEnvironment(),
             $definitionCall->getCallee(),
             $this,
             array($argumentValue)
         );
+
+        $result = $callCenter->makeCall($call);
+
+        if ($result->hasException()) {
+            throw $result->getException();
+        }
+
+        return $result->getReturn();
     }
 
     /**
