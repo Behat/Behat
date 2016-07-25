@@ -149,28 +149,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer
      */
     private function isApplicableTableTransformation(Transformation $transformation, $value)
     {
-        if ($this->isApplicableColumnTableTransformation($transformation, $value)) {
-            return true;
-        }
-
         return $this->isApplicableRowTableTransformation($transformation, $value);
-    }
-
-    /**
-     * Checks if provided transformation is applicable column table transformation.
-     *
-     * @param Transformation $transformation
-     * @param mixed          $value
-     *
-     * @return Boolean
-     */
-    private function isApplicableColumnTableTransformation(Transformation $transformation, $value)
-    {
-        if (!$value instanceof TableNode) {
-            return false;
-        };
-
-        return $transformation->getPattern() === 'table:' . implode(',', $value->getRow(0));
     }
 
     /**
