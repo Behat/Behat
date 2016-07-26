@@ -249,7 +249,8 @@ Feature: Step Definition Pattern
       class FeatureContext implements Context
       {
           /**
-           * @Given I don't provide \
+           * @Given I don'\
+           * t provide \
            *      parameter
            * @Given I can provide \
            *        parameter :param
