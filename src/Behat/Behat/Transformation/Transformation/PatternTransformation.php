@@ -8,9 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Transformation\Call;
+namespace Behat\Behat\Transformation\Transformation;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\RegexGenerator;
 use Behat\Behat\Transformation\Transformation;
 use Behat\Testwork\Call\CallCenter;
@@ -121,7 +122,7 @@ final class PatternTransformation extends RuntimeCallee implements Transformatio
      */
     public function __toString()
     {
-        return 'PatternTransform ' . $this->getPattern();
+        return 'PatternTransform ' . $this->pattern;
     }
 
     /**

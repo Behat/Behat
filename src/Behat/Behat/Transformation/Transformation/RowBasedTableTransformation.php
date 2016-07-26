@@ -8,26 +8,37 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Transformation\Call;
+namespace Behat\Behat\Transformation\Transformation;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
-use Behat\Behat\Transformation\ArgumentTransformation;
+use Behat\Behat\Transformation\Call\TransformationCall;
+use Behat\Behat\Transformation\SimpleArgumentTransformation;
+use Behat\Gherkin\Exception\NodeException;
+use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 
 /**
- * Token name based transformation.
+ * Row-based table transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TokenNameTransformation extends RuntimeCallee implements ArgumentTransformation
+final class RowBasedTableTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    const PATTERN_REGEX = '/^\:\w+$/';
+    const PATTERN_REGEX = '/^rowtable\:[\w\s,]+$/';
 
     /**
      * @var string
      */
     private $pattern;
+
+    /**
+     * {@inheritdoc}
+     */
+    static public function supportsPattern($pattern)
+    {
+        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
+    }
 
     /**
      * Initializes transformation.
@@ -46,9 +57,29 @@ final class TokenNameTransformation extends RuntimeCallee implements ArgumentTra
     /**
      * {@inheritdoc}
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $value)
     {
-        return ':' . $argumentIndex === $this->pattern;
+        if (!$value instanceof TableNode) {
+            return false;
+        };
+
+        // What we're doing here is checking that we have a 2 column table.
+        // This bit checks we have two columns
+        try {
+            $value->getColumn(1);
+        } catch (NodeException $e) {
+            return false;
+        }
+
+        // And here we check we don't have a 3rd column
+        try {
+            $value->getColumn(2);
+        } catch (NodeException $e) {
+            // Once we know the table could be a row table, we check against the pattern.
+            return $this->pattern === 'rowtable:' . implode(',', $value->getColumn(0));
+        }
+
+        return false;
     }
 
     /**
@@ -85,6 +116,6 @@ final class TokenNameTransformation extends RuntimeCallee implements ArgumentTra
      */
     public function __toString()
     {
-        return 'TokenNameTransform ' . $this->getPattern();
+        return 'RowTableTransform ' . $this->pattern;
     }
 }

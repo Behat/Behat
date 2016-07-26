@@ -11,11 +11,7 @@
 namespace Behat\Behat\Transformation\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
-use Behat\Behat\Transformation\Call\PatternTransformation;
-use Behat\Behat\Transformation\Call\RowBasedTableTransformation;
-use Behat\Behat\Transformation\Call\ColumnBasedTableTransformation;
-use Behat\Behat\Transformation\Call\TableRowTransformation;
-use Behat\Behat\Transformation\Call\TokenNameTransformation;
+use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\Transformation;
 use ReflectionMethod;
 
@@ -52,22 +48,27 @@ class TransformationAnnotationReader implements AnnotationReader
         $pattern = $match[1];
         $callable = array($contextClass, $method->getName());
 
-        if (1 === preg_match(TokenNameTransformation::PATTERN_REGEX, $pattern)) {
-            return new TokenNameTransformation($pattern, $callable, $description);
-        }
-
-        if (1 === preg_match(ColumnBasedTableTransformation::PATTERN_REGEX, $pattern)) {
-            return new ColumnBasedTableTransformation($pattern, $callable, $description);
-        }
-
-        if (1 === preg_match(RowBasedTableTransformation::PATTERN_REGEX, $pattern)) {
-            return new RowBasedTableTransformation($pattern, $callable, $description);
-        }
-
-        if (1 === preg_match(TableRowTransformation::PATTERN_REGEX, $pattern)) {
-            return new TableRowTransformation($pattern, $callable, $description);
+        foreach ($this->simpleTransformations() as $transformation) {
+            if ($transformation::supportsPattern($pattern)) {
+                return new $transformation($pattern, $callable, $description);
+            }
         }
 
         return new PatternTransformation($pattern, $callable, $description);
+    }
+
+    /**
+     * Returns list of default transformations.
+     *
+     * @return array
+     */
+    private function simpleTransformations()
+    {
+        return array(
+            'Behat\Behat\Transformation\Transformation\RowBasedTableTransformation',
+            'Behat\Behat\Transformation\Transformation\ColumnBasedTableTransformation',
+            'Behat\Behat\Transformation\Transformation\TableRowTransformation',
+            'Behat\Behat\Transformation\Transformation\TokenNameTransformation',
+        );
     }
 }

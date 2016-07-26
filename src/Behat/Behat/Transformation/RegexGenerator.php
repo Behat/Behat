@@ -22,7 +22,7 @@ interface RegexGenerator
      *
      * @param string $suiteName
      * @param string $pattern
-     * @param string$language
+     * @param string $language
      *
      * @return string
      */

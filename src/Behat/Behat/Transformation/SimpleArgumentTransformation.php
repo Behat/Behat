@@ -14,14 +14,23 @@ use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Testwork\Call\CallCenter;
 
 /**
- * Represents a single transformation capable of changing single argument.
+ * Represents a simple self-contained transformation capable of changing a single argument.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ArgumentTransformation extends Transformation
+interface SimpleArgumentTransformation extends Transformation
 {
     /**
-     * Checks if transformer supports argument.
+     * Checks if transformation supports given pattern.
+     *
+     * @param string $pattern
+     *
+     * @return Boolean
+     */
+    static public function supportsPattern($pattern);
+
+    /**
+     * Checks if transformation supports argument.
      *
      * @param DefinitionCall $definitionCall
      * @param integer|string $argumentIndex

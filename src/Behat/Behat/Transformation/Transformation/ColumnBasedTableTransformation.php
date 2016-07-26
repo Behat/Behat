@@ -8,27 +8,36 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Transformation\Call;
+namespace Behat\Behat\Transformation\Transformation;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
-use Behat\Behat\Transformation\ArgumentTransformation;
+use Behat\Behat\Transformation\Call\TransformationCall;
+use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 
 /**
- * Table row transformation.
+ * Column-based table transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TableRowTransformation extends RuntimeCallee implements ArgumentTransformation
+final class ColumnBasedTableTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    const PATTERN_REGEX = '/^row\:[\w\s,]+$/';
+    const PATTERN_REGEX = '/^table\:[\w\s,]+$/';
 
     /**
      * @var string
      */
     private $pattern;
+
+    /**
+     * {@inheritdoc}
+     */
+    static public function supportsPattern($pattern)
+    {
+        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
+    }
 
     /**
      * Initializes transformation.
@@ -53,7 +62,7 @@ final class TableRowTransformation extends RuntimeCallee implements ArgumentTran
             return false;
         };
 
-        return $this->pattern === 'row:' . implode(',', $argumentValue->getRow(0));
+        return $this->pattern === 'table:' . implode(',', $argumentValue->getRow(0));
     }
 
     /**
@@ -61,25 +70,20 @@ final class TableRowTransformation extends RuntimeCallee implements ArgumentTran
      */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        $rows = array();
-        foreach ($argumentValue as $row) {
-            $call = new TransformationCall(
-                $definitionCall->getEnvironment(),
-                $definitionCall->getCallee(),
-                $this,
-                array($row)
-            );
+        $call = new TransformationCall(
+            $definitionCall->getEnvironment(),
+            $definitionCall->getCallee(),
+            $this,
+            array($argumentValue)
+        );
 
-            $result = $callCenter->makeCall($call);
+        $result = $callCenter->makeCall($call);
 
-            if ($result->hasException()) {
-                throw $result->getException();
-            }
-
-            $rows[] = $result->getReturn();
+        if ($result->hasException()) {
+            throw $result->getException();
         }
 
-        return $rows;
+        return $result->getReturn();
     }
 
     /**
@@ -95,6 +99,6 @@ final class TableRowTransformation extends RuntimeCallee implements ArgumentTran
      */
     public function __toString()
     {
-        return 'TableRowTransform ' . $this->getPattern();
+        return 'ColumnTableTransform ' . $this->pattern;
     }
 }
