@@ -11,7 +11,8 @@
 namespace Behat\Behat\Transformation\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
-use Behat\Behat\Transformation\Call\RuntimeTransformation;
+use Behat\Behat\Transformation\Transformation\PatternTransformation;
+use Behat\Behat\Transformation\Transformation;
 use ReflectionMethod;
 
 /**
@@ -36,7 +37,7 @@ class TransformationAnnotationReader implements AnnotationReader
      * @param string           $docLine
      * @param string           $description
      *
-     * @return null|RuntimeTransformation
+     * @return null|Transformation
      */
     public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description)
     {
@@ -47,6 +48,27 @@ class TransformationAnnotationReader implements AnnotationReader
         $pattern = $match[1];
         $callable = array($contextClass, $method->getName());
 
-        return new RuntimeTransformation($pattern, $callable, $description);
+        foreach ($this->simpleTransformations() as $transformation) {
+            if ($transformation::supportsPattern($pattern)) {
+                return new $transformation($pattern, $callable, $description);
+            }
+        }
+
+        return new PatternTransformation($pattern, $callable, $description);
+    }
+
+    /**
+     * Returns list of default transformations.
+     *
+     * @return array
+     */
+    private function simpleTransformations()
+    {
+        return array(
+            'Behat\Behat\Transformation\Transformation\RowBasedTableTransformation',
+            'Behat\Behat\Transformation\Transformation\ColumnBasedTableTransformation',
+            'Behat\Behat\Transformation\Transformation\TableRowTransformation',
+            'Behat\Behat\Transformation\Transformation\TokenNameTransformation',
+        );
     }
 }

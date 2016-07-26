@@ -10,28 +10,21 @@
 
 namespace Behat\Behat\Transformation;
 
-use Behat\Testwork\Call\Callee;
-
 /**
- * Step transformation interface.
+ * Regular expression generator.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface Transformation extends Callee
+interface RegexGenerator
 {
     /**
-     * Returns transformation pattern exactly as it was defined.
+     * Generates regular expression using provided parameters.
      *
-     * @deprecated Will be removed in 4.0.
-     *
-     * @return string
-     */
-    public function getPattern();
-
-    /**
-     * Represents transformation as a string.
+     * @param string $suiteName
+     * @param string $pattern
+     * @param string $language
      *
      * @return string
      */
-    public function __toString();
+    public function generateRegex($suiteName, $pattern, $language);
 }
