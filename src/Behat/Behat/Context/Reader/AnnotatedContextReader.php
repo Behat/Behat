@@ -141,7 +141,7 @@ final class AnnotatedContextReader implements ContextReader
      */
     private function mergeMultilines($docBlock)
     {
-        return preg_replace("#\\\\$\s*\*\s*([^\\\\$]+)#m", '$1', $docBlock);
+        return preg_replace("#\\\\$\s*+\*\s*+([^\\\\$]++)#m", '$1', $docBlock);
     }
 
     /**
