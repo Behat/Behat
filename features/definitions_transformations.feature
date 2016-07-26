@@ -316,3 +316,187 @@ Feature: Step Arguments Transformations
       3 scenarios (3 passed)
       6 steps (6 passed)
       """
+
+  Scenario: From-string object transformations
+    Given a file named "features/my.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given I am "everzet"
+          And he is "sroze"
+          Then I should be a user named "everzet"
+          And he should be a user named "sroze"
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      class User {
+          private function __construct($name) { $this->name = $name; }
+          static public function fromString($name) { return new static($name); }
+      }
+
+      class FeatureContext implements Behat\Behat\Context\Context
+      {
+          private $I;
+          private $he;
+
+          /** @Given I am :user */
+          public function iAm(User $user) {
+              $this->I = $user;
+          }
+
+          /** @Given /^he is \"([^\"]+)\"$/ */
+          public function heIs(User $user) {
+              $this->he = $user;
+          }
+
+          /** @Then I should be a user named :name */
+          public function iShouldHaveName($name) {
+              if ('User' !== get_class($this->I)) {
+                  throw new Exception("User expected, {gettype($this->I)} given");
+              }
+              if ($name !== $this->I->name) {
+                  throw new Exception("Actual name is {$this->I->name}");
+              }
+          }
+
+          /** @Then he should be a user named :name */
+          public function heShouldHaveName($name) {
+          if ('User' !== get_class($this->he)) {
+                  throw new Exception("User expected, {gettype($this->he)} given");
+              }
+              if ($name !== $this->he->name) {
+                  throw new Exception("Actual name is {$this->he->name}");
+              }
+          }
+      }
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ....
+
+      1 scenario (1 passed)
+      4 steps (4 passed)
+      """
+
+  Scenario: From-string object transformations throw method not found exception,
+            so that newcomers can quickly understand what to do
+    Given a file named "features/my.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given I am "everzet"
+          Then I should be a user named "everzet"
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      class User {}
+
+      class FeatureContext implements Behat\Behat\Context\Context
+      {
+          private $I;
+
+          /** @Given I am :user */
+          public function iAm(User $user) {
+              $this->I = $user;
+          }
+
+          /** @Then I should be a user named :name */
+          public function iShouldHaveName($name) {
+              if ('User' !== get_class($this->I)) {
+                  throw new Exception("User expected, {gettype($this->I)} given");
+              }
+              if ($name !== $this->I->name) {
+                  throw new Exception("Actual name is {$this->I->name}");
+              }
+          }
+      }
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should fail with:
+      """
+      F-
+
+      --- Failed steps:
+
+          Given I am "everzet" # features/my.feature:3
+            Method fromString does not exist (ReflectionException)
+
+      1 scenario (1 failed)
+      2 steps (1 failed, 1 skipped)
+      """
+
+  Scenario: From-string object transformations have lower precedence than others,
+            so you can override them with your own transformations
+    Given a file named "features/my.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given I am "everzet"
+          And she is "lunivore"
+          Then I should be a user named "everzet"
+          And she should be an admin named "lunivore"
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      class User {
+          private function __construct($name) { $this->name = $name; }
+          static public function fromString($name) { return new static($name); }
+      }
+      class Admin extends User {}
+
+      class FeatureContext implements Behat\Behat\Context\Context
+      {
+          private $I;
+          private $she;
+
+          /** @Transform :admin */
+          public function transformAdmin($admin) {
+              return Admin::fromString($admin);
+          }
+
+          /** @Given I am :user */
+          public function iAm(User $user) {
+              $this->I = $user;
+          }
+
+          /** @Given she is :admin */
+          public function sheIs(User $admin) {
+              $this->she = $admin;
+          }
+
+          /** @Then I should be a user named :name */
+          public function iShouldHaveName($name) {
+              if ('User' !== get_class($this->I)) {
+                  throw new Exception("User expected, {gettype($this->I)} given");
+              }
+              if ($name !== $this->I->name) {
+                  throw new Exception("Actual name is {$this->I->name}");
+              }
+          }
+
+          /** @Then she should be an admin named :name */
+          public function sheShouldHaveName($name) {
+              if ('Admin' !== get_class($this->she)) {
+                  throw new Exception("Admin expected, {gettype($this->she)} given");
+              }
+              if ($name !== $this->she->name) {
+                  throw new Exception("Actual name is {$this->she->name}");
+              }
+          }
+      }
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ....
+
+      1 scenario (1 passed)
+      4 steps (4 passed)
+      """
