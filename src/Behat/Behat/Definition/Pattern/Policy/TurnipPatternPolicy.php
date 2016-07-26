@@ -11,6 +11,7 @@
 namespace Behat\Behat\Definition\Pattern\Policy;
 
 use Behat\Behat\Definition\Pattern\Pattern;
+use Behat\Behat\Definition\Exception\InvalidPatternException;
 use Behat\Transliterator\Transliterator;
 
 /**
@@ -132,9 +133,20 @@ final class TurnipPatternPolicy implements PatternPolicy
 
         return preg_replace_callback(
             self::PLACEHOLDER_REGEXP,
-            function ($match) use ($tokenRegex) { return sprintf($tokenRegex, $match[1]); },
+            array($this, 'replaceTokenWithRegexCaptureGroup'),
             $regex
         );
+    }
+
+    private function replaceTokenWithRegexCaptureGroup($tokenMatch)
+    {
+        if (strlen($tokenMatch[1]) >= 32) {
+            throw new InvalidPatternException(
+                "Token name should not exceed 32 characters, but `{$tokenMatch[1]}` was used."
+            );
+        }
+
+        return sprintf(self::TOKEN_REGEX, $tokenMatch[1]);
     }
 
     /**
