@@ -11,8 +11,9 @@
 namespace Behat\Behat\Transformation\Transformer;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Transformation\Exception\FactoryMethodNotFound;
 use Closure;
-use ReflectionMethod;
+use ReflectionClass;
 use ReflectionParameter;
 
 /**
@@ -22,12 +23,14 @@ use ReflectionParameter;
  */
 final class FromStringObjectTransformer implements ArgumentTransformer
 {
+    const FACTORY_METHOD = 'fromString';
+
     /**
      * {@inheritdoc}
      */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        return !is_object($argumentValue) && null !== $this->getParameterFactoryByIndex($definitionCall, $argumentIndex);
+        return !is_object($argumentValue) && null !== $this->getParameterClassByIndex($definitionCall, $argumentIndex);
     }
 
     /**
@@ -35,7 +38,25 @@ final class FromStringObjectTransformer implements ArgumentTransformer
      */
     public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        return $this->getParameterFactoryByIndex($definitionCall, $argumentIndex)->invoke(null, $argumentValue);
+        $class = $this->getParameterClassByIndex($definitionCall, $argumentIndex);
+
+        if (!$class->hasMethod(self::FACTORY_METHOD)) {
+            throw new FactoryMethodNotFound(
+                sprintf(
+                    "Argument `%s` of `%s` was type-hinted as `%s`, but `%s::fromString(\$string)` is not implemented.\n" .
+                    "Either implement `%s::fromString(\$string)` method or define your own custom transformation for the argument.",
+                    $argumentIndex,
+                    $definitionCall->getCallee()->getPath(),
+                    $class->getName(),
+                    $class->getName(),
+                    $class->getName()
+                ),
+                $class->getName(),
+                self::FACTORY_METHOD
+            );
+        }
+
+        return $class->getMethod(self::FACTORY_METHOD)->invoke(null, $argumentValue);
     }
 
     /**
@@ -44,18 +65,18 @@ final class FromStringObjectTransformer implements ArgumentTransformer
      * @param DefinitionCall $definitionCall
      * @param string|integer $argumentIndex
      *
-     * @return ReflectionMethod|null
+     * @return ReflectionClass|null
      */
-    private function getParameterFactoryByIndex(DefinitionCall $definitionCall, $argumentIndex)
+    private function getParameterClassByIndex(DefinitionCall $definitionCall, $argumentIndex)
     {
         $parameters = array_filter(
             array_filter($this->getCallParameters($definitionCall),
                 $this->hasIndex($argumentIndex)
             ),
-            $this->isClassWithMethod('fromString')
+            $this->isClass()
         );
 
-        return count($parameters) ? current($parameters)->getClass()->getMethod('fromString') : null;
+        return count($parameters) ? current($parameters)->getClass() : null;
     }
 
     /**
@@ -111,15 +132,13 @@ final class FromStringObjectTransformer implements ArgumentTransformer
     }
 
     /**
-     * Returns closure to filter parameter by typehinted class and its method name.
-     *
-     * @param string $methodName
+     * Returns closure to filter parameter by typehinted class.
      *
      * @return Closure
      */
-    private function isClassWithMethod($methodName)
+    private function isClass()
     {
-        return function (ReflectionParameter $parameter) use ($methodName) {
+        return function (ReflectionParameter $parameter) {
             return $parameter->getClass();
         };
     }

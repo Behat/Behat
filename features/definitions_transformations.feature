@@ -424,7 +424,8 @@ Feature: Step Arguments Transformations
       --- Failed steps:
 
           Given I am "everzet" # features/my.feature:3
-            Method fromString does not exist (ReflectionException)
+            Argument `user` of `FeatureContext::iAm()` was type-hinted as `User`, but `User::fromString($string)` is not implemented.
+            Either implement `User::fromString($string)` method or define your own custom transformation for the argument.
 
       1 scenario (1 failed)
       2 steps (1 failed, 1 skipped)
