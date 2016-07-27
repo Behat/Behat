@@ -44,9 +44,10 @@ final class FromStringObjectTransformer implements ArgumentTransformer
         if (!$class->hasMethod($factoryMethod) || 1 !== $class->getMethod($factoryMethod)->getNumberOfParameters()) {
             $definitionPath = $definitionCall->getCallee()->getPath();
             $className = $class->getName();
+            $argumentIndicator = is_string($argumentIndex) ? "`\$$argumentIndex`" : ($argumentIndex + 1);
 
             throw new FactoryMethodNotFound(
-                "Argument `$argumentIndex` of `$definitionPath` was type-hinted as `$className`, " .
+                "Argument $argumentIndicator of `$definitionPath` was type-hinted as `$className`, " .
                 "but `$className::$factoryMethod(\$string)` is not implemented.\n" .
                 "Either implement `$className::$factoryMethod(\$string)` method or define your own custom " .
                 "transformation for the argument.",
