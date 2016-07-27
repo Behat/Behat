@@ -43,13 +43,15 @@ final class FromStringObjectTransformer implements ArgumentTransformer
         if (!$class->hasMethod(self::FACTORY_METHOD)) {
             throw new FactoryMethodNotFound(
                 sprintf(
-                    "Argument `%s` of `%s` was type-hinted as `%s`, but `%s::fromString(\$string)` is not implemented.\n" .
-                    "Either implement `%s::fromString(\$string)` method or define your own custom transformation for the argument.",
+                    "Argument `%s` of `%s` was type-hinted as `%s`, but `%s::%s(\$string)` is not implemented.\n" .
+                    "Either implement `%s::%s(\$string)` method or define your own custom transformation for the argument.",
                     $argumentIndex,
                     $definitionCall->getCallee()->getPath(),
                     $class->getName(),
                     $class->getName(),
-                    $class->getName()
+                    self::FACTORY_METHOD,
+                    $class->getName(),
+                    self::FACTORY_METHOD
                 ),
                 $class->getName(),
                 self::FACTORY_METHOD
