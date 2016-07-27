@@ -39,26 +39,23 @@ final class FromStringObjectTransformer implements ArgumentTransformer
     public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $class = $this->getParameterClassByIndex($definitionCall, $argumentIndex);
+        $factoryMethod = self::FACTORY_METHOD;
 
-        if (!$class->hasMethod(self::FACTORY_METHOD)) {
+        if (!$class->hasMethod($factoryMethod) || 1 !== $class->getMethod($factoryMethod)->getNumberOfParameters()) {
+            $definitionPath = $definitionCall->getCallee()->getPath();
+            $className = $class->getName();
+
             throw new FactoryMethodNotFound(
-                sprintf(
-                    "Argument `%s` of `%s` was type-hinted as `%s`, but `%s::%s(\$string)` is not implemented.\n" .
-                    "Either implement `%s::%s(\$string)` method or define your own custom transformation for the argument.",
-                    $argumentIndex,
-                    $definitionCall->getCallee()->getPath(),
-                    $class->getName(),
-                    $class->getName(),
-                    self::FACTORY_METHOD,
-                    $class->getName(),
-                    self::FACTORY_METHOD
-                ),
-                $class->getName(),
-                self::FACTORY_METHOD
+                "Argument `$argumentIndex` of `$definitionPath` was type-hinted as `$className`, " .
+                "but `$className::$factoryMethod(\$string)` is not implemented.\n" .
+                "Either implement `$className::$factoryMethod(\$string)` method or define your own custom " .
+                "transformation for the argument.",
+                $className,
+                $factoryMethod
             );
         }
 
-        return $class->getMethod(self::FACTORY_METHOD)->invoke(null, $argumentValue);
+        return $class->getMethod($factoryMethod)->invoke(null, $argumentValue);
     }
 
     /**
