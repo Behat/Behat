@@ -32,14 +32,15 @@ final class FactoryMethodNotFound extends InvalidArgumentException implements Tr
      * Initializes exception.
      *
      * @param string $message
-     * @param string   $class
+     * @param string $class
+     * @param string $factoryMethod
      */
-    public function __construct($message, $class, $method)
+    public function __construct($message, $class, $factoryMethod)
     {
         parent::__construct($message);
 
         $this->class = $class;
-        $this->method = $method;
+        $this->method = $factoryMethod;
     }
 
     /**
