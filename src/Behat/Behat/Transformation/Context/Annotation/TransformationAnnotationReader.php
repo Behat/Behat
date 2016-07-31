@@ -70,7 +70,7 @@ class TransformationAnnotationReader implements AnnotationReader
         $transformations[] = 'Behat\Behat\Transformation\Transformation\TableRowTransformation';
 
         if (PHP_VERSION_ID >= 70000) {
-            $transformations[] = 'Behat\Behat\Transformation\Transformation\ByTypeObjectTransformation';
+            $transformations[] = 'Behat\Behat\Transformation\Transformation\ReturnTypeTransformation';
         }
 
         $transformations[] = 'Behat\Behat\Transformation\Transformation\TokenNameTransformation';

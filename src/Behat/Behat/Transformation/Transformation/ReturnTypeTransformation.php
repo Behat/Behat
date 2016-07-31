@@ -24,7 +24,7 @@ use ReflectionParameter;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ByTypeObjectTransformation extends RuntimeCallee implements SimpleArgumentTransformation
+final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
 
     /**
