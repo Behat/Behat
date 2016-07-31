@@ -27,7 +27,7 @@ class TransformationAnnotationReader implements AnnotationReader
     /**
      * @var string
      */
-    private static $regex = '/^\@transform\s+(.+)$/i';
+    private static $regex = '/^\@transform\s*+(.*+)$/i';
 
     /**
      * Loads step callees (if exist) associated with specific method.
@@ -64,11 +64,17 @@ class TransformationAnnotationReader implements AnnotationReader
      */
     private function simpleTransformations()
     {
-        return array(
-            'Behat\Behat\Transformation\Transformation\RowBasedTableTransformation',
-            'Behat\Behat\Transformation\Transformation\ColumnBasedTableTransformation',
-            'Behat\Behat\Transformation\Transformation\TableRowTransformation',
-            'Behat\Behat\Transformation\Transformation\TokenNameTransformation',
-        );
+        $transformations = array();
+        $transformations[] = 'Behat\Behat\Transformation\Transformation\RowBasedTableTransformation';
+        $transformations[] = 'Behat\Behat\Transformation\Transformation\ColumnBasedTableTransformation';
+        $transformations[] = 'Behat\Behat\Transformation\Transformation\TableRowTransformation';
+
+        if (PHP_VERSION_ID >= 70000) {
+            $transformations[] = 'Behat\Behat\Transformation\Transformation\ByTypeObjectTransformation';
+        }
+
+        $transformations[] = 'Behat\Behat\Transformation\Transformation\TokenNameTransformation';
+
+        return $transformations;
     }
 }
