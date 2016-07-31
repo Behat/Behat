@@ -16,6 +16,7 @@ use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
+use ReflectionMethod;
 
 /**
  * Column-based table transformation.
@@ -34,7 +35,7 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
     /**
      * {@inheritdoc}
      */
-    static public function supportsPattern($pattern)
+    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
@@ -84,6 +85,14 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
         }
 
         return $result->getReturn();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        return 50;
     }
 
     /**

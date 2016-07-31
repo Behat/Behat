@@ -17,6 +17,7 @@ use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use Closure;
 use ReflectionFunctionAbstract;
+use ReflectionMethod;
 use ReflectionParameter;
 
 /**
@@ -30,8 +31,14 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * {@inheritdoc}
      */
-    static public function supportsPattern($pattern)
+    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
+        $returnClass = self::getReturnClass($method);
+
+        if (null === $returnClass) {
+            return false;
+        }
+
         return '' === $pattern;
     }
 
@@ -52,7 +59,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        $returnClass = $this->getReturnClass($this->getReflection());
+        $returnClass = self::getReturnClass($this->getReflection());
 
         if (null === $returnClass) {
             return false;
@@ -87,6 +94,14 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * {@inheritdoc}
      */
+    public function getPriority()
+    {
+        return 80;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getPattern()
     {
         return null;
@@ -97,7 +112,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      */
     public function __toString()
     {
-        return 'ByTypeObjectTransform';
+        return 'ReturnTypeTransform';
     }
 
     /**
@@ -107,7 +122,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      *
      * @return null|string
      */
-    private function getReturnClass(ReflectionFunctionAbstract $reflection)
+    static private function getReturnClass(ReflectionFunctionAbstract $reflection)
     {
         $type = $reflection->getReturnType();
 

@@ -20,6 +20,13 @@ use Behat\Testwork\Call\Callee;
 interface Transformation extends Callee
 {
     /**
+     * Returns transformation priority.
+     *
+     * @return integer
+     */
+    public function getPriority();
+
+    /**
      * Returns transformation pattern exactly as it was defined.
      *
      * @deprecated Will be removed in 4.0.

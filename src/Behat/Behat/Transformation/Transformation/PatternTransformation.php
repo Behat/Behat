@@ -112,6 +112,14 @@ final class PatternTransformation extends RuntimeCallee implements Transformatio
     /**
      * {@inheritdoc}
      */
+    public function getPriority()
+    {
+        return 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getPattern()
     {
         return $this->pattern;

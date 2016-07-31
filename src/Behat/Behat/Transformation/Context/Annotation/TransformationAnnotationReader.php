@@ -49,7 +49,7 @@ class TransformationAnnotationReader implements AnnotationReader
         $callable = array($contextClass, $method->getName());
 
         foreach ($this->simpleTransformations() as $transformation) {
-            if ($transformation::supportsPattern($pattern)) {
+            if ($transformation::supportsPatternAndMethod($pattern, $method)) {
                 return new $transformation($pattern, $callable, $description);
             }
         }
@@ -70,6 +70,7 @@ class TransformationAnnotationReader implements AnnotationReader
         $transformations[] = 'Behat\Behat\Transformation\Transformation\TableRowTransformation';
 
         if (PHP_VERSION_ID >= 70000) {
+            $transformations[] = 'Behat\Behat\Transformation\Transformation\TokenNameAndReturnTypeTransformation';
             $transformations[] = 'Behat\Behat\Transformation\Transformation\ReturnTypeTransformation';
         }
 
