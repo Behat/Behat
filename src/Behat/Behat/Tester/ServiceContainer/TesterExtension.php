@@ -146,9 +146,17 @@ class TesterExtension extends BaseExtension
         $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', array(
             new Reference('tester.step_container'),
             new Reference(self::BACKGROUND_TESTER_ID)
-
         ));
         $container->setDefinition(self::SCENARIO_TESTER_ID, $definition);
+
+        // Proper isolation for scenarios
+        $definition = new Definition('Behat\Behat\Tester\Runtime\IsolatingScenarioTester', array(
+                new Reference(self::SCENARIO_TESTER_ID),
+                new Reference(EnvironmentExtension::MANAGER_ID)
+            )
+        );
+        $definition->addTag(self::SCENARIO_TESTER_WRAPPER_TAG, array('priority' => -999999));
+        $container->setDefinition(self::SCENARIO_TESTER_WRAPPER_TAG . '.isolating', $definition);
     }
 
     /**
@@ -183,6 +191,15 @@ class TesterExtension extends BaseExtension
             new Reference(self::BACKGROUND_TESTER_ID)
         ));
         $container->setDefinition(self::EXAMPLE_TESTER_ID, $definition);
+
+        // Proper isolation for examples
+        $definition = new Definition('Behat\Behat\Tester\Runtime\IsolatingScenarioTester', array(
+                new Reference(self::EXAMPLE_TESTER_ID),
+                new Reference(EnvironmentExtension::MANAGER_ID)
+            )
+        );
+        $definition->addTag(self::EXAMPLE_TESTER_WRAPPER_TAG, array('priority' => -999999));
+        $container->setDefinition(self::EXAMPLE_TESTER_WRAPPER_TAG . '.isolating', $definition);
     }
 
     /**

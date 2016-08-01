@@ -49,6 +49,8 @@ final class RuntimeFeatureTester implements SpecificationTester
      * @param ScenarioTester     $scenarioTester
      * @param OutlineTester      $outlineTester
      * @param EnvironmentManager $envManager
+     *
+     * TODO: Remove EnvironmentManager parameter in next major
      */
     public function __construct(
         ScenarioTester $scenarioTester,
@@ -75,13 +77,12 @@ final class RuntimeFeatureTester implements SpecificationTester
     {
         $results = array();
         foreach ($feature->getScenarios() as $scenario) {
-            $isolatedEnvironment = $this->envManager->isolateEnvironment($env, $scenario);
             $tester = $scenario instanceof OutlineNode ? $this->outlineTester : $this->scenarioTester;
 
-            $setup = $tester->setUp($isolatedEnvironment, $feature, $scenario, $skip);
+            $setup = $tester->setUp($env, $feature, $scenario, $skip);
             $localSkip = !$setup->isSuccessful() || $skip;
-            $testResult = $tester->test($isolatedEnvironment, $feature, $scenario, $localSkip);
-            $teardown = $tester->tearDown($isolatedEnvironment, $feature, $scenario, $localSkip, $testResult);
+            $testResult = $tester->test($env, $feature, $scenario, $localSkip);
+            $teardown = $tester->tearDown($env, $feature, $scenario, $localSkip, $testResult);
 
             $integerResult = new IntegerTestResult($testResult->getResultCode());
             $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
