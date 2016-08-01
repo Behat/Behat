@@ -32,6 +32,13 @@ interface SimpleArgumentTransformation extends Transformation
     static public function supportsPatternAndMethod($pattern, ReflectionMethod $method);
 
     /**
+     * Returns transformation priority.
+     *
+     * @return integer
+     */
+    public function getPriority();
+
+    /**
      * Checks if transformation supports argument.
      *
      * @param DefinitionCall $definitionCall

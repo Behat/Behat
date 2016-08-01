@@ -82,11 +82,15 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         $transformations = $this->repository->getEnvironmentTransformations($environment);
 
         usort($transformations, function(Transformation $t1, Transformation $t2) {
-            if ($t1->getPriority() == $t2->getPriority()) {
+            // TODO: remove with upgrade of Transformation interface
+            $t1p = $t1 instanceof SimpleArgumentTransformation ? $t1->getPriority() : 0;
+            $t2p = $t2 instanceof SimpleArgumentTransformation ? $t2->getPriority() : 0;
+
+            if ($t1p == $t2p) {
                 return 0;
             }
 
-            return ($t1->getPriority() > $t2->getPriority()) ? -1 : 1;
+            return ($t1p > $t2p) ? -1 : 1;
         });
 
         $newValue = $argumentValue;
