@@ -249,10 +249,11 @@ Feature: Step Arguments Transformations
         Then it should be of type "<type>"
 
         Examples:
-            | value      | type       |
-            | "soeuhtou" | string     |
-            | 34         | integer    |
-            | null       | NULL       |
+            | value          | type     |
+            | "soeuhtou"     | string   |
+            | 34             | integer  |
+            | null           | NULL     |
+            | 2 workdays ago | DateTime |
       """
     And a file named "features/bootstrap/FeatureContext.php" with:
       """
@@ -271,6 +272,14 @@ Feature: Step Arguments Transformations
           public function transformString($string)
           {
               return strval($string);
+          }
+
+          /**
+           * @Transform :number workdays ago
+           */
+          public function transformDate($number)
+          {
+              return new \DateTime("-$number days");
           }
 
           /**
@@ -302,8 +311,8 @@ Feature: Step Arguments Transformations
            */
           public function itShouldBeOfType($type)
           {
-              if (gettype($this->value) != $type) {
-                  throw new Exception("Expected " . $type . ", got " . gettype($this->value) . " (value: " . $this->value . ")");
+              if (gettype($this->value) != $type && get_class($this->value) != $type) {
+                  throw new Exception("Expected " . $type . ", got " . gettype($this->value) . " (value: " . var_export($this->value, true) . ")");
               }
           }
       }
@@ -311,8 +320,8 @@ Feature: Step Arguments Transformations
     When I run "behat -f progress --no-colors"
     Then it should pass with:
       """
-      ......
+      ........
 
-      3 scenarios (3 passed)
-      6 steps (6 passed)
+      4 scenarios (4 passed)
+      8 steps (8 passed)
       """
