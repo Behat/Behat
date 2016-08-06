@@ -213,4 +213,17 @@
         'undefined_count'         => '{1,21,31} %1% не определен|]1,Inf] %1% не определено',
         'skipped_count'           => '{1,21,31} %1% пропущен|]1,Inf] %1% пропущено',
     ),
+    'zh-CN' =>
+    array (
+        'proposal_title'      => '你可以通过以下代码片段对未定义的步骤实现步骤定义：',
+        'failed_steps_title'  => '未通过的步骤',
+        'pending_steps_title' => '待定的步骤',
+        'scenarios_count'     => '{0} 没有场景|{1} 1 个场景|]1,Inf] %1% 个场景',
+        'steps_count'         => '{0} 没有步骤|{1} 1 个步骤|]1,Inf] %1% 个步骤',
+        'passed_count'        => '[1,Inf] %1% 已通过',
+        'failed_count'        => '[1,Inf] %1% 未通过',
+        'pending_count'       => '[1,Inf] %1% 待定的',
+        'undefined_count'     => '[1,Inf] %1% 未定义',
+        'skipped_count'       => '[1,Inf] %1% 跳过的',
+    ),
 );
