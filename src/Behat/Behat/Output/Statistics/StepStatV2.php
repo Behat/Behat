@@ -11,22 +11,28 @@
 namespace Behat\Behat\Output\Statistics;
 
 /**
- * Behat step stat.
+ * Second iteration of Behat step stat, with a scenario information.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @deprecated in favour of StepStatV2 and to be removed in 4.0
  */
-class StepStat
+final class StepStatV2 extends StepStat
 {
     /**
      * @var string
      */
-    private $text;
+    private $scenarioTitle;
     /**
      * @var string
      */
-    private $path;
+    private $scenarioPath;
+    /**
+     * @var string
+     */
+    private $stepText;
+    /**
+     * @var string
+     */
+    private $stepPath;
     /**
      * @var integer
      */
@@ -43,19 +49,45 @@ class StepStat
     /**
      * Initializes step stat.
      *
-     * @param string      $text
-     * @param string      $path
+     * @param string      $scenarioTitle
+     * @param string      $scenarioPath
+     * @param string      $stepText
+     * @param string      $stepPath
      * @param integer     $resultCode
      * @param null|string $error
      * @param null|string $stdOut
      */
-    public function __construct($text, $path, $resultCode, $error = null, $stdOut = null)
+    public function __construct($scenarioTitle, $scenarioPath, $stepText, $stepPath, $resultCode, $error = null, $stdOut = null)
     {
-        $this->text = $text;
-        $this->path = $path;
+        parent::__construct($stepText, $stepPath, $resultCode, $error, $stdOut);
+
+        $this->scenarioTitle = $scenarioTitle;
+        $this->scenarioPath = $scenarioPath;
+        $this->stepText = $stepText;
+        $this->stepPath = $stepPath;
         $this->resultCode = $resultCode;
         $this->error = $error;
         $this->stdOut = $stdOut;
+    }
+
+    /**
+     * Returns associated scenario text.
+     *
+     * @return string
+     */
+    public function getScenarioText()
+    {
+        return $this->scenarioTitle;
+    }
+
+    /**
+     * Returns associated scenario path.
+     *
+     * @return string
+     */
+    public function getScenarioPath()
+    {
+        return $this->scenarioPath;
     }
 
     /**
@@ -63,9 +95,9 @@ class StepStat
      *
      * @return string
      */
-    public function getText()
+    public function getStepText()
     {
-        return $this->text;
+        return $this->stepText;
     }
 
     /**
@@ -73,9 +105,9 @@ class StepStat
      *
      * @return string
      */
-    public function getPath()
+    public function getStepPath()
     {
-        return $this->path;
+        return $this->stepPath;
     }
 
     /**

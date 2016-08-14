@@ -155,8 +155,9 @@ Feature: Different result types
 
       --- Pending steps:
 
-          Given human have ordered very very very hot "coffee" # FeatureContext::humanOrdered()
-            TODO: write pending definition
+          Scenario: When the coffee ready                        # features/coffee.feature:9
+            Given human have ordered very very very hot "coffee" # FeatureContext::humanOrdered()
+              TODO: write pending definition
 
       1 scenario (1 undefined)
       3 steps (1 undefined, 1 pending, 1 skipped)
@@ -178,8 +179,9 @@ Feature: Different result types
 
       --- Pending steps:
 
-          Given human have ordered very very very hot "coffee" # FeatureContext::humanOrdered()
-            TODO: write pending definition
+          Scenario: When the coffee ready                        # features/coffee.feature:9
+            Given human have ordered very very very hot "coffee" # FeatureContext::humanOrdered()
+              TODO: write pending definition
 
       1 scenario (1 undefined)
       3 steps (1 undefined, 1 pending, 1 skipped)
@@ -249,11 +251,13 @@ Feature: Different result types
 
       --- Failed steps:
 
-          Then I should see 12$ on the screen # features/coffee.feature:10
-            Failed asserting that 10 matches expected '12'.
+          Scenario: Check thrown amount         # features/coffee.feature:9
+            Then I should see 12$ on the screen # features/coffee.feature:10
+              Failed asserting that 10 matches expected '12'.
 
-          Then I should see 31$ on the screen # features/coffee.feature:14
-            Failed asserting that 30 matches expected '31'.
+          Scenario: Additional throws           # features/coffee.feature:12
+            Then I should see 31$ on the screen # features/coffee.feature:14
+              Failed asserting that 30 matches expected '31'.
 
       2 scenarios (2 failed)
       6 steps (3 passed, 2 failed, 1 skipped)
@@ -335,11 +339,13 @@ Feature: Different result types
 
       --- Failed steps:
 
-          Given I have no water # features/coffee.feature:10
-            NO water in coffee machine!!! (Exception)
+          Scenario: I have no water # features/coffee.feature:9
+            Given I have no water   # features/coffee.feature:10
+              NO water in coffee machine!!! (Exception)
 
-          And I have no electricity # features/coffee.feature:17
-            NO electricity in coffee machine!!! (Exception)
+          Scenario: I have no electricity # features/coffee.feature:15
+            And I have no electricity     # features/coffee.feature:17
+              NO electricity in coffee machine!!! (Exception)
 
       2 scenarios (2 failed)
       10 steps (3 passed, 2 failed, 5 skipped)
@@ -393,10 +399,11 @@ Feature: Different result types
 
       --- Failed steps:
 
-          Given human have chosen "Latte" # features/coffee.feature:7
-            Ambiguous match of "human have chosen "Latte"":
-            to `/^human have chosen "([^"]*)"$/` from FeatureContext::chosen()
-            to `/^human have chosen "Latte"$/` from FeatureContext::chosenLatte()
+          Scenario: Ambiguous coffee type   # features/coffee.feature:6
+            Given human have chosen "Latte" # features/coffee.feature:7
+              Ambiguous match of "human have chosen "Latte"":
+              to `/^human have chosen "([^"]*)"$/` from FeatureContext::chosen()
+              to `/^human have chosen "Latte"$/` from FeatureContext::chosenLatte()
 
       1 scenario (1 failed)
       2 steps (1 failed, 1 skipped)
@@ -485,8 +492,9 @@ Feature: Different result types
 
       --- Failed steps:
 
-          Given customer bought coffee # features/coffee.feature:7
-            User Error: some error in features/bootstrap/FeatureContext.php line 12
+          Scenario: Redundant menu       # features/coffee.feature:6
+            Given customer bought coffee # features/coffee.feature:7
+              User Error: some error in features/bootstrap/FeatureContext.php line 12
 
       1 scenario (1 failed)
       2 steps (1 failed, 1 skipped)

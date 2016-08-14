@@ -156,11 +156,13 @@ Feature: Snippets
 
       --- Pending steps:
 
-          Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
-            TODO: write pending definition
+          Scenario: Single quotes              # features/coffee.feature:6
+            Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
+              TODO: write pending definition
 
-          Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
-            TODO: write pending definition
+          Scenario: Double quotes              # features/coffee.feature:18
+            Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
+              TODO: write pending definition
 
       2 scenarios (2 pending)
       11 steps (2 pending, 9 skipped)
@@ -257,11 +259,13 @@ Feature: Snippets
 
       --- Pending steps:
 
-          Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
-            TODO: write pending definition
+          Scenario: Single quotes              # features/coffee.feature:6
+            Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
+              TODO: write pending definition
 
-          Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
-            TODO: write pending definition
+          Scenario: Double quotes              # features/coffee.feature:18
+            Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
+              TODO: write pending definition
 
       2 scenarios (2 pending)
       11 steps (2 pending, 9 skipped)

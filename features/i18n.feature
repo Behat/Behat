@@ -154,19 +154,23 @@ Feature: I18n
 
       --- Проваленные шаги:
 
-          То Я должен иметь 13 # features/World.feature:22
-            Failed asserting that 14 matches expected 13.
+          Сценарий: Провален     # features/World.feature:20
+            То Я должен иметь 13 # features/World.feature:22
+              Failed asserting that 14 matches expected 13.
 
-          То Я должен иметь 16 # features/World.feature:27
-            Failed asserting that 15 matches expected 16.
+          Example: | 5        | 16        | # features/World.feature:31
+            То Я должен иметь 16            # features/World.feature:27
+              Failed asserting that 15 matches expected 16.
 
-          То Я должен иметь 32 # features/World.feature:27
-            Failed asserting that 33 matches expected 32.
+          Example: | 23       | 32        | # features/World.feature:33
+            То Я должен иметь 32            # features/World.feature:27
+              Failed asserting that 33 matches expected 32.
 
       --- Шаги в ожидании:
 
-          И Что-то еще не сделано # FeatureContext::somethingNotDone()
-            TODO: write pending definition
+          Сценарий: В ожидании      # features/World.feature:15
+            И Что-то еще не сделано # FeatureContext::somethingNotDone()
+              TODO: write pending definition
 
       6 сценариев (1 пройден, 3 провалено, 1 не определен, 1 в ожидании)
       23 шага (16 пройдено, 3 провалено, 1 не определен, 1 в ожидании, 2 пропущено)
@@ -190,19 +194,23 @@ Feature: I18n
 
       --- Failed steps:
 
-          То Я должен иметь 13 # features/World.feature:22
-            Failed asserting that 14 matches expected 13.
+          Сценарий: Провален     # features/World.feature:20
+            То Я должен иметь 13 # features/World.feature:22
+              Failed asserting that 14 matches expected 13.
 
-          То Я должен иметь 16 # features/World.feature:27
-            Failed asserting that 15 matches expected 16.
+          Example: | 5        | 16        | # features/World.feature:31
+            То Я должен иметь 16            # features/World.feature:27
+              Failed asserting that 15 matches expected 16.
 
-          То Я должен иметь 32 # features/World.feature:27
-            Failed asserting that 33 matches expected 32.
+          Example: | 23       | 32        | # features/World.feature:33
+            То Я должен иметь 32            # features/World.feature:27
+              Failed asserting that 33 matches expected 32.
 
       --- Pending steps:
 
-          И Что-то еще не сделано # FeatureContext::somethingNotDone()
-            TODO: write pending definition
+          Сценарий: В ожидании      # features/World.feature:15
+            И Что-то еще не сделано # FeatureContext::somethingNotDone()
+              TODO: write pending definition
 
       6 scenarios (1 passed, 3 failed, 1 undefined, 1 pending)
       23 steps (16 passed, 3 failed, 1 undefined, 1 pending, 2 skipped)
@@ -226,19 +234,23 @@ Feature: I18n
 
       --- Failed steps:
 
-          То Я должен иметь 13 # features/World.feature:22
-            Failed asserting that 14 matches expected 13.
+          Сценарий: Провален     # features/World.feature:20
+            То Я должен иметь 13 # features/World.feature:22
+              Failed asserting that 14 matches expected 13.
 
-          То Я должен иметь 16 # features/World.feature:27
-            Failed asserting that 15 matches expected 16.
+          Example: | 5        | 16        | # features/World.feature:31
+            То Я должен иметь 16            # features/World.feature:27
+              Failed asserting that 15 matches expected 16.
 
-          То Я должен иметь 32 # features/World.feature:27
-            Failed asserting that 33 matches expected 32.
+          Example: | 23       | 32        | # features/World.feature:33
+            То Я должен иметь 32            # features/World.feature:27
+              Failed asserting that 33 matches expected 32.
 
       --- Pending steps:
 
-          И Что-то еще не сделано # FeatureContext::somethingNotDone()
-            TODO: write pending definition
+          Сценарий: В ожидании      # features/World.feature:15
+            И Что-то еще не сделано # FeatureContext::somethingNotDone()
+              TODO: write pending definition
 
       6 scenarios (1 passed, 3 failed, 1 undefined, 1 pending)
       23 steps (16 passed, 3 failed, 1 undefined, 1 pending, 2 skipped)
