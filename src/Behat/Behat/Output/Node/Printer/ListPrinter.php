@@ -214,7 +214,7 @@ final class ListPrinter
      */
     private function printStepStat(OutputPrinter $printer, $number, StepStatV2 $stat, $style)
     {
-        $maxLength = max(mb_strlen($stat->getScenarioText()), mb_strlen($stat->getStepText()) + 2) + 1;
+        $maxLength = max(mb_strlen($stat->getScenarioText(), 'utf8'), mb_strlen($stat->getStepText(), 'utf8') + 2) + 1;
 
         $printer->writeln(
             sprintf('%03d {+%s}%s{-%s}%s{+comment}# %s{-comment}',
@@ -222,7 +222,7 @@ final class ListPrinter
                 $style,
                 $stat->getScenarioText(),
                 $style,
-                str_pad(' ', $maxLength - mb_strlen($stat->getScenarioText())),
+                str_pad(' ', $maxLength - mb_strlen($stat->getScenarioText(), 'utf8')),
                 $this->relativizePaths($stat->getScenarioPath())
             )
         );
@@ -232,7 +232,7 @@ final class ListPrinter
                 $style,
                 $stat->getStepText(),
                 $style,
-                str_pad(' ', $maxLength - mb_strlen($stat->getStepText()) - 2),
+                str_pad(' ', $maxLength - mb_strlen($stat->getStepText(), 'utf8') - 2),
                 $this->relativizePaths($stat->getStepPath())
             )
         );
