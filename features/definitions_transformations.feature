@@ -325,3 +325,149 @@ Feature: Step Arguments Transformations
       4 scenarios (4 passed)
       8 steps (8 passed)
       """
+
+  @php-version @php7.0
+  Scenario: By-type object transformations
+    Given a file named "features/my.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given I am "everzet"
+          And he is "sroze"
+          Then I should be a user named "everzet"
+          And he should be a user named "sroze"
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+      class User {
+          private function __construct($name) { $this->name = $name; }
+          static public function named($name) { return new static($name); }
+      }
+      class FeatureContext implements Behat\Behat\Context\Context
+      {
+          private $I;
+          private $he;
+
+          /** @Transform */
+          public function userFromName($name) : User {
+              return User::named($name);
+          }
+
+          /** @Given I am :user */
+          public function iAm(User $user) {
+              $this->I = $user;
+          }
+
+          /** @Given /^he is \"([^\"]+)\"$/ */
+          public function heIs(User $user) {
+              $this->he = $user;
+          }
+
+          /** @Then I should be a user named :name */
+          public function iShouldHaveName($name) {
+              if ('User' !== get_class($this->I)) {
+                  throw new Exception("User expected, {gettype($this->I)} given");
+              }
+              if ($name !== $this->I->name) {
+                  throw new Exception("Actual name is {$this->I->name}");
+              }
+          }
+
+          /** @Then he should be a user named :name */
+          public function heShouldHaveName($name) {
+          if ('User' !== get_class($this->he)) {
+                  throw new Exception("User expected, {gettype($this->he)} given");
+              }
+              if ($name !== $this->he->name) {
+                  throw new Exception("Actual name is {$this->he->name}");
+              }
+          }
+      }
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ....
+
+      1 scenario (1 passed)
+      4 steps (4 passed)
+      """
+
+  @php-version @php7.0
+  Scenario: By-type and by-name object transformations
+    Given a file named "features/my.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given I am "everzet"
+          And she is "lunivore"
+          Then I should be a user named "everzet"
+          And she should be an admin named "admin: lunivore"
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+      class User {
+          private function __construct($name) { $this->name = $name; }
+          static public function named($name) { return new static($name); }
+      }
+      class FeatureContext implements Behat\Behat\Context\Context
+      {
+          private $I;
+          private $he;
+
+          /** @Transform */
+          public function userFromName($name) : User {
+              return User::named($name);
+          }
+
+          /** @Transform :admin */
+          public function adminFromName($name) : User {
+              return User::named('admin: ' . $name);
+          }
+
+          /** @Transform :admin */
+          public function adminString($name) {
+              return 'admin';
+          }
+
+          /** @Given I am :user */
+          public function iAm(User $user) {
+              $this->I = $user;
+          }
+
+          /** @Given she is :admin */
+          public function sheIs(User $admin) {
+              $this->she = $admin;
+          }
+
+          /** @Then I should be a user named :name */
+          public function iShouldHaveName($name) {
+              if ('User' !== get_class($this->I)) {
+                  throw new Exception("User expected, {gettype($this->I)} given");
+              }
+              if ($name !== $this->I->name) {
+                  throw new Exception("Actual name is {$this->I->name}");
+              }
+          }
+
+          /** @Then she should be an admin named :name */
+          public function sheShouldHaveName($name) {
+              if ('User' !== get_class($this->she)) {
+                  throw new Exception("User expected, {gettype($this->she)} given");
+              }
+              if ($name !== $this->she->name) {
+                  throw new Exception("Actual name is {$this->she->name}");
+              }
+          }
+      }
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ....
+
+      1 scenario (1 passed)
+      4 steps (4 passed)
+      """

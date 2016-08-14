@@ -15,6 +15,7 @@ use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
+use ReflectionMethod;
 
 /**
  * Token name based transformation.
@@ -34,7 +35,7 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
     /**
      * {@inheritdoc}
      */
-    static public function supportsPattern($pattern)
+    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
@@ -80,6 +81,14 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
         }
 
         return $result->getReturn();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        return 50;
     }
 
     /**

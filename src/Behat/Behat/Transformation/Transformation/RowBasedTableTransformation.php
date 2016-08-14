@@ -17,6 +17,7 @@ use Behat\Gherkin\Exception\NodeException;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
+use ReflectionMethod;
 
 /**
  * Row-based table transformation.
@@ -35,7 +36,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
     /**
      * {@inheritdoc}
      */
-    static public function supportsPattern($pattern)
+    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
@@ -101,6 +102,14 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
         }
 
         return $result->getReturn();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        return 50;
     }
 
     /**

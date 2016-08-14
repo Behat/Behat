@@ -13,31 +13,33 @@ namespace Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
-use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use ReflectionMethod;
 
 /**
- * Table row transformation.
+ * Name and return type object transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TableRowTransformation extends RuntimeCallee implements SimpleArgumentTransformation
+final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    const PATTERN_REGEX = '/^row\:[\w\s,]+$/';
-
     /**
-     * @var string
+     * @var TokenNameTransformation
      */
-    private $pattern;
+    private $tokenTransformation;
+    /**
+     * @var ReturnTypeTransformation
+     */
+    private $returnTransformation;
 
     /**
      * {@inheritdoc}
      */
     static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
-        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
+        return TokenNameTransformation::supportsPatternAndMethod($pattern, $method)
+            && ReturnTypeTransformation::supportsPatternAndMethod('', $method);
     }
 
     /**
@@ -49,7 +51,8 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      */
     public function __construct($pattern, $callable, $description = null)
     {
-        $this->pattern = $pattern;
+        $this->tokenTransformation = new TokenNameTransformation($pattern, $callable, $description);
+        $this->returnTransformation = new ReturnTypeTransformation('', $callable, $description);
 
         parent::__construct($callable, $description);
     }
@@ -59,11 +62,8 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        if (!$argumentValue instanceof TableNode) {
-            return false;
-        };
-
-        return $this->pattern === 'row:' . implode(',', $argumentValue->getRow(0));
+        return $this->tokenTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentValue)
+            && $this->returnTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentValue);
     }
 
     /**
@@ -71,25 +71,20 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        $rows = array();
-        foreach ($argumentValue as $row) {
-            $call = new TransformationCall(
-                $definitionCall->getEnvironment(),
-                $definitionCall->getCallee(),
-                $this,
-                array($row)
-            );
+        $call = new TransformationCall(
+            $definitionCall->getEnvironment(),
+            $definitionCall->getCallee(),
+            $this,
+            array($argumentValue)
+        );
 
-            $result = $callCenter->makeCall($call);
+        $result = $callCenter->makeCall($call);
 
-            if ($result->hasException()) {
-                throw $result->getException();
-            }
-
-            $rows[] = $result->getReturn();
+        if ($result->hasException()) {
+            throw $result->getException();
         }
 
-        return $rows;
+        return $result->getReturn();
     }
 
     /**
@@ -97,7 +92,7 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      */
     public function getPriority()
     {
-        return 50;
+        return 100;
     }
 
     /**
@@ -105,7 +100,7 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      */
     public function getPattern()
     {
-        return $this->pattern;
+        return $this->tokenTransformation->getPattern();
     }
 
     /**
@@ -113,6 +108,6 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      */
     public function __toString()
     {
-        return 'TableRowTransform ' . $this->pattern;
+        return 'NamedReturnTypeTransform ' . $this->getPattern();
     }
 }
