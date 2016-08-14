@@ -13,6 +13,7 @@ namespace Behat\Behat\Output\Node\Printer;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Statistics\HookStat;
 use Behat\Behat\Output\Statistics\ScenarioStat;
+use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
@@ -108,13 +109,12 @@ final class ListPrinter
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
 
-        foreach ($stepStats as $stepStat) {
-            $name = $stepStat->getText();
-            $path = $stepStat->getPath();
-            $stdOut = $stepStat->getStdOut();
-            $error = $stepStat->getError();
-
-            $this->printStat($printer, $name, $path, $style, $stdOut, $error);
+        foreach ($stepStats as $num => $stepStat) {
+            if ($stepStat instanceof StepStatV2) {
+                $this->printStepStat($printer, $num + 1, $stepStat, $style);
+            } elseif ($stepStat instanceof StepStat) {
+                $this->printStat($printer, $stepStat->getText(), $stepStat->getPath(), $style, $stepStat->getStdOut(), $stepStat->getError());
+            }
         }
     }
 
@@ -136,12 +136,7 @@ final class ListPrinter
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
         foreach ($failedHookStats as $hookStat) {
-            $name = $hookStat->getName();
-            $path = $hookStat->getPath();
-            $stdOut = $hookStat->getStdOut();
-            $error = $hookStat->getError();
-
-            $this->printStat($printer, $name, $path, $style, $stdOut, $error);
+            $this->printHookStat($printer, $hookStat, $style);
         }
     }
 
@@ -154,6 +149,8 @@ final class ListPrinter
      * @param string        $style
      * @param null|string   $stdOut
      * @param null|string   $error
+     *
+     * @deprecated Remove in 4.0
      */
     private function printStat(OutputPrinter $printer, $name, $path, $style, $stdOut, $error)
     {
@@ -170,6 +167,86 @@ final class ListPrinter
 
         if ($error) {
             $exceptionString = implode("\n", array_map($pad, explode("\n", $error)));
+            $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $exceptionString, $style));
+        }
+
+        $printer->writeln();
+    }
+
+    /**
+     * Prints hook stat.
+     *
+     * @param OutputPrinter $printer
+     * @param HookStat      $hookStat
+     * @param string        $style
+     */
+    private function printHookStat(OutputPrinter $printer, HookStat $hookStat, $style)
+    {
+        $printer->writeln(
+            sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}',
+                $style, $hookStat->getName(), $style, $this->relativizePaths($hookStat->getPath())
+            )
+        );
+
+        $pad = function ($line) { return '      ' . $line; };
+
+        if (null !== $hookStat->getStdOut()) {
+            $padText = function ($line) { return '      │ ' . $line; };
+            $stdOutString = array_map($padText, explode("\n", $hookStat->getStdOut()));
+            $printer->writeln(implode("\n", $stdOutString));
+        }
+
+        if ($hookStat->getError()) {
+            $exceptionString = implode("\n", array_map($pad, explode("\n", $hookStat->getError())));
+            $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $exceptionString, $style));
+        }
+
+        $printer->writeln();
+    }
+
+    /**
+     * Prints hook stat.
+     *
+     * @param OutputPrinter $printer
+     * @param integer       $number
+     * @param StepStatV2    $stat
+     * @param string        $style
+     */
+    private function printStepStat(OutputPrinter $printer, $number, StepStatV2 $stat, $style)
+    {
+        $maxLength = max(mb_strlen($stat->getScenarioText(), 'utf8'), mb_strlen($stat->getStepText(), 'utf8') + 2) + 1;
+
+        $printer->writeln(
+            sprintf('%03d {+%s}%s{-%s}%s{+comment}# %s{-comment}',
+                $number,
+                $style,
+                $stat->getScenarioText(),
+                $style,
+                str_pad(' ', $maxLength - mb_strlen($stat->getScenarioText(), 'utf8')),
+                $this->relativizePaths($stat->getScenarioPath())
+            )
+        );
+
+        $printer->writeln(
+            sprintf('      {+%s}%s{-%s}%s{+comment}# %s{-comment}',
+                $style,
+                $stat->getStepText(),
+                $style,
+                str_pad(' ', $maxLength - mb_strlen($stat->getStepText(), 'utf8') - 2),
+                $this->relativizePaths($stat->getStepPath())
+            )
+        );
+
+        $pad = function ($line) { return '        ' . $line; };
+
+        if (null !== $stat->getStdOut()) {
+            $padText = function ($line) { return '        │ ' . $line; };
+            $stdOutString = array_map($padText, explode("\n", $stat->getStdOut()));
+            $printer->writeln(implode("\n", $stdOutString));
+        }
+
+        if ($stat->getError()) {
+            $exceptionString = implode("\n", array_map($pad, explode("\n", $stat->getError())));
             $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $exceptionString, $style));
         }
 
