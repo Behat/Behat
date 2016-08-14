@@ -154,21 +154,21 @@ Feature: I18n
 
       --- Проваленные шаги:
 
-          Сценарий: Провален     # features/World.feature:20
+      001 Сценарий: Провален     # features/World.feature:20
             То Я должен иметь 13 # features/World.feature:22
               Failed asserting that 14 matches expected 13.
 
-          Example: | 5        | 16        | # features/World.feature:31
+      002 Example: | 5        | 16        | # features/World.feature:31
             То Я должен иметь 16            # features/World.feature:27
               Failed asserting that 15 matches expected 16.
 
-          Example: | 23       | 32        | # features/World.feature:33
+      003 Example: | 23       | 32        | # features/World.feature:33
             То Я должен иметь 32            # features/World.feature:27
               Failed asserting that 33 matches expected 32.
 
       --- Шаги в ожидании:
 
-          Сценарий: В ожидании      # features/World.feature:15
+      001 Сценарий: В ожидании      # features/World.feature:15
             И Что-то еще не сделано # FeatureContext::somethingNotDone()
               TODO: write pending definition
 
@@ -194,21 +194,21 @@ Feature: I18n
 
       --- Failed steps:
 
-          Сценарий: Провален     # features/World.feature:20
+      001 Сценарий: Провален     # features/World.feature:20
             То Я должен иметь 13 # features/World.feature:22
               Failed asserting that 14 matches expected 13.
 
-          Example: | 5        | 16        | # features/World.feature:31
+      002 Example: | 5        | 16        | # features/World.feature:31
             То Я должен иметь 16            # features/World.feature:27
               Failed asserting that 15 matches expected 16.
 
-          Example: | 23       | 32        | # features/World.feature:33
+      003 Example: | 23       | 32        | # features/World.feature:33
             То Я должен иметь 32            # features/World.feature:27
               Failed asserting that 33 matches expected 32.
 
       --- Pending steps:
 
-          Сценарий: В ожидании      # features/World.feature:15
+      001 Сценарий: В ожидании      # features/World.feature:15
             И Что-то еще не сделано # FeatureContext::somethingNotDone()
               TODO: write pending definition
 
@@ -234,21 +234,21 @@ Feature: I18n
 
       --- Failed steps:
 
-          Сценарий: Провален     # features/World.feature:20
+      001 Сценарий: Провален     # features/World.feature:20
             То Я должен иметь 13 # features/World.feature:22
               Failed asserting that 14 matches expected 13.
 
-          Example: | 5        | 16        | # features/World.feature:31
+      002 Example: | 5        | 16        | # features/World.feature:31
             То Я должен иметь 16            # features/World.feature:27
               Failed asserting that 15 matches expected 16.
 
-          Example: | 23       | 32        | # features/World.feature:33
+      003 Example: | 23       | 32        | # features/World.feature:33
             То Я должен иметь 32            # features/World.feature:27
               Failed asserting that 33 matches expected 32.
 
       --- Pending steps:
 
-          Сценарий: В ожидании      # features/World.feature:15
+      001 Сценарий: В ожидании      # features/World.feature:15
             И Что-то еще не сделано # FeatureContext::somethingNotDone()
               TODO: write pending definition
 

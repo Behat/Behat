@@ -200,19 +200,19 @@ Feature: Scenario Outlines
 
       --- Failed steps:
 
-          Example: | 5       | 4       | 15     | # features/math.feature:14
+      001 Example: | 5       | 4       | 15     | # features/math.feature:14
             Then The result should be 15          # features/math.feature:9
               Failed asserting that 20 matches expected 15.
 
-          Scenario:                     # features/math.feature:16
+      002 Scenario:                     # features/math.feature:16
             Then The result should be 7 # features/math.feature:20
               Failed asserting that 6 matches expected 7.
 
-          Example: | 50      | 10      | 2      | # features/math.feature:31
+      003 Example: | 50      | 10      | 2      | # features/math.feature:31
             Then The result should be 2           # features/math.feature:26
               Failed asserting that 5 matches expected 2.
 
-          Example: | 50      | 10      | 4      | # features/math.feature:32
+      004 Example: | 50      | 10      | 4      | # features/math.feature:32
             Then The result should be 4           # features/math.feature:26
               Failed asserting that 5 matches expected 4.
 

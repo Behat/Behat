@@ -86,7 +86,7 @@ Feature: Error Reporting
     """
     --- Failed steps:
 
-        Scenario: Access undefined index # features/e_notice_in_scenario.feature:9
+    001 Scenario: Access undefined index # features/e_notice_in_scenario.feature:9
           When I access array index 0    # features/e_notice_in_scenario.feature:10
             Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 24
 

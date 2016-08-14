@@ -156,11 +156,11 @@ Feature: Snippets
 
       --- Pending steps:
 
-          Scenario: Single quotes              # features/coffee.feature:6
+      001 Scenario: Single quotes              # features/coffee.feature:6
             Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
               TODO: write pending definition
 
-          Scenario: Double quotes              # features/coffee.feature:18
+      002 Scenario: Double quotes              # features/coffee.feature:18
             Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
               TODO: write pending definition
 
@@ -259,11 +259,11 @@ Feature: Snippets
 
       --- Pending steps:
 
-          Scenario: Single quotes              # features/coffee.feature:6
+      001 Scenario: Single quotes              # features/coffee.feature:6
             Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
               TODO: write pending definition
 
-          Scenario: Double quotes              # features/coffee.feature:18
+      002 Scenario: Double quotes              # features/coffee.feature:18
             Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
               TODO: write pending definition
 

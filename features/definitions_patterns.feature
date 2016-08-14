@@ -274,7 +274,7 @@ Feature: Step Definition Pattern
 
       --- Failed steps:
 
-          Scenario:                       # features/step_patterns.feature:2
+      001 Scenario:                       # features/step_patterns.feature:2
             And I can provide parameter 2 # features/step_patterns.feature:4
               Failed asserting that '2' is null.
 

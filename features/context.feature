@@ -162,19 +162,19 @@ Feature: Context consistency
 
       --- Failed steps:
 
-          Scenario: I'm little hungry   # features/apples.feature:9
+      001 Scenario: I'm little hungry   # features/apples.feature:9
             Then I should have 5 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 5.
 
-          Scenario: Found more apples    # features/apples.feature:13
+      002 Scenario: Found more apples    # features/apples.feature:13
             Then I should have 10 apples # features/apples.feature:15
               Failed asserting that 13 matches expected 10.
 
-          Example: | 3   | 1     | 3      | # features/apples.feature:24
+      003 Example: | 3   | 1     | 3      | # features/apples.feature:24
             Then I should have 3 apples     # features/apples.feature:20
               Failed asserting that 1 matches expected 3.
 
-          Example: | 2   | 2     | 4      | # features/apples.feature:26
+      004 Example: | 2   | 2     | 4      | # features/apples.feature:26
             Then I should have 4 apples     # features/apples.feature:20
               Failed asserting that 3 matches expected 4.
 

@@ -105,11 +105,11 @@ Feature: Rerun
 
       --- Failed steps:
 
-          Scenario: I'm little hungry   # features/apples.feature:9
+      001 Scenario: I'm little hungry   # features/apples.feature:9
             Then I should have 3 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 3.
 
-          Example: | 0   | 4     | 8      | # features/apples.feature:29
+      002 Example: | 0   | 4     | 8      | # features/apples.feature:29
             Then I should have 8 apples     # features/apples.feature:24
               Failed asserting that 7 matches expected 8.
 
@@ -126,11 +126,11 @@ Feature: Rerun
 
     --- Failed steps:
 
-        Scenario: I'm little hungry   # features/apples.feature:9
+    001 Scenario: I'm little hungry   # features/apples.feature:9
           Then I should have 3 apples # features/apples.feature:11
             Failed asserting that 2 matches expected 3.
 
-        Example: | 0   | 4     | 8      | # features/apples.feature:29
+    002 Example: | 0   | 4     | 8      | # features/apples.feature:29
           Then I should have 8 apples     # features/apples.feature:24
             Failed asserting that 7 matches expected 8.
 
@@ -181,7 +181,7 @@ Feature: Rerun
 
     --- Failed steps:
 
-        Scenario: I'm little hungry   # features/apples.feature:9
+    001 Scenario: I'm little hungry   # features/apples.feature:9
           Then I should have 3 apples # features/apples.feature:11
             Failed asserting that 2 matches expected 3.
 

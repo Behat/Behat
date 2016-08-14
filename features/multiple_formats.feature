@@ -167,11 +167,11 @@ Feature: Multiple formats
 
       --- Failed steps:
 
-          Scenario: I'm little hungry   # features/apples.feature:9
+      001 Scenario: I'm little hungry   # features/apples.feature:9
             Then I should have 3 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 3.
 
-          Example: | 0   | 4     | 8      | # features/apples.feature:30
+      002 Example: | 0   | 4     | 8      | # features/apples.feature:30
             Then I should have 8 apples     # features/apples.feature:25
               Failed asserting that 7 matches expected 8.
 
@@ -260,11 +260,11 @@ Feature: Multiple formats
 
       --- Failed steps:
 
-          Scenario: I'm little hungry   # features/apples.feature:9
+      001 Scenario: I'm little hungry   # features/apples.feature:9
             Then I should have 3 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 3.
 
-          Example: | 0   | 4     | 8      | # features/apples.feature:30
+      002 Example: | 0   | 4     | 8      | # features/apples.feature:30
             Then I should have 8 apples     # features/apples.feature:25
               Failed asserting that 7 matches expected 8.
 
@@ -306,11 +306,11 @@ Feature: Multiple formats
 
       --- Failed steps:
 
-          Scenario: I'm little hungry   # features/apples.feature:9
+      001 Scenario: I'm little hungry   # features/apples.feature:9
             Then I should have 3 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 3.
 
-          Example: | 0   | 4     | 8      | # features/apples.feature:30
+      002 Example: | 0   | 4     | 8      | # features/apples.feature:30
             Then I should have 8 apples     # features/apples.feature:25
               Failed asserting that 7 matches expected 8.
 
@@ -478,11 +478,11 @@ Feature: Multiple formats
 
       --- Failed steps:
 
-          Scenario: I'm little hungry   # features/apples.feature:9
+      001 Scenario: I'm little hungry   # features/apples.feature:9
             Then I should have 3 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 3.
 
-          Example: | 0   | 4     | 8      | # features/apples.feature:30
+      002 Example: | 0   | 4     | 8      | # features/apples.feature:30
             Then I should have 8 apples     # features/apples.feature:25
               Failed asserting that 7 matches expected 8.
 
@@ -576,11 +576,11 @@ Feature: Multiple formats
 
       --- Failed steps:
 
-          Scenario: I'm little hungry   # features/apples.feature:9
+      001 Scenario: I'm little hungry   # features/apples.feature:9
             Then I should have 3 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 3.
 
-          Example: | 0   | 4     | 8      | # features/apples.feature:30
+      002 Example: | 0   | 4     | 8      | # features/apples.feature:30
             Then I should have 8 apples     # features/apples.feature:25
               Failed asserting that 7 matches expected 8.
 

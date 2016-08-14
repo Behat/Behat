@@ -109,9 +109,9 @@ final class ListPrinter
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
 
-        foreach ($stepStats as $stepStat) {
+        foreach ($stepStats as $num => $stepStat) {
             if ($stepStat instanceof StepStatV2) {
-                $this->printStepStat($printer, $stepStat, $style);
+                $this->printStepStat($printer, $num + 1, $stepStat, $style);
             } elseif ($stepStat instanceof StepStat) {
                 $this->printStat($printer, $stepStat->getText(), $stepStat->getPath(), $style, $stepStat->getStdOut(), $stepStat->getError());
             }
@@ -208,15 +208,17 @@ final class ListPrinter
      * Prints hook stat.
      *
      * @param OutputPrinter $printer
+     * @param integer       $number
      * @param StepStatV2    $stat
      * @param string        $style
      */
-    private function printStepStat(OutputPrinter $printer, StepStatV2 $stat, $style)
+    private function printStepStat(OutputPrinter $printer, $number, StepStatV2 $stat, $style)
     {
         $maxLength = max(mb_strlen($stat->getScenarioText()), mb_strlen($stat->getStepText()) + 2) + 1;
 
         $printer->writeln(
-            sprintf('    {+%s}%s{-%s}%s{+comment}# %s{-comment}',
+            sprintf('%03d {+%s}%s{-%s}%s{+comment}# %s{-comment}',
+                $number,
                 $style,
                 $stat->getScenarioText(),
                 $style,
