@@ -19,7 +19,7 @@ use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
-use Behat\Behat\Gherkin\Specification\LazyFeatureIterator;
+use Behat\Gherkin\Node\FeatureNode;
 
 /**
  * Listens for Outline events store the current one
@@ -55,13 +55,13 @@ final class JUnitOutlineStoreListener implements EventListener
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
       $this->captureOutlineOnBeforeOutlineEvent($event);
-      if (method_exists($event, 'getSpecificationIterator')) {
-        $class = 'Behat\Gherkin\Node\FeatureNode';
-        foreach ($event->getSpecificationIterator() as $iterator) {
-          if ($iterator instanceof $class) {
-            $file = $iterator->getFile();
-            if (($path_parts = pathinfo($file)) && !empty($path_parts['filename'])) {
-              $formatter->fileName = $path_parts['filename'];
+      if ($event instanceof SuiteTested) {
+        foreach ($event->getSpecificationIterator() as $node) {
+          if ($node instanceof FeatureNode) {
+            $file = $node->getFile();
+            $path = pathinfo($file, PATHINFO_FILENAME);
+            if (!empty($path)) {
+              $formatter->fileName = $path;
             }
           }
         }
