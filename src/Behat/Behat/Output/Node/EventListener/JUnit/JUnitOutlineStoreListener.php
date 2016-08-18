@@ -56,15 +56,12 @@ final class JUnitOutlineStoreListener implements EventListener
     {
       $this->captureOutlineOnBeforeOutlineEvent($event);
       if (method_exists($event, 'getSpecificationIterator')) {
-        $iterators = $event->getSpecificationIterator();
-        foreach ($iterators as $iterator) {
-          if ($iterator instanceof FeatureNode){
+        $class = 'Behat\Gherkin\Node\FeatureNode';
+        foreach ($event->getSpecificationIterator() as $iterator) {
+          if ($iterator instanceof $class) {
             $file = $iterator->getFile();
-            if (!empty($file)) {
-              $path_parts = pathinfo($file);
-              if (!empty($path_parts['filename'])) {
-                $formatter->fileName = $path_parts['filename'];
-              }
+            if (($path_parts = pathinfo($file)) && !empty($path_parts['filename'])) {
+              $formatter->fileName = $path_parts['filename'];
             }
           }
         }
