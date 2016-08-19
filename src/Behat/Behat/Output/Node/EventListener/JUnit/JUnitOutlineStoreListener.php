@@ -56,7 +56,7 @@ final class JUnitOutlineStoreListener implements EventListener
     {
         $this->captureOutlineOnBeforeOutlineEvent($event);
         if ($event instanceof SuiteTested) {
-            setFormatterFileName($event, $formatter);
+            $formatter->fileName = $this->getFormatterFileName($event);
         }
 
         $this->printHeaderOnBeforeSuiteTestedEvent($formatter, $event);
@@ -64,17 +64,16 @@ final class JUnitOutlineStoreListener implements EventListener
     }
 
     /**
-     * Get FeatureNode from within Event
+     * Get FeatureNode from within Event and return the feature path name.
      *
      * @param Event $event
      */
-    private function setFormatterFileName(Event $event, Formatter $formatter) {
+    private function getFormatterFileName(Event $event) 
+    {
         foreach ($event->getSpecificationIterator() as $node) {
             if ($node instanceof FeatureNode) {
                 $path = pathinfo($node->getFile(), PATHINFO_FILENAME);
-                if (!empty($path)) {
-                    $formatter->fileName = $path;
-                }
+                return !empty($path) ? $path : NULL;
             }
         }
     }
