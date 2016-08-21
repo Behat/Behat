@@ -871,7 +871,7 @@ Feature: Append snippets option
       14 scenarios (14 undefined)
       58 steps (58 undefined)
 
-      --- Snippets for the following steps in the second suite were not generated (does your context implement SnippetAcceptingContext interface?):
+      --- Use --snippets-for CLI option to generate snippets for following second suite steps:
 
           Given I have 3 apples
           When I ate 1 apple
