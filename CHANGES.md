@@ -1,3 +1,33 @@
+3.2.0rc1 / 2016-xx-xx
+=====================
+
+### New Features
+
+  * Return type based transformations ([PR #910](https://github.com/Behat/Behat/pull/910))
+  * Snippets generation revamp ([PR #922](https://github.com/Behat/Behat/pull/922))
+  * More context for pending/failed steps with progress formatter ([PR #920](https://github.com/Behat/Behat/pull/920))
+  * Multiline step definitions support ([PR #903](https://github.com/Behat/Behat/pull/903))
+
+### Internal design improvements
+
+  * Transformations refactoring ([PR #905](https://github.com/Behat/Behat/pull/905))
+  * `*SnippetAcceptingContext` interfaces deprecation ([PR #922](https://github.com/Behat/Behat/pull/922))
+
+### Bug fixes
+
+  * Fix context isolation for Scenario Outlines (by Konstantin Kudryashov)
+  * Include basepath in generateKey (by Rajesh Taneja)
+  * Only cache failed scenario's for rerun (by Rajesh Taneja)
+
+### Small improvements
+
+  * Use only one autoloader if possible (by Warnar Boekkooi)
+  * Added build-related files and folders to .gitattributes (by Filippo Tessarotto)
+  * Properly handle interupts on PHP7 (by Peter Mitchell)
+  * Remove behat.bat (by Konstantin Kudryashov)
+  * Improve "No specifications found" error message (by Konstantin Kudryashov)
+  * Provide clearer exception message when long token names used (by Konstantin Kudryashov)
+
 3.1.0 / 2016-03-28
 ==================
 
