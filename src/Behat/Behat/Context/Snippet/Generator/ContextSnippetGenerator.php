@@ -48,6 +48,14 @@ TPL;
      * @var PatternTransformer
      */
     private $patternTransformer;
+    /**
+     * @var null|string
+     */
+    private $snippetAcceptingClass;
+    /**
+     * @var null|string
+     */
+    private $snippetType;
 
     /**
      * Initializes snippet generator.
@@ -57,6 +65,26 @@ TPL;
     public function __construct(PatternTransformer $patternTransformer)
     {
         $this->patternTransformer = $patternTransformer;
+    }
+
+    /**
+     * Sets the context class to generate snippets for.
+     *
+     * @param null|string $contextClass
+     */
+    public function generateSnippetsForContext($contextClass = null)
+    {
+        $this->snippetAcceptingClass = $contextClass;
+    }
+
+    /**
+     * Sets the type of snippets to generate.
+     *
+     * @param null|string $snippetType
+     */
+    public function generateSnippetType($snippetType = null)
+    {
+        $this->snippetType = $snippetType;
     }
 
     /**
@@ -110,6 +138,10 @@ TPL;
      */
     private function getSnippetAcceptingContextClass(ContextEnvironment $environment)
     {
+        if (null !== $this->snippetAcceptingClass) {
+            return $this->snippetAcceptingClass;
+        }
+
         foreach ($environment->getContextClasses() as $class) {
             if (in_array('Behat\Behat\Context\SnippetAcceptingContext', class_implements($class))) {
                 return $class;
@@ -128,6 +160,10 @@ TPL;
      */
     private function getPatternType($contextClass)
     {
+        if (null !== $this->snippetType) {
+            return $this->snippetType;
+        }
+
         if (!in_array('Behat\Behat\Context\CustomSnippetAcceptingContext', class_implements($contextClass))) {
             return null;
         }
