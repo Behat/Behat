@@ -138,7 +138,7 @@ TPL;
      */
     private function getSnippetAcceptingContextClass(ContextEnvironment $environment)
     {
-        if (null !== $this->snippetAcceptingClass) {
+        if (null !== $this->snippetAcceptingClass && in_array($this->snippetAcceptingClass, $environment->getContextClasses())) {
             return $this->snippetAcceptingClass;
         }
 

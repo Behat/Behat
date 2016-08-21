@@ -8,17 +8,15 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $apples = 0;
           private $parameters;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters = array()) {
               $this->parameters = $parameters;
@@ -120,22 +118,20 @@ Feature: Append snippets option
       """
 
   Scenario: Append snippets to main context
-    When I run "behat -f progress --append-snippets"
+    When I run "behat -f progress --append-snippets --snippets-for=FeatureContext --snippets-type=regex"
     Then "features/bootstrap/FeatureContext.php" file should contain:
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $apples = 0;
           private $parameters;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters = array()) {
               $this->parameters = $parameters;
@@ -233,16 +229,14 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+      use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $apples = 0;
           private $parameters;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters = array()) {
               $this->parameters = $parameters;
@@ -294,22 +288,20 @@ Feature: Append snippets option
           private function doSomethingUndefinedWith() {}
       }
       """
-    When I run "behat -f progress --append-snippets"
+    When I run "behat -f progress --append-snippets --snippets-for=FeatureContext --snippets-type=regex"
     Then "features/bootstrap/FeatureContext.php" file should contain:
       """
       <?php
 
       use Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+      use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $apples = 0;
           private $parameters;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters = array()) {
               $this->parameters = $parameters;
@@ -407,14 +399,12 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+      use Behat\Behat\Context\Context;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $apples = 0;
           private $parameters;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters = array()) {
               $this->parameters = $parameters;
@@ -466,7 +456,7 @@ Feature: Append snippets option
           private function doSomethingUndefinedWith() {}
       }
       """
-    When I run "behat -f progress --append-snippets"
+    When I run "behat -f progress --append-snippets --snippets-for=FeatureContext --snippets-type=regex"
     Then "features/bootstrap/FeatureContext.php" file should contain:
       """
       <?php
@@ -474,14 +464,12 @@ Feature: Append snippets option
       use Behat\Gherkin\Node\TableNode;
       use Behat\Gherkin\Node\PyStringNode;
       use Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+      use Behat\Behat\Context\Context;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $apples = 0;
           private $parameters;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters = array()) {
               $this->parameters = $parameters;
@@ -573,260 +561,6 @@ Feature: Append snippets option
           }
       }
       """
-
-    Scenario: Append snippets to two contexts
-      Given a file named "features/bootstrap/FirstContext.php" with:
-        """
-        <?php
-
-        use Behat\Behat\Tester\Exception\PendingException;
-        use Behat\Behat\Context\CustomSnippetAcceptingContext;
-        use Behat\Gherkin\Node\TableNode;
-        use Behat\Gherkin\Node\PyStringNode;
-
-        class FirstContext implements CustomSnippetAcceptingContext
-        {
-            public static function getAcceptedSnippetType() { return 'regex'; }
-        }
-        """
-      And a file named "features/bootstrap/SecondContext.php" with:
-        """
-        <?php
-
-        use Behat\Behat\Tester\Exception\PendingException;
-        use Behat\Behat\Context\SnippetAcceptingContext;
-        use Behat\Gherkin\Node\TableNode;
-        use Behat\Gherkin\Node\PyStringNode;
-
-        class SecondContext implements SnippetAcceptingContext
-        {
-        }
-        """
-      And a file named "behat.yml" with:
-        """
-        default:
-          suites:
-            first:
-              contexts: [ FirstContext ]
-            second:
-              contexts: [ SecondContext ]
-        """
-      When I run "behat -f progress --append-snippets --no-colors"
-      Then it should pass with:
-        """
-        UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
-
-        14 scenarios (14 undefined)
-        58 steps (58 undefined)
-
-        u features/bootstrap/FirstContext.php - `I have 3 apples` definition added
-        u features/bootstrap/FirstContext.php - `I ate 1 apple` definition added
-        u features/bootstrap/FirstContext.php - `I should have 3 apples` definition added
-        u features/bootstrap/FirstContext.php - `I found 5 apples` definition added
-        u features/bootstrap/FirstContext.php - `do something undefined with $` definition added
-        u features/bootstrap/FirstContext.php - `I ate 3 apples` definition added
-        u features/bootstrap/FirstContext.php - `do something undefined with \1` definition added
-        u features/bootstrap/FirstContext.php - `pystring:` definition added
-        u features/bootstrap/FirstContext.php - `pystring 5:` definition added
-        u features/bootstrap/FirstContext.php - `table:` definition added
-        u features/bootstrap/SecondContext.php - `I have 3 apples` definition added
-        u features/bootstrap/SecondContext.php - `I ate 1 apple` definition added
-        u features/bootstrap/SecondContext.php - `I should have 3 apples` definition added
-        u features/bootstrap/SecondContext.php - `I found 5 apples` definition added
-        u features/bootstrap/SecondContext.php - `do something undefined with $` definition added
-        u features/bootstrap/SecondContext.php - `I ate 3 apples` definition added
-        u features/bootstrap/SecondContext.php - `do something undefined with \1` definition added
-        u features/bootstrap/SecondContext.php - `pystring:` definition added
-        u features/bootstrap/SecondContext.php - `pystring 5:` definition added
-        u features/bootstrap/SecondContext.php - `table:` definition added
-        """
-      And "features/bootstrap/FirstContext.php" file should contain:
-        """
-        <?php
-
-        use Behat\Behat\Tester\Exception\PendingException;
-        use Behat\Behat\Context\CustomSnippetAcceptingContext;
-        use Behat\Gherkin\Node\TableNode;
-        use Behat\Gherkin\Node\PyStringNode;
-
-        class FirstContext implements CustomSnippetAcceptingContext
-        {
-            public static function getAcceptedSnippetType() { return 'regex'; }
-
-            /**
-             * @Given /^I have (\d+) apples$/
-             */
-            public function iHaveApples($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @When /^I ate (\d+) apple$/
-             */
-            public function iAteApple($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Then /^I should have (\d+) apples$/
-             */
-            public function iShouldHaveApples($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @When /^I found (\d+) apples$/
-             */
-            public function iFoundApples($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Then /^do something undefined with \$$/
-             */
-            public function doSomethingUndefinedWith()
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @When /^I ate (\d+) apples$/
-             */
-            public function iAteApples($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Then /^do something undefined with \\(\d+)$/
-             */
-            public function doSomethingUndefinedWith2($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Given /^pystring:$/
-             */
-            public function pystring(PyStringNode $string)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Given /^pystring (\d+):$/
-             */
-            public function pystring2($arg1, PyStringNode $string)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Given /^table:$/
-             */
-            public function table(TableNode $table)
-            {
-                throw new PendingException();
-            }
-        }
-        """
-      And "features/bootstrap/SecondContext.php" file should contain:
-        """
-        <?php
-
-        use Behat\Behat\Tester\Exception\PendingException;
-        use Behat\Behat\Context\SnippetAcceptingContext;
-        use Behat\Gherkin\Node\TableNode;
-        use Behat\Gherkin\Node\PyStringNode;
-
-        class SecondContext implements SnippetAcceptingContext
-        {
-
-            /**
-             * @Given I have :arg1 apples
-             */
-            public function iHaveApples($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @When I ate :arg1 apple
-             */
-            public function iAteApple($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Then I should have :arg1 apples
-             */
-            public function iShouldHaveApples($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @When I found :arg1 apples
-             */
-            public function iFoundApples($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Then do something undefined with $
-             */
-            public function doSomethingUndefinedWith()
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @When I ate :arg1 apples
-             */
-            public function iAteApples($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Then do something undefined with \:arg1
-             */
-            public function doSomethingUndefinedWith2($arg1)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Given pystring:
-             */
-            public function pystring(PyStringNode $string)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Given pystring :arg1:
-             */
-            public function pystring2($arg1, PyStringNode $string)
-            {
-                throw new PendingException();
-            }
-
-            /**
-             * @Given table:
-             */
-            public function table(TableNode $table)
-            {
-                throw new PendingException();
-            }
-        }
-        """
 
   Scenario: Append snippets to accepting context only
     Given a file named "features/bootstrap/FirstContext.php" with:
@@ -834,13 +568,12 @@ Feature: Append snippets option
       <?php
 
       use Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+      use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\TableNode;
       use Behat\Gherkin\Node\PyStringNode;
 
-      class FirstContext implements CustomSnippetAcceptingContext
+      class FirstContext implements Context
       {
-          public static function getAcceptedSnippetType() { return 'regex'; }
       }
       """
     And a file named "features/bootstrap/SecondContext.php" with:
@@ -863,7 +596,7 @@ Feature: Append snippets option
           second:
             contexts: [ SecondContext ]
       """
-    When I run "behat -f progress --append-snippets --no-colors"
+    When I run "behat -f progress --append-snippets --snippets-for=FirstContext --snippets-type=regex --no-colors"
     Then it should pass with:
       """
       UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
@@ -909,13 +642,12 @@ Feature: Append snippets option
       <?php
 
       use Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+      use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\TableNode;
       use Behat\Gherkin\Node\PyStringNode;
 
-      class FirstContext implements CustomSnippetAcceptingContext
+      class FirstContext implements Context
       {
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given /^I have (\d+) apples$/
