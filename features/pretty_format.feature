@@ -8,16 +8,14 @@ Feature: Pretty Formatter
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $value;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given /I have entered (\d+)/
@@ -83,7 +81,7 @@ Feature: Pretty Formatter
             |  10   | 20     |
             |  23   | 32     |
       """
-    When I run "behat --no-colors -f pretty"
+    When I run "behat --no-colors -f pretty --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       Feature: World consistency

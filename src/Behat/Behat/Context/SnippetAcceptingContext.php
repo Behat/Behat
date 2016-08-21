@@ -18,6 +18,8 @@ use Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator;
  * @see ContextSnippetGenerator
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @deprecated will be removed in 4.0. Use --snippets-for CLI option instead
  */
 interface SnippetAcceptingContext extends Context
 {

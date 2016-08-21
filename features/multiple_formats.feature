@@ -8,17 +8,15 @@ Feature: Multiple formats
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $apples = 0;
           private $parameters;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters = array()) {
               $this->parameters = $parameters;
@@ -113,7 +111,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, default output
-    When I run "behat --no-colors -f pretty -f progress --format-settings='{\"multiline\": false}'"
+    When I run "behat --no-colors -f pretty -f progress --format-settings='{\"multiline\": false}' --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       Feature: Apples story
@@ -206,7 +204,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, same output
-    When I run "behat --no-colors -f pretty -f progress --out=std --format-settings='{\"multiline\": false}'"
+    When I run "behat --no-colors -f pretty -f progress --out=std --format-settings='{\"multiline\": false}' --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       Feature: Apples story
@@ -299,7 +297,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write first to file
-    When I run "behat --no-colors -f pretty -o apples.pretty -f progress -o std --format-settings='{\"multiline\": false, \"paths\": false}'"
+    When I run "behat --no-colors -f pretty -o apples.pretty -f progress -o std --format-settings='{\"multiline\": false, \"paths\": false}' --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       ..F......U.......F.....UU
@@ -395,7 +393,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write second to file
-    When I run "behat --no-colors -f pretty -o std --format=progress --out=apples.progress --format-settings='{\"multiline\": false, \"paths\": false}'"
+    When I run "behat --no-colors -f pretty -o std --format=progress --out=apples.progress --format-settings='{\"multiline\": false, \"paths\": false}' --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       Feature: Apples story
@@ -491,7 +489,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write both to files
-    When I run "behat --no-colors -f pretty -o app.pretty -f progress -o app.progress --format-settings='{\"multiline\": false, \"paths\": false}'"
+    When I run "behat --no-colors -f pretty -o app.pretty -f progress -o app.progress --format-settings='{\"multiline\": false, \"paths\": false}' --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       --- FeatureContext has missing steps. Define them with these snippets:

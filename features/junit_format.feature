@@ -8,14 +8,12 @@
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $value;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given /I have entered (\d+)/
@@ -89,7 +87,7 @@
           | 5     | 15     |
           | 10    | 20     |
       """
-    When I run "behat --no-colors -f junit -o junit"
+    When I run "behat --no-colors -f junit -o junit --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       --- FeatureContext has missing steps. Define them with these snippets:
@@ -135,14 +133,12 @@
     """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $value;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given /I have entered (\d+)/
@@ -283,13 +279,11 @@
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+      use Behat\Behat\Context\Context;
 
-      class SmallKidContext implements CustomSnippetAcceptingContext
+      class SmallKidContext implements Context
       {
           protected $strongLevel;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given I am not strong
@@ -317,13 +311,11 @@
     """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext;
+      use Behat\Behat\Context\Context;
 
-      class OldManContext implements CustomSnippetAcceptingContext
+      class OldManContext implements Context
       {
           protected $strongLevel;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given I am not strong
@@ -418,14 +410,12 @@
     """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $value;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @BeforeScenario
@@ -478,14 +468,12 @@
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $value;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given /I have entered (\d+)/
@@ -544,14 +532,12 @@
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $value;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given /I have entered (\d+)/
@@ -605,12 +591,11 @@
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
-        public static function getAcceptedSnippetType() { return 'regex'; }
       }
       """
     And a file named "junit.txt" with:
@@ -628,14 +613,12 @@
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $value;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @BeforeStep
@@ -686,14 +669,12 @@
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $value;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @AfterStep

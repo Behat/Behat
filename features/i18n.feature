@@ -8,16 +8,14 @@ Feature: I18n
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $value = 0;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           /**
            * @Given /Я ввел (\d+)/
@@ -86,7 +84,7 @@ Feature: I18n
       """
 
   Scenario: Pretty
-    When I run "behat --no-colors -f pretty --lang=ru"
+    When I run "behat --no-colors -f pretty --lang=ru --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       Функционал: Постоянство мира
@@ -147,7 +145,7 @@ Feature: I18n
       """
 
   Scenario: Progress
-    When I run "behat --no-colors -f progress --lang=ru"
+    When I run "behat --no-colors -f progress --lang=ru --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
@@ -187,7 +185,7 @@ Feature: I18n
       """
 
   Scenario: Progress with unexisting locale
-    When I run "behat --no-colors -f progress --lang=xx"
+    When I run "behat --no-colors -f progress --lang=xx --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
@@ -227,7 +225,7 @@ Feature: I18n
       """
 
   Scenario: Progress with unexisting locale
-    When I run "behat --no-colors -f progress --lang=xx"
+    When I run "behat --no-colors -f progress --lang=xx --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
