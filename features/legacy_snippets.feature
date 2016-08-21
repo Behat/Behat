@@ -1,7 +1,7 @@
-Feature: Snippets generation and addition
-  In order to not manually write definitions every time
-  As a feature tester
-  I need tool to generate snippets for me
+Feature: Legacy Snippets
+
+  This is a deprecated usage of snippets and it is planned to go away in 4.0
+  use functionality described in `snippets.feature` instead!
 
   Background:
     Given a file named "features/coffee.feature" with:
@@ -37,19 +37,21 @@ Feature: Snippets generation and addition
             '''
       """
 
-  Scenario: Generating regex snippets for particular context
+  Scenario: Regex snippets
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
-      use Behat\Behat\Context\Context,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements Context {}
+      class FeatureContext implements CustomSnippetAcceptingContext {
+          public static function getAcceptedSnippetType() { return 'regex'; }
+      }
       """
-    When I run "behat --no-colors --snippets-for=FeatureContext --snippets-type=regex -f progress features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature"
     Then it should pass with:
       """
       UUUUUUUUUUU
@@ -132,19 +134,21 @@ Feature: Snippets generation and addition
           }
       """
 
-  Scenario: Appending regex snippets to a particular context
+  Scenario: Regex snippets are working
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
-      use Behat\Behat\Context\Context,
+      use Behat\Behat\Context\CustomSnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements Context {}
+      class FeatureContext implements CustomSnippetAcceptingContext {
+          public static function getAcceptedSnippetType() { return 'regex'; }
+      }
       """
-    When I run "behat --no-colors -f progress --snippets-for=FeatureContext --snippets-type=regex --append-snippets features/coffee.feature"
+    When I run "behat --no-colors -f progress --append-snippets features/coffee.feature"
     And I run "behat --no-colors -f progress features/coffee.feature"
     Then it should pass with:
       """
@@ -164,19 +168,19 @@ Feature: Snippets generation and addition
       11 steps (2 pending, 9 skipped)
       """
 
-  Scenario: Generating turnip snippets for a particular context
+  Scenario: Turnip snippets
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
-      use Behat\Behat\Context\Context,
+      use Behat\Behat\Context\SnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements Context {}
+      class FeatureContext implements SnippetAcceptingContext { }
       """
-    When I run "behat --no-colors -f progress --snippets-for=FeatureContext features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature"
     Then it should pass with:
       """
       UUUUUUUUUUU
@@ -235,19 +239,19 @@ Feature: Snippets generation and addition
           }
       """
 
-  Scenario: Appending turnip snippets to a particular context
+  Scenario: Turnip snippets are working
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
-      use Behat\Behat\Context\Context,
+      use Behat\Behat\Context\SnippetAcceptingContext,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements Context {}
+      class FeatureContext implements SnippetAcceptingContext { }
       """
-    When I run "behat --no-colors -f progress --append-snippets --snippets-for=FeatureContext features/coffee.feature"
+    When I run "behat --no-colors -f progress --append-snippets features/coffee.feature"
     And I run "behat --no-colors -f progress features/coffee.feature"
     Then it should pass with:
       """
@@ -267,14 +271,14 @@ Feature: Snippets generation and addition
       11 steps (2 pending, 9 skipped)
       """
 
-  Scenario: Generating snippets for steps that have numbers with decimal points
+  Scenario: Numbers with decimal points
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
-      use Behat\Behat\Context\Context;
+      use Behat\Behat\Context\SnippetAcceptingContext;
 
-      class FeatureContext implements Context {}
+      class FeatureContext implements SnippetAcceptingContext {}
       """
     And a file named "features/coffee.feature" with:
       """
@@ -283,7 +287,7 @@ Feature: Snippets generation and addition
           Then 5 should have value of £10
           And 7 should have value of £7.2
       """
-    When I run "behat -f progress --no-colors --append-snippets --snippets-for=FeatureContext"
+    When I run "behat -f progress --no-colors --append-snippets"
     And I run "behat -f pretty --no-colors"
     Then it should pass with:
       """
@@ -298,14 +302,17 @@ Feature: Snippets generation and addition
       2 steps (1 pending, 1 skipped)
       """
 
-  Scenario: Generating snippets for steps that have string followed by decimal number
+  Scenario: Parameter with decimal number following string
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Behat\Context\SnippetAcceptingContext;
 
-      class FeatureContext implements Context {}
+      class FeatureContext implements Context, SnippetAcceptingContext
+      {
+      }
       """
     And a file named "features/coffee.feature" with:
       """
@@ -313,7 +320,7 @@ Feature: Snippets generation and addition
         Scenario:
           Given I have a package v2.5
       """
-    When I run "behat -f progress --no-colors --snippets-for=FeatureContext"
+    When I run "behat -f progress --no-colors"
     Then it should pass with:
       """
       U
@@ -332,14 +339,17 @@ Feature: Snippets generation and addition
           }
       """
 
-  Scenario: Generating snippets for steps with slashes
+  Scenario: Step with slashes
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Behat\Context\SnippetAcceptingContext;
 
-      class FeatureContext implements Context {}
+      class FeatureContext implements Context, SnippetAcceptingContext
+      {
+      }
       """
     And a file named "features/coffee.feature" with:
       """
@@ -347,7 +357,7 @@ Feature: Snippets generation and addition
         Scenario:
           Then images should be uploaded to web/uploads/media/default/0001/01/
       """
-    When I run "behat -f progress --no-colors --snippets-for=FeatureContext"
+    When I run "behat -f progress --no-colors"
     Then it should pass with:
       """
       U
