@@ -30,6 +30,13 @@ interface Formatter extends EventSubscriberInterface
     public function getName();
 
     /**
+     * Returns file name.
+     * @param string $suite
+     * @return string
+     */
+    public function generateFilenameFor($suite);
+
+    /**
      * Returns formatter description.
      *
      * @return string

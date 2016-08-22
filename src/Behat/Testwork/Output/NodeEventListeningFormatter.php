@@ -39,7 +39,6 @@ final class NodeEventListeningFormatter implements Formatter
      */
     private $name;
     /**
-     * 
      * @var string
      */
     public $fileName;
@@ -100,9 +99,9 @@ final class NodeEventListeningFormatter implements Formatter
     /**
      * {@inheritdoc}
      */
-    public function getFeatureName()
+    public function generateFilenameFor($suite)
     {
-        return $this->fileName;
+        return !empty($this->fileName) ? $this->fileName : $suite->getName();
     }
 
     /**
