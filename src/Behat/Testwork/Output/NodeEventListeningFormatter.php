@@ -14,6 +14,7 @@ use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Symfony\Component\EventDispatcher\Event;
+use Behat\Testwork\Suite\Suite;
 
 /**
  * Formatter built around the idea of event delegation and composition.
@@ -99,7 +100,7 @@ final class NodeEventListeningFormatter implements Formatter
     /**
      * {@inheritdoc}
      */
-    public function generateFilenameFor($suite)
+    public function generateFilenameFor(Suite $suite)
     {
         return !empty($this->fileName) ? $this->fileName : $suite->getName();
     }
