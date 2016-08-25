@@ -46,10 +46,10 @@ final class DefinitionFinder
      *
      * @return SearchResult
      */
-    public function findDefinition(Environment $environment, FeatureNode $feature, StepNode $step)
+    public function findDefinition(Environment $environment, FeatureNode $feature, StepNode $step, array $bag)
     {
         foreach ($this->engines as $engine) {
-            $result = $engine->searchDefinition($environment, $feature, $step);
+            $result = $engine->searchDefinition($environment, $feature, $step, $bag);
 
             if (null !== $result && $result->hasMatch()) {
                 return $result;

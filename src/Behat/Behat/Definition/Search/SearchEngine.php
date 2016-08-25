@@ -34,5 +34,5 @@ interface SearchEngine
      *
      * @return null|SearchResult
      */
-    public function searchDefinition(Environment $environment, FeatureNode $feature, StepNode $step);
+    public function searchDefinition(Environment $environment, FeatureNode $feature, StepNode $step, array $bag = array());
 }

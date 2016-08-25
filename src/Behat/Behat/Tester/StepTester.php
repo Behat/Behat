@@ -41,12 +41,13 @@ interface StepTester
      *
      * @param Environment $env
      * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param Boolean     $skip
+     * @param StepNode $step
+     * @param Boolean $skip
+     * @param array $bag
      *
      * @return StepResult
      */
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip);
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip, array $bag = array());
 
     /**
      * Tears down step after a test.

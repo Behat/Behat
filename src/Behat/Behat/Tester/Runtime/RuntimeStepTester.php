@@ -66,10 +66,10 @@ final class RuntimeStepTester implements StepTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip = false)
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip = false, array $bag = array())
     {
         try {
-            $search = $this->searchDefinition($env, $feature, $step);
+            $search = $this->searchDefinition($env, $feature, $step, $bag);
             $result = $this->testDefinition($env, $feature, $step, $search, $skip);
         } catch (SearchException $exception) {
             $result = new FailedStepSearchResult($exception);
@@ -95,9 +95,9 @@ final class RuntimeStepTester implements StepTester
      *
      * @return SearchResult
      */
-    private function searchDefinition(Environment $env, FeatureNode $feature, StepNode $step)
+    private function searchDefinition(Environment $env, FeatureNode $feature, StepNode $step, array $bag)
     {
-        return $this->definitionFinder->findDefinition($env, $feature, $step);
+        return $this->definitionFinder->findDefinition($env, $feature, $step, $bag);
     }
 
     /**

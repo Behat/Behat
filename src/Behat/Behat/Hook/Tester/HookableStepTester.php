@@ -69,9 +69,9 @@ final class HookableStepTester implements StepTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip)
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip, array $bag = array())
     {
-        return $this->baseTester->test($env, $feature, $step, $skip);
+        return $this->baseTester->test($env, $feature, $step, $skip, $bag);
     }
 
     /**

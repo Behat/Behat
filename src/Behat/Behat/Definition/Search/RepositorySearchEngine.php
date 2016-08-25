@@ -76,7 +76,8 @@ final class RepositorySearchEngine implements SearchEngine
     public function searchDefinition(
         Environment $environment,
         FeatureNode $feature,
-        StepNode $step
+        StepNode $step,
+        array $bag = array()
     ) {
         $suite = $environment->getSuite();
         $language = $feature->getLanguage();
@@ -89,7 +90,7 @@ final class RepositorySearchEngine implements SearchEngine
         foreach ($this->repository->getEnvironmentDefinitions($environment) as $definition) {
             $definition = $this->translator->translateDefinition($suite, $definition, $language);
 
-            if (!$newResult = $this->match($definition, $stepText, $multi)) {
+            if (!$newResult = $this->match($definition, $stepText, $multi, $bag)) {
                 continue;
             }
 
@@ -113,7 +114,7 @@ final class RepositorySearchEngine implements SearchEngine
      *
      * @return null|SearchResult
      */
-    private function match(Definition $definition, $stepText, array $multiline)
+    private function match(Definition $definition, $stepText, array $multiline, array $bag)
     {
         $regex = $this->patternTransformer->transformPatternToRegex($definition->getPattern());
 
@@ -122,7 +123,7 @@ final class RepositorySearchEngine implements SearchEngine
         }
 
         $function = $definition->getReflection();
-        $match = array_merge($match, array_values($multiline));
+        $match = array_merge($match, array_values($multiline), $bag);
         $arguments = $this->argumentOrganiser->organiseArguments($function, $match);
 
         return new SearchResult($definition, $stepText, $arguments);
