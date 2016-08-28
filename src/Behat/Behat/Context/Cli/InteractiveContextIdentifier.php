@@ -68,7 +68,7 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
         $choices = array_values(array_merge(array('None'), $contextClasses));
         $default = current($contextClasses);
 
-        $answer = $this->askQuestion($message, $choices, $default);
+        $answer = $this->askQuestion('>> ' . $message, $choices, $default);
 
         return 'None' !== $answer ? $answer : null;
     }
