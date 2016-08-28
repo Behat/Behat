@@ -10,12 +10,15 @@
 
 namespace Behat\Behat\Context\Cli;
 
+use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
  * Configures which context snippets are generated for.
@@ -44,7 +47,7 @@ final class ContextSnippetsController implements Controller
     {
         $command
             ->addOption(
-                '--snippets-for', null, InputOption::VALUE_REQUIRED,
+                '--snippets-for', null, InputOption::VALUE_OPTIONAL,
                 "Specifies which context class to generate snippets for."
             )
             ->addOption(
@@ -58,12 +61,42 @@ final class ContextSnippetsController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if (null !== $input->getOption('snippets-for')) {
-            $this->generator->generateSnippetsForContext($input->getOption('snippets-for'));
+        if ($input->hasParameterOption('--snippets-for')) {
+            $this->generator->setContextClassGetter($this->createContextClassGetter($input, $output));
         }
 
         if (null !== $input->getOption('snippets-type')) {
-            $this->generator->generateSnippetType($input->getOption('snippets-type'));
+            $this->generator->setSnippetsType($input->getOption('snippets-type'));
         }
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return \Closure
+     */
+    private function createContextClassGetter(InputInterface $input, OutputInterface $output)
+    {
+        if (null !== $input->getOption('snippets-for')) {
+            return function () use ($input) {
+                return $input->getOption('snippets-for');
+            };
+        }
+
+        return function (ContextEnvironment $environment) use ($input, $output) {
+            $output->writeln('');
+            $helper = new QuestionHelper();
+            $question = new ChoiceQuestion(
+                sprintf(
+                    ' <snippet_undefined><snippet_keyword>%s</snippet_keyword> suite has undefined steps. ' .
+                    'Please choose the context to generate snippets:</snippet_undefined>' . "\n",
+                    $environment->getSuite()->getName()),
+                $environment->getContextClasses(),
+                current($environment->getContextClasses())
+            );
+
+            return $helper->ask($input, $output, $question);
+        };
     }
 }

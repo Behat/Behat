@@ -66,6 +66,7 @@ class FeatureContext implements Context
         $this->workingDir = $dir;
         $this->phpBin = $php;
         $this->process = new Process(null);
+        $this->process->setTimeout(10);
     }
 
     /**
@@ -147,8 +148,26 @@ class FeatureContext implements Context
             $this->process->setEnv($env);
         }
 
-        $this->process->start();
-        $this->process->wait();
+        $this->process->run();
+    }
+
+    /**
+     * Runs behat command with provided parameters in interactive mode
+     *
+     * @When /^I answer "([^"]+)" when running "behat(?: ((?:\"|[^"])*))?"$/
+     *
+     * @param string $answerString
+     * @param string $argumentsString
+     */
+    public function iRunBehatInteractively($answerString, $argumentsString)
+    {
+        $env = $this->process->getEnv();
+        $env['SHELL_INTERACTIVE'] = true;
+
+        $this->process->setEnv($env);
+        $this->process->setInput("0");
+
+        $this->iRunBehat($argumentsString);
     }
 
     /**

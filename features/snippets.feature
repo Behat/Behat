@@ -365,3 +365,70 @@ Feature: Snippets generation and addition
               throw new PendingException();
           }
       """
+
+  Scenario: Generating snippets using interactive --snippets-for
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context,
+          Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Gherkin\Node\PyStringNode,
+          Behat\Gherkin\Node\TableNode;
+
+      class FeatureContext implements Context {}
+      """
+    When I answer "0" when running "behat --no-colors -f progress --snippets-for"
+    Then it should pass
+    And the output should contain:
+      """
+      --- FeatureContext has missing steps. Define them with these snippets:
+
+          /**
+           * @Given I have magically created :arg1$
+           */
+          public function iHaveMagicallyCreated($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @When I have chose :arg1 in coffee machine
+           */
+          public function iHaveChoseInCoffeeMachine($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then I should have :arg1
+           */
+          public function iShouldHave($arg1)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then I should get a :arg1:
+           */
+          public function iShouldGetA($arg1, PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then I should get a simple string:
+           */
+          public function iShouldGetASimpleString(PyStringNode $string)
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @When do something undefined with \:arg1
+           */
+          public function doSomethingUndefinedWith($arg1)
+          {
+              throw new PendingException();
+          }
+      """
