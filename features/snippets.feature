@@ -378,7 +378,7 @@ Feature: Snippets generation and addition
 
       class FeatureContext implements Context {}
       """
-    When I answer "0" when running "behat --no-colors -f progress --snippets-for"
+    When I answer "1" when running "behat --no-colors -f progress --snippets-for"
     Then it should pass
     And the output should contain:
       """

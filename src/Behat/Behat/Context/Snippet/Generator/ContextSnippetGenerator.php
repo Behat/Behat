@@ -49,13 +49,9 @@ TPL;
      */
     private $patternTransformer;
     /**
-     * @var null|callable
+     * @var TargetContextIdentifier
      */
-    private $contextClassGetter;
-    /**
-     * @var array
-     */
-    private $snippetContextClasses;
+    private $contextIdentifier;
     /**
      * @var null|string
      */
@@ -69,16 +65,18 @@ TPL;
     public function __construct(PatternTransformer $patternTransformer)
     {
         $this->patternTransformer = $patternTransformer;
+
+        $this->setContextIdentifier(new SnippetAcceptingContextIdentifier());
     }
 
     /**
-     * Sets the closure to get context class into which snippets should be generated.
+     * Sets target context identifier.
      *
-     * @param null|callable $contextClassGetter
+     * @param TargetContextIdentifier $identifier
      */
-    public function setContextClassGetter($contextClassGetter = null)
+    public function setContextIdentifier(TargetContextIdentifier $identifier)
     {
-        $this->contextClassGetter = $contextClassGetter;
+        $this->contextIdentifier = new CachedContextIdentifier($identifier);
     }
 
     /**
@@ -104,7 +102,7 @@ TPL;
             return false;
         }
 
-        return null !== $this->getCachedSnippetContextClass($environment);
+        return null !== $this->contextIdentifier->guessTargetContextClass($environment);
     }
 
     /**
@@ -119,7 +117,7 @@ TPL;
             ), $environment);
         }
 
-        $contextClass = $this->getCachedSnippetContextClass($environment);
+        $contextClass = $this->contextIdentifier->guessTargetContextClass($environment);
         $patternType = $this->getPatternType($contextClass);
         $stepText = $step->getText();
         $pattern = $this->patternTransformer->generatePattern($patternType, $stepText);
@@ -131,48 +129,6 @@ TPL;
         $usedClasses = $this->getUsedClasses($step);
 
         return new ContextSnippet($step, $snippetTemplate, $contextClass, $usedClasses);
-    }
-
-    /**
-     * Caches and returns snippet-accepting context class.
-     *
-     * @param ContextEnvironment $environment
-     *
-     * @return null|string
-     */
-    private function getCachedSnippetContextClass(ContextEnvironment $environment)
-    {
-        $suiteKey = $environment->getSuite()->getName();
-
-        if (isset($this->snippetContextClasses[$suiteKey])) {
-            return $this->snippetContextClasses[$suiteKey];
-        }
-
-        return $this->snippetContextClasses[$suiteKey] = $this->getSnippetContextClass($environment);
-    }
-
-    /**
-     * Returns snippet-accepting context class.
-     *
-     * @param ContextEnvironment $environment
-     *
-     * @return null|string
-     */
-    private function getSnippetContextClass(ContextEnvironment $environment)
-    {
-        if (null !== $this->contextClassGetter) {
-            $contextClass = call_user_func($this->contextClassGetter, $environment);
-
-            return $environment->hasContextClass($contextClass) ? $contextClass : null;
-        }
-
-        foreach ($environment->getContextClasses() as $class) {
-            if (in_array('Behat\Behat\Context\SnippetAcceptingContext', class_implements($class))) {
-                return $class;
-            }
-        }
-
-        return null;
     }
 
     /**

@@ -206,7 +206,8 @@ final class ContextExtension implements Extension
     protected function loadSnippetsController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Cli\ContextSnippetsController', array(
-            new Reference(self::CONTEXT_SNIPPET_GENERATOR_ID)
+            new Reference(self::CONTEXT_SNIPPET_GENERATOR_ID),
+            new Reference(TranslatorExtension::TRANSLATOR_ID)
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 410));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.context_snippets', $definition);

@@ -10,6 +10,7 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
+use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -165,7 +166,7 @@ class FeatureContext implements Context
         $env['SHELL_INTERACTIVE'] = true;
 
         $this->process->setEnv($env);
-        $this->process->setInput("0");
+        $this->process->setInput($answerString);
 
         $this->iRunBehat($argumentsString);
     }
