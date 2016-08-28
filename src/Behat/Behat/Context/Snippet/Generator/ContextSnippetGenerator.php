@@ -53,9 +53,9 @@ TPL;
      */
     private $contextIdentifier;
     /**
-     * @var null|string
+     * @var PatternIdentifier
      */
-    private $snippetsType;
+    private $patternIdentifier;
 
     /**
      * Initializes snippet generator.
@@ -66,7 +66,8 @@ TPL;
     {
         $this->patternTransformer = $patternTransformer;
 
-        $this->setContextIdentifier(new SnippetAcceptingContextIdentifier());
+        $this->setContextIdentifier(new ContextInterfaceBasedContextIdentifier());
+        $this->setPatternIdentifier(new ContextInterfaceBasedPatternIdentifier());
     }
 
     /**
@@ -80,13 +81,13 @@ TPL;
     }
 
     /**
-     * Sets the type of snippets to generate.
+     * Sets target pattern type identifier.
      *
-     * @param null|string $snippetsType
+     * @param PatternIdentifier $identifier
      */
-    public function setSnippetsType($snippetsType = null)
+    public function setPatternIdentifier(PatternIdentifier $identifier)
     {
-        $this->snippetsType = $snippetsType;
+        $this->patternIdentifier = $identifier;
     }
 
     /**
@@ -118,7 +119,7 @@ TPL;
         }
 
         $contextClass = $this->contextIdentifier->guessTargetContextClass($environment);
-        $patternType = $this->getPatternType($contextClass);
+        $patternType = $this->patternIdentifier->guessPatternType($contextClass);
         $stepText = $step->getText();
         $pattern = $this->patternTransformer->generatePattern($patternType, $stepText);
 
@@ -129,26 +130,6 @@ TPL;
         $usedClasses = $this->getUsedClasses($step);
 
         return new ContextSnippet($step, $snippetTemplate, $contextClass, $usedClasses);
-    }
-
-    /**
-     * Returns snippet-type that provided context class accepts.
-     *
-     * @param string $contextClass
-     *
-     * @return null|string
-     */
-    private function getPatternType($contextClass)
-    {
-        if (null !== $this->snippetsType) {
-            return $this->snippetsType;
-        }
-
-        if (!in_array('Behat\Behat\Context\CustomSnippetAcceptingContext', class_implements($contextClass))) {
-            return null;
-        }
-
-        return $contextClass::getAcceptedSnippetType();
     }
 
     /**

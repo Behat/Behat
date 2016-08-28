@@ -19,7 +19,7 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
  *
  * @deprecated in favour of --snippets-for and will be removed in 4.0
  */
-final class SnippetAcceptingContextIdentifier implements TargetContextIdentifier
+final class ContextInterfaceBasedContextIdentifier implements TargetContextIdentifier
 {
     /**
      * {@inheritdoc}
