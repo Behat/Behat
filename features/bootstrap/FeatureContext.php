@@ -166,7 +166,12 @@ class FeatureContext implements Context
         $env['SHELL_INTERACTIVE'] = true;
 
         $this->process->setEnv($env);
-        $this->process->setInput($answerString);
+
+        if (method_exists($this->process, 'setStdin')) {
+            $this->process->setStdin($answerString);
+        } else {
+            $this->process->setInput($answerString);
+        }
 
         $this->iRunBehat($argumentsString);
     }
