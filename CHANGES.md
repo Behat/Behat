@@ -7,6 +7,7 @@
   * Snippets generation revamp ([PR #922](https://github.com/Behat/Behat/pull/922))
   * More context for pending/failed steps with progress formatter ([PR #920](https://github.com/Behat/Behat/pull/920))
   * Multiline step definitions support ([PR #903](https://github.com/Behat/Behat/pull/903))
+  * Whole table transformation ([PR #930](https://github.com/Behat/Behat/pull/930))
 
 ### Internal design improvements
 

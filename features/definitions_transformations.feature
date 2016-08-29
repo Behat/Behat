@@ -171,6 +171,7 @@ Feature: Step Arguments Transformations
       2 scenarios (2 passed)
       6 steps (6 passed)
       """
+
   Scenario: Row Table Arguments Transformations
     Given a file named "features/row_table_arguments.feature" with:
       """
@@ -197,6 +198,7 @@ Feature: Step Arguments Transformations
       2 scenarios (2 passed)
       6 steps (6 passed)
       """
+
   Scenario: Table Row Arguments Transformations
     Given a file named "features/table_row_arguments.feature" with:
       """
@@ -216,6 +218,53 @@ Feature: Step Arguments Transformations
 
       1 scenario (1 passed)
       2 steps (2 passed)
+      """
+
+  Scenario: Whole table transformation
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+      use Behat\Gherkin\Node\TableNode;
+
+      class FeatureContext implements Context
+      {
+          private $data;
+
+          /** @Transform table:* */
+          public function transformTable(TableNode $table) {
+              return $table->getHash();
+          }
+
+          /** @Given data: */
+          public function givenData(array $data) {
+              $this->data = $data;
+          }
+
+          /** @Then the :field should be :value */
+          public function theFieldShouldBe($field, $value) {
+              PHPUnit_Framework_Assert::assertSame($value, $this->data[0][$field]);
+          }
+      }
+      """
+    And a file named "features/table.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given data:
+            | username | age |
+            | ever.zet | 22  |
+          Then the "username" should be "ever.zet"
+          And the "age" should be 22
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ...
+
+      1 scenario (1 passed)
+      3 steps (3 passed)
       """
 
   Scenario: Named Arguments Transformations
