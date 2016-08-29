@@ -122,3 +122,104 @@ Feature: Extensions
       [Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException]
         `inexistent_extension` extension file or class could not be located.
       """
+
+  Scenario: Exception handlers extension
+    Given a file named "behat.yml" with:
+      """
+      default:
+        extensions:
+          custom_extension.php: ~
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /** @Given non-existent class */
+          public function nonexistentClass() {
+              $ins = new Non\Existent\Cls();
+          }
+
+          /** @Given non-existent method */
+          public function nonexistentMethod() {
+              $this->getName();
+          }
+      }
+      """
+    And a file named "custom_extension.php" with:
+      """
+      <?php
+
+      use Behat\Testwork\ServiceContainer\Extension;
+      use Behat\Testwork\ServiceContainer\ExtensionManager;
+      use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+      use Symfony\Component\DependencyInjection\Definition;
+      use Symfony\Component\DependencyInjection\ContainerBuilder;
+      use Behat\Testwork\Call\ServiceContainer\CallExtension;
+
+      class NonExistentClassPrinter extends Behat\Testwork\Call\Handler\Exception\ClassNotFoundHandler
+      {
+          protected function handleNonExistentClass($class) { var_dump($class); }
+      }
+
+      class NonExistentMethodPrinter extends Behat\Testwork\Call\Handler\Exception\MethodNotFoundHandler
+      {
+          protected function handleNonExistentMethod(array $callable) { var_dump($callable); }
+      }
+
+      class CustomHandlers implements Extension {
+          public function getConfigKey() { return 'custom_handlers'; }
+          public function configure(ArrayNodeDefinition $builder) { }
+          public function initialize(Behat\Testwork\ServiceContainer\ExtensionManager $extensionManager) {}
+          public function process(ContainerBuilder $container) {}
+
+          public function load(ContainerBuilder $container, array $config)
+          {
+              $definition = new Definition('NonExistentClassPrinter', array());
+              $definition->addTag(CallExtension::EXCEPTION_HANDLER_TAG, array('priority' => 50));
+              $container->setDefinition(CallExtension::EXCEPTION_HANDLER_TAG . '.class_printer', $definition);
+
+              $definition = new Definition('NonExistentMethodPrinter', array());
+              $definition->addTag(CallExtension::EXCEPTION_HANDLER_TAG, array('priority' => 55));
+              $container->setDefinition(CallExtension::EXCEPTION_HANDLER_TAG . '.method_printer', $definition);
+          }
+      }
+
+      return new CustomHandlers;
+      """
+    And a file named "features/extensions.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given non-existent class
+        Scenario:
+          Given non-existent method
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should fail with:
+      """
+      FF
+
+      --- Failed steps:
+
+      001 Scenario:                  # features/extensions.feature:2
+            Given non-existent class # features/extensions.feature:3
+              Fatal error: Class 'Non\Existent\Cls' not found (Behat\Testwork\Call\Exception\FatalThrowableError)
+
+      002 Scenario:                   # features/extensions.feature:4
+            Given non-existent method # features/extensions.feature:5
+              Fatal error: Call to undefined method FeatureContext::getName() (Behat\Testwork\Call\Exception\FatalThrowableError)
+
+      2 scenarios (2 failed)
+      2 steps (2 failed)
+      string(16) "Non\Existent\Cls"
+      array(2) {
+        [0]=>
+        string(14) "FeatureContext"
+        [1]=>
+        string(7) "getName"
+      }
+      """
