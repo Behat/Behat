@@ -58,6 +58,13 @@ to fix a serious issue.
 
 You can read detailed guidance on what BC means in [Symfony2 BC guide](http://symfony.com/doc/current/contributing/code/bc.html).
 
+Third-party dependencies & versioning
+-------------------------------------
+
+Starting from `v3.2.0` we also promise to not break the minimum required dependencies version (like Symfony) in the
+patch updates. However, we sometimes will need to break the minimum required versions for minor updates, but only in
+case where current version in question became unsupported or obsolete.
+
 Useful Links
 ------------
 
