@@ -35,6 +35,7 @@ final class CallExtension implements Extension
     const CALL_FILTER_TAG = 'call.call_filter';
     const CALL_HANDLER_TAG = 'call.call_handler';
     const RESULT_FILTER_TAG = 'call.result_filter';
+    const EXCEPTION_HANDLER_TAG = 'call.exception_handler';
 
     /**
      * @var ServiceProcessor
@@ -99,6 +100,7 @@ final class CallExtension implements Extension
         $this->processCallFilters($container);
         $this->processCallHandlers($container);
         $this->processResultFilters($container);
+        $this->processExceptionHandlers($container);
     }
 
     /**
@@ -167,6 +169,21 @@ final class CallExtension implements Extension
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerResultFilter', array($reference));
+        }
+    }
+
+    /**
+     * Registers all exception handlers to the CallCenter.
+     *
+     * @param ContainerBuilder $container
+     */
+    private function processExceptionHandlers(ContainerBuilder $container)
+    {
+        $references = $this->processor->findAndSortTaggedServices($container, CallExtension::EXCEPTION_HANDLER_TAG);
+        $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
+
+        foreach ($references as $reference) {
+            $definition->addMethodCall('registerExceptionHandler', array($reference));
         }
     }
 }
