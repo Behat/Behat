@@ -25,7 +25,7 @@ use ReflectionMethod;
  */
 final class ColumnBasedTableTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    const PATTERN_REGEX = '/^table\:[\w\s,]+$/';
+    const PATTERN_REGEX = '/^table\:(?:\*|[\w\s\,]+)$/';
 
     /**
      * @var string
@@ -63,7 +63,8 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
             return false;
         };
 
-        return $this->pattern === 'table:' . implode(',', $argumentValue->getRow(0));
+        return $this->pattern === 'table:' . implode(',', $argumentValue->getRow(0))
+            || $this->pattern === 'table:*';
     }
 
     /**
