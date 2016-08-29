@@ -1,6 +1,8 @@
 Behat
 =====
 
+**Behat v2.x is not maintained anymore. Please upgrade to v3.x ASAP**
+
 [![2.5 Build Status](https://secure.travis-ci.org/Behat/Behat.png?branch=2.5)](http://travis-ci.org/Behat/Behat)
 
 Useful Links
