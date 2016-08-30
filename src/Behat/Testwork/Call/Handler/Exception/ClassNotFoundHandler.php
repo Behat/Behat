@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Call\Handler\Exception;
 
 use Behat\Testwork\Call\Handler\ExceptionHandler;
-use Throwable;
+use Error;
 
 /**
  * Handles class not found exceptions.
@@ -29,7 +29,7 @@ abstract class ClassNotFoundHandler implements ExceptionHandler
      */
     final public function supportsException($exception)
     {
-        if (!$exception instanceof Throwable) {
+        if (!$exception instanceof Error) {
             return false;
         }
 
@@ -56,11 +56,11 @@ abstract class ClassNotFoundHandler implements ExceptionHandler
     /**
      * Extracts missing class name from the exception.
      *
-     * @param Throwable $exception
+     * @param Error $exception
      *
      * @return null|string
      */
-    private function extractNonExistentClass(Throwable $exception)
+    private function extractNonExistentClass(Error $exception)
     {
         if (1 === preg_match(self::PATTERN, $exception->getMessage(), $matches)) {
             return $matches[1];
