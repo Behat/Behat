@@ -13,7 +13,7 @@
 
   * Transformations refactoring ([PR #905](https://github.com/Behat/Behat/pull/905))
   * `*SnippetAcceptingContext` interfaces deprecation ([PR #922](https://github.com/Behat/Behat/pull/922))
-  * Exception handlers extension point added ([PR #927](https://github.com/Behat/Behat/pull/927))
+  * Exception handlers extension point added ([PR #931](https://github.com/Behat/Behat/pull/931))
 
 ### Bug fixes
 
