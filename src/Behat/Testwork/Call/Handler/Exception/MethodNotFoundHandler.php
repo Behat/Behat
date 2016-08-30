@@ -22,7 +22,7 @@ use Error;
  */
 abstract class MethodNotFoundHandler implements ExceptionHandler
 {
-    const PATTERN = '/Call to undefined method ([^:]+)::([^\)]+)\(\)/';
+    const PATTERN = '/^Call to undefined method ([^:]+)::([^\)]+)\(\)$/';
 
     /**
      * {@inheritdoc}
