@@ -163,12 +163,12 @@ Feature: Extensions
 
       class NonExistentClassPrinter extends Behat\Testwork\Call\Handler\Exception\ClassNotFoundHandler
       {
-          protected function handleNonExistentClass($class) { var_dump($class); }
+          public function handleNonExistentClass($class) { var_dump($class); }
       }
 
       class NonExistentMethodPrinter extends Behat\Testwork\Call\Handler\Exception\MethodNotFoundHandler
       {
-          protected function handleNonExistentMethod(array $callable) { var_dump($callable); }
+          public function handleNonExistentMethod(array $callable) { var_dump($callable); }
       }
 
       class CustomHandlers implements Extension {
