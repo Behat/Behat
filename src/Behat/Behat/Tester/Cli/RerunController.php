@@ -120,8 +120,9 @@ final class RerunController implements Controller
 
         $feature = $event->getFeature();
         $scenario = $event->getScenario();
+        $suitename = $event->getSuite()->getName();
 
-        $this->lines[] = $feature->getFile() . ':' . $scenario->getLine();
+        $this->lines[$suitename][] = $feature->getFile() . ':' . $scenario->getLine();
     }
 
     /**
@@ -141,7 +142,7 @@ final class RerunController implements Controller
             return;
         }
 
-        file_put_contents($this->getFileName(), trim(implode("\n", $this->lines)));
+        file_put_contents($this->getFileName(), json_encode($this->lines));
     }
 
     /**
@@ -179,6 +180,6 @@ final class RerunController implements Controller
             mkdir($this->cachePath, 0777);
         }
 
-        return $this->cachePath . DIRECTORY_SEPARATOR . $this->key . '.scenarios';
+        return $this->cachePath . DIRECTORY_SEPARATOR . $this->key . '.rerun';
     }
 }
