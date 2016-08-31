@@ -8,6 +8,7 @@
   * More context for pending/failed steps with progress formatter ([PR #920](https://github.com/Behat/Behat/pull/920))
   * Multiline step definitions support ([PR #903](https://github.com/Behat/Behat/pull/903))
   * Whole table transformation ([PR #930](https://github.com/Behat/Behat/pull/930))
+  * Narrative filters in suites ([PR #935](https://github.com/Behat/Behat/pull/935))
 
 ### Internal design improvements
 
