@@ -117,6 +117,7 @@ final class GherkinExtension implements Extension
         $this->loadSuiteWithPathsSetup($container);
         $this->loadFilesystemFeatureLocator($container);
         $this->loadFilesystemScenariosListLocator($container);
+        $this->loadFilesystemRerunScenariosListLocator($container);
     }
 
     /**
@@ -314,6 +315,20 @@ final class GherkinExtension implements Extension
         ));
         $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 50));
         $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_scenarios_list', $definition);
+    }
+
+    /**
+     * Loads filesystem rerun scenarios list locator.
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadFilesystemRerunScenariosListLocator(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemRerunScenariosListLocator', array(
+            new Reference(self::MANAGER_ID)
+        ));
+        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 50));
+        $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_rerun_scenarios_list', $definition);
     }
 
     /**
