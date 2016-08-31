@@ -14,6 +14,7 @@ use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Autoloader\ServiceContainer\AutoloaderExtension;
+use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -39,6 +40,7 @@ final class ContextExtension implements Extension
      * Available services
      */
     const FACTORY_ID = 'context.factory';
+    const CONTEXT_SNIPPET_GENERATOR_ID = 'snippet.generator.context';
 
     /*
      * Available extension points
@@ -98,6 +100,7 @@ final class ContextExtension implements Extension
         $this->loadSuiteSetup($container);
         $this->loadSnippetAppender($container);
         $this->loadSnippetGenerators($container);
+        $this->loadSnippetsController($container);
         $this->loadDefaultClassGenerators($container);
         $this->loadDefaultContextReaders($container);
     }
@@ -194,7 +197,20 @@ final class ContextExtension implements Extension
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID)
         ));
         $definition->addTag(SnippetExtension::GENERATOR_TAG, array('priority' => 50));
-        $container->setDefinition(SnippetExtension::GENERATOR_TAG . '.context', $definition);
+        $container->setDefinition(self::CONTEXT_SNIPPET_GENERATOR_ID, $definition);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    protected function loadSnippetsController(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Context\Cli\ContextSnippetsController', array(
+            new Reference(self::CONTEXT_SNIPPET_GENERATOR_ID),
+            new Reference(TranslatorExtension::TRANSLATOR_ID)
+        ));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 410));
+        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.context_snippets', $definition);
     }
 
     /**

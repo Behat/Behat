@@ -8,17 +8,15 @@ Feature: Format options
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
           private $apples = 0;
           private $parameters;
-
-          public static function getAcceptedSnippetType() { return 'regex'; }
 
           public function __construct(array $parameters = array()) {
               $this->parameters = $parameters;
@@ -113,7 +111,7 @@ Feature: Format options
       """
 
   Scenario: --no-colors option
-    When I run "behat --no-colors"
+    When I run "behat --no-colors --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       Feature: Apples story
@@ -195,7 +193,7 @@ Feature: Format options
       """
 
   Scenario: --no-paths option
-    When I run "behat --no-colors --format-settings='{\"paths\": false}'"
+    When I run "behat --no-colors --format-settings='{\"paths\": false}' --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       Feature: Apples story
@@ -333,7 +331,7 @@ Feature: Format options
       """
 
   Scenario: --expand option
-    When I run "behat --no-colors --format-settings='{\"expand\": true}'"
+    When I run "behat --no-colors --format-settings='{\"expand\": true}' --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       Feature: Apples story
@@ -424,7 +422,7 @@ Feature: Format options
       """
 
   Scenario: --no-multiline option
-    When I run "behat --no-colors --format-settings='{\"multiline\": false}'"
+    When I run "behat --no-colors --format-settings='{\"multiline\": false}' --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       Feature: Apples story

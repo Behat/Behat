@@ -1,7 +1,8 @@
 <?php return array(
     'en'    => array(
+        'snippet_context_choice'  => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> suite has undefined steps. Please choose the context to generate snippets:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%1%</snippet_keyword> has missing steps. Define them with these snippets:</snippet_undefined>',
-        'snippet_missing_title'   => '<snippet_undefined>Snippets for the following steps in the <snippet_keyword>%1%</snippet_keyword> suite were not generated (does your context implement SnippetAcceptingContext interface?):</snippet_undefined>',
+        'snippet_missing_title'   => '<snippet_undefined>Use <snippet_keyword>--snippets-for</snippet_keyword> CLI option to generate snippets for following <snippet_keyword>%1%</snippet_keyword> suite steps:</snippet_undefined>',
         'skipped_scenarios_title' => 'Skipped scenarios:',
         'failed_scenarios_title'  => 'Failed scenarios:',
         'failed_hooks_title'      => 'Failed hooks:',

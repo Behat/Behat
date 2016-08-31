@@ -27,16 +27,14 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements CustomSnippetAcceptingContext {
-          public static function getAcceptedSnippetType() { return 'regex'; }
-      }
+      class FeatureContext implements Context {}
       """
-    When I run "behat --no-colors -f progress features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature --snippets-for=FeatureContext --snippets-type=regex"
     Then it should pass with:
       """
       UUUUUU
@@ -70,7 +68,7 @@ Feature: Different result types
               throw new PendingException();
           }
       """
-    When I run "behat --no-colors --strict -f progress features/coffee.feature"
+    When I run "behat --no-colors --strict -f progress features/coffee.feature --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       UUUUUU
@@ -124,15 +122,13 @@ Feature: Different result types
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class FeatureContext implements CustomSnippetAcceptingContext
+      class FeatureContext implements Context
       {
-          public static function getAcceptedSnippetType() { return 'regex'; }
-
           /**
            * @Given /^human have ordered very very very hot "([^"]*)"$/
            */
@@ -148,7 +144,7 @@ Feature: Different result types
           }
       }
       """
-    When I run "behat --no-colors -f progress features/coffee.feature"
+    When I run "behat --no-colors -f progress features/coffee.feature --snippets-for=FeatureContext --snippets-type=regex"
     Then it should pass with:
       """
       P-U
@@ -172,7 +168,7 @@ Feature: Different result types
               throw new PendingException();
           }
       """
-    When I run "behat --no-colors --strict -f progress features/coffee.feature"
+    When I run "behat --no-colors --strict -f progress features/coffee.feature --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       P-U

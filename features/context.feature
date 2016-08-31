@@ -8,7 +8,7 @@ Feature: Context consistency
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
@@ -66,23 +66,21 @@ Feature: Context consistency
           }
       }
 
-      class FeatureContext extends CoreContext implements CustomSnippetAcceptingContext
+      class FeatureContext extends CoreContext implements Context
       {
-          public static function getAcceptedSnippetType() { return 'regex'; }
       }
       """
     And a file named "features/bootstrap/CustomContext.php" with:
       """
       <?php
 
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
+      use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
 
-      class CustomContext implements CustomSnippetAcceptingContext
+      class CustomContext implements Context
       {
-          public static function getAcceptedSnippetType() { return 'regex'; }
       }
       """
 
@@ -264,7 +262,7 @@ Feature: Context consistency
           Then context parameter "parameter1" should be equal to "val_one"
           And context parameter "parameter2" should be array with 2 elements
       """
-  When I run "behat --no-colors -f progress features/params.feature"
+  When I run "behat --no-colors -f progress --snippets-type=regex --snippets-for=CustomContext features/params.feature"
   Then it should pass with:
     """
     UU
@@ -407,7 +405,7 @@ Feature: Context consistency
       1 scenario (1 undefined)
       3 steps (3 undefined)
 
-      --- Snippets for the following steps in the first suite were not generated (does your context implement SnippetAcceptingContext interface?):
+      --- Use --snippets-for CLI option to generate snippets for following first suite steps:
 
           Given I have 3 apples
           When I ate 1 apple
