@@ -351,6 +351,103 @@ Feature: Suites
       6 steps (6 passed)
       """
 
+  Scenario: Narrative-based suites
+    Given a file named "features/bootstrap/LittleKidContext.php" with:
+      """
+      <?php
+
+      class LittleKidContext implements \Behat\Behat\Context\Context
+      {
+          /** @Given I have :count apple(s) */
+          public function iHaveApples($count) { }
+
+          /** @When I ate :count apple(s) */
+          public function iAteApples($count) { }
+
+          /** @Then I should have :count apple(s) */
+          public function iShouldHaveApples($count) { }
+      }
+      """
+    And a file named "features/bootstrap/BigBrotherContext.php" with:
+      """
+      <?php
+
+      class BigBrotherContext implements \Behat\Behat\Context\Context
+      {
+          /** @Given I have :count apple(s) */
+          public function iHaveApples($count) { }
+
+          /** @When I ate :count apple(s) */
+          public function iAteApples($count) { }
+
+          /** @Then I should have :count apple(s) */
+          public function iShouldHaveApples($count) { }
+      }
+      """
+    And a file named "features/little_kid.feature" with:
+      """
+      Feature: Apples story
+        In order to eat apple
+        As a little kid
+        I need to have an apple in my pocket
+
+        Scenario: I'm little hungry
+          Given I have 3 apples
+          When I ate 1 apple
+          Then I should have 2 apples
+      """
+    And a file named "features/big_brother.feature" with:
+      """
+      Feature: Apples story
+        In order to eat apple
+        As a big brother
+        I need to have an apple in my pocket
+
+        Scenario: I'm little hungry
+          Given I have 15 apples
+          When I ate 10 apple
+          Then I should have 5 apples
+      """
+    And a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          little_kid:
+            contexts: [ LittleKidContext ]
+            filters:
+              narrative: '/As a little kid/'
+          big_brother:
+            contexts: [ BigBrotherContext ]
+            filters:
+              narrative: '/As a big brother/'
+      """
+    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    Then it should pass with:
+      """
+      Feature: Apples story
+        In order to eat apple
+        As a little kid
+        I need to have an apple in my pocket
+
+        Scenario: I'm little hungry   # features/little_kid.feature:6
+          Given I have 3 apples       # LittleKidContext::iHaveApples()
+          When I ate 1 apple          # LittleKidContext::iAteApples()
+          Then I should have 2 apples # LittleKidContext::iShouldHaveApples()
+
+      Feature: Apples story
+        In order to eat apple
+        As a big brother
+        I need to have an apple in my pocket
+
+        Scenario: I'm little hungry   # features/big_brother.feature:6
+          Given I have 15 apples      # BigBrotherContext::iHaveApples()
+          When I ate 10 apple         # BigBrotherContext::iAteApples()
+          Then I should have 5 apples # BigBrotherContext::iShouldHaveApples()
+
+      2 scenarios (2 passed)
+      6 steps (6 passed)
+      """
+
   Scenario: Running single suite
     Given a file named "features/bootstrap/LittleKidContext.php" with:
       """
