@@ -20,12 +20,13 @@
   * Fix context isolation for Scenario Outlines (by Konstantin Kudryashov)
   * Include basepath in generateKey (by Rajesh Taneja)
   * Only cache failed scenario's for rerun (by Rajesh Taneja)
+  * Save failed runs with suite information (by Rajesh Taneja)
+  * Properly handle interupts on PHP7 (by Peter Mitchell)
 
 ### Small improvements
 
   * Use only one autoloader if possible (by Warnar Boekkooi)
   * Added build-related files and folders to .gitattributes (by Filippo Tessarotto)
-  * Properly handle interupts on PHP7 (by Peter Mitchell)
   * Remove behat.bat (by Konstantin Kudryashov)
   * Improve "No specifications found" error message (by Konstantin Kudryashov)
   * Provide clearer exception message when long token names used (by Konstantin Kudryashov)
