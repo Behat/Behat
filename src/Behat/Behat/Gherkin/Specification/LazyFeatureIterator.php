@@ -12,6 +12,7 @@ namespace Behat\Behat\Gherkin\Specification;
 
 use Behat\Gherkin\Filter\FilterInterface;
 use Behat\Gherkin\Filter\NameFilter;
+use Behat\Gherkin\Filter\NarrativeFilter;
 use Behat\Gherkin\Filter\RoleFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Gherkin;
@@ -165,6 +166,10 @@ final class LazyFeatureIterator implements SpecificationIterator
 
         if ('tags' === $type) {
             return new TagFilter($filterString);
+        }
+
+        if ('narrative' === $type) {
+            return new NarrativeFilter($filterString);
         }
 
         throw new SuiteConfigurationException(sprintf(
