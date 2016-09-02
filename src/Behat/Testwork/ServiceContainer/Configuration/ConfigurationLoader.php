@@ -32,6 +32,14 @@ final class ConfigurationLoader
      * @var Boolean
      */
     private $profileFound;
+    /**
+     * @var array
+     */
+    private $debugInformation = array(
+        'environment_variable_name' => 'none',
+        'environment_variable_content' => 'none',
+        'configuration_file_path' => 'none'
+    );
 
     /**
      * Constructs reader.
@@ -106,6 +114,8 @@ final class ConfigurationLoader
 
         // second is file configuration (if there is some)
         if ($this->configurationPath) {
+            $this->debugInformation['configuration_file_path'] = $this->configurationPath;
+
             foreach ($this->loadFileConfiguration($this->configurationPath, $profile) as $config) {
                 $configs[] = $config;
             }
@@ -123,6 +133,16 @@ final class ConfigurationLoader
     }
 
     /**
+     * Returns array with configuration debug information.
+     *
+     * @return array
+     */
+    public function debugInformation()
+    {
+        return $this->debugInformation;
+    }
+
+    /**
      * Loads information from environment variable.
      *
      * @return array
@@ -137,8 +157,12 @@ final class ConfigurationLoader
             return $configs;
         }
 
+        $this->debugInformation['environment_variable_name'] = $this->environmentVariable;
+
         if ($envConfig = getenv($this->environmentVariable)) {
             $config = @json_decode($envConfig, true);
+
+            $this->debugInformation['environment_variable_content'] = $envConfig;
 
             if (!$config) {
                 throw new ConfigurationLoadingException(sprintf(
