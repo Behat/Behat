@@ -9,6 +9,7 @@
   * Multiline step definitions support ([PR #903](https://github.com/Behat/Behat/pull/903))
   * Whole table transformation ([PR #930](https://github.com/Behat/Behat/pull/930))
   * Narrative filters in suites ([PR #935](https://github.com/Behat/Behat/pull/935))
+  * Debug command ([PR #936)](https://github.com/Behat/Behat/pull/936))
 
 ### Internal design improvements
 
