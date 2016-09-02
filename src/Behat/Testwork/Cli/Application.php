@@ -73,6 +73,7 @@ final class Application extends BaseApplication
             ),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
             new InputOption('--config-reference', null, InputOption::VALUE_NONE, 'Display the configuration reference.'),
+            new InputOption('--debug', null, InputOption::VALUE_NONE, 'Provide debuggin information about current environment.'),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
             new InputOption(
@@ -126,6 +127,7 @@ final class Application extends BaseApplication
         $commands = parent::getDefaultCommands();
 
         $commands[] = new DumpReferenceCommand($this->extensionManager);
+        $commands[] = new DebugCommand($this, $this->configurationLoader, $this->extensionManager);
 
         return $commands;
     }
@@ -210,6 +212,10 @@ final class Application extends BaseApplication
     {
         if ($input->hasParameterOption(array('--config-reference'))) {
             return 'dump-reference';
+        }
+
+        if ($input->hasParameterOption(array('--debug'))) {
+            return 'debug';
         }
 
         return $this->getName();
