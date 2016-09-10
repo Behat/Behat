@@ -1,0 +1,48 @@
+version: '{build}'
+build: false
+shallow_clone: false
+platform: x86
+clone_folder: c:\projects\behat
+
+environment:
+    matrix:
+        - PHP_DOWNLOAD_FILE: php-7.0.9-nts-Win32-VC14-x86.zip
+
+branches:
+  only:
+    - master
+
+skip_commits:
+    message: /\[ci skip\]/
+
+cache:
+    - c:\php -> appveyor.yml
+
+init:
+    - SET PATH=c:\php;%PATH%
+    - SET COMPOSER_NO_INTERACTION=1
+    - SET PHP=1
+    - SET ANSICON=121x90 (121x90)
+    - git config --global core.autocrlf input
+
+install:
+    - IF EXIST c:\php (SET PHP=0) ELSE (mkdir c:\php)
+    - cd c:\php
+    - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/releases/archives/%PHP_DOWNLOAD_FILE%
+    - IF %PHP%==1 7z x %PHP_DOWNLOAD_FILE% -y > 7z.log
+    - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
+    - appveyor DownloadFile https://getcomposer.org/composer.phar
+    - copy php.ini-production php.ini /Y
+    - echo date.timezone="UTC" >> php.ini
+    - echo extension_dir=ext >> php.ini
+    - echo extension=php_openssl.dll >> php.ini
+    - echo extension=php_curl.dll >> php.ini
+    - echo extension=php_mbstring.dll >> php.ini
+    - echo extension=php_fileinfo.dll >> php.ini
+    - cd c:\projects\behat
+    - composer install --no-progress --ansi
+
+test_script:
+    - cd c:\projects\behat
+    - php bin\behat --tags="~@php-version,@php53,@php5.2,@php5.1,@php5.0" --format=progress
+    - php vendor\phpunit\phpunit\phpunit --testdox
