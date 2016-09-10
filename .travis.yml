@@ -9,10 +9,8 @@ cache:
     - $HOME/.composer/cache
 
 branches:
-  except:
-    - /^bugfix\/.*$/
-    - /^feature\/.*$/
-    - /^refactoring\/.*$/
+  only:
+    - master
 
 matrix:
   include:
