@@ -4,16 +4,15 @@ Contributing
 Behat is an open source, community-driven project. If you'd like to contribute,
 feel free to do this, but remember to follow this few simple rules:
 
-- Make your feature addition or bug fix,
-- __Always__ as base for your changes use `master` branch (all new development
-  happens here),
-- Add `*.features` for those changes (please look into `features/` folder for
+1. Clone the `master` of this repository
+2. Make your feature addition, bug fix or refactoring
+3. Add `*.features` (tests) for those changes (please look into `features/` folder for
   some examples). This is important so we don't break it in a future version
-  unintentionally,
-- Commit your code, but do not mess with `BehatApplication` version, or
-  `CHANGES.md` one,
-- __Remember__: when you create Pull Request, always select `master` branch as
-  target, otherwise it will be closed (this is selected by default).
+  unintentionally
+4. Make sure your changes adhere to [Semantic Versioning](http://semver.org/spec/v2.0.0.html)
+  (e.g. no changes in public interfaces between minor or patch releases)
+5. Commit your code, but do not mess with the `BehatApplication` version
+6. Explain the kind of change you made under the [`[Unreleased]`](https://github.com/Behat/Behat/blob/master/CHANGELOG.md#unreleased) section of the `CHANGELOG.md`. You'd make our life even easier if you stick to [Keep a Changelog](http://keepachangelog.com/en/0.3.0/) format
 
 Backwards compatibility
 -----------------------
@@ -41,6 +40,6 @@ Make sure that you don't break anything with your changes by running the test
 suite with your locale set to english:
 
 ```bash
-$> LANG=C bin/behat
+$> LANG=C bin/behat --format=progress
 ```
 
