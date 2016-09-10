@@ -12,7 +12,7 @@ branches:
   except:
     - /^bugfix\/.*$/
     - /^feature\/.*$/
-    - /^optimization\/.*$/
+    - /^refactoring\/.*$/
 
 matrix:
   include:
