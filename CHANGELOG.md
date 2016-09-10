@@ -179,7 +179,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Dropped chained steps
   * Dropped closured definitions
 
-## [3.0.0rc3] - 2014-03-16
+## 3.0.0rc3 - 2014-03-16
 ### Changed
   * Multiline step description support ([082da36b7db2525700287616babe982e485330d1](https://github.com/Behat/Behat/commit/082da36b7db2525700287616babe982e485330d1))
   * Added ability to choose all 3 verbosity levels and moved stack traces to the 2nd one ([d550f72d6aa49f0f87a6ce0e50721356a5d04c45](https://github.com/Behat/Behat/commit/d550f72d6aa49f0f87a6ce0e50721356a5d04c45))
@@ -216,7 +216,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Added `initialize` call to extension lifecycle and Extension interface
   * Renamed some extensions config keys to be more intuitive
 
-## [3.0.0rc1] - 2014-01-01
+## 3.0.0rc1 - 2014-01-01
 ### Changed
   * New layered and highly extendable architecture
   * Standard output buffering of definitions and hooks
@@ -225,7 +225,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Huge speed and memory footprint improvements
   * Moved 40% of non-Behat related codebase into a shared foundation called Testwork
 
-## [3.0.0beta8] - 2013-10-01
+## 3.0.0beta8 - 2013-10-01
 ### Changed
   * Add `*SnippetsFriendlyInterface`(s) that are now required to generate snippets
   * Add support for turnip-style definitions
@@ -234,7 +234,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Extract snippet generators into extendable component
   * Extract context generators into extendable component
 
-## [3.0.0beta7] - 2013-09-29
+## 3.0.0beta7 - 2013-09-29
 ### Changed
   * Multivalue options are now array options (format, output, name and tags)
   * Added back junit formatter (should support all junit formats from 4 to 7)
@@ -242,7 +242,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Small optimizations and refactorings
   * Proper handling of hook failures
 
-## [3.0.0beta6] - 2013-09-25
+## 3.0.0beta6 - 2013-09-25
 ### Changed
   * Skip step execution and `AfterStep` hook if its `BeforeStep` hook failed
   * Fix failure-initiated skips of hooks in Scenario and Example testers
@@ -253,29 +253,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Add `SnippetlessContextInterface` to `Snippet` namespace - to prevent snippet generation for
     custom contexts
 
-## [3.0.0beta5] - 2013-09-15
+## 3.0.0beta5 - 2013-09-15
 ### Changed
   * Switch to Gherkin 3.0 parser
   * Complete rewrite of pretty formatter (much better outline handling)
   * Automatically add `use` for `PendingException` to contexts during `--append-snippets`
   * Lots of optimizations
 
-## [3.0.0beta4] - 2013-08-17
+## 3.0.0beta4 - 2013-08-17
 ### Changed
   * Cleanup suite configuration sub-system
   * New ability to turn off specific suites through `behat.yml`
   * Support for danish language
 
-## [3.0.0beta3] - 2013-08-13
+## 3.0.0beta3 - 2013-08-13
 ### Changed
   * Refactor extension sub-system. Update `ExtensionInterface`
   * Avoid trying to create folders for non-fs suites
 
-## [3.0.0beta2] - 2013-08-13
+## 3.0.0beta2 - 2013-08-13
 ### Changed
   * Remove support for Symfony 2.0 components
 
-## [3.0.0beta1] - 2013-08-13
+## 3.0.0beta1 - 2013-08-13
 ### Changed
   * New suite-centric architecture
   * New context pools sub-system with multi-context support
@@ -290,13 +290,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Chained steps extracted into [separate extension](https://github.com/Behat/ChainedStepsExtension)
   * Closured step definitions removed
 
-## [2.5.0] - 2013-08-11
+## 2.5.0 - 2013-08-11
 ### Changed
   * First Behat LTS release
   * Update Junit formatter to reflect latest junit format (thanks @alistairstead)
   * Fix some container options
 
-## [2.4.6] - 2013-06-06
+## 2.4.6 - 2013-06-06
 ### Changed
   * New --stop-on-failure option
   * Support JSON in environment variables
@@ -304,7 +304,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Support Symfony 2.3
   * Out-of-the-box support for PHPUnit assertions pretty output
 
-## [2.4.5] - 2013-01-27
+## 2.4.5 - 2013-01-27
 ### Changed
   * Added wrapping of lines in progress formatter
   * Added `--append-to` option to be able to add snippets to custom class
@@ -315,13 +315,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Fixed configs import directive and loading precedence
   * Fixed path to vendor dir (solves problem of custom vendor dirs)
 
-## [2.4.4] - 2012-09-12
+## 2.4.4 - 2012-09-12
 ### Changed
   * Fixed `RuntimeException` namespacing error
   * Added `FormatterManager::disableFormatter(s)` method
   * Updated Gherkin parser and fixed couple of helper bugs
 
-## [2.4.3] - 2012-07-28
+## 2.4.3 - 2012-07-28
 ### Changed
   * Fixed broken `output_path` setting ([issue #169](https://github.com/Behat/Behat/issues/169))
   * Added shellbang to phar executable ([issue #167](https://github.com/Behat/Behat/issues/167))
@@ -329,11 +329,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Tuned failed formatter to print only failed examples in outline ([issue #154](https://github.com/Behat/Behat/issues/154))
   * Small bugfixes
 
-## [2.4.2] - 2012-06-26
+## 2.4.2 - 2012-06-26
 ### Changed
   * Fixed broken autoloading with Composer installation
 
-## [2.4.1] - 2012-06-26
+## 2.4.1 - 2012-06-26
 ### Changed
   * Force custom context class usage if user changed it from `FeatureContext`
   * Clarified `Context class not found` exception
@@ -347,7 +347,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Fixed czech translation
   * Fixed CS to be PSR2 compliant
 
-## [2.4.0] - 2012-05-15
+## 2.4.0 - 2012-05-15
 ### Changed
   * New extension system based on Symfony2 DIC component
   * Refactored paths reading system (now relative paths are fully supported)
@@ -362,15 +362,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Use different names for examples in JUnit formatter
   * Major core cleanup
 
-## [2.3.5] - 2012-03-30
+## 2.3.5 - 2012-03-30
 ### Changed
   * Fixed formatter language configuration and locale guesser
 
-## [2.3.4] - 2012-03-28
+## 2.3.4 - 2012-03-28
 ### Changed
-  * Added `StepEvent::getLogicalParent()`. Fixed issue ### [115
+  * Added `StepEvent::getLogicalParent()`. Fixed issue ### 115
 
-2.3.3] - 2012-03-09
+2.3.3 - 2012-03-09
 
 ### Changed
   * Implemented Gherkin caching support ([--cache](https://github.com/Behat/Behat/commit/753c4f6e392a873a640543306191d92e6dc91099))
@@ -379,17 +379,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Minor bug fixes
   * Updated Gherkin
 
-## [2.3.2] - 2012-01-29
+## 2.3.2 - 2012-01-29
 ### Changed
   * Fixed bug in `ErrorException`, that caused wrong exceptions on warnings and notices
 
-## [2.3.1] - 2012-01-26
+## 2.3.1 - 2012-01-26
 ### Changed
   * Updated error handler to avoid suppressed exceptions
   * Autoload bootstrap scripts in their name order
-  * Updated Gherkin dependency to v## [2.0.1
+  * Updated Gherkin dependency to v## 2.0.1
 
-2.3.0] - 2012-01-19
+2.3.0 - 2012-01-19
 
 ### Changed
   * Switch to the Behat\Gherkin 2.0 usage
@@ -402,37 +402,37 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Performance improvements
   * Bugfixes
 
-## [2.2.7] - 2012-01-13
+## 2.2.7 - 2012-01-13
 ### Changed
   * Added ability to search translated definitions with `--definitions`
   * Fixed custom formatters use bug
 
-## [2.2.6] - 2012-01-09
+## 2.2.6 - 2012-01-09
 ### Changed
   * Fixed pretty and html formatters printing of undefined steps in outlines
 
-## [2.2.5] - 2012-01-07
+## 2.2.5 - 2012-01-07
 ### Changed
   * `BEHAT_PARAMS` env variable support (083092e)
   * HTML formatter print styles optimization (@davedevelopment)
 
-## [2.2.4] - 2012-01-04
+## 2.2.4 - 2012-01-04
 ### Changed
   * Prevent method name duplication with definition snippets
 
-## [2.2.3] - 2012-01-04
+## 2.2.3 - 2012-01-04
 ### Changed
   * Fixed couple of `--append-snippets` bugs
 
-## [2.2.2] - 2011-12-21
+## 2.2.2 - 2011-12-21
 ### Changed
   * Fixed Composer deps
 
-## [2.2.1] - 2011-12-21
+## 2.2.1 - 2011-12-21
 ### Changed
   * Fixed Composer package bin
 
-## [2.2.0] - 2011-12-14
+## 2.2.0 - 2011-12-14
 ### Changed
   * Multiple formats and outputs support
   * New `snippets` formatter
@@ -447,37 +447,37 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Spanish translation updated (Andrés Botero)
   * Locale autodetect
 
-## [2.1.3] - 2011-11-04
+## 2.1.3 - 2011-11-04
 ### Changed
   * Substep translations support
   * Correctly print undefined substeps in pretty printer
   * @Transform callback now gets all provided matches
-  * Always set proper encoding (UTF## [8)
+  * Always set proper encoding (UTF## 8)
 
-2.1.2] - 2011-10-12
+2.1.2 - 2011-10-12
 
 ### Changed
   * Fixed filtered feature hooks
   * Fixed JUnit formatter time output in some locales
 
-## [2.1.1] - 2011-10-09
+## 2.1.1 - 2011-10-09
 ### Changed
   * Fixed multiline titles printing bug
   * Fixed outline parameter inside step argument printing bug
 
-## [2.1.0] - 2011-09-12
+## 2.1.0 - 2011-09-12
 ### Changed
   * Totally revamped HTML formatter template
   * Added transliteration support to definition snippets (for most langs)
   * Written missed features and fixed some bugs
   * Stabilization fixes for 3 major OS: MacOS/Ubuntu/Windows
 
-## [2.0.5] - 2011-08-07
+## 2.0.5 - 2011-08-07
 ### Changed
   * Cleaned ContextDispatcher extension points
   * Cleaned context-parameters passing behavior
 
-## [2.0.4] - 2011-08-02
+## 2.0.4 - 2011-08-02
 ### Changed
   * Subcontexts aliasing and retrieving
   * Multiple steps chaining
@@ -487,22 +487,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Spanish translation
   * Dutch translation
 
-## [2.0.3] - 2011-07-20
+## 2.0.3 - 2011-07-20
 ### Changed
   * Fixed JUnit formatter CDATA output
 
-## [2.0.2] - 2011-07-17
+## 2.0.2 - 2011-07-17
 ### Changed
   * Added extra checks to context instance mapper
   * Fixed i18n support in definitions printer
   * Refactored Gherkin tags inheritance
 
-## [2.0.1] - 2011-07-12
+## 2.0.1 - 2011-07-12
 ### Changed
   * Exception prefix added to statuses. Now you should throw `PendingException` instead of just
     `Pending`
 
-## [2.0.0] - 2011-07-12
+## 2.0.0 - 2011-07-12
 ### Changed
   * Brand new Context-oriented architecture
   * Refactored --definitions (--steps) to print more useful info
@@ -518,47 +518,47 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Fixed some Gherkin bugs
   * Fixed lots of bugs in Behat itself
 
-## [1.1.9] - 2011-06-17
+## 1.1.9 - 2011-06-17
 ### Changed
   * Updated to the latest Symfony components
 
-## [1.1.8] - 2011-06-09
+## 1.1.8 - 2011-06-09
 ### Changed
   * Fixed empty match printing in Pretty and HTML formatters
   * Updated to latest Symfony components
 
-## [1.1.7] - 2011-06-03
+## 1.1.7 - 2011-06-03
 ### Changed
   * Fixed steps colorization bug in outline
   * Additional checks in config import routine
 
-## [1.1.6] - 2011-05-27
+## 1.1.6 - 2011-05-27
 ### Changed
   * Updated Symfony vendors
   * Refactored console formatters
 
-## [1.1.5] - 2011-05-17
+## 1.1.5 - 2011-05-17
 ### Changed
   * Fixed CWD path finding
   * Fixed HTML formatter (thanks @glenjamin)
 
-## [1.1.4] - 2011-05-03
+## 1.1.4 - 2011-05-03
 ### Changed
   * Fixed `--out` option usage critical bug
   * Added ability to specify `output_path` from config file
 
-## [1.1.3] - 2011-04-28
+## 1.1.3 - 2011-04-28
 ### Changed
   * JUnit formatter fix
   * Formatters basePath fix. Now formatters uses CWD as path trimmer
   * Relative paths locator bug fix
   * Show table argument header in HTML formatter
 
-## [1.1.2] - 2011-04-27
+## 1.1.2 - 2011-04-27
 ### Changed
-  * Fixed custom features path locator bug(issue ### [020)
+  * Fixed custom features path locator bug(issue ### 020)
 
-1.1.1] - 2011-04-21
+1.1.1 - 2011-04-21
 
 ### Changed
   * Fixed paths finding routines
@@ -567,7 +567,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Ability to remove previously specified paths in `behat.yml`
   * Bugfixes and little tweaks
 
-## [1.1.0] - 2011-04-04
+## 1.1.0 - 2011-04-04
 ### Changed
   * New configuration system with profiles and imports support
   * New event system
@@ -579,24 +579,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Step snippets (proposals) bugfixes
   * Updated vendor libraries
 
-## [1.0.0] - 2011-03-08
+## 1.0.0 - 2011-03-08
 ### Changed
   * Changed XSD
   * Updated vendors
 
-## [1.0.0RC6] - 2011-03-03
+## 1.0.0RC6 - 2011-03-03
 ### Changed
   * Cleaned command options
   * Added --init option
   * Multiple paths support in behat.yml
   * Application options refactoring
 
-## [1.0.0RC5] - 2011-02-25
+## 1.0.0RC5 - 2011-02-25
 ### Changed
   * Windows support
   * Bundled features hooks optimizations
 
-## [1.0.0RC4] - 2011-02-23
+## 1.0.0RC4 - 2011-02-23
 ### Changed
   * Pretty formatter tag printing fix
   * Custom formatter specification fix in `behat.yml`
@@ -605,18 +605,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Cleaning of `behat.yml` configurator (thanks to Symfony\Component\Config)
   * Additional formatter parameters support in `behat.yml`
 
-## [1.0.0RC3] - 2011-02-18
+## 1.0.0RC3 - 2011-02-18
 ### Changed
   * Event dispatcher binding optimizations
   * Command API optimizations for easier overloading
   * Formatter path trimming bugfix
   * BehatExtension config merging support
 
-## [1.0.0RC2] - 2011-02-15
+## 1.0.0RC2 - 2011-02-15
 ### Changed
   * Step printing option bugfix
 
-## [1.0.0RC1] - 2011-02-15
+## 1.0.0RC1 - 2011-02-15
 ### Changed
   * Gherkin DSL parser is standalone project
   * Own Behat namespace for both Behat & Gherkin
@@ -633,44 +633,44 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Event system refactoring
   * 42 new languages with new Gherkin DSL parser
 
-## [0.3.6] - 2010-12-07
+## 0.3.6 - 2010-12-07
 ### Changed
   * [Behat,Gherkin] Fixed French support includes (fr)
 
-## [0.3.6] - 2010-12-06
+## 0.3.6 - 2010-12-06
 ### Changed
   * [Behat] Updated Symfony2 Components to latest PR4
   * [Gherkin] Added French support (fr)
   * [Gherkin] Added German support (de)
   * [Behat] Small bugfixes
 
-## [0.3.5] - 2010-11-19
+## 0.3.5 - 2010-11-19
 ### Changed
   * [Behat] Refactored EnvironmentBuilder to allow Environment service definition overload
 
-## [0.3.4] - 2010-11-18
+## 0.3.4 - 2010-11-18
 ### Changed
   * [Behat] Introduced environment builder
   * [Gherkin,Behat] id locale support
 
-## [0.3.3] - 2010-11-07
+## 0.3.3 - 2010-11-07
 ### Changed
   * [Gherkin] Added ability to create Table & PyString nodes with hands (in your step to step calls for example)
   * [Gherkin] Added getRowsHash() method to TableNode, so now you can "rotate" given tables
   * [Gherkin] You now can add comments before language specification in your feature files
 
-## [0.3.2] - 2010-11-06
+## 0.3.2 - 2010-11-06
 ### Changed
   * [Gherkin] Added ability to specify extended langs (en-US)
   * [Behat,Gherkin] Added pt-BR translation
 
-## [0.3.1] - 2010-11-02
+## 0.3.1 - 2010-11-02
 ### Changed
   * [Behat] JUnit formatter
   * [Behat] Pretty & HTML formatter background hooks fix
   * [Behat] Other small fixes
 
-## [0.3.0] - 2010-11-02
+## 0.3.0 - 2010-11-02
 ### Changed
   * [Behat] Refactored tags filter
   * [Behat] Added name filter
@@ -681,19 +681,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * [Behat] Bunch of new options
   * [Behat] DIC optimisations
 
-## [0.2.5] - 2010-10-22
+## 0.2.5 - 2010-10-22
 ### Changed
   * [Behat] Format manager introduced
   * [Behat] Formatters refactoring
   * [Behat] Optmized container parameters to support EverzetBehatBundle
   * [Behat] --no-color => --no-colors
 
-## [0.2.4] - 2010-10-19
+## 0.2.4 - 2010-10-19
 ### Changed
   * [Behat] Autoguess of colors support
   * [Behat] Formatter setup bugfix (properl casing)
 
-## [0.2.3] - 2010-10-19
+## 0.2.3 - 2010-10-19
 ### Changed
   * [Behat] Filters optimisations
   * [Behat] Changed Core Loaders with topic-specific (`StepDefinition\Loader\PHPLoader`,
@@ -703,15 +703,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     will load it
   * [Behat] Updated Redundant & Ambiguous exceptions behavior
 
-## [0.2.2] - 2010-10-10
+## 0.2.2 - 2010-10-10
 ### Changed
   * [Behat] Configuration file/path setting update
 
-## [0.2.1] - 2010-10-10
+## 0.2.1 - 2010-10-10
 ### Changed
   * [PEAR] Fix path to phpbin on installation
 
-## [0.2.0] - 2010-10-08
+## 0.2.0 - 2010-10-08
 ### Changed
   * [Behat] Brand new stateless testers, based on Visitor pattern
   * [Behat] Refactored event listeners & event names
@@ -736,7 +736,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * [Behat,Gherkin] Autoloader refactoring
   * [Behat,Gherkin] Removed Zend & Goutte depencies
 
-## [0.1.5] - 2010-09-25
+## 0.1.5 - 2010-09-25
 ### Changed
   * Added ability to call other steps inside step definition
   * Added profiles
@@ -744,13 +744,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Single quotes support in step definitions
   * Added tests for hooks, profiles, inline steps
 
-## [0.1.4] - 2010-09-16
+## 0.1.4 - 2010-09-16
 ### Changed
   * Refactored code
   * Removed logic from object constructors
   * Added Loader & Filter interfaces
 
-## [0.1.3] - 2010-09-14
+## 0.1.3 - 2010-09-14
 ### Changed
   * Ability to specify arrays of paths/files for loaders
   * Event hooks and support for `support/hooks.php`
@@ -758,7 +758,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Don't try to load steps if `steps` folder doesn't exists
   * Bugfixes/refactoring
 
-## [0.1.2] - 2010-09-10
+## 0.1.2 - 2010-09-10
 ### Changed
   * Added ability to read from `behat.yml` and `behat.xml`
   * Moved tags filter to separate object
@@ -766,12 +766,33 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Optimized event names in event dispatcher
   * Other small fixes/refactorings
 
-## [0.1.1] - 2010-09-09
+## 0.1.1 - 2010-09-09
 ### Changed
   * Added `--tags` option
   * Changed environment (world) routines
   * Added lots of core tests (writed in Behat itself)
 
-## [0.1.0] - 2010-09-08
+## 0.1.0 - 2010-09-08
 ### Changed
   * Initial release
+
+[Unreleased]: https://github.com/Behat/Behat/compare/v3.2.0rc2...HEAD
+[3.2.0rc2]: https://github.com/Behat/Behat/compare/v3.2.0rc1...v3.2.0rc2
+[3.2.0rc1]: https://github.com/Behat/Behat/compare/v3.1.0...v3.2.0rc1
+[3.1.0]: https://github.com/Behat/Behat/compare/v3.0.15...v3.1.0
+[3.0.15]: https://github.com/Behat/Behat/compare/v3.0.14...v3.0.15
+[3.0.14]: https://github.com/Behat/Behat/compare/v3.0.13...v3.0.14
+[3.0.13]: https://github.com/Behat/Behat/compare/v3.0.12...v3.0.13
+[3.0.12]: https://github.com/Behat/Behat/compare/v3.0.11...v3.0.12
+[3.0.11]: https://github.com/Behat/Behat/compare/v3.0.10...v3.0.11
+[3.0.10]: https://github.com/Behat/Behat/compare/v3.0.9...v3.0.10
+[3.0.9]: https://github.com/Behat/Behat/compare/v3.0.8...v3.0.9
+[3.0.8]: https://github.com/Behat/Behat/compare/v3.0.7...v3.0.8
+[3.0.7]: https://github.com/Behat/Behat/compare/v3.0.6...v3.0.7
+[3.0.6]: https://github.com/Behat/Behat/compare/v3.0.5...v3.0.6
+[3.0.5]: https://github.com/Behat/Behat/compare/v3.0.4...v3.0.5
+[3.0.4]: https://github.com/Behat/Behat/compare/v3.0.3...v3.0.4
+[3.0.3]: https://github.com/Behat/Behat/compare/v3.0.2...v3.0.3
+[3.0.2]: https://github.com/Behat/Behat/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/Behat/Behat/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/Behat/Behat/compare/v2.5.5...v3.0.0
