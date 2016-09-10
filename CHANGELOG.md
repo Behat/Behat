@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Only cache failed scenario's for rerun (by Rajesh Taneja)
   * Save failed runs with suite information (by Rajesh Taneja)
   * Properly handle interupts on PHP7 (by Peter Mitchell)
+  * Provide clearer exception message when long token names used (by Konstantin Kudryashov)
 
 ### Deprecated
   * `*SnippetAcceptingContext` interfaces ([PR #922](https://github.com/Behat/Behat/pull/922))
@@ -49,7 +50,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
   * Remove behat.bat (by Konstantin Kudryashov)
-  * Provide clearer exception message when long token names used (by Konstantin Kudryashov)
 
 ## [3.1.0] - 2016-03-28
 ### Changed
