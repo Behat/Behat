@@ -11,30 +11,30 @@ Feature: Syntax helpers
     When I run "behat --no-colors --story-syntax"
     Then the output should contain:
       """
-      [Feature|Business Need|Ability]: Internal operations
+      [Business Need|Feature|Ability]: Internal operations
         In order to stay secret
         As a secret organization
         We need to be able to erase past agents' memory
 
         Background:
-          Given there is agent A
-          And there is agent B
+          [Given|*] there is agent A
+          [And|*] there is agent B
 
         Scenario: Erasing agent memory
-          Given there is agent J
-          And there is agent K
-          When I erase agent K's memory
-          Then there should be agent J
-          But there should not be agent K
+          [Given|*] there is agent J
+          [And|*] there is agent K
+          [When|*] I erase agent K's memory
+          [Then|*] there should be agent J
+          [But|*] there should not be agent K
 
-        [Scenario Outline|Scenario Template]: Erasing other agents' memory
-          Given there is agent <agent1>
-          And there is agent <agent2>
-          When I erase agent <agent2>'s memory
-          Then there should be agent <agent1>
-          But there should not be agent <agent2>
+        [Scenario Template|Scenario Outline]: Erasing other agents' memory
+          [Given|*] there is agent <agent1>
+          [And|*] there is agent <agent2>
+          [When|*] I erase agent <agent2>'s memory
+          [Then|*] there should be agent <agent1>
+          [But|*] there should not be agent <agent2>
 
-          [Examples|Scenarios]:
+          [Scenarios|Examples]:
             | agent1 | agent2 |
             | D      | M      |
       """
@@ -48,28 +48,28 @@ Feature: Syntax helpers
     Then the output should contain:
       """
       # language: ru
-      [Функция|Функционал|Свойство]: Internal operations
+      [Функциональность|Функционал|Свойство|Функция]: Internal operations
         In order to stay secret
         As a secret organization
         We need to be able to erase past agents' memory
 
         [Предыстория|Контекст]:
-          [Допустим|Пусть|Дано] there is agent A
-          [К тому же|Также|И] there is agent B
+          [Допустим|Пусть|Дано|*] there is agent A
+          [К тому же|Также|*|И] there is agent B
 
         Сценарий: Erasing agent memory
-          [Допустим|Пусть|Дано] there is agent J
-          [К тому же|Также|И] there is agent K
-          [Когда|Если] I erase agent K's memory
-          [Тогда|То] there should be agent J
-          [Но|А] there should not be agent K
+          [Допустим|Пусть|Дано|*] there is agent J
+          [К тому же|Также|*|И] there is agent K
+          [Когда|Если|*] I erase agent K's memory
+          [Тогда|То|*] there should be agent J
+          [Но|*|А] there should not be agent K
 
         Структура сценария: Erasing other agents' memory
-          [Допустим|Пусть|Дано] there is agent <agent1>
-          [К тому же|Также|И] there is agent <agent2>
-          [Когда|Если] I erase agent <agent2>'s memory
-          [Тогда|То] there should be agent <agent1>
-          [Но|А] there should not be agent <agent2>
+          [Допустим|Пусть|Дано|*] there is agent <agent1>
+          [К тому же|Также|*|И] there is agent <agent2>
+          [Когда|Если|*] I erase agent <agent2>'s memory
+          [Тогда|То|*] there should be agent <agent1>
+          [Но|*|А] there should not be agent <agent2>
 
           Примеры:
             | agent1 | agent2 |
@@ -245,10 +245,10 @@ Feature: Syntax helpers
     When I run "behat --no-colors -di"
     Then the output should contain:
       """
-      default | Given /^I have (\d+) apples?$/
+      default | [Given|*] /^I have (\d+) apples?$/
               | at `FeatureContext::iHaveApples()`
 
-      default | When /^I ate (\d+) apples?$/
+      default | [When|*] /^I ate (\d+) apples?$/
               | Eating apples
               |
               | More details on eating apples, and a list:
@@ -256,10 +256,10 @@ Feature: Syntax helpers
               | - two
               | at `FeatureContext::iAteApples()`
 
-      default | When /^I found (\d+) apples?$/
+      default | [When|*] /^I found (\d+) apples?$/
               | at `FeatureContext::iFoundApples()`
 
-      default | Then /^I should have (\d+) apples$/
+      default | [Then|*] /^I should have (\d+) apples$/
               | at `FeatureContext::iShouldHaveApples()`
       """
 
@@ -328,6 +328,6 @@ Feature: Syntax helpers
     When I run "behat --no-colors --lang=ru -d 'нашел'"
     Then the output should contain:
       """
-      default | [Когда|Если] /^Я нашел (\d+) яблоко?$/
+      default | [Когда|Если|*] /^Я нашел (\d+) яблоко?$/
               | at `FeatureContext::iFoundApples()`
       """
