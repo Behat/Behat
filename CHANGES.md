@@ -1,3 +1,10 @@
+3.2.0rc2 / 2016-09-10
+=====================
+
+### Bug fixes
+
+  * Transformation should be allowed if printable chars are used (by Rajesh Taneja)
+
 3.2.0rc1 / 2016-09-02
 =====================
 
