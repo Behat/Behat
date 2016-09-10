@@ -29,7 +29,7 @@ us reduce the clutter of "silent issues"
 2. Add new `Scenario` into [one of existing features](features) or create a new `.feature` file describing
 the changes. Check the [features/](features) folder for examples. This is important so we don't break the
 changes you introduced in a future version unintentionally
-3. Make sure your changes adhere to [Backward Compatibility](#backward-compatibility) rules. This is important
+3. Make sure your changes adhere to [Backwards Compatibility](#backwards-compatibility) rules. This is important
 so that we adhere to [Semantic Versioning v2.0.0](http://semver.org/spec/v2.0.0.html)
 4. Explain the kind of change you made under the [`[Unreleased]`](CHANGELOG.md#unreleased) section of the
 [CHANGELOG.md](CHANGELOG.md). You'd make our life even easier if you stick to [Keep a Changelog](http://keepachangelog.com/en/0.3.0/) format
@@ -39,7 +39,7 @@ so that we adhere to [Semantic Versioning v2.0.0](http://semver.org/spec/v2.0.0.
 7. Commit your code and submit a Pull Request, providing a clear description of a change,
 similar to the one you did in the changelog
 
-## Backward compatibility
+## Backwards compatibility
 
 Starting from `v3.0.0`, Behat is following [Semantic Versioning v2.0.0](http://semver.org/spec/v2.0.0.html).
 This means that we take backwards compatibility of public API very seriously. So unless you want your PR to start a
