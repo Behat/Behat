@@ -26,8 +26,9 @@ us reduce the clutter of "silent issues"
 ## Submitting a Pull Request
 
 1. Make your feature addition, bug fix or refactoring
-2. Add `*.feature` files (tests) describing those changes. Check the [features/](features) folder for
-examples. This is important so we don't break it in a future version unintentionally
+2. Add new `Scenario` into [one of existing features](features) or create a new `.feature` file describing
+the changes. Check the [features/](features) folder for examples. This is important so we don't break the
+changes you introduced in a future version unintentionally
 3. Make sure your changes adhere to [Backward Compatibility](#backward-compatibility) rules. This is important
 so that we adhere to [Semantic Versioning v2.0.0](http://semver.org/spec/v2.0.0.html)
 4. Explain the kind of change you made under the [`[Unreleased]`](CHANGELOG.md#unreleased) section of the
