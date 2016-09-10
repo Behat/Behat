@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
   * Make changelog follow [Keep a Changelog](http://keepachangelog.com/)
+  * Refreshed [CONTRIBUTING.md](CONTRIBUTING.md)
+  * Refreshed Scrutinizer config
 
 ## [3.2.0rc2] - 2016-09-10
 ### Fixed
