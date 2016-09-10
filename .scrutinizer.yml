@@ -3,7 +3,7 @@ filter:
 
 build_failure_conditions:
     - 'elements.rating(<= D).exists'
-    - 'elements.rating(<= D).new.exists'
+    - 'elements.rating(<= B).new.exists'
     - 'issues.label("coding-style").new.exists'
     - 'issues.severity(>= MAJOR).new.exists'
 
