@@ -1,5 +1,6 @@
 *.tgz
 *.phar
+*.phar.asc
 php_version_tags.php
 behat.yml
 vendor
