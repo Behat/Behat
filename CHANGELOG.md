@@ -1,23 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/) 
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Added
-  * Windows CI ([AppVeyor](http://appveyor.com))
 
-### Changed
-  * Make changelog follow [Keep a Changelog](http://keepachangelog.com/)
-  * Refreshed [CONTRIBUTING.md](CONTRIBUTING.md)
-  * Refreshed Scrutinizer config
-
-## [3.2.0rc2] - 2016-09-10
-### Fixed
-  * Transformation should be allowed if printable chars are used (by Rajesh Taneja)
-
-## [3.2.0rc1] - 2016-09-02
+## [3.2.0] - 2016-09-20
 ### Added
   * Return type based transformations ([PR #910](https://github.com/Behat/Behat/pull/910))
   * Multiline step definitions support ([PR #903](https://github.com/Behat/Behat/pull/903))
@@ -26,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Debug command ([PR #936)](https://github.com/Behat/Behat/pull/936))
   * Exception handlers extension point ([PR #931](https://github.com/Behat/Behat/pull/931))
   * Added build-related files and folders to .gitattributes (by Filippo Tessarotto)
+  * Official full Windows support with CI ([AppVeyor](http://appveyor.com)) on every build
 
 ### Changed
   * Snippets generation revamp ([PR #922](https://github.com/Behat/Behat/pull/922))
@@ -33,6 +23,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Transformations refactoring ([PR #905](https://github.com/Behat/Behat/pull/905))
   * Use only one autoloader if possible (by Warnar Boekkooi)
   * Improve "No specifications found" error message (by Konstantin Kudryashov)
+  * Make changelog follow [Keep a Changelog](http://keepachangelog.com/)
+  * Refreshed [CONTRIBUTING.md](CONTRIBUTING.md)
+  * Refreshed Scrutinizer config
 
 ### Fixed
   * Fix context isolation for Scenario Outlines (by Konstantin Kudryashov)
@@ -41,6 +34,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Save failed runs with suite information (by Rajesh Taneja)
   * Properly handle interupts on PHP7 (by Peter Mitchell)
   * Provide clearer exception message when long token names used (by Konstantin Kudryashov)
+  * Transformation should be allowed if printable chars are used (by Rajesh Taneja)
 
 ### Deprecated
   * `*SnippetAcceptingContext` interfaces ([PR #922](https://github.com/Behat/Behat/pull/922))
@@ -781,9 +775,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
-[Unreleased]: https://github.com/Behat/Behat/compare/v3.2.0rc2...HEAD
-[3.2.0rc2]: https://github.com/Behat/Behat/compare/v3.2.0rc1...v3.2.0rc2
-[3.2.0rc1]: https://github.com/Behat/Behat/compare/v3.1.0...v3.2.0rc1
+[Unreleased]: https://github.com/Behat/Behat/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/Behat/Behat/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/Behat/Behat/compare/v3.0.15...v3.1.0
 [3.0.15]: https://github.com/Behat/Behat/compare/v3.0.14...v3.0.15
 [3.0.14]: https://github.com/Behat/Behat/compare/v3.0.13...v3.0.14
