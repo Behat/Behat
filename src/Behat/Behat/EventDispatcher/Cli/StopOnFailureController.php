@@ -18,7 +18,9 @@ use Behat\Testwork\EventDispatcher\Event\AfterExerciseAborted;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteAborted;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\SuiteTested;
-use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
+use Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation;
+use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -38,6 +40,11 @@ final class StopOnFailureController implements Controller
     private $eventDispatcher;
 
     /**
+     * @var ResultInterpretation
+     */
+    private $resultInterpretation;
+
+    /**
      * Initializes controller.
      *
      * @param EventDispatcherInterface $eventDispatcher
@@ -45,6 +52,7 @@ final class StopOnFailureController implements Controller
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
+        $this->resultInterpretation = new SoftInterpretation();
     }
 
     /**
@@ -73,6 +81,10 @@ final class StopOnFailureController implements Controller
             return null;
         }
 
+        if ($input->getOption('strict')) {
+            $this->resultInterpretation = new StrictInterpretation();
+        }
+
         $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'exitOnFailure'), -100);
         $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'exitOnFailure'), -100);
     }
@@ -84,7 +96,7 @@ final class StopOnFailureController implements Controller
      */
     public function exitOnFailure(AfterScenarioTested $event)
     {
-        if (TestResult::FAILED !== $event->getTestResult()->getResultCode()) {
+        if (!$this->resultInterpretation->isFailure($event->getTestResult())) {
             return;
         }
 
