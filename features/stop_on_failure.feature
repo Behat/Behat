@@ -57,6 +57,34 @@ Feature: Stop on failure
           When I have a step that fails
           Then I should have a scenario that failed
       """
+    And a file named "features/missing-step.feature" with:
+      """
+      Feature: Missing Step Feature
+        In order to test the stop-on-failure and strict features
+        As a behat developer
+        I need to have a feature with a missing step
+
+        Background:
+          Given I have a step that passes
+
+        Scenario: 1st Passing
+          When I have a step that passes
+          Then I should have a scenario that passed
+
+        Scenario: 2nd Passing
+          When I have a step that passes
+           And I have another step that passes
+          Then I should have a scenario that passed
+
+        Scenario: 1st Failing
+          When I have a step that passes
+           And I have another step that is missing
+          Then I should have a scenario that failed
+
+        Scenario: 2st Failing
+          When I have a step that is missing
+          Then I should have a scenario that failed
+      """
     And a file named "features/passing.feature" with:
       """
       Feature: Passing Feature
@@ -116,6 +144,40 @@ Feature: Stop on failure
 
       3 scenarios (2 passed, 1 failed)
       11 steps (9 passed, 1 failed, 1 skipped)
+      """
+
+  Scenario: Just run feature
+    When I run "behat --no-colors --format-settings='{\"paths\": false}' --strict --stop-on-failure features/missing-step.feature"
+    Then it should fail with:
+      """
+      Feature: Missing Step Feature
+        In order to test the stop-on-failure and strict features
+        As a behat developer
+        I need to have a feature with a missing step
+
+        Background:
+          Given I have a step that passes
+
+        Scenario: 1st Passing
+          When I have a step that passes
+          Then I should have a scenario that passed
+
+        Scenario: 2nd Passing
+          When I have a step that passes
+          And I have another step that passes
+          Then I should have a scenario that passed
+
+        Scenario: 1st Failing
+          When I have a step that passes
+          And I have another step that is missing
+          Then I should have a scenario that failed
+
+      3 scenarios (2 passed, 1 undefined)
+      11 steps (9 passed, 1 undefined, 1 skipped)
+
+      --- Use --snippets-for CLI option to generate snippets for following default suite steps:
+
+          And I have another step that is missing
       """
 
   Scenario: Just run feature
