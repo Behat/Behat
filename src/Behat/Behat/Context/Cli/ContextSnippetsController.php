@@ -10,9 +10,13 @@
 
 namespace Behat\Behat\Context\Cli;
 
+use Behat\Behat\Context\Snippet\Generator\AggregatePatternIdentifier;
+use Behat\Behat\Context\Snippet\Generator\ContextInterfaceBasedContextIdentifier;
+use Behat\Behat\Context\Snippet\Generator\ContextInterfaceBasedPatternIdentifier;
 use Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator;
 use Behat\Behat\Context\Snippet\Generator\FixedContextIdentifier;
 use Behat\Behat\Context\Snippet\Generator\FixedPatternIdentifier;
+use Behat\Behat\Context\Snippet\Generator\AggregateContextIdentifier;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -69,17 +73,19 @@ final class ContextSnippetsController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->hasParameterOption('--snippets-for')) {
-            $identifier =
-                null !== $input->getOption('snippets-for')
-                    ? new FixedContextIdentifier($input->getOption('snippets-for'))
-                    : new InteractiveContextIdentifier($this->translator, $input, $output);
+        $this->generator->setContextIdentifier(
+            new AggregateContextIdentifier(array(
+                new ContextInterfaceBasedContextIdentifier(),
+                new FixedContextIdentifier($input->getOption('snippets-for')),
+                new InteractiveContextIdentifier($this->translator, $input, $output)
+            ))
+        );
 
-            $this->generator->setContextIdentifier($identifier);
-        }
-
-        if (null !== $input->getOption('snippets-type')) {
-            $this->generator->setPatternIdentifier(new FixedPatternIdentifier($input->getOption('snippets-type')));
-        }
+        $this->generator->setPatternIdentifier(
+            new AggregatePatternIdentifier(array(
+                new ContextInterfaceBasedPatternIdentifier(),
+                new FixedPatternIdentifier($input->getOption('snippets-type'))
+            ))
+        );
     }
 }
