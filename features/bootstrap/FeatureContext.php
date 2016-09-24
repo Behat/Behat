@@ -33,6 +33,10 @@ class FeatureContext implements Context
      * @var string
      */
     private $workingDir;
+    /**
+     * @var string
+     */
+    private $options = '--format-settings=\'{"timer": false}\' --no-interaction';
 
     /**
      * Cleans test folders in the temporary directory.
@@ -138,7 +142,7 @@ class FeatureContext implements Context
                 $this->phpBin,
                 escapeshellarg(BEHAT_BIN_PATH),
                 $argumentsString,
-                strtr('--format-settings=\'{"timer": false}\'', array('\'' => '"', '"' => '\"'))
+                strtr($this->options, array('\'' => '"', '"' => '\"'))
             )
         );
 
@@ -168,6 +172,7 @@ class FeatureContext implements Context
         $this->process->setEnv($env);
         $this->process->setInput($answerString);
 
+        $this->options = '--format-settings=\'{"timer": false}\'';
         $this->iRunBehat($argumentsString);
     }
 
