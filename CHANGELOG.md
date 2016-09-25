@@ -8,44 +8,44 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.2.1] - 2016-09-25
 ### Changed
-  * `--snippets-for` is not required now as interactive mode is the new default ([PR #955](https://github.com/Behat/Behat/pull/955))
-  * Stop execution on missing steps when running with `--stop-on-failure` and `--strict` options ([PR #954](https://github.com/Behat/Behat/pull/954))
+  * [#955](https://github.com/Behat/Behat/pull/955): `--snippets-for` is not required now as interactive mode is the new default
+  * [#954](https://github.com/Behat/Behat/pull/954): Stop execution on missing steps when running with `--stop-on-failure` and `--strict` options
 
 ## [3.2.0] - 2016-09-20
 ### Added
-  * Return type based transformations ([PR #910](https://github.com/Behat/Behat/pull/910))
-  * Multiline step definitions support ([PR #903](https://github.com/Behat/Behat/pull/903))
-  * Whole table transformation ([PR #930](https://github.com/Behat/Behat/pull/930))
-  * Narrative filters in suites ([PR #935](https://github.com/Behat/Behat/pull/935))
-  * Debug command ([PR #936)](https://github.com/Behat/Behat/pull/936))
-  * Exception handlers extension point ([PR #931](https://github.com/Behat/Behat/pull/931))
-  * Added build-related files and folders to .gitattributes (by Filippo Tessarotto)
-  * Official full Windows support with CI ([AppVeyor](http://appveyor.com)) on every build
+  * [#910](https://github.com/Behat/Behat/pull/910): Return type based transformations
+  * [#903](https://github.com/Behat/Behat/pull/903): Multiline step definitions support
+  * [#930](https://github.com/Behat/Behat/pull/930): Whole table transformation
+  * [#935](https://github.com/Behat/Behat/pull/935): Narrative filters in suites
+  * [#936](https://github.com/Behat/Behat/pull/936): Debug command
+  * [#931](https://github.com/Behat/Behat/pull/931): Exception handlers extension point
+  * [#870](https://github.com/Behat/Behat/pull/870): Added build-related files and folders to .gitattributes
+  * [#946](https://github.com/Behat/Behat/pull/946): Official full Windows support with CI ([AppVeyor](http://appveyor.com)) on every build
 
 ### Changed
-  * Snippets generation revamp ([PR #922](https://github.com/Behat/Behat/pull/922))
-  * More context for pending/failed steps with progress formatter ([PR #920](https://github.com/Behat/Behat/pull/920))
-  * Transformations refactoring ([PR #905](https://github.com/Behat/Behat/pull/905))
-  * Use only one autoloader if possible (by Warnar Boekkooi)
-  * Improve "No specifications found" error message (by Konstantin Kudryashov)
-  * Make changelog follow [Keep a Changelog](http://keepachangelog.com/)
+  * [#922](https://github.com/Behat/Behat/pull/922): Snippets generation revamp
+  * [#920](https://github.com/Behat/Behat/pull/920): More context for pending/failed steps with progress formatter
+  * [#905](https://github.com/Behat/Behat/pull/905): Transformations refactoring
+  * [#864](https://github.com/Behat/Behat/pull/864): Use only one autoloader if possible
+  * [#920](https://github.com/Behat/Behat/pull/920): Improve "No specifications found" error message
+  * Refactor changelog to follow [Keep a Changelog](http://keepachangelog.com/)
   * Refreshed [CONTRIBUTING.md](CONTRIBUTING.md)
   * Refreshed Scrutinizer config
 
 ### Fixed
-  * Fix context isolation for Scenario Outlines (by Konstantin Kudryashov)
-  * Include basepath in generateKey (by Rajesh Taneja)
-  * Only cache failed scenario's for rerun (by Rajesh Taneja)
-  * Save failed runs with suite information (by Rajesh Taneja)
-  * Properly handle interupts on PHP7 (by Peter Mitchell)
-  * Provide clearer exception message when long token names used (by Konstantin Kudryashov)
-  * Transformation should be allowed if printable chars are used (by Rajesh Taneja)
+  * [#911](https://github.com/Behat/Behat/pull/911): Fix context isolation for Scenario Outlines
+  * [#860](https://github.com/Behat/Behat/pull/860): Include basepath in `generateKey`
+  * [#857](https://github.com/Behat/Behat/pull/857): Only cache failed scenario's for rerun
+  * [#933](https://github.com/Behat/Behat/pull/933): Save failed runs with suite information
+  * [#833](https://github.com/Behat/Behat/pull/833): Properly handle interupts on PHP7
+  * [#904](https://github.com/Behat/Behat/pull/904): Provide clearer exception message when long token names used
+  * [#941](https://github.com/Behat/Behat/pull/941): Transformation should be allowed if printable chars are used
 
 ### Deprecated
-  * `*SnippetAcceptingContext` interfaces ([PR #922](https://github.com/Behat/Behat/pull/922))
-  * `RuntimeTransformation` ([PR #905](https://github.com/Behat/Behat/pull/905))
-  * `Transformation::getPattern` ([PR #905](https://github.com/Behat/Behat/pull/905))
-  * `StepStat` ([PR #920](https://github.com/Behat/Behat/pull/920))
+  * [#922](https://github.com/Behat/Behat/pull/922): `*SnippetAcceptingContext` interfaces
+  * [#905](https://github.com/Behat/Behat/pull/905): `RuntimeTransformation`
+  * [#905](https://github.com/Behat/Behat/pull/905): `Transformation::getPattern`
+  * [#920](https://github.com/Behat/Behat/pull/920): `StepStat`
 
 ### Removed
   * Remove behat.bat (by Konstantin Kudryashov)
