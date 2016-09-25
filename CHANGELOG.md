@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [3.2.1] - 2016-09-25
 ### Changed
   * `--snippets-for` is not required now as interactive mode is the new default ([PR #955](https://github.com/Behat/Behat/pull/955))
   * Stop execution on missing steps when running with `--stop-on-failure` and `--strict` options ([PR #954](https://github.com/Behat/Behat/pull/954))
@@ -778,7 +780,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
-[Unreleased]: https://github.com/Behat/Behat/compare/v3.2.0...HEAD
+[Unreleased]: https://github.com/Behat/Behat/compare/v3.2.1...HEAD
+[3.2.1]: https://github.com/Behat/Behat/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/Behat/Behat/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/Behat/Behat/compare/v3.0.15...v3.1.0
 [3.0.15]: https://github.com/Behat/Behat/compare/v3.0.14...v3.0.15
