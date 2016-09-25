@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Changed
-  * Stop execution on missing steps when running with `--stop-on-failure` and `--strict` options
+  * `--snippets-for` is not required now as interactive mode is the new default ([PR #955](https://github.com/Behat/Behat/pull/955))
+  * Stop execution on missing steps when running with `--stop-on-failure` and `--strict` options ([PR #954](https://github.com/Behat/Behat/pull/954))
 
 ## [3.2.0] - 2016-09-20
 ### Added

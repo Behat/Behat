@@ -66,8 +66,8 @@ TPL;
     {
         $this->patternTransformer = $patternTransformer;
 
-        $this->setContextIdentifier(new ContextInterfaceBasedContextIdentifier());
-        $this->setPatternIdentifier(new ContextInterfaceBasedPatternIdentifier());
+        $this->setContextIdentifier(new FixedContextIdentifier(null));
+        $this->setPatternIdentifier(new FixedPatternIdentifier(null));
     }
 
     /**

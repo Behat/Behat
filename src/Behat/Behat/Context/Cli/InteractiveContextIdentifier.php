@@ -57,6 +57,10 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
      */
     public function guessTargetContextClass(ContextEnvironment $environment)
     {
+        if ($this->input->hasParameterOption('--no-interaction')) {
+            return null;
+        }
+
         $suiteName = $environment->getSuite()->getName();
         $contextClasses = $environment->getContextClasses();
 
