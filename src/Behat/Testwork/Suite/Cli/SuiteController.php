@@ -63,21 +63,21 @@ final class SuiteController implements Controller
     {
         $exerciseSuiteName = $input->getOption('suite');
 
-        if (null !== $exerciseSuiteName && !isset($this->suiteConfigurations[$exerciseSuiteName])) {
+        if (null === $exerciseSuiteName) {
+            return;
+        }
+
+        if (!isset($this->suiteConfigurations[$exerciseSuiteName])) {
             throw new SuiteNotFoundException(sprintf(
                 '`%s` suite is not found or has not been properly registered.',
                 $exerciseSuiteName
             ), $exerciseSuiteName);
         }
 
-        foreach ($this->suiteConfigurations as $name => $config) {
-            if (null !== $exerciseSuiteName && $exerciseSuiteName !== $name) {
-                continue;
-            }
+        $config = $this->suiteConfigurations[$exerciseSuiteName];
 
-            $this->registry->registerSuiteConfiguration(
-                $name, $config['type'], $config['settings']
-            );
-        }
+        $this->registry->registerSuiteConfiguration(
+            $exerciseSuiteName, $config['type'], $config['settings']
+        );
     }
 }
