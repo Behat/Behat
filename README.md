@@ -4,8 +4,8 @@ Behat is a BDD framework for PHP to help you test business expectations.
 
 [![Gitter chat](https://badges.gitter.im/Behat/Behat.svg)](https://gitter.im/Behat/Behat)
 [![License](https://poser.pugx.org/behat/behat/license.svg)](https://packagist.org/packages/behat/behat)
-[![Travis Status](https://travis-ci.org/Behat/Behat.svg?branch=master)](https://travis-ci.org/Behat/Behat)
-[![Appveyor status](https://ci.appveyor.com/api/projects/status/9uc5sellmvbv02ei?svg=true)](https://ci.appveyor.com/project/everzet/behat)
+[![Unix Status](https://travis-ci.org/Behat/Behat.svg?branch=master)](https://travis-ci.org/Behat/Behat)
+[![Windows status](https://ci.appveyor.com/api/projects/status/9uc5sellmvbv02ei/branch/master?svg=true)](https://ci.appveyor.com/project/everzet/behat/branch/master)
 [![HHVM Status](http://hhvm.h4cc.de/badge/behat/behat.svg?branch=master)](http://hhvm.h4cc.de/package/behat/behat)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Behat/Behat/badges/quality-score.png?s=ad84e95fc2405712f88a96d89b4f31dfe5c80fae)](https://scrutinizer-ci.com/g/Behat/Behat/)
 
