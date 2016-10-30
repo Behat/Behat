@@ -81,22 +81,8 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         $environment = $definitionCall->getEnvironment();
         $transformations = $this->repository->getEnvironmentTransformations($environment);
 
-        usort($transformations, function(Transformation $t1, Transformation $t2) {
-            // TODO: remove with upgrade of Transformation interface
-            $t1p = $t1 instanceof SimpleArgumentTransformation ? $t1->getPriority() : 0;
-            $t2p = $t2 instanceof SimpleArgumentTransformation ? $t2->getPriority() : 0;
-
-            if ($t1p == $t2p) {
-                return 0;
-            }
-
-            return ($t1p > $t2p) ? -1 : 1;
-        });
-
-        $newValue = $argumentValue;
-        foreach ($transformations as $transformation) {
-            $newValue = $this->transform($definitionCall, $transformation, $argumentIndex, $newValue);
-        }
+        $newValue = $this->applySimpleTransformations($definitionCall, $transformations, $argumentIndex, $argumentValue);
+        $newValue = $this->applyNormalTransformations($definitionCall, $transformations, $argumentIndex, $newValue);
 
         return $newValue;
     }
@@ -141,5 +127,60 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         }
 
         return $this->patternTransformer->transformPatternToRegex($translatedPattern);
+    }
+
+    /**
+     * Apply simple argument transformations in priority order.
+     *
+     * @param DefinitionCall   $definitionCall
+     * @param Transformation[] $transformations
+     * @param integer|string   $index
+     * @param mixed            $value
+     *
+     * @return mixed
+     */
+    private function applySimpleTransformations(DefinitionCall $definitionCall, array $transformations, $index, $value)
+    {
+        $simpleTransformations = array_filter($transformations, function ($transformation) {
+            return $transformation instanceof SimpleArgumentTransformation;
+        });
+
+        usort($simpleTransformations, function (SimpleArgumentTransformation $t1, SimpleArgumentTransformation $t2) {
+            if ($t1->getPriority() == $t2->getPriority()) {
+                return 0;
+            }
+
+            return ($t1->getPriority() > $t2->getPriority()) ? -1 : 1;
+        });
+
+        $newValue = $value;
+        foreach ($simpleTransformations as $transformation) {
+            $newValue = $this->transform($definitionCall, $transformation, $index, $newValue);
+        }
+
+        return $newValue;
+    }
+
+    /**
+     * Apply normal (non-simple) argument transformations.
+     *
+     * @param DefinitionCall   $definitionCall
+     * @param Transformation[] $transformations
+     * @param integer|string   $index
+     * @param mixed            $value
+     *
+     * @return mixed
+     */
+    private function applyNormalTransformations(DefinitionCall $definitionCall, array $transformations, $index, $value)
+    {
+        $normalTransformations = array_filter($transformations, function ($transformation) {
+            return !$transformation instanceof SimpleArgumentTransformation;
+        });
+
+        foreach ($normalTransformations as $transformation) {
+            $value = $this->transform($definitionCall, $transformation, $index, $value);
+        }
+
+        return $value;
     }
 }
