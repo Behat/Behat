@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [3.2.2] - 2016-11-05
 ### Fixed
   * [#959](https://github.com/Behat/Behat/issues/959): Fix transformations not sorted properly on different php version
 
