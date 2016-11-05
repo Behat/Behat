@@ -79,23 +79,72 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $environment = $definitionCall->getEnvironment();
-        $transformations = $this->repository->getEnvironmentTransformations($environment);
+        list($simpleTransformations, $normalTransformations) = $this->splitSimpleAndNormalTransformations(
+            $this->repository->getEnvironmentTransformations($environment)
+        );
 
-        usort($transformations, function(Transformation $t1, Transformation $t2) {
-            // TODO: remove with upgrade of Transformation interface
-            $t1p = $t1 instanceof SimpleArgumentTransformation ? $t1->getPriority() : 0;
-            $t2p = $t2 instanceof SimpleArgumentTransformation ? $t2->getPriority() : 0;
+        $newValue = $this->applySimpleTransformations($simpleTransformations, $definitionCall, $argumentIndex, $argumentValue);
+        $newValue = $this->applyNormalTransformations($normalTransformations, $definitionCall, $argumentIndex, $newValue);
 
-            if ($t1p == $t2p) {
+        return $newValue;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateRegex($suiteName, $pattern, $language)
+    {
+        $translatedPattern = $this->translator->trans($pattern, array(), $suiteName, $language);
+        if ($pattern == $translatedPattern) {
+            return $this->patternTransformer->transformPatternToRegex($pattern);
+        }
+
+        return $this->patternTransformer->transformPatternToRegex($translatedPattern);
+    }
+
+    /**
+     * Apply simple argument transformations in priority order.
+     *
+     * @param SimpleArgumentTransformation[] $transformations
+     * @param DefinitionCall                 $definitionCall
+     * @param integer|string                 $index
+     * @param mixed                          $value
+     *
+     * @return mixed
+     */
+    private function applySimpleTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
+    {
+        usort($transformations, function (SimpleArgumentTransformation $t1, SimpleArgumentTransformation $t2) {
+            if ($t1->getPriority() == $t2->getPriority()) {
                 return 0;
             }
 
-            return ($t1p > $t2p) ? -1 : 1;
+            return ($t1->getPriority() > $t2->getPriority()) ? -1 : 1;
         });
 
-        $newValue = $argumentValue;
+        $newValue = $value;
         foreach ($transformations as $transformation) {
-            $newValue = $this->transform($definitionCall, $transformation, $argumentIndex, $newValue);
+            $newValue = $this->transform($definitionCall, $transformation, $index, $newValue);
+        }
+
+        return $newValue;
+    }
+
+    /**
+     * Apply normal (non-simple) argument transformations.
+     *
+     * @param Transformation[] $transformations
+     * @param DefinitionCall   $definitionCall
+     * @param integer|string   $index
+     * @param mixed            $value
+     *
+     * @return mixed
+     */
+    private function applyNormalTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
+    {
+        $newValue = $value;
+        foreach ($transformations as $transformation) {
+            $newValue = $this->transform($definitionCall, $transformation, $index, $newValue);
         }
 
         return $newValue;
@@ -131,15 +180,19 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     }
 
     /**
-     * {@inheritdoc}
+     * Splits transformations into simple and normal ones.
+     *
+     * @param Transformation[] $transformations
+     *
+     * @return array
      */
-    public function generateRegex($suiteName, $pattern, $language)
+    private function splitSimpleAndNormalTransformations(array $transformations)
     {
-        $translatedPattern = $this->translator->trans($pattern, array(), $suiteName, $language);
-        if ($pattern == $translatedPattern) {
-            return $this->patternTransformer->transformPatternToRegex($pattern);
-        }
-
-        return $this->patternTransformer->transformPatternToRegex($translatedPattern);
+        return array_reduce($transformations, function ($acc, $t) {
+            return array(
+                $t instanceof SimpleArgumentTransformation ? array_merge($acc[0], array($t)) : $acc[0],
+                !$t instanceof SimpleArgumentTransformation ? array_merge($acc[1], array($t)) : $acc[1],
+            );
+        }, array(array(), array()));
     }
 }
