@@ -50,6 +50,8 @@ final class Application extends BaseApplication
      */
     public function __construct($name, $version, ConfigurationLoader $configLoader, ExtensionManager $extensionManager)
     {
+        putenv('COLUMNS=9999');
+
         $this->configurationLoader = $configLoader;
         $this->extensionManager = $extensionManager;
 
