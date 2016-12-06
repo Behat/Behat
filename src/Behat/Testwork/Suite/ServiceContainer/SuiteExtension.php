@@ -82,6 +82,7 @@ final class SuiteExtension implements Extension
             ->treatNullLike(array())
             ->treatFalseLike(array())
             ->useAttributeAsKey('name')
+            ->normalizeKeys(false)
             ->prototype('array')
                 ->beforeNormalization()
                     ->ifTrue(function ($suite) {
