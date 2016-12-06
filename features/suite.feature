@@ -534,3 +534,26 @@ Feature: Suites
       1 scenario (1 passed)
       3 steps (3 passed)
       """
+
+  Scenario: Running suite with a hyphen in suite name
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          suite-with-hyphens:
+            paths: {}
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      class FeatureContext implements \Behat\Behat\Context\Context
+      {
+      }
+      """
+    When I run "behat --no-colors -f progress --suite suite-with-hyphens"
+    Then it should pass with:
+      """
+      No scenarios
+      No steps
+      """

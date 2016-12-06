@@ -19,8 +19,6 @@ Feature: Rerun with multiple suite
           suite2:
             paths:
               - features/bananas.feature
-          suite-3:
-            paths: {}
       """
     And a file named "features/bootstrap/FeatureContext.php" with:
       """
@@ -295,12 +293,4 @@ Feature: Rerun with multiple suite
 
     2 scenarios (2 failed)
     7 steps (5 passed, 2 failed)
-    """
-
-  Scenario: Run suite with dash in name
-    When I run "behat --no-colors -f progress --suite suite-3"
-    Then it should pass with:
-    """
-    No scenarios
-    No steps
     """
