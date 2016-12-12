@@ -11,6 +11,7 @@
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
@@ -47,10 +48,11 @@ final class JUnitScenarioPrinter
      */
     private $outlineStepCount;
 
-    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener)
+    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, JUnitDurationListener $durationListener)
     {
         $this->resultConverter = $resultConverter;
         $this->outlineStoreListener = $outlineListener;
+        $this->durationListener = $durationListener;
     }
 
     /**
@@ -71,7 +73,8 @@ final class JUnitScenarioPrinter
 
         $outputPrinter->addTestcase(array(
             'name' => $name,
-            'status' => $this->resultConverter->convertResultToString($result)
+            'status' => $this->resultConverter->convertResultToString($result),
+            'time' => $this->durationListener->getDuration($scenario)
         ));
     }
 
