@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+  * [#971](https://github.com/Behat/Behat/pull/971): Added support for suite names with hyphens
 
 ## [3.2.2] - 2016-11-05
 ### Fixed
