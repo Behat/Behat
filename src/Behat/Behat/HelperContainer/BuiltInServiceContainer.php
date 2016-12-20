@@ -78,7 +78,7 @@ final class BuiltInServiceContainer implements ServiceContainer
         $reflection = new ReflectionClass($schema['class']);
         $arguments = $schema['arguments'];
 
-        if ($factoryMethod = $this->getAndValidateFactoryMethod($reflection, $schema['factory_method'])) {
+        if ($factoryMethod = $this->getAndValidateFactoryMethod($reflection, $schema)) {
             return $factoryMethod->invokeArgs(null, $arguments);
         }
 
@@ -102,6 +102,22 @@ final class BuiltInServiceContainer implements ServiceContainer
             $schema = array('class' => $schema);
         }
 
+        $schema['class'] = $this->getAndValidateClass($id, $schema);
+        $schema['arguments'] = $this->getAndValidateArguments($schema);
+
+        return $schema;
+    }
+
+    /**
+     * Gets and validates a class from schema.
+     *
+     * @param string       $id
+     * @param string|array $schema
+     *
+     * @return string
+     */
+    private function getAndValidateClass($id, array $schema)
+    {
         if (!isset($schema['class'])) {
             throw new WrongServicesConfigurationException(sprintf(
                 'All services of the built-in `services` must have `class` option set, but `%s` does not.',
@@ -109,46 +125,77 @@ final class BuiltInServiceContainer implements ServiceContainer
             ));
         }
 
-        $schema['arguments'] = isset($schema['arguments']) ? (array)$schema['arguments'] : array();
-        $schema['factory_method'] = isset($schema['factory_method']) ? $schema['factory_method'] : null;
+        return $schema['class'];
+    }
 
-        return $schema;
+    /**
+     * Gets and validates arguments from schema.
+     *
+     * @param array $schema
+     *
+     * @return array
+     */
+    private function getAndValidateArguments(array $schema)
+    {
+        return isset($schema['arguments']) ? (array)$schema['arguments'] : array();
     }
 
     /**
      * Gets and validates a factory method.
      *
      * @param ReflectionClass $reflection
-     * @param null|string     $factoryMethod
-     *
-     * @throws WrongServicesConfigurationException
+     * @param array           $schema
      *
      * @return null|ReflectionMethod
      */
-    private function getAndValidateFactoryMethod(ReflectionClass $reflection, $factoryMethod)
+    private function getAndValidateFactoryMethod(ReflectionClass $reflection, array $schema)
     {
-        if (null === $factoryMethod) {
+        if (!isset($schema['factory_method'])) {
             return null;
         }
 
-        if (!$reflection->hasMethod($factoryMethod)) {
+        $factoryMethod = $schema['factory_method'];
+        $this->assertFactoryMethodExists($reflection, $factoryMethod);
+        $method = $reflection->getMethod($factoryMethod);
+        $this->assertFactoryMethodIsStatic($method);
+
+        return $method;
+    }
+
+    /**
+     * Checks if factory method exists.
+     *
+     * @param ReflectionClass $class
+     * @param string          $methodName
+     *
+     * @throws WrongServicesConfigurationException
+     */
+    private function assertFactoryMethodExists(ReflectionClass $class, $methodName)
+    {
+        if (!$class->hasMethod($methodName)) {
             throw new WrongServicesConfigurationException(sprintf(
                 'Factory method `%s::%s` does not exist.',
-                $reflection->getName(),
-                $factoryMethod
+                $class->getName(),
+                $methodName
             ));
         }
+    }
 
-        $method = $reflection->getMethod($factoryMethod);
-
+    /**
+     * Checks if factory method is static.
+     *
+     * @param ReflectionMethod $method
+     *
+     * @throws WrongServicesConfigurationException
+     */
+    private function assertFactoryMethodIsStatic(ReflectionMethod $method)
+    {
         if (!$method->isStatic()) {
             throw new WrongServicesConfigurationException(sprintf(
                 'Service factory methods must be static, but `%s::%s` is not.',
-                $reflection->getName(),
-                $factoryMethod
+                $method->getDeclaringClass()->getName(),
+                $method->getName()
             ));
         }
-
-        return $method;
     }
 }

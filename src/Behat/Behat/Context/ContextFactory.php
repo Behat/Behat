@@ -78,8 +78,8 @@ final class ContextFactory
     {
         $reflection = new ReflectionClass($class);
         $resolvers = array_merge($singleUseResolvers, $this->argumentResolvers);
-        $arguments = $this->resolveArguments($reflection, $arguments, $resolvers);
-        $context = $this->createInstance($reflection, $arguments);
+        $resolvedArguments = $this->resolveArguments($reflection, $arguments, $resolvers);
+        $context = $this->createInstance($reflection, $resolvedArguments);
         $this->initializeInstance($context);
 
         return $context;
