@@ -88,11 +88,29 @@ final class HelperContainerExtension implements Extension
         $references = $this->processor->findAndSortTaggedServices($container, self::HELPER_CONTAINER_TAG);
 
         foreach ($references as $reference) {
-            if ($container->getDefinition($reference)->isShared()) {
+            if ($this->isDefinitionShared($container->getDefinition($reference))) {
                 throw new WrongServicesConfigurationException(sprintf(
                     'Container services must not be configured as shared, but `@%s` is.', $reference
                 ));
             }
+        }
+    }
+
+    /**
+     * Checks if provided definition is shared.
+     *
+     * @param Definition $definition
+     *
+     * @return bool
+     *
+     * @deprecated remove after upgrading to Symfony 2.8+
+     */
+    private function isDefinitionShared(Definition $definition)
+    {
+        if (method_exists($definition, 'isShared')) {
+            return $definition->isShared();
+        } else {
+            return $definition->getScope() !== ContainerBuilder::SCOPE_PROTOTYPE;
         }
     }
 }
