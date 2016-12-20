@@ -109,8 +109,10 @@ final class HelperContainerExtension implements Extension
     {
         if (method_exists($definition, 'isShared')) {
             return $definition->isShared();
-        } else {
+        } else if (method_exists($definition, 'getScope')) {
             return $definition->getScope() !== ContainerBuilder::SCOPE_PROTOTYPE;
         }
+
+        return false;
     }
 }
