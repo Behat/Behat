@@ -12,6 +12,7 @@ namespace Behat\Behat\HelperContainer;
 
 use Behat\Behat\HelperContainer\Exception\ServiceNotFoundException;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
+use Interop\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -20,7 +21,7 @@ use ReflectionMethod;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class BuiltInServiceContainer implements ServiceContainer
+final class BuiltInServiceContainer implements ContainerInterface
 {
     /**
      * @var array
