@@ -88,7 +88,7 @@ final class HelperContainerExtension implements Extension
         $references = $this->processor->findAndSortTaggedServices($container, self::HELPER_CONTAINER_TAG);
 
         foreach ($references as $reference) {
-            if ($this->isDefinitionShared($container->getDefinition($reference))) {
+            if ($this->isDefinitionShared($container->getDefinition((string) $reference))) {
                 throw new WrongServicesConfigurationException(sprintf(
                     'Container services must not be configured as shared, but `@%s` is.', $reference
                 ));
