@@ -13,13 +13,13 @@ namespace Behat\Behat\Context\Argument;
 use Behat\Testwork\Suite\Suite;
 
 /**
- * Aggregate factory. Delegates to other (registered) factories to do the job.
+ * Composite factory. Delegates to other (registered) factories to do the job.
  *
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AggregateFactory implements SuiteScopedResolverFactory
+final class CompositeFactory implements SuiteScopedResolverFactory
 {
     /**
      * @var SuiteScopedResolverFactory[]
