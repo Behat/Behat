@@ -103,7 +103,7 @@ final class HelperContainerExtension implements Extension
      *
      * @return bool
      *
-     * @deprecated remove after upgrading to Symfony 2.8+
+     * @todo Remove after upgrading to Symfony 2.8+
      */
     private function isDefinitionShared(Definition $definition)
     {
