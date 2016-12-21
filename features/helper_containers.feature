@@ -4,7 +4,7 @@ Feature: Per-suite helper containers
 
   Rules:
     - A single optional container is allowed per suite
-    - Having container enables you to use its services as context arguments via `@name` syntax
+    - Having a container enables you to use its services as context arguments via `@name` syntax
     - Container is rebuilt and is isolated between scenarios
     - Container is configured via suite's `services` option
     - Container is a class implementing `Interop\Container\ContainerInterface`
