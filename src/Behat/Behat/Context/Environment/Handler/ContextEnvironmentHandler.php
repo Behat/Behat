@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Context\Environment\Handler;
 
+use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
+use Behat\Behat\Context\Argument\NullFactory;
 use Behat\Behat\Context\ContextClass\ClassResolver;
 use Behat\Behat\Context\ContextFactory;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
@@ -32,7 +34,11 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * @var ContextFactory
      */
-    private $factory;
+    private $contextFactory;
+    /**
+     * @var SuiteScopedResolverFactory
+     */
+    private $resolverFactory;
     /**
      * @var ClassResolver[]
      */
@@ -41,11 +47,13 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Initializes handler.
      *
-     * @param ContextFactory $factory
+     * @param ContextFactory             $factory
+     * @param SuiteScopedResolverFactory $resolverFactory
      */
-    public function __construct(ContextFactory $factory)
+    public function __construct(ContextFactory $factory, SuiteScopedResolverFactory $resolverFactory = null)
     {
-        $this->factory = $factory;
+        $this->contextFactory = $factory;
+        $this->resolverFactory = $resolverFactory ?: new NullFactory();
     }
 
     /**
@@ -100,8 +108,10 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         }
 
         $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
+        $resolvers = $this->resolverFactory->generateArgumentResolvers($uninitializedEnvironment->getSuite());
+
         foreach ($uninitializedEnvironment->getContextClassesWithArguments() as $class => $arguments) {
-            $context = $this->factory->createContext($class, $arguments);
+            $context = $this->contextFactory->createContext($class, $arguments, $resolvers);
             $environment->registerContext($context);
         }
 

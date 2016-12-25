@@ -18,6 +18,7 @@ use Behat\Behat\Hook\ServiceContainer\HookExtension;
 use Behat\Behat\Output\ServiceContainer\Formatter\JUnitFormatterFactory;
 use Behat\Behat\Output\ServiceContainer\Formatter\PrettyFormatterFactory;
 use Behat\Behat\Output\ServiceContainer\Formatter\ProgressFormatterFactory;
+use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Behat\Transformation\ServiceContainer\TransformationExtension;
@@ -91,7 +92,8 @@ final class ApplicationFactory extends BaseFactory
             new EventDispatcherExtension($processor),
             new HookExtension(),
             new TransformationExtension($processor),
-            new OrderingExtension($processor)
+            new OrderingExtension($processor),
+            new HelperContainerExtension($processor)
         );
     }
 
