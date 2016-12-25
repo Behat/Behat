@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * [#973](https://github.com/Behat/Behat/pull/974): Added helper containers
   * [#973](https://github.com/Behat/Behat/pull/974): Added `SuiteScopedResolverFactory` extension point
 
+### Removed
+  * Removed php 5.3 from the Travis build matrix. You can consider it official end of support. 5.4 and 5.5 will follow shortly.
+
 ## [3.2.3] - 2016-12-25
 ### Fixed
   * [#971](https://github.com/Behat/Behat/pull/971): Added support for suite names with hyphens
