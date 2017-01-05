@@ -9,7 +9,9 @@
  */
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Gherkin\Node\PyStringNode;
+use Prophecy\Argument;
 use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -239,6 +241,8 @@ class FeatureContext implements Context
         PHPUnit_Framework_Assert::assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
+
+        $fileContent = preg_replace('/time="(.*)"/', 'time="-IGNORE-VALUE-"', $fileContent);
 
         $dom = new DOMDocument();
         $dom->loadXML($text);
