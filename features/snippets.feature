@@ -432,3 +432,55 @@ Feature: Snippets generation and addition
               throw new PendingException();
           }
       """
+
+  Scenario: Generating snippets for steps with apostrophes
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context {}
+      """
+    And a file named "features/coffee.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Given that it's eleven o'clock
+          When the guest's taxi has arrived
+          Then the guest says 'Goodbye'
+      """
+    When I run "behat -f progress --no-colors --snippets-for=FeatureContext"
+    Then it should pass with:
+      """
+      UUU
+
+      1 scenario (1 undefined)
+      3 steps (3 undefined)
+
+      --- FeatureContext has missing steps. Define them with these snippets:
+
+          /**
+           * @Given that it's eleven o'clock
+           */
+          public function thatItsElevenOclock()
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @When the guest's taxi has arrived
+           */
+          public function theGuestsTaxiHasArrived()
+          {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then the guest says :arg1
+           */
+          public function theGuestSays($arg1)
+          {
+              throw new PendingException();
+          }
+      """
