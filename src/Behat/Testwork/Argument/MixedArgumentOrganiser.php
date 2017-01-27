@@ -58,7 +58,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         $arguments =
             $this->prepareNamedArguments($parameters, $named) +
-            $typehinted +
+            $this->prepareTypehintedArguments($typehinted) +
             $this->prepareNumberedArguments($parameters, $numbered) +
             $this->prepareDefaultArguments($parameters);
 
@@ -172,6 +172,29 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         return $arguments;
     }
+
+    /**
+     * Captures argument value based on their respective typehints.
+     *
+     * Note ; as it is keeping in mind that $typeHintedArgument already has the
+     * right keys matching the correct parameter, it just iterates over this
+     * array in order to mark each arguments as "defined".
+     *
+     * @see https://github.com/Behat/Behat/pull/993#issuecomment-275669510
+     *
+     * @param mixed[] $typehintedArguments
+     *
+     * @return mixed[]
+     */
+    private function prepareTypehintedArguments(array $typehintedArguments)
+    {
+        foreach (array_keys($typehintedArguments) as $num) {
+            $this->markArgumentDefined($num);
+        }
+
+        return $typehintedArguments;
+    }
+
 
     /**
      * Captures argument values for undefined arguments based on their respective numbers.
