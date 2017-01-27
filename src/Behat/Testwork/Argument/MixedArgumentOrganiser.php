@@ -88,7 +88,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         foreach ($arguments as $key => $val) {
             if ($this->isStringKeyAndExistsInParameters($key, $parameterNames)) {
                 $namedArguments[$key] = $val;
-            } elseif ($num = $this->getParameterNumberWithTypehintingValue($parameters, $val)) {
+            } elseif (null !== ($num = $this->getParameterNumberWithTypehintingValue($parameters, $val))) {
                 $typehintedArguments[$num] = $val;
             } else {
                 $numberedArguments[] = $val;
