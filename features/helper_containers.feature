@@ -305,3 +305,44 @@ Feature: Per-suite helper containers
       """
     When I run "behat --no-colors -f progress features/container.feature"
     Then it should pass
+
+  Scenario: Mix of typehinted arguments and numbered arguments (fix #991)
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - foo
+                - "@typehinted_service"
+                - bar
+
+            services:
+              typehinted_service:
+                class: stdClass
+      """
+    And a file named "features/container_args.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given foo
+      """
+    And a file named "features/bootstrap/FirstContext.php" with:
+      """
+      <?php use Behat\Behat\Context\Context;
+
+      class FirstContext implements Context {
+          public function __construct($foo, stdClass $service, $bar) {
+            // the first argument is a placeholder while #990 is still opened
+            // otherwise, if we had only the SharedService and $arg2, it would not
+            // show the fix that was made in #993
+          }
+
+          /** @Given foo */
+          public function foo() {
+          }
+      }
+      """
+    When I run "behat --no-colors -f progress features/container_args.feature"
+    Then it should pass
