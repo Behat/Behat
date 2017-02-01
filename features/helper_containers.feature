@@ -314,7 +314,6 @@ Feature: Per-suite helper containers
           default:
             contexts:
               - FirstContext:
-                - foo
                 - "@typehinted_service"
                 - bar
 
@@ -333,10 +332,7 @@ Feature: Per-suite helper containers
       <?php use Behat\Behat\Context\Context;
 
       class FirstContext implements Context {
-          public function __construct($foo, stdClass $service, $bar) {
-            // the first argument is a placeholder while #990 is still opened
-            // otherwise, if we had only the SharedService and $arg2, it would not
-            // show the fix that was made in #993
+          public function __construct(stdClass $service, $bar) {
           }
 
           /** @Given foo */
