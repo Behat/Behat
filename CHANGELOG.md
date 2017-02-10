@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
   * [#993](https://github.com/Behat/Behat/pull/993) Fix mixed arguments organizer not marking typehinted arguments as "defined"
   * [#992](https://github.com/Behat/Behat/pull/993) Do not misinterpret first argument as a numbered argument if it is in fact typehinted
+  
+### Changed
+  * The `paths` argument accepts an optional array of paths.
 
 ## [3.3.0] - 2016-12-25
 ### Added
