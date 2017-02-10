@@ -359,7 +359,7 @@ EOL;
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
-                '/[ "]features\/[^\n "]+/', function ($matches) {
+                '/[^,][ "]features\/[^\n "]+/', function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 }, $text
             );
