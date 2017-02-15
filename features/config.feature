@@ -91,3 +91,36 @@ Feature: Config
       """
       The requested config file does not exist
       """
+
+  Scenario: Prioritize *.yaml config file
+    Given a file named "behat.yaml"
+    Given a file named "behat.yml"
+    Given a some feature context
+    And a some feature scenarios
+    When I run behat in debug mode
+    Then the output should contain:
+      """
+      behat.yaml
+      """
+
+  Scenario: Load custom config instead of distribution
+    Given a file named "behat.yml"
+    Given a file named "behat.yaml.dist"
+    Given a some feature context
+    And a some feature scenarios
+    When I run behat in debug mode
+    Then the output should contain:
+      """
+      behat.yml
+      """
+
+  Scenario: Prioritize config file from root
+    Given a file named "behat.yaml.dist"
+    Given a file named "config/behat.yaml"
+    Given a some feature context
+    And a some feature scenarios
+    When I run behat in debug mode
+    Then the output should contain:
+      """
+      behat.yaml.dist
+      """

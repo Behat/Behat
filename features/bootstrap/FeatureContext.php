@@ -10,7 +10,6 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
-use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -85,6 +84,54 @@ class FeatureContext implements Context
     public function aFileNamedWith($filename, PyStringNode $content)
     {
         $content = strtr((string) $content, array("'''" => '"""'));
+        $this->createFile($this->workingDir . '/' . $filename, $content);
+    }
+
+    /**
+     * Creates a empty file with specified name in current workdir.
+     *
+     * @Given /^(?:there is )?a file named "([^"]*)"$/
+     *
+     * @param string $filename name of the file (relative path)
+     */
+    public function aFileNamed($filename)
+    {
+        $this->createFile($this->workingDir . '/' . $filename, '');
+    }
+
+    /**
+     * Creates a noop feature context in current workdir.
+     *
+     * @Given /^(?:there is )?a some feature context$/
+     */
+    public function aNoopFeatureContext()
+    {
+        $filename = 'features/bootstrap/FeatureContext.php';
+        $content = <<<'EOL'
+<?php
+
+use Behat\Behat\Context\Context;
+
+class FeatureContext implements Context
+{
+}
+EOL;
+        $this->createFile($this->workingDir . '/' . $filename, $content);
+    }
+
+        /**
+         * Creates a noop feature in current workdir.
+         *
+         * @Given /^(?:there is )?a some feature scenarios/
+         */
+        public function aNoopFeature()
+    {
+        $filename = 'features/bootstrap/FeatureContext.php';
+        $content = <<<'EOL'
+Feature:
+        Scenario:
+          When this scenario executes
+EOL;
         $this->createFile($this->workingDir . '/' . $filename, $content);
     }
 
@@ -174,6 +221,17 @@ class FeatureContext implements Context
 
         $this->options = '--format-settings=\'{"timer": false}\'';
         $this->iRunBehat($argumentsString);
+    }
+
+    /**
+     * Runs behat command in debug mode
+     *
+     * @When /^I run behat in debug mode$/
+     */
+    public function iRunBehatInDebugMode()
+    {
+        $this->options = '';
+        $this->iRunBehat('--debug');
     }
 
     /**
