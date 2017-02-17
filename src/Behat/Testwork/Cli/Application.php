@@ -75,8 +75,8 @@ final class Application extends BaseApplication
             ),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
             new InputOption('--config-reference', null, InputOption::VALUE_NONE, 'Display the configuration reference.'),
-            new InputOption('--debug', null, InputOption::VALUE_NONE, 'Provide debuggin information about current environment.'),
-            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
+            new InputOption('--debug', null, InputOption::VALUE_NONE, 'Provide debugging information about current environment.'),
+            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display version.'),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
             new InputOption(
                 '--colors', null, InputOption::VALUE_NONE,
