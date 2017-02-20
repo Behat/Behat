@@ -16,6 +16,7 @@ use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ExtensionInstantiator;
 use Behat\Testwork\ServiceContainer\Instantiator\ExtensionFileInstantiator;
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionPuliInstantiator;
 use Behat\Testwork\ServiceContainer\Instantiator\ExtensionClassInstantiator;
 
 /**
@@ -69,10 +70,16 @@ abstract class ApplicationFactory
      */
     protected function getDefaultInstantiators()
     {
-        return array(
+        $instantiators = array(
             new ExtensionClassInstantiator(),
             new ExtensionFileInstantiator(),
         );
+
+        if (defined('PULI_FACTORY_CLASS') && class_exists(PULI_FACTORY_CLASS)) {
+            $instantiators[] = new ExtensionPuliInstantiator();
+        }
+
+        return $instantiators;
     }
 
     /**
