@@ -10,6 +10,8 @@
 
 namespace Behat\Testwork\ServiceContainer;
 
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionFileInstantiator;
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionClassInstantiator;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 
 /**
@@ -38,16 +40,42 @@ final class ExtensionManager
     /**
      * Initializes manager.
      *
-     * @param Extension[]             $extensions    List of default extensions
-     * @param ExtensionInstantiator[] $instantiators Extension instantiators to use
+     * @param Extension[]             $extensions      List of default extensions
+     * @param string|null             $extensionsPath  Base path where to search custom extension files (deprecated)
+     * @param ExtensionInstantiator[] $instantiators   Extension instantiators to use
      */
-    public function __construct(array $extensions, array $instantiators)
+    public function __construct(array $extensions, $extensionsPath = null, array $instantiators = array())
     {
         foreach ($extensions as $extension) {
             $this->extensions[$extension->getConfigKey()] = $extension;
         }
 
+        // BC Layer for `extensionsPath`
+        // to be removed in 4.0
+        if (empty($instantiators)) {
+            $instantiators = array(
+                new ExtensionClassInstantiator(),
+                new ExtensionFileInstantiator($extensionsPath),
+            );
+        }
+
         $this->instantiators = $instantiators;
+    }
+
+    /**
+     * Sets path to directory in which manager will try to find extension files.
+     *
+     * @param null|string $path
+     * @deprecated since 3.4, to be removed in 4.0
+     *  (Set the extensions path through the proper instantiator instead)
+     */
+    public function setExtensionsPath($path)
+    {
+        foreach ($this->instantiators as $instantiator) {
+            if ($instantiator instanceof ExtensionFileInstantiator) {
+                $instantiator->setExtensionsPath($path);
+            }
+        }
     }
 
     /**

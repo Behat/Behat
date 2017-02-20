@@ -105,6 +105,6 @@ abstract class ApplicationFactory
      */
     protected function createExtensionManager()
     {
-        return new ExtensionManager($this->getDefaultExtensions(), $this->getDefaultInstantiators());
+        return new ExtensionManager($this->getDefaultExtensions(), null, $this->getDefaultInstantiators());
     }
 }
