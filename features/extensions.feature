@@ -120,7 +120,7 @@ Feature: Extensions
     Then it should fail with:
       """
       [Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException]
-        `inexistent_extension` extension file or class could not be located.
+        `inexistent_extension` extension could not be located.
       """
 
   @php-version @php7.0

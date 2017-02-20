@@ -26,6 +26,16 @@ final class ExtensionFileInstantiator implements ExtensionInstantiator
     }
 
     /**
+     * Sets path to directory in which manager will try to find extension files.
+     *
+     * @param null|string $path
+     */
+    public function setExtensionsPath($path)
+    {
+        $this->extensionsPath = $path;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function instantiate($locator)

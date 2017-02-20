@@ -10,6 +10,8 @@
 
 namespace Behat\Testwork\ServiceContainer;
 
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionFileInstantiator;
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionClassInstantiator;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 
 /**
@@ -38,16 +40,54 @@ final class ExtensionManager
     /**
      * Initializes manager.
      *
-     * @param Extension[]             $extensions    List of default extensions
-     * @param ExtensionInstantiator[] $instantiators Extension instantiators to use
+     * @param Extension[]                         $extensions      List of default extensions
+     * @param ExtensionInstantiator[]|string|null $instantiators   Extension instantiators to use
      */
-    public function __construct(array $extensions, array $instantiators)
+    public function __construct(array $extensions, $instantiators = null)
     {
         foreach ($extensions as $extension) {
             $this->extensions[$extension->getConfigKey()] = $extension;
         }
 
+        // BC Layer, using default instantiators
+        // to be removed in 4.0
+        if (!is_array($instantiators)) {
+            @trigger_error(
+                'The $extensionsPath parameters is deprecated since 3.4 and will be changed into an array of'
+                . 'instantiators in 4.0. Use the constructor or the setExtensionsPath method on the'
+                . ' ExtensionFileInstantiator class instead.',
+                E_USER_DEPRECATED
+            );
+
+            $instantiators = array(new ExtensionClassInstantiator(), new ExtensionFileInstantiator($instantiators));
+        }
+
         $this->instantiators = $instantiators;
+    }
+
+    /**
+     * Sets path to directory in which manager will try to find extension files.
+     *
+     * @param null|string $path
+     * @deprecated since 3.4, to be removed in 4.0
+     *  (Set the extensions path through the proper instantiator instead)
+     */
+    public function setExtensionsPath($path)
+    {
+        @trigger_error(
+            sprintf(
+                '%s::%s is deprecated since 3.4, and will be removed in 4.0. Use the proper instantiator instead.',
+                __CLASS__,
+                __FUNCTION__
+            ),
+            E_USER_DEPRECATED
+        );
+
+        foreach ($this->instantiators as $instantiator) {
+            if ($instantiator instanceof ExtensionFileInstantiator) {
+                $instantiator->setExtensionsPath($path);
+            }
+        }
     }
 
     /**
