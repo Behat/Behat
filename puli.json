@@ -1,0 +1,286 @@
+{
+    "version": "1.0",
+    "name": "behat/behat",
+    "binding-types": {
+        "behat/extension": {
+            "parameters": {
+                "name": {}
+            }
+        }
+    },
+    "config": {
+        "bootstrap-file": "vendor/autoload.php"
+    },
+    "packages": {
+        "behat/gherkin": {
+            "install-path": "vendor/behat/gherkin",
+            "installer": "composer"
+        },
+        "behat/transliterator": {
+            "install-path": "vendor/behat/transliterator",
+            "installer": "composer"
+        },
+        "container-interop/container-interop": {
+            "install-path": "vendor/container-interop/container-interop",
+            "installer": "composer"
+        },
+        "doctrine/instantiator": {
+            "install-path": "vendor/doctrine/instantiator",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "herrera-io/box": {
+            "install-path": "vendor/herrera-io/box",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "justinrainbow/json-schema": {
+            "install-path": "vendor/justinrainbow/json-schema",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "padraic/humbug_get_contents": {
+            "install-path": "vendor/padraic/humbug_get_contents",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "padraic/phar-updater": {
+            "install-path": "vendor/padraic/phar-updater",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "paragonie/random_compat": {
+            "install-path": "vendor/paragonie/random_compat",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phine/exception": {
+            "install-path": "vendor/phine/exception",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phine/path": {
+            "install-path": "vendor/phine/path",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpdocumentor/reflection-common": {
+            "install-path": "vendor/phpdocumentor/reflection-common",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpdocumentor/reflection-docblock": {
+            "install-path": "vendor/phpdocumentor/reflection-docblock",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpdocumentor/type-resolver": {
+            "install-path": "vendor/phpdocumentor/type-resolver",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpspec/prophecy": {
+            "install-path": "vendor/phpspec/prophecy",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpunit/php-code-coverage": {
+            "install-path": "vendor/phpunit/php-code-coverage",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpunit/php-file-iterator": {
+            "install-path": "vendor/phpunit/php-file-iterator",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpunit/php-text-template": {
+            "install-path": "vendor/phpunit/php-text-template",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpunit/php-timer": {
+            "install-path": "vendor/phpunit/php-timer",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpunit/php-token-stream": {
+            "install-path": "vendor/phpunit/php-token-stream",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpunit/phpunit": {
+            "install-path": "vendor/phpunit/phpunit",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "phpunit/phpunit-mock-objects": {
+            "install-path": "vendor/phpunit/phpunit-mock-objects",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "psr/container": {
+            "install-path": "vendor/psr/container",
+            "installer": "composer"
+        },
+        "psr/log": {
+            "install-path": "vendor/psr/log",
+            "installer": "composer"
+        },
+        "puli/cli": {
+            "install-path": "vendor/puli/cli",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "puli/composer-plugin": {
+            "install-path": "vendor/puli/composer-plugin",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "puli/discovery": {
+            "install-path": "vendor/puli/discovery",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "puli/manager": {
+            "install-path": "vendor/puli/manager",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "puli/repository": {
+            "install-path": "vendor/puli/repository",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "puli/url-generator": {
+            "install-path": "vendor/puli/url-generator",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "ramsey/uuid": {
+            "install-path": "vendor/ramsey/uuid",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "sebastian/comparator": {
+            "install-path": "vendor/sebastian/comparator",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "sebastian/diff": {
+            "install-path": "vendor/sebastian/diff",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "sebastian/environment": {
+            "install-path": "vendor/sebastian/environment",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "sebastian/exporter": {
+            "install-path": "vendor/sebastian/exporter",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "sebastian/global-state": {
+            "install-path": "vendor/sebastian/global-state",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "sebastian/recursion-context": {
+            "install-path": "vendor/sebastian/recursion-context",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "sebastian/version": {
+            "install-path": "vendor/sebastian/version",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "seld/jsonlint": {
+            "install-path": "vendor/seld/jsonlint",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "symfony/class-loader": {
+            "install-path": "vendor/symfony/class-loader",
+            "installer": "composer"
+        },
+        "symfony/config": {
+            "install-path": "vendor/symfony/config",
+            "installer": "composer"
+        },
+        "symfony/console": {
+            "install-path": "vendor/symfony/console",
+            "installer": "composer"
+        },
+        "symfony/debug": {
+            "install-path": "vendor/symfony/debug",
+            "installer": "composer"
+        },
+        "symfony/dependency-injection": {
+            "install-path": "vendor/symfony/dependency-injection",
+            "installer": "composer"
+        },
+        "symfony/event-dispatcher": {
+            "install-path": "vendor/symfony/event-dispatcher",
+            "installer": "composer"
+        },
+        "symfony/filesystem": {
+            "install-path": "vendor/symfony/filesystem",
+            "installer": "composer"
+        },
+        "symfony/polyfill-mbstring": {
+            "install-path": "vendor/symfony/polyfill-mbstring",
+            "installer": "composer"
+        },
+        "symfony/process": {
+            "install-path": "vendor/symfony/process",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "symfony/translation": {
+            "install-path": "vendor/symfony/translation",
+            "installer": "composer"
+        },
+        "symfony/yaml": {
+            "install-path": "vendor/symfony/yaml",
+            "installer": "composer"
+        },
+        "tedivm/jshrink": {
+            "install-path": "vendor/tedivm/jshrink",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "webmozart/assert": {
+            "install-path": "vendor/webmozart/assert",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "webmozart/console": {
+            "install-path": "vendor/webmozart/console",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "webmozart/expression": {
+            "install-path": "vendor/webmozart/expression",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "webmozart/glob": {
+            "install-path": "vendor/webmozart/glob",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "webmozart/json": {
+            "install-path": "vendor/webmozart/json",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "webmozart/path-util": {
+            "install-path": "vendor/webmozart/path-util",
+            "installer": "composer",
+            "env": "dev"
+        }
+    }
+}
