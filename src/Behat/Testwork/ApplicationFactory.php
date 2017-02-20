@@ -14,6 +14,9 @@ use Behat\Testwork\Cli\Application;
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationLoader;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use Behat\Testwork\ServiceContainer\ExtensionInstantiator;
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionFileInstantiator;
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionClassInstantiator;
 
 /**
  * Defines the way application is created.
@@ -60,6 +63,19 @@ abstract class ApplicationFactory
     abstract protected function getConfigPath();
 
     /**
+     * Returns the extension instantiators
+     *
+     * @return ExtensionInstantiator[]
+     */
+    protected function getDefaultInstantiators()
+    {
+        return array(
+            new ExtensionClassInstantiator(),
+            new ExtensionFileInstantiator(),
+        );
+    }
+
+    /**
      * Creates application instance.
      *
      * @return Application
@@ -89,6 +105,6 @@ abstract class ApplicationFactory
      */
     protected function createExtensionManager()
     {
-        return new ExtensionManager($this->getDefaultExtensions());
+        return new ExtensionManager($this->getDefaultExtensions(), $this->getDefaultInstantiators());
     }
 }
