@@ -20,10 +20,6 @@ use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 final class ExtensionManager
 {
     /**
-     * @var string
-     */
-    private $extensionsPath;
-    /**
      * @var Extension[]
      */
     private $extensions = array();
@@ -34,30 +30,24 @@ final class ExtensionManager
     private $debugInformation = array(
         'extensions_list' => array()
     );
+    /**
+     * @var ExtensionInstantiator[]
+     */
+    private $instantiators = array();
 
     /**
      * Initializes manager.
      *
-     * @param Extension[] $extensions     List of default extensions
-     * @param null|string $extensionsPath Base path where to search custom extension files
+     * @param Extension[]             $extensions    List of default extensions
+     * @param ExtensionInstantiator[] $instantiators Extension instantiators to use
      */
-    public function __construct(array $extensions, $extensionsPath = null)
+    public function __construct(array $extensions, array $instantiators)
     {
         foreach ($extensions as $extension) {
             $this->extensions[$extension->getConfigKey()] = $extension;
         }
 
-        $this->extensionsPath = $extensionsPath;
-    }
-
-    /**
-     * Sets path to directory in which manager will try to find extension files.
-     *
-     * @param null|string $path
-     */
-    public function setExtensionsPath($path)
-    {
-        $this->extensionsPath = $path;
+        $this->instantiators = $instantiators;
     }
 
     /**
@@ -129,21 +119,6 @@ final class ExtensionManager
     }
 
     /**
-     * Attempts to guess full extension class from relative.
-     *
-     * @param string $locator
-     *
-     * @return string
-     */
-    private function getFullExtensionClass($locator)
-    {
-        $parts = explode('\\', $locator);
-        $name = preg_replace('/Extension$/', '', end($parts)) . 'Extension';
-
-        return $locator . '\\ServiceContainer\\' . $name;
-    }
-
-    /**
      * Initializes extension by id.
      *
      * @param string $locator
@@ -175,24 +150,16 @@ final class ExtensionManager
      */
     private function instantiateExtension($locator)
     {
-        if (class_exists($class = $locator)) {
-            return new $class;
-        }
-
-        if (class_exists($class = $this->getFullExtensionClass($locator))) {
-            return new $class;
-        }
-
-        if (file_exists($locator)) {
-            return require($locator);
-        }
-
-        if (file_exists($path = $this->extensionsPath . DIRECTORY_SEPARATOR . $locator)) {
-            return require($path);
+        foreach ($this->instantiators as $instantiator) {
+            try {
+                return $instantiator->instantiate($locator);
+            } catch (ExtensionInitializationException $e) {
+                // ignored if the instantiator does not support the locator
+            }
         }
 
         throw new ExtensionInitializationException(sprintf(
-            '`%s` extension file or class could not be located.',
+            '`%s` extension could not be located.',
             $locator
         ), $locator);
     }
