@@ -110,19 +110,23 @@ final class ApplicationFactory extends BaseFactory
      */
     protected function getConfigPath()
     {
-        $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR);
-        $paths = array_filter(
-            array(
-                $cwd . DIRECTORY_SEPARATOR . 'behat.yml',
-                $cwd . DIRECTORY_SEPARATOR . 'behat.yml.dist',
-                $cwd . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'behat.yml',
-                $cwd . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'behat.yml.dist',
-            ),
-            'is_file'
+        $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $configDir = $cwd . 'config' . DIRECTORY_SEPARATOR;
+        $paths = array(
+            $cwd . 'behat.yaml',
+            $cwd . 'behat.yml',
+            $cwd . 'behat.yaml.dist',
+            $cwd . 'behat.yml.dist',
+            $configDir . 'behat.yaml',
+            $configDir . 'behat.yml',
+            $configDir . 'behat.yaml.dist',
+            $configDir . 'behat.yml.dist',
         );
-
-        if (count($paths)) {
-            return current($paths);
+        
+        foreach ($paths as $path) {
+            if (is_file($path)) {
+                return $path;
+            }
         }
 
         return null;

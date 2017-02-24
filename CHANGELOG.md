@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+  * [#997](https://github.com/Behat/Behat/pull/997) Prioritize `*.yaml` extension for configuration files, as this extension is considered official.
+
 ### Fixed
   * [#993](https://github.com/Behat/Behat/pull/993) Fix mixed arguments organizer not marking typehinted arguments as "defined"
   * [#992](https://github.com/Behat/Behat/pull/993) Do not misinterpret first argument as a numbered argument if it is in fact typehinted
