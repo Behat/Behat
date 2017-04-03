@@ -7,7 +7,7 @@ Feature: Per-suite helper containers
     - Having a container enables you to use its services as context arguments via `@name` syntax
     - Container is rebuilt and is isolated between scenarios
     - Container is configured via suite's `services` option
-    - Container is a class implementing `Interop\Container\ContainerInterface`
+    - Container is a class implementing `Psr\Container\ContainerInterface`
     - There is a built-in container if you need a very simple service-sharing, configurable through the same `services` setting
     - There is an extension point that allows Behat extensions provide their own containers for end-users via `@name` syntax
 
@@ -120,7 +120,7 @@ Feature: Per-suite helper containers
       """
     And a file named "features/bootstrap/MyContainer.php" with:
       """
-      <?php use Interop\Container\ContainerInterface;
+      <?php use Psr\Container\ContainerInterface;
 
       class MyContainer implements ContainerInterface {
           private $service;
@@ -154,7 +154,7 @@ Feature: Per-suite helper containers
       """
     And a file named "features/bootstrap/MyContainer.php" with:
       """
-      <?php use Interop\Container\ContainerInterface;
+      <?php use Psr\Container\ContainerInterface;
 
       class MyContainer implements ContainerInterface {
           private $service;
@@ -255,7 +255,7 @@ Feature: Per-suite helper containers
       """
     And a file named "features/bootstrap/MyContainer.php" with:
       """
-      <?php use Interop\Container\ContainerInterface;
+      <?php use Psr\Container\ContainerInterface;
 
       class MyContainer implements ContainerInterface {
           private $service;
