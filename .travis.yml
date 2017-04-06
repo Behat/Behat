@@ -14,7 +14,7 @@ branches:
 
 matrix:
   include:
-    - php: 5.3
+    - php: 5.4
       env: DEPENDENCIES='low'
     - php: 5.6
       env: SYMFONY_VERSION='2.3.*'
@@ -22,8 +22,6 @@ matrix:
       env: SYMFONY_VERSION='2.7.*'
     - php: 5.6
       env: SYMFONY_VERSION='2.8.*'
-    - php: 7.0
-      env: SYMFONY_VERSION='3.0.*'
     - php: 7.0
       env: DEPENDENCIES='dev'
 
