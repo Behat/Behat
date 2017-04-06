@@ -24,6 +24,9 @@ matrix:
       env: SYMFONY_VERSION='2.8.*'
     - php: 7.0
       env: DEPENDENCIES='dev'
+  allow_failures:
+    - php: hhvm
+  fast_finish: true
 
 before_install:
   - if [[ ${TRAVIS_PHP_VERSION:0:4} != "hhvm" ]]; then phpenv config-rm xdebug.ini; fi
