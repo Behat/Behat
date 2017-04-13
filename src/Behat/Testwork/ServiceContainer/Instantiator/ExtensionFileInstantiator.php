@@ -13,6 +13,28 @@ namespace Behat\Testwork\ServiceContainer\Instantiator;
 use Behat\Testwork\ServiceContainer\ExtensionInstantiator;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 
+/**
+ * Instantiate an extension by its filepath
+ *
+ * ```
+ *   extensions:
+ *       my_extension.php:
+ *           # extension configuration
+ * ```
+ *
+ * Note that the file *must* return an instance of the extension
+ *
+ * ```
+ * class MyExtension
+ * {
+ *     // ...
+ * }
+ *
+ * return new MyExtension();
+ * ```
+ *
+ * @author Baptiste Clavié <clavie.b@gmail.com>
+ */
 final class ExtensionFileInstantiator implements ExtensionInstantiator
 {
     /**

@@ -13,6 +13,19 @@ namespace Behat\Testwork\ServiceContainer\Instantiator;
 use Behat\Testwork\ServiceContainer\ExtensionInstantiator;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 
+/**
+ * Instantiate an extension by its classname
+ *
+ * ```
+ *   extensions:
+ *       MyExtension:
+ *           # extension configuration
+ * ```
+ *
+ * Note that the `MyExtension` class must be autoloaded or autoloadable.
+ *
+ * @author Baptiste Clavié <clavie.b@gmail.com>
+ */
 final class ExtensionClassInstantiator implements ExtensionInstantiator
 {
     /**
