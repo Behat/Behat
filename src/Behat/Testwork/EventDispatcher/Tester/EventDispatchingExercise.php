@@ -65,9 +65,9 @@ final class EventDispatchingExercise implements Exercise
     /**
      * {@inheritdoc}
      */
-    public function test(array $iterators, $skip = false)
+    public function test(array $iterators, $skip = false, $batch)
     {
-        return $this->baseExercise->test($iterators, $skip);
+        return $this->baseExercise->test($iterators, $skip, $batch);
     }
 
     /**

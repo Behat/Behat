@@ -60,7 +60,7 @@ final class RuntimeExercise implements Exercise
     /**
      * {@inheritdoc}
      */
-    public function test(array $iterators, $skip = false)
+    public function test(array $iterators, $skip = false, $batch)
     {
         $results = array();
         foreach (GroupedSpecificationIterator::group($iterators) as $iterator) {
@@ -68,7 +68,7 @@ final class RuntimeExercise implements Exercise
 
             $setup = $this->suiteTester->setUp($environment, $iterator, $skip);
             $localSkip = !$setup->isSuccessful() || $skip;
-            $testResult = $this->suiteTester->test($environment, $iterator, $localSkip);
+            $testResult = $this->suiteTester->test($environment, $iterator, $localSkip, $batch);
             $teardown = $this->suiteTester->tearDown($environment, $iterator, $localSkip, $testResult);
 
             $integerResult = new IntegerTestResult($testResult->getResultCode());

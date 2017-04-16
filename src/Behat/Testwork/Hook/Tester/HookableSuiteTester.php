@@ -68,9 +68,9 @@ final class HookableSuiteTester implements SuiteTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, SpecificationIterator $iterator, $skip)
+    public function test(Environment $env, SpecificationIterator $iterator, $skip, $batch)
     {
-        return $this->baseTester->test($env, $iterator, $skip);
+        return $this->baseTester->test($env, $iterator, $skip, $batch);
     }
 
     /**

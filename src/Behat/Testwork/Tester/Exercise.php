@@ -40,7 +40,7 @@ interface Exercise
      *
      * @return TestResult
      */
-    public function test(array $iterators, $skip);
+    public function test(array $iterators, $skip, $batch);
 
     /**
      * Tears down exercise after a test.

@@ -20,6 +20,8 @@ use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 use Behat\Testwork\Tester\SpecificationTester;
 use Behat\Testwork\Tester\SuiteTester;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Process\Process;
 
 /**
  * Tester executing suite tests in the runtime.
@@ -54,17 +56,29 @@ final class RuntimeSuiteTester implements SuiteTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
+    public function test(Environment $env, SpecificationIterator $iterator, $skip = false, $batch)
     {
+
         $results = array();
         foreach ($iterator as $specification) {
-            $setup = $this->specTester->setUp($env, $specification, $skip);
-            $localSkip = !$setup->isSuccessful() || $skip;
-            $testResult = $this->specTester->test($env, $specification, $localSkip);
-            $teardown = $this->specTester->tearDown($env, $specification, $localSkip, $testResult);
+            if ($batch) {
+                foreach ($specification->getScenarios() as $scenario) {
+                    $cmd = 'bin/behat ' . $specification->getFile() . ":" . $scenario->getLine();
 
-            $integerResult = new IntegerTestResult($testResult->getResultCode());
-            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
+                    $process = new Process($cmd, null, null, null, 0);
+                    $process->run(function ($type, $buffer) {
+                        echo $buffer;
+                    });
+                }
+            } else {
+                $setup      = $this->specTester->setUp($env, $specification, $skip);
+                $localSkip  = !$setup->isSuccessful() || $skip;
+                $testResult = $this->specTester->test($env, $specification, $localSkip);
+                $teardown   = $this->specTester->tearDown($env, $specification, $localSkip, $testResult);
+
+                $integerResult = new IntegerTestResult($testResult->getResultCode());
+                $results[]     = new TestWithSetupResult($setup, $integerResult, $teardown);
+            }
         }
 
         return new TestResults($results);
