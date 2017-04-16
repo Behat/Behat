@@ -21,6 +21,7 @@ interface TestResult
     const SKIPPED = 10;
     const PENDING = 20;
     const FAILED = 99;
+    const NO_TESTS = -100;
 
     /**
      * Checks that test has passed.

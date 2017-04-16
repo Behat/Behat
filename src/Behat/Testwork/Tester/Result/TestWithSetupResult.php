@@ -52,7 +52,8 @@ final class TestWithSetupResult implements TestResult
      */
     public function isPassed()
     {
-        return self::PASSED == $this->getResultCode();
+        return self::PASSED == $this->getResultCode() ||
+          self::NO_TESTS == $this->getResultCode();
     }
 
     /**
