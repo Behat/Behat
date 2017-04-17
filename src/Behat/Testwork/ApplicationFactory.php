@@ -53,6 +53,13 @@ abstract class ApplicationFactory
     abstract protected function getEnvironmentVariableName();
 
     /**
+     * Returns the name of configuration environment precedence variable.
+     *
+     * @return string
+     */
+    abstract protected function getEnvironmentPrecedenceVariableName();
+
+    /**
      * Returns user config path.
      *
      * @return null|string
@@ -79,7 +86,7 @@ abstract class ApplicationFactory
      */
     protected function createConfigurationLoader()
     {
-        return new ConfigurationLoader($this->getEnvironmentVariableName(), $this->getConfigPath());
+        return new ConfigurationLoader($this->getEnvironmentVariableName(), $this->getEnvironmentPrecedenceVariableName(), $this->getConfigPath());
     }
 
     /**

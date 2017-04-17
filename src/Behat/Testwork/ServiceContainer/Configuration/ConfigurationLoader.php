@@ -29,6 +29,10 @@ final class ConfigurationLoader
      */
     private $environmentVariable;
     /**
+     * @var null|string
+     */
+    private $environmentPrecedenceVariable;
+    /**
      * @var Boolean
      */
     private $profileFound;
@@ -44,12 +48,14 @@ final class ConfigurationLoader
     /**
      * Constructs reader.
      *
-     * @param string $environmentVariableName Environment variable name
-     * @param string $configurationPath       Configuration file path
+     * @param string $environmentVariableName           Environment variable name
+     * @param string $environmentPrecedenceVariableName Environment precedence variable name
+     * @param string $configurationPath                 Configuration file path
      */
-    public function __construct($environmentVariableName = null, $configurationPath = null)
+    public function __construct($environmentVariableName = null, $environmentPrecedenceVariableName = null, $configurationPath = null)
     {
         $this->environmentVariable = $environmentVariableName;
+        $this->environmentPrecedenceVariable = $environmentPrecedenceVariableName;
         $this->configurationPath = $configurationPath;
     }
 
@@ -71,6 +77,26 @@ final class ConfigurationLoader
     public function getEnvironmentVariableName()
     {
         return $this->environmentVariable;
+    }
+
+    /**
+     * Sets environment precedence variable name.
+     *
+     * @param null|string $variable
+     */
+    public function setEnvironmentPrecedenceVariableName($variable)
+    {
+        $this->environmentPrecedenceVariable = $variable;
+    }
+
+    /**
+     * Returns environment precedence variable name.
+     *
+     * @return null|string
+     */
+    public function getEnvironmentPrecedenceVariableName()
+    {
+        return $this->environmentPrecedenceVariable;
     }
 
     /**
@@ -104,20 +130,23 @@ final class ConfigurationLoader
      */
     public function loadConfiguration($profile = 'default')
     {
-        $configs = array();
         $this->profileFound = false;
 
-        // first is ENV config
+        // ENV config
+        $envConfigs = array();
+        
         foreach ($this->loadEnvironmentConfiguration() as $config) {
-            $configs[] = $config;
+            $envConfigs[] = $config;
         }
 
-        // second is file configuration (if there is some)
+        // file configuration (if there is some)
+        $fileConfigs = array();
+
         if ($this->configurationPath) {
             $this->debugInformation['configuration_file_path'] = $this->configurationPath;
 
             foreach ($this->loadFileConfiguration($this->configurationPath, $profile) as $config) {
-                $configs[] = $config;
+                $fileConfigs[] = $config;
             }
         }
 
@@ -129,7 +158,12 @@ final class ConfigurationLoader
             ));
         }
 
-        return $configs;
+        // should env configs takes precedence over file configs ?
+        if (getenv($this->environmentPrecedenceVariable) == 1) {
+            return array_merge($envConfigs, $fileConfigs);
+        }
+
+        return array_merge($fileConfigs, $envConfigs);
     }
 
     /**
