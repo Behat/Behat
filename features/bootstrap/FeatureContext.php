@@ -320,7 +320,11 @@ EOL;
 
     private function getExpectedOutput(PyStringNode $expectedText)
     {
-        $text = strtr($expectedText, array('\'\'\'' => '"""', '%%TMP_DIR%%' => sys_get_temp_dir() . DIRECTORY_SEPARATOR));
+        $text = strtr($expectedText, array(
+            '\'\'\'' => '"""',
+            '%%TMP_DIR%%' => sys_get_temp_dir() . DIRECTORY_SEPARATOR,
+            '%%WORKING_DIR%%' => $this->workingDir
+        ));
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
