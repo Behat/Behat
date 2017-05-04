@@ -236,7 +236,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
                 $arguments[$num] = $candidate;
 
-                $this->markArgumentDefined(true);
+                $this->markArgumentDefined($num);
 
                 unset($candidates[$candidateIndex]);
 
