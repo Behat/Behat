@@ -190,7 +190,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param ReflectionParameter[] $parameters          Reflection Parameters (constructor argument requirements)
      * @param mixed[]               $typehintedArguments Resolved arguments
      *
-     * @return mixed[]
+     * @return mixed[] Ordered list of arguments, index is the constructor argument position, value is what will be injected
      */
     private function prepareTypehintedArguments(array $parameters, array $typehintedArguments)
     {
