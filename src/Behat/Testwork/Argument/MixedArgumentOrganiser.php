@@ -58,7 +58,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         $arguments =
             $this->prepareNamedArguments($parameters, $named) +
-            $this->prepareTypehintedArguments($typehinted) +
+            $this->prepareTypehintedArguments($parameters, $typehinted) +
             $this->prepareNumberedArguments($parameters, $numbered) +
             $this->prepareDefaultArguments($parameters);
 
@@ -88,8 +88,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         foreach ($arguments as $key => $val) {
             if ($this->isStringKeyAndExistsInParameters($key, $parameterNames)) {
                 $namedArguments[$key] = $val;
-            } elseif (null !== ($num = $this->getParameterNumberWithTypehintingValue($parameters, $val))) {
-                $typehintedArguments[$num] = $val;
+            } elseif ($this->isParameterTypehintedInArgumentList($parameters, $val)) {
+                $typehintedArguments[] = $val;
             } else {
                 $numberedArguments[] = $val;
             }
@@ -112,26 +112,26 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     }
 
     /**
-     * Tries to find a parameter number, which typehints provided value.
+     * Check if a given value is typehinted in the argument list.
      *
-     * @param ReflectionParameter[] $parameters
-     * @param mixed                 $value
+     * @param  ReflectionParameter[] $parameters
+     * @param  mixed                 $value
      *
-     * @return null|integer
+     * @return Boolean
      */
-    private function getParameterNumberWithTypehintingValue(array $parameters, $value)
+    public function isParameterTypehintedInArgumentList(array $parameters, $value)
     {
         if (!is_object($value)) {
-            return null;
+            return false;
         }
 
-        foreach ($parameters as $num => $parameter) {
+        foreach ($parameters as $parameter) {
             if ($this->isValueMatchesTypehintedParameter($value, $parameter)) {
-                return $num;
+                return true;
             }
         }
 
-        return null;
+        return false;
     }
 
     /**
@@ -174,27 +174,76 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     }
 
     /**
-     * Captures argument value based on their respective typehints.
+     * Captures argument values for typehinted arguments based on the given candidates.
      *
-     * Note ; as it is keeping in mind that $typeHintedArgument already has the
-     * right keys matching the correct parameter, it just iterates over this
-     * array in order to mark each arguments as "defined".
+     * This method attempts to match up the best fitting arguments to each constructor argument.
      *
-     * @see https://github.com/Behat/Behat/pull/993#issuecomment-275669510
+     * This case specifically fixes the issue where a constructor asks for a parent and child class,
+     * as separate arguments, but both arguments could satisfy the first argument,
+     * so they would both be passed in (overwriting each other).
      *
-     * @param mixed[] $typehintedArguments
+     * This will ensure that the children (exact class matches) are mapped first, and then other dependencies
+     * are mapped sequentially (to arguments which they are an `instanceof`).
+     *
+     * As such, this requires two passes of the $parameters array to ensure it is mapped as accurately as possible.
+     *
+     * @param ReflectionParameter[] $parameters          Reflection Parameters (constructor argument requirements)
+     * @param mixed[]               $typehintedArguments Resolved arguments
      *
      * @return mixed[]
      */
-    private function prepareTypehintedArguments(array $typehintedArguments)
+    private function prepareTypehintedArguments(array $parameters, array $typehintedArguments)
     {
-        foreach (array_keys($typehintedArguments) as $num) {
+        $arguments = [];
+
+        $candidates = $typehintedArguments;
+
+        foreach ($parameters as $num => $parameter) {
+            if ($this->isArgumentDefined($num)) {
+                continue;
+            }
+
+            foreach ($candidates as $candidateIndex => $candidate) {
+                $reflectionClass = $parameter->getClass();
+
+                if (!$reflectionClass || !$reflectionClass->isInstance($candidate)) {
+                    continue;
+                }
+
+                if ($reflectionClass->getName() === get_class($candidate)) {
+                    $arguments[$num] = $candidate;
+                    
             $this->markArgumentDefined($num);
+
+                    unset($candidates[$candidateIndex]);
+
+                    break 1;
+        }
+            }
         }
 
-        return $typehintedArguments;
+        foreach ($parameters as $num => $parameter) {
+            if ($this->isArgumentDefined($num)) {
+                continue;
+            }
+
+            foreach ($candidates as $candidateIndex => $candidate) {
+                if (!$reflectionClass || !$reflectionClass->isInstance($candidate)) {
+                    continue;
+                }
+
+                $arguments[$num] = $candidate;
+
+                $this->markArgumentDefined(true);
+
+                unset($candidates[$candidateIndex]);
+
+                break 1;
+            }
     }
 
+        return $arguments;
+    }
 
     /**
      * Captures argument values for undefined arguments based on their respective numbers.
