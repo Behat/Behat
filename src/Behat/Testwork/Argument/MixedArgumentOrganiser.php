@@ -228,6 +228,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
             }
 
             foreach ($candidates as $candidateIndex => $candidate) {
+                $reflectionClass = $parameter->getClass();
+
                 if (!$reflectionClass || !$reflectionClass->isInstance($candidate)) {
                     continue;
                 }
