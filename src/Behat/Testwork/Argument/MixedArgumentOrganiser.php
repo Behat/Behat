@@ -119,7 +119,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @return Boolean
      */
-    public function isParameterTypehintedInArgumentList(array $parameters, $value)
+    private function isParameterTypehintedInArgumentList(array $parameters, $value)
     {
         if (!is_object($value)) {
             return false;
