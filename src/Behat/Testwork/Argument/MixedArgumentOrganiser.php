@@ -12,6 +12,7 @@ namespace Behat\Testwork\Argument;
 
 use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
 use ReflectionFunctionAbstract;
+use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 
@@ -198,6 +199,30 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         $candidates = $typehintedArguments;
 
+        $this->applyPredicateToTypehintedArguments($parameters, $candidates, $arguments, 'classMatchingPredicateForTypehintedArguments');
+
+        // This iteration maps up everything else, providing the argument is an instanceof the parameter.
+        $this->applyPredicateToTypehintedArguments($parameters, $candidates, $arguments);
+
+        return $arguments;
+        }
+
+    /**
+     * Applies a predicate for each candidate when matching up typehinted arguments.
+     * This helps to avoid repetition when looping them, as multiple passes are needed over the parameters / candidates.
+     *
+     * @param  ReflectionParameter[] $parameters Reflection Parameters (constructor argument requirements)
+     * @param  mixed[]               &$candidates Resolved arguments
+     * @param  mixed[]               &$arguments  Argument mapping
+     * @param  string                $predicate   [optional] Predicate to each candidate in this iteration
+     * @return void
+     */
+    private function applyPredicateToTypehintedArguments(
+        array $parameters,
+        array &$candidates,
+        array &$arguments,
+        $predicate = null
+    ) {
         foreach ($parameters as $num => $parameter) {
             if ($this->isArgumentDefined($num)) {
                 continue;
@@ -210,28 +235,10 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
                     continue;
                 }
 
-                if ($reflectionClass->getName() === get_class($candidate)) {
-                    $arguments[$num] = $candidate;
-                    
-            $this->markArgumentDefined($num);
-
-                    unset($candidates[$candidateIndex]);
-
-                    break 1;
-        }
-            }
-        }
-
-        foreach ($parameters as $num => $parameter) {
-            if ($this->isArgumentDefined($num)) {
-                continue;
-            }
-
-            foreach ($candidates as $candidateIndex => $candidate) {
-                $reflectionClass = $parameter->getClass();
-
-                if (!$reflectionClass || !$reflectionClass->isInstance($candidate)) {
-                    continue;
+                if ($predicate !== null && method_exists($this, $predicate)) {
+                    if (call_user_func_array([$this, $predicate], [$reflectionClass, $candidate]) !== true) {
+                        continue;
+                    }
                 }
 
                 $arguments[$num] = $candidate;
@@ -243,8 +250,18 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
                 break 1;
             }
     }
+    }
 
-        return $arguments;
+    /**
+     * Typehinted argument predicate to check if the argument and parameter classes match equally.
+     *
+     * @param  ReflectionClass $reflectionClass Typehinted argument
+     * @param  mixed           $candidate       Resolved argument
+     * @return boolean
+     */
+    private function classMatchingPredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
+    {
+        return $reflectionClass->getName() === get_class($candidate);
     }
 
     /**
