@@ -218,6 +218,33 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     }
 
     /**
+     * Filtered out superfluous parameters for matching up typehinted arguments.
+     *
+     * @param  ReflectionParameter[] $parameters Constructor Arguments
+     * @return ReflectionParameter[]             Filtered $parameters
+     */
+    private function filterApplicableTypehintedParameters(array $parameters)
+    {
+        $filtered = [];
+
+        foreach ($parameters as $num => $parameter) {
+            if ($this->isArgumentDefined($num)) {
+                continue;
+            }
+
+            $reflectionClass = $parameter->getClass();
+
+            if (!$reflectionClass) {
+                continue;
+            }
+
+            $filtered[$num] = $parameter;
+        }
+
+        return $filtered;
+    }
+
+    /**
      * Applies a predicate for each candidate when matching up typehinted arguments.
      * This helps to avoid repetition when looping them, as multiple passes are needed over the parameters / candidates.
      *
@@ -233,16 +260,10 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         array &$arguments,
         callable $predicate
     ) {
-        foreach ($parameters as $num => $parameter) {
-            if ($this->isArgumentDefined($num)) {
-                continue;
-            }
-            
-            $reflectionClass = $parameter->getClass();
+        $parameters = $this->filterApplicableTypehintedParameters($parameters);
 
-            if (!$reflectionClass) {
-                continue;
-            }
+        foreach ($parameters as $num => $parameter) {
+            $reflectionClass = $parameter->getClass();
 
             foreach ($candidates as $candidateIndex => $candidate) {
                 if (call_user_func_array($predicate, [$reflectionClass, $candidate]) !== true) {
