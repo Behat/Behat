@@ -199,13 +199,23 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         $candidates = $typehintedArguments;
 
-        $this->applyPredicateToTypehintedArguments($parameters, $candidates, $arguments, 'classMatchingPredicateForTypehintedArguments');
+        $this->applyPredicateToTypehintedArguments(
+            $parameters,
+            $candidates,
+            $arguments,
+            [$this, 'classMatchingPredicateForTypehintedArguments']
+        );
 
         // This iteration maps up everything else, providing the argument is an instanceof the parameter.
-        $this->applyPredicateToTypehintedArguments($parameters, $candidates, $arguments);
+        $this->applyPredicateToTypehintedArguments(
+            $parameters,
+            $candidates,
+            $arguments,
+            [$this, 'isInstancePredicateForTypehintedArguments']
+        );
 
         return $arguments;
-        }
+    }
 
     /**
      * Applies a predicate for each candidate when matching up typehinted arguments.
@@ -214,31 +224,29 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param  ReflectionParameter[] $parameters Reflection Parameters (constructor argument requirements)
      * @param  mixed[]               &$candidates Resolved arguments
      * @param  mixed[]               &$arguments  Argument mapping
-     * @param  string                $predicate   [optional] Predicate to each candidate in this iteration
+     * @param  callable              $predicate   Callable predicate to apply to each candidate
      * @return void
      */
     private function applyPredicateToTypehintedArguments(
         array $parameters,
         array &$candidates,
         array &$arguments,
-        $predicate = null
+        callable $predicate
     ) {
         foreach ($parameters as $num => $parameter) {
             if ($this->isArgumentDefined($num)) {
                 continue;
             }
+            
+            $reflectionClass = $parameter->getClass();
+
+            if (!$reflectionClass) {
+                continue;
+            }
 
             foreach ($candidates as $candidateIndex => $candidate) {
-                $reflectionClass = $parameter->getClass();
-
-                if (!$reflectionClass || !$reflectionClass->isInstance($candidate)) {
+                if (call_user_func_array($predicate, [$reflectionClass, $candidate]) !== true) {
                     continue;
-                }
-
-                if ($predicate !== null && method_exists($this, $predicate)) {
-                    if (call_user_func_array([$this, $predicate], [$reflectionClass, $candidate]) !== true) {
-                        continue;
-                    }
                 }
 
                 $arguments[$num] = $candidate;
@@ -249,7 +257,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
                 break 1;
             }
-    }
+        }
     }
 
     /**
@@ -262,6 +270,18 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     private function classMatchingPredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
     {
         return $reflectionClass->getName() === get_class($candidate);
+    }
+
+    /**
+     * Typehinted argument predicate to check if the argument is an instance of the parameter.
+     *
+     * @param  ReflectionClass $reflectionClass Typehinted argument
+     * @param  mixed           $candidate       Resolved argument
+     * @return boolean
+     */
+    private function isInstancePredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
+    {
+        return $reflectionClass->isInstance($candidate);
     }
 
     /**
