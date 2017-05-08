@@ -260,9 +260,9 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         array &$arguments,
         callable $predicate
     ) {
-        $parameters = $this->filterApplicableTypehintedParameters($parameters);
+        $filtered = $this->filterApplicableTypehintedParameters($parameters);
 
-        foreach ($parameters as $num => $parameter) {
+        foreach ($filtered as $num => $parameter) {
             $reflectionClass = $parameter->getClass();
 
             foreach ($candidates as $candidateIndex => $candidate) {
