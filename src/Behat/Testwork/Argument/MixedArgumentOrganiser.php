@@ -263,20 +263,16 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         $filtered = $this->filterApplicableTypehintedParameters($parameters);
 
         foreach ($filtered as $num => $parameter) {
-            $reflectionClass = $parameter->getClass();
-
             foreach ($candidates as $candidateIndex => $candidate) {
-                if (call_user_func_array($predicate, [$reflectionClass, $candidate]) !== true) {
-                    continue;
+                if (call_user_func_array($predicate, [$parameter->getClass(), $candidate])) {
+                    $arguments[$num] = $candidate;
+
+                    $this->markArgumentDefined($num);
+
+                    unset($candidates[$candidateIndex]);
+
+                    break 1;
                 }
-
-                $arguments[$num] = $candidate;
-
-                $this->markArgumentDefined($num);
-
-                unset($candidates[$candidateIndex]);
-
-                break 1;
             }
         }
     }
