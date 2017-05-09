@@ -246,7 +246,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
     /**
      * Applies a predicate for each candidate when matching up typehinted arguments.
-     * This helps to avoid repetition when looping them, as multiple passes are needed over the parameters / candidates.
+     * This passes through to another loop of the candidates in @matchParameterToCandidateUsingPredicate,
+     * because this method is "too complex" with two loops...
      *
      * @param  ReflectionParameter[] $parameters Reflection Parameters (constructor argument requirements)
      * @param  mixed[]               &$candidates Resolved arguments
@@ -263,18 +264,41 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         $filtered = $this->filterApplicableTypehintedParameters($parameters);
 
         foreach ($filtered as $num => $parameter) {
-            foreach ($candidates as $candidateIndex => $candidate) {
-                if (call_user_func_array($predicate, [$parameter->getClass(), $candidate])) {
-                    $arguments[$num] = $candidate;
+            $this->matchParameterToCandidateUsingPredicate($parameter, $candidates, $arguments, $predicate);
+        }
+    }
 
-                    $this->markArgumentDefined($num);
+    /**
+     * Applies a predicate for each candidate when matching up typehinted arguments.
+     * This helps to avoid repetition when looping them, as multiple passes are needed over the parameters / candidates.
+     *
+     * @param  ReflectionParameter $parameter   Reflection Parameter (constructor argument requirements)
+     * @param  mixed[]             &$candidates Resolved arguments
+     * @param  mixed[]             &$arguments  Argument mapping
+     * @param  callable            $predicate   Callable predicate to apply to each candidate
+     * @return boolean Returns true if a candidate has been matched to the given parameter, otherwise false
+     */
+    public function matchParameterToCandidateUsingPredicate(
+        ReflectionParameter $parameter,
+        array &$candidates,
+        array &$arguments,
+        callable $predicate
+    ) {
+        foreach ($candidates as $candidateIndex => $candidate) {
+            if (call_user_func_array($predicate, [$parameter->getClass(), $candidate])) {
+                $num = $parameter->getPosition();
 
-                    unset($candidates[$candidateIndex]);
+                $arguments[$num] = $candidate;
 
-                    break 1;
-                }
+                $this->markArgumentDefined($num);
+
+                unset($candidates[$candidateIndex]);
+
+                return true;
             }
         }
+
+        return false;
     }
 
     /**
