@@ -342,3 +342,52 @@ Feature: Per-suite helper containers
       """
     When I run "behat --no-colors -f progress features/container_args.feature"
     Then it should pass
+
+  Scenario: Injecting typehinted arguments for a parent and child class (fix #1008)
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - "@child_class"
+                - "@parent_class"
+            services:
+              parent_class:
+                class: ParentClass
+              child_class:
+                class: ChildClass
+      """
+    And a file named "features/container_args.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given foo
+      """
+    And a file named "features/bootstrap/FirstContext.php" with:
+      """
+      <?php use Behat\Behat\Context\Context;
+
+      class FirstContext implements Context {
+        public function __construct(ParentClass $parent, ChildClass $child) {
+        }
+
+        /** @Given foo */
+        public function foo() {
+
+        }
+      }
+      """
+    And a file named "features/bootstrap/ParentClass.php" with:
+      """
+      <?php
+      class ParentClass {}
+      """
+    And a file named "features/bootstrap/ChildClass.php" with:
+      """
+      <?php
+      class ChildClass extends ParentClass {}
+      """
+    When I run "behat --no-colors -f progress features/container_args.feature"
+    Then it should pass

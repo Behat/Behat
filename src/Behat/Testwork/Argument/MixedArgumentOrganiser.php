@@ -12,6 +12,7 @@ namespace Behat\Testwork\Argument;
 
 use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
 use ReflectionFunctionAbstract;
+use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 
@@ -58,7 +59,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         $arguments =
             $this->prepareNamedArguments($parameters, $named) +
-            $this->prepareTypehintedArguments($typehinted) +
+            $this->prepareTypehintedArguments($parameters, $typehinted) +
             $this->prepareNumberedArguments($parameters, $numbered) +
             $this->prepareDefaultArguments($parameters);
 
@@ -88,8 +89,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         foreach ($arguments as $key => $val) {
             if ($this->isStringKeyAndExistsInParameters($key, $parameterNames)) {
                 $namedArguments[$key] = $val;
-            } elseif (null !== ($num = $this->getParameterNumberWithTypehintingValue($parameters, $val))) {
-                $typehintedArguments[$num] = $val;
+            } elseif ($this->isParameterTypehintedInArgumentList($parameters, $val)) {
+                $typehintedArguments[] = $val;
             } else {
                 $numberedArguments[] = $val;
             }
@@ -112,26 +113,26 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     }
 
     /**
-     * Tries to find a parameter number, which typehints provided value.
+     * Check if a given value is typehinted in the argument list.
      *
-     * @param ReflectionParameter[] $parameters
-     * @param mixed                 $value
+     * @param  ReflectionParameter[] $parameters
+     * @param  mixed                 $value
      *
-     * @return null|integer
+     * @return Boolean
      */
-    private function getParameterNumberWithTypehintingValue(array $parameters, $value)
+    private function isParameterTypehintedInArgumentList(array $parameters, $value)
     {
         if (!is_object($value)) {
-            return null;
+            return false;
         }
 
-        foreach ($parameters as $num => $parameter) {
+        foreach ($parameters as $parameter) {
             if ($this->isValueMatchesTypehintedParameter($value, $parameter)) {
-                return $num;
+                return true;
             }
         }
 
-        return null;
+        return false;
     }
 
     /**
@@ -174,27 +175,155 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     }
 
     /**
-     * Captures argument value based on their respective typehints.
+     * Captures argument values for typehinted arguments based on the given candidates.
      *
-     * Note ; as it is keeping in mind that $typeHintedArgument already has the
-     * right keys matching the correct parameter, it just iterates over this
-     * array in order to mark each arguments as "defined".
+     * This method attempts to match up the best fitting arguments to each constructor argument.
      *
-     * @see https://github.com/Behat/Behat/pull/993#issuecomment-275669510
+     * This case specifically fixes the issue where a constructor asks for a parent and child class,
+     * as separate arguments, but both arguments could satisfy the first argument,
+     * so they would both be passed in (overwriting each other).
      *
-     * @param mixed[] $typehintedArguments
+     * This will ensure that the children (exact class matches) are mapped first, and then other dependencies
+     * are mapped sequentially (to arguments which they are an `instanceof`).
      *
-     * @return mixed[]
+     * As such, this requires two passes of the $parameters array to ensure it is mapped as accurately as possible.
+     *
+     * @param ReflectionParameter[] $parameters          Reflection Parameters (constructor argument requirements)
+     * @param mixed[]               $typehintedArguments Resolved arguments
+     *
+     * @return mixed[] Ordered list of arguments, index is the constructor argument position, value is what will be injected
      */
-    private function prepareTypehintedArguments(array $typehintedArguments)
+    private function prepareTypehintedArguments(array $parameters, array $typehintedArguments)
     {
-        foreach (array_keys($typehintedArguments) as $num) {
-            $this->markArgumentDefined($num);
-        }
+        $arguments = [];
 
-        return $typehintedArguments;
+        $candidates = $typehintedArguments;
+
+        $this->applyPredicateToTypehintedArguments(
+            $parameters,
+            $candidates,
+            $arguments,
+            [$this, 'classMatchingPredicateForTypehintedArguments']
+        );
+
+        // This iteration maps up everything else, providing the argument is an instanceof the parameter.
+        $this->applyPredicateToTypehintedArguments(
+            $parameters,
+            $candidates,
+            $arguments,
+            [$this, 'isInstancePredicateForTypehintedArguments']
+        );
+
+        return $arguments;
     }
 
+    /**
+     * Filtered out superfluous parameters for matching up typehinted arguments.
+     *
+     * @param  ReflectionParameter[] $parameters Constructor Arguments
+     * @return ReflectionParameter[]             Filtered $parameters
+     */
+    private function filterApplicableTypehintedParameters(array $parameters)
+    {
+        $filtered = [];
+
+        foreach ($parameters as $num => $parameter) {
+            if ($this->isArgumentDefined($num)) {
+                continue;
+            }
+
+            $reflectionClass = $parameter->getClass();
+
+            if (!$reflectionClass) {
+                continue;
+            }
+
+            $filtered[$num] = $parameter;
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * Applies a predicate for each candidate when matching up typehinted arguments.
+     * This passes through to another loop of the candidates in @matchParameterToCandidateUsingPredicate,
+     * because this method is "too complex" with two loops...
+     *
+     * @param  ReflectionParameter[] $parameters Reflection Parameters (constructor argument requirements)
+     * @param  mixed[]               &$candidates Resolved arguments
+     * @param  mixed[]               &$arguments  Argument mapping
+     * @param  callable              $predicate   Callable predicate to apply to each candidate
+     * @return void
+     */
+    private function applyPredicateToTypehintedArguments(
+        array $parameters,
+        array &$candidates,
+        array &$arguments,
+        callable $predicate
+    ) {
+        $filtered = $this->filterApplicableTypehintedParameters($parameters);
+
+        foreach ($filtered as $num => $parameter) {
+            $this->matchParameterToCandidateUsingPredicate($parameter, $candidates, $arguments, $predicate);
+        }
+    }
+
+    /**
+     * Applies a predicate for each candidate when matching up typehinted arguments.
+     * This helps to avoid repetition when looping them, as multiple passes are needed over the parameters / candidates.
+     *
+     * @param  ReflectionParameter $parameter   Reflection Parameter (constructor argument requirements)
+     * @param  mixed[]             &$candidates Resolved arguments
+     * @param  mixed[]             &$arguments  Argument mapping
+     * @param  callable            $predicate   Callable predicate to apply to each candidate
+     * @return boolean Returns true if a candidate has been matched to the given parameter, otherwise false
+     */
+    public function matchParameterToCandidateUsingPredicate(
+        ReflectionParameter $parameter,
+        array &$candidates,
+        array &$arguments,
+        callable $predicate
+    ) {
+        foreach ($candidates as $candidateIndex => $candidate) {
+            if (call_user_func_array($predicate, [$parameter->getClass(), $candidate])) {
+                $num = $parameter->getPosition();
+
+                $arguments[$num] = $candidate;
+
+                $this->markArgumentDefined($num);
+
+                unset($candidates[$candidateIndex]);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Typehinted argument predicate to check if the argument and parameter classes match equally.
+     *
+     * @param  ReflectionClass $reflectionClass Typehinted argument
+     * @param  mixed           $candidate       Resolved argument
+     * @return boolean
+     */
+    private function classMatchingPredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
+    {
+        return $reflectionClass->getName() === get_class($candidate);
+    }
+
+    /**
+     * Typehinted argument predicate to check if the argument is an instance of the parameter.
+     *
+     * @param  ReflectionClass $reflectionClass Typehinted argument
+     * @param  mixed           $candidate       Resolved argument
+     * @return boolean
+     */
+    private function isInstancePredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
+    {
+        return $reflectionClass->isInstance($candidate);
+    }
 
     /**
      * Captures argument values for undefined arguments based on their respective numbers.
