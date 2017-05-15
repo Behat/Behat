@@ -60,4 +60,4 @@ deploy:
     repo: Behat/Behat
     tags: true
     php: 5.6
-    condition: $SYMFONY_VERSION != "2.8.*"
+    condition: $SYMFONY_VERSION == "2.8.*"
