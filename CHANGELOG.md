@@ -5,17 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Changed
-  * [#997](https://github.com/Behat/Behat/pull/997) Prioritize `*.yaml` extension for configuration files, as this extension is considered official.
+
+## [3.3.1] - 2017-05-15
+### Added
+  * [#976](https://github.com/Behat/Behat/pull/1001): Add tests to check that snippets treat words containing apostrophes as a single word
 
 ### Fixed
   * [#993](https://github.com/Behat/Behat/pull/993) Fix mixed arguments organizer not marking typehinted arguments as "defined"
   * [#992](https://github.com/Behat/Behat/pull/993) Do not misinterpret first argument as a numbered argument if it is in fact typehinted
-  * [#1028](https://github.com/Behat/Behat/pull/1028) Parent / Child class argument ambiguity issue
-    with `MixedArgumentResolver`
-
-### Added
-  * [#976](https://github.com/Behat/Behat/pull/1001): Add tests to check that snippets treat words containing apostrophes as a single word
+  * [#1028](https://github.com/Behat/Behat/pull/1028) Parent / Child class argument ambiguity issue with `MixedArgumentResolver`
 
 ## [3.3.0] - 2016-12-25
 ### Added
@@ -807,7 +805,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
-[Unreleased]: https://github.com/Behat/Behat/compare/v3.3.0...HEAD
+[Unreleased]: https://github.com/Behat/Behat/compare/v3.3.1...HEAD
+[3.3.1]: https://github.com/Behat/Behat/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/Behat/Behat/compare/v3.2.3...v3.3.0
 [3.2.3]: https://github.com/Behat/Behat/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/Behat/Behat/compare/v3.2.1...v3.2.2
