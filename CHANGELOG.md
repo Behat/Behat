@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
   * [#993](https://github.com/Behat/Behat/pull/993) Fix mixed arguments organizer not marking typehinted arguments as "defined"
   * [#992](https://github.com/Behat/Behat/pull/993) Do not misinterpret first argument as a numbered argument if it is in fact typehinted
-  
+  * [#1028](https://github.com/Behat/Behat/pull/1028) Parent / Child class argument ambiguity issue
+    with `MixedArgumentResolver`
+
 ### Added
   * [#976](https://github.com/Behat/Behat/pull/1001): Add tests to check that snippets treat words containing apostrophes as a single word
 
