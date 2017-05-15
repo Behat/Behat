@@ -195,7 +195,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      */
     private function prepareTypehintedArguments(array $parameters, array $typehintedArguments)
     {
-        $arguments = [];
+        $arguments = array();
 
         $candidates = $typehintedArguments;
 
@@ -203,7 +203,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
             $parameters,
             $candidates,
             $arguments,
-            [$this, 'classMatchingPredicateForTypehintedArguments']
+            array($this, 'classMatchingPredicateForTypehintedArguments')
         );
 
         // This iteration maps up everything else, providing the argument is an instanceof the parameter.
@@ -211,7 +211,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
             $parameters,
             $candidates,
             $arguments,
-            [$this, 'isInstancePredicateForTypehintedArguments']
+            array($this, 'isInstancePredicateForTypehintedArguments')
         );
 
         return $arguments;
@@ -225,7 +225,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      */
     private function filterApplicableTypehintedParameters(array $parameters)
     {
-        $filtered = [];
+        $filtered = array();
 
         foreach ($parameters as $num => $parameter) {
             if ($this->isArgumentDefined($num)) {
