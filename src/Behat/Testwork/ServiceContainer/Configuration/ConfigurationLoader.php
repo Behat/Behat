@@ -266,17 +266,22 @@ final class ConfigurationLoader
      */
     private function parseImport($basePath, $path, $profile)
     {
-        if (!file_exists($path) && file_exists($basePath . DIRECTORY_SEPARATOR . $path)) {
-            $path = $basePath . DIRECTORY_SEPARATOR . $path;
+        $tmpPaths = array(
+            $path,
+            $basePath . DIRECTORY_SEPARATOR . $path,
+            $path . '.dist',
+            $basePath . DIRECTORY_SEPARATOR . $path . '.dist',
+        );
+
+        foreach ($tmpPaths as $tmpPath) {
+            if (file_exists($tmpPath)) {
+                return $this->loadFileConfiguration($tmpPath, $profile);
+            }
         }
 
-        if (!file_exists($path)) {
-            throw new ConfigurationLoadingException(sprintf(
-                'Can not import `%s` configuration file. File not found.',
-                $path
-            ));
-        }
-
-        return $this->loadFileConfiguration($path, $profile);
+        throw new ConfigurationLoadingException(sprintf(
+            'Can not import `%s` configuration file. File not found.',
+            $path
+        ));
     }
 }
