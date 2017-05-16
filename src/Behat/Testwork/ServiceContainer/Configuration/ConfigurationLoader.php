@@ -107,18 +107,18 @@ final class ConfigurationLoader
         $configs = array();
         $this->profileFound = false;
 
-        // first is ENV config
-        foreach ($this->loadEnvironmentConfiguration() as $config) {
-            $configs[] = $config;
-        }
-
-        // second is file configuration (if there is some)
+        // first is file configuration (if there is some)
         if ($this->configurationPath) {
             $this->debugInformation['configuration_file_path'] = $this->configurationPath;
 
             foreach ($this->loadFileConfiguration($this->configurationPath, $profile) as $config) {
                 $configs[] = $config;
             }
+        }
+
+        // second is ENV config
+        foreach ($this->loadEnvironmentConfiguration() as $config) {
+            $configs[] = $config;
         }
 
         // if specific profile has not been found
