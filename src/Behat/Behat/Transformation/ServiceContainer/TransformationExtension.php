@@ -123,6 +123,10 @@ class TransformationExtension implements Extension
         ));
         $definition->addTag(self::ARGUMENT_TRANSFORMER_TAG, array('priority' => 50));
         $container->setDefinition(self::ARGUMENT_TRANSFORMER_TAG . '.repository', $definition);
+
+        $definition = new Definition('Behat\Behat\Transformation\Transformer\FromStringObjectTransformer', array());
+        $definition->addTag(self::ARGUMENT_TRANSFORMER_TAG, array('priority' => 0));
+        $container->setDefinition(self::ARGUMENT_TRANSFORMER_TAG . '.from_string_object', $definition);
     }
 
     /**
