@@ -12,6 +12,7 @@ namespace Behat\Testwork\Output;
 
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Behat\Testwork\Suite\Suite;
 
 /**
  * Represents Testwork output formatter.
@@ -28,6 +29,13 @@ interface Formatter extends EventSubscriberInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * Returns file name.
+     * @param Suite $suite
+     * @return string
+     */
+    public function generateFilenameFor(Suite $suite);
 
     /**
      * Returns formatter description.

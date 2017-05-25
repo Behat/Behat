@@ -19,6 +19,7 @@ use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Symfony\Component\EventDispatcher\Event;
+use Behat\Gherkin\Node\FeatureNode;
 
 /**
  * Listens for Outline events store the current one
@@ -54,9 +55,27 @@ final class JUnitOutlineStoreListener implements EventListener
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureOutlineOnBeforeOutlineEvent($event);
+        if ($event instanceof SuiteTested) {
+            $formatter->fileName = $this->getFormatterFileName($event);
+        }
 
         $this->printHeaderOnBeforeSuiteTestedEvent($formatter, $event);
         $this->printFooterOnAfterSuiteTestedEvent($formatter, $event);
+    }
+
+    /**
+     * Get FeatureNode from within Event and return the feature path name.
+     *
+     * @param Event $event
+     */
+    private function getFormatterFileName(Event $event) 
+    {
+        foreach ($event->getSpecificationIterator() as $node) {
+            if ($node instanceof FeatureNode) {
+                $path = pathinfo($node->getFile(), PATHINFO_FILENAME);
+                return !empty($path) ? $path : NULL;
+            }
+        }
     }
 
     /**

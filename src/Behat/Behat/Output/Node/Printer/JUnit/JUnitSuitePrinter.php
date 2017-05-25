@@ -44,7 +44,7 @@ final class JUnitSuitePrinter implements SuitePrinter
 
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
-        $outputPrinter->createNewFile($suite->getName());
+        $outputPrinter->createNewFile($formatter->generateFilenameFor($suite));
     }
 
     /**
