@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Tester;
 
+use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepContainerInterface;
 use Behat\Testwork\Environment\Environment;
@@ -52,11 +53,16 @@ final class StepContainerTester
     public function test(Environment $env, FeatureNode $feature, StepContainerInterface $container, $skip)
     {
         $results = array();
+        $bag = array();
         foreach ($container->getSteps() as $step) {
             $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
             $skipSetup = !$setup->isSuccessful() || $skip;
 
-            $testResult = $this->stepTester->test($env, $feature, $step, $skipSetup);
+            $testResult = $this->stepTester->test($env, $feature, $step, $skipSetup, $bag);
+            if ($testResult instanceof ExecutedStepResult) {
+                $bag[] = $testResult->getCallResult()->getReturn();
+            }
+
             $skip = !$testResult->isPassed() || $skip;
 
             $teardown = $this->stepTester->tearDown($env, $feature, $step, $skipSetup, $testResult);
