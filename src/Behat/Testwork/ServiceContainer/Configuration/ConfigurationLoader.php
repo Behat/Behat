@@ -245,8 +245,10 @@ final class ConfigurationLoader
     {
         $configs = array();
         foreach ($paths as $path) {
-            foreach ($this->parseImport($basePath, $path, $profile) as $importConfig) {
-                $configs[] = $importConfig;
+            foreach ($this->resolveImport($basePath, $path) as $resolvedPath) {
+                foreach ($this->loadFileConfiguration($resolvedPath, $profile) as $importConfig) {
+                    $configs[] = $importConfig;
+                }
             }
         }
 
@@ -254,29 +256,29 @@ final class ConfigurationLoader
     }
 
     /**
-     * Parses import.
+     * Resolves import path.
      *
      * @param string $basePath
      * @param string $path
-     * @param string $profile
      *
      * @return array
      *
-     * @throws ConfigurationLoadingException If import file not found
+     * @throws ConfigurationLoadingException If the path can not be resolved
      */
-    private function parseImport($basePath, $path, $profile)
+    private function resolveImport($basePath, $path)
     {
-        if (!file_exists($path) && file_exists($basePath . DIRECTORY_SEPARATOR . $path)) {
+        if (false === $resolvedPaths = glob($path)) {
+            throw new ConfigurationLoadingException(sprintf('Can not resolve import path `%s`.', $path));
+        }
+
+        if (!$resolvedPaths) {
             $path = $basePath . DIRECTORY_SEPARATOR . $path;
+
+            if (false === $resolvedPaths = glob($path)) {
+                throw new ConfigurationLoadingException(sprintf('Can not resolve import path `%s`.', $path));
+            }
         }
 
-        if (!file_exists($path)) {
-            throw new ConfigurationLoadingException(sprintf(
-                'Can not import `%s` configuration file. File not found.',
-                $path
-            ));
-        }
-
-        return $this->loadFileConfiguration($path, $profile);
+        return $resolvedPaths;
     }
 }
