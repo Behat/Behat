@@ -14,6 +14,10 @@ use Behat\Testwork\Cli\Application;
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationLoader;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use Behat\Testwork\ServiceContainer\ExtensionInstantiator;
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionFileInstantiator;
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionPuliInstantiator;
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionClassInstantiator;
 
 /**
  * Defines the way application is created.
@@ -60,6 +64,25 @@ abstract class ApplicationFactory
     abstract protected function getConfigPath();
 
     /**
+     * Returns the extension instantiators
+     *
+     * @return ExtensionInstantiator[]
+     */
+    protected function getDefaultInstantiators()
+    {
+        $instantiators = array(
+            new ExtensionClassInstantiator(),
+            new ExtensionFileInstantiator(),
+        );
+
+        if (defined('PULI_FACTORY_CLASS') && class_exists(PULI_FACTORY_CLASS)) {
+            $instantiators[] = new ExtensionPuliInstantiator();
+        }
+
+        return $instantiators;
+    }
+
+    /**
      * Creates application instance.
      *
      * @return Application
@@ -89,6 +112,6 @@ abstract class ApplicationFactory
      */
     protected function createExtensionManager()
     {
-        return new ExtensionManager($this->getDefaultExtensions());
+        return new ExtensionManager($this->getDefaultExtensions(), null, $this->getDefaultInstantiators());
     }
 }

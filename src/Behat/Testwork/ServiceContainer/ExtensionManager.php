@@ -10,6 +10,8 @@
 
 namespace Behat\Testwork\ServiceContainer;
 
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionFileInstantiator;
+use Behat\Testwork\ServiceContainer\Instantiator\ExtensionClassInstantiator;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 
 /**
@@ -19,10 +21,6 @@ use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
  */
 final class ExtensionManager
 {
-    /**
-     * @var string
-     */
-    private $extensionsPath;
     /**
      * @var Extension[]
      */
@@ -34,30 +32,50 @@ final class ExtensionManager
     private $debugInformation = array(
         'extensions_list' => array()
     );
+    /**
+     * @var ExtensionInstantiator[]
+     */
+    private $instantiators = array();
 
     /**
      * Initializes manager.
      *
-     * @param Extension[] $extensions     List of default extensions
-     * @param null|string $extensionsPath Base path where to search custom extension files
+     * @param Extension[]             $extensions      List of default extensions
+     * @param string|null             $extensionsPath  Base path where to search custom extension files (deprecated)
+     * @param ExtensionInstantiator[] $instantiators   Extension instantiators to use
      */
-    public function __construct(array $extensions, $extensionsPath = null)
+    public function __construct(array $extensions, $extensionsPath = null, array $instantiators = array())
     {
         foreach ($extensions as $extension) {
             $this->extensions[$extension->getConfigKey()] = $extension;
         }
 
-        $this->extensionsPath = $extensionsPath;
+        // BC Layer for `extensionsPath`
+        // to be removed in 4.0
+        if (empty($instantiators)) {
+            $instantiators = array(
+                new ExtensionClassInstantiator(),
+                new ExtensionFileInstantiator($extensionsPath),
+            );
+        }
+
+        $this->instantiators = $instantiators;
     }
 
     /**
      * Sets path to directory in which manager will try to find extension files.
      *
      * @param null|string $path
+     * @deprecated since 3.4, to be removed in 4.0
+     *  (Set the extensions path through the proper instantiator instead)
      */
     public function setExtensionsPath($path)
     {
-        $this->extensionsPath = $path;
+        foreach ($this->instantiators as $instantiator) {
+            if ($instantiator instanceof ExtensionFileInstantiator) {
+                $instantiator->setExtensionsPath($path);
+            }
+        }
     }
 
     /**
@@ -129,21 +147,6 @@ final class ExtensionManager
     }
 
     /**
-     * Attempts to guess full extension class from relative.
-     *
-     * @param string $locator
-     *
-     * @return string
-     */
-    private function getFullExtensionClass($locator)
-    {
-        $parts = explode('\\', $locator);
-        $name = preg_replace('/Extension$/', '', end($parts)) . 'Extension';
-
-        return $locator . '\\ServiceContainer\\' . $name;
-    }
-
-    /**
      * Initializes extension by id.
      *
      * @param string $locator
@@ -175,20 +178,12 @@ final class ExtensionManager
      */
     private function instantiateExtension($locator)
     {
-        if (class_exists($class = $locator)) {
-            return new $class;
-        }
-
-        if (class_exists($class = $this->getFullExtensionClass($locator))) {
-            return new $class;
-        }
-
-        if (file_exists($locator)) {
-            return require($locator);
-        }
-
-        if (file_exists($path = $this->extensionsPath . DIRECTORY_SEPARATOR . $locator)) {
-            return require($path);
+        foreach ($this->instantiators as $instantiator) {
+            try {
+                return $instantiator->instantiate($locator);
+            } catch (ExtensionInitializationException $e) {
+                // ignored if the instantiator does not support the locator
+            }
         }
 
         throw new ExtensionInitializationException(sprintf(
