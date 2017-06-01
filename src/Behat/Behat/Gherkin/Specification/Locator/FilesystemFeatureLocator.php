@@ -121,12 +121,12 @@ final class FilesystemFeatureLocator implements SpecificationLocator
      */
     private function findFeatureFiles($path)
     {
-        $path = $this->sanitisePath($path);
+        $sanitisedPath = $this->sanitisePath($path);
 
-        $absolutePath = $this->findAbsolutePath($path);
+        $absolutePath = $this->findAbsolutePath($sanitisedPath);
 
         if (!$absolutePath) {
-            return array($path);
+            return array($sanitisedPath);
         }
 
         if (is_file($absolutePath)) {
