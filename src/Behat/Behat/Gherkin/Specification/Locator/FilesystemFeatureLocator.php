@@ -121,10 +121,12 @@ final class FilesystemFeatureLocator implements SpecificationLocator
      */
     private function findFeatureFiles($path)
     {
-        $absolutePath = $this->findAbsolutePath($path);
+        $sanitisedPath = $this->sanitisePath($path);
+
+        $absolutePath = $this->findAbsolutePath($sanitisedPath);
 
         if (!$absolutePath) {
-            return array($path);
+            return array($sanitisedPath);
         }
 
         if (is_file($absolutePath)) {
@@ -172,5 +174,23 @@ final class FilesystemFeatureLocator implements SpecificationLocator
         }
 
         return false;
+    }
+
+    /**
+     * Sanitise the given path. The path may contain a line number or range,
+     * indicated by a colon followed by a number after the file extension, ex:
+     * - example.feature:9
+     * - example.feature:5-28
+     *
+     * This method will strip out everything following the `.feature` extension in the filename if the next character is a colon.
+     * This is required so that we can locate the file on the filesystem.
+     *
+     * @param  string $path Path to the feature file
+     *
+     * @return string       Path safe for searching the filesystem.
+     */
+    private function sanitisePath($path)
+    {
+        return preg_replace('/(.+\.feature)(?:\:.+?)?$/i', '$1', $path);
     }
 }
