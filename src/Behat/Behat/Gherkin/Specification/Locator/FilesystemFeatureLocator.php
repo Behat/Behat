@@ -182,7 +182,7 @@ final class FilesystemFeatureLocator implements SpecificationLocator
      * - example.feature:9
      * - example.feature:5-28
      *
-     *  This method will strip out everything preceeding the .feature if the next character is a colon.
+     * This method will strip out everything following the `.feature` extension in the filename if the next character is a colon.
      * This is required so that we can locate the file on the filesystem.
      *
      * @param  string $path Path to the feature file
