@@ -7,7 +7,7 @@ Feature: Per-suite helper containers
     - Having a container enables you to use its services as context arguments via `@name` syntax
     - Container is rebuilt and is isolated between scenarios
     - Container is configured via suite's `services` option
-    - Container is a class implementing `Interop\Container\ContainerInterface`
+    - Container is a class implementing `Psr\Container\ContainerInterface`
     - There is a built-in container if you need a very simple service-sharing, configurable through the same `services` setting
     - There is an extension point that allows Behat extensions provide their own containers for end-users via `@name` syntax
 
@@ -120,7 +120,7 @@ Feature: Per-suite helper containers
       """
     And a file named "features/bootstrap/MyContainer.php" with:
       """
-      <?php use Interop\Container\ContainerInterface;
+      <?php use Psr\Container\ContainerInterface;
 
       class MyContainer implements ContainerInterface {
           private $service;
@@ -154,7 +154,7 @@ Feature: Per-suite helper containers
       """
     And a file named "features/bootstrap/MyContainer.php" with:
       """
-      <?php use Interop\Container\ContainerInterface;
+      <?php use Psr\Container\ContainerInterface;
 
       class MyContainer implements ContainerInterface {
           private $service;
@@ -163,6 +163,40 @@ Feature: Per-suite helper containers
           public static function factoryMethod() {
               return new self();
           }
+
+          public function has($id) {
+              return $id == 'shared_service';
+          }
+
+          public function get($id) {
+              if ($id !== 'shared_service') throw new \InvalidArgumentException();
+              return isset($this->service) ? $this->service : $this->service = new SharedService();
+          }
+      }
+      """
+    When I run "behat --no-colors -f progress features/container.feature"
+    Then it should pass
+
+  Scenario: Interop container
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - "@shared_service"
+              - SecondContext:
+                - "@shared_service"
+
+            services: MyContainer
+      """
+    And a file named "features/bootstrap/MyContainer.php" with:
+      """
+      <?php use Interop\Container\ContainerInterface;
+
+      class MyContainer implements ContainerInterface {
+          private $service;
 
           public function has($id) {
               return $id == 'shared_service';
@@ -255,7 +289,7 @@ Feature: Per-suite helper containers
       """
     And a file named "features/bootstrap/MyContainer.php" with:
       """
-      <?php use Interop\Container\ContainerInterface;
+      <?php use Psr\Container\ContainerInterface;
 
       class MyContainer implements ContainerInterface {
           private $service;
