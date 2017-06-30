@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+  * [#1054](https://github.com/Behat/Behat/pull/1054): PSR-11 support
+
+### Deprecated
+  * [#1054](https://github.com/Behat/Behat/pull/1054): `Interop\Container`
+    usage. Upgrade to `1.2` in the interim, but aim to move to `Psr\Container`
+    as soon as possible.
 
 ## [3.3.1] - 2017-05-15
 ### Added
