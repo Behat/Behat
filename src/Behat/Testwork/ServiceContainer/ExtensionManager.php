@@ -40,14 +40,16 @@ final class ExtensionManager
     /**
      * Initializes manager.
      *
-     * @param Extension[]                         $extensions      List of default extensions
-     * @param ExtensionInstantiator[]|string|null $instantiators   Extension instantiators to use
+     * @param Extension[]                         $extensions              List of default extensions
+     * @param ExtensionInstantiator[]|string|null $extensionsInstantiators Extension instantiators to use
      */
-    public function __construct(array $extensions, $instantiators = null)
+    public function __construct(array $extensions, $extensionsInstantiators = null)
     {
         foreach ($extensions as $extension) {
             $this->extensions[$extension->getConfigKey()] = $extension;
         }
+
+        $instantiators = $extensionsInstantiators;
 
         // BC Layer, using default instantiators
         // to be removed in 4.0
