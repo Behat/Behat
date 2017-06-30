@@ -6,12 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-  * [#1054](https://github.com/Behat/Behat/pull/1054): PSR-11 support
+  * [#1054](https://github.com/Behat/Behat/pull/1054): [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md) support for helper containers.
 
 ### Deprecated
-  * [#1054](https://github.com/Behat/Behat/pull/1054): `Interop\Container`
-    usage. Upgrade to `1.2` in the interim, but aim to move to `Psr\Container`
-    as soon as possible.
+  * [#1054](https://github.com/Behat/Behat/pull/1054): Deprecated usage
+    of `Interop\Container`. Versions prior to `1.2` are not supported, but `1.2`
+    is a non-breaking change. If you depend heavily on `Interop`, upgrade to
+    `1.2`, which is still supported by helper containers. Aim to migrate to
+    `Psr` before Behat 4.0 shows up on horizon
 
 ## [3.3.1] - 2017-05-15
 ### Added
