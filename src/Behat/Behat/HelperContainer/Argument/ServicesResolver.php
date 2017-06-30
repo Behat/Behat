@@ -11,7 +11,7 @@
 namespace Behat\Behat\HelperContainer\Argument;
 
 use Behat\Behat\Context\Argument\ArgumentResolver;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 
 /**

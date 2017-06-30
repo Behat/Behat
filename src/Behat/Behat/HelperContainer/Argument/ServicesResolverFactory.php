@@ -16,7 +16,7 @@ use Behat\Behat\HelperContainer\Exception\WrongContainerClassException;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
 use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
 use Behat\Testwork\Suite\Suite;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\TaggedContainerInterface;
 
 /**
@@ -157,7 +157,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory
         if (!$container instanceof ContainerInterface) {
             throw new WrongContainerClassException(
                 sprintf(
-                    'Service container is expected to implement `Interop\Container\ContainerInterface`, but `%s` does not.',
+                    'Service container is expected to implement `Psr\Container\ContainerInterface`, but `%s` does not.',
                     get_class($container)
                 ),
                 get_class($container)
