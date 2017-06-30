@@ -12,7 +12,7 @@ namespace Behat\Behat\HelperContainer;
 
 use Behat\Behat\HelperContainer\Exception\ServiceNotFoundException;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionMethod;
 
