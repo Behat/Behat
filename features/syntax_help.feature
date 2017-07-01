@@ -214,7 +214,7 @@ Feature: Syntax helpers
 
           /**
            * Eating apples
-           * 
+           *
            * More details on eating apples, and a list:
            * - one
            * - two
@@ -243,6 +243,73 @@ Feature: Syntax helpers
       }
       """
     When I run "behat --no-colors -di"
+    Then the output should contain:
+      """
+      default | [Given|*] /^I have (\d+) apples?$/
+              | at `FeatureContext::iHaveApples()`
+
+      default | [When|*] /^I ate (\d+) apples?$/
+              | Eating apples
+              | More details on eating apples, and a list:
+              | - one
+              | - two
+              | at `FeatureContext::iAteApples()`
+
+      default | [When|*] /^I found (\d+) apples?$/
+              | at `FeatureContext::iFoundApples()`
+
+      default | [Then|*] /^I should have (\d+) apples$/
+              | at `FeatureContext::iShouldHaveApples()`
+      """
+
+  Scenario: Print extended definitions info with file name and line numbers
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context,
+          Behat\Behat\Exception\PendingException;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given /^I have (\d+) apples?$/
+           */
+          public function iHaveApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * Eating apples
+           * 
+           * More details on eating apples, and a list:
+           * - one
+           * - two
+           * --
+           * Internal note not showing in help
+           *
+           * @When /^I ate (\d+) apples?$/
+           */
+          public function iAteApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @When /^I found (\d+) apples?$/
+           */
+          public function iFoundApples($count) {
+              throw new PendingException();
+          }
+
+          /**
+           * @Then /^I should have (\d+) apples$/
+           */
+          public function iShouldHaveApples($count) {
+              throw new PendingException();
+          }
+      }
+      """
+    When I run "behat --no-colors -di -v"
     Then the output should contain:
       """
       default | [Given|*] /^I have (\d+) apples?$/

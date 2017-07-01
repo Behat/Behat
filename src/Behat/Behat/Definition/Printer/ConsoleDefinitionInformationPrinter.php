@@ -131,14 +131,16 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
             )
         );
 
-        $lines[] = strtr(
-            '{space}<def_dimmed>|</def_dimmed> on `{filepath}[{start}:{end}]`', array(
-                '{space}' => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
-                '{filepath}' => $definition->getReflection()->getFileName(),
-                '{start}' => $definition->getReflection()->getStartLine(),
-                '{end}' => $definition->getReflection()->getEndLine()
-            )
-        );
+        if ($this->isVerbose()) {
+            $lines[] = strtr(
+                '{space}<def_dimmed>|</def_dimmed> on `{filepath}[{start}:{end}]`', array(
+                    '{space}' => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
+                    '{filepath}' => $definition->getReflection()->getFileName(),
+                    '{start}' => $definition->getReflection()->getStartLine(),
+                    '{end}' => $definition->getReflection()->getEndLine()
+                )
+            );
+        }
 
         return $lines;
     }
