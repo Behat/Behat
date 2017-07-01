@@ -323,7 +323,8 @@ EOL;
         $text = strtr($expectedText, array(
             '\'\'\'' => '"""',
             '%%TMP_DIR%%' => sys_get_temp_dir() . DIRECTORY_SEPARATOR,
-            '%%WORKING_DIR%%' => $this->workingDir
+            '%%WORKING_DIR%%' => $this->workingDir . DIRECTORY_SEPARATOR,
+            '%%DS%%' => DIRECTORY_SEPARATOR,
         ));
 
         // windows path fix
