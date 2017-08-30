@@ -101,7 +101,7 @@ Feature: hooks
            * @Then /^I must have (\d+)$/
            */
           public function iMustHave($number) {
-              \PHPUnit\Framework\Assert::assertEquals(intval($number), $this->number);
+              \PHPUnit_Framework_Assert::assertEquals(intval($number), $this->number);
           }
       }
       """

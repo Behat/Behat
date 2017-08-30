@@ -80,7 +80,7 @@ Feature: Scenario Outlines
             * @Then /^The result should be (\d+)$/
             */
            public function theResultShouldBe($result) {
-              PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
+              PHPUnit_Framework_Assert::assertEquals(intval($result), $this->result);
            }
       }
       """
@@ -242,7 +242,7 @@ Feature: Scenario Outlines
             * @Then the result should be :result
             */
            public function theResultShouldBe($result) {
-              PHPUnit\Framework\Assert::assertEquals(intval($result), $this->number);
+              PHPUnit_Framework_Assert::assertEquals(intval($result), $this->number);
            }
       }
       """

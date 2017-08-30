@@ -47,7 +47,7 @@ Feature: Definitions translations
            * @Then /^I should see (\d+) on the screen$/
            */
           public function iShouldSeeOnTheScreen($result) {
-              PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
+              PHPUnit_Framework_Assert::assertEquals(intval($result), $this->result);
           }
 
           /** @Transform /"([^"]+)" user/ */
@@ -59,7 +59,7 @@ Feature: Definitions translations
            * @Then /^the ("[^"]+" user) name should be "([^"]*)"$/
            */
           public function theUserUsername($user, $username) {
-              PHPUnit\Framework\Assert::assertEquals($username, $user->name);
+              PHPUnit_Framework_Assert::assertEquals($username, $user->name);
           }
 
           public static function getTranslationResources() {
@@ -150,7 +150,7 @@ Feature: Definitions translations
            * @Then /^I should see (\d+) on the screen$/
            */
           public function iShouldSeeOnTheScreen($result) {
-              PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
+              PHPUnit_Framework_Assert::assertEquals(intval($result), $this->result);
           }
 
           /** @Transform /"([^"]+)" user/ */
@@ -162,7 +162,7 @@ Feature: Definitions translations
            * @Then /^the ("[^"]+" user) name should be "([^"]*)"$/
            */
           public function theUserUsername($user, $username) {
-              PHPUnit\Framework\Assert::assertEquals($username, $user->name);
+              PHPUnit_Framework_Assert::assertEquals($username, $user->name);
           }
 
           public static function getTranslationResources() {
@@ -231,7 +231,7 @@ Feature: Definitions translations
            * @Then /^I should see (\d+) on the screen$/
            */
           public function iShouldSeeOnTheScreen($result) {
-              PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
+              PHPUnit_Framework_Assert::assertEquals(intval($result), $this->result);
           }
 
           /** @Transform /"([^"]+)" user/ */
@@ -243,7 +243,7 @@ Feature: Definitions translations
            * @Then /^the ("[^"]+" user) name should be "([^"]*)"$/
            */
           public function theUserUsername($user, $username) {
-              PHPUnit\Framework\Assert::assertEquals($username, $user->name);
+              PHPUnit_Framework_Assert::assertEquals($username, $user->name);
           }
 
           public static function getTranslationResources() {
@@ -321,7 +321,7 @@ Feature: Definitions translations
            * @Then /^I should see (\d+) on the screen$/
            */
           public function iShouldSeeOnTheScreen($result) {
-              PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
+              PHPUnit_Framework_Assert::assertEquals(intval($result), $this->result);
           }
 
           /** @Transform /"([^"]+)" user/ */
@@ -333,7 +333,7 @@ Feature: Definitions translations
            * @Then /^the ("[^"]+" user) name should be "([^"]*)"$/
            */
           public function theUserUsername($user, $username) {
-              PHPUnit\Framework\Assert::assertEquals($username, $user->name);
+              PHPUnit_Framework_Assert::assertEquals($username, $user->name);
           }
 
           public static function getTranslationResources() {

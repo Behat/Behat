@@ -44,22 +44,22 @@ Feature: Rerun
            * @Then /^I should have (\d+) apples$/
            */
           public function iShouldHaveApples($count) {
-              PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
+              PHPUnit_Framework_Assert::assertEquals(intval($count), $this->apples);
           }
 
           /**
            * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
            */
           public function contextParameterShouldBeEqualTo($key, $val) {
-              PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
+              PHPUnit_Framework_Assert::assertEquals($val, $this->parameters[$key]);
           }
 
           /**
            * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
            */
           public function contextParameterShouldBeArrayWithElements($key, $count) {
-              PHPUnit\Framework\Assert::assertInternalType('array', $this->parameters[$key]);
-              PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
+              PHPUnit_Framework_Assert::assertInternalType('array', $this->parameters[$key]);
+              PHPUnit_Framework_Assert::assertEquals(2, count($this->parameters[$key]));
           }
       }
       """

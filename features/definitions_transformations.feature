@@ -117,29 +117,29 @@ Feature: Step Arguments Transformations
            * @Then /Username must be "([^"]+)"/
            */
           public function usernameMustBe($username) {
-              PHPUnit\Framework\Assert::assertEquals($username, $this->user->getUsername());
+              PHPUnit_Framework_Assert::assertEquals($username, $this->user->getUsername());
           }
 
           /**
            * @Then /Age must be (\d+)/
            */
           public function ageMustBe($age) {
-              PHPUnit\Framework\Assert::assertEquals($age, $this->user->getAge());
-              PHPUnit\Framework\Assert::assertInternalType('int', $age);
+              PHPUnit_Framework_Assert::assertEquals($age, $this->user->getAge());
+              PHPUnit_Framework_Assert::assertInternalType('int', $age);
           }
 
           /**
            * @Then the Usernames must be:
            */
           public function usernamesMustBe(array $usernames) {
-              PHPUnit\Framework\Assert::assertEquals($usernames[0], $this->user->getUsername());
+              PHPUnit_Framework_Assert::assertEquals($usernames[0], $this->user->getUsername());
           }
 
           /**
            * @Then /^the boolean (no) should be transformed to false$/
            */
           public function theBooleanShouldBeTransformed($boolean) {
-              PHPUnit\Framework\Assert::assertSame(false, $boolean);
+              PHPUnit_Framework_Assert::assertSame(false, $boolean);
           }
       }
     """
@@ -289,7 +289,7 @@ Feature: Step Arguments Transformations
 
           /** @Then the :field should be :value */
           public function theFieldShouldBe($field, $value) {
-              PHPUnit\Framework\Assert::assertSame($value, $this->data[0][$field]);
+              PHPUnit_Framework_Assert::assertSame($value, $this->data[0][$field]);
           }
       }
       """

@@ -26,7 +26,7 @@
            * @Then /I must have (\d+)/
            */
           public function iMustHave($num) {
-              PHPUnit\Framework\Assert::assertEquals($num, $this->value);
+              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
           }
 
           /**
@@ -151,7 +151,7 @@
            * @Then /I must have (\d+)/
            */
           public function iMustHave($num) {
-              PHPUnit\Framework\Assert::assertEquals($num, $this->value);
+              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
           }
 
           /**
@@ -223,7 +223,7 @@
            * @Then /I must have (\d+)/
            */
           public function iMustHave($num) {
-              PHPUnit\Framework\Assert::assertEquals($num, $this->value);
+              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
           }
 
           /**
@@ -303,7 +303,7 @@
            * @Then /I will be stronger/
            */
           public function iWillBeStronger() {
-              PHPUnit\Framework\Assert::assertNotEquals(0, $this->strongLevel);
+              PHPUnit_Framework_Assert::assertNotEquals(0, $this->strongLevel);
           }
       }
       """
@@ -333,7 +333,7 @@
            * @Then /I will be stronger/
            */
           public function iWillBeStronger() {
-              PHPUnit\Framework\Assert::assertNotEquals(0, $this->strongLevel);
+              PHPUnit_Framework_Assert::assertNotEquals(0, $this->strongLevel);
           }
       }
       """
@@ -486,7 +486,7 @@
            * @Then /I must have (\d+)/
            */
           public function iMustHave($num) {
-              PHPUnit\Framework\Assert::assertEquals($num, $this->value);
+              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
           }
 
           /**
@@ -550,7 +550,7 @@
            * @Then /I must have (\d+)/
            */
           public function iMustHave($num) {
-              PHPUnit\Framework\Assert::assertEqual($num, $this->value);
+              PHPUnit_Framework_Assert::assertEqual($num, $this->value);
           }
 
           /**
@@ -578,7 +578,7 @@
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with:
       """
-      Call to undefined method PHPUnit\Framework\Assert::assertEqual
+      Call to undefined method PHPUnit_Framework_Assert::assertEqual
       """
     And "junit/default.xml" file xml should be like:
       """

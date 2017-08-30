@@ -60,22 +60,22 @@ Feature: Rerun with multiple suite
            * @Then /^I should have (\d+) (apples|bananas)$/
            */
           public function iShouldHaveFruit($count, $fruit) {
-              PHPUnit\Framework\Assert::assertEquals(intval($count), $this->fruits[$fruit]);
+              PHPUnit_Framework_Assert::assertEquals(intval($count), $this->fruits[$fruit]);
           }
 
           /**
            * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
            */
           public function contextParameterShouldBeEqualTo($key, $val) {
-              PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
+              PHPUnit_Framework_Assert::assertEquals($val, $this->parameters[$key]);
           }
 
           /**
            * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
            */
           public function contextParameterShouldBeArrayWithElements($key, $count) {
-              PHPUnit\Framework\Assert::assertInternalType('array', $this->parameters[$key]);
-              PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
+              PHPUnit_Framework_Assert::assertInternalType('array', $this->parameters[$key]);
+              PHPUnit_Framework_Assert::assertEquals(2, count($this->parameters[$key]));
           }
       }
       """

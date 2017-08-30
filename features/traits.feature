@@ -49,7 +49,7 @@ Feature: Support php 5.4 traits
            * @Then /^I should have (\d+) apples$/
            */
           public function iShouldHaveApples($count) {
-              PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
+              PHPUnit_Framework_Assert::assertEquals(intval($count), $this->apples);
           }
       }
       """

@@ -37,7 +37,7 @@ Feature: Error Reporting
            */
           public function iShouldGetNull()
           {
-              PHPUnit\Framework\Assert::assertNull($this->result);
+              PHPUnit_Framework_Assert::assertNull($this->result);
           }
 
           /**
@@ -53,7 +53,7 @@ Feature: Error Reporting
            */
           public function iShouldGet($arg1)
           {
-              PHPUnit\Framework\Assert::assertEquals($arg1, $this->result);
+              PHPUnit_Framework_Assert::assertEquals($arg1, $this->result);
           }
 
       }

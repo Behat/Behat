@@ -73,12 +73,12 @@ Feature: Config inheritance
 
           /** @Then the context parameters should be overwritten */
           public function theContextParametersOverwrite() {
-              \PHPUnit\Framework\Assert::assertEquals(array('param2' => 'val2'), $this->parameters);
+              \PHPUnit_Framework_Assert::assertEquals(array('param2' => 'val2'), $this->parameters);
           }
 
           /** @Then the extension config should be merged */
           public function theExtensionConfigMerge() {
-              \PHPUnit\Framework\Assert::assertEquals(array('param1' => 'val2', 'param2' => 'val1'), $this->extension);
+              \PHPUnit_Framework_Assert::assertEquals(array('param1' => 'val2', 'param2' => 'val1'), $this->extension);
           }
       }
       """
