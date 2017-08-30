@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-  * [#1054](https://github.com/Behat/Behat/pull/1054): [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md) support for helper containers.
+  * [#1054](https://github.com/Behat/Behat/pull/1054): [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md)
+    support for helper containers.
+
+### Fixed
+  * [#1056](https://github.com/Behat/Behat/pull/1056): Make Gherkin aware of the
+  base path so it can filter correctly
 
 ### Deprecated
   * [#1054](https://github.com/Behat/Behat/pull/1054): Deprecated usage
