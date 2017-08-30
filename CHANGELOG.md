@@ -22,66 +22,92 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.3.1] - 2017-05-15
 ### Added
-  * [#976](https://github.com/Behat/Behat/pull/1001): Add tests to check that snippets treat words containing apostrophes as a single word
+  * [#976](https://github.com/Behat/Behat/pull/1001): Add tests to check that
+    snippets treat words containing apostrophes as a single word
 
 ### Fixed
-  * [#993](https://github.com/Behat/Behat/pull/993) Fix mixed arguments organizer not marking typehinted arguments as "defined"
-  * [#992](https://github.com/Behat/Behat/pull/993) Do not misinterpret first argument as a numbered argument if it is in fact typehinted
-  * [#1028](https://github.com/Behat/Behat/pull/1028) Parent / Child class argument ambiguity issue with `MixedArgumentResolver`
+  * [#993](https://github.com/Behat/Behat/pull/993) Fix mixed arguments
+    organizer not marking typehinted arguments as "defined"
+  * [#992](https://github.com/Behat/Behat/pull/993) Do not misinterpret first
+    argument as a numbered argument if it is in fact typehinted
+  * [#1028](https://github.com/Behat/Behat/pull/1028) Parent / Child class
+    argument ambiguity issue with `MixedArgumentResolver`
 
 ## [3.3.0] - 2016-12-25
 ### Added
   * [#973](https://github.com/Behat/Behat/pull/974): Added helper containers
-  * [#973](https://github.com/Behat/Behat/pull/974): Added `SuiteScopedResolverFactory` extension point
+  * [#973](https://github.com/Behat/Behat/pull/974): Added
+    `SuiteScopedResolverFactory` extension point
 
 ### Removed
-  * Removed php 5.3 from the Travis build matrix. You can consider it official end of support. 5.4 and 5.5 will follow shortly.
+  * Removed php 5.3 from the Travis build matrix. You can consider it official
+    end of support. 5.4 and 5.5 will follow shortly.
 
 ## [3.2.3] - 2016-12-25
 ### Fixed
-  * [#971](https://github.com/Behat/Behat/pull/971): Added support for suite names with hyphens
+  * [#971](https://github.com/Behat/Behat/pull/971): Added support for suite
+    names with hyphens
 
 ## [3.2.2] - 2016-11-05
 ### Fixed
-  * [#959](https://github.com/Behat/Behat/issues/959): Fix transformations not sorted properly on different php version
+  * [#959](https://github.com/Behat/Behat/issues/959): Fix transformations not
+    sorted properly on different php version
 
 ## [3.2.1] - 2016-09-25
 ### Changed
-  * [#955](https://github.com/Behat/Behat/pull/955): `--snippets-for` is not required now as interactive mode is the new default
-  * [#954](https://github.com/Behat/Behat/pull/954): Stop execution on missing steps when running with `--stop-on-failure` and `--strict` options
+  * [#955](https://github.com/Behat/Behat/pull/955): `--snippets-for` is not
+    required now as interactive mode is the new default
+  * [#954](https://github.com/Behat/Behat/pull/954): Stop execution on missing
+    steps when running with `--stop-on-failure` and `--strict` options
 
 ## [3.2.0] - 2016-09-20
 ### Added
-  * [#910](https://github.com/Behat/Behat/pull/910): Return type based transformations
-  * [#903](https://github.com/Behat/Behat/pull/903): Multiline step definitions support
+  * [#910](https://github.com/Behat/Behat/pull/910): Return type based
+    transformations
+  * [#903](https://github.com/Behat/Behat/pull/903): Multiline step definitions
+    support
   * [#930](https://github.com/Behat/Behat/pull/930): Whole table transformation
   * [#935](https://github.com/Behat/Behat/pull/935): Narrative filters in suites
   * [#936](https://github.com/Behat/Behat/pull/936): Debug command
-  * [#931](https://github.com/Behat/Behat/pull/931): Exception handlers extension point
-  * [#870](https://github.com/Behat/Behat/pull/870): Added build-related files and folders to .gitattributes
-  * [#946](https://github.com/Behat/Behat/pull/946): Official full Windows support with CI ([AppVeyor](http://appveyor.com)) on every build
+  * [#931](https://github.com/Behat/Behat/pull/931): Exception handlers
+    extension point
+  * [#870](https://github.com/Behat/Behat/pull/870): Added build-related files
+    and folders to .gitattributes
+  * [#946](https://github.com/Behat/Behat/pull/946): Official full Windows
+    support with CI ([AppVeyor](http://appveyor.com)) on every build
 
 ### Changed
   * [#922](https://github.com/Behat/Behat/pull/922): Snippets generation revamp
-  * [#920](https://github.com/Behat/Behat/pull/920): More context for pending/failed steps with progress formatter
+  * [#920](https://github.com/Behat/Behat/pull/920): More context for
+    pending/failed steps with progress formatter
   * [#905](https://github.com/Behat/Behat/pull/905): Transformations refactoring
-  * [#864](https://github.com/Behat/Behat/pull/864): Use only one autoloader if possible
-  * [#920](https://github.com/Behat/Behat/pull/920): Improve "No specifications found" error message
+  * [#864](https://github.com/Behat/Behat/pull/864): Use only one autoloader if
+    possible
+  * [#920](https://github.com/Behat/Behat/pull/920): Improve "No specifications
+    found" error message
   * Refactor changelog to follow [Keep a Changelog](http://keepachangelog.com/)
   * Refreshed [CONTRIBUTING.md](CONTRIBUTING.md)
   * Refreshed Scrutinizer config
 
 ### Fixed
-  * [#911](https://github.com/Behat/Behat/pull/911): Fix context isolation for Scenario Outlines
-  * [#860](https://github.com/Behat/Behat/pull/860): Include basepath in `generateKey`
-  * [#857](https://github.com/Behat/Behat/pull/857): Only cache failed scenario's for rerun
-  * [#933](https://github.com/Behat/Behat/pull/933): Save failed runs with suite information
-  * [#833](https://github.com/Behat/Behat/pull/833): Properly handle interupts on PHP7
-  * [#904](https://github.com/Behat/Behat/pull/904): Provide clearer exception message when long token names used
-  * [#941](https://github.com/Behat/Behat/pull/941): Transformation should be allowed if printable chars are used
+  * [#911](https://github.com/Behat/Behat/pull/911): Fix context isolation for
+    Scenario Outlines
+  * [#860](https://github.com/Behat/Behat/pull/860): Include basepath in
+    `generateKey`
+  * [#857](https://github.com/Behat/Behat/pull/857): Only cache failed
+    scenario's for rerun
+  * [#933](https://github.com/Behat/Behat/pull/933): Save failed runs with suite
+    information
+  * [#833](https://github.com/Behat/Behat/pull/833): Properly handle interupts
+    on PHP7
+  * [#904](https://github.com/Behat/Behat/pull/904): Provide clearer exception
+    message when long token names used
+  * [#941](https://github.com/Behat/Behat/pull/941): Transformation should be
+    allowed if printable chars are used
 
 ### Deprecated
-  * [#922](https://github.com/Behat/Behat/pull/922): `*SnippetAcceptingContext` interfaces
+  * [#922](https://github.com/Behat/Behat/pull/922): `*SnippetAcceptingContext`
+    interfaces
   * [#905](https://github.com/Behat/Behat/pull/905): `RuntimeTransformation`
   * [#905](https://github.com/Behat/Behat/pull/905): `Transformation::getPattern`
   * [#920](https://github.com/Behat/Behat/pull/920): `StepStat`
@@ -100,7 +126,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Add Japanese translation (thanks @SNakano)
   * Add romanian translation for formatters (thanks @Chriton)
   * Add table row transformations (thanks @ciaranmcnulty)
-  * Add support for negative numbers without surrounding quotes (thanks @ryancookdev)
+  * Add support for negative numbers without surrounding quotes (thanks
+    @ryancookdev)
   * Handle case when non-existent config file is used (thanks @watermanio)
   * Handle non-default `error_reporting()`
   * Handle PHP7 errors implementing `Throwable`
@@ -114,7 +141,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Allow suite settings with null values to exist (thanks @docteurklein)
   * Improve "can not generate snippets" message
   * Improve performance of Turnip parsing (thanks @Sam-Burns)
-  * Improve the snippet generation by auto-importing needed classes (thanks @stof)
+  * Improve the snippet generation by auto-importing needed classes (thanks
+    @stof)
 
 ## [3.0.15] - 2015-02-22
 ### Changed
