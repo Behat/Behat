@@ -314,7 +314,7 @@ Feature: Syntax helpers
       """
       default | [Given|*] /^I have (\d+) apples?$/
               | at `FeatureContext::iHaveApples()`
-              | on `%%WORKING_DIR%%/features%%DS%%bootstrap%%DS%%FeatureContext.php[11:13]`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[11:13]`
 
       default | [When|*] /^I ate (\d+) apples?$/
               | Eating apples
@@ -323,15 +323,15 @@ Feature: Syntax helpers
               | - one
               | - two
               | at `FeatureContext::iAteApples()`
-              | on `%%WORKING_DIR%%/features%%DS%%bootstrap%%DS%%FeatureContext.php[26:28]`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[26:28]`
 
       default | [When|*] /^I found (\d+) apples?$/
               | at `FeatureContext::iFoundApples()`
-              | on `%%WORKING_DIR%%/features%%DS%%bootstrap%%DS%%FeatureContext.php[33:35]`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[33:35]`
 
       default | [Then|*] /^I should have (\d+) apples$/
               | at `FeatureContext::iShouldHaveApples()`
-              | on `%%WORKING_DIR%%/features%%DS%%bootstrap%%DS%%FeatureContext.php[40:42]`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[40:42]`
       """
 
   Scenario: Search definition
