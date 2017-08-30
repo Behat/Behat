@@ -11,13 +11,13 @@
 namespace Behat\Behat\HelperContainer\Exception;
 
 use Behat\Testwork\Environment\Exception\EnvironmentException;
-use Psr\Container\ContainerExceptionInterface;
+use Interop\Container\Exception\ContainerException;
 
 /**
  * All HelperContainer exceptions implement this interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface HelperContainerException extends ContainerExceptionInterface, EnvironmentException
+interface HelperContainerException extends ContainerException, EnvironmentException
 {
 }
