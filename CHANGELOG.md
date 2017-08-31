@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * [#1056](https://github.com/Behat/Behat/pull/1056): Make Gherkin aware of the
   base path so it can filter correctly
 
+### Changed
+  * [#1069](https://github.com/Behat/Behat/pull/1069): Rework argument validators
+
 ### Deprecated
   * [#1054](https://github.com/Behat/Behat/pull/1054): Deprecated usage
     of `Interop\Container`. Versions prior to `1.2` are not supported, but `1.2`
