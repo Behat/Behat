@@ -1,4 +1,4 @@
-![Behat](https://dl.dropboxusercontent.com/u/282797/behat/behat.png)
+![Behat](https://github.com/Behat/logo/raw/master/logo%402x.png)
 
 Behat is a BDD framework for PHP to help you test business expectations.
 
