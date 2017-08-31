@@ -102,19 +102,21 @@ final class ContextFactory
      */
     private function resolveArguments(ReflectionClass $reflection, array $arguments, array $resolvers)
     {
+        $newArguments = $arguments;
+
         foreach ($resolvers as $resolver) {
-            $arguments = $resolver->resolveArguments($reflection, $arguments);
+            $newArguments = $resolver->resolveArguments($reflection, $newArguments);
         }
 
         if (!$reflection->hasMethod('__construct')) {
-            return $arguments;
+            return $newArguments;
         }
 
         $constructor = $reflection->getConstructor();
-        $arguments = $this->argumentOrganiser->organiseArguments($constructor, $arguments);
-        $this->validator->validateArguments($constructor, $arguments);
+        $newArguments = $this->argumentOrganiser->organiseArguments($constructor, $newArguments);
+        $this->validator->validateArguments($constructor, $newArguments);
 
-        return $arguments;
+        return $newArguments;
     }
 
     /**

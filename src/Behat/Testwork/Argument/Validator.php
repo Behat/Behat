@@ -13,6 +13,7 @@ namespace Behat\Testwork\Argument;
 use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
+use ReflectionParameter;
 
 /**
  * Validates function arguments.
@@ -32,20 +33,36 @@ final class Validator
     public function validateArguments(ReflectionFunctionAbstract $function, array $arguments)
     {
         foreach ($function->getParameters() as $num => $parameter) {
-            $name = $parameter->getName();
-
-            if ($parameter->isDefaultValueAvailable()
-                || array_key_exists($num, $arguments)
-                || array_key_exists($name, $arguments)) {
-                continue;
-            }
-
-            throw new UnknownParameterValueException(sprintf(
-                'Can not find a matching value for an argument `$%s` of the method `%s`.',
-                $name,
-                $this->getFunctionPath($function)
-            ));
+            $this->validateArgument($parameter, $num, $arguments);
         }
+    }
+
+    /**
+     * Validates given argument.
+     *
+     * @param ReflectionParameter $parameter
+     * @param integer             $parameterIndex
+     * @param array               $givenArguments
+     */
+    private function validateArgument(ReflectionParameter $parameter, $parameterIndex, array $givenArguments)
+    {
+        if ($parameter->isDefaultValueAvailable()) {
+            return;
+        }
+
+        if (array_key_exists($parameterIndex, $givenArguments)) {
+            return;
+        }
+
+        if (array_key_exists($parameter->getName(), $givenArguments)) {
+            return;
+        }
+
+        throw new UnknownParameterValueException(sprintf(
+            'Can not find a matching value for an argument `$%s` of the method `%s`.',
+            $parameter->getName(),
+            $this->getFunctionPath($parameter->getDeclaringFunction())
+        ));
     }
 
     /**
