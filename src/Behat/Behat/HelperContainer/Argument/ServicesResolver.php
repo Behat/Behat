@@ -57,8 +57,8 @@ final class ServicesResolver implements ArgumentResolver
                     continue;
                 }
 
-                if ($parameter->hasType() && $this->container->has($parameter->getType()->getName())) {
-                    $newArguments[$index] = $this->container->get($parameter->getType()->getName());
+                if ($parameter->getClass() && $this->container->has($parameter->getClass()->getName())) {
+                    $newArguments[$index] = $this->container->get($parameter->getClass()->getName());
                 }
             }
         }

@@ -59,8 +59,8 @@ final class ServicesResolver implements CallFilter
                     continue;
                 }
 
-                if ($parameter->hasType() && $container->has((string) $parameter->getType())) {
-                    $newArguments[$index] = $container->get((string) $parameter->getType());
+                if ($parameter->getClass() && $container->has($parameter->getClass()->getName())) {
+                    $newArguments[$index] = $container->get($parameter->getClass()->getName());
                 }
             }
         }
