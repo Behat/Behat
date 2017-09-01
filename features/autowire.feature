@@ -10,6 +10,8 @@ Feature: Helper services autowire
     - It works for step definition arguments
     - It works for transformation arguments
     - It only wires arguments that weren't otherwise set
+    - Services must be last arguments in step definitions
+    - Services must be last arguments in transformations
 
   Background:
     Given a file named "behat.yaml" with:
