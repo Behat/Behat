@@ -10,11 +10,14 @@
 
 namespace Behat\Behat\HelperContainer\Argument;
 
+use Behat\Behat\Context\Environment\ServiceContainerEnvironment;
+use Behat\Behat\Context\Argument\ArgumentResolverFactory;
 use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
 use Behat\Behat\HelperContainer\BuiltInServiceContainer;
 use Behat\Behat\HelperContainer\Exception\WrongContainerClassException;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
 use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
+use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Suite\Suite;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\TaggedContainerInterface;
@@ -26,7 +29,7 @@ use Symfony\Component\DependencyInjection\TaggedContainerInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ServicesResolverFactory implements SuiteScopedResolverFactory
+final class ServicesResolverFactory implements SuiteScopedResolverFactory, ArgumentResolverFactory
 {
     /**
      * @var TaggedContainerInterface
@@ -45,6 +48,8 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated
      */
     public function generateArgumentResolvers(Suite $suite)
     {
@@ -53,6 +58,24 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory
         }
 
         $container = $this->createContainer($suite->getSetting('services'));
+
+        return array($this->createArgumentResolver($container));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createArgumentResolvers(Environment $environment)
+    {
+        if (!$environment->getSuite()->hasSetting('services')) {
+            return array();
+        }
+
+        $container = $this->createContainer($environment->getSuite()->getSetting('services'));
+
+        if ($environment instanceof ServiceContainerEnvironment) {
+            $environment->setServiceContainer($container);
+        }
 
         return array($this->createArgumentResolver($container));
     }
