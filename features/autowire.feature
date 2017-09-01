@@ -101,8 +101,6 @@ Feature: Helper services autowire
     Then it should pass
 
   Scenario: Step definition arguments
-
-  Scenario: Constructor arguments
     Given a file named "features/autowire.feature" with:
       """
       Feature:
