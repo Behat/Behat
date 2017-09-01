@@ -49,10 +49,15 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     /**
      * {@inheritdoc}
      *
-     * @deprecated
+     * @deprecated as part of SuiteScopedResolverFactory deprecation. Would be removed in 4.0
      */
     public function generateArgumentResolvers(Suite $suite)
     {
+        @trigger_error(
+            'SuiteScopedResolverFactory::generateArgumentResolvers() was deprecated and will be removed in 4.0',
+            E_USER_DEPRECATED
+        );
+
         if (!$suite->hasSetting('services')) {
             return array();
         }
