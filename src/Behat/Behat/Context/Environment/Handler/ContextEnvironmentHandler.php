@@ -23,7 +23,6 @@ use Behat\Testwork\Environment\Exception\EnvironmentIsolationException;
 use Behat\Testwork\Environment\Handler\EnvironmentHandler;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
-use Webmozart\Assert\Assert;
 
 /**
  * Handles build and initialisation of the context-based environments.
@@ -58,12 +57,6 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         $this->contextFactory = $factory;
 
         if ($resolverFactory && !$resolverFactory instanceof ArgumentResolverFactory) {
-            Assert::isInstanceOf(
-                $resolverFactory,
-                'Behat\Behat\Context\Argument\SuiteScopedResolverFactory',
-                'Argument resolver must implement ArgumentResolverFactory or SuiteScopedResolverFactory (deprecated)'
-            );
-
             $resolverFactory = new SuiteScopedResolverFactoryAdapter($resolverFactory);
         }
 
