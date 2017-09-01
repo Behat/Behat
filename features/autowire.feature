@@ -17,8 +17,8 @@ Feature: Helper services autowire
       default:
         suites:
           default:
-            services: ServiceContainer
             autowire: true
+            services: ServiceContainer
       """
     And a file named "features/bootstrap/ServiceContainer.php" with:
       """
@@ -27,6 +27,7 @@ Feature: Helper services autowire
       class Service1 {public $state;}
       class Service2 {public $state;}
       class Service3 {public $state;}
+      class Service4 {public $state;}
 
       class ServiceContainer implements ContainerInterface {
           private $services = array();
@@ -36,6 +37,9 @@ Feature: Helper services autowire
           }
 
           public function get($class) {
+              if (!$this->has($class))
+                  throw new \Behat\Behat\HelperContainer\Exception\ServiceNotFoundException("Service $class not found", $class);
+
               return isset($this->services[$class])
                    ? $this->services[$class]
                    : $this->services[$class] = new $class;
@@ -100,6 +104,31 @@ Feature: Helper services autowire
     When I run "behat --no-colors -f progress features/autowire.feature"
     Then it should pass
 
+  Scenario: Unregistered services as constructor arguments
+    Given a file named "features/autowire.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given a step
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context {
+          public function __construct(Service4 $s) {}
+
+          /** @Given a step */
+          public function aStep() {}
+      }
+      """
+    When I run "behat --no-colors -f progress features/autowire.feature"
+    Then it should fail with:
+      """
+      [Behat\Behat\HelperContainer\Exception\ServiceNotFoundException]
+        Service Service4 not found
+      """
+
   Scenario: Step definition arguments
     Given a file named "features/autowire.feature" with:
       """
@@ -126,6 +155,34 @@ Feature: Helper services autowire
       """
     When I run "behat --no-colors -f progress features/autowire.feature"
     Then it should pass
+
+  Scenario: Unregistered step definition argument
+    Given a file named "features/autowire.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given a step
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context {
+          /** @Given a step */
+          public function aStep(Service4 $s) {}
+      }
+      """
+    When I run "behat --no-colors -f progress features/autowire.feature"
+    Then it should fail with:
+      """
+      F
+
+      --- Failed steps:
+
+      001 Scenario:      # features/autowire.feature:2
+            Given a step # features/autowire.feature:3
+              Fatal error: Service Service4 not found (Behat\Testwork\Call\Exception\FatalThrowableError)
+      """
 
   Scenario: Transformation arguments
     Given a file named "features/autowire.feature" with:
