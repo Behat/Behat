@@ -64,7 +64,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
 
         $container = $this->createContainer($suite->getSetting('services'));
 
-        return array($this->createArgumentResolver($container));
+        return array($this->createArgumentResolver($container, false));
     }
 
     /**
@@ -72,17 +72,20 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      */
     public function createArgumentResolvers(Environment $environment)
     {
-        if (!$environment->getSuite()->hasSetting('services')) {
+        $suite = $environment->getSuite();
+
+        if (!$suite->hasSetting('services')) {
             return array();
         }
 
-        $container = $this->createContainer($environment->getSuite()->getSetting('services'));
+        $container = $this->createContainer($suite->getSetting('services'));
+        $autowire = $suite->hasSetting('autowire') && $suite->getSetting('autowire');
 
         if ($environment instanceof ServiceContainerEnvironment) {
             $environment->setServiceContainer($container);
         }
 
-        return array($this->createArgumentResolver($container));
+        return array($this->createArgumentResolver($container, $autowire));
     }
 
     /**
@@ -177,10 +180,11 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      * Checks if container implements the correct interface and creates resolver using it.
      *
      * @param mixed $container
+     * @param bool  $autowire
      *
      * @return ServicesResolver
      */
-    private function createArgumentResolver($container)
+    private function createArgumentResolver($container, $autowire)
     {
         if (!$container instanceof ContainerInterface) {
             throw new WrongContainerClassException(
@@ -192,6 +196,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
             );
         }
 
-        return new ServicesResolver($container);
+        return new ServicesResolver($container, $autowire);
     }
 }

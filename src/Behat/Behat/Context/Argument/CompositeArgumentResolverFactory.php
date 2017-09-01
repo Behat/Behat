@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Context\Argument;
 
-use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Environment\Environment;
 
 /**
  * Composite factory. Delegates to other (registered) factories to do the job.
@@ -18,22 +18,20 @@ use Behat\Testwork\Suite\Suite;
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @deprecated and will be removed in 4.0. Use CompositeArgumentResolverFactory instead
  */
-final class CompositeFactory implements SuiteScopedResolverFactory
+final class CompositeArgumentResolverFactory implements ArgumentResolverFactory
 {
     /**
-     * @var SuiteScopedResolverFactory[]
+     * @var ArgumentResolverFactory[]
      */
     private $factories = array();
 
     /**
      * Registers factory.
      *
-     * @param SuiteScopedResolverFactory $factory
+     * @param ArgumentResolverFactory $factory
      */
-    public function registerFactory(SuiteScopedResolverFactory $factory)
+    public function registerFactory(ArgumentResolverFactory $factory)
     {
         $this->factories[] = $factory;
     }
@@ -41,12 +39,12 @@ final class CompositeFactory implements SuiteScopedResolverFactory
     /**
      * {@inheritdoc}
      */
-    public function generateArgumentResolvers(Suite $suite)
+    public function createArgumentResolvers(Environment $environment)
     {
         return array_reduce(
             $this->factories,
-            function (array $resolvers, SuiteScopedResolverFactory $factory) use ($suite) {
-                return array_merge($resolvers, $factory->generateArgumentResolvers($suite));
+            function (array $resolvers, ArgumentResolverFactory $factory) use ($environment) {
+                return array_merge($resolvers, $factory->createArgumentResolvers($environment));
             },
             array()
         );

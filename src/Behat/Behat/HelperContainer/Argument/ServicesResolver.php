@@ -27,15 +27,21 @@ final class ServicesResolver implements ArgumentResolver
      * @var ContainerInterface
      */
     private $container;
+    /**
+     * @var bool
+     */
+    private $autowire;
 
     /**
      * Initialises resolver.
      *
      * @param ContainerInterface $container
+     * @param bool               $autowire
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $autowire = false)
     {
         $this->container = $container;
+        $this->autowire = $autowire;
     }
 
     /**
@@ -43,7 +49,21 @@ final class ServicesResolver implements ArgumentResolver
      */
     public function resolveArguments(ReflectionClass $classReflection, array $arguments)
     {
-        return array_map(array($this, 'resolveArgument'), $arguments);
+        $newArguments = array_map(array($this, 'resolveArgument'), $arguments);
+
+        if ($this->autowire && $classReflection->getConstructor()) {
+            foreach ($classReflection->getConstructor()->getParameters() as $index => $parameter) {
+                if (isset($newArguments[$index]) || isset($newArguments[$parameter->getName()])) {
+                    continue;
+                }
+
+                if ($parameter->hasType() && $this->container->has($parameter->getType()->getName())) {
+                    $newArguments[$index] = $this->container->get($parameter->getType()->getName());
+                }
+            }
+        }
+
+        return $newArguments;
     }
 
     /**
