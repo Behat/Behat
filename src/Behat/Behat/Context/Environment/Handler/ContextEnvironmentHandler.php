@@ -10,12 +10,12 @@
 
 namespace Behat\Behat\Context\Environment\Handler;
 
-use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
+use Behat\Behat\Context\Argument\SuiteScopedResolverFactoryAdapter;
+use Behat\Behat\Context\Argument\ArgumentResolverFactory;
 use Behat\Behat\Context\Argument\NullFactory;
 use Behat\Behat\Context\ContextClass\ClassResolver;
 use Behat\Behat\Context\ContextFactory;
-use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Context\Environment\UninitializedContextEnvironment;
 use Behat\Testwork\Environment\Environment;
@@ -23,6 +23,7 @@ use Behat\Testwork\Environment\Exception\EnvironmentIsolationException;
 use Behat\Testwork\Environment\Handler\EnvironmentHandler;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
+use Webmozart\Assert\Assert;
 
 /**
  * Handles build and initialisation of the context-based environments.
@@ -38,7 +39,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
      */
     private $contextFactory;
     /**
-     * @var ArgumentResolver|SuiteScopedResolverFactory
+     * @var ArgumentResolverFactory
      */
     private $resolverFactory;
     /**
@@ -49,12 +50,23 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Initializes handler.
      *
-     * @param ContextFactory                              $factory
-     * @param ArgumentResolver|SuiteScopedResolverFactory $resolverFactory
+     * @param ContextFactory                                     $factory
+     * @param ArgumentResolverFactory|SuiteScopedResolverFactory $resolverFactory
      */
     public function __construct(ContextFactory $factory, $resolverFactory = null)
     {
         $this->contextFactory = $factory;
+
+        if ($resolverFactory && !$resolverFactory instanceof ArgumentResolverFactory) {
+            Assert::isInstanceOf(
+                $resolverFactory,
+                'Behat\Behat\Context\Argument\SuiteScopedResolverFactory',
+                'Argument resolver must implement ArgumentResolverFactory or SuiteScopedResolverFactory (deprecated)'
+            );
+
+            $resolverFactory = new SuiteScopedResolverFactoryAdapter($resolverFactory);
+        }
+
         $this->resolverFactory = $resolverFactory ?: new NullFactory();
     }
 
@@ -110,7 +122,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         }
 
         $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
-        $resolvers = $this->createArgumentResolvers($environment);
+        $resolvers = $this->resolverFactory->createArgumentResolvers($environment);
 
         foreach ($uninitializedEnvironment->getContextClassesWithArguments() as $class => $arguments) {
             $context = $this->contextFactory->createContext($class, $arguments, $resolvers);
@@ -185,23 +197,5 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         }
 
         return $class;
-    }
-
-    /**
-     * Creates argument resolvers for a given environment.
-     *
-     * @param ContextEnvironment $environment
-     *
-     * @return ArgumentResolver[]
-     */
-    private function createArgumentResolvers(ContextEnvironment $environment)
-    {
-        if ($this->resolverFactory instanceof ArgumentResolver) {
-            return $this->resolverFactory->createArgumentResolvers($environment);
-        } elseif ($this->resolverFactory instanceof SuiteScopedResolverFactory) {
-            return $this->resolverFactory->generateArgumentResolvers($environment->getSuite());
-        }
-
-        return array();
     }
 }
