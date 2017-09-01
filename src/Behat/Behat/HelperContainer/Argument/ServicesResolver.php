@@ -13,6 +13,7 @@ namespace Behat\Behat\HelperContainer\Argument;
 use Behat\Behat\Context\Argument\ArgumentResolver;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
+use ReflectionFunctionAbstract;
 
 /**
  * Resolves arguments using provided service container.
@@ -51,16 +52,10 @@ final class ServicesResolver implements ArgumentResolver
     {
         $newArguments = array_map(array($this, 'resolveArgument'), $arguments);
 
-        if ($this->autowire && $classReflection->getConstructor()) {
-            foreach ($classReflection->getConstructor()->getParameters() as $index => $parameter) {
-                if (isset($newArguments[$index]) || isset($newArguments[$parameter->getName()])) {
-                    continue;
-                }
+        $constructor = $classReflection->getConstructor();
 
-                if ($parameter->getClass() && $this->container->has($parameter->getClass()->getName())) {
-                    $newArguments[$index] = $this->container->get($parameter->getClass()->getName());
-                }
-            }
+        if ($this->autowire && $constructor) {
+            return $this->autowireArguments($constructor, $newArguments);
         }
 
         return $newArguments;
@@ -83,5 +78,29 @@ final class ServicesResolver implements ArgumentResolver
         }
 
         return $value;
+    }
+
+    /**
+     * Autowires given arguments.
+     *
+     * @param ReflectionFunctionAbstract $constructor
+     * @param array                      $arguments
+     *
+     * @return array
+     */
+    private function autowireArguments(ReflectionFunctionAbstract $constructor, array $arguments)
+    {
+        $newArguments = $arguments;
+        foreach ($constructor->getParameters() as $index => $parameter) {
+            if (isset($newArguments[$index]) || isset($newArguments[$parameter->getName()]) || !$parameter->getClass()) {
+                continue;
+            }
+
+            if ($parameter->getClass()) {
+                $newArguments[$index] = $this->container->get($parameter->getClass()->getName());
+            }
+        }
+
+        return $newArguments;
     }
 }

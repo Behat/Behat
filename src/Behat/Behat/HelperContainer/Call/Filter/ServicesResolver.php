@@ -17,6 +17,8 @@ use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Testwork\Call\Call;
 use Behat\Testwork\Call\Filter\CallFilter;
 use Behat\Testwork\Environment\Call\EnvironmentCall;
+use Psr\Container\ContainerInterface;
+use ReflectionFunctionAbstract;
 
 /**
  * Dynamically resolves call arguments using the service container.
@@ -43,48 +45,98 @@ final class ServicesResolver implements CallFilter
      */
     public function filterCall(Call $call)
     {
-        if (!$call instanceof EnvironmentCall || !$call->getEnvironment() instanceof ServiceContainerEnvironment) {
+        if ($container = $this->getContainer($call)) {
+            $newArguments = $this->autowireArguments(
+                $container,
+                $call->getCallee()->getReflection(),
+                $call->getArguments()
+            );
+
+            return $this->repackageCallWithNewArguments($call, $newArguments);
+        }
+
+        return $call;
+    }
+
+    /**
+     * Gets container from the call.
+     *
+     * @param Call $call
+     *
+     * @return null|ContainerInterface
+     */
+    private function getContainer(Call $call)
+    {
+        if (!$call instanceof EnvironmentCall) {
             throw new UnsupportedCallException(sprintf(
                 'ServicesResolver can not filter `%s` call.',
                 get_class($call)
             ), $call);
         }
 
-        $container = $call->getEnvironment()->getServiceContainer();
-        $newArguments = $call->getArguments();
-
-        if ($container) {
-            foreach ($call->getCallee()->getReflection()->getParameters() as $index => $parameter) {
-                if (isset($newArguments[$index]) || isset($newArguments[$parameter->getName()])) {
-                    continue;
-                }
-
-                if ($parameter->getClass() && $container->has($parameter->getClass()->getName())) {
-                    $newArguments[$index] = $container->get($parameter->getClass()->getName());
-                }
-            }
+        if (!$call->getEnvironment() instanceof ServiceContainerEnvironment) {
+            throw new UnsupportedCallException(sprintf(
+                'ServicesResolver can not filter `%s` call.',
+                get_class($call)
+            ), $call);
         }
 
+        return $call->getEnvironment()->getServiceContainer();
+    }
+
+    /**
+     * * Autowires given arguments using provided container.
+     *
+     * @param ContainerInterface         $container
+     * @param ReflectionFunctionAbstract $reflection
+     * @param array                      $arguments
+     *
+     * @return array
+     */
+    private function autowireArguments(
+        ContainerInterface $container,
+        ReflectionFunctionAbstract $reflection,
+        array $arguments
+    ) {
+        $newArguments = $arguments;
+        foreach ($reflection->getParameters() as $index => $parameter) {
+            if (isset($newArguments[$index]) || isset($newArguments[$parameter->getName()])) {
+                continue;
+            }
+
+            if ($parameter->getClass()) {
+                $newArguments[$index] = $container->get($parameter->getClass()->getName());
+            }
+        }
+        return $newArguments;
+    }
+
+    /**
+     * Repackages old calls with new arguments.
+     *
+     * @param Call  $call
+     * @param array $arguments
+     *
+     * @return DefinitionCall|TransformationCall
+     */
+    private function repackageCallWithNewArguments(Call $call, array $arguments)
+    {
         if ($call instanceof DefinitionCall) {
             return new DefinitionCall(
                 $call->getEnvironment(),
                 $call->getFeature(),
                 $call->getStep(),
                 $call->getCallee(),
-                $newArguments,
+                $arguments,
                 $call->getErrorReportingLevel()
             );
         }
 
-        if ($call instanceof TransformationCall) {
-            return new TransformationCall(
-                $call->getEnvironment(),
-                $call->getDefinition(),
-                $call->getCallee(),
-                $newArguments
-            );
-        }
-
-        return $call;
+        return new TransformationCall(
+            $call->getEnvironment(),
+            $call->getDefinition(),
+            $call->getCallee(),
+            $arguments
+        );
     }
 }
