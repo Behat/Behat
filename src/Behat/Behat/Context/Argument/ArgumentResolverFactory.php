@@ -10,25 +10,23 @@
 
 namespace Behat\Behat\Context\Argument;
 
-use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Environment\Environment;
 
 /**
- * Creates argument resolvers for provided suite.
+ * Creates argument resolvers for provided environment.
  *
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @deprecated since 3.4. Use `ArgumentResolverFactory` instead
  */
-interface SuiteScopedResolverFactory
+interface ArgumentResolverFactory
 {
     /**
-     * Creates argument resolvers for provided suite.
+     * Builds argument resolvers for provided suite.
      *
-     * @param Suite $suite
+     * @param Environment $environment
      *
      * @return ArgumentResolver[]
      */
-    public function generateArgumentResolvers(Suite $suite);
+    public function createArgumentResolvers(Environment $environment);
 }
