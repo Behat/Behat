@@ -127,8 +127,7 @@ Feature: Helper services autowire
     When I run "behat --no-colors -f progress features/autowire.feature"
     Then it should fail with:
       """
-      [Behat\Behat\HelperContainer\Exception\ServiceNotFoundException]
-        Service Service4 not found
+      Service Service4 not found
       """
 
   Scenario: Step definition arguments
@@ -177,13 +176,7 @@ Feature: Helper services autowire
     When I run "behat --no-colors -f progress features/autowire.feature"
     Then it should fail with:
       """
-      F
-
-      --- Failed steps:
-
-      001 Scenario:      # features/autowire.feature:2
-            Given a step # features/autowire.feature:3
-              Fatal error: Service Service4 not found (Behat\Testwork\Call\Exception\FatalThrowableError)
+      Service Service4 not found
       """
 
   Scenario: Transformation arguments
