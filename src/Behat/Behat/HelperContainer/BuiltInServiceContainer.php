@@ -103,7 +103,7 @@ final class BuiltInServiceContainer implements ContainerInterface
             $schema = array('class' => $id);
         }
 
-        if (!isset($schema['class'])) {
+        if (is_array($schema) && !array_key_exists('class', $schema)) {
             $schema['class'] = $id;
         }
 
