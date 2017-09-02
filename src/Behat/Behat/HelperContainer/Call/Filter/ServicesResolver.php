@@ -18,6 +18,7 @@ use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Testwork\Call\Call;
 use Behat\Testwork\Call\Filter\CallFilter;
 use Behat\Testwork\Environment\Call\EnvironmentCall;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -44,6 +45,7 @@ final class ServicesResolver implements CallFilter
      * @return Call
      *
      * @throws UnsupportedCallException
+     * @throws ContainerExceptionInterface
      */
     public function filterCall(Call $call)
     {
@@ -51,7 +53,7 @@ final class ServicesResolver implements CallFilter
             $autowirer = new ArgumentAutowirer($container);
             $newArguments = $autowirer->autowireArguments($call->getCallee()->getReflection(), $call->getArguments());
 
-            return $this->repackageCallWithNewArguments($call, $newArguments);
+            return $this->repackageCallIfNewArguments($call, $newArguments);
         }
 
         return $call;
@@ -88,7 +90,7 @@ final class ServicesResolver implements CallFilter
     }
 
     /**
-     * Repackages old calls with new arguments.
+     * Repackages old calls with new arguments, but only if two differ.
      *
      * @param Call $call
      * @param array $arguments
@@ -97,12 +99,27 @@ final class ServicesResolver implements CallFilter
      *
      * @throws UnsupportedCallException if given call is not DefinitionCall or TransformationCall
      */
-    private function repackageCallWithNewArguments(Call $call, array $arguments)
+    private function repackageCallIfNewArguments(Call $call, array $arguments)
     {
         if ($arguments === $call->getArguments()) {
             return $call;
         }
 
+        return $this->repackageCallWithNewArguments($call, $arguments);
+    }
+
+    /**
+     * Repackages old calls with new arguments.
+     *
+     * @param Call  $call
+     * @param array $arguments
+     *
+     * @return DefinitionCall|TransformationCall
+     *
+     * @throws UnsupportedCallException
+     */
+    private function repackageCallWithNewArguments(Call $call, array $arguments)
+    {
         if ($call instanceof DefinitionCall) {
             return new DefinitionCall(
                 $call->getEnvironment(),
@@ -123,9 +140,11 @@ final class ServicesResolver implements CallFilter
             );
         }
 
-        throw new UnsupportedCallException(sprintf(
-            'ServicesResolver can not filter `%s` call.',
-            get_class($call)
-        ), $call);
+        throw new UnsupportedCallException(
+            sprintf(
+                'ServicesResolver can not filter `%s` call.',
+                get_class($call)
+            ), $call
+        );
     }
 }
