@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Context\Environment;
+namespace Behat\Behat\HelperContainer\Environment;
 
 use Behat\Testwork\Environment\Environment;
 use Psr\Container\ContainerInterface;

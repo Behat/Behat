@@ -13,6 +13,7 @@ namespace Behat\Behat\Context\Environment;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
+use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Testwork\Call\Callee;
 use Behat\Testwork\Suite\Suite;
 use Psr\Container\ContainerInterface;
