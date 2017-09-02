@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\HelperContainer\Argument;
 
+use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\Context\Argument\ArgumentResolverFactory;
 use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
@@ -50,6 +51,9 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      * {@inheritdoc}
      *
      * @deprecated as part of SuiteScopedResolverFactory deprecation. Would be removed in 4.0
+     *
+     * @throws WrongServicesConfigurationException
+     * @throws WrongContainerClassException
      */
     public function generateArgumentResolvers(Suite $suite)
     {
@@ -64,11 +68,14 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
 
         $container = $this->createContainer($suite->getSetting('services'));
 
-        return array($this->createArgumentResolver($container, false));
+        return $this->createResolvers($container, false);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws WrongServicesConfigurationException
+     * @throws WrongContainerClassException
      */
     public function createArgumentResolvers(Environment $environment)
     {
@@ -85,7 +92,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
             $environment->setServiceContainer($container);
         }
 
-        return array($this->createArgumentResolver($container, $autowire));
+        return $this->createResolvers($container, $autowire);
     }
 
     /**
@@ -94,6 +101,8 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      * @param string $settings
      *
      * @return mixed
+     *
+     * @throws WrongServicesConfigurationException
      */
     private function createContainer($settings)
     {
@@ -116,10 +125,12 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      * @param string $settings
      *
      * @return mixed
+     *
+     * @throws WrongServicesConfigurationException
      */
     private function createContainerFromString($settings)
     {
-        if ('@' === mb_substr($settings, 0, 1)) {
+        if (0 === mb_strpos($settings, '@')) {
             return $this->loadContainerFromContainer(mb_substr($settings, 1));
         }
 
@@ -144,12 +155,14 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      * @param string $name
      *
      * @return mixed
+     *
+     * @throws WrongServicesConfigurationException
      */
     private function loadContainerFromContainer($name)
     {
         $services = $this->container->findTaggedServiceIds(HelperContainerExtension::HELPER_CONTAINER_TAG);
 
-        if (!in_array($name, array_keys($services))) {
+        if (!array_key_exists($name, $services)) {
             throw new WrongServicesConfigurationException(
                 sprintf('Service container `@%s` was not found.', $name)
             );
@@ -169,7 +182,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     {
         $constructor = explode('::', $classSpec);
 
-        if (2 == count($constructor)) {
+        if (2 === count($constructor)) {
             return call_user_func($constructor);
         }
 
@@ -182,9 +195,11 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      * @param mixed $container
      * @param bool  $autowire
      *
-     * @return ServicesResolver
+     * @return ArgumentResolver[]
+     *
+     * @throws WrongContainerClassException
      */
-    private function createArgumentResolver($container, $autowire)
+    private function createResolvers($container, $autowire)
     {
         if (!$container instanceof ContainerInterface) {
             throw new WrongContainerClassException(
@@ -196,6 +211,10 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
             );
         }
 
-        return new ServicesResolver($container, $autowire);
+        if ($autowire) {
+            return array(new ServicesResolver($container), new AutowiringResolver($container));
+        }
+
+        return array(new ServicesResolver($container));
     }
 }
