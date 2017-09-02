@@ -250,6 +250,44 @@ Feature: Per-suite helper containers
     When I run "behat --no-colors -f progress features/container.feature"
     Then it should pass
 
+  Scenario: Built-in container with class names as service IDs
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - "@SharedService"
+              - SecondContext:
+                - "@SharedService"
+
+            services:
+              SharedService: ~
+      """
+    When I run "behat --no-colors -f progress features/container.feature"
+    Then it should pass
+
+  Scenario: Built-in container with class names as service IDs and arguments
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - "@SharedServiceExpecting1"
+              - SecondContext:
+                - "@SharedServiceExpecting1"
+
+            services:
+              SharedServiceExpecting1:
+                arguments:
+                  - 1
+      """
+    When I run "behat --no-colors -f progress features/container.feature"
+    Then it should pass
+
   Scenario: Built-in container with factory-based services
     Given a file named "behat.yml" with:
       """
