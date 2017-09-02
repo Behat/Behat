@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\HelperContainer;
 
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionFunctionAbstract;
 use ReflectionParameter;
@@ -37,12 +38,14 @@ final class ArgumentAutowirer
     }
 
     /**
-     * * Autowires given arguments using provided container.
+     * Autowires given arguments using provided container.
      *
      * @param ReflectionFunctionAbstract $reflection
-     * @param array                      $arguments
+     * @param array $arguments
      *
      * @return array
+     *
+     * @throws ContainerExceptionInterface if unset argument typehint can not be resolved from container
      */
     public function autowireArguments(ReflectionFunctionAbstract $reflection, array $arguments)
     {
