@@ -10,11 +10,13 @@
 
 namespace Behat\Behat\HelperContainer\Call\Filter;
 
+use Behat\Behat\Definition\Definition;
 use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\HelperContainer\ArgumentAutowirer;
 use Behat\Behat\HelperContainer\Exception\UnsupportedCallException;
 use Behat\Behat\Transformation\Call\TransformationCall;
+use Behat\Behat\Transformation\Transformation;
 use Behat\Testwork\Call\Call;
 use Behat\Testwork\Call\Filter\CallFilter;
 use Behat\Testwork\Environment\Call\EnvironmentCall;
@@ -112,32 +114,20 @@ final class ServicesResolver implements CallFilter
      * Repackages old calls with new arguments.
      *
      * @param Call  $call
-     * @param array $arguments
+     * @param array $newArguments
      *
      * @return DefinitionCall|TransformationCall
      *
      * @throws UnsupportedCallException
      */
-    private function repackageCallWithNewArguments(Call $call, array $arguments)
+    private function repackageCallWithNewArguments(Call $call, array $newArguments)
     {
         if ($call instanceof DefinitionCall) {
-            return new DefinitionCall(
-                $call->getEnvironment(),
-                $call->getFeature(),
-                $call->getStep(),
-                $call->getCallee(),
-                $arguments,
-                $call->getErrorReportingLevel()
-            );
+            return $this->repackageDefinitionCall($call, $newArguments);
         }
 
         if ($call instanceof TransformationCall) {
-            return new TransformationCall(
-                $call->getEnvironment(),
-                $call->getDefinition(),
-                $call->getCallee(),
-                $arguments
-            );
+            return $this->repackageTransformationCall($call, $newArguments);
         }
 
         throw new UnsupportedCallException(
@@ -145,6 +135,70 @@ final class ServicesResolver implements CallFilter
                 'ServicesResolver can not filter `%s` call.',
                 get_class($call)
             ), $call
+        );
+    }
+
+    /**
+     * Repackages definition call with new arguments.
+     *
+     * @param DefinitionCall $call
+     * @param array $newArguments
+     *
+     * @return DefinitionCall
+     *
+     * @throws UnsupportedCallException
+     */
+    private function repackageDefinitionCall(DefinitionCall $call, array $newArguments)
+    {
+        $definition = $call->getCallee();
+
+        if (!$definition instanceof Definition) {
+            throw new UnsupportedCallException(
+                sprintf(
+                    'Something is wrong in callee associated with `%s` call.',
+                    get_class($call)
+                ), $call
+            );
+        }
+
+        return new DefinitionCall(
+            $call->getEnvironment(),
+            $call->getFeature(),
+            $call->getStep(),
+            $definition,
+            $newArguments,
+            $call->getErrorReportingLevel()
+        );
+    }
+
+    /**
+     * Repackages transformation call with new arguments.
+     *
+     * @param TransformationCall $call
+     * @param array $newArguments
+     *
+     * @return TransformationCall
+     *
+     * @throws UnsupportedCallException
+     */
+    private function repackageTransformationCall(TransformationCall $call, array $newArguments)
+    {
+        $transformation = $call->getCallee();
+
+        if (!$transformation instanceof Transformation) {
+            throw new UnsupportedCallException(
+                sprintf(
+                    'Something is wrong in callee associated with `%s` call.',
+                    get_class($call)
+                ), $call
+            );
+        }
+
+        return new TransformationCall(
+            $call->getEnvironment(),
+            $call->getDefinition(),
+            $transformation,
+            $newArguments
         );
     }
 }
