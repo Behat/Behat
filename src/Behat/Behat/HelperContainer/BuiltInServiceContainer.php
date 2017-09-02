@@ -47,7 +47,7 @@ final class BuiltInServiceContainer implements ContainerInterface
      */
     public function has($id)
     {
-        return isset($this->schema[$id]);
+        return array_key_exists($id, $this->schema);
     }
 
     /**
@@ -98,6 +98,14 @@ final class BuiltInServiceContainer implements ContainerInterface
     private function getAndValidateServiceSchema($id)
     {
         $schema = $this->schema[$id];
+
+        if (null === $schema) {
+            $schema = array('class' => $id);
+        }
+
+        if (!isset($schema['class'])) {
+            $schema['class'] = $id;
+        }
 
         if (is_string($schema)) {
             $schema = array('class' => $schema);
