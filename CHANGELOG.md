@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+  * [#1071](https://github.com/Behat/Behat/pull/1071): Services auto-wiring
   * [#1054](https://github.com/Behat/Behat/pull/1054): [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md)
     support for helper containers.
   * Support for modern PHPUnit.
