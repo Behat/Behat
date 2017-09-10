@@ -36,7 +36,7 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
     /**
      * {@inheritdoc}
      */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return TokenNameTransformation::supportsPatternAndMethod($pattern, $method)
             && ReturnTypeTransformation::supportsPatternAndMethod('', $method);

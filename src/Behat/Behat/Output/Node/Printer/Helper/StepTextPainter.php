@@ -58,7 +58,7 @@ final class StepTextPainter
         $paramStyle = $style . '_param';
 
         // If it's just a string - skip
-        if ('/' !== substr($regex, 0, 1)) {
+        if ('/' !== $regex[0]) {
             return $text;
         }
 

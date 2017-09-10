@@ -196,7 +196,7 @@ final class AnnotatedContextReader implements ContextReader
      */
     private function isNotAnnotation($docLine)
     {
-        return '@' !== substr($docLine, 0, 1);
+        return '@' !== $docLine[0];
     }
 
     /**

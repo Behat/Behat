@@ -36,7 +36,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
     /**
      * {@inheritdoc}
      */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
@@ -62,7 +62,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
     {
         if (!$value instanceof TableNode) {
             return false;
-        };
+        }
 
         // What we're doing here is checking that we have a 2 column table.
         // This bit checks we have two columns

@@ -29,7 +29,7 @@ interface SimpleArgumentTransformation extends Transformation
      *
      * @return bool
      */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method);
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method);
 
     /**
      * Returns transformation priority.

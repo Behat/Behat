@@ -31,7 +31,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * {@inheritdoc}
      */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         $returnClass = self::getReturnClass($method);
 
@@ -122,7 +122,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      *
      * @return null|string
      */
-    static private function getReturnClass(ReflectionFunctionAbstract $reflection)
+    private static function getReturnClass(ReflectionFunctionAbstract $reflection)
     {
         $type = $reflection->getReturnType();
 

@@ -62,7 +62,8 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
         $arguments = array();
 
         $keys = array_keys($cleanMatch);
-        for ($keyIndex = 0; $keyIndex < count($keys); $keyIndex++) {
+        $keysCount = count($keys);
+        for ($keyIndex = 0; $keyIndex < $keysCount; $keyIndex++) {
             $key = $keys[$keyIndex];
 
             $arguments[$key] = $cleanMatch[$key];

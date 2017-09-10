@@ -95,9 +95,7 @@ final class JUnitFeatureElementListener implements EventListener
             $this->captureScenarioEvent($event);
         }
 
-        if ($event instanceof StepTested
-            || $event instanceof AfterStepSetup
-        ) {
+        if ($event instanceof StepTested) {
             $this->captureStepEvent($event);
         }
 
