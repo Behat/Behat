@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [3.4.0] - 2017-09-10
 ### Added
   * [#1071](https://github.com/Behat/Behat/pull/1071): Services auto-wiring
   * [#1054](https://github.com/Behat/Behat/pull/1054): [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md)
@@ -856,7 +858,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
-[Unreleased]: https://github.com/Behat/Behat/compare/v3.3.1...HEAD
+[Unreleased]: https://github.com/Behat/Behat/compare/v3.4.0...HEAD
+[3.4.0]: https://github.com/Behat/Behat/compare/v3.3.1...v3.4.0
 [3.3.1]: https://github.com/Behat/Behat/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/Behat/Behat/compare/v3.2.3...v3.3.0
 [3.2.3]: https://github.com/Behat/Behat/compare/v3.2.2...v3.2.3
