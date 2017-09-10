@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     is a non-breaking change. If you depend heavily on `Interop`, upgrade to
     `1.2`, which is still supported by helper containers. Aim to migrate to
     `Psr` before Behat 4.0 shows up on horizon
+  * PHP versions prior to 5.6 and HHVM were dropped from CI build matrix. It
+    doesn't mean that we'll start using features of 5.6 yet, it just means we
+    don't get out of our way to support 5.3 and 5.4 anymore. In 4.0 support will
+    be completely dropped.
 
 ## [3.3.1] - 2017-05-15
 ### Added
