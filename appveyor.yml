@@ -6,7 +6,7 @@ clone_folder: c:\projects\behat
 
 environment:
     matrix:
-        - PHP_DOWNLOAD_FILE: php-7.1.8-nts-Win32-VC14-x86.zip
+        - PHP_DOWNLOAD_FILE: php-7.1.9-nts-Win32-VC14-x86.zip
 
 branches:
   only:
