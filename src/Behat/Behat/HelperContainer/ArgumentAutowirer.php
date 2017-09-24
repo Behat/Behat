@@ -72,6 +72,6 @@ final class ArgumentAutowirer
      */
     private function isArgumentWireable(array $arguments, $index, ReflectionParameter $parameter)
     {
-        return !isset($arguments[$index]) && !isset($arguments[$parameter->getName()]) && $parameter->getClass();
+        return !isset($arguments[$index]) && !isset($arguments[$parameter->getName()]) && !array_key_exists($index, $arguments) && !array_key_exists($parameter->getName(), $arguments) && $parameter->getClass();
     }
 }
