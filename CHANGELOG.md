@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+  * [#1083](https://github.com/Behat/Behat/pull/1083): JUnit time attribute
 
 ## [3.4.1] - 2017-09-18
 ### Fixed
