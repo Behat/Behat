@@ -11,7 +11,8 @@
 namespace Behat\Behat\HelperContainer\Argument;
 
 use Behat\Behat\Context\Argument\ArgumentResolver;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 
 /**
@@ -40,6 +41,8 @@ final class ServicesResolver implements ArgumentResolver
 
     /**
      * {@inheritdoc}
+     *
+     * @throws ContainerExceptionInterface
      */
     public function resolveArguments(ReflectionClass $classReflection, array $arguments)
     {
@@ -55,10 +58,12 @@ final class ServicesResolver implements ArgumentResolver
      * @param mixed $value
      *
      * @return mixed
+     *
+     * @throws ContainerExceptionInterface
      */
     private function resolveArgument($value)
     {
-        if ('@' === mb_substr($value, 0, 1)) {
+        if (0 === mb_strpos($value, '@')) {
             return $this->container->get(mb_substr($value, 1));
         }
 

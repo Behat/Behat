@@ -110,4 +110,14 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
     {
         return $this->translator->translateDefinition($suite, $definition);
     }
+
+    /**
+     * Returns whether verbosity is verbose (-v).
+     *
+     * @return bool true if verbosity is set to VERBOSITY_VERBOSE, false otherwise
+     */
+    final protected function isVerbose()
+    {
+        return $this->output->isVerbose();
+    }
 }

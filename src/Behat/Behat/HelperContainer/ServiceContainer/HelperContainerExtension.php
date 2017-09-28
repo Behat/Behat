@@ -12,6 +12,7 @@ namespace Behat\Behat\HelperContainer\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
+use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -78,6 +79,10 @@ final class HelperContainerExtension implements Extension
         $definition = new Definition('Behat\Behat\HelperContainer\Argument\ServicesResolverFactory', array($container));
         $definition->addTag(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG, array('priority' => 0));
         $container->setDefinition(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG . '.helper_container', $definition);
+
+        $definition = new Definition('Behat\Behat\HelperContainer\Call\Filter\ServicesResolver');
+        $definition->addTag(CallExtension::CALL_FILTER_TAG, array('priority' => 0));
+        $container->setDefinition(CallExtension::CALL_FILTER_TAG . '.helper_container', $definition);
     }
 
     /**

@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Context;
 
+use Behat\Testwork\Argument\Validator;
 use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Initializer\ContextInitializer;
 use Behat\Testwork\Argument\ArgumentOrganiser;
@@ -34,6 +35,10 @@ final class ContextFactory
      * @var ContextInitializer[]
      */
     private $contextInitializers = array();
+    /**
+     * @var Validator
+     */
+    private $validator;
 
     /**
      * Initialises factory.
@@ -43,6 +48,7 @@ final class ContextFactory
     public function __construct(ArgumentOrganiser $argumentOrganiser)
     {
         $this->argumentOrganiser = $argumentOrganiser;
+        $this->validator = new Validator();
     }
 
     /**
@@ -96,17 +102,21 @@ final class ContextFactory
      */
     private function resolveArguments(ReflectionClass $reflection, array $arguments, array $resolvers)
     {
+        $newArguments = $arguments;
+
         foreach ($resolvers as $resolver) {
-            $arguments = $resolver->resolveArguments($reflection, $arguments);
+            $newArguments = $resolver->resolveArguments($reflection, $newArguments);
         }
 
-        if (!$reflection->hasMethod('__construct') || !count($arguments)) {
-            return $arguments;
+        if (!$reflection->hasMethod('__construct')) {
+            return $newArguments;
         }
 
         $constructor = $reflection->getConstructor();
+        $newArguments = $this->argumentOrganiser->organiseArguments($constructor, $newArguments);
+        $this->validator->validateArguments($constructor, $newArguments);
 
-        return $this->argumentOrganiser->organiseArguments($constructor, $arguments);
+        return $newArguments;
     }
 
     /**

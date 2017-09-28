@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Context\Argument;
 
+use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -19,12 +20,20 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class NullFactory implements SuiteScopedResolverFactory
+final class NullFactory implements ArgumentResolverFactory, SuiteScopedResolverFactory
 {
     /**
      * {@inheritdoc}
      */
     public function generateArgumentResolvers(Suite $suite)
+    {
+        return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createArgumentResolvers(Environment $environment)
     {
         return array();
     }

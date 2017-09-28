@@ -1,6 +1,6 @@
 language: php
 
-php: [5.4, 5.5, 5.6, 7.0, 7.1, hhvm]
+php: [5.6, 7.0, 7.1]
 
 sudo: false
 
@@ -14,24 +14,17 @@ branches:
 
 matrix:
   include:
-    - php: 5.3
-      env: DEPENDENCIES='low'
     - php: 5.6
-      env: SYMFONY_VERSION='2.3.*'
+      env: DEPENDENCIES='low'
     - php: 5.6
       env: SYMFONY_VERSION='2.7.*'
     - php: 5.6
       env: SYMFONY_VERSION='2.8.*'
-    - php: 7.0
-      env: SYMFONY_VERSION='3.0.*'
-    - php: 7.0
-      env: DEPENDENCIES='dev'
 
 before_install:
-  - if [[ ${TRAVIS_PHP_VERSION:0:4} != "hhvm" ]]; then phpenv config-rm xdebug.ini; fi
+  - phpenv config-rm xdebug.ini
 
 before_script:
-  - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"; fi;
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
@@ -41,3 +34,19 @@ before_script:
 script:
   - phpunit
   - behat -fprogress --strict --tags '~@php-version,'`php php_version_tags.php`
+
+before_deploy:
+  - curl -LSs https://box-project.github.io/box2/installer.php | php
+  - export PATH=.:$PATH
+  - rm -Rf ./vendor
+  - composer install --no-dev -o
+  - box.phar build
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_API_KEY
+  file: behat.phar
+  skip_cleanup: true
+  on:
+    tags: true
+    php: 5.6

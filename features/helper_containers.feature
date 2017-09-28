@@ -7,7 +7,7 @@ Feature: Per-suite helper containers
     - Having a container enables you to use its services as context arguments via `@name` syntax
     - Container is rebuilt and is isolated between scenarios
     - Container is configured via suite's `services` option
-    - Container is a class implementing `Interop\Container\ContainerInterface`
+    - Container is a class implementing `Psr\Container\ContainerInterface`
     - There is a built-in container if you need a very simple service-sharing, configurable through the same `services` setting
     - There is an extension point that allows Behat extensions provide their own containers for end-users via `@name` syntax
 
@@ -120,7 +120,7 @@ Feature: Per-suite helper containers
       """
     And a file named "features/bootstrap/MyContainer.php" with:
       """
-      <?php use Interop\Container\ContainerInterface;
+      <?php use Psr\Container\ContainerInterface;
 
       class MyContainer implements ContainerInterface {
           private $service;
@@ -154,7 +154,7 @@ Feature: Per-suite helper containers
       """
     And a file named "features/bootstrap/MyContainer.php" with:
       """
-      <?php use Interop\Container\ContainerInterface;
+      <?php use Psr\Container\ContainerInterface;
 
       class MyContainer implements ContainerInterface {
           private $service;
@@ -163,6 +163,40 @@ Feature: Per-suite helper containers
           public static function factoryMethod() {
               return new self();
           }
+
+          public function has($id) {
+              return $id == 'shared_service';
+          }
+
+          public function get($id) {
+              if ($id !== 'shared_service') throw new \InvalidArgumentException();
+              return isset($this->service) ? $this->service : $this->service = new SharedService();
+          }
+      }
+      """
+    When I run "behat --no-colors -f progress features/container.feature"
+    Then it should pass
+
+  Scenario: Interop container
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - "@shared_service"
+              - SecondContext:
+                - "@shared_service"
+
+            services: MyContainer
+      """
+    And a file named "features/bootstrap/MyContainer.php" with:
+      """
+      <?php use Interop\Container\ContainerInterface;
+
+      class MyContainer implements ContainerInterface {
+          private $service;
 
           public function has($id) {
               return $id == 'shared_service';
@@ -216,6 +250,44 @@ Feature: Per-suite helper containers
     When I run "behat --no-colors -f progress features/container.feature"
     Then it should pass
 
+  Scenario: Built-in container with class names as service IDs
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - "@SharedService"
+              - SecondContext:
+                - "@SharedService"
+
+            services:
+              SharedService: ~
+      """
+    When I run "behat --no-colors -f progress features/container.feature"
+    Then it should pass
+
+  Scenario: Built-in container with class names as service IDs and arguments
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - "@SharedServiceExpecting1"
+              - SecondContext:
+                - "@SharedServiceExpecting1"
+
+            services:
+              SharedServiceExpecting1:
+                arguments:
+                  - 1
+      """
+    When I run "behat --no-colors -f progress features/container.feature"
+    Then it should pass
+
   Scenario: Built-in container with factory-based services
     Given a file named "behat.yml" with:
       """
@@ -255,7 +327,7 @@ Feature: Per-suite helper containers
       """
     And a file named "features/bootstrap/MyContainer.php" with:
       """
-      <?php use Interop\Container\ContainerInterface;
+      <?php use Psr\Container\ContainerInterface;
 
       class MyContainer implements ContainerInterface {
           private $service;
@@ -304,4 +376,90 @@ Feature: Per-suite helper containers
       return new MyExtension;
       """
     When I run "behat --no-colors -f progress features/container.feature"
+    Then it should pass
+
+  Scenario: Mix of typehinted arguments and numbered arguments (fix #991)
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - "@typehinted_service"
+                - bar
+
+            services:
+              typehinted_service:
+                class: stdClass
+      """
+    And a file named "features/container_args.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given foo
+      """
+    And a file named "features/bootstrap/FirstContext.php" with:
+      """
+      <?php use Behat\Behat\Context\Context;
+
+      class FirstContext implements Context {
+          public function __construct(stdClass $service, $bar) {
+          }
+
+          /** @Given foo */
+          public function foo() {
+          }
+      }
+      """
+    When I run "behat --no-colors -f progress features/container_args.feature"
+    Then it should pass
+
+  Scenario: Injecting typehinted arguments for a parent and child class (fix #1008)
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - "@child_class"
+                - "@parent_class"
+            services:
+              parent_class:
+                class: ParentClass
+              child_class:
+                class: ChildClass
+      """
+    And a file named "features/container_args.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given foo
+      """
+    And a file named "features/bootstrap/FirstContext.php" with:
+      """
+      <?php use Behat\Behat\Context\Context;
+
+      class FirstContext implements Context {
+        public function __construct(ParentClass $parent, ChildClass $child) {
+        }
+
+        /** @Given foo */
+        public function foo() {
+
+        }
+      }
+      """
+    And a file named "features/bootstrap/ParentClass.php" with:
+      """
+      <?php
+      class ParentClass {}
+      """
+    And a file named "features/bootstrap/ChildClass.php" with:
+      """
+      <?php
+      class ChildClass extends ParentClass {}
+      """
+    When I run "behat --no-colors -f progress features/container_args.feature"
     Then it should pass

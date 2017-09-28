@@ -225,6 +225,7 @@ final class GherkinExtension implements Extension
         }
 
         $definition->addMethodCall('setCache', array($cacheDefinition));
+        $definition->addMethodCall('setBasePath', array('%paths.base%'));
         $definition->addTag(self::LOADER_TAG, array('priority' => 50));
         $container->setDefinition('gherkin.loader.gherkin_file', $definition);
     }

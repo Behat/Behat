@@ -11,8 +11,6 @@
 use Behat\Behat\Context\Context;
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Gherkin\Node\PyStringNode;
-use Prophecy\Argument;
-use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -87,6 +85,54 @@ class FeatureContext implements Context
     public function aFileNamedWith($filename, PyStringNode $content)
     {
         $content = strtr((string) $content, array("'''" => '"""'));
+        $this->createFile($this->workingDir . '/' . $filename, $content);
+    }
+
+    /**
+     * Creates a empty file with specified name in current workdir.
+     *
+     * @Given /^(?:there is )?a file named "([^"]*)"$/
+     *
+     * @param string $filename name of the file (relative path)
+     */
+    public function aFileNamed($filename)
+    {
+        $this->createFile($this->workingDir . '/' . $filename, '');
+    }
+
+    /**
+     * Creates a noop feature context in current workdir.
+     *
+     * @Given /^(?:there is )?a some feature context$/
+     */
+    public function aNoopFeatureContext()
+    {
+        $filename = 'features/bootstrap/FeatureContext.php';
+        $content = <<<'EOL'
+<?php
+
+use Behat\Behat\Context\Context;
+
+class FeatureContext implements Context
+{
+}
+EOL;
+        $this->createFile($this->workingDir . '/' . $filename, $content);
+    }
+
+        /**
+         * Creates a noop feature in current workdir.
+         *
+         * @Given /^(?:there is )?a some feature scenarios/
+         */
+        public function aNoopFeature()
+    {
+        $filename = 'features/bootstrap/FeatureContext.php';
+        $content = <<<'EOL'
+Feature:
+        Scenario:
+          When this scenario executes
+EOL;
         $this->createFile($this->workingDir . '/' . $filename, $content);
     }
 
@@ -179,6 +225,17 @@ class FeatureContext implements Context
     }
 
     /**
+     * Runs behat command in debug mode
+     *
+     * @When /^I run behat in debug mode$/
+     */
+    public function iRunBehatInDebugMode()
+    {
+        $this->options = '';
+        $this->iRunBehat('--debug');
+    }
+
+    /**
      * Checks whether previously ran command passes|fails with provided output.
      *
      * @Then /^it should (fail|pass) with:$/
@@ -266,7 +323,12 @@ class FeatureContext implements Context
 
     private function getExpectedOutput(PyStringNode $expectedText)
     {
-        $text = strtr($expectedText, array('\'\'\'' => '"""', '%%TMP_DIR%%' => sys_get_temp_dir() . DIRECTORY_SEPARATOR));
+        $text = strtr($expectedText, array(
+            '\'\'\'' => '"""',
+            '%%TMP_DIR%%' => sys_get_temp_dir() . DIRECTORY_SEPARATOR,
+            '%%WORKING_DIR%%' => realpath($this->workingDir . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR,
+            '%%DS%%' => DIRECTORY_SEPARATOR,
+        ));
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {

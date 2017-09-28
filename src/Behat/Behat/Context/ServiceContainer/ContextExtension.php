@@ -142,7 +142,7 @@ final class ContextExtension implements Extension
      */
     private function loadArgumentResolverFactory(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Argument\CompositeFactory');
+        $definition = new Definition('Behat\Behat\Context\Argument\CompositeArgumentResolverFactory');
         $container->setDefinition(self::AGGREGATE_RESOLVER_FACTORY_ID, $definition);
     }
 
