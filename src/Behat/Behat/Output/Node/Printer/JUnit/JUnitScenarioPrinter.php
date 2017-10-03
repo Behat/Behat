@@ -48,6 +48,11 @@ final class JUnitScenarioPrinter
      */
     private $outlineStepCount;
 
+    /**
+     * @var JUnitDurationListener
+     */
+    private $durationListener;
+
     public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, JUnitDurationListener $durationListener)
     {
         $this->resultConverter = $resultConverter;

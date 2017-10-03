@@ -23,21 +23,10 @@ final class JUnitDurationListener implements EventListener
     /** @inheritdoc */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if ($event instanceof BeforeScenarioTested) {
-            $this->captureBeforeScenarioEvent($event);
-        }
-
-        if ($event instanceof BeforeFeatureTested) {
-            $this->captureBeforeFeatureTested($event);
-        }
-
-        if ($event instanceof AfterScenarioTested) {
-            $this->captureAfterScenarioEvent($event);
-        }
-
-        if ($event instanceof AfterFeatureTested) {
-            $this->captureAfterFeatureEvent($event);
-        }
+        $this->captureBeforeScenarioEvent($event);
+        $this->captureBeforeFeatureTested($event);
+        $this->captureAfterScenarioEvent($event);
+        $this->captureAfterFeatureEvent($event);
     }
 
     public function getDuration(ScenarioLikeInterface $scenario)
@@ -52,18 +41,30 @@ final class JUnitDurationListener implements EventListener
         return array_key_exists($key, $this->featureResultStore) ? $this->featureResultStore[$key] : '';
     }
 
-    private function captureBeforeFeatureTested(BeforeFeatureTested $event)
+    private function captureBeforeFeatureTested(Event $event)
     {
+        if (!$event instanceof BeforeFeatureTested) {
+            return;
+        }
+
         $this->featureTimerStore[$this->getHash($event->getFeature())] = $this->startTimer();
     }
 
-    private function captureBeforeScenarioEvent(BeforeScenarioTested $event)
+    private function captureBeforeScenarioEvent(Event $event)
     {
+        if (!$event instanceof BeforeScenarioTested) {
+            return;
+        }
+
         $this->scenarioTimerStore[$this->getHash($event->getScenario())] = $this->startTimer();
     }
 
-    private function captureAfterScenarioEvent(AfterScenarioTested $event)
+    private function captureAfterScenarioEvent(Event $event)
     {
+        if (!$event instanceof AfterScenarioTested) {
+            return;
+        }
+
         $key = $this->getHash($event->getScenario());
         $timer = $this->scenarioTimerStore[$key];
         if ($timer instanceof Timer) {
@@ -72,8 +73,12 @@ final class JUnitDurationListener implements EventListener
         }
     }
 
-    private function captureAfterFeatureEvent(AfterFeatureTested $event)
+    private function captureAfterFeatureEvent(Event $event)
     {
+        if (!$event instanceof AfterFeatureTested) {
+            return;
+        }
+
         $key = $this->getHash($event->getFeature());
         $timer = $this->featureTimerStore[$key];
         if ($timer instanceof Timer) {
