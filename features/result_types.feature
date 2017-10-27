@@ -236,7 +236,7 @@ Feature: Different result types
            * @Then /^I should see (\d+)\$ on the screen$/
            */
           public function iShouldSee($money) {
-              PHPUnit_Framework_Assert::assertEquals($money, $this->money);
+              PHPUnit\Framework\Assert::assertEquals($money, $this->money);
           }
       }
       """
@@ -324,7 +324,7 @@ Feature: Different result types
            * @Then /^I should see (\d+)\$ on the screen$/
            */
           public function iShouldSee($money) {
-              PHPUnit_Framework_Assert::assertEquals($money, $this->money);
+              PHPUnit\Framework\Assert::assertEquals($money, $this->money);
           }
       }
       """

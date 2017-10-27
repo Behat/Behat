@@ -96,7 +96,7 @@ Feature: Helper services autowire
       class FeatureContext implements Context {
           public function __construct(Service2 $s2, $name, Service1 $s1, Service3 $s3)
           {
-              PHPUnit_Framework_Assert::assertEquals('Konstantin', $name);
+              PHPUnit\Framework\Assert::assertEquals('Konstantin', $name);
           }
 
           /** @Given a step */
@@ -150,7 +150,7 @@ Feature: Helper services autowire
 
           /** @Then that state should be persisted as :value */
           public function checkState($val, Service2 $s2) {
-              PHPUnit_Framework_Assert::assertEquals($val, $s2->state);
+              PHPUnit\Framework\Assert::assertEquals($val, $s2->state);
           }
       }
       """
@@ -204,7 +204,7 @@ Feature: Helper services autowire
 
           /** @Then the :flag flag should be persisted as :value */
           public function checkState($flag, $value) {
-              PHPUnit_Framework_Assert::assertEquals($value, $flag);
+              PHPUnit\Framework\Assert::assertEquals($value, $flag);
           }
       }
       """

@@ -51,7 +51,7 @@ Feature: Profiles
            * @Then /The result should be (\d+)/
            */
           public function theResultShouldBe($result) {
-              PHPUnit_Framework_Assert::assertEquals($result, $this->result);
+              PHPUnit\Framework\Assert::assertEquals($result, $this->result);
           }
       }
       """
