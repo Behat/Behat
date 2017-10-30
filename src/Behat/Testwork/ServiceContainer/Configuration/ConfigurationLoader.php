@@ -11,6 +11,7 @@
 namespace Behat\Testwork\ServiceContainer\Configuration;
 
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -266,17 +267,21 @@ final class ConfigurationLoader
      */
     private function parseImport($basePath, $path, $profile)
     {
-        if (!file_exists($path) && file_exists($basePath . DIRECTORY_SEPARATOR . $path)) {
-            $path = $basePath . DIRECTORY_SEPARATOR . $path;
+      $finder = new Finder();
+      $path_info = pathinfo($path);
+      foreach ($finder->files()->name($path_info['basename'])->in(dirname($path)) as $file) {
+        if (!file_exists($file) && file_exists($basePath . DIRECTORY_SEPARATOR . $file)) {
+          $file = $basePath . DIRECTORY_SEPARATOR . $file;
+        }
+        if (!file_exists($file)) {
+          throw new ConfigurationLoadingException(sprintf(
+            'Can not import `%s` configuration file. File not found.',
+            $file
+          ));
         }
 
-        if (!file_exists($path)) {
-            throw new ConfigurationLoadingException(sprintf(
-                'Can not import `%s` configuration file. File not found.',
-                $path
-            ));
-        }
-
-        return $this->loadFileConfiguration($path, $profile);
+        return $this->loadFileConfiguration($file, $profile);
+      }
     }
+
 }
