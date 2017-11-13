@@ -44,22 +44,22 @@ Feature: Step Arguments
            * @Then /^it must be equals to string (\d+)$/
            */
           public function itMustBeEqualsToString($number) {
-              \PHPUnit_Framework_Assert::assertEquals($this->strings[intval($number)], (string) $this->input);
+              \PHPUnit\Framework\Assert::assertEquals($this->strings[intval($number)], (string) $this->input);
           }
 
           /**
            * @Then /^it must be equals to table (\d+)$/
            */
           public function itMustBeEqualsToTable($number) {
-              \PHPUnit_Framework_Assert::assertEquals($this->tables[intval($number)], $this->input->getHash());
+              \PHPUnit\Framework\Assert::assertEquals($this->tables[intval($number)], $this->input->getHash());
           }
 
           /**
            * @Given /^I have number2 = (?P<number2>\d+) and number1 = (?P<number1>\d+)$/
            */
           public function iHaveNumberAndNumber($number1, $number2) {
-              \PHPUnit_Framework_Assert::assertEquals(13, intval($number1));
-              \PHPUnit_Framework_Assert::assertEquals(243, intval($number2));
+              \PHPUnit\Framework\Assert::assertEquals(13, intval($number1));
+              \PHPUnit\Framework\Assert::assertEquals(243, intval($number2));
           }
       }
       """

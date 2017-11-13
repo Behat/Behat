@@ -28,7 +28,7 @@ Feature: Pretty Formatter
            * @Then /I must have (\d+)/
            */
           public function iMustHave($num) {
-              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
+              PHPUnit\Framework\Assert::assertEquals($num, $this->value);
           }
 
           /**
@@ -163,7 +163,7 @@ Feature: Pretty Formatter
            * @Then /I must have (\d+)/
            */
           public function iMustHave($num) {
-              PHPUnit_Framework_Assert::assertEquals($num, $this->value);
+              PHPUnit\Framework\Assert::assertEquals($num, $this->value);
           }
 
           /**
@@ -245,7 +245,7 @@ Feature: Pretty Formatter
              * @Then /I must have "([^"]+)"/
              */
             public function iMustHave($num) {
-                PHPUnit_Framework_Assert::assertEquals(intval(preg_replace('/[^\d]+/', '', $num)), $this->value);
+                PHPUnit\Framework\Assert::assertEquals(intval(preg_replace('/[^\d]+/', '', $num)), $this->value);
             }
 
             /**
