@@ -28,7 +28,7 @@ Feature: I18n
            * @Then /Я должен иметь (\d+)/
            */
           public function iShouldHave($number) {
-              PHPUnit_Framework_Assert::assertEquals(intval($number), $this->value);
+              PHPUnit\Framework\Assert::assertEquals(intval($number), $this->value);
           }
 
           /**
