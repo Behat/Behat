@@ -31,7 +31,7 @@
 
     "require-dev": {
         "symfony/process": "~2.5|~3.0|~4.0",
-        "phpunit/phpunit": "^4.8.36|^6.3"
+        "phpunit/phpunit": "^4.8.36|^6.3",
         "herrera-io/box": "~1.6.1"
     },
 
