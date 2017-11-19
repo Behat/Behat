@@ -158,8 +158,8 @@ Feature: Step Definition Pattern
            * @Given only second :second
            */
           public function invalidRegex($first = 'foo', $second = 'fiz') {
-            PHPUnit_Framework_Assert::assertEquals('foo', $first);
-            PHPUnit_Framework_Assert::assertEquals('bar', $second);
+            PHPUnit\Framework\Assert::assertEquals('foo', $first);
+            PHPUnit\Framework\Assert::assertEquals('bar', $second);
           }
       }
       """
@@ -192,7 +192,7 @@ Feature: Step Definition Pattern
            * @Given I can provide parameter :param
            */
           public function parameterCouldBeNull($param = null) {
-            PHPUnit_Framework_Assert::assertNull($param);
+            PHPUnit\Framework\Assert::assertNull($param);
           }
       }
       """
@@ -256,7 +256,7 @@ Feature: Step Definition Pattern
            *        parameter :param
            */
           public function parameterCouldBeNull($param = null) {
-            PHPUnit_Framework_Assert::assertNull($param);
+            PHPUnit\Framework\Assert::assertNull($param);
           }
       }
       """
@@ -295,8 +295,8 @@ Feature: Step Definition Pattern
            * @Given I can provide parameters :someParam and :someParam2
            */
           public function multipleWrongNamedParameters($param1, $param2) {
-            PHPUnit_Framework_Assert::assertEquals('one', $param1);
-            PHPUnit_Framework_Assert::assertEquals('two', $param2);
+            PHPUnit\Framework\Assert::assertEquals('one', $param1);
+            PHPUnit\Framework\Assert::assertEquals('two', $param2);
           }
       }
       """
@@ -328,8 +328,8 @@ Feature: Step Definition Pattern
            * @Given I can provide parameters :someParam and :someParam2
            */
           public function multipleWrongNamedParameters($param1, $someParam) {
-            PHPUnit_Framework_Assert::assertEquals('two', $param1);
-            PHPUnit_Framework_Assert::assertEquals('one', $someParam);
+            PHPUnit\Framework\Assert::assertEquals('two', $param1);
+            PHPUnit\Framework\Assert::assertEquals('one', $someParam);
           }
       }
       """
@@ -361,9 +361,9 @@ Feature: Step Definition Pattern
            * @Given I can provide :count parameters :firstParam and :otherParam
            */
           public function multipleWrongNamedParameters($param1, $firstParam, $count) {
-            PHPUnit_Framework_Assert::assertEquals('two', $param1);
-            PHPUnit_Framework_Assert::assertEquals('one', $firstParam);
-            PHPUnit_Framework_Assert::assertEquals(2, $count);
+            PHPUnit\Framework\Assert::assertEquals('two', $param1);
+            PHPUnit\Framework\Assert::assertEquals('one', $firstParam);
+            PHPUnit\Framework\Assert::assertEquals(2, $count);
           }
       }
       """
@@ -395,10 +395,10 @@ Feature: Step Definition Pattern
            * @Given I can provide :count parameters :firstParam and :otherParam with:
            */
           public function multipleWrongNamedParameters($param1, $firstParam, $count, $string) {
-            PHPUnit_Framework_Assert::assertEquals('two', $param1);
-            PHPUnit_Framework_Assert::assertEquals('one', $firstParam);
-            PHPUnit_Framework_Assert::assertEquals(2, $count);
-            PHPUnit_Framework_Assert::assertEquals("Test", (string) $string);
+            PHPUnit\Framework\Assert::assertEquals('two', $param1);
+            PHPUnit\Framework\Assert::assertEquals('one', $firstParam);
+            PHPUnit\Framework\Assert::assertEquals(2, $count);
+            PHPUnit\Framework\Assert::assertEquals("Test", (string) $string);
           }
       }
       """
@@ -433,9 +433,9 @@ Feature: Step Definition Pattern
            * @Given I can provide :count parameters for :name:
            */
           public function multipleWrongNamedParameters($count, $name, $string) {
-          PHPUnit_Framework_Assert::assertEquals('2', $count);
-            PHPUnit_Framework_Assert::assertEquals('thing', $name);
-            PHPUnit_Framework_Assert::assertEquals("Test", (string) $string);
+          PHPUnit\Framework\Assert::assertEquals('2', $count);
+            PHPUnit\Framework\Assert::assertEquals('thing', $name);
+            PHPUnit\Framework\Assert::assertEquals("Test", (string) $string);
           }
       }
       """
@@ -472,9 +472,9 @@ Feature: Step Definition Pattern
            */
           public function checkEquality($path = null, $isNegative = null, PyStringNode $json = null)
           {
-              PHPUnit_Framework_Assert::assertNull($path);
-              PHPUnit_Framework_Assert::assertNull($isNegative);
-              PHPUnit_Framework_Assert::assertNotNull($json);
+              PHPUnit\Framework\Assert::assertNull($path);
+              PHPUnit\Framework\Assert::assertNull($isNegative);
+              PHPUnit\Framework\Assert::assertNotNull($json);
           }
 
           /**
@@ -482,9 +482,9 @@ Feature: Step Definition Pattern
            */
           public function checkEquality2($json = null, $path = null, $isNegative = null)
           {
-              PHPUnit_Framework_Assert::assertNull($path);
-              PHPUnit_Framework_Assert::assertNull($isNegative);
-              PHPUnit_Framework_Assert::assertNotNull($json);
+              PHPUnit\Framework\Assert::assertNull($path);
+              PHPUnit\Framework\Assert::assertNull($isNegative);
+              PHPUnit\Framework\Assert::assertNotNull($json);
           }
       }
       """
@@ -523,7 +523,7 @@ Feature: Step Definition Pattern
            * @Given I have a package v:version
            */
           public function multipleWrongNamedParameters($version) {
-          PHPUnit_Framework_Assert::assertEquals('2.5', $version);
+          PHPUnit\Framework\Assert::assertEquals('2.5', $version);
           }
       }
       """
@@ -555,7 +555,7 @@ Feature: Step Definition Pattern
            * @When I enter the string :input
            */
           public function multipleWrongNamedParameters($input) {
-          PHPUnit_Framework_Assert::assertEquals('', $input);
+          PHPUnit\Framework\Assert::assertEquals('', $input);
           }
       }
       """
@@ -587,8 +587,8 @@ Feature: Step Definition Pattern
            * @Then images should be uploaded to web\/uploads\/media\/default\/:arg1\/:arg2\/
            */
           public function multipleWrongNamedParameters($arg1, $arg2) {
-          PHPUnit_Framework_Assert::assertEquals('0001', $arg1);
-          PHPUnit_Framework_Assert::assertEquals('01', $arg2);
+          PHPUnit\Framework\Assert::assertEquals('0001', $arg1);
+          PHPUnit\Framework\Assert::assertEquals('01', $arg2);
           }
       }
       """
@@ -620,7 +620,7 @@ Feature: Step Definition Pattern
            * @Given I have a negative number :num
            */
           public function multipleWrongNamedParameters($num) {
-          PHPUnit_Framework_Assert::assertEquals('-3', $num);
+          PHPUnit\Framework\Assert::assertEquals('-3', $num);
           }
       }
       """

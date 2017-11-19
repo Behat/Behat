@@ -47,7 +47,7 @@ Feature: Per-suite helper containers
 
           /** @Given service has no state */
           public function noState() {
-              PHPUnit_Framework_Assert::assertNull($this->service->number);
+              PHPUnit\Framework\Assert::assertNull($this->service->number);
           }
 
           /** @When service gets a state of :number in first context */
@@ -67,7 +67,7 @@ Feature: Per-suite helper containers
 
           /** @Then service should have a state of :number in second context */
           public function checkState($number) {
-              PHPUnit_Framework_Assert::assertSame($number, $this->service->number);
+              PHPUnit\Framework\Assert::assertSame($number, $this->service->number);
           }
       }
       """
