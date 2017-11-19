@@ -11,6 +11,7 @@
 use Behat\Behat\Context\Context;
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Gherkin\Node\PyStringNode;
+use PHPUnit\Framework\Assert;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -120,12 +121,12 @@ EOL;
         $this->createFile($this->workingDir . '/' . $filename, $content);
     }
 
-        /**
-         * Creates a noop feature in current workdir.
-         *
-         * @Given /^(?:there is )?a some feature scenarios/
-         */
-        public function aNoopFeature()
+    /**
+     * Creates a noop feature in current workdir.
+     *
+     * @Given /^(?:there is )?a some feature scenarios/
+     */
+    public function aNoopFeature()
     {
         $filename = 'features/bootstrap/FeatureContext.php';
         $content = <<<'EOL'
@@ -157,7 +158,7 @@ EOL;
      */
     public function fileShouldExist($path)
     {
-        PHPUnit_Framework_Assert::assertFileExists($this->workingDir . DIRECTORY_SEPARATOR . $path);
+        Assert::assertFileExists($this->workingDir . DIRECTORY_SEPARATOR . $path);
     }
 
     /**
@@ -259,7 +260,7 @@ EOL;
     public function itShouldPassWithNoOutput($success)
     {
         $this->itShouldFail($success);
-        PHPUnit_Framework_Assert::assertEmpty($this->getOutput());
+        Assert::assertEmpty($this->getOutput());
     }
 
     /**
@@ -273,7 +274,7 @@ EOL;
     public function fileShouldContain($path, PyStringNode $text)
     {
         $path = $this->workingDir . '/' . $path;
-        PHPUnit_Framework_Assert::assertFileExists($path);
+        Assert::assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
         // Normalize the line endings in the output
@@ -281,7 +282,7 @@ EOL;
             $fileContent = str_replace(PHP_EOL, "\n", $fileContent);
         }
 
-        PHPUnit_Framework_Assert::assertEquals($this->getExpectedOutput($text), $fileContent);
+        Assert::assertEquals($this->getExpectedOutput($text), $fileContent);
     }
 
     /**
@@ -295,7 +296,7 @@ EOL;
     public function fileXmlShouldBeLike($path, PyStringNode $text)
     {
         $path = $this->workingDir . '/' . $path;
-        PHPUnit_Framework_Assert::assertFileExists($path);
+        Assert::assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
 
@@ -305,7 +306,7 @@ EOL;
         $dom->loadXML($text);
         $dom->formatOutput = true;
 
-        PHPUnit_Framework_Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
+        Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
     }
 
 
@@ -318,7 +319,7 @@ EOL;
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        PHPUnit_Framework_Assert::assertContains($this->getExpectedOutput($text), $this->getOutput());
+        Assert::assertContains($this->getExpectedOutput($text), $this->getOutput());
     }
 
     private function getExpectedOutput(PyStringNode $expectedText)
@@ -366,13 +367,13 @@ EOL;
                 echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
             }
 
-            PHPUnit_Framework_Assert::assertNotEquals(0, $this->getExitCode());
+            Assert::assertNotEquals(0, $this->getExitCode());
         } else {
             if (0 !== $this->getExitCode()) {
                 echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
             }
 
-            PHPUnit_Framework_Assert::assertEquals(0, $this->getExitCode());
+            Assert::assertEquals(0, $this->getExitCode());
         }
     }
 

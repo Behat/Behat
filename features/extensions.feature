@@ -31,7 +31,7 @@ Feature: Extensions
 
           /** @Then the extension should be loaded */
           public function theExtensionLoaded() {
-              PHPUnit_Framework_Assert::assertEquals(array('param1' => 'val1', 'param2' => 'val2'), $this->extension);
+              PHPUnit\Framework\Assert::assertEquals(array('param1' => 'val1', 'param2' => 'val2'), $this->extension);
           }
       }
       """
