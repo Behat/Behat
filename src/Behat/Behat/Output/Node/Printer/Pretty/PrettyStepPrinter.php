@@ -191,9 +191,7 @@ final class PrettyStepPrinter implements StepPrinter
         }
 
         if ($argument instanceof PyStringNode) {
-            $text = '"""' . "\n" . $argument . "\n" . '"""';
-
-            return $text;
+            return '"""' . "\n" . $argument . "\n" . '"""';
         }
 
         return (string) $argument;

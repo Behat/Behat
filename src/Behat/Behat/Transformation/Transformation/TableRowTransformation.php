@@ -35,7 +35,7 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
     /**
      * {@inheritdoc}
      */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
@@ -61,7 +61,7 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
     {
         if (!$argumentValue instanceof TableNode) {
             return false;
-        };
+        }
 
         return $this->pattern === 'row:' . implode(',', $argumentValue->getRow(0));
     }

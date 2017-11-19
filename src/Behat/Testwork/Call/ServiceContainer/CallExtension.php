@@ -134,8 +134,8 @@ final class CallExtension implements Extension
      */
     protected function processCallFilters(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, CallExtension::CALL_FILTER_TAG);
-        $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
+        $references = $this->processor->findAndSortTaggedServices($container, self::CALL_FILTER_TAG);
+        $definition = $container->getDefinition(self::CALL_CENTER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerCallFilter', array($reference));
@@ -149,8 +149,8 @@ final class CallExtension implements Extension
      */
     protected function processCallHandlers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, CallExtension::CALL_HANDLER_TAG);
-        $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
+        $references = $this->processor->findAndSortTaggedServices($container, self::CALL_HANDLER_TAG);
+        $definition = $container->getDefinition(self::CALL_CENTER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerCallHandler', array($reference));
@@ -164,8 +164,8 @@ final class CallExtension implements Extension
      */
     protected function processResultFilters(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, CallExtension::RESULT_FILTER_TAG);
-        $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
+        $references = $this->processor->findAndSortTaggedServices($container, self::RESULT_FILTER_TAG);
+        $definition = $container->getDefinition(self::CALL_CENTER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerResultFilter', array($reference));
@@ -179,8 +179,8 @@ final class CallExtension implements Extension
      */
     private function processExceptionHandlers(ContainerBuilder $container)
     {
-        $references = $this->processor->findAndSortTaggedServices($container, CallExtension::EXCEPTION_HANDLER_TAG);
-        $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
+        $references = $this->processor->findAndSortTaggedServices($container, self::EXCEPTION_HANDLER_TAG);
+        $definition = $container->getDefinition(self::CALL_CENTER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerExceptionHandler', array($reference));

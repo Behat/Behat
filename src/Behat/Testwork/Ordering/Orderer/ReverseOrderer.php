@@ -27,9 +27,8 @@ final class ReverseOrderer implements Orderer
     public function order(array $scenarioIterators)
     {
         $orderedFeatures = $this->orderFeatures($scenarioIterators);
-        $orderedSuites = $this->orderSuites($orderedFeatures);
 
-        return $orderedSuites;
+        return $this->orderSuites($orderedFeatures);
     }
 
     /**

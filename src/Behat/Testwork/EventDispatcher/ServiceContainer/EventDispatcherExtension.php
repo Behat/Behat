@@ -101,7 +101,7 @@ class EventDispatcherExtension implements Extension
     protected function loadSigintController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\EventDispatcher\Cli\SigintController', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+            new Reference(self::DISPATCHER_ID)
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.sigint', $definition);

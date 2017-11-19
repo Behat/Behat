@@ -140,7 +140,8 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
                 $arguments = array();
 
                 if (is_array($context)) {
-                    $class = current(array_keys($context));
+                    $keys = array_keys($context);
+                    $class = current($keys);
                     $arguments = $context[$class];
                 }
 

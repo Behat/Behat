@@ -238,8 +238,8 @@ final class SuiteExtension implements Extension
         $definition = new Definition('Behat\Testwork\Suite\Generator\GenericSuiteGenerator', array(
             '%suite.generic.default_settings%'
         ));
-        $definition->addTag(SuiteExtension::GENERATOR_TAG, array('priority' => 50));
-        $container->setDefinition(SuiteExtension::GENERATOR_TAG . '.generic', $definition);
+        $definition->addTag(self::GENERATOR_TAG, array('priority' => 50));
+        $container->setDefinition(self::GENERATOR_TAG . '.generic', $definition);
     }
 
     /**
