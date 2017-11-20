@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [3.4.2] - 2017-11-20
+### Added
+  * [#1095](https://github.com/Behat/Behat/pull/1095): Support for Symfony 4.x
+  * [#1096](https://github.com/Behat/Behat/pull/1096): Allow to use latest PHPUnit
+
 ## [3.4.1] - 2017-09-18
 ### Fixed
   * PHP 5.3 style cleanup.
