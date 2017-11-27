@@ -61,8 +61,7 @@ Feature: Setting order of execution
       When I run "behat -fpretty --order=foo"
       Then it should fail with:
       """
-      [Behat\Testwork\Ordering\Exception\InvalidOrderException]
-        Order option 'foo' was not recognised
+      Order option 'foo' was not recognised
       """
 
   Scenario: Reverse order

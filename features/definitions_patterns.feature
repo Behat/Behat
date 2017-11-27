@@ -141,8 +141,7 @@ Feature: Step Definition Pattern
     When I run "behat -f progress --no-colors"
     Then it should fail with:
       """
-      [Behat\Behat\Definition\Exception\InvalidPatternException]
-        The regex `/I am (foo/` is invalid:
+      The regex `/I am (foo/` is invalid:
       """
 
   Scenario: Pattern with default values
@@ -235,8 +234,7 @@ Feature: Step Definition Pattern
     When I run "behat -f progress --no-colors"
     Then it should fail with:
       """
-      [Behat\Behat\Definition\Exception\InvalidPatternException]
-        Token name should not exceed 32 characters, but `too1234567891123456789012345678901` was used.
+      Token name should not exceed 32 characters, but `too1234567891123456789012345678901` was used.
       """
 
   Scenario: Multiline definitions

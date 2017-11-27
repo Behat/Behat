@@ -146,10 +146,10 @@ Feature: Suites
       default:
         suites:
           first:
-            paths:    [ %paths.base%/features/first ]
+            paths:    [ '%paths.base%/features/first' ]
             contexts: [ FirstContext ]
           second:
-            paths:    [ %paths.base%/features/second ]
+            paths:    [ '%paths.base%/features/second' ]
             contexts: [ SecondContext ]
       """
     When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
@@ -241,17 +241,16 @@ Feature: Suites
       default:
         suites:
           first:
-            paths:    %paths.base%/features/first
+            paths:    '%paths.base%/features/first'
             contexts: [ FirstContext ]
           second:
-            paths:    [ %paths.base%/features/second ]
+            paths:    [ '%paths.base%/features/second' ]
             contexts: [ SecondContext ]
       """
     When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
     Then it should fail with:
       """
-      Behat\Testwork\Suite\Exception\SuiteConfigurationException]
-        `paths` setting of the "first" suite is expected to be an array, string given.
+      `paths` setting of the "first" suite is expected to be an array, string given.
       """
 
   Scenario: Role-based suites

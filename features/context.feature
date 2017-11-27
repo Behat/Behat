@@ -311,8 +311,7 @@ Feature: Context consistency
     When I run "behat --no-colors -f progress features/params.feature"
     Then it should fail with:
       """
-      [Behat\Testwork\Suite\Exception\SuiteConfigurationException]
-        `contexts` setting of the "default" suite is expected to be an array, string given.
+      `contexts` setting of the "default" suite is expected to be an array, string given.
       """
 
   Scenario: Unexisting custom context class
@@ -337,8 +336,7 @@ Feature: Context consistency
   When I run "behat --no-colors -f progress features/params.feature"
   Then it should fail with:
     """
-    [Behat\Behat\Context\Exception\ContextNotFoundException]
-      `UnexistentContext` context class not found and can not be used.
+    `UnexistentContext` context class not found and can not be used.
     """
 
   Scenario: Unexisting context argument
@@ -365,8 +363,7 @@ Feature: Context consistency
     When I run "behat --no-colors -f progress features/params.feature"
     Then it should fail with:
       """
-      [Behat\Testwork\Argument\Exception\UnknownParameterValueException]
-        `CoreContext::__construct()` does not expect argument `$unexistingParam`.
+      `CoreContext::__construct()` does not expect argument `$unexistingParam`.
       """
 
   Scenario: Suite without contexts and FeatureContext available

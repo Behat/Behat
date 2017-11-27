@@ -604,8 +604,7 @@
     When I run "behat --no-colors -f junit -o junit.txt"
     Then it should fail with:
       """
-      [Behat\Testwork\Output\Exception\BadOutputPathException]
-        Directory expected for the `output_path` option, but a filename was given.
+      Directory expected for the `output_path` option, but a filename was given.
       """
 
   Scenario: Include BeforeStep Failures
