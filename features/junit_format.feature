@@ -373,10 +373,10 @@
                   contexts: [SmallKidContext]
                   filters:
                     role: small kid
-                  path: %paths.base%/features
+                  path: '%paths.base%/features'
               old_man:
                   contexts: [OldManContext]
-                  path: %paths.base%/features
+                  path: '%paths.base%/features'
                   filters:
                     role: old man
       """
