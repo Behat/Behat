@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [3.4.3] - 2017-11-27
+### Fixed
+  * BC break due to parameters resolution in Dependency Injection Container
+
 ## [3.4.2] - 2017-11-20
 ### Added
   * [#1095](https://github.com/Behat/Behat/pull/1095): Support for Symfony 4.x
@@ -867,7 +871,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
-[Unreleased]: https://github.com/Behat/Behat/compare/v3.4.2...HEAD
+[Unreleased]: https://github.com/Behat/Behat/compare/v3.4.3...HEAD
+[3.4.3]: https://github.com/Behat/Behat/compare/v3.4.2...v3.4.3
 [3.4.2]: https://github.com/Behat/Behat/compare/v3.4.1...v3.4.2
 [3.4.1]: https://github.com/Behat/Behat/compare/v3.4.0...v3.4.1
 [3.4.0]: https://github.com/Behat/Behat/compare/v3.3.1...v3.4.0
