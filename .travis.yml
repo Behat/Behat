@@ -1,6 +1,6 @@
 language: php
 
-php: [5.3, 5.4, 5.5, 5.6, 5.3.3, hhvm]
+php: [5.4, 5.5, 5.6, 5.3.3, hhvm]
 
 branches:
   except:
@@ -12,12 +12,17 @@ matrix:
   allow_failures:
     - php: hhvm
   include:
+    - php: 5.3
+      dist: precise
+    - php: 5.6
+      env: DEPENDENCIES='low'
     - php: 5.5
       env: SYMFONY_VERSION='2.3.*'
 
 before_script:
   - sh -c 'if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;'
-  - composer install --dev --prefer-source
+  - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
+  - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
   - export PATH=./bin:$PATH
   - echo "<?php echo '@php5' . implode(',@php5.', range(3, PHP_MINOR_VERSION));" > php_version_tags.php
 
