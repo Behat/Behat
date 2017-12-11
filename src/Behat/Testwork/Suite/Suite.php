@@ -48,4 +48,12 @@ interface Suite
      * @return mixed
      */
     public function getSetting($key);
+
+    /**
+     * Set key value pair to the settings
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+    public function setSetting($key, $value);
 }

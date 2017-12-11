@@ -34,7 +34,7 @@ final class GenericSuite implements Suite
      * @param string $name
      * @param array  $settings
      */
-    public function __construct($name, array $settings)
+    public function __construct($name, array $settings = [])
     {
         $this->name = $name;
         $this->settings = $settings;
@@ -92,5 +92,14 @@ final class GenericSuite implements Suite
         }
 
         return $this->settings[$key];
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
+    public function setSetting($key, $value)
+    {
+        $this->settings[$key] = $value;
     }
 }
