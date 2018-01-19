@@ -49,11 +49,11 @@ final class JUnitScenarioPrinter
     private $outlineStepCount;
 
     /**
-     * @var JUnitDurationListener
+     * @var JUnitDurationListener|null
      */
     private $durationListener;
 
-    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, JUnitDurationListener $durationListener)
+    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, JUnitDurationListener $durationListener = null)
     {
         $this->resultConverter = $resultConverter;
         $this->outlineStoreListener = $outlineListener;
@@ -79,7 +79,7 @@ final class JUnitScenarioPrinter
         $outputPrinter->addTestcase(array(
             'name' => $name,
             'status' => $this->resultConverter->convertResultToString($result),
-            'time' => $this->durationListener->getDuration($scenario)
+            'time' => $this->durationListener ? $this->durationListener->getDuration($scenario) : ''
         ));
     }
 

@@ -32,11 +32,11 @@ final class JUnitFeaturePrinter implements FeaturePrinter
     private $statistics;
 
     /**
-     * @var JUnitDurationListener
+     * @var JUnitDurationListener|null
      */
     private $durationListener;
 
-    public function __construct(PhaseStatistics $statistics, JUnitDurationListener $durationListener)
+    public function __construct(PhaseStatistics $statistics, JUnitDurationListener $durationListener = null)
     {
         $this->statistics = $statistics;
         $this->durationListener = $durationListener;
@@ -64,7 +64,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
             'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[StepResult::UNDEFINED],
-            'time' => $this->durationListener->getFeatureDuration($feature)
+            'time' => $this->durationListener ? $this->durationListener->getFeatureDuration($feature) : '',
         ));
         $this->statistics->reset();
     }
