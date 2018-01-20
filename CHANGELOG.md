@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+  * [#1116](https://github.com/Behat/Behat/pull/1116): Uniq filename for xml file
 
 ## [3.4.3] - 2017-11-27
 ### Fixed

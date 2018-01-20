@@ -100,7 +100,7 @@
               throw new PendingException();
           }
       """
-    And "junit/default.xml" file xml should be like:
+    And "junit/default*.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
@@ -126,7 +126,7 @@
         </testsuite>
       </testsuites>
       """
-    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+    And the file "junit/default*.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Multiple Features
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -187,7 +187,7 @@
           Then I must have 18
       """
     When I run "behat --no-colors -f junit -o junit"
-    And "junit/default.xml" file xml should be like:
+    And "junit/default*.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
@@ -199,7 +199,7 @@
         </testsuite>
       </testsuites>
       """
-    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+    And the file "junit/default*.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Multiline titles
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -262,7 +262,7 @@
       """
     When I run "behat --no-colors -f junit -o junit"
     Then it should pass with no output
-    And "junit/default.xml" file xml should be like:
+    And "junit/default*.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
@@ -272,7 +272,7 @@
         </testsuite>
       </testsuites>
       """
-    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+    And the file "junit/default*.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Multiple suites
     Given a file named "features/bootstrap/SmallKidContext.php" with:
@@ -382,7 +382,7 @@
       """
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with no output
-    And "junit/small_kid.xml" file xml should be like:
+    And "junit/small_kid*.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="small_kid">
@@ -391,8 +391,8 @@
         </testsuite>
       </testsuites>
       """
-    And the file "junit/small_kid.xml" should be a valid document according to "junit.xsd"
-    And "junit/old_man.xml" file xml should be like:
+    And the file "junit/small_kid*.xml" should be a valid document according to "junit.xsd"
+    And "junit/old_man*.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="old_man">
@@ -403,7 +403,7 @@
         </testsuite>
       </testsuites>
       """
-    And the file "junit/old_man.xml" should be a valid document according to "junit.xsd"
+    And the file "junit/old_man*.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Report skipped testcases
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -451,7 +451,7 @@
 
       """
     When I run "behat --no-colors -f junit -o junit"
-    And "junit/default.xml" file xml should be like:
+    And "junit/default*.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
@@ -461,7 +461,7 @@
         </testsuite>
       </testsuites>
       """
-    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+    And the file "junit/default*.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Stop on Failure
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -513,7 +513,7 @@
       """
     When I run "behat --no-colors -f junit -o junit"
     Then it should fail with no output
-    And "junit/default.xml" file xml should be like:
+    And "junit/default*.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
@@ -524,7 +524,7 @@
         </testsuite>
       </testsuites>
       """
-    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+    And the file "junit/default*.xml" should be a valid document according to "junit.xsd"
 
   @php-version @php5.3 @php5.4
   Scenario: Aborting due to PHP error
@@ -580,7 +580,7 @@
       """
       Call to undefined method PHPUnit\Framework\Assert::assertEqual
       """
-    And "junit/default.xml" file xml should be like:
+    And "junit/default*.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default"/>
@@ -650,7 +650,7 @@
 
       """
     When I run "behat --no-colors -f junit -o junit"
-    And "junit/default.xml" file xml should be like:
+    And "junit/default*.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
@@ -661,7 +661,7 @@
         </testsuite>
       </testsuites>
       """
-    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+    And the file "junit/default*.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Include AfterStep Failures
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -706,7 +706,7 @@
 
       """
     When I run "behat --no-colors -f junit -o junit"
-    And "junit/default.xml" file xml should be like:
+    And "junit/default*.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
@@ -717,4 +717,4 @@
         </testsuite>
       </testsuites>
       """
-    And the file "junit/default.xml" should be a valid document according to "junit.xsd"
+    And the file "junit/default*.xml" should be a valid document according to "junit.xsd"

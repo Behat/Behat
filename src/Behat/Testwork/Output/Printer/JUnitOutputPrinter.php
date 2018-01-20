@@ -57,7 +57,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function createNewFile($name, array $testsuitesAttributes = array())
     {
-        $this->setFileName(strtolower(trim(preg_replace('/[^[:alnum:]_]+/', '_', $name), '_')));
+        $this->setFileName(uniqid(strtolower(trim(preg_replace('/[^[:alnum:]_]+/', '_', $name), '_'))));
 
         $this->domDocument = new \DOMDocument(self::XML_VERSION, self::XML_ENCODING);
         $this->domDocument->formatOutput = true;

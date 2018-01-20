@@ -157,7 +157,7 @@ EOL;
      */
     public function fileShouldExist($path)
     {
-        Assert::assertFileExists($this->workingDir . DIRECTORY_SEPARATOR . $path);
+        $this->findFileByPattern($this->workingDir . DIRECTORY_SEPARATOR . $path);
     }
 
     /**
@@ -272,8 +272,7 @@ EOL;
      */
     public function fileShouldContain($path, PyStringNode $text)
     {
-        $path = $this->workingDir . '/' . $path;
-        Assert::assertFileExists($path);
+        $path = $this->findFileByPattern($this->workingDir . DIRECTORY_SEPARATOR . $path);
 
         $fileContent = trim(file_get_contents($path));
         // Normalize the line endings in the output
@@ -294,8 +293,7 @@ EOL;
      */
     public function fileXmlShouldBeLike($path, PyStringNode $text)
     {
-        $path = $this->workingDir . '/' . $path;
-        Assert::assertFileExists($path);
+        $path = $this->findFileByPattern($this->workingDir . DIRECTORY_SEPARATOR . $path);
 
         $fileContent = trim(file_get_contents($path));
 
@@ -385,7 +383,7 @@ EOL;
     public function xmlShouldBeValid($xmlFile, $schemaPath)
     {
         $dom = new DomDocument();
-        $dom->load($this->workingDir . '/' . $xmlFile);
+        $dom->load($this->findFileByPattern($this->workingDir . DIRECTORY_SEPARATOR . $xmlFile));
 
         $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);
     }
@@ -451,5 +449,19 @@ EOL;
         }
 
         rmdir($path);
+    }
+
+    /**
+     * Looks for a file by it's name or a pattern like "default*.xml"
+     *
+     * @param string $path
+     * @return string
+     */
+    private function findFileByPattern($path)
+    {
+        $files = glob($path);
+        Assert::assertNotFalse($files, "Error occurred when searching for files.");
+        Assert::assertCount(1, $files, "Couldn't find file at $path");
+        return array_shift($files);
     }
 }
