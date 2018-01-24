@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Cli;
 
+use Behat\Testwork\Call\Exception\FatalThrowableError;
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationLoader;
 use Behat\Testwork\ServiceContainer\ContainerLoader;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
@@ -121,7 +122,14 @@ final class Application extends BaseApplication
 
         $this->add($this->createCommand($input, $output));
 
-        return parent::doRun($input, $output);
+        try {
+            return parent::doRun($input, $output);
+        } catch(\Error $error) {
+            // Catch PHP 7 Error's and rethrow them as FatalThrowableError exception
+            // This will make sure that the Symfony Console application returns a non-zero exit code
+
+            throw new FatalThrowableError($error);
+        }
     }
 
     protected function getDefaultCommands()
