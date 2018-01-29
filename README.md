@@ -14,8 +14,7 @@ Installing Behat
 The easiest way to install Behat is by using [Composer](https://getcomposer.org):
 
 ```bash
-$> curl -sS https://getcomposer.org/installer | php
-$> php composer.phar require behat/behat
+$> composer require --dev behat/behat
 ```
 
 After that you'll be able to run Behat via:
@@ -30,8 +29,7 @@ Installing Development Version
 Clone the repository and install dependencies via [Composer](https://getcomposer.org):
 
 ```bash
-$> curl -sS https://getcomposer.org/installer | php
-$> php composer.phar install
+$> composer install
 ```
 
 After that you will be able to run development version of Behat via:
