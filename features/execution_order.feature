@@ -38,7 +38,7 @@ Feature: Setting order of execution
       """
 
   Scenario: No order specified
-    When I run "behat -fpretty"
+    When I run "behat -fpretty --no-colors"
     Then it should pass with:
       """
       Feature: Feature 1
@@ -65,7 +65,7 @@ Feature: Setting order of execution
       """
 
   Scenario: Reverse order
-    When I run "behat -fpretty --order=reverse"
+    When I run "behat -fpretty --order=reverse --no-colors"
     Then it should pass with:
       """
       Feature: Feature 2
