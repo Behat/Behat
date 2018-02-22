@@ -565,3 +565,77 @@ Feature: Step Arguments Transformations
       1 scenario (1 passed)
       4 steps (4 passed)
       """
+
+  Scenario: Unicode Named Arguments Transformations
+    Given a file named "features/step_arguments_unicode.feature" with:
+      """
+      Feature: Step Arguments
+        Scenario:
+          Given I am боб
+          Then Username must be "боб"
+
+        Scenario:
+          Given I am "элис"
+          Then Username must be "элис"
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ....
+
+      2 scenarios (2 passed)
+      4 steps (4 passed)
+      """
+
+  Scenario: Ordinal Arguments without quotes Transformations
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+      use Behat\Gherkin\Node\TableNode;
+
+      class FeatureContext implements Context
+      {
+          private $index;
+
+          /** @Transform /^(0|[1-9]\d*)(?:st|nd|rd|th)?$/ */
+          public function castToInt($number) {
+            return intval($number) < PHP_INT_MAX ? intval($number) : $number;
+          }
+
+          /** @Given I pick the :index thing */
+          public function iPickThing($index) {
+              $this->index = $index;
+          }
+
+          /** @Then the index should be :value */
+          public function theIndexShouldBe($value) {
+              PHPUnit\Framework\Assert::assertSame($value, $this->index);
+          }
+      }
+      """
+    And a file named "features/ordinal_arguments.feature" with:
+      """
+      Feature: Ordinal Step Arguments
+        Scenario:
+          Given I pick the 1st thing
+          Then the index should be "1"
+        Scenario:
+          Given I pick the "1st" thing
+          Then the index should be "1"
+        Scenario:
+          Given I pick the 27th thing
+          Then the index should be "27"
+        Scenario:
+          Given I pick the 5 thing
+          Then the index should be "5"
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ........
+
+      4 scenarios (4 passed)
+      8 steps (8 passed)
+      """

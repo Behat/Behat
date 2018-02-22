@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+  * [#1129](https://github.com/Behat/Behat/issues/1129): Fix quoteless
+    definition arguments matching with unicode characters
 
 ## [3.4.3] - 2017-11-27
 ### Fixed
