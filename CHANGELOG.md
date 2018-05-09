@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+  * [#1144](https://github.com/Behat/Behat/pull/1144) : Allow to use arrays as context parameters
 
 ## [3.4.3] - 2017-11-27
 ### Fixed
