@@ -6,7 +6,7 @@ clone_folder: c:\projects\behat
 
 environment:
     matrix:
-        - PHP_DOWNLOAD_FILE: php-7.2.1-nts-Win32-VC15-x86.zip
+        - PHP_DOWNLOAD_FILE: php-7.2.5-nts-Win32-VC15-x86.zip
 
 branches:
   only:
@@ -28,7 +28,7 @@ init:
 install:
     - IF EXIST c:\php (SET PHP=0) ELSE (mkdir c:\php)
     - cd c:\php
-    - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/releases/%PHP_DOWNLOAD_FILE%
+    - IF %PHP%==1 appveyor DownloadFile https://windows.php.net/downloads/releases/%PHP_DOWNLOAD_FILE%
     - IF %PHP%==1 7z x %PHP_DOWNLOAD_FILE% -y > 7z.log
     - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
     - appveyor DownloadFile https://getcomposer.org/composer.phar
