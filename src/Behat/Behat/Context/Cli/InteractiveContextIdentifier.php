@@ -70,7 +70,7 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
 
         $message = $this->translator->trans('snippet_context_choice', array('%1%' => $suiteName), 'output');
         $choices = array_values(array_merge(array('None'), $contextClasses));
-        $default = current($contextClasses);
+        $default = 1;
 
         $answer = $this->askQuestion('>> ' . $message, $choices, $default);
 
