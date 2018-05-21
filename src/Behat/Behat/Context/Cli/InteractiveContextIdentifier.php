@@ -51,7 +51,7 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
         $this->input = $input;
         $this->output = $output;
     }
-    
+
     /**
      * {@inheritdoc}
      */
