@@ -79,9 +79,11 @@ final class PatternTransformer
                 }
             }
         }
+
+        if (!isset($this->patternToRegexpCache[$pattern])) {
+            throw new UnknownPatternException(sprintf('Can not find policy for a pattern `%s`.', $pattern), $pattern);
+        }
+
         return $this->patternToRegexpCache[$pattern];
-
-
-        throw new UnknownPatternException(sprintf('Can not find policy for a pattern `%s`.', $pattern), $pattern);
     }
 }
