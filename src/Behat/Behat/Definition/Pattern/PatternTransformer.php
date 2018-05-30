@@ -72,18 +72,20 @@ final class PatternTransformer
     public function transformPatternToRegex($pattern)
     {
         if (!isset($this->patternToRegexpCache[$pattern])) {
-            foreach ($this->policies as $policy) {
-                if ($policy->supportsPattern($pattern)) {
-                    $this->patternToRegexpCache[$pattern] = $policy->transformPatternToRegex($pattern);
-                    break;
-                }
-            }
-        }
-
-        if (!isset($this->patternToRegexpCache[$pattern])) {
-            throw new UnknownPatternException(sprintf('Can not find policy for a pattern `%s`.', $pattern), $pattern);
+            $this->patternToRegexpCache[$pattern] = $this->transformPatternToRegexWithSupportedPolicy($pattern);
         }
 
         return $this->patternToRegexpCache[$pattern];
+    }
+
+    private function transformPatternToRegexWithSupportedPolicy($pattern)
+    {
+        foreach ($this->policies as $policy) {
+            if ($policy->supportsPattern($pattern)) {
+                return $policy->transformPatternToRegex($pattern);
+            }
+        }
+
+        throw new UnknownPatternException(sprintf('Can not find policy for a pattern `%s`.', $pattern), $pattern);
     }
 }
