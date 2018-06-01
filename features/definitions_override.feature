@@ -3,7 +3,7 @@ Feature: Step Definitions Override
   As a step definitions developer
   I need to be able to override definition methods
 
-  Scenario: Overriden method without own annotation will inherit parent pattern
+  Scenario: Overridden method without own annotation will inherit parent pattern
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
@@ -38,7 +38,7 @@ Feature: Step Definitions Override
       1 step (1 passed)
       """
 
-  Scenario: Overriden method with different annotation will have both patterns
+  Scenario: Overridden method with different annotation will have both patterns
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
