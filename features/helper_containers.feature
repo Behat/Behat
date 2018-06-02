@@ -362,6 +362,7 @@ Feature: Per-suite helper containers
           public function load(ContainerBuilder $container, array $config) {
               $definition = new Definition('MyContainer', array());
               $definition->addTag(HelperContainerExtension::HELPER_CONTAINER_TAG);
+              $definition->setPublic(true);
 
               if (method_exists($definition, 'setShared')) {
                   $definition->setShared(false); // <- Starting Symfony 2.8
