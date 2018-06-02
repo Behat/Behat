@@ -517,7 +517,7 @@ Feature: Suites
             filters:
               role:   big brother
       """
-    When I run "behat --no-colors -sbig_brother -fpretty --format-settings='{\"paths\": true}' features"
+    When I run "behat --no-colors -s big_brother -fpretty --format-settings='{\"paths\": true}' features"
     Then it should pass with:
       """
       Feature: Apples story
