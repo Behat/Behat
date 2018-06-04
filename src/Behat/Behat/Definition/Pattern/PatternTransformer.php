@@ -26,6 +26,9 @@ final class PatternTransformer
      */
     private $policies = array();
 
+    /**
+     * @var string[]
+     */
     private $patternToRegexpCache = array();
 
     /**
@@ -78,6 +81,13 @@ final class PatternTransformer
         return $this->patternToRegexpCache[$pattern];
     }
 
+    /**
+     * @param string $pattern
+     *
+     * @return string
+     *
+     * @throws UnknownPatternException
+     */
     private function transformPatternToRegexWithSupportedPolicy($pattern)
     {
         foreach ($this->policies as $policy) {
