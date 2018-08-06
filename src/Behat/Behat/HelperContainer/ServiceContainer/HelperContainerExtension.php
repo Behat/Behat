@@ -19,6 +19,7 @@ use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Behat helper container extension.
@@ -76,7 +77,9 @@ final class HelperContainerExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $definition = new Definition('Behat\Behat\HelperContainer\Argument\ServicesResolverFactory', array($container));
+        $definition = new Definition('Behat\Behat\HelperContainer\Argument\ServicesResolverFactory', array(
+            new Reference('service_container')
+        ));
         $definition->addTag(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG, array('priority' => 0));
         $container->setDefinition(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG . '.helper_container', $definition);
 

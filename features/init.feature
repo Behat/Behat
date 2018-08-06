@@ -19,10 +19,10 @@ Feature: Init
     And a file named "behat.yml" with:
       """
       default:
-        autoload: %paths.base%/supp
+        autoload: '%paths.base%/supp'
         suites:
           default:
-            paths:    [ %paths.base%/scenarios ]
+            paths:    [ '%paths.base%/scenarios' ]
             contexts: [ CustomContext ]
       """
     When I run "behat --no-colors --init"
@@ -39,13 +39,13 @@ Feature: Init
     And a file named "behat.yml" with:
       """
       default:
-        autoload: %paths.base%/contexts
+        autoload: '%paths.base%/contexts'
         suites:
           suite1:
-            paths:    [ %paths.base%/scenarios1 ]
+            paths:    [ '%paths.base%/scenarios1' ]
             contexts: [ Custom1Context ]
           suite2:
-            paths:    [ %paths.base%/scenarios2 ]
+            paths:    [ '%paths.base%/scenarios2' ]
             contexts: [ Custom2Context ]
       """
     When I run "behat --no-colors --init"
@@ -65,10 +65,10 @@ Feature: Init
     And a file named "behat.yml" with:
       """
       default:
-        autoload: %paths.base%/supp
+        autoload: '%paths.base%/supp'
         suites:
           default:
-            paths:    [ %paths.base%/scenarios ]
+            paths:    [ '%paths.base%/scenarios' ]
             contexts:
               - CustomContext: [ 'a', 'b' ]
       """

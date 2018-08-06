@@ -311,8 +311,7 @@ Feature: Context consistency
     When I run "behat --no-colors -f progress features/params.feature"
     Then it should fail with:
       """
-      [Behat\Testwork\Suite\Exception\SuiteConfigurationException]
-        `contexts` setting of the "default" suite is expected to be an array, string given.
+      `contexts` setting of the "default" suite is expected to be an array, string given.
       """
 
   Scenario: Unexisting custom context class
@@ -337,8 +336,7 @@ Feature: Context consistency
   When I run "behat --no-colors -f progress features/params.feature"
   Then it should fail with:
     """
-    [Behat\Behat\Context\Exception\ContextNotFoundException]
-      `UnexistentContext` context class not found and can not be used.
+    `UnexistentContext` context class not found and can not be used.
     """
 
   Scenario: Unexisting context argument
@@ -365,8 +363,7 @@ Feature: Context consistency
     When I run "behat --no-colors -f progress features/params.feature"
     Then it should fail with:
       """
-      [Behat\Testwork\Argument\Exception\UnknownParameterValueException]
-        `CoreContext::__construct()` does not expect argument `$unexistingParam`.
+      `CoreContext::__construct()` does not expect argument `$unexistingParam`.
       """
 
   Scenario: Suite without contexts and FeatureContext available
@@ -469,3 +466,42 @@ Feature: Context consistency
       2 scenarios (2 passed)
       2 steps (2 passed)
       """
+
+  Scenario: Array arguments
+    Given a file named "behat.yml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FirstContext:
+                - [foo, bar]
+      """
+    And a file named "features/context-args-array.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given foo
+      """
+    And a file named "features/bootstrap/FirstContext.php" with:
+      """
+      <?php use Behat\Behat\Context\Context;
+
+      class FirstContext implements Context {
+          private $foo;
+
+          public function __construct(array $foo) {
+            $this->foo = $foo;
+          }
+
+          /** @Given foo */
+          public function foo() {
+            PHPUnit\Framework\Assert::assertInternalType('array', $this->foo);
+
+            PHPUnit\Framework\Assert::assertSame('foo', $this->foo[0]);
+            PHPUnit\Framework\Assert::assertSame('bar', $this->foo[1]);
+          }
+      }
+      """
+    When I run "behat --no-colors -f progress features/context-args-array.feature"
+    Then it should pass

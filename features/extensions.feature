@@ -119,8 +119,7 @@ Feature: Extensions
     When I run "behat -f progress --no-colors"
     Then it should fail with:
       """
-      [Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException]
-        `inexistent_extension` extension file or class could not be located.
+      `inexistent_extension` extension file or class could not be located.
       """
 
   @php-version @php7.0

@@ -13,6 +13,7 @@ namespace Behat\Testwork\Argument;
 use ReflectionFunctionAbstract;
 use ReflectionClass;
 use ReflectionParameter;
+use ReflectionException;
 
 /**
  * Organises function arguments using its reflection.
@@ -225,7 +226,11 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
                 continue;
             }
 
-            $reflectionClass = $parameter->getClass();
+            try {
+                $reflectionClass = $parameter->getClass();
+            } catch (ReflectionException $e) {
+                continue;
+            }
 
             if (!$reflectionClass) {
                 continue;
@@ -252,7 +257,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         array $parameters,
         array &$candidates,
         array &$arguments,
-        callable $predicate
+        $predicate
     ) {
         $filtered = $this->filterApplicableTypehintedParameters($parameters);
 
@@ -275,7 +280,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         ReflectionParameter $parameter,
         array &$candidates,
         array &$arguments,
-        callable $predicate
+        $predicate
     ) {
         foreach ($candidates as $candidateIndex => $candidate) {
             if (call_user_func_array($predicate, array($parameter->getClass(), $candidate))) {

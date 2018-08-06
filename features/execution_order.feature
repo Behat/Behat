@@ -38,7 +38,7 @@ Feature: Setting order of execution
       """
 
   Scenario: No order specified
-    When I run "behat -fpretty"
+    When I run "behat -fpretty --no-colors"
     Then it should pass with:
       """
       Feature: Feature 1
@@ -61,12 +61,11 @@ Feature: Setting order of execution
       When I run "behat -fpretty --order=foo"
       Then it should fail with:
       """
-      [Behat\Testwork\Ordering\Exception\InvalidOrderException]
-        Order option 'foo' was not recognised
+      Order option 'foo' was not recognised
       """
 
   Scenario: Reverse order
-    When I run "behat -fpretty --order=reverse"
+    When I run "behat -fpretty --order=reverse --no-colors"
     Then it should pass with:
       """
       Feature: Feature 2
