@@ -5,14 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Fixed
-  * [#1081](https://github.com/Behat/Behat/pull/1081): Do not use isset to be
-    able to check for intentional `null` values when autowiring contexts
 
 ### Added
   * [#1144](https://github.com/Behat/Behat/pull/1144) : Support for arrays as context parameters
+  * [#1083](https://github.com/Behat/Behat/pull/1083): JUnit time attribute
 ### Fixed
   * Serializable definitions for Symfony 4.x
+  * [#1081](https://github.com/Behat/Behat/pull/1081): Do not use isset to be
+    able to check for intentional `null` values when autowiring contexts
 ### Fixed
   * [#1129](https://github.com/Behat/Behat/issues/1129): Fix quoteless
     definition arguments matching with unicode characters
