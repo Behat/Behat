@@ -6,9 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-  * [#1144](https://github.com/Behat/Behat/pull/1144) : Support for arrays as context parameters
+  * [#1144](https://github.com/Behat/Behat/pull/1144) : Allow to use arrays as context parameters 
+ 
+### Changed
+  * [#1153](https://github.com/Behat/Behat/pull/1153) : Cache pattern to regex transformations 
+  * [#1155](https://github.com/Behat/Behat/pull/1155) : Remove composer suggestions
+ 
 ### Fixed
-  * Serializable definitions for Symfony 4.x
+  * Custom container must be public for symfony 4 
+  * [#1160](https://github.com/Behat/Behat/pull/1160) : Register CLI services as synthetic
+  * [#1163](https://github.com/Behat/Behat/pull/1163) : Allow for new-style symfony serialisation
 
 ## [3.4.3] - 2017-11-27
 ### Fixed
