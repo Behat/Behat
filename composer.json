@@ -35,12 +35,6 @@
         "herrera-io/box": "~1.6.1"
     },
 
-    "suggest": {
-        "behat/symfony2-extension": "for integration with Symfony2 web framework",
-        "behat/yii-extension": "for integration with Yii web framework",
-        "behat/mink-extension": "for integration with Mink testing framework"
-    },
-
     "autoload": {
         "psr-0": {
             "Behat\\Behat": "src/",
