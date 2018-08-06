@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+  * [#1144](https://github.com/Behat/Behat/pull/1144) : Support for arrays as context parameters
 ### Fixed
   * Serializable definitions for Symfony 4.x
 
