@@ -63,7 +63,7 @@ final class ServicesResolver implements ArgumentResolver
      */
     private function resolveArgument($value)
     {
-        if (0 === mb_strpos($value, '@')) {
+        if (is_string($value) && 0 === mb_strpos($value, '@')) {
             return $this->container->get(mb_substr($value, 1));
         }
 
