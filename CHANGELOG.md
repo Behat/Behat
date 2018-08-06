@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+  * [#1081](https://github.com/Behat/Behat/pull/1081): Do not use isset to be
+    able to check for intentional `null` values when autowiring contexts
 
 ### Added
   * [#1144](https://github.com/Behat/Behat/pull/1144) : Support for arrays as context parameters

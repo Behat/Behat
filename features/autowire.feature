@@ -106,6 +106,41 @@ Feature: Helper services autowire
     When I run "behat --no-colors -f progress features/autowire.feature"
     Then it should pass
 
+  Scenario: Null arguments should be skipped
+    Given a file named "behat.yaml" with:
+      """
+      default:
+        suites:
+          default:
+            contexts:
+              - FeatureContext:
+                  name: null
+            services: ServiceContainer
+            autowire: true
+      """
+    And a file named "features/autowire.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given a step
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context {
+          public function __construct($name, Service1 $s1, Service3 $s3)
+          {
+              PHPUnit\Framework\Assert::assertNull($name);
+          }
+
+          /** @Given a step */
+          public function aStep() {}
+      }
+      """
+    When I run "behat --no-colors -f progress features/autowire.feature"
+    Then it should pass
+
   Scenario: Unregistered services as constructor arguments
     Given a file named "features/autowire.feature" with:
       """
