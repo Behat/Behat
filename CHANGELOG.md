@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+  * Serializable definitions for Symfony 4.x
 
 ## [3.4.3] - 2017-11-27
 ### Fixed
