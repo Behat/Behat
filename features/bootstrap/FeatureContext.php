@@ -9,6 +9,7 @@
  */
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Gherkin\Node\PyStringNode;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Process\PhpExecutableFinder;
@@ -298,6 +299,8 @@ EOL;
         Assert::assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
+
+        $fileContent = preg_replace('/time="(.*)"/', 'time="-IGNORE-VALUE-"', $fileContent);
 
         $dom = new DOMDocument();
         $dom->loadXML($text);
