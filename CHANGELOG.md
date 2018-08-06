@@ -4,18 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.5.0] - 2018-08-06
 ### Added
-  * [#1144](https://github.com/Behat/Behat/pull/1144) : Allow to use arrays as context parameters 
+  * [#1144](https://github.com/Behat/Behat/pull/1144): Allow to use arrays as context parameters 
+  * [#1081](https://github.com/Behat/Behat/pull/1081): Allow passing null as a named context parameter
+  * [#1083](https://github.com/Behat/Behat/pull/1083): Time attribute in JUnit output
  
 ### Changed
-  * [#1153](https://github.com/Behat/Behat/pull/1153) : Cache pattern to regex transformations 
-  * [#1155](https://github.com/Behat/Behat/pull/1155) : Remove composer suggestions
+  * [#1153](https://github.com/Behat/Behat/pull/1153): Cache pattern to regex transformations 
+  * [#1155](https://github.com/Behat/Behat/pull/1155): Remove composer suggestions
  
 ### Fixed
   * Custom container must be public for symfony 4 
-  * [#1160](https://github.com/Behat/Behat/pull/1160) : Register CLI services as synthetic
-  * [#1163](https://github.com/Behat/Behat/pull/1163) : Allow for new-style symfony serialisation
+  * [#1160](https://github.com/Behat/Behat/pull/1160): Register CLI services as synthetic
+  * [#1163](https://github.com/Behat/Behat/pull/1163): Allow for new-style symfony serialisation
+  * [#1130](https://github.com/Behat/Behat/pull/1130): Fix quoteless definition arguments matching with unicode characters
 
 ## [3.4.3] - 2017-11-27
 ### Fixed

@@ -359,3 +359,82 @@ Feature: Definitions translations
       2 scenarios (2 passed)
       10 steps (10 passed)
       """
+
+  Scenario: Translations with arguments without quotes
+    Given a file named "features/calc_ru_arguments.feature" with:
+      """
+      # language: ru
+      Функция: Индексы
+
+        Сценарий:
+          Допустим Я беру 14ую вещь
+          То индекс должен быть "14"
+
+        Сценарий:
+          Допустим Я беру "2ю" вещь
+          То индекс должен быть "2"
+
+        Сценарий:
+          Допустим Я беру 5 вещь
+          То индекс должен быть "5"
+
+        Сценарий:
+          Допустим Я беру "10" вещь
+          То индекс должен быть "10"
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\TranslatableContext;
+
+      class FeatureContext implements TranslatableContext
+      {
+          private $index;
+
+          /** @Transform /^(0|[1-9]\d*)(?:ую|ью|ю|ый|ой|ий|ый|й|ом|ем|м)?$/ */
+          public function castToInt($number) {
+            return intval($number) < PHP_INT_MAX ? intval($number) : $number;
+          }
+
+          /** @Given I pick the :index thing */
+          public function iPickThing($index) {
+              $this->index = $index;
+          }
+
+          /** @Then /^the index should be "([^"]*)"$/ */
+          public function theIndexShouldBe($value) {
+              PHPUnit\Framework\Assert::assertSame($value, $this->index);
+          }
+
+          public static function getTranslationResources() {
+              return array(__DIR__ . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR . 'ru.xliff');
+          }
+      }
+      """
+    And a file named "features/bootstrap/i18n/ru.xliff" with:
+      """
+      <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+        <file original="global" source-language="en" target-language="ru" datatype="plaintext">
+          <header />
+          <body>
+            <trans-unit id="i-pick-the-thing">
+              <source>I pick the :index thing</source>
+              <target>я беру :index вещь</target>
+            </trans-unit>
+            <trans-unit id="the-index-should-be">
+              <source>/^the index should be "([^"]*)"$/</source>
+              <target>/^индекс должен быть "([^"]*)"$/</target>
+            </trans-unit>
+          </body>
+        </file>
+      </xliff>
+      """
+    When I run "behat --no-colors -f progress features/calc_ru_arguments.feature"
+    Then it should pass with:
+      """
+      ........
+
+      4 scenarios (4 passed)
+      8 steps (8 passed)
+      """

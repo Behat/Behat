@@ -73,12 +73,14 @@ final class JUnitFormatterFactory implements FormatterFactory
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitFeaturePrinter', array(
             new Reference('output.junit.statistics'),
+            new Reference('output.node.listener.junit.duration')
         ));
         $container->setDefinition('output.node.printer.junit.feature', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter', array(
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference('output.node.listener.junit.outline'),
+            new Reference('output.node.listener.junit.duration')
         ));
         $container->setDefinition('output.node.printer.junit.scenario', $definition);
 
@@ -109,9 +111,15 @@ final class JUnitFormatterFactory implements FormatterFactory
         );
         $container->setDefinition('output.node.listener.junit.outline', $definition);
 
+        $definition = new Definition(
+            'Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener'
+        );
+
+        $container->setDefinition('output.node.listener.junit.duration', $definition);
 
         $definition = new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
             array(
+                new Reference('output.node.listener.junit.duration'),
                 new Reference('output.node.listener.junit.outline'),
                 new Definition('Behat\Behat\Output\Node\EventListener\JUnit\JUnitFeatureElementListener', array(
                     new Reference('output.node.printer.junit.feature'),
