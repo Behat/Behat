@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.5.0] - 2018-08-06
+## [3.5.0] - 2018-08-10
 ### Added
   * [#1144](https://github.com/Behat/Behat/pull/1144): Allow to use arrays as context parameters 
   * [#1081](https://github.com/Behat/Behat/pull/1081): Allow passing null as a named context parameter
