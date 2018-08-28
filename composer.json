@@ -35,12 +35,18 @@
     },
 
     "autoload": {
-        "psr-0": {
-            "Behat\\Behat": "src/",
-            "Behat\\Testwork": "src/"
+        "psr-4": {
+            "Behat\\Behat\\": "src/Behat/Behat/",
+            "Behat\\Testwork\\": "src/Behat/Testwork/"
         }
     },
-
+    
+    "autoload-dev": {
+        "psr-4": {
+            "Behat\\Tests\\": "tests/"
+        }
+    },
+    
     "extra": {
         "branch-alias": {
             "dev-master": "3.5.x-dev"
