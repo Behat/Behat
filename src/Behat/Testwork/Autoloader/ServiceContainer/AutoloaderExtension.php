@@ -149,7 +149,7 @@ final class AutoloaderExtension implements Extension
         $prefixes = $container->getParameter('class_loader.prefixes');
 
         foreach ($prefixes as $prefix => $path) {
-            $loaderDefinition->addMethodCall('addPsr4', array($prefix, $path));
+            $loaderDefinition->addMethodCall('add', array($prefix, $path));
         }
     }
 }
