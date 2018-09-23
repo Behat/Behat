@@ -16,7 +16,7 @@ use Behat\Testwork\Filesystem\FilesystemLogger;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Setup\SuiteSetup;
 use Behat\Testwork\Suite\Suite;
-use Symfony\Component\ClassLoader\ClassLoader;
+use Composer\Autoload\ClassLoader;
 
 /**
  * Generates classes for all contexts in the suite using autoloader.

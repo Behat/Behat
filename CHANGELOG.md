@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
   * [#1116](https://github.com/Behat/Behat/pull/1116): Uniq filename for xml file
 
+## [3.5.0] - 2018-08-10
+### Added
+  * [#1144](https://github.com/Behat/Behat/pull/1144): Allow to use arrays as context parameters 
+  * [#1081](https://github.com/Behat/Behat/pull/1081): Allow passing null as a named context parameter
+  * [#1083](https://github.com/Behat/Behat/pull/1083): Time attribute in JUnit output
+ 
+### Changed
+  * [#1153](https://github.com/Behat/Behat/pull/1153): Cache pattern to regex transformations 
+  * [#1155](https://github.com/Behat/Behat/pull/1155): Remove composer suggestions
+ 
+### Fixed
+  * Custom container must be public for symfony 4 
+  * [#1160](https://github.com/Behat/Behat/pull/1160): Register CLI services as synthetic
+  * [#1163](https://github.com/Behat/Behat/pull/1163): Allow for new-style symfony serialisation
+  * [#1130](https://github.com/Behat/Behat/pull/1130): Fix quoteless definition arguments matching with unicode characters
+
 ## [3.4.3] - 2017-11-27
 ### Fixed
   * BC break due to parameters resolution in Dependency Injection Container
@@ -873,7 +889,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
-[Unreleased]: https://github.com/Behat/Behat/compare/v3.4.3...HEAD
+[Unreleased]: https://github.com/Behat/Behat/compare/v3.5.0...master
+[3.5.0]: https://github.com/Behat/Behat/compare/v3.4.3...v3.5.0
 [3.4.3]: https://github.com/Behat/Behat/compare/v3.4.2...v3.4.3
 [3.4.2]: https://github.com/Behat/Behat/compare/v3.4.1...v3.4.2
 [3.4.1]: https://github.com/Behat/Behat/compare/v3.4.0...v3.4.1

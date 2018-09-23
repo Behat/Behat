@@ -27,6 +27,11 @@ final class PatternTransformer
     private $policies = array();
 
     /**
+     * @var string[]
+     */
+    private $patternToRegexpCache = array();
+
+    /**
      * Registers pattern policy.
      *
      * @param PatternPolicy $policy
@@ -34,6 +39,7 @@ final class PatternTransformer
     public function registerPatternPolicy(PatternPolicy $policy)
     {
         $this->policies[] = $policy;
+        $this->patternToRegexpCache = array();
     }
 
     /**
@@ -67,6 +73,22 @@ final class PatternTransformer
      * @throws UnknownPatternException
      */
     public function transformPatternToRegex($pattern)
+    {
+        if (!isset($this->patternToRegexpCache[$pattern])) {
+            $this->patternToRegexpCache[$pattern] = $this->transformPatternToRegexWithSupportedPolicy($pattern);
+        }
+
+        return $this->patternToRegexpCache[$pattern];
+    }
+
+    /**
+     * @param string $pattern
+     *
+     * @return string
+     *
+     * @throws UnknownPatternException
+     */
+    private function transformPatternToRegexWithSupportedPolicy($pattern)
     {
         foreach ($this->policies as $policy) {
             if ($policy->supportsPattern($pattern)) {
