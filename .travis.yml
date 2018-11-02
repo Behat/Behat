@@ -8,20 +8,7 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-branches:
-  only:
-    - master
-
-matrix:
-  include:
-    - php: 5.6
-      env: DEPENDENCIES='low'
-    - php: 5.6
-      env: SYMFONY_VERSION='2.7.*'
-    - php: 5.6
-      env: SYMFONY_VERSION='2.8.*'
-    - php: 7.2
-      env: SYMFONY_VERSION='^3.4'
+if: branch = master OR tag IS present
 
 before_install:
   - phpenv config-rm xdebug.ini
@@ -37,18 +24,38 @@ script:
   - phpunit
   - behat -fprogress --strict --tags '~@php-version,'`php php_version_tags.php`
 
-before_deploy:
-  - curl -LSs https://box-project.github.io/box2/installer.php | php
-  - export PATH=.:$PATH
-  - rm -Rf ./vendor
-  - composer install --no-dev -o
-  - box.phar build
+stages:
+  - test
+  - name: deploy
+    if: tag IS present
 
-deploy:
-  provider: releases
-  api_key: $GITHUB_API_KEY
-  file: behat.phar
-  skip_cleanup: true
-  on:
-    tags: true
-    php: 5.6
+jobs:
+  include:
+    - stage: test
+      php: 5.6
+      env: DEPENDENCIES='low'
+    - php: 5.6
+      env: SYMFONY_VERSION='2.7.*'
+    - php: 5.6
+      env: SYMFONY_VERSION='2.8.*'
+    - php: 7.2
+      env: SYMFONY_VERSION='^3.4'
+
+    - stage: deploy
+      php: 7.2
+      before_script: skip
+      script: skip
+
+      before_deploy:
+        - curl -LSs https://box-project.github.io/box2/installer.php | php
+        - export PATH=.:$PATH
+        - composer install --no-dev -o
+        - box.phar build
+
+      deploy:
+        on:
+          tags: true
+        provider: releases
+        api_key: $GITHUB_API_KEY
+        file: behat.phar
+        skip_cleanup: true
