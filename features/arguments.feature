@@ -181,3 +181,41 @@ Feature: Step Arguments
       1 scenario (1 passed)
       1 step (1 passed)
       """
+
+  @php-version @php7.1
+  Scenario: Nullable arguments
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+          /**
+           * @Given /^I do not match the nullable parameter$/
+           */
+          public function iHaveANullableArgument(?string $null)
+          {
+              \PHPUnit\Framework\Assert::assertNull($null);
+          }
+      }
+      """
+    And a file named "features/named_args.feature" with:
+      """
+      Feature: Nullable arguments
+        In order to maintain steps
+        As a step developer
+        I need to be able to declare regex with nullable matches
+
+        Scenario:
+          Given I do not match the nullable parameter
+      """
+    When I run "behat --no-colors -f progress features/named_args.feature "
+    Then it should pass with:
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
