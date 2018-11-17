@@ -366,9 +366,11 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
                 continue;
             }
 
-            if ($parameter->isDefaultValueAvailable()) {
-                $arguments[$num] = $parameter->getDefaultValue();
+            if ($parameter->isDefaultValueAvailable() || $parameter->allowsNull()) {
+                $arguments[$num] = $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
                 $this->markArgumentDefined($num);
+
+                continue;
             }
         }
 

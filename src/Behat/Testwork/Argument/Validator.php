@@ -58,6 +58,10 @@ final class Validator
             return;
         }
 
+        if ($parameter->allowsNull()) {
+            return;
+        }
+
         throw new UnknownParameterValueException(sprintf(
             'Can not find a matching value for an argument `$%s` of the method `%s`.',
             $parameter->getName(),
