@@ -183,7 +183,7 @@ Feature: Rerun with multiple suite
       """
 
   Scenario: Rerun only failed scenarios, 4 from default suite and 2 from suite2
-    Given I run "behat --no-colors -f progress"
+    Given I run "behat --no-colors -f progress --rerun"
     When I run "behat --no-colors -f progress --rerun"
     Then it should fail with:
     """
@@ -254,7 +254,7 @@ Feature: Rerun with multiple suite
             | 0   | 4     | 7      |
             | 2   | 2     | 3      |
       """
-    When I run "behat --no-colors -f progress"
+    When I run "behat --no-colors -f progress --rerun"
     And I run "behat --no-colors -f progress --rerun"
     Then it should fail with:
     """
@@ -275,7 +275,7 @@ Feature: Rerun with multiple suite
     """
 
   Scenario: Rerun only suite failed scenarios from suite2 suite
-    Given I run "behat --no-colors -f progress --suite suite2"
+    Given I run "behat --no-colors -f progress --suite suite2 --rerun"
     When I run "behat --no-colors -f progress --suite suite2 --rerun"
     Then it should fail with:
     """

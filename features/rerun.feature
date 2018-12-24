@@ -118,7 +118,7 @@ Feature: Rerun
       """
 
   Scenario: Rerun only failed scenarios
-    Given I run "behat --no-colors -f progress features/apples.feature"
+    Given I run "behat --no-colors -f progress features/apples.feature --rerun"
     When I run "behat --no-colors -f progress features/apples.feature --rerun"
     Then it should fail with:
     """
@@ -173,7 +173,7 @@ Feature: Rerun
             | 0   | 4     | 7      |
             | 2   | 2     | 3      |
       """
-    When I run "behat --no-colors -f progress features/apples.feature"
+    When I run "behat --no-colors -f progress features/apples.feature --rerun"
     And I run "behat --no-colors -f progress features/apples.feature --rerun"
     Then it should fail with:
     """
