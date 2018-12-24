@@ -86,21 +86,26 @@ final class RerunController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'collectFailedScenario'), -50);
-        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'collectFailedScenario'), -50);
-        $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'writeCache'), -50);
-
-        $this->key = $this->generateKey($input);
-
         if (!$input->getOption('rerun')) {
             return;
         }
 
-        if (!$this->getFileName() || !file_exists($this->getFileName())) {
+        $this->key = $this->generateKey($input);
+        $filename = $this->getFileName();
+
+        if (!$filename) {
             return;
         }
 
-        $input->setArgument('paths', $this->getFileName());
+        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'collectFailedScenario'), -50);
+        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'collectFailedScenario'), -50);
+        $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'writeCache'), -50);
+
+        if (!file_exists($filename)) {
+            return;
+        }
+
+        $input->setArgument('paths', $filename);
     }
 
     /**
