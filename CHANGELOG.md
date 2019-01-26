@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+  * 1202: Fix Symfony Translator deprecation warnings while using `TransChoice` method
+
 ## [3.5.0] - 2018-08-10
 ### Added
   * [#1144](https://github.com/Behat/Behat/pull/1144): Allow to use arrays as context parameters 
