@@ -100,7 +100,7 @@ final class DefinitionArgumentsTransformer implements CallFilter
                 continue;
             }
 
-            return $transformer->transformArgument($definitionCall, $index, $value);
+            $value = $transformer->transformArgument($definitionCall, $index, $value);
         }
 
         return $value;
