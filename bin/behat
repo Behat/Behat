@@ -11,7 +11,9 @@
 
 define('BEHAT_BIN_PATH',     __FILE__);
 
-if (is_file($autoload = getcwd() . '/vendor/autoload.php')) {
+if (is_file($autoload = getcwd().'/src/.bootstrap.php')) {
+    require $autoload;
+} elseif (is_file($autoload = getcwd() . '/vendor/autoload.php')) {
     require $autoload;
 }
 
