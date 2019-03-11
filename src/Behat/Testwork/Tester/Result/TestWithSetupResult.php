@@ -61,7 +61,7 @@ final class TestWithSetupResult implements TestResult
     public function getResultCode()
     {
         if (!$this->setup->isSuccessful()) {
-            return self::FAILED;
+            return self::SKIPPED;
         }
 
         if (!$this->teardown->isSuccessful()) {
