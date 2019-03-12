@@ -13,6 +13,7 @@ namespace Behat\Behat\Tester\Runtime;
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Definition\DefinitionFinder;
 use Behat\Behat\Definition\Exception\SearchException;
+use Behat\Behat\Definition\Exception\BeforeStepException;
 use Behat\Behat\Definition\SearchResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\FailedStepSearchResult;

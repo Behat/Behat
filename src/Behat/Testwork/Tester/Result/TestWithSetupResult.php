@@ -32,6 +32,10 @@ final class TestWithSetupResult implements TestResult
      * @var Teardown
      */
     private $teardown;
+    /**
+     * @var bool
+     */
+    private $setupFailureCausesSkip;
 
     /**
      * Initializes test result.
@@ -39,12 +43,14 @@ final class TestWithSetupResult implements TestResult
      * @param Setup      $setup
      * @param TestResult $result
      * @param Teardown   $teardown
+     * @param bool       $setupFailureCausesSkip
      */
-    public function __construct(Setup $setup, TestResult $result, Teardown $teardown)
+    public function __construct(Setup $setup, TestResult $result, Teardown $teardown, $setupFailureCausesSkip = true)
     {
         $this->setup = $setup;
         $this->result = $result;
         $this->teardown = $teardown;
+        $this->setupFailureCausesSkip = $setupFailureCausesSkip;
     }
 
     /**
@@ -61,7 +67,11 @@ final class TestWithSetupResult implements TestResult
     public function getResultCode()
     {
         if (!$this->setup->isSuccessful()) {
-            return self::SKIPPED;
+            if ($this->setupFailureCausesSkip) {
+                return self::SKIPPED;
+            } else {
+                return self::FAILED;
+            }
         }
 
         if (!$this->teardown->isSuccessful()) {

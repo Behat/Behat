@@ -17,6 +17,10 @@ use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestWithSetupResult;
 
+use Behat\Testwork\Tester\Setup\FailedSetup;
+use Behat\Testwork\Tester\Setup\FailedTeardown;
+use Behat\Behat\Tester\Result\StepResult;
+
 /**
  * Tests provided collection of steps against provided environment.
  *
@@ -52,6 +56,7 @@ final class StepContainerTester
     public function test(Environment $env, FeatureNode $feature, StepContainerInterface $container, $skip)
     {
         $results = array();
+        $previousStageSkipped = $skip;
         foreach ($container->getSteps() as $step) {
             $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
             $skipSetup = !$setup->isSuccessful() || $skip;
@@ -63,7 +68,8 @@ final class StepContainerTester
             $skip = $skip || $skipSetup || !$teardown->isSuccessful();
 
             $integerResult = new IntegerTestResult($testResult->getResultCode());
-            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown);
+            $results[] = new TestWithSetupResult($setup, $integerResult, $teardown, $previousStageSkipped);
+            $previousStageSkipped = $skip;
         }
 
         return $results;

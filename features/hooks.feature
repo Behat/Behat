@@ -300,7 +300,7 @@ Feature: hooks
         Scenario: 130
           Given I must have 130
       """
-    When I run "behat --no-colors -f pretty"
+    When I run "behat --no-colors -f pretty --strict"
     Then it should fail with:
       """
       ┌─ @BeforeFeature # FeatureContext::doSomethingBeforeFeature()
@@ -426,7 +426,7 @@ Feature: hooks
           }
       }
       """
-    When I run "behat --no-colors -f pretty"
+    When I run "behat --no-colors -f pretty --strict"
     Then it should fail with:
       """
       Feature:
