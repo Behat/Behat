@@ -213,14 +213,14 @@ final class ConfigurationLoader
     {
         $configs = array();
 
-        // first load default profile from current config, but only if custom profile requested
-        if ('default' !== $profile && isset($config['default'])) {
-            $configs[] = $config['default'];
-        }
-
-        // then recursively load profiles from imports
+        // recursively load profiles from imports first
         if (isset($config['imports']) && is_array($config['imports'])) {
             $configs = array_merge($configs, $this->loadImports($basePath, $config['imports'], $profile));
+        }
+
+        // then load default profile from current config, but only if custom profile requested
+        if ('default' !== $profile && isset($config['default'])) {
+            $configs[] = $config['default'];
         }
 
         // then load specific profile from current config
