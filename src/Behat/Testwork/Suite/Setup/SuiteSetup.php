@@ -27,7 +27,7 @@ interface SuiteSetup
      *
      * @param Suite $suite
      *
-     * @return Boolean
+     * @return boolean
      */
     public function supportsSuite(Suite $suite);
 

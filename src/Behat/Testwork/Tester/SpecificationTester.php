@@ -27,7 +27,7 @@ interface SpecificationTester
      *
      * @param Environment $env
      * @param mixed       $spec
-     * @param Boolean     $skip
+     * @param boolean     $skip
      *
      * @return Setup
      */
@@ -38,7 +38,7 @@ interface SpecificationTester
      *
      * @param Environment $env
      * @param mixed       $spec
-     * @param Boolean     $skip
+     * @param boolean     $skip
      *
      * @return TestResult
      */
@@ -49,7 +49,7 @@ interface SpecificationTester
      *
      * @param Environment $env
      * @param mixed       $spec
-     * @param Boolean     $skip
+     * @param boolean     $skip
      * @param TestResult  $result
      *
      * @return Teardown

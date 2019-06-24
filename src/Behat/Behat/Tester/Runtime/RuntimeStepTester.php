@@ -107,7 +107,7 @@ final class RuntimeStepTester implements StepTester
      * @param FeatureNode  $feature
      * @param StepNode     $step
      * @param SearchResult $search
-     * @param Boolean      $skip
+     * @param boolean      $skip
      *
      * @return StepResult
      */

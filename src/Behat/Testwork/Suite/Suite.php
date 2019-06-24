@@ -36,7 +36,7 @@ interface Suite
      *
      * @param string $key
      *
-     * @return Boolean
+     * @return boolean
      */
     public function hasSetting($key);
 

@@ -27,7 +27,7 @@ interface SnippetAppender
      *
      * @param AggregateSnippet $snippet
      *
-     * @return Boolean
+     * @return boolean
      */
     public function supportsSnippet(AggregateSnippet $snippet);
 

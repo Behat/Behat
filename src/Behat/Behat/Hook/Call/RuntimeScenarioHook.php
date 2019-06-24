@@ -48,7 +48,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
      * @param ScenarioInterface $scenario
      * @param string            $filterString
      *
-     * @return Boolean
+     * @return boolean
      */
     protected function isMatch(FeatureNode $feature, ScenarioInterface $scenario, $filterString)
     {
@@ -70,7 +70,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
      * @param ScenarioInterface $scenario
      * @param string            $filterString
      *
-     * @return Boolean
+     * @return boolean
      */
     protected function isMatchTagFilter(FeatureNode $feature, ScenarioInterface $scenario, $filterString)
     {
@@ -89,7 +89,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
      * @param ScenarioInterface $scenario
      * @param string            $filterString
      *
-     * @return Boolean
+     * @return boolean
      */
     protected function isMatchNameFilter(ScenarioInterface $scenario, $filterString)
     {

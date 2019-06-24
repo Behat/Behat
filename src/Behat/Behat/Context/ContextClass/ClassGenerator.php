@@ -28,7 +28,7 @@ interface ClassGenerator
      * @param Suite  $suite
      * @param string $contextClass
      *
-     * @return Boolean
+     * @return boolean
      */
     public function supportsSuiteAndClass(Suite $suite, $contextClass);
 

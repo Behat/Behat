@@ -28,7 +28,7 @@ interface EnvironmentHandler
      *
      * @param Suite $suite
      *
-     * @return Boolean
+     * @return boolean
      */
     public function supportsSuite(Suite $suite);
 
@@ -47,7 +47,7 @@ interface EnvironmentHandler
      * @param Environment $environment
      * @param mixed       $testSubject
      *
-     * @return Boolean
+     * @return boolean
      */
     public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null);
 

@@ -26,7 +26,7 @@ interface ArgumentTransformer
      * @param integer|string $argumentIndex
      * @param mixed          $argumentValue
      *
-     * @return Boolean
+     * @return boolean
      */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
 

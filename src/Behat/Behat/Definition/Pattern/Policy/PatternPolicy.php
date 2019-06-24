@@ -27,7 +27,7 @@ interface PatternPolicy
      *
      * @param string $type
      *
-     * @return Boolean
+     * @return boolean
      */
     public function supportsPatternType($type);
 
@@ -45,7 +45,7 @@ interface PatternPolicy
      *
      * @param string $pattern
      *
-     * @return Boolean
+     * @return boolean
      */
     public function supportsPattern($pattern);
 

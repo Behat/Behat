@@ -153,7 +153,7 @@ class OutputController implements Controller
      *
      * @param array   $formats
      * @param array   $outputs
-     * @param Boolean $decorated
+     * @param boolean $decorated
      */
     private function configureOutputs(array $formats, array $outputs, $decorated = false)
     {
@@ -184,7 +184,7 @@ class OutputController implements Controller
      *
      * @param string $outputId
      *
-     * @return Boolean
+     * @return boolean
      */
     private function isStandardOutput($outputId)
     {
@@ -196,7 +196,7 @@ class OutputController implements Controller
      *
      * @param string $file A file path
      *
-     * @return Boolean
+     * @return boolean
      */
     private function isAbsolutePath($file)
     {

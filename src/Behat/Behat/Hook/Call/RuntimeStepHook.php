@@ -55,7 +55,7 @@ abstract class RuntimeStepHook extends RuntimeFilterableHook
      * @param StepNode $step
      * @param string   $filterString
      *
-     * @return Boolean
+     * @return boolean
      */
     private function isStepMatch(StepNode $step, $filterString)
     {

@@ -70,7 +70,7 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
      * @param Suite  $suite
      * @param string $filterString
      *
-     * @return Boolean
+     * @return boolean
      */
     private function isSuiteMatch(Suite $suite, $filterString)
     {

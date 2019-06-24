@@ -86,7 +86,7 @@ final class AfterStepSetup extends StepTested implements AfterSetup
     /**
      * Checks if step call, setup or teardown produced any output (stdOut or exception).
      *
-     * @return Boolean
+     * @return boolean
      */
     public function hasOutput()
     {

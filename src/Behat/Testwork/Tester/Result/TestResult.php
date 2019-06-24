@@ -25,7 +25,7 @@ interface TestResult
     /**
      * Checks that test has passed.
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isPassed();
 

@@ -61,7 +61,7 @@ final class OutlineTableListener implements EventListener
      */
     private $exampleSetup;
     /**
-     * @var Boolean
+     * @var boolean
      */
     private $headerPrinted = false;
     /**

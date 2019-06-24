@@ -99,7 +99,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param mixed    $argumentKey
      * @param string[] $parameterNames
      *
-     * @return Boolean
+     * @return boolean
      */
     private function isStringKeyAndExistsInParameters($argumentKey, $parameterNames)
     {
@@ -112,7 +112,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param  ReflectionParameter[] $parameters
      * @param  mixed                 $value
      *
-     * @return Boolean
+     * @return boolean
      */
     private function isParameterTypehintedInArgumentList(array $parameters, $value)
     {
@@ -135,7 +135,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param object              $value
      * @param ReflectionParameter $parameter
      *
-     * @return Boolean
+     * @return boolean
      */
     private function isValueMatchesTypehintedParameter($value, ReflectionParameter $parameter)
     {
@@ -425,7 +425,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @param integer $position
      *
-     * @return Boolean
+     * @return boolean
      */
     private function isArgumentDefined($position)
     {

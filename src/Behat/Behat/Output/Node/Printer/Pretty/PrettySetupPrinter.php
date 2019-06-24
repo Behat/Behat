@@ -56,8 +56,8 @@ final class PrettySetupPrinter implements SetupPrinter
      * @param ResultToStringConverter $resultConverter
      * @param ExceptionPresenter      $exceptionPresenter
      * @param integer                 $indentation
-     * @param Boolean                 $newlineBefore
-     * @param Boolean                 $newlineAfter
+     * @param boolean                 $newlineBefore
+     * @param boolean                 $newlineAfter
      */
     public function __construct(
         ResultToStringConverter $resultConverter,

@@ -58,7 +58,7 @@ final class OutputManager
      *
      * @param string $name
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isFormatterRegistered($name)
     {

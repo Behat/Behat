@@ -27,7 +27,7 @@ interface ResultInterpretation
      *
      * @param TestResult $result
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isFailure(TestResult $result);
 }

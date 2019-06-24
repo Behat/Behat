@@ -27,7 +27,7 @@ interface ResultFilter
      *
      * @param CallResult $result
      *
-     * @return Boolean
+     * @return boolean
      */
     public function supportsResult(CallResult $result);
 

@@ -28,7 +28,7 @@ interface BackgroundTester
      *
      * @param Environment $env
      * @param FeatureNode $feature
-     * @param Boolean     $skip
+     * @param boolean     $skip
      *
      * @return Setup
      */
@@ -39,7 +39,7 @@ interface BackgroundTester
      *
      * @param Environment $env
      * @param FeatureNode $feature
-     * @param Boolean     $skip
+     * @param boolean     $skip
      *
      * @return TestResult
      */
@@ -50,7 +50,7 @@ interface BackgroundTester
      *
      * @param Environment $env
      * @param FeatureNode $feature
-     * @param Boolean     $skip
+     * @param boolean     $skip
      * @param TestResult  $result
      *
      * @return Teardown
