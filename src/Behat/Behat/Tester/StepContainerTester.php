@@ -45,7 +45,7 @@ final class StepContainerTester
      * @param Environment            $env
      * @param FeatureNode            $feature
      * @param StepContainerInterface $container
-     * @param boolean                $skip
+     * @param bool                $skip
      *
      * @return TestResult[]
      */

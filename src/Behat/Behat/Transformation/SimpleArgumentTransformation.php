@@ -45,7 +45,7 @@ interface SimpleArgumentTransformation extends Transformation
      * @param integer|string $argumentIndex
      * @param mixed          $argumentValue
      *
-     * @return boolean
+     * @return bool
      */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
 

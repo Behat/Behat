@@ -27,7 +27,7 @@ interface CallFilter
      *
      * @param Call $call
      *
-     * @return boolean
+     * @return bool
      */
     public function supportsCall(Call $call);
 

@@ -180,7 +180,7 @@ final class PrettyStepPrinter implements StepPrinter
      * Returns argument string for provided argument.
      *
      * @param ArgumentInterface $argument
-     * @param boolean           $collapse
+     * @param bool           $collapse
      *
      * @return string
      */

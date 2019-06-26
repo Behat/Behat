@@ -83,7 +83,7 @@ abstract class OutputFactory
     /**
      * Forces output to be decorated.
      *
-     * @param boolean $decorated
+     * @param bool $decorated
      */
     public function setOutputDecorated($decorated)
     {

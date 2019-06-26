@@ -97,7 +97,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
      *
      * @param string $file A file path
      *
-     * @return boolean
+     * @return bool
      */
     private function isAbsolutePath($file)
     {

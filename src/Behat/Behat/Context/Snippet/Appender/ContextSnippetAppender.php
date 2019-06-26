@@ -81,7 +81,7 @@ final class ContextSnippetAppender implements SnippetAppender
      * @param string $class
      * @param string $contextFileContent
      *
-     * @return boolean
+     * @return bool
      */
     private function isClassImported($class, $contextFileContent)
     {

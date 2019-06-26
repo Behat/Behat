@@ -28,7 +28,7 @@ interface SuiteGenerator
      * @param string $type
      * @param array  $settings
      *
-     * @return boolean
+     * @return bool
      */
     public function supportsTypeAndSettings($type, array $settings);
 

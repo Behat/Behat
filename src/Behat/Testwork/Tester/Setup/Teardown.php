@@ -20,14 +20,14 @@ interface Teardown
     /**
      * Returns true if fixtures have been handled successfully.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSuccessful();
 
     /**
      * Checks if tear down has produced any output.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasOutput();
 }

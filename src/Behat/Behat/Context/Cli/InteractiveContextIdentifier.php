@@ -98,7 +98,7 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
     /**
      * Checks if interactive mode is supported.
      *
-     * @return boolean
+     * @return bool
      *
      * @deprecated there is a better way to do it - `InputInterface::isInteractive()` method.
      *             Sadly, this doesn't work properly prior Symfony\Console 2.7 and as we need

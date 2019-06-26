@@ -81,7 +81,7 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
      * @param integer $keyIndex
      * @param mixed[] $keys
      *
-     * @return boolean
+     * @return bool
      */
     private function isKeyAStringAndNexOneIsAnInteger($keyIndex, array $keys)
     {

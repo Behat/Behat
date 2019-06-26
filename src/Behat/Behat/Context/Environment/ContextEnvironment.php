@@ -25,7 +25,7 @@ interface ContextEnvironment extends Environment
     /**
      * Checks if environment has any contexts registered.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasContexts();
 
@@ -41,7 +41,7 @@ interface ContextEnvironment extends Environment
      *
      * @param string $class
      *
-     * @return boolean
+     * @return bool
      */
     public function hasContextClass($class);
 }

@@ -26,7 +26,7 @@ interface ClassResolver
      *
      * @param string $contextString
      *
-     * @return boolean
+     * @return bool
      */
     public function supportsClass($contextString);
 

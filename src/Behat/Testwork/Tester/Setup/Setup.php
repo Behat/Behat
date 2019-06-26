@@ -20,14 +20,14 @@ interface Setup
     /**
      * Returns true if fixtures have been handled successfully.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSuccessful();
 
     /**
      * Checks if setup has produced any output.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasOutput();
 }

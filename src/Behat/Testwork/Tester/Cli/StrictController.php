@@ -30,7 +30,7 @@ final class StrictController implements Controller
      */
     private $resultInterpreter;
     /**
-     * @var boolean
+     * @var bool
      */
     private $strict;
 
@@ -38,7 +38,7 @@ final class StrictController implements Controller
      * Initializes controller.
      *
      * @param ResultInterpreter $resultInterpreter
-     * @param boolean           $strict
+     * @param bool           $strict
      */
     public function __construct(ResultInterpreter $resultInterpreter, $strict = false)
     {
