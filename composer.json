@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.3.3",
         "ext-mbstring": "*",
-        "behat/gherkin": "^4.5.1",
+        "behat/gherkin": "^4.6.0",
         "behat/transliterator": "^1.2",
         "symfony/console": "~2.7.40||^2.8.33||~3.3.15||^3.4.3||^4.0.3",
         "symfony/config": "~2.3||~3.0||~4.0",
