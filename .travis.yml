@@ -38,7 +38,7 @@ before_script:
   - echo "<?php echo '@php5' . implode(',@php5.', range(3, PHP_MINOR_VERSION));" > php_version_tags.php
 
 script:
-  - phpunit
+  - ./vendor/bin/phpunit
   - behat -fprogress --strict --tags '~@php-version,'`php php_version_tags.php`
 
 before_deploy:
