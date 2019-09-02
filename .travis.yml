@@ -1,6 +1,6 @@
 language: php
 
-php: [5.6, 7.0, 7.1, 7.2]
+php: [5.6, 7.0, 7.1, 7.2, 7.3]
 
 sudo: false
 
@@ -22,6 +22,10 @@ matrix:
       env: SYMFONY_VERSION='2.8.*'
     - php: 7.2
       env: SYMFONY_VERSION='^3.4'
+    - php: 7.3
+      env: SYMFONY_VERSION='^3.4'
+    - php: 7.3
+      env: SYMFONY_VERSION='^4.2'
 
 before_install:
   - phpenv config-rm xdebug.ini
