@@ -15,6 +15,7 @@
 
     "require": {
         "php": ">=5.3.3",
+        "ext-dom": "*",
         "ext-mbstring": "*",
         "behat/gherkin": "^4.6.0",
         "behat/transliterator": "^1.2",
