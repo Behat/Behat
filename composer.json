@@ -15,7 +15,6 @@
 
     "require": {
         "php": ">=5.3.3",
-        "ext-dom": "*",
         "ext-mbstring": "*",
         "behat/gherkin": "^4.6.0",
         "behat/transliterator": "^1.2",
@@ -33,6 +32,10 @@
         "symfony/process": "~2.5|~3.0|~4.0",
         "phpunit/phpunit": "^4.8.36|^6.3",
         "herrera-io/box": "~1.6.1"
+    },
+
+    "suggest": {
+        "ext-dom": "Needed to output test results in JUnit format."
     },
 
     "autoload": {

@@ -57,6 +57,10 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function createNewFile($name, array $testsuitesAttributes = array())
     {
+        // This requires the DOM extension to be enabled.
+        if (!extension_loaded('dom')) {
+            throw new \Exception('The PHP DOM extension is required to generate JUnit reports.');
+        }
         $this->setFileName(strtolower(trim(preg_replace('/[^[:alnum:]_]+/', '_', $name), '_')));
 
         $this->domDocument = new \DOMDocument(self::XML_VERSION, self::XML_ENCODING);
