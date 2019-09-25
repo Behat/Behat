@@ -76,8 +76,13 @@ final class FilesystemFeatureLocator implements SpecificationLocator
 
         if ($locator) {
             $filters = array(new PathsFilter($suiteLocators));
+            $features = array();
+            foreach ($this->findFeatureFiles($locator) as $featureFile) {
+                // Collect all the feature specification files.
+                $features = array_merge($features, $this->gherkin->load($featureFile, $filters));
+            }
 
-            return new LazyFeatureIterator($suite, $this->gherkin, $this->findFeatureFiles($locator), $filters);
+            return new LazyFeatureIterator($suite, $this->gherkin, [], $filters, $features);
         }
 
         $featurePaths = array();

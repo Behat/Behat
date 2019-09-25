@@ -64,12 +64,14 @@ final class LazyFeatureIterator implements SpecificationIterator
      * @param Gherkin           $gherkin
      * @param string[]          $paths
      * @param FilterInterface[] $filters
+     * @param FeatureNode[]     $features
      */
-    public function __construct(Suite $suite, Gherkin $gherkin, array $paths, array $filters = array())
+    public function __construct(Suite $suite, Gherkin $gherkin, array $paths, array $filters = array(), $features = array())
     {
         $this->suite = $suite;
         $this->gherkin = $gherkin;
         $this->paths = array_values($paths);
+        $this->features = $features;
         $this->filters = array_merge($this->getSuiteFilters($suite), $filters);
     }
 
