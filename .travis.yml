@@ -28,7 +28,7 @@ matrix:
       env: SYMFONY_VERSION='^4.2'
 
 before_install:
-  - phpenv config-rm xdebug.ini
+  - phpenv config-rm xdebug.ini || echo "XDebug is not enabled"
 
 before_script:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"; fi;
