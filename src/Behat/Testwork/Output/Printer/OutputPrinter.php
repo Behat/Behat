@@ -69,7 +69,7 @@ interface OutputPrinter
     /**
      * Forces output to be decorated.
      *
-     * @param Boolean $decorated
+     * @param bool $decorated
      */
     public function setOutputDecorated($decorated);
 

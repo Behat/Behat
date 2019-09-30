@@ -28,7 +28,7 @@ interface SuiteTester
      *
      * @param Environment           $env
      * @param SpecificationIterator $iterator
-     * @param Boolean               $skip
+     * @param bool               $skip
      *
      * @return Setup
      */
@@ -39,7 +39,7 @@ interface SuiteTester
      *
      * @param Environment           $env
      * @param SpecificationIterator $iterator
-     * @param Boolean               $skip
+     * @param bool               $skip
      *
      * @return TestResult
      */
@@ -50,7 +50,7 @@ interface SuiteTester
      *
      * @param Environment           $env
      * @param SpecificationIterator $iterator
-     * @param Boolean               $skip
+     * @param bool               $skip
      * @param TestResult            $result
      *
      * @return Teardown

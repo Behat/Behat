@@ -34,7 +34,7 @@ final class SnippetRegistry implements SnippetRepository
      */
     private $snippets = array();
     /**
-     * @var Boolean
+     * @var bool
      */
     private $snippetsGenerated = false;
 

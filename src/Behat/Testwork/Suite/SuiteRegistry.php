@@ -23,7 +23,7 @@ use Behat\Testwork\Suite\Generator\SuiteGenerator;
 final class SuiteRegistry implements SuiteRepository
 {
     /**
-     * @var Boolean
+     * @var bool
      */
     private $suitesGenerated = false;
     /**

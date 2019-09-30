@@ -34,7 +34,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
      */
     private $descendant;
     /**
-     * @var Boolean
+     * @var bool
      */
     private $firstBackgroundEnded = false;
     /**
@@ -103,7 +103,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
      *
      * @param Event $event
      *
-     * @return Boolean
+     * @return bool
      */
     private function isEventDelayedUntilFirstBackgroundPrinted(Event $event)
     {
