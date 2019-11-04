@@ -77,7 +77,7 @@ final class RuntimeCallHandler implements CallHandler
      * @param string  $file
      * @param integer $line
      *
-     * @return Boolean
+     * @return bool
      *
      * @throws CallErrorException
      */
@@ -154,7 +154,7 @@ final class RuntimeCallHandler implements CallHandler
      *
      * @param integer $level
      *
-     * @return Boolean
+     * @return bool
      */
     private function errorLevelIsNotReportable($level)
     {

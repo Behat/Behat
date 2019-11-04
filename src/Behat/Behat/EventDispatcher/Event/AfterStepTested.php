@@ -111,7 +111,7 @@ final class AfterStepTested extends StepTested implements AfterTested
     /**
      * Checks if step call, setup or teardown produced any output (stdOut or exception).
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasOutput()
     {
@@ -121,7 +121,7 @@ final class AfterStepTested extends StepTested implements AfterTested
     /**
      * Checks if step teardown has output.
      *
-     * @return Boolean
+     * @return bool
      */
     private function teardownHasOutput()
     {
@@ -131,7 +131,7 @@ final class AfterStepTested extends StepTested implements AfterTested
     /**
      * Checks if result has produced exception.
      *
-     * @return Boolean
+     * @return bool
      */
     private function resultHasException()
     {
@@ -141,7 +141,7 @@ final class AfterStepTested extends StepTested implements AfterTested
     /**
      * Checks if result is executed and call result has produced exception or stdOut.
      *
-     * @return Boolean
+     * @return bool
      */
     private function resultCallHasOutput()
     {

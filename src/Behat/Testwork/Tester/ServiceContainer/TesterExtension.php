@@ -123,7 +123,7 @@ abstract class TesterExtension implements Extension
      * Loads exercise cli controllers.
      *
      * @param ContainerBuilder $container
-     * @param Boolean          $skip
+     * @param bool          $skip
      */
     protected function loadExerciseController(ContainerBuilder $container, $skip = false)
     {
@@ -142,7 +142,7 @@ abstract class TesterExtension implements Extension
      * Loads exercise cli controllers.
      *
      * @param ContainerBuilder $container
-     * @param Boolean          $strict
+     * @param bool          $strict
      */
     protected function loadStrictController(ContainerBuilder $container, $strict = false)
     {

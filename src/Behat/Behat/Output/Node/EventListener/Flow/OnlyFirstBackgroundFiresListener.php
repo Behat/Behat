@@ -36,15 +36,15 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      */
     private $descendant;
     /**
-     * @var Boolean
+     * @var bool
      */
     private $firstBackgroundEnded = false;
     /**
-     * @var Boolean
+     * @var bool
      */
     private $inBackground = false;
     /**
-     * @var Boolean
+     * @var bool
      */
     private $stepSetupHadOutput = false;
 
@@ -125,7 +125,7 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      *
      * @param Event $event
      *
-     * @return Boolean
+     * @return bool
      */
     private function isSkippableEvent(Event $event)
     {
@@ -141,7 +141,7 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      *
      * @param Event $event
      *
-     * @return Boolean
+     * @return bool
      */
     private function isNonFailingConsequentBackgroundStep(Event $event)
     {
@@ -157,7 +157,7 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      *
      * @param Event $event
      *
-     * @return Boolean
+     * @return bool
      */
     private function isStepEventWithOutput(Event $event)
     {
@@ -169,7 +169,7 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      *
      * @param Event $event
      *
-     * @return Boolean
+     * @return bool
      */
     private function isBeforeStepEventWithOutput(Event $event)
     {
@@ -187,7 +187,7 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      *
      * @param Event $event
      *
-     * @return Boolean
+     * @return bool
      */
     private function isAfterStepWithOutput(Event $event)
     {

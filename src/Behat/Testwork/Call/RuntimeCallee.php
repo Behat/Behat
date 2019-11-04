@@ -112,7 +112,7 @@ class RuntimeCallee implements Callee
     /**
      * Returns true if callee is a method, false otherwise.
      *
-     * @return Boolean
+     * @return bool
      */
     public function isAMethod()
     {
@@ -122,7 +122,7 @@ class RuntimeCallee implements Callee
     /**
      * Returns true if callee is an instance (non-static) method, false otherwise.
      *
-     * @return Boolean
+     * @return bool
      */
     public function isAnInstanceMethod()
     {

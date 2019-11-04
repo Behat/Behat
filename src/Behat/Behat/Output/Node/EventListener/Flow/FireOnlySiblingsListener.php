@@ -37,7 +37,7 @@ class FireOnlySiblingsListener implements EventListener
      */
     private $descendant;
     /**
-     * @var Boolean
+     * @var bool
      */
     private $inContext = false;
 

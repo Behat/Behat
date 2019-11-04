@@ -58,7 +58,7 @@ final class OrderedExercise implements Exercise
      * Sets up exercise for a test.
      *
      * @param SpecificationIterator[] $iterators
-     * @param Boolean $skip
+     * @param bool $skip
      *
      * @return Setup
      */
@@ -71,7 +71,7 @@ final class OrderedExercise implements Exercise
      * Tests suites specifications.
      *
      * @param SpecificationIterator[] $iterators
-     * @param Boolean $skip
+     * @param bool $skip
      *
      * @return TestResult
      */
@@ -84,7 +84,7 @@ final class OrderedExercise implements Exercise
      * Tears down exercise after a test.
      *
      * @param SpecificationIterator[] $iterators
-     * @param Boolean $skip
+     * @param bool $skip
      * @param TestResult $result
      *
      * @return Teardown

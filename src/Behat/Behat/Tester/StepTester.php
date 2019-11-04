@@ -30,7 +30,7 @@ interface StepTester
      * @param Environment $env
      * @param FeatureNode $feature
      * @param StepNode    $step
-     * @param Boolean     $skip
+     * @param bool     $skip
      *
      * @return Setup
      */
@@ -42,7 +42,7 @@ interface StepTester
      * @param Environment $env
      * @param FeatureNode $feature
      * @param StepNode    $step
-     * @param Boolean     $skip
+     * @param bool     $skip
      *
      * @return StepResult
      */
@@ -54,7 +54,7 @@ interface StepTester
      * @param Environment $env
      * @param FeatureNode $feature
      * @param StepNode    $step
-     * @param Boolean     $skip
+     * @param bool     $skip
      * @param StepResult  $result
      *
      * @return Teardown

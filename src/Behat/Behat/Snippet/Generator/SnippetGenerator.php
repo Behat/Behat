@@ -30,7 +30,7 @@ interface SnippetGenerator
      * @param Environment $environment
      * @param StepNode    $step
      *
-     * @return Boolean
+     * @return bool
      */
     public function supportsEnvironmentAndStep(Environment $environment, StepNode $step);
 

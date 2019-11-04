@@ -30,7 +30,7 @@ interface OutlineTester
      * @param Environment $env
      * @param FeatureNode $feature
      * @param OutlineNode $outline
-     * @param Boolean     $skip
+     * @param bool     $skip
      *
      * @return Setup
      */
@@ -42,7 +42,7 @@ interface OutlineTester
      * @param Environment $env
      * @param FeatureNode $feature
      * @param OutlineNode $outline
-     * @param Boolean     $skip
+     * @param bool     $skip
      *
      * @return TestResult
      */
@@ -54,7 +54,7 @@ interface OutlineTester
      * @param Environment $env
      * @param FeatureNode $feature
      * @param OutlineNode $outline
-     * @param Boolean     $skip
+     * @param bool     $skip
      * @param TestResult  $result
      *
      * @return Teardown

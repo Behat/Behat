@@ -53,7 +53,7 @@ final class CallResults implements Countable, IteratorAggregate
     /**
      * Checks if any call in collection throws an exception.
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasExceptions()
     {
@@ -69,7 +69,7 @@ final class CallResults implements Countable, IteratorAggregate
     /**
      * Checks if any call in collection produces an output.
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasStdOuts()
     {

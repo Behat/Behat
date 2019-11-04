@@ -91,7 +91,7 @@ final class RuntimeScenarioTester implements ScenarioTester
      *
      * @param Environment $env
      * @param FeatureNode $feature
-     * @param Boolean     $skip
+     * @param bool     $skip
      *
      * @return TestResult
      */

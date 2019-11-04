@@ -68,7 +68,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      * @param FeatureNode $feature
      * @param string      $filterString
      *
-     * @return Boolean
+     * @return bool
      */
     private function isMatch(FeatureNode $feature, $filterString)
     {
@@ -89,7 +89,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      * @param FeatureNode $feature
      * @param string      $filterString
      *
-     * @return Boolean
+     * @return bool
      */
     private function isMatchTagFilter(FeatureNode $feature, $filterString)
     {
@@ -104,7 +104,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      * @param FeatureNode $feature
      * @param string      $filterString
      *
-     * @return Boolean
+     * @return bool
      */
     private function isMatchNameFilter(FeatureNode $feature, $filterString)
     {

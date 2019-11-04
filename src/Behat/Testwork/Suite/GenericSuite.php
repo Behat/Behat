@@ -65,7 +65,7 @@ final class GenericSuite implements Suite
      *
      * @param string $key
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasSetting($key)
     {
