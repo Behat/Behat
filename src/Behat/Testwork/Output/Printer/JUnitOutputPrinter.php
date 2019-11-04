@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Output\Printer;
 
+use Behat\Testwork\Output\Exception\MissingExtensionException;
 use Behat\Testwork\Output\Printer\Factory\FilesystemOutputFactory;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -59,7 +60,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
     {
         // This requires the DOM extension to be enabled.
         if (!extension_loaded('dom')) {
-            throw new \Exception('The PHP DOM extension is required to generate JUnit reports.');
+            throw new MissingExtensionException('The PHP DOM extension is required to generate JUnit reports.');
         }
         $this->setFileName(strtolower(trim(preg_replace('/[^[:alnum:]_]+/', '_', $name), '_')));
 
