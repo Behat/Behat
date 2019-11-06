@@ -30,13 +30,12 @@ final class ConfigurationTree
      */
     public function getConfigTree(array $extensions)
     {
-        $tree = new TreeBuilder();
-        $root = $tree->root('testwork');
+        $root = new TreeBuilder('testwork');
 
         foreach ($extensions as $extension) {
-            $extension->configure($root->children()->arrayNode($extension->getConfigKey()));
+            $extension->configure($root->getRootNode()->children()->arrayNode($extension->getConfigKey()));
         }
 
-        return $tree->buildTree();
+        return $root->buildTree();
     }
 }
