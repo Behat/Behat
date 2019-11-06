@@ -18,6 +18,7 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SpecificationTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Feature tester dispatching BEFORE/AFTER events during tests.
@@ -53,13 +54,20 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     public function setUp(Environment $env, $feature, $skip)
     {
         $event = new BeforeFeatureTested($env, $feature);
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
-
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        }
         $setup = $this->baseTester->setUp($env, $feature, $skip);
 
         $event = new AfterFeatureSetup($env, $feature, $setup);
-        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
-
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+        }
+        
         return $setup;
     }
 
@@ -77,13 +85,21 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     public function tearDown(Environment $env, $feature, $skip, TestResult $result)
     {
         $event = new BeforeFeatureTeardown($env, $feature, $result);
-        $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
-
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+            
+        }
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
-
         $event = new AfterFeatureTested($env, $feature, $result, $teardown);
-        $this->eventDispatcher->dispatch($event::AFTER, $event);
-
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER, $event);
+            
+        }
+        
         return $teardown;
     }
 }

@@ -100,9 +100,16 @@ final class StopOnFailureController implements Controller
             return;
         }
 
-        $this->eventDispatcher->dispatch(SuiteTested::AFTER, new AfterSuiteAborted($event->getEnvironment()));
-        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new AfterExerciseAborted());
-
+        if(!class_exists(\Symfony\Contracts\EventDispatcher\Event::class)){
+            $this->eventDispatcher->dispatch(SuiteTested::AFTER, new AfterSuiteAborted($event->getEnvironment()));
+            $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new AfterExerciseAborted());
+    
+        }else{
+            $this->eventDispatcher->dispatch( new AfterSuiteAborted($event->getEnvironment()), SuiteTested::AFTER);
+            $this->eventDispatcher->dispatch(new AfterExerciseAborted(), ExerciseCompleted::AFTER);
+    
+        }
+        
         exit(1);
     }
 }

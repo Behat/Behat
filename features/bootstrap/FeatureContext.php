@@ -9,7 +9,6 @@
  */
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Gherkin\Node\PyStringNode;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Process\PhpExecutableFinder;
@@ -27,10 +26,6 @@ class FeatureContext implements Context
      */
     private $phpBin;
     /**
-     * @var Process
-     */
-    private $process;
-    /**
      * @var string
      */
     private $workingDir;
@@ -38,7 +33,15 @@ class FeatureContext implements Context
      * @var string
      */
     private $options = '--format-settings=\'{"timer": false}\' --no-interaction';
-
+    
+    private $processEnv = array();
+    
+    private $input;
+    /**
+     * @var Process
+     */
+    private $process;
+    
     /**
      * Cleans test folders in the temporary directory.
      *
@@ -71,8 +74,7 @@ class FeatureContext implements Context
         }
         $this->workingDir = $dir;
         $this->phpBin = $php;
-        $this->process = new Process(null);
-        $this->process->setTimeout(20);
+        
     }
 
     /**
@@ -170,7 +172,7 @@ EOL;
      */
     public function iSetEnvironmentVariable(PyStringNode $value)
     {
-        $this->process->setEnv(array('BEHAT_PARAMS' => (string) $value));
+        $this->processEnv = array('BEHAT_PARAMS' => (string) $value);
     }
 
     /**
@@ -183,26 +185,35 @@ EOL;
     public function iRunBehat($argumentsString = '')
     {
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
-
-        $this->process->setWorkingDirectory($this->workingDir);
-        $this->process->setCommandLine(
-            sprintf(
-                '%s %s %s %s',
-                $this->phpBin,
-                escapeshellarg(BEHAT_BIN_PATH),
-                $argumentsString,
-                strtr($this->options, array('\'' => '"', '"' => '\"'))
-            )
+        $cmd =  sprintf(
+            '%s %s %s %s',
+            $this->phpBin,
+            escapeshellarg(BEHAT_BIN_PATH),
+            $argumentsString,
+            strtr($this->options, array('\'' => '"', '"' => '\"'))
         );
-
+        if (method_exists('\\Symfony\\Component\\Process\\Process','fromShellCommandline')) {
+            $process = Process::fromShellCommandline($cmd);
+        } else {
+            $process = new Process(null);
+            $process->setCommandLine($cmd);
+        }
+        $process->setTimeout(20);
+    
+        $process->setWorkingDirectory($this->workingDir);
+    
+        $env = $this->processEnv;
         // Don't reset the LANG variable on HHVM, because it breaks HHVM itself
         if (!defined('HHVM_VERSION')) {
-            $env = $this->process->getEnv();
             $env['LANG'] = 'en'; // Ensures that the default language is en, whatever the OS locale is.
-            $this->process->setEnv($env);
         }
-
-        $this->process->run();
+        if($this->input !== null){
+            $process->setInput($this->input);
+        }
+        
+        $process->setEnv($env);
+        $this->process = $process;
+        $process->run();
     }
 
     /**
@@ -215,11 +226,11 @@ EOL;
      */
     public function iRunBehatInteractively($answerString, $argumentsString)
     {
-        $env = $this->process->getEnv();
+        $env = $this->processEnv;
         $env['SHELL_INTERACTIVE'] = true;
 
-        $this->process->setEnv($env);
-        $this->process->setInput($answerString);
+        $this->processEnv = $env;
+        $this->input = $answerString;
 
         $this->options = '--format-settings=\'{"timer": false}\'';
         $this->iRunBehat($argumentsString);
@@ -302,7 +313,7 @@ EOL;
 
         $fileContent = preg_replace('/time="(.*)"/', 'time="-IGNORE-VALUE-"', $fileContent);
 
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
         $dom->loadXML($text);
         $dom->formatOutput = true;
 
@@ -369,18 +380,19 @@ EOL;
      */
     public function itShouldFail($success)
     {
+    
         if ('fail' === $success) {
-            if (0 === $this->getExitCode()) {
+            if (0 === (int)$this->getExitCode()) {
                 echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
             }
-
+    
             Assert::assertNotEquals(0, $this->getExitCode());
         } else {
-            if (0 !== $this->getExitCode()) {
+            if (0 !== (int)$this->getExitCode()) {
                 echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
             }
-
-            Assert::assertEquals(0, $this->getExitCode());
+    
+            Assert::assertEquals(0, (int)$this->getExitCode());
         }
     }
 
@@ -394,7 +406,7 @@ EOL;
      */
     public function xmlShouldBeValid($xmlFile, $schemaPath)
     {
-        $dom = new DomDocument();
+        $dom = new \DomDocument();
         $dom->load($this->workingDir . '/' . $xmlFile);
 
         $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);

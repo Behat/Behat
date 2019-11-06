@@ -12,7 +12,6 @@ namespace Behat\Behat\Definition\Translator;
 
 use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Suite\Suite;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Translates definitions using translator component.

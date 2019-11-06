@@ -17,6 +17,7 @@ use Behat\Testwork\EventDispatcher\Event\BeforeExerciseTeardown;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Exercise dispatching BEFORE/AFTER events during its execution.
@@ -33,32 +34,40 @@ final class EventDispatchingExercise implements Exercise
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
-
+    
     /**
      * Initializes exercise.
      *
-     * @param Exercise                 $baseExercise
+     * @param Exercise $baseExercise
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Exercise $baseExercise, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        Exercise $baseExercise,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->baseExercise = $baseExercise;
         $this->eventDispatcher = $eventDispatcher;
     }
-
+    
     /**
      * {@inheritdoc}
      */
     public function setUp(array $iterators, $skip)
     {
         $event = new BeforeExerciseCompleted($iterators);
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
-
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        }
         $setup = $this->baseExercise->setUp($iterators, $skip);
-
         $event = new AfterExerciseSetup($iterators, $setup);
-        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
-
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+        }
+        
         return $setup;
     }
 
@@ -69,20 +78,30 @@ final class EventDispatchingExercise implements Exercise
     {
         return $this->baseExercise->test($iterators, $skip);
     }
-
+    
     /**
      * {@inheritdoc}
      */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
         $event = new BeforeExerciseTeardown($iterators, $result);
-        $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
-
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+    
+        }else{
+            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+    
+        }
         $teardown = $this->baseExercise->tearDown($iterators, $skip, $result);
-
         $event = new AfterExerciseCompleted($iterators, $result, $teardown);
-        $this->eventDispatcher->dispatch($event::AFTER, $event);
-
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER);
+    
+        }else{
+            $this->eventDispatcher->dispatch($event::AFTER, $event);
+    
+        }
+        
         return $teardown;
     }
 }

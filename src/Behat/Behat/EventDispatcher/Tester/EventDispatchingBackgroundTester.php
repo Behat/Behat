@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -20,6 +19,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Background tester dispatching BEFORE/AFTER events.
@@ -43,8 +43,10 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
      * @param BackgroundTester         $baseTester
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(BackgroundTester $baseTester, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        BackgroundTester $baseTester,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->baseTester = $baseTester;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -54,14 +56,22 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
      */
     public function setUp(Environment $env, FeatureNode $feature, $skip)
     {
-        $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground());
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
-
+        $event = new BeforeBackgroundTested($env, $feature,
+            $feature->getBackground());
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        }
         $setup = $this->baseTester->setUp($env, $feature, $skip);
-
-        $event = new AfterBackgroundSetup($env, $feature, $feature->getBackground(), $setup);
-        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
-
+        $event = new AfterBackgroundSetup($env, $feature,
+            $feature->getBackground(), $setup);
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+        }
+        
         return $setup;
     }
 
@@ -72,20 +82,37 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     {
         return $this->baseTester->test($env, $feature, $skip);
     }
-
+    
     /**
      * {@inheritdoc}
      */
-    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result)
-    {
-        $event = new BeforeBackgroundTeardown($env, $feature, $feature->getBackground(), $result);
-        $this->eventDispatcher->dispatch(BackgroundTested::BEFORE_TEARDOWN, $event);
-
+    public function tearDown(
+        Environment $env,
+        FeatureNode $feature,
+        $skip,
+        TestResult $result
+    ) {
+        $event = new BeforeBackgroundTeardown($env, $feature,
+            $feature->getBackground(), $result);
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event,
+                BackgroundTested::BEFORE_TEARDOWN);
+            
+        } else {
+            $this->eventDispatcher->dispatch(BackgroundTested::BEFORE_TEARDOWN,
+                $event);
+            
+        }
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
-
-        $event = new AfterBackgroundTested($env, $feature, $feature->getBackground(), $result, $teardown);
-        $this->eventDispatcher->dispatch(BackgroundTested::AFTER, $event);
-
+        $event = new AfterBackgroundTested($env, $feature,
+            $feature->getBackground(), $result, $teardown);
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, BackgroundTested::AFTER);
+        } else {
+            $this->eventDispatcher->dispatch(BackgroundTested::AFTER, $event);
+            
+        }
+        
         return $teardown;
     }
 }

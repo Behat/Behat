@@ -30,12 +30,24 @@ final class ConfigurationTree
      */
     public function getConfigTree(array $extensions)
     {
-        $root = new TreeBuilder('testwork');
-
-        foreach ($extensions as $extension) {
-            $extension->configure($root->getRootNode()->children()->arrayNode($extension->getConfigKey()));
+        $rootName = 'testwork';
+        if ($this->isOlderTreeBuilder()) {
+            $tree = new TreeBuilder();
+            $root = $tree->root($rootName);
+        } else {
+            $tree = new TreeBuilder($rootName);
+            $root = $tree->getRootNode();
         }
-
-        return $root->buildTree();
+        foreach ($extensions as $extension) {
+            $extension->configure($root->children()->arrayNode($extension->getConfigKey()));
+        }
+        
+        return $tree->buildTree();
+    }
+    
+    private function isOlderTreeBuilder()
+    {
+        return method_exists('\\Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder',
+            'root');
     }
 }

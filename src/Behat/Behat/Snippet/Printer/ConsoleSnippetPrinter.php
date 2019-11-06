@@ -10,11 +10,11 @@
 
 namespace Behat\Behat\Snippet\Printer;
 
+use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\Snippet\AggregateSnippet;
 use Behat\Gherkin\Node\StepNode;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Behat console-based snippet printer.

@@ -19,6 +19,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SuiteTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Suite tester dispatching BEFORE/AFTER events during testing.
@@ -54,13 +55,23 @@ final class EventDispatchingSuiteTester implements SuiteTester
     public function setUp(Environment $env, SpecificationIterator $iterator, $skip)
     {
         $event = new BeforeSuiteTested($env, $iterator);
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
 
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        }
+    
         $setup = $this->baseTester->setUp($env, $iterator, $skip);
-
         $event = new AfterSuiteSetup($env, $iterator, $setup);
-        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
-
+        
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+        }
+        
+        
         return $setup;
     }
 
@@ -78,13 +89,20 @@ final class EventDispatchingSuiteTester implements SuiteTester
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         $event = new BeforeSuiteTeardown($env, $iterator, $result);
-        $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
-
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch( $event, $event::BEFORE_TEARDOWN);
+        }
+        else{
+            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+        }
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);
 
         $event = new AfterSuiteTested($env, $iterator, $result, $teardown);
-        $this->eventDispatcher->dispatch($event::AFTER, $event);
-
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch( $event, $event::AFTER);
+        }else{
+            $this->eventDispatcher->dispatch($event::AFTER, $event);
+        }
         return $teardown;
     }
 }

@@ -91,7 +91,7 @@ final class TranslatorExtension implements Extension
      */
     private function loadTranslator(ContainerBuilder $container, $locale, $fallbackLocale)
     {
-        $definition = new Definition('Symfony\Component\Translation\Translator', array($locale));
+        $definition = new Definition('Behat\Behat\Definition\Translator\Translator', array($locale));
         $container->setDefinition(self::TRANSLATOR_ID, $definition);
 
         $definition->addMethodCall('setFallbackLocales', array(array($fallbackLocale)));
