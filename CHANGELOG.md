@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+  * [#1244](https://github.com/Behat/Behat/pull/1244): Hide internal steps from stack traces in very verbose mode
 
 ## [3.5.0] - 2018-08-10
 ### Added
