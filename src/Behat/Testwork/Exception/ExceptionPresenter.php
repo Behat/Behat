@@ -13,6 +13,7 @@ namespace Behat\Testwork\Exception;
 use Behat\Testwork\Exception\Stringer\ExceptionStringer;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Exception;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Presents exceptions as strings using registered stringers.
@@ -93,11 +94,43 @@ final class ExceptionPresenter
             }
         }
 
-        if (OutputPrinter::VERBOSITY_VERY_VERBOSE <= $verbosity) {
+        if (OutputInterface::VERBOSITY_VERY_VERBOSE <= $verbosity) {
+            if (OutputInterface::VERBOSITY_DEBUG > $verbosity) {
+                $exception = $this->removeBehatCallsFromTrace($exception);
+            }
+
             return $this->relativizePaths(trim($exception));
         }
 
         return trim($this->relativizePaths($exception->getMessage()) . ' (' . get_class($exception) . ')');
+    }
+
+    private function removeBehatCallsFromTrace(Exception $exception)
+    {
+        $traceOutput = '';
+        foreach ($exception->getTrace() as $i => $trace) {
+            if (isset($trace['file']) && false !== strpos(str_replace('\\', '/', $trace['file']), 'Behat/Testwork/Call/Handler/RuntimeCallHandler')) {
+                break;
+            }
+
+            $traceOutput .= sprintf(
+                '#%d %s: %s()'.PHP_EOL,
+                $i,
+                isset($trace['file']) ? $trace['file'].'('.$trace['line'].')' : '[internal function]',
+                isset($trace['class']) ? $trace['class'].$trace['type'].$trace['function'] : $trace['function']
+            );
+        }
+
+        return sprintf(
+            "%s: %s in %s:%d%sStack trace:%s%s",
+            get_class($exception),
+            $exception->getMessage(),
+            $exception->getFile(),
+            $exception->getLine(),
+            PHP_EOL,
+            PHP_EOL,
+            $traceOutput
+        );
     }
 
     /**

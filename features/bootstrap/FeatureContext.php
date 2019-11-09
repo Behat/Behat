@@ -348,6 +348,13 @@ EOL;
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 }, $text
             );
+
+            // error stacktrace
+            $text = preg_replace_callback(
+                '/#\d+ [^:]+:/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, $text
+            );
         }
 
         return $text;
@@ -402,10 +409,13 @@ EOL;
     {
         $output = $this->process->getErrorOutput() . $this->process->getOutput();
 
-        // Normalize the line endings in the output
+        // Normalize the line endings and directory separators in the output
         if ("\n" !== PHP_EOL) {
             $output = str_replace(PHP_EOL, "\n", $output);
         }
+
+        // Remove location of the project
+        $output = str_replace(realpath(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR, '', $output);
 
         // Replace wrong warning message of HHVM
         $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);
