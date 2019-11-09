@@ -34,6 +34,10 @@
         "herrera-io/box": "~1.6.1"
     },
 
+    "suggest": {
+        "ext-dom": "Needed to output test results in JUnit format."
+    },
+
     "autoload": {
         "psr-4": {
             "Behat\\Behat\\": "src/Behat/Behat/",
