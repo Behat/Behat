@@ -64,12 +64,12 @@ final class CounterPrinter
             $style = $this->resultConverter->convertResultCodeToString($resultCode);
 
             $transId = $style . '_count';
-            $message = $this->translator->trans($transId, array('%1%' => $count), 'output');
+            $message = $this->translator->trans($transId, array('%count%' => $count), 'output');
 
             $detailedStats[] = sprintf('{+%s}%s{-%s}', $style, $message, $style);
         }
 
-        $message = $this->translator->trans($intro, array('%1%' => $totalCount), 'output');
+        $message = $this->translator->trans($intro, array('%count%' => $totalCount), 'output');
         $printer->write($message);
 
         if (count($detailedStats)) {
