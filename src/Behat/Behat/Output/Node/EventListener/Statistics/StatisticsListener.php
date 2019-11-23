@@ -15,7 +15,7 @@ use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Collects general suite stats such as time and memory during its execution and prints it afterwards.

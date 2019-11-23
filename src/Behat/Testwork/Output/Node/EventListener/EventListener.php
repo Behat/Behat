@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Output\Node\EventListener;
 
 use Behat\Testwork\Output\Formatter;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Used to define formatter event listeners.

@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\EventDispatcher;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -26,7 +26,7 @@ final class TestworkEventDispatcher extends EventDispatcher
     /**
      * {@inheritdoc}
      */
-    public function dispatch($eventName, Event $event = null)
+    public function dispatch(object $event, string $eventName = null): object
     {
         if (null === $event) {
             $event = new Event();
@@ -36,7 +36,7 @@ final class TestworkEventDispatcher extends EventDispatcher
             $event->setName($eventName);
         }
 
-        $this->doDispatch($this->getListeners($eventName), $eventName, $event);
+        $this->callListeners($this->getListeners($eventName), $eventName, $event);
 
         return $event;
     }
@@ -44,7 +44,7 @@ final class TestworkEventDispatcher extends EventDispatcher
     /**
      * {@inheritdoc}
      */
-    public function getListeners($eventName = null)
+    public function getListeners(string $eventName = null)
     {
         if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
             return parent::getListeners($eventName);

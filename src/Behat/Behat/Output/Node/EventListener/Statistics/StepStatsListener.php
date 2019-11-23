@@ -26,7 +26,7 @@ use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Tester\Result\ExceptionResult;
 use Exception;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Listens and records step events to statistics.

@@ -27,7 +27,7 @@ use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Tester\Setup\Setup;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Listens to outline table events and calls appropriate printers.

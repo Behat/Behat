@@ -14,7 +14,7 @@ use ArrayIterator;
 use Behat\Testwork\Output\Formatter;
 use Countable;
 use IteratorAggregate;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Used to compose formatter event listeners.

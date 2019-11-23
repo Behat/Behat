@@ -25,7 +25,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Listens to feature, scenario and step events and calls appropriate printers.

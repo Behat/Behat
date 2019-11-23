@@ -13,7 +13,7 @@ namespace Behat\Testwork\Output;
 use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Output\Printer\OutputPrinter;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Formatter built around the idea of event delegation and composition.

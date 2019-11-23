@@ -55,12 +55,12 @@ final class EventDispatchingOutlineTester implements OutlineTester
     public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
         $event = new BeforeOutlineTested($env, $feature, $outline);
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        $this->eventDispatcher->dispatch($event, $event::BEFORE);
 
         $setup = $this->baseTester->setUp($env, $feature, $outline, $skip);
 
         $event = new AfterOutlineSetup($env, $feature, $outline, $setup);
-        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
 
         return $setup;
     }
@@ -79,12 +79,12 @@ final class EventDispatchingOutlineTester implements OutlineTester
     public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
     {
         $event = new BeforeOutlineTeardown($env, $feature, $outline, $result);
-        $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $feature, $outline, $skip, $result);
 
         $event = new AfterOutlineTested($env, $feature, $outline, $result, $teardown);
-        $this->eventDispatcher->dispatch($event::AFTER, $event);
+        $this->eventDispatcher->dispatch($event, $event::AFTER);
 
         return $teardown;
     }

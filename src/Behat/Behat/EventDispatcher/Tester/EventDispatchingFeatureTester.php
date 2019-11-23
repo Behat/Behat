@@ -53,12 +53,12 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     public function setUp(Environment $env, $feature, $skip)
     {
         $event = new BeforeFeatureTested($env, $feature);
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        $this->eventDispatcher->dispatch($event, $event::BEFORE);
 
         $setup = $this->baseTester->setUp($env, $feature, $skip);
 
         $event = new AfterFeatureSetup($env, $feature, $setup);
-        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
 
         return $setup;
     }
@@ -77,12 +77,12 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     public function tearDown(Environment $env, $feature, $skip, TestResult $result)
     {
         $event = new BeforeFeatureTeardown($env, $feature, $result);
-        $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
 
         $event = new AfterFeatureTested($env, $feature, $result, $teardown);
-        $this->eventDispatcher->dispatch($event::AFTER, $event);
+        $this->eventDispatcher->dispatch($event, $event::AFTER);
 
         return $teardown;
     }

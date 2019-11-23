@@ -17,7 +17,7 @@ use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Listens to feature events and calls appropriate printers.

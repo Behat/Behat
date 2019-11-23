@@ -14,7 +14,7 @@ use Behat\Behat\Snippet\AggregateSnippet;
 use Behat\Gherkin\Node\StepNode;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Behat console-based snippet printer.

@@ -100,8 +100,8 @@ final class StopOnFailureController implements Controller
             return;
         }
 
-        $this->eventDispatcher->dispatch(SuiteTested::AFTER, new AfterSuiteAborted($event->getEnvironment()));
-        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new AfterExerciseAborted());
+        $this->eventDispatcher->dispatch(new AfterSuiteAborted($event->getEnvironment()), SuiteTested::AFTER);
+        $this->eventDispatcher->dispatch(new AfterExerciseAborted(), ExerciseCompleted::AFTER);
 
         exit(1);
     }

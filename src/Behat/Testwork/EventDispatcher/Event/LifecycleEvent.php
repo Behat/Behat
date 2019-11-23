@@ -12,7 +12,7 @@ namespace Behat\Testwork\EventDispatcher\Event;
 
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Suite\Suite;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Represents an event which holds references to current suite and environment.
