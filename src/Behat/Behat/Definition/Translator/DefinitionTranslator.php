@@ -13,7 +13,6 @@ namespace Behat\Behat\Definition\Translator;
 use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Suite\Suite;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Contracts\Translation\TranslatorTrait;
 
 /**
  * Translates definitions using translator component.
@@ -22,8 +21,6 @@ use Symfony\Contracts\Translation\TranslatorTrait;
  */
 final class DefinitionTranslator
 {
-    use TranslatorTrait;
-
     /**
      * @var TranslatorInterface
      */
@@ -59,5 +56,10 @@ final class DefinitionTranslator
         }
 
         return $definition;
+    }
+
+    public function getLocale()
+    {
+        return $this->translator->getLocale();
     }
 }
