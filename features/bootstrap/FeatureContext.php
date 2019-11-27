@@ -190,15 +190,21 @@ EOL;
     {
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
-        $this->process = Process::fromShellCommandline(
-            sprintf(
-                '%s %s %s %s',
-                $this->phpBin,
-                escapeshellarg(BEHAT_BIN_PATH),
-                $argumentsString,
-                strtr($this->options, array('\'' => '"', '"' => '\"'))
-            )
+        $cmd = sprintf(
+            '%s %s %s %s',
+            $this->phpBin,
+            escapeshellarg(BEHAT_BIN_PATH),
+            $argumentsString,
+            strtr($this->options, array('\'' => '"', '"' => '\"'))
         );
+
+        if (method_exists('\\Symfony\\Component\\Process\\Process', 'fromShellCommandline')) {
+            $this->process = Process::fromShellCommandline($cmd);
+        } else {
+            // BC layer for symfony/process 4.1 and older
+            $this->process = new Process(null);
+            $this->process->setCommandLine($cmd);
+        }
 
         // Prepare the process parameters.
         $this->process->setTimeout(20);
