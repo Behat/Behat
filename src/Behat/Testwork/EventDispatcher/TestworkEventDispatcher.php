@@ -45,7 +45,7 @@ if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
         /**
          * {@inheritdoc}
          */
-        public function getListeners(string $eventName = null)
+        public function getListeners($eventName = null)
         {
             if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
                 return parent::getListeners($eventName);
