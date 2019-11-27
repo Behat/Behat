@@ -94,7 +94,6 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
             $this->eventDispatcher->dispatch($event, BackgroundTested::BEFORE_TEARDOWN);
         } else {
             $this->eventDispatcher->dispatch(BackgroundTested::BEFORE_TEARDOWN, $event);
-
         }
 
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);

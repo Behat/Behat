@@ -39,13 +39,13 @@ final class ConfigurationTree
             // BC layer for symfony/config 4.1 and older
             $treeBuilder = new TreeBuilder();
             /** @var ArrayNodeDefinition $rootNode */
-            $rootNode = $treeBuilder->root('sylius_resource');
+            $rootNode = $treeBuilder->root('testwork');
         }
 
         foreach ($extensions as $extension) {
             $extension->configure($rootNode->children()->arrayNode($extension->getConfigKey()));
         }
 
-        return $tree->buildTree();
+        return $treeBuilder->buildTree();
     }
 }
