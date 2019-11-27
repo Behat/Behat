@@ -7,7 +7,7 @@ if (interface_exists(\Symfony\Contracts\Translation\TranslatorInterface::class))
     {
     }
 } else {
-    interface  TranslatorInterface extends \Symfony\Component\Translation\TranslatorInterface
+    interface TranslatorInterface extends \Symfony\Component\Translation\TranslatorInterface
     {
     }
 }
