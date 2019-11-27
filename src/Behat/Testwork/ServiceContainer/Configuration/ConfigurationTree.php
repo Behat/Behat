@@ -11,6 +11,7 @@
 namespace Behat\Testwork\ServiceContainer\Configuration;
 
 use Behat\Testwork\ServiceContainer\Extension;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\NodeInterface;
 
@@ -30,11 +31,19 @@ final class ConfigurationTree
      */
     public function getConfigTree(array $extensions)
     {
-        $tree = new TreeBuilder('testwork');
-        $root = $tree->getRootNode();
+        if (method_exists(TreeBuilder::class, 'getRootNode')) {
+            $treeBuilder = new TreeBuilder('testwork');
+            /** @var ArrayNodeDefinition $rootNode */
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $treeBuilder = new TreeBuilder();
+            /** @var ArrayNodeDefinition $rootNode */
+            $rootNode = $treeBuilder->root('sylius_resource');
+        }
 
         foreach ($extensions as $extension) {
-            $extension->configure($root->children()->arrayNode($extension->getConfigKey()));
+            $extension->configure($rootNode->children()->arrayNode($extension->getConfigKey()));
         }
 
         return $tree->buildTree();

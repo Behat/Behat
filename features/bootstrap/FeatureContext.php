@@ -79,7 +79,6 @@ class FeatureContext implements Context
         }
         $this->workingDir = $dir;
         $this->phpBin = $php;
-        $this->process = Process::fromShellCommandline('');
     }
 
     /**
