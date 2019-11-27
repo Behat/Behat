@@ -39,6 +39,7 @@ final class ConfigurationTree
             // BC layer for symfony/config 4.1 and older
             $treeBuilder = new TreeBuilder();
             /** @var ArrayNodeDefinition $rootNode */
+            /** @scrutinizer ignore-call */
             $rootNode = $treeBuilder->root('testwork');
         }
 
