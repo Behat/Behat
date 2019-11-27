@@ -13,7 +13,6 @@ namespace Behat\Testwork\Exception;
 use Behat\Testwork\Exception\Stringer\ExceptionStringer;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Exception;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Presents exceptions as strings using registered stringers.

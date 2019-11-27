@@ -10,9 +10,9 @@
 
 namespace Behat\Behat\Output\Node\Printer;
 
+use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Behat counter printer.

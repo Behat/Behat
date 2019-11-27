@@ -85,12 +85,22 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
         $event = new BeforeScenarioTested($env, $feature, $scenario);
-        $this->eventDispatcher->dispatch($event, $this->beforeEventName);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $this->beforeEventName);
+        } else {
+            $this->eventDispatcher->dispatch($this->beforeEventName, $event);
+        }
 
         $setup = $this->baseTester->setUp($env, $feature, $scenario, $skip);
 
         $event = new AfterScenarioSetup($env, $feature, $scenario, $setup);
-        $this->eventDispatcher->dispatch($event, $this->afterSetupEventName);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $this->afterSetupEventName);
+        } else {
+            $this->eventDispatcher->dispatch($this->afterSetupEventName, $event);
+        }
 
         return $setup;
     }
@@ -109,12 +119,22 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
         $event = new BeforeScenarioTeardown($env, $feature, $scenario, $result);
-        $this->eventDispatcher->dispatch($event, $this->beforeTeardownEventName);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $this->beforeTeardownEventName);
+        } else {
+            $this->eventDispatcher->dispatch($this->beforeTeardownEventName, $event);
+        }
 
         $teardown = $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);
 
         $event = new AfterScenarioTested($env, $feature, $scenario, $result, $teardown);
-        $this->eventDispatcher->dispatch($event, $this->afterEventName);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $this->afterEventName);
+        } else {
+            $this->eventDispatcher->dispatch($this->afterEventName, $event);
+        }
 
         return $teardown;
     }

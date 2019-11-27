@@ -53,12 +53,22 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     public function setUp(Environment $env, $feature, $skip)
     {
         $event = new BeforeFeatureTested($env, $feature);
-        $this->eventDispatcher->dispatch($event, $event::BEFORE);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        }
 
         $setup = $this->baseTester->setUp($env, $feature, $skip);
 
         $event = new AfterFeatureSetup($env, $feature, $setup);
-        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+        }
 
         return $setup;
     }
@@ -77,12 +87,22 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     public function tearDown(Environment $env, $feature, $skip, TestResult $result)
     {
         $event = new BeforeFeatureTeardown($env, $feature, $result);
-        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+        }
 
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
 
         $event = new AfterFeatureTested($env, $feature, $result, $teardown);
-        $this->eventDispatcher->dispatch($event, $event::AFTER);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER, $event);
+        }
 
         return $teardown;
     }

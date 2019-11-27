@@ -10,8 +10,8 @@
 
 namespace Behat\Testwork\Output\Node\EventListener;
 
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
-use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Used to define formatter event listeners.

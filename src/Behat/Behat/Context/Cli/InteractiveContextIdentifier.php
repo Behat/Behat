@@ -12,11 +12,11 @@ namespace Behat\Behat\Context\Cli;
 
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Snippet\Generator\TargetContextIdentifier;
+use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Interactive identifier that asks user for input.

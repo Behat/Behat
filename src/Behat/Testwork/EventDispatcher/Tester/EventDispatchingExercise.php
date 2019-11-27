@@ -52,12 +52,22 @@ final class EventDispatchingExercise implements Exercise
     public function setUp(array $iterators, $skip)
     {
         $event = new BeforeExerciseCompleted($iterators);
-        $this->eventDispatcher->dispatch($event, $event::BEFORE);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        }
 
         $setup = $this->baseExercise->setUp($iterators, $skip);
 
         $event = new AfterExerciseSetup($iterators, $setup);
-        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+        }
 
         return $setup;
     }
@@ -76,12 +86,22 @@ final class EventDispatchingExercise implements Exercise
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
         $event = new BeforeExerciseTeardown($iterators, $result);
-        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+        }
 
         $teardown = $this->baseExercise->tearDown($iterators, $skip, $result);
 
         $event = new AfterExerciseCompleted($iterators, $result, $teardown);
-        $this->eventDispatcher->dispatch($event, $event::AFTER);
+
+        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER, $event);
+        }
 
         return $teardown;
     }

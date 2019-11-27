@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\EventDispatcher;
 
-use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -18,42 +17,84 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TestworkEventDispatcher extends EventDispatcher
-{
-    const BEFORE_ALL_EVENTS = '*~';
-    const AFTER_ALL_EVENTS = '~*';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function dispatch(object $event, string $eventName = null): object
+if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+
+    final class TestworkEventDispatcher extends EventDispatcher
     {
-        if (null === $event) {
-            $event = new Event();
+        const BEFORE_ALL_EVENTS = '*~';
+        const AFTER_ALL_EVENTS = '~*';
+
+        /**
+         * {@inheritdoc}
+         */
+        public function dispatch(object $event, string $eventName = null): object
+        {
+            if (null === $event) {
+                $event = new \Symfony\Contracts\EventDispatcher\Event();
+            }
+            if (method_exists($event, 'setName')) {
+                $event->setName($eventName);
+            }
+
+            $this->callListeners($this->getListeners($eventName), $eventName, $event);
+
+            return $event;
         }
 
-        if (method_exists($event, 'setName')) {
-            $event->setName($eventName);
+        /**
+         * {@inheritdoc}
+         */
+        public function getListeners(string $eventName = null)
+        {
+            if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
+                return parent::getListeners($eventName);
+            }
+
+            return array_merge(
+                parent::getListeners(self::BEFORE_ALL_EVENTS),
+                parent::getListeners($eventName),
+                parent::getListeners(self::AFTER_ALL_EVENTS)
+            );
         }
+    }
+} else {
 
-        $this->callListeners($this->getListeners($eventName), $eventName, $event);
+    final class TestworkEventDispatcher extends EventDispatcher
+    {
+        const BEFORE_ALL_EVENTS = '*~';
+        const AFTER_ALL_EVENTS = '~*';
 
-        return $event;
+        /**
+         * {@inheritdoc}
+         */
+        public function dispatch($eventName, \Symfony\Component\EventDispatcher\Event $event = null)
+        {
+            if (null === $event) {
+                $event = new \Symfony\Component\EventDispatcher\Event();
+            }
+            if (method_exists($event, 'setName')) {
+                $event->setName($eventName);
+            }
+            $this->doDispatch($this->getListeners($eventName), $eventName, $event);
+
+            return $event;
+        }
+        /**
+         * {@inheritdoc}
+         */
+        public function getListeners($eventName = null)
+        {
+            if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
+                return parent::getListeners($eventName);
+            }
+
+            return array_merge(
+                parent::getListeners(self::BEFORE_ALL_EVENTS),
+                parent::getListeners($eventName),
+                parent::getListeners(self::AFTER_ALL_EVENTS)
+            );
+        }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getListeners(string $eventName = null)
-    {
-        if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
-            return parent::getListeners($eventName);
-        }
-
-        return array_merge(
-            parent::getListeners(self::BEFORE_ALL_EVENTS),
-            parent::getListeners($eventName),
-            parent::getListeners(self::AFTER_ALL_EVENTS)
-        );
-    }
 }
