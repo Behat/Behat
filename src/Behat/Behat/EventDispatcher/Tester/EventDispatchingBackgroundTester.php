@@ -56,7 +56,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     public function setUp(Environment $env, FeatureNode $feature, $skip)
     {
         $event = new BeforeBackgroundTested($env, $feature,
-            $feature->getBackground());
+            /** @scrutinizer ignore-type */ $feature->getBackground());
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE);
         } else {
@@ -64,7 +64,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
         }
         $setup = $this->baseTester->setUp($env, $feature, $skip);
         $event = new AfterBackgroundSetup($env, $feature,
-            $feature->getBackground(), $setup);
+            /** @scrutinizer ignore-type */ $feature->getBackground(), $setup);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
         } else {
@@ -104,7 +104,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
         }
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
         $event = new AfterBackgroundTested($env, $feature,
-            $feature->getBackground(), $result, $teardown);
+            /** @scrutinizer ignore-type */ $feature->getBackground(), $result, $teardown);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event, BackgroundTested::AFTER);
         } else {
