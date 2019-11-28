@@ -29,25 +29,6 @@ if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
         /**
          * {@inheritdoc}
          */
-        public function dispatch($event, string $eventName = null): object
-        {
-            if (null === $event) {
-                $event = new Symfony\Contracts\EventDispatcher\Event();
-            }
-            if (method_exists($event, 'setName')) {
-                $event->setName($eventName);
-            }
-      
-            $this->callListeners($this->getListeners($eventName),
-                $eventName,
-                $event);
-        
-            return $event;
-        }
-        
-        /**
-         * {@inheritdoc}
-         */
         public function getListeners($eventName = null)
         {
             if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
