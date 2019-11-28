@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -19,7 +18,6 @@ use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SuiteTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Suite tester dispatching BEFORE/AFTER events during testing.
@@ -36,11 +34,11 @@ final class EventDispatchingSuiteTester implements SuiteTester
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
-
+    
     /**
      * Initializes tester.
      *
-     * @param SuiteTester              $baseTester
+     * @param SuiteTester $baseTester
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(SuiteTester $baseTester, EventDispatcherInterface $eventDispatcher)
@@ -48,33 +46,29 @@ final class EventDispatchingSuiteTester implements SuiteTester
         $this->baseTester = $baseTester;
         $this->eventDispatcher = $eventDispatcher;
     }
-
+    
     /**
      * {@inheritdoc}
      */
     public function setUp(Environment $env, SpecificationIterator $iterator, $skip)
     {
         $event = new BeforeSuiteTested($env, $iterator);
-
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE, $event);
         }
-    
         $setup = $this->baseTester->setUp($env, $iterator, $skip);
         $event = new AfterSuiteSetup($env, $iterator, $setup);
-        
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
         }
         
-        
         return $setup;
     }
-
+    
     /**
      * {@inheritdoc}
      */
@@ -82,7 +76,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
     {
         return $this->baseTester->test($env, $iterator, $skip);
     }
-
+    
     /**
      * {@inheritdoc}
      */
@@ -90,19 +84,18 @@ final class EventDispatchingSuiteTester implements SuiteTester
     {
         $event = new BeforeSuiteTeardown($env, $iterator, $result);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
-            $this->eventDispatcher->dispatch( $event, $event::BEFORE_TEARDOWN);
-        }
-        else{
+            $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+        } else {
             $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
         }
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);
-
         $event = new AfterSuiteTested($env, $iterator, $result, $teardown);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
-            $this->eventDispatcher->dispatch( $event, $event::AFTER);
-        }else{
+            $this->eventDispatcher->dispatch($event, $event::AFTER);
+        } else {
             $this->eventDispatcher->dispatch($event::AFTER, $event);
         }
+        
         return $teardown;
     }
 }

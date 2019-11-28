@@ -35,6 +35,7 @@ final class ConfigurationTree
             $tree = new TreeBuilder();
             $root = $tree->root($rootName);
         } else {
+            /** @scrutinizer ignore-call */
             $tree = new TreeBuilder($rootName);
             $root = $tree->getRootNode();
         }

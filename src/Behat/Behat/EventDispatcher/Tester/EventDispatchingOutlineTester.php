@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -20,7 +19,6 @@ use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Outline tester dispatching BEFORE/AFTER events during tests.
@@ -37,11 +35,11 @@ final class EventDispatchingOutlineTester implements OutlineTester
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
-
+    
     /**
      * Initializes tester.
      *
-     * @param OutlineTester            $baseTester
+     * @param OutlineTester $baseTester
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(OutlineTester $baseTester, EventDispatcherInterface $eventDispatcher)
@@ -49,7 +47,7 @@ final class EventDispatchingOutlineTester implements OutlineTester
         $this->baseTester = $baseTester;
         $this->eventDispatcher = $eventDispatcher;
     }
-
+    
     /**
      * {@inheritdoc}
      */
@@ -62,16 +60,16 @@ final class EventDispatchingOutlineTester implements OutlineTester
             $this->eventDispatcher->dispatch($event::BEFORE, $event);
         }
         $setup = $this->baseTester->setUp($env, $feature, $outline, $skip);
-
         $event = new AfterOutlineSetup($env, $feature, $outline, $setup);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
         }
+        
         return $setup;
     }
-
+    
     /**
      * {@inheritdoc}
      */
@@ -79,7 +77,7 @@ final class EventDispatchingOutlineTester implements OutlineTester
     {
         return $this->baseTester->test($env, $feature, $outline, $skip);
     }
-
+    
     /**
      * {@inheritdoc}
      */
@@ -87,22 +85,21 @@ final class EventDispatchingOutlineTester implements OutlineTester
     {
         $event = new BeforeOutlineTeardown($env, $feature, $outline, $result);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
-            $this->eventDispatcher->dispatch( $event,$event::BEFORE_TEARDOWN);
-        }else{
+            $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+        } else {
             $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
-    
+            
         }
         $teardown = $this->baseTester->tearDown($env, $feature, $outline, $skip, $result);
-
         $event = new AfterOutlineTested($env, $feature, $outline, $result, $teardown);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event, $event::AFTER);
-    
-        }else{
+            
+        } else {
             $this->eventDispatcher->dispatch($event::AFTER, $event);
-    
+            
         }
-
+        
         return $teardown;
     }
 }

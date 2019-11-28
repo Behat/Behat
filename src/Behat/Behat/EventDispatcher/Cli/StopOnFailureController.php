@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -38,12 +37,11 @@ final class StopOnFailureController implements Controller
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
-
     /**
      * @var ResultInterpretation
      */
     private $resultInterpretation;
-
+    
     /**
      * Initializes controller.
      *
@@ -54,7 +52,7 @@ final class StopOnFailureController implements Controller
         $this->eventDispatcher = $eventDispatcher;
         $this->resultInterpretation = new SoftInterpretation();
     }
-
+    
     /**
      * Configures command to be executable by the controller.
      *
@@ -66,11 +64,11 @@ final class StopOnFailureController implements Controller
             'Stop processing on first failed scenario.'
         );
     }
-
+    
     /**
      * Executes controller.
      *
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return null|integer
@@ -80,15 +78,13 @@ final class StopOnFailureController implements Controller
         if (!$input->getOption('stop-on-failure')) {
             return null;
         }
-
         if ($input->getOption('strict')) {
             $this->resultInterpretation = new StrictInterpretation();
         }
-
         $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'exitOnFailure'), -100);
         $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'exitOnFailure'), -100);
     }
-
+    
     /**
      * Exits if scenario is a failure and if stopper is enabled.
      *
@@ -99,17 +95,15 @@ final class StopOnFailureController implements Controller
         if (!$this->resultInterpretation->isFailure($event->getTestResult())) {
             return;
         }
-
-        if(!class_exists(\Symfony\Contracts\EventDispatcher\Event::class)){
+        if (!class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch(SuiteTested::AFTER, new AfterSuiteAborted($event->getEnvironment()));
             $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new AfterExerciseAborted());
-    
-        }else{
-            $this->eventDispatcher->dispatch( new AfterSuiteAborted($event->getEnvironment()), SuiteTested::AFTER);
+            
+        } else {
+            $this->eventDispatcher->dispatch(new AfterSuiteAborted($event->getEnvironment()), SuiteTested::AFTER);
             $this->eventDispatcher->dispatch(new AfterExerciseAborted(), ExerciseCompleted::AFTER);
-    
+            
         }
-        
         exit(1);
     }
 }

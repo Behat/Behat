@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Behat Testwork.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -17,7 +16,6 @@ use Behat\Testwork\EventDispatcher\Event\BeforeExerciseTeardown;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Exercise dispatching BEFORE/AFTER events during its execution.
@@ -70,7 +68,7 @@ final class EventDispatchingExercise implements Exercise
         
         return $setup;
     }
-
+    
     /**
      * {@inheritdoc}
      */
@@ -87,19 +85,16 @@ final class EventDispatchingExercise implements Exercise
         $event = new BeforeExerciseTeardown($iterators, $result);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
-    
-        }else{
+        } else {
             $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
-    
         }
         $teardown = $this->baseExercise->tearDown($iterators, $skip, $result);
         $event = new AfterExerciseCompleted($iterators, $result, $teardown);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event, $event::AFTER);
-    
-        }else{
+            
+        } else {
             $this->eventDispatcher->dispatch($event::AFTER, $event);
-    
         }
         
         return $teardown;
