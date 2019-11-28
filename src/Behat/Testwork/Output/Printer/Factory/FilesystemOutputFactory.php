@@ -56,8 +56,8 @@ class FilesystemOutputFactory extends OutputFactory
         if (null === $this->fileName) {
             throw new \LogicException('Unable to create file, no file name specified');
         }
-
-        $filePath = $this->getOutputPath().'/'.$this->fileName;
+    
+        $filePath = $this->getOutputPath() . '/' . $this->fileName;
 
         $stream = new StreamOutput(
             fopen($filePath, 'w'),

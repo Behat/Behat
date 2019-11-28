@@ -46,7 +46,7 @@ final class SpecificationExtension implements Extension
      */
     public function __construct(ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**

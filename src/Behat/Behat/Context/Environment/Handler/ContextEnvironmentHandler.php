@@ -135,7 +135,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     private function getNormalizedContextSettings(Suite $suite)
     {
         return array_map(
-            function ($context) {
+            function($context) {
                 $class = $context;
                 $arguments = array();
 

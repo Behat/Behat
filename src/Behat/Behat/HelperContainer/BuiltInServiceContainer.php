@@ -139,7 +139,7 @@ final class BuiltInServiceContainer implements ContainerInterface
      */
     private function getAndValidateArguments(array $schema)
     {
-        return isset($schema['arguments']) ? (array)$schema['arguments'] : array();
+        return isset($schema['arguments']) ? (array) $schema['arguments'] : array();
     }
 
     /**

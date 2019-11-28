@@ -185,7 +185,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      */
     private function hasName($index)
     {
-        return function (ReflectionParameter $parameter) use ($index) {
+        return function(ReflectionParameter $parameter) use ($index) {
             return $index === $parameter->getName();
         };
     }
@@ -199,7 +199,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      */
     private function hasPosition($index)
     {
-        return function (ReflectionParameter $parameter) use ($index) {
+        return function(ReflectionParameter $parameter) use ($index) {
             return $index === $parameter->getPosition();
         };
     }
@@ -211,7 +211,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      */
     private function isClass()
     {
-        return function (ReflectionParameter $parameter) {
+        return function(ReflectionParameter $parameter) {
             return $parameter->getClass();
         };
     }

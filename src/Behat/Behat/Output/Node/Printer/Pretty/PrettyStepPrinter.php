@@ -148,7 +148,7 @@ final class PrettyStepPrinter implements StepPrinter
         $callResult = $result->getCallResult();
         $indentedText = $this->subIndentText;
 
-        $pad = function ($line) use ($indentedText) {
+        $pad = function($line) use ($indentedText) {
             return sprintf(
                 '%s│ {+stdout}%s{-stdout}', $indentedText, $line
             );

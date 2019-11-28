@@ -69,7 +69,7 @@ final class AutoloaderExtension implements Extension
     {
         $builder
             ->beforeNormalization()
-                ->ifString()->then(function ($path) {
+                ->ifString()->then(function($path) {
                     return array('' => $path);
                 })
             ->end()

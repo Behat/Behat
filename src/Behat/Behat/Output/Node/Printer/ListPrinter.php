@@ -157,10 +157,10 @@ final class ListPrinter
         $path = $this->relativizePaths($path);
         $printer->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $name, $style, $path));
 
-        $pad = function ($line) { return '      ' . $line; };
+        $pad = function($line) { return '      ' . $line; };
 
         if (null !== $stdOut) {
-            $padText = function ($line) { return '      │ ' . $line; };
+            $padText = function($line) { return '      │ ' . $line; };
             $stdOutString = array_map($padText, explode("\n", $stdOut));
             $printer->writeln(implode("\n", $stdOutString));
         }
@@ -188,10 +188,10 @@ final class ListPrinter
             )
         );
 
-        $pad = function ($line) { return '      ' . $line; };
+        $pad = function($line) { return '      ' . $line; };
 
         if (null !== $hookStat->getStdOut()) {
-            $padText = function ($line) { return '      │ ' . $line; };
+            $padText = function($line) { return '      │ ' . $line; };
             $stdOutString = array_map($padText, explode("\n", $hookStat->getStdOut()));
             $printer->writeln(implode("\n", $stdOutString));
         }
@@ -237,10 +237,10 @@ final class ListPrinter
             )
         );
 
-        $pad = function ($line) { return '        ' . $line; };
+        $pad = function($line) { return '        ' . $line; };
 
         if (null !== $stat->getStdOut()) {
-            $padText = function ($line) { return '        │ ' . $line; };
+            $padText = function($line) { return '        │ ' . $line; };
             $stdOutString = array_map($padText, explode("\n", $stat->getStdOut()));
             $printer->writeln(implode("\n", $stdOutString));
         }

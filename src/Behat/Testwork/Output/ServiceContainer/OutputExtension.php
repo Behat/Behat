@@ -62,7 +62,7 @@ final class OutputExtension implements Extension
     {
         $this->defaultFormatter = $defaultFormatter;
         $this->factories = $formatterFactories;
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -100,10 +100,10 @@ final class OutputExtension implements Extension
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->beforeNormalization()
-                    ->ifTrue(function ($a) {
+                    ->ifTrue(function($a) {
                         return is_array($a) && !isset($a['enabled']);
                     })
-                    ->then(function ($a) {
+                    ->then(function($a) {
                         return array_merge($a, array('enabled' => true));
                     })
                 ->end()

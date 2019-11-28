@@ -74,7 +74,7 @@ final class AggregateSnippet
     {
         return array_unique(
             array_map(
-                function (Snippet $snippet) {
+                function(Snippet $snippet) {
                     return $snippet->getStep();
                 },
                 $this->snippets
@@ -92,7 +92,7 @@ final class AggregateSnippet
     {
         return array_unique(
             array_map(
-                function (Snippet $snippet) {
+                function(Snippet $snippet) {
                     return $snippet->getTarget();
                 },
                 $this->snippets
@@ -115,7 +115,7 @@ final class AggregateSnippet
             call_user_func_array(
                 'array_merge',
                 array_map(
-                    function (Snippet $snippet) {
+                    function(Snippet $snippet) {
                         if (!$snippet instanceof ContextSnippet) {
                             return array();
                         }

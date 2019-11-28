@@ -54,7 +54,7 @@ final class TickingStepTester implements StepTester
      */
     public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
-        declare(ticks = 1);
+        declare(ticks=1);
 
         return $this->baseTester->test($env, $feature, $step, $skip);
     }

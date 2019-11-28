@@ -11,8 +11,8 @@
 namespace Behat\Behat\Definition\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
-use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
+use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -59,7 +59,7 @@ final class DefinitionExtension implements Extension
      */
     public function __construct(ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**

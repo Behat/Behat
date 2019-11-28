@@ -87,15 +87,15 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
     {
         $this->keywords->setLanguage($this->translator->getLocale());
 
-        $method = 'get'.ucfirst($definition->getType()).'Keywords';
+        $method = 'get' . ucfirst($definition->getType()) . 'Keywords';
 
         $keywords = explode('|', $this->keywords->$method());
 
         if ($onlyOne) {
             return current($keywords);
         }
-
-        return 1 < count($keywords) ? '['.implode('|', $keywords).']' : implode('|', $keywords);
+    
+        return 1 < count($keywords) ? '[' . implode('|', $keywords) . ']' : implode('|', $keywords);
     }
 
     /**

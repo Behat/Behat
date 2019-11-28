@@ -59,7 +59,7 @@ final class TurnipPatternPolicy implements PatternPolicy
         foreach (self::$placeholderPatterns as $replacePattern) {
             $pattern = preg_replace_callback(
                 $replacePattern,
-                function () use (&$count) { return ':arg' . ++$count; },
+                function() use (&$count) { return ':arg' . ++$count; },
                 $pattern
             );
         }

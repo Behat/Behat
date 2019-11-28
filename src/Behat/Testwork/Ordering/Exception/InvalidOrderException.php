@@ -19,4 +19,6 @@ use RuntimeException;
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
 final class InvalidOrderException extends RuntimeException implements TestworkException
-{}
+{
+
+}

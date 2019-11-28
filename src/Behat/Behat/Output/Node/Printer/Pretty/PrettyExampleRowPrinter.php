@@ -93,8 +93,8 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     private function getWrapperClosure(OutlineNode $outline, ExampleNode $example, array $stepEvents)
     {
         $resultConverter = $this->resultConverter;
-
-        return function ($value, $column) use ($outline, $example, $stepEvents, $resultConverter) {
+    
+        return function($value, $column) use ($outline, $example, $stepEvents, $resultConverter) {
             $results = array();
             foreach ($stepEvents as $event) {
                 $index = array_search($event->getStep(), $example->getSteps());
@@ -162,7 +162,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         $callResult = $result->getCallResult();
         $indentedText = $this->subIndentText;
 
-        $pad = function ($line) use ($indentedText) {
+        $pad = function($line) use ($indentedText) {
             return sprintf(
                 '%s│ {+stdout}%s{-stdout}', $indentedText, $line
             );

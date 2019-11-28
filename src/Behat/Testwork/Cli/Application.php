@@ -143,7 +143,7 @@ final class Application extends BaseApplication
      */
     private function loadConfiguration(InputInterface $input)
     {
-        $profile = $input->getParameterOption(array('--profile', '-p')) ? : 'default';
+        $profile = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
 
         return $this->configurationLoader->loadConfiguration($profile);
     }

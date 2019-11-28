@@ -71,7 +71,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     private function splitArguments(array $parameters, array $arguments)
     {
         $parameterNames = array_map(
-            function (ReflectionParameter $parameter) {
+            function(ReflectionParameter $parameter) {
                 return $parameter->getName();
             },
             $parameters

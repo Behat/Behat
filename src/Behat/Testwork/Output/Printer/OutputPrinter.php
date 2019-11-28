@@ -20,11 +20,11 @@ interface OutputPrinter
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
-    const VERBOSITY_NORMAL       = 1;
+    const VERBOSITY_NORMAL = 1;
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
-    const VERBOSITY_VERBOSE      = 2;
+    const VERBOSITY_VERBOSE = 2;
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
@@ -32,7 +32,7 @@ interface OutputPrinter
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
-    const VERBOSITY_DEBUG        = 4;
+    const VERBOSITY_DEBUG = 4;
 
     /**
      * Sets output path.

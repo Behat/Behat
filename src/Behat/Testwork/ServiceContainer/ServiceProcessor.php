@@ -39,8 +39,8 @@ final class ServiceProcessor
             $serviceTags[] = array_merge(array('priority' => 0), $firstTags, array('id' => $id));
         }
 
-        usort($serviceTags, function ($tag1, $tag2) { return $tag2['priority'] - $tag1['priority']; });
-        $serviceReferences = array_map(function ($tag) { return new Reference($tag['id']); }, $serviceTags);
+        usort($serviceTags, function($tag1, $tag2) { return $tag2['priority'] - $tag1['priority']; });
+        $serviceReferences = array_map(function($tag) { return new Reference($tag['id']); }, $serviceTags);
 
         return $serviceReferences;
     }

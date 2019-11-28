@@ -133,7 +133,7 @@ final class RuntimeCallHandler implements CallHandler
      */
     private function startErrorAndOutputBuffering(Call $call)
     {
-        $errorReporting = $call->getErrorReportingLevel() ? : $this->errorReportingLevel;
+        $errorReporting = $call->getErrorReportingLevel() ?: $this->errorReportingLevel;
         set_error_handler(array($this, 'handleError'), $errorReporting);
         $this->obStarted = ob_start();
     }
