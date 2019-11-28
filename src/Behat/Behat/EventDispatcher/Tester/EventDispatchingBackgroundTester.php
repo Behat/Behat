@@ -93,7 +93,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
         TestResult $result
     ) {
         $event = new BeforeBackgroundTeardown($env, $feature,
-            $feature->getBackground(), $result);
+            /** @scrutinizer ignore-type */  $feature->getBackground(), $result);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event,
                 BackgroundTested::BEFORE_TEARDOWN);

@@ -182,7 +182,7 @@ final class Application extends BaseApplication
         $container->set('cli.output', $output);
 
         $extension = new ContainerLoader($this->extensionManager);
-        $extension->load($container, $this->loadConfiguration($input));
+        $extension->load($container, $this->loadConfiguration(/** @scrutinizer ignore-type */ $input));
         $container->addObjectResource($extension);
         $container->compile();
 

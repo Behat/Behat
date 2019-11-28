@@ -32,7 +32,8 @@ final class ConfigurationTree
     {
         $rootName = 'testwork';
         if ($this->isOlderTreeBuilder()) {
-            $tree = new TreeBuilder();
+            $tree = /** @scrutinizer ignore-call */ new TreeBuilder();
+            /** @scrutinizer ignore-call */
             $root = $tree->root($rootName);
         } else {
             /** @scrutinizer ignore-call */
