@@ -18,7 +18,6 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SpecificationTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Feature tester dispatching BEFORE/AFTER events during tests.

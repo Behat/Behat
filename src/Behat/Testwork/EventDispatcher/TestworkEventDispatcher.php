@@ -11,16 +11,14 @@
 namespace Behat\Testwork\EventDispatcher;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Extends Symfony2 event dispatcher with catch-all listeners.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-
 if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
-
+    
     final class TestworkEventDispatcher extends EventDispatcher
     {
         const BEFORE_ALL_EVENTS = '*~';

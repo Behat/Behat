@@ -19,7 +19,6 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Background tester dispatching BEFORE/AFTER events.
