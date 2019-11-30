@@ -108,7 +108,7 @@ final class AutoloaderExtension implements Extension
      */
     private function loadAutoloader(ContainerBuilder $container)
     {
-        $definition = new Definition('Composer\Autoload\ClassLoader');
+        $definition = new Definition('Behat\Testwork\Autoloader\ClassLoader');
         $container->setDefinition(self::CLASS_LOADER_ID, $definition);
     }
 

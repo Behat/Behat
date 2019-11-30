@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Autoloader\Cli;
 
 use Behat\Testwork\Cli\Controller;
-use Composer\Autoload\ClassLoader;
+use Behat\Testwork\Autoloader\ClassLoader;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

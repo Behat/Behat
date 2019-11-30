@@ -1,9 +1,9 @@
 {
-    "chmod": "0755",
     "directories": ["src"],
     "files": [
         "LICENSE",
-        "i18n.php"
+        "i18n.php",
+        "vendor/symfony/translation/Resources/data/parents.json"
     ],
     "finder": [
         {
@@ -12,8 +12,10 @@
             "in": "vendor"
         }
     ],
-    "compactors": "Herrera\\Box\\Compactor\\Php",
-    "main": "bin/behat",
+    "compactors": [
+        "KevinGH\\Box\\Compactor\\Php",
+        "KevinGH\\Box\\Compactor\\PhpScoper"
+    ],
     "output": "behat.phar",
-    "stub": true
+    "stub": "build/stub.php"
 }

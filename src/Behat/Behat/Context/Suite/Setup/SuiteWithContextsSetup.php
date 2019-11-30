@@ -16,7 +16,7 @@ use Behat\Testwork\Filesystem\FilesystemLogger;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Setup\SuiteSetup;
 use Behat\Testwork\Suite\Suite;
-use Composer\Autoload\ClassLoader;
+use Behat\Testwork\Autoloader\ClassLoader;
 
 /**
  * Generates classes for all contexts in the suite using autoloader.
