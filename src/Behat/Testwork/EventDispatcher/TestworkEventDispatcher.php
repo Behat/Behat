@@ -76,6 +76,7 @@ if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             if (method_exists($event, 'setName')) {
                 $event->setName($eventName);
             }
+            /** @scrutinizer ignore-call */
             $this->doDispatch($this->getListeners($eventName), $eventName, $event);
 
             return $event;
