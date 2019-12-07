@@ -18,6 +18,7 @@ use Behat\Behat\EventDispatcher\Event\BeforeBackgroundTested;
 use Behat\Behat\Tester\BackgroundTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -56,7 +57,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     {
         $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground());
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE, $event);
@@ -66,7 +67,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
 
         $event = new AfterBackgroundSetup($env, $feature, $feature->getBackground(), $setup);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
@@ -90,7 +91,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     {
         $event = new BeforeBackgroundTeardown($env, $feature, $feature->getBackground(), $result);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, BackgroundTested::BEFORE_TEARDOWN);
         } else {
             $this->eventDispatcher->dispatch(BackgroundTested::BEFORE_TEARDOWN, $event);
@@ -100,7 +101,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
 
         $event = new AfterBackgroundTested($env, $feature, $feature->getBackground(), $result, $teardown);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, BackgroundTested::AFTER);
         } else {
             $this->eventDispatcher->dispatch(BackgroundTested::AFTER, $event);

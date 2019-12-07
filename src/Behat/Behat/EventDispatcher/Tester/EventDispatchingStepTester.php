@@ -19,6 +19,7 @@ use Behat\Behat\Tester\StepTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -56,7 +57,7 @@ final class EventDispatchingStepTester implements StepTester
     {
         $event = new BeforeStepTested($env, $feature, $step);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE, $event);
@@ -66,7 +67,7 @@ final class EventDispatchingStepTester implements StepTester
 
         $event = new AfterStepSetup($env, $feature, $step, $setup);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
@@ -90,7 +91,7 @@ final class EventDispatchingStepTester implements StepTester
     {
         $event = new BeforeStepTeardown($env, $feature, $step, $result);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
@@ -100,7 +101,7 @@ final class EventDispatchingStepTester implements StepTester
 
         $event = new AfterStepTested($env, $feature, $step, $result, $teardown);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::AFTER);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER, $event);

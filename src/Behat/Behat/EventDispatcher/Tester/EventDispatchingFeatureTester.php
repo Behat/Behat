@@ -15,6 +15,7 @@ use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTeardown;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SpecificationTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -54,7 +55,7 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     {
         $event = new BeforeFeatureTested($env, $feature);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE, $event);
@@ -64,7 +65,7 @@ final class EventDispatchingFeatureTester implements SpecificationTester
 
         $event = new AfterFeatureSetup($env, $feature, $setup);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
@@ -88,7 +89,7 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     {
         $event = new BeforeFeatureTeardown($env, $feature, $result);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
@@ -98,7 +99,7 @@ final class EventDispatchingFeatureTester implements SpecificationTester
 
         $event = new AfterFeatureTested($env, $feature, $result, $teardown);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::AFTER);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER, $event);

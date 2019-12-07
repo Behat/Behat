@@ -15,6 +15,7 @@ use Behat\Testwork\EventDispatcher\Event\AfterSuiteSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTeardown;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SuiteTester;
@@ -55,7 +56,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
     {
         $event = new BeforeSuiteTested($env, $iterator);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE, $event);
@@ -65,7 +66,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
 
         $event = new AfterSuiteSetup($env, $iterator, $setup);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
@@ -88,7 +89,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         $event = new BeforeSuiteTeardown($env, $iterator, $result);
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch( $event, $event::BEFORE_TEARDOWN);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
@@ -98,7 +99,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
 
         $event = new AfterSuiteTested($env, $iterator, $result, $teardown);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch( $event, $event::AFTER);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER, $event);
