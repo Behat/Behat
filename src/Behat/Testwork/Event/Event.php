@@ -2,8 +2,9 @@
 
 namespace Behat\Testwork\Event;
 
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 
-if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
     class Event extends \Symfony\Contracts\EventDispatcher\Event
     {
     }

@@ -14,6 +14,7 @@ use Behat\Testwork\EventDispatcher\Event\AfterExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\AfterExerciseSetup;
 use Behat\Testwork\EventDispatcher\Event\BeforeExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\BeforeExerciseTeardown;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -53,7 +54,7 @@ final class EventDispatchingExercise implements Exercise
     {
         $event = new BeforeExerciseCompleted($iterators);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE, $event);
@@ -63,7 +64,7 @@ final class EventDispatchingExercise implements Exercise
 
         $event = new AfterExerciseSetup($iterators, $setup);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
@@ -87,7 +88,7 @@ final class EventDispatchingExercise implements Exercise
     {
         $event = new BeforeExerciseTeardown($iterators, $result);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
@@ -97,7 +98,7 @@ final class EventDispatchingExercise implements Exercise
 
         $event = new AfterExerciseCompleted($iterators, $result, $teardown);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::AFTER);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER, $event);

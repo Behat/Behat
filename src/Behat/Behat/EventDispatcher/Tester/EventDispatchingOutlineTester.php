@@ -18,6 +18,7 @@ use Behat\Behat\Tester\OutlineTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -56,7 +57,7 @@ final class EventDispatchingOutlineTester implements OutlineTester
     {
         $event = new BeforeOutlineTested($env, $feature, $outline);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::BEFORE);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE, $event);
@@ -66,7 +67,7 @@ final class EventDispatchingOutlineTester implements OutlineTester
 
         $event = new AfterOutlineSetup($env, $feature, $outline, $setup);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
@@ -90,7 +91,7 @@ final class EventDispatchingOutlineTester implements OutlineTester
     {
         $event = new BeforeOutlineTeardown($env, $feature, $outline, $result);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch( $event,$event::BEFORE_TEARDOWN);
         } else {
             $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
@@ -100,7 +101,7 @@ final class EventDispatchingOutlineTester implements OutlineTester
 
         $event = new AfterOutlineTested($env, $feature, $outline, $result, $teardown);
 
-        if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
             $this->eventDispatcher->dispatch($event, $event::AFTER);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER, $event);
