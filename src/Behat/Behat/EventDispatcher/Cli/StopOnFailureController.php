@@ -104,7 +104,6 @@ final class StopOnFailureController implements Controller
             $this->eventDispatcher->dispatch(new AfterExerciseAborted(), ExerciseCompleted::AFTER);
             
         }
-        /** @scrutinizer ignore-call */
-        exit(1);
+        /** @scrutinizer ignore-call */ exit(1);
     }
 }
