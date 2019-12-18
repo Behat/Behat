@@ -32,21 +32,18 @@ final class EventDispatchingExercise implements Exercise
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
-    
+
     /**
      * Initializes exercise.
      *
-     * @param Exercise $baseExercise
+     * @param Exercise                 $baseExercise
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(
-        Exercise $baseExercise,
-        EventDispatcherInterface $eventDispatcher
-    ) {
+    public function __construct(Exercise $baseExercise, EventDispatcherInterface $eventDispatcher) {
         $this->baseExercise = $baseExercise;
         $this->eventDispatcher = $eventDispatcher;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -68,7 +65,7 @@ final class EventDispatchingExercise implements Exercise
         
         return $setup;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -76,7 +73,7 @@ final class EventDispatchingExercise implements Exercise
     {
         return $this->baseExercise->test($iterators, $skip);
     }
-    
+
     /**
      * {@inheritdoc}
      */

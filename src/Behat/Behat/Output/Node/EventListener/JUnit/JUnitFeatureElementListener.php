@@ -164,7 +164,6 @@ final class JUnitFeatureElementListener implements EventListener
         if (!$event instanceof AfterFeatureTested) {
             return;
         }
-        
         $this->featurePrinter->printHeader($formatter, $this->beforeFeatureTestedEvent);
 
         foreach ($this->afterScenarioTestedEvents as $afterScenario) {

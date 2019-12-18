@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -59,7 +58,6 @@ final class EventDispatchingFeatureTester implements SpecificationTester
             $this->eventDispatcher->dispatch($event::BEFORE, $event);
         }
         $setup = $this->baseTester->setUp($env, $feature, $skip);
-
         $event = new AfterFeatureSetup($env, $feature, $setup);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
@@ -96,7 +94,6 @@ final class EventDispatchingFeatureTester implements SpecificationTester
             $this->eventDispatcher->dispatch($event, $event::AFTER);
         } else {
             $this->eventDispatcher->dispatch($event::AFTER, $event);
-            
         }
         
         return $teardown;

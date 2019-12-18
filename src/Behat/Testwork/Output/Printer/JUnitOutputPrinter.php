@@ -114,7 +114,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
 
     private function addAttributesToNode(\DOMElement $node, array $attributes)
     {
-        foreach ($attributes as $name => $value) {
+        foreach ($attributes as $name => $value){
             $node->setAttribute($name, $value);
         }
     }
@@ -127,8 +127,8 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function setFileName($fileName, $extension = 'xml')
     {
-        if ('.' . $extension !== substr($fileName, strlen($extension) + 1)) {
-            $fileName .= '.' . $extension;
+        if ('.'.$extension !== substr($fileName, strlen($extension) + 1)) {
+            $fileName .= '.'.$extension;
         }
 
         $this->getOutputFactory()->setFileName($fileName);
@@ -140,7 +140,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function flush()
     {
-        if ($this->domDocument instanceof \DOMDocument) {
+        if($this->domDocument instanceof \DOMDocument){
             $this->getWritingStream()->write(
                 $this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG),
                 false,

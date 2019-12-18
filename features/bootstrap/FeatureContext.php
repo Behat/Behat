@@ -213,7 +213,7 @@ EOL;
         
         $process->setEnv($env);
         $this->process = $process;
-        $process->run();
+        $this->process->run();
     }
 
     /**
@@ -380,18 +380,17 @@ EOL;
      */
     public function itShouldFail($success)
     {
-    
         if ('fail' === $success) {
             if (0 === (int)$this->getExitCode()) {
                 echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
             }
-    
+
             Assert::assertNotEquals(0, $this->getExitCode());
         } else {
             if (0 !== (int)$this->getExitCode()) {
                 echo 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
             }
-    
+
             Assert::assertEquals(0, (int)$this->getExitCode());
         }
     }

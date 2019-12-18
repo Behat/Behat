@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -37,11 +38,12 @@ final class StopOnFailureController implements Controller
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+
     /**
      * @var ResultInterpretation
      */
     private $resultInterpretation;
-    
+
     /**
      * Initializes controller.
      *
@@ -52,7 +54,7 @@ final class StopOnFailureController implements Controller
         $this->eventDispatcher = $eventDispatcher;
         $this->resultInterpretation = new SoftInterpretation();
     }
-    
+
     /**
      * Configures command to be executable by the controller.
      *
@@ -64,7 +66,7 @@ final class StopOnFailureController implements Controller
             'Stop processing on first failed scenario.'
         );
     }
-    
+
     /**
      * Executes controller.
      *
@@ -84,7 +86,7 @@ final class StopOnFailureController implements Controller
         $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'exitOnFailure'), -100);
         $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'exitOnFailure'), -100);
     }
-    
+
     /**
      * Exits if scenario is a failure and if stopper is enabled.
      *

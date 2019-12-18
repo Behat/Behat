@@ -48,7 +48,7 @@ final class HookRepository
     {
         return array_filter(
             $this->environmentManager->readEnvironmentCallees($environment),
-            function(Callee $callee) {
+            function (Callee $callee) {
                 return $callee instanceof Hook;
             }
         );
@@ -65,7 +65,7 @@ final class HookRepository
     {
         return array_filter(
             $this->getEnvironmentHooks($scope->getEnvironment()),
-            function(Hook $hook) use ($scope) {
+            function (Hook $hook) use ($scope) {
                 if ($scope->getName() !== $hook->getScopeName()) {
                     return false;
                 }

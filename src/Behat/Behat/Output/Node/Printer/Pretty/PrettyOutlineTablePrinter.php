@@ -137,8 +137,8 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
     private function getWrapperClosure()
     {
         $style = $this->resultConverter->convertResultCodeToString(TestResult::SKIPPED);
-    
-        return function($col) use ($style) {
+
+        return function ($col) use ($style) {
             return sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
         };
     }

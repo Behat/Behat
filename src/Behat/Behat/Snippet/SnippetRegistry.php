@@ -114,7 +114,7 @@ final class SnippetRegistry implements SnippetRepository
 
         $this->snippets = array_values(
             array_map(
-                function(array $snippets) {
+                function (array $snippets) {
                     return new AggregateSnippet($snippets);
                 },
                 $snippetsSet

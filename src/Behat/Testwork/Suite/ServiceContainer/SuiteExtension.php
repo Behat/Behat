@@ -50,7 +50,7 @@ final class SuiteExtension implements Extension
      */
     public function __construct(ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ?: new ServiceProcessor();
+        $this->processor = $processor ? : new ServiceProcessor();
     }
 
     /**
@@ -85,10 +85,10 @@ final class SuiteExtension implements Extension
             ->normalizeKeys(false)
             ->prototype('array')
                 ->beforeNormalization()
-                    ->ifTrue(function($suite) {
+                    ->ifTrue(function ($suite) {
                         return is_array($suite) && count($suite);
                     })
-                    ->then(function($suite) {
+                    ->then(function ($suite) {
                         $suite['settings'] = isset($suite['settings'])
                             ? $suite['settings']
                             : array();

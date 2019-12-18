@@ -59,7 +59,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
         }
 
         return array_map(
-            function($iterator) {
+            function ($iterator) {
                 return new GroupedSpecificationIterator($iterator[0]->getSuite(), $iterator);
             },
             $groupedSpecifications

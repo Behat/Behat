@@ -43,7 +43,7 @@ final class ConfigurationTree
         foreach ($extensions as $extension) {
             $extension->configure($root->children()->arrayNode($extension->getConfigKey()));
         }
-        
+
         return $tree->buildTree();
     }
     

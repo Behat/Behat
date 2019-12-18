@@ -34,11 +34,11 @@ final class EventDispatchingSuiteTester implements SuiteTester
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
-    
+
     /**
      * Initializes tester.
      *
-     * @param SuiteTester $baseTester
+     * @param SuiteTester              $baseTester
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(SuiteTester $baseTester, EventDispatcherInterface $eventDispatcher)
@@ -46,7 +46,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
         $this->baseTester = $baseTester;
         $this->eventDispatcher = $eventDispatcher;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -68,7 +68,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
         
         return $setup;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -76,7 +76,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
     {
         return $this->baseTester->test($env, $iterator, $skip);
     }
-    
+
     /**
      * {@inheritdoc}
      */

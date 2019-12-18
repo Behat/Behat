@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -31,15 +32,16 @@ final class EventDispatchingOutlineTester implements OutlineTester
      * @var OutlineTester
      */
     private $baseTester;
+
     /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
-    
+
     /**
      * Initializes tester.
      *
-     * @param OutlineTester $baseTester
+     * @param OutlineTester            $baseTester
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(OutlineTester $baseTester, EventDispatcherInterface $eventDispatcher)
@@ -47,7 +49,7 @@ final class EventDispatchingOutlineTester implements OutlineTester
         $this->baseTester = $baseTester;
         $this->eventDispatcher = $eventDispatcher;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -69,7 +71,7 @@ final class EventDispatchingOutlineTester implements OutlineTester
         
         return $setup;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -77,7 +79,7 @@ final class EventDispatchingOutlineTester implements OutlineTester
     {
         return $this->baseTester->test($env, $feature, $outline, $skip);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -97,7 +99,6 @@ final class EventDispatchingOutlineTester implements OutlineTester
             
         } else {
             $this->eventDispatcher->dispatch($event::AFTER, $event);
-            
         }
         
         return $teardown;

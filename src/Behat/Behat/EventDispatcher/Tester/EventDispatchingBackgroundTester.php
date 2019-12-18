@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -31,6 +32,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
      * @var BackgroundTester
      */
     private $baseTester;
+
     /**
      * @var EventDispatcherInterface
      */
@@ -42,10 +44,8 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
      * @param BackgroundTester         $baseTester
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(
-        BackgroundTester $baseTester,
-        EventDispatcherInterface $eventDispatcher
-    ) {
+    public function __construct(BackgroundTester $baseTester, EventDispatcherInterface $eventDispatcher)
+    {
         $this->baseTester = $baseTester;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -81,26 +81,20 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     {
         return $this->baseTester->test($env, $feature, $skip);
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function tearDown(
-        Environment $env,
-        FeatureNode $feature,
-        $skip,
-        TestResult $result
-    ) {
+    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result) {
+
         $event = new BeforeBackgroundTeardown($env, $feature,
             /** @scrutinizer ignore-type */  $feature->getBackground(), $result);
         if (class_exists(\Symfony\Contracts\EventDispatcher\Event::class)) {
             $this->eventDispatcher->dispatch($event,
                 BackgroundTested::BEFORE_TEARDOWN);
-            
         } else {
             $this->eventDispatcher->dispatch(BackgroundTested::BEFORE_TEARDOWN,
                 $event);
-            
         }
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
         $event = new AfterBackgroundTested($env, $feature,
@@ -109,7 +103,6 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
             $this->eventDispatcher->dispatch($event, BackgroundTested::AFTER);
         } else {
             $this->eventDispatcher->dispatch(BackgroundTested::AFTER, $event);
-            
         }
         
         return $teardown;

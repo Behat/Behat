@@ -49,8 +49,8 @@ final class ContainerLoader
         Processor $processor = null
     ) {
         $this->extensionManager = $extensionManager;
-        $this->configuration = $configuration ?: new ConfigurationTree();
-        $this->processor = $processor ?: new Processor();
+        $this->configuration = $configuration ? : new ConfigurationTree();
+        $this->processor = $processor ? : new Processor();
     }
 
     /**

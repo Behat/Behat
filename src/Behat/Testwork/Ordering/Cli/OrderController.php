@@ -81,7 +81,7 @@ final class OrderController implements Controller
         }
 
         if (!array_key_exists($orderer, $this->orderers)) {
-            throw new InvalidOrderException(sprintf("Order option '%s' was not recognised", $orderer));
+           throw new InvalidOrderException(sprintf("Order option '%s' was not recognised", $orderer));
         }
 
         $this->exercise->setOrderer($this->orderers[$orderer]);

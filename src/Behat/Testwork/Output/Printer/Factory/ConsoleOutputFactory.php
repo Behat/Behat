@@ -79,7 +79,7 @@ class ConsoleOutputFactory extends OutputFactory
      */
     public function createOutput($stream = null)
     {
-        $stream = $stream ?: $this->createOutputStream();
+        $stream = $stream ? : $this->createOutputStream();
         $format = $this->createOutputFormatter();
 
         // set user-defined styles
