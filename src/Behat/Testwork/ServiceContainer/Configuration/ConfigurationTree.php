@@ -30,8 +30,12 @@ final class ConfigurationTree
      */
     public function getConfigTree(array $extensions)
     {
-        $tree = new TreeBuilder();
-        $root = $tree->root('testwork');
+        $tree = new TreeBuilder('testwork');
+        if (method_exists($tree, 'root')) {
+            $root = $tree->root('testwork');
+        } else {
+            $root = $tree->getRootNode();
+        }
 
         foreach ($extensions as $extension) {
             $extension->configure($root->children()->arrayNode($extension->getConfigKey()));
