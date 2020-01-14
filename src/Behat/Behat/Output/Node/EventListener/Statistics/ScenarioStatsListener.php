@@ -15,9 +15,9 @@ use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\Output\Statistics\ScenarioStat;
 use Behat\Behat\Output\Statistics\Statistics;
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Listens and records scenario events to the statistics.

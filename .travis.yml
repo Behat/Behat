@@ -25,7 +25,9 @@ matrix:
     - php: 7.3
       env: SYMFONY_VERSION='^3.4'
     - php: 7.3
-      env: SYMFONY_VERSION='^4.2'
+      env: SYMFONY_VERSION='^4.3'
+    - php: 7.3
+      env: SYMFONY_VERSION='^5.0'
 
 before_install:
   - phpenv config-rm xdebug.ini || echo "XDebug is not enabled"

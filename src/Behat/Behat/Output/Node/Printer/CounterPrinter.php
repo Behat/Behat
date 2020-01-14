@@ -10,9 +10,9 @@
 
 namespace Behat\Behat\Output\Node\Printer;
 
+use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Behat counter printer.
@@ -64,12 +64,12 @@ final class CounterPrinter
             $style = $this->resultConverter->convertResultCodeToString($resultCode);
 
             $transId = $style . '_count';
-            $message = $this->translator->transChoice($transId, $count, array('%1%' => $count), 'output');
+            $message = $this->translator->trans($transId, array('%count%' => $count), 'output');
 
             $detailedStats[] = sprintf('{+%s}%s{-%s}', $style, $message, $style);
         }
 
-        $message = $this->translator->transChoice($intro, $totalCount, array('%1%' => $totalCount), 'output');
+        $message = $this->translator->trans($intro, array('%count%' => $totalCount), 'output');
         $printer->write($message);
 
         if (count($detailedStats)) {

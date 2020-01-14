@@ -57,5 +57,7 @@ final class DumpReferenceCommand extends BaseCommand
         $configTree = new ConfigurationTree();
 
         $output->writeln($dumper->dumpNode($configTree->getConfigTree($this->extensionManager->getExtensions())));
+
+        return 0;
     }
 }

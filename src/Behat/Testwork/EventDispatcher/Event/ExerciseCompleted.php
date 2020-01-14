@@ -10,8 +10,9 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Specification\SpecificationIterator;
-use Symfony\Component\EventDispatcher\Event;
+
 
 /**
  * Represents an exercise event.

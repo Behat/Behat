@@ -18,6 +18,7 @@ use Behat\Behat\EventDispatcher\Event\BeforeBackgroundTested;
 use Behat\Behat\Tester\BackgroundTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -55,12 +56,22 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     public function setUp(Environment $env, FeatureNode $feature, $skip)
     {
         $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground());
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        }
 
         $setup = $this->baseTester->setUp($env, $feature, $skip);
 
         $event = new AfterBackgroundSetup($env, $feature, $feature->getBackground(), $setup);
-        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+        }
 
         return $setup;
     }
@@ -79,12 +90,22 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result)
     {
         $event = new BeforeBackgroundTeardown($env, $feature, $feature->getBackground(), $result);
-        $this->eventDispatcher->dispatch(BackgroundTested::BEFORE_TEARDOWN, $event);
+
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
+            $this->eventDispatcher->dispatch($event, BackgroundTested::BEFORE_TEARDOWN);
+        } else {
+            $this->eventDispatcher->dispatch(BackgroundTested::BEFORE_TEARDOWN, $event);
+        }
 
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
 
         $event = new AfterBackgroundTested($env, $feature, $feature->getBackground(), $result, $teardown);
-        $this->eventDispatcher->dispatch(BackgroundTested::AFTER, $event);
+
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
+            $this->eventDispatcher->dispatch($event, BackgroundTested::AFTER);
+        } else {
+            $this->eventDispatcher->dispatch(BackgroundTested::AFTER, $event);
+        }
 
         return $teardown;
     }

@@ -14,11 +14,11 @@ use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
 use Behat\Behat\Output\Node\Printer\SuitePrinter;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\OutlineNode;
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Listens for Outline events store the current one

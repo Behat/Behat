@@ -17,16 +17,15 @@ use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Output\Statistics\Statistics;
-use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Tester\Result\ExceptionResult;
 use Exception;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Listens and records step events to statistics.

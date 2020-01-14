@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Output\Node\Printer;
 
+use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Statistics\HookStat;
 use Behat\Behat\Output\Statistics\ScenarioStat;
@@ -18,7 +19,6 @@ use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Behat list printer.

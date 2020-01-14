@@ -14,9 +14,9 @@ use Behat\Behat\EventDispatcher\Event\AfterStepSetup;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Behat only first background fires listener.
