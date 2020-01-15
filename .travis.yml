@@ -1,6 +1,6 @@
 language: php
 
-php: [5.6, 7.0, 7.1, 7.2, 7.3, 7.4snapshot]
+php: [5.6, 7.0, 7.1, 7.2, 7.3, 7.4]
 
 sudo: false
 
@@ -35,6 +35,12 @@ matrix:
     - php: 7.3
       env: SYMFONY_VERSION='^4.3'
     - php: 7.3
+      env: SYMFONY_VERSION='^5.0'
+    - php: 7.4
+      env: SYMFONY_VERSION='^3.4'
+    - php: 7.4
+      env: SYMFONY_VERSION='^4.3'
+    - php: 7.4
       env: SYMFONY_VERSION='^5.0'
 
 before_install:
