@@ -37,7 +37,7 @@ before_script:
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
   - export PATH=./bin:$PATH
-  - echo "<?php echo '@php5.' . implode(',@php5.', range(3, PHP_MINOR_VERSION));" > php_version_tags.php
+  - echo "<?php echo '@php' . PHP_MAJOR_VERSION . '.' . implode(',@php' . PHP_MAJOR_VERSION, range(0, PHP_MINOR_VERSION));" > php_version_tags.php
 
 script:
   - ./vendor/bin/phpunit
