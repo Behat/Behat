@@ -420,7 +420,7 @@ Feature: Step Arguments Transformations
       8 steps (8 passed)
       """
 
-  @php-version @php7.0
+  @php-version @php7
   Scenario: By-type object transformations
     Given a file named "features/my.feature" with:
       """
@@ -488,7 +488,7 @@ Feature: Step Arguments Transformations
       4 steps (4 passed)
       """
 
-  @php-version @php7.0
+  @php-version @php7
   Scenario: By-type and by-name object transformations
     Given a file named "features/my.feature" with:
       """
