@@ -4,10 +4,6 @@ shallow_clone: false
 platform: x86
 clone_folder: c:\projects\behat
 
-environment:
-    matrix:
-        - php: 7.4
-
 branches:
   only:
     - master
@@ -29,10 +25,9 @@ init:
     - git config --global core.autocrlf input
 
 install:
-
     - ps: |
         if (!(Test-Path c:\tools\php)) {
-            appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+            appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version 7.4
             Get-ChildItem -Path c:\tools\php
             cd c:\tools\php
 
