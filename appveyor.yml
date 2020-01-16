@@ -15,12 +15,12 @@ branches:
 skip_commits:
     message: /\[ci skip\]/
 
-#cache:
-##    - C:\ProgramData\chocolatey\bin -> appveyor.yml
-##    - C:\ProgramData\chocolatey\lib -> appveyor.yml
-##    - C:\tools\php -> appveyor.yml
-##    - C:\tools\composer -> appveyor.yml
-##    - '%LOCALAPPDATA%\Composer\files'
+cache:
+    - C:\ProgramData\chocolatey\bin -> appveyor.yml
+    - C:\ProgramData\chocolatey\lib -> appveyor.yml
+    - C:\tools\php -> appveyor.yml
+    - C:\tools\composer -> appveyor.yml
+    - '%LOCALAPPDATA%\Composer\files'
 
 init:
     - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;C:\tools\composer;%PATH%
@@ -30,7 +30,6 @@ init:
 
 install:
 
-#    - cinst php
     - ps: |
         if (!(Test-Path c:\tools\php)) {
             appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
