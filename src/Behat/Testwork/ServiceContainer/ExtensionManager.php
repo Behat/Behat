@@ -81,7 +81,7 @@ final class ExtensionManager
      *
      * @param string $key
      *
-     * @return Extension
+     * @return Extension|null
      */
     public function getExtension($key)
     {
