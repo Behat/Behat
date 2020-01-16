@@ -14,7 +14,6 @@ skip_commits:
 cache:
     - C:\ProgramData\chocolatey\bin -> appveyor.yml
     - C:\ProgramData\chocolatey\lib -> appveyor.yml
-    - C:\tools\php -> appveyor.yml
     - C:\tools\composer -> appveyor.yml
     - '%LOCALAPPDATA%\Composer\files'
 
