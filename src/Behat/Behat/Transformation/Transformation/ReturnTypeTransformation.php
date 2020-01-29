@@ -130,7 +130,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
             return null;
         }
 
-        return (string) $type;
+        return $type->getName();
     }
 
     /**
