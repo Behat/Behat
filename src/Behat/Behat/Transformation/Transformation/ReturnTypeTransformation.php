@@ -19,6 +19,7 @@ use Closure;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use ReflectionParameter;
+use ReflectionNamedType;
 
 /**
  * By-type object transformation.
@@ -130,7 +131,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
             return null;
         }
 
-        if (PHP_VERSION_ID >= 70100) {
+        if ($type instanceof ReflectionNamedType) {
             return $type->getName();
         }
 
