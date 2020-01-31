@@ -130,6 +130,10 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
             return null;
         }
 
+        if (PHP_VERSION_ID >= 70100) {
+            return $type->getName();
+        }
+
         return (string) $type;
     }
 
