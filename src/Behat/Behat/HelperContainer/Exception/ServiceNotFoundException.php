@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\HelperContainer\Exception;
 
-use Interop\Container\Exception\NotFoundException;
+use Psr\Container\NotFoundExceptionInterface;
 use InvalidArgumentException;
 
 /**
@@ -18,7 +18,7 @@ use InvalidArgumentException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ServiceNotFoundException extends InvalidArgumentException implements HelperContainerException, NotFoundException
+final class ServiceNotFoundException extends InvalidArgumentException implements HelperContainerException, NotFoundExceptionInterface
 {
     /**
      * @var string

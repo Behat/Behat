@@ -193,7 +193,7 @@ Feature: Per-suite helper containers
       """
     And a file named "features/bootstrap/MyContainer.php" with:
       """
-      <?php use Interop\Container\ContainerInterface;
+      <?php use Psr\Container\ContainerInterface;
 
       class MyContainer implements ContainerInterface {
           private $service;
