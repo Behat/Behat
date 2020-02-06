@@ -19,6 +19,7 @@ use Closure;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use ReflectionParameter;
+use ReflectionNamedType;
 
 /**
  * By-type object transformation.
@@ -128,6 +129,10 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
 
         if (null === $type || $type->isBuiltin()) {
             return null;
+        }
+
+        if ($type instanceof ReflectionNamedType) {
+            return $type->getName();
         }
 
         return (string) $type;
