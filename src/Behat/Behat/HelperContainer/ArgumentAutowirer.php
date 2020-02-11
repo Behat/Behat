@@ -11,7 +11,7 @@
 namespace Behat\Behat\HelperContainer;
 
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
+use Psr\Container\ContainerInterface as PsrContainerInterface;
 use ReflectionFunctionAbstract;
 use ReflectionParameter;
 use ReflectionException;
@@ -24,16 +24,16 @@ use ReflectionException;
 final class ArgumentAutowirer
 {
     /**
-     * @var ContainerInterface
+     * @var PsrContainerInterface
      */
     private $container;
 
     /**
      * Initialises wirer.
      *
-     * @param ContainerInterface $container
+     * @param PsrContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(PsrContainerInterface $container)
     {
         $this->container = $container;
     }

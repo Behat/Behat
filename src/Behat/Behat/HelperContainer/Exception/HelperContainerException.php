@@ -11,7 +11,6 @@
 namespace Behat\Behat\HelperContainer\Exception;
 
 use Behat\Testwork\Environment\Exception\EnvironmentException;
-use Interop\Container\Exception\ContainerException;
 
 /**
  * All HelperContainer exceptions implement this interface.
