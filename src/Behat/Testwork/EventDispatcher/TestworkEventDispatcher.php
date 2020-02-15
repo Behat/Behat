@@ -29,7 +29,8 @@ $identifyEventDispatcherClassVersion = function() {
         return 'Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfonyLegacy';
     }
 
-    $first_param = $dispatch->getParameters()[0];
+    $params = $dispatch->getParameters();
+    $first_param = reset($params);
     switch ($first_param->getName()) {
         case 'event':
             // This is the new Symfony 5 event dispatcher interface

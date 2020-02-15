@@ -41,7 +41,7 @@ class FeatureContext implements Context
     /**
      * @var array
      */
-    private $env = [];
+    private $env = array();
     /**
      * @var string
      */
