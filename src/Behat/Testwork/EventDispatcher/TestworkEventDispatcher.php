@@ -18,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 $identifyEventDispatcherClassVersion = function() {
-    $reflection  = new \ReflectionClass('\Symfony\Component\EventDispatcher\EventDispatcher');
+    $reflection  = new \ReflectionClass('Symfony\Component\EventDispatcher\EventDispatcher');
     $dispatch    = $reflection->getMethod('dispatch');
 
     if ($dispatch->getNumberOfParameters() === 1) {
@@ -47,7 +47,7 @@ $identifyEventDispatcherClassVersion = function() {
     }
 };
 
-class_alias($identifyEventDispatcherClassVersion(), '\Behat\Testwork\EventDispatcher\TestworkEventDispatcher');
+class_alias($identifyEventDispatcherClassVersion(), 'Behat\Testwork\EventDispatcher\TestworkEventDispatcher');
 unset($identifyEventDispatcherClassVersion);
 
 
