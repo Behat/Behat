@@ -57,5 +57,5 @@ install:
 
 test_script:
     - cd c:\projects\behat
-    - php bin\behat --tags="~@php-version,@php53,@php5.2,@php5.1,@php5.0" --format=progress
+    - php bin\behat --tags="~@php-version,@php7" --format=progress
     - php vendor\phpunit\phpunit\phpunit --testdox

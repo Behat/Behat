@@ -1,5 +1,4 @@
-@php-version @php5.4
-Feature: Support php 5.4 traits
+Feature: Support traits
   In order to have much cleaner horizontal reusability
   As a context developer
   I need to be able to use definition traits in my context

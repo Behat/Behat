@@ -37,11 +37,10 @@ before_script:
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
   - export PATH=./bin:$PATH
-  - echo "<?php echo '@php5' . implode(',@php5.', range(3, PHP_MINOR_VERSION));" > php_version_tags.php
 
 script:
   - ./vendor/bin/phpunit
-  - behat -fprogress --strict --tags '~@php-version,'`php php_version_tags.php`
+  - behat -fprogress --strict --tags '~@php-version,@php'`php -r 'echo PHP_MAJOR_VERSION;'`
 
 before_deploy:
   - curl -LSs https://box-project.github.io/box2/installer.php | php
