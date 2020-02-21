@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.6.1] - 2019-02-06
+## [3.6.1] - 2020-02-06
 ### Fixed
   * [#1278](https://github.com/Behat/Behat/pull/1278): Fix fatal when unexpected symfony/event-dispatcher version is installed
 
-## [3.6.0] - 2019-02-04
+## [3.6.0] - 2020-02-04
 ### Added
   * [#1244](https://github.com/Behat/Behat/pull/1244): Hide internal steps from stack traces in very verbose mode
 ### Fixed
