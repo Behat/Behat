@@ -26,7 +26,7 @@ interface Exercise
      * Sets up exercise for a test.
      *
      * @param SpecificationIterator[] $iterators
-     * @param Boolean                 $skip
+     * @param bool                 $skip
      *
      * @return Setup
      */
@@ -36,7 +36,7 @@ interface Exercise
      * Tests suites specifications.
      *
      * @param SpecificationIterator[] $iterators
-     * @param Boolean                 $skip
+     * @param bool                 $skip
      *
      * @return TestResult
      */
@@ -46,7 +46,7 @@ interface Exercise
      * Tears down exercise after a test.
      *
      * @param SpecificationIterator[] $iterators
-     * @param Boolean                 $skip
+     * @param bool                 $skip
      * @param TestResult              $result
      *
      * @return Teardown

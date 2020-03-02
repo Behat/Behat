@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Gherkin\Cli;
 
+use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Gherkin\Keywords\KeywordsDumper;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command;
@@ -17,7 +18,6 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Prints example of the feature to present all available syntax keywords.

@@ -15,9 +15,9 @@ use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\EventDispatcher\Event\OutlineTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Behat first background fires first listener.
@@ -34,7 +34,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
      */
     private $descendant;
     /**
-     * @var Boolean
+     * @var bool
      */
     private $firstBackgroundEnded = false;
     /**
@@ -103,7 +103,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
      *
      * @param Event $event
      *
-     * @return Boolean
+     * @return bool
      */
     private function isEventDelayedUntilFirstBackgroundPrinted(Event $event)
     {

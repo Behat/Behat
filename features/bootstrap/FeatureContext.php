@@ -38,6 +38,14 @@ class FeatureContext implements Context
      * @var string
      */
     private $options = '--format-settings=\'{"timer": false}\' --no-interaction';
+    /**
+     * @var array
+     */
+    private $env = [];
+    /**
+     * @var string
+     */
+    private $answerString;
 
     /**
      * Cleans test folders in the temporary directory.
@@ -71,8 +79,6 @@ class FeatureContext implements Context
         }
         $this->workingDir = $dir;
         $this->phpBin = $php;
-        $this->process = new Process(null);
-        $this->process->setTimeout(20);
     }
 
     /**
@@ -170,7 +176,7 @@ EOL;
      */
     public function iSetEnvironmentVariable(PyStringNode $value)
     {
-        $this->process->setEnv(array('BEHAT_PARAMS' => (string) $value));
+        $this->env = array('BEHAT_PARAMS' => (string) $value);
     }
 
     /**
@@ -184,16 +190,30 @@ EOL;
     {
         $argumentsString = strtr($argumentsString, array('\'' => '"'));
 
-        $this->process->setWorkingDirectory($this->workingDir);
-        $this->process->setCommandLine(
-            sprintf(
-                '%s %s %s %s',
-                $this->phpBin,
-                escapeshellarg(BEHAT_BIN_PATH),
-                $argumentsString,
-                strtr($this->options, array('\'' => '"', '"' => '\"'))
-            )
+        $cmd = sprintf(
+            '%s %s %s %s',
+            $this->phpBin,
+            escapeshellarg(BEHAT_BIN_PATH),
+            $argumentsString,
+            strtr($this->options, array('\'' => '"', '"' => '\"'))
         );
+
+        if (method_exists('\\Symfony\\Component\\Process\\Process', 'fromShellCommandline')) {
+            $this->process = Process::fromShellCommandline($cmd);
+        } else {
+            // BC layer for symfony/process 4.1 and older
+            $this->process = new Process(null);
+            $this->process->setCommandLine($cmd);
+        }
+
+        // Prepare the process parameters.
+        $this->process->setTimeout(20);
+        $this->process->setEnv($this->env);
+        $this->process->setWorkingDirectory($this->workingDir);
+
+        if (!empty($this->answerString)) {
+            $this->process->setInput($this->answerString);
+        }
 
         // Don't reset the LANG variable on HHVM, because it breaks HHVM itself
         if (!defined('HHVM_VERSION')) {
@@ -215,11 +235,9 @@ EOL;
      */
     public function iRunBehatInteractively($answerString, $argumentsString)
     {
-        $env = $this->process->getEnv();
-        $env['SHELL_INTERACTIVE'] = true;
+        $this->env['SHELL_INTERACTIVE'] = true;
 
-        $this->process->setEnv($env);
-        $this->process->setInput($answerString);
+        $this->answerString = $answerString;
 
         $this->options = '--format-settings=\'{"timer": false}\'';
         $this->iRunBehat($argumentsString);
@@ -346,6 +364,13 @@ EOL;
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 }, $text
             );
+
+            // error stacktrace
+            $text = preg_replace_callback(
+                '/#\d+ [^:]+:/', function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                }, $text
+            );
         }
 
         return $text;
@@ -400,10 +425,13 @@ EOL;
     {
         $output = $this->process->getErrorOutput() . $this->process->getOutput();
 
-        // Normalize the line endings in the output
+        // Normalize the line endings and directory separators in the output
         if ("\n" !== PHP_EOL) {
             $output = str_replace(PHP_EOL, "\n", $output);
         }
+
+        // Remove location of the project
+        $output = str_replace(realpath(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR, '', $output);
 
         // Replace wrong warning message of HHVM
         $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);

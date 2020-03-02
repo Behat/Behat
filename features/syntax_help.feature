@@ -20,7 +20,7 @@ Feature: Syntax helpers
           [Given|*] there is agent A
           [And|*] there is agent B
 
-        Scenario: Erasing agent memory
+        [Scenario|Example]: Erasing agent memory
           [Given|*] there is agent J
           [And|*] there is agent K
           [When|*] I erase agent K's memory
@@ -54,22 +54,22 @@ Feature: Syntax helpers
         We need to be able to erase past agents' memory
 
         [Предыстория|Контекст]:
-          [Допустим|Пусть|Дано|Если|*] there is agent A
+          [Допустим|Пусть|Дано|*] there is agent A
           [К тому же|Также|*|И] there is agent B
 
-        Сценарий: Erasing agent memory
-          [Допустим|Пусть|Дано|Если|*] there is agent J
+        [Сценарий|Пример]: Erasing agent memory
+          [Допустим|Пусть|Дано|*] there is agent J
           [К тому же|Также|*|И] there is agent K
-          [Когда|*] I erase agent K's memory
+          [Когда|Если|*] I erase agent K's memory
           [Затем|Тогда|То|*] there should be agent J
-          [Но|*|А] there should not be agent K
+          [Иначе|Но|*|А] there should not be agent K
 
         Структура сценария: Erasing other agents' memory
-          [Допустим|Пусть|Дано|Если|*] there is agent <agent1>
+          [Допустим|Пусть|Дано|*] there is agent <agent1>
           [К тому же|Также|*|И] there is agent <agent2>
-          [Когда|*] I erase agent <agent2>'s memory
+          [Когда|Если|*] I erase agent <agent2>'s memory
           [Затем|Тогда|То|*] there should be agent <agent1>
-          [Но|*|А] there should not be agent <agent2>
+          [Иначе|Но|*|А] there should not be agent <agent2>
 
           Примеры:
             | agent1 | agent2 |
@@ -399,6 +399,6 @@ Feature: Syntax helpers
     When I run "behat --no-colors --lang=ru -d 'нашел'"
     Then the output should contain:
       """
-      default | [Когда|*] /^Я нашел (\d+) яблоко?$/
+      default | [Когда|Если|*] /^Я нашел (\d+) яблоко?$/
               | at `FeatureContext::iFoundApples()`
       """

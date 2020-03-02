@@ -12,11 +12,11 @@ namespace Behat\Behat\Context\Cli;
 
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Snippet\Generator\TargetContextIdentifier;
+use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Interactive identifier that asks user for input.
@@ -68,7 +68,7 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
             return null;
         }
 
-        $message = $this->translator->trans('snippet_context_choice', array('%1%' => $suiteName), 'output');
+        $message = $this->translator->trans('snippet_context_choice', array('%count%' => $suiteName), 'output');
         $choices = array_values(array_merge(array('None'), $contextClasses));
         $default = 1;
 
@@ -98,7 +98,7 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
     /**
      * Checks if interactive mode is supported.
      *
-     * @return Boolean
+     * @return bool
      *
      * @deprecated there is a better way to do it - `InputInterface::isInteractive()` method.
      *             Sadly, this doesn't work properly prior Symfony\Console 2.7 and as we need

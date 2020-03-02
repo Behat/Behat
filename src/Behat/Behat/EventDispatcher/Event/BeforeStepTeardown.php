@@ -93,7 +93,7 @@ final class BeforeStepTeardown extends StepTested implements BeforeTeardown
     /**
      * Checks if step call produced any output (stdOut or exception).
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasOutput()
     {
@@ -103,7 +103,7 @@ final class BeforeStepTeardown extends StepTested implements BeforeTeardown
     /**
      * Checks if result has produced exception.
      *
-     * @return Boolean
+     * @return bool
      */
     private function resultHasException()
     {
@@ -113,7 +113,7 @@ final class BeforeStepTeardown extends StepTested implements BeforeTeardown
     /**
      * Checks if result is executed and call result has produced exception or stdOut.
      *
-     * @return Boolean
+     * @return bool
      */
     private function resultCallHasOutput()
     {

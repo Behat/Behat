@@ -10,9 +10,9 @@
 
 namespace Behat\Behat\Output\Node\EventListener\Flow;
 
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Behat fire only siblings listener.
@@ -37,7 +37,7 @@ class FireOnlySiblingsListener implements EventListener
      */
     private $descendant;
     /**
-     * @var Boolean
+     * @var bool
      */
     private $inContext = false;
 

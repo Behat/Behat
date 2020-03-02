@@ -75,7 +75,7 @@ final class CallResult
     /**
      * Check if call thrown exception.
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasException()
     {
@@ -95,7 +95,7 @@ final class CallResult
     /**
      * Checks if call produced stdOut.
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasStdOut()
     {

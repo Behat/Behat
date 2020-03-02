@@ -10,7 +10,6 @@
 
 namespace Behat\Behat\HelperContainer\Exception;
 
-use Interop\Container\Exception\NotFoundException;
 use InvalidArgumentException;
 
 /**

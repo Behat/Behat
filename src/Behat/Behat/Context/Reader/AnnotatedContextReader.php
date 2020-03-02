@@ -180,7 +180,7 @@ final class AnnotatedContextReader implements ContextReader
      *
      * @param string $docLine
      *
-     * @return Boolean
+     * @return bool
      */
     private function isEmpty($docLine)
     {
@@ -192,7 +192,7 @@ final class AnnotatedContextReader implements ContextReader
      *
      * @param string $docLine
      *
-     * @return Boolean
+     * @return bool
      */
     private function isNotAnnotation($docLine)
     {
@@ -229,7 +229,7 @@ final class AnnotatedContextReader implements ContextReader
      *
      * @param string $docLine
      *
-     * @return Boolean
+     * @return bool
      */
     private function isIgnoredAnnotation($docLine)
     {

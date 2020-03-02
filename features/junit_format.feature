@@ -526,7 +526,7 @@
       """
     And the file "junit/default*.xml" should be a valid document according to "junit.xsd"
 
-  @php-version @php5.3 @php5.4
+  @php-version @php5
   Scenario: Aborting due to PHP error
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """

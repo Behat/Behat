@@ -28,7 +28,7 @@ interface EnvironmentReader
      *
      * @param Environment $environment
      *
-     * @return Boolean
+     * @return bool
      */
     public function supportsEnvironment(Environment $environment);
 

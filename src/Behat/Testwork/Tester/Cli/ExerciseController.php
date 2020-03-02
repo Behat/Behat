@@ -52,7 +52,7 @@ final class ExerciseController implements Controller
      */
     private $resultInterpreter;
     /**
-     * @var Boolean
+     * @var bool
      */
     private $skip;
 
@@ -63,7 +63,7 @@ final class ExerciseController implements Controller
      * @param SpecificationFinder $specificationFinder
      * @param Exercise            $exercise
      * @param ResultInterpreter   $resultInterpreter
-     * @param Boolean             $skip
+     * @param bool             $skip
      */
     public function __construct(
         SuiteRepository $suiteRepository,

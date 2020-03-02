@@ -11,11 +11,11 @@
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Behat suite listener.

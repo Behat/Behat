@@ -29,7 +29,7 @@ final class ConfigurationLoader
      */
     private $environmentVariable;
     /**
-     * @var Boolean
+     * @var bool
      */
     private $profileFound;
     /**

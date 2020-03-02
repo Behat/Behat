@@ -11,10 +11,10 @@
 namespace Behat\Testwork\Output\Node\EventListener;
 
 use ArrayIterator;
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
 use Countable;
 use IteratorAggregate;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Used to compose formatter event listeners.

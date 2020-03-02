@@ -47,7 +47,7 @@ final class SearchResult
     /**
      * Checks if result contains a match.
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasMatch()
     {

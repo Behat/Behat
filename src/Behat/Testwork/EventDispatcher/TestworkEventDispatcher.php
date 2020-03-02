@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\EventDispatcher;
 
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -18,42 +17,49 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TestworkEventDispatcher extends EventDispatcher
-{
-    const BEFORE_ALL_EVENTS = '*~';
-    const AFTER_ALL_EVENTS = '~*';
+$identifyEventDispatcherClassVersion = function() {
+    $reflection  = new \ReflectionClass(\Symfony\Component\EventDispatcher\EventDispatcher::class);
+    $dispatch    = $reflection->getMethod('dispatch');
 
-    /**
-     * {@inheritdoc}
-     */
-    public function dispatch($eventName, Event $event = null)
-    {
-        if (null === $event) {
-            $event = new Event();
-        }
-
-        if (method_exists($event, 'setName')) {
-            $event->setName($eventName);
-        }
-
-        $this->doDispatch($this->getListeners($eventName), $eventName, $event);
-
-        return $event;
+    if ($dispatch->getNumberOfParameters() === 1) {
+        // This is the 4.3 / 4.4 version, which has `public function dispatch($event/*, string $eventName = null*/)` and
+        // internally uses func_get_args to work parameters it got in what order. The legacy Testwork class can still
+        // extend this because its signature only adds an extra optional param. It may however produce unexpected
+        // results as it assumes all dispatch calls are with the legacy sequence of $eventName, $event.
+        return TestworkEventDispatcherSymfonyLegacy::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getListeners($eventName = null)
-    {
-        if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
-            return parent::getListeners($eventName);
-        }
+    $first_param = $dispatch->getParameters()[0];
+    switch ($first_param->getName()) {
+        case 'event':
+            // This is the new Symfony 5 event dispatcher interface
+            // public function dispatch(object $event, string $eventName = null): object
+            return TestworkEventDispatcherSymfony5::class;
 
-        return array_merge(
-            parent::getListeners(self::BEFORE_ALL_EVENTS),
-            parent::getListeners($eventName),
-            parent::getListeners(self::AFTER_ALL_EVENTS)
-        );
+        case 'eventName':
+            // This is the Symfony <= 4.2 version
+            // public function dispatch($eventName, Event $event = null)
+            return TestworkEventDispatcherSymfonyLegacy::class;
+
+        default:
+            throw new \UnexpectedValueException('Could not identify which version of symfony/event-dispatcher is in use, could not define a compatible TestworkEventDispatcher');
     }
+};
+
+class_alias($identifyEventDispatcherClassVersion(), \Behat\Testwork\EventDispatcher\TestworkEventDispatcher::class);
+unset($identifyEventDispatcherClassVersion);
+
+
+if (false) {
+
+    // Empty, never-actually-defined, class definition to fool any tooling looking for a class in this file
+    final class TestworkEventDispatcher
+    {
+
+        // These constant definitions are required to prevent scrutinizer failing static analysis
+        const BEFORE_ALL_EVENTS = '*~';
+        const AFTER_ALL_EVENTS = '~*';
+        const DISPATCHER_VERSION = 'undefined';
+    }
+
 }

@@ -56,6 +56,13 @@ Feature: Error Reporting
               PHPUnit\Framework\Assert::assertEquals($arg1, $this->result);
           }
 
+          /**
+           * @When an exception is thrown
+           */
+          public function anExceptionIsThrown()
+          {
+              throw new \Exception('Exception is thrown');
+          }
       }
       """
     And a file named "features/e_notice_in_scenario.feature" with:
@@ -76,11 +83,21 @@ Feature: Error Reporting
           When I push "foo" to that array
           And I access array index 0
           Then I should get "foo"
+      """
+    And a file named "features/exception_in_scenario.feature" with:
+      """
+      Feature: Error in scenario
+        In order to test the error stacktraces
+        As a contributor of behat
+        I need to have a FeatureContext that triggers an error within steps.
+
+        Scenario: Exception thrown
+          When an exception is thrown
 
       """
 
   Scenario: With default error reporting
-    When I run "behat -f progress --no-colors"
+    When I run "behat -f progress --no-colors features/e_notice_in_scenario.feature"
     Then it should fail
     And the output should contain:
     """
@@ -101,5 +118,40 @@ Feature: Error Reporting
         calls:
           error_reporting: 32759
       """
-    When I run "behat -f progress --no-colors"
+    When I run "behat -f progress --no-colors features/e_notice_in_scenario.feature"
     Then it should pass
+
+  @php-version @php7
+  Scenario: With very verbose error reporting
+    When I run "behat -f progress --no-colors -vv features/exception_in_scenario.feature"
+    Then it should fail
+    And the output should contain:
+    """
+    --- Failed steps:
+
+    001 Scenario: Exception thrown    # features/exception_in_scenario.feature:6
+          When an exception is thrown # features/exception_in_scenario.feature:7
+            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:56
+            Stack trace:
+            #0 [internal function]: FeatureContext->anExceptionIsThrown()
+
+    1 scenario (1 failed)
+    1 step (1 failed)
+    """
+
+  @php-version @php7
+  Scenario: With debug verbose error reporting
+    When I run "behat -f progress --no-colors -vvv features/exception_in_scenario.feature"
+    Then it should fail
+    And the output should contain:
+    """
+    --- Failed steps:
+
+    001 Scenario: Exception thrown    # features/exception_in_scenario.feature:6
+          When an exception is thrown # features/exception_in_scenario.feature:7
+            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:56
+            Stack trace:
+            #0 [internal function]: FeatureContext->anExceptionIsThrown()
+            #1 src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(109): call_user_func_array(Array, Array)
+            #2 src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(64): Behat\Testwork\Call\Handler\RuntimeCallHandler->executeCall(Object(Behat\Behat\Definition\Call\DefinitionCall))
+    """

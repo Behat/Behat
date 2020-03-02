@@ -10,9 +10,9 @@
 
 namespace Behat\Testwork\Output\Node\EventListener\Flow;
 
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Catches all events, but proxies them only if formatter has specific parameter set to a specific value.

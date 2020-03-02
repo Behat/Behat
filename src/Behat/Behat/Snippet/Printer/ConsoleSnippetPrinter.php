@@ -10,11 +10,11 @@
 
 namespace Behat\Behat\Snippet\Printer;
 
+use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\Snippet\AggregateSnippet;
 use Behat\Gherkin\Node\StepNode;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Behat console-based snippet printer.
@@ -57,7 +57,7 @@ class ConsoleSnippetPrinter implements SnippetPrinter
      */
     public function printSnippets($targetName, array $snippets)
     {
-        $message = $this->translator->trans('snippet_proposal_title', array('%1%' => $targetName), 'output');
+        $message = $this->translator->trans('snippet_proposal_title', array('%count%' => $targetName), 'output');
 
         $this->output->writeln('--- ' . $message . PHP_EOL);
 
@@ -74,7 +74,7 @@ class ConsoleSnippetPrinter implements SnippetPrinter
      */
     public function printUndefinedSteps($suiteName, array $steps)
     {
-        $message = $this->translator->trans('snippet_missing_title', array('%1%' => $suiteName), 'output');
+        $message = $this->translator->trans('snippet_missing_title', array('%count%' => $suiteName), 'output');
 
         $this->output->writeln('--- ' . $message . PHP_EOL);
 

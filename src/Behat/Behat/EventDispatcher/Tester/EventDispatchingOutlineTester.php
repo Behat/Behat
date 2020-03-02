@@ -18,6 +18,7 @@ use Behat\Behat\Tester\OutlineTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -55,12 +56,22 @@ final class EventDispatchingOutlineTester implements OutlineTester
     public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
         $event = new BeforeOutlineTested($env, $feature, $outline);
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
+            $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE, $event);
+        }
 
         $setup = $this->baseTester->setUp($env, $feature, $outline, $skip);
 
         $event = new AfterOutlineSetup($env, $feature, $outline, $setup);
-        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+        }
 
         return $setup;
     }
@@ -79,12 +90,22 @@ final class EventDispatchingOutlineTester implements OutlineTester
     public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
     {
         $event = new BeforeOutlineTeardown($env, $feature, $outline, $result);
-        $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
+            $this->eventDispatcher->dispatch( $event,$event::BEFORE_TEARDOWN);
+        } else {
+            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+        }
 
         $teardown = $this->baseTester->tearDown($env, $feature, $outline, $skip, $result);
 
         $event = new AfterOutlineTested($env, $feature, $outline, $result, $teardown);
-        $this->eventDispatcher->dispatch($event::AFTER, $event);
+
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
+            $this->eventDispatcher->dispatch($event, $event::AFTER);
+        } else {
+            $this->eventDispatcher->dispatch($event::AFTER, $event);
+        }
 
         return $teardown;
     }

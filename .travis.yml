@@ -1,6 +1,6 @@
 language: php
 
-php: [5.6, 7.0, 7.1, 7.2]
+php: [5.6, 7.0, 7.1, 7.2, 7.3]
 
 sudo: false
 
@@ -17,25 +17,33 @@ matrix:
     - php: 5.6
       env: DEPENDENCIES='low'
     - php: 5.6
+      env: SKIP_INTEROP='~@interop&&'
+    - php: 5.6
       env: SYMFONY_VERSION='2.7.*'
     - php: 5.6
       env: SYMFONY_VERSION='2.8.*'
     - php: 7.2
       env: SYMFONY_VERSION='^3.4'
+    - php: 7.3
+      env: SYMFONY_VERSION='^3.4'
+    - php: 7.3
+      env: SYMFONY_VERSION='^4.3'
+    - php: 7.3
+      env: SYMFONY_VERSION='^5.0'
 
 before_install:
-  - phpenv config-rm xdebug.ini
+  - phpenv config-rm xdebug.ini || echo "XDebug is not enabled"
 
 before_script:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"; fi;
+  - if [ "$SKIP_INTEROP" != "" ]; then composer remove --dev --no-update container-interop/container-interop; fi;
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
   - export PATH=./bin:$PATH
-  - echo "<?php echo '@php5' . implode(',@php5.', range(3, PHP_MINOR_VERSION));" > php_version_tags.php
 
 script:
-  - phpunit
-  - behat -fprogress --strict --tags '~@php-version,'`php php_version_tags.php`
+  - ./vendor/bin/phpunit
+  - behat -fprogress --strict --tags "$SKIP_INTEROP"'~@php-version,@php'`php -r 'echo PHP_MAJOR_VERSION;'`
 
 before_deploy:
   - curl -LSs https://box-project.github.io/box2/installer.php | php

@@ -27,7 +27,7 @@ interface ExceptionStringer
      *
      * @param Exception $exception
      *
-     * @return Boolean
+     * @return bool
      */
     public function supportsException(Exception $exception);
 

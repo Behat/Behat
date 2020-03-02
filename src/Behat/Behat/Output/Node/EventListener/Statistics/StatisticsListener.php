@@ -12,10 +12,10 @@ namespace Behat\Behat\Output\Node\EventListener\Statistics;
 
 use Behat\Behat\Output\Node\Printer\StatisticsPrinter;
 use Behat\Behat\Output\Statistics\Statistics;
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Collects general suite stats such as time and memory during its execution and prints it afterwards.

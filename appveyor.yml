@@ -4,10 +4,6 @@ shallow_clone: false
 platform: x86
 clone_folder: c:\projects\behat
 
-environment:
-    matrix:
-        - php: 7.2
-
 branches:
   only:
     - master
@@ -31,7 +27,7 @@ init:
 install:
     - ps: |
         if (!(Test-Path c:\tools\php)) {
-            appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+            appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version 7.2
             Get-ChildItem -Path c:\tools\php
             cd c:\tools\php
 
@@ -61,5 +57,5 @@ install:
 
 test_script:
     - cd c:\projects\behat
-    - php bin\behat --tags="~@php-version,@php53,@php5.2,@php5.1,@php5.0" --format=progress
+    - php bin\behat --tags="~@php-version,@php7" --format=progress
     - php vendor\phpunit\phpunit\phpunit --testdox

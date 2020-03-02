@@ -13,6 +13,7 @@ namespace Behat\Testwork\EventDispatcher\Cli;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\EventDispatcher\Event\AfterExerciseAborted;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -63,7 +64,11 @@ final class SigintController implements Controller
      */
     public function abortExercise()
     {
-        $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new AfterExerciseAborted());
+        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
+            $this->eventDispatcher->dispatch(new AfterExerciseAborted(), ExerciseCompleted::AFTER);
+        } else {
+            $this->eventDispatcher->dispatch(ExerciseCompleted::AFTER, new AfterExerciseAborted());
+        }
 
         exit(1);
     }
