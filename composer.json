@@ -24,14 +24,14 @@
         "symfony/event-dispatcher": "^2.7.51 || ^3.0 || ^4.0 || ^5.0",
         "symfony/translation": "^2.7.51 || ^3.0 || ^4.0 || ^5.0",
         "symfony/yaml": "^2.7.51 || ^3.0 || ^4.0 || ^5.0",
-        "psr/container": "^1.0",
-        "container-interop/container-interop": "^1.2"
+        "psr/container": "^1.0"
     },
 
     "require-dev": {
         "symfony/process": "~2.5 || ^3.0 || ^4.0 || ^5.0",
         "phpunit/phpunit": "^4.8.36 || ^6.3",
-        "herrera-io/box": "~1.6.1"
+        "herrera-io/box": "~1.6.1",
+        "container-interop/container-interop": "^1.2"
     },
 
     "suggest": {
@@ -44,16 +44,16 @@
             "Behat\\Testwork\\": "src/Behat/Testwork/"
         }
     },
-    
+
     "autoload-dev": {
         "psr-4": {
             "Behat\\Tests\\": "tests/"
         }
     },
-    
+
     "extra": {
         "branch-alias": {
-            "dev-master": "3.5.x-dev"
+            "dev-master": "3.6.x-dev"
         }
     },
 
