@@ -1,0 +1,91 @@
+---------------------------------------------------------------------------
+
+by snapshotpl at 2019-09-24T18:15:58Z
+
+Looks like Transliterator's dependecy is not ready for 7.4
+
+---------------------------------------------------------------------------
+
+by stof at 2019-09-30T13:08:29Z
+
+@snapshotpl any chance to contribute there first then ?
+
+---------------------------------------------------------------------------
+
+by snapshotpl at 2019-09-30T18:04:00Z
+
+@stof Done https://github.com/Behat/Transliterator/pull/26
+
+---------------------------------------------------------------------------
+
+by snapshotpl at 2020-01-14T18:47:06Z
+
+Waiting for v1.3 of behat/transliterator appear on packagist https://packagist.org/packages/behat/transliterator
+
+---------------------------------------------------------------------------
+
+by ciaranmcnulty at 2020-01-15T08:11:05Z
+
+@snapshotpl The transliterator tag is released now on packagist
+
+---------------------------------------------------------------------------
+
+by ciaranmcnulty at 2020-01-15T08:11:39Z
+
+(we don't need 'snapshot' now I think)
+
+---------------------------------------------------------------------------
+
+by snapshotpl at 2020-01-15T09:33:39Z
+
+One test in php 7.4 doesn't pass. @ciaranmcnulty can you help me to resolve this https://travis-ci.org/Behat/Behat/jobs/637319029#L316 ?
+
+---------------------------------------------------------------------------
+
+by ciaranmcnulty at 2020-01-15T16:43:02Z
+
+Hm, something must have changed around error handling...
+
+---------------------------------------------------------------------------
+
+by Sam-Burns at 2020-01-15T18:59:55Z
+
+@ciaranmcnulty @snapshotpl we really need to delete the offending test at https://github.com/snapshotpl/Behat/blob/ea89bd18f290a26c0c7fc0e8aa3205242bf7e5b8/features/junit_format.feature#L529-L587 .
+
+It's tagged only to run in PHP 5.3 and 5.4. The system by which these tags are used in Travis is a bit of a mess because:
+- Detection of whether we're in PHP 5.4 is done using the minor version _only_, hence problems in PHP 7.4.
+- This problem didn't come up with PHP 7.3 because of a missing decimal point, meaning it was trying to run tests tagged as `php53` but not `php5.3`.
+
+I'll do a separate pull request cleaning up the whole fiasco at https://github.com/Behat/Behat/blob/7aa8161be7499ecc8b73ccc6dcd18f4062e6bf8e/.travis.yml#L40 , but deleting this test is definitely necessary as it is tagged only to run in PHP versions we don't even seem to be testing in anymore.
+
+The rest of your PHP looks great, thanks so much for doing this.
+
+---------------------------------------------------------------------------
+
+by snapshotpl at 2020-01-15T19:14:46Z
+
+@Sam-Burns nice catch! So I'm waiting for PR to clean this an then I will rebase your fix here
+
+---------------------------------------------------------------------------
+
+by Sam-Burns at 2020-01-16T10:35:00Z
+
+Regarding the Appveyor and Travis builds: I think if we merge (or you rebase on top of) https://github.com/Behat/Behat/pull/1273 and https://github.com/Behat/Behat/pull/1270, this PR should be ready to merge.
+
+---------------------------------------------------------------------------
+
+by snapshotpl at 2020-01-16T11:13:56Z
+
+@Sam-Burns awesome. Now waiting for fixed builds. @ciaranmcnulty ?
+
+---------------------------------------------------------------------------
+
+by snapshotpl at 2020-02-24T13:33:54Z
+
+@ciaranmcnulty ready to merge!
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-06-02T19:36:10Z
+
+Thanks, Witold! :tada:
