@@ -50,7 +50,7 @@ before_script:
 
 script:
   - ./vendor/bin/phpunit
-  - behat -fprogress --strict --tags '~@php-version,@php'$PHP_VERSION
+  - behat -fprogress --strict --tags "${SKIP_INTEROP}~@php-version,@php${PHP_VERSION}"
 
 before_deploy:
   - curl -LSs https://box-project.github.io/box2/installer.php | php
