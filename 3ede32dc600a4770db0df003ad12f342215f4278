@@ -1,0 +1,120 @@
+---------------------------------------------------------------------------
+
+by dvdoug at 2020-02-15T22:29:40Z
+
+Scrutinizer failure is a false-positive, there's nothing I can do about that. I've reported it, and they say there's already a ticket their side for it.
+
+This should be good to go
+
+---------------------------------------------------------------------------
+
+by upyx at 2020-02-17T10:00:53Z
+
+May be is it the time to drop support of old PHP versions?
+
+---------------------------------------------------------------------------
+
+by dvdoug at 2020-02-17T10:05:11Z
+
+>
+>
+> May be is it the time to drop support of old PHP versions?
+
+Need to fix it first though, otherwise running `composer update` breaks projects (I discovered this through a broken build)
+
+---------------------------------------------------------------------------
+
+by upyx at 2020-02-17T10:13:16Z
+
+> Scrutinizer failure is a false-positive, there's nothing I can do about that.
+
+It failures because of the first '\\' symbol. It should be skipped in fully-qualified class names:
+```php
+interface_exists('Symfony\\Component\\Translation\\TranslatorInterface')
+```
+
+---------------------------------------------------------------------------
+
+by dvdoug at 2020-02-17T10:27:21Z
+
+The leading slash is equivalent to not having one, see rule #1 on https://www.php.net/manual/en/language.namespaces.rules.php. Happy to remove though.
+
+The failure on line 10 is because the interface exists on the version of Symfony that isn't installed on Scrutinzer and the static analysis isn't picking up on the fact that it's guarded by `interface_exists` on line 9.
+
+---------------------------------------------------------------------------
+
+by ciaranmcnulty at 2020-02-21T16:37:38Z
+
+I updated from master and the 5.3 build doesn't seem to be working
+
+---------------------------------------------------------------------------
+
+by dvdoug at 2020-02-21T16:43:52Z
+
+@ciaranmcnulty Traits are 5.4 and https://github.com/Behat/Behat/pull/1270/files seems to have removed that restriction from the test suite
+
+---------------------------------------------------------------------------
+
+by dvdoug at 2020-02-21T18:18:27Z
+
+I'm not sure there's an elegant way of excluding that test file from the 5.3 build using the revised tag system, I'm thinking it might be easier to simply `rm` it inside Travis on the 5.3 build? How would maintainers feel about that?
+
+Another idea would be adding `Given my PHP version is >= x.y` as step definition to the test suite but that seems like a lot of extra code for the purpose of skipping 1 test.
+
+Or...could temporarily revert #1270, release a final 5.3 supporting version and then put #1270 back on master alongside a bumped minimum PHP version?
+
+---------------------------------------------------------------------------
+
+by Sam-Burns at 2020-02-24T11:23:48Z
+
+@dvdoug This approach seems to be passing on Travis, if it is of any interest https://github.com/Sam-Burns/Behat/compare/master...Sam-Burns:restore_php54_compat
+
+---------------------------------------------------------------------------
+
+by Sam-Burns at 2020-02-24T11:27:24Z
+
+Would be good to get your fix included, and do a patch release with working PHP 5.3 support. After speaking to @ciaranmcnulty, it sounds like it may well be the last release to support EOL PHP versions 🍾
+
+---------------------------------------------------------------------------
+
+by dvdoug at 2020-02-24T12:44:09Z
+
+>
+>
+> Would be good to get your fix included, and do a patch release with working PHP 5.3 support. After speaking to @ciaranmcnulty, it sounds like it may well be the last release to support EOL PHP versions 🍾
+
+Awesome @Sam-Burns, I've cherry-picked that one into my branch and rebased on master.
+
+---------------------------------------------------------------------------
+
+by Sam-Burns at 2020-02-24T14:30:48Z
+
+Scrutinizer is complaining about a reference to a nonexistent interface, although frankly that is the entire point of the relevant file. I'd suggest ignoring it, if it's possible to merge the PR anyway.
+
+---------------------------------------------------------------------------
+
+by dvdoug at 2020-03-02T20:59:59Z
+
+>
+>
+> Scrutinizer is complaining about a reference to a nonexistent interface, although frankly that is the entire point of the relevant file. I'd suggest ignoring it, if it's possible to merge the PR anyway.
+
+Yep, it's a false positive dating back to before this PR. Any chance this could get merged/released @ciaranmcnulty?
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-05-05T13:21:23Z
+
+Fixes #1280.
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-06-01T17:21:43Z
+
+I've rebased it with master, but it's failing on one of the builds connected to the container interop. @dvdoug, could you please take a look at it?
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-06-02T15:53:56Z
+
+Thanks, Doug! :tada:
