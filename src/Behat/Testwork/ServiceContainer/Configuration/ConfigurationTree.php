@@ -31,7 +31,7 @@ final class ConfigurationTree
      */
     public function getConfigTree(array $extensions)
     {
-        if (method_exists(TreeBuilder::class, 'getRootNode')) {
+        if (method_exists('Symfony\Component\Config\Definition\Builder\TreeBuilder', 'getRootNode')) {
             $treeBuilder = new TreeBuilder('testwork');
             /** @var ArrayNodeDefinition $rootNode */
             $rootNode = $treeBuilder->getRootNode();

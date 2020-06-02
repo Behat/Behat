@@ -86,6 +86,7 @@ Feature: Support traits
             | 2   | 2     | 3      |
       """
 
+  @php-version @php54+ @php7
   Scenario: Run feature with failing scenarios
     When I run "behat --no-colors -f progress"
     Then it should pass with:
