@@ -46,7 +46,7 @@ use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
  */
 final class ApplicationFactory extends BaseFactory
 {
-    const VERSION = '3.6.1';
+    const VERSION = '3.7.0';
 
     /**
      * {@inheritdoc}
