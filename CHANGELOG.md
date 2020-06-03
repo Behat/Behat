@@ -4,8 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.7.0] - 2020-06-03
+
+### Added
+  * [#1236](https://github.com/Behat/Behat/pull/1236): Add support for php 7.4 ([@snapshotpl](https://github.com/snapshotpl))
+
+### Fixed
+  * [#1270](https://github.com/Behat/Behat/pull/1270): Fix issues with PHP version handling in build ([@Sam-Burns](https://github.com/Sam-Burns))
+  * [#1282](https://github.com/Behat/Behat/pull/1282): Updated the year on Changelog dates ([@choult](https://github.com/choult))
+  * [#1284](https://github.com/Behat/Behat/pull/1284): Restore PHP 5.3/5.4 compat ([@dvdoug](https://github.com/dvdoug), [@Sam-Burns](https://github.com/Sam-Burns), [@pamil](https://github.com/pamil))
+  
+### Changed  
+  * [#1281](https://github.com/Behat/Behat/pull/1281): Make container-interop/container-interop optional dependency ([@upyx](https://github.com/upyx))
+
 ## [3.6.1] - 2020-02-06
 ### Fixed
+  * [#1275](https://github.com/Behat/Behat/pull/1275): fix php 7.1 deprecation for ReflectionType::__toString
   * [#1278](https://github.com/Behat/Behat/pull/1278): Fix fatal when unexpected symfony/event-dispatcher version is installed
 
 ## [3.6.0] - 2020-02-04
@@ -901,7 +915,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
-[Unreleased]: https://github.com/Behat/Behat/compare/v3.5.0...master
+[Unreleased]: https://github.com/Behat/Behat/compare/v3.7.0...master
+[3.7.0]: https://github.com/Behat/Behat/compare/v3.6.1...v3.7.0
+[3.6.1]: https://github.com/Behat/Behat/compare/v3.6.0...v3.6.1
+[3.6.0]: https://github.com/Behat/Behat/compare/v3.5.0...v3.6.0
 [3.5.0]: https://github.com/Behat/Behat/compare/v3.4.3...v3.5.0
 [3.4.3]: https://github.com/Behat/Behat/compare/v3.4.2...v3.4.3
 [3.4.2]: https://github.com/Behat/Behat/compare/v3.4.1...v3.4.2
