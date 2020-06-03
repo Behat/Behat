@@ -122,7 +122,6 @@ Feature: Extensions
       `inexistent_extension` extension file or class could not be located.
       """
 
-  @php-version @php7
   Scenario: Exception handlers extension
     Given a file named "behat.yml" with:
       """

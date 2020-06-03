@@ -1,4 +1,3 @@
-@php-version @php7
 Feature: Support PHP 7 Throwable
   In order for my test suite to continue running despite fatal errors in my code
   As a feature developer
