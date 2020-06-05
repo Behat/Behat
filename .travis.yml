@@ -12,10 +12,6 @@ matrix:
       env: SKIP_INTEROP='~@interop&&'
     - php: 7.2
       env: DEPENDENCIES='low'
-    - php: 7.2
-      env: SYMFONY_VERSION='^4.4'
-    - php: 7.3
-      env: SYMFONY_VERSION='^4.4'
     - php: 7.4
       env: SYMFONY_VERSION='^4.4'
 
