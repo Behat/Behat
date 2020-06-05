@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by Taluu at 2019-12-19T11:53:43Z
+
+Why ? It doesn't mke sense...
+
+---------------------------------------------------------------------------
+
+by Lctrs at 2019-12-19T12:03:24Z
+
+Look at the body of the function. It does return `null` if there is no extension defined with the given `$key`.
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-06-05T10:04:43Z
+
+Thank you, @Lctrs! :1st_place_medal:
