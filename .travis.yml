@@ -1,12 +1,16 @@
 language: php
 
+os: linux
+
+dist: xenial
+
 php: [7.2, 7.3, 7.4]
 
 cache:
   directories:
     - $HOME/.composer/cache
 
-matrix:
+jobs:
   include:
     - php: 7.2
       env: SKIP_INTEROP='~@interop&&'
@@ -38,9 +42,9 @@ before_deploy:
 
 deploy:
   provider: releases
-  api_key: $GITHUB_API_KEY
+  token: $GITHUB_API_KEY
   file: behat.phar
-  skip_cleanup: true
+  cleanup: false
   on:
     tags: true
     php: 5.6
