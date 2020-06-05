@@ -14,7 +14,7 @@ class PatternTransformerTest extends TestCase
 {
     public function testTransformPatternToRegexCache()
     {
-        $observer = $this->prophesize(PatternPolicy::class);
+        $observer = $this->prophesize('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
         // first pattern
         $observer->supportsPattern('hello world')->willReturn(true);
         $observer->transformPatternToRegex('hello world')
@@ -42,14 +42,14 @@ class PatternTransformerTest extends TestCase
     public function testTransformPatternToRegexCacheAndRegisterNewPolicy()
     {
         // first pattern
-        $policy1Prophecy = $this->prophesize(PatternPolicy::class);
+        $policy1Prophecy = $this->prophesize('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
         $policy1Prophecy->supportsPattern('hello world')->willReturn(true);
         $policy1Prophecy->transformPatternToRegex('hello world')
             ->shouldBeCalledTimes(2)
             ->willReturn('/hello world/');
 
         // second pattern
-        $policy2Prophecy = $this->prophesize(PatternPolicy::class);
+        $policy2Prophecy = $this->prophesize('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
         $policy1Prophecy->supportsPattern()->shouldNotBeCalled();
         $policy1Prophecy->transformPatternToRegex()->shouldNotBeCalled();
 
@@ -73,7 +73,7 @@ class PatternTransformerTest extends TestCase
     public function testTransformPatternToRegexNoMatch()
     {
         // first pattern
-        $policy1Prophecy = $this->prophesize(PatternPolicy::class);
+        $policy1Prophecy = $this->prophesize('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
         $policy1Prophecy->supportsPattern('hello world')->willReturn(false);
         $policy1Prophecy->transformPatternToRegex('hello world')
             ->shouldNotBeCalled();

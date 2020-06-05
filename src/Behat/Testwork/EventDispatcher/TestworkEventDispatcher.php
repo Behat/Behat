@@ -18,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 $identifyEventDispatcherClassVersion = function() {
-    $reflection  = new \ReflectionClass(\Symfony\Component\EventDispatcher\EventDispatcher::class);
+    $reflection  = new \ReflectionClass('Symfony\Component\EventDispatcher\EventDispatcher');
     $dispatch    = $reflection->getMethod('dispatch');
 
     if ($dispatch->getNumberOfParameters() === 1) {
@@ -26,27 +26,28 @@ $identifyEventDispatcherClassVersion = function() {
         // internally uses func_get_args to work parameters it got in what order. The legacy Testwork class can still
         // extend this because its signature only adds an extra optional param. It may however produce unexpected
         // results as it assumes all dispatch calls are with the legacy sequence of $eventName, $event.
-        return TestworkEventDispatcherSymfonyLegacy::class;
+        return 'Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfonyLegacy';
     }
 
-    $first_param = $dispatch->getParameters()[0];
+    $params = $dispatch->getParameters();
+    $first_param = reset($params);
     switch ($first_param->getName()) {
         case 'event':
             // This is the new Symfony 5 event dispatcher interface
             // public function dispatch(object $event, string $eventName = null): object
-            return TestworkEventDispatcherSymfony5::class;
+            return 'Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfony5';
 
         case 'eventName':
             // This is the Symfony <= 4.2 version
             // public function dispatch($eventName, Event $event = null)
-            return TestworkEventDispatcherSymfonyLegacy::class;
+            return 'Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfonyLegacy';
 
         default:
             throw new \UnexpectedValueException('Could not identify which version of symfony/event-dispatcher is in use, could not define a compatible TestworkEventDispatcher');
     }
 };
 
-class_alias($identifyEventDispatcherClassVersion(), \Behat\Testwork\EventDispatcher\TestworkEventDispatcher::class);
+class_alias($identifyEventDispatcherClassVersion(), 'Behat\Testwork\EventDispatcher\TestworkEventDispatcher');
 unset($identifyEventDispatcherClassVersion);
 
 
