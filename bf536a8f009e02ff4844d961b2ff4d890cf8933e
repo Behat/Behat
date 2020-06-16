@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by Shine-neko at 2020-06-15T12:07:32Z
+
+Duplicate ? https://github.com/Behat/Behat/pull/1299
+
+---------------------------------------------------------------------------
+
+by tkotosz at 2020-06-15T12:23:31Z
+
+ye this was just to update the description only in case the php requirement will still not be updated... but since now the plan is that the tool will go to php7 I am happy to close this PR and leave the composer desc change to the other PR :)
+
+---------------------------------------------------------------------------
+
+by pamil at 2020-06-16T08:29:14Z
+
+Thank you, Tibor! :1st_place_medal:
