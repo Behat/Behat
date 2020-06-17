@@ -121,7 +121,6 @@ Feature: Error Reporting
     When I run "behat -f progress --no-colors features/e_notice_in_scenario.feature"
     Then it should pass
 
-  @php-version @php7
   Scenario: With very verbose error reporting
     When I run "behat -f progress --no-colors -vv features/exception_in_scenario.feature"
     Then it should fail
@@ -139,7 +138,6 @@ Feature: Error Reporting
     1 step (1 failed)
     """
 
-  @php-version @php7
   Scenario: With debug verbose error reporting
     When I run "behat -f progress --no-colors -vvv features/exception_in_scenario.feature"
     Then it should fail

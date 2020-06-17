@@ -526,33 +526,28 @@
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
 
-  @php-version @php53 @php54+
-  Scenario: Aborting due to PHP error
-    Given a file named "features/bootstrap/FeatureContext.php" with:
+    Scenario: Aborting due to PHP error
+      Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
-
       use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
-
+      class Foo {}
       class FeatureContext implements Context
       {
           private $value;
-
           /**
            * @Given /I have entered (\d+)/
            */
           public function iHaveEntered($num) {
               $this->value = $num;
           }
-
           /**
            * @Then /I must have (\d+)/
            */
           public function iMustHave($num) {
-              PHPUnit\Framework\Assert::assertEqual($num, $this->value);
+              $foo = new class extends Foo implements Foo {};
           }
-
           /**
            * @When /I add (\d+)/
            */
@@ -561,26 +556,24 @@
           }
       }
       """
-    And a file named "features/World.feature" with:
+      And a file named "features/World.feature" with:
       """
       Feature: World consistency
         In order to maintain stable behaviors
         As a features developer
         I want, that "World" flushes between scenarios
-
         Background:
           Given I have entered 10
-
         Scenario: Failed
           When I add 4
           Then I must have 14
       """
-    When I run "behat --no-colors -f junit -o junit"
-    Then it should fail with:
+      When I run "behat --no-colors -f junit -o junit"
+      Then it should fail with:
       """
-      Call to undefined method PHPUnit\Framework\Assert::assertEqual
+      PHP Fatal error:  class@anonymous cannot implement Foo - it is not an interface
       """
-    And "junit/default.xml" file xml should be like:
+      And "junit/default.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default"/>

@@ -1,41 +1,23 @@
 language: php
 
-php: [5.6, 7.0, 7.1, 7.2, 7.3, 7.4]
+os: linux
 
-sudo: false
+dist: xenial
+
+php: [7.2, 7.3, 7.4]
 
 cache:
   directories:
     - $HOME/.composer/cache
 
-matrix:
+jobs:
   include:
-    - php: 5.3
-      dist: precise
-      env: PHP_VERSION=53
-    - php: 5.4
-      dist: trusty
-      env: PHP_VERSION=54+
-    - php: 5.5
-      dist: trusty
-      env: PHP_VERSION=54+
-    - php: 5.6
-      env: DEPENDENCIES='low'
-      env: PHP_VERSION=54+
-    - php: 5.6
-      env: SKIP_INTEROP='~@interop&&'
-    - php: 5.6
-      env: SYMFONY_VERSION='2.7.*'
-    - php: 5.6
-      env: SYMFONY_VERSION='2.8.*'
     - php: 7.2
-      env: SYMFONY_VERSION='^3.4'
-    - php: 7.3
-      env: SYMFONY_VERSION='^3.4'
-    - php: 7.3
-      env: SYMFONY_VERSION='^4.3'
-    - php: 7.3
-      env: SYMFONY_VERSION='^5.0'
+      env: SKIP_INTEROP=true
+    - php: 7.2
+      env: DEPENDENCIES='low'
+    - php: 7.4
+      env: SYMFONY_VERSION='^4.4'
 
 before_install:
   - phpenv config-rm xdebug.ini || echo "XDebug is not enabled"
@@ -45,12 +27,11 @@ before_script:
   - if [ "$SKIP_INTEROP" != "" ]; then composer remove --dev --no-update container-interop/container-interop; fi;
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
-  - if [ ! "$PHP_VERSION" ]; then export PHP_VERSION=`php -r 'echo PHP_MAJOR_VERSION;'`; fi;
   - export PATH=./bin:$PATH
 
 script:
   - ./vendor/bin/phpunit
-  - behat -fprogress --strict --tags "${SKIP_INTEROP}~@php-version,@php${PHP_VERSION}"
+  - behat -fprogress --strict $([ -z "$SKIP_INTEROP" ] || echo "--tags ~@interop")
 
 before_deploy:
   - curl -LSs https://box-project.github.io/box2/installer.php | php
@@ -61,9 +42,9 @@ before_deploy:
 
 deploy:
   provider: releases
-  api_key: $GITHUB_API_KEY
+  token: $GITHUB_API_KEY
   file: behat.phar
-  skip_cleanup: true
+  cleanup: false
   on:
     tags: true
     php: 5.6
