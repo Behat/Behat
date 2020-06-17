@@ -13,7 +13,7 @@ cache:
 jobs:
   include:
     - php: 7.2
-      env: SKIP_INTEROP='~@interop&&'
+      env: SKIP_INTEROP=true
     - php: 7.2
       env: DEPENDENCIES='low'
     - php: 7.4
@@ -31,7 +31,7 @@ before_script:
 
 script:
   - ./vendor/bin/phpunit
-  - behat -fprogress --strict --tags "${SKIP_INTEROP}~@random"
+  - behat -fprogress --strict $([ -z "$SKIP_INTEROP" ] || echo "--tags ~@interop")
 
 before_deploy:
   - curl -LSs https://box-project.github.io/box2/installer.php | php

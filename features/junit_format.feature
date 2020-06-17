@@ -526,6 +526,59 @@
       """
     And the file "junit/default.xml" should be a valid document according to "junit.xsd"
 
+    Scenario: Aborting due to PHP error
+      Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+      use Behat\Behat\Context\Context,
+          Behat\Behat\Tester\Exception\PendingException;
+      class Foo {}
+      class FeatureContext implements Context
+      {
+          private $value;
+          /**
+           * @Given /I have entered (\d+)/
+           */
+          public function iHaveEntered($num) {
+              $this->value = $num;
+          }
+          /**
+           * @Then /I must have (\d+)/
+           */
+          public function iMustHave($num) {
+              $foo = new class extends Foo implements Foo {};
+          }
+          /**
+           * @When /I add (\d+)/
+           */
+          public function iAdd($num) {
+              $this->value += $num;
+          }
+      }
+      """
+      And a file named "features/World.feature" with:
+      """
+      Feature: World consistency
+        In order to maintain stable behaviors
+        As a features developer
+        I want, that "World" flushes between scenarios
+        Background:
+          Given I have entered 10
+        Scenario: Failed
+          When I add 4
+          Then I must have 14
+      """
+      When I run "behat --no-colors -f junit -o junit"
+      Then it should fail with:
+      """
+      PHP Fatal error:  class@anonymous cannot implement Foo - it is not an interface
+      """
+      And "junit/default.xml" file xml should be like:
+      """
+      <?xml version="1.0" encoding="UTF-8"?>
+      <testsuites name="default"/>
+      """
+
   Scenario: Aborting due invalid output path
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
