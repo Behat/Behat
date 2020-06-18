@@ -17,7 +17,6 @@ use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\OutlineNode;
-use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
@@ -125,7 +124,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     {
         foreach ($events as $event) {
             $this->printStepStdOut($printer, $event->getTestResult());
-            $this->printStepException($printer, $event->getStep(), $event->getTestResult());
+            $this->printStepException($printer, $event);
         }
     }
 
@@ -133,18 +132,21 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
      * Prints step exception (if has one).
      *
      * @param OutputPrinter $printer
-     * @param StepNode      $step
-     * @param StepResult    $result
+     * @param AfterTested   $event
      */
-    private function printStepException(OutputPrinter $printer, StepNode $step, StepResult $result)
+    private function printStepException(OutputPrinter $printer, AfterTested $event)
     {
+        $result = $event->getTestResult();
+
         $style = $this->resultConverter->convertResultToString($result);
 
         if (!$result instanceof ExceptionResult || !$result->hasException()) {
             return;
         }
 
-        $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $this->subIndent($step->getText()), $style));
+        if ($event instanceof AfterStepTested) {
+            $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $this->subIndent($event->getStep()->getText()), $style));
+        }
 
         $text = $this->exceptionPresenter->presentException($result->getException());
         $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
