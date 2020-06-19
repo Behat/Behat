@@ -116,11 +116,11 @@ Feature: Pretty Formatter
           Examples:
             | value | result |
             | 5     | 16     |
-              I must have 16
+              Then I must have 16
               Failed asserting that 15 matches expected '16'.
             | 10    | 20     |
             | 23    | 32     |
-              I must have 32
+              Then I must have 32
               Failed asserting that 33 matches expected '32'.
 
       --- Failed scenarios:
