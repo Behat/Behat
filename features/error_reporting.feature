@@ -132,7 +132,6 @@ Feature: Error Reporting
           When an exception is thrown # features/exception_in_scenario.feature:7
             Exception: Exception is thrown in features/bootstrap/FeatureContext.php:56
             Stack trace:
-            #0 [internal function]: FeatureContext->anExceptionIsThrown()
 
     1 scenario (1 failed)
     1 step (1 failed)

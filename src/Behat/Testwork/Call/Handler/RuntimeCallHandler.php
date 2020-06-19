@@ -106,7 +106,7 @@ final class RuntimeCallHandler implements CallHandler
 
         try {
             $this->validator->validateArguments($reflection, $arguments);
-            $return = call_user_func_array($callable, $arguments);
+            $return = $callable(...array_values($arguments));
         } catch (Exception $caught) {
             $exception = $caught;
         }

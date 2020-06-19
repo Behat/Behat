@@ -283,7 +283,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         $predicate
     ) {
         foreach ($candidates as $candidateIndex => $candidate) {
-            if (call_user_func_array($predicate, array($parameter->getClass(), $candidate))) {
+            if ($predicate($parameter->getClass(), $candidate)) {
                 $num = $parameter->getPosition();
 
                 $arguments[$num] = $candidate;
