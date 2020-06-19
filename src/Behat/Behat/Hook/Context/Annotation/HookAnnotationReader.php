@@ -57,7 +57,7 @@ final class HookAnnotationReader implements AnnotationReader
 
         $type = strtolower($match[1]);
         $class = self::$classes[$type];
-        $pattern = isset($match[2]) ? $match[2] : null;
+        $pattern = $match[2] ?? null;
         $callable = array($contextClass, $method->getName());
 
         return new $class($pattern, $callable, $description);

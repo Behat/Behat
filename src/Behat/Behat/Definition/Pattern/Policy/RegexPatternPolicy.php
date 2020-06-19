@@ -65,7 +65,7 @@ final class RegexPatternPolicy implements PatternPolicy
     {
         if (false === @preg_match($pattern, 'anything')) {
             $error = error_get_last();
-            $errorMessage = isset($error['message']) ? $error['message'] : '';
+            $errorMessage = $error['message'] ?? '';
 
             throw new InvalidPatternException(sprintf('The regex `%s` is invalid: %s', $pattern, $errorMessage));
         }

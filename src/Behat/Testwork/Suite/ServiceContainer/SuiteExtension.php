@@ -89,9 +89,7 @@ final class SuiteExtension implements Extension
                         return is_array($suite) && count($suite);
                     })
                     ->then(function ($suite) {
-                        $suite['settings'] = isset($suite['settings'])
-                            ? $suite['settings']
-                            : array();
+                        $suite['settings'] = $suite['settings'] ?? array();
 
                         foreach ($suite as $key => $val) {
                             $suiteKeys = array('enabled', 'type', 'settings');

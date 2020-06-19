@@ -85,7 +85,7 @@ final class ExtensionManager
      */
     public function getExtension($key)
     {
-        return isset($this->extensions[$key]) ? $this->extensions[$key] : null;
+        return $this->extensions[$key] ?? null;
     }
 
     /**

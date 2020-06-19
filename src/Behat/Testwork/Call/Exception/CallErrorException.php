@@ -42,7 +42,7 @@ final class CallErrorException extends ErrorException
         parent::__construct(
             sprintf(
                 '%s: %s in %s line %d',
-                isset($this->levels[$level]) ? $this->levels[$level] : $level,
+                $this->levels[$level] ?? $level,
                 $message,
                 $file,
                 $line
