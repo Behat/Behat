@@ -33,7 +33,7 @@ final class HelperContainerExtension implements Extension
     /*
      * Available extension points
      */
-    const HELPER_CONTAINER_TAG = 'helper_container.container';
+    public const HELPER_CONTAINER_TAG = 'helper_container.container';
 
     /**
      * @var ServiceProcessor

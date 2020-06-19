@@ -38,13 +38,13 @@ class PrettyFormatterFactory implements FormatterFactory
     /*
      * Available services
      */
-    const ROOT_LISTENER_ID = 'output.node.listener.pretty';
-    const RESULT_TO_STRING_CONVERTER_ID = 'output.node.printer.result_to_string';
+    public const ROOT_LISTENER_ID = 'output.node.listener.pretty';
+    public const RESULT_TO_STRING_CONVERTER_ID = 'output.node.printer.result_to_string';
 
     /*
      * Available extension points
      */
-    const ROOT_LISTENER_WRAPPER_TAG = 'output.node.listener.pretty.wrapper';
+    public const ROOT_LISTENER_WRAPPER_TAG = 'output.node.listener.pretty.wrapper';
 
     /**
      * Initializes extension.

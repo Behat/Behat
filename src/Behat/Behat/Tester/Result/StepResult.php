@@ -19,5 +19,5 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 interface StepResult extends TestResult
 {
-    const UNDEFINED = 30;
+    public const UNDEFINED = 30;
 }

@@ -20,8 +20,8 @@ use Behat\Testwork\Hook\Scope\HookScope;
  */
 interface FeatureScope extends HookScope
 {
-    const BEFORE = 'feature.before';
-    const AFTER = 'feature.after';
+    public const BEFORE = 'feature.before';
+    public const AFTER = 'feature.after';
 
     /**
      * Returns scope feature.

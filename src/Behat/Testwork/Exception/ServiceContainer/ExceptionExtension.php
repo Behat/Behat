@@ -30,12 +30,12 @@ final class ExceptionExtension implements Extension
     /*
      * Available services
      */
-    const PRESENTER_ID = 'exception.presenter';
+    public const PRESENTER_ID = 'exception.presenter';
 
     /*
      * Available extension points
      */
-    const STRINGER_TAG = 'exception.stringer';
+    public const STRINGER_TAG = 'exception.stringer';
 
     /**
      * @var ServiceProcessor

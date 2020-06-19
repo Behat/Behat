@@ -17,8 +17,8 @@ namespace Behat\Behat\EventDispatcher\Event;
  */
 interface ExampleTested
 {
-    const BEFORE = 'tester.example_tested.before';
-    const AFTER_SETUP = 'tester.example_tested.after_setup';
-    const BEFORE_TEARDOWN = 'tester.example_tested.before_teardown';
-    const AFTER = 'tester.example_tested.after';
+    public const BEFORE = 'tester.example_tested.before';
+    public const AFTER_SETUP = 'tester.example_tested.after_setup';
+    public const BEFORE_TEARDOWN = 'tester.example_tested.before_teardown';
+    public const AFTER = 'tester.example_tested.after';
 }

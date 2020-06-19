@@ -19,8 +19,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
  */
 interface SuiteScope extends HookScope
 {
-    const BEFORE = 'suite.before';
-    const AFTER = 'suite.after';
+    public const BEFORE = 'suite.before';
+    public const AFTER = 'suite.after';
 
     /**
      * Returns specification iterator.

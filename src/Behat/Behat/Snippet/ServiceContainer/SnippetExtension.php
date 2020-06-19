@@ -31,14 +31,14 @@ class SnippetExtension implements Extension
     /*
      * Available services
      */
-    const REGISTRY_ID = 'snippet.registry';
-    const WRITER_ID = 'snippet.writer';
+    public const REGISTRY_ID = 'snippet.registry';
+    public const WRITER_ID = 'snippet.writer';
 
     /*
      * Available extension points
      */
-    const GENERATOR_TAG = 'snippet.generator';
-    const APPENDER_TAG = 'snippet.appender';
+    public const GENERATOR_TAG = 'snippet.generator';
+    public const APPENDER_TAG = 'snippet.appender';
 
     /**
      * @var ServiceProcessor

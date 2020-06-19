@@ -27,9 +27,9 @@ final class ArgumentExtension implements Extension
     /*
      * Available services
      */
-    const MIXED_ARGUMENT_ORGANISER_ID = 'argument.mixed_organiser';
-    const PREG_MATCH_ARGUMENT_ORGANISER_ID = 'argument.preg_match_organiser';
-    const CONSTRUCTOR_ARGUMENT_ORGANISER_ID = 'argument.constructor_organiser';
+    public const MIXED_ARGUMENT_ORGANISER_ID = 'argument.mixed_organiser';
+    public const PREG_MATCH_ARGUMENT_ORGANISER_ID = 'argument.preg_match_organiser';
+    public const CONSTRUCTOR_ARGUMENT_ORGANISER_ID = 'argument.constructor_organiser';
 
     /**
      * {@inheritdoc}

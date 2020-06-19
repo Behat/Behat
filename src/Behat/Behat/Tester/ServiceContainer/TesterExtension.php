@@ -33,20 +33,20 @@ class TesterExtension extends BaseExtension
     /*
      * Available services
      */
-    const SCENARIO_TESTER_ID = 'tester.scenario';
-    const OUTLINE_TESTER_ID = 'tester.outline';
-    const EXAMPLE_TESTER_ID = 'tester.example';
-    const BACKGROUND_TESTER_ID = 'tester.background';
-    const STEP_TESTER_ID = 'tester.step';
+    public const SCENARIO_TESTER_ID = 'tester.scenario';
+    public const OUTLINE_TESTER_ID = 'tester.outline';
+    public const EXAMPLE_TESTER_ID = 'tester.example';
+    public const BACKGROUND_TESTER_ID = 'tester.background';
+    public const STEP_TESTER_ID = 'tester.step';
 
     /**
      * Available extension points
      */
-    const SCENARIO_TESTER_WRAPPER_TAG = 'tester.scenario.wrapper';
-    const OUTLINE_TESTER_WRAPPER_TAG = 'tester.outline.wrapper';
-    const EXAMPLE_TESTER_WRAPPER_TAG = 'tester.example.wrapper';
-    const BACKGROUND_TESTER_WRAPPER_TAG = 'tester.background.wrapper';
-    const STEP_TESTER_WRAPPER_TAG = 'tester.step.wrapper';
+    public const SCENARIO_TESTER_WRAPPER_TAG = 'tester.scenario.wrapper';
+    public const OUTLINE_TESTER_WRAPPER_TAG = 'tester.outline.wrapper';
+    public const EXAMPLE_TESTER_WRAPPER_TAG = 'tester.example.wrapper';
+    public const BACKGROUND_TESTER_WRAPPER_TAG = 'tester.background.wrapper';
+    public const STEP_TESTER_WRAPPER_TAG = 'tester.step.wrapper';
 
     /**
      * @var ServiceProcessor

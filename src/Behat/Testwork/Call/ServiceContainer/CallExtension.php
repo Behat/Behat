@@ -27,15 +27,15 @@ final class CallExtension implements Extension
     /*
      * Available services
      */
-    const CALL_CENTER_ID = 'call.center';
+    public const CALL_CENTER_ID = 'call.center';
 
     /*
      * Available extension points
      */
-    const CALL_FILTER_TAG = 'call.call_filter';
-    const CALL_HANDLER_TAG = 'call.call_handler';
-    const RESULT_FILTER_TAG = 'call.result_filter';
-    const EXCEPTION_HANDLER_TAG = 'call.exception_handler';
+    public const CALL_FILTER_TAG = 'call.call_filter';
+    public const CALL_HANDLER_TAG = 'call.call_handler';
+    public const RESULT_FILTER_TAG = 'call.result_filter';
+    public const EXCEPTION_HANDLER_TAG = 'call.exception_handler';
 
     /**
      * @var ServiceProcessor

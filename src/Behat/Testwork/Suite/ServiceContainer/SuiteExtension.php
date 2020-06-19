@@ -29,14 +29,14 @@ final class SuiteExtension implements Extension
     /*
      * Available services
      */
-    const REGISTRY_ID = 'suite.registry';
-    const BOOTSTRAPPER_ID = 'suite.bootstrapper';
+    public const REGISTRY_ID = 'suite.registry';
+    public const BOOTSTRAPPER_ID = 'suite.bootstrapper';
 
     /*
      * Available extension points
      */
-    const GENERATOR_TAG = 'suite.generator';
-    const SETUP_TAG = 'suite.setup';
+    public const GENERATOR_TAG = 'suite.generator';
+    public const SETUP_TAG = 'suite.setup';
 
     /**
      * @var ServiceProcessor

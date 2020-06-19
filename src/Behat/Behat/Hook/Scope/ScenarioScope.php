@@ -21,8 +21,8 @@ use Behat\Testwork\Hook\Scope\HookScope;
  */
 interface ScenarioScope extends HookScope
 {
-    const BEFORE = 'scenario.before';
-    const AFTER = 'scenario.after';
+    public const BEFORE = 'scenario.before';
+    public const AFTER = 'scenario.after';
 
     /**
      * Returns scope feature.

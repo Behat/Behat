@@ -26,7 +26,7 @@ use ReflectionMethod;
  */
 final class RowBasedTableTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    const PATTERN_REGEX = '/^rowtable\:[[:print:]]+$/';
+    public const PATTERN_REGEX = '/^rowtable\:[[:print:]]+$/';
 
     /**
      * @var string

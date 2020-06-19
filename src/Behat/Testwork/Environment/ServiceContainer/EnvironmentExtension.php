@@ -29,13 +29,13 @@ final class EnvironmentExtension implements Extension
     /*
      * Available services
      */
-    const MANAGER_ID = 'environment.manager';
+    public const MANAGER_ID = 'environment.manager';
 
     /*
      * Available extension points
      */
-    const HANDLER_TAG = 'environment.handler';
-    const READER_TAG = 'environment.reader';
+    public const HANDLER_TAG = 'environment.handler';
+    public const READER_TAG = 'environment.reader';
 
     /**
      * @var ServiceProcessor

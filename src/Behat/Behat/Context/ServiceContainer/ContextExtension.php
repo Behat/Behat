@@ -39,20 +39,20 @@ final class ContextExtension implements Extension
     /**
      * Available services
      */
-    const FACTORY_ID = 'context.factory';
-    const CONTEXT_SNIPPET_GENERATOR_ID = 'snippet.generator.context';
-    const AGGREGATE_RESOLVER_FACTORY_ID = 'context.argument.aggregate_resolver_factory';
+    public const FACTORY_ID = 'context.factory';
+    public const CONTEXT_SNIPPET_GENERATOR_ID = 'snippet.generator.context';
+    public const AGGREGATE_RESOLVER_FACTORY_ID = 'context.argument.aggregate_resolver_factory';
 
     /*
      * Available extension points
      */
-    const CLASS_RESOLVER_TAG = 'context.class_resolver';
-    const ARGUMENT_RESOLVER_TAG = 'context.argument_resolver';
-    const INITIALIZER_TAG = 'context.initializer';
-    const READER_TAG = 'context.reader';
-    const ANNOTATION_READER_TAG = 'context.annotation_reader';
-    const CLASS_GENERATOR_TAG = 'context.class_generator';
-    const SUITE_SCOPED_RESOLVER_FACTORY_TAG = 'context.argument.suite_resolver_factory';
+    public const CLASS_RESOLVER_TAG = 'context.class_resolver';
+    public const ARGUMENT_RESOLVER_TAG = 'context.argument_resolver';
+    public const INITIALIZER_TAG = 'context.initializer';
+    public const READER_TAG = 'context.reader';
+    public const ANNOTATION_READER_TAG = 'context.annotation_reader';
+    public const CLASS_GENERATOR_TAG = 'context.class_generator';
+    public const SUITE_SCOPED_RESOLVER_FACTORY_TAG = 'context.argument.suite_resolver_factory';
 
     /**
      * @var ServiceProcessor

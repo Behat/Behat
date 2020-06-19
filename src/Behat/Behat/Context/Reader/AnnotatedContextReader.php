@@ -24,7 +24,7 @@ use ReflectionMethod;
  */
 final class AnnotatedContextReader implements ContextReader
 {
-    const DOCLINE_TRIMMER_REGEX = '/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/';
+    public const DOCLINE_TRIMMER_REGEX = '/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/';
 
     /**
      * @var string[]

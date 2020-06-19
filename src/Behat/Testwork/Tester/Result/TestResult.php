@@ -17,10 +17,10 @@ namespace Behat\Testwork\Tester\Result;
  */
 interface TestResult
 {
-    const PASSED = 0;
-    const SKIPPED = 10;
-    const PENDING = 20;
-    const FAILED = 99;
+    public const PASSED = 0;
+    public const SKIPPED = 10;
+    public const PENDING = 20;
+    public const FAILED = 99;
 
     /**
      * Checks that test has passed.

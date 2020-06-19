@@ -27,14 +27,14 @@ final class CliExtension implements Extension
     /*
      * Available services
      */
-    const COMMAND_ID = 'cli.command';
-    const INPUT_ID = 'cli.input';
-    const OUTPUT_ID = 'cli.output';
+    public const COMMAND_ID = 'cli.command';
+    public const INPUT_ID = 'cli.input';
+    public const OUTPUT_ID = 'cli.output';
 
     /*
      * Available extension points
      */
-    const CONTROLLER_TAG = 'cli.controller';
+    public const CONTROLLER_TAG = 'cli.controller';
 
     /**
      * @var ServiceProcessor

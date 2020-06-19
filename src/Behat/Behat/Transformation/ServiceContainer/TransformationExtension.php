@@ -33,12 +33,12 @@ class TransformationExtension implements Extension
     /*
      * Available services
      */
-    const REPOSITORY_ID = 'transformation.repository';
+    public const REPOSITORY_ID = 'transformation.repository';
 
     /*
      * Available extension points
      */
-    const ARGUMENT_TRANSFORMER_TAG = 'transformation.argument_transformer';
+    public const ARGUMENT_TRANSFORMER_TAG = 'transformation.argument_transformer';
 
     /**
      * @var ServiceProcessor
