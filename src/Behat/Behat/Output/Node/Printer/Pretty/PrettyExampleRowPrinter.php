@@ -145,7 +145,8 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         }
 
         if ($event instanceof AfterStepTested) {
-            $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $this->subIndent($event->getStep()->getText()), $style));
+            $step = $event->getStep();
+            $printer->writeln(sprintf('{+%s}%s%s %s{-%s}', $style, $this->subIndentText, $step->getKeyword(), $step->getText(), $style));
         }
 
         $text = $this->exceptionPresenter->presentException($result->getException());

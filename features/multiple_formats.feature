@@ -145,7 +145,7 @@ Feature: Multiple formats
             | ate | found | result |
             | 3   | 1     | 1      |
       ...F      | 0   | 4     | 8      |
-              I should have 8 apples
+              Then I should have 8 apples
               Failed asserting that 7 matches expected 8.
       ....      | 2   | 2     | 3      |
 
@@ -239,7 +239,7 @@ Feature: Multiple formats
             | ate | found | result |
             | 3   | 1     | 1      |
       ...F      | 0   | 4     | 8      |
-              I should have 8 apples
+              Then I should have 8 apples
               Failed asserting that 7 matches expected 8.
       ....      | 2   | 2     | 3      |
 
@@ -376,7 +376,7 @@ Feature: Multiple formats
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
-              I should have 8 apples
+              Then I should have 8 apples
               Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
@@ -430,7 +430,7 @@ Feature: Multiple formats
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
-              I should have 8 apples
+              Then I should have 8 apples
               Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
@@ -555,7 +555,7 @@ Feature: Multiple formats
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
-              I should have 8 apples
+              Then I should have 8 apples
               Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
