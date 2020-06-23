@@ -39,6 +39,7 @@ install:
             Add-Content php.ini "`n extension=php_curl.dll"
             Add-Content php.ini "`n extension=php_mbstring.dll"
             Add-Content php.ini "`n extension=php_fileinfo.dll"
+            Add-Content php.ini "`n zend.exception_ignore_args=Off"
 
             # download Composer
             if (!(Test-Path C:\tools\composer)) {

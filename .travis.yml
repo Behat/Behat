@@ -27,6 +27,7 @@ before_script:
   - if [ "$SKIP_INTEROP" != "" ]; then composer remove --dev --no-update container-interop/container-interop; fi;
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
+  - echo 'zend.exception_ignore_args=Off' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - export PATH=./bin:$PATH
 
 script:
