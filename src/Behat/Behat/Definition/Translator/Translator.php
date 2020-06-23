@@ -7,7 +7,7 @@ class Translator extends \Symfony\Component\Translation\Translator implements Tr
     
     public function trans($id, array $parameters = array(), $domain = null, $locale = null ) {
         
-        if(array_key_exists('%count%', $parameters) && method_exists($this, 'transChoice')){
+        if(array_key_exists('%count%', $parameters) && method_exists($this, 'transChoice') && !$this instanceof \Symfony\Contracts\Translation\TranslatorInterface){
             return parent::transChoice($id, $parameters['%count%'], $parameters, $domain, $locale);
         }
         return parent::trans($id, $parameters, $domain, $locale);
