@@ -28,7 +28,7 @@ final class FilesystemExtension implements Extension
     /*
      * Available services
      */
-    const LOGGER_ID = 'filesystem.logger';
+    public const LOGGER_ID = 'filesystem.logger';
 
     /**
      * {@inheritdoc}

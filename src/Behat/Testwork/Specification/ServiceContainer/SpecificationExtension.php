@@ -27,12 +27,12 @@ final class SpecificationExtension implements Extension
     /*
      * Available services
      */
-    const FINDER_ID = 'specifications.finder';
+    public const FINDER_ID = 'specifications.finder';
 
     /*
      * Available extension points
      */
-    const LOCATOR_TAG = 'specifications.locator';
+    public const LOCATOR_TAG = 'specifications.locator';
 
     /**
      * @var ServiceProcessor

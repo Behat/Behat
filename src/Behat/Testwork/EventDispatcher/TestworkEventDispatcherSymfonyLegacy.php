@@ -16,9 +16,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 final class TestworkEventDispatcherSymfonyLegacy extends EventDispatcher
 {
-    const BEFORE_ALL_EVENTS = '*~';
-    const AFTER_ALL_EVENTS = '~*';
-    const DISPATCHER_VERSION = 1;
+    public const BEFORE_ALL_EVENTS = '*~';
+    public const AFTER_ALL_EVENTS = '~*';
+    public const DISPATCHER_VERSION = 1;
 
     /**
      * {@inheritdoc}

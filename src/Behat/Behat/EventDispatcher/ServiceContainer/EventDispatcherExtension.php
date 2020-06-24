@@ -156,20 +156,18 @@ class EventDispatcherExtension extends BaseExtension
     }
 
     /**
-     * Loads ticking step tester.
+     * This method used in the past to load the TickingStepTester to work around
+     * a bug with the scope of declare(ticks) in PHP < 7.1. Since we don't
+     * support those PHP versions anymore loading the TickingStepTester is
+     * no longer needed. This method is left here to prevent breaking BC.
+     *
+     * @todo Remove this method in next major
+     *
+     * @deprecated
      *
      * @param ContainerBuilder $container
      */
     protected function loadTickingStepTester(ContainerBuilder $container)
     {
-        if (!function_exists('pcntl_signal')) {
-            return;
-        }
-
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\TickingStepTester', array(
-            new Reference(TesterExtension::STEP_TESTER_ID)
-        ));
-        $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG, array('priority' => 9999));
-        $container->setDefinition(TesterExtension::STEP_TESTER_WRAPPER_TAG . '.ticking', $definition);
     }
 }

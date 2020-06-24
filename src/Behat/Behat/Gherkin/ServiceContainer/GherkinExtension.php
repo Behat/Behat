@@ -35,14 +35,14 @@ final class GherkinExtension implements Extension
     /*
      * Available services
      */
-    const MANAGER_ID = 'gherkin';
-    const KEYWORDS_DUMPER_ID = 'gherkin.keywords_dumper';
-    const KEYWORDS_ID = 'gherkin.keywords';
+    public const MANAGER_ID = 'gherkin';
+    public const KEYWORDS_DUMPER_ID = 'gherkin.keywords_dumper';
+    public const KEYWORDS_ID = 'gherkin.keywords';
 
     /*
      * Available extension points
      */
-    const LOADER_TAG = 'gherkin.loader';
+    public const LOADER_TAG = 'gherkin.loader';
 
     /**
      * @var ServiceProcessor

@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class OrderingExtension implements Extension
 {
-    const ORDERER_TAG = 'tester.orderer';
+    public const ORDERER_TAG = 'tester.orderer';
 
     /**
      * @var ServiceProcessor

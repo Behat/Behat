@@ -28,7 +28,7 @@ final class AutoloaderExtension implements Extension
     /*
      * Available services
      */
-    const CLASS_LOADER_ID = 'class_loader';
+    public const CLASS_LOADER_ID = 'class_loader';
 
     /**
      * @var array

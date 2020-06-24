@@ -21,6 +21,11 @@ use Behat\Testwork\Environment\Environment;
  * to handle an interupt (on PHP7)
  *
  * @see Behat\Testwork\EventDispatcher\Cli\SigintController
+ * 
+ * @deprecated Since the way signals are handled changed to use pcntl_signal_dispatch
+ *   this class is no longer needed.
+ * 
+ * @todo Remove this class in the next major version
  *
  * @author Peter Mitchell <peterjmit@gmail.com>
  */

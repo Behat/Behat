@@ -94,8 +94,6 @@ final class CallCenter
     {
         try {
             return $this->filterResult($this->handleCall($this->filterCall($call)));
-        } catch (Exception $exception) {
-            return new CallResult($call, null, $this->handleException($exception), null);
         } catch (Throwable $exception) {
             return new CallResult($call, null, $this->handleException($exception), null);
         }

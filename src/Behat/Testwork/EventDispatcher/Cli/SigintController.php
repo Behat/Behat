@@ -54,7 +54,7 @@ final class SigintController implements Controller
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (function_exists('pcntl_signal')) {
-            declare(ticks = 1);
+            pcntl_async_signals(true);
             pcntl_signal(SIGINT, array($this, 'abortExercise'));
         }
     }

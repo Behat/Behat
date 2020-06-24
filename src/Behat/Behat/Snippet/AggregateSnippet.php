@@ -112,9 +112,8 @@ final class AggregateSnippet
         }
 
         return array_unique(
-            call_user_func_array(
-                'array_merge',
-                array_map(
+            array_merge(
+                ...array_map(
                     function (Snippet $snippet) {
                         if (!$snippet instanceof ContextSnippet) {
                             return array();

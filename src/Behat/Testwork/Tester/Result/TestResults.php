@@ -21,7 +21,7 @@ use IteratorAggregate;
  */
 final class TestResults implements TestResult, Countable, IteratorAggregate
 {
-    const NO_TESTS = -100;
+    public const NO_TESTS = -100;
 
     /**
      * @var TestResult[]

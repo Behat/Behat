@@ -21,8 +21,8 @@ use Behat\Testwork\Hook\Scope\HookScope;
  */
 interface StepScope extends HookScope
 {
-    const BEFORE = 'step.before';
-    const AFTER = 'step.after';
+    public const BEFORE = 'step.before';
+    public const AFTER = 'step.after';
 
     /**
      * Returns scope feature.

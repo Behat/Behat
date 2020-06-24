@@ -24,7 +24,7 @@ use ReflectionMethod;
  */
 final class TokenNameTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    const PATTERN_REGEX = '/^\:\w+$/';
+    public const PATTERN_REGEX = '/^\:\w+$/';
 
     /**
      * @var string

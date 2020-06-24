@@ -35,17 +35,17 @@ final class DefinitionExtension implements Extension
     /*
      * Available services
      */
-    const FINDER_ID = 'definition.finder';
-    const REPOSITORY_ID = 'definition.repository';
-    const PATTERN_TRANSFORMER_ID = 'definition.pattern_transformer';
-    const WRITER_ID = 'definition.writer';
-    const DEFINITION_TRANSLATOR_ID = 'definition.translator';
+    public const FINDER_ID = 'definition.finder';
+    public const REPOSITORY_ID = 'definition.repository';
+    public const PATTERN_TRANSFORMER_ID = 'definition.pattern_transformer';
+    public const WRITER_ID = 'definition.writer';
+    public const DEFINITION_TRANSLATOR_ID = 'definition.translator';
 
     /*
      * Available extension points
      */
-    const SEARCH_ENGINE_TAG = 'definition.search_engine';
-    const PATTERN_POLICY_TAG = 'definition.pattern_policy';
+    public const SEARCH_ENGINE_TAG = 'definition.search_engine';
+    public const PATTERN_POLICY_TAG = 'definition.pattern_policy';
 
     /**
      * @var ServiceProcessor

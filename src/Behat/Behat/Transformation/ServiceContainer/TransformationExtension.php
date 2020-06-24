@@ -33,12 +33,14 @@ class TransformationExtension implements Extension
     /*
      * Available services
      */
-    const REPOSITORY_ID = 'transformation.repository';
+    public const REPOSITORY_ID = 'transformation.repository';
 
     /*
      * Available extension points
      */
-    const ARGUMENT_TRANSFORMER_TAG = 'transformation.argument_transformer';
+    public const ARGUMENT_TRANSFORMER_TAG = 'transformation.argument_transformer';
+
+    protected const DEFINITION_ARGUMENT_TRANSFORMER_ID = CallExtension::CALL_FILTER_TAG . '.definition_argument_transformer';
 
     /**
      * @var ServiceProcessor
@@ -105,7 +107,7 @@ class TransformationExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Transformation\Call\Filter\DefinitionArgumentsTransformer');
         $definition->addTag(CallExtension::CALL_FILTER_TAG, array('priority' => 200));
-        $container->setDefinition($this->getDefinitionArgumentTransformerId(), $definition);
+        $container->setDefinition(self::DEFINITION_ARGUMENT_TRANSFORMER_ID, $definition);
     }
 
     /**
@@ -158,7 +160,7 @@ class TransformationExtension implements Extension
     protected function processArgumentsTransformers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ARGUMENT_TRANSFORMER_TAG);
-        $definition = $container->getDefinition($this->getDefinitionArgumentTransformerId());
+        $definition = $container->getDefinition(self::DEFINITION_ARGUMENT_TRANSFORMER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerArgumentTransformer', array($reference));
@@ -169,9 +171,13 @@ class TransformationExtension implements Extension
      * Returns definition argument transformer service id.
      *
      * @return string
+     * 
+     * @deprecated Use DEFINITION_ARGUMENT_TRANSFORMER_ID constant instead
+     * 
+     * @todo Remove method in next major version
      */
     protected function getDefinitionArgumentTransformerId()
     {
-        return CallExtension::CALL_FILTER_TAG . '.definition_argument_transformer';
+        return self::DEFINITION_ARGUMENT_TRANSFORMER_ID;
     }
 }

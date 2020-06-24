@@ -21,10 +21,10 @@ use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
  */
 abstract class FeatureTested extends LifecycleEvent implements GherkinNodeTested
 {
-    const BEFORE = 'tester.feature_tested.before';
-    const AFTER_SETUP = 'tester.feature_tested.after_setup';
-    const BEFORE_TEARDOWN = 'tester.feature_tested.before_teardown';
-    const AFTER = 'tester.feature_tested.after';
+    public const BEFORE = 'tester.feature_tested.before';
+    public const AFTER_SETUP = 'tester.feature_tested.after_setup';
+    public const BEFORE_TEARDOWN = 'tester.feature_tested.before_teardown';
+    public const AFTER = 'tester.feature_tested.after';
 
     /**
      * Returns feature.

@@ -30,12 +30,12 @@ class EventDispatcherExtension implements Extension
     /*
      * Available services
      */
-    const DISPATCHER_ID = 'event_dispatcher';
+    public const DISPATCHER_ID = 'event_dispatcher';
 
     /*
      * Available extension points
      */
-    const SUBSCRIBER_TAG = 'event_dispatcher.subscriber';
+    public const SUBSCRIBER_TAG = 'event_dispatcher.subscriber';
 
     /**
      * @var ServiceProcessor

@@ -21,11 +21,11 @@ use Behat\Transliterator\Transliterator;
  */
 final class TurnipPatternPolicy implements PatternPolicy
 {
-    const TOKEN_REGEX = "[\"']?(?P<%s>(?<=\")[^\"]*(?=\")|(?<=')[^']*(?=')|\-?[\w\.\,]+)['\"]?";
+    public const TOKEN_REGEX = "[\"']?(?P<%s>(?<=\")[^\"]*(?=\")|(?<=')[^']*(?=')|\-?[\w\.\,]+)['\"]?";
 
-    const PLACEHOLDER_REGEXP = "/\\\:(\w+)/";
-    const OPTIONAL_WORD_REGEXP = '/(\s)?\\\\\(([^\\\]+)\\\\\)(\s)?/';
-    const ALTERNATIVE_WORD_REGEXP = '/(\w+)\\\\\/(\w+)/';
+    public const PLACEHOLDER_REGEXP = "/\\\:(\w+)/";
+    public const OPTIONAL_WORD_REGEXP = '/(\s)?\\\\\(([^\\\]+)\\\\\)(\s)?/';
+    public const ALTERNATIVE_WORD_REGEXP = '/(\w+)\\\\\/(\w+)/';
 
     /**
      * @var string[]

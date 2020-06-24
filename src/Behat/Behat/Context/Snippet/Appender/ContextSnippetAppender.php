@@ -25,7 +25,7 @@ final class ContextSnippetAppender implements SnippetAppender
     /**
      * @const PendingException class
      */
-    const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Tester\Exception\PendingException';
+    public const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Tester\Exception\PendingException';
 
     /**
      * @var FilesystemLogger

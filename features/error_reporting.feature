@@ -132,7 +132,6 @@ Feature: Error Reporting
           When an exception is thrown # features/exception_in_scenario.feature:7
             Exception: Exception is thrown in features/bootstrap/FeatureContext.php:56
             Stack trace:
-            #0 [internal function]: FeatureContext->anExceptionIsThrown()
 
     1 scenario (1 failed)
     1 step (1 failed)
@@ -149,7 +148,6 @@ Feature: Error Reporting
           When an exception is thrown # features/exception_in_scenario.feature:7
             Exception: Exception is thrown in features/bootstrap/FeatureContext.php:56
             Stack trace:
-            #0 [internal function]: FeatureContext->anExceptionIsThrown()
-            #1 src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(109): call_user_func_array(Array, Array)
-            #2 src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(64): Behat\Testwork\Call\Handler\RuntimeCallHandler->executeCall(Object(Behat\Behat\Definition\Call\DefinitionCall))
+            #0 src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(109): FeatureContext->anExceptionIsThrown()
+            #1 src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(64): Behat\Testwork\Call\Handler\RuntimeCallHandler->executeCall(Object(Behat\Behat\Definition\Call\DefinitionCall))
     """

@@ -19,7 +19,7 @@ use Symfony\Component\Console\Formatter\OutputFormatter as BaseOutputFormatter;
  */
 final class ConsoleFormatter extends BaseOutputFormatter
 {
-    const CUSTOM_PATTERN = '/{\+([a-z-_]+)}(.*?){\-\\1}/si';
+    public const CUSTOM_PATTERN = '/{\+([a-z-_]+)}(.*?){\-\\1}/si';
 
     /**
      * Formats a message according to the given styles.

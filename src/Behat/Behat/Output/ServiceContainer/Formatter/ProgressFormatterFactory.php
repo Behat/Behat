@@ -34,13 +34,13 @@ class ProgressFormatterFactory implements FormatterFactory
     /*
      * Available services
      */
-    const ROOT_LISTENER_ID = 'output.node.listener.progress';
-    const RESULT_TO_STRING_CONVERTER_ID = 'output.node.printer.result_to_string';
+    public const ROOT_LISTENER_ID = 'output.node.listener.progress';
+    public const RESULT_TO_STRING_CONVERTER_ID = 'output.node.printer.result_to_string';
 
     /*
      * Available extension points
      */
-    const ROOT_LISTENER_WRAPPER_TAG = 'output.node.listener.progress.wrapper';
+    public const ROOT_LISTENER_WRAPPER_TAG = 'output.node.listener.progress.wrapper';
 
     /**
      * Initializes extension.

@@ -28,7 +28,7 @@ final class TranslatorExtension implements Extension
     /*
      * Available services
      */
-    const TRANSLATOR_ID = 'translator';
+    public const TRANSLATOR_ID = 'translator';
 
     /**
      * {@inheritdoc}

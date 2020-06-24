@@ -58,9 +58,9 @@ if (false) {
     {
 
         // These constant definitions are required to prevent scrutinizer failing static analysis
-        const BEFORE_ALL_EVENTS = '*~';
-        const AFTER_ALL_EVENTS = '~*';
-        const DISPATCHER_VERSION = 'undefined';
+        public const BEFORE_ALL_EVENTS = '*~';
+        public const AFTER_ALL_EVENTS = '~*';
+        public const DISPATCHER_VERSION = 'undefined';
     }
 
 }

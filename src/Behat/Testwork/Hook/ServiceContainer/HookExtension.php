@@ -30,8 +30,8 @@ class HookExtension implements Extension
     /*
      * Available services
      */
-    const DISPATCHER_ID = 'hook.dispatcher';
-    const REPOSITORY_ID = 'hook.repository';
+    public const DISPATCHER_ID = 'hook.dispatcher';
+    public const REPOSITORY_ID = 'hook.repository';
 
     /**
      * {@inheritdoc}

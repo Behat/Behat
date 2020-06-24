@@ -29,14 +29,14 @@ final class SuiteExtension implements Extension
     /*
      * Available services
      */
-    const REGISTRY_ID = 'suite.registry';
-    const BOOTSTRAPPER_ID = 'suite.bootstrapper';
+    public const REGISTRY_ID = 'suite.registry';
+    public const BOOTSTRAPPER_ID = 'suite.bootstrapper';
 
     /*
      * Available extension points
      */
-    const GENERATOR_TAG = 'suite.generator';
-    const SETUP_TAG = 'suite.setup';
+    public const GENERATOR_TAG = 'suite.generator';
+    public const SETUP_TAG = 'suite.setup';
 
     /**
      * @var ServiceProcessor
@@ -89,9 +89,7 @@ final class SuiteExtension implements Extension
                         return is_array($suite) && count($suite);
                     })
                     ->then(function ($suite) {
-                        $suite['settings'] = isset($suite['settings'])
-                            ? $suite['settings']
-                            : array();
+                        $suite['settings'] = $suite['settings'] ?? array();
 
                         foreach ($suite as $key => $val) {
                             $suiteKeys = array('enabled', 'type', 'settings');

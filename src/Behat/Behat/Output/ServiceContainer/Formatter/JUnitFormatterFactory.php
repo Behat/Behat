@@ -27,8 +27,8 @@ final class JUnitFormatterFactory implements FormatterFactory
     /*
      * Available services
      */
-    const ROOT_LISTENER_ID = 'output.node.listener.junit';
-    const RESULT_TO_STRING_CONVERTER_ID = 'output.node.printer.result_to_string';
+    public const ROOT_LISTENER_ID = 'output.node.listener.junit';
+    public const RESULT_TO_STRING_CONVERTER_ID = 'output.node.printer.result_to_string';
 
     /**
      * {@inheritdoc}

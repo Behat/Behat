@@ -31,12 +31,12 @@ final class OutputExtension implements Extension
     /*
      * Available services
      */
-    const MANAGER_ID = 'output.manager';
+    public const MANAGER_ID = 'output.manager';
 
     /*
      * Available extension points
      */
-    const FORMATTER_TAG = 'output.formatter';
+    public const FORMATTER_TAG = 'output.formatter';
 
     /**
      * @var string

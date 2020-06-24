@@ -324,7 +324,7 @@ TPL;
      */
     private function getAlreadyProposedMethods($contextClass)
     {
-        return isset(self::$proposedMethods[$contextClass]) ? self::$proposedMethods[$contextClass] : array();
+        return self::$proposedMethods[$contextClass] ?? array();
     }
 
     /**
