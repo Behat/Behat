@@ -56,21 +56,13 @@ final class EventDispatchingSuiteTester implements SuiteTester
     {
         $event = new BeforeSuiteTested($env, $iterator);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::BEFORE);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::BEFORE);
 
         $setup = $this->baseTester->setUp($env, $iterator, $skip);
 
         $event = new AfterSuiteSetup($env, $iterator, $setup);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
 
         return $setup;
     }
@@ -89,21 +81,13 @@ final class EventDispatchingSuiteTester implements SuiteTester
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         $event = new BeforeSuiteTeardown($env, $iterator, $result);
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch( $event, $event::BEFORE_TEARDOWN);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
-        }
+        $this->eventDispatcher->dispatch( $event, $event::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);
 
         $event = new AfterSuiteTested($env, $iterator, $result, $teardown);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch( $event, $event::AFTER);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER, $event);
-        }
+        $this->eventDispatcher->dispatch( $event, $event::AFTER);
 
         return $teardown;
     }

@@ -13,6 +13,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  * if the new symfony interface is detected.
  *
  * @deprecated Do not reference this class directly, use TestworkEventDispatcher
+ *
+ * @todo Remove this class in the next major version. It's not used anymore, but just left here
+ *       for BC purposes.
  */
 final class TestworkEventDispatcherSymfony5 extends EventDispatcher
 {
