@@ -13,9 +13,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  * if the new symfony interface is detected.
  *
  * @deprecated Do not reference this class directly, use TestworkEventDispatcher
- *
- * @todo Remove this class in the next major version. It's not used anymore, but just left here
- *       for BC purposes.
  */
 final class TestworkEventDispatcherSymfony5 extends EventDispatcher
 {
@@ -28,6 +25,12 @@ final class TestworkEventDispatcherSymfony5 extends EventDispatcher
      */
     public function dispatch($event, string $eventName = null): object
     {
+        trigger_error(
+            'Class "\Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfony5" is deprecated ' .
+            'and should not be relied upon anymore. Use "Behat\Testwork\EventDispatcher\TestworkEventDispatcher" ' .
+            'instead',
+            E_USER_DEPRECATED
+        );
         if (null === $event) {
             $event = new \Symfony\Contracts\EventDispatcher\Event();
         }
@@ -45,6 +48,13 @@ final class TestworkEventDispatcherSymfony5 extends EventDispatcher
      */
     public function getListeners($eventName = null)
     {
+        trigger_error(
+            'Class "\Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfony5" is deprecated ' .
+            'and should not be relied upon anymore. Use "Behat\Testwork\EventDispatcher\TestworkEventDispatcher" ' .
+            'instead',
+            E_USER_DEPRECATED
+        );
+
         if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
             return parent::getListeners($eventName);
         }
