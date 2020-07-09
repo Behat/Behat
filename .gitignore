@@ -4,3 +4,4 @@
 behat.yml
 vendor
 composer.lock
+.phpunit.result.cache

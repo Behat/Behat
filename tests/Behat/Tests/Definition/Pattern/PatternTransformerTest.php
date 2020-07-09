@@ -66,12 +66,10 @@ class PatternTransformerTest extends TestCase
         $this->assertEquals('/hello world/', $regex3);
     }
 
-    /**
-     * @expectedException \Behat\Behat\Definition\Exception\UnknownPatternException
-     * @expectedExceptionMessage Can not find policy for a pattern `hello world`.
-     */
     public function testTransformPatternToRegexNoMatch()
     {
+        $this->expectException('\Behat\Behat\Definition\Exception\UnknownPatternException');
+        $this->expectExceptionMessage("Can not find policy for a pattern `hello world`.");
         // first pattern
         $policy1Prophecy = $this->prophesize('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
         $policy1Prophecy->supportsPattern('hello world')->willReturn(false);
