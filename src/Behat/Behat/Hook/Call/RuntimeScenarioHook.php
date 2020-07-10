@@ -76,10 +76,6 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
     {
         $filter = new TagFilter($filterString);
 
-        if ($filter->isFeatureMatch($feature)) {
-            return true;
-        }
-
         return $filter->isScenarioMatch($feature, $scenario);
     }
 

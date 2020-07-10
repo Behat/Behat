@@ -84,6 +84,20 @@ Feature: hooks
           }
 
           /**
+           * @BeforeScenario @filtered
+           */
+          public function beforeScenarioFiltered($event) {
+              $this->scenarioFilter = 'filtered';
+          }
+
+          /**
+           * @BeforeScenario @~filtered
+           */
+          public function beforeScenarioNotFiltered($event) {
+              $this->scenarioFilter = '~filtered';
+          }
+
+          /**
            * @BeforeStep I must have 100
            */
           public function beforeStep100($event) {
@@ -102,6 +116,13 @@ Feature: hooks
            */
           public function iMustHave($number) {
               \PHPUnit\Framework\Assert::assertEquals(intval($number), $this->number);
+          }
+
+          /**
+           * @Then I must have a scenario filter value of :value
+           */
+          public function iMustHaveScenarioFilter($filterValue) {
+              \PHPUnit\Framework\Assert::assertEquals($filterValue, $this->scenarioFilter);
           }
       }
       """
@@ -129,6 +150,17 @@ Feature: hooks
 
         Scenario: 130
           Given I must have 130
+
+        @filtered
+        Scenario:
+          Then I must have a scenario filter value of "filtered"
+
+        @~filtered
+        Scenario:
+          Then I must have a scenario filter value of "~filtered"
+
+        Scenario:
+          Then I must have a scenario filter value of "~filtered"
       """
     When I run "behat --no-colors -f pretty"
     Then it should pass with:
@@ -161,13 +193,24 @@ Feature: hooks
         Scenario: 130           # features/test.feature:19
           Given I must have 130 # FeatureContext::iMustHave()
 
+        @filtered
+        Scenario:                                                # features/test.feature:23
+          Then I must have a scenario filter value of "filtered" # FeatureContext::iMustHaveScenarioFilter()
+
+        @~filtered
+        Scenario:                                                 # features/test.feature:27
+          Then I must have a scenario filter value of "~filtered" # FeatureContext::iMustHaveScenarioFilter()
+
+        Scenario:                                                 # features/test.feature:30
+          Then I must have a scenario filter value of "~filtered" # FeatureContext::iMustHaveScenarioFilter()
+
       │
       │  = do something AFTER EVERY FEATURE
       │
       └─ @AfterFeature # FeatureContext::doSomethingAfterFeature()
 
-      5 scenarios (5 passed)
-      10 steps (10 passed)
+      8 scenarios (8 passed)
+      13 steps (13 passed)
       """
 
   Scenario: Filter features
