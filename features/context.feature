@@ -61,7 +61,7 @@ Feature: Context consistency
            * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
            */
           public function contextParameterShouldBeArrayWithElements($key, $count) {
-              PHPUnit\Framework\Assert::assertInternalType('array', $this->parameters[$key]);
+              PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
               PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
           }
       }
@@ -496,7 +496,7 @@ Feature: Context consistency
 
           /** @Given foo */
           public function foo() {
-            PHPUnit\Framework\Assert::assertInternalType('array', $this->foo);
+            PHPUnit\Framework\Assert::assertIsArray($this->foo);
 
             PHPUnit\Framework\Assert::assertSame('foo', $this->foo[0]);
             PHPUnit\Framework\Assert::assertSame('bar', $this->foo[1]);
