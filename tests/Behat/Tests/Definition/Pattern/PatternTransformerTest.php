@@ -68,8 +68,6 @@ class PatternTransformerTest extends TestCase
 
     public function testTransformPatternToRegexNoMatch()
     {
-        $this->expectException('\Behat\Behat\Definition\Exception\UnknownPatternException');
-        $this->expectExceptionMessage("Can not find policy for a pattern `hello world`.");
         // first pattern
         $policy1Prophecy = $this->prophesize('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
         $policy1Prophecy->supportsPattern('hello world')->willReturn(false);
@@ -79,6 +77,8 @@ class PatternTransformerTest extends TestCase
 
         $testedInstance = new PatternTransformer();
         $testedInstance->registerPatternPolicy($policy1Prophecy->reveal());
+        $this->expectException('\Behat\Behat\Definition\Exception\UnknownPatternException');
+        $this->expectExceptionMessage("Can not find policy for a pattern `hello world`.");
         $regex = $testedInstance->transformPatternToRegex('hello world');
     }
 }
