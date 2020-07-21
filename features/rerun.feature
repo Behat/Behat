@@ -58,7 +58,7 @@ Feature: Rerun
            * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
            */
           public function contextParameterShouldBeArrayWithElements($key, $count) {
-              PHPUnit\Framework\Assert::assertInternalType('array', $this->parameters[$key]);
+              PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
               PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
           }
       }

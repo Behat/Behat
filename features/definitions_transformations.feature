@@ -125,7 +125,7 @@ Feature: Step Arguments Transformations
            */
           public function ageMustBe($age) {
               PHPUnit\Framework\Assert::assertEquals($age, $this->user->getAge());
-              PHPUnit\Framework\Assert::assertInternalType('int', $age);
+              PHPUnit\Framework\Assert::assertIsInt($age);
           }
 
           /**
