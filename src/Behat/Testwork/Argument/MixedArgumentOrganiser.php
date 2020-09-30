@@ -131,17 +131,14 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
     /**
      * Checks if value matches typehint of provided parameter.
-     *
-     * @param object              $value
-     * @param ReflectionParameter $parameter
-     *
-     * @return bool
      */
-    private function isValueMatchesTypehintedParameter($value, ReflectionParameter $parameter)
+    private function isValueMatchesTypehintedParameter($value, ReflectionParameter $parameter) : bool
     {
-        $typehintRefl = $parameter->getClass();
+        if ($typehintRefl = $this->getReflectionClassFromParameter($parameter)) {
+            return $typehintRefl->isInstance($value);
+        }
 
-        return $typehintRefl && $typehintRefl->isInstance($value);
+        return false;
     }
 
     /**
@@ -217,29 +214,36 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param  ReflectionParameter[] $parameters Constructor Arguments
      * @return ReflectionParameter[]             Filtered $parameters
      */
-    private function filterApplicableTypehintedParameters(array $parameters)
+    private function filterApplicableTypehintedParameters(array $parameters) : array
     {
-        $filtered = array();
+        return array_filter($parameters,
+            function($parameter, $num) {
+                return !$this->isArgumentDefined($num)
+                && $this->getReflectionClassFromParameter($parameter);
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
 
-        foreach ($parameters as $num => $parameter) {
-            if ($this->isArgumentDefined($num)) {
-                continue;
+    }
+
+    private function getReflectionClassFromParameter(\ReflectionParameter $parameter) : ?ReflectionClass
+    {
+        try {
+            if (!$parameter->hasType()) {
+                return null;
+            }
+            $type = $parameter->getType()->getName();
+
+            if ($type == 'self') {
+                $type = $parameter->getDeclaringClass();
+            } elseif ($type == 'parent') {
+                $type = $parameter->getDeclaringClass()->getParentClass();
             }
 
-            try {
-                $reflectionClass = $parameter->getClass();
-            } catch (ReflectionException $e) {
-                continue;
-            }
-
-            if (!$reflectionClass) {
-                continue;
-            }
-
-            $filtered[$num] = $parameter;
+            return new ReflectionClass($type); // will throw
+        } catch (ReflectionException $e) {
+            return null;
         }
-
-        return $filtered;
     }
 
     /**
@@ -283,7 +287,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         $predicate
     ) {
         foreach ($candidates as $candidateIndex => $candidate) {
-            if ($predicate($parameter->getClass(), $candidate)) {
+            if (($class = $this->getReflectionClassFromParameter($parameter)) && $predicate($class, $candidate)) {
                 $num = $parameter->getPosition();
 
                 $arguments[$num] = $candidate;
