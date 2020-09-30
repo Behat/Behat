@@ -92,4 +92,27 @@ final class MixedArgumentOrganiserTest extends TestCase
 
         $this->assertSame([1, 'date' => $date], $organised);
     }
+
+    /** @test */
+    function it_matches_union_types()
+    {
+        if (\PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped('Union types are not supported');
+        }
+
+        $r = eval(<<<CODE
+            return new \ReflectionFunction(
+              function(int|\DateTimeInterface \$a) {}
+            );
+CODE
+        );
+        $args = [
+            'date' => $date = new \DateTime(),
+            'x' => 1
+        ];
+
+        $organised = $this->organiser->organiseArguments($r, $args);
+
+        $this->assertSame([$date], $organised);
+    }
 }
