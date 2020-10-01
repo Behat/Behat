@@ -111,12 +111,12 @@ Feature: Error Reporting
     7 steps (5 passed, 1 failed, 1 skipped)
     """
 
-  Scenario: With error reporting ignoring E_NOTICE
+  Scenario: With error reporting ignoring E_NOTICE and E_WARNING
     Given a file named "behat.yml" with:
       """
       default:
         calls:
-          error_reporting: 32759
+          error_reporting: 32757
       """
     When I run "behat -f progress --no-colors features/e_notice_in_scenario.feature"
     Then it should pass
