@@ -253,6 +253,11 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         foreach ($types as $type) {
 
+            // ReflectionUnionType::getTypes is only documented as returning ReflectionType[]
+            if (!$type instanceof \ReflectionNamedType) {
+                continue;
+            }
+
             $typeString = $type->getName();
 
             if ($typeString == 'self') {

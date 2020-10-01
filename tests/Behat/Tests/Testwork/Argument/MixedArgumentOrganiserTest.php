@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Behat\Tests\Testwork\Argument;
 
@@ -93,13 +92,12 @@ final class MixedArgumentOrganiserTest extends TestCase
         $this->assertSame([1, 'date' => $date], $organised);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @requires PHP >= 8.0
+     */
     function it_matches_union_types()
     {
-        if (\PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported');
-        }
-
         $r = eval(<<<CODE
             return new \ReflectionFunction(
               function(int|\DateTimeInterface \$a) {}
