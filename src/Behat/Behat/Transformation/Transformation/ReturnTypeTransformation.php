@@ -223,15 +223,20 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      */
     private function getClassReflection() : closure
     {
-        return function (ReflectionParameter $parameter) {
+        return function (ReflectionParameter $parameter) : ?ReflectionClass
+        {
             $t = $parameter->getType();
 
             if ($t instanceof ReflectionNamedType) {
                 try {
                     return new ReflectionClass($t->getName());
                 }
-                catch (\TypeError $t) {}
+                catch (\TypeError $t) {
+                    return null;
+                }
             }
+
+            return null;
         };
     }
 }
