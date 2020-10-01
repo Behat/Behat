@@ -438,8 +438,9 @@ EOL;
         // Replace wrong warning message of HHVM
         $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);
 
-        // replace error message that changed in PHP
+        // replace error messages that changed in PHP8
         $output = str_replace('Warning: Undefined array key','Notice: Undefined offset:', $output);
+        $output = preg_replace('/Class "([^"]+)" not found/', 'Class \'$1\' not found', $output);
 
         return trim(preg_replace("/ +$/m", '', $output));
     }
