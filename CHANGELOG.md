@@ -916,9 +916,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * Initial release
 
 [Unreleased]: https://github.com/Behat/Behat/compare/v3.7.0...master
-### Changed
-  * Added feature title as classname of testcase in junit output
-
 [3.7.0]: https://github.com/Behat/Behat/compare/v3.6.1...v3.7.0
 [3.6.1]: https://github.com/Behat/Behat/compare/v3.6.0...v3.6.1
 [3.6.0]: https://github.com/Behat/Behat/compare/v3.5.0...v3.6.0
