@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
+use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
@@ -47,6 +48,10 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
      * @var string
      */
     private $subIndentText;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
 
     /**
      * Initializes printer.
@@ -59,11 +64,13 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     public function __construct(
         ResultToStringConverter $resultConverter,
         ExceptionPresenter $exceptionPresenter,
+        TranslatorInterface $translator,
         $indentation = 6,
         $subIndentation = 2
     ) {
         $this->resultConverter = $resultConverter;
         $this->exceptionPresenter = $exceptionPresenter;
+        $this->translator = $translator;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
@@ -145,8 +152,9 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         }
 
         if ($event instanceof AfterStepTested) {
+            $title = $this->translator->trans('failed_step_title', [], 'output');
             $step = $event->getStep();
-            $printer->writeln(sprintf('{+%s}%s%s %s{-%s}', $style, $this->subIndentText, $step->getKeyword(), $step->getText(), $style));
+            $printer->writeln(sprintf('{+%s}%s%s %s %s{-%s}', $style, $this->subIndentText, $title, $step->getKeyword(), $step->getText(), $style));
         }
 
         $text = $this->exceptionPresenter->presentException($result->getException());
