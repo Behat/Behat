@@ -54,21 +54,13 @@ final class EventDispatchingExercise implements Exercise
     {
         $event = new BeforeExerciseCompleted($iterators);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::BEFORE);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::BEFORE);
 
         $setup = $this->baseExercise->setUp($iterators, $skip);
 
         $event = new AfterExerciseSetup($iterators, $setup);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
 
         return $setup;
     }
@@ -88,21 +80,13 @@ final class EventDispatchingExercise implements Exercise
     {
         $event = new BeforeExerciseTeardown($iterators, $result);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
 
         $teardown = $this->baseExercise->tearDown($iterators, $skip, $result);
 
         $event = new AfterExerciseCompleted($iterators, $result, $teardown);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::AFTER);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::AFTER);
 
         return $teardown;
     }

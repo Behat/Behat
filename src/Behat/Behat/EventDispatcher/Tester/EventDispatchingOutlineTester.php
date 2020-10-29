@@ -57,21 +57,13 @@ final class EventDispatchingOutlineTester implements OutlineTester
     {
         $event = new BeforeOutlineTested($env, $feature, $outline);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::BEFORE);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::BEFORE);
 
         $setup = $this->baseTester->setUp($env, $feature, $outline, $skip);
 
         $event = new AfterOutlineSetup($env, $feature, $outline, $setup);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
 
         return $setup;
     }
@@ -91,21 +83,13 @@ final class EventDispatchingOutlineTester implements OutlineTester
     {
         $event = new BeforeOutlineTeardown($env, $feature, $outline, $result);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch( $event,$event::BEFORE_TEARDOWN);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
-        }
+        $this->eventDispatcher->dispatch( $event,$event::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $feature, $outline, $skip, $result);
 
         $event = new AfterOutlineTested($env, $feature, $outline, $result, $teardown);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::AFTER);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::AFTER);
 
         return $teardown;
     }

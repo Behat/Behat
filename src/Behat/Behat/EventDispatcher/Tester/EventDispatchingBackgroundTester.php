@@ -57,21 +57,13 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     {
         $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground());
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::BEFORE);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::BEFORE);
 
         $setup = $this->baseTester->setUp($env, $feature, $skip);
 
         $event = new AfterBackgroundSetup($env, $feature, $feature->getBackground(), $setup);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
 
         return $setup;
     }
@@ -91,21 +83,13 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     {
         $event = new BeforeBackgroundTeardown($env, $feature, $feature->getBackground(), $result);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, BackgroundTested::BEFORE_TEARDOWN);
-        } else {
-            $this->eventDispatcher->dispatch(BackgroundTested::BEFORE_TEARDOWN, $event);
-        }
+        $this->eventDispatcher->dispatch($event, BackgroundTested::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
 
         $event = new AfterBackgroundTested($env, $feature, $feature->getBackground(), $result, $teardown);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, BackgroundTested::AFTER);
-        } else {
-            $this->eventDispatcher->dispatch(BackgroundTested::AFTER, $event);
-        }
+        $this->eventDispatcher->dispatch($event, BackgroundTested::AFTER);
 
         return $teardown;
     }

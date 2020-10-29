@@ -87,21 +87,13 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     {
         $event = new BeforeScenarioTested($env, $feature, $scenario);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $this->beforeEventName);
-        } else {
-            $this->eventDispatcher->dispatch($this->beforeEventName, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $this->beforeEventName);
 
         $setup = $this->baseTester->setUp($env, $feature, $scenario, $skip);
 
         $event = new AfterScenarioSetup($env, $feature, $scenario, $setup);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $this->afterSetupEventName);
-        } else {
-            $this->eventDispatcher->dispatch($this->afterSetupEventName, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $this->afterSetupEventName);
 
         return $setup;
     }
@@ -121,21 +113,13 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     {
         $event = new BeforeScenarioTeardown($env, $feature, $scenario, $result);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $this->beforeTeardownEventName);
-        } else {
-            $this->eventDispatcher->dispatch($this->beforeTeardownEventName, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $this->beforeTeardownEventName);
 
         $teardown = $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);
 
         $event = new AfterScenarioTested($env, $feature, $scenario, $result, $teardown);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $this->afterEventName);
-        } else {
-            $this->eventDispatcher->dispatch($this->afterEventName, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $this->afterEventName);
 
         return $teardown;
     }

@@ -26,6 +26,13 @@ final class TestworkEventDispatcherSymfonyLegacy extends EventDispatcher
      */
     public function dispatch($eventName, \Symfony\Component\EventDispatcher\Event $event = null)
     {
+        trigger_error(
+            'Class "\Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfonyLegacy" is deprecated ' .
+            'and should not be relied upon anymore. Use "Behat\Testwork\EventDispatcher\TestworkEventDispatcher" ' .
+            'instead',
+            E_USER_DEPRECATED
+        );
+
         if (null === $event) {
             $event = new \Symfony\Component\EventDispatcher\Event();
         }
@@ -43,6 +50,13 @@ final class TestworkEventDispatcherSymfonyLegacy extends EventDispatcher
      */
     public function getListeners($eventName = null)
     {
+        trigger_error(
+            'Class "\Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfonyLegacy" is deprecated ' .
+            'and should not be relied upon anymore. Use "Behat\Testwork\EventDispatcher\TestworkEventDispatcher" ' .
+            'instead',
+            E_USER_DEPRECATED
+        );
+
         if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
             return parent::getListeners($eventName);
         }

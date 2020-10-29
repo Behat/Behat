@@ -57,21 +57,13 @@ final class EventDispatchingStepTester implements StepTester
     {
         $event = new BeforeStepTested($env, $feature, $step);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::BEFORE);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::BEFORE);
 
         $setup = $this->baseTester->setUp($env, $feature, $step, $skip);
 
         $event = new AfterStepSetup($env, $feature, $step, $setup);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
 
         return $setup;
     }
@@ -91,21 +83,13 @@ final class EventDispatchingStepTester implements StepTester
     {
         $event = new BeforeStepTeardown($env, $feature, $step, $result);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
-        } else {
-            $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $feature, $step, $skip, $result);
 
         $event = new AfterStepTested($env, $feature, $step, $result, $teardown);
 
-        if (TestworkEventDispatcher::DISPATCHER_VERSION === 2) {
-            $this->eventDispatcher->dispatch($event, $event::AFTER);
-        } else {
-            $this->eventDispatcher->dispatch($event::AFTER, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $event::AFTER);
 
         return $teardown;
     }
