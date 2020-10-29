@@ -105,24 +105,24 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
         <testsuite name="World consistency" tests="8" skipped="0" failures="3" errors="2" time="-IGNORE-VALUE-">
-          <testcase name="Undefined" status="undefined" time="-IGNORE-VALUE-">
+          <testcase name="Undefined" classname="World consistency" status="undefined" time="-IGNORE-VALUE-">
             <error message="And Something new" type="undefined"/>
           </testcase>
-          <testcase name="Pending" status="pending" time="-IGNORE-VALUE-">
+          <testcase name="Pending" classname="World consistency" status="pending" time="-IGNORE-VALUE-">
             <error message="And Something not done yet: TODO: write pending definition" type="pending"/>
           </testcase>
-          <testcase name="Failed" status="failed" time="-IGNORE-VALUE-">
+          <testcase name="Failed" classname="World consistency" status="failed" time="-IGNORE-VALUE-">
             <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
           </testcase>
-          <testcase name="Passed &amp; Failed #1" status="failed" time="-IGNORE-VALUE-">
+          <testcase name="Passed &amp; Failed #1" classname="World consistency" status="failed" time="-IGNORE-VALUE-">
             <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
           </testcase>
-          <testcase name="Passed &amp; Failed #2" status="passed" time="-IGNORE-VALUE-"/>
-          <testcase name="Passed &amp; Failed #3" status="failed" time="-IGNORE-VALUE-">
+          <testcase name="Passed &amp; Failed #2" classname="World consistency" status="passed" time="-IGNORE-VALUE-"/>
+          <testcase name="Passed &amp; Failed #3" classname="World consistency" status="failed" time="-IGNORE-VALUE-">
             <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
           </testcase>
-          <testcase name="Another Outline #1" status="passed" time="-IGNORE-VALUE-"/>
-          <testcase name="Another Outline #2" status="passed" time="-IGNORE-VALUE-"/>
+          <testcase name="Another Outline #1" classname="World consistency" status="passed" time="-IGNORE-VALUE-"/>
+          <testcase name="Another Outline #2" classname="World consistency" status="passed" time="-IGNORE-VALUE-"/>
         </testsuite>
       </testsuites>
       """
@@ -192,10 +192,10 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
         <testsuite name="Adding Feature 1" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Adding 4 to 10" status="passed" time="-IGNORE-VALUE-"></testcase>
+          <testcase name="Adding 4 to 10" classname="Adding Feature 1" status="passed" time="-IGNORE-VALUE-"></testcase>
         </testsuite>
         <testsuite name="Adding Feature 2" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Adding 8 to 10" status="passed" time="-IGNORE-VALUE-"></testcase>
+          <testcase name="Adding 8 to 10" classname="Adding Feature 2" status="passed" time="-IGNORE-VALUE-"></testcase>
         </testsuite>
       </testsuites>
       """
@@ -267,8 +267,8 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
         <testsuite name="World consistency" tests="2" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Adding some interesting value" status="passed" time="-IGNORE-VALUE-"/>
-          <testcase name="Subtracting some value" status="passed" time="-IGNORE-VALUE-"/>
+          <testcase name="Adding some interesting value" classname="World consistency" status="passed" time="-IGNORE-VALUE-"/>
+          <testcase name="Subtracting some value" classname="World consistency" status="passed" time="-IGNORE-VALUE-"/>
         </testsuite>
       </testsuites>
       """
@@ -387,7 +387,7 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="small_kid">
         <testsuite name="Apple Eating" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Eating one apple" status="passed" time="-IGNORE-VALUE-"/>
+          <testcase name="Eating one apple" classname="Apple Eating" status="passed" time="-IGNORE-VALUE-"/>
         </testsuite>
       </testsuites>
       """
@@ -397,7 +397,7 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="old_man">
         <testsuite name="Apple Eating" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Eating one apple" status="failed" time="-IGNORE-VALUE-">
+          <testcase name="Eating one apple" classname="Apple Eating" status="failed" time="-IGNORE-VALUE-">
             <failure message="Then I will be stronger: Failed asserting that 0 is not equal to 0."/>
           </testcase>
         </testsuite>
@@ -456,8 +456,8 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
         <testsuite name="World consistency" tests="2" skipped="2" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Skipped" status="skipped" time="-IGNORE-VALUE-"/>
-          <testcase name="Another skipped" status="skipped" time="-IGNORE-VALUE-"/>
+          <testcase name="Skipped" classname="World consistency" status="skipped" time="-IGNORE-VALUE-"/>
+          <testcase name="Another skipped" classname="World consistency" status="skipped" time="-IGNORE-VALUE-"/>
         </testsuite>
       </testsuites>
       """
@@ -518,7 +518,7 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
         <testsuite name="World consistency" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Failed" status="failed" time="-IGNORE-VALUE-">
+          <testcase name="Failed" classname="World consistency" status="failed" time="-IGNORE-VALUE-">
             <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
           </testcase>
         </testsuite>
@@ -648,7 +648,7 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
         <testsuite name="World consistency" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Failed" status="failed" time="-IGNORE-VALUE-">
+          <testcase name="Failed" classname="World consistency" status="failed" time="-IGNORE-VALUE-">
             <failure message="Given I have entered 10: failure (Exception)" type="setup"></failure>
           </testcase>
         </testsuite>
@@ -704,7 +704,7 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
         <testsuite name="World consistency" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Failed" status="failed" time="-IGNORE-VALUE-">
+          <testcase name="Failed" classname="World consistency" status="failed" time="-IGNORE-VALUE-">
             <failure message="Given I have entered 10: failure (Exception)" type="teardown"></failure>
           </testcase>
         </testsuite>
