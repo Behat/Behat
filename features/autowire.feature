@@ -12,6 +12,7 @@ Feature: Helper services autowire
     - It only wires arguments that weren't otherwise set
     - Services must be last arguments in step definitions
     - Services must be last arguments in transformations
+    - Autowiring is not yet triggered for union types
 
   Background:
     Given a file named "behat.yaml" with:
@@ -245,3 +246,28 @@ Feature: Helper services autowire
       """
     When I run "behat --no-colors -f progress features/autowire.feature"
     Then it should pass
+
+  @php8
+  Scenario: Union constructor arguments
+    Given a file named "features/autowire.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given a step
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context {
+          public function __construct(Service1|Service2 $s) {}
+
+          /** @Given a step */
+          public function aStep() {}
+      }
+      """
+    When I run "behat --no-colors -f progress features/autowire.feature"
+    Then it should fail with:
+      """
+      Can not find a matching value for an argument `$s` of the method `FeatureContext::__construct()`
+      """

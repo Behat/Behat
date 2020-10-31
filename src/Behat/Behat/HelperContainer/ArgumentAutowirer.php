@@ -12,12 +12,14 @@ namespace Behat\Behat\HelperContainer;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
+use ReflectionClass;
 use ReflectionFunctionAbstract;
+use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionException;
 
 /**
- * Automatically wires arguments of a given function from inside the container by using type-hitns.
+ * Automatically wires arguments of a given function from inside the container by using type-hints.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -53,7 +55,7 @@ final class ArgumentAutowirer
         $newArguments = $arguments;
         foreach ($reflection->getParameters() as $index => $parameter) {
             if ($this->isArgumentWireable($newArguments, $index, $parameter)) {
-                $newArguments[$index] = $this->container->get($parameter->getClass()->getName());
+                $newArguments[$index] = $this->container->get($this->getClassFromParameter($parameter));
             }
         }
 
@@ -81,10 +83,32 @@ final class ArgumentAutowirer
             return false;
         }
 
+        return (bool) $this->getClassFromParameter($parameter);
+    }
+
+    private function getClassFromParameter(ReflectionParameter $parameter) : ?string
+    {
+        if (!($type = $parameter->getType()) || !($type instanceof ReflectionNamedType)) {
+            return null;
+        }
+
         try {
-            return (bool) $parameter->getClass();
+            $typeString = $type->getName();
+
+            if ($typeString == 'self') {
+                return $parameter->getDeclaringClass()->getName();
+            }
+            elseif ($typeString == 'parent') {
+                return $parameter->getDeclaringClass()->getParentClass()->getName();
+            }
+
+            // will throw if not valid class
+            new ReflectionClass($typeString);
+
+            return $typeString;
+
         } catch (ReflectionException $e) {
-            return false;
+            return null;
         }
     }
 }

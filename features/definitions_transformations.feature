@@ -637,3 +637,40 @@ Feature: Step Arguments Transformations
       4 scenarios (4 passed)
       8 steps (8 passed)
       """
+
+  @php8
+  Scenario: By-type transformations don't trigger from union types
+    Given a file named "features/union-transforms.feature" with:
+      """
+      Feature:
+        Scenario:
+          Given I am "everzet"
+          And she is "lunivore"
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+      class User {
+      }
+      class FeatureContext implements Behat\Behat\Context\Context
+      {
+          /** @Transform */
+          public function userFromName($name) : User|int
+          {
+              return new User();
+          }
+
+          /**
+           * @Given I am :user
+           * @Given she is :user
+           */
+          public function iAm(User $user) {
+              $this->I = $user;
+          }
+      }
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should fail with:
+      """
+      string given
+      """

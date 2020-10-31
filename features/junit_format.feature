@@ -571,7 +571,7 @@
       When I run "behat --no-colors -f junit -o junit"
       Then it should fail with:
       """
-      PHP Fatal error:  class@anonymous cannot implement Foo - it is not an interface
+      cannot implement Foo - it is not an interface
       """
       And "junit/default.xml" file xml should be like:
       """

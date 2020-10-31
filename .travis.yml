@@ -15,9 +15,13 @@ jobs:
     - php: 7.2
       env: SKIP_INTEROP=true
     - php: 7.2
-      env: DEPENDENCIES='low'
+      env: COMPOSER_FLAGS='--prefer-lowest'
     - php: 7.4
       env: SYMFONY_VERSION='^4.4'
+    - php: nightly
+      env:
+        - PHP8=true
+        - COMPOSER_FLAGS='--ignore-platform-reqs'
 
 before_install:
   - phpenv config-rm xdebug.ini || echo "XDebug is not enabled"
@@ -25,14 +29,14 @@ before_install:
 before_script:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"; fi;
   - if [ "$SKIP_INTEROP" != "" ]; then composer remove --dev --no-update container-interop/container-interop; fi;
-  - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
-  - if [ "$DEPENDENCIES" = "low" ]; then composer update --prefer-lowest; fi;
+  - composer update $COMPOSER_FLAGS
   - echo 'zend.exception_ignore_args=Off' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - export PATH=./bin:$PATH
 
 script:
   - ./vendor/bin/phpunit
-  - behat -fprogress --strict $([ -z "$SKIP_INTEROP" ] || echo "--tags ~@interop")
+  - behat -fprogress --strict $([ -z "$SKIP_INTEROP" ] || echo "--tags ~@interop&&~@php8")
+  - if [ "$PHP8" = true ]; then behat -fprogress --strict --tags=@php8; fi;
 
 before_deploy:
   - curl -LSs https://box-project.github.io/box2/installer.php | php

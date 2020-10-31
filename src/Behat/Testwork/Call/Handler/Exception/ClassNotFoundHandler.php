@@ -22,7 +22,7 @@ use Error;
  */
 abstract class ClassNotFoundHandler implements ExceptionHandler
 {
-    public const PATTERN = "/^Class '([^']+)' not found$/";
+    public const PATTERN = "/^Class (?:'|\")([^'\"]+)(?:'|\") not found$/";
 
     /**
      * {@inheritdoc}

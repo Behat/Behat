@@ -130,7 +130,7 @@ final class ContextFactory
     private function createInstance(ReflectionClass $reflection, array $arguments)
     {
         if (count($arguments)) {
-            return $reflection->newInstanceArgs($arguments);
+            return $reflection->newInstanceArgs(array_values($arguments));
         }
 
         return $reflection->newInstance();
