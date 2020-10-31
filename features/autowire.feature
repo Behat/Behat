@@ -247,7 +247,7 @@ Feature: Helper services autowire
     When I run "behat --no-colors -f progress features/autowire.feature"
     Then it should pass
 
-    @php8
+  @php8
   Scenario: Union constructor arguments
     Given a file named "features/autowire.feature" with:
       """
