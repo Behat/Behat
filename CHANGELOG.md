@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.8.0] - 2020-11-01
+
+### Added
+ * [1198](https://github.com/Behat/Behat/pull/1198): Korean language translations ([@getsolaris](https://github.com/getsolaris))
+ * [1252](https://github.com/Behat/Behat/pull/1252): Hungarian language translations ([@kolesar-andras](https://github.com/kolesar-andras))
+ * [1217](https://github.com/Behat/Behat/pull/1217): Bulgarian language translations ([@toni-kolev](https://github.com/toni-kolev))
+ * [1322](https://github.com/Behat/Behat/pull/1322): Feature title as classname in JUnit output ([@steefmin](https://github.com/steefmin))
+ * [1313](https://github.com/Behat/Behat/pull/1313): PHP 8 support ([@ciaranmcnulty](https://github.com/ciaranmcnulty))
+ * [1313](https://github.com/Behat/Behat/pull/1323): Further PHP 8 support ([@dgafka](https://github.com/dgafka))
+ 
+### Fixed
+
+ * [#1303](https://github.com/Behat/Behat/pull/1303): Error when running `--debug` with recent Symfony versions ([@jawira](https://github.com/jawira))
+ * [#1311](https://github.com/Behat/Behat/pull/1311): Remove symfony deprecation messages about transChoice ([@guilliamxavier](https://github.com/guilliamxavier))
+ * [#1318](https://github.com/Behat/Behat/pull/1318): Allow negated filters on scenario hoooks ([@andrewnicols ](https://github.com/andrewnicols))
+
+### Changed  
+ * [#1299](https://github.com/Behat/Behat/pull/1299): Removed support for PHP <7.2, Symfony <4.4 ([@upamil](https://github.com/pamil))
+ * [#1310](https://github.com/Behat/Behat/pull/1310): Refactoring to use newer language features ([@rpkamp](https://github.com/rpkamp))
+ * [#1315](https://github.com/Behat/Behat/pull/1315): Remove BC layer for unsuppored symfony dispatcher ([@rpkamp](https://github.com/rpkamp))
+ * [#1314](https://github.com/Behat/Behat/pull/1314): Remove BC layer for unsuppored symfony translator ([@rpkamp](https://github.com/rpkamp))
+ * [#1212](https://github.com/Behat/Behat/pull/1212): Updated composer description ([@tkotosz](https://github.com/tkotosz))
+ * [#1317](https://github.com/Behat/Behat/pull/1317): Use PHPUnit8 for unit testing ([@phil-davis](https://github.com/phil-davis))
+
 ## [3.7.0] - 2020-06-03
 
 ### Added
