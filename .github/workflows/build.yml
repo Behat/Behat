@@ -1,0 +1,95 @@
+name: Build
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+    release:
+        types: [created]
+
+jobs:
+    tests:
+        runs-on: ubuntu-latest
+        name: Build and test
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    -   php: 7.2
+                        publish-phar: true
+                    -   php: 7.2
+                        skip-interop: true
+                    -   php: 7.2
+                        composer-flags: --prefer-lowest
+                    -   php: 7.3
+                    -   php: 7.4
+                    -   php: 7.4
+                        symfony-version: ^4.4
+                    -   php: 8.0
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: "${{ matrix.php }}"
+                    ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
+                    coverage: none
+
+            -   name: Update Symfony version
+                if: matrix.symfony-version != ''
+                run: composer require --no-update "symfony/symfony:${{ matrix.symfony-version }}"
+
+            -   name: Uninstall container interop
+                if: matrix.skip-interop
+                run: composer remove --dev --no-update container-interop/container-interop
+
+            -   name: Install dependencies
+                run: composer update ${{ matrix.composer-flags }}
+
+            -   name: Run tests (phpunit)
+                run: ./vendor/bin/phpunit
+
+            -   name: Run tests (Behat)
+                run: ./bin/behat -fprogress --strict $([ -z "${{ matrix.skip-interop }}" ] || echo "--tags ~@interop&&~@php8")
+
+            -   name: Run tests (Behat for PHP 8.0)
+                if: matrix.php >= 8.0
+                run: ./bin/behat -fprogress --strict --tags=@php8
+
+            -   name: Build the PHAR
+                if: matrix.php != '8.0'
+                run: |
+                    curl -LSs https://box-project.github.io/box2/installer.php | php &&
+                    export PATH=.:$PATH &&
+                    rm -Rf ./vendor &&
+                    composer install --no-dev -o &&
+                    box.phar build
+
+            -   uses: actions/upload-artifact@v1
+                name: Publish the PHAR
+                if: matrix.publish-phar
+                with:
+                    name: behat.phar
+                    path: behat.phar
+
+    publish-phar:
+        runs-on: ubuntu-latest
+        name: Publish the PHAR
+        needs: tests
+        if: github.event_name == 'release'
+        steps:
+            -   uses: actions/download-artifact@v1
+                with:
+                    name: behat.phar
+                    path: .
+            -   name: Upload behat.phar
+                uses: actions/upload-release-asset@v1
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    upload_url: ${{ github.event.release.upload_url }}
+                    asset_path: behat.phar
+                    asset_name: behat.phar
+                    asset_content_type: application/zip
