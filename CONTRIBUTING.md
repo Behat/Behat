@@ -11,7 +11,7 @@ issues quicker than adding new features
 2. Outline clearly in one/two sentences why that feature is important to you or why
 that problem causes you grief (and at what scale). This helps us properly prioritise
 what we're working on
-3. Behat is [automatically tested](https://travis-ci.org/Behat/Behat) on every change.
+3. Behat is [automatically tested](https://github.com/Behat/Behat/actions) on every change.
 If you have a problem, chances are high it is something very specific to your context
 and the more we know about it the more likely we would be able help. At the very least
 provide us with enough information about your feature files, context classes and local
@@ -35,7 +35,7 @@ so that we adhere to [Semantic Versioning v2.0.0](http://semver.org/spec/v2.0.0.
 [CHANGELOG.md](CHANGELOG.md). You'd make our life even easier if you stick to [Keep a Changelog](http://keepachangelog.com/en/0.3.0/) format
 5. Do not mess with the [`BehatApplication::VERSION`](src/Behat/Behat/ApplicationFactory.php#L48) version
 6. Make sure you [ran tests](#running-tests) and didn't break anything. That will save some time for
-[Travis](https://travis-ci.org)
+[GitHub](https://github.com/Behat/Behat/actions)
 7. Commit your code and submit a Pull Request, providing a clear description of a change,
 similar to the one you did in the changelog
 
