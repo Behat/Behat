@@ -17,6 +17,7 @@ use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use Closure;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -231,7 +232,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
                 try {
                     return new ReflectionClass($t->getName());
                 }
-                catch (\TypeError $t) {
+                catch (ReflectionException $t) {
                     return null;
                 }
             }
