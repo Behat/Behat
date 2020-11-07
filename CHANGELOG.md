@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.8.1] - 2020-11-07
+
+### Fixed
+
+ * [1329](https://github.com/Behat/Behat/pull/1329): Regression when using scalar type hints ([@ciaranmcnulty](https://github.com/ciaranmcnulty))
+
 ## [3.8.0] - 2020-11-01
 
 ### Added
