@@ -674,3 +674,36 @@ Feature: Step Arguments Transformations
       """
       string given
       """
+
+  Scenario: Return type transformations don't cause issues with scalar type hints (regression)
+    Given a file named "features/scalar-transforms.feature" with:
+      """
+      Feature:
+
+        Scenario:
+          Then "string" should be passed
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      class FeatureContext implements Behat\Behat\Context\Context
+      {
+          /**
+           * @Transform
+           */
+           public function transformToFoo($input): Foo
+           {
+           }
+
+          /**
+           * @Then :string should be passed
+           */
+          public function doSomething(string $job)
+          {
+
+          }
+      }
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass
