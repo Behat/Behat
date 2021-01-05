@@ -30,7 +30,6 @@
     "require-dev": {
         "symfony/process": "^4.4 || ^5.0",
         "phpunit/phpunit": "^8.5 || ^9.0",
-        "humbug/box": "^3.11.1",
         "psr/container-implementation": "^1.0"
     },
 
