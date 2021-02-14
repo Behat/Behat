@@ -79,9 +79,9 @@ final class JUnitScenarioPrinter
         $outputPrinter->addTestcase(array(
             'name' => $name,
             'classname' => $feature->getTitle(),
+            'file' => $file,
             'status' => $this->resultConverter->convertResultToString($result),
-            'time' => $this->durationListener ? $this->durationListener->getDuration($scenario) : '',
-            'file' => $file
+            'time' => $this->durationListener ? $this->durationListener->getDuration($scenario) : ''
         ));
     }
 
