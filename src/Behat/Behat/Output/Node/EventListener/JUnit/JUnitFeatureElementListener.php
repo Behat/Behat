@@ -167,7 +167,7 @@ final class JUnitFeatureElementListener implements EventListener
 
         $file = $event->getFeature()->getFile();
 
-        if (substr($file, 0, strlen(getcwd())) === getcwd()) {
+        if (!is_null($file) && substr($file, 0, strlen(getcwd())) === getcwd()) {
             $file = ltrim(substr($file, strlen(getcwd())), DIRECTORY_SEPARATOR);
         }
 

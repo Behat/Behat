@@ -63,7 +63,7 @@ final class JUnitScenarioPrinter
     /**
      * {@inheritDoc}
      */
-    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, string $file)
+    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, string $file = null)
     {
         $name = implode(' ', array_map(function ($l) {
             return trim($l);
@@ -76,13 +76,18 @@ final class JUnitScenarioPrinter
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $outputPrinter->addTestcase(array(
-            'name' => $name,
+        $testCaseAttributes = array(
+            'name'      => $name,
             'classname' => $feature->getTitle(),
-            'file' => $file,
-            'status' => $this->resultConverter->convertResultToString($result),
-            'time' => $this->durationListener ? $this->durationListener->getDuration($scenario) : ''
-        ));
+            'status'    => $this->resultConverter->convertResultToString($result),
+            'time'      => $this->durationListener ? $this->durationListener->getDuration($scenario) : ''
+        );
+
+        if ($file) {
+            $testCaseAttributes['file'] = $file;
+        }
+
+        $outputPrinter->addTestcase($testCaseAttributes);
     }
 
     /**
