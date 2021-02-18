@@ -63,7 +63,7 @@ final class JUnitScenarioPrinter
     /**
      * {@inheritDoc}
      */
-    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result)
+    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, string $file)
     {
         $name = implode(' ', array_map(function ($l) {
             return trim($l);
@@ -79,6 +79,7 @@ final class JUnitScenarioPrinter
         $outputPrinter->addTestcase(array(
             'name' => $name,
             'classname' => $feature->getTitle(),
+            'file' => $file,
             'status' => $this->resultConverter->convertResultToString($result),
             'time' => $this->durationListener ? $this->durationListener->getDuration($scenario) : ''
         ));

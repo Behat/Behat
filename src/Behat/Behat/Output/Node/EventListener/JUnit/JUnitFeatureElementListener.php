@@ -165,11 +165,17 @@ final class JUnitFeatureElementListener implements EventListener
             return;
         }
 
+        $file = $event->getFeature()->getFile();
+
+        if (substr($file, 0, strlen(getcwd())) === getcwd()) {
+            $file = ltrim(substr($file, strlen(getcwd())), DIRECTORY_SEPARATOR);
+        }
+
         $this->featurePrinter->printHeader($formatter, $this->beforeFeatureTestedEvent);
 
         foreach ($this->afterScenarioTestedEvents as $afterScenario) {
             $afterScenarioTested = $afterScenario['event'];
-            $this->scenarioPrinter->printOpenTag($formatter, $afterScenarioTested->getFeature(), $afterScenarioTested->getScenario(), $afterScenarioTested->getTestResult());
+            $this->scenarioPrinter->printOpenTag($formatter, $afterScenarioTested->getFeature(), $afterScenarioTested->getScenario(), $afterScenarioTested->getTestResult(), $file);
 
             /** @var AfterStepSetup $afterStepSetup */
             foreach ($afterScenario['step_setup_events'] as $afterStepSetup) {
