@@ -318,7 +318,6 @@ Feature: Syntax helpers
 
       default | [When|*] /^I ate (\d+) apples?$/
               | Eating apples
-              |
               | More details on eating apples, and a list:
               | - one
               | - two
