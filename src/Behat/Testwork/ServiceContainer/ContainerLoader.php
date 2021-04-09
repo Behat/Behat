@@ -98,8 +98,9 @@ final class ContainerLoader
                     $configs[$i][$extension->getConfigKey()] = $extensionConfig;
                 }
 
-                unset($configs[$i]['extensions']);
             }
+
+            unset($configs[$i]['extensions']);
         }
 
         $this->extensionManager->initializeExtensions();
