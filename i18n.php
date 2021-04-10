@@ -264,7 +264,7 @@
         'undefined_count'         => '{1,21,31} %count% не определен|]1,Inf] %count% не определено',
         'skipped_count'           => '{1,21,31} %count% пропущен|]1,Inf] %count% пропущено',
     ),
-    'cn'    => array(
+    'zh'    => array(
         'snippet_context_choice'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> 有新的场景步骤， 请选择要生成代码片段的ContextClass:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> 已经更新。 请检查生成片段:</snippet_undefined>',
         'snippet_missing_title'   => '<snippet_undefined>您可以使用 <snippet_keyword>--snippets-for</snippet_keyword> CLI命令更新 <snippet_keyword>%count%</snippet_keyword> 的ContextClass:</snippet_undefined>',
