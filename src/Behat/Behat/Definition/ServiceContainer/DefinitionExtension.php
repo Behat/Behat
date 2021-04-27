@@ -97,6 +97,7 @@ final class DefinitionExtension implements Extension
         $this->loadDefaultSearchEngines($container);
         $this->loadDefaultPatternPolicies($container);
         $this->loadAnnotationReader($container);
+        $this->loadAttributeReader($container);
         $this->loadDefinitionPrinters($container);
         $this->loadController($container);
     }
@@ -215,6 +216,18 @@ final class DefinitionExtension implements Extension
         $definition = new Definition('Behat\Behat\Definition\Context\Annotation\DefinitionAnnotationReader');
         $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, array('priority' => 50));
         $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.definition', $definition);
+    }
+
+    /**
+     * Loads definition Attribute reader.
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadAttributeReader(ContainerBuilder $container)
+    {
+        $definition = new Definition('\Behat\Behat\Definition\Context\Attribute\DefinitionAttributeReader');
+        $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, array('priority' => 50));
+        $container->setDefinition(ContextExtension::ATTRIBUTE_READER_TAG . '.definition', $definition);
     }
 
     /**
