@@ -15,40 +15,53 @@ Feature: attributes
       class FeatureContext implements \Behat\Behat\Context\Context
       {
           #[Given('I have :count apple(s)')]
-          public function iHaveApples($count) { }
+          #[Given('I have :count banana(s)')]
+          public function iHaveFruit($count) { }
 
-          #[When('I ate :count apple(s)')]
-          public function iAteApples($count) { }
+          #[When('I eat :count apple(s)')]
+          #[When('I eat :count banana(s)')]
+          public function iEatFruit($count) { }
 
           #[Then('I should have :count apple(s)')]
-          public function iShouldHaveApples($count) { }
+          #[Then('I should have :count banana(s)')]
+          public function iShouldHaveFruit($count) { }
       }
       """
     And a file named "features/some.feature" with:
       """
-      Feature: Apples story
-        In order to eat apple
+      Feature: Fruit story
+        In order to eat fruit
         As a little kid
-        I need to have an apple in my pocket
+        I need to have fruit in my pocket
 
-        Scenario: I'm little hungry
+        Scenario: I'm little hungry for apples
           Given I have 3 apples
-          When I ate 1 apple
+          When I eat 1 apple
           Then I should have 2 apples
+
+        Scenario: I'm little hungry for bananas
+          Given I have 3 bananas
+          When I eat 1 banana
+          Then I should have 2 bananas
       """
     When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
     Then it should pass with:
       """
-      Feature: Apples story
-        In order to eat apple
+      Feature: Fruit story
+        In order to eat fruit
         As a little kid
-        I need to have an apple in my pocket
+        I need to have fruit in my pocket
 
-        Scenario: I'm little hungry   # features/some.feature:6
-          Given I have 3 apples       # FeatureContext::iHaveApples()
-          When I ate 1 apple          # FeatureContext::iAteApples()
-          Then I should have 2 apples # FeatureContext::iShouldHaveApples()
+        Scenario: I'm little hungry for apples # features/some.feature:6
+          Given I have 3 apples                # FeatureContext::iHaveFruit()
+          When I eat 1 apple                   # FeatureContext::iEatFruit()
+          Then I should have 2 apples          # FeatureContext::iShouldHaveFruit()
 
-      1 scenario (1 passed)
-      3 steps (3 passed)
+        Scenario: I'm little hungry for bananas # features/some.feature:11
+          Given I have 3 bananas                # FeatureContext::iHaveFruit()
+          When I eat 1 banana                   # FeatureContext::iEatFruit()
+          Then I should have 2 bananas          # FeatureContext::iShouldHaveFruit()
+
+      2 scenarios (2 passed)
+      6 steps (6 passed)
       """

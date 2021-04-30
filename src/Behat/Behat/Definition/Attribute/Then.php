@@ -13,7 +13,7 @@ namespace Behat\Behat\Definition\Attribute;
 /**
  * Represents an Attribute for Then steps
  */
-#[\Attribute(\Attribute::TARGET_METHOD)]
+#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 final class Then implements Definition
 {
     /**
