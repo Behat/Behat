@@ -23,7 +23,7 @@ use ReflectionMethod;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class DefinitionAttributeReader implements AttributeReader
+final class DefinitionAttributeReader implements AttributeReader
 {
     /**
      * @var string[]
@@ -47,7 +47,7 @@ class DefinitionAttributeReader implements AttributeReader
 
         $callees = [];
         foreach ($attributes as $attribute) {
-            $class = static::$classes[$attribute->getName()];
+            $class = self::$classes[$attribute->getName()];
             $callable = array($contextClass, $method->getName());
             $description = null;
             if ($docBlock = $method->getDocComment()) {

@@ -14,7 +14,7 @@ namespace Behat\Behat\Definition\Attribute;
  * Represents an Attribute for Given steps
  */
 #[\Attribute(\Attribute::TARGET_METHOD)]
-class Given implements Definition
+final class Given implements Definition
 {
     /**
      * @var string
