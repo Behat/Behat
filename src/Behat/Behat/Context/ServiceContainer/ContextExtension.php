@@ -286,7 +286,7 @@ final class ContextExtension implements Extension
      */
     private function loadAttributedContextReader(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Reader\AttributedContextReader');
+        $definition = new Definition('Behat\Behat\Context\Reader\AttributeContextReader');
         $container->setDefinition(self::ATTRIBUTED_CONTEXT_READER_ID, $definition);
 
         $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerContext', array(

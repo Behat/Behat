@@ -20,7 +20,7 @@ use ReflectionMethod;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AttributedContextReader implements ContextReader
+class AttributeContextReader implements ContextReader
 {
     /**
      * @var AttributeReader[]

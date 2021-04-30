@@ -15,7 +15,7 @@ use ReflectionMethod;
 /**
  * Reads Attributes of a provided context method into a Callee.
  *
- * @see AttributedContextReader
+ * @see AttributeContextReader
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
