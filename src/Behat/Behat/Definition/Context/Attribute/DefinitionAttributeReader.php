@@ -37,7 +37,7 @@ final class DefinitionAttributeReader implements AttributeReader
     /**
      * @{inheritdoc}
      */
-    public function readCallees($contextClass, ReflectionMethod $method)
+    public function readCallees(string $contextClass, ReflectionMethod $method)
     {
         if (PHP_MAJOR_VERSION < 8) {
             return [];

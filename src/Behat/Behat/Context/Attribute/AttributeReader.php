@@ -29,5 +29,5 @@ interface AttributeReader
      *
      * @return array
      */
-    public function readCallees($contextClass, ReflectionMethod $method);
+    public function readCallees(string $contextClass, ReflectionMethod $method);
 }
