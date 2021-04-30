@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Definition\Attribute;
+namespace Behat\Step;
 
 /**
  * Marker interface for all Attributes regarding

@@ -9,8 +9,7 @@ Feature: attributes
       """
       <?php
 
-      use \Behat\Behat\Definition\Attribute\Given, \Behat\Behat\Definition\Attribute\When,
-        \Behat\Behat\Definition\Attribute\Then;
+      use Behat\Step\Given, Behat\Step\When, Behat\Step\Then;
 
       class FeatureContext implements \Behat\Behat\Context\Context
       {

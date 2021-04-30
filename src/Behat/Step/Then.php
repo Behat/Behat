@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Definition\Attribute;
+namespace Behat\Step;
 
 /**
- * Represents an Attribute for When steps
+ * Represents an Attribute for Then steps
  */
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
-final class When implements Definition
+final class Then implements Definition
 {
     /**
      * @var string

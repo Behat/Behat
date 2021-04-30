@@ -12,10 +12,10 @@ namespace Behat\Behat\Definition\Context\Attribute;
 
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
-use Behat\Behat\Definition\Attribute\Definition;
-use Behat\Behat\Definition\Attribute\Given;
-use Behat\Behat\Definition\Attribute\Then;
-use Behat\Behat\Definition\Attribute\When;
+use Behat\Step\Definition;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use ReflectionMethod;
 
 /**
