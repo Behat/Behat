@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Definition\Context\Attribute;
 
+use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
 use Behat\Behat\Definition\Attribute\Definition;
 use Behat\Behat\Definition\Attribute\Given;
@@ -48,8 +49,12 @@ class DefinitionAttributeReader implements AttributeReader
         foreach ($attributes as $attribute) {
             $class = static::$classes[$attribute->getName()];
             $callable = array($contextClass, $method->getName());
+            $description = null;
+            if ($docBlock = $method->getDocComment()) {
+                $description = DocBlockHelper::extractDescription($docBlock);
+            }
 
-            $callees[] = new $class($attribute->newInstance()->pattern, $callable, null);
+            $callees[] = new $class($attribute->newInstance()->pattern, $callable, $description);
         }
 
         return $callees;
