@@ -13,6 +13,8 @@ namespace Behat\Behat\Definition\Attribute;
 /**
  * Marker interface for all Attributes regarding
  * Call definitions
+ *
+ * @internal Only meant as marker, not as an extension point
  */
 interface Definition
 {
