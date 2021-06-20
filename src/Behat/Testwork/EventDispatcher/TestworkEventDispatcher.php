@@ -26,10 +26,12 @@ final class TestworkEventDispatcher extends EventDispatcher
 
     /**
      * {@inheritdoc}
+     *
+     * @param string|null $eventName
      */
-    public function getListeners($eventName = null)
+    public function getListeners($eventName = null): array
     {
-        if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
+        if (null === $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
             return parent::getListeners($eventName);
         }
 
