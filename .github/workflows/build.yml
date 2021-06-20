@@ -26,6 +26,9 @@ jobs:
                     -   php: 7.4
                         symfony-version: ^4.4
                     -   php: 8.0
+                    -   php: 8.0
+                        stability: dev
+                        symfony-version: ^6.0
                     -   php: 8.1
 
         steps:
@@ -37,6 +40,10 @@ jobs:
                     php-version: "${{ matrix.php }}"
                     ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
                     coverage: none
+
+            -   name: Configure Composer minimum stability
+                if: matrix.stability
+                run: composer config minimum-stability ${{ matrix.stability }}
 
             -   name: Update Symfony version
                 if: matrix.symfony-version != ''
