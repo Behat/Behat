@@ -32,7 +32,7 @@ abstract class OutputFactory
      */
     private $outputStyles = array();
     /**
-     * @var null|Boolean
+     * @var null|bool
      */
     private $outputDecorated = null;
     /**
@@ -93,7 +93,7 @@ abstract class OutputFactory
     /**
      * Returns output decoration status.
      *
-     * @return null|Boolean
+     * @return null|bool
      */
     public function isOutputDecorated()
     {
