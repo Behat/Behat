@@ -82,6 +82,25 @@ jobs:
                     name: behat.phar
                     path: behat.phar
 
+    psalm:
+        runs-on: ubuntu-latest
+        name: Psalm (PHP 8.0)
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 8.0
+                  ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
+                  coverage: none
+
+            - name: Install dependencies
+              run: composer update
+
+            - name: Run Psalm
+              run: ./vendor/bin/psalm
+
     publish-phar:
         runs-on: ubuntu-latest
         name: Publish the PHAR
