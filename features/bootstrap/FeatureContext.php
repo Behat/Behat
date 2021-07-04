@@ -198,13 +198,7 @@ EOL;
             strtr($this->options, array('\'' => '"', '"' => '\"'))
         );
 
-        if (method_exists('\\Symfony\\Component\\Process\\Process', 'fromShellCommandline')) {
-            $this->process = Process::fromShellCommandline($cmd);
-        } else {
-            // BC layer for symfony/process 4.1 and older
-            $this->process = new Process(null);
-            $this->process->setCommandLine($cmd);
-        }
+        $this->process = Process::fromShellCommandline($cmd);
 
         // Prepare the process parameters.
         $this->process->setTimeout(20);

@@ -31,17 +31,9 @@ final class ConfigurationTree
      */
     public function getConfigTree(array $extensions)
     {
-        if (method_exists('Symfony\Component\Config\Definition\Builder\TreeBuilder', 'getRootNode')) {
-            $treeBuilder = new TreeBuilder('testwork');
-            /** @var ArrayNodeDefinition $rootNode */
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            // BC layer for symfony/config 4.1 and older
-            $treeBuilder = new TreeBuilder();
-            /** @var ArrayNodeDefinition $rootNode */
-            /** @scrutinizer ignore-call */
-            $rootNode = $treeBuilder->root('testwork');
-        }
+        $treeBuilder = new TreeBuilder('testwork');
+        /** @var ArrayNodeDefinition $rootNode */
+        $rootNode = $treeBuilder->getRootNode();
 
         foreach ($extensions as $extension) {
             $extension->configure($rootNode->children()->arrayNode($extension->getConfigKey()));
