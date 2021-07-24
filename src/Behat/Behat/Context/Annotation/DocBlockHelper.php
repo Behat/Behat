@@ -19,7 +19,7 @@ class DocBlockHelper
      * Extracts a description from the provided docblock,
      * with support for multiline descriptions.
      */
-    public static function extractDescription(string $docBlock): string
+    public function extractDescription(string $docBlock): string
     {
         // Remove indentation
         $description = preg_replace('/^[\s\t]*/m', '', $docBlock);

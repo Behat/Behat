@@ -44,6 +44,21 @@ final class AnnotatedContextReader implements ContextReader
     private $readers = array();
 
     /**
+     * @var DocBlockHelper
+     */
+    private $docBlockHelper;
+
+    /**
+     * Initializes reader.
+     *
+     * @param DocBlockHelper $docBlockHelper
+     */
+    public function __construct(DocBlockHelper $docBlockHelper)
+    {
+        $this->docBlockHelper = $docBlockHelper;
+    }
+
+    /**
      * Registers annotation reader.
      *
      * @param AnnotationReader $reader
@@ -111,7 +126,7 @@ final class AnnotatedContextReader implements ContextReader
     private function readDocBlockCallees($class, ReflectionMethod $method, $docBlock)
     {
         $callees = array();
-        $description = DocBlockHelper::extractDescription($docBlock);
+        $description = $this->docBlockHelper->extractDescription($docBlock);
         $docBlock = $this->mergeMultilines($docBlock);
 
         foreach (explode("\n", $docBlock) as $docLine) {

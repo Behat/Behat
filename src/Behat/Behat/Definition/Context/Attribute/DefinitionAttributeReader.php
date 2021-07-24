@@ -35,6 +35,21 @@ final class DefinitionAttributeReader implements AttributeReader
     );
 
     /**
+     * @var DocBlockHelper
+     */
+    private $docBlockHelper;
+
+    /**
+     * Initializes reader.
+     *
+     * @param DocBlockHelper $docBlockHelper
+     */
+    public function __construct(DocBlockHelper $docBlockHelper)
+    {
+        $this->docBlockHelper = $docBlockHelper;
+    }
+
+    /**
      * @{inheritdoc}
      */
     public function readCallees(string $contextClass, ReflectionMethod $method)
@@ -51,7 +66,7 @@ final class DefinitionAttributeReader implements AttributeReader
             $callable = array($contextClass, $method->getName());
             $description = null;
             if ($docBlock = $method->getDocComment()) {
-                $description = DocBlockHelper::extractDescription($docBlock);
+                $description = $this->docBlockHelper->extractDescription($docBlock);
             }
 
             $callees[] = new $class($attribute->newInstance()->pattern, $callable, $description);

@@ -59,6 +59,7 @@ final class ContextExtension implements Extension
     public const ATTRIBUTE_READER_TAG = 'context.attribute_reader';
     public const CLASS_GENERATOR_TAG = 'context.class_generator';
     public const SUITE_SCOPED_RESOLVER_FACTORY_TAG = 'context.argument.suite_resolver_factory';
+    public const DOC_BLOCK_HELPER_ID = 'context.docblock_helper';
 
     /**
      * @var ServiceProcessor
@@ -112,6 +113,7 @@ final class ContextExtension implements Extension
         $this->loadSnippetsController($container);
         $this->loadDefaultClassGenerators($container);
         $this->loadDefaultContextReaders($container);
+        $this->loadDocblockHelper($container);
     }
 
     /**
@@ -269,7 +271,9 @@ final class ContextExtension implements Extension
      */
     private function loadAnnotatedContextReader(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Reader\AnnotatedContextReader');
+        $definition = new Definition('Behat\Behat\Context\Reader\AnnotatedContextReader', array(
+            new Reference(self::DOC_BLOCK_HELPER_ID)
+        ));
         $container->setDefinition(self::ANNOTATED_CONTEXT_READER_ID, $definition);
 
         $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerContext', array(
@@ -314,6 +318,18 @@ final class ContextExtension implements Extension
         ));
         $definition->addTag(self::READER_TAG, array('priority' => 50));
         $container->setDefinition(self::READER_TAG . '.translatable.cached', $definition);
+    }
+
+    /**
+     * Loads DocBlockHelper
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadDocblockHelper(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Context\Annotation\DocBlockHelper');
+
+        $container->setDefinition(self::DOC_BLOCK_HELPER_ID, $definition);
     }
 
     /**
