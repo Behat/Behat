@@ -26,6 +26,7 @@ jobs:
                     -   php: 7.4
                         symfony-version: ^4.4
                     -   php: 8.0
+                    -   php: 8.1
 
         steps:
             -   uses: actions/checkout@v2

@@ -107,7 +107,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function addTestcaseChild($nodeName, array $nodeAttributes = array(), $nodeValue = null)
     {
-        $childNode = $this->domDocument->createElement($nodeName, $nodeValue);
+        $childNode = $this->domDocument->createElement($nodeName, $nodeValue ?? '');
         $this->currentTestcase->appendChild($childNode);
         $this->addAttributesToNode($childNode, $nodeAttributes);
     }

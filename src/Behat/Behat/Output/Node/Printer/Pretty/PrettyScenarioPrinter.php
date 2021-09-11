@@ -110,7 +110,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      */
     private function printTitle(OutputPrinter $printer, $longTitle)
     {
-        $description = explode("\n", $longTitle);
+        $description = explode("\n", $longTitle ?? '');
         $title = array_shift($description);
 
         if ('' !== $title) {
@@ -126,7 +126,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      */
     private function printDescription(OutputPrinter $printer, $longTitle)
     {
-        $lines = explode("\n", $longTitle);
+        $lines = explode("\n", $longTitle ?? '');
         array_shift($lines);
 
         foreach ($lines as $line) {

@@ -51,7 +51,7 @@ final class FilesystemRerunScenariosListLocator implements SpecificationLocator
      */
     public function locateSpecifications(Suite $suite, $locator)
     {
-        if (!is_file($locator) || 'rerun' !== pathinfo($locator, PATHINFO_EXTENSION)) {
+        if (null === $locator || !is_file($locator) || 'rerun' !== pathinfo($locator, PATHINFO_EXTENSION)) {
             return new NoSpecificationsIterator($suite);
         }
 
