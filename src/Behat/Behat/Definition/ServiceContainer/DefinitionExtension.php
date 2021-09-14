@@ -46,6 +46,7 @@ final class DefinitionExtension implements Extension
      */
     public const SEARCH_ENGINE_TAG = 'definition.search_engine';
     public const PATTERN_POLICY_TAG = 'definition.pattern_policy';
+    public const DOC_BLOCK_HELPER_ID = 'definition.doc_block_helper';
 
     /**
      * @var ServiceProcessor
@@ -97,8 +98,10 @@ final class DefinitionExtension implements Extension
         $this->loadDefaultSearchEngines($container);
         $this->loadDefaultPatternPolicies($container);
         $this->loadAnnotationReader($container);
+        $this->loadAttributeReader($container);
         $this->loadDefinitionPrinters($container);
         $this->loadController($container);
+        $this->loadDocblockHelper($container);
     }
 
     /**
@@ -218,6 +221,20 @@ final class DefinitionExtension implements Extension
     }
 
     /**
+     * Loads definition Attribute reader.
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadAttributeReader(ContainerBuilder $container)
+    {
+        $definition = new Definition('\Behat\Behat\Definition\Context\Attribute\DefinitionAttributeReader', array(
+            new Reference(self::DOC_BLOCK_HELPER_ID)
+        ));
+        $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, array('priority' => 50));
+        $container->setDefinition(ContextExtension::ATTRIBUTE_READER_TAG . '.definition', $definition);
+    }
+
+    /**
      * Loads definition printers.
      *
      * @param ContainerBuilder $container
@@ -256,6 +273,18 @@ final class DefinitionExtension implements Extension
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 500));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.available_definitions', $definition);
+    }
+
+    /**
+     * Loads DocBlockHelper
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadDocblockHelper(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Context\Annotation\DocBlockHelper');
+
+        $container->setDefinition(self::DOC_BLOCK_HELPER_ID, $definition);
     }
 
     /**
