@@ -79,7 +79,7 @@ final class WidthCalculator
             $header = sprintf('%s%s', $indentText, $scenario->getTitle());
         } else {
             $title = $scenario->getTitle();
-            $lines = explode("\n", $title);
+            $lines = explode("\n", $title ?? '');
             $header = sprintf('%s%s: %s', $indentText, $scenario->getKeyword(), array_shift($lines));
         }
 
