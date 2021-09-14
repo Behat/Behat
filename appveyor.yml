@@ -27,7 +27,7 @@ init:
 install:
     - ps: |
         if (!(Test-Path c:\tools\php)) {
-            appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version 7.2
+            appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version 7.4
             Get-ChildItem -Path c:\tools\php
             cd c:\tools\php
 
