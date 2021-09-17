@@ -53,6 +53,9 @@ jobs:
                 if: matrix.skip-interop
                 run: composer remove --dev --no-update container-interop/container-interop
 
+            -   name: Uninstall Psalm
+                run: composer remove --dev --no-update vimeo/psalm
+
             -   name: Install dependencies
                 run: composer update ${{ matrix.composer-flags }}
 
