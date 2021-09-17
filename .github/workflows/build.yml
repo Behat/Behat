@@ -99,7 +99,7 @@ jobs:
               run: composer update
 
             - name: Run Psalm
-              run: ./vendor/bin/psalm
+              run: ./vendor/bin/psalm --output-format=github
 
     publish-phar:
         runs-on: ubuntu-latest
