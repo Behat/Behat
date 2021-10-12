@@ -38,7 +38,8 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: "${{ matrix.php }}"
-                    ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
+                    ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"          
+                    extensions: "mbstring"
                     coverage: none
 
             -   name: Configure Composer minimum stability
