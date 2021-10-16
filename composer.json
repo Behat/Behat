@@ -58,6 +58,5 @@
         }
     },
 
-    "bin": ["bin/behat"],
-    "minimum-stability": "dev"
+    "bin": ["bin/behat"]
 }
