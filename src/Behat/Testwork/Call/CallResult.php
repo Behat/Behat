@@ -75,6 +75,9 @@ final class CallResult
     /**
      * Check if call thrown exception.
      *
+     * @psalm-assert-if-true Exception $this->exception
+     * @psalm-assert-if-true Exception $this->getException()
+     *
      * @return bool
      */
     public function hasException()

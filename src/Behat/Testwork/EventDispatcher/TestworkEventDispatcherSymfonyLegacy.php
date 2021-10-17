@@ -34,6 +34,7 @@ final class TestworkEventDispatcherSymfonyLegacy extends EventDispatcher
         );
 
         if (null === $event) {
+            /** @psalm-suppress UndefinedClass */
             $event = new \Symfony\Component\EventDispatcher\Event();
         }
         if (method_exists($event, 'setName')) {

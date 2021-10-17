@@ -76,7 +76,7 @@ interface OutputPrinter
     /**
      * Returns output decoration status.
      *
-     * @return null|Boolean
+     * @return null|bool
      *
      * @deprecated since 3.1, to be removed in 4.0
      */
