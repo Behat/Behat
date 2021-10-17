@@ -64,7 +64,7 @@ Feature: Syntax helpers
           [Затем|Тогда|То|*] there should be agent J
           [Иначе|Но|*|А] there should not be agent K
 
-        Структура сценария: Erasing other agents' memory
+        [Структура сценария|Шаблон сценария]: Erasing other agents' memory
           [Допустим|Пусть|Дано|*] there is agent <agent1>
           [К тому же|Также|*|И] there is agent <agent2>
           [Когда|Если|*] I erase agent <agent2>'s memory
