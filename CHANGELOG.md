@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.9.0] - 2021-10-18
+
+### What's Changed
+* Fix syntax help test and bump gherkin dependency by @ciaranmcnulty in https://github.com/Behat/Behat/pull/1336
+* Remove legacy Symfony compatibility layers (#1305, #1347) by @simonhammes in https://github.com/Behat/Behat/pull/1349
+* Add PHP 8.1 support by @javer in https://github.com/Behat/Behat/pull/1355
+* Introduce reading PHP8 Attributes for Given, When and Then steps by @rpkamp in https://github.com/Behat/Behat/pull/1342
+* Allow Symfony 6 by @Kocal in https://github.com/Behat/Behat/pull/1346
+* Remove minimum-stability dev from composer.json & require Gherkin ^4.9.0 by @pamil in https://github.com/Behat/Behat/pull/1365
+* Allow to manually run GitHub Actions by @pamil in https://github.com/Behat/Behat/pull/1361
+* Add vimeo/psalm (#1307) by @simonhammes in https://github.com/Behat/Behat/pull/1348
+
+### New Contributors
+* @simonhammes made their first contribution in https://github.com/Behat/Behat/pull/1349
+* @javer made their first contribution in https://github.com/Behat/Behat/pull/1355
+* @Kocal made their first contribution in https://github.com/Behat/Behat/pull/1346
+
 ## [3.8.1] - 2020-11-07
 
 ### Fixed
@@ -945,7 +962,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
-[Unreleased]: https://github.com/Behat/Behat/compare/v3.7.0...master
+[Unreleased]: https://github.com/Behat/Behat/compare/v3.9.0...master
+[3.9.0]: https://github.com/Behat/Behat/compare/v3.8.1...v3.9.0
+[3.8.1]: https://github.com/Behat/Behat/compare/v3.8.0...v3.8.1
+[3.8.0]: https://github.com/Behat/Behat/compare/v3.7.0...v3.8.0
 [3.7.0]: https://github.com/Behat/Behat/compare/v3.6.1...v3.7.0
 [3.6.1]: https://github.com/Behat/Behat/compare/v3.6.0...v3.6.1
 [3.6.0]: https://github.com/Behat/Behat/compare/v3.5.0...v3.6.0
