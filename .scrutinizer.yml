@@ -50,7 +50,7 @@ checks:
         encourage_single_quotes: true
         classes_in_camel_caps: true
         check_method_contracts:
-            verify_interface_like_constraints: true
+            verify_interface_like_constraints: false
             verify_documented_constraints: true
             verify_parent_constraints: true
         avoid_perl_style_comments: true
