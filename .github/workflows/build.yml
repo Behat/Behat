@@ -25,11 +25,13 @@ jobs:
                     -   php: 7.3
                     -   php: 7.4
                     -   php: 7.4
-                        symfony-version: ^4.4
+                        env:
+                            SYMFONY_REQUIRE: 4.4.*
                     -   php: 8.0
                     -   php: 8.0
                         stability: dev
-                        symfony-version: ^6.0
+                        env:
+                            SYMFONY_REQUIRE: 6.0.*
                     -   php: 8.1
 
         steps:
@@ -46,9 +48,8 @@ jobs:
                 if: matrix.stability
                 run: composer config minimum-stability ${{ matrix.stability }}
 
-            -   name: Update Symfony version
-                if: matrix.symfony-version != ''
-                run: composer require --no-update "symfony/symfony:${{ matrix.symfony-version }}"
+            -   name: Install symfony/flex
+                run: composer global require symfony/flex
 
             -   name: Uninstall container interop
                 if: matrix.skip-interop
