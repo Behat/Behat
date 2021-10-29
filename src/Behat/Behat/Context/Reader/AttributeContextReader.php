@@ -42,7 +42,7 @@ final class AttributeContextReader implements ContextReader
      */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        if (PHP_MAJOR_VERSION < 8) {
+        if (\PHP_MAJOR_VERSION < 8) {
             return [];
         }
 

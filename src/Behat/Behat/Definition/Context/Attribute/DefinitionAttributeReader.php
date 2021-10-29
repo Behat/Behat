@@ -54,7 +54,7 @@ final class DefinitionAttributeReader implements AttributeReader
      */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
-        if (PHP_MAJOR_VERSION < 8) {
+        if (\PHP_MAJOR_VERSION < 8) {
             return [];
         }
 
