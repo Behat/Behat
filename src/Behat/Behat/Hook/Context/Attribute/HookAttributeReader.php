@@ -21,7 +21,7 @@ use Behat\Hook\BeforeStep;
 use Behat\Hook\Hook;
 use ReflectionMethod;
 
-class HookAttributeReader implements AttributeReader
+final class HookAttributeReader implements AttributeReader
 {
     /**
      * @var string[]
