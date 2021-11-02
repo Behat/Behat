@@ -25,13 +25,11 @@ jobs:
                     -   php: 7.3
                     -   php: 7.4
                     -   php: 7.4
-                        env:
-                            SYMFONY_REQUIRE: 4.4.*
+                        SYMFONY_REQUIRE: 4.4.*
                     -   php: 8.0
                     -   php: 8.0
                         stability: dev
-                        env:
-                            SYMFONY_REQUIRE: 6.0.*
+                        SYMFONY_REQUIRE: 6.0.*
                     -   php: 8.1
 
         steps:
@@ -59,6 +57,8 @@ jobs:
                 run: composer remove --dev --no-update vimeo/psalm
 
             -   name: Install dependencies
+                env:
+                    SYMFONY_REQUIRE: "${{ matrix.SYMFONY_REQUIRE }}"
                 run: composer update ${{ matrix.composer-flags }}
 
             -   name: Run tests (phpunit)
