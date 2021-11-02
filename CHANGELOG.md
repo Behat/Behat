@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.10.0 - 2021-11-02
+
+## What's Changed
+* PHP8 Hook attributes by @rpkamp in https://github.com/Behat/Behat/pull/1372
+
+**Full Changelog**: https://github.com/Behat/Behat/compare/v3.9.1...v3.10.0
+
 ## 3.9.1 - 2021-11-02
 
 ## What's Changed
