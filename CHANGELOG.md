@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.9.1 - 2021-11-02
+
+## What's Changed
+* Fix issue 1363 (Symfony 6 compatibility) by @dmaicher in https://github.com/Behat/Behat/pull/1368
+* update branch alias for dev-master by @dmaicher in https://github.com/Behat/Behat/pull/1369
+* Fix SYMFONY_REQUIRE for github action by @dmaicher in https://github.com/Behat/Behat/pull/1370
+* Issue #1373 - Replace %1% with %count% in hu translations by @Sweetchuck in https://github.com/Behat/Behat/pull/1374
+
+## New Contributors
+* @dmaicher made their first contribution in https://github.com/Behat/Behat/pull/1368
+* @Sweetchuck made their first contribution in https://github.com/Behat/Behat/pull/1374
+
+**Full Changelog**: https://github.com/Behat/Behat/compare/v3.9.0...v3.9.1
+
 ## [3.9.0] - 2021-10-18
 
 ### What's Changed
