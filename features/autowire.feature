@@ -35,7 +35,7 @@ Feature: Helper services autowire
       class ServiceContainer implements ContainerInterface {
           private $services = array();
 
-          public function has($class) {
+          public function has($class): bool {
               return in_array($class, array('Service1', 'Service2', 'Service3'));
           }
 

@@ -24,14 +24,13 @@
         "symfony/event-dispatcher": "^4.4 || ^5.0 || ^6.0",
         "symfony/translation": "^4.4 || ^5.0 || ^6.0",
         "symfony/yaml": "^4.4 || ^5.0 || ^6.0",
-        "psr/container": "^1.0"
+        "psr/container": "^1.0 || ^2.0"
     },
 
     "require-dev": {
         "symfony/process": "^4.4 || ^5.0 || ^6.0",
         "phpunit/phpunit": "^8.5 || ^9.0",
         "herrera-io/box": "~1.6.1",
-        "container-interop/container-interop": "^1.2",
         "vimeo/psalm": "^4.8"
     },
 
