@@ -312,7 +312,10 @@ EOL;
 
         $fileContent = trim(file_get_contents($path));
 
-        $fileContent = preg_replace('/time="(.*)"/', 'time="-IGNORE-VALUE-"', $fileContent);
+        $fileContent = preg_replace('/time="(.*)"/U', 'time="-IGNORE-VALUE-"', $fileContent);
+
+        // The placeholder is necessary because of different separators on Unix and Windows environments
+        $text = str_replace('-DIRECTORY-SEPARATOR-', DIRECTORY_SEPARATOR, $text);
 
         $dom = new DOMDocument();
         $dom->loadXML($text);
