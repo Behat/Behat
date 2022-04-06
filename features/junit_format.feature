@@ -105,7 +105,7 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
         <testsuite name="World consistency" tests="8" skipped="0" failures="3" errors="2" time="-IGNORE-VALUE-">
-          <testcase name="Pending" classname="World consistency" status="pending" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
+          <testcase name="Undefined" classname="World consistency" status="undefined" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
             <error message="And Something new" type="undefined"/>
           </testcase>
           <testcase name="Pending" classname="World consistency" status="pending" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
@@ -397,7 +397,7 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="old_man">
         <testsuite name="Apple Eating" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Eating one apple" classname="Apple Eating" status="failed" time="-IGNORE-VALUE-">
+          <testcase name="Eating one apple" classname="Apple Eating" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-apple_eating_oldmen.feature">
             <failure message="Then I will be stronger: Failed asserting that 0 is not equal to 0."/>
           </testcase>
         </testsuite>
