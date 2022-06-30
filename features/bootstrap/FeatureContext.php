@@ -170,11 +170,21 @@ EOL;
     /**
      * Sets specified ENV variable
      *
+     * @When /^the "([^"]*)" environment variable is set to "([^"]*)"$/
+     */
+    public function iSetEnvironmentVariable($name, $value)
+    {
+        $this->env = array($name => (string) $value);
+    }
+
+    /**
+     * Sets the BEHAT_PARAMS env variable
+     *
      * @When /^"BEHAT_PARAMS" environment variable is set to:$/
      *
      * @param PyStringNode $value
      */
-    public function iSetEnvironmentVariable(PyStringNode $value)
+    public function iSetBehatParamsEnvironmentVariable(PyStringNode $value)
     {
         $this->env = array('BEHAT_PARAMS' => (string) $value);
     }
