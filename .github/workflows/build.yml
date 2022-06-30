@@ -79,7 +79,11 @@ jobs:
                 run: ./vendor/bin/phpunit
 
             -   name: Run tests (Behat)
-                run: ./bin/behat -fprogress --strict $([ -z "${{ matrix.skip-interop }}" ] || echo "--tags ~@interop&&~@php8")
+                run: ./bin/behat -fprogress --strict --tags="~@interop&&~@php8"
+
+            -   name: Run tests (Behat with Interop)
+                if: matrix.skip-interop != true
+                run: ./bin/behat -fprogress --strict --tags=@interop
 
             -   name: Run tests (Behat for PHP 8.0)
                 if: matrix.php >= 8.0
