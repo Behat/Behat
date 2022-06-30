@@ -59,6 +59,9 @@ final class HookAttributeReader implements AttributeReader
             return [];
         }
 
+        /**
+         * @psalm-suppress UndefinedClass (ReflectionAttribute is PHP 8.0 only)
+         */
         $attributes = $method->getAttributes(Hook::class, \ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];
