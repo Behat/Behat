@@ -10,7 +10,7 @@ on:
 
 jobs:
     tests:
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
         name: Build and test
         strategy:
             fail-fast: false
@@ -18,19 +18,31 @@ jobs:
                 include:
                     -   php: 7.2
                         publish-phar: true
+                        os: ubuntu-latest
                     -   php: 7.2
                         skip-interop: true
+                        os: ubuntu-latest
                     -   php: 7.2
                         composer-flags: --prefer-lowest
+                        os: ubuntu-latest
                     -   php: 7.3
+                        os: ubuntu-latest
                     -   php: 7.4
+                        os: ubuntu-latest
                     -   php: 7.4
                         SYMFONY_REQUIRE: 4.4.*
+                        os: ubuntu-latest
                     -   php: 8.0
+                        os: ubuntu-latest
                     -   php: 8.0
                         stability: dev
                         SYMFONY_REQUIRE: 6.0.*
+                        os: ubuntu-latest
                     -   php: 8.1
+                        os: windows-latest
+                    -   php: 8.1
+                        os: ubuntu-latest
+
 
         steps:
             -   uses: actions/checkout@v2
