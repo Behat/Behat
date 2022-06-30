@@ -145,6 +145,7 @@ Feature: Format options
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
+              Failed step: Then I should have 8 apples
               Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
@@ -227,6 +228,7 @@ Feature: Format options
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
+              Failed step: Then I should have 8 apples
               Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
@@ -309,6 +311,7 @@ Feature: Format options
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
+              Failed step: Then I should have 8 apples
               Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 
@@ -456,6 +459,7 @@ Feature: Format options
             | ate | found | result |
             | 3   | 1     | 1      |
             | 0   | 4     | 8      |
+              Failed step: Then I should have 8 apples
               Failed asserting that 7 matches expected 8.
             | 2   | 2     | 3      |
 

@@ -119,9 +119,11 @@ Feature: I18n
           Примеры:
             | значение | результат |
             | 5        | 16        |
+              Проваленные шаг: То Я должен иметь 16
               Failed asserting that 15 matches expected 16.
             | 10       | 20        |
             | 23       | 32        |
+              Проваленные шаг: То Я должен иметь 32
               Failed asserting that 33 matches expected 32.
 
       --- Проваленные сценарии:

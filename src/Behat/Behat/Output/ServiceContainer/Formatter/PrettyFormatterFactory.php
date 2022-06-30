@@ -257,7 +257,8 @@ class PrettyFormatterFactory implements FormatterFactory
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyExampleRowPrinter', array(
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
-            new Reference(ExceptionExtension::PRESENTER_ID)
+            new Reference(ExceptionExtension::PRESENTER_ID),
+            new Reference(TranslatorExtension::TRANSLATOR_ID)
         ));
         $container->setDefinition('output.node.printer.pretty.example_row', $definition);
     }

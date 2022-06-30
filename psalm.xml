@@ -32,6 +32,13 @@
             </errorLevel>
         </InvalidThrow>
 
+        <!-- suppress errors related to Symfony return types including enums -->
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <referencedClass name="UnitEnum" />
+            </errorLevel>
+        </UndefinedDocblockClass>
+
         <!-- Suppress errors related to legacy PHPUnit classes -->
         <UndefinedClass>
             <errorLevel type="suppress">
