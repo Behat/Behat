@@ -18,3 +18,5 @@ jobs:
         with:
           from_branch: 'master'
           to_branch: '4.x'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
