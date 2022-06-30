@@ -84,9 +84,10 @@ final class JUnitScenarioPrinter
         );
 
         if ($file) {
+            $cwd = realpath(getcwd());
             $testCaseAttributes['file'] =
-                substr($file, 0, strlen(getcwd())) === getcwd() ?
-                    ltrim(substr($file, strlen(getcwd())), DIRECTORY_SEPARATOR) : $file;
+                substr($file, 0, strlen($cwd)) === $cwd ?
+                    ltrim(substr($file, strlen($cwd)), DIRECTORY_SEPARATOR) : $file;
         }
 
         $outputPrinter->addTestcase($testCaseAttributes);
