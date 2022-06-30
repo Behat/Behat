@@ -16,5 +16,5 @@ jobs:
       - name: Up Merge
         uses: bambamboole/gha-upmerge@main
         with:
-          stable_branch: 'master'
-          development_branch: '4.x'
+          from_branch: 'master'
+          to_branch: '4.x'
