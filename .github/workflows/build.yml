@@ -23,9 +23,6 @@ jobs:
                         publish-phar: true
                         os: ubuntu-latest
                     -   php: 7.2
-                        skip-interop: true
-                        os: ubuntu-latest
-                    -   php: 7.2
                         composer-flags: --prefer-lowest
                         os: ubuntu-latest
                     -   php: 7.3
@@ -66,10 +63,6 @@ jobs:
             -   name: Install symfony/flex
                 run: composer global require symfony/flex
 
-            -   name: Uninstall container interop
-                if: matrix.skip-interop
-                run: composer remove --dev --no-update container-interop/container-interop
-
             -   name: Uninstall Psalm
                 run: composer remove --dev --no-update vimeo/psalm
 
@@ -82,11 +75,7 @@ jobs:
                 run: ./vendor/bin/phpunit
 
             -   name: Run tests (Behat)
-                run: ./bin/behat -fprogress --strict --tags="~@interop&&~@php8"
-
-            -   name: Run tests (Behat with Interop)
-                if: matrix.skip-interop != true
-                run: ./bin/behat -fprogress --strict --tags=@interop
+                run: ./bin/behat -fprogress --strict
 
             -   name: Run tests (Behat for PHP 8.0)
                 if: matrix.php >= 8.0
