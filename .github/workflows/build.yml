@@ -61,7 +61,9 @@ jobs:
                 run: composer config minimum-stability ${{ matrix.stability }}
 
             -   name: Install symfony/flex
-                run: composer global require symfony/flex
+                run: |
+                    composer config --global --no-plugins allow-plugins.symfony/flex true &&
+                    composer global require symfony/flex
 
             -   name: Uninstall Psalm
                 run: composer remove --dev --no-update vimeo/psalm
