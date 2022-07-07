@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.11.0] - 2022-07-07
+
+### Added
+* [#1387](https://github.com/Behat/Behat/pull/1387) Added file attribute to Junit output [@ppaulis](https://github.com/ppaulis)
+* [#1266](https://github.com/Behat/Behat/pull/1266) Enable env placeholder resolution in config [@mpdude](https://github.com/mpdude)
+* [#1380](https://github.com/Behat/Behat/pull/1380) Support psr/container 2.0 [@wouterj](https://github.com/wouterj)
+* [#1340](https://github.com/Behat/Behat/pull/1340) Added Chinese language [@54853315](https://github.com/54853315)
+
+### Fixed
+* [#1374](https://github.com/Behat/Behat/pull/1374) Fixed counts in hu translations [@Sweetchuck](https://github.com/Sweetchuck)
+* [#1393](https://github.com/Behat/Behat/pull/1393) Fixed counts in bg and jo translations [@delyro](https://github.com/delyro)
+
+### Other contributions
+* [#1398](https://github.com/Behat/Behat/pull/1398) Fix failing builds due to composer --allow-plugins [@Chekote](https://github.com/Chekote)
+
 ## 3.10.0 - 2021-11-02
 
 ## What's Changed
@@ -983,7 +998,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
-[Unreleased]: https://github.com/Behat/Behat/compare/v3.9.0...master
+[3.11.0]: https://github.com/Behat/Behat/compare/v3.10.0...v3.11.0
 [3.9.0]: https://github.com/Behat/Behat/compare/v3.8.1...v3.9.0
 [3.8.1]: https://github.com/Behat/Behat/compare/v3.8.0...v3.8.1
 [3.8.0]: https://github.com/Behat/Behat/compare/v3.7.0...v3.8.0
