@@ -35,7 +35,7 @@ Feature: Multiple Paths
            * @Then /^I should have (\d+) apples$/
            */
           public function iShouldHaveApples($count) {
-              PHPUnit_Framework_Assert::assertEquals(intval($count), $this->apples);
+              assert(intval($count) == $this->apples);
           }
       }
       """
@@ -89,4 +89,3 @@ Feature: Multiple Paths
     """
     No specifications found at path(s) `features/pears.feature, features/peaches.feature`
     """
-
