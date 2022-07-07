@@ -91,7 +91,7 @@ final class ExerciseController implements Controller
         ));
 
         $command
-            ->addArgument('paths', InputArgument::OPTIONAL,
+            ->addArgument('paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
                 'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples
             )
             ->addOption('--dry-run', null, InputOption::VALUE_NONE,
@@ -111,7 +111,7 @@ final class ExerciseController implements Controller
             throw new WrongPathsException(
                 sprintf(
                     'No specifications found at path(s) `%s`. This might be because of incorrect paths configuration in your `suites`.',
-                    $input->getArgument('paths')
+                    implode(', ', $input->getArgument('paths'))
                 ),
                 $input->getArgument('paths')
             );
@@ -167,13 +167,25 @@ final class ExerciseController implements Controller
     /**
      * Finds specification iterators for all provided suites using locator.
      *
-     * @param Suite[]     $suites
-     * @param null|string $locator
+     * @param Suite[]  $suites
+     * @param string[] $locators
      *
      * @return SpecificationIterator[]
      */
-    private function findSuitesSpecifications($suites, $locator)
+    private function findSuitesSpecifications($suites, array $locators)
     {
-        return $this->specificationFinder->findSuitesSpecifications($suites, $locator);
+        if (empty($locators)) {
+            return $this->specificationFinder->findSuitesSpecifications($suites);
+        }
+
+        $specifications = array();
+        foreach ($locators as $locator) {
+            $specifications = array_merge(
+                $specifications,
+                $this->specificationFinder->findSuitesSpecifications($suites, $locator)
+            );
+        }
+
+        return $specifications;
     }
 }
