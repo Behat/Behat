@@ -18,33 +18,49 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
+                php: [7.2, 7.3, 7.4, 8.0, 8.1]
+                os: [ubuntu-latest]
+                composer-mode: [update]
+                symfony-version: ['']
                 include:
+                    # Get the existing 7.2 to publish the phar
                     -   php: 7.2
+                        os: ubuntu-latest
+                        composer-mode: update
                         publish-phar: true
-                        os: ubuntu-latest
+                        symfony-version: ''
+
+                    # 7.2 build with lowest dependencies
                     -   php: 7.2
-                        composer-flags: --prefer-lowest
                         os: ubuntu-latest
-                    -   php: 7.3
-                        os: ubuntu-latest
-                    -   php: 7.4
-                        os: ubuntu-latest
-                    -   php: 7.4
-                        SYMFONY_REQUIRE: 4.4.*
-                        os: ubuntu-latest
-                    -   php: 8.0
-                        os: ubuntu-latest
-                    -   php: 8.0
-                        stability: dev
-                        SYMFONY_REQUIRE: 6.0.*
-                        os: ubuntu-latest
+                        composer-mode: lowest
+                        symfony-version: ''
+
+                    # MacOS on latest PHP only
                     -   php: 8.1
                         os: macos-latest
+                        composer-mode: update
+                        symfony-version: ''
+
+                    # Windows on latest PHP only
                     -   php: 8.1
                         os: windows-latest
+                        composer-mode: update
+                        symfony-version: ''
+
+                    # Symfony jobs:
                     -   php: 8.1
                         os: ubuntu-latest
-
+                        composer-mode: update
+                        symfony-version: '4.4'
+                    -   php: 8.1
+                        os: ubuntu-latest
+                        composer-mode: update
+                        symfony-version: '5.4'
+                    -   php: 8.1
+                        os: ubuntu-latest
+                        composer-mode: update
+                        symfony-version: '6.0'
 
         steps:
             -   uses: actions/checkout@v2
@@ -56,22 +72,21 @@ jobs:
                     ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
                     coverage: none
 
-            -   name: Configure Composer minimum stability
-                if: matrix.stability
-                run: composer config minimum-stability ${{ matrix.stability }}
-
             -   name: Install symfony/flex
+                if: matrix.symfony-version != ''
                 run: |
                     composer config --global --no-plugins allow-plugins.symfony/flex true &&
                     composer global require symfony/flex
 
-            -   name: Uninstall Psalm
-                run: composer remove --dev --no-update vimeo/psalm
-
-            -   name: Install dependencies
+            -   name: Install latest dependencies
+                if: matrix.composer-mode == 'update'
                 env:
-                    SYMFONY_REQUIRE: "${{ matrix.SYMFONY_REQUIRE }}"
-                run: composer update ${{ matrix.composer-flags }}
+                    SYMFONY_REQUIRE: ${{ matrix.symfony-version }}.*
+                run: composer update
+
+            -   name: Install lowest dependencies
+                if: matrix.composer-mode == 'lowest'
+                run: composer update --prefer-lowest
 
             -   name: Run tests (phpunit)
                 run: ./vendor/bin/phpunit
@@ -84,7 +99,7 @@ jobs:
                 run: ./bin/behat -fprogress --strict --tags=@php8
 
             -   name: Build the PHAR
-                if: matrix.php != '8.0'
+                if: matrix.publish-phar == true
                 run: |
                     curl -LSs https://box-project.github.io/box2/installer.php | php &&
                     export PATH=.:$PATH &&
@@ -94,14 +109,14 @@ jobs:
 
             -   uses: actions/upload-artifact@v1
                 name: Publish the PHAR
-                if: matrix.publish-phar
+                if: matrix.publish-phar == true
                 with:
                     name: behat.phar
                     path: behat.phar
 
-    psalm:
+    static-analysis:
         runs-on: ubuntu-latest
-        name: Psalm (PHP 8.0)
+        name: Static analysis
         steps:
             - uses: actions/checkout@v2
 
@@ -109,7 +124,7 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: 8.0
-                  ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
+                  ini-values: "zend.exception_ignore_args=Off"
                   coverage: none
 
             - name: Install dependencies
@@ -120,7 +135,7 @@ jobs:
 
     publish-phar:
         runs-on: ubuntu-latest
-        name: Publish the PHAR
+        name: Publish the PHAR for release
         needs: tests
         if: github.event_name == 'release'
         steps:
