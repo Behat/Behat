@@ -22,6 +22,7 @@ jobs:
                 os: [ubuntu-latest]
                 composer-mode: [update]
                 symfony-version: ['']
+                cucumber-parser: [false]
                 include:
                     # Get the existing 7.2 to publish the phar
                     -   php: 7.2
@@ -29,38 +30,52 @@ jobs:
                         composer-mode: update
                         publish-phar: true
                         symfony-version: ''
+                        cucumber-parser: false
 
                     # 7.2 build with lowest dependencies
                     -   php: 7.2
                         os: ubuntu-latest
                         composer-mode: lowest
                         symfony-version: ''
+                        cucumber-parser: false
+
+                    # Cucumber-parser build
+                    -   php: 8.1
+                        os: ubuntu-latest
+                        composer-mode: update
+                        symfony-version: ''
+                        cucumber-parser: true
 
                     # MacOS on latest PHP only
                     -   php: 8.1
                         os: macos-latest
                         composer-mode: update
                         symfony-version: ''
+                        cucumber-parser: false
 
                     # Windows on latest PHP only
                     -   php: 8.1
                         os: windows-latest
                         composer-mode: update
                         symfony-version: ''
+                        cucumber-parser: false
 
                     # Symfony jobs:
                     -   php: 8.1
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '4.4'
+                        cucumber-parser: false
                     -   php: 8.1
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '5.4'
+                        cucumber-parser: false
                     -   php: 8.1
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '6.0'
+                        cucumber-parser: false
 
         steps:
             -   uses: actions/checkout@v2
@@ -72,11 +87,23 @@ jobs:
                     ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
                     coverage: none
 
-            -   name: Install symfony/flex
+            -   name: Require symfony/flex
                 if: matrix.symfony-version != ''
                 run: |
                     composer config --global --no-plugins allow-plugins.symfony/flex true &&
                     composer global require symfony/flex
+
+            -   name: Temporary - add ciaran fork
+                if: matrix.cucumber-parser == true
+                run: |
+                    composer config github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
+                    composer config repositories.0 vcs https://github.com/ciaranmcnulty/gherkin-1
+                    composer require behat/gherkin dev-cucumber-gherkin --no-update
+
+            -   name: Require cucumber/gherkin
+                if: matrix.cucumber-parser == true
+                run: |
+                    composer require cucumber/gherkin --no-update
 
             -   name: Install latest dependencies
                 if: matrix.composer-mode == 'update'
@@ -91,12 +118,21 @@ jobs:
             -   name: Run tests (phpunit)
                 run: ./vendor/bin/phpunit
 
+            -   name: Configure cucumber parser
+                if: matrix.cucumber-parser == true
+                run: |
+                    echo '    parser: cucumber' >> behat.yml.dist
+
             -   name: Run tests (Behat)
                 run: ./bin/behat -fprogress --strict
 
             -   name: Run tests (Behat for PHP 8.0)
                 if: matrix.php >= 8.0
                 run: ./bin/behat -fprogress --strict --tags=@php8
+
+            -   name: Run tests (Cucumber parser)
+                if: matrix.cucumber-parser == true
+                run: ./bin/behat -fprogress --strict --tags=@cucumber-parser
 
             -   name: Build the PHAR
                 if: matrix.publish-phar == true
