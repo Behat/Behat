@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Gherkin\ServiceContainer;
 
+use Behat\Behat\Gherkin\Exception\ParserNotAvailable;
+use Behat\Gherkin\Loader\CucumberGherkinLoader;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionException;
@@ -97,6 +99,11 @@ final class GherkinExtension implements Extension
                     ->useAttributeAsKey('name')
                     ->prototype('scalar')->end()
                 ->end()
+                ->enumNode('parser')
+                    ->info('Sets which gherkin parser to use if not specified at CLI')
+                    ->values(['auto', 'cucumber', 'legacy'])
+                    ->defaultValue('auto')
+                ->end()
             ->end()
         ;
     }
@@ -110,7 +117,7 @@ final class GherkinExtension implements Extension
         $this->loadGherkin($container);
         $this->loadKeywords($container);
         $this->loadParser($container);
-        $this->loadDefaultLoaders($container, $config['cache']);
+        $this->loadDefaultLoaders($container, $config['cache'], $config['parser']);
         $this->loadProfileFilters($container, $config['filters']);
         $this->loadSyntaxController($container);
         $this->loadFilterController($container);
@@ -208,26 +215,40 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads gherkin loaders.
-     *
-     * @param ContainerBuilder $container
-     * @param string           $cachePath
      */
-    private function loadDefaultLoaders(ContainerBuilder $container, $cachePath)
+    private function loadDefaultLoaders(ContainerBuilder $container, string $cachePath, string $parserName)
     {
-        $definition = new Definition('Behat\Gherkin\Loader\GherkinFileLoader', array(
-            new Reference('gherkin.parser')
-        ));
-
         if ($cachePath) {
             $cacheDefinition = new Definition('Behat\Gherkin\Cache\FileCache', array($cachePath));
         } else {
             $cacheDefinition = new Definition('Behat\Gherkin\Cache\MemoryCache');
         }
 
-        $definition->addMethodCall('setCache', array($cacheDefinition));
-        $definition->addMethodCall('setBasePath', array('%paths.base%'));
-        $definition->addTag(self::LOADER_TAG, array('priority' => 50));
-        $container->setDefinition('gherkin.loader.gherkin_file', $definition);
+        // default to old parser for now
+        if ($parserName == 'auto') {
+            $parserName = 'legacy';
+        }
+
+        if ($parserName == 'legacy') {
+            $definition = new Definition('Behat\Gherkin\Loader\GherkinFileLoader', array(
+                new Reference('gherkin.parser')
+            ));
+            $definition->addMethodCall('setCache', array($cacheDefinition));
+            $definition->addMethodCall('setBasePath', array('%paths.base%'));
+            $definition->addTag(self::LOADER_TAG, array('priority' => 50));
+            $container->setDefinition('gherkin.loader.gherkin_file', $definition);
+        }
+
+        if ($parserName == 'cucumber') {
+            if (!class_exists(CucumberGherkinLoader::class) || !CucumberGherkinLoader::isAvailable()) {
+                throw new ParserNotAvailable('Can not specify the cucumber parser without cucumber/gherkin');
+            }
+
+            $definition = new Definition('Behat\Gherkin\Loader\CucumberGherkinLoader');
+            $definition->addMethodCall('setBasePath', array('%paths.base%'));
+            $definition->addTag(self::LOADER_TAG, array('priority' => 100));
+            $container->setDefinition('gherkin.loader.cucumber_gherkin_file', $definition);
+        }
     }
 
     /**
