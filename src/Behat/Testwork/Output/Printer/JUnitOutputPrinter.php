@@ -115,7 +115,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
     private function addAttributesToNode(\DOMElement $node, array $attributes)
     {
         foreach ($attributes as $name => $value){
-            $node->setAttribute($name, $value);
+            $node->setAttribute($name, $value ?? '');
         }
     }
 
