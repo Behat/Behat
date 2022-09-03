@@ -15,6 +15,9 @@ Feature: Error Reporting
 
       class FeatureContext implements Context
       {
+          private $array;
+          private $result;
+
           /**
            * @Given /^I have an empty array$/
            */
@@ -105,7 +108,7 @@ Feature: Error Reporting
 
     001 Scenario: Access undefined index # features/e_notice_in_scenario.feature:9
           When I access array index 0    # features/e_notice_in_scenario.feature:10
-            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 24
+            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 27
 
     2 scenarios (1 passed, 1 failed)
     7 steps (5 passed, 1 failed, 1 skipped)
@@ -130,7 +133,7 @@ Feature: Error Reporting
 
     001 Scenario: Exception thrown    # features/exception_in_scenario.feature:6
           When an exception is thrown # features/exception_in_scenario.feature:7
-            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:56
+            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:59
             Stack trace:
 
     1 scenario (1 failed)
@@ -146,7 +149,7 @@ Feature: Error Reporting
 
     001 Scenario: Exception thrown    # features/exception_in_scenario.feature:6
           When an exception is thrown # features/exception_in_scenario.feature:7
-            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:56
+            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:59
             Stack trace:
             #0 src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(110): FeatureContext->anExceptionIsThrown()
             #1 src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(64): Behat\Testwork\Call\Handler\RuntimeCallHandler->executeCall(
