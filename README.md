@@ -51,7 +51,7 @@ you would not have any backwards compatibility issues with Behat up until `v4.0.
 is released. Exception could be an extremely rare case where BC break is introduced as a measure
 to fix a serious issue.
 
-You can read detailed guidance on what BC means in [Symfony2 BC guide](http://symfony.com/doc/current/contributing/code/bc.html).
+You can read detailed guidance on what BC means in [Symfony BC guide](http://symfony.com/doc/current/contributing/code/bc.html).
 
 Useful Links
 ------------
