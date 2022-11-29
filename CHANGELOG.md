@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.12.0] - 2022-11-29
+
+### Added
+* [#1417](https://github.com/Behat/Behat/pull/1417) Allow install with PHP 8.2 [@ciaranmcnulty](https://github.com/ciaranmcnulty)
+
+### Fixed
+* [#1412](https://github.com/Behat/Behat/pull/1412) Fix dynamic property deprecation notices in PHP 8.2 [@gquemener](https://github.com/gquemener)
+* [#1410](https://github.com/Behat/Behat/pull/1410) Fix deprecation errors in Junit formatter for PHP 8.1 [@albeorte96](https://github.com/albeorte96)
+
+### Other contributions
+* [#1415](https://github.com/Behat/Behat/pull/1415) Fix README typo [@vinceAmstoutz](https://github.com/vinceAmstoutz)
+
 ## [3.11.0] - 2022-07-07
 
 ### Added
@@ -998,6 +1010,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.12.0]: https://github.com/Behat/Behat/compare/v3.11.0...v3.12.0
 [3.11.0]: https://github.com/Behat/Behat/compare/v3.10.0...v3.11.0
 [3.9.0]: https://github.com/Behat/Behat/compare/v3.8.1...v3.9.0
 [3.8.1]: https://github.com/Behat/Behat/compare/v3.8.0...v3.8.1
