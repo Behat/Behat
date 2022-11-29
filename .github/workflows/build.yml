@@ -18,7 +18,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [7.2, 7.3, 7.4, 8.0, 8.1]
+                php: [7.2, 7.3, 7.4, 8.0, 8.1, 8.2]
                 os: [ubuntu-latest]
                 composer-mode: [update]
                 symfony-version: ['']
@@ -37,13 +37,13 @@ jobs:
                         symfony-version: ''
 
                     # MacOS on latest PHP only
-                    -   php: 8.1
+                    -   php: 8.2
                         os: macos-latest
                         composer-mode: update
                         symfony-version: ''
 
                     # Windows on latest PHP only
-                    -   php: 8.1
+                    -   php: 8.2
                         os: windows-latest
                         composer-mode: update
                         symfony-version: ''
@@ -53,11 +53,11 @@ jobs:
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '4.4'
-                    -   php: 8.1
+                    -   php: 8.2
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '5.4'
-                    -   php: 8.1
+                    -   php: 8.2
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '6.0'
@@ -123,7 +123,7 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: 8.0
+                  php-version: 8.2
                   ini-values: "zend.exception_ignore_args=Off"
                   coverage: none
 
