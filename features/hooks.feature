@@ -24,6 +24,7 @@ Feature: hooks
       class FeatureContext implements Context
       {
           private $number;
+          private $scenarioFilter;
 
           /**
            * @BeforeFeature
