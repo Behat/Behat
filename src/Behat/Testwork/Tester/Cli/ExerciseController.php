@@ -102,6 +102,12 @@ final class ExerciseController implements Controller
                 null,
                 InputOption::VALUE_NONE,
                 'Invokes formatters without executing the tests and hooks.'
+            )
+            ->addOption(
+                '--allow-no-tests',
+                null,
+                InputOption::VALUE_NONE,
+                'Will not fail if no specifications are found.'
             );
     }
 
@@ -113,7 +119,7 @@ final class ExerciseController implements Controller
         $specs = $this->findSpecifications($input);
         $result = $this->testSpecifications($input, $specs);
 
-        if ($input->getArgument('paths') && TestResults::NO_TESTS === $result->getResultCode()) {
+        if ($input->getArgument('paths') && !$input->getOption('allow-no-tests') && TestResults::NO_TESTS === $result->getResultCode()) {
             throw new WrongPathsException(
                 sprintf(
                     'No specifications found at path(s) `%s`. This might be because of incorrect paths configuration in your `suites`.',
