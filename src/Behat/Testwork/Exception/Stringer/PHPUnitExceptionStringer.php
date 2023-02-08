@@ -39,7 +39,7 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
             return trim(\PHPUnit\Util\ThrowableToStringMapper::map($exception));
         }
 
-        if (class_exists('PHPUnit_Framework_TestFailure')) {
+        if (!class_exists('PHPUnit\\Framework\\TestFailure')) {
             return trim(\PHPUnit_Framework_TestFailure::exceptionToString($exception));
         }
 
