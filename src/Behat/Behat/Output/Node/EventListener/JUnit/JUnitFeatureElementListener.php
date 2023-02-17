@@ -96,9 +96,10 @@ final class JUnitFeatureElementListener implements EventListener
      */
     private function printFeatureOnBeforeEvent(Formatter $formatter, Event $event)
     {
-        if ($event instanceof BeforeFeatureTested) {
-            $this->featurePrinter->printHeader($formatter, $event->getFeature());
+        if (!$event instanceof BeforeFeatureTested) {
+            return;
         }
+        $this->featurePrinter->printHeader($formatter, $event->getFeature());
     }
 
     /**
@@ -120,32 +121,33 @@ final class JUnitFeatureElementListener implements EventListener
      * Captures scenario tested event.
      *
      * @param Formatter $formatter
-     * @param ScenarioTested $event
+     * @param Event $event
      */
     private function printScenarioEvent(Formatter $formatter, Event $event)
     {
-        if ($event instanceof AfterScenarioTested) {
-            $afterScenarioTested = $event;
-            $this->scenarioPrinter->printOpenTag(
-                $formatter,
-                $afterScenarioTested->getFeature(),
-                $afterScenarioTested->getScenario(),
-                $afterScenarioTested->getTestResult(),
-                $event->getFeature()->getFile()
-            );
-
-            /** @var AfterStepSetup $afterStepSetup */
-            foreach ($this->afterStepSetupEvents as $afterStepSetup) {
-                $this->setupPrinter->printSetup($formatter, $afterStepSetup->getSetup());
-            }
-            foreach ($this->afterStepTestedEvents as $afterStepTested) {
-                $this->stepPrinter->printStep($formatter, $afterScenarioTested->getScenario(), $afterStepTested->getStep(), $afterStepTested->getTestResult());
-                $this->setupPrinter->printTeardown($formatter, $afterStepTested->getTeardown());
-            }
-
-            $this->afterStepTestedEvents = array();
-            $this->afterStepSetupEvents = array();
+        if (!$event instanceof AfterScenarioTested) {
+            return;
         }
+        $afterScenarioTested = $event;
+        $this->scenarioPrinter->printOpenTag(
+            $formatter,
+            $afterScenarioTested->getFeature(),
+            $afterScenarioTested->getScenario(),
+            $afterScenarioTested->getTestResult(),
+            $event->getFeature()->getFile()
+        );
+
+        /** @var AfterStepSetup $afterStepSetup */
+        foreach ($this->afterStepSetupEvents as $afterStepSetup) {
+            $this->setupPrinter->printSetup($formatter, $afterStepSetup->getSetup());
+        }
+        foreach ($this->afterStepTestedEvents as $afterStepTested) {
+            $this->stepPrinter->printStep($formatter, $afterScenarioTested->getScenario(), $afterStepTested->getStep(), $afterStepTested->getTestResult());
+            $this->setupPrinter->printTeardown($formatter, $afterStepTested->getTeardown());
+        }
+
+        $this->afterStepTestedEvents = array();
+        $this->afterStepSetupEvents = array();
     }
 
     /**
@@ -156,8 +158,9 @@ final class JUnitFeatureElementListener implements EventListener
      */
     private function printFeatureOnAfterEvent(Formatter $formatter, Event $event)
     {
-        if ($event instanceof AfterFeatureTested) {
-            $this->featurePrinter->printFooter($formatter, $event->getTestResult());
+        if (!$event instanceof AfterFeatureTested) {
+            return;
         }
+        $this->featurePrinter->printFooter($formatter, $event->getTestResult());
     }
 }
