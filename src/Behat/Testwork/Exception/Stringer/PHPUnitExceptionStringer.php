@@ -35,6 +35,10 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
      */
     public function stringException(Exception $exception, $verbosity)
     {
+        if (class_exists('PHPUnit\\Util\\ThrowableToStringMapper')) {
+            return trim(\PHPUnit\Util\ThrowableToStringMapper::map($exception));
+        }
+
         if (!class_exists('PHPUnit\\Framework\\TestFailure')) {
             return trim(\PHPUnit_Framework_TestFailure::exceptionToString($exception));
         }
