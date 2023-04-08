@@ -50,7 +50,7 @@
 
     "autoload-dev": {
         "psr-4": {
-            "Behat\\Tests\\": "tests/Behat/Tests"
+            "Behat\\Tests\\": "tests/Behat/Tests/"
         }
     },
 
