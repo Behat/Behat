@@ -35,17 +35,24 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
      */
     public function stringException(Exception $exception, $verbosity)
     {
-        if (class_exists('PHPUnit\\Util\\ThrowableToStringMapper')) {
-            return trim(\PHPUnit\Util\ThrowableToStringMapper::map($exception));
-        }
-
-        if (!class_exists('PHPUnit\\Framework\\TestFailure')) {
-            return trim(\PHPUnit_Framework_TestFailure::exceptionToString($exception));
-        }
-
         // PHPUnit assertion exceptions do not include expected / observed info in their
         // messages, but expect the test listeners to format that info like the following
         // (see e.g. PHPUnit_TextUI_ResultPrinter::printDefectTrace)
-        return trim(\PHPUnit\Framework\TestFailure::exceptionToString($exception));
+
+        switch (true) {
+            case class_exists(\PHPUnit\Util\ThrowableToStringMapper::class):
+                return trim(\PHPUnit\Util\ThrowableToStringMapper::map($exception));
+
+            case class_exists(\PHPUnit\Framework\TestFailure::class):
+                return trim(\PHPUnit\Framework\TestFailure::exceptionToString($exception));
+
+            case class_exists(\PHPUnit_Framework_TestFailure::class):
+                return trim(\PHPUnit_Framework_TestFailure::exceptionToString($exception));
+
+            default:
+                throw new \RuntimeException(
+                    'Cannot stringify PHPUnit exception, a valid stringifier class could not be found'
+                );
+        }
     }
 }
