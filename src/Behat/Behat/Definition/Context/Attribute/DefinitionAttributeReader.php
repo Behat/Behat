@@ -64,6 +64,7 @@ final class DefinitionAttributeReader implements AttributeReader
         $attributes = $method->getAttributes(Definition::class, \ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];
+        $patterns = [];
         foreach ($attributes as $attribute) {
             $class = self::$classes[$attribute->getName()];
             $callable = array($contextClass, $method->getName());
@@ -72,7 +73,11 @@ final class DefinitionAttributeReader implements AttributeReader
                 $description = $this->docBlockHelper->extractDescription($docBlock);
             }
 
-            $callees[] = new $class($attribute->newInstance()->pattern, $callable, $description);
+            $pattern = $attribute->newInstance()->pattern;
+            if (!isset($patterns[$pattern])) {
+                $patterns[$pattern] = true;
+                $callees[] = new $class($pattern, $callable, $description);
+            }
         }
 
         return $callees;
