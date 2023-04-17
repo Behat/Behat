@@ -53,8 +53,8 @@ interface Extension extends CompilerPassInterface
     /**
      * Loads extension services into temporary container.
      *
-     * @param ContainerBuilder $container
-     * @param array            $config
+     * @param ContainerBuilder     $container
+     * @param array<string, mixed> $config
      */
     public function load(ContainerBuilder $container, array $config);
 }

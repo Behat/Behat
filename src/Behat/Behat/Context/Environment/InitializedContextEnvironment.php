@@ -37,6 +37,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
     private $serviceContainer;
     /**
      * @var array<class-string<Context>, Context>
+     * @psalm-var class-string-map<T as Context, T>
      */
     private $contexts = array();
 
