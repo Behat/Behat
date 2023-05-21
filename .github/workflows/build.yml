@@ -123,7 +123,7 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: 8.2
+                  php-version: 7.2
                   ini-values: "zend.exception_ignore_args=Off"
                   coverage: none
 

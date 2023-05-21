@@ -57,7 +57,7 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
     /**
      * {@inheritdoc}
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         return ':' . $argumentIndex === $this->pattern;
     }
