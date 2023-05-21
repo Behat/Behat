@@ -17,7 +17,7 @@
         "php": "^8.2, <8.3.0",
         "ext-mbstring": "*",
         "behat/gherkin": "^4.9.0",
-        "behat/transliterator": "^1.2",
+        "behat/transliterator": "^1.5",
         "symfony/console": "^5.4 || ^6.3",
         "symfony/config": "^5.4 || ^6.3",
         "symfony/dependency-injection": "^5.4 || ^6.3",
