@@ -43,11 +43,11 @@ interface SimpleArgumentTransformation extends Transformation
      *
      * @param DefinitionCall $definitionCall
      * @param integer|string $argumentIndex
-     * @param mixed          $argumentValue
+     * @param mixed          $argumentArgumentValue
      *
      * @return bool
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue);
 
     /**
      * Transforms argument value using transformation and returns a new one.

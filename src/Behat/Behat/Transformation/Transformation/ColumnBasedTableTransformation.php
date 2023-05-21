@@ -57,13 +57,13 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
     /**
      * {@inheritdoc}
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
-        if (!$argumentValue instanceof TableNode) {
+        if (!$argumentArgumentValue instanceof TableNode) {
             return false;
         };
 
-        return $this->pattern === 'table:' . implode(',', $argumentValue->getRow(0))
+        return $this->pattern === 'table:' . implode(',', $argumentArgumentValue->getRow(0))
             || $this->pattern === 'table:*';
     }
 
