@@ -23,15 +23,15 @@ jobs:
                 composer-mode: [update]
                 symfony-version: ['']
                 include:
-                    # Get the existing 7.2 to publish the phar
-                    -   php: 7.2
+                    # publish the phar
+                    -   php: 8.2
                         os: ubuntu-latest
                         composer-mode: update
                         publish-phar: true
                         symfony-version: ''
 
-                    # 7.2 build with lowest dependencies
-                    -   php: 7.2
+                    # Build with lowest dependencies
+                    -   php: 8.2
                         os: ubuntu-latest
                         composer-mode: lowest
                         symfony-version: ''
@@ -49,10 +49,6 @@ jobs:
                         symfony-version: ''
 
                     # Symfony jobs:
-                    -   php: 8.1
-                        os: ubuntu-latest
-                        composer-mode: update
-                        symfony-version: '4.4'
                     -   php: 8.2
                         os: ubuntu-latest
                         composer-mode: update
