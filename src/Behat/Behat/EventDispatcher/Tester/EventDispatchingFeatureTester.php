@@ -51,15 +51,15 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $env, $feature, $skip)
+    public function setUp(Environment $env, $spec, $skip)
     {
-        $event = new BeforeFeatureTested($env, $feature);
+        $event = new BeforeFeatureTested($env, $spec);
 
         $this->eventDispatcher->dispatch($event, $event::BEFORE);
 
-        $setup = $this->baseTester->setUp($env, $feature, $skip);
+        $setup = $this->baseTester->setUp($env, $spec, $skip);
 
-        $event = new AfterFeatureSetup($env, $feature, $setup);
+        $event = new AfterFeatureSetup($env, $spec, $setup);
 
         $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
 
@@ -69,23 +69,23 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, $feature, $skip)
+    public function test(Environment $env, $spec, $skip)
     {
-        return $this->baseTester->test($env, $feature, $skip);
+        return $this->baseTester->test($env, $spec, $skip);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function tearDown(Environment $env, $feature, $skip, TestResult $result)
+    public function tearDown(Environment $env, $spec, $skip, TestResult $result)
     {
-        $event = new BeforeFeatureTeardown($env, $feature, $result);
+        $event = new BeforeFeatureTeardown($env, $spec, $result);
 
         $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
 
-        $teardown = $this->baseTester->tearDown($env, $feature, $skip, $result);
+        $teardown = $this->baseTester->tearDown($env, $spec, $skip, $result);
 
-        $event = new AfterFeatureTested($env, $feature, $result, $teardown);
+        $event = new AfterFeatureTested($env, $spec, $result, $teardown);
 
         $this->eventDispatcher->dispatch($event, $event::AFTER);
 

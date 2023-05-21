@@ -18,7 +18,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [7.2, 7.3, 7.4, 8.0, 8.1]
+                php: [7.2, 7.3, 7.4, 8.0, 8.1, 8.2]
                 os: [ubuntu-latest]
                 composer-mode: [update]
                 symfony-version: ['']
@@ -37,13 +37,13 @@ jobs:
                         symfony-version: ''
 
                     # MacOS on latest PHP only
-                    -   php: 8.1
+                    -   php: 8.2
                         os: macos-latest
                         composer-mode: update
                         symfony-version: ''
 
                     # Windows on latest PHP only
-                    -   php: 8.1
+                    -   php: 8.2
                         os: windows-latest
                         composer-mode: update
                         symfony-version: ''
@@ -53,17 +53,17 @@ jobs:
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '4.4'
-                    -   php: 8.1
+                    -   php: 8.2
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '5.4'
-                    -   php: 8.1
+                    -   php: 8.2
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '6.0'
 
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
@@ -107,7 +107,7 @@ jobs:
                     composer install --no-dev -o &&
                     box.phar build
 
-            -   uses: actions/upload-artifact@v1
+            -   uses: actions/upload-artifact@v3
                 name: Publish the PHAR
                 if: matrix.publish-phar == true
                 with:
@@ -118,12 +118,12 @@ jobs:
         runs-on: ubuntu-latest
         name: Static analysis
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: 8.0
+                  php-version: 7.2
                   ini-values: "zend.exception_ignore_args=Off"
                   coverage: none
 
@@ -139,16 +139,15 @@ jobs:
         needs: tests
         if: github.event_name == 'release'
         steps:
-            -   uses: actions/download-artifact@v1
+            -   uses: actions/download-artifact@v3
                 with:
                     name: behat.phar
                     path: .
             -   name: Upload behat.phar
-                uses: actions/upload-release-asset@v1
+                uses: basefas/upload-release-asset-action@v1
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 with:
-                    upload_url: ${{ github.event.release.upload_url }}
+                    release_id: ${{ github.event.release.id }}
                     asset_path: behat.phar
                     asset_name: behat.phar
-                    asset_content_type: application/zip

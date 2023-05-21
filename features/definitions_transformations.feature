@@ -355,6 +355,8 @@ Feature: Step Arguments Transformations
 
       class FeatureContext implements Behat\Behat\Context\Context
       {
+          private $value;
+
           public function __construct()
           {
               unset($this->value);
@@ -434,6 +436,7 @@ Feature: Step Arguments Transformations
       """
       <?php
       class User {
+          public $name;
           private function __construct($name) { $this->name = $name; }
           static public function named($name) { return new static($name); }
       }
@@ -501,13 +504,14 @@ Feature: Step Arguments Transformations
       """
       <?php
       class User {
+          public $name;
           private function __construct($name) { $this->name = $name; }
           static public function named($name) { return new static($name); }
       }
       class FeatureContext implements Behat\Behat\Context\Context
       {
           private $I;
-          private $he;
+          private $she;
 
           /** @Transform */
           public function userFromName($name) : User {
@@ -654,6 +658,8 @@ Feature: Step Arguments Transformations
       }
       class FeatureContext implements Behat\Behat\Context\Context
       {
+          private $I;
+
           /** @Transform */
           public function userFromName($name) : User|int
           {

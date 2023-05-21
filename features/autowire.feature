@@ -28,7 +28,7 @@ Feature: Helper services autowire
       <?php use Psr\Container\ContainerInterface;
 
       class Service1 {public $state;}
-      class Service2 {public $state;}
+      class Service2 {public $state; public $myFlag;}
       class Service3 {public $state;}
       class Service4 {public $state;}
 

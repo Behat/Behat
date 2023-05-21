@@ -36,7 +36,8 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      */
     private $serviceContainer;
     /**
-     * @var Context[]
+     * @var array<class-string<Context>, Context>
+     * @psalm-var class-string-map<T as Context, T>
      */
     private $contexts = array();
 
@@ -103,7 +104,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
     /**
      * Returns list of registered context instances.
      *
-     * @return Context[]
+     * @return list<Context>
      */
     public function getContexts()
     {
@@ -113,9 +114,11 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
     /**
      * Returns registered context by its class name.
      *
-     * @param string $class
+     * @template T of Context
      *
-     * @return Context
+     * @param class-string<T> $class
+     *
+     * @return T
      *
      * @throws ContextNotFoundException If context is not in the environment
      */

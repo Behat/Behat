@@ -58,26 +58,26 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
     /**
      * {@inheritdoc}
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $value)
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
-        if (!$value instanceof TableNode) {
+        if (!$argumentArgumentValue instanceof TableNode) {
             return false;
         };
 
         // What we're doing here is checking that we have a 2 column table.
         // This bit checks we have two columns
         try {
-            $value->getColumn(1);
+            $argumentArgumentValue->getColumn(1);
         } catch (NodeException $e) {
             return false;
         }
 
         // And here we check we don't have a 3rd column
         try {
-            $value->getColumn(2);
+            $argumentArgumentValue->getColumn(2);
         } catch (NodeException $e) {
             // Once we know the table could be a row table, we check against the pattern.
-            return $this->pattern === 'rowtable:' . implode(',', $value->getColumn(0));
+            return $this->pattern === 'rowtable:' . implode(',', $argumentArgumentValue->getColumn(0));
         }
 
         return false;

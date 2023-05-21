@@ -60,10 +60,10 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
     /**
      * {@inheritdoc}
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
-        return $this->tokenTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentValue)
-            && $this->returnTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentValue);
+        return $this->tokenTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentArgumentValue)
+            && $this->returnTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentArgumentValue);
     }
 
     /**
