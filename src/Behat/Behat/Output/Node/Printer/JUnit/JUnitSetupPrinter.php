@@ -1,4 +1,13 @@
 <?php
+
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Hook\Scope\StepScope;
@@ -19,7 +28,6 @@ use Behat\Testwork\Tester\Setup\Teardown;
  */
 class JUnitSetupPrinter implements SetupPrinter
 {
-
     /** @var ExceptionPresenter */
     private $exceptionPresenter;
 
@@ -53,8 +61,6 @@ class JUnitSetupPrinter implements SetupPrinter
     }
 
     /**
-     * @param Formatter $formatter
-     * @param CallResults $results
      * @param string $messageType
      */
     private function handleHookCalls(Formatter $formatter, CallResults $results, $messageType)
@@ -65,6 +71,7 @@ class JUnitSetupPrinter implements SetupPrinter
                 /** @var HookCall $call */
                 $call = $hookCallResult->getCall();
                 $scope = $call->getScope();
+
                 /** @var JUnitOutputPrinter $outputPrinter */
                 $outputPrinter = $formatter->getOutputPrinter();
 
@@ -74,13 +81,12 @@ class JUnitSetupPrinter implements SetupPrinter
                 }
                 $message .= $this->exceptionPresenter->presentException($hookCallResult->getException());
 
-                $attributes = array(
+                $attributes = [
                     'message' => $message,
-                    'type'    => $messageType,
-                );
+                    'type' => $messageType,
+                ];
 
                 $outputPrinter->addTestcaseChild('failure', $attributes);
-
             }
         }
     }

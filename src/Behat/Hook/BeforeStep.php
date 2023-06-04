@@ -11,7 +11,7 @@
 namespace Behat\Hook;
 
 /**
- * Represents an Attribute for BeforeStep hook
+ * Represents an Attribute for BeforeStep hook.
  */
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 final class BeforeStep implements Hook

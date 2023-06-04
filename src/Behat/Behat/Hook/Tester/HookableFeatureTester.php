@@ -30,6 +30,7 @@ final class HookableFeatureTester implements SpecificationTester
      * @var SpecificationTester
      */
     private $baseTester;
+
     /**
      * @var HookDispatcher
      */
@@ -37,9 +38,6 @@ final class HookableFeatureTester implements SpecificationTester
 
     /**
      * Initializes tester.
-     *
-     * @param SpecificationTester $baseTester
-     * @param HookDispatcher      $hookDispatcher
      */
     public function __construct(SpecificationTester $baseTester, HookDispatcher $hookDispatcher)
     {
@@ -67,14 +65,6 @@ final class HookableFeatureTester implements SpecificationTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, $spec, $skip)
-    {
-        return $this->baseTester->test($env, $spec, $skip);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, $spec, $skip, TestResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $spec, $skip, $result);
@@ -87,5 +77,13 @@ final class HookableFeatureTester implements SpecificationTester
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);
 
         return new HookedTeardown($teardown, $hookCallResults);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function test(Environment $env, $spec, $skip)
+    {
+        return $this->baseTester->test($env, $spec, $skip);
     }
 }

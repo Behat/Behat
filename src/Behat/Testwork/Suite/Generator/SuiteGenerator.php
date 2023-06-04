@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -26,7 +26,6 @@ interface SuiteGenerator
      * Checks if generator support provided suite type and settings.
      *
      * @param string $type
-     * @param array  $settings
      *
      * @return bool
      */
@@ -36,7 +35,6 @@ interface SuiteGenerator
      * Generate suite with provided name and settings.
      *
      * @param string $suiteName
-     * @param array  $settings
      *
      * @return Suite
      */

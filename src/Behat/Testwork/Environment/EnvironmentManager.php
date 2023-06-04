@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,16 +27,15 @@ final class EnvironmentManager
     /**
      * @var EnvironmentHandler[]
      */
-    private $handlers = array();
+    private $handlers = [];
+
     /**
      * @var EnvironmentReader[]
      */
-    private $readers = array();
+    private $readers = [];
 
     /**
      * Registers environment handler.
-     *
-     * @param EnvironmentHandler $handler
      */
     public function registerEnvironmentHandler(EnvironmentHandler $handler)
     {
@@ -45,8 +44,6 @@ final class EnvironmentManager
 
     /**
      * Registers environment reader.
-     *
-     * @param EnvironmentReader $reader
      */
     public function registerEnvironmentReader(EnvironmentReader $reader)
     {
@@ -56,11 +53,8 @@ final class EnvironmentManager
     /**
      * Builds new environment for provided test suite.
      *
-     * @param Suite $suite
-     *
-     * @return Environment
-     *
      * @throws EnvironmentBuildException
+     * @return Environment
      */
     public function buildEnvironment(Suite $suite)
     {
@@ -79,12 +73,10 @@ final class EnvironmentManager
     /**
      * Creates new isolated test environment using built one.
      *
-     * @param Environment $environment
-     * @param mixed       $testSubject
-     *
-     * @return Environment
+     * @param mixed $testSubject
      *
      * @throws EnvironmentIsolationException If appropriate environment handler is not found
+     * @return Environment
      */
     public function isolateEnvironment(Environment $environment, $testSubject = null)
     {
@@ -103,13 +95,11 @@ final class EnvironmentManager
     /**
      * Reads all callees from environment using registered environment readers.
      *
-     * @param Environment $environment
-     *
      * @return Callee[]
      */
     public function readEnvironmentCallees(Environment $environment)
     {
-        $callees = array();
+        $callees = [];
         foreach ($this->readers as $reader) {
             if ($reader->supportsEnvironment($environment)) {
                 $callees = array_merge($callees, $reader->readEnvironmentCallees($environment));

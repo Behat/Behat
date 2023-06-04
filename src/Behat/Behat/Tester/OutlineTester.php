@@ -27,37 +27,27 @@ interface OutlineTester
     /**
      * Sets up background for a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
-     * @param bool     $skip
+     * @param bool $skip
      *
      * @return Setup
      */
     public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip);
 
     /**
-     * Tests outline.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
-     * @param bool     $skip
-     *
-     * @return TestResult
-     */
-    public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip);
-
-    /**
      * Sets up background for a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
-     * @param bool     $skip
-     * @param TestResult  $result
+     * @param bool $skip
      *
      * @return Teardown
      */
     public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result);
+
+    /**
+     * Tests outline.
+     *
+     * @param bool $skip
+     *
+     * @return TestResult
+     */
+    public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip);
 }

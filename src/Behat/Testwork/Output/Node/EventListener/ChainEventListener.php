@@ -10,18 +10,15 @@
 
 namespace Behat\Testwork\Output\Node\EventListener;
 
-use ArrayIterator;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
-use Countable;
-use IteratorAggregate;
 
 /**
  * Used to compose formatter event listeners.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ChainEventListener implements EventListener, Countable, IteratorAggregate
+class ChainEventListener implements EventListener, \Countable, \IteratorAggregate
 {
     /**
      * @var EventListener[]
@@ -59,8 +56,8 @@ class ChainEventListener implements EventListener, Countable, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator(): ArrayIterator
+    public function getIterator(): \ArrayIterator
     {
-        return new ArrayIterator($this->listeners);
+        return new \ArrayIterator($this->listeners);
     }
 }

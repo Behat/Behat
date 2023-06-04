@@ -10,13 +10,13 @@
 
 namespace Behat\Behat\Context\Cli;
 
+use Behat\Behat\Context\Snippet\Generator\AggregateContextIdentifier;
 use Behat\Behat\Context\Snippet\Generator\AggregatePatternIdentifier;
 use Behat\Behat\Context\Snippet\Generator\ContextInterfaceBasedContextIdentifier;
 use Behat\Behat\Context\Snippet\Generator\ContextInterfaceBasedPatternIdentifier;
 use Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator;
 use Behat\Behat\Context\Snippet\Generator\FixedContextIdentifier;
 use Behat\Behat\Context\Snippet\Generator\FixedPatternIdentifier;
-use Behat\Behat\Context\Snippet\Generator\AggregateContextIdentifier;
 use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
@@ -35,6 +35,7 @@ final class ContextSnippetsController implements Controller
      * @var ContextSnippetGenerator
      */
     private $generator;
+
     /**
      * @var TranslatorInterface
      */
@@ -42,9 +43,6 @@ final class ContextSnippetsController implements Controller
 
     /**
      * Initialises controller.
-     *
-     * @param ContextSnippetGenerator $generator
-     * @param TranslatorInterface     $translator
      */
     public function __construct(ContextSnippetGenerator $generator, TranslatorInterface $translator)
     {
@@ -59,12 +57,16 @@ final class ContextSnippetsController implements Controller
     {
         $command
             ->addOption(
-                '--snippets-for', null, InputOption::VALUE_OPTIONAL,
-                "Specifies which context class to generate snippets for."
+                '--snippets-for',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Specifies which context class to generate snippets for.'
             )
             ->addOption(
-                '--snippets-type', null, InputOption::VALUE_REQUIRED,
-                "Specifies which type of snippets (turnip, regex) to generate."
+                '--snippets-type',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Specifies which type of snippets (turnip, regex) to generate.'
             );
     }
 
@@ -74,18 +76,18 @@ final class ContextSnippetsController implements Controller
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->generator->setContextIdentifier(
-            new AggregateContextIdentifier(array(
+            new AggregateContextIdentifier([
                 new ContextInterfaceBasedContextIdentifier(),
                 new FixedContextIdentifier($input->getOption('snippets-for')),
-                new InteractiveContextIdentifier($this->translator, $input, $output)
-            ))
+                new InteractiveContextIdentifier($this->translator, $input, $output),
+            ])
         );
 
         $this->generator->setPatternIdentifier(
-            new AggregatePatternIdentifier(array(
+            new AggregatePatternIdentifier([
                 new ContextInterfaceBasedPatternIdentifier(),
-                new FixedPatternIdentifier($input->getOption('snippets-type'))
-            ))
+                new FixedPatternIdentifier($input->getOption('snippets-type')),
+            ])
         );
     }
 }

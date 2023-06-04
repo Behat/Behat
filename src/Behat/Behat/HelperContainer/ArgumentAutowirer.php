@@ -12,11 +12,6 @@ namespace Behat\Behat\HelperContainer;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
-use ReflectionClass;
-use ReflectionFunctionAbstract;
-use ReflectionNamedType;
-use ReflectionParameter;
-use ReflectionException;
 
 /**
  * Automatically wires arguments of a given function from inside the container by using type-hints.
@@ -32,8 +27,6 @@ final class ArgumentAutowirer
 
     /**
      * Initialises wirer.
-     *
-     * @param PsrContainerInterface $container
      */
     public function __construct(PsrContainerInterface $container)
     {
@@ -43,14 +36,10 @@ final class ArgumentAutowirer
     /**
      * Autowires given arguments using provided container.
      *
-     * @param ReflectionFunctionAbstract $reflection
-     * @param array $arguments
-     *
-     * @return array
-     *
      * @throws ContainerExceptionInterface if unset argument typehint can not be resolved from container
+     * @return array
      */
-    public function autowireArguments(ReflectionFunctionAbstract $reflection, array $arguments)
+    public function autowireArguments(\ReflectionFunctionAbstract $reflection, array $arguments)
     {
         $newArguments = $arguments;
         foreach ($reflection->getParameters() as $index => $parameter) {
@@ -67,13 +56,11 @@ final class ArgumentAutowirer
      *
      * Argument is wireable if it was not previously set and it has a class type-hint.
      *
-     * @param array               $arguments
-     * @param integer             $index
-     * @param ReflectionParameter $parameter
+     * @param int $index
      *
      * @return bool
      */
-    private function isArgumentWireable(array $arguments, $index, ReflectionParameter $parameter)
+    private function isArgumentWireable(array $arguments, $index, \ReflectionParameter $parameter)
     {
         if (isset($arguments[$index]) || array_key_exists($index, $arguments)) {
             return false;
@@ -86,28 +73,27 @@ final class ArgumentAutowirer
         return (bool) $this->getClassFromParameter($parameter);
     }
 
-    private function getClassFromParameter(ReflectionParameter $parameter) : ?string
+    private function getClassFromParameter(\ReflectionParameter $parameter): ?string
     {
-        if (!($type = $parameter->getType()) || !($type instanceof ReflectionNamedType)) {
+        if (!($type = $parameter->getType()) || !($type instanceof \ReflectionNamedType)) {
             return null;
         }
 
         try {
             $typeString = $type->getName();
 
-            if ($typeString == 'self') {
+            if ($typeString === 'self') {
                 return $parameter->getDeclaringClass()->getName();
             }
-            elseif ($typeString == 'parent') {
+            if ($typeString === 'parent') {
                 return $parameter->getDeclaringClass()->getParentClass()->getName();
             }
 
             // will throw if not valid class
-            new ReflectionClass($typeString);
+            new \ReflectionClass($typeString);
 
             return $typeString;
-
-        } catch (ReflectionException $e) {
+        } catch (\ReflectionException $e) {
             return null;
         }
     }

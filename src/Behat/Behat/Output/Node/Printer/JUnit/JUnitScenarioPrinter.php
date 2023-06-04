@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
-use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
@@ -49,21 +49,18 @@ final class JUnitScenarioPrinter
     private $outlineStepCount;
 
     /**
-     * @var JUnitDurationListener|null
+     * @var null|JUnitDurationListener
      */
     private $durationListener;
 
-    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, JUnitDurationListener $durationListener = null)
+    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, ?JUnitDurationListener $durationListener = null)
     {
         $this->resultConverter = $resultConverter;
         $this->outlineStoreListener = $outlineListener;
         $this->durationListener = $durationListener;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, string $file = null)
+    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null)
     {
         $name = implode(' ', array_map(function ($l) {
             return trim($l);
@@ -76,12 +73,12 @@ final class JUnitScenarioPrinter
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $testCaseAttributes = array(
-            'name'      => $name,
+        $testCaseAttributes = [
+            'name' => $name,
             'classname' => $feature->getTitle(),
-            'status'    => $this->resultConverter->convertResultToString($result),
-            'time'      => $this->durationListener ? $this->durationListener->getDuration($scenario) : ''
-        );
+            'status' => $this->resultConverter->convertResultToString($result),
+            'time' => $this->durationListener ? $this->durationListener->getDuration($scenario) : '',
+        ];
 
         if ($file) {
             $cwd = realpath(getcwd());
@@ -94,20 +91,18 @@ final class JUnitScenarioPrinter
     }
 
     /**
-     * @param ExampleNode $scenario
      * @return string
      */
     private function buildExampleName(ExampleNode $scenario)
     {
         $currentOutline = $this->outlineStoreListener->getCurrentOutline($scenario);
         if ($currentOutline === $this->lastOutline) {
-            $this->outlineStepCount++;
+            ++$this->outlineStepCount;
         } else {
             $this->lastOutline = $currentOutline;
             $this->outlineStepCount = 1;
         }
 
-        $name = $currentOutline->getTitle() . ' #' . $this->outlineStepCount;
-        return $name;
+        return $currentOutline->getTitle() . ' #' . $this->outlineStepCount;
     }
 }

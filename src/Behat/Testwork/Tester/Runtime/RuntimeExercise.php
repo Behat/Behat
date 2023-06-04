@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -32,6 +32,7 @@ final class RuntimeExercise implements Exercise
      * @var EnvironmentManager
      */
     private $envManager;
+
     /**
      * @var SuiteTester
      */
@@ -39,9 +40,6 @@ final class RuntimeExercise implements Exercise
 
     /**
      * Initializes tester.
-     *
-     * @param EnvironmentManager $envManager
-     * @param SuiteTester        $suiteTester
      */
     public function __construct(EnvironmentManager $envManager, SuiteTester $suiteTester)
     {
@@ -60,9 +58,17 @@ final class RuntimeExercise implements Exercise
     /**
      * {@inheritdoc}
      */
+    public function tearDown(array $iterators, $skip, TestResult $result)
+    {
+        return new SuccessfulTeardown();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function test(array $iterators, $skip = false)
     {
-        $results = array();
+        $results = [];
         foreach (GroupedSpecificationIterator::group($iterators) as $iterator) {
             $environment = $this->envManager->buildEnvironment($iterator->getSuite());
 
@@ -76,13 +82,5 @@ final class RuntimeExercise implements Exercise
         }
 
         return new TestResults($results);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown(array $iterators, $skip, TestResult $result)
-    {
-        return new SuccessfulTeardown();
     }
 }

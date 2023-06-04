@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -26,34 +26,27 @@ interface SuiteTester
     /**
      * Sets up suite for a test.
      *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
-     * @param bool               $skip
+     * @param bool $skip
      *
      * @return Setup
      */
     public function setUp(Environment $env, SpecificationIterator $iterator, $skip);
 
     /**
-     * Tests provided suite specifications.
-     *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
-     * @param bool               $skip
-     *
-     * @return TestResult
-     */
-    public function test(Environment $env, SpecificationIterator $iterator, $skip);
-
-    /**
      * Tears down suite after a test.
      *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
-     * @param bool               $skip
-     * @param TestResult            $result
+     * @param bool $skip
      *
      * @return Teardown
      */
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result);
+
+    /**
+     * Tests provided suite specifications.
+     *
+     * @param bool $skip
+     *
+     * @return TestResult
+     */
+    public function test(Environment $env, SpecificationIterator $iterator, $skip);
 }

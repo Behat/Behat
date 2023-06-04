@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,17 +20,7 @@ final class Memory
     /**
      * @var string[]
      */
-    private $units = array('B', 'Kb', 'Mb', 'Gb', 'Tb');
-
-    /**
-     * Returns current memory usage.
-     *
-     * @return integer
-     */
-    public function getMemoryUsage()
-    {
-        return memory_get_usage();
-    }
+    private $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
 
     /**
      * Presents memory usage in human-readable form.
@@ -43,9 +33,19 @@ final class Memory
     }
 
     /**
+     * Returns current memory usage.
+     *
+     * @return int
+     */
+    public function getMemoryUsage()
+    {
+        return memory_get_usage();
+    }
+
+    /**
      * Humanizes usage information.
      *
-     * @param integer $bytes
+     * @param int $bytes
      *
      * @return string
      */
@@ -57,6 +57,6 @@ final class Memory
             return 'Can not calculate memory usage';
         }
 
-        return sprintf('%.2f%s', ($bytes / pow(1024, floor($e))), $this->units[$e]);
+        return sprintf('%.2f%s', $bytes / pow(1024, floor($e)), $this->units[$e]);
     }
 }

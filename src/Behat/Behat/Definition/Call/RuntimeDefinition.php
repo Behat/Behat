@@ -24,6 +24,7 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
      * @var string
      */
     private $type;
+
     /**
      * @var string
      */
@@ -48,6 +49,14 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
     /**
      * {@inheritdoc}
      */
+    public function __toString()
+    {
+        return $this->getType() . ' ' . $this->getPattern();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getType()
     {
         return $this->type;
@@ -59,13 +68,5 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
     public function getPattern()
     {
         return $this->pattern;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return $this->getType() . ' ' . $this->getPattern();
     }
 }

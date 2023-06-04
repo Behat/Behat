@@ -15,7 +15,6 @@ use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTeardown;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SpecificationTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -31,6 +30,7 @@ final class EventDispatchingFeatureTester implements SpecificationTester
      * @var SpecificationTester
      */
     private $baseTester;
+
     /**
      * @var EventDispatcherInterface
      */
@@ -38,9 +38,6 @@ final class EventDispatchingFeatureTester implements SpecificationTester
 
     /**
      * Initializes tester.
-     *
-     * @param SpecificationTester      $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(SpecificationTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {
@@ -69,14 +66,6 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, $spec, $skip)
-    {
-        return $this->baseTester->test($env, $spec, $skip);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, $spec, $skip, TestResult $result)
     {
         $event = new BeforeFeatureTeardown($env, $spec, $result);
@@ -90,5 +79,13 @@ final class EventDispatchingFeatureTester implements SpecificationTester
         $this->eventDispatcher->dispatch($event, $event::AFTER);
 
         return $teardown;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function test(Environment $env, $spec, $skip)
+    {
+        return $this->baseTester->test($env, $spec, $skip);
     }
 }

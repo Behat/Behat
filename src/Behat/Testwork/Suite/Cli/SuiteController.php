@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -29,16 +29,14 @@ final class SuiteController implements Controller
      * @var SuiteRegistry
      */
     private $registry;
+
     /**
      * @var array
      */
-    private $suiteConfigurations = array();
+    private $suiteConfigurations = [];
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRegistry $registry
-     * @param array         $suiteConfigurations
      */
     public function __construct(SuiteRegistry $registry, array $suiteConfigurations)
     {
@@ -51,7 +49,10 @@ final class SuiteController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption('--suite', '-s', InputOption::VALUE_REQUIRED,
+        $command->addOption(
+            '--suite',
+            '-s',
+            InputOption::VALUE_REQUIRED,
             'Only execute a specific suite.'
         );
     }
@@ -76,7 +77,9 @@ final class SuiteController implements Controller
             }
 
             $this->registry->registerSuiteConfiguration(
-                $name, $config['type'], $config['settings']
+                $name,
+                $config['type'],
+                $config['settings']
             );
         }
     }

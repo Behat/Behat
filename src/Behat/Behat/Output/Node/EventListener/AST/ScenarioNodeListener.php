@@ -30,14 +30,17 @@ final class ScenarioNodeListener implements EventListener
      * @var string
      */
     private $beforeEventName;
+
     /**
      * @var string
      */
     private $afterEventName;
+
     /**
      * @var ScenarioPrinter
      */
     private $scenarioPrinter;
+
     /**
      * @var SetupPrinter
      */
@@ -46,16 +49,14 @@ final class ScenarioNodeListener implements EventListener
     /**
      * Initializes listener.
      *
-     * @param string            $beforeEventName
-     * @param string            $afterEventName
-     * @param ScenarioPrinter   $scenarioPrinter
-     * @param null|SetupPrinter $setupPrinter
+     * @param string $beforeEventName
+     * @param string $afterEventName
      */
     public function __construct(
         $beforeEventName,
         $afterEventName,
         ScenarioPrinter $scenarioPrinter,
-        SetupPrinter $setupPrinter = null
+        ?SetupPrinter $setupPrinter = null
     ) {
         $this->beforeEventName = $beforeEventName;
         $this->afterEventName = $afterEventName;
@@ -79,8 +80,7 @@ final class ScenarioNodeListener implements EventListener
     /**
      * Prints scenario/background header on BEFORE event.
      *
-     * @param Formatter                     $formatter
-     * @param ScenarioLikeTested|AfterSetup $event
+     * @param AfterSetup|ScenarioLikeTested $event
      * @param string                        $eventName
      */
     private function printHeaderOnBeforeEvent(Formatter $formatter, ScenarioLikeTested $event, $eventName)
@@ -99,8 +99,7 @@ final class ScenarioNodeListener implements EventListener
     /**
      * Prints scenario/background footer on AFTER event.
      *
-     * @param Formatter                      $formatter
-     * @param ScenarioLikeTested|AfterTested $event
+     * @param AfterTested|ScenarioLikeTested $event
      * @param string                         $eventName
      */
     private function printFooterOnAfterEvent(Formatter $formatter, ScenarioLikeTested $event, $eventName)

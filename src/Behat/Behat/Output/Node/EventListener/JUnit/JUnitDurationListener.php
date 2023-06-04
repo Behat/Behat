@@ -1,4 +1,13 @@
 <?php
+
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Behat\Behat\Output\Node\EventListener\JUnit;
 
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
@@ -15,12 +24,12 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 
 final class JUnitDurationListener implements EventListener
 {
-    private $scenarioTimerStore = array();
-    private $featureTimerStore = array();
-    private $resultStore = array();
-    private $featureResultStore = array();
+    private $scenarioTimerStore = [];
+    private $featureTimerStore = [];
+    private $resultStore = [];
+    private $featureResultStore = [];
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureBeforeScenarioEvent($event);
@@ -32,12 +41,14 @@ final class JUnitDurationListener implements EventListener
     public function getDuration(ScenarioLikeInterface $scenario)
     {
         $key = $this->getHash($scenario);
+
         return array_key_exists($key, $this->resultStore) ? $this->resultStore[$key] : '';
     }
 
     public function getFeatureDuration(FeatureNode $feature)
     {
         $key = $this->getHash($feature);
+
         return array_key_exists($key, $this->featureResultStore) ? $this->featureResultStore[$key] : '';
     }
 

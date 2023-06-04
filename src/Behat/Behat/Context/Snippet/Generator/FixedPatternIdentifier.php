@@ -10,8 +10,6 @@
 
 namespace Behat\Behat\Context\Snippet\Generator;
 
-use Behat\Behat\Context\Context;
-
 /**
  * Identifier that always returns same pattern type.
  *

@@ -15,7 +15,6 @@ use Behat\Testwork\EventDispatcher\Event\AfterSuiteSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTeardown;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SuiteTester;
@@ -32,6 +31,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
      * @var SuiteTester
      */
     private $baseTester;
+
     /**
      * @var EventDispatcherInterface
      */
@@ -39,9 +39,6 @@ final class EventDispatchingSuiteTester implements SuiteTester
 
     /**
      * Initializes tester.
-     *
-     * @param SuiteTester              $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(SuiteTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {
@@ -70,25 +67,25 @@ final class EventDispatchingSuiteTester implements SuiteTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
-    {
-        return $this->baseTester->test($env, $iterator, $skip);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         $event = new BeforeSuiteTeardown($env, $iterator, $result);
-        $this->eventDispatcher->dispatch( $event, $event::BEFORE_TEARDOWN);
+        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);
 
         $event = new AfterSuiteTested($env, $iterator, $result, $teardown);
 
-        $this->eventDispatcher->dispatch( $event, $event::AFTER);
+        $this->eventDispatcher->dispatch($event, $event::AFTER);
 
         return $teardown;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
+    {
+        return $this->baseTester->test($env, $iterator, $skip);
     }
 }

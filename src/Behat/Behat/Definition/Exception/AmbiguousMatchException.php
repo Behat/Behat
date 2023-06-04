@@ -11,7 +11,6 @@
 namespace Behat\Behat\Definition\Exception;
 
 use Behat\Behat\Definition\Definition;
-use RuntimeException;
 
 /**
  * Represents an exception caused by an ambiguous step definition match.
@@ -21,16 +20,17 @@ use RuntimeException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class AmbiguousMatchException extends RuntimeException implements SearchException
+final class AmbiguousMatchException extends \RuntimeException implements SearchException
 {
     /**
      * @var string
      */
     private $text;
+
     /**
      * @var Definition[]
      */
-    private $matches = array();
+    private $matches = [];
 
     /**
      * Initializes ambiguous exception.
@@ -43,7 +43,7 @@ final class AmbiguousMatchException extends RuntimeException implements SearchEx
         $this->text = $text;
         $this->matches = $matches;
 
-        $message = sprintf("Ambiguous match of \"%s\":", $text);
+        $message = sprintf('Ambiguous match of "%s":', $text);
         foreach ($matches as $definition) {
             $message .= sprintf(
                 "\nto `%s` from %s",

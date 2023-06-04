@@ -16,12 +16,6 @@ use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use Closure;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionFunctionAbstract;
-use ReflectionMethod;
-use ReflectionParameter;
-use ReflectionNamedType;
 
 /**
  * By-type object transformation.
@@ -30,21 +24,6 @@ use ReflectionNamedType;
  */
 final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-
-    /**
-     * {@inheritdoc}
-     */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
-    {
-        $returnClass = self::getReturnClass($method);
-
-        if (null === $returnClass) {
-            return false;
-        }
-
-        return '' === $pattern;
-    }
-
     /**
      * Initializes transformation.
      *
@@ -55,6 +34,28 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     public function __construct($pattern, $callable, $description = null)
     {
         parent::__construct($callable, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return 'ReturnTypeTransform';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function supportsPatternAndMethod($pattern, \ReflectionMethod $method)
+    {
+        $returnClass = self::getReturnClass($method);
+
+        if (null === $returnClass) {
+            return false;
+        }
+
+        return '' === $pattern;
     }
 
     /**
@@ -82,7 +83,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
             $definitionCall->getEnvironment(),
             $definitionCall->getCallee(),
             $this,
-            array($argumentValue)
+            [$argumentValue]
         );
 
         $result = $callCenter->makeCall($call);
@@ -111,21 +112,11 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return 'ReturnTypeTransform';
-    }
-
-    /**
      * Extracts parameters from provided definition call.
-     *
-     * @param ReflectionFunctionAbstract $reflection
      *
      * @return null|string
      */
-    static private function getReturnClass(ReflectionFunctionAbstract $reflection)
+    private static function getReturnClass(\ReflectionFunctionAbstract $reflection)
     {
         $type = $reflection->getReturnType();
 
@@ -134,7 +125,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
             return null;
         }
 
-        if ($type instanceof ReflectionNamedType) {
+        if ($type instanceof \ReflectionNamedType) {
             return $type->getName();
         }
 
@@ -144,21 +135,21 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Attempts to get definition parameter using its index (parameter position or name).
      *
-     * @param DefinitionCall $definitionCall
-     * @param string|integer $argumentIndex
+     * @param int|string $argumentIndex
      *
      * @return null|string
      */
     private function getParameterClassNameByIndex(DefinitionCall $definitionCall, $argumentIndex)
     {
         $parameters = array_filter(
-            array_filter($this->getCallParameters($definitionCall),
+            array_filter(
+                $this->getCallParameters($definitionCall),
                 $this->hasIndex($argumentIndex)
             ),
             $this->getClassReflection()
         );
 
-        if (count($parameters) == 0) {
+        if (count($parameters) === 0) {
             return null;
         }
 
@@ -168,9 +159,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Extracts parameters from provided definition call.
      *
-     * @param DefinitionCall $definitionCall
-     *
-     * @return ReflectionParameter[]
+     * @return \ReflectionParameter[]
      */
     private function getCallParameters(DefinitionCall $definitionCall)
     {
@@ -180,9 +169,9 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Returns appropriate closure for filtering parameter by index.
      *
-     * @param string|integer $index
+     * @param int|string $index
      *
-     * @return Closure
+     * @return \Closure
      */
     private function hasIndex($index)
     {
@@ -194,11 +183,11 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      *
      * @param string $index
      *
-     * @return Closure
+     * @return \Closure
      */
     private function hasName($index)
     {
-        return function (ReflectionParameter $parameter) use ($index) {
+        return function (\ReflectionParameter $parameter) use ($index) {
             return $index === $parameter->getName();
         };
     }
@@ -206,33 +195,29 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Returns closure to filter parameter by position.
      *
-     * @param integer $index
+     * @param int $index
      *
-     * @return Closure
+     * @return \Closure
      */
     private function hasPosition($index)
     {
-        return function (ReflectionParameter $parameter) use ($index) {
+        return function (\ReflectionParameter $parameter) use ($index) {
             return $index === $parameter->getPosition();
         };
     }
 
     /**
      * Returns closure to filter parameter by typehinted class.
-     *
-     * @return Closure
      */
-    private function getClassReflection() : closure
+    private function getClassReflection(): \closure
     {
-        return function (ReflectionParameter $parameter) : ?ReflectionClass
-        {
+        return function (\ReflectionParameter $parameter): ?\ReflectionClass {
             $t = $parameter->getType();
 
-            if ($t instanceof ReflectionNamedType) {
+            if ($t instanceof \ReflectionNamedType) {
                 try {
-                    return new ReflectionClass($t->getName());
-                }
-                catch (ReflectionException $t) {
+                    return new \ReflectionClass($t->getName());
+                } catch (\ReflectionException $t) {
                     return null;
                 }
             }

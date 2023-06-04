@@ -27,37 +27,27 @@ interface ScenarioTester
     /**
      * Sets up example for a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param bool     $skip
+     * @param bool $skip
      *
      * @return Setup
      */
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip);
 
     /**
-     * Tests example.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param bool     $skip
-     *
-     * @return TestResult
-     */
-    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip);
-
-    /**
      * Tears down example after a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param bool     $skip
-     * @param TestResult  $result
+     * @param bool $skip
      *
      * @return Teardown
      */
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result);
+
+    /**
+     * Tests example.
+     *
+     * @param bool $skip
+     *
+     * @return TestResult
+     */
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip);
 }

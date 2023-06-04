@@ -19,7 +19,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Exercise that is ordered according to a specified algorithm
+ * Exercise that is ordered according to a specified algorithm.
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
@@ -45,9 +45,6 @@ final class OrderedExercise implements Exercise
      */
     private $decoratedExercise;
 
-    /**
-     * @param Exercise $decoratedExercise
-     */
     public function __construct(Exercise $decoratedExercise)
     {
         $this->orderer = new NoopOrderer();
@@ -58,7 +55,7 @@ final class OrderedExercise implements Exercise
      * Sets up exercise for a test.
      *
      * @param SpecificationIterator[] $iterators
-     * @param bool $skip
+     * @param bool                    $skip
      *
      * @return Setup
      */
@@ -68,24 +65,10 @@ final class OrderedExercise implements Exercise
     }
 
     /**
-     * Tests suites specifications.
-     *
-     * @param SpecificationIterator[] $iterators
-     * @param bool $skip
-     *
-     * @return TestResult
-     */
-    public function test(array $iterators, $skip)
-    {
-        return $this->decoratedExercise->test($this->order($iterators), $skip);
-    }
-
-    /**
      * Tears down exercise after a test.
      *
      * @param SpecificationIterator[] $iterators
-     * @param bool $skip
-     * @param TestResult $result
+     * @param bool                    $skip
      *
      * @return Teardown
      */
@@ -95,9 +78,20 @@ final class OrderedExercise implements Exercise
     }
 
     /**
-     * Replace the algorithm being used for prioritisation
+     * Tests suites specifications.
      *
-     * @param Orderer $orderer
+     * @param SpecificationIterator[] $iterators
+     * @param bool                    $skip
+     *
+     * @return TestResult
+     */
+    public function test(array $iterators, $skip)
+    {
+        return $this->decoratedExercise->test($this->order($iterators), $skip);
+    }
+
+    /**
+     * Replace the algorithm being used for prioritisation.
      */
     public function setOrderer(Orderer $orderer)
     {
@@ -105,12 +99,12 @@ final class OrderedExercise implements Exercise
     }
 
     /**
-     * @param SpecificationIterator[] $iterators
+     * @param  SpecificationIterator[] $iterators
      * @return SpecificationIterator[]
      */
     private function order(array $iterators)
     {
-        if (!$this->ordered || $this->unordered != $iterators) {
+        if (!$this->ordered || $this->unordered !== $iterators) {
             $this->unordered = $iterators;
             $this->ordered = $this->orderer->order($iterators);
         }

@@ -10,14 +10,12 @@
 
 namespace Behat\Behat\Context\Exception;
 
-use InvalidArgumentException;
-
 /**
  * Represents an exception when provided class exists, but is not an acceptable as a context.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class WrongContextClassException extends InvalidArgumentException implements ContextException
+final class WrongContextClassException extends \InvalidArgumentException implements ContextException
 {
     /**
      * @var string
@@ -27,8 +25,8 @@ final class WrongContextClassException extends InvalidArgumentException implemen
     /**
      * Initializes exception.
      *
-     * @param integer $message
-     * @param string  $class
+     * @param int    $message
+     * @param string $class
      */
     public function __construct($message, $class)
     {

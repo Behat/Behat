@@ -25,6 +25,7 @@ final class StepTextPainter
      * @var PatternTransformer
      */
     private $patternTransformer;
+
     /**
      * @var ResultToStringConverter
      */
@@ -32,9 +33,6 @@ final class StepTextPainter
 
     /**
      * Initializes painter.
-     *
-     * @param PatternTransformer      $patternTransformer
-     * @param ResultToStringConverter $resultConverter
      */
     public function __construct(PatternTransformer $patternTransformer, ResultToStringConverter $resultConverter)
     {
@@ -45,9 +43,7 @@ final class StepTextPainter
     /**
      * Colorizes step text arguments according to definition.
      *
-     * @param string     $text
-     * @param Definition $definition
-     * @param TestResult $result
+     * @param string $text
      *
      * @return string
      */
@@ -63,7 +59,7 @@ final class StepTextPainter
         }
 
         // Find arguments with offsets
-        $matches = array();
+        $matches = [];
         preg_match($regex, $text, $matches, PREG_OFFSET_CAPTURE);
         array_shift($matches);
 
@@ -86,7 +82,7 @@ final class StepTextPainter
 
             $begin = substr($text, 0, $offset);
             $end = substr($text, $lastReplacementPosition);
-            $format = "{-$style}{+$paramStyle}%s{-$paramStyle}{+$style}";
+            $format = "{-{$style}}{+{$paramStyle}}%s{-{$paramStyle}}{+{$style}}";
             $text = sprintf("%s{$format}%s", $begin, $value, $end);
 
             // Keep track of how many extra characters are added
@@ -95,12 +91,10 @@ final class StepTextPainter
         }
 
         // Replace "<", ">" with colorized ones
-        $text = preg_replace(
+        return preg_replace(
             '/(<[^>]+>)/',
-            "{-$style}{+$paramStyle}\$1{-$paramStyle}{+$style}",
+            "{-{$style}}{+{$paramStyle}}\$1{-{$paramStyle}}{+{$style}}",
             $text
         );
-
-        return $text;
     }
 }

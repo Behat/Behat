@@ -21,13 +21,12 @@ use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 
 /**
- * Listens for Outline events store the current one
+ * Listens for Outline events store the current one.
  *
  * @author James Watson <james@sitepulse.org>
  */
 final class JUnitOutlineStoreListener implements EventListener
 {
-
     /**
      * @var SuitePrinter
      */
@@ -36,12 +35,10 @@ final class JUnitOutlineStoreListener implements EventListener
     /**
      * @var array
      */
-    private $lineScenarioMap = array();
+    private $lineScenarioMap = [];
 
     /**
      * Initializes listener.
-     *
-     * @param SuitePrinter $suitePrinter
      */
     public function __construct(SuitePrinter $suitePrinter)
     {
@@ -60,9 +57,15 @@ final class JUnitOutlineStoreListener implements EventListener
     }
 
     /**
+     * @return OutlineNode
+     */
+    public function getCurrentOutline(ExampleNode $scenario)
+    {
+        return $this->lineScenarioMap[$scenario->getLine()];
+    }
+
+    /**
      * Captures outline into the ivar on outline BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureOutlineOnBeforeOutlineEvent(Event $event)
     {
@@ -76,10 +79,6 @@ final class JUnitOutlineStoreListener implements EventListener
         }
     }
 
-    /**
-     * @param Formatter $formatter
-     * @param Event     $event
-     */
     private function printHeaderOnBeforeSuiteTestedEvent(Formatter $formatter, Event $event)
     {
         if (!$event instanceof BeforeSuiteTested) {
@@ -88,24 +87,11 @@ final class JUnitOutlineStoreListener implements EventListener
         $this->suitePrinter->printHeader($formatter, $event->getSuite());
     }
 
-    /**
-     * @param Formatter $formatter
-     * @param Event     $event
-     */
     private function printFooterOnAfterSuiteTestedEvent(Formatter $formatter, Event $event)
     {
         if (!$event instanceof AfterSuiteTested) {
             return;
         }
         $this->suitePrinter->printFooter($formatter, $event->getSuite());
-    }
-
-    /**
-     * @param ExampleNode $scenario
-     * @return OutlineNode
-     */
-    public function getCurrentOutline(ExampleNode $scenario)
-    {
-        return $this->lineScenarioMap[$scenario->getLine()];
     }
 }

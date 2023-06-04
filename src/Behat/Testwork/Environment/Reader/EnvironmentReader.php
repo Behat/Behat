@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -26,16 +26,12 @@ interface EnvironmentReader
     /**
      * Checks if reader supports an environment.
      *
-     * @param Environment $environment
-     *
      * @return bool
      */
     public function supportsEnvironment(Environment $environment);
 
     /**
      * Reads callees from an environment.
-     *
-     * @param Environment $environment
      *
      * @return Callee[]
      */

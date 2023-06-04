@@ -28,14 +28,17 @@ class FireOnlySiblingsListener implements EventListener
      * @var string
      */
     private $beforeEventName;
+
     /**
      * @var string
      */
     private $afterEventName;
+
     /**
      * @var EventListener
      */
     private $descendant;
+
     /**
      * @var bool
      */
@@ -44,9 +47,8 @@ class FireOnlySiblingsListener implements EventListener
     /**
      * Initializes listener.
      *
-     * @param string        $beforeEventName
-     * @param string        $afterEventName
-     * @param EventListener $descendant
+     * @param string $beforeEventName
+     * @param string $afterEventName
      */
     public function __construct($beforeEventName, $afterEventName, EventListener $descendant)
     {

@@ -28,7 +28,7 @@ final class JUnitSuitePrinter implements SuitePrinter
      */
     private $statistics;
 
-    public function __construct(PhaseStatistics $statistics = null)
+    public function __construct(?PhaseStatistics $statistics = null)
     {
         $this->statistics = $statistics;
     }

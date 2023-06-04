@@ -18,25 +18,28 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class OutputFactory
 {
-    public const VERBOSITY_NORMAL       = 1;
-    public const VERBOSITY_VERBOSE      = 2;
+    public const VERBOSITY_NORMAL = 1;
+    public const VERBOSITY_VERBOSE = 2;
     public const VERBOSITY_VERY_VERBOSE = 3;
-    public const VERBOSITY_DEBUG        = 4;
+    public const VERBOSITY_DEBUG = 4;
 
     /**
      * @var null|string
      */
     private $outputPath;
+
     /**
      * @var array
      */
-    private $outputStyles = array();
+    private $outputStyles = [];
+
     /**
      * @var null|bool
      */
-    private $outputDecorated = null;
+    private $outputDecorated;
+
     /**
-     * @var integer
+     * @var int
      */
     private $verbosityLevel = 0;
 
@@ -62,8 +65,6 @@ abstract class OutputFactory
 
     /**
      * Sets output styles.
-     *
-     * @param array $styles
      */
     public function setOutputStyles(array $styles)
     {
@@ -103,7 +104,7 @@ abstract class OutputFactory
     /**
      * Sets output verbosity level.
      *
-     * @param integer $level
+     * @param int $level
      */
     public function setOutputVerbosity($level)
     {
@@ -113,7 +114,7 @@ abstract class OutputFactory
     /**
      * Returns output verbosity level.
      *
-     * @return integer
+     * @return int
      */
     public function getOutputVerbosity()
     {

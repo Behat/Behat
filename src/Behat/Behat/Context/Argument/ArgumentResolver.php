@@ -11,7 +11,6 @@
 namespace Behat\Behat\Context\Argument;
 
 use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
-use ReflectionClass;
 
 /**
  * Resolves arguments of context constructors.
@@ -25,10 +24,9 @@ interface ArgumentResolver
     /**
      * Resolves context constructor arguments.
      *
-     * @param ReflectionClass $classReflection
-     * @param mixed[]         $arguments
+     * @param mixed[] $arguments
      *
      * @return mixed[]
      */
-    public function resolveArguments(ReflectionClass $classReflection, array $arguments);
+    public function resolveArguments(\ReflectionClass $classReflection, array $arguments);
 }

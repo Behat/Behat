@@ -26,6 +26,7 @@ final class BeforeFeatureTeardown extends FeatureTested implements BeforeTeardow
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var TestResult
      */
@@ -33,10 +34,6 @@ final class BeforeFeatureTeardown extends FeatureTested implements BeforeTeardow
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param TestResult  $result
      */
     public function __construct(Environment $env, FeatureNode $feature, TestResult $result)
     {

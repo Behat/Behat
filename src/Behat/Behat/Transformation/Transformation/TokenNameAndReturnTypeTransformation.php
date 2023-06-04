@@ -15,7 +15,6 @@ use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
-use ReflectionMethod;
 
 /**
  * Name and return type object transformation.
@@ -28,19 +27,11 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
      * @var TokenNameTransformation
      */
     private $tokenTransformation;
+
     /**
      * @var ReturnTypeTransformation
      */
     private $returnTransformation;
-
-    /**
-     * {@inheritdoc}
-     */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
-    {
-        return TokenNameTransformation::supportsPatternAndMethod($pattern, $method)
-            && ReturnTypeTransformation::supportsPatternAndMethod('', $method);
-    }
 
     /**
      * Initializes transformation.
@@ -55,6 +46,23 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
         $this->returnTransformation = new ReturnTypeTransformation('', $callable, $description);
 
         parent::__construct($callable, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return 'NamedReturnTypeTransform ' . $this->getPattern();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function supportsPatternAndMethod($pattern, \ReflectionMethod $method)
+    {
+        return TokenNameTransformation::supportsPatternAndMethod($pattern, $method)
+            && ReturnTypeTransformation::supportsPatternAndMethod('', $method);
     }
 
     /**
@@ -75,7 +83,7 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
             $definitionCall->getEnvironment(),
             $definitionCall->getCallee(),
             $this,
-            array($argumentValue)
+            [$argumentValue]
         );
 
         $result = $callCenter->makeCall($call);
@@ -101,13 +109,5 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
     public function getPattern()
     {
         return $this->tokenTransformation->getPattern();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return 'NamedReturnTypeTransform ' . $this->getPattern();
     }
 }

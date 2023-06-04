@@ -27,7 +27,7 @@ final class TestworkEventDispatcher extends EventDispatcher
     /**
      * {@inheritdoc}
      *
-     * @param string|null $eventName
+     * @param null|string $eventName
      */
     public function getListeners($eventName = null): array
     {

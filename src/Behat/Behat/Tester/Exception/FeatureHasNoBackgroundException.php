@@ -12,14 +12,13 @@ namespace Behat\Behat\Tester\Exception;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Exception\TestworkException;
-use RuntimeException;
 
 /**
  * Represents exception throw during attempt to test non-existent feature background.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class FeatureHasNoBackgroundException extends RuntimeException implements TestworkException
+final class FeatureHasNoBackgroundException extends \RuntimeException implements TestworkException
 {
     /**
      * @var FeatureNode
@@ -29,8 +28,7 @@ final class FeatureHasNoBackgroundException extends RuntimeException implements 
     /**
      * Initializes exception.
      *
-     * @param string      $message
-     * @param FeatureNode $feature
+     * @param string $message
      */
     public function __construct($message, FeatureNode $feature)
     {

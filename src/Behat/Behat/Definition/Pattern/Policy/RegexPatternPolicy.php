@@ -24,11 +24,11 @@ final class RegexPatternPolicy implements PatternPolicy
     /**
      * @var string[string]
      */
-    private static $replacePatterns = array(
-        "/(?<=\W|^)\\\'(?:((?!\\').)*)\\\'(?=\W|$)/" => "'([^']*)'", // Single quoted strings
-        '/(?<=\W|^)\"(?:[^\"]*)\"(?=\W|$)/'          => "\"([^\"]*)\"", // Double quoted strings
-        '/(?<=\W|^)(\d+)(?=\W|$)/'                   => "(\\d+)", // Numbers
-    );
+    private static $replacePatterns = [
+        "/(?<=\\W|^)\\\\'(?:((?!\\').)*)\\\\'(?=\\W|$)/" => "'([^']*)'", // Single quoted strings
+        '/(?<=\W|^)\"(?:[^\"]*)\"(?=\W|$)/' => '"([^"]*)"', // Double quoted strings
+        '/(?<=\W|^)(\d+)(?=\W|$)/' => '(\\d+)', // Numbers
+    ];
 
     /**
      * {@inheritdoc}
@@ -101,9 +101,8 @@ final class RegexPatternPolicy implements PatternPolicy
         $canonicalText = preg_replace(array_keys(self::$replacePatterns), '', $stepText);
         $canonicalText = Transliterator::transliterate($canonicalText, ' ');
         $canonicalText = preg_replace('/[^a-zA-Z\_\ ]/', '', $canonicalText);
-        $canonicalText = str_replace(' ', '', ucwords($canonicalText));
 
-        return $canonicalText;
+        return str_replace(' ', '', ucwords($canonicalText));
     }
 
     /**
@@ -112,7 +111,7 @@ final class RegexPatternPolicy implements PatternPolicy
      * @param string $stepText
      * @param string $stepRegex
      *
-     * @return integer
+     * @return int
      */
     private function countPlaceholders($stepText, $stepRegex)
     {

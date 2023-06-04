@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -17,7 +17,6 @@ use Behat\Testwork\Call\Filter\ResultFilter;
 use Behat\Testwork\Call\Handler\CallHandler;
 use Behat\Testwork\Call\Handler\ExceptionHandler;
 use Exception;
-use Throwable;
 
 /**
  * Makes calls and handles results using registered handlers.
@@ -29,24 +28,25 @@ final class CallCenter
     /**
      * @var CallFilter[]
      */
-    private $callFilters = array();
+    private $callFilters = [];
+
     /**
      * @var CallHandler[]
      */
-    private $callHandlers = array();
+    private $callHandlers = [];
+
     /**
      * @var ResultFilter[]
      */
-    private $resultFilters = array();
+    private $resultFilters = [];
+
     /**
      * @var ExceptionHandler[]
      */
-    private $exceptionHandlers = array();
+    private $exceptionHandlers = [];
 
     /**
      * Registers call filter.
-     *
-     * @param CallFilter $filter
      */
     public function registerCallFilter(CallFilter $filter)
     {
@@ -55,8 +55,6 @@ final class CallCenter
 
     /**
      * Registers call handler.
-     *
-     * @param CallHandler $handler
      */
     public function registerCallHandler(CallHandler $handler)
     {
@@ -65,8 +63,6 @@ final class CallCenter
 
     /**
      * Registers call result filter.
-     *
-     * @param ResultFilter $filter
      */
     public function registerResultFilter(ResultFilter $filter)
     {
@@ -75,8 +71,6 @@ final class CallCenter
 
     /**
      * Registers result exception handler.
-     *
-     * @param ExceptionHandler $handler
      */
     public function registerExceptionHandler(ExceptionHandler $handler)
     {
@@ -86,23 +80,19 @@ final class CallCenter
     /**
      * Handles call and its result using registered filters and handlers.
      *
-     * @param Call $call
-     *
      * @return CallResult
      */
     public function makeCall(Call $call)
     {
         try {
             return $this->filterResult($this->handleCall($this->filterCall($call)));
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             return new CallResult($call, null, $this->handleException($exception), null);
         }
     }
 
     /**
      * Filters call using registered filters and returns a filtered one.
-     *
-     * @param Call $call
      *
      * @return Call
      */
@@ -122,11 +112,8 @@ final class CallCenter
     /**
      * Handles call using registered call handlers.
      *
-     * @param Call $call
-     *
-     * @return CallResult
-     *
      * @throws CallHandlingException If call handlers didn't produce call result
+     * @return CallResult
      */
     private function handleCall(Call $call)
     {
@@ -147,8 +134,6 @@ final class CallCenter
     /**
      * Filters call result using registered filters and returns a filtered one.
      *
-     * @param CallResult $result
-     *
      * @return CallResult
      */
     private function filterResult(CallResult $result)
@@ -167,9 +152,9 @@ final class CallCenter
     /**
      * Handles exception using registered handlers and returns a handled one.
      *
-     * @param Throwable $exception
+     * @param \Throwable $exception
      *
-     * @return Throwable
+     * @return \Throwable
      */
     private function handleException($exception)
     {
@@ -181,7 +166,7 @@ final class CallCenter
             $exception = $handler->handleException($exception);
         }
 
-        if ($exception instanceof Throwable) {
+        if ($exception instanceof \Throwable) {
             return new FatalThrowableError($exception);
         }
 

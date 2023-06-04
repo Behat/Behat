@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -24,15 +24,14 @@ final class OutputManager
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+
     /**
      * @var Formatter[]
      */
-    private $formatters = array();
+    private $formatters = [];
 
     /**
      * Initializes manager.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
@@ -41,8 +40,6 @@ final class OutputManager
 
     /**
      * Registers formatter.
-     *
-     * @param Formatter $formatter
      */
     public function registerFormatter(Formatter $formatter)
     {
@@ -70,9 +67,8 @@ final class OutputManager
      *
      * @param string $name
      *
-     * @return Formatter
-     *
      * @throws FormatterNotFoundException
+     * @return Formatter
      */
     public function getFormatter($name)
     {
@@ -131,7 +127,7 @@ final class OutputManager
      */
     public function disableAllFormatters()
     {
-        array_map(array($this, 'disableFormatter'), array_keys($this->formatters));
+        array_map([$this, 'disableFormatter'], array_keys($this->formatters));
     }
 
     /**
@@ -151,14 +147,17 @@ final class OutputManager
                 $printer->setOutputVerbosity($parameterValue);
 
                 return;
+
             case 'output_path':
                 $printer->setOutputPath($parameterValue);
 
                 return;
+
             case 'output_decorate':
                 $printer->setOutputDecorated($parameterValue);
 
                 return;
+
             case 'output_styles':
                 $printer->setOutputStyles($parameterValue);
 
@@ -172,7 +171,6 @@ final class OutputManager
      * Sets provided formatter parameters.
      *
      * @param string $formatter
-     * @param array  $parameters
      */
     public function setFormatterParameters($formatter, array $parameters)
     {
@@ -196,8 +194,6 @@ final class OutputManager
 
     /**
      * Sets provided parameters to all registered formatters.
-     *
-     * @param array $parameters
      */
     public function setFormattersParameters(array $parameters)
     {

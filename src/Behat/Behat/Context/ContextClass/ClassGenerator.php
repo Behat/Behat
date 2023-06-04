@@ -25,7 +25,6 @@ interface ClassGenerator
     /**
      * Checks if generator supports provided context class.
      *
-     * @param Suite  $suite
      * @param string $contextClass
      *
      * @return bool
@@ -35,7 +34,6 @@ interface ClassGenerator
     /**
      * Generates context class code.
      *
-     * @param Suite  $suite
      * @param string $contextClass
      *
      * @return string The context class source code

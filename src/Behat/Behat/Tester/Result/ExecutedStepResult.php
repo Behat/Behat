@@ -26,6 +26,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
      * @var SearchResult
      */
     private $searchResult;
+
     /**
      * @var null|CallResult
      */
@@ -33,9 +34,6 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
 
     /**
      * Initialize test result.
-     *
-     * @param SearchResult $searchResult
-     * @param CallResult   $callResult
      */
     public function __construct(SearchResult $searchResult, CallResult $callResult)
     {
@@ -108,6 +106,6 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
      */
     public function isPassed()
     {
-        return self::PASSED == $this->getResultCode();
+        return self::PASSED === $this->getResultCode();
     }
 }

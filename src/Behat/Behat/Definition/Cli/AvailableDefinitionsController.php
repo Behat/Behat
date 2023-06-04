@@ -32,14 +32,17 @@ final class AvailableDefinitionsController implements Controller
      * @var SuiteRepository
      */
     private $suiteRepository;
+
     /**
      * @var DefinitionWriter
      */
     private $writer;
+
     /**
      * @var ConsoleDefinitionListPrinter
      */
     private $listPrinter;
+
     /**
      * @var ConsoleDefinitionInformationPrinter
      */
@@ -47,11 +50,6 @@ final class AvailableDefinitionsController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRepository                     $suiteRepository
-     * @param DefinitionWriter                    $writer
-     * @param ConsoleDefinitionListPrinter        $listPrinter
-     * @param ConsoleDefinitionInformationPrinter $infoPrinter
      */
     public function __construct(
         SuiteRepository $suiteRepository,
@@ -70,12 +68,15 @@ final class AvailableDefinitionsController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption('--definitions', '-d', InputOption::VALUE_REQUIRED,
-            "Print all available step definitions:" . PHP_EOL .
-            "- use <info>--definitions l</info> to just list definition expressions." . PHP_EOL .
-            "- use <info>--definitions i</info> to show definitions with extended info." . PHP_EOL .
+        $command->addOption(
+            '--definitions',
+            '-d',
+            InputOption::VALUE_REQUIRED,
+            'Print all available step definitions:' . PHP_EOL .
+            '- use <info>--definitions l</info> to just list definition expressions.' . PHP_EOL .
+            '- use <info>--definitions i</info> to show definitions with extended info.' . PHP_EOL .
             "- use <info>--definitions 'needle'</info> to find specific definitions." . PHP_EOL .
-            "Use <info>--lang</info> to see definitions in specific language."
+            'Use <info>--lang</info> to see definitions in specific language.'
         );
     }
 

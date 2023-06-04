@@ -30,8 +30,6 @@ final class FilesystemScenariosListLocator implements SpecificationLocator
 
     /**
      * Initializes locator.
-     *
-     * @param Gherkin $gherkin
      */
     public function __construct(Gherkin $gherkin)
     {
@@ -43,7 +41,7 @@ final class FilesystemScenariosListLocator implements SpecificationLocator
      */
     public function getLocatorExamples()
     {
-        return array("a scenarios list file <comment>(*.scenarios)</comment>.");
+        return ['a scenarios list file <comment>(*.scenarios)</comment>.'];
     }
 
     /**

@@ -28,14 +28,17 @@ final class AfterScenarioScope implements ScenarioScope, AfterTestScope
      * @var Environment
      */
     private $environment;
+
     /**
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var Scenario
      */
     private $scenario;
+
     /**
      * @var TestResult
      */
@@ -43,11 +46,6 @@ final class AfterScenarioScope implements ScenarioScope, AfterTestScope
 
     /**
      * Initializes scope.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param TestResult  $result
      */
     public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario, TestResult $result)
     {

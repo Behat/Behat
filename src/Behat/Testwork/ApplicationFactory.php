@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -24,6 +24,19 @@ use Behat\Testwork\ServiceContainer\ExtensionManager;
  */
 abstract class ApplicationFactory
 {
+    /**
+     * Creates application instance.
+     *
+     * @return Application
+     */
+    public function createApplication()
+    {
+        $configurationLoader = $this->createConfigurationLoader();
+        $extensionManager = $this->createExtensionManager();
+
+        return new Application($this->getName(), $this->getVersion(), $configurationLoader, $extensionManager);
+    }
+
     /**
      * Returns application name.
      *
@@ -58,19 +71,6 @@ abstract class ApplicationFactory
      * @return null|string
      */
     abstract protected function getConfigPath();
-
-    /**
-     * Creates application instance.
-     *
-     * @return Application
-     */
-    public function createApplication()
-    {
-        $configurationLoader = $this->createConfigurationLoader();
-        $extensionManager = $this->createExtensionManager();
-
-        return new Application($this->getName(), $this->getVersion(), $configurationLoader, $extensionManager);
-    }
 
     /**
      * Creates configuration loader.

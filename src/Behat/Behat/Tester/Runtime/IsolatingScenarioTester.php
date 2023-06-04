@@ -32,6 +32,7 @@ final class IsolatingScenarioTester implements ScenarioTester
      * @var ScenarioTester
      */
     private $decoratedTester;
+
     /**
      * @var EnvironmentManager
      */
@@ -39,9 +40,6 @@ final class IsolatingScenarioTester implements ScenarioTester
 
     /**
      * Initialises tester.
-     *
-     * @param ScenarioTester     $decoratedTester
-     * @param EnvironmentManager $envManager
      */
     public function __construct(ScenarioTester $decoratedTester, EnvironmentManager $envManager)
     {
@@ -60,6 +58,14 @@ final class IsolatingScenarioTester implements ScenarioTester
     /**
      * {@inheritdoc}
      */
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
+    {
+        return new SuccessfulTeardown();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
         $isolatedEnvironment = $this->envManager->isolateEnvironment($env, $scenario);
@@ -72,13 +78,5 @@ final class IsolatingScenarioTester implements ScenarioTester
         $integerResult = new IntegerTestResult($testResult->getResultCode());
 
         return new TestWithSetupResult($setup, $integerResult, $teardown);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
-    {
-        return new SuccessfulTeardown();
     }
 }

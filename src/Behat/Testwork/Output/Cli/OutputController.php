@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -32,8 +32,6 @@ class OutputController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param OutputManager $manager
      */
     public function __construct(OutputManager $manager)
     {
@@ -47,19 +45,25 @@ class OutputController implements Controller
     {
         $command
             ->addOption(
-                '--format', '-f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                '--format',
+                '-f',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'How to format tests output. <comment>pretty</comment> is default.' . PHP_EOL .
                 'Available formats are:' . PHP_EOL . $this->getFormatterDescriptions() .
                 'You can use multiple formats at the same time.'
             )
             ->addOption(
-                '--out', '-o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                '--out',
+                '-o',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Write format output to a file/directory instead of' . PHP_EOL .
                 'STDOUT <comment>(output_path)</comment>. You can also provide different' . PHP_EOL .
                 'outputs to multiple formats.'
             )
             ->addOption(
-                '--format-settings', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                '--format-settings',
+                null,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Set formatters parameters using json object.' . PHP_EOL .
                 'Keys are parameter names, values are values.'
             );
@@ -79,10 +83,6 @@ class OutputController implements Controller
 
     /**
      * Configures formatters based on container, input and output configurations.
-     *
-     * @param array           $formats
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function configureFormatters(array $formats, InputInterface $input, OutputInterface $output)
     {
@@ -92,8 +92,6 @@ class OutputController implements Controller
 
     /**
      * Enables formatters.
-     *
-     * @param array $formats
      */
     protected function enableFormatters(array $formats)
     {
@@ -107,9 +105,6 @@ class OutputController implements Controller
 
     /**
      * Sets formatters parameters based on input & output.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function setFormattersParameters(InputInterface $input, OutputInterface $output)
     {
@@ -151,13 +146,11 @@ class OutputController implements Controller
     /**
      * Initializes multiple formatters with different outputs.
      *
-     * @param array   $formats
-     * @param array   $outputs
      * @param bool $decorated
      */
     private function configureOutputs(array $formats, array $outputs, $decorated = false)
     {
-        if (1 == count($outputs) && !$this->isStandardOutput($outputs[0])) {
+        if (1 === count($outputs) && !$this->isStandardOutput($outputs[0])) {
             $outputPath = $this->locateOutputPath($outputs[0]);
 
             $this->manager->setFormattersParameter('output_path', $outputPath);
@@ -200,10 +193,11 @@ class OutputController implements Controller
      */
     private function isAbsolutePath($file)
     {
-        if ($file[0] == '/' || $file[0] == '\\'
-            || (strlen($file) > 3 && ctype_alpha($file[0])
-                && $file[1] == ':'
-                && ($file[2] == '\\' || $file[2] == '/')
+        if ($file[0] === '/' || $file[0] === '\\'
+            || (
+                strlen($file) > 3 && ctype_alpha($file[0])
+                && $file[1] === ':'
+                && ($file[2] === '\\' || $file[2] === '/')
             )
             || null !== parse_url($file, PHP_URL_SCHEME)
         ) {
@@ -228,7 +222,8 @@ class OutputController implements Controller
                     $comment .= $formatter->getDescription();
 
                     return $comment;
-                }, $this->manager->getFormatters()
+                },
+                $this->manager->getFormatters()
             )
         ) . PHP_EOL;
     }

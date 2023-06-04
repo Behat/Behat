@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -25,16 +25,12 @@ interface ResultFilter
     /**
      * Checks if filter supports call result.
      *
-     * @param CallResult $result
-     *
      * @return bool
      */
     public function supportsResult(CallResult $result);
 
     /**
      * Filters call result and returns a new result.
-     *
-     * @param CallResult $result
      *
      * @return CallResult
      */

@@ -31,20 +31,20 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      * @var string
      */
     private $suite;
+
     /**
      * @var ContainerInterface
      */
     private $serviceContainer;
+
     /**
      * @var array<class-string<Context>, Context>
      * @psalm-var class-string-map<T as Context, T>
      */
-    private $contexts = array();
+    private $contexts = [];
 
     /**
      * Initializes environment.
-     *
-     * @param Suite $suite
      */
     public function __construct(Suite $suite)
     {
@@ -53,8 +53,6 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
 
     /**
      * Registers context instance in the environment.
-     *
-     * @param Context $context
      */
     public function registerContext(Context $context)
     {
@@ -64,7 +62,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
     /**
      * {@inheritdoc}
      */
-    public function setServiceContainer(ContainerInterface $container = null)
+    public function setServiceContainer(?ContainerInterface $container = null)
     {
         $this->serviceContainer = $container;
     }
@@ -118,9 +116,8 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      *
      * @param class-string<T> $class
      *
-     * @return T
-     *
      * @throws ContextNotFoundException If context is not in the environment
+     * @return T
      */
     public function getContext($class)
     {
@@ -150,7 +147,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
         $callable = $callee->getCallable();
 
         if ($callee->isAnInstanceMethod()) {
-            return array($this->getContext($callable[0]), $callable[1]);
+            return [$this->getContext($callable[0]), $callable[1]];
         }
 
         return $callable;

@@ -10,10 +10,10 @@
 
 namespace Behat\Testwork\Ordering\Cli;
 
+use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\Ordering\Exception\InvalidOrderException;
 use Behat\Testwork\Ordering\OrderedExercise;
 use Behat\Testwork\Ordering\Orderer\Orderer;
-use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Preloads scenarios and then modifies the order when --order is passed
+ * Preloads scenarios and then modifies the order when --order is passed.
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
@@ -31,20 +31,19 @@ final class OrderController implements Controller
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+
     /**
      * @var OrderedExercise
      */
     private $exercise;
+
     /**
      * @var array
      */
-    private $orderers = array();
+    private $orderers = [];
 
     /**
      * Initializes controller.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param OrderedExercise $exercise
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, OrderedExercise $exercise)
     {
@@ -54,12 +53,13 @@ final class OrderController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param SymfonyCommand $command
      */
     public function configure(SymfonyCommand $command)
     {
-        $command->addOption('--order', null, InputOption::VALUE_REQUIRED,
+        $command->addOption(
+            '--order',
+            null,
+            InputOption::VALUE_REQUIRED,
             'Set an order in which to execute the specifications (this will result in slower feedback).'
         );
     }
@@ -67,10 +67,7 @@ final class OrderController implements Controller
     /**
      * Executes controller.
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * @return null|int
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -81,16 +78,14 @@ final class OrderController implements Controller
         }
 
         if (!array_key_exists($orderer, $this->orderers)) {
-           throw new InvalidOrderException(sprintf("Order option '%s' was not recognised", $orderer));
+            throw new InvalidOrderException(sprintf("Order option '%s' was not recognised", $orderer));
         }
 
         $this->exercise->setOrderer($this->orderers[$orderer]);
     }
 
     /**
-     * Register a new available controller
-     *
-     * @param Orderer $orderer
+     * Register a new available controller.
      */
     public function registerOrderer(Orderer $orderer)
     {

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -25,19 +25,16 @@ interface ExceptionStringer
     /**
      * Checks if stringer supports provided exception.
      *
-     * @param Exception $exception
-     *
      * @return bool
      */
-    public function supportsException(Exception $exception);
+    public function supportsException(\Exception $exception);
 
     /**
      * Strings provided exception.
      *
-     * @param Exception $exception
-     * @param integer   $verbosity
+     * @param int $verbosity
      *
      * @return string
      */
-    public function stringException(Exception $exception, $verbosity);
+    public function stringException(\Exception $exception, $verbosity);
 }

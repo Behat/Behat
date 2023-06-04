@@ -16,7 +16,6 @@ use Behat\Step\Definition;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
-use ReflectionMethod;
 
 /**
  * Reads definition Attributes from the context class.
@@ -28,11 +27,11 @@ final class DefinitionAttributeReader implements AttributeReader
     /**
      * @var string[]
      */
-    private static $classes = array(
+    private static $classes = [
         Given::class => 'Behat\Behat\Definition\Call\Given',
-        When::class  => 'Behat\Behat\Definition\Call\When',
-        Then::class  => 'Behat\Behat\Definition\Call\Then',
-    );
+        When::class => 'Behat\Behat\Definition\Call\When',
+        Then::class => 'Behat\Behat\Definition\Call\Then',
+    ];
 
     /**
      * @var DocBlockHelper
@@ -41,8 +40,6 @@ final class DefinitionAttributeReader implements AttributeReader
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
     public function __construct(DocBlockHelper $docBlockHelper)
     {
@@ -50,9 +47,9 @@ final class DefinitionAttributeReader implements AttributeReader
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
-    public function readCallees(string $contextClass, ReflectionMethod $method)
+    public function readCallees(string $contextClass, \ReflectionMethod $method)
     {
         if (\PHP_MAJOR_VERSION < 8) {
             return [];
@@ -66,7 +63,7 @@ final class DefinitionAttributeReader implements AttributeReader
         $callees = [];
         foreach ($attributes as $attribute) {
             $class = self::$classes[$attribute->getName()];
-            $callable = array($contextClass, $method->getName());
+            $callable = [$contextClass, $method->getName()];
             $description = null;
             if ($docBlock = $method->getDocComment()) {
                 $description = $this->docBlockHelper->extractDescription($docBlock);

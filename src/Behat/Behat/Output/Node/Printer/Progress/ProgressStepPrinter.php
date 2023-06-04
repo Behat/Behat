@@ -29,15 +29,14 @@ final class ProgressStepPrinter implements StepPrinter
      * @var ResultToStringConverter
      */
     private $resultConverter;
+
     /**
-     * @var integer
+     * @var int
      */
     private $stepsPrinted = 0;
 
     /**
      * Initializes printer.
-     *
-     * @param ResultToStringConverter $resultConverter
      */
     public function __construct(ResultToStringConverter $resultConverter)
     {
@@ -54,23 +53,32 @@ final class ProgressStepPrinter implements StepPrinter
 
         switch ($result->getResultCode()) {
             case TestResult::PASSED:
-                $printer->write("{+$style}.{-$style}");
+                $printer->write("{+{$style}}.{-{$style}}");
+
                 break;
+
             case TestResult::SKIPPED:
-                $printer->write("{+$style}-{-$style}");
+                $printer->write("{+{$style}}-{-{$style}}");
+
                 break;
+
             case TestResult::PENDING:
-                $printer->write("{+$style}P{-$style}");
+                $printer->write("{+{$style}}P{-{$style}}");
+
                 break;
+
             case StepResult::UNDEFINED:
-                $printer->write("{+$style}U{-$style}");
+                $printer->write("{+{$style}}U{-{$style}}");
+
                 break;
+
             case TestResult::FAILED:
-                $printer->write("{+$style}F{-$style}");
+                $printer->write("{+{$style}}F{-{$style}}");
+
                 break;
         }
 
-        if (++$this->stepsPrinted % 70 == 0) {
+        if (++$this->stepsPrinted % 70 === 0) {
             $printer->writeln(' ' . $this->stepsPrinted);
         }
     }

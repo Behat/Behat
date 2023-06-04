@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,7 +11,6 @@
 namespace Behat\Testwork\Specification;
 
 use Behat\Testwork\Suite\Suite;
-use EmptyIterator;
 
 /**
  * Represents empty specification iterator.
@@ -20,7 +19,7 @@ use EmptyIterator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class NoSpecificationsIterator extends EmptyIterator implements SpecificationIterator
+final class NoSpecificationsIterator extends \EmptyIterator implements SpecificationIterator
 {
     /**
      * @var Suite
@@ -29,8 +28,6 @@ final class NoSpecificationsIterator extends EmptyIterator implements Specificat
 
     /**
      * Initializes iterator.
-     *
-     * @param Suite $suite
      */
     public function __construct(Suite $suite)
     {

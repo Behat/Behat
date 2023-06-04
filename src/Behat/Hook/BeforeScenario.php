@@ -11,7 +11,7 @@
 namespace Behat\Hook;
 
 /**
- * Represents an Attribute for BeforeScenario hook
+ * Represents an Attribute for BeforeScenario hook.
  */
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 final class BeforeScenario implements Hook

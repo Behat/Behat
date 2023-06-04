@@ -10,14 +10,12 @@
 
 namespace Behat\Behat\HelperContainer\Exception;
 
-use InvalidArgumentException;
-
 /**
  * Represents an exception thrown when service ID is not found inside the container.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ServiceNotFoundException extends InvalidArgumentException implements HelperContainerException, NotFoundException
+final class ServiceNotFoundException extends \InvalidArgumentException implements HelperContainerException, NotFoundException
 {
     /**
      * @var string

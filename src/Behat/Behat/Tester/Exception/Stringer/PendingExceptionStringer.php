@@ -12,7 +12,6 @@ namespace Behat\Behat\Tester\Exception\Stringer;
 
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Testwork\Exception\Stringer\ExceptionStringer;
-use Exception;
 
 /**
  * Strings pending exceptions.
@@ -24,7 +23,7 @@ class PendingExceptionStringer implements ExceptionStringer
     /**
      * {@inheritdoc}
      */
-    public function supportsException(Exception $exception)
+    public function supportsException(\Exception $exception)
     {
         return $exception instanceof PendingException;
     }
@@ -32,7 +31,7 @@ class PendingExceptionStringer implements ExceptionStringer
     /**
      * {@inheritdoc}
      */
-    public function stringException(Exception $exception, $verbosity)
+    public function stringException(\Exception $exception, $verbosity)
     {
         return trim($exception->getMessage());
     }

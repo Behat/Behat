@@ -20,6 +20,13 @@ use Behat\Testwork\Call\Callee;
 interface Definition extends Callee
 {
     /**
+     * Represents definition as a string.
+     *
+     * @return string
+     */
+    public function __toString();
+
+    /**
      * Returns definition type (Given|When|Then).
      *
      * @return string
@@ -32,11 +39,4 @@ interface Definition extends Callee
      * @return string
      */
     public function getPattern();
-
-    /**
-     * Represents definition as a string.
-     *
-     * @return string
-     */
-    public function __toString();
 }

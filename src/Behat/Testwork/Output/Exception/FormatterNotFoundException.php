@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -10,14 +10,12 @@
 
 namespace Behat\Testwork\Output\Exception;
 
-use InvalidArgumentException;
-
 /**
  * Represents an exception thrown because requested formatter is not found.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FormatterNotFoundException extends InvalidArgumentException implements OutputException
+class FormatterNotFoundException extends \InvalidArgumentException implements OutputException
 {
     /**
      * @var string

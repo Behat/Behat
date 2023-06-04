@@ -11,14 +11,13 @@
 namespace Behat\Testwork\Environment\Exception;
 
 use Behat\Testwork\Environment\Environment;
-use RuntimeException;
 
 /**
  * Represents exception thrown during an environment read.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class EnvironmentReadException extends RuntimeException implements EnvironmentException
+final class EnvironmentReadException extends \RuntimeException implements EnvironmentException
 {
     /**
      * @var Environment
@@ -28,8 +27,7 @@ final class EnvironmentReadException extends RuntimeException implements Environ
     /**
      * Initializes exception.
      *
-     * @param string      $message
-     * @param Environment $environment
+     * @param string $message
      */
     public function __construct($message, Environment $environment)
     {

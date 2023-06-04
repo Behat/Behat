@@ -32,6 +32,7 @@ final class HookableStepTester implements StepTester
      * @var StepTester
      */
     private $baseTester;
+
     /**
      * @var HookDispatcher
      */
@@ -39,9 +40,6 @@ final class HookableStepTester implements StepTester
 
     /**
      * Initializes tester.
-     *
-     * @param StepTester     $baseTester
-     * @param HookDispatcher $hookDispatcher
      */
     public function __construct(StepTester $baseTester, HookDispatcher $hookDispatcher)
     {
@@ -69,14 +67,6 @@ final class HookableStepTester implements StepTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip)
-    {
-        return $this->baseTester->test($env, $feature, $step, $skip);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $feature, $step, $skip, $result);
@@ -89,5 +79,13 @@ final class HookableStepTester implements StepTester
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);
 
         return new HookedTeardown($teardown, $hookCallResults);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip)
+    {
+        return $this->baseTester->test($env, $feature, $step, $skip);
     }
 }

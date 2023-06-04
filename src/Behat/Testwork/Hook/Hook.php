@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,6 +20,13 @@ use Behat\Testwork\Call\Callee;
 interface Hook extends Callee
 {
     /**
+     * Represents hook as a string.
+     *
+     * @return string
+     */
+    public function __toString();
+
+    /**
      * Returns hook name.
      *
      * @return string
@@ -32,11 +39,4 @@ interface Hook extends Callee
      * @return string
      */
     public function getScopeName();
-
-    /**
-     * Represents hook as a string.
-     *
-     * @return string
-     */
-    public function __toString();
 }

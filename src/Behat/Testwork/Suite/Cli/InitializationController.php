@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -29,6 +29,7 @@ final class InitializationController implements Controller
      * @var SuiteRepository
      */
     private $repository;
+
     /**
      * @var SuiteBootstrapper
      */
@@ -36,9 +37,6 @@ final class InitializationController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRepository   $repository
-     * @param SuiteBootstrapper $bootstrapper
      */
     public function __construct(SuiteRepository $repository, SuiteBootstrapper $bootstrapper)
     {
@@ -51,7 +49,10 @@ final class InitializationController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption('--init', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--init',
+            null,
+            InputOption::VALUE_NONE,
             'Initialize all registered test suites.'
         );
     }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -14,7 +14,6 @@ use Behat\Testwork\Argument\Validator;
 use Behat\Testwork\Call\Call;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Call\Exception\CallErrorException;
-use Exception;
 
 /**
  * Handles calls in the current runtime.
@@ -24,13 +23,15 @@ use Exception;
 final class RuntimeCallHandler implements CallHandler
 {
     /**
-     * @var integer
+     * @var int
      */
     private $errorReportingLevel;
+
     /**
      * @var bool
      */
     private $obStarted = false;
+
     /**
      * @var Validator
      */
@@ -39,7 +40,7 @@ final class RuntimeCallHandler implements CallHandler
     /**
      * Initializes executor.
      *
-     * @param integer $errorReportingLevel
+     * @param int $errorReportingLevel
      */
     public function __construct($errorReportingLevel = E_ALL)
     {
@@ -72,14 +73,13 @@ final class RuntimeCallHandler implements CallHandler
      *
      * @see set_error_handler()
      *
-     * @param integer $level
-     * @param string  $message
-     * @param string  $file
-     * @param integer $line
-     *
-     * @return bool
+     * @param int    $level
+     * @param string $message
+     * @param string $file
+     * @param int    $line
      *
      * @throws CallErrorException
+     * @return bool
      */
     public function handleError($level, $message, $file, $line)
     {
@@ -92,8 +92,6 @@ final class RuntimeCallHandler implements CallHandler
 
     /**
      * Executes single call.
-     *
-     * @param Call $call
      *
      * @return CallResult
      */
@@ -108,7 +106,7 @@ final class RuntimeCallHandler implements CallHandler
             $arguments = array_values($arguments);
             $this->validator->validateArguments($reflection, $arguments);
             $return = $callable(...$arguments);
-        } catch (Exception $caught) {
+        } catch (\Exception $caught) {
             $exception = $caught;
         }
 
@@ -129,13 +127,11 @@ final class RuntimeCallHandler implements CallHandler
 
     /**
      * Starts error handler and stdout buffering.
-     *
-     * @param Call $call
      */
     private function startErrorAndOutputBuffering(Call $call)
     {
-        $errorReporting = $call->getErrorReportingLevel() ? : $this->errorReportingLevel;
-        set_error_handler(array($this, 'handleError'), $errorReporting);
+        $errorReporting = $call->getErrorReportingLevel() ?: $this->errorReportingLevel;
+        set_error_handler([$this, 'handleError'], $errorReporting);
         $this->obStarted = ob_start();
     }
 
@@ -153,7 +149,7 @@ final class RuntimeCallHandler implements CallHandler
     /**
      * Checks if provided error level is not reportable.
      *
-     * @param integer $level
+     * @param int $level
      *
      * @return bool
      */

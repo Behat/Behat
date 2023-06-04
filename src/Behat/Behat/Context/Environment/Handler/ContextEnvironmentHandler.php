@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\Context\Environment\Handler;
 
-use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
-use Behat\Behat\Context\Argument\SuiteScopedResolverFactoryAdapter;
 use Behat\Behat\Context\Argument\ArgumentResolverFactory;
 use Behat\Behat\Context\Argument\NullFactory;
+use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
+use Behat\Behat\Context\Argument\SuiteScopedResolverFactoryAdapter;
 use Behat\Behat\Context\ContextClass\ClassResolver;
 use Behat\Behat\Context\ContextFactory;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
@@ -37,19 +37,20 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
      * @var ContextFactory
      */
     private $contextFactory;
+
     /**
      * @var ArgumentResolverFactory
      */
     private $resolverFactory;
+
     /**
      * @var ClassResolver[]
      */
-    private $classResolvers = array();
+    private $classResolvers = [];
 
     /**
      * Initializes handler.
      *
-     * @param ContextFactory                                     $factory
      * @param ArgumentResolverFactory|SuiteScopedResolverFactory $resolverFactory
      */
     public function __construct(ContextFactory $factory, $resolverFactory = null)
@@ -65,8 +66,6 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
 
     /**
      * Registers context class resolver.
-     *
-     * @param ClassResolver $resolver
      */
     public function registerClassResolver(ClassResolver $resolver)
     {
@@ -128,8 +127,6 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Returns normalized suite context settings.
      *
-     * @param Suite $suite
-     *
      * @return array
      */
     private function getNormalizedContextSettings(Suite $suite)
@@ -137,14 +134,14 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         return array_map(
             function ($context) {
                 $class = $context;
-                $arguments = array();
+                $arguments = [];
 
                 if (is_array($context)) {
                     $class = current(array_keys($context));
                     $arguments = $context[$class];
                 }
 
-                return array($class, $arguments);
+                return [$class, $arguments];
             },
             $this->getSuiteContexts($suite)
         );
@@ -153,17 +150,15 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Returns array of context classes configured for the provided suite.
      *
-     * @param Suite $suite
-     *
-     * @return string[]
-     *
      * @throws SuiteConfigurationException If `contexts` setting is not an array
+     * @return string[]
      */
     private function getSuiteContexts(Suite $suite)
     {
         if (!is_array($suite->getSetting('contexts'))) {
             throw new SuiteConfigurationException(
-                sprintf('`contexts` setting of the "%s" suite is expected to be an array, %s given.',
+                sprintf(
+                    '`contexts` setting of the "%s" suite is expected to be an array, %s given.',
                     $suite->getName(),
                     gettype($suite->getSetting('contexts'))
                 ),

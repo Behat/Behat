@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,6 +23,7 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
      * @var string
      */
     private $basePath;
+
     /**
      * @var OutputInterface
      */
@@ -31,8 +32,7 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
     /**
      * Initializes logger.
      *
-     * @param string          $basePath
-     * @param OutputInterface $output
+     * @param string $basePath
      */
     public function __construct($basePath, OutputInterface $output)
     {

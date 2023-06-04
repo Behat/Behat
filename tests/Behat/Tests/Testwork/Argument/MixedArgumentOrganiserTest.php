@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Behat\Tests\Testwork\Argument;
 
 use Behat\Testwork\Argument\MixedArgumentOrganiser;
@@ -9,16 +17,16 @@ final class MixedArgumentOrganiserTest extends TestCase
 {
     private $organiser;
 
-    function setUp() : void
+    public function setUp(): void
     {
         $this->organiser = new MixedArgumentOrganiser();
     }
 
     /** @test */
-    function it_organises_nothing_if_no_args()
+    public function itOrganisesNothingIfNoArgs()
     {
         $r = new \ReflectionFunction(
-            function(\DateTimeInterface $d) {}
+            function (\DateTimeInterface $d) {}
         );
         $args = [];
 
@@ -28,31 +36,31 @@ final class MixedArgumentOrganiserTest extends TestCase
     }
 
     /** @test */
-    function it_matches_args_by_position()
+    public function itMatchesArgsByPosition()
     {
         $r = new \ReflectionFunction(
-            function($x, $y) {}
+            function ($x, $y) {}
         );
         $args = [
             1,
             2,
-            3
+            3,
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
 
-        $this->assertSame([1,2], $organised);
+        $this->assertSame([1, 2], $organised);
     }
 
     /** @test */
-    function it_matches_args_by_name()
+    public function itMatchesArgsByName()
     {
         $r = new \ReflectionFunction(
-            function($date) {}
+            function ($date) {}
         );
         $args = [
             'date' => $date = new \DateTime(),
-            'x' => new \stdClass()
+            'x' => new \stdClass(),
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -61,14 +69,14 @@ final class MixedArgumentOrganiserTest extends TestCase
     }
 
     /** @test */
-    function it_matches_args_by_type()
+    public function itMatchesArgsByType()
     {
         $r = new \ReflectionFunction(
-            function(\DateTimeInterface $d) {}
+            function (\DateTimeInterface $d) {}
         );
         $args = [
             'x' => $date = new \DateTime(),
-            'y' => new \stdClass()
+            'y' => new \stdClass(),
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -77,14 +85,14 @@ final class MixedArgumentOrganiserTest extends TestCase
     }
 
     /** @test */
-    function it_matches_args_by_name_over_type()
+    public function itMatchesArgsByNameOverType()
     {
         $r = new \ReflectionFunction(
-            function(\DateTimeInterface $a, $date) {}
+            function (\DateTimeInterface $a, $date) {}
         );
         $args = [
             'date' => $date = new \DateTime(),
-            'x' => 1
+            'x' => 1,
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -96,17 +104,17 @@ final class MixedArgumentOrganiserTest extends TestCase
      * @test
      * @requires PHP >= 8.0
      */
-    function it_matches_union_types()
+    public function itMatchesUnionTypes()
     {
-        $r = eval(<<<CODE
+        $r = eval(<<<'CODE'
             return new \ReflectionFunction(
-              function(int|\DateTimeInterface \$a) {}
+              function(int|\DateTimeInterface $a) {}
             );
 CODE
         );
         $args = [
             'date' => $date = new \DateTime(),
-            'x' => 1
+            'x' => 1,
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);

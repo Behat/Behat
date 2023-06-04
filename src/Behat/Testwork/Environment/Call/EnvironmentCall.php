@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -25,26 +25,26 @@ class EnvironmentCall implements Call
      * @var Environment
      */
     private $environment;
+
     /**
      * @var Callee
      */
     private $callee;
+
     /**
      * @var array
      */
     private $arguments;
+
     /**
-     * @var null|integer
+     * @var null|int
      */
     private $errorReportingLevel;
 
     /**
      * Initializes call.
      *
-     * @param Environment  $environment
-     * @param Callee       $callee
-     * @param array        $arguments
-     * @param null|integer $errorReportingLevel
+     * @param null|int $errorReportingLevel
      */
     public function __construct(
         Environment $environment,

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -43,10 +43,8 @@ final class CliExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
@@ -94,17 +92,15 @@ final class CliExtension implements Extension
 
     /**
      * Loads application command.
-     *
-     * @param ContainerBuilder $container
      */
-    protected function loadCommand(ContainerBuilder $container)
+    private function loadCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Cli\Command', array('%cli.command.name%', array()));
+        $definition = new Definition('Behat\Testwork\Cli\Command', ['%cli.command.name%', []]);
         $definition->setPublic(true);
         $container->setDefinition(self::COMMAND_ID, $definition);
     }
 
-    protected function loadSyntheticServices(ContainerBuilder $container)
+    private function loadSyntheticServices(ContainerBuilder $container)
     {
         $container->register(self::INPUT_ID)->setSynthetic(true)->setPublic(true);
         $container->register(self::OUTPUT_ID)->setSynthetic(true)->setPublic(true);
@@ -112,10 +108,8 @@ final class CliExtension implements Extension
 
     /**
      * Processes all controllers in container.
-     *
-     * @param ContainerBuilder $container
      */
-    protected function processControllers(ContainerBuilder $container)
+    private function processControllers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::CONTROLLER_TAG);
         $container->getDefinition(self::COMMAND_ID)->replaceArgument(1, $references);

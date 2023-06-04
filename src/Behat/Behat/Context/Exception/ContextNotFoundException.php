@@ -10,14 +10,12 @@
 
 namespace Behat\Behat\Context\Exception;
 
-use InvalidArgumentException;
-
 /**
  * Represents an exception thrown when provided context class is not found.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ContextNotFoundException extends InvalidArgumentException implements ContextException
+final class ContextNotFoundException extends \InvalidArgumentException implements ContextException
 {
     /**
      * @var string

@@ -14,8 +14,8 @@ use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Statistics\HookStat;
 use Behat\Behat\Output\Statistics\ScenarioStat;
-use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Output\Statistics\StepStat;
+use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -31,14 +31,17 @@ final class ListPrinter
      * @var ResultToStringConverter
      */
     private $resultConverter;
+
     /**
      * @var ExceptionPresenter
      */
     private $exceptionPresenter;
+
     /**
      * @var TranslatorInterface
      */
     private $translator;
+
     /**
      * @var string
      */
@@ -47,10 +50,7 @@ final class ListPrinter
     /**
      * Initializes printer.
      *
-     * @param ResultToStringConverter $resultConverter
-     * @param ExceptionPresenter      $exceptionPresenter
-     * @param TranslatorInterface     $translator
-     * @param string                  $basePath
+     * @param string $basePath
      */
     public function __construct(
         ResultToStringConverter $resultConverter,
@@ -67,9 +67,8 @@ final class ListPrinter
     /**
      * Prints scenarios list.
      *
-     * @param OutputPrinter  $printer
      * @param string         $intro
-     * @param integer        $resultCode
+     * @param int            $resultCode
      * @param ScenarioStat[] $scenarioStats
      */
     public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats)
@@ -79,7 +78,7 @@ final class ListPrinter
         }
 
         $style = $this->resultConverter->convertResultCodeToString($resultCode);
-        $intro = $this->translator->trans($intro, array(), 'output');
+        $intro = $this->translator->trans($intro, [], 'output');
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
         foreach ($scenarioStats as $stat) {
@@ -93,10 +92,9 @@ final class ListPrinter
     /**
      * Prints step list.
      *
-     * @param OutputPrinter $printer
-     * @param string        $intro
-     * @param integer       $resultCode
-     * @param StepStat[]    $stepStats
+     * @param string     $intro
+     * @param int        $resultCode
+     * @param StepStat[] $stepStats
      */
     public function printStepList(OutputPrinter $printer, $intro, $resultCode, array $stepStats)
     {
@@ -105,7 +103,7 @@ final class ListPrinter
         }
 
         $style = $this->resultConverter->convertResultCodeToString($resultCode);
-        $intro = $this->translator->trans($intro, array(), 'output');
+        $intro = $this->translator->trans($intro, [], 'output');
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
 
@@ -121,9 +119,8 @@ final class ListPrinter
     /**
      * Prints failed hooks list.
      *
-     * @param OutputPrinter $printer
-     * @param string        $intro
-     * @param HookStat[]    $failedHookStats
+     * @param string     $intro
+     * @param HookStat[] $failedHookStats
      */
     public function printFailedHooksList(OutputPrinter $printer, $intro, array $failedHookStats)
     {
@@ -132,7 +129,7 @@ final class ListPrinter
         }
 
         $style = $this->resultConverter->convertResultCodeToString(TestResult::FAILED);
-        $intro = $this->translator->trans($intro, array(), 'output');
+        $intro = $this->translator->trans($intro, [], 'output');
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
         foreach ($failedHookStats as $hookStat) {
@@ -143,12 +140,11 @@ final class ListPrinter
     /**
      * Prints hook stat.
      *
-     * @param OutputPrinter $printer
-     * @param string        $name
-     * @param string        $path
-     * @param string        $style
-     * @param null|string   $stdOut
-     * @param null|string   $error
+     * @param string      $name
+     * @param string      $path
+     * @param string      $style
+     * @param null|string $stdOut
+     * @param null|string $error
      *
      * @deprecated Remove in 4.0
      */
@@ -176,15 +172,17 @@ final class ListPrinter
     /**
      * Prints hook stat.
      *
-     * @param OutputPrinter $printer
-     * @param HookStat      $hookStat
-     * @param string        $style
+     * @param string $style
      */
     private function printHookStat(OutputPrinter $printer, HookStat $hookStat, $style)
     {
         $printer->writeln(
-            sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}',
-                $style, $hookStat->getName(), $style, $this->relativizePaths($hookStat->getPath())
+            sprintf(
+                '    {+%s}%s{-%s} {+comment}# %s{-comment}',
+                $style,
+                $hookStat->getName(),
+                $style,
+                $this->relativizePaths($hookStat->getPath())
             )
         );
 
@@ -207,17 +205,16 @@ final class ListPrinter
     /**
      * Prints hook stat.
      *
-     * @param OutputPrinter $printer
-     * @param integer       $number
-     * @param StepStatV2    $stat
-     * @param string        $style
+     * @param int    $number
+     * @param string $style
      */
     private function printStepStat(OutputPrinter $printer, $number, StepStatV2 $stat, $style)
     {
         $maxLength = max(mb_strlen($stat->getScenarioText(), 'utf8'), mb_strlen($stat->getStepText(), 'utf8') + 2) + 1;
 
         $printer->writeln(
-            sprintf('%03d {+%s}%s{-%s}%s{+comment}# %s{-comment}',
+            sprintf(
+                '%03d {+%s}%s{-%s}%s{+comment}# %s{-comment}',
                 $number,
                 $style,
                 $stat->getScenarioText(),
@@ -228,7 +225,8 @@ final class ListPrinter
         );
 
         $printer->writeln(
-            sprintf('      {+%s}%s{-%s}%s{+comment}# %s{-comment}',
+            sprintf(
+                '      {+%s}%s{-%s}%s{+comment}# %s{-comment}',
                 $style,
                 $stat->getStepText(),
                 $style,

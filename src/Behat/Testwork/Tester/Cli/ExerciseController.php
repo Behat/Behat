@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -39,18 +39,22 @@ final class ExerciseController implements Controller
      * @var SuiteRepository
      */
     private $suiteRepository;
+
     /**
      * @var SpecificationFinder
      */
     private $specificationFinder;
+
     /**
      * @var Exercise
      */
     private $exercise;
+
     /**
      * @var ResultInterpreter
      */
     private $resultInterpreter;
+
     /**
      * @var bool
      */
@@ -59,11 +63,7 @@ final class ExerciseController implements Controller
     /**
      * Initializes controller.
      *
-     * @param SuiteRepository     $suiteRepository
-     * @param SpecificationFinder $specificationFinder
-     * @param Exercise            $exercise
-     * @param ResultInterpreter   $resultInterpreter
-     * @param bool             $skip
+     * @param bool $skip
      */
     public function __construct(
         SuiteRepository $suiteRepository,
@@ -87,14 +87,20 @@ final class ExerciseController implements Controller
         $locatorsExamples = implode(PHP_EOL, array_map(
             function ($locator) {
                 return '- ' . $locator;
-            }, $this->specificationFinder->getExampleLocators()
+            },
+            $this->specificationFinder->getExampleLocators()
         ));
 
         $command
-            ->addArgument('paths', InputArgument::OPTIONAL,
+            ->addArgument(
+                'paths',
+                InputArgument::OPTIONAL,
                 'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples
             )
-            ->addOption('--dry-run', null, InputOption::VALUE_NONE,
+            ->addOption(
+                '--dry-run',
+                null,
+                InputOption::VALUE_NONE,
                 'Invokes formatters without executing the tests and hooks.'
             );
     }
@@ -123,8 +129,6 @@ final class ExerciseController implements Controller
     /**
      * Finds exercise specifications.
      *
-     * @param InputInterface $input
-     *
      * @return SpecificationIterator[]
      */
     private function findSpecifications(InputInterface $input)
@@ -135,7 +139,6 @@ final class ExerciseController implements Controller
     /**
      * Tests exercise specifications.
      *
-     * @param InputInterface          $input
      * @param SpecificationIterator[] $specifications
      *
      * @return TestResult

@@ -23,12 +23,10 @@ final class SnippetWriter
     /**
      * @var SnippetAppender[]
      */
-    private $appenders = array();
+    private $appenders = [];
 
     /**
      * Registers snippet appender.
-     *
-     * @param SnippetAppender $appender
      */
     public function registerSnippetAppender(SnippetAppender $appender)
     {
@@ -50,15 +48,14 @@ final class SnippetWriter
     /**
      * Prints snippets using provided printer.
      *
-     * @param SnippetPrinter     $printer
      * @param AggregateSnippet[] $snippets
      */
     public function printSnippets(SnippetPrinter $printer, array $snippets)
     {
-        $printableSnippets = array();
+        $printableSnippets = [];
         foreach ($snippets as $snippet) {
             foreach ($snippet->getTargets() as $target) {
-                $targetSnippets = array();
+                $targetSnippets = [];
 
                 if (isset($printableSnippets[$target])) {
                     $targetSnippets = $printableSnippets[$target];
@@ -77,18 +74,17 @@ final class SnippetWriter
     /**
      * Prints undefined steps using provided printer.
      *
-     * @param SnippetPrinter  $printer
      * @param UndefinedStep[] $undefinedSteps
      */
     public function printUndefinedSteps(SnippetPrinter $printer, array $undefinedSteps)
     {
-        $printableSteps = array();
+        $printableSteps = [];
         foreach ($undefinedSteps as $undefinedStep) {
             $suiteName = $undefinedStep->getEnvironment()->getSuite()->getName();
             $step = $undefinedStep->getStep();
 
             if (!isset($printableSteps[$suiteName])) {
-                $printableSteps[$suiteName] = array();
+                $printableSteps[$suiteName] = [];
             }
 
             $printableSteps[$suiteName][$step->getText()] = $step;
@@ -101,8 +97,6 @@ final class SnippetWriter
 
     /**
      * Appends snippet to appropriate targets.
-     *
-     * @param AggregateSnippet $snippet
      */
     private function appendSnippet(AggregateSnippet $snippet)
     {

@@ -11,14 +11,13 @@
 namespace Behat\Behat\Snippet\Exception;
 
 use Behat\Testwork\Environment\Environment;
-use RuntimeException;
 
 /**
  * Represents exception caused by an attempt to generate snippet for unsupported environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class EnvironmentSnippetGenerationException extends RuntimeException implements SnippetException
+final class EnvironmentSnippetGenerationException extends \RuntimeException implements SnippetException
 {
     /**
      * @var Environment
@@ -28,8 +27,7 @@ final class EnvironmentSnippetGenerationException extends RuntimeException imple
     /**
      * Initializes exception.
      *
-     * @param string      $message
-     * @param Environment $environment
+     * @param string $message
      */
     public function __construct($message, Environment $environment)
     {

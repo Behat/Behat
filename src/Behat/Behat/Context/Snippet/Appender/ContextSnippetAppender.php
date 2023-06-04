@@ -13,7 +13,6 @@ namespace Behat\Behat\Context\Snippet\Appender;
 use Behat\Behat\Snippet\AggregateSnippet;
 use Behat\Behat\Snippet\Appender\SnippetAppender;
 use Behat\Testwork\Filesystem\FilesystemLogger;
-use ReflectionClass;
 
 /**
  * Appends context-related snippets to their context classes.
@@ -34,10 +33,8 @@ final class ContextSnippetAppender implements SnippetAppender
 
     /**
      * Initializes appender.
-     *
-     * @param null|FilesystemLogger $logger
      */
-    public function __construct(FilesystemLogger $logger = null)
+    public function __construct(?FilesystemLogger $logger = null)
     {
         $this->logger = $logger;
     }
@@ -56,7 +53,7 @@ final class ContextSnippetAppender implements SnippetAppender
     public function appendSnippet(AggregateSnippet $snippet)
     {
         foreach ($snippet->getTargets() as $contextClass) {
-            $reflection = new ReflectionClass($contextClass);
+            $reflection = new \ReflectionClass($contextClass);
             $content = file_get_contents($reflection->getFileName());
 
             foreach ($snippet->getUsedClasses() as $class) {
@@ -65,7 +62,7 @@ final class ContextSnippetAppender implements SnippetAppender
                 }
             }
 
-            $generated = rtrim(strtr($snippet->getSnippet(), array('\\' => '\\\\', '$' => '\\$')));
+            $generated = rtrim(strtr($snippet->getSnippet(), ['\\' => '\\\\', '$' => '\\$']));
             $content = preg_replace('/}\s*$/', "\n" . $generated . "\n}\n", $content);
             $path = $reflection->getFileName();
 
@@ -103,7 +100,7 @@ final class ContextSnippetAppender implements SnippetAppender
      */
     private function importClass($class, $contextFileContent)
     {
-        $replaceWith = "\$1" . 'use ' . $class . ";\n\$2;";
+        $replaceWith = '$1use '. $class . ";\n\$2;";
 
         return preg_replace('@^(.*)(use\s+[^;]*);@m', $replaceWith, $contextFileContent, 1);
     }
@@ -111,8 +108,7 @@ final class ContextSnippetAppender implements SnippetAppender
     /**
      * Logs snippet addition to the provided path (if logger is given).
      *
-     * @param AggregateSnippet $snippet
-     * @param string           $path
+     * @param string $path
      */
     private function logSnippetAddition(AggregateSnippet $snippet, $path)
     {
@@ -121,7 +117,7 @@ final class ContextSnippetAppender implements SnippetAppender
         }
 
         $steps = $snippet->getSteps();
-        $reason = sprintf("`<comment>%s</comment>` definition added", $steps[0]->getText());
+        $reason = sprintf('`<comment>%s</comment>` definition added', $steps[0]->getText());
 
         $this->logger->fileUpdated($path, $reason);
     }

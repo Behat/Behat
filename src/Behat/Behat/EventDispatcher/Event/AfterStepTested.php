@@ -31,14 +31,17 @@ final class AfterStepTested extends StepTested implements AfterTested
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var StepNode
      */
     private $step;
+
     /**
      * @var StepResult
      */
     private $result;
+
     /**
      * @var Teardown
      */
@@ -46,12 +49,6 @@ final class AfterStepTested extends StepTested implements AfterTested
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param StepResult  $result
-     * @param Teardown    $teardown
      */
     public function __construct(
         Environment $env,

@@ -30,8 +30,6 @@ final class FilesystemRerunScenariosListLocator implements SpecificationLocator
 
     /**
      * Initializes locator.
-     *
-     * @param Gherkin $gherkin
      */
     public function __construct(Gherkin $gherkin)
     {
@@ -43,7 +41,7 @@ final class FilesystemRerunScenariosListLocator implements SpecificationLocator
      */
     public function getLocatorExamples()
     {
-        return array();
+        return [];
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,10 +27,12 @@ final class DebugCommand extends BaseCommand
      * @var Application
      */
     private $application;
+
     /**
      * @var ConfigurationLoader
      */
     private $configurationLoader;
+
     /**
      * @var ExtensionManager
      */
@@ -38,10 +40,6 @@ final class DebugCommand extends BaseCommand
 
     /**
      * Initialises command.
-     *
-     * @param Application         $application
-     * @param ConfigurationLoader $configurationLoader
-     * @param ExtensionManager    $extensionManager
      */
     public function __construct(
         Application $application,

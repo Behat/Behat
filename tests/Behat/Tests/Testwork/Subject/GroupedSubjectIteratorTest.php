@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Behat\Tests\Testwork\Subject;
 
 use Behat\Testwork\Specification\GroupedSpecificationIterator;
@@ -13,10 +21,10 @@ class GroupedSubjectIteratorTest extends TestCase
     {
         $suite = $this->prophesize('Behat\Testwork\Suite\Suite')->reveal();
 
-        $iterator = new GroupedSpecificationIterator($suite, array(
+        $iterator = new GroupedSpecificationIterator($suite, [
             new NoSpecificationsIterator($suite),
-            new SpecificationArrayIterator($suite, array($this->prophesize()->reveal())),
-        ));
+            new SpecificationArrayIterator($suite, [$this->prophesize()->reveal()]),
+        ]);
 
         $this->assertEquals(1, iterator_count($iterator));
     }
@@ -25,11 +33,11 @@ class GroupedSubjectIteratorTest extends TestCase
     {
         $suite = $this->prophesize('Behat\Testwork\Suite\Suite')->reveal();
 
-        $iterator = new GroupedSpecificationIterator($suite, array(
-            new SpecificationArrayIterator($suite, array($this->prophesize()->reveal())),
+        $iterator = new GroupedSpecificationIterator($suite, [
+            new SpecificationArrayIterator($suite, [$this->prophesize()->reveal()]),
             new NoSpecificationsIterator($suite),
-            new SpecificationArrayIterator($suite, array($this->prophesize()->reveal())),
-        ));
+            new SpecificationArrayIterator($suite, [$this->prophesize()->reveal()]),
+        ]);
 
         $this->assertEquals(2, iterator_count($iterator));
     }

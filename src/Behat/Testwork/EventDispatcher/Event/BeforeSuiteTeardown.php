@@ -25,6 +25,7 @@ final class BeforeSuiteTeardown extends SuiteTested implements BeforeTeardown
      * @var SpecificationIterator
      */
     private $iterator;
+
     /**
      * @var TestResult
      */
@@ -32,10 +33,6 @@ final class BeforeSuiteTeardown extends SuiteTested implements BeforeTeardown
 
     /**
      * Initializes event.
-     *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
-     * @param TestResult            $result
      */
     public function __construct(Environment $env, SpecificationIterator $iterator, TestResult $result)
     {

@@ -28,18 +28,17 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
     /**
      * @var array<class-string<Context>, array>
      */
-    private $contextClasses = array();
+    private $contextClasses = [];
 
     /**
      * Registers context class.
      *
      * @param class-string<Context> $contextClass
-     * @param null|array            $arguments
      *
      * @throws ContextNotFoundException   If class does not exist
      * @throws WrongContextClassException if class does not implement Context interface
      */
-    public function registerContextClass($contextClass, array $arguments = null)
+    public function registerContextClass($contextClass, ?array $arguments = null)
     {
         if (!class_exists($contextClass)) {
             throw new ContextNotFoundException(sprintf(
@@ -57,7 +56,7 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
             ), $contextClass);
         }
 
-        $this->contextClasses[$contextClass] = $arguments ? : array();
+        $this->contextClasses[$contextClass] = $arguments ?: [];
     }
 
     /**

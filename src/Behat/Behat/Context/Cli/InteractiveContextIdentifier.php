@@ -29,10 +29,12 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
      * @var TranslatorInterface
      */
     private $translator;
+
     /**
      * @var InputInterface
      */
     private $input;
+
     /**
      * @var OutputInterface
      */
@@ -40,10 +42,6 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
 
     /**
      * Initialises identifier.
-     *
-     * @param TranslatorInterface $translator
-     * @param InputInterface      $input
-     * @param OutputInterface     $output
      */
     public function __construct(TranslatorInterface $translator, InputInterface $input, OutputInterface $output)
     {
@@ -68,8 +66,8 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
             return null;
         }
 
-        $message = $this->translator->trans('snippet_context_choice', array('%count%' => $suiteName), 'output');
-        $choices = array_values(array_merge(array('None'), $contextClasses));
+        $message = $this->translator->trans('snippet_context_choice', ['%count%' => $suiteName], 'output');
+        $choices = array_values(array_merge(['None'], $contextClasses));
         $default = 1;
 
         $answer = $this->askQuestion('>> ' . $message, $choices, $default);

@@ -23,6 +23,7 @@ class StreamOutputPrinter implements OutputPrinter
      * @var OutputInterface
      */
     private $output;
+
     /**
      * @var OutputFactory
      */
@@ -31,14 +32,6 @@ class StreamOutputPrinter implements OutputPrinter
     public function __construct(OutputFactory $outputFactory)
     {
         $this->outputFactory = $outputFactory;
-    }
-
-    /**
-     * @return OutputFactory
-     */
-    protected function getOutputFactory()
-    {
-        return $this->outputFactory;
     }
 
     /**
@@ -131,6 +124,14 @@ class StreamOutputPrinter implements OutputPrinter
     public function flush()
     {
         $this->output = null;
+    }
+
+    /**
+     * @return OutputFactory
+     */
+    protected function getOutputFactory()
+    {
+        return $this->outputFactory;
     }
 
     /**

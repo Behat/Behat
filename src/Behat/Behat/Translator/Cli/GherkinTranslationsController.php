@@ -30,8 +30,6 @@ final class GherkinTranslationsController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param Translator $translator
      */
     public function __construct(Translator $translator)
     {

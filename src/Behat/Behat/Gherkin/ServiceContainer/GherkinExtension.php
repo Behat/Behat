@@ -19,7 +19,6 @@ use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
-use ReflectionClass;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -51,12 +50,10 @@ final class GherkinExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -82,21 +79,21 @@ final class GherkinExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('cache')
-                    ->info('Sets the gherkin parser cache folder')
-                    ->defaultValue(
-                        is_writable(sys_get_temp_dir())
-                            ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat_gherkin_cache'
-                            : null
-                    )
-                ->end()
-                ->arrayNode('filters')
-                    ->info('Sets the gherkin filters (overridable by CLI options)')
-                    ->performNoDeepMerging()
-                    ->defaultValue(array())
-                    ->useAttributeAsKey('name')
-                    ->prototype('scalar')->end()
-                ->end()
+            ->scalarNode('cache')
+            ->info('Sets the gherkin parser cache folder')
+            ->defaultValue(
+                is_writable(sys_get_temp_dir())
+                    ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat_gherkin_cache'
+                    : null
+            )
+            ->end()
+            ->arrayNode('filters')
+            ->info('Sets the gherkin filters (overridable by CLI options)')
+            ->performNoDeepMerging()
+            ->defaultValue([])
+            ->useAttributeAsKey('name')
+            ->prototype('scalar')->end()
+            ->end()
             ->end()
         ;
     }
@@ -130,8 +127,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads default container parameters.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadParameters(ContainerBuilder $container)
     {
@@ -139,10 +134,10 @@ final class GherkinExtension implements Extension
         $container->setParameter('gherkin.paths.i18n', '%gherkin.paths.lib%/i18n.php');
         $container->setParameter(
             'suite.generic.default_settings',
-            array(
-                'paths'    => array('%paths.base%/features'),
-                'contexts' => array('FeatureContext')
-            )
+            [
+                'paths' => ['%paths.base%/features'],
+                'contexts' => ['FeatureContext'],
+            ]
         );
     }
 
@@ -153,16 +148,13 @@ final class GherkinExtension implements Extension
      */
     private function getLibPath()
     {
-        $reflection = new ReflectionClass('Behat\Gherkin\Gherkin');
-        $libPath = rtrim(dirname($reflection->getFilename()) . '/../../../', DIRECTORY_SEPARATOR);
+        $reflection = new \ReflectionClass('Behat\Gherkin\Gherkin');
 
-        return $libPath;
+        return rtrim(dirname($reflection->getFilename()) . '/../../../', DIRECTORY_SEPARATOR);
     }
 
     /**
      * Loads gherkin service.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadGherkin(ContainerBuilder $container)
     {
@@ -172,170 +164,148 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads keyword services.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadKeywords(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Gherkin\Keywords\CachedArrayKeywords', array(
-            '%gherkin.paths.i18n%'
-        ));
+        $definition = new Definition('Behat\Gherkin\Keywords\CachedArrayKeywords', [
+            '%gherkin.paths.i18n%',
+        ]);
         $container->setDefinition(self::KEYWORDS_ID, $definition);
 
-        $definition = new Definition('Behat\Gherkin\Keywords\KeywordsDumper', array(
-            new Reference(self::KEYWORDS_ID)
-        ));
+        $definition = new Definition('Behat\Gherkin\Keywords\KeywordsDumper', [
+            new Reference(self::KEYWORDS_ID),
+        ]);
         $container->setDefinition(self::KEYWORDS_DUMPER_ID, $definition);
     }
 
     /**
      * Loads gherkin parser.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadParser(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Gherkin\Parser', array(
-            new Reference('gherkin.lexer')
-        ));
+        $definition = new Definition('Behat\Gherkin\Parser', [
+            new Reference('gherkin.lexer'),
+        ]);
         $container->setDefinition('gherkin.parser', $definition);
 
-        $definition = new Definition('Behat\Gherkin\Lexer', array(
-            new Reference('gherkin.keywords')
-        ));
+        $definition = new Definition('Behat\Gherkin\Lexer', [
+            new Reference('gherkin.keywords'),
+        ]);
         $container->setDefinition('gherkin.lexer', $definition);
     }
 
     /**
      * Loads gherkin loaders.
      *
-     * @param ContainerBuilder $container
-     * @param string           $cachePath
+     * @param string $cachePath
      */
     private function loadDefaultLoaders(ContainerBuilder $container, $cachePath)
     {
-        $definition = new Definition('Behat\Gherkin\Loader\GherkinFileLoader', array(
-            new Reference('gherkin.parser')
-        ));
+        $definition = new Definition('Behat\Gherkin\Loader\GherkinFileLoader', [
+            new Reference('gherkin.parser'),
+        ]);
 
         if ($cachePath) {
-            $cacheDefinition = new Definition('Behat\Gherkin\Cache\FileCache', array($cachePath));
+            $cacheDefinition = new Definition('Behat\Gherkin\Cache\FileCache', [$cachePath]);
         } else {
             $cacheDefinition = new Definition('Behat\Gherkin\Cache\MemoryCache');
         }
 
-        $definition->addMethodCall('setCache', array($cacheDefinition));
-        $definition->addMethodCall('setBasePath', array('%paths.base%'));
-        $definition->addTag(self::LOADER_TAG, array('priority' => 50));
+        $definition->addMethodCall('setCache', [$cacheDefinition]);
+        $definition->addMethodCall('setBasePath', ['%paths.base%']);
+        $definition->addTag(self::LOADER_TAG, ['priority' => 50]);
         $container->setDefinition('gherkin.loader.gherkin_file', $definition);
     }
 
     /**
      * Loads profile-level gherkin filters.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $filters
      */
     private function loadProfileFilters(ContainerBuilder $container, array $filters)
     {
         $gherkin = $container->getDefinition(self::MANAGER_ID);
         foreach ($filters as $type => $filterString) {
             $filter = $this->createFilterDefinition($type, $filterString);
-            $gherkin->addMethodCall('addFilter', array($filter));
+            $gherkin->addMethodCall('addFilter', [$filter]);
         }
     }
 
     /**
      * Loads syntax controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadSyntaxController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Gherkin\Cli\SyntaxController', array(
+        $definition = new Definition('Behat\Behat\Gherkin\Cli\SyntaxController', [
             new Reference(self::KEYWORDS_DUMPER_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 600));
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 600]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.gherkin_syntax', $definition);
     }
 
     /**
      * Loads filter controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFilterController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Gherkin\Cli\FilterController', array(
-            new Reference(self::MANAGER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 700));
+        $definition = new Definition('Behat\Behat\Gherkin\Cli\FilterController', [
+            new Reference(self::MANAGER_ID),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 700]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.gherkin_filters', $definition);
     }
 
     /**
      * Loads suite with paths setup.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadSuiteWithPathsSetup(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Gherkin\Suite\Setup\SuiteWithPathsSetup', array(
+        $definition = new Definition('Behat\Behat\Gherkin\Suite\Setup\SuiteWithPathsSetup', [
             '%paths.base%',
-            new Reference(FilesystemExtension::LOGGER_ID)
-        ));
-        $definition->addTag(SuiteExtension::SETUP_TAG, array('priority' => 50));
+            new Reference(FilesystemExtension::LOGGER_ID),
+        ]);
+        $definition->addTag(SuiteExtension::SETUP_TAG, ['priority' => 50]);
         $container->setDefinition(SuiteExtension::SETUP_TAG . '.suite_with_paths', $definition);
     }
 
     /**
      * Loads filesystem feature locator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFilesystemFeatureLocator(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemFeatureLocator', array(
+        $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemFeatureLocator', [
             new Reference(self::MANAGER_ID),
-            '%paths.base%'
-        ));
-        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 60));
+            '%paths.base%',
+        ]);
+        $definition->addTag(SpecificationExtension::LOCATOR_TAG, ['priority' => 60]);
         $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_feature', $definition);
     }
 
     /**
      * Loads filesystem scenarios list locator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFilesystemScenariosListLocator(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemScenariosListLocator', array(
-            new Reference(self::MANAGER_ID)
-        ));
-        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 50));
+        $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemScenariosListLocator', [
+            new Reference(self::MANAGER_ID),
+        ]);
+        $definition->addTag(SpecificationExtension::LOCATOR_TAG, ['priority' => 50]);
         $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_scenarios_list', $definition);
     }
 
     /**
      * Loads filesystem rerun scenarios list locator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFilesystemRerunScenariosListLocator(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemRerunScenariosListLocator', array(
-            new Reference(self::MANAGER_ID)
-        ));
-        $definition->addTag(SpecificationExtension::LOCATOR_TAG, array('priority' => 50));
+        $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemRerunScenariosListLocator', [
+            new Reference(self::MANAGER_ID),
+        ]);
+        $definition->addTag(SpecificationExtension::LOCATOR_TAG, ['priority' => 50]);
         $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_rerun_scenarios_list', $definition);
     }
 
     /**
      * Processes all available gherkin loaders.
-     *
-     * @param ContainerBuilder $container
      */
     private function processLoaders(ContainerBuilder $container)
     {
@@ -343,7 +313,7 @@ final class GherkinExtension implements Extension
         $definition = $container->getDefinition(self::MANAGER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('addLoader', array($reference));
+            $definition->addMethodCall('addLoader', [$reference]);
         }
     }
 
@@ -353,32 +323,31 @@ final class GherkinExtension implements Extension
      * @param string $type
      * @param string $filterString
      *
-     * @return Definition
-     *
      * @throws ExtensionException If filter type is not recognised
+     * @return Definition
      */
     private function createFilterDefinition($type, $filterString)
     {
         if ('role' === $type) {
-            return new Definition('Behat\Gherkin\Filter\RoleFilter', array($filterString));
+            return new Definition('Behat\Gherkin\Filter\RoleFilter', [$filterString]);
         }
 
         if ('name' === $type) {
-            return new Definition('Behat\Gherkin\Filter\NameFilter', array($filterString));
+            return new Definition('Behat\Gherkin\Filter\NameFilter', [$filterString]);
         }
 
         if ('tags' === $type) {
-            return new Definition('Behat\Gherkin\Filter\TagFilter', array($filterString));
+            return new Definition('Behat\Gherkin\Filter\TagFilter', [$filterString]);
         }
 
         if ('narrative' === $type) {
-            return new Definition('Behat\Gherkin\Filter\NarrativeFilter', array($filterString));
+            return new Definition('Behat\Gherkin\Filter\NarrativeFilter', [$filterString]);
         }
 
         throw new ExtensionException(sprintf(
             '`%s` filter is not supported by the `filters` option of gherkin extension. Supported types are `%s`.',
             $type,
-            implode('`, `', array('narrative', 'role', 'name', 'tags'))
+            implode('`, `', ['narrative', 'role', 'name', 'tags'])
         ), 'gherkin');
     }
 }

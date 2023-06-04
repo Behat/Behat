@@ -17,9 +17,6 @@ use Behat\Testwork\Specification\Locator\SpecificationLocator;
 use Behat\Testwork\Specification\NoSpecificationsIterator;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RegexIterator;
 
 /**
  * Loads gherkin features from the filesystem using gherkin parser.
@@ -32,6 +29,7 @@ final class FilesystemFeatureLocator implements SpecificationLocator
      * @var Gherkin
      */
     private $gherkin;
+
     /**
      * @var string
      */
@@ -40,8 +38,7 @@ final class FilesystemFeatureLocator implements SpecificationLocator
     /**
      * Initializes loader.
      *
-     * @param Gherkin $gherkin
-     * @param string  $basePath
+     * @param string $basePath
      */
     public function __construct(Gherkin $gherkin, $basePath)
     {
@@ -54,13 +51,13 @@ final class FilesystemFeatureLocator implements SpecificationLocator
      */
     public function getLocatorExamples()
     {
-        return array(
-            "a dir <comment>(features/)</comment>",
-            "a feature <comment>(*.feature)</comment>",
-            "a scenario at specific line <comment>(*.feature:10)</comment>.",
-            "all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.",
-            "all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>."
-        );
+        return [
+            'a dir <comment>(features/)</comment>',
+            'a feature <comment>(*.feature)</comment>',
+            'a scenario at specific line <comment>(*.feature:10)</comment>.',
+            'all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.',
+            'all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>.',
+        ];
     }
 
     /**
@@ -75,12 +72,12 @@ final class FilesystemFeatureLocator implements SpecificationLocator
         $suiteLocators = $this->getSuitePaths($suite);
 
         if ($locator) {
-            $filters = array(new PathsFilter($suiteLocators));
+            $filters = [new PathsFilter($suiteLocators)];
 
             return new LazyFeatureIterator($suite, $this->gherkin, $this->findFeatureFiles($locator), $filters);
         }
 
-        $featurePaths = array();
+        $featurePaths = [];
         foreach ($suiteLocators as $suiteLocator) {
             $featurePaths = array_merge($featurePaths, $this->findFeatureFiles($suiteLocator));
         }
@@ -91,17 +88,15 @@ final class FilesystemFeatureLocator implements SpecificationLocator
     /**
      * Returns array of feature paths configured for the provided suite.
      *
-     * @param Suite $suite
-     *
-     * @return string[]
-     *
      * @throws SuiteConfigurationException If `paths` setting is not an array
+     * @return string[]
      */
     private function getSuitePaths(Suite $suite)
     {
         if (!is_array($suite->getSetting('paths'))) {
             throw new SuiteConfigurationException(
-                sprintf('`paths` setting of the "%s" suite is expected to be an array, %s given.',
+                sprintf(
+                    '`paths` setting of the "%s" suite is expected to be an array, %s given.',
                     $suite->getName(),
                     gettype($suite->getSetting('paths'))
                 ),
@@ -124,22 +119,22 @@ final class FilesystemFeatureLocator implements SpecificationLocator
         $absolutePath = $this->findAbsolutePath($path);
 
         if (!$absolutePath) {
-            return array($path);
+            return [$path];
         }
 
         if (is_file($absolutePath)) {
-            return array($absolutePath);
+            return [$absolutePath];
         }
 
-        $iterator = new RegexIterator(
-            new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator(
+        $iterator = new \RegexIterator(
+            new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(
                     $absolutePath,
-                    RecursiveDirectoryIterator::FOLLOW_SYMLINKS | RecursiveDirectoryIterator::SKIP_DOTS
+                    \RecursiveDirectoryIterator::FOLLOW_SYMLINKS | \RecursiveDirectoryIterator::SKIP_DOTS
                 )
             ),
             '/^.+\.feature$/i',
-            RegexIterator::MATCH
+            \RegexIterator::MATCH
         );
 
         $paths = array_map('strval', iterator_to_array($iterator));

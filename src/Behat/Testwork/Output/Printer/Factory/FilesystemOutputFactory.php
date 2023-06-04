@@ -29,17 +29,6 @@ class FilesystemOutputFactory extends OutputFactory
     }
 
     /**
-     * Configure output stream parameters.
-     *
-     * @param OutputInterface $output
-     */
-    protected function configureOutputStream(OutputInterface $output)
-    {
-        $verbosity = $this->getOutputVerbosity() ? OutputInterface::VERBOSITY_VERBOSE : OutputInterface::VERBOSITY_NORMAL;
-        $output->setVerbosity($verbosity);
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function createOutput($stream = null)
@@ -49,7 +38,8 @@ class FilesystemOutputFactory extends OutputFactory
                 'Directory expected for the `output_path` option, but a filename was given.',
                 $this->getOutputPath()
             );
-        } elseif (!is_dir($this->getOutputPath())) {
+        }
+        if (!is_dir($this->getOutputPath())) {
             mkdir($this->getOutputPath(), 0777, true);
         }
 
@@ -67,5 +57,14 @@ class FilesystemOutputFactory extends OutputFactory
         $this->configureOutputStream($stream);
 
         return $stream;
+    }
+
+    /**
+     * Configure output stream parameters.
+     */
+    protected function configureOutputStream(OutputInterface $output)
+    {
+        $verbosity = $this->getOutputVerbosity() ? OutputInterface::VERBOSITY_VERBOSE : OutputInterface::VERBOSITY_NORMAL;
+        $output->setVerbosity($verbosity);
     }
 }

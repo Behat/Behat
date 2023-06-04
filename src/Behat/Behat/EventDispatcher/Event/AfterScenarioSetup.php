@@ -28,22 +28,19 @@ final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var Scenario
      */
     private $scenario;
+
     /**
      * @var Setup
      */
     private $setup;
 
     /**
-     * Initializes event
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param Setup       $setup
+     * Initializes event.
      */
     public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario, Setup $setup)
     {

@@ -14,9 +14,6 @@ use Behat\Behat\Context\Annotation\AnnotationReader;
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Testwork\Call\Callee;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
 
 /**
  * Reads context callees by annotations using registered annotation readers.
@@ -30,18 +27,19 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * @var string[]
      */
-    private static $ignoreAnnotations = array(
+    private static $ignoreAnnotations = [
         '@param',
         '@return',
         '@throws',
         '@see',
         '@uses',
-        '@todo'
-    );
+        '@todo',
+    ];
+
     /**
      * @var AnnotationReader[]
      */
-    private $readers = array();
+    private $readers = [];
 
     /**
      * @var DocBlockHelper
@@ -50,8 +48,6 @@ final class AnnotatedContextReader implements ContextReader
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
     public function __construct(DocBlockHelper $docBlockHelper)
     {
@@ -60,8 +56,6 @@ final class AnnotatedContextReader implements ContextReader
 
     /**
      * Registers annotation reader.
-     *
-     * @param AnnotationReader $reader
      */
     public function registerAnnotationReader(AnnotationReader $reader)
     {
@@ -73,10 +67,10 @@ final class AnnotatedContextReader implements ContextReader
      */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        $reflection = new ReflectionClass($contextClass);
+        $reflection = new \ReflectionClass($contextClass);
 
-        $callees = array();
-        foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+        $callees = [];
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             foreach ($this->readMethodCallees($reflection->getName(), $method) as $callee) {
                 $callees[] = $callee;
             }
@@ -88,14 +82,13 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * Loads callees associated with specific method.
      *
-     * @param string           $class
-     * @param ReflectionMethod $method
+     * @param string $class
      *
      * @return Callee[]
      */
-    private function readMethodCallees($class, ReflectionMethod $method)
+    private function readMethodCallees($class, \ReflectionMethod $method)
     {
-        $callees = array();
+        $callees = [];
 
         // read parent annotations
         try {
@@ -104,7 +97,7 @@ final class AnnotatedContextReader implements ContextReader
             if ($prototype->getDeclaringClass()->getName() !== $method->getDeclaringClass()->getName()) {
                 $callees = array_merge($callees, $this->readMethodCallees($class, $prototype));
             }
-        } catch (ReflectionException $e) {
+        } catch (\ReflectionException $e) {
         }
 
         if ($docBlock = $method->getDocComment()) {
@@ -117,15 +110,14 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * Reads callees from the method doc block.
      *
-     * @param string           $class
-     * @param ReflectionMethod $method
-     * @param string           $docBlock
+     * @param string $class
+     * @param string $docBlock
      *
      * @return Callee[]
      */
-    private function readDocBlockCallees($class, ReflectionMethod $method, $docBlock)
+    private function readDocBlockCallees($class, \ReflectionMethod $method, $docBlock)
     {
-        $callees = array();
+        $callees = [];
         $description = $this->docBlockHelper->extractDescription($docBlock);
         $docBlock = $this->mergeMultilines($docBlock);
 
@@ -149,7 +141,7 @@ final class AnnotatedContextReader implements ContextReader
     }
 
     /**
-     * Merges multiline strings (strings ending with "\")
+     * Merges multiline strings (strings ending with "\").
      *
      * @param string $docBlock
      *
@@ -157,7 +149,7 @@ final class AnnotatedContextReader implements ContextReader
      */
     private function mergeMultilines($docBlock)
     {
-        return preg_replace("#\\\\$\s*+\*\s*+([^\\\\$]++)#m", '$1', $docBlock);
+        return preg_replace('#\\\$\\s*+\\*\\s*+([^\\\$]++)#m', '$1', $docBlock);
     }
 
     /**
@@ -169,7 +161,7 @@ final class AnnotatedContextReader implements ContextReader
      */
     private function isEmpty($docLine)
     {
-        return '' == $docLine;
+        return '' === $docLine;
     }
 
     /**
@@ -187,14 +179,13 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * Reads callee from provided doc line using registered annotation readers.
      *
-     * @param string           $class
-     * @param ReflectionMethod $method
-     * @param string           $docLine
-     * @param null|string      $description
+     * @param string      $class
+     * @param string      $docLine
+     * @param null|string $description
      *
      * @return null|Callee
      */
-    private function readDocLineCallee($class, ReflectionMethod $method, $docLine, $description = null)
+    private function readDocLineCallee($class, \ReflectionMethod $method, $docLine, $description = null)
     {
         if ($this->isIgnoredAnnotation($docLine)) {
             return null;
@@ -220,7 +211,7 @@ final class AnnotatedContextReader implements ContextReader
     {
         $lowDocLine = strtolower($docLine);
         foreach (self::$ignoreAnnotations as $ignoredAnnotation) {
-            if ($ignoredAnnotation == substr($lowDocLine, 0, strlen($ignoredAnnotation))) {
+            if ($ignoredAnnotation === substr($lowDocLine, 0, strlen($ignoredAnnotation))) {
                 return true;
             }
         }

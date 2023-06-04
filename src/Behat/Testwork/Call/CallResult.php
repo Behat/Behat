@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,14 +23,17 @@ final class CallResult
      * @var Call
      */
     private $call;
+
     /**
      * @var mixed
      */
     private $return;
+
     /**
-     * @var null|Exception
+     * @var null|\Exception
      */
     private $exception;
+
     /**
      * @var null|string
      */
@@ -39,12 +42,10 @@ final class CallResult
     /**
      * Initializes call result.
      *
-     * @param Call           $call
-     * @param mixed          $return
-     * @param null|Exception $exception
-     * @param null|string    $stdOut
+     * @param mixed       $return
+     * @param null|string $stdOut
      */
-    public function __construct(Call $call, $return, Exception $exception = null, $stdOut = null)
+    public function __construct(Call $call, $return, ?\Exception $exception = null, $stdOut = null)
     {
         $this->call = $call;
         $this->return = $return;
@@ -88,7 +89,7 @@ final class CallResult
     /**
      * Returns exception thrown by call (if any).
      *
-     * @return null|Exception
+     * @return null|\Exception
      */
     public function getException()
     {

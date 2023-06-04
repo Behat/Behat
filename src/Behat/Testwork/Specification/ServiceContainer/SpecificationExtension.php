@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -41,12 +41,10 @@ final class SpecificationExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -89,8 +87,6 @@ final class SpecificationExtension implements Extension
 
     /**
      * Loads specification finder.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFinder(ContainerBuilder $container)
     {
@@ -100,8 +96,6 @@ final class SpecificationExtension implements Extension
 
     /**
      * Processes specification locators.
-     *
-     * @param ContainerBuilder $container
      */
     private function processLocators(ContainerBuilder $container)
     {
@@ -109,7 +103,7 @@ final class SpecificationExtension implements Extension
         $definition = $container->getDefinition(self::FINDER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerSpecificationLocator', array($reference));
+            $definition->addMethodCall('registerSpecificationLocator', [$reference]);
         }
     }
 }

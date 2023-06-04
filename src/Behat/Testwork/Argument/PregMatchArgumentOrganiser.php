@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -9,8 +9,6 @@
  */
 
 namespace Behat\Testwork\Argument;
-
-use ReflectionFunctionAbstract;
 
 /**
  * Organises arguments coming from preg_match results.
@@ -26,8 +24,6 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
 
     /**
      * Initialises organiser.
-     *
-     * @param ArgumentOrganiser $organiser
      */
     public function __construct(ArgumentOrganiser $organiser)
     {
@@ -37,7 +33,7 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
     /**
      * {@inheritdoc}
      */
-    public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)
+    public function organiseArguments(\ReflectionFunctionAbstract $function, array $arguments)
     {
         $cleanedArguments = $this->cleanupMatchDuplicates($arguments);
 
@@ -52,23 +48,21 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
      * duplication and also drops the first full match element from the
      * array.
      *
-     * @param array $match
-     *
      * @return mixed[]
      */
     private function cleanupMatchDuplicates(array $match)
     {
         $cleanMatch = array_slice($match, 1);
-        $arguments = array();
+        $arguments = [];
 
         $keys = array_keys($cleanMatch);
-        for ($keyIndex = 0; $keyIndex < count($keys); $keyIndex++) {
+        for ($keyIndex = 0; $keyIndex < count($keys); ++$keyIndex) {
             $key = $keys[$keyIndex];
 
             $arguments[$key] = $cleanMatch[$key];
 
             if ($this->isKeyAStringAndNexOneIsAnInteger($keyIndex, $keys)) {
-                $keyIndex += 1;
+                ++$keyIndex;
             }
         }
 
@@ -78,7 +72,7 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks if key at provided index is a string and next key in the array is an integer.
      *
-     * @param integer $keyIndex
+     * @param int     $keyIndex
      * @param mixed[] $keys
      *
      * @return bool

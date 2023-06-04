@@ -21,26 +21,32 @@ final class StepStatV2 extends StepStat
      * @var string
      */
     private $scenarioTitle;
+
     /**
      * @var string
      */
     private $scenarioPath;
+
     /**
      * @var string
      */
     private $stepText;
+
     /**
      * @var string
      */
     private $stepPath;
+
     /**
-     * @var integer
+     * @var int
      */
     private $resultCode;
+
     /**
      * @var null|string
      */
     private $error;
+
     /**
      * @var null|string
      */
@@ -53,7 +59,7 @@ final class StepStatV2 extends StepStat
      * @param string      $scenarioPath
      * @param string      $stepText
      * @param string      $stepPath
-     * @param integer     $resultCode
+     * @param int         $resultCode
      * @param null|string $error
      * @param null|string $stdOut
      */
@@ -68,6 +74,16 @@ final class StepStatV2 extends StepStat
         $this->resultCode = $resultCode;
         $this->error = $error;
         $this->stdOut = $stdOut;
+    }
+
+    /**
+     * Returns string representation for a stat.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getPath();
     }
 
     /**
@@ -113,7 +129,7 @@ final class StepStatV2 extends StepStat
     /**
      * Returns step result code.
      *
-     * @return integer
+     * @return int
      */
     public function getResultCode()
     {
@@ -138,15 +154,5 @@ final class StepStatV2 extends StepStat
     public function getStdOut()
     {
         return $this->stdOut;
-    }
-
-    /**
-     * Returns string representation for a stat.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getPath();
     }
 }

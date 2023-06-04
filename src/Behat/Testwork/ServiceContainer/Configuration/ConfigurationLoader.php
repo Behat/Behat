@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -24,22 +24,25 @@ final class ConfigurationLoader
      * @var null|string
      */
     private $configurationPath;
+
     /**
      * @var null|string
      */
     private $environmentVariable;
+
     /**
      * @var bool
      */
     private $profileFound;
+
     /**
      * @var array
      */
-    private $debugInformation = array(
+    private $debugInformation = [
         'environment_variable_name' => 'none',
         'environment_variable_content' => 'none',
-        'configuration_file_path' => 'none'
-    );
+        'configuration_file_path' => 'none',
+    ];
 
     /**
      * Constructs reader.
@@ -98,13 +101,12 @@ final class ConfigurationLoader
      *
      * @param string $profile Profile name
      *
-     * @return array
-     *
      * @throws ConfigurationLoadingException
+     * @return array
      */
     public function loadConfiguration($profile = 'default')
     {
-        $configs = array();
+        $configs = [];
         $this->profileFound = false;
 
         // first is ENV config
@@ -145,13 +147,12 @@ final class ConfigurationLoader
     /**
      * Loads information from environment variable.
      *
-     * @return array
-     *
      * @throws ConfigurationLoadingException If environment variable environment var is set to invalid JSON
+     * @return array
      */
-    protected function loadEnvironmentConfiguration()
+    private function loadEnvironmentConfiguration()
     {
-        $configs = array();
+        $configs = [];
 
         if (!$this->environmentVariable) {
             return $configs;
@@ -184,11 +185,10 @@ final class ConfigurationLoader
      * @param string $configPath Config file path
      * @param string $profile    Profile name
      *
-     * @return array
-     *
      * @throws ConfigurationLoadingException If config file is not found
+     * @return array
      */
-    protected function loadFileConfiguration($configPath, $profile)
+    private function loadFileConfiguration($configPath, $profile)
     {
         if (!is_file($configPath) || !is_readable($configPath)) {
             throw new ConfigurationLoadingException(sprintf('Configuration file `%s` not found.', $configPath));
@@ -204,14 +204,13 @@ final class ConfigurationLoader
      * Loads configs for provided config and profile.
      *
      * @param string $basePath
-     * @param array  $config
      * @param string $profile
      *
      * @return array
      */
     private function loadConfigs($basePath, array $config, $profile)
     {
-        $configs = array();
+        $configs = [];
 
         // first load default profile from current config, but only if custom profile requested
         if ('default' !== $profile && isset($config['default'])) {
@@ -236,14 +235,13 @@ final class ConfigurationLoader
      * Loads all provided imports.
      *
      * @param string $basePath
-     * @param array  $paths
      * @param string $profile
      *
      * @return array
      */
     private function loadImports($basePath, array $paths, $profile)
     {
-        $configs = array();
+        $configs = [];
         foreach ($paths as $path) {
             foreach ($this->parseImport($basePath, $path, $profile) as $importConfig) {
                 $configs[] = $importConfig;
@@ -260,9 +258,8 @@ final class ConfigurationLoader
      * @param string $path
      * @param string $profile
      *
-     * @return array
-     *
      * @throws ConfigurationLoadingException If import file not found
+     * @return array
      */
     private function parseImport($basePath, $path, $profile)
     {

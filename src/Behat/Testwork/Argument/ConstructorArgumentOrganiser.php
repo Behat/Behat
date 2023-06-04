@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -12,8 +12,6 @@ namespace Behat\Testwork\Argument;
 
 use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
 use Behat\Testwork\Argument\Exception\UnsupportedFunctionException;
-use ReflectionFunctionAbstract;
-use ReflectionMethod;
 
 /**
  * Organises constructor arguments.
@@ -29,8 +27,6 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
 
     /**
      * Initializes organiser.
-     *
-     * @param ArgumentOrganiser $organiser
      */
     public function __construct(ArgumentOrganiser $organiser)
     {
@@ -40,9 +36,9 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
     /**
      * {@inheritdoc}
      */
-    public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)
+    public function organiseArguments(\ReflectionFunctionAbstract $function, array $arguments)
     {
-        if (!$function instanceof ReflectionMethod) {
+        if (!$function instanceof \ReflectionMethod) {
             throw new UnsupportedFunctionException(sprintf(
                 'ConstructorArgumentOrganiser can only work with ReflectionMethod, but `%s` given.',
                 get_class($function)
@@ -62,14 +58,13 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks that all provided constructor arguments are present in the constructor.
      *
-     * @param ReflectionMethod $constructor
-     * @param mixed[]          $passedArguments
-     * @param mixed[]          $organisedArguments
+     * @param mixed[] $passedArguments
+     * @param mixed[] $organisedArguments
      *
      * @throws UnknownParameterValueException
      */
     private function validateArguments(
-        ReflectionMethod $constructor,
+        \ReflectionMethod $constructor,
         array $passedArguments,
         array $organisedArguments
     ) {

@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\HelperContainer\Call\Filter;
 
-use Behat\Behat\Definition\Definition;
-use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Definition\Definition;
 use Behat\Behat\HelperContainer\ArgumentAutowirer;
+use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\HelperContainer\Exception\UnsupportedCallException;
 use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\Transformation;
@@ -42,12 +42,9 @@ final class ServicesResolver implements CallFilter
     /**
      * Filters a call and returns a new one.
      *
-     * @param Call $call
-     *
-     * @return Call
-     *
      * @throws UnsupportedCallException
      * @throws ContainerExceptionInterface
+     * @return Call
      */
     public function filterCall(Call $call)
     {
@@ -64,11 +61,8 @@ final class ServicesResolver implements CallFilter
     /**
      * Gets container from the call.
      *
-     * @param Call $call
-     *
-     * @return null|ContainerInterface
-     *
      * @throws UnsupportedCallException if given call is not EnvironmentCall or environment is not ServiceContainerEnvironment
+     * @return null|ContainerInterface
      */
     private function getContainer(Call $call)
     {
@@ -94,12 +88,8 @@ final class ServicesResolver implements CallFilter
     /**
      * Repackages old calls with new arguments, but only if two differ.
      *
-     * @param Call $call
-     * @param array $arguments
-     *
-     * @return Call
-     *
      * @throws UnsupportedCallException if given call is not DefinitionCall or TransformationCall
+     * @return Call
      */
     private function repackageCallIfNewArguments(Call $call, array $arguments)
     {
@@ -113,12 +103,8 @@ final class ServicesResolver implements CallFilter
     /**
      * Repackages old calls with new arguments.
      *
-     * @param Call  $call
-     * @param array $newArguments
-     *
-     * @return DefinitionCall|TransformationCall
-     *
      * @throws UnsupportedCallException
+     * @return DefinitionCall|TransformationCall
      */
     private function repackageCallWithNewArguments(Call $call, array $newArguments)
     {
@@ -134,19 +120,16 @@ final class ServicesResolver implements CallFilter
             sprintf(
                 'ServicesResolver can not filter `%s` call.',
                 get_class($call)
-            ), $call
+            ),
+            $call
         );
     }
 
     /**
      * Repackages definition call with new arguments.
      *
-     * @param DefinitionCall $call
-     * @param array $newArguments
-     *
-     * @return DefinitionCall
-     *
      * @throws UnsupportedCallException
+     * @return DefinitionCall
      */
     private function repackageDefinitionCall(DefinitionCall $call, array $newArguments)
     {
@@ -157,7 +140,8 @@ final class ServicesResolver implements CallFilter
                 sprintf(
                     'Something is wrong in callee associated with `%s` call.',
                     get_class($call)
-                ), $call
+                ),
+                $call
             );
         }
 
@@ -174,12 +158,8 @@ final class ServicesResolver implements CallFilter
     /**
      * Repackages transformation call with new arguments.
      *
-     * @param TransformationCall $call
-     * @param array $newArguments
-     *
-     * @return TransformationCall
-     *
      * @throws UnsupportedCallException
+     * @return TransformationCall
      */
     private function repackageTransformationCall(TransformationCall $call, array $newArguments)
     {
@@ -190,7 +170,8 @@ final class ServicesResolver implements CallFilter
                 sprintf(
                     'Something is wrong in callee associated with `%s` call.',
                     get_class($call)
-                ), $call
+                ),
+                $call
             );
         }
 

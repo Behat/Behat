@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,8 +27,6 @@ class StaticEnvironment implements Environment
 
     /**
      * Initializes environment.
-     *
-     * @param Suite $suite
      */
     public function __construct(Suite $suite)
     {

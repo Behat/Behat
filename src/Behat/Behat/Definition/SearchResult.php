@@ -21,10 +21,12 @@ final class SearchResult
      * @var null|Definition
      */
     private $definition;
+
     /**
      * @var null|string
      */
     private $matchedText;
+
     /**
      * @var null|array
      */
@@ -33,11 +35,9 @@ final class SearchResult
     /**
      * Registers search match.
      *
-     * @param null|Definition $definition
-     * @param null|string     $matchedText
-     * @param null|array      $arguments
+     * @param null|string $matchedText
      */
-    public function __construct(Definition $definition = null, $matchedText = null, array $arguments = null)
+    public function __construct(?Definition $definition = null, $matchedText = null, ?array $arguments = null)
     {
         $this->definition = $definition;
         $this->matchedText = $matchedText;

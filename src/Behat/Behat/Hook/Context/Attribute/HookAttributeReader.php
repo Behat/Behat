@@ -19,21 +19,20 @@ use Behat\Hook\BeforeFeature;
 use Behat\Hook\BeforeScenario;
 use Behat\Hook\BeforeStep;
 use Behat\Hook\Hook;
-use ReflectionMethod;
 
 final class HookAttributeReader implements AttributeReader
 {
     /**
      * @var string[]
      */
-    private const KNOWN_ATTRIBUTES = array(
+    private const KNOWN_ATTRIBUTES = [
         AfterFeature::class => 'Behat\Behat\Hook\Call\AfterFeature',
         AfterScenario::class => 'Behat\Behat\Hook\Call\AfterScenario',
         AfterStep::class => 'Behat\Behat\Hook\Call\AfterStep',
         BeforeFeature::class => 'Behat\Behat\Hook\Call\BeforeFeature',
         BeforeScenario::class => 'Behat\Behat\Hook\Call\BeforeScenario',
         BeforeStep::class => 'Behat\Behat\Hook\Call\BeforeStep',
-    );
+    ];
 
     /**
      * @var DocBlockHelper
@@ -42,8 +41,6 @@ final class HookAttributeReader implements AttributeReader
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
     public function __construct(DocBlockHelper $docBlockHelper)
     {
@@ -51,9 +48,9 @@ final class HookAttributeReader implements AttributeReader
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
-    public function readCallees(string $contextClass, ReflectionMethod $method)
+    public function readCallees(string $contextClass, \ReflectionMethod $method)
     {
         if (\PHP_MAJOR_VERSION < 8) {
             return [];
@@ -67,7 +64,7 @@ final class HookAttributeReader implements AttributeReader
         $callees = [];
         foreach ($attributes as $attribute) {
             $class = self::KNOWN_ATTRIBUTES[$attribute->getName()];
-            $callable = array($contextClass, $method->getName());
+            $callable = [$contextClass, $method->getName()];
             $description = null;
             if ($docBlock = $method->getDocComment()) {
                 $description = $this->docBlockHelper->extractDescription($docBlock);

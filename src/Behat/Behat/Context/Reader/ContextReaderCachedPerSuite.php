@@ -23,15 +23,14 @@ final class ContextReaderCachedPerSuite implements ContextReader
      * @var ContextReader
      */
     private $childReader;
+
     /**
      * @var array[]
      */
-    private $cachedCallees = array();
+    private $cachedCallees = [];
 
     /**
      * Initializes reader.
-     *
-     * @param ContextReader $childReader
      */
     public function __construct(ContextReader $childReader)
     {
@@ -50,15 +49,15 @@ final class ContextReaderCachedPerSuite implements ContextReader
         }
 
         return $this->cachedCallees[$key] = $this->childReader->readContextCallees(
-            $environment, $contextClass
+            $environment,
+            $contextClass
         );
     }
 
     /**
      * Generates cache key.
      *
-     * @param ContextEnvironment $environment
-     * @param string             $contextClass
+     * @param string $contextClass
      *
      * @return string
      */

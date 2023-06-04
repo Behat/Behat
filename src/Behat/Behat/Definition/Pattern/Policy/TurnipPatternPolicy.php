@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Definition\Pattern\Policy;
 
-use Behat\Behat\Definition\Pattern\Pattern;
 use Behat\Behat\Definition\Exception\InvalidPatternException;
+use Behat\Behat\Definition\Pattern\Pattern;
 use Behat\Transliterator\Transliterator;
 
 /**
@@ -21,25 +21,25 @@ use Behat\Transliterator\Transliterator;
  */
 final class TurnipPatternPolicy implements PatternPolicy
 {
-    public const TOKEN_REGEX = "[\"']?(?P<%s>(?<=\")[^\"]*(?=\")|(?<=')[^']*(?=')|\-?[\w\.\,]+)['\"]?";
+    public const TOKEN_REGEX = "[\"']?(?P<%s>(?<=\")[^\"]*(?=\")|(?<=')[^']*(?=')|\\-?[\\w\\.\\,]+)['\"]?";
 
-    public const PLACEHOLDER_REGEXP = "/\\\:(\w+)/";
+    public const PLACEHOLDER_REGEXP = '/\\\\:(\\w+)/';
     public const OPTIONAL_WORD_REGEXP = '/(\s)?\\\\\(([^\\\]+)\\\\\)(\s)?/';
     public const ALTERNATIVE_WORD_REGEXP = '/(\w+)\\\\\/(\w+)/';
 
     /**
      * @var string[]
      */
-    private $regexCache = array();
+    private $regexCache = [];
 
     /**
      * @var string[]
      */
-    private static $placeholderPatterns = array(
-        "/(?<!\w)\"[^\"]+\"(?!\w)/",
-        "/(?<!\w)'[^']+'(?!\w)/",
-        "/(?<!\w|\.|\,)\-?\d+(?:[\.\,]\d+)?(?!\w|\.|\,)/"
-    );
+    private static $placeholderPatterns = [
+        '/(?<!\\w)"[^"]+"(?!\\w)/',
+        "/(?<!\\w)'[^']+'(?!\\w)/",
+        '/(?<!\\w|\\.|\\,)\\-?\\d+(?:[\\.\\,]\\d+)?(?!\\w|\\.|\\,)/',
+    ];
 
     /**
      * {@inheritdoc}
@@ -85,11 +85,12 @@ final class TurnipPatternPolicy implements PatternPolicy
         if (!isset($this->regexCache[$pattern])) {
             $this->regexCache[$pattern] = $this->createTransformedRegex($pattern);
         }
+
         return $this->regexCache[$pattern];
     }
 
     /**
-     * @param string $pattern
+     * @param  string $pattern
      * @return string
      */
     private function createTransformedRegex($pattern)
@@ -115,9 +116,8 @@ final class TurnipPatternPolicy implements PatternPolicy
         $canonicalText = preg_replace(self::$placeholderPatterns, '', $stepText);
         $canonicalText = Transliterator::transliterate($canonicalText, ' ');
         $canonicalText = preg_replace('/[^a-zA-Z\_\ ]/', '', $canonicalText);
-        $canonicalText = str_replace(' ', '', ucwords($canonicalText));
 
-        return $canonicalText;
+        return str_replace(' ', '', ucwords($canonicalText));
     }
 
     /**
@@ -133,7 +133,7 @@ final class TurnipPatternPolicy implements PatternPolicy
 
         return preg_replace_callback(
             self::PLACEHOLDER_REGEXP,
-            array($this, 'replaceTokenWithRegexCaptureGroup'),
+            [$this, 'replaceTokenWithRegexCaptureGroup'],
             $regex
         );
     }
@@ -171,9 +171,8 @@ final class TurnipPatternPolicy implements PatternPolicy
     private function replaceTurnipAlternativeWordsWithRegex($regex)
     {
         $regex = preg_replace(self::ALTERNATIVE_WORD_REGEXP, '(?:\1|\2)', $regex);
-        $regex = $this->removeEscapingOfAlternationSyntax($regex);
 
-        return $regex;
+        return $this->removeEscapingOfAlternationSyntax($regex);
     }
 
     /**

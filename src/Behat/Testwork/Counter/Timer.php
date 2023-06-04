@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,10 +23,25 @@ final class Timer
      * @var null|float
      */
     private $starTime;
+
     /**
      * @var null|float
      */
     private $stopTime;
+
+    /**
+     * Returns string representation of time passed.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        if (!$this->starTime || !$this->stopTime) {
+            return '0m0s';
+        }
+
+        return sprintf('%dm%.2fs', $this->getMinutes(), $this->getSeconds());
+    }
 
     /**
      * Starts timer.
@@ -51,9 +66,8 @@ final class Timer
     }
 
     /**
-     * @return null|float
-     *
      * @throws TimerException If timer has not been started
+     * @return null|float
      */
     public function getTime()
     {
@@ -72,7 +86,7 @@ final class Timer
     /**
      * Returns number of minutes passed.
      *
-     * @return integer
+     * @return int
      */
     public function getMinutes()
     {
@@ -87,19 +101,5 @@ final class Timer
     public function getSeconds()
     {
         return round($this->getTime() - ($this->getMinutes() * 60), 3);
-    }
-
-    /**
-     * Returns string representation of time passed.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        if (!$this->starTime || !$this->stopTime) {
-            return '0m0s';
-        }
-
-        return sprintf('%dm%.2fs', $this->getMinutes(), $this->getSeconds());
     }
 }

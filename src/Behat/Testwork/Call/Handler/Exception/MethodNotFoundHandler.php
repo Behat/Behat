@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,7 +11,6 @@
 namespace Behat\Testwork\Call\Handler\Exception;
 
 use Behat\Testwork\Call\Handler\ExceptionHandler;
-use Error;
 
 /**
  * Handles method not found exceptions.
@@ -29,7 +28,7 @@ abstract class MethodNotFoundHandler implements ExceptionHandler
      */
     final public function supportsException($exception)
     {
-        if (!$exception instanceof Error) {
+        if (!$exception instanceof \Error) {
             return false;
         }
 
@@ -48,22 +47,18 @@ abstract class MethodNotFoundHandler implements ExceptionHandler
 
     /**
      * Override to handle non-existent method.
-     *
-     * @param array $callable
      */
     abstract public function handleNonExistentMethod(array $callable);
 
     /**
      * Extract callable from exception.
      *
-     * @param Error $exception
-     *
      * @return null|array
      */
-    private function extractNonExistentCallable(Error $exception)
+    private function extractNonExistentCallable(\Error $exception)
     {
         if (1 === preg_match(self::PATTERN, $exception->getMessage(), $matches)) {
-            return array($matches[1], $matches[2]);
+            return [$matches[1], $matches[2]];
         }
 
         return null;

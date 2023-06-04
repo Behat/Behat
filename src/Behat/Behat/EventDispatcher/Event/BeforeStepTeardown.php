@@ -30,10 +30,12 @@ final class BeforeStepTeardown extends StepTested implements BeforeTeardown
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var StepNode
      */
     private $step;
+
     /**
      * @var StepResult
      */
@@ -41,11 +43,6 @@ final class BeforeStepTeardown extends StepTested implements BeforeTeardown
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param StepResult  $result
      */
     public function __construct(
         Environment $env,

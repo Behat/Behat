@@ -35,14 +35,17 @@ class OnlyFirstBackgroundFiresListener implements EventListener
      * @var EventListener
      */
     private $descendant;
+
     /**
      * @var bool
      */
     private $firstBackgroundEnded = false;
+
     /**
      * @var bool
      */
     private $inBackground = false;
+
     /**
      * @var bool
      */
@@ -50,8 +53,6 @@ class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param EventListener $descendant
      */
     public function __construct(EventListener $descendant)
     {
@@ -123,8 +124,6 @@ class OnlyFirstBackgroundFiresListener implements EventListener
     /**
      * Checks if provided event is skippable.
      *
-     * @param Event $event
-     *
      * @return bool
      */
     private function isSkippableEvent(Event $event)
@@ -138,8 +137,6 @@ class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Checks if provided event is a non-failing step in consequent background.
-     *
-     * @param Event $event
      *
      * @return bool
      */
@@ -155,8 +152,6 @@ class OnlyFirstBackgroundFiresListener implements EventListener
     /**
      * Checks if provided event is a step event which setup or teardown produced any output.
      *
-     * @param Event $event
-     *
      * @return bool
      */
     private function isStepEventWithOutput(Event $event)
@@ -166,8 +161,6 @@ class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Checks if provided event is a BEFORE step with setup that produced output.
-     *
-     * @param Event $event
      *
      * @return bool
      */
@@ -184,8 +177,6 @@ class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Checks if provided event is an AFTER step with teardown that produced output.
-     *
-     * @param Event $event
      *
      * @return bool
      */

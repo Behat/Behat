@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -29,13 +29,11 @@ final class HookCall extends EnvironmentCall
     /**
      * Initializes hook call.
      *
-     * @param HookScope    $scope
-     * @param Hook         $hook
-     * @param null|integer $errorReportingLevel
+     * @param null|int $errorReportingLevel
      */
     public function __construct(HookScope $scope, Hook $hook, $errorReportingLevel = null)
     {
-        parent::__construct($scope->getEnvironment(), $hook, array($scope), $errorReportingLevel);
+        parent::__construct($scope->getEnvironment(), $hook, [$scope], $errorReportingLevel);
 
         $this->scope = $scope;
     }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -25,18 +25,13 @@ interface Controller
 {
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param SymfonyCommand $command
      */
     public function configure(SymfonyCommand $command);
 
     /**
      * Executes controller.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * @return null|int
      */
     public function execute(InputInterface $input, OutputInterface $output);
 }

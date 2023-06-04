@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -42,16 +42,16 @@ abstract class RuntimeHook extends RuntimeCallee implements Hook
     /**
      * {@inheritdoc}
      */
-    public function getScopeName()
+    public function __toString()
     {
-        return $this->scopeName;
+        return $this->getName();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function getScopeName()
     {
-        return $this->getName();
+        return $this->scopeName;
     }
 }

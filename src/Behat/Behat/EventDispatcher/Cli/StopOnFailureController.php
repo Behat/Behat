@@ -18,7 +18,6 @@ use Behat\Testwork\EventDispatcher\Event\AfterExerciseAborted;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteAborted;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\SuiteTested;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
 use Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation;
 use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
@@ -47,8 +46,6 @@ final class StopOnFailureController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
@@ -58,12 +55,13 @@ final class StopOnFailureController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
-        $command->addOption('--stop-on-failure', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--stop-on-failure',
+            null,
+            InputOption::VALUE_NONE,
             'Stop processing on first failed scenario.'
         );
     }
@@ -71,10 +69,7 @@ final class StopOnFailureController implements Controller
     /**
      * Executes controller.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * @return null|int
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -86,14 +81,12 @@ final class StopOnFailureController implements Controller
             $this->resultInterpretation = new StrictInterpretation();
         }
 
-        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'exitOnFailure'), -100);
-        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'exitOnFailure'), -100);
+        $this->eventDispatcher->addListener(ScenarioTested::AFTER, [$this, 'exitOnFailure'], -100);
+        $this->eventDispatcher->addListener(ExampleTested::AFTER, [$this, 'exitOnFailure'], -100);
     }
 
     /**
      * Exits if scenario is a failure and if stopper is enabled.
-     *
-     * @param AfterScenarioTested $event
      */
     public function exitOnFailure(AfterScenarioTested $event)
     {

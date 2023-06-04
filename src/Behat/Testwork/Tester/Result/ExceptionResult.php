@@ -29,7 +29,7 @@ interface ExceptionResult extends TestResult
     /**
      * Returns exception that test result has.
      *
-     * @return null|Exception
+     * @return null|\Exception
      */
     public function getException();
 }

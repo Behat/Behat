@@ -34,10 +34,12 @@ final class RuntimeFeatureTester implements SpecificationTester
      * @var ScenarioTester
      */
     private $scenarioTester;
+
     /**
      * @var OutlineTester
      */
     private $outlineTester;
+
     /**
      * @var EnvironmentManager
      */
@@ -46,8 +48,6 @@ final class RuntimeFeatureTester implements SpecificationTester
     /**
      * Initializes tester.
      *
-     * @param ScenarioTester     $scenarioTester
-     * @param OutlineTester      $outlineTester
      * @param EnvironmentManager $envManager
      *
      * TODO: Remove EnvironmentManager parameter in next major
@@ -73,9 +73,17 @@ final class RuntimeFeatureTester implements SpecificationTester
     /**
      * {@inheritdoc}
      */
+    public function tearDown(Environment $env, $spec, $skip, TestResult $result)
+    {
+        return new SuccessfulTeardown();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function test(Environment $env, $spec, $skip = false)
     {
-        $results = array();
+        $results = [];
         foreach ($spec->getScenarios() as $scenario) {
             $tester = $scenario instanceof OutlineNode ? $this->outlineTester : $this->scenarioTester;
 
@@ -89,13 +97,5 @@ final class RuntimeFeatureTester implements SpecificationTester
         }
 
         return new TestResults($results);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown(Environment $env, $spec, $skip, TestResult $result)
-    {
-        return new SuccessfulTeardown();
     }
 }

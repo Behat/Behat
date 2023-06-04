@@ -36,8 +36,6 @@ final class RuntimeOutlineTester implements OutlineTester
 
     /**
      * Initializes tester.
-     *
-     * @param ScenarioTester $scenarioTester
      */
     public function __construct(ScenarioTester $scenarioTester)
     {
@@ -55,9 +53,17 @@ final class RuntimeOutlineTester implements OutlineTester
     /**
      * {@inheritdoc}
      */
+    public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
+    {
+        return new SuccessfulTeardown();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip = false)
     {
-        $results = array();
+        $results = [];
         foreach ($outline->getExamples() as $example) {
             $setup = $this->scenarioTester->setUp($env, $feature, $example, $skip);
             $localSkip = !$setup->isSuccessful() || $skip;
@@ -69,13 +75,5 @@ final class RuntimeOutlineTester implements OutlineTester
         }
 
         return new TestResults($results);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
-    {
-        return new SuccessfulTeardown();
     }
 }

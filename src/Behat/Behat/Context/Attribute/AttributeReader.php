@@ -10,8 +10,6 @@
 
 namespace Behat\Behat\Context\Attribute;
 
-use ReflectionMethod;
-
 /**
  * Reads Attributes of a provided context method into a Callee.
  *
@@ -24,10 +22,7 @@ interface AttributeReader
     /**
      * Reads all callees associated with a provided method.
      *
-     * @param string           $contextClass
-     * @param ReflectionMethod $method
-     *
      * @return array
      */
-    public function readCallees(string $contextClass, ReflectionMethod $method);
+    public function readCallees(string $contextClass, \ReflectionMethod $method);
 }

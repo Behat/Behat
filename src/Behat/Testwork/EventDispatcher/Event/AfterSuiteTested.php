@@ -26,10 +26,12 @@ final class AfterSuiteTested extends SuiteTested implements AfterTested
      * @var SpecificationIterator
      */
     private $iterator;
+
     /**
      * @var TestResult
      */
     private $result;
+
     /**
      * @var Teardown
      */
@@ -37,11 +39,6 @@ final class AfterSuiteTested extends SuiteTested implements AfterTested
 
     /**
      * Initializes event.
-     *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
-     * @param TestResult            $result
-     * @param Teardown              $teardown
      */
     public function __construct(
         Environment $env,

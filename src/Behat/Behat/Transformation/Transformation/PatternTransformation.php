@@ -45,11 +45,17 @@ final class PatternTransformation extends RuntimeCallee implements Transformatio
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return 'PatternTransform ' . $this->pattern;
+    }
+
+    /**
      * Checks if transformer supports argument.
      *
-     * @param RegexGenerator $regexGenerator
-     * @param DefinitionCall $definitionCall
-     * @param mixed          $argumentValue
+     * @param mixed $argumentValue
      *
      * @return bool
      */
@@ -70,14 +76,10 @@ final class PatternTransformation extends RuntimeCallee implements Transformatio
     /**
      * Transforms argument value using transformation and returns a new one.
      *
-     * @param RegexGenerator $regexGenerator
-     * @param CallCenter     $callCenter
-     * @param DefinitionCall $definitionCall
-     * @param mixed          $argumentValue
+     * @param mixed $argumentValue
      *
+     * @throws \Exception If transformation throws exception
      * @return mixed
-     *
-     * @throws Exception If transformation throws exception
      */
     public function transformArgument(
         RegexGenerator $regexGenerator,
@@ -118,18 +120,6 @@ final class PatternTransformation extends RuntimeCallee implements Transformatio
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return 'PatternTransform ' . $this->pattern;
-    }
-
-    /**
-     * @param $regexPattern
-     * @param $argumentValue
-     * @param $match
-     *
      * @return bool
      */
     private function match($regexPattern, $argumentValue, &$match)

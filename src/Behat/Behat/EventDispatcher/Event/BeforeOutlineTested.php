@@ -26,6 +26,7 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var OutlineNode
      */
@@ -33,10 +34,6 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
      */
     public function __construct(Environment $env, FeatureNode $feature, OutlineNode $outline)
     {

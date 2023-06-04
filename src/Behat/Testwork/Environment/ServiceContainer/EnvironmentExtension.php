@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -44,12 +44,10 @@ final class EnvironmentExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -94,10 +92,8 @@ final class EnvironmentExtension implements Extension
 
     /**
      * Loads environment manager.
-     *
-     * @param ContainerBuilder $container
      */
-    protected function loadManager(ContainerBuilder $container)
+    private function loadManager(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Environment\EnvironmentManager');
         $container->setDefinition(self::MANAGER_ID, $definition);
@@ -105,43 +101,37 @@ final class EnvironmentExtension implements Extension
 
     /**
      * Loads static environments handler.
-     *
-     * @param ContainerBuilder $container
      */
-    protected function loadStaticEnvironmentHandler(ContainerBuilder $container)
+    private function loadStaticEnvironmentHandler(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Environment\Handler\StaticEnvironmentHandler');
-        $definition->addTag(self::HANDLER_TAG, array('priority' => 0));
+        $definition->addTag(self::HANDLER_TAG, ['priority' => 0]);
         $container->setDefinition(self::HANDLER_TAG . '.static', $definition);
     }
 
     /**
      * Processes all environment handlers.
-     *
-     * @param ContainerBuilder $container
      */
-    protected function processHandlers(ContainerBuilder $container)
+    private function processHandlers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::HANDLER_TAG);
         $definition = $container->getDefinition(self::MANAGER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerEnvironmentHandler', array($reference));
+            $definition->addMethodCall('registerEnvironmentHandler', [$reference]);
         }
     }
 
     /**
      * Processes all environment readers.
-     *
-     * @param ContainerBuilder $container
      */
-    protected function processReaders(ContainerBuilder $container)
+    private function processReaders(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::READER_TAG);
         $definition = $container->getDefinition(self::MANAGER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerEnvironmentReader', array($reference));
+            $definition->addMethodCall('registerEnvironmentReader', [$reference]);
         }
     }
 }

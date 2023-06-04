@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -25,34 +25,30 @@ interface SpecificationTester
     /**
      * Sets up specification for a test.
      *
-     * @param Environment $env
-     * @param mixed       $spec
-     * @param bool     $skip
+     * @param mixed $spec
+     * @param bool  $skip
      *
      * @return Setup
      */
     public function setUp(Environment $env, $spec, $skip);
 
     /**
-     * Tests provided specification.
-     *
-     * @param Environment $env
-     * @param mixed       $spec
-     * @param bool     $skip
-     *
-     * @return TestResult
-     */
-    public function test(Environment $env, $spec, $skip);
-
-    /**
      * Tears down specification after a test.
      *
-     * @param Environment $env
-     * @param mixed       $spec
-     * @param bool     $skip
-     * @param TestResult  $result
+     * @param mixed $spec
+     * @param bool  $skip
      *
      * @return Teardown
      */
     public function tearDown(Environment $env, $spec, $skip, TestResult $result);
+
+    /**
+     * Tests provided specification.
+     *
+     * @param mixed $spec
+     * @param bool  $skip
+     *
+     * @return TestResult
+     */
+    public function test(Environment $env, $spec, $skip);
 }

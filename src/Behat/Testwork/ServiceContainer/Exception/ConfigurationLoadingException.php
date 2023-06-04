@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -10,13 +10,11 @@
 
 namespace Behat\Testwork\ServiceContainer\Exception;
 
-use InvalidArgumentException;
-
 /**
  * Represents exception thrown during configuration load.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ConfigurationLoadingException extends InvalidArgumentException implements ServiceContainerException
+final class ConfigurationLoadingException extends \InvalidArgumentException implements ServiceContainerException
 {
 }

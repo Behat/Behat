@@ -25,61 +25,11 @@ use Symfony\Component\Console\Output\StreamOutput;
 class ConsoleOutputFactory extends OutputFactory
 {
     /**
-     * Creates output formatter that is used to create a stream.
-     *
-     * @return OutputFormatter
-     */
-    protected function createOutputFormatter()
-    {
-        return new OutputFormatter();
-    }
-
-    /**
-     * Configure output stream parameters.
-     *
-     * @param OutputInterface $output
-     */
-    protected function configureOutputStream(OutputInterface $output)
-    {
-        $verbosity = $this->getOutputVerbosity() ? OutputInterface::VERBOSITY_VERBOSE : OutputInterface::VERBOSITY_NORMAL;
-        $output->setVerbosity($verbosity);
-
-        if (null !== $this->isOutputDecorated()) {
-            $output->getFormatter()->setDecorated($this->isOutputDecorated());
-        }
-    }
-
-    /**
-     * Returns new output stream.
-     *
-     * Override this method & call flush() to write output in another stream
-     *
-     * @return resource
-     *
-     * @throws BadOutputPathException
-     */
-    protected function createOutputStream()
-    {
-        if (null === $this->getOutputPath()) {
-            $stream = fopen('php://stdout', 'w');
-        } elseif (!is_dir($this->getOutputPath())) {
-            $stream = fopen($this->getOutputPath(), 'w');
-        } else {
-            throw new BadOutputPathException(sprintf(
-                'Filename expected as `output_path` parameter, but got `%s`.',
-                $this->getOutputPath()
-            ), $this->getOutputPath());
-        }
-
-        return $stream;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function createOutput($stream = null)
     {
-        $stream = $stream ? : $this->createOutputStream();
+        $stream = $stream ?: $this->createOutputStream();
         $format = $this->createOutputFormatter();
 
         // set user-defined styles
@@ -108,5 +58,52 @@ class ConsoleOutputFactory extends OutputFactory
         $this->configureOutputStream($output);
 
         return $output;
+    }
+
+    /**
+     * Creates output formatter that is used to create a stream.
+     *
+     * @return OutputFormatter
+     */
+    protected function createOutputFormatter()
+    {
+        return new OutputFormatter();
+    }
+
+    /**
+     * Configure output stream parameters.
+     */
+    protected function configureOutputStream(OutputInterface $output)
+    {
+        $verbosity = $this->getOutputVerbosity() ? OutputInterface::VERBOSITY_VERBOSE : OutputInterface::VERBOSITY_NORMAL;
+        $output->setVerbosity($verbosity);
+
+        if (null !== $this->isOutputDecorated()) {
+            $output->getFormatter()->setDecorated($this->isOutputDecorated());
+        }
+    }
+
+    /**
+     * Returns new output stream.
+     *
+     * Override this method & call flush() to write output in another stream
+     *
+     * @throws BadOutputPathException
+     * @return resource
+     */
+    protected function createOutputStream()
+    {
+        if (null === $this->getOutputPath()) {
+            $stream = fopen('php://stdout', 'w');
+        } elseif (!is_dir($this->getOutputPath())) {
+            $stream = fopen($this->getOutputPath(), 'w');
+        } else {
+            throw new BadOutputPathException(sprintf(
+                'Filename expected as `output_path` parameter, but got `%s`.',
+                $this->getOutputPath()
+            ), $this->getOutputPath());
+        }
+
+        return $stream;
     }
 }

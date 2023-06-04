@@ -14,11 +14,11 @@ use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
+use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
 use Behat\Behat\Hook\ServiceContainer\HookExtension;
 use Behat\Behat\Output\ServiceContainer\Formatter\JUnitFormatterFactory;
 use Behat\Behat\Output\ServiceContainer\Formatter\PrettyFormatterFactory;
 use Behat\Behat\Output\ServiceContainer\Formatter\ProgressFormatterFactory;
-use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Behat\Transformation\ServiceContainer\TransformationExtension;
@@ -71,9 +71,9 @@ final class ApplicationFactory extends BaseFactory
     {
         $processor = new ServiceProcessor();
 
-        return array(
+        return [
             new ArgumentExtension(),
-            new AutoloaderExtension(array('' => '%paths.base%/features/bootstrap')),
+            new AutoloaderExtension(['' => '%paths.base%/features/bootstrap']),
             new SuiteExtension($processor),
             new OutputExtension('pretty', $this->getDefaultFormatterFactories($processor), $processor),
             new ExceptionExtension($processor),
@@ -93,8 +93,8 @@ final class ApplicationFactory extends BaseFactory
             new HookExtension(),
             new TransformationExtension($processor),
             new OrderingExtension($processor),
-            new HelperContainerExtension($processor)
-        );
+            new HelperContainerExtension($processor),
+        ];
     }
 
     /**
@@ -112,7 +112,7 @@ final class ApplicationFactory extends BaseFactory
     {
         $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $configDir = $cwd . 'config' . DIRECTORY_SEPARATOR;
-        $paths = array(
+        $paths = [
             $cwd . 'behat.yaml',
             $cwd . 'behat.yml',
             $cwd . 'behat.yaml.dist',
@@ -121,7 +121,7 @@ final class ApplicationFactory extends BaseFactory
             $configDir . 'behat.yml',
             $configDir . 'behat.yaml.dist',
             $configDir . 'behat.yml.dist',
-        );
+        ];
 
         foreach ($paths as $path) {
             if (is_file($path)) {
@@ -135,16 +135,14 @@ final class ApplicationFactory extends BaseFactory
     /**
      * Returns default formatter factories.
      *
-     * @param ServiceProcessor $processor
-     *
      * @return FormatterFactory[]
      */
     private function getDefaultFormatterFactories(ServiceProcessor $processor)
     {
-        return array(
+        return [
             new PrettyFormatterFactory($processor),
             new ProgressFormatterFactory($processor),
             new JUnitFormatterFactory(),
-        );
+        ];
     }
 }

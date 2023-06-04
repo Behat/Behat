@@ -10,8 +10,8 @@
 
 namespace Behat\Testwork\Hook\Scope;
 
-use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -25,10 +25,12 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
      * @var Environment
      */
     private $environment;
+
     /**
      * @var SpecificationIterator
      */
     private $iterator;
+
     /**
      * @var TestResult
      */
@@ -36,10 +38,6 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
 
     /**
      * Initializes scope.
-     *
-     * @param Environment           $environment
-     * @param SpecificationIterator $iterator
-     * @param TestResult            $result
      */
     public function __construct(Environment $environment, SpecificationIterator $iterator, TestResult $result)
     {

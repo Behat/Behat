@@ -27,7 +27,7 @@ final class NullFactory implements ArgumentResolverFactory, SuiteScopedResolverF
      */
     public function generateArgumentResolvers(Suite $suite)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -35,6 +35,6 @@ final class NullFactory implements ArgumentResolverFactory, SuiteScopedResolverF
      */
     public function createArgumentResolvers(Environment $environment)
     {
-        return array();
+        return [];
     }
 }

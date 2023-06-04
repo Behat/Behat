@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,6 +27,7 @@ final class HookDispatcher
      * @var HookRepository
      */
     private $repository;
+
     /**
      * @var CallCenter
      */
@@ -34,9 +35,6 @@ final class HookDispatcher
 
     /**
      * Initializes hook dispatcher.
-     *
-     * @param HookRepository $repository
-     * @param CallCenter     $callCenter
      */
     public function __construct(HookRepository $repository, CallCenter $callCenter)
     {
@@ -47,13 +45,11 @@ final class HookDispatcher
     /**
      * Dispatches hooks for a specified event.
      *
-     * @param HookScope $scope
-     *
      * @return CallResults
      */
     public function dispatchScopeHooks(HookScope $scope)
     {
-        $results = array();
+        $results = [];
         foreach ($this->repository->getScopeHooks($scope) as $hook) {
             $results[] = $this->dispatchHook($scope, $hook);
         }
@@ -63,9 +59,6 @@ final class HookDispatcher
 
     /**
      * Dispatches single event hook.
-     *
-     * @param HookScope $scope
-     * @param Hook      $hook
      *
      * @return CallResult
      */

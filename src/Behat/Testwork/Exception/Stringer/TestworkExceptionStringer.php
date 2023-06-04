@@ -12,7 +12,6 @@ namespace Behat\Testwork\Exception\Stringer;
 
 use Behat\Testwork\Call\Exception\CallErrorException;
 use Behat\Testwork\Exception\TestworkException;
-use Exception;
 
 /**
  * Strings Testwork exceptions.
@@ -24,7 +23,7 @@ final class TestworkExceptionStringer implements ExceptionStringer
     /**
      * {@inheritdoc}
      */
-    public function supportsException(Exception $exception)
+    public function supportsException(\Exception $exception)
     {
         return $exception instanceof TestworkException || $exception instanceof CallErrorException;
     }
@@ -32,7 +31,7 @@ final class TestworkExceptionStringer implements ExceptionStringer
     /**
      * {@inheritdoc}
      */
-    public function stringException(Exception $exception, $verbosity)
+    public function stringException(\Exception $exception, $verbosity)
     {
         return trim($exception->getMessage());
     }

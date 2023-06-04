@@ -27,10 +27,12 @@ final class AfterFeatureTested extends FeatureTested implements AfterTested
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var TestResult
      */
     private $result;
+
     /**
      * @var Teardown
      */
@@ -38,11 +40,6 @@ final class AfterFeatureTested extends FeatureTested implements AfterTested
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param TestResult  $result
-     * @param Teardown    $teardown
      */
     public function __construct(Environment $env, FeatureNode $feature, TestResult $result, Teardown $teardown)
     {

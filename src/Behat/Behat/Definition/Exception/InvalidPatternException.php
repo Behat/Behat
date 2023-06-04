@@ -10,13 +10,11 @@
 
 namespace Behat\Behat\Definition\Exception;
 
-use InvalidArgumentException;
-
 /**
  * Represents an exception caused by an invalid definition pattern (not able to transform it to a regex).
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-final class InvalidPatternException extends InvalidArgumentException implements DefinitionException
+final class InvalidPatternException extends \InvalidArgumentException implements DefinitionException
 {
 }

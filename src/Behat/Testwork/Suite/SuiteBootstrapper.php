@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -22,12 +22,10 @@ final class SuiteBootstrapper
     /**
      * @var SuiteSetup[]
      */
-    private $setups = array();
+    private $setups = [];
 
     /**
      * Registers suite setup.
-     *
-     * @param SuiteSetup $setup
      */
     public function registerSuiteSetup(SuiteSetup $setup)
     {
@@ -41,13 +39,11 @@ final class SuiteBootstrapper
      */
     public function bootstrapSuites(array $suites)
     {
-        array_map(array($this, 'bootstrapSuite'), $suites);
+        array_map([$this, 'bootstrapSuite'], $suites);
     }
 
     /**
      * Bootstraps provided suite using registered setup.
-     *
-     * @param Suite $suite
      */
     public function bootstrapSuite(Suite $suite)
     {

@@ -24,14 +24,17 @@ final class ContextSnippet implements Snippet
      * @var StepNode
      */
     private $step;
+
     /**
      * @var string
      */
     private $template;
+
     /**
      * @var string
      */
     private $contextClass;
+
     /**
      * @var string[]
      */
@@ -40,12 +43,11 @@ final class ContextSnippet implements Snippet
     /**
      * Initializes definition snippet.
      *
-     * @param StepNode $step
      * @param string   $template
      * @param string   $contextClass
      * @param string[] $usedClasses
      */
-    public function __construct(StepNode $step, $template, $contextClass, array $usedClasses = array())
+    public function __construct(StepNode $step, $template, $contextClass, array $usedClasses = [])
     {
         $this->step = $step;
         $this->template = $template;
