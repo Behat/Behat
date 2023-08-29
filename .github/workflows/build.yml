@@ -18,7 +18,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [7.2, 7.3, 7.4, 8.0, 8.1, 8.2]
+                php: [7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3]
                 os: [ubuntu-latest]
                 composer-mode: [update]
                 symfony-version: ['']
@@ -82,7 +82,7 @@ jobs:
                 if: matrix.composer-mode == 'update'
                 env:
                     SYMFONY_REQUIRE: ${{ matrix.symfony-version }}.*
-                run: composer update
+                run: composer update ${{ matrix.php == '8.3' && '--ignore-platform-req=php+' || '' }}
 
             -   name: Install lowest dependencies
                 if: matrix.composer-mode == 'lowest'
