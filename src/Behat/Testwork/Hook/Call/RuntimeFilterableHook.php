@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -40,6 +40,14 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHo
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return trim($this->getName() . ' ' . $this->getFilterString());
+    }
+
+    /**
      * Returns hook filter string (if has one).
      *
      * @return null|string
@@ -47,13 +55,5 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHo
     public function getFilterString()
     {
         return $this->filterString;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return trim($this->getName() . ' ' . $this->getFilterString());
     }
 }

@@ -33,18 +33,22 @@ final class RerunController implements Controller
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+
     /**
      * @var null|string
      */
     private $cachePath;
+
     /**
      * @var string
      */
     private $key;
+
     /**
      * @var string[]
      */
-    private $lines = array();
+    private $lines = [];
+
     /**
      * @var string
      */
@@ -53,9 +57,8 @@ final class RerunController implements Controller
     /**
      * Initializes controller.
      *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param null|string              $cachePath
-     * @param string                   $basepath
+     * @param null|string $cachePath
+     * @param string      $basepath
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, $cachePath, $basepath)
     {
@@ -66,12 +69,13 @@ final class RerunController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
-        $command->addOption('--rerun', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--rerun',
+            null,
+            InputOption::VALUE_NONE,
             'Re-run scenarios that failed during last execution.'
         );
     }
@@ -79,16 +83,13 @@ final class RerunController implements Controller
     /**
      * Executes controller.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * @return null|int
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'collectFailedScenario'), -50);
-        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'collectFailedScenario'), -50);
-        $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'writeCache'), -50);
+        $this->eventDispatcher->addListener(ScenarioTested::AFTER, [$this, 'collectFailedScenario'], -50);
+        $this->eventDispatcher->addListener(ExampleTested::AFTER, [$this, 'collectFailedScenario'], -50);
+        $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'writeCache'], -50);
 
         $this->key = $this->generateKey($input);
 
@@ -105,8 +106,6 @@ final class RerunController implements Controller
 
     /**
      * Records scenario if it is failed.
-     *
-     * @param AfterScenarioTested $event
      */
     public function collectFailedScenario(AfterScenarioTested $event)
     {
@@ -148,14 +147,12 @@ final class RerunController implements Controller
     /**
      * Generates cache key.
      *
-     * @param InputInterface $input
-     *
      * @return string
      */
     private function generateKey(InputInterface $input)
     {
         return md5(
-            $input->getParameterOption(array('--profile', '-p')) .
+            $input->getParameterOption(['--profile', '-p']) .
             $input->getOption('suite') .
             implode(' ', $input->getOption('name')) .
             implode(' ', $input->getOption('tags')) .

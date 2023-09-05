@@ -11,10 +11,10 @@
 namespace Behat\Behat\HelperContainer\Argument;
 
 use Behat\Behat\Context\Argument\ArgumentResolver;
-use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\Context\Argument\ArgumentResolverFactory;
 use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
 use Behat\Behat\HelperContainer\BuiltInServiceContainer;
+use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\HelperContainer\Exception\WrongContainerClassException;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
 use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
@@ -39,8 +39,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
 
     /**
      * Initialises factory.
-     *
-     * @param TaggedContainerInterface $container
      */
     public function __construct(TaggedContainerInterface $container)
     {
@@ -63,7 +61,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
         );
 
         if (!$suite->hasSetting('services')) {
-            return array();
+            return [];
         }
 
         $container = $this->createContainer($suite->getSetting('services'));
@@ -82,7 +80,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
         $suite = $environment->getSuite();
 
         if (!$suite->hasSetting('services')) {
-            return array();
+            return [];
         }
 
         $container = $this->createContainer($suite->getSetting('services'));
@@ -100,9 +98,8 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      *
      * @param string $settings
      *
-     * @return mixed
-     *
      * @throws WrongServicesConfigurationException
+     * @return mixed
      */
     private function createContainer($settings)
     {
@@ -124,9 +121,8 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      *
      * @param string $settings
      *
-     * @return mixed
-     *
      * @throws WrongServicesConfigurationException
+     * @return mixed
      */
     private function createContainerFromString($settings)
     {
@@ -140,8 +136,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     /**
      * Creates built-in service container with provided settings.
      *
-     * @param array $settings
-     *
      * @return BuiltInServiceContainer
      */
     private function createContainerFromArray(array $settings)
@@ -154,9 +148,8 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      *
      * @param string $name
      *
-     * @return mixed
-     *
      * @throws WrongServicesConfigurationException
+     * @return mixed
      */
     private function loadContainerFromContainer($name)
     {
@@ -186,7 +179,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
             return call_user_func($constructor);
         }
 
-        return new $constructor[0];
+        return new $constructor[0]();
     }
 
     /**
@@ -195,9 +188,8 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      * @param mixed $container
      * @param bool  $autowire
      *
-     * @return ArgumentResolver[]
-     *
      * @throws WrongContainerClassException
+     * @return ArgumentResolver[]
      */
     private function createResolvers($container, $autowire)
     {
@@ -212,9 +204,9 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
         }
 
         if ($autowire) {
-            return array(new ServicesResolver($container), new AutowiringResolver($container));
+            return [new ServicesResolver($container), new AutowiringResolver($container)];
         }
 
-        return array(new ServicesResolver($container));
+        return [new ServicesResolver($container)];
     }
 }

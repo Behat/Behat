@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,19 +23,20 @@ final class GroupedSpecificationIterator implements SpecificationIterator
      * @var Suite
      */
     private $suite;
+
     /**
      * @var SpecificationIterator[]
      */
     private $iterators;
+
     /**
-     * @var integer
+     * @var int
      */
     private $position = 0;
 
     /**
      * Initializes iterator.
      *
-     * @param Suite                   $suite
      * @param SpecificationIterator[] $specificationIterators
      */
     public function __construct(Suite $suite, array $specificationIterators)
@@ -53,7 +54,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
      */
     public static function group(array $specificationIterators)
     {
-        $groupedSpecifications = array();
+        $groupedSpecifications = [];
         foreach ($specificationIterators as $specificationIterator) {
             $groupedSpecifications[$specificationIterator->getSuite()->getName()][] = $specificationIterator;
         }
@@ -86,7 +87,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
             if ($this->iterators[$this->position]->valid()) {
                 break;
             }
-            $this->position++;
+            ++$this->position;
         }
     }
 
@@ -101,7 +102,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
 
         $this->iterators[$this->position]->next();
         while (!$this->iterators[$this->position]->valid()) {
-            $this->position++;
+            ++$this->position;
 
             if (!isset($this->iterators[$this->position])) {
                 break;

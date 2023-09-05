@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -10,14 +10,12 @@
 
 namespace Behat\Testwork\Output\Exception;
 
-use InvalidArgumentException;
-
 /**
  * Represents an exception thrown because user provided bad output path.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BadOutputPathException extends InvalidArgumentException implements PrinterException
+class BadOutputPathException extends \InvalidArgumentException implements PrinterException
 {
     /**
      * @var string

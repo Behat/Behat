@@ -24,8 +24,6 @@ interface ArgumentResolverFactory
     /**
      * Builds argument resolvers for provided suite.
      *
-     * @param Environment $environment
-     *
      * @return ArgumentResolver[]
      */
     public function createArgumentResolvers(Environment $environment);

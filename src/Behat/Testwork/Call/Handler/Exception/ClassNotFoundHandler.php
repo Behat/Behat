@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,7 +11,6 @@
 namespace Behat\Testwork\Call\Handler\Exception;
 
 use Behat\Testwork\Call\Handler\ExceptionHandler;
-use Error;
 
 /**
  * Handles class not found exceptions.
@@ -29,7 +28,7 @@ abstract class ClassNotFoundHandler implements ExceptionHandler
      */
     final public function supportsException($exception)
     {
-        if (!$exception instanceof Error) {
+        if (!$exception instanceof \Error) {
             return false;
         }
 
@@ -56,11 +55,9 @@ abstract class ClassNotFoundHandler implements ExceptionHandler
     /**
      * Extracts missing class name from the exception.
      *
-     * @param Error $exception
-     *
      * @return null|string
      */
-    private function extractNonExistentClass(Error $exception)
+    private function extractNonExistentClass(\Error $exception)
     {
         if (1 === preg_match(self::PATTERN, $exception->getMessage(), $matches)) {
             return $matches[1];

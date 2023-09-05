@@ -23,8 +23,6 @@ final class ResultToStringConverter
     /**
      * Converts provided test result to a string.
      *
-     * @param TestResult $result
-     *
      * @return string
      */
     public function convertResultToString(TestResult $result)
@@ -35,7 +33,7 @@ final class ResultToStringConverter
     /**
      * Converts provided result code to a string.
      *
-     * @param integer $resultCode
+     * @param int $resultCode
      *
      * @return string
      */
@@ -44,10 +42,13 @@ final class ResultToStringConverter
         switch ($resultCode) {
             case TestResult::SKIPPED:
                 return 'skipped';
+
             case TestResult::PENDING:
                 return 'pending';
+
             case TestResult::FAILED:
                 return 'failed';
+
             case StepResult::UNDEFINED:
                 return 'undefined';
         }

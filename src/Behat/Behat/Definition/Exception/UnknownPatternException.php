@@ -10,14 +10,12 @@
 
 namespace Behat\Behat\Definition\Exception;
 
-use InvalidArgumentException;
-
 /**
  * Represents an exception caused by an unrecognised definition pattern.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class UnknownPatternException extends InvalidArgumentException implements DefinitionException
+final class UnknownPatternException extends \InvalidArgumentException implements DefinitionException
 {
     /**
      * @var string
@@ -27,8 +25,8 @@ final class UnknownPatternException extends InvalidArgumentException implements 
     /**
      * Initializes exception.
      *
-     * @param string  $message
-     * @param integer $pattern
+     * @param string $message
+     * @param int    $pattern
      */
     public function __construct($message, $pattern)
     {

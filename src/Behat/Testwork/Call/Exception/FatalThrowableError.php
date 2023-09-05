@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -10,24 +10,21 @@
 
 namespace Behat\Testwork\Call\Exception;
 
-use ErrorException;
-use ParseError;
 use Throwable;
-use TypeError;
 
 /**
  * Fatal Throwable Error.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class FatalThrowableError extends ErrorException
+class FatalThrowableError extends \ErrorException
 {
-    public function __construct(Throwable $e)
+    public function __construct(\Throwable $e)
     {
-        if ($e instanceof ParseError) {
+        if ($e instanceof \ParseError) {
             $message = 'Parse error: '.$e->getMessage();
             $severity = E_PARSE;
-        } elseif ($e instanceof TypeError) {
+        } elseif ($e instanceof \TypeError) {
             $message = 'Type error: '.$e->getMessage();
             $severity = E_RECOVERABLE_ERROR;
         } else {

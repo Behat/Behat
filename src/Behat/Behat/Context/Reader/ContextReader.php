@@ -23,8 +23,7 @@ interface ContextReader
     /**
      * Reads callees from specific environment & context.
      *
-     * @param ContextEnvironment $environment
-     * @param string             $contextClass
+     * @param string $contextClass
      *
      * @return Callee[]
      */

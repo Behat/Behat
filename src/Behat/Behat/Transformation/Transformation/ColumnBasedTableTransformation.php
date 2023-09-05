@@ -16,7 +16,6 @@ use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
-use ReflectionMethod;
 
 /**
  * Column-based table transformation.
@@ -31,14 +30,6 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
      * @var string
      */
     private $pattern;
-
-    /**
-     * {@inheritdoc}
-     */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
-    {
-        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
-    }
 
     /**
      * Initializes transformation.
@@ -57,11 +48,27 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
     /**
      * {@inheritdoc}
      */
+    public function __toString()
+    {
+        return 'ColumnTableTransform ' . $this->pattern;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function supportsPatternAndMethod($pattern, \ReflectionMethod $method)
+    {
+        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         if (!$argumentArgumentValue instanceof TableNode) {
             return false;
-        };
+        }
 
         return $this->pattern === 'table:' . implode(',', $argumentArgumentValue->getRow(0))
             || $this->pattern === 'table:*';
@@ -76,7 +83,7 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
             $definitionCall->getEnvironment(),
             $definitionCall->getCallee(),
             $this,
-            array($argumentValue)
+            [$argumentValue]
         );
 
         $result = $callCenter->makeCall($call);
@@ -102,13 +109,5 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
     public function getPattern()
     {
         return $this->pattern;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return 'ColumnTableTransform ' . $this->pattern;
     }
 }

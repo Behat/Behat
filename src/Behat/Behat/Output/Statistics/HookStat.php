@@ -21,16 +21,19 @@ final class HookStat
      * @var string
      */
     private $name;
+
     /**
      * @var string
      */
     private $path;
+
     /**
-     * @var string|null
+     * @var null|string
      */
     private $error;
+
     /**
-     * @var string|null
+     * @var null|string
      */
     private $stdOut;
 
@@ -50,17 +53,11 @@ final class HookStat
         $this->stdOut = $stdOut;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSuccessful()
     {
         return null === $this->error;

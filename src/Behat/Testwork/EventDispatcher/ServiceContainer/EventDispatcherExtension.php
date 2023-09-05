@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -44,12 +44,10 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -94,23 +92,19 @@ class EventDispatcherExtension implements Extension
     }
 
     /**
-     * Loads sigint controller
-     *
-     * @param ContainerBuilder $container
+     * Loads sigint controller.
      */
     protected function loadSigintController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Cli\SigintController', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Cli\SigintController', [
+            new Reference(EventDispatcherExtension::DISPATCHER_ID),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.sigint', $definition);
     }
 
     /**
      * Loads event dispatcher.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatcher(ContainerBuilder $container)
     {
@@ -120,38 +114,32 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Loads event-dispatching exercise.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingExercise', array(
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingExercise', [
             new Reference(TesterExtension::EXERCISE_ID),
-            new Reference(self::DISPATCHER_ID)
-        ));
+            new Reference(self::DISPATCHER_ID),
+        ]);
         $definition->addTag(TesterExtension::EXERCISE_WRAPPER_TAG);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
     /**
      * Loads event-dispatching suite tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingSuiteTester', array(
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingSuiteTester', [
             new Reference(TesterExtension::SUITE_TESTER_ID),
-            new Reference(self::DISPATCHER_ID)
-        ));
-        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => -9999));
+            new Reference(self::DISPATCHER_ID),
+        ]);
+        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
     /**
      * Registers all available event subscribers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processSubscribers(ContainerBuilder $container)
     {
@@ -159,7 +147,7 @@ class EventDispatcherExtension implements Extension
         $definition = $container->getDefinition(self::DISPATCHER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('addSubscriber', array($reference));
+            $definition->addMethodCall('addSubscriber', [$reference]);
         }
     }
 }

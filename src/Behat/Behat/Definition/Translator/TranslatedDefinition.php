@@ -23,10 +23,12 @@ final class TranslatedDefinition implements Definition
      * @var Definition
      */
     private $definition;
+
     /**
      * @var string
      */
     private $translatedPattern;
+
     /**
      * @var string
      */
@@ -35,15 +37,22 @@ final class TranslatedDefinition implements Definition
     /**
      * Initialises translated definition.
      *
-     * @param Definition $definition
-     * @param string     $translatedPattern
-     * @param string     $language
+     * @param string $translatedPattern
+     * @param string $language
      */
     public function __construct(Definition $definition, $translatedPattern, $language)
     {
         $this->definition = $definition;
         $this->translatedPattern = $translatedPattern;
         $this->language = $language;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->definition->__toString();
     }
 
     /**
@@ -128,13 +137,5 @@ final class TranslatedDefinition implements Definition
     public function getReflection()
     {
         return $this->definition->getReflection();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return $this->definition->__toString();
     }
 }

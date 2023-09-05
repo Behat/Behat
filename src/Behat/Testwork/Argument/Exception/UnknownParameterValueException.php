@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -10,8 +10,6 @@
 
 namespace Behat\Testwork\Argument\Exception;
 
-use BadMethodCallException;
-
 /**
  * Represents an exception caused by an unknown function parameter value.
  *
@@ -19,6 +17,6 @@ use BadMethodCallException;
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
-final class UnknownParameterValueException extends BadMethodCallException implements ArgumentException
+final class UnknownParameterValueException extends \BadMethodCallException implements ArgumentException
 {
 }

@@ -36,18 +36,22 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
      * @var ResultToStringConverter
      */
     private $resultConverter;
+
     /**
      * @var ExceptionPresenter
      */
     private $exceptionPresenter;
+
     /**
      * @var string
      */
     private $indentText;
+
     /**
      * @var string
      */
     private $subIndentText;
+
     /**
      * @var TranslatorInterface
      */
@@ -56,10 +60,8 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     /**
      * Initializes printer.
      *
-     * @param ResultToStringConverter $resultConverter
-     * @param ExceptionPresenter      $exceptionPresenter
-     * @param integer                 $indentation
-     * @param integer                 $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct(
         ResultToStringConverter $resultConverter,
@@ -80,7 +82,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
      */
     public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleNode $example, array $events)
     {
-        $rowNum = array_search($example, $outline->getExamples()) + 1;
+        $rowNum = array_search($example, $outline->getExamples(), true) + 1;
         $wrapper = $this->getWrapperClosure($outline, $example, $events);
         $row = $outline->getExampleTable()->getRowAsStringWithWrappedValues($rowNum, $wrapper);
 
@@ -91,8 +93,6 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     /**
      * Creates wrapper-closure for the example table.
      *
-     * @param OutlineNode   $outline
-     * @param ExampleNode   $example
      * @param AfterStepTested[] $stepEvents
      *
      * @return callable
@@ -102,9 +102,9 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         $resultConverter = $this->resultConverter;
 
         return function ($value, $column) use ($outline, $example, $stepEvents, $resultConverter) {
-            $results = array();
+            $results = [];
             foreach ($stepEvents as $event) {
-                $index = array_search($event->getStep(), $example->getSteps());
+                $index = array_search($event->getStep(), $example->getSteps(), true);
                 $header = $outline->getExampleTable()->getRow(0);
                 $steps = $outline->getSteps();
                 $outlineStepText = $steps[$index]->getText();
@@ -124,7 +124,6 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     /**
      * Prints step events exceptions (if has some).
      *
-     * @param OutputPrinter $printer
      * @param AfterTested[] $events
      */
     private function printStepExceptionsAndStdOut(OutputPrinter $printer, array $events)
@@ -137,9 +136,6 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
 
     /**
      * Prints step exception (if has one).
-     *
-     * @param OutputPrinter $printer
-     * @param AfterTested   $event
      */
     private function printStepException(OutputPrinter $printer, AfterTested $event)
     {
@@ -158,15 +154,12 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         }
 
         $text = $this->exceptionPresenter->presentException($result->getException());
-        $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+        $indentedText = implode("\n", array_map([$this, 'subIndent'], explode("\n", $text)));
         $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
     }
 
     /**
      * Prints step output (if has one).
-     *
-     * @param OutputPrinter $printer
-     * @param StepResult    $result
      */
     private function printStepStdOut(OutputPrinter $printer, StepResult $result)
     {
@@ -179,7 +172,9 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
 
         $pad = function ($line) use ($indentedText) {
             return sprintf(
-                '%s│ {+stdout}%s{-stdout}', $indentedText, $line
+                '%s│ {+stdout}%s{-stdout}',
+                $indentedText,
+                $line
             );
         };
 

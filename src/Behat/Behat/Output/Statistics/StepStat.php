@@ -23,18 +23,22 @@ class StepStat
      * @var string
      */
     private $text;
+
     /**
      * @var string
      */
     private $path;
+
     /**
-     * @var integer
+     * @var int
      */
     private $resultCode;
+
     /**
      * @var null|string
      */
     private $error;
+
     /**
      * @var null|string
      */
@@ -45,7 +49,7 @@ class StepStat
      *
      * @param string      $text
      * @param string      $path
-     * @param integer     $resultCode
+     * @param int         $resultCode
      * @param null|string $error
      * @param null|string $stdOut
      */
@@ -56,6 +60,16 @@ class StepStat
         $this->resultCode = $resultCode;
         $this->error = $error;
         $this->stdOut = $stdOut;
+    }
+
+    /**
+     * Returns string representation for a stat.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getPath();
     }
 
     /**
@@ -81,7 +95,7 @@ class StepStat
     /**
      * Returns step result code.
      *
-     * @return integer
+     * @return int
      */
     public function getResultCode()
     {
@@ -106,15 +120,5 @@ class StepStat
     public function getStdOut()
     {
         return $this->stdOut;
-    }
-
-    /**
-     * Returns string representation for a stat.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getPath();
     }
 }

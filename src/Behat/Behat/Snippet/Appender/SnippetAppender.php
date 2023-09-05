@@ -25,16 +25,12 @@ interface SnippetAppender
     /**
      * Checks if appender supports snippet.
      *
-     * @param AggregateSnippet $snippet
-     *
      * @return bool
      */
     public function supportsSnippet(AggregateSnippet $snippet);
 
     /**
      * Appends snippet to the source.
-     *
-     * @param AggregateSnippet $snippet
      */
     public function appendSnippet(AggregateSnippet $snippet);
 }

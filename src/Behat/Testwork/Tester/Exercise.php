@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -26,30 +26,29 @@ interface Exercise
      * Sets up exercise for a test.
      *
      * @param SpecificationIterator[] $iterators
-     * @param bool                 $skip
+     * @param bool                    $skip
      *
      * @return Setup
      */
     public function setUp(array $iterators, $skip);
 
     /**
-     * Tests suites specifications.
-     *
-     * @param SpecificationIterator[] $iterators
-     * @param bool                 $skip
-     *
-     * @return TestResult
-     */
-    public function test(array $iterators, $skip);
-
-    /**
      * Tears down exercise after a test.
      *
      * @param SpecificationIterator[] $iterators
-     * @param bool                 $skip
-     * @param TestResult              $result
+     * @param bool                    $skip
      *
      * @return Teardown
      */
     public function tearDown(array $iterators, $skip, TestResult $result);
+
+    /**
+     * Tests suites specifications.
+     *
+     * @param SpecificationIterator[] $iterators
+     * @param bool                    $skip
+     *
+     * @return TestResult
+     */
+    public function test(array $iterators, $skip);
 }

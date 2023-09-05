@@ -11,14 +11,13 @@
 namespace Behat\Behat\Tester\Exception;
 
 use Behat\Testwork\Tester\Exception\TesterException;
-use RuntimeException;
 
 /**
  * Represents a pending exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class PendingException extends RuntimeException implements TesterException
+final class PendingException extends \RuntimeException implements TesterException
 {
     /**
      * Initializes pending exception.

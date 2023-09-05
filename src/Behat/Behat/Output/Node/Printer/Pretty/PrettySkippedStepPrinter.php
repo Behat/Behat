@@ -35,18 +35,22 @@ final class PrettySkippedStepPrinter implements StepPrinter
      * @var StepTextPainter
      */
     private $textPainter;
+
     /**
      * @var ResultToStringConverter
      */
     private $resultConverter;
+
     /**
      * @var PrettyPathPrinter
      */
     private $pathPrinter;
+
     /**
      * @var string
      */
     private $indentText;
+
     /**
      * @var string
      */
@@ -55,11 +59,8 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Initializes printer.
      *
-     * @param StepTextPainter         $textPainter
-     * @param ResultToStringConverter $resultConverter
-     * @param PrettyPathPrinter       $pathPrinter
-     * @param integer                 $indentation
-     * @param integer                 $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct(
         StepTextPainter $textPainter,
@@ -88,10 +89,8 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Prints step text.
      *
-     * @param OutputPrinter $printer
-     * @param string        $stepType
-     * @param string        $stepText
-     * @param StepResult    $result
+     * @param string $stepType
+     * @param string $stepText
      */
     private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result)
     {
@@ -100,7 +99,9 @@ final class PrettySkippedStepPrinter implements StepPrinter
         if ($result instanceof DefinedStepResult && $result->getStepDefinition()) {
             $definition = $result->getStepDefinition();
             $stepText = $this->textPainter->paintText(
-                $stepText, $definition, new IntegerTestResult(TestResult::SKIPPED)
+                $stepText,
+                $definition,
+                new IntegerTestResult(TestResult::SKIPPED)
             );
         }
 
@@ -110,7 +111,6 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Prints step multiline arguments.
      *
-     * @param Formatter           $formatter
      * @param ArgumentInterface[] $arguments
      */
     private function printArguments(Formatter $formatter, array $arguments)
@@ -120,7 +120,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
         foreach ($arguments as $argument) {
             $text = $this->getArgumentString($argument, !$formatter->getParameter('multiline'));
 
-            $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+            $indentedText = implode("\n", array_map([$this, 'subIndent'], explode("\n", $text)));
             $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
         }
     }
@@ -128,8 +128,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Returns argument string for provided argument.
      *
-     * @param ArgumentInterface $argument
-     * @param bool           $collapse
+     * @param bool $collapse
      *
      * @return string
      */
@@ -140,9 +139,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
         }
 
         if ($argument instanceof PyStringNode) {
-            $text = '"""' . "\n" . $argument . "\n" . '"""';
-
-            return $text;
+            return '"""' . "\n" . $argument . "\n" . '"""';
         }
 
         return (string) $argument;

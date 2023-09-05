@@ -20,6 +20,13 @@ use Behat\Testwork\Call\Callee;
 interface Transformation extends Callee
 {
     /**
+     * Represents transformation as a string.
+     *
+     * @return string
+     */
+    public function __toString();
+
+    /**
      * Returns transformation pattern exactly as it was defined.
      *
      * @deprecated Will be removed in 4.0.
@@ -27,11 +34,4 @@ interface Transformation extends Callee
      * @return string
      */
     public function getPattern();
-
-    /**
-     * Represents transformation as a string.
-     *
-     * @return string
-     */
-    public function __toString();
 }

@@ -25,10 +25,12 @@ class FireOnlyIfFormatterParameterListener implements EventListener
      * @var string
      */
     private $name;
+
     /**
      * @var mixed
      */
     private $value;
+
     /**
      * @var EventListener
      */
@@ -37,9 +39,8 @@ class FireOnlyIfFormatterParameterListener implements EventListener
     /**
      * Initializes listener.
      *
-     * @param string        $name
-     * @param mixed         $value
-     * @param EventListener $descendant
+     * @param string $name
+     * @param mixed  $value
      */
     public function __construct($name, $value, EventListener $descendant)
     {

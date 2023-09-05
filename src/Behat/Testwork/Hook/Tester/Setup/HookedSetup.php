@@ -24,6 +24,7 @@ final class HookedSetup implements Setup
      * @var Setup
      */
     private $setup;
+
     /**
      * @var CallResults
      */
@@ -31,9 +32,6 @@ final class HookedSetup implements Setup
 
     /**
      * Initializes setup.
-     *
-     * @param Setup       $setup
-     * @param CallResults $hookCallResults
      */
     public function __construct(Setup $setup, CallResults $hookCallResults)
     {

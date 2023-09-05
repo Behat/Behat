@@ -19,9 +19,6 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
  */
 final class FixedContextIdentifier implements TargetContextIdentifier
 {
-    /**
-     * @var
-     */
     private $contextClass;
 
     /**

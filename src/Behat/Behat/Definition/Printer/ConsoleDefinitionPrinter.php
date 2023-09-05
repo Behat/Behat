@@ -29,14 +29,17 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      * @var OutputInterface
      */
     private $output;
+
     /**
      * @var PatternTransformer
      */
     private $patternTransformer;
+
     /**
      * @var DefinitionTranslator
      */
     private $translator;
+
     /**
      * @var KeywordsInterface
      */
@@ -44,11 +47,6 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param OutputInterface     $output
-     * @param PatternTransformer  $patternTransformer
-     * @param DefinitionTranslator $translator
-     * @param KeywordsInterface   $keywords
      */
     public function __construct(
         OutputInterface $output,
@@ -64,11 +62,11 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
         $output->getFormatter()->setStyle('def_regex', new OutputFormatterStyle('yellow'));
         $output->getFormatter()->setStyle(
             'def_regex_capture',
-            new OutputFormatterStyle('yellow', null, array('bold'))
+            new OutputFormatterStyle('yellow', null, ['bold'])
         );
         $output->getFormatter()->setStyle(
             'def_dimmed',
-            new OutputFormatterStyle('black', null, array('bold'))
+            new OutputFormatterStyle('black', null, ['bold'])
         );
     }
 
@@ -89,7 +87,7 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
 
         $method = 'get'.ucfirst($definition->getType()).'Keywords';
 
-        $keywords = explode('|', $this->keywords->$method());
+        $keywords = explode('|', $this->keywords->{$method}());
 
         if ($onlyOne) {
             return current($keywords);
@@ -100,9 +98,6 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
 
     /**
      * Translates definition using translator.
-     *
-     * @param Suite      $suite
-     * @param Definition $definition
      *
      * @return Definition
      */

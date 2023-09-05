@@ -28,8 +28,6 @@ final class TransformationRepository
 
     /**
      * Initializes repository.
-     *
-     * @param EnvironmentManager $environmentManager
      */
     public function __construct(EnvironmentManager $environmentManager)
     {
@@ -38,8 +36,6 @@ final class TransformationRepository
 
     /**
      * Returns all available definitions for a specific environment.
-     *
-     * @param Environment $environment
      *
      * @return Transformation[]
      */

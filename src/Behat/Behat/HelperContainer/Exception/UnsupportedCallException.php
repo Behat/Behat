@@ -11,14 +11,13 @@
 namespace Behat\Behat\HelperContainer\Exception;
 
 use Behat\Testwork\Call\Call;
-use InvalidArgumentException;
 
 /**
  * Represents an exception caused by an attempt to filter an unsupported call.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class UnsupportedCallException extends InvalidArgumentException implements HelperContainerException
+final class UnsupportedCallException extends \InvalidArgumentException implements HelperContainerException
 {
     /**
      * @var Call
@@ -29,7 +28,6 @@ final class UnsupportedCallException extends InvalidArgumentException implements
      * Initializes exception.
      *
      * @param string $message
-     * @param Call   $call
      */
     public function __construct($message, Call $call)
     {

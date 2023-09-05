@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,9 +11,6 @@
 namespace Behat\Testwork\Call;
 
 use Behat\Testwork\Call\Exception\BadCallbackException;
-use ReflectionFunction;
-use ReflectionFunctionAbstract;
-use ReflectionMethod;
 
 /**
  * Represents callee created and executed in the runtime.
@@ -26,14 +23,17 @@ class RuntimeCallee implements Callee
      * @var callable
      */
     private $callable;
+
     /**
      * @var null|string
      */
     private $description;
+
     /**
-     * @var ReflectionFunctionAbstract
+     * @var \ReflectionFunctionAbstract
      */
     private $reflection;
+
     /**
      * @var string
      */
@@ -58,10 +58,10 @@ class RuntimeCallee implements Callee
         }
 
         if (is_array($callable)) {
-            $this->reflection = new ReflectionMethod($callable[0], $callable[1]);
+            $this->reflection = new \ReflectionMethod($callable[0], $callable[1]);
             $this->path = $callable[0] . '::' . $callable[1] . '()';
         } else {
-            $this->reflection = new ReflectionFunction($callable);
+            $this->reflection = new \ReflectionFunction($callable);
             $this->path = $this->reflection->getFileName() . ':' . $this->reflection->getStartLine();
         }
 
@@ -102,7 +102,7 @@ class RuntimeCallee implements Callee
     /**
      * Returns callable reflection.
      *
-     * @return ReflectionFunctionAbstract
+     * @return \ReflectionFunctionAbstract
      */
     public function getReflection()
     {
@@ -116,7 +116,7 @@ class RuntimeCallee implements Callee
      */
     public function isAMethod()
     {
-        return $this->reflection instanceof ReflectionMethod;
+        return $this->reflection instanceof \ReflectionMethod;
     }
 
     /**
@@ -126,7 +126,7 @@ class RuntimeCallee implements Callee
      */
     public function isAnInstanceMethod()
     {
-        return $this->reflection instanceof ReflectionMethod
+        return $this->reflection instanceof \ReflectionMethod
             && !$this->reflection->isStatic();
     }
 }

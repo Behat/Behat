@@ -26,14 +26,12 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
 
     /**
      * Initializes step result.
-     *
-     * @param SearchResult $searchResult
      */
     public function __construct(SearchResult $searchResult)
     {
         $this->searchResult = $searchResult;
     }
-    
+
     /**
      * Returns definition search result.
      *

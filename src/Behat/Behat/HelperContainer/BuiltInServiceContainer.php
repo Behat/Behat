@@ -13,8 +13,6 @@ namespace Behat\Behat\HelperContainer;
 use Behat\Behat\HelperContainer\Exception\ServiceNotFoundException;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
-use ReflectionClass;
-use ReflectionMethod;
 
 /**
  * Built-in service container.
@@ -27,6 +25,7 @@ final class BuiltInServiceContainer implements PsrContainerInterface
      * @var array
      */
     private $schema;
+
     /**
      * @var array
      */
@@ -34,8 +33,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Initialises container using provided service configuration.
-     *
-     * @param array $schema
      */
     public function __construct(array $schema)
     {
@@ -76,7 +73,7 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     {
         $schema = $this->getAndValidateServiceSchema($id);
 
-        $reflection = new ReflectionClass($schema['class']);
+        $reflection = new \ReflectionClass($schema['class']);
         $arguments = $schema['arguments'];
 
         if ($factoryMethod = $this->getAndValidateFactoryMethod($reflection, $schema)) {
@@ -100,11 +97,11 @@ final class BuiltInServiceContainer implements PsrContainerInterface
         $schema = $this->schema[$id];
 
         if (null === $schema) {
-            $schema = array('class' => $id);
+            $schema = ['class' => $id];
         }
 
         if (is_string($schema)) {
-            $schema = array('class' => $schema);
+            $schema = ['class' => $schema];
         }
 
         $schema['class'] = $this->getAndValidateClass($id, $schema);
@@ -117,7 +114,7 @@ final class BuiltInServiceContainer implements PsrContainerInterface
      * Gets and validates a class from schema.
      *
      * @param string       $id
-     * @param string|array $schema
+     * @param array|string $schema
      *
      * @return string
      */
@@ -133,24 +130,19 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Gets and validates arguments from schema.
      *
-     * @param array $schema
-     *
      * @return array
      */
     private function getAndValidateArguments(array $schema)
     {
-        return isset($schema['arguments']) ? (array)$schema['arguments'] : array();
+        return isset($schema['arguments']) ? (array) $schema['arguments'] : [];
     }
 
     /**
      * Gets and validates a factory method.
      *
-     * @param ReflectionClass $reflection
-     * @param array           $schema
-     *
-     * @return null|ReflectionMethod
+     * @return null|\ReflectionMethod
      */
-    private function getAndValidateFactoryMethod(ReflectionClass $reflection, array $schema)
+    private function getAndValidateFactoryMethod(\ReflectionClass $reflection, array $schema)
     {
         if (!isset($schema['factory_method'])) {
             return null;
@@ -167,12 +159,11 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Checks if factory method exists.
      *
-     * @param ReflectionClass $class
-     * @param string          $methodName
+     * @param string $methodName
      *
      * @throws WrongServicesConfigurationException
      */
-    private function assertFactoryMethodExists(ReflectionClass $class, $methodName)
+    private function assertFactoryMethodExists(\ReflectionClass $class, $methodName)
     {
         if (!$class->hasMethod($methodName)) {
             throw new WrongServicesConfigurationException(sprintf(
@@ -186,11 +177,9 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Checks if factory method is static.
      *
-     * @param ReflectionMethod $method
-     *
      * @throws WrongServicesConfigurationException
      */
-    private function assertFactoryMethodIsStatic(ReflectionMethod $method)
+    private function assertFactoryMethodIsStatic(\ReflectionMethod $method)
     {
         if (!$method->isStatic()) {
             throw new WrongServicesConfigurationException(sprintf(

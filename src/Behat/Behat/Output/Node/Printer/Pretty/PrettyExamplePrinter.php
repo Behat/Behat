@@ -28,6 +28,7 @@ final class PrettyExamplePrinter implements ExamplePrinter
      * @var PrettyPathPrinter
      */
     private $pathPrinter;
+
     /**
      * @var string
      */
@@ -36,8 +37,7 @@ final class PrettyExamplePrinter implements ExamplePrinter
     /**
      * Initializes printer.
      *
-     * @param PrettyPathPrinter $pathPrinter
-     * @param integer           $indentation
+     * @param int $indentation
      */
     public function __construct(PrettyPathPrinter $pathPrinter, $indentation = 6)
     {
@@ -63,9 +63,6 @@ final class PrettyExamplePrinter implements ExamplePrinter
 
     /**
      * Prints example title.
-     *
-     * @param OutputPrinter $printer
-     * @param ExampleNode   $example
      */
     private function printTitle(OutputPrinter $printer, ExampleNode $example)
     {

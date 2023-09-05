@@ -65,8 +65,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     }
 
     /**
-     * @param FeatureNode $feature
-     * @param string      $filterString
+     * @param string $filterString
      *
      * @return bool
      */
@@ -86,8 +85,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Checks if feature matches tag filter.
      *
-     * @param FeatureNode $feature
-     * @param string      $filterString
+     * @param string $filterString
      *
      * @return bool
      */
@@ -101,8 +99,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Checks if feature matches name filter.
      *
-     * @param FeatureNode $feature
-     * @param string      $filterString
+     * @param string $filterString
      *
      * @return bool
      */

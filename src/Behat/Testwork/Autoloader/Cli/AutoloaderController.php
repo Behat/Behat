@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -29,9 +29,7 @@ final class AutoloaderController implements Controller
     private $loader;
 
     /**
-     * Initializes controller
-     *
-     * @param ClassLoader $loader
+     * Initializes controller.
      */
     public function __construct(ClassLoader $loader)
     {

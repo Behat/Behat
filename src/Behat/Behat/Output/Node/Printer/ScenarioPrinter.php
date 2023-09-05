@@ -24,18 +24,11 @@ interface ScenarioPrinter
 {
     /**
      * Prints scenario header using provided printer.
-     *
-     * @param Formatter   $formatter
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature, Scenario $scenario);
 
     /**
      * Prints scenario footer using provided printer.
-     *
-     * @param Formatter  $formatter
-     * @param TestResult $result
      */
     public function printFooter(Formatter $formatter, TestResult $result);
 }

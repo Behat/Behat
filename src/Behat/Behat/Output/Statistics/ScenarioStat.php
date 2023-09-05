@@ -21,27 +21,39 @@ final class ScenarioStat
      * @var string
      */
     private $title;
+
     /**
      * @var string
      */
     private $path;
+
     /**
-     * @var integer
+     * @var int
      */
     private $resultCode;
 
     /**
      * Initializes scenario stat.
      *
-     * @param string  $title
-     * @param string  $path
-     * @param integer $resultCode
+     * @param string $title
+     * @param string $path
+     * @param int    $resultCode
      */
     public function __construct($title, $path, $resultCode)
     {
         $this->title = $title;
         $this->path = $path;
         $this->resultCode = $resultCode;
+    }
+
+    /**
+     * Returns string representation for a stat.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getPath();
     }
 
     /**
@@ -67,20 +79,10 @@ final class ScenarioStat
     /**
      * Returns scenario result code.
      *
-     * @return integer
+     * @return int
      */
     public function getResultCode()
     {
         return $this->resultCode;
-    }
-
-    /**
-     * Returns string representation for a stat.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getPath();
     }
 }

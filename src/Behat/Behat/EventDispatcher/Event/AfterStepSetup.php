@@ -27,10 +27,12 @@ final class AfterStepSetup extends StepTested implements AfterSetup
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var StepNode
      */
     private $step;
+
     /**
      * @var Setup
      */
@@ -38,11 +40,6 @@ final class AfterStepSetup extends StepTested implements AfterSetup
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param Setup       $setup
      */
     public function __construct(Environment $env, FeatureNode $feature, StepNode $step, Setup $setup)
     {

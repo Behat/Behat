@@ -30,8 +30,6 @@ final class VerbosityController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param ExceptionPresenter $exceptionPresenter
      */
     public function __construct(ExceptionPresenter $exceptionPresenter)
     {
@@ -40,8 +38,6 @@ final class VerbosityController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -50,10 +46,7 @@ final class VerbosityController implements Controller
     /**
      * Executes controller.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * @return null|int
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

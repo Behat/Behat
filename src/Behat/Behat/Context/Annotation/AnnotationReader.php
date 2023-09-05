@@ -12,7 +12,6 @@ namespace Behat\Behat\Context\Annotation;
 
 use Behat\Behat\Context\Reader\AnnotatedContextReader;
 use Behat\Testwork\Call\Callee;
-use ReflectionMethod;
 
 /**
  * Reads custom annotation of a provided context method into a Callee.
@@ -26,12 +25,11 @@ interface AnnotationReader
     /**
      * Reads all callees associated with a provided method.
      *
-     * @param string           $contextClass
-     * @param ReflectionMethod $method
-     * @param string           $docLine
-     * @param string           $description
+     * @param string $contextClass
+     * @param string $docLine
+     * @param string $description
      *
      * @return null|Callee
      */
-    public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description);
+    public function readCallee($contextClass, \ReflectionMethod $method, $docLine, $description);
 }

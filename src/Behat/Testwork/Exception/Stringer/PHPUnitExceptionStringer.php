@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -9,8 +9,6 @@
  */
 
 namespace Behat\Testwork\Exception\Stringer;
-
-use Exception;
 
 /**
  * Strings PHPUnit assertion exceptions.
@@ -24,7 +22,7 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
     /**
      * {@inheritdoc}
      */
-    public function supportsException(Exception $exception)
+    public function supportsException(\Exception $exception)
     {
         return $exception instanceof \PHPUnit_Framework_Exception
             || $exception instanceof \PHPUnit\Framework\Exception;
@@ -33,7 +31,7 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
     /**
      * {@inheritdoc}
      */
-    public function stringException(Exception $exception, $verbosity)
+    public function stringException(\Exception $exception, $verbosity)
     {
         if (class_exists('PHPUnit\\Util\\ThrowableToStringMapper')) {
             return trim(\PHPUnit\Util\ThrowableToStringMapper::map($exception));

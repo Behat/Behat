@@ -24,22 +24,20 @@ final class PatternTransformer
     /**
      * @var PatternPolicy[]
      */
-    private $policies = array();
+    private $policies = [];
 
     /**
      * @var string[]
      */
-    private $patternToRegexpCache = array();
+    private $patternToRegexpCache = [];
 
     /**
      * Registers pattern policy.
-     *
-     * @param PatternPolicy $policy
      */
     public function registerPatternPolicy(PatternPolicy $policy)
     {
         $this->policies[] = $policy;
-        $this->patternToRegexpCache = array();
+        $this->patternToRegexpCache = [];
     }
 
     /**
@@ -48,9 +46,8 @@ final class PatternTransformer
      * @param string $type
      * @param string $stepText
      *
-     * @return Pattern
-     *
      * @throws UnsupportedPatternTypeException
+     * @return Pattern
      */
     public function generatePattern($type, $stepText)
     {
@@ -68,9 +65,8 @@ final class PatternTransformer
      *
      * @param string $pattern
      *
-     * @return string
-     *
      * @throws UnknownPatternException
+     * @return string
      */
     public function transformPatternToRegex($pattern)
     {
@@ -84,9 +80,8 @@ final class PatternTransformer
     /**
      * @param string $pattern
      *
-     * @return string
-     *
      * @throws UnknownPatternException
+     * @return string
      */
     private function transformPatternToRegexWithSupportedPolicy($pattern)
     {

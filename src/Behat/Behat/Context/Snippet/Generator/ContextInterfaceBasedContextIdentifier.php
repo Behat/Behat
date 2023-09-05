@@ -27,7 +27,7 @@ final class ContextInterfaceBasedContextIdentifier implements TargetContextIdent
     public function guessTargetContextClass(ContextEnvironment $environment)
     {
         foreach ($environment->getContextClasses() as $class) {
-            if (in_array('Behat\Behat\Context\SnippetAcceptingContext', class_implements($class))) {
+            if (in_array('Behat\Behat\Context\SnippetAcceptingContext', class_implements($class), true)) {
                 return $class;
             }
         }

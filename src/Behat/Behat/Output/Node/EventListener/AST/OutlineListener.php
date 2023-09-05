@@ -37,22 +37,27 @@ final class OutlineListener implements EventListener
      * @var OutlinePrinter
      */
     private $outlinePrinter;
+
     /**
      * @var ExamplePrinter
      */
     private $examplePrinter;
+
     /**
      * @var StepPrinter
      */
     private $stepPrinter;
+
     /**
      * @var SetupPrinter
      */
     private $stepSetupPrinter;
+
     /**
      * @var SetupPrinter
      */
     private $exampleSetupPrinter;
+
     /**
      * @var ExampleNode
      */
@@ -60,12 +65,6 @@ final class OutlineListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param OutlinePrinter $outlinePrinter
-     * @param ExamplePrinter $examplePrinter
-     * @param StepPrinter    $stepPrinter
-     * @param SetupPrinter   $exampleSetupPrinter
-     * @param SetupPrinter   $stepSetupPrinter
      */
     public function __construct(
         OutlinePrinter $outlinePrinter,
@@ -96,9 +95,6 @@ final class OutlineListener implements EventListener
 
     /**
      * Prints outline header and captures outline into ivar on BEFORE event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printAndCaptureOutlineHeaderOnBeforeEvent(Formatter $formatter, Event $event)
     {
@@ -111,9 +107,6 @@ final class OutlineListener implements EventListener
 
     /**
      * Prints outline footer and removes outline from ivar on AFTER event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printAndForgetOutlineFooterOnAfterEvent(Formatter $formatter, Event $event)
     {
@@ -126,9 +119,6 @@ final class OutlineListener implements EventListener
 
     /**
      * Prints example header on example BEFORE event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printExampleHeaderOnBeforeExampleEvent(Formatter $formatter, Event $event)
     {
@@ -145,9 +135,7 @@ final class OutlineListener implements EventListener
     /**
      * Prints example footer on example AFTER event.
      *
-     * @param Formatter $formatter
-     * @param Event     $event
-     * @param string    $eventName
+     * @param string $eventName
      */
     private function printExampleFooterOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName)
     {
@@ -163,9 +151,6 @@ final class OutlineListener implements EventListener
 
     /**
      * Prints step setup on step BEFORE event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printStepSetupOnBeforeStepEvent(Formatter $formatter, Event $event)
     {
@@ -178,9 +163,6 @@ final class OutlineListener implements EventListener
 
     /**
      * Prints example step on step AFTER event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printStepOnAfterStepEvent(Formatter $formatter, Event $event)
     {

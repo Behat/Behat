@@ -22,17 +22,11 @@ interface SuitePrinter
 {
     /**
      * Prints suite header using provided formatter.
-     *
-     * @param Formatter $formatter
-     * @param Suite     $suite
      */
     public function printHeader(Formatter $formatter, Suite $suite);
 
     /**
      * Prints suite footer using provided printer.
-     *
-     * @param Formatter $formatter
-     * @param Suite     $suite
      */
     public function printFooter(Formatter $formatter, Suite $suite);
 }

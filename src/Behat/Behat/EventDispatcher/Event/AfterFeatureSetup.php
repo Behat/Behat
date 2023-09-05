@@ -26,6 +26,7 @@ final class AfterFeatureSetup extends FeatureTested implements AfterSetup
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var Setup
      */
@@ -33,10 +34,6 @@ final class AfterFeatureSetup extends FeatureTested implements AfterSetup
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Setup       $setup
      */
     public function __construct(Environment $env, FeatureNode $feature, Setup $setup)
     {

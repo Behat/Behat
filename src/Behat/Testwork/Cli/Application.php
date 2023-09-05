@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -35,6 +35,7 @@ final class Application extends BaseApplication
      * @var ConfigurationLoader
      */
     private $configurationLoader;
+
     /**
      * @var ExtensionManager
      */
@@ -43,10 +44,8 @@ final class Application extends BaseApplication
     /**
      * Initializes application.
      *
-     * @param string              $name
-     * @param string              $version
-     * @param ConfigurationLoader $configLoader
-     * @param ExtensionManager    $extensionManager
+     * @param string $name
+     * @param string $version
      */
     public function __construct($name, $version, ConfigurationLoader $configLoader, ExtensionManager $extensionManager)
     {
@@ -65,11 +64,13 @@ final class Application extends BaseApplication
      */
     public function getDefaultInputDefinition(): InputDefinition
     {
-        return new InputDefinition(array(
+        return new InputDefinition([
             new InputOption('--profile', '-p', InputOption::VALUE_REQUIRED, 'Specify config profile to use.'),
             new InputOption('--config', '-c', InputOption::VALUE_REQUIRED, 'Specify config file to use.'),
             new InputOption(
-                '--verbose', '-v', InputOption::VALUE_OPTIONAL,
+                '--verbose',
+                '-v',
+                InputOption::VALUE_OPTIONAL,
                 'Increase verbosity of exceptions.' . PHP_EOL .
                 'Use -vv or --verbose=2 to display backtraces in addition to exceptions.'
             ),
@@ -79,12 +80,14 @@ final class Application extends BaseApplication
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display version.'),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
             new InputOption(
-                '--colors', null, InputOption::VALUE_NONE,
+                '--colors',
+                null,
+                InputOption::VALUE_NONE,
                 'Force ANSI color in the output. By default color support is' . PHP_EOL .
                 'guessed based on your platform and the output if not specified.'
             ),
             new InputOption('--no-colors', null, InputOption::VALUE_NONE, 'Force no ANSI color in the output.'),
-        ));
+        ]);
     }
 
     /**
@@ -93,7 +96,7 @@ final class Application extends BaseApplication
      * @param InputInterface  $input  An Input instance
      * @param OutputInterface $output An Output instance
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
@@ -107,13 +110,13 @@ final class Application extends BaseApplication
             }
         }
 
-        if ($input->hasParameterOption(array('--config-reference'))) {
-            $input = new ArrayInput(array('--config-reference' => true));
+        if ($input->hasParameterOption(['--config-reference'])) {
+            $input = new ArrayInput(['--config-reference' => true]);
         }
 
-        if ($path = $input->getParameterOption(array('--config', '-c'))) {
+        if ($path = $input->getParameterOption(['--config', '-c'])) {
             if (!is_file($path)) {
-                throw new ConfigurationLoadingException("The requested config file does not exist");
+                throw new ConfigurationLoadingException('The requested config file does not exist');
             }
 
             $this->configurationLoader->setConfigurationFilePath($path);
@@ -135,24 +138,50 @@ final class Application extends BaseApplication
     }
 
     /**
-     * Configures container based on provided config file and profile.
+     * Gets the name of the command based on input.
      *
-     * @param InputInterface $input
+     * @param InputInterface $input The input interface
+     *
+     * @return string The command name
+     */
+    protected function getCommandName(InputInterface $input): string
+    {
+        if ($input->hasParameterOption(['--config-reference'])) {
+            return 'dump-reference';
+        }
+
+        if ($input->hasParameterOption(['--debug'])) {
+            return 'debug';
+        }
+
+        return $this->getName();
+    }
+
+    protected function configureIO(InputInterface $input, OutputInterface $output)
+    {
+        if (true === $input->hasParameterOption(['--colors'])) {
+            $output->setDecorated(true);
+        } elseif (true === $input->hasParameterOption(['--no-colors'])) {
+            $output->setDecorated(false);
+        }
+
+        parent::configureIO($input, $output);
+    }
+
+    /**
+     * Configures container based on provided config file and profile.
      *
      * @return array
      */
     private function loadConfiguration(InputInterface $input)
     {
-        $profile = $input->getParameterOption(array('--profile', '-p')) ? : 'default';
+        $profile = $input->getParameterOption(['--profile', '-p']) ?: 'default';
 
         return $this->configurationLoader->loadConfiguration($profile);
     }
 
     /**
      * Creates main command for application.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      *
      * @return SymfonyCommand
      */
@@ -163,9 +192,6 @@ final class Application extends BaseApplication
 
     /**
      * Creates container instance, loads extensions and freezes it.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      *
      * @return ContainerInterface
      */
@@ -201,36 +227,5 @@ final class Application extends BaseApplication
         }
 
         return realpath(getcwd());
-    }
-
-    /**
-     * Gets the name of the command based on input.
-     *
-     * @param InputInterface $input The input interface
-     *
-     * @return string The command name
-     */
-    protected function getCommandName(InputInterface $input): string
-    {
-        if ($input->hasParameterOption(array('--config-reference'))) {
-            return 'dump-reference';
-        }
-
-        if ($input->hasParameterOption(array('--debug'))) {
-            return 'debug';
-        }
-
-        return $this->getName();
-    }
-
-    protected function configureIO(InputInterface $input, OutputInterface $output)
-    {
-        if (true === $input->hasParameterOption(array('--colors'))) {
-            $output->setDecorated(true);
-        } elseif (true === $input->hasParameterOption(array('--no-colors'))) {
-            $output->setDecorated(false);
-        }
-
-        parent::configureIO($input, $output);
     }
 }

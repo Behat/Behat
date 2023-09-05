@@ -34,8 +34,6 @@ final class FilterController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param Gherkin $gherkin
      */
     public function __construct(Gherkin $gherkin)
     {
@@ -44,40 +42,41 @@ final class FilterController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
         $command
             ->addOption(
-                '--name', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                "Only executeCall the feature elements which match part" . PHP_EOL .
-                "of the given name or regex."
+                '--name',
+                null,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Only executeCall the feature elements which match part' . PHP_EOL .
+                'of the given name or regex.'
             )
             ->addOption(
-                '--tags', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                "Only executeCall the features or scenarios with tags" . PHP_EOL .
-                "matching tag filter expression."
+                '--tags',
+                null,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Only executeCall the features or scenarios with tags' . PHP_EOL .
+                'matching tag filter expression.'
             )
             ->addOption(
-                '--role', null, InputOption::VALUE_REQUIRED,
-                "Only executeCall the features with actor role matching" . PHP_EOL .
-                "a wildcard."
+                '--role',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Only executeCall the features with actor role matching' . PHP_EOL .
+                'a wildcard.'
             );
     }
 
     /**
      * Executes controller.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * @return null|int
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $filters = array();
+        $filters = [];
 
         foreach ($input->getOption('name') as $name) {
             $filters[] = new NameFilter($name);

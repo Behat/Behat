@@ -17,7 +17,6 @@ use Behat\Gherkin\Exception\NodeException;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
-use ReflectionMethod;
 
 /**
  * Row-based table transformation.
@@ -32,14 +31,6 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
      * @var string
      */
     private $pattern;
-
-    /**
-     * {@inheritdoc}
-     */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
-    {
-        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
-    }
 
     /**
      * Initializes transformation.
@@ -58,11 +49,27 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
     /**
      * {@inheritdoc}
      */
+    public function __toString()
+    {
+        return 'RowTableTransform ' . $this->pattern;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function supportsPatternAndMethod($pattern, \ReflectionMethod $method)
+    {
+        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         if (!$argumentArgumentValue instanceof TableNode) {
             return false;
-        };
+        }
 
         // What we're doing here is checking that we have a 2 column table.
         // This bit checks we have two columns
@@ -92,7 +99,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
             $definitionCall->getEnvironment(),
             $definitionCall->getCallee(),
             $this,
-            array($argumentValue)
+            [$argumentValue]
         );
 
         $result = $callCenter->makeCall($call);
@@ -118,13 +125,5 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
     public function getPattern()
     {
         return $this->pattern;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return 'RowTableTransform ' . $this->pattern;
     }
 }

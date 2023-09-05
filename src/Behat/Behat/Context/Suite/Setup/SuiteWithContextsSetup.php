@@ -29,22 +29,21 @@ final class SuiteWithContextsSetup implements SuiteSetup
      * @var ClassLoader
      */
     private $autoloader;
+
     /**
      * @var null|FilesystemLogger
      */
     private $logger;
+
     /**
      * @var ClassGenerator[]
      */
-    private $classGenerators = array();
+    private $classGenerators = [];
 
     /**
      * Initializes setup.
-     *
-     * @param ClassLoader           $autoloader
-     * @param null|FilesystemLogger $logger
      */
-    public function __construct(ClassLoader $autoloader, FilesystemLogger $logger = null)
+    public function __construct(ClassLoader $autoloader, ?FilesystemLogger $logger = null)
     {
         $this->autoloader = $autoloader;
         $this->logger = $logger;
@@ -52,8 +51,6 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
     /**
      * Registers class generator.
-     *
-     * @param ClassGenerator $generator
      */
     public function registerClassGenerator(ClassGenerator $generator)
     {
@@ -89,8 +86,6 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Returns normalized context classes.
      *
-     * @param Suite $suite
-     *
      * @return string[]
      */
     private function getNormalizedContextClasses(Suite $suite)
@@ -106,11 +101,8 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Returns array of context classes configured for the provided suite.
      *
-     * @param Suite $suite
-     *
-     * @return string[]
-     *
      * @throws SuiteConfigurationException If `contexts` setting is not an array
+     * @return string[]
      */
     private function getSuiteContexts(Suite $suite)
     {
@@ -118,7 +110,8 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
         if (!is_array($contexts)) {
             throw new SuiteConfigurationException(
-                sprintf('`contexts` setting of the "%s" suite is expected to be an array, `%s` given.',
+                sprintf(
+                    '`contexts` setting of the "%s" suite is expected to be an array, `%s` given.',
                     $suite->getName(),
                     gettype($contexts)
                 ),
@@ -163,9 +156,8 @@ final class SuiteWithContextsSetup implements SuiteSetup
      *
      * @param string $class
      *
-     * @return string
-     *
      * @throws ContextNotFoundException If class file could not be determined
+     * @return string
      */
     private function findClassFile($class)
     {
@@ -191,7 +183,6 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Generates class using registered class generators.
      *
-     * @param Suite  $suite
      * @param string $class
      *
      * @return null|string
@@ -234,13 +225,13 @@ final class SuiteWithContextsSetup implements SuiteSetup
             $classpath = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, 0, $pos)) . DIRECTORY_SEPARATOR;
             $classname = substr($class, $pos + 1);
 
-            return array($classpath, $classname);
+            return [$classpath, $classname];
         }
 
         // PEAR-like class name
         $classpath = null;
         $classname = $class;
 
-        return array($classpath, $classname);
+        return [$classpath, $classname];
     }
 }

@@ -19,7 +19,6 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Environment\Environment;
-use ReflectionClass;
 
 /**
  * Generates snippets for a context class.
@@ -31,11 +30,12 @@ final class ContextSnippetGenerator implements SnippetGenerator
     /**
      * @var string[string]
      */
-    private static $proposedMethods = array();
+    private static $proposedMethods = [];
+
     /**
      * @var string
      */
-    private static $templateTemplate = <<<TPL
+    private static $templateTemplate = <<<'TPL'
     /**
      * @%%s %s
      */
@@ -44,14 +44,17 @@ final class ContextSnippetGenerator implements SnippetGenerator
         throw new PendingException();
     }
 TPL;
+
     /**
      * @var PatternTransformer
      */
     private $patternTransformer;
+
     /**
      * @var TargetContextIdentifier
      */
     private $contextIdentifier;
+
     /**
      * @var PatternIdentifier
      */
@@ -59,8 +62,6 @@ TPL;
 
     /**
      * Initializes snippet generator.
-     *
-     * @param PatternTransformer $patternTransformer
      */
     public function __construct(PatternTransformer $patternTransformer)
     {
@@ -72,8 +73,6 @@ TPL;
 
     /**
      * Sets target context identifier.
-     *
-     * @param TargetContextIdentifier $identifier
      */
     public function setContextIdentifier(TargetContextIdentifier $identifier)
     {
@@ -82,8 +81,6 @@ TPL;
 
     /**
      * Sets target pattern type identifier.
-     *
-     * @param PatternIdentifier $identifier
      */
     public function setPatternIdentifier(PatternIdentifier $identifier)
     {
@@ -144,23 +141,21 @@ TPL;
     private function getMethodName($contextClass, $canonicalText, $pattern)
     {
         $methodName = $this->deduceMethodName($canonicalText);
-        $methodName = $this->getUniqueMethodName($contextClass, $pattern, $methodName);
 
-        return $methodName;
+        return $this->getUniqueMethodName($contextClass, $pattern, $methodName);
     }
 
     /**
      * Returns an array of method argument names from step and token count.
      *
-     * @param StepNode $step
-     * @param integer  $tokenCount
+     * @param int $tokenCount
      *
      * @return string[]
      */
     private function getMethodArguments(StepNode $step, $tokenCount)
     {
-        $args = array();
-        for ($i = 0; $i < $tokenCount; $i++) {
+        $args = [];
+        for ($i = 0; $i < $tokenCount; ++$i) {
             $args[] = '$arg' . ($i + 1);
         }
 
@@ -172,15 +167,13 @@ TPL;
     }
 
     /**
-     * Returns an array of classes used by the snippet template
-     *
-     * @param StepNode $step
+     * Returns an array of classes used by the snippet template.
      *
      * @return string[]
      */
     private function getUsedClasses(StepNode $step)
     {
-        $usedClasses = array('Behat\Behat\Tester\Exception\PendingException');
+        $usedClasses = ['Behat\Behat\Tester\Exception\PendingException'];
 
         foreach ($step->getArguments() as $argument) {
             if ($argument instanceof TableNode) {
@@ -242,13 +235,12 @@ TPL;
      */
     private function getUniqueMethodName($contextClass, $stepPattern, $name)
     {
-        $reflection = new ReflectionClass($contextClass);
+        $reflection = new \ReflectionClass($contextClass);
 
         $number = $this->getMethodNumberFromTheMethodName($name);
         list($name, $number) = $this->getMethodNameNotExistentInContext($reflection, $name, $number);
-        $name = $this->getMethodNameNotProposedEarlier($contextClass, $stepPattern, $name, $number);
 
-        return $name;
+        return $this->getMethodNameNotProposedEarlier($contextClass, $stepPattern, $name, $number);
     }
 
     /**
@@ -256,7 +248,7 @@ TPL;
      *
      * @param string $methodName
      *
-     * @return integer
+     * @return int
      */
     private function getMethodNumberFromTheMethodName($methodName)
     {
@@ -271,29 +263,28 @@ TPL;
     /**
      * Tries to guess method name that is not yet defined in the context class.
      *
-     * @param ReflectionClass $reflection
-     * @param string          $methodName
-     * @param integer         $methodNumber
+     * @param string $methodName
+     * @param int    $methodNumber
      *
      * @return array
      */
-    private function getMethodNameNotExistentInContext(ReflectionClass $reflection, $methodName, $methodNumber)
+    private function getMethodNameNotExistentInContext(\ReflectionClass $reflection, $methodName, $methodNumber)
     {
         while ($reflection->hasMethod($methodName)) {
             $methodName = preg_replace('/\d+$/', '', $methodName);
             $methodName .= $methodNumber++;
         }
 
-        return array($methodName, $methodNumber);
+        return [$methodName, $methodNumber];
     }
 
     /**
      * Tries to guess method name that is not yet proposed to the context class.
      *
-     * @param string  $contextClass
-     * @param string  $stepPattern
-     * @param string  $name
-     * @param integer $number
+     * @param string $contextClass
+     * @param string $stepPattern
+     * @param string $name
+     * @param int    $number
      *
      * @return string
      */
@@ -324,7 +315,7 @@ TPL;
      */
     private function getAlreadyProposedMethods($contextClass)
     {
-        return self::$proposedMethods[$contextClass] ?? array();
+        return self::$proposedMethods[$contextClass] ?? [];
     }
 
     /**

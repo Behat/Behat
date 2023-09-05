@@ -27,37 +27,27 @@ interface StepTester
     /**
      * Sets up step for a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param bool     $skip
+     * @param bool $skip
      *
      * @return Setup
      */
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip);
 
     /**
-     * Tests step.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param bool     $skip
-     *
-     * @return StepResult
-     */
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip);
-
-    /**
      * Tears down step after a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param bool     $skip
-     * @param StepResult  $result
+     * @param bool $skip
      *
      * @return Teardown
      */
     public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result);
+
+    /**
+     * Tests step.
+     *
+     * @param bool $skip
+     *
+     * @return StepResult
+     */
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip);
 }

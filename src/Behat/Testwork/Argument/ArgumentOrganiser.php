@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -9,8 +9,6 @@
  */
 
 namespace Behat\Testwork\Argument;
-
-use ReflectionFunctionAbstract;
 
 /**
  * Organises function arguments using its reflection.
@@ -22,10 +20,9 @@ interface ArgumentOrganiser
     /**
      * Organises arguments using function reflection.
      *
-     * @param ReflectionFunctionAbstract $function
-     * @param mixed[]                    $arguments
+     * @param mixed[] $arguments
      *
      * @return mixed[]
      */
-    public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments);
+    public function organiseArguments(\ReflectionFunctionAbstract $function, array $arguments);
 }

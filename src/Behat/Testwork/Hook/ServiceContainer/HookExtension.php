@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -74,43 +74,37 @@ class HookExtension implements Extension
 
     /**
      * Loads hook dispatcher.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDispatcher(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\HookDispatcher', array(
+        $definition = new Definition('Behat\Testwork\Hook\HookDispatcher', [
             new Reference(self::REPOSITORY_ID),
-            new Reference(CallExtension::CALL_CENTER_ID)
-        ));
+            new Reference(CallExtension::CALL_CENTER_ID),
+        ]);
         $container->setDefinition(self::DISPATCHER_ID, $definition);
     }
 
     /**
      * Loads hook repository.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadRepository(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\HookRepository', array(
-            new Reference(EnvironmentExtension::MANAGER_ID)
-        ));
+        $definition = new Definition('Behat\Testwork\Hook\HookRepository', [
+            new Reference(EnvironmentExtension::MANAGER_ID),
+        ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
     }
 
     /**
      * Loads hookable testers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadHookableTesters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\Tester\HookableSuiteTester', array(
+        $definition = new Definition('Behat\Testwork\Hook\Tester\HookableSuiteTester', [
             new Reference(TesterExtension::SUITE_TESTER_ID),
-            new Reference(self::DISPATCHER_ID)
-        ));
-        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => 9999));
+            new Reference(self::DISPATCHER_ID),
+        ]);
+        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, ['priority' => 9999]);
         $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.hookable', $definition);
     }
 }

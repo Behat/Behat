@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -33,14 +33,12 @@ final class AutoloaderExtension implements Extension
     /**
      * @var array
      */
-    private $defaultPaths = array();
+    private $defaultPaths = [];
 
     /**
      * Initializes extension.
-     *
-     * @param array $defaultPaths
      */
-    public function __construct(array $defaultPaths = array())
+    public function __construct(array $defaultPaths = [])
     {
         $this->defaultPaths = $defaultPaths;
     }
@@ -69,15 +67,15 @@ final class AutoloaderExtension implements Extension
     {
         $builder
             ->beforeNormalization()
-                ->ifString()->then(function ($path) {
-                    return array('' => $path);
+            ->ifString()->then(function ($path) {
+                    return ['' => $path];
                 })
             ->end()
 
             ->defaultValue($this->defaultPaths)
             ->treatTrueLike($this->defaultPaths)
-            ->treatNullLike(array())
-            ->treatFalseLike(array())
+            ->treatNullLike([])
+            ->treatFalseLike([])
 
             ->prototype('scalar')->end()
         ;
@@ -103,8 +101,6 @@ final class AutoloaderExtension implements Extension
 
     /**
      * Loads Symfony2 autoloader.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAutoloader(ContainerBuilder $container)
     {
@@ -114,24 +110,19 @@ final class AutoloaderExtension implements Extension
 
     /**
      * Loads controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Autoloader\Cli\AutoloaderController', array(
-            new Reference(self::CLASS_LOADER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
+        $definition = new Definition('Behat\Testwork\Autoloader\Cli\AutoloaderController', [
+            new Reference(self::CLASS_LOADER_ID),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
 
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.autoloader', $definition);
     }
 
     /**
      * Sets provided prefixes to container.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $prefixes
      */
     private function setLoaderPrefixes(ContainerBuilder $container, array $prefixes)
     {
@@ -140,8 +131,6 @@ final class AutoloaderExtension implements Extension
 
     /**
      * Processes container loader prefixes.
-     *
-     * @param ContainerBuilder $container
      */
     private function processLoaderPrefixes(ContainerBuilder $container)
     {
@@ -149,7 +138,7 @@ final class AutoloaderExtension implements Extension
         $prefixes = $container->getParameter('class_loader.prefixes');
 
         foreach ($prefixes as $prefix => $path) {
-            $loaderDefinition->addMethodCall('add', array($prefix, $path));
+            $loaderDefinition->addMethodCall('add', [$prefix, $path]);
         }
     }
 }

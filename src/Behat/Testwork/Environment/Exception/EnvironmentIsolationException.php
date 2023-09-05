@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,19 +11,19 @@
 namespace Behat\Testwork\Environment\Exception;
 
 use Behat\Testwork\Environment\Environment;
-use RuntimeException;
 
 /**
  * Represents exception thrown during environment isolation process.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class EnvironmentIsolationException extends RuntimeException implements EnvironmentException
+final class EnvironmentIsolationException extends \RuntimeException implements EnvironmentException
 {
     /**
      * @var Environment
      */
     private $environment;
+
     /**
      * @var mixed
      */
@@ -32,9 +32,8 @@ final class EnvironmentIsolationException extends RuntimeException implements En
     /**
      * Initializes exception.
      *
-     * @param string      $message
-     * @param Environment $environment
-     * @param mixed       $testSubject
+     * @param string $message
+     * @param mixed  $testSubject
      */
     public function __construct($message, Environment $environment, $testSubject = null)
     {

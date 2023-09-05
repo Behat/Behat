@@ -38,48 +38,51 @@ final class JUnitFeatureElementListener implements EventListener
      * @var FeaturePrinter
      */
     private $featurePrinter;
+
     /**
      * @var JUnitScenarioPrinter
      */
     private $scenarioPrinter;
+
     /**
      * @var StepPrinter
      */
     private $stepPrinter;
+
     /**
      * @var SetupPrinter
      */
     private $setupPrinter;
+
     /**
      * @var FeatureNode
      */
     private $beforeFeatureTestedEvent;
+
     /**
      * @var AfterScenarioTested[]
      */
-    private $afterScenarioTestedEvents = array();
+    private $afterScenarioTestedEvents = [];
+
     /**
      * @var AfterStepTested[]
      */
-    private $afterStepTestedEvents = array();
+    private $afterStepTestedEvents = [];
+
     /**
      * @var AfterSetup[]
      */
-    private $afterStepSetupEvents = array();
+    private $afterStepSetupEvents = [];
 
     /**
      * Initializes listener.
-     *
-     * @param FeaturePrinter $featurePrinter
-     * @param JUnitScenarioPrinter $scenarioPrinter
-     * @param StepPrinter $stepPrinter
-     * @param SetupPrinter $setupPrinter
      */
-    public function __construct(FeaturePrinter $featurePrinter,
-                                JUnitScenarioPrinter $scenarioPrinter,
-                                StepPrinter $stepPrinter,
-                                SetupPrinter $setupPrinter)
-    {
+    public function __construct(
+        FeaturePrinter $featurePrinter,
+        JUnitScenarioPrinter $scenarioPrinter,
+        StepPrinter $stepPrinter,
+        SetupPrinter $setupPrinter
+    ) {
         $this->featurePrinter = $featurePrinter;
         $this->scenarioPrinter = $scenarioPrinter;
         $this->stepPrinter = $stepPrinter;
@@ -106,58 +109,7 @@ final class JUnitFeatureElementListener implements EventListener
     }
 
     /**
-     * Captures scenario tested event.
-     *
-     * @param ScenarioTested $event
-     */
-    private function captureScenarioEvent(ScenarioTested $event)
-    {
-        if ($event instanceof AfterScenarioTested) {
-            $this->afterScenarioTestedEvents[$event->getScenario()->getLine()] = array(
-                'event'             => $event,
-                'step_events'       => $this->afterStepTestedEvents,
-                'step_setup_events' => $this->afterStepSetupEvents,
-            );
-
-            $this->afterStepTestedEvents = array();
-            $this->afterStepSetupEvents = array();
-        }
-    }
-
-    /**
-     * Captures feature on BEFORE event.
-     *
-     * @param Event $event
-     */
-    private function captureFeatureOnBeforeEvent(Event $event)
-    {
-        if (!$event instanceof BeforeFeatureTested) {
-            return;
-        }
-
-        $this->beforeFeatureTestedEvent = $event->getFeature();
-    }
-
-    /**
-     * Captures step tested event.
-     *
-     * @param Event $event
-     */
-    private function captureStepEvent(Event $event)
-    {
-        if ($event instanceof AfterStepTested) {
-            $this->afterStepTestedEvents[$event->getStep()->getLine()] = $event;
-        }
-        if ($event instanceof AfterStepSetup) {
-            $this->afterStepSetupEvents[$event->getStep()->getLine()] = $event;
-        }
-    }
-
-    /**
      * Prints the feature on AFTER event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     public function printFeatureOnAfterEvent(Formatter $formatter, Event $event)
     {
@@ -188,6 +140,48 @@ final class JUnitFeatureElementListener implements EventListener
         }
 
         $this->featurePrinter->printFooter($formatter, $event->getTestResult());
-        $this->afterScenarioTestedEvents = array();
+        $this->afterScenarioTestedEvents = [];
+    }
+
+    /**
+     * Captures scenario tested event.
+     */
+    private function captureScenarioEvent(ScenarioTested $event)
+    {
+        if ($event instanceof AfterScenarioTested) {
+            $this->afterScenarioTestedEvents[$event->getScenario()->getLine()] = [
+                'event' => $event,
+                'step_events' => $this->afterStepTestedEvents,
+                'step_setup_events' => $this->afterStepSetupEvents,
+            ];
+
+            $this->afterStepTestedEvents = [];
+            $this->afterStepSetupEvents = [];
+        }
+    }
+
+    /**
+     * Captures feature on BEFORE event.
+     */
+    private function captureFeatureOnBeforeEvent(Event $event)
+    {
+        if (!$event instanceof BeforeFeatureTested) {
+            return;
+        }
+
+        $this->beforeFeatureTestedEvent = $event->getFeature();
+    }
+
+    /**
+     * Captures step tested event.
+     */
+    private function captureStepEvent(Event $event)
+    {
+        if ($event instanceof AfterStepTested) {
+            $this->afterStepTestedEvents[$event->getStep()->getLine()] = $event;
+        }
+        if ($event instanceof AfterStepSetup) {
+            $this->afterStepSetupEvents[$event->getStep()->getLine()] = $event;
+        }
     }
 }

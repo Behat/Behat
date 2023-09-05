@@ -24,7 +24,7 @@ final class ContextInterfaceBasedPatternIdentifier implements PatternIdentifier
      */
     public function guessPatternType($contextClass)
     {
-        if (!in_array('Behat\Behat\Context\CustomSnippetAcceptingContext', class_implements($contextClass))) {
+        if (!in_array('Behat\Behat\Context\CustomSnippetAcceptingContext', class_implements($contextClass), true)) {
             return null;
         }
 

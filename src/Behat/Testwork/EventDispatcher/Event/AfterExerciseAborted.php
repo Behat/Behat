@@ -22,6 +22,6 @@ final class AfterExerciseAborted extends ExerciseCompleted
      */
     public function getSpecificationIterators()
     {
-        return array();
+        return [];
     }
 }

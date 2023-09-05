@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -24,7 +24,7 @@ final class Command extends BaseCommand
     /**
      * @var Controller[]
      */
-    private $controllers = array();
+    private $controllers = [];
 
     /**
      * Initializes command.
@@ -55,7 +55,7 @@ final class Command extends BaseCommand
      * @param InputInterface  $input  An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
-     * @return integer Return code of one of the processors or 0 if none of them returned integer
+     * @return int Return code of one of the processors or 0 if none of them returned integer
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

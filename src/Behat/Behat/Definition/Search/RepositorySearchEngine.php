@@ -35,14 +35,17 @@ final class RepositorySearchEngine implements SearchEngine
      * @var DefinitionRepository
      */
     private $repository;
+
     /**
      * @var PatternTransformer
      */
     private $patternTransformer;
+
     /**
      * @var DefinitionTranslator
      */
     private $translator;
+
     /**
      * @var ArgumentOrganiser
      */
@@ -50,11 +53,6 @@ final class RepositorySearchEngine implements SearchEngine
 
     /**
      * Initializes search engine.
-     *
-     * @param DefinitionRepository $repository
-     * @param PatternTransformer   $patternTransformer
-     * @param DefinitionTranslator $translator
-     * @param ArgumentOrganiser    $argumentOrganiser
      */
     public function __construct(
         DefinitionRepository $repository,
@@ -83,7 +81,7 @@ final class RepositorySearchEngine implements SearchEngine
         $stepText = $step->getText();
         $multi = $step->getArguments();
 
-        $definitions = array();
+        $definitions = [];
         $result = null;
 
         foreach ($this->repository->getEnvironmentDefinitions($environment) as $definition) {
@@ -107,7 +105,6 @@ final class RepositorySearchEngine implements SearchEngine
     /**
      * Attempts to match provided definition against a step text.
      *
-     * @param Definition          $definition
      * @param string              $stepText
      * @param ArgumentInterface[] $multiline
      *

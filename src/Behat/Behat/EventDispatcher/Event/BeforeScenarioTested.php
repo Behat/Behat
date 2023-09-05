@@ -27,17 +27,14 @@ final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var Scenario
      */
     private $scenario;
 
     /**
-     * Initializes event
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
+     * Initializes event.
      */
     public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario)
     {

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -9,8 +9,6 @@
  */
 
 namespace Behat\Testwork\Call;
-
-use ReflectionFunctionAbstract;
 
 /**
  * Represents callable object.
@@ -57,7 +55,7 @@ interface Callee
     /**
      * Returns callable reflection.
      *
-     * @return ReflectionFunctionAbstract
+     * @return \ReflectionFunctionAbstract
      */
     public function getReflection();
 }

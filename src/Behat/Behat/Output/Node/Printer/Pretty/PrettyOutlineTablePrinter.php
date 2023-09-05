@@ -34,18 +34,22 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
      * @var ScenarioPrinter
      */
     private $scenarioPrinter;
+
     /**
      * @var StepPrinter
      */
     private $stepPrinter;
+
     /**
      * @var ResultToStringConverter
      */
     private $resultConverter;
+
     /**
      * @var string
      */
     private $indentText;
+
     /**
      * @var string
      */
@@ -54,11 +58,8 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
     /**
      * Initializes printer.
      *
-     * @param ScenarioPrinter         $scenarioPrinter
-     * @param StepPrinter             $stepPrinter
-     * @param ResultToStringConverter $resultConverter
-     * @param integer                 $indentation
-     * @param integer                 $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct(
         ScenarioPrinter $scenarioPrinter,
@@ -96,8 +97,6 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
     /**
      * Prints example steps with definition paths (if has some), but without exceptions or state (skipped).
      *
-     * @param Formatter    $formatter
-     * @param OutlineNode  $outline
      * @param StepNode[]   $steps
      * @param StepResult[] $results
      */
@@ -114,9 +113,6 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
 
     /**
      * Prints examples table header.
-     *
-     * @param OutputPrinter    $printer
-     * @param ExampleTableNode $table
      */
     private function printExamplesTableHeader(OutputPrinter $printer, ExampleTableNode $table)
     {

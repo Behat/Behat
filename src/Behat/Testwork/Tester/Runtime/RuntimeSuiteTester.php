@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -35,8 +35,6 @@ final class RuntimeSuiteTester implements SuiteTester
 
     /**
      * Initializes tester.
-     *
-     * @param SpecificationTester $specTester
      */
     public function __construct(SpecificationTester $specTester)
     {
@@ -54,9 +52,17 @@ final class RuntimeSuiteTester implements SuiteTester
     /**
      * {@inheritdoc}
      */
+    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
+    {
+        return new SuccessfulTeardown();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
     {
-        $results = array();
+        $results = [];
         foreach ($iterator as $specification) {
             $setup = $this->specTester->setUp($env, $specification, $skip);
             $localSkip = !$setup->isSuccessful() || $skip;
@@ -68,13 +74,5 @@ final class RuntimeSuiteTester implements SuiteTester
         }
 
         return new TestResults($results);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
-    {
-        return new SuccessfulTeardown();
     }
 }

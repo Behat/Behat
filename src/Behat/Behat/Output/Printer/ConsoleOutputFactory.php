@@ -42,21 +42,21 @@ final class ConsoleOutputFactory extends BaseFactory
      */
     private function getDefaultStyles()
     {
-        return array(
-            'keyword'       => new OutputFormatterStyle(null, null, array('bold')),
-            'stdout'        => new OutputFormatterStyle(null, null, array()),
-            'exception'     => new OutputFormatterStyle('red'),
-            'undefined'     => new OutputFormatterStyle('yellow'),
-            'pending'       => new OutputFormatterStyle('yellow'),
-            'pending_param' => new OutputFormatterStyle('yellow', null, array('bold')),
-            'failed'        => new OutputFormatterStyle('red'),
-            'failed_param'  => new OutputFormatterStyle('red', null, array('bold')),
-            'passed'        => new OutputFormatterStyle('green'),
-            'passed_param'  => new OutputFormatterStyle('green', null, array('bold')),
-            'skipped'       => new OutputFormatterStyle('cyan'),
-            'skipped_param' => new OutputFormatterStyle('cyan', null, array('bold')),
-            'comment'       => new OutputFormatterStyle('black'),
-            'tag'           => new OutputFormatterStyle('cyan')
-        );
+        return [
+            'keyword' => new OutputFormatterStyle(null, null, ['bold']),
+            'stdout' => new OutputFormatterStyle(null, null, []),
+            'exception' => new OutputFormatterStyle('red'),
+            'undefined' => new OutputFormatterStyle('yellow'),
+            'pending' => new OutputFormatterStyle('yellow'),
+            'pending_param' => new OutputFormatterStyle('yellow', null, ['bold']),
+            'failed' => new OutputFormatterStyle('red'),
+            'failed_param' => new OutputFormatterStyle('red', null, ['bold']),
+            'passed' => new OutputFormatterStyle('green'),
+            'passed_param' => new OutputFormatterStyle('green', null, ['bold']),
+            'skipped' => new OutputFormatterStyle('cyan'),
+            'skipped_param' => new OutputFormatterStyle('cyan', null, ['bold']),
+            'comment' => new OutputFormatterStyle('black'),
+            'tag' => new OutputFormatterStyle('cyan'),
+        ];
     }
 }

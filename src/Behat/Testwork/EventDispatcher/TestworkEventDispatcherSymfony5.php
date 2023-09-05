@@ -1,8 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Behat\Testwork\EventDispatcher;
-
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -23,7 +29,7 @@ final class TestworkEventDispatcherSymfony5 extends EventDispatcher
     /**
      * {@inheritdoc}
      */
-    public function dispatch($event, string $eventName = null): object
+    public function dispatch($event, ?string $eventName = null): object
     {
         trigger_error(
             'Class "\Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfony5" is deprecated ' .
@@ -55,7 +61,7 @@ final class TestworkEventDispatcherSymfony5 extends EventDispatcher
             E_USER_DEPRECATED
         );
 
-        if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
+        if (null === $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
             return parent::getListeners($eventName);
         }
 

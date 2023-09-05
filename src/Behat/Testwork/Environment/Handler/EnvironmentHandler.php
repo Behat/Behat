@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -26,16 +26,12 @@ interface EnvironmentHandler
     /**
      * Checks if handler supports provided suite.
      *
-     * @param Suite $suite
-     *
      * @return bool
      */
     public function supportsSuite(Suite $suite);
 
     /**
      * Builds environment object based on provided suite.
-     *
-     * @param Suite $suite
      *
      * @return Environment
      */
@@ -44,8 +40,7 @@ interface EnvironmentHandler
     /**
      * Checks if handler supports provided environment.
      *
-     * @param Environment $environment
-     * @param mixed       $testSubject
+     * @param mixed $testSubject
      *
      * @return bool
      */
@@ -54,8 +49,7 @@ interface EnvironmentHandler
     /**
      * Isolates provided environment.
      *
-     * @param Environment $environment
-     * @param mixed       $testSubject
+     * @param mixed $testSubject
      *
      * @return Environment
      */

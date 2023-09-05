@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -14,7 +14,6 @@ use Behat\Testwork\EventDispatcher\Event\AfterExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\AfterExerciseSetup;
 use Behat\Testwork\EventDispatcher\Event\BeforeExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\BeforeExerciseTeardown;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -30,6 +29,7 @@ final class EventDispatchingExercise implements Exercise
      * @var Exercise
      */
     private $baseExercise;
+
     /**
      * @var EventDispatcherInterface
      */
@@ -37,9 +37,6 @@ final class EventDispatchingExercise implements Exercise
 
     /**
      * Initializes exercise.
-     *
-     * @param Exercise                 $baseExercise
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(Exercise $baseExercise, EventDispatcherInterface $eventDispatcher)
     {
@@ -68,14 +65,6 @@ final class EventDispatchingExercise implements Exercise
     /**
      * {@inheritdoc}
      */
-    public function test(array $iterators, $skip = false)
-    {
-        return $this->baseExercise->test($iterators, $skip);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
         $event = new BeforeExerciseTeardown($iterators, $result);
@@ -89,5 +78,13 @@ final class EventDispatchingExercise implements Exercise
         $this->eventDispatcher->dispatch($event, $event::AFTER);
 
         return $teardown;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function test(array $iterators, $skip = false)
+    {
+        return $this->baseExercise->test($iterators, $skip);
     }
 }

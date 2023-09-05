@@ -26,12 +26,10 @@ final class DefinitionArgumentsTransformer implements CallFilter
     /**
      * @var ArgumentTransformer[]
      */
-    private $argumentTransformers = array();
+    private $argumentTransformers = [];
 
     /**
      * Registers new argument transformer.
-     *
-     * @param ArgumentTransformer $transformer
      */
     public function registerArgumentTransformer(ArgumentTransformer $transformer)
     {
@@ -58,7 +56,7 @@ final class DefinitionArgumentsTransformer implements CallFilter
             ), $call);
         }
 
-        $newArguments = array();
+        $newArguments = [];
         $transformed = false;
         foreach ($call->getArguments() as $index => $value) {
             $newValue = $this->transformArgument($call, $index, $value);
@@ -87,9 +85,8 @@ final class DefinitionArgumentsTransformer implements CallFilter
     /**
      * Transforms call argument using registered transformers.
      *
-     * @param DefinitionCall $definitionCall
-     * @param integer|string $index
-     * @param mixed          $value
+     * @param int|string $index
+     * @param mixed      $value
      *
      * @return mixed
      */

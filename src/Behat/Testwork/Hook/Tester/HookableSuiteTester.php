@@ -31,6 +31,7 @@ final class HookableSuiteTester implements SuiteTester
      * @var SuiteTester
      */
     private $baseTester;
+
     /**
      * @var HookDispatcher
      */
@@ -38,9 +39,6 @@ final class HookableSuiteTester implements SuiteTester
 
     /**
      * Initializes tester.
-     *
-     * @param SuiteTester    $baseTester
-     * @param HookDispatcher $hookDispatcher
      */
     public function __construct(SuiteTester $baseTester, HookDispatcher $hookDispatcher)
     {
@@ -68,14 +66,6 @@ final class HookableSuiteTester implements SuiteTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, SpecificationIterator $iterator, $skip)
-    {
-        return $this->baseTester->test($env, $iterator, $skip);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);
@@ -88,5 +78,13 @@ final class HookableSuiteTester implements SuiteTester
         $hookCallResults = $this->hookDispatcher->dispatchScopeHooks($scope);
 
         return new HookedTeardown($teardown, $hookCallResults);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function test(Environment $env, SpecificationIterator $iterator, $skip)
+    {
+        return $this->baseTester->test($env, $iterator, $skip);
     }
 }

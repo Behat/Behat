@@ -13,7 +13,6 @@ namespace Behat\Behat\HelperContainer\Argument;
 use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\HelperContainer\ArgumentAutowirer;
 use Psr\Container\ContainerInterface;
-use ReflectionClass;
 
 /**
  * Resolves arguments that weren't resolved before by autowiring.
@@ -31,8 +30,6 @@ final class AutowiringResolver implements ArgumentResolver
 
     /**
      * Initialises resolver.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -42,7 +39,7 @@ final class AutowiringResolver implements ArgumentResolver
     /**
      * {@inheritdoc}
      */
-    public function resolveArguments(ReflectionClass $classReflection, array $arguments)
+    public function resolveArguments(\ReflectionClass $classReflection, array $arguments)
     {
         if ($constructor = $classReflection->getConstructor()) {
             return $this->autowirer->autowireArguments($constructor, $arguments);

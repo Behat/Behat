@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -10,16 +10,12 @@
 
 namespace Behat\Testwork\Call;
 
-use ArrayIterator;
-use Countable;
-use IteratorAggregate;
-
 /**
  * Aggregates multiple call results into a collection and provides an informational API on top of that.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class CallResults implements Countable, IteratorAggregate
+final class CallResults implements \Countable, \IteratorAggregate
 {
     /**
      * @var CallResult[]
@@ -31,16 +27,13 @@ final class CallResults implements Countable, IteratorAggregate
      *
      * @param CallResult[] $results
      */
-    public function __construct(array $results = array())
+    public function __construct(array $results = [])
     {
         $this->results = $results;
     }
 
     /**
      * Merges results from provided collection into the current one.
-     *
-     * @param CallResults $first
-     * @param CallResults $second
      *
      * @return CallResults
      */
@@ -83,8 +76,6 @@ final class CallResults implements Countable, IteratorAggregate
 
     /**
      * Returns amount of results.
-     *
-     * @return integer
      */
     public function count(): int
     {
@@ -93,12 +84,10 @@ final class CallResults implements Countable, IteratorAggregate
 
     /**
      * Returns collection iterator.
-     *
-     * @return ArrayIterator
      */
-    public function getIterator(): ArrayIterator
+    public function getIterator(): \ArrayIterator
     {
-        return new ArrayIterator($this->results);
+        return new \ArrayIterator($this->results);
     }
 
     /**

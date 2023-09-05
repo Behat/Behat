@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -26,23 +26,24 @@ final class SuiteRegistry implements SuiteRepository
      * @var bool
      */
     private $suitesGenerated = false;
+
     /**
      * @var SuiteGenerator[]
      */
-    private $generators = array();
+    private $generators = [];
+
     /**
      * @var array
      */
-    private $suiteConfigurations = array();
+    private $suiteConfigurations = [];
+
     /**
      * @var Suite[]
      */
-    private $suites = array();
+    private $suites = [];
 
     /**
      * Registers suite generator.
-     *
-     * @param SuiteGenerator $generator
      */
     public function registerSuiteGenerator(SuiteGenerator $generator)
     {
@@ -55,7 +56,6 @@ final class SuiteRegistry implements SuiteRepository
      *
      * @param string $name
      * @param string $type
-     * @param array  $settings
      *
      * @throws SuiteConfigurationException
      */
@@ -68,7 +68,7 @@ final class SuiteRegistry implements SuiteRepository
             ), $name);
         }
 
-        $this->suiteConfigurations[$name] = array($type, $settings);
+        $this->suiteConfigurations[$name] = [$type, $settings];
         $this->suitesGenerated = false;
     }
 
@@ -83,7 +83,7 @@ final class SuiteRegistry implements SuiteRepository
             return $this->suites;
         }
 
-        $this->suites = array();
+        $this->suites = [];
         foreach ($this->suiteConfigurations as $name => $configuration) {
             list($type, $settings) = $configuration;
 
@@ -100,11 +100,9 @@ final class SuiteRegistry implements SuiteRepository
      *
      * @param string $name
      * @param string $type
-     * @param array  $settings
-     *
-     * @return Suite
      *
      * @throws SuiteGenerationException If no appropriate generator found
+     * @return Suite
      */
     private function generateSuite($name, $type, array $settings)
     {

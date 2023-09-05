@@ -10,13 +10,11 @@
 
 namespace Behat\Behat\HelperContainer\Exception;
 
-use RuntimeException;
-
 /**
  * Represents an exception when wrong value passed into `services` setting.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class WrongServicesConfigurationException extends RuntimeException implements HelperContainerException
+final class WrongServicesConfigurationException extends \RuntimeException implements HelperContainerException
 {
 }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -69,15 +69,13 @@ final class FilesystemExtension implements Extension
 
     /**
      * Loads filesystem logger.
-     *
-     * @param ContainerBuilder $container
      */
-    protected function loadFilesystemLogger(ContainerBuilder $container)
+    private function loadFilesystemLogger(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Filesystem\ConsoleFilesystemLogger', array(
+        $definition = new Definition('Behat\Testwork\Filesystem\ConsoleFilesystemLogger', [
             '%paths.base%',
-            new Reference(CliExtension::OUTPUT_ID)
-        ));
+            new Reference(CliExtension::OUTPUT_ID),
+        ]);
         $container->setDefinition(self::LOGGER_ID, $definition);
     }
 }

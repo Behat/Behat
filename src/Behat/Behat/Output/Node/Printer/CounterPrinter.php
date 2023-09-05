@@ -25,6 +25,7 @@ final class CounterPrinter
      * @var ResultToStringConverter
      */
     private $resultConverter;
+
     /**
      * @var TranslatorInterface
      */
@@ -32,9 +33,6 @@ final class CounterPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param ResultToStringConverter $resultConverter
-     * @param TranslatorInterface     $translator
      */
     public function __construct(ResultToStringConverter $resultConverter, TranslatorInterface $translator)
     {
@@ -45,9 +43,7 @@ final class CounterPrinter
     /**
      * Prints scenario and step counters.
      *
-     * @param OutputPrinter $printer
-     * @param string        $intro
-     * @param array         $stats
+     * @param string $intro
      */
     public function printCounters(OutputPrinter $printer, $intro, array $stats)
     {
@@ -59,17 +55,17 @@ final class CounterPrinter
             $totalCount = array_sum($stats);
         }
 
-        $detailedStats = array();
+        $detailedStats = [];
         foreach ($stats as $resultCode => $count) {
             $style = $this->resultConverter->convertResultCodeToString($resultCode);
 
             $transId = $style . '_count';
-            $message = $this->translator->trans($transId, array('%count%' => $count), 'output');
+            $message = $this->translator->trans($transId, ['%count%' => $count], 'output');
 
             $detailedStats[] = sprintf('{+%s}%s{-%s}', $style, $message, $style);
         }
 
-        $message = $this->translator->trans($intro, array('%count%' => $totalCount), 'output');
+        $message = $this->translator->trans($intro, ['%count%' => $totalCount], 'output');
         $printer->write($message);
 
         if (count($detailedStats)) {

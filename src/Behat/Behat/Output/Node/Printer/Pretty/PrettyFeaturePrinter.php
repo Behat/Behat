@@ -28,6 +28,7 @@ final class PrettyFeaturePrinter implements FeaturePrinter
      * @var string
      */
     private $indentText;
+
     /**
      * @var string
      */
@@ -36,8 +37,8 @@ final class PrettyFeaturePrinter implements FeaturePrinter
     /**
      * Initializes printer.
      *
-     * @param integer $indentation
-     * @param integer $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct($indentation = 0, $subIndentation = 2)
     {
@@ -68,8 +69,7 @@ final class PrettyFeaturePrinter implements FeaturePrinter
     /**
      * Prints feature tags.
      *
-     * @param OutputPrinter $printer
-     * @param string[]      $tags
+     * @param string[] $tags
      */
     private function printTags(OutputPrinter $printer, array $tags)
     {
@@ -77,15 +77,12 @@ final class PrettyFeaturePrinter implements FeaturePrinter
             return;
         }
 
-        $tags = array_map(array($this, 'prependTagWithTagSign'), $tags);
+        $tags = array_map([$this, 'prependTagWithTagSign'], $tags);
         $printer->writeln(sprintf('%s{+tag}%s{-tag}', $this->indentText, implode(' ', $tags)));
     }
 
     /**
      * Prints feature title using provided printer.
-     *
-     * @param OutputPrinter $printer
-     * @param FeatureNode   $feature
      */
     private function printTitle(OutputPrinter $printer, FeatureNode $feature)
     {
@@ -100,9 +97,6 @@ final class PrettyFeaturePrinter implements FeaturePrinter
 
     /**
      * Prints feature description using provided printer.
-     *
-     * @param OutputPrinter $printer
-     * @param FeatureNode   $feature
      */
     private function printDescription(OutputPrinter $printer, FeatureNode $feature)
     {

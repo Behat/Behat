@@ -13,7 +13,6 @@ namespace Behat\Behat\HelperContainer\Argument;
 use Behat\Behat\Context\Argument\ArgumentResolver;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
-use ReflectionClass;
 
 /**
  * Resolves arguments using provided service container.
@@ -31,8 +30,6 @@ final class ServicesResolver implements ArgumentResolver
 
     /**
      * Initialises resolver.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -44,9 +41,9 @@ final class ServicesResolver implements ArgumentResolver
      *
      * @throws ContainerExceptionInterface
      */
-    public function resolveArguments(ReflectionClass $classReflection, array $arguments)
+    public function resolveArguments(\ReflectionClass $classReflection, array $arguments)
     {
-        return array_map(array($this, 'resolveArgument'), $arguments);
+        return array_map([$this, 'resolveArgument'], $arguments);
     }
 
     /**
@@ -57,9 +54,8 @@ final class ServicesResolver implements ArgumentResolver
      *
      * @param mixed $value
      *
-     * @return mixed
-     *
      * @throws ContainerExceptionInterface
+     * @return mixed
      */
     private function resolveArgument($value)
     {

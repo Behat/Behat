@@ -23,17 +23,11 @@ interface SetupPrinter
 {
     /**
      * Prints setup state.
-     *
-     * @param Formatter $formatter
-     * @param Setup     $setup
      */
     public function printSetup(Formatter $formatter, Setup $setup);
 
     /**
      * Prints teardown state.
-     *
-     * @param Formatter $formatter
-     * @param Teardown  $teardown
      */
     public function printTeardown(Formatter $formatter, Teardown $teardown);
 }

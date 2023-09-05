@@ -26,10 +26,12 @@ final class BeforeScenarioScope implements ScenarioScope
      * @var Environment
      */
     private $environment;
+
     /**
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var Scenario
      */
@@ -37,10 +39,6 @@ final class BeforeScenarioScope implements ScenarioScope
 
     /**
      * Initializes scope.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
      */
     public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario)
     {

@@ -42,12 +42,10 @@ final class HelperContainerExtension implements Extension
 
     /**
      * Initializes compiler pass.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -77,14 +75,14 @@ final class HelperContainerExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $definition = new Definition('Behat\Behat\HelperContainer\Argument\ServicesResolverFactory', array(
-            new Reference('service_container')
-        ));
-        $definition->addTag(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG, array('priority' => 0));
+        $definition = new Definition('Behat\Behat\HelperContainer\Argument\ServicesResolverFactory', [
+            new Reference('service_container'),
+        ]);
+        $definition->addTag(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG, ['priority' => 0]);
         $container->setDefinition(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG . '.helper_container', $definition);
 
         $definition = new Definition('Behat\Behat\HelperContainer\Call\Filter\ServicesResolver');
-        $definition->addTag(CallExtension::CALL_FILTER_TAG, array('priority' => 0));
+        $definition->addTag(CallExtension::CALL_FILTER_TAG, ['priority' => 0]);
         $container->setDefinition(CallExtension::CALL_FILTER_TAG . '.helper_container', $definition);
     }
 
@@ -98,7 +96,8 @@ final class HelperContainerExtension implements Extension
         foreach ($references as $reference) {
             if ($container->getDefinition((string) $reference)->isShared()) {
                 throw new WrongServicesConfigurationException(sprintf(
-                    'Container services must not be configured as shared, but `@%s` is.', $reference
+                    'Container services must not be configured as shared, but `@%s` is.',
+                    $reference
                 ));
             }
         }

@@ -11,7 +11,7 @@
 namespace Behat\Behat\Context\Annotation;
 
 /**
- * Helper class for DocBlock parsing
+ * Helper class for DocBlock parsing.
  */
 class DocBlockHelper
 {

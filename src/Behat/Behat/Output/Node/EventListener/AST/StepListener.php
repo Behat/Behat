@@ -33,10 +33,12 @@ final class StepListener implements EventListener
      * @var StepPrinter
      */
     private $stepPrinter;
+
     /**
      * @var ScenarioLikeInterface
      */
     private $scenario;
+
     /**
      * @var null|SetupPrinter
      */
@@ -44,11 +46,8 @@ final class StepListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param StepPrinter       $stepPrinter
-     * @param null|SetupPrinter $setupPrinter
      */
-    public function __construct(StepPrinter $stepPrinter, SetupPrinter $setupPrinter = null)
+    public function __construct(StepPrinter $stepPrinter, ?SetupPrinter $setupPrinter = null)
     {
         $this->stepPrinter = $stepPrinter;
         $this->setupPrinter = $setupPrinter;
@@ -67,8 +66,6 @@ final class StepListener implements EventListener
 
     /**
      * Captures scenario into the ivar on scenario/background/example BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureScenarioOnScenarioEvent(Event $event)
     {
@@ -86,7 +83,7 @@ final class StepListener implements EventListener
      */
     private function forgetScenarioOnAfterEvent($eventName)
     {
-        if (!in_array($eventName, array(ScenarioTested::AFTER, ExampleTested::AFTER))) {
+        if (!in_array($eventName, [ScenarioTested::AFTER, ExampleTested::AFTER], true)) {
             return;
         }
 
@@ -106,9 +103,6 @@ final class StepListener implements EventListener
 
     /**
      * Prints step on AFTER event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printStepOnAfterEvent(Formatter $formatter, Event $event)
     {

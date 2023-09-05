@@ -10,13 +10,11 @@
 
 namespace Behat\Testwork\Argument\Exception;
 
-use InvalidArgumentException;
-
 /**
  * Represents an attempt to organise unsupported function arguments.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class UnsupportedFunctionException extends InvalidArgumentException implements ArgumentException
+final class UnsupportedFunctionException extends \InvalidArgumentException implements ArgumentException
 {
 }

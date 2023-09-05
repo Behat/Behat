@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -30,17 +30,18 @@ final class ExceptionPresenter
     /**
      * @var ExceptionStringer[]
      */
-    private $stringers = array();
+    private $stringers = [];
+
     /**
-     * @var integer
+     * @var int
      */
     private $defaultVerbosity = OutputPrinter::VERBOSITY_NORMAL;
 
     /**
      * Initializes presenter.
      *
-     * @param string  $basePath
-     * @param integer $defaultVerbosity
+     * @param string $basePath
+     * @param int    $defaultVerbosity
      */
     public function __construct($basePath = null, $defaultVerbosity = OutputPrinter::VERBOSITY_NORMAL)
     {
@@ -58,8 +59,6 @@ final class ExceptionPresenter
 
     /**
      * Registers exception stringer.
-     *
-     * @param ExceptionStringer $stringer
      */
     public function registerExceptionStringer(ExceptionStringer $stringer)
     {
@@ -69,7 +68,7 @@ final class ExceptionPresenter
     /**
      * Sets default verbosity to a specified level.
      *
-     * @param integer $defaultVerbosity
+     * @param int $defaultVerbosity
      */
     public function setDefaultVerbosity($defaultVerbosity)
     {
@@ -79,12 +78,11 @@ final class ExceptionPresenter
     /**
      * Presents exception as a string.
      *
-     * @param Exception $exception
-     * @param integer   $verbosity
+     * @param int $verbosity
      *
      * @return string
      */
-    public function presentException(Exception $exception, $verbosity = null)
+    public function presentException(\Exception $exception, $verbosity = null)
     {
         $verbosity = $verbosity ?: $this->defaultVerbosity;
 
@@ -105,7 +103,7 @@ final class ExceptionPresenter
         return trim($this->relativizePaths($exception->getMessage()) . ' (' . get_class($exception) . ')');
     }
 
-    private function removeBehatCallsFromTrace(Exception $exception)
+    private function removeBehatCallsFromTrace(\Exception $exception)
     {
         $traceOutput = '';
         foreach ($exception->getTrace() as $i => $trace) {
@@ -122,7 +120,7 @@ final class ExceptionPresenter
         }
 
         return sprintf(
-            "%s: %s in %s:%d%sStack trace:%s%s",
+            '%s: %s in %s:%d%sStack trace:%s%s',
             get_class($exception),
             $exception->getMessage(),
             $exception->getFile(),

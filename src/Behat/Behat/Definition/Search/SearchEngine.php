@@ -28,10 +28,6 @@ interface SearchEngine
     /**
      * Searches for a step definition.
      *
-     * @param Environment $environment
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     *
      * @return null|SearchResult
      */
     public function searchDefinition(Environment $environment, FeatureNode $feature, StepNode $step);

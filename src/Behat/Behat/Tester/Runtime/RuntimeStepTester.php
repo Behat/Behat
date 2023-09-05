@@ -38,6 +38,7 @@ final class RuntimeStepTester implements StepTester
      * @var DefinitionFinder
      */
     private $definitionFinder;
+
     /**
      * @var CallCenter
      */
@@ -45,9 +46,6 @@ final class RuntimeStepTester implements StepTester
 
     /**
      * Initialize tester.
-     *
-     * @param DefinitionFinder $definitionFinder
-     * @param CallCenter       $callCenter
      */
     public function __construct(DefinitionFinder $definitionFinder, CallCenter $callCenter)
     {
@@ -66,6 +64,14 @@ final class RuntimeStepTester implements StepTester
     /**
      * {@inheritdoc}
      */
+    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
+    {
+        return new SuccessfulTeardown();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip = false)
     {
         try {
@@ -79,19 +85,7 @@ final class RuntimeStepTester implements StepTester
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
-    {
-        return new SuccessfulTeardown();
-    }
-
-    /**
      * Searches for a definition.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
      *
      * @return SearchResult
      */
@@ -103,11 +97,7 @@ final class RuntimeStepTester implements StepTester
     /**
      * Tests found definition.
      *
-     * @param Environment  $env
-     * @param FeatureNode  $feature
-     * @param StepNode     $step
-     * @param SearchResult $search
-     * @param bool      $skip
+     * @param bool $skip
      *
      * @return StepResult
      */
@@ -129,11 +119,6 @@ final class RuntimeStepTester implements StepTester
 
     /**
      * Creates definition call.
-     *
-     * @param Environment  $env
-     * @param FeatureNode  $feature
-     * @param SearchResult $search
-     * @param StepNode     $step
      *
      * @return DefinitionCall
      */

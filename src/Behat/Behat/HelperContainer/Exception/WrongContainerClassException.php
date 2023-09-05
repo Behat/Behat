@@ -10,14 +10,12 @@
 
 namespace Behat\Behat\HelperContainer\Exception;
 
-use InvalidArgumentException;
-
 /**
  * Represents an exception when provided class exists, but is not an acceptable as a container.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class WrongContainerClassException extends InvalidArgumentException implements HelperContainerException
+final class WrongContainerClassException extends \InvalidArgumentException implements HelperContainerException
 {
     /**
      * @var string
@@ -27,8 +25,8 @@ final class WrongContainerClassException extends InvalidArgumentException implem
     /**
      * Initializes exception.
      *
-     * @param integer $message
-     * @param string  $class
+     * @param int    $message
+     * @param string $class
      */
     public function __construct($message, $class)
     {

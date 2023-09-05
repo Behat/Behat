@@ -15,7 +15,6 @@ use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
-use ReflectionMethod;
 
 /**
  * Token name based transformation.
@@ -31,15 +30,6 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
      */
     private $pattern;
 
-
-    /**
-     * {@inheritdoc}
-     */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
-    {
-        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
-    }
-
     /**
      * Initializes transformation.
      *
@@ -52,6 +42,22 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
         $this->pattern = $pattern;
 
         parent::__construct($callable, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return 'TokenNameTransform ' . $this->pattern;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function supportsPatternAndMethod($pattern, \ReflectionMethod $method)
+    {
+        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
 
     /**
@@ -71,7 +77,7 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
             $definitionCall->getEnvironment(),
             $definitionCall->getCallee(),
             $this,
-            array($argumentValue)
+            [$argumentValue]
         );
 
         $result = $callCenter->makeCall($call);
@@ -97,13 +103,5 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
     public function getPattern()
     {
         return $this->pattern;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return 'TokenNameTransform ' . $this->pattern;
     }
 }

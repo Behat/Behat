@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -12,14 +12,13 @@ namespace Behat\Testwork\Suite\Exception;
 
 use Behat\Testwork\Exception\TestworkException;
 use Exception;
-use InvalidArgumentException;
 
 /**
  * Represents a suite exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SuiteException extends InvalidArgumentException implements TestworkException
+class SuiteException extends \InvalidArgumentException implements TestworkException
 {
     /**
      * @var string
@@ -29,11 +28,10 @@ class SuiteException extends InvalidArgumentException implements TestworkExcepti
     /**
      * Initializes exception.
      *
-     * @param string         $message
-     * @param string         $name
-     * @param Exception|null $previous
+     * @param string $message
+     * @param string $name
      */
-    public function __construct($message, $name, Exception $previous = null)
+    public function __construct($message, $name, ?\Exception $previous = null)
     {
         $this->name = $name;
 

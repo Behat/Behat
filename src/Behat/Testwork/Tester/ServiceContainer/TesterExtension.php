@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -38,7 +38,7 @@ abstract class TesterExtension implements Extension
     public const RESULT_INTERPRETER_ID = 'tester.result.interpreter';
 
     /**
-     * Available extension points
+     * Available extension points.
      */
     public const EXERCISE_WRAPPER_TAG = 'tester.exercise.wrapper';
     public const SUITE_TESTER_WRAPPER_TAG = 'tester.suite.wrapper';
@@ -52,12 +52,10 @@ abstract class TesterExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -83,14 +81,14 @@ abstract class TesterExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->booleanNode('strict')
-                    ->info('Sets the strict mode for result interpretation')
-                    ->defaultFalse()
-                ->end()
-                ->booleanNode('skip')
-                    ->info('Tells tester to skip all tests')
-                    ->defaultFalse()
-                ->end()
+            ->booleanNode('strict')
+            ->info('Sets the strict mode for result interpretation')
+            ->defaultFalse()
+            ->end()
+            ->booleanNode('skip')
+            ->info('Tells tester to skip all tests')
+            ->defaultFalse()
+            ->end()
             ->end()
         ;
     }
@@ -122,42 +120,38 @@ abstract class TesterExtension implements Extension
     /**
      * Loads exercise cli controllers.
      *
-     * @param ContainerBuilder $container
-     * @param bool          $skip
+     * @param bool $skip
      */
     protected function loadExerciseController(ContainerBuilder $container, $skip = false)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', array(
+        $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', [
             new Reference(SuiteExtension::REGISTRY_ID),
             new Reference(SpecificationExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
             new Reference(self::RESULT_INTERPRETER_ID),
-            $skip
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
+            $skip,
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 0]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
     }
 
     /**
      * Loads exercise cli controllers.
      *
-     * @param ContainerBuilder $container
-     * @param bool          $strict
+     * @param bool $strict
      */
     protected function loadStrictController(ContainerBuilder $container, $strict = false)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', array(
+        $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', [
             new Reference(self::RESULT_INTERPRETER_ID),
-            $strict
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
+            $strict,
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 300]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
     }
 
     /**
-     * Loads result interpreter controller
-     *
-     * @param ContainerBuilder $container
+     * Loads result interpreter controller.
      */
     protected function loadResultInterpreter(ContainerBuilder $container)
     {
@@ -171,42 +165,34 @@ abstract class TesterExtension implements Extension
 
     /**
      * Loads exercise tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeExercise', array(
+        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeExercise', [
             new Reference(EnvironmentExtension::MANAGER_ID),
-            new Reference(self::SUITE_TESTER_ID)
-        ));
+            new Reference(self::SUITE_TESTER_ID),
+        ]);
         $container->setDefinition(self::EXERCISE_ID, $definition);
     }
 
     /**
      * Loads suite tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeSuiteTester', array(
-            new Reference(self::SPECIFICATION_TESTER_ID)
-        ));
+        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeSuiteTester', [
+            new Reference(self::SPECIFICATION_TESTER_ID),
+        ]);
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);
     }
 
     /**
      * Loads specification tester.
-     *
-     * @param ContainerBuilder $container
      */
     abstract protected function loadSpecificationTester(ContainerBuilder $container);
 
     /**
      * Processes all registered exercise wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processExerciseWrappers(ContainerBuilder $container)
     {
@@ -215,8 +201,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Processes all registered suite tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processSuiteTesterWrappers(ContainerBuilder $container)
     {
@@ -225,8 +209,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Processes all registered specification tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processSpecificationTesterWrappers(ContainerBuilder $container)
     {
@@ -235,8 +217,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Processes all registered result interpretations.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processResultInterpretations(ContainerBuilder $container)
     {
@@ -244,7 +224,7 @@ abstract class TesterExtension implements Extension
         $definition = $container->getDefinition(self::RESULT_INTERPRETER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerResultInterpretation', array($reference));
+            $definition->addMethodCall('registerResultInterpretation', [$reference]);
         }
     }
 }

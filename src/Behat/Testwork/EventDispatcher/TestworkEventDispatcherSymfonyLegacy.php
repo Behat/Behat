@@ -1,8 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Behat\Testwork\EventDispatcher;
-
 
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -23,9 +29,8 @@ final class TestworkEventDispatcherSymfonyLegacy extends EventDispatcher
 
     /**
      * {@inheritdoc}
-     *
      */
-    public function dispatch($eventName, Event $event = null)
+    public function dispatch($eventName, ?Event $event = null)
     {
         trigger_error(
             'Class "\Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfonyLegacy" is deprecated ' .
@@ -41,6 +46,7 @@ final class TestworkEventDispatcherSymfonyLegacy extends EventDispatcher
         if (method_exists($event, 'setName')) {
             $event->setName($eventName);
         }
+
         /** @scrutinizer ignore-call */
         $this->doDispatch($this->getListeners($eventName), $eventName, $event);
 
@@ -59,7 +65,7 @@ final class TestworkEventDispatcherSymfonyLegacy extends EventDispatcher
             E_USER_DEPRECATED
         );
 
-        if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
+        if (null === $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
             return parent::getListeners($eventName);
         }
 

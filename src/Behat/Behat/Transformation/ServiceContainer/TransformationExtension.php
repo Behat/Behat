@@ -49,10 +49,8 @@ class TransformationExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
@@ -100,62 +98,52 @@ class TransformationExtension implements Extension
 
     /**
      * Loads definition arguments transformer.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDefinitionArgumentsTransformer(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Transformation\Call\Filter\DefinitionArgumentsTransformer');
-        $definition->addTag(CallExtension::CALL_FILTER_TAG, array('priority' => 200));
+        $definition->addTag(CallExtension::CALL_FILTER_TAG, ['priority' => 200]);
         $container->setDefinition(self::DEFINITION_ARGUMENT_TRANSFORMER_ID, $definition);
     }
 
     /**
      * Loads default transformers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDefaultTransformers(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\Transformer\RepositoryArgumentTransformer', array(
+        $definition = new Definition('Behat\Behat\Transformation\Transformer\RepositoryArgumentTransformer', [
             new Reference(self::REPOSITORY_ID),
             new Reference(CallExtension::CALL_CENTER_ID),
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
-        ));
-        $definition->addTag(self::ARGUMENT_TRANSFORMER_TAG, array('priority' => 50));
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
+        ]);
+        $definition->addTag(self::ARGUMENT_TRANSFORMER_TAG, ['priority' => 50]);
         $container->setDefinition(self::ARGUMENT_TRANSFORMER_TAG . '.repository', $definition);
     }
 
     /**
      * Loads transformation context annotation reader.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadAnnotationReader(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Transformation\Context\Annotation\TransformationAnnotationReader');
-        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, array('priority' => 50));
+        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, ['priority' => 50]);
         $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.transformation', $definition);
     }
 
     /**
      * Loads transformations repository.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadRepository(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\TransformationRepository', array(
-            new Reference(EnvironmentExtension::MANAGER_ID)
-        ));
+        $definition = new Definition('Behat\Behat\Transformation\TransformationRepository', [
+            new Reference(EnvironmentExtension::MANAGER_ID),
+        ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
     }
 
     /**
      * Processes all available argument transformers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processArgumentsTransformers(ContainerBuilder $container)
     {
@@ -163,7 +151,7 @@ class TransformationExtension implements Extension
         $definition = $container->getDefinition(self::DEFINITION_ARGUMENT_TRANSFORMER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerArgumentTransformer', array($reference));
+            $definition->addMethodCall('registerArgumentTransformer', [$reference]);
         }
     }
 
@@ -171,9 +159,9 @@ class TransformationExtension implements Extension
      * Returns definition argument transformer service id.
      *
      * @return string
-     * 
+     *
      * @deprecated Use DEFINITION_ARGUMENT_TRANSFORMER_ID constant instead
-     * 
+     *
      * @todo Remove method in next major version
      */
     protected function getDefinitionArgumentTransformerId()

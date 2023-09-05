@@ -12,7 +12,6 @@ namespace Behat\Behat\Transformation;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Testwork\Call\CallCenter;
-use ReflectionMethod;
 
 /**
  * Represents a simple self-contained transformation capable of changing a single argument.
@@ -24,26 +23,24 @@ interface SimpleArgumentTransformation extends Transformation
     /**
      * Checks if transformation supports given pattern.
      *
-     * @param string           $pattern
-     * @param ReflectionMethod $method
+     * @param string $pattern
      *
      * @return bool
      */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method);
+    public static function supportsPatternAndMethod($pattern, \ReflectionMethod $method);
 
     /**
      * Returns transformation priority.
      *
-     * @return integer
+     * @return int
      */
     public function getPriority();
 
     /**
      * Checks if transformation supports argument.
      *
-     * @param DefinitionCall $definitionCall
-     * @param integer|string $argumentIndex
-     * @param mixed          $argumentArgumentValue
+     * @param int|string $argumentIndex
+     * @param mixed      $argumentArgumentValue
      *
      * @return bool
      */
@@ -52,10 +49,8 @@ interface SimpleArgumentTransformation extends Transformation
     /**
      * Transforms argument value using transformation and returns a new one.
      *
-     * @param CallCenter     $callCenter
-     * @param DefinitionCall $definitionCall
-     * @param integer|string $argumentIndex
-     * @param mixed          $argumentValue
+     * @param int|string $argumentIndex
+     * @param mixed      $argumentValue
      *
      * @return mixed
      */

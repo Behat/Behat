@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,21 +23,24 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class JUnitOutputPrinter extends StreamOutputPrinter
 {
-    public const XML_VERSION  = '1.0';
+    public const XML_VERSION = '1.0';
     public const XML_ENCODING = 'UTF-8';
 
     /**
      * @var \DOMDocument
      */
     private $domDocument;
+
     /**
      * @var \DOMElement
      */
     private $currentTestsuite;
+
     /**
      * @var \DOMElement
      */
     private $currentTestcase;
+
     /**
      * @var \DOMElement
      */
@@ -56,7 +59,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      * @param string $name                 The filename (without extension) and default value of the name attribute
      * @param array  $testsuitesAttributes Attributes for the root element
      */
-    public function createNewFile($name, array $testsuitesAttributes = array())
+    public function createNewFile($name, array $testsuitesAttributes = [])
     {
         // This requires the DOM extension to be enabled.
         if (!extension_loaded('dom')) {
@@ -69,29 +72,24 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
 
         $this->testSuites = $this->domDocument->createElement('testsuites');
         $this->domDocument->appendChild($this->testSuites);
-        $this->addAttributesToNode($this->testSuites, array_merge(array('name' => $name), $testsuitesAttributes));
+        $this->addAttributesToNode($this->testSuites, array_merge(['name' => $name], $testsuitesAttributes));
         $this->flush();
     }
 
     /**
      * Adds a new <testsuite> node.
-     *
-     * @param array $testsuiteAttributes
      */
-    public function addTestsuite(array $testsuiteAttributes = array())
+    public function addTestsuite(array $testsuiteAttributes = [])
     {
         $this->currentTestsuite = $this->domDocument->createElement('testsuite');
         $this->testSuites->appendChild($this->currentTestsuite);
         $this->addAttributesToNode($this->currentTestsuite, $testsuiteAttributes);
     }
 
-
     /**
      * Adds a new <testcase> node.
-     *
-     * @param array $testcaseAttributes
      */
-    public function addTestcase(array $testcaseAttributes = array())
+    public function addTestcase(array $testcaseAttributes = [])
     {
         $this->currentTestcase = $this->domDocument->createElement('testcase');
         $this->currentTestsuite->appendChild($this->currentTestcase);
@@ -102,21 +100,13 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      * Add a testcase child element.
      *
      * @param string $nodeName
-     * @param array  $nodeAttributes
      * @param string $nodeValue
      */
-    public function addTestcaseChild($nodeName, array $nodeAttributes = array(), $nodeValue = null)
+    public function addTestcaseChild($nodeName, array $nodeAttributes = [], $nodeValue = null)
     {
         $childNode = $this->domDocument->createElement($nodeName, $nodeValue ?? '');
         $this->currentTestcase->appendChild($childNode);
         $this->addAttributesToNode($childNode, $nodeAttributes);
-    }
-
-    private function addAttributesToNode(\DOMElement $node, array $attributes)
-    {
-        foreach ($attributes as $name => $value){
-            $node->setAttribute($name, $value ?? '');
-        }
     }
 
     /**
@@ -136,11 +126,11 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * Generate XML from the DOMDocument and parse to the the writing stream
+     * Generate XML from the DOMDocument and parse to the the writing stream.
      */
     public function flush()
     {
-        if($this->domDocument instanceof \DOMDocument){
+        if ($this->domDocument instanceof \DOMDocument) {
             $this->getWritingStream()->write(
                 $this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG),
                 false,
@@ -149,5 +139,12 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
         }
 
         parent::flush();
+    }
+
+    private function addAttributesToNode(\DOMElement $node, array $attributes)
+    {
+        foreach ($attributes as $name => $value) {
+            $node->setAttribute($name, $value ?? '');
+        }
     }
 }

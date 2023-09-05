@@ -11,7 +11,6 @@
 namespace Behat\Behat\Definition\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
-use ReflectionMethod;
 
 /**
  * Reads definition annotations from the context class.
@@ -24,19 +23,20 @@ final class DefinitionAnnotationReader implements AnnotationReader
      * @var string
      */
     private static $regex = '/^\@(given|when|then)\s+(.+)$/i';
+
     /**
      * @var string[]
      */
-    private static $classes = array(
+    private static $classes = [
         'given' => 'Behat\Behat\Definition\Call\Given',
-        'when'  => 'Behat\Behat\Definition\Call\When',
-        'then'  => 'Behat\Behat\Definition\Call\Then',
-    );
+        'when' => 'Behat\Behat\Definition\Call\When',
+        'then' => 'Behat\Behat\Definition\Call\Then',
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description)
+    public function readCallee($contextClass, \ReflectionMethod $method, $docLine, $description)
     {
         if (!preg_match(self::$regex, $docLine, $match)) {
             return null;
@@ -45,7 +45,7 @@ final class DefinitionAnnotationReader implements AnnotationReader
         $type = strtolower($match[1]);
         $class = self::$classes[$type];
         $pattern = $match[2];
-        $callable = array($contextClass, $method->getName());
+        $callable = [$contextClass, $method->getName()];
 
         return new $class($pattern, $callable, $description);
     }

@@ -12,8 +12,6 @@ namespace Behat\Behat\Context\Reader;
 
 use Behat\Behat\Context\Attribute\AttributeReader;
 use Behat\Behat\Context\Environment\ContextEnvironment;
-use ReflectionClass;
-use ReflectionMethod;
 
 /**
  * Reads context callees by Attributes using registered Attribute readers.
@@ -25,12 +23,10 @@ final class AttributeContextReader implements ContextReader
     /**
      * @var AttributeReader[]
      */
-    private $readers = array();
+    private $readers = [];
 
     /**
      * Registers attribute reader.
-     *
-     * @param AttributeReader $reader
      */
     public function registerAttributeReader(AttributeReader $reader)
     {
@@ -46,10 +42,10 @@ final class AttributeContextReader implements ContextReader
             return [];
         }
 
-        $reflection = new ReflectionClass($contextClass);
+        $reflection = new \ReflectionClass($contextClass);
 
-        $callees = array();
-        foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+        $callees = [];
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             foreach ($this->readMethodCallees($reflection->getName(), $method) as $callee) {
                 $callees[] = $callee;
             }
@@ -58,7 +54,7 @@ final class AttributeContextReader implements ContextReader
         return $callees;
     }
 
-    private function readMethodCallees(string $contextClass, ReflectionMethod $method)
+    private function readMethodCallees(string $contextClass, \ReflectionMethod $method)
     {
         $callees = [];
         foreach ($this->readers as $reader) {

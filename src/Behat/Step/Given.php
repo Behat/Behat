@@ -11,7 +11,7 @@
 namespace Behat\Step;
 
 /**
- * Represents an Attribute for Given steps
+ * Represents an Attribute for Given steps.
  */
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 final class Given implements Definition

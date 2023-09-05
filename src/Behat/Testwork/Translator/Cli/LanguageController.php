@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -31,8 +31,6 @@ final class LanguageController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param Translator $translator
      */
     public function __construct(Translator $translator)
     {
@@ -44,7 +42,10 @@ final class LanguageController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption('--lang', null, InputOption::VALUE_REQUIRED,
+        $command->addOption(
+            '--lang',
+            null,
+            InputOption::VALUE_REQUIRED,
             'Print output in particular language.'
         );
     }

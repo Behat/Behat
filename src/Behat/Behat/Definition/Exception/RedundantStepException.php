@@ -11,7 +11,6 @@
 namespace Behat\Behat\Definition\Exception;
 
 use Behat\Behat\Definition\Definition;
-use RuntimeException;
 
 /**
  * Represents an exception caused by a redundant step definition.
@@ -21,7 +20,7 @@ use RuntimeException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class RedundantStepException extends RuntimeException implements SearchException
+final class RedundantStepException extends \RuntimeException implements SearchException
 {
     /**
      * Initializes redundant exception.
@@ -33,7 +32,10 @@ final class RedundantStepException extends RuntimeException implements SearchExc
     {
         $message = sprintf(
             "Step \"%s\" is already defined in %s\n\n%s\n%s",
-            $step2->getPattern(), $step1->getPath(), $step1->getPath(), $step2->getPath()
+            $step2->getPattern(),
+            $step1->getPath(),
+            $step1->getPath(),
+            $step2->getPath()
         );
 
         parent::__construct($message);

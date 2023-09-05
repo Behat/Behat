@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -22,14 +22,12 @@ final class GenericSuiteGenerator implements SuiteGenerator
     /**
      * @var array
      */
-    private $defaultSettings = array();
+    private $defaultSettings = [];
 
     /**
      * Initializes suite generator.
-     *
-     * @param array $defaultSettings
      */
-    public function __construct(array $defaultSettings = array())
+    public function __construct(array $defaultSettings = [])
     {
         $this->defaultSettings = $defaultSettings;
     }
@@ -52,8 +50,6 @@ final class GenericSuiteGenerator implements SuiteGenerator
 
     /**
      * Merges provided settings into default ones.
-     *
-     * @param array $settings
      *
      * @return array
      */

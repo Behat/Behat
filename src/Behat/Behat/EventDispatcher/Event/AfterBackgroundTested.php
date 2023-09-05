@@ -29,14 +29,17 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var BackgroundNode
      */
     private $background;
+
     /**
      * @var TestResult
      */
     private $result;
+
     /**
      * @var Teardown
      */
@@ -44,12 +47,6 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
 
     /**
      * Initializes event.
-     *
-     * @param Environment    $env
-     * @param FeatureNode    $feature
-     * @param BackgroundNode $background
-     * @param TestResult     $result
-     * @param Teardown       $teardown
      */
     public function __construct(
         Environment $env,

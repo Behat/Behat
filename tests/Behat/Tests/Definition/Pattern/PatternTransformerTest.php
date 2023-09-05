@@ -1,13 +1,20 @@
 <?php
 
+/*
+ * This file is part of the Behat.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Behat\Tests\Definition\Pattern;
 
 use Behat\Behat\Definition\Pattern\PatternTransformer;
-use Behat\Behat\Definition\Pattern\Policy\PatternPolicy;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class PatternTransformerTest
+ * Class PatternTransformerTest.
  * @author Julien Deniau <julien.deniau@mapado.com>
  */
 class PatternTransformerTest extends TestCase
@@ -74,11 +81,10 @@ class PatternTransformerTest extends TestCase
         $policy1Prophecy->transformPatternToRegex('hello world')
             ->shouldNotBeCalled();
 
-
         $testedInstance = new PatternTransformer();
         $testedInstance->registerPatternPolicy($policy1Prophecy->reveal());
         $this->expectException('\Behat\Behat\Definition\Exception\UnknownPatternException');
-        $this->expectExceptionMessage("Can not find policy for a pattern `hello world`.");
+        $this->expectExceptionMessage('Can not find policy for a pattern `hello world`.');
         $regex = $testedInstance->transformPatternToRegex('hello world');
     }
 }

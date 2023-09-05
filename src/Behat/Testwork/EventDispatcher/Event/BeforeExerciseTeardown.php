@@ -24,6 +24,7 @@ final class BeforeExerciseTeardown extends ExerciseCompleted implements BeforeTe
      * @var SpecificationIterator[]
      */
     private $specificationIterators;
+
     /**
      * @var TestResult
      */
@@ -33,7 +34,6 @@ final class BeforeExerciseTeardown extends ExerciseCompleted implements BeforeTe
      * Initializes event.
      *
      * @param SpecificationIterator[] $specificationIterators
-     * @param TestResult              $result
      */
     public function __construct(array $specificationIterators, TestResult $result)
     {

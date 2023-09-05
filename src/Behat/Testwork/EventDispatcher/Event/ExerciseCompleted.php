@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -12,7 +12,6 @@ namespace Behat\Testwork\EventDispatcher\Event;
 
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\Specification\SpecificationIterator;
-
 
 /**
  * Represents an exercise event.

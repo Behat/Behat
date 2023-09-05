@@ -27,8 +27,6 @@ final class DefinitionTranslator
 
     /**
      * Initialises definition translator.
-     *
-     * @param TranslatorInterface $translator
      */
     public function __construct(TranslatorInterface $translator)
     {
@@ -38,8 +36,6 @@ final class DefinitionTranslator
     /**
      * Attempts to translate definition using translator and produce translated one on success.
      *
-     * @param Suite       $suite
-     * @param Definition  $definition
      * @param null|string $language
      *
      * @return Definition|TranslatedDefinition
@@ -49,8 +45,8 @@ final class DefinitionTranslator
         $assetsId = $suite->getName();
         $pattern = $definition->getPattern();
 
-        $translatedPattern = $this->translator->trans($pattern, array(), $assetsId, $language);
-        if ($pattern != $translatedPattern) {
+        $translatedPattern = $this->translator->trans($pattern, [], $assetsId, $language);
+        if ($pattern !== $translatedPattern) {
             return new TranslatedDefinition($definition, $translatedPattern, $language);
         }
 

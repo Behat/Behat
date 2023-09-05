@@ -26,18 +26,22 @@ final class NodeEventListeningFormatter implements Formatter
      * @var OutputPrinter
      */
     private $printer;
+
     /**
      * @var array
      */
     private $parameters;
+
     /**
      * @var EventListener
      */
     private $listener;
+
     /**
      * @var string
      */
     private $name;
+
     /**
      * @var string
      */
@@ -46,11 +50,8 @@ final class NodeEventListeningFormatter implements Formatter
     /**
      * Initializes formatter.
      *
-     * @param string        $name
-     * @param string        $description
-     * @param array         $parameters
-     * @param OutputPrinter $printer
-     * @param EventListener $listener
+     * @param string $name
+     * @param string $description
      */
     public function __construct($name, $description, array $parameters, OutputPrinter $printer, EventListener $listener)
     {
@@ -68,13 +69,12 @@ final class NodeEventListeningFormatter implements Formatter
      */
     public static function getSubscribedEvents()
     {
-        return array(TestworkEventDispatcher::BEFORE_ALL_EVENTS => 'listenEvent');
+        return [TestworkEventDispatcher::BEFORE_ALL_EVENTS => 'listenEvent'];
     }
 
     /**
      * Proxies event to the listener.
      *
-     * @param Event       $event
      * @param null|string $eventName
      */
     public function listenEvent(Event $event, $eventName = null)

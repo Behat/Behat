@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\Specification;
 
-use ArrayIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -20,7 +19,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-final class SpecificationArrayIterator extends ArrayIterator implements SpecificationIterator
+final class SpecificationArrayIterator extends \ArrayIterator implements SpecificationIterator
 {
     /**
      * @var Suite
@@ -30,10 +29,9 @@ final class SpecificationArrayIterator extends ArrayIterator implements Specific
     /**
      * Initializes iterator.
      *
-     * @param Suite   $suite
      * @param mixed[] $specifications
      */
-    public function __construct(Suite $suite, $specifications = array())
+    public function __construct(Suite $suite, $specifications = [])
     {
         $this->suite = $suite;
 

@@ -24,8 +24,8 @@ use Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator;
 interface CustomSnippetAcceptingContext extends SnippetAcceptingContext
 {
     /**
-     * Returns type of the snippets that this context accepts. 
-     * 
+     * Returns type of the snippets that this context accepts.
+     *
      * Behat implements a couple of types by default: "regex" and "turnip"
      *
      * @return string

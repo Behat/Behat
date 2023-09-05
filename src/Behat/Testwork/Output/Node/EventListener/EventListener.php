@@ -23,9 +23,7 @@ interface EventListener
     /**
      * Notifies listener about an event.
      *
-     * @param Formatter $formatter
-     * @param Event     $event
-     * @param string    $eventName
+     * @param string $eventName
      */
     public function listenEvent(Formatter $formatter, Event $event, $eventName);
 }

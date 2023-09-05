@@ -26,6 +26,7 @@ final class BeforeStepTested extends StepTested implements BeforeTested
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var StepNode
      */
@@ -33,10 +34,6 @@ final class BeforeStepTested extends StepTested implements BeforeTested
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
      */
     public function __construct(Environment $env, FeatureNode $feature, StepNode $step)
     {

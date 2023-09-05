@@ -14,31 +14,37 @@ use Behat\Testwork\Specification\SpecificationArrayIterator;
 use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
- * Prioritises Suites and Features into reverse order
+ * Prioritises Suites and Features into reverse order.
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
 final class ReverseOrderer implements Orderer
 {
     /**
-     * @param SpecificationIterator[] $scenarioIterators
+     * @param  SpecificationIterator[] $scenarioIterators
      * @return SpecificationIterator[]
      */
     public function order(array $scenarioIterators)
     {
         $orderedFeatures = $this->orderFeatures($scenarioIterators);
-        $orderedSuites = $this->orderSuites($orderedFeatures);
 
-        return $orderedSuites;
+        return $this->orderSuites($orderedFeatures);
     }
 
     /**
-     * @param array $scenarioIterators
+     * @return string
+     */
+    public function getName()
+    {
+        return 'reverse';
+    }
+
+    /**
      * @return array
      */
     private function orderFeatures(array $scenarioIterators)
     {
-        $orderedSuites = array();
+        $orderedSuites = [];
 
         foreach ($scenarioIterators as $scenarioIterator) {
             $orderedSpecifications = array_reverse(iterator_to_array($scenarioIterator));
@@ -52,19 +58,10 @@ final class ReverseOrderer implements Orderer
     }
 
     /**
-     * @param $orderedSuites
      * @return array
      */
     private function orderSuites($orderedSuites)
     {
         return array_reverse($orderedSuites);
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'reverse';
     }
 }

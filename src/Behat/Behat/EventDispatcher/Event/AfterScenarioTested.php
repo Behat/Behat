@@ -29,27 +29,24 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
      * @var FeatureNode
      */
     private $feature;
+
     /**
      * @var Scenario
      */
     private $scenario;
+
     /**
      * @var TestResult
      */
     private $result;
+
     /**
      * @var Teardown
      */
     private $teardown;
 
     /**
-     * Initializes event
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param TestResult  $result
-     * @param Teardown    $teardown
+     * Initializes event.
      */
     public function __construct(
         Environment $env,

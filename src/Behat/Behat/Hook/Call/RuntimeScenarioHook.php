@@ -44,9 +44,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
     /**
      * Checks if nodes match filter.
      *
-     * @param FeatureNode       $feature
-     * @param ScenarioInterface $scenario
-     * @param string            $filterString
+     * @param string $filterString
      *
      * @return bool
      */
@@ -66,9 +64,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
     /**
      * Checks if node match tag filter.
      *
-     * @param FeatureNode       $feature
-     * @param ScenarioInterface $scenario
-     * @param string            $filterString
+     * @param string $filterString
      *
      * @return bool
      */
@@ -82,8 +78,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
     /**
      * Checks if scenario matches name filter.
      *
-     * @param ScenarioInterface $scenario
-     * @param string            $filterString
+     * @param string $filterString
      *
      * @return bool
      */

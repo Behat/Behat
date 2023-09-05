@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,16 +23,16 @@ final class GenericSuite implements Suite
      * @var string
      */
     private $name;
+
     /**
      * @var array
      */
-    private $settings = array();
+    private $settings = [];
 
     /**
      * Initializes suite.
      *
      * @param string $name
-     * @param array  $settings
      */
     public function __construct($name, array $settings)
     {
@@ -77,9 +77,8 @@ final class GenericSuite implements Suite
      *
      * @param string $key
      *
-     * @return mixed
-     *
      * @throws ParameterNotFoundException If setting is not set
+     * @return mixed
      */
     public function getSetting($key)
     {

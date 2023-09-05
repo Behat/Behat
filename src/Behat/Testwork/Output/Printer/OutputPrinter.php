@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,19 +20,22 @@ interface OutputPrinter
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
-    public const VERBOSITY_NORMAL       = 1;
+    public const VERBOSITY_NORMAL = 1;
+
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
-    public const VERBOSITY_VERBOSE      = 2;
+    public const VERBOSITY_VERBOSE = 2;
+
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
     public const VERBOSITY_VERY_VERBOSE = 3;
+
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
-    public const VERBOSITY_DEBUG        = 4;
+    public const VERBOSITY_DEBUG = 4;
 
     /**
      * Sets output path.
@@ -52,8 +55,6 @@ interface OutputPrinter
 
     /**
      * Sets output styles.
-     *
-     * @param array $styles
      */
     public function setOutputStyles(array $styles);
 
@@ -85,14 +86,14 @@ interface OutputPrinter
     /**
      * Sets output verbosity level.
      *
-     * @param integer $level
+     * @param int $level
      */
     public function setOutputVerbosity($level);
 
     /**
      * Returns output verbosity level.
      *
-     * @return integer
+     * @return int
      *
      * @deprecated since 3.1, to be removed in 4.0
      */
@@ -101,14 +102,14 @@ interface OutputPrinter
     /**
      * Writes message(s) to output stream.
      *
-     * @param string|array $messages message or array of messages
+     * @param array|string $messages message or array of messages
      */
     public function write($messages);
 
     /**
      * Writes newlined message(s) to output stream.
      *
-     * @param string|array $messages message or array of messages
+     * @param array|string $messages message or array of messages
      */
     public function writeln($messages = '');
 

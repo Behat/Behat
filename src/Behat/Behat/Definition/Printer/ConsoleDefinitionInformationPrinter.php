@@ -41,7 +41,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
     public function printDefinitions(Suite $suite, $definitions)
     {
         $search = $this->searchCriterion;
-        $output = array();
+        $output = [];
 
         foreach ($definitions as $definition) {
             $definition = $this->translateDefinition($suite, $definition);
@@ -66,21 +66,19 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
     /**
      * Extracts the formatted header from the definition.
      *
-     * @param Suite      $suite
-     * @param Definition $definition
-     *
      * @return string[]
      */
     private function extractHeader(Suite $suite, Definition $definition)
     {
         $pattern = $definition->getPattern();
-        $lines = array();
+        $lines = [];
         $lines[] = strtr(
-            '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>', array(
+            '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>',
+            [
                 '{suite}' => $suite->getName(),
-                '{type}'  => $this->getDefinitionType($definition),
+                '{type}' => $this->getDefinitionType($definition),
                 '{regex}' => $pattern,
-            )
+            ]
         );
 
         return $lines;
@@ -89,23 +87,21 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
     /**
      * Extracts the formatted description from the definition.
      *
-     * @param Suite      $suite
-     * @param Definition $definition
-     *
      * @return string[]
      */
     private function extractDescription(Suite $suite, Definition $definition)
     {
         $definition = $this->translateDefinition($suite, $definition);
 
-        $lines = array();
+        $lines = [];
         if ($description = $definition->getDescription()) {
             foreach (explode("\n", $description) as $descriptionLine) {
                 $lines[] = strtr(
-                    '{space}<def_dimmed>|</def_dimmed> {description}', array(
-                        '{space}'       => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
-                        '{description}' => $descriptionLine
-                    )
+                    '{space}<def_dimmed>|</def_dimmed> {description}',
+                    [
+                        '{space}' => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
+                        '{description}' => $descriptionLine,
+                    ]
                 );
             }
         }
@@ -116,29 +112,28 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
     /**
      * Extracts the formatted footer from the definition.
      *
-     * @param Suite      $suite
-     * @param Definition $definition
-     *
      * @return string[]
      */
     private function extractFooter(Suite $suite, Definition $definition)
     {
-        $lines = array();
+        $lines = [];
         $lines[] = strtr(
-            '{space}<def_dimmed>|</def_dimmed> at `{path}`', array(
+            '{space}<def_dimmed>|</def_dimmed> at `{path}`',
+            [
                 '{space}' => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
-                '{path}'  => $definition->getPath()
-            )
+                '{path}' => $definition->getPath(),
+            ]
         );
 
         if ($this->isVerbose()) {
             $lines[] = strtr(
-                '{space}<def_dimmed>|</def_dimmed> on `{filepath}[{start}:{end}]`', array(
+                '{space}<def_dimmed>|</def_dimmed> on `{filepath}[{start}:{end}]`',
+                [
                     '{space}' => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
                     '{filepath}' => $definition->getReflection()->getFileName(),
                     '{start}' => $definition->getReflection()->getStartLine(),
-                    '{end}' => $definition->getReflection()->getEndLine()
-                )
+                    '{end}' => $definition->getReflection()->getEndLine(),
+                ]
             );
         }
 

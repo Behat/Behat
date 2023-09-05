@@ -25,8 +25,6 @@ interface ResultInterpretation
     /**
      * Checks if provided test result should be considered as a failure.
      *
-     * @param TestResult $result
-     *
      * @return bool
      */
     public function isFailure(TestResult $result);

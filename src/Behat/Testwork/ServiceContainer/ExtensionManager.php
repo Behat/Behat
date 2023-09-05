@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,17 +23,19 @@ final class ExtensionManager
      * @var string
      */
     private $extensionsPath;
+
     /**
      * @var Extension[]
      */
-    private $extensions = array();
+    private $extensions = [];
+
     /**
      * @var Extension[string]
      */
-    private $locatedExtensions = array();
-    private $debugInformation = array(
-        'extensions_list' => array()
-    );
+    private $locatedExtensions = [];
+    private $debugInformation = [
+        'extensions_list' => [],
+    ];
 
     /**
      * Initializes manager.
@@ -81,7 +83,7 @@ final class ExtensionManager
      *
      * @param string $key
      *
-     * @return Extension|null
+     * @return null|Extension
      */
     public function getExtension($key)
     {
@@ -148,9 +150,8 @@ final class ExtensionManager
      *
      * @param string $locator
      *
-     * @return Extension
-     *
      * @throws ExtensionInitializationException
+     * @return Extension
      */
     private function initialize($locator)
     {
@@ -169,26 +170,25 @@ final class ExtensionManager
      *
      * @param string $locator
      *
-     * @return Extension
-     *
      * @throws ExtensionInitializationException
+     * @return Extension
      */
     private function instantiateExtension($locator)
     {
         if (class_exists($class = $locator)) {
-            return new $class;
+            return new $class();
         }
 
         if (class_exists($class = $this->getFullExtensionClass($locator))) {
-            return new $class;
+            return new $class();
         }
 
         if (file_exists($locator)) {
-            return require($locator);
+            return require $locator;
         }
 
         if (file_exists($path = $this->extensionsPath . DIRECTORY_SEPARATOR . $locator)) {
-            return require($path);
+            return require $path;
         }
 
         throw new ExtensionInitializationException(sprintf(

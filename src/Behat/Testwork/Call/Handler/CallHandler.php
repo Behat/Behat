@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -26,16 +26,12 @@ interface CallHandler
     /**
      * Checks if handler supports call.
      *
-     * @param Call $call
-     *
      * @return bool
      */
     public function supportsCall(Call $call);
 
     /**
      * Handles call and returns call result.
-     *
-     * @param Call $call
      *
      * @return CallResult
      */

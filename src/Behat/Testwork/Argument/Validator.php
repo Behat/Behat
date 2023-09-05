@@ -11,9 +11,6 @@
 namespace Behat\Testwork\Argument;
 
 use Behat\Testwork\Argument\Exception\UnknownParameterValueException;
-use ReflectionFunctionAbstract;
-use ReflectionMethod;
-use ReflectionParameter;
 
 /**
  * Validates function arguments.
@@ -25,12 +22,11 @@ final class Validator
     /**
      * Validates that all arguments are in place, throws exception otherwise.
      *
-     * @param ReflectionFunctionAbstract $function
-     * @param mixed[]                    $arguments
+     * @param mixed[] $arguments
      *
      * @throws UnknownParameterValueException
      */
-    public function validateArguments(ReflectionFunctionAbstract $function, array $arguments)
+    public function validateArguments(\ReflectionFunctionAbstract $function, array $arguments)
     {
         foreach ($function->getParameters() as $num => $parameter) {
             $this->validateArgument($parameter, $num, $arguments);
@@ -40,11 +36,9 @@ final class Validator
     /**
      * Validates given argument.
      *
-     * @param ReflectionParameter $parameter
-     * @param integer             $parameterIndex
-     * @param array               $givenArguments
+     * @param int $parameterIndex
      */
-    private function validateArgument(ReflectionParameter $parameter, $parameterIndex, array $givenArguments)
+    private function validateArgument(\ReflectionParameter $parameter, $parameterIndex, array $givenArguments)
     {
         if ($parameter->isDefaultValueAvailable()) {
             return;
@@ -68,13 +62,11 @@ final class Validator
     /**
      * Returns function path for a provided reflection.
      *
-     * @param ReflectionFunctionAbstract $function
-     *
      * @return string
      */
-    private function getFunctionPath(ReflectionFunctionAbstract $function)
+    private function getFunctionPath(\ReflectionFunctionAbstract $function)
     {
-        if ($function instanceof ReflectionMethod) {
+        if ($function instanceof \ReflectionMethod) {
             return sprintf(
                 '%s::%s()',
                 $function->getDeclaringClass()->getName(),

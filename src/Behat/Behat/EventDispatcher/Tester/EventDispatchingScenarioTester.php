@@ -18,7 +18,6 @@ use Behat\Behat\Tester\ScenarioTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -33,22 +32,27 @@ final class EventDispatchingScenarioTester implements ScenarioTester
      * @var ScenarioTester
      */
     private $baseTester;
+
     /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+
     /**
      * @var string
      */
     private $beforeEventName;
+
     /**
      * @var string
      */
     private $afterSetupEventName;
+
     /**
      * @var string
      */
     private $beforeTeardownEventName;
+
     /**
      * @var string
      */
@@ -57,12 +61,10 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     /**
      * Initializes tester.
      *
-     * @param ScenarioTester           $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param string                   $beforeEventName
-     * @param string                   $afterSetupEventName
-     * @param string                   $beforeTeardownEventName
-     * @param string                   $afterEventName
+     * @param string $beforeEventName
+     * @param string $afterSetupEventName
+     * @param string $beforeTeardownEventName
+     * @param string $afterEventName
      */
     public function __construct(
         ScenarioTester $baseTester,
@@ -101,14 +103,6 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     /**
      * {@inheritdoc}
      */
-    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
-    {
-        return $this->baseTester->test($env, $feature, $scenario, $skip);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
         $event = new BeforeScenarioTeardown($env, $feature, $scenario, $result);
@@ -122,5 +116,13 @@ final class EventDispatchingScenarioTester implements ScenarioTester
         $this->eventDispatcher->dispatch($event, $this->afterEventName);
 
         return $teardown;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
+    {
+        return $this->baseTester->test($env, $feature, $scenario, $skip);
     }
 }

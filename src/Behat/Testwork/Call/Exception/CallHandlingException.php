@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,14 +11,13 @@
 namespace Behat\Testwork\Call\Exception;
 
 use Behat\Testwork\Call\Call;
-use RuntimeException;
 
 /**
  * Represents exceptions thrown during call handling phase.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class CallHandlingException extends RuntimeException implements CallException
+final class CallHandlingException extends \RuntimeException implements CallException
 {
     /**
      * @var Call
@@ -29,7 +28,6 @@ final class CallHandlingException extends RuntimeException implements CallExcept
      * Initializes exception.
      *
      * @param string $message
-     * @param Call   $callable
      */
     public function __construct($message, Call $callable)
     {

@@ -28,9 +28,6 @@ final class BeforeFeatureTested extends FeatureTested implements BeforeTested
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
      */
     public function __construct(Environment $env, FeatureNode $feature)
     {

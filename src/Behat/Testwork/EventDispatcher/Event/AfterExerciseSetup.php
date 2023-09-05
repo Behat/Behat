@@ -24,6 +24,7 @@ final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
      * @var SpecificationIterator[]
      */
     private $specificationIterators;
+
     /**
      * @var Setup
      */
@@ -33,7 +34,6 @@ final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
      * Initializes event.
      *
      * @param SpecificationIterator[] $specificationIterators
-     * @param Setup                   $setup
      */
     public function __construct(array $specificationIterators, Setup $setup)
     {

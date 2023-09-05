@@ -24,18 +24,11 @@ interface OutlinePrinter
 {
     /**
      * Prints outline header using provided printer.
-     *
-     * @param Formatter   $formatter
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline);
 
     /**
      * Prints outline footer using provided printer.
-     *
-     * @param Formatter  $formatter
-     * @param TestResult $result
      */
     public function printFooter(Formatter $formatter, TestResult $result);
 }

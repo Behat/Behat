@@ -26,34 +26,27 @@ interface BackgroundTester
     /**
      * Sets up background for a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param bool     $skip
+     * @param bool $skip
      *
      * @return Setup
      */
     public function setUp(Environment $env, FeatureNode $feature, $skip);
 
     /**
-     * Tests background.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param bool     $skip
-     *
-     * @return TestResult
-     */
-    public function test(Environment $env, FeatureNode $feature, $skip);
-
-    /**
      * Tears down background after a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param bool     $skip
-     * @param TestResult  $result
+     * @param bool $skip
      *
      * @return Teardown
      */
     public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result);
+
+    /**
+     * Tests background.
+     *
+     * @param bool $skip
+     *
+     * @return TestResult
+     */
+    public function test(Environment $env, FeatureNode $feature, $skip);
 }

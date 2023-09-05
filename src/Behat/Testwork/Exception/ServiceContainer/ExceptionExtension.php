@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -44,12 +44,10 @@ final class ExceptionExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -75,16 +73,17 @@ final class ExceptionExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('verbosity')
-                    ->info('Output verbosity')
-                    ->example(sprintf('%d, %d, %d, %d',
-                        OutputPrinter::VERBOSITY_NORMAL,
-                        OutputPrinter::VERBOSITY_VERBOSE,
-                        OutputPrinter::VERBOSITY_VERY_VERBOSE,
-                        OutputPrinter::VERBOSITY_DEBUG
-                    ))
-                    ->defaultValue(OutputPrinter::VERBOSITY_NORMAL)
-                ->end()
+            ->scalarNode('verbosity')
+            ->info('Output verbosity')
+            ->example(sprintf(
+                '%d, %d, %d, %d',
+                OutputPrinter::VERBOSITY_NORMAL,
+                OutputPrinter::VERBOSITY_VERBOSE,
+                OutputPrinter::VERBOSITY_VERY_VERBOSE,
+                OutputPrinter::VERBOSITY_DEBUG
+            ))
+            ->defaultValue(OutputPrinter::VERBOSITY_NORMAL)
+            ->end()
             ->end()
         ;
     }
@@ -110,46 +109,41 @@ final class ExceptionExtension implements Extension
     /**
      * Loads exception presenter.
      *
-     * @param ContainerBuilder $container
-     * @param integer          $verbosity
+     * @param int $verbosity
      */
-    protected function loadPresenter(ContainerBuilder $container, $verbosity)
+    private function loadPresenter(ContainerBuilder $container, $verbosity)
     {
-        $definition = new Definition('Behat\Testwork\Exception\ExceptionPresenter', array(
+        $definition = new Definition('Behat\Testwork\Exception\ExceptionPresenter', [
             '%paths.base%',
-            $verbosity
-        ));
+            $verbosity,
+        ]);
         $container->setDefinition(self::PRESENTER_ID, $definition);
     }
 
     /**
      * Loads default stringer.
-     *
-     * @param ContainerBuilder $container
      */
-    protected function loadDefaultStringers(ContainerBuilder $container)
+    private function loadDefaultStringers(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Exception\Stringer\PHPUnitExceptionStringer');
-        $definition->addTag(self::STRINGER_TAG, array('priority' => 50));
+        $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
         $container->setDefinition(self::STRINGER_TAG . '.phpunit', $definition);
 
         $definition = new Definition('Behat\Testwork\Exception\Stringer\TestworkExceptionStringer');
-        $definition->addTag(self::STRINGER_TAG, array('priority' => 50));
+        $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
         $container->setDefinition(self::STRINGER_TAG . '.testwork', $definition);
     }
 
     /**
      * Processes all available exception stringers.
-     *
-     * @param ContainerBuilder $container
      */
-    protected function processStringers(ContainerBuilder $container)
+    private function processStringers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::STRINGER_TAG);
         $definition = $container->getDefinition(self::PRESENTER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerExceptionStringer', array($reference));
+            $definition->addMethodCall('registerExceptionStringer', [$reference]);
         }
     }
 
@@ -158,12 +152,12 @@ final class ExceptionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadVerbosityController($container)
+    private function loadVerbosityController($container)
     {
-        $definition = new Definition('Behat\Testwork\Exception\Cli\VerbosityController', array(
-            new Reference(self::PRESENTER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
+        $definition = new Definition('Behat\Testwork\Exception\Cli\VerbosityController', [
+            new Reference(self::PRESENTER_ID),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exception_verbosity', $definition);
     }
 }

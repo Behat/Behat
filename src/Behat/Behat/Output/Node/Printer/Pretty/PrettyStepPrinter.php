@@ -36,22 +36,27 @@ final class PrettyStepPrinter implements StepPrinter
      * @var StepTextPainter
      */
     private $textPainter;
+
     /**
      * @var ResultToStringConverter
      */
     private $resultConverter;
+
     /**
      * @var PrettyPathPrinter
      */
     private $pathPrinter;
+
     /**
      * @var ExceptionPresenter
      */
     private $exceptionPresenter;
+
     /**
      * @var string
      */
     private $indentText;
+
     /**
      * @var string
      */
@@ -60,12 +65,8 @@ final class PrettyStepPrinter implements StepPrinter
     /**
      * Initializes printer.
      *
-     * @param StepTextPainter         $textPainter
-     * @param ResultToStringConverter $resultConverter
-     * @param PrettyPathPrinter       $pathPrinter
-     * @param ExceptionPresenter      $exceptionPresenter
-     * @param integer                 $indentation
-     * @param integer                 $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct(
         StepTextPainter $textPainter,
@@ -98,10 +99,8 @@ final class PrettyStepPrinter implements StepPrinter
     /**
      * Prints step text.
      *
-     * @param OutputPrinter $printer
-     * @param string        $stepType
-     * @param string        $stepText
-     * @param StepResult    $result
+     * @param string $stepType
+     * @param string $stepText
      */
     private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result)
     {
@@ -117,9 +116,7 @@ final class PrettyStepPrinter implements StepPrinter
     /**
      * Prints step multiline arguments.
      *
-     * @param Formatter           $formatter
      * @param ArgumentInterface[] $arguments
-     * @param StepResult          $result
      */
     private function printArguments(Formatter $formatter, array $arguments, StepResult $result)
     {
@@ -128,16 +125,13 @@ final class PrettyStepPrinter implements StepPrinter
         foreach ($arguments as $argument) {
             $text = $this->getArgumentString($argument, !$formatter->getParameter('multiline'));
 
-            $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+            $indentedText = implode("\n", array_map([$this, 'subIndent'], explode("\n", $text)));
             $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
         }
     }
 
     /**
      * Prints step output (if has one).
-     *
-     * @param OutputPrinter $printer
-     * @param StepResult    $result
      */
     private function printStdOut(OutputPrinter $printer, StepResult $result)
     {
@@ -150,7 +144,9 @@ final class PrettyStepPrinter implements StepPrinter
 
         $pad = function ($line) use ($indentedText) {
             return sprintf(
-                '%s│ {+stdout}%s{-stdout}', $indentedText, $line
+                '%s│ {+stdout}%s{-stdout}',
+                $indentedText,
+                $line
             );
         };
 
@@ -159,9 +155,6 @@ final class PrettyStepPrinter implements StepPrinter
 
     /**
      * Prints step exception (if has one).
-     *
-     * @param OutputPrinter $printer
-     * @param StepResult    $result
      */
     private function printException(OutputPrinter $printer, StepResult $result)
     {
@@ -172,15 +165,14 @@ final class PrettyStepPrinter implements StepPrinter
         }
 
         $text = $this->exceptionPresenter->presentException($result->getException());
-        $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+        $indentedText = implode("\n", array_map([$this, 'subIndent'], explode("\n", $text)));
         $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
     }
 
     /**
      * Returns argument string for provided argument.
      *
-     * @param ArgumentInterface $argument
-     * @param bool           $collapse
+     * @param bool $collapse
      *
      * @return string
      */
@@ -191,9 +183,7 @@ final class PrettyStepPrinter implements StepPrinter
         }
 
         if ($argument instanceof PyStringNode) {
-            $text = '"""' . "\n" . $argument . "\n" . '"""';
-
-            return $text;
+            return '"""' . "\n" . $argument . "\n" . '"""';
         }
 
         return (string) $argument;

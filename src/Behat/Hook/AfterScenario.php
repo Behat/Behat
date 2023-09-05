@@ -11,7 +11,7 @@
 namespace Behat\Hook;
 
 /**
- * Represents an Attribute for AfterScenario hook
+ * Represents an Attribute for AfterScenario hook.
  */
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 final class AfterScenario implements Hook

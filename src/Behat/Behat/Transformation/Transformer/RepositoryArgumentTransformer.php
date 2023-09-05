@@ -13,10 +13,10 @@ namespace Behat\Behat\Transformation\Transformer;
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\Translator\TranslatorInterface;
-use Behat\Behat\Transformation\SimpleArgumentTransformation;
-use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\RegexGenerator;
+use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Behat\Transformation\Transformation;
+use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\TransformationRepository;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Testwork\Call\CallCenter;
@@ -32,14 +32,17 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      * @var TransformationRepository
      */
     private $repository;
+
     /**
      * @var CallCenter
      */
     private $callCenter;
+
     /**
      * @var PatternTransformer
      */
     private $patternTransformer;
+
     /**
      * @var TranslatorInterface
      */
@@ -47,11 +50,6 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
 
     /**
      * Initializes transformer.
-     *
-     * @param TransformationRepository $repository
-     * @param CallCenter               $callCenter
-     * @param PatternTransformer       $patternTransformer
-     * @param TranslatorInterface      $translator
      */
     public function __construct(
         TransformationRepository $repository,
@@ -84,9 +82,8 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         );
 
         $newValue = $this->applySimpleTransformations($simpleTransformations, $definitionCall, $argumentIndex, $argumentValue);
-        $newValue = $this->applyNormalTransformations($normalTransformations, $definitionCall, $argumentIndex, $newValue);
 
-        return $newValue;
+        return $this->applyNormalTransformations($normalTransformations, $definitionCall, $argumentIndex, $newValue);
     }
 
     /**
@@ -94,8 +91,8 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      */
     public function generateRegex($suiteName, $pattern, $language)
     {
-        $translatedPattern = $this->translator->trans($pattern, array(), $suiteName, $language);
-        if ($pattern == $translatedPattern) {
+        $translatedPattern = $this->translator->trans($pattern, [], $suiteName, $language);
+        if ($pattern === $translatedPattern) {
             return $this->patternTransformer->transformPatternToRegex($pattern);
         }
 
@@ -106,8 +103,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      * Apply simple argument transformations in priority order.
      *
      * @param SimpleArgumentTransformation[] $transformations
-     * @param DefinitionCall                 $definitionCall
-     * @param integer|string                 $index
+     * @param int|string                     $index
      * @param mixed                          $value
      *
      * @return mixed
@@ -130,8 +126,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      * Apply normal (non-simple) argument transformations.
      *
      * @param Transformation[] $transformations
-     * @param DefinitionCall   $definitionCall
-     * @param integer|string   $index
+     * @param int|string       $index
      * @param mixed            $value
      *
      * @return mixed
@@ -149,10 +144,8 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     /**
      * Transforms argument value using registered transformers.
      *
-     * @param Transformation $transformation
-     * @param DefinitionCall $definitionCall
-     * @param integer|string $index
-     * @param mixed          $value
+     * @param int|string $index
+     * @param mixed      $value
      *
      * @return mixed
      */
@@ -162,13 +155,13 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
             return $value;
         }
 
-        if ($transformation instanceof SimpleArgumentTransformation &&
-            $transformation->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
+        if ($transformation instanceof SimpleArgumentTransformation
+            && $transformation->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
             return $transformation->transformArgument($this->callCenter, $definitionCall, $index, $value);
         }
 
-        if ($transformation instanceof PatternTransformation &&
-            $transformation->supportsDefinitionAndArgument($this, $definitionCall, $value)) {
+        if ($transformation instanceof PatternTransformation
+            && $transformation->supportsDefinitionAndArgument($this, $definitionCall, $value)) {
             return $transformation->transformArgument($this, $this->callCenter, $definitionCall, $value);
         }
 
@@ -185,10 +178,10 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     private function splitSimpleAndNormalTransformations(array $transformations)
     {
         return array_reduce($transformations, function ($acc, $t) {
-            return array(
-                $t instanceof SimpleArgumentTransformation ? array_merge($acc[0], array($t)) : $acc[0],
-                !$t instanceof SimpleArgumentTransformation ? array_merge($acc[1], array($t)) : $acc[1],
-            );
-        }, array(array(), array()));
+            return [
+                $t instanceof SimpleArgumentTransformation ? array_merge($acc[0], [$t]) : $acc[0],
+                !$t instanceof SimpleArgumentTransformation ? array_merge($acc[1], [$t]) : $acc[1],
+            ];
+        }, [[], []]);
     }
 }

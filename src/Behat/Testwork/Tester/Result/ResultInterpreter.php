@@ -22,12 +22,10 @@ final class ResultInterpreter
     /**
      * @var ResultInterpretation[]
      */
-    private $interpretations = array();
+    private $interpretations = [];
 
     /**
      * Registers result interpretation.
-     *
-     * @param ResultInterpretation $interpretation
      */
     public function registerResultInterpretation(ResultInterpretation $interpretation)
     {
@@ -37,9 +35,7 @@ final class ResultInterpreter
     /**
      * Interprets result as a UNIX return code (0 for success, 1 for failure).
      *
-     * @param TestResult $result
-     *
-     * @return integer
+     * @return int
      */
     public function interpretResult(TestResult $result)
     {

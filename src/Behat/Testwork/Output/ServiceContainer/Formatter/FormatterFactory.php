@@ -21,15 +21,11 @@ interface FormatterFactory
 {
     /**
      * Builds formatter configuration.
-     *
-     * @param ContainerBuilder $container
      */
     public function buildFormatter(ContainerBuilder $container);
 
     /**
      * Processes formatter configuration.
-     *
-     * @param ContainerBuilder $container
      */
     public function processFormatter(ContainerBuilder $container);
 }

@@ -29,8 +29,6 @@ final class TranslatableContextReader implements ContextReader
 
     /**
      * Initializes loader.
-     *
-     * @param Translator $translator
      */
     public function __construct(Translator $translator)
     {
@@ -47,15 +45,15 @@ final class TranslatableContextReader implements ContextReader
         $reflClass = new \ReflectionClass($contextClass);
 
         if (!$reflClass->implementsInterface('Behat\Behat\Context\TranslatableContext')) {
-            return array();
+            return [];
         }
 
         $assetsId = $environment->getSuite()->getName();
-        foreach (call_user_func(array($contextClass, 'getTranslationResources')) as $path) {
+        foreach (call_user_func([$contextClass, 'getTranslationResources']) as $path) {
             $this->addTranslationResource($path, $assetsId);
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -71,13 +69,19 @@ final class TranslatableContextReader implements ContextReader
         switch ($ext = pathinfo($path, PATHINFO_EXTENSION)) {
             case 'yml':
                 $this->addTranslatorResource('yaml', $path, basename($path, '.' . $ext), $assetsId);
+
                 break;
+
             case 'xliff':
                 $this->addTranslatorResource('xliff', $path, basename($path, '.' . $ext), $assetsId);
+
                 break;
+
             case 'php':
                 $this->addTranslatorResource('php', $path, basename($path, '.' . $ext), $assetsId);
+
                 break;
+
             default:
                 throw new UnknownTranslationResourceException(sprintf(
                     'Can not read translations from `%s`. File type is not supported.',

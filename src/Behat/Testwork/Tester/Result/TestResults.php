@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Behat Testwork.
+ * This file is part of the Behat.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -10,16 +10,12 @@
 
 namespace Behat\Testwork\Tester\Result;
 
-use ArrayIterator;
-use Countable;
-use IteratorAggregate;
-
 /**
  * Aggregates multiple test results into a collection and provides informational API on top of that.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TestResults implements TestResult, Countable, IteratorAggregate
+final class TestResults implements TestResult, \Countable, \IteratorAggregate
 {
     public const NO_TESTS = -100;
 
@@ -33,7 +29,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
      *
      * @param TestResult[] $results
      */
-    public function __construct(array $results = array())
+    public function __construct(array $results = [])
     {
         $this->results = $results;
     }
@@ -43,7 +39,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
      */
     public function isPassed()
     {
-        return self::PASSED == $this->getResultCode();
+        return self::PASSED === $this->getResultCode();
     }
 
     /**
@@ -70,9 +66,9 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator(): ArrayIterator
+    public function getIterator(): \ArrayIterator
     {
-        return new ArrayIterator($this->results);
+        return new \ArrayIterator($this->results);
     }
 
     /**
