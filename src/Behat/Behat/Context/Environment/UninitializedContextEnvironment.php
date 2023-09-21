@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Context\Environment;
 
+use Behat\Behat\Context\Context;
 use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Behat\Context\Exception\WrongContextClassException;
@@ -25,15 +26,15 @@ use Behat\Testwork\Environment\StaticEnvironment;
 final class UninitializedContextEnvironment extends StaticEnvironment implements ContextEnvironment
 {
     /**
-     * @var array[]
+     * @var array<class-string<Context>, array>
      */
     private $contextClasses = array();
 
     /**
      * Registers context class.
      *
-     * @param string     $contextClass
-     * @param null|array $arguments
+     * @param class-string<Context> $contextClass
+     * @param null|array            $arguments
      *
      * @throws ContextNotFoundException   If class does not exist
      * @throws WrongContextClassException if class does not implement Context interface
@@ -86,7 +87,7 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
     /**
      * Returns context classes with their arguments.
      *
-     * @return array[]
+     * @return array<class-string<Context>, array>
      */
     public function getContextClassesWithArguments()
     {

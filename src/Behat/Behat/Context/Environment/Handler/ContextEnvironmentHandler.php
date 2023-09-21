@@ -105,24 +105,24 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * {@inheritdoc}
      */
-    public function isolateEnvironment(Environment $uninitializedEnvironment, $testSubject = null)
+    public function isolateEnvironment(Environment $environment, $testSubject = null)
     {
-        if (!$uninitializedEnvironment instanceof UninitializedContextEnvironment) {
+        if (!$environment instanceof UninitializedContextEnvironment) {
             throw new EnvironmentIsolationException(sprintf(
                 'ContextEnvironmentHandler does not support isolation of `%s` environment.',
-                get_class($uninitializedEnvironment)
-            ), $uninitializedEnvironment);
+                get_class($environment)
+            ), $environment);
         }
 
-        $environment = new InitializedContextEnvironment($uninitializedEnvironment->getSuite());
-        $resolvers = $this->resolverFactory->createArgumentResolvers($environment);
+        $initialisedEnvironment = new InitializedContextEnvironment($environment->getSuite());
+        $resolvers = $this->resolverFactory->createArgumentResolvers($initialisedEnvironment);
 
-        foreach ($uninitializedEnvironment->getContextClassesWithArguments() as $class => $arguments) {
+        foreach ($environment->getContextClassesWithArguments() as $class => $arguments) {
             $context = $this->contextFactory->createContext($class, $arguments, $resolvers);
-            $environment->registerContext($context);
+            $initialisedEnvironment->registerContext($context);
         }
 
-        return $environment;
+        return $initialisedEnvironment;
     }
 
     /**
