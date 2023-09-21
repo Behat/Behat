@@ -184,7 +184,7 @@ final class Application extends BaseApplication
         $extension = new ContainerLoader($this->extensionManager);
         $extension->load($container, $this->loadConfiguration($input));
         $container->addObjectResource($extension);
-        $container->compile(true);
+        $container->compile();
 
         return $container;
     }
