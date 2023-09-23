@@ -54,7 +54,7 @@ final class JUnitFeatureElementListener implements EventListener
      */
     private $afterStepTestedEvents = array();
     /**
-     * @var AfterSetup[]
+     * @var AfterStepSetup[]
      */
     private $afterStepSetupEvents = array();
 
@@ -118,7 +118,7 @@ final class JUnitFeatureElementListener implements EventListener
     }
 
     /**
-     * Captures scenario tested event.
+     * Prints the scenario tested event.
      *
      * @param Formatter $formatter
      * @param Event $event
@@ -137,7 +137,6 @@ final class JUnitFeatureElementListener implements EventListener
             $event->getFeature()->getFile()
         );
 
-        /** @var AfterStepSetup $afterStepSetup */
         foreach ($this->afterStepSetupEvents as $afterStepSetup) {
             $this->setupPrinter->printSetup($formatter, $afterStepSetup->getSetup());
         }
