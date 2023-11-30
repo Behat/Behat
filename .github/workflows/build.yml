@@ -61,6 +61,10 @@ jobs:
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '6.0'
+                    -   php: 8.2
+                        os: ubuntu-latest
+                        composer-mode: update
+                        symfony-version: '7.0'
 
         steps:
             -   uses: actions/checkout@v3
@@ -77,6 +81,11 @@ jobs:
                 run: |
                     composer config --global --no-plugins allow-plugins.symfony/flex true &&
                     composer global require symfony/flex
+
+            # until psalm is updated to v5 which is compatible with Symfony 7
+            -   name: Remove vimeo/psalm
+                if: matrix.symfony-version == '7.0'
+                run: composer remove vimeo/psalm --no-update --dev
 
             -   name: Install latest dependencies
                 if: matrix.composer-mode == 'update'
