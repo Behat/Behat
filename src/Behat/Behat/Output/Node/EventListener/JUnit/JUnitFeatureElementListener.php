@@ -16,7 +16,6 @@ use Behat\Behat\EventDispatcher\Event\AfterStepSetup;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
-use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
@@ -51,19 +50,11 @@ final class JUnitFeatureElementListener implements EventListener
      */
     private $setupPrinter;
     /**
-     * @var FeatureNode
-     */
-    private $beforeFeatureTestedEvent;
-    /**
-     * @var AfterScenarioTested[]
-     */
-    private $afterScenarioTestedEvents = array();
-    /**
      * @var AfterStepTested[]
      */
     private $afterStepTestedEvents = array();
     /**
-     * @var AfterSetup[]
+     * @var AfterStepSetup[]
      */
     private $afterStepSetupEvents = array();
 
@@ -91,51 +82,24 @@ final class JUnitFeatureElementListener implements EventListener
      */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
-        if ($event instanceof ScenarioTested) {
-            $this->captureScenarioEvent($event);
-        }
-
-        if ($event instanceof StepTested
-            || $event instanceof AfterStepSetup
-        ) {
-            $this->captureStepEvent($event);
-        }
-
-        $this->captureFeatureOnBeforeEvent($event);
+        $this->printFeatureOnBeforeEvent($formatter, $event);
+        $this->captureStepEvent($event);
+        $this->printScenarioEvent($formatter, $event);
         $this->printFeatureOnAfterEvent($formatter, $event);
     }
 
     /**
-     * Captures scenario tested event.
+     * Prints the header for the feature.
      *
-     * @param ScenarioTested $event
-     */
-    private function captureScenarioEvent(ScenarioTested $event)
-    {
-        if ($event instanceof AfterScenarioTested) {
-            $this->afterScenarioTestedEvents[$event->getScenario()->getLine()] = array(
-                'event'             => $event,
-                'step_events'       => $this->afterStepTestedEvents,
-                'step_setup_events' => $this->afterStepSetupEvents,
-            );
-
-            $this->afterStepTestedEvents = array();
-            $this->afterStepSetupEvents = array();
-        }
-    }
-
-    /**
-     * Captures feature on BEFORE event.
-     *
+     * @param Formatter $formatter
      * @param Event $event
      */
-    private function captureFeatureOnBeforeEvent(Event $event)
+    private function printFeatureOnBeforeEvent(Formatter $formatter, Event $event)
     {
         if (!$event instanceof BeforeFeatureTested) {
             return;
         }
-
-        $this->beforeFeatureTestedEvent = $event->getFeature();
+        $this->featurePrinter->printHeader($formatter, $event->getFeature());
     }
 
     /**
@@ -154,40 +118,48 @@ final class JUnitFeatureElementListener implements EventListener
     }
 
     /**
+     * Prints the scenario tested event.
+     *
+     * @param Formatter $formatter
+     * @param Event $event
+     */
+    private function printScenarioEvent(Formatter $formatter, Event $event)
+    {
+        if (!$event instanceof AfterScenarioTested) {
+            return;
+        }
+        $afterScenarioTested = $event;
+        $this->scenarioPrinter->printOpenTag(
+            $formatter,
+            $afterScenarioTested->getFeature(),
+            $afterScenarioTested->getScenario(),
+            $afterScenarioTested->getTestResult(),
+            $event->getFeature()->getFile()
+        );
+
+        foreach ($this->afterStepSetupEvents as $afterStepSetup) {
+            $this->setupPrinter->printSetup($formatter, $afterStepSetup->getSetup());
+        }
+        foreach ($this->afterStepTestedEvents as $afterStepTested) {
+            $this->stepPrinter->printStep($formatter, $afterScenarioTested->getScenario(), $afterStepTested->getStep(), $afterStepTested->getTestResult());
+            $this->setupPrinter->printTeardown($formatter, $afterStepTested->getTeardown());
+        }
+
+        $this->afterStepTestedEvents = array();
+        $this->afterStepSetupEvents = array();
+    }
+
+    /**
      * Prints the feature on AFTER event.
      *
      * @param Formatter $formatter
      * @param Event     $event
      */
-    public function printFeatureOnAfterEvent(Formatter $formatter, Event $event)
+    private function printFeatureOnAfterEvent(Formatter $formatter, Event $event)
     {
         if (!$event instanceof AfterFeatureTested) {
             return;
         }
-
-        $this->featurePrinter->printHeader($formatter, $this->beforeFeatureTestedEvent);
-
-        foreach ($this->afterScenarioTestedEvents as $afterScenario) {
-            $afterScenarioTested = $afterScenario['event'];
-            $this->scenarioPrinter->printOpenTag(
-                $formatter,
-                $afterScenarioTested->getFeature(),
-                $afterScenarioTested->getScenario(),
-                $afterScenarioTested->getTestResult(),
-                $event->getFeature()->getFile()
-            );
-
-            /** @var AfterStepSetup $afterStepSetup */
-            foreach ($afterScenario['step_setup_events'] as $afterStepSetup) {
-                $this->setupPrinter->printSetup($formatter, $afterStepSetup->getSetup());
-            }
-            foreach ($afterScenario['step_events'] as $afterStepTested) {
-                $this->stepPrinter->printStep($formatter, $afterScenarioTested->getScenario(), $afterStepTested->getStep(), $afterStepTested->getTestResult());
-                $this->setupPrinter->printTeardown($formatter, $afterStepTested->getTeardown());
-            }
-        }
-
         $this->featurePrinter->printFooter($formatter, $event->getTestResult());
-        $this->afterScenarioTestedEvents = array();
     }
 }
