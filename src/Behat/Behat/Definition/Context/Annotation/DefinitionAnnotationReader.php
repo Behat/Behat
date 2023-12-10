@@ -12,6 +12,9 @@ namespace Behat\Behat\Definition\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
 use ReflectionMethod;
+use Behat\Behat\Definition\Call\Given;
+use Behat\Behat\Definition\Call\When;
+use Behat\Behat\Definition\Call\Then;
 
 /**
  * Reads definition annotations from the context class.
@@ -28,9 +31,9 @@ final class DefinitionAnnotationReader implements AnnotationReader
      * @var string[]
      */
     private static $classes = array(
-        'given' => 'Behat\Behat\Definition\Call\Given',
-        'when'  => 'Behat\Behat\Definition\Call\When',
-        'then'  => 'Behat\Behat\Definition\Call\Then',
+        'given' => Given::class,
+        'when'  => When::class,
+        'then'  => Then::class,
     );
 
     /**
