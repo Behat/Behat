@@ -140,7 +140,7 @@ final class TurnipPatternPolicy implements PatternPolicy
 
     private function replaceTokenWithRegexCaptureGroup($tokenMatch)
     {
-        if (strlen($tokenMatch[1]) >= 32) {
+        if (strlen($tokenMatch[1]) > 32) {
             throw new InvalidPatternException(
                 "Token name should not exceed 32 characters, but `{$tokenMatch[1]}` was used."
             );
