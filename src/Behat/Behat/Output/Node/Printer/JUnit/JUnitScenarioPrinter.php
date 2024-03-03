@@ -10,12 +10,10 @@
 
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
-use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
@@ -34,44 +32,26 @@ final class JUnitScenarioPrinter
     private $resultConverter;
 
     /**
-     * @var JUnitOutlineStoreListener
-     */
-    private $outlineStoreListener;
-
-    /**
-     * @var OutlineNode
-     */
-    private $lastOutline;
-
-    /**
-     * @var int
-     */
-    private $outlineStepCount;
-
-    /**
      * @var JUnitDurationListener|null
      */
     private $durationListener;
 
-    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, JUnitDurationListener $durationListener = null)
+    public function __construct(ResultToStringConverter $resultConverter, JUnitDurationListener $durationListener = null)
     {
         $this->resultConverter = $resultConverter;
-        $this->outlineStoreListener = $outlineListener;
         $this->durationListener = $durationListener;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, string $file = null)
+    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, string $file = null): void
     {
-        $name = implode(' ', array_map(function ($l) {
-            return trim($l);
-        }, explode("\n", $scenario->getTitle())));
-
-        if ($scenario instanceof ExampleNode) {
-            $name = $this->buildExampleName($scenario);
-        }
+        $name = $this->convertMultipleLinesToOne(
+            $scenario instanceof ExampleNode
+                ? $this->buildExampleName($scenario)
+                : $scenario->getTitle()
+        );
 
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
@@ -85,29 +65,42 @@ final class JUnitScenarioPrinter
 
         if ($file) {
             $cwd = realpath(getcwd());
-            $testCaseAttributes['file'] =
-                substr($file, 0, strlen($cwd)) === $cwd ?
-                    ltrim(substr($file, strlen($cwd)), DIRECTORY_SEPARATOR) : $file;
+            $testCaseAttributes['file'] = substr($file, 0, strlen($cwd)) === $cwd
+                ? ltrim(substr($file, strlen($cwd)), DIRECTORY_SEPARATOR)
+                : $file;
         }
 
         $outputPrinter->addTestcase($testCaseAttributes);
     }
 
-    /**
-     * @param ExampleNode $scenario
-     * @return string
-     */
-    private function buildExampleName(ExampleNode $scenario)
+    private function buildExampleName(ExampleNode $scenario): string
     {
-        $currentOutline = $this->outlineStoreListener->getCurrentOutline($scenario);
-        if ($currentOutline === $this->lastOutline) {
-            $this->outlineStepCount++;
-        } else {
-            $this->lastOutline = $currentOutline;
-            $this->outlineStepCount = 1;
-        }
+        return sprintf(
+            '%s (%s)',
+            $scenario->getOutlineTitle(),
+            implode(
+                ', ',
+                array_map(
+                    static function ($key, $val) {
+                        return "$key: $val";
+                    },
+                    array_keys($scenario->getTokens()),
+                    array_values($scenario->getTokens())
+                )
+            )
+        );
+    }
 
-        $name = $currentOutline->getTitle() . ' #' . $this->outlineStepCount;
-        return $name;
+    private function convertMultipleLinesToOne(string $string): string
+    {
+        return implode(
+            ' ',
+            array_map(
+                static function ($line) {
+                    return trim($line);
+                },
+                explode("\n", $string)
+            )
+        );
     }
 }

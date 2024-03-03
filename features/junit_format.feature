@@ -114,15 +114,15 @@
           <testcase name="Failed" classname="World consistency" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
             <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
           </testcase>
-          <testcase name="Passed &amp; Failed #1" classname="World consistency" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
+          <testcase name="Passed &amp; Failed (value: 5, result: 16)" classname="World consistency" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
             <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
           </testcase>
-          <testcase name="Passed &amp; Failed #2" classname="World consistency" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature"/>
-          <testcase name="Passed &amp; Failed #3" classname="World consistency" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
+          <testcase name="Passed &amp; Failed (value: 10, result: 20)" classname="World consistency" status="passed" time="-IGNORE-VALUE-" file="features\World.feature"></testcase>
+          <testcase name="Passed &amp; Failed (value: 23, result: 32)" classname="World consistency" status="failed" time="-IGNORE-VALUE-" file="features\World.feature">
             <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
           </testcase>
-          <testcase name="Another Outline #1" classname="World consistency" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature"/>
-          <testcase name="Another Outline #2" classname="World consistency" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature"/>
+          <testcase name="Another Outline (value: 5, result: 15)" classname="World consistency" status="passed" time="-IGNORE-VALUE-" file="features\World.feature"></testcase>
+          <testcase name="Another Outline (value: 10, result: 20)" classname="World consistency" status="passed" time="-IGNORE-VALUE-" file="features\World.feature"></testcase>
         </testsuite>
       </testsuites>
       """
