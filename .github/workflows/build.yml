@@ -75,6 +75,7 @@ jobs:
                     php-version: "${{ matrix.php }}"
                     ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
                     coverage: none
+                    tools: box
 
             -   name: Install symfony/flex
                 if: matrix.symfony-version != ''
@@ -110,11 +111,8 @@ jobs:
             -   name: Build the PHAR
                 if: matrix.publish-phar == true
                 run: |
-                    curl -LSs https://box-project.github.io/box2/installer.php | php &&
-                    export PATH=.:$PATH &&
-                    rm -Rf ./vendor &&
                     composer install --no-dev -o &&
-                    box.phar build
+                    box build
 
             -   uses: actions/upload-artifact@v3
                 name: Publish the PHAR
