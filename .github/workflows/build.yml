@@ -23,8 +23,8 @@ jobs:
                 composer-mode: [update]
                 symfony-version: ['']
                 include:
-                    # Get the existing 7.2 to publish the phar
-                    -   php: 7.2
+                    # Get the latest stable PHP to publish the phar
+                    -   php: 8.3
                         os: ubuntu-latest
                         composer-mode: update
                         publish-phar: true
