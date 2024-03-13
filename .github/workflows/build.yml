@@ -114,6 +114,11 @@ jobs:
                     composer install --no-dev -o &&
                     box build
 
+            -   name: Test the PHAR
+                if: matrix.publish-phar == true
+                run: |
+                    behat.phar --version
+
             -   uses: actions/upload-artifact@v3
                 name: Publish the PHAR
                 if: matrix.publish-phar == true
