@@ -1,19 +1,10 @@
 {
-    "chmod": "0755",
-    "directories": ["src"],
     "files": [
         "LICENSE",
         "i18n.php"
     ],
-    "finder": [
-        {
-            "name": ["*.php", "*.xsd", "LICENSE"],
-            "exclude": ["Tests", "tests", "sebastian", "phpunit", "phpspec", "process", "filesystem"],
-            "in": "vendor"
-        }
+    "compactors": [
+        "KevinGH\\Box\\Compactor\\Php"
     ],
-    "compactors": "Herrera\\Box\\Compactor\\Php",
-    "main": "bin/behat",
-    "output": "behat.phar",
-    "stub": true
+    "output": "behat.phar"
 }
