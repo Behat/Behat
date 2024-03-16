@@ -14,7 +14,7 @@ jobs:
         defaults:
             run:
                 shell: bash
-        name: Build and test
+        name: Test
         strategy:
             fail-fast: false
             matrix:
@@ -75,7 +75,6 @@ jobs:
                     php-version: "${{ matrix.php }}"
                     ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
                     coverage: none
-                    tools: box
 
             -   name: Install symfony/flex
                 if: matrix.symfony-version != ''
@@ -108,24 +107,6 @@ jobs:
                 if: matrix.php >= 8.0
                 run: ./bin/behat -fprogress --strict --tags=@php8
 
-            -   name: Build the PHAR
-                if: matrix.publish-phar == true
-                run: |
-                    composer install --no-dev -o &&
-                    box build
-
-            -   name: Test the PHAR
-                if: matrix.publish-phar == true
-                run: |
-                    behat.phar --version
-
-            -   uses: actions/upload-artifact@v3
-                name: Publish the PHAR
-                if: matrix.publish-phar == true
-                with:
-                    name: behat.phar
-                    path: behat.phar
-
     static-analysis:
         runs-on: ubuntu-latest
         name: Static analysis
@@ -145,10 +126,42 @@ jobs:
             - name: Run Psalm
               run: ./vendor/bin/psalm --output-format=github
 
+    build-phar:
+        needs: tests
+        runs-on: ubuntu-latest
+        name: Build PHAR file
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.3"
+                  ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
+                  coverage: none
+                  tools: box
+
+            - name: Build the PHAR
+              run: |
+                  composer config platform.php ^7.2.34 
+                  composer update --no-dev -o
+                  box build
+
+            - name: Test the PHAR
+              run: |
+                  behat.phar --version
+
+            - uses: actions/upload-artifact@v3
+              name: Upload PHAR artifact
+              with:
+                  name: behat.phar
+                  path: behat.phar
+
+
     publish-phar:
         runs-on: ubuntu-latest
         name: Publish the PHAR for release
-        needs: tests
+        needs: build-phar
         if: github.event_name == 'release'
         steps:
             -   uses: actions/download-artifact@v3
