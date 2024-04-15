@@ -39,7 +39,7 @@ final class ContextSnippetGenerator implements SnippetGenerator
     /**
      * @%%s %s
      */
-    public function %s(%s)
+    public function %s(%s): void
     {
         throw new PendingException();
     }
