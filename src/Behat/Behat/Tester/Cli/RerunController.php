@@ -100,7 +100,7 @@ final class RerunController implements Controller
         }
 
         if (!$this->getFileName() || !file_exists($this->getFileName())) {
-            return $input->getOption('rerun-only') ? 0: null;
+            return $input->getOption('rerun-only') ? 0 : null;
         }
 
         $input->setArgument('paths', $this->getFileName());
