@@ -74,6 +74,9 @@ final class RerunController implements Controller
         $command->addOption('--rerun', null, InputOption::VALUE_NONE,
             'Re-run scenarios that failed during last execution.'
         );
+        $command->addOption('--rerun-only', null, InputOption::VALUE_NONE,
+            'Re-run scenarios that failed during last execution or exit if no file is found.'
+        );
     }
 
     /**
@@ -92,12 +95,12 @@ final class RerunController implements Controller
 
         $this->key = $this->generateKey($input);
 
-        if (!$input->getOption('rerun')) {
+        if (!$input->getOption('rerun') && !$input->getOption('rerun-only')) {
             return;
         }
 
         if (!$this->getFileName() || !file_exists($this->getFileName())) {
-            return;
+            return $input->getOption('rerun-only') ? 0: null;
         }
 
         $input->setArgument('paths', $this->getFileName());
