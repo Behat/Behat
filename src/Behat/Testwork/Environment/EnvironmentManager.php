@@ -32,6 +32,10 @@ final class EnvironmentManager
      * @var EnvironmentReader[]
      */
     private $readers = array();
+    /**
+     * @var array<string,Callee[]>
+     */
+    private $callees = array();
 
     /**
      * Registers environment handler.
@@ -109,12 +113,20 @@ final class EnvironmentManager
      */
     public function readEnvironmentCallees(Environment $environment)
     {
+        $suiteName = $environment->getSuite()->getName();
+
+        if (isset($this->callees[$suiteName])) {
+            return $this->callees[$suiteName];
+        }
+
         $callees = array();
         foreach ($this->readers as $reader) {
             if ($reader->supportsEnvironment($environment)) {
                 $callees = array_merge($callees, $reader->readEnvironmentCallees($environment));
             }
         }
+
+        $this->callees[$suiteName] = $callees;
 
         return $callees;
     }
