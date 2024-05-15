@@ -57,7 +57,7 @@ Useful Links
 ------------
 
 - The main website is at [http://behat.org](http://behat.org)
-- The documentation is at [http://docs.behat.org/en/latest/](http://docs.behat.org/en/latest/)
+- The documentation is at [https://docs.behat.org/en/latest/guides.html](https://docs.behat.org/en/latest/guides.html)
 - Official Google Group is at [http://groups.google.com/group/behat](http://groups.google.com/group/behat)
 - IRC channel on [#freenode](http://freenode.net/) is `#behat`
 - [Note on Patches/Pull Requests](CONTRIBUTING.md)
