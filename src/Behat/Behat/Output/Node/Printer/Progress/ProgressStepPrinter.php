@@ -52,6 +52,17 @@ final class ProgressStepPrinter implements StepPrinter
         $printer = $formatter->getOutputPrinter();
         $style = $this->resultConverter->convertResultToString($result);
 
+        // FIXME when refactored to symphony output use OutputInterface->getVerbosity() here instead of the magic global
+        $isVeryVerbose = $_SERVER['SHELL_VERBOSITY'] ?? 0 >= 2;
+        if (
+            $isVeryVerbose
+            && $result instanceof ExecutedStepResult
+            && ($callResult = $result->getCallResult())
+            && $callResult->hasStdOut()
+        ) {
+            $printer->writeln(['', $callResult->getStdOut()]);
+        }
+
         switch ($result->getResultCode()) {
             case TestResult::PASSED:
                 $printer->write("{+$style}.{-$style}");
