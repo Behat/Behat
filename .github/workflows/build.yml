@@ -73,6 +73,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: "${{ matrix.php }}"
+                    ini-file: "development"
                     ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
                     coverage: none
 
