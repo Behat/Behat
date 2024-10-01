@@ -44,7 +44,7 @@ final class CallResult
      * @param null|Exception $exception
      * @param null|string    $stdOut
      */
-    public function __construct(Call $call, $return, Exception $exception = null, $stdOut = null)
+    public function __construct(Call $call, $return, ?Exception $exception = null, $stdOut = null)
     {
         $this->call = $call;
         $this->return = $return;

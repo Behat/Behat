@@ -181,7 +181,7 @@ final class StepStatsListener implements EventListener
      *
      * @return string
      */
-    private function getStepPath(AfterStepTested $event, Exception $exception = null)
+    private function getStepPath(AfterStepTested $event, ?Exception $exception = null)
     {
         $path = sprintf('%s:%d', $this->currentFeaturePath, $event->getStep()->getLine());
 
