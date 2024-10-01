@@ -92,7 +92,7 @@ jobs:
                 if: matrix.composer-mode == 'update'
                 env:
                     SYMFONY_REQUIRE: ${{ matrix.symfony-version }}.*
-                run: composer update ${{ matrix.php == '8.3' && '--ignore-platform-req=php+' || '' }}
+                run: composer update ${{ matrix.php == '8.4' && '--ignore-platform-req=php+' || '' }}
 
             -   name: Install lowest dependencies
                 if: matrix.composer-mode == 'lowest'
