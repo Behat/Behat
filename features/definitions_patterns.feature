@@ -220,7 +220,7 @@ Feature: Step Definition Pattern
       class FeatureContext implements Context
       {
           /**
-           * @Given I provide parameter :too1234567891123456789012345678901
+           * @Given I provide parameter :too12345678911234567890123456789012
            */
           public function parameterCouldBeNull($param) {}
       }
