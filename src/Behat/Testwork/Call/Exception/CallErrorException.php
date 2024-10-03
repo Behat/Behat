@@ -25,7 +25,6 @@ final class CallErrorException extends ErrorException
         E_USER_ERROR        => 'User Error',
         E_USER_WARNING      => 'User Warning',
         E_USER_NOTICE       => 'User Notice',
-        E_STRICT            => 'Runtime Notice',
         E_RECOVERABLE_ERROR => 'Catchable Fatal Error',
     );
 
@@ -39,6 +38,11 @@ final class CallErrorException extends ErrorException
      */
     public function __construct($level, $message, $file, $line)
     {
+        // E_STRICT is deprecated since PHP 8.4.
+        if (defined('E_STRICT') && $level === @E_STRICT) {
+            $this->levels[@E_STRICT] = 'Runtime Notice';
+        }
+
         parent::__construct(
             sprintf(
                 '%s: %s in %s line %d',
