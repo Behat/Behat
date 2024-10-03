@@ -13,6 +13,8 @@ namespace Behat\Behat\Context\Reader;
 use Behat\Behat\Context\Annotation\AnnotationReader;
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Environment\ContextEnvironment;
+use Behat\Behat\Definition\Call\RuntimeDefinition;
+use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Call\Callee;
 use ReflectionClass;
 use ReflectionException;
@@ -129,6 +131,7 @@ final class AnnotatedContextReader implements ContextReader
         $description = $this->docBlockHelper->extractDescription($docBlock);
         $docBlock = $this->mergeMultilines($docBlock);
 
+        $patterns = [];
         foreach (explode("\n", $docBlock) as $docLine) {
             $docLine = preg_replace(self::DOCLINE_TRIMMER_REGEX, '', $docLine);
 
@@ -140,9 +143,18 @@ final class AnnotatedContextReader implements ContextReader
                 continue;
             }
 
-            if ($callee = $this->readDocLineCallee($class, $method, $docLine, $description)) {
-                $callees[] = $callee;
+            if (!($callee = $this->readDocLineCallee($class, $method, $docLine, $description))) {
+                continue;
             }
+
+            if ($callee instanceof Definition) {
+                if (isset($patterns[$callee->getPattern()])) {
+                    continue;
+                }
+                $patterns[$callee->getPattern()] = true;
+            }
+
+            $callees[] = $callee;
         }
 
         return $callees;

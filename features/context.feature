@@ -505,3 +505,54 @@ Feature: Context consistency
       """
     When I run "behat --no-colors -f progress features/context-args-array.feature"
     Then it should pass
+
+  Scenario:  Multi-Step-Type Annotations
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Step\Given, Behat\Step\When, Behat\Step\Then;
+
+      class FeatureContext implements \Behat\Behat\Context\Context
+      {
+          /**
+           * @Given /^I buy (\d+) (apples|oranges)$/
+           * @When /^I buy (\d+) (apples|oranges)$/
+           */
+          public function iBuyFruit($count, $fruit) { }
+
+          /**
+           * @Given /^I buy (\d+) shoes$/
+           */
+          public function iBuyShoes($count) { }
+
+          /**
+           * @Then I should have :count fruit(s)
+           */
+          public function iShouldHaveFruit($count) { }
+      }
+      """
+    And a file named "features/some.feature" with:
+      """
+      Feature: Purchase story
+
+        Scenario: I'm buying stuff
+          Given I buy 3 apples
+          And I buy 4 shoes
+          When I buy 2 oranges
+          Then I should have 5 fruits
+      """
+    When I run "behat --no-colors -fpretty --no-snippets --format-settings='{\"paths\": true}' features"
+    Then it should pass with:
+      """
+      Feature: Purchase story
+
+        Scenario: I'm buying stuff    # features\some.feature:3
+          Given I buy 3 apples        # FeatureContext::iBuyFruit()
+          And I buy 4 shoes           # FeatureContext::iBuyShoes()
+          When I buy 2 oranges        # FeatureContext::iBuyFruit()
+          Then I should have 5 fruits # FeatureContext::iShouldHaveFruit()
+
+      1 scenario (1 passed)
+      4 steps (4 passed)
+      """
