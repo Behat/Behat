@@ -140,7 +140,7 @@ Feature: I18n
           /**
            * @Then /^Добавить "([^"]*)" число$/
            */
-          public function dobavitChislo($arg1)
+          public function dobavitChislo($arg1): void
           {
               throw new PendingException();
           }
@@ -180,7 +180,7 @@ Feature: I18n
           /**
            * @Then /^Добавить "([^"]*)" число$/
            */
-          public function dobavitChislo($arg1)
+          public function dobavitChislo($arg1): void
           {
               throw new PendingException();
           }
@@ -220,7 +220,7 @@ Feature: I18n
           /**
            * @Then /^Добавить "([^"]*)" число$/
            */
-          public function dobavitChislo($arg1)
+          public function dobavitChislo($arg1): void
           {
               throw new PendingException();
           }
@@ -260,7 +260,7 @@ Feature: I18n
           /**
            * @Then /^Добавить "([^"]*)" число$/
            */
-          public function dobavitChislo($arg1)
+          public function dobavitChislo($arg1): void
           {
               throw new PendingException();
           }

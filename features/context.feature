@@ -275,7 +275,7 @@ Feature: Context consistency
         /**
          * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
          */
-        public function contextParameterShouldBeEqualTo($arg1, $arg2)
+        public function contextParameterShouldBeEqualTo($arg1, $arg2): void
         {
             throw new PendingException();
         }
@@ -283,7 +283,7 @@ Feature: Context consistency
         /**
          * @Then /^context parameter "([^"]*)" should be array with (\d+) elements$/
          */
-        public function contextParameterShouldBeArrayWithElements($arg1, $arg2)
+        public function contextParameterShouldBeArrayWithElements($arg1, $arg2): void
         {
             throw new PendingException();
         }
