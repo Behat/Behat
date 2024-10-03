@@ -5,16 +5,16 @@ namespace Behat\Tests\Definition\Pattern;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\Pattern\Policy\PatternPolicy;
 use PHPUnit\Framework\TestCase;
+use Behat\Behat\Definition\Exception\UnknownPatternException;
 
 /**
- * Class PatternTransformerTest
  * @author Julien Deniau <julien.deniau@mapado.com>
  */
 class PatternTransformerTest extends TestCase
 {
-    public function testTransformPatternToRegexCache()
+    public function testTransformPatternToRegexCache(): void
     {
-        $observer = $this->prophesize('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
+        $observer = $this->prophesize(PatternPolicy::class);
         // first pattern
         $observer->supportsPattern('hello world')->willReturn(true);
         $observer->transformPatternToRegex('hello world')
@@ -39,19 +39,19 @@ class PatternTransformerTest extends TestCase
         $this->assertEquals('/hi world/', $regex3);
     }
 
-    public function testTransformPatternToRegexCacheAndRegisterNewPolicy()
+    public function testTransformPatternToRegexCacheAndRegisterNewPolicy(): void
     {
         // first pattern
-        $policy1Prophecy = $this->prophesize('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
+        $policy1Prophecy = $this->prophesize(PatternPolicy::class);
         $policy1Prophecy->supportsPattern('hello world')->willReturn(true);
         $policy1Prophecy->transformPatternToRegex('hello world')
             ->shouldBeCalledTimes(2)
             ->willReturn('/hello world/');
 
         // second pattern
-        $policy2Prophecy = $this->prophesize('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
-        $policy1Prophecy->supportsPattern()->shouldNotBeCalled();
-        $policy1Prophecy->transformPatternToRegex()->shouldNotBeCalled();
+        $policy2Prophecy = $this->prophesize(PatternPolicy::class);
+        $policy1Prophecy->supportsPattern('')->shouldNotBeCalled();
+        $policy1Prophecy->transformPatternToRegex('')->shouldNotBeCalled();
 
         $testedInstance = new PatternTransformer();
         $testedInstance->registerPatternPolicy($policy1Prophecy->reveal());
@@ -66,10 +66,10 @@ class PatternTransformerTest extends TestCase
         $this->assertEquals('/hello world/', $regex3);
     }
 
-    public function testTransformPatternToRegexNoMatch()
+    public function testTransformPatternToRegexNoMatch(): void
     {
         // first pattern
-        $policy1Prophecy = $this->prophesize('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
+        $policy1Prophecy = $this->prophesize(PatternPolicy::class);
         $policy1Prophecy->supportsPattern('hello world')->willReturn(false);
         $policy1Prophecy->transformPatternToRegex('hello world')
             ->shouldNotBeCalled();
@@ -77,7 +77,7 @@ class PatternTransformerTest extends TestCase
 
         $testedInstance = new PatternTransformer();
         $testedInstance->registerPatternPolicy($policy1Prophecy->reveal());
-        $this->expectException('\Behat\Behat\Definition\Exception\UnknownPatternException');
+        $this->expectException(UnknownPatternException::class);
         $this->expectExceptionMessage("Can not find policy for a pattern `hello world`.");
         $regex = $testedInstance->transformPatternToRegex('hello world');
     }

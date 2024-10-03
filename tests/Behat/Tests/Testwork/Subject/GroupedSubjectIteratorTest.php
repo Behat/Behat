@@ -6,12 +6,13 @@ use Behat\Testwork\Specification\GroupedSpecificationIterator;
 use Behat\Testwork\Specification\NoSpecificationsIterator;
 use Behat\Testwork\Specification\SpecificationArrayIterator;
 use PHPUnit\Framework\TestCase;
+use Behat\Testwork\Suite\Suite;
 
 class GroupedSubjectIteratorTest extends TestCase
 {
-    public function testIterationWithEmptyAtBeginning()
+    public function testIterationWithEmptyAtBeginning(): void
     {
-        $suite = $this->prophesize('Behat\Testwork\Suite\Suite')->reveal();
+        $suite = $this->prophesize(Suite::class)->reveal();
 
         $iterator = new GroupedSpecificationIterator($suite, array(
             new NoSpecificationsIterator($suite),
@@ -21,9 +22,9 @@ class GroupedSubjectIteratorTest extends TestCase
         $this->assertEquals(1, iterator_count($iterator));
     }
 
-    public function testIterationWithEmptyInMiddle()
+    public function testIterationWithEmptyInMiddle(): void
     {
-        $suite = $this->prophesize('Behat\Testwork\Suite\Suite')->reveal();
+        $suite = $this->prophesize(Suite::class)->reveal();
 
         $iterator = new GroupedSpecificationIterator($suite, array(
             new SpecificationArrayIterator($suite, array($this->prophesize()->reveal())),

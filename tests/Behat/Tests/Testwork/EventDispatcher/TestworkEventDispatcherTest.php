@@ -24,7 +24,7 @@ class TestworkEventDispatcherTest extends TestCase
         $listener = $this->createListenerSpy();
 
         $dispatcher->addListener($eventName, $listener);
-        $dispatcher->dispatch($eventName, $event);
+        $dispatcher->dispatch($event, $eventName);
 
         $this->assertCount(1, $listener->receivedEvents);
         $this->assertEquals($event, $listener->receivedEvents[0]);
@@ -57,7 +57,7 @@ class TestworkEventDispatcherTest extends TestCase
         $listener = $this->createListenerSpy();
 
         $dispatcher->addListener($eventName, $listener);
-        $dispatcher->dispatch($eventName, $event);
+        $dispatcher->dispatch($event, $eventName);
 
         $this->assertCount(1, $listener->receivedEvents);
         $this->assertEquals($eventName, $event->name);
