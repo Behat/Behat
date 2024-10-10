@@ -64,6 +64,9 @@ final class ProgressStatisticsPrinter implements StatisticsPrinter
         $stepStats = $statistics->getPendingSteps();
         $this->listPrinter->printStepList($printer, 'pending_steps_title', TestResult::PENDING, $stepStats);
 
+        $scenarioStats = $statistics->getFailedScenarios();
+        $this->listPrinter->printScenariosList($printer, 'failed_scenarios_title', TestResult::FAILED, $scenarioStats);
+
         $this->counterPrinter->printCounters($printer, 'scenarios_count', $statistics->getScenarioStatCounts());
         $this->counterPrinter->printCounters($printer, 'steps_count', $statistics->getStepStatCounts());
 
