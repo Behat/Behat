@@ -27,7 +27,7 @@ use ReflectionMethod;
 final class RowBasedTableTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
     public const PATTERN_REGEX = '/^rowtable\:[[:print:]]+$/';
-    public const PRIORITY = 50;
+    private const PRIORITY = 50;
 
     /**
      * @var string
