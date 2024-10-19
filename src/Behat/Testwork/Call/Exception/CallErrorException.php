@@ -38,6 +38,11 @@ final class CallErrorException extends ErrorException
      */
     public function __construct($level, $message, $file, $line)
     {
+        // E_STRICT is deprecated since PHP 8.4.
+        if (defined('E_STRICT') && $level === @E_STRICT) {
+            $this->levels[@E_STRICT] = 'Runtime Notice';
+        }
+
         parent::__construct(
             sprintf(
                 '%s: %s in %s line %d',
