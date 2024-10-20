@@ -185,7 +185,7 @@ Feature: Append snippets option
           /**
            * @Then /^do something undefined with \$$/
            */
-          public function doSomethingUndefinedWith2()
+          public function doSomethingUndefinedWith2(): void
           {
               throw new PendingException();
           }
@@ -193,7 +193,7 @@ Feature: Append snippets option
           /**
            * @Then /^do something undefined with \\(\d+)$/
            */
-          public function doSomethingUndefinedWith3($arg1)
+          public function doSomethingUndefinedWith3($arg1): void
           {
               throw new PendingException();
           }
@@ -201,7 +201,7 @@ Feature: Append snippets option
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -209,7 +209,7 @@ Feature: Append snippets option
           /**
            * @Given /^pystring (\d+):$/
            */
-          public function pystring2($arg1, PyStringNode $string)
+          public function pystring2($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -217,7 +217,7 @@ Feature: Append snippets option
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -355,7 +355,7 @@ Feature: Append snippets option
           /**
            * @Then /^do something undefined with \$$/
            */
-          public function doSomethingUndefinedWith2()
+          public function doSomethingUndefinedWith2(): void
           {
               throw new PendingException();
           }
@@ -363,7 +363,7 @@ Feature: Append snippets option
           /**
            * @Then /^do something undefined with \\(\d+)$/
            */
-          public function doSomethingUndefinedWith3($arg1)
+          public function doSomethingUndefinedWith3($arg1): void
           {
               throw new PendingException();
           }
@@ -371,7 +371,7 @@ Feature: Append snippets option
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -379,7 +379,7 @@ Feature: Append snippets option
           /**
            * @Given /^pystring (\d+):$/
            */
-          public function pystring2($arg1, PyStringNode $string)
+          public function pystring2($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -387,7 +387,7 @@ Feature: Append snippets option
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -523,7 +523,7 @@ Feature: Append snippets option
           /**
            * @Then /^do something undefined with \$$/
            */
-          public function doSomethingUndefinedWith2()
+          public function doSomethingUndefinedWith2(): void
           {
               throw new PendingException();
           }
@@ -531,7 +531,7 @@ Feature: Append snippets option
           /**
            * @Then /^do something undefined with \\(\d+)$/
            */
-          public function doSomethingUndefinedWith3($arg1)
+          public function doSomethingUndefinedWith3($arg1): void
           {
               throw new PendingException();
           }
@@ -539,7 +539,7 @@ Feature: Append snippets option
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -547,7 +547,7 @@ Feature: Append snippets option
           /**
            * @Given /^pystring (\d+):$/
            */
-          public function pystring2($arg1, PyStringNode $string)
+          public function pystring2($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -555,7 +555,7 @@ Feature: Append snippets option
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -652,7 +652,7 @@ Feature: Append snippets option
           /**
            * @Given /^I have (\d+) apples$/
            */
-          public function iHaveApples($arg1)
+          public function iHaveApples($arg1): void
           {
               throw new PendingException();
           }
@@ -660,7 +660,7 @@ Feature: Append snippets option
           /**
            * @When /^I ate (\d+) apple$/
            */
-          public function iAteApple($arg1)
+          public function iAteApple($arg1): void
           {
               throw new PendingException();
           }
@@ -668,7 +668,7 @@ Feature: Append snippets option
           /**
            * @Then /^I should have (\d+) apples$/
            */
-          public function iShouldHaveApples($arg1)
+          public function iShouldHaveApples($arg1): void
           {
               throw new PendingException();
           }
@@ -676,7 +676,7 @@ Feature: Append snippets option
           /**
            * @When /^I found (\d+) apples$/
            */
-          public function iFoundApples($arg1)
+          public function iFoundApples($arg1): void
           {
               throw new PendingException();
           }
@@ -684,7 +684,7 @@ Feature: Append snippets option
           /**
            * @Then /^do something undefined with \$$/
            */
-          public function doSomethingUndefinedWith()
+          public function doSomethingUndefinedWith(): void
           {
               throw new PendingException();
           }
@@ -692,7 +692,7 @@ Feature: Append snippets option
           /**
            * @When /^I ate (\d+) apples$/
            */
-          public function iAteApples($arg1)
+          public function iAteApples($arg1): void
           {
               throw new PendingException();
           }
@@ -700,7 +700,7 @@ Feature: Append snippets option
           /**
            * @Then /^do something undefined with \\(\d+)$/
            */
-          public function doSomethingUndefinedWith2($arg1)
+          public function doSomethingUndefinedWith2($arg1): void
           {
               throw new PendingException();
           }
@@ -708,7 +708,7 @@ Feature: Append snippets option
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -716,7 +716,7 @@ Feature: Append snippets option
           /**
            * @Given /^pystring (\d+):$/
            */
-          public function pystring2($arg1, PyStringNode $string)
+          public function pystring2($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -724,7 +724,7 @@ Feature: Append snippets option
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }

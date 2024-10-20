@@ -62,7 +62,7 @@ Feature: Snippets generation and addition
           /**
            * @Given /^I have magically created (\d+)\$$/
            */
-          public function iHaveMagicallyCreated($arg1)
+          public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
@@ -70,7 +70,7 @@ Feature: Snippets generation and addition
           /**
            * @When /^I have chose '([^']*)' in coffee machine$/
            */
-          public function iHaveChoseCoffeeWithTurkeyInCoffeeMachine($arg1)
+          public function iHaveChoseCoffeeWithTurkeyInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
@@ -78,7 +78,7 @@ Feature: Snippets generation and addition
           /**
            * @Then /^I should have '([^']*)'$/
            */
-          public function iShouldHaveTurkeyWithCoffeeSauce($arg1)
+          public function iShouldHaveTurkeyWithCoffeeSauce($arg1): void
           {
               throw new PendingException();
           }
@@ -86,7 +86,7 @@ Feature: Snippets generation and addition
           /**
            * @Then /^I should get a '([^']*)':$/
            */
-          public function iShouldGetASuperString($arg1, PyStringNode $string)
+          public function iShouldGetASuperString($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -94,7 +94,7 @@ Feature: Snippets generation and addition
           /**
            * @Then /^I should get a simple string:$/
            */
-          public function iShouldGetASimpleString(PyStringNode $string)
+          public function iShouldGetASimpleString(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -102,7 +102,7 @@ Feature: Snippets generation and addition
           /**
            * @When /^I have chose "([^"]*)" in coffee machine$/
            */
-          public function iHaveChoseInCoffeeMachine($arg1)
+          public function iHaveChoseInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
@@ -110,7 +110,7 @@ Feature: Snippets generation and addition
           /**
            * @When /^do something undefined with \\(\d+)$/
            */
-          public function doSomethingUndefinedWith($arg1)
+          public function doSomethingUndefinedWith($arg1): void
           {
               throw new PendingException();
           }
@@ -118,7 +118,7 @@ Feature: Snippets generation and addition
           /**
            * @Then /^I should have "([^"]*)"$/
            */
-          public function iShouldHave($arg1)
+          public function iShouldHave($arg1): void
           {
               throw new PendingException();
           }
@@ -126,7 +126,7 @@ Feature: Snippets generation and addition
           /**
            * @Then /^I should get a "([^"]*)":$/
            */
-          public function iShouldGetA($arg1, PyStringNode $string)
+          public function iShouldGetA($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -189,7 +189,7 @@ Feature: Snippets generation and addition
           /**
            * @Given I have magically created :arg1$
            */
-          public function iHaveMagicallyCreated($arg1)
+          public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
@@ -197,7 +197,7 @@ Feature: Snippets generation and addition
           /**
            * @When I have chose :arg1 in coffee machine
            */
-          public function iHaveChoseInCoffeeMachine($arg1)
+          public function iHaveChoseInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
@@ -205,7 +205,7 @@ Feature: Snippets generation and addition
           /**
            * @Then I should have :arg1
            */
-          public function iShouldHave($arg1)
+          public function iShouldHave($arg1): void
           {
               throw new PendingException();
           }
@@ -213,7 +213,7 @@ Feature: Snippets generation and addition
           /**
            * @Then I should get a :arg1:
            */
-          public function iShouldGetA($arg1, PyStringNode $string)
+          public function iShouldGetA($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -221,7 +221,7 @@ Feature: Snippets generation and addition
           /**
            * @Then I should get a simple string:
            */
-          public function iShouldGetASimpleString(PyStringNode $string)
+          public function iShouldGetASimpleString(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -229,7 +229,7 @@ Feature: Snippets generation and addition
           /**
            * @When do something undefined with \:arg1
            */
-          public function doSomethingUndefinedWith($arg1)
+          public function doSomethingUndefinedWith($arg1): void
           {
               throw new PendingException();
           }
@@ -326,7 +326,7 @@ Feature: Snippets generation and addition
           /**
            * @Given I have a package v2.5
            */
-          public function iHaveAPackageV()
+          public function iHaveAPackageV(): void
           {
               throw new PendingException();
           }
@@ -360,7 +360,7 @@ Feature: Snippets generation and addition
           /**
            * @Then images should be uploaded to web\/uploads\/media\/default\/:arg1\/:arg2\/
            */
-          public function imagesShouldBeUploadedToWebUploadsMediaDefault($arg1, $arg2)
+          public function imagesShouldBeUploadedToWebUploadsMediaDefault($arg1, $arg2): void
           {
               throw new PendingException();
           }
@@ -387,7 +387,7 @@ Feature: Snippets generation and addition
           /**
            * @Given I have magically created :arg1$
            */
-          public function iHaveMagicallyCreated($arg1)
+          public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
@@ -395,7 +395,7 @@ Feature: Snippets generation and addition
           /**
            * @When I have chose :arg1 in coffee machine
            */
-          public function iHaveChoseInCoffeeMachine($arg1)
+          public function iHaveChoseInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
@@ -403,7 +403,7 @@ Feature: Snippets generation and addition
           /**
            * @Then I should have :arg1
            */
-          public function iShouldHave($arg1)
+          public function iShouldHave($arg1): void
           {
               throw new PendingException();
           }
@@ -411,7 +411,7 @@ Feature: Snippets generation and addition
           /**
            * @Then I should get a :arg1:
            */
-          public function iShouldGetA($arg1, PyStringNode $string)
+          public function iShouldGetA($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -419,7 +419,7 @@ Feature: Snippets generation and addition
           /**
            * @Then I should get a simple string:
            */
-          public function iShouldGetASimpleString(PyStringNode $string)
+          public function iShouldGetASimpleString(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -427,7 +427,7 @@ Feature: Snippets generation and addition
           /**
            * @When do something undefined with \:arg1
            */
-          public function doSomethingUndefinedWith($arg1)
+          public function doSomethingUndefinedWith($arg1): void
           {
               throw new PendingException();
           }
@@ -463,7 +463,7 @@ Feature: Snippets generation and addition
           /**
            * @Given that it's eleven o'clock
            */
-          public function thatItsElevenOclock()
+          public function thatItsElevenOclock(): void
           {
               throw new PendingException();
           }
@@ -471,7 +471,7 @@ Feature: Snippets generation and addition
           /**
            * @When the guest's taxi has arrived
            */
-          public function theGuestsTaxiHasArrived()
+          public function theGuestsTaxiHasArrived(): void
           {
               throw new PendingException();
           }
@@ -479,7 +479,7 @@ Feature: Snippets generation and addition
           /**
            * @Then the guest says :arg1
            */
-          public function theGuestSays($arg1)
+          public function theGuestSays($arg1): void
           {
               throw new PendingException();
           }

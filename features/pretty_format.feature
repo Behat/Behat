@@ -137,7 +137,7 @@ Feature: Pretty Formatter
           /**
            * @Then /^Something new$/
            */
-          public function somethingNew()
+          public function somethingNew(): void
           {
               throw new PendingException();
           }
