@@ -1,3 +1,4 @@
+@wip
 Feature: Rerun
   In order to test only failed scenarios and exit if none is found
   As a feature developer
@@ -139,7 +140,7 @@ Feature: Rerun
     """
 
   Scenario: Fixing scenario removes it from the rerun log
-    Given I run "behat --no-colors -f progress features/apples.feature"
+    Given I run "behat --no-colors -f progress features/apples.feature --rerun-only"
     And there is a file named "features/apples.feature" with:
       """
       Feature: Apples story
@@ -177,4 +178,5 @@ Feature: Rerun
     And I run "behat --no-colors -f progress features/apples.feature --rerun-only"
     Then it should pass with:
     """
+    No failure found, exiting
     """
