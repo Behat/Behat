@@ -57,7 +57,7 @@ final class Command extends BaseCommand
      *
      * @return integer Return code of one of the processors or 0 if none of them returned integer
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         foreach ($this->controllers as $controller) {
             if (is_int($return = $controller->execute($input, $output))) {

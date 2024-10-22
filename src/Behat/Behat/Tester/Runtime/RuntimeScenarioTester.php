@@ -54,7 +54,7 @@ final class RuntimeScenarioTester implements ScenarioTester
     /**
      * {@inheritdoc}
      */
-    public function setUp(Environment $env, FeatureNode $feature, Scenario $example, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
         return new SuccessfulSetup();
     }

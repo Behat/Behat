@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.13.0] - 2023-04-18
+
+### Added
+* [#1422](https://github.com/Behat/Behat/pull/1422) Add support for displaying PHPUnit 10 exceptions [@mnocon](https://github.com/mnocon)
+* [#1429](https://github.com/Behat/Behat/pull/1429) Add more precise types for static analysis [@yguedidi](https://github.com/yguedidi)
+
 ## [3.12.0] - 2022-11-29
 
 ### Added
@@ -84,14 +90,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  * [1322](https://github.com/Behat/Behat/pull/1322): Feature title as classname in JUnit output ([@steefmin](https://github.com/steefmin))
  * [1313](https://github.com/Behat/Behat/pull/1313): PHP 8 support ([@ciaranmcnulty](https://github.com/ciaranmcnulty))
  * [1313](https://github.com/Behat/Behat/pull/1323): Further PHP 8 support ([@dgafka](https://github.com/dgafka))
- 
+
 ### Fixed
 
  * [#1303](https://github.com/Behat/Behat/pull/1303): Error when running `--debug` with recent Symfony versions ([@jawira](https://github.com/jawira))
  * [#1311](https://github.com/Behat/Behat/pull/1311): Remove symfony deprecation messages about transChoice ([@guilliamxavier](https://github.com/guilliamxavier))
  * [#1318](https://github.com/Behat/Behat/pull/1318): Allow negated filters on scenario hoooks ([@andrewnicols ](https://github.com/andrewnicols))
 
-### Changed  
+### Changed
  * [#1299](https://github.com/Behat/Behat/pull/1299): Removed support for PHP <7.2, Symfony <4.4 ([@upamil](https://github.com/pamil))
  * [#1310](https://github.com/Behat/Behat/pull/1310): Refactoring to use newer language features ([@rpkamp](https://github.com/rpkamp))
  * [#1315](https://github.com/Behat/Behat/pull/1315): Remove BC layer for unsuppored symfony dispatcher ([@rpkamp](https://github.com/rpkamp))
@@ -108,8 +114,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * [#1270](https://github.com/Behat/Behat/pull/1270): Fix issues with PHP version handling in build ([@Sam-Burns](https://github.com/Sam-Burns))
   * [#1282](https://github.com/Behat/Behat/pull/1282): Updated the year on Changelog dates ([@choult](https://github.com/choult))
   * [#1284](https://github.com/Behat/Behat/pull/1284): Restore PHP 5.3/5.4 compat ([@dvdoug](https://github.com/dvdoug), [@Sam-Burns](https://github.com/Sam-Burns), [@pamil](https://github.com/pamil))
-  
-### Changed  
+
+### Changed
   * [#1281](https://github.com/Behat/Behat/pull/1281): Make container-interop/container-interop optional dependency ([@upyx](https://github.com/upyx))
 
 ## [3.6.1] - 2020-02-06
@@ -131,16 +137,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.5.0] - 2018-08-10
 ### Added
-  * [#1144](https://github.com/Behat/Behat/pull/1144): Allow to use arrays as context parameters 
+  * [#1144](https://github.com/Behat/Behat/pull/1144): Allow to use arrays as context parameters
   * [#1081](https://github.com/Behat/Behat/pull/1081): Allow passing null as a named context parameter
   * [#1083](https://github.com/Behat/Behat/pull/1083): Time attribute in JUnit output
- 
+
 ### Changed
-  * [#1153](https://github.com/Behat/Behat/pull/1153): Cache pattern to regex transformations 
+  * [#1153](https://github.com/Behat/Behat/pull/1153): Cache pattern to regex transformations
   * [#1155](https://github.com/Behat/Behat/pull/1155): Remove composer suggestions
- 
+
 ### Fixed
-  * Custom container must be public for symfony 4 
+  * Custom container must be public for symfony 4
   * [#1160](https://github.com/Behat/Behat/pull/1160): Register CLI services as synthetic
   * [#1163](https://github.com/Behat/Behat/pull/1163): Allow for new-style symfony serialisation
   * [#1130](https://github.com/Behat/Behat/pull/1130): Fix quoteless definition arguments matching with unicode characters
@@ -1010,6 +1016,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.13.0]: https://github.com/Behat/Behat/compare/v3.12.0...v3.13.0
 [3.12.0]: https://github.com/Behat/Behat/compare/v3.11.0...v3.12.0
 [3.11.0]: https://github.com/Behat/Behat/compare/v3.10.0...v3.11.0
 [3.9.0]: https://github.com/Behat/Behat/compare/v3.8.1...v3.9.0

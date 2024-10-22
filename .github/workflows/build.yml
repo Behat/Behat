@@ -18,7 +18,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [7.2, 7.3, 7.4, 8.0, 8.1, 8.2]
+                php: [7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4]
                 os: [ubuntu-latest]
                 composer-mode: [update]
                 symfony-version: ['']
@@ -61,14 +61,19 @@ jobs:
                         os: ubuntu-latest
                         composer-mode: update
                         symfony-version: '6.0'
+                    -   php: 8.2
+                        os: ubuntu-latest
+                        composer-mode: update
+                        symfony-version: '7.0'
 
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v4
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: "${{ matrix.php }}"
+                    ini-file: "development"
                     ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
                     coverage: none
 
@@ -78,11 +83,16 @@ jobs:
                     composer config --global --no-plugins allow-plugins.symfony/flex true &&
                     composer global require symfony/flex
 
+            # until psalm is updated to v5 which is compatible with Symfony 7
+            -   name: Remove vimeo/psalm
+                if: matrix.symfony-version == '7.0'
+                run: composer remove vimeo/psalm --no-update --dev
+
             -   name: Install latest dependencies
                 if: matrix.composer-mode == 'update'
                 env:
                     SYMFONY_REQUIRE: ${{ matrix.symfony-version }}.*
-                run: composer update
+                run: composer update ${{ matrix.php == '8.4' && '--ignore-platform-req=php+' || '' }}
 
             -   name: Install lowest dependencies
                 if: matrix.composer-mode == 'lowest'
@@ -107,7 +117,7 @@ jobs:
                     composer install --no-dev -o &&
                     box.phar build
 
-            -   uses: actions/upload-artifact@v1
+            -   uses: actions/upload-artifact@v4
                 name: Publish the PHAR
                 if: matrix.publish-phar == true
                 with:
@@ -118,12 +128,12 @@ jobs:
         runs-on: ubuntu-latest
         name: Static analysis
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: 8.2
+                  php-version: 7.2
                   ini-values: "zend.exception_ignore_args=Off"
                   coverage: none
 
@@ -139,16 +149,15 @@ jobs:
         needs: tests
         if: github.event_name == 'release'
         steps:
-            -   uses: actions/download-artifact@v1
+            -   uses: actions/download-artifact@v4
                 with:
                     name: behat.phar
                     path: .
             -   name: Upload behat.phar
-                uses: actions/upload-release-asset@v1
+                uses: basefas/upload-release-asset-action@v1
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 with:
-                    upload_url: ${{ github.event.release.upload_url }}
+                    release_id: ${{ github.event.release.id }}
                     asset_path: behat.phar
                     asset_name: behat.phar
-                    asset_content_type: application/zip

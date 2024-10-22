@@ -49,19 +49,19 @@ final class DefinitionArgumentsTransformer implements CallFilter
     /**
      * {@inheritdoc}
      */
-    public function filterCall(Call $definitionCall)
+    public function filterCall(Call $call)
     {
-        if (!$definitionCall instanceof DefinitionCall) {
+        if (!$call instanceof DefinitionCall) {
             throw new UnsupportedCallException(sprintf(
                 'DefinitionArgumentTransformer can not filter `%s` call.',
-                get_class($definitionCall)
-            ), $definitionCall);
+                get_class($call)
+            ), $call);
         }
 
         $newArguments = array();
         $transformed = false;
-        foreach ($definitionCall->getArguments() as $index => $value) {
-            $newValue = $this->transformArgument($definitionCall, $index, $value);
+        foreach ($call->getArguments() as $index => $value) {
+            $newValue = $this->transformArgument($call, $index, $value);
 
             if ($newValue !== $value) {
                 $transformed = true;
@@ -71,16 +71,16 @@ final class DefinitionArgumentsTransformer implements CallFilter
         }
 
         if (!$transformed) {
-            return $definitionCall;
+            return $call;
         }
 
         return new DefinitionCall(
-            $definitionCall->getEnvironment(),
-            $definitionCall->getFeature(),
-            $definitionCall->getStep(),
-            $definitionCall->getCallee(),
+            $call->getEnvironment(),
+            $call->getFeature(),
+            $call->getStep(),
+            $call->getCallee(),
             $newArguments,
-            $definitionCall->getErrorReportingLevel()
+            $call->getErrorReportingLevel()
         );
     }
 

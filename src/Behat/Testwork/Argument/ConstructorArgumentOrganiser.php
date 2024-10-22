@@ -40,21 +40,21 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
     /**
      * {@inheritdoc}
      */
-    public function organiseArguments(ReflectionFunctionAbstract $constructor, array $arguments)
+    public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)
     {
-        if (!$constructor instanceof ReflectionMethod) {
+        if (!$function instanceof ReflectionMethod) {
             throw new UnsupportedFunctionException(sprintf(
                 'ConstructorArgumentOrganiser can only work with ReflectionMethod, but `%s` given.',
-                get_class($constructor)
+                get_class($function)
             ));
         }
 
         $organisedArguments = $this->baseOrganiser->organiseArguments(
-            $constructor,
+            $function,
             $arguments
         );
 
-        $this->validateArguments($constructor, $arguments, $organisedArguments);
+        $this->validateArguments($function, $arguments, $organisedArguments);
 
         return $organisedArguments;
     }

@@ -58,7 +58,7 @@ final class DebugCommand extends BaseCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln(sprintf('%s version %s', $this->application->getName(), $this->application->getVersion()));
 

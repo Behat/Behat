@@ -46,7 +46,7 @@ use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
  */
 final class ApplicationFactory extends BaseFactory
 {
-    public const VERSION = '3.12.0';
+    public const VERSION = '3.13.0';
 
     /**
      * {@inheritdoc}
@@ -117,10 +117,14 @@ final class ApplicationFactory extends BaseFactory
             $cwd . 'behat.yml',
             $cwd . 'behat.yaml.dist',
             $cwd . 'behat.yml.dist',
+            $cwd . 'behat.dist.yaml',
+            $cwd . 'behat.dist.yml',
             $configDir . 'behat.yaml',
             $configDir . 'behat.yml',
             $configDir . 'behat.yaml.dist',
             $configDir . 'behat.yml.dist',
+            $configDir . 'behat.dist.yaml',
+            $configDir . 'behat.dist.yml',
         );
 
         foreach ($paths as $path) {

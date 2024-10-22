@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="8"
+    errorLevel="7"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
@@ -46,5 +46,17 @@
                 <referencedClass name="PHPUnit_Framework_TestFailure" />
             </errorLevel>
         </UndefinedClass>
+
+        <!-- Suppress deliberately mismatching parameters and methods in Symfony legacy layer -->
+        <ParamNameMismatch>
+            <errorLevel type="suppress">
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
+            </errorLevel>
+        </ParamNameMismatch>
+        <MethodSignatureMismatch>
+            <errorLevel type="suppress">
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
+            </errorLevel>
+        </MethodSignatureMismatch>
     </issueHandlers>
 </psalm>
