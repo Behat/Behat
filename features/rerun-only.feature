@@ -1,4 +1,3 @@
-@wip
 Feature: Rerun
   In order to test only failed scenarios and exit if none is found
   As a feature developer
