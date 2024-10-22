@@ -71,16 +71,10 @@ final class RerunController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption(
-            '--rerun',
-            null,
-            InputOption::VALUE_NONE,
-            'Re-run scenarios that failed during last execution.'
+        $command->addOption('--rerun', null, InputOption::VALUE_NONE,
+            'Re-run scenarios that failed during last execution, or run everything if there were no failures.'
         );
-        $command->addOption(
-            '--rerun-only',
-            null,
-            InputOption::VALUE_NONE,
+        $command->addOption('--rerun-only', null, InputOption::VALUE_NONE,
             'Re-run scenarios that failed during last execution, or exit if there were no failures.'
         );
     }
@@ -170,12 +164,12 @@ final class RerunController implements Controller
     {
         return md5(
             $input->getParameterOption(array('--profile', '-p')) .
-                $input->getOption('suite') .
-                implode(' ', $input->getOption('name')) .
-                implode(' ', $input->getOption('tags')) .
-                $input->getOption('role') .
-                $input->getArgument('paths') .
-                $this->basepath
+            $input->getOption('suite') .
+            implode(' ', $input->getOption('name')) .
+            implode(' ', $input->getOption('tags')) .
+            $input->getOption('role') .
+            $input->getArgument('paths') .
+            $this->basepath
         );
     }
 
