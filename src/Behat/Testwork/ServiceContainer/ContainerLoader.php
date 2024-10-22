@@ -45,8 +45,8 @@ final class ContainerLoader
      */
     public function __construct(
         ExtensionManager $extensionManager,
-        ConfigurationTree $configuration = null,
-        Processor $processor = null
+        ?ConfigurationTree $configuration = null,
+        ?Processor $processor = null
     ) {
         $this->extensionManager = $extensionManager;
         $this->configuration = $configuration ? : new ConfigurationTree();

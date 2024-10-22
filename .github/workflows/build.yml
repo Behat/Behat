@@ -18,7 +18,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3]
+                php: [7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4]
                 os: [ubuntu-latest]
                 composer-mode: [update]
                 symfony-version: ['']
@@ -67,12 +67,13 @@ jobs:
                         symfony-version: '7.0'
 
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: "${{ matrix.php }}"
+                    ini-file: "development"
                     ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
                     coverage: none
 
@@ -91,7 +92,7 @@ jobs:
                 if: matrix.composer-mode == 'update'
                 env:
                     SYMFONY_REQUIRE: ${{ matrix.symfony-version }}.*
-                run: composer update ${{ matrix.php == '8.3' && '--ignore-platform-req=php+' || '' }}
+                run: composer update ${{ matrix.php == '8.4' && '--ignore-platform-req=php+' || '' }}
 
             -   name: Install lowest dependencies
                 if: matrix.composer-mode == 'lowest'
@@ -111,7 +112,7 @@ jobs:
         runs-on: ubuntu-latest
         name: Static analysis
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
@@ -164,7 +165,7 @@ jobs:
         needs: build-phar
         if: github.event_name == 'release'
         steps:
-            -   uses: actions/download-artifact@v3
+            -   uses: actions/download-artifact@v4
                 with:
                     name: behat.phar
                     path: .
