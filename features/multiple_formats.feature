@@ -182,7 +182,7 @@ Feature: Multiple formats
           /**
            * @Then /^do something undefined$/
            */
-          public function doSomethingUndefined()
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
@@ -190,7 +190,7 @@ Feature: Multiple formats
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -198,7 +198,7 @@ Feature: Multiple formats
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -276,7 +276,7 @@ Feature: Multiple formats
           /**
            * @Then /^do something undefined$/
            */
-          public function doSomethingUndefined()
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
@@ -284,7 +284,7 @@ Feature: Multiple formats
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -292,7 +292,7 @@ Feature: Multiple formats
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -322,7 +322,7 @@ Feature: Multiple formats
           /**
            * @Then /^do something undefined$/
            */
-          public function doSomethingUndefined()
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
@@ -330,7 +330,7 @@ Feature: Multiple formats
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -338,7 +338,7 @@ Feature: Multiple formats
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -453,7 +453,7 @@ Feature: Multiple formats
           /**
            * @Then /^do something undefined$/
            */
-          public function doSomethingUndefined()
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
@@ -461,7 +461,7 @@ Feature: Multiple formats
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -469,7 +469,7 @@ Feature: Multiple formats
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -501,7 +501,7 @@ Feature: Multiple formats
           /**
            * @Then /^do something undefined$/
            */
-          public function doSomethingUndefined()
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
@@ -509,7 +509,7 @@ Feature: Multiple formats
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -517,7 +517,7 @@ Feature: Multiple formats
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }

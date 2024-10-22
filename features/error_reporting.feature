@@ -1,5 +1,5 @@
 Feature: Error Reporting
-  In order to ignore E_NOTICE warnings of code I depend uppon
+  In order to ignore E_NOTICE warnings of code I depend upon
   As a feature developer
   I need to have an ability to set a custom error level for steps to be executed in
 

@@ -44,7 +44,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      * @param ClassLoader           $autoloader
      * @param null|FilesystemLogger $logger
      */
-    public function __construct(ClassLoader $autoloader, FilesystemLogger $logger = null)
+    public function __construct(ClassLoader $autoloader, ?FilesystemLogger $logger = null)
     {
         $this->autoloader = $autoloader;
         $this->logger = $logger;

@@ -47,7 +47,7 @@ Feature: Different result types
           /**
            * @Given /^I have magically created (\d+)\$$/
            */
-          public function iHaveMagicallyCreated($arg1)
+          public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
@@ -55,7 +55,7 @@ Feature: Different result types
           /**
            * @When /^I have chose "([^"]*)" in coffee machine$/
            */
-          public function iHaveChoseInCoffeeMachine($arg1)
+          public function iHaveChoseInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
@@ -63,7 +63,7 @@ Feature: Different result types
           /**
            * @Then /^I should have "([^"]*)"$/
            */
-          public function iShouldHave($arg1)
+          public function iShouldHave($arg1): void
           {
               throw new PendingException();
           }
@@ -81,7 +81,7 @@ Feature: Different result types
           /**
            * @Given /^I have magically created (\d+)\$$/
            */
-          public function iHaveMagicallyCreated($arg1)
+          public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
@@ -89,7 +89,7 @@ Feature: Different result types
           /**
            * @When /^I have chose "([^"]*)" in coffee machine$/
            */
-          public function iHaveChoseInCoffeeMachine($arg1)
+          public function iHaveChoseInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
@@ -97,7 +97,7 @@ Feature: Different result types
           /**
            * @Then /^I should have "([^"]*)"$/
            */
-          public function iShouldHave($arg1)
+          public function iShouldHave($arg1): void
           {
               throw new PendingException();
           }
@@ -132,14 +132,14 @@ Feature: Different result types
           /**
            * @Given /^human have ordered very very very hot "([^"]*)"$/
            */
-          public function humanOrdered($arg1) {
+          public function humanOrdered($arg1): void {
               throw new PendingException;
           }
 
           /**
            * @When the coffee will be ready
            */
-          public function theCoffeeWillBeReady() {
+          public function theCoffeeWillBeReady(): void {
               throw new PendingException;
           }
       }
@@ -163,7 +163,7 @@ Feature: Different result types
           /**
            * @Then /^I should say "([^"]*)"$/
            */
-          public function iShouldSay($arg1)
+          public function iShouldSay($arg1): void
           {
               throw new PendingException();
           }
@@ -187,7 +187,7 @@ Feature: Different result types
           /**
            * @Then /^I should say "([^"]*)"$/
            */
-          public function iShouldSay($arg1)
+          public function iShouldSay($arg1): void
           {
               throw new PendingException();
           }
@@ -371,19 +371,19 @@ Feature: Different result types
       class FeatureContext implements Context
       {
           /** @Given /^human have chosen "([^"]*)"$/ */
-          public function chosen($arg1) {
+          public function chosen($arg1): void {
               throw new PendingException;
           }
 
           /** @Given /^human have chosen "Latte"$/ */
-          public function chosenLatte() {
+          public function chosenLatte(): void {
               throw new PendingException;
           }
 
           /**
            * @Then /^I should make him "([^"]*)"$/
            */
-          public function iShouldSee($money) {
+          public function iShouldSee($money): void {
               throw new PendingException;
           }
       }
@@ -446,11 +446,11 @@ Feature: Different result types
       Step "/^customer bought coffee$/" is already defined in FeatureContext::chosen()
       """
 
-  Scenario: Error-containing steps
+  Scenario: Warning-containing steps
     Given a file named "features/coffee.feature" with:
       """
       Feature: Redundant actions
-        In order to be able to know about errors in definitions as soon as possible
+        In order to be able to know about warnings in definitions as soon as possible
         As a coffee machine mechanic
         I need to be able to know about redundant menu definitions
 
@@ -471,7 +471,7 @@ Feature: Different result types
       {
           /** @Given /^customer bought coffee$/ */
           public function chosen() {
-              trigger_error("some error", E_USER_ERROR);
+              trigger_error("some warning", E_USER_WARNING);
           }
 
           /** @Given /^customer bought another one coffee$/ */
@@ -490,7 +490,7 @@ Feature: Different result types
 
       001 Scenario: Redundant menu       # features/coffee.feature:6
             Given customer bought coffee # features/coffee.feature:7
-              User Error: some error in features/bootstrap/FeatureContext.php line 12
+              User Warning: some warning in features/bootstrap/FeatureContext.php line 12
 
       1 scenario (1 failed)
       2 steps (1 failed, 1 skipped)
