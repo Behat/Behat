@@ -75,7 +75,7 @@ final class RerunController implements Controller
             'Re-run scenarios that failed during last execution.'
         );
         $command->addOption('--rerun-only', null, InputOption::VALUE_NONE,
-            'Re-run scenarios that failed during last execution or exit if no file is found.'
+            'Re-run scenarios that failed during last execution, or exit if there were no failures.'
         );
     }
 
