@@ -7,7 +7,7 @@ use Behat\Testwork\Specification\NoSpecificationsIterator;
 use Behat\Testwork\Specification\SpecificationArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Behat\Testwork\Suite\Suite;
-Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Specification\SpecificationIterator;
 
 class GroupedSubjectIteratorTest extends TestCase
 {
