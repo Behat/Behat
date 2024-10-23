@@ -58,7 +58,7 @@ final class OutputExtension implements Extension
      * @param FormatterFactory[]    $formatterFactories
      * @param null|ServiceProcessor $processor
      */
-    public function __construct($defaultFormatter, array $formatterFactories, ServiceProcessor $processor = null)
+    public function __construct($defaultFormatter, array $formatterFactories, ?ServiceProcessor $processor = null)
     {
         $this->defaultFormatter = $defaultFormatter;
         $this->factories = $formatterFactories;

@@ -11,11 +11,12 @@ class GroupedSubjectIteratorTest extends TestCase
 {
     public function testIterationWithEmptyAtBeginning()
     {
-        $suite = $this->prophesize('Behat\Testwork\Suite\Suite')->reveal();
+        $suite = $this->createStub('Behat\Testwork\Suite\Suite');
+        $subIterator = $this->createStub('Behat\Testwork\Specification\SpecificationIterator');
 
         $iterator = new GroupedSpecificationIterator($suite, array(
             new NoSpecificationsIterator($suite),
-            new SpecificationArrayIterator($suite, array($this->prophesize()->reveal())),
+            new SpecificationArrayIterator($suite, array($subIterator)),
         ));
 
         $this->assertEquals(1, iterator_count($iterator));
@@ -23,12 +24,13 @@ class GroupedSubjectIteratorTest extends TestCase
 
     public function testIterationWithEmptyInMiddle()
     {
-        $suite = $this->prophesize('Behat\Testwork\Suite\Suite')->reveal();
+        $suite = $this->createStub('Behat\Testwork\Suite\Suite');
+        $subIterator = $this->createStub('Behat\Testwork\Specification\SpecificationIterator');
 
         $iterator = new GroupedSpecificationIterator($suite, array(
-            new SpecificationArrayIterator($suite, array($this->prophesize()->reveal())),
+            new SpecificationArrayIterator($suite, array($subIterator)),
             new NoSpecificationsIterator($suite),
-            new SpecificationArrayIterator($suite, array($this->prophesize()->reveal())),
+            new SpecificationArrayIterator($suite, array($subIterator)),
         ));
 
         $this->assertEquals(2, iterator_count($iterator));

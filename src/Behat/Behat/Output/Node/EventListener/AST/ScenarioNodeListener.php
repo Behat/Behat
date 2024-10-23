@@ -55,7 +55,7 @@ final class ScenarioNodeListener implements EventListener
         $beforeEventName,
         $afterEventName,
         ScenarioPrinter $scenarioPrinter,
-        SetupPrinter $setupPrinter = null
+        ?SetupPrinter $setupPrinter = null
     ) {
         $this->beforeEventName = $beforeEventName;
         $this->afterEventName = $afterEventName;

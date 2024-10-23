@@ -37,7 +37,7 @@ final class SearchResult
      * @param null|string     $matchedText
      * @param null|array      $arguments
      */
-    public function __construct(Definition $definition = null, $matchedText = null, array $arguments = null)
+    public function __construct(?Definition $definition = null, $matchedText = null, ?array $arguments = null)
     {
         $this->definition = $definition;
         $this->matchedText = $matchedText;
