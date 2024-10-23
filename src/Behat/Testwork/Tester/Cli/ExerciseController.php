@@ -94,6 +94,9 @@ final class ExerciseController implements Controller
             ->addArgument('paths', InputArgument::OPTIONAL,
                 'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples
             )
+            ->addOption('--allow-empty', null, InputOption::VALUE_NONE,
+              'Will not fail if no specification are found.'
+            )
             ->addOption('--dry-run', null, InputOption::VALUE_NONE,
                 'Invokes formatters without executing the tests and hooks.'
             );
@@ -107,7 +110,7 @@ final class ExerciseController implements Controller
         $specs = $this->findSpecifications($input);
         $result = $this->testSpecifications($input, $specs);
 
-        if ($input->getArgument('paths') && TestResults::NO_TESTS === $result->getResultCode()) {
+        if ($input->getArgument('paths') && !$input->getOption('allow-empty') && TestResults::NO_TESTS === $result->getResultCode()) {
             throw new WrongPathsException(
                 sprintf(
                     'No specifications found at path(s) `%s`. This might be because of incorrect paths configuration in your `suites`.',
