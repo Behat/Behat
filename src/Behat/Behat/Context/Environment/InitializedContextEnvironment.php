@@ -64,7 +64,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
     /**
      * {@inheritdoc}
      */
-    public function setServiceContainer(ContainerInterface $container = null)
+    public function setServiceContainer(?ContainerInterface $container = null)
     {
         $this->serviceContainer = $container;
     }

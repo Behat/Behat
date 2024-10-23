@@ -36,7 +36,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
      */
     private $durationListener;
 
-    public function __construct(PhaseStatistics $statistics, JUnitDurationListener $durationListener = null)
+    public function __construct(PhaseStatistics $statistics, ?JUnitDurationListener $durationListener = null)
     {
         $this->statistics = $statistics;
         $this->durationListener = $durationListener;

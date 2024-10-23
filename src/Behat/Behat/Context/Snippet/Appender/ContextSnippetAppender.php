@@ -37,7 +37,7 @@ final class ContextSnippetAppender implements SnippetAppender
      *
      * @param null|FilesystemLogger $logger
      */
-    public function __construct(FilesystemLogger $logger = null)
+    public function __construct(?FilesystemLogger $logger = null)
     {
         $this->logger = $logger;
     }

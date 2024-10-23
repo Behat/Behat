@@ -53,7 +53,7 @@ final class JUnitScenarioPrinter
      */
     private $durationListener;
 
-    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, JUnitDurationListener $durationListener = null)
+    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, ?JUnitDurationListener $durationListener = null)
     {
         $this->resultConverter = $resultConverter;
         $this->outlineStoreListener = $outlineListener;
@@ -63,7 +63,7 @@ final class JUnitScenarioPrinter
     /**
      * {@inheritDoc}
      */
-    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, string $file = null)
+    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null)
     {
         $name = implode(' ', array_map(function ($l) {
             return trim($l);

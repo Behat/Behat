@@ -171,7 +171,7 @@ Feature: Format options
           /**
            * @Then /^do something undefined$/
            */
-          public function doSomethingUndefined()
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
@@ -179,7 +179,7 @@ Feature: Format options
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -187,7 +187,7 @@ Feature: Format options
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -254,7 +254,7 @@ Feature: Format options
           /**
            * @Then /^do something undefined$/
            */
-          public function doSomethingUndefined()
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
@@ -262,7 +262,7 @@ Feature: Format options
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -270,7 +270,7 @@ Feature: Format options
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -402,7 +402,7 @@ Feature: Format options
           /**
            * @Then /^do something undefined$/
            */
-          public function doSomethingUndefined()
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
@@ -410,7 +410,7 @@ Feature: Format options
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -418,7 +418,7 @@ Feature: Format options
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -482,7 +482,7 @@ Feature: Format options
           /**
            * @Then /^do something undefined$/
            */
-          public function doSomethingUndefined()
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
@@ -490,7 +490,7 @@ Feature: Format options
           /**
            * @Given /^pystring:$/
            */
-          public function pystring(PyStringNode $string)
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -498,7 +498,7 @@ Feature: Format options
           /**
            * @Given /^table:$/
            */
-          public function table(TableNode $table)
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }

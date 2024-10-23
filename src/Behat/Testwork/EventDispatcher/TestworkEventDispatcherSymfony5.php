@@ -23,7 +23,7 @@ final class TestworkEventDispatcherSymfony5 extends EventDispatcher
     /**
      * {@inheritdoc}
      */
-    public function dispatch($event, string $eventName = null): object
+    public function dispatch($event, ?string $eventName = null): object
     {
         trigger_error(
             'Class "\Behat\Testwork\EventDispatcher\TestworkEventDispatcherSymfony5" is deprecated ' .

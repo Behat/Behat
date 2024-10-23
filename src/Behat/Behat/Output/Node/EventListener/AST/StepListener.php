@@ -48,7 +48,7 @@ final class StepListener implements EventListener
      * @param StepPrinter       $stepPrinter
      * @param null|SetupPrinter $setupPrinter
      */
-    public function __construct(StepPrinter $stepPrinter, SetupPrinter $setupPrinter = null)
+    public function __construct(StepPrinter $stepPrinter, ?SetupPrinter $setupPrinter = null)
     {
         $this->stepPrinter = $stepPrinter;
         $this->setupPrinter = $setupPrinter;

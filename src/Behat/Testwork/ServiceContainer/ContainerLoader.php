@@ -45,8 +45,8 @@ final class ContainerLoader
      */
     public function __construct(
         ExtensionManager $extensionManager,
-        ConfigurationTree $configuration = null,
-        Processor $processor = null
+        ?ConfigurationTree $configuration = null,
+        ?Processor $processor = null
     ) {
         $this->extensionManager = $extensionManager;
         $this->configuration = $configuration ? : new ConfigurationTree();
@@ -91,14 +91,28 @@ final class ContainerLoader
      */
     private function initializeExtensions(ContainerBuilder $container, array $configs)
     {
+        $extensions = [];
         foreach ($configs as $i => $config) {
-            if (isset($config['extensions'])) {
-                foreach ($config['extensions'] as $extensionLocator => $extensionConfig) {
-                    $extension = $this->extensionManager->activateExtension($extensionLocator);
-                    $configs[$i][$extension->getConfigKey()] = $extensionConfig;
+            $extensions[$i] = [];
+            if (array_key_exists('extensions', $config)) {
+                if (null === $config['extensions']) {
+                    $extensions = []; // Disable all extensions
+                    break;
                 }
+                foreach ($config['extensions'] as $extensionLocator => $extensionConfig) {
+                    $extensions[$i][$extensionLocator] = $extensionConfig;
+                }
+            }
+        }
 
-                unset($configs[$i]['extensions']);
+        foreach ($configs as $i => $config) {
+            unset($configs[$i]['extensions']);
+        }
+
+        foreach ($extensions as $i => $extensionConfigs) {
+            foreach ($extensionConfigs as $extensionLocator => $extensionConfig) {
+                $extension = $this->extensionManager->activateExtension($extensionLocator);
+                $configs[$i][$extension->getConfigKey()] = $extensionConfig;
             }
         }
 
