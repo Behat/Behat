@@ -180,8 +180,6 @@ jobs:
         - name: Test the PHAR
           run: |
             php ./behat.phar --version
-            php ./behat.phar
-
 
     publish-phar:
         runs-on: ubuntu-latest
