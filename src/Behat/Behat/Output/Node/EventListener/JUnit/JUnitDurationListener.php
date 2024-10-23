@@ -78,6 +78,7 @@ final class JUnitDurationListener implements EventListener
         if ($timer instanceof Timer) {
             $timer->stop();
             $this->resultStore[$key] = $timer->getTime();
+            unset($this->scenarioTimerStore[$key]);
         }
     }
 
@@ -92,6 +93,7 @@ final class JUnitDurationListener implements EventListener
         if ($timer instanceof Timer) {
             $timer->stop();
             $this->featureResultStore[$key] = $timer->getTime();
+            unset($this->featureTimerStore[$key]);
         }
     }
 
