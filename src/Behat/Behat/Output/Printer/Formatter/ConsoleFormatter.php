@@ -30,7 +30,7 @@ final class ConsoleFormatter extends BaseOutputFormatter
      */
     public function format($message): string
     {
-        return preg_replace_callback(self::CUSTOM_PATTERN, array($this, 'replaceStyle'), $message);
+        return preg_replace_callback(self::CUSTOM_PATTERN, array($this, 'replaceStyle'), $message) ?? '';
     }
 
     /**
