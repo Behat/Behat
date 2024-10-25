@@ -121,7 +121,6 @@ jobs:
               run: ./vendor/bin/psalm --output-format=github
 
     build-phar:
-        needs: tests
         runs-on: ubuntu-latest
         name: Build PHAR file
         steps:
@@ -184,7 +183,7 @@ jobs:
     publish-phar:
         runs-on: ubuntu-latest
         name: Publish the PHAR for release
-        needs: test-phar
+        needs: [test-phar, tests]
         if: github.event_name == 'release'
         steps:
             -   uses: actions/download-artifact@v4
