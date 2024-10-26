@@ -14,7 +14,7 @@ jobs:
         defaults:
             run:
                 shell: bash
-        name: Build and test
+        name: Test
         strategy:
             fail-fast: false
             matrix:
@@ -23,13 +23,6 @@ jobs:
                 composer-mode: [update]
                 symfony-version: ['']
                 include:
-                    # Get the existing 7.2 to publish the phar
-                    -   php: 7.2
-                        os: ubuntu-latest
-                        composer-mode: update
-                        publish-phar: true
-                        symfony-version: ''
-
                     # 7.2 build with lowest dependencies
                     -   php: 7.2
                         os: ubuntu-latest
@@ -108,22 +101,6 @@ jobs:
                 if: matrix.php >= 8.0
                 run: ./bin/behat -fprogress --strict --tags=@php8
 
-            -   name: Build the PHAR
-                if: matrix.publish-phar == true
-                run: |
-                    curl -LSs https://box-project.github.io/box2/installer.php | php &&
-                    export PATH=.:$PATH &&
-                    rm -Rf ./vendor &&
-                    composer install --no-dev -o &&
-                    box.phar build
-
-            -   uses: actions/upload-artifact@v4
-                name: Publish the PHAR
-                if: matrix.publish-phar == true
-                with:
-                    name: behat.phar
-                    path: behat.phar
-
     static-analysis:
         runs-on: ubuntu-latest
         name: Static analysis
@@ -143,10 +120,70 @@ jobs:
             - name: Run Psalm
               run: ./vendor/bin/psalm --output-format=github
 
+    build-phar:
+        runs-on: ubuntu-latest
+        name: Build PHAR file
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.3"
+                  ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
+                  coverage: none
+                  tools: box
+
+            - name: Build the PHAR
+              run: |
+                  composer config platform.php 7.2.34
+                  composer update --no-dev -o
+                  box compile
+
+            - name: cache artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: behat.phar
+                path: behat.phar
+
+
+    test-phar:
+      needs: build-phar
+      runs-on: ubuntu-latest
+      name: test PHAR file
+      strategy:
+        fail-fast: false
+        matrix:
+          php: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4' ]
+      steps:
+        - uses: actions/checkout@v4
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: "${{ matrix.php }}"
+            ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
+            coverage: none
+
+        - name: Install dependencies
+          run: composer install
+
+
+        - uses: actions/download-artifact@v4
+          with:
+            name: behat.phar
+
+        - name: "Check content"
+          run: |
+            ls -R .
+
+        - name: Test the PHAR
+          run: |
+            php ./behat.phar --version
+
     publish-phar:
         runs-on: ubuntu-latest
         name: Publish the PHAR for release
-        needs: tests
+        needs: [test-phar, tests]
         if: github.event_name == 'release'
         steps:
             -   uses: actions/download-artifact@v4
