@@ -2,7 +2,7 @@
     "name": "behat/behat",
     "description": "Scenario-oriented BDD framework for PHP",
     "keywords": ["BDD", "ScenarioBDD", "StoryBDD", "Examples", "Scrum", "Agile", "User story", "Symfony", "business", "development", "testing", "documentation"],
-    "homepage": "http://behat.org/",
+    "homepage": "https://behat.org/",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -49,7 +49,7 @@
 
     "autoload-dev": {
         "psr-4": {
-            "Behat\\Tests\\": "tests/"
+            "Behat\\Tests\\": "tests/Behat/Tests/"
         }
     },
 
