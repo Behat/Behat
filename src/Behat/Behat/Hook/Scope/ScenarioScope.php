@@ -11,7 +11,7 @@
 namespace Behat\Behat\Hook\Scope;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ScenarioInterface as Scenario;
+use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\Hook\Scope\HookScope;
 
 /**
@@ -34,7 +34,7 @@ interface ScenarioScope extends HookScope
     /**
      * Returns scenario.
      *
-     * @return Scenario
+     * @return ScenarioInterface
      */
     public function getScenario();
 }
