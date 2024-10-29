@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.14.0] - 2024-01-10
+
+### Added
+
+* 🎉 Symfony 7 is now supported 🎉 by @dmaicher in [#1442](https://github.com/Behat/Behat/pull/1442)
+* PHP 8.3 is now supported (no code changes were required) by @jrfnl in [#1440](https://github.com/Behat/Behat/pull/1440)
+
+### Fixed
+
+* Renamed method parameters to match signatures from interfaces by @ciaranmcnulty in [#1434](https://github.com/Behat/Behat/pull/1434)
+
+### Internal
+
+* CI improvements by @stof in [#1430](https://github.com/Behat/Behat/pull/1430)
+
 ## [3.13.0] - 2023-04-18
 
 ### Added
