@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\EventDispatcher\ServiceContainer;
 
+use Behat\Behat\Configuration\ServiceContainer\ConfigurationExtension;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
@@ -51,7 +52,7 @@ class EventDispatcherExtension extends BaseExtension
     protected function loadStopOnFailureController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\EventDispatcher\Cli\StopOnFailureController', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+            new Reference(ConfigurationExtension::STOP_ON_FAILURE_ID)
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 100));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.stop_on_failure', $definition);

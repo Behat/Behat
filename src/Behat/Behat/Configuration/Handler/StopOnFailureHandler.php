@@ -25,7 +25,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Enables stop on failure via configuration.
  */
-final class StopOnFailureHandler implements EventSubscriberInterface
+final class StopOnFailureHandler
 {
     
     /**
@@ -43,15 +43,19 @@ final class StopOnFailureHandler implements EventSubscriberInterface
         $this->eventDispatcher = $eventDispatcher;
         $this->resultInterpretation = new StrictInterpretation();
     }
-
-    public static function getSubscribedEvents()
-    {
-        return array(
-            ScenarioTested::AFTER => array('exitOnFailure', -100),
-            ExampleTested::AFTER => array('exitOnFailure', -100),
-        );
-    }
     
+    /**
+     * @param ?ResultInterpretation $resultInterpretation 
+     */
+    public function registerListeners($resultInterpretation = null)
+    {
+        if ($resultInterpretation) {
+            $this->resultInterpretation = $resultInterpretation;
+        }
+
+        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'exitOnFailure'), -100);
+        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'exitOnFailure'), -100);
+    }
 
     /**
      * Exits if scenario is a failure and if stopper is enabled.

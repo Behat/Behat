@@ -23,6 +23,8 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class ConfigurationExtension implements Extension
 {
+    public const STOP_ON_FAILURE_ID = 'configuration.stop_on_failure';
+
     /**
      * {@inheritdoc}
      */
@@ -59,9 +61,7 @@ final class ConfigurationExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        if ($config['stop_on_failure'] === true) {
-            $this->loadStopOnFailureController($container);
-        }
+        $this->loadStopOnFailureController($container, $config);
     }
 
     /**
@@ -75,12 +75,14 @@ final class ConfigurationExtension implements Extension
     /**
      * Loads stop on failure controller.
      */
-    private function loadStopOnFailureController(ContainerBuilder $container)
+    private function loadStopOnFailureController(ContainerBuilder $container, array $config)
     {
         $definition = new Definition('Behat\Behat\Configuration\Handler\StopOnFailureHandler', array(
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
         ));
-        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG);
-        $container->setDefinition('configuration.stop_on_failure', $definition);
+        if ($config['stop_on_failure'] === true) {
+            $definition->addMethodCall('registerListeners');
+        }
+        $container->setDefinition(self::STOP_ON_FAILURE_ID, $definition);
     }
 }
