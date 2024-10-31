@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\EventDispatcher\Cli;
 
-use Behat\Behat\Configuration\Handler\StopOnFailureHandler;
+use Behat\Behat\Config\Handler\StopOnFailureHandler;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
@@ -27,6 +27,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Stops tests on first scenario failure.
@@ -35,6 +36,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class StopOnFailureController implements Controller
 {
+     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
     /**
      * @var StopOnFailureHandler
      */
@@ -43,9 +49,17 @@ final class StopOnFailureController implements Controller
     /**
      * Initializes controller.
      *
-     * @param StopOnFailureHandler $stopOnFailureHandler
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(StopOnFailureHandler $stopOnFailureHandler)
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    /**
+     * @required
+     */
+    public function setStopOnFailureHandler(StopOnFailureHandler $stopOnFailureHandler)
     {
         $this->stopOnFailureHandler = $stopOnFailureHandler;
     }

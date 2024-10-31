@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Configuration\ServiceContainer;
+namespace Behat\Behat\Config\ServiceContainer;
 
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -21,16 +21,16 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * Enables stop on failure controller for Behat.
  */
-final class ConfigurationExtension implements Extension
+final class ConfigExtension implements Extension
 {
-    public const STOP_ON_FAILURE_ID = 'configuration.stop_on_failure';
+    public const STOP_ON_FAILURE_ID = 'config.stop_on_failure';
 
     /**
      * {@inheritdoc}
      */
     public function getConfigKey()
     {
-        return 'configuration';
+        return 'config';
     }
 
     /**
@@ -49,8 +49,7 @@ final class ConfigurationExtension implements Extension
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('stop_on_failure')
-                    ->defaultValue(false)
-                    ->treatNullLike(false)
+                    ->defaultValue(null)
                 ->end()
             ->end()
         ;
@@ -77,7 +76,7 @@ final class ConfigurationExtension implements Extension
      */
     private function loadStopOnFailureController(ContainerBuilder $container, array $config)
     {
-        $definition = new Definition('Behat\Behat\Configuration\Handler\StopOnFailureHandler', array(
+        $definition = new Definition('Behat\Behat\Config\Handler\StopOnFailureHandler', array(
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
         ));
         if ($config['stop_on_failure'] === true) {

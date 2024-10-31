@@ -1,7 +1,7 @@
-Feature: Stop on failure via configuration
+Feature: Stop on failure via config
   In order to stop further execution of steps when first step fails
   As a feature developer
-  I need to have a configuration.stop_on_failure sets to true
+  I need to have a config.stop_on_failure sets to true
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -62,7 +62,7 @@ Feature: Stop on failure via configuration
    Given a file named "behat.yml" with:
       """
       default:
-        configuration:
+        config:
           stop_on_failure: false
       """
     When I run "behat --no-colors --format-settings='{\"paths\": false}' features/failing.feature"
@@ -98,7 +98,7 @@ Feature: Stop on failure via configuration
    Given a file named "behat.yml" with:
       """
       default:
-        configuration:
+        config:
           stop_on_failure: true
       """
     When I run "behat --no-colors --format-settings='{\"paths\": false}' features/failing.feature"

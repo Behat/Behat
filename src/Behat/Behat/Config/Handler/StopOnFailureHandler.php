@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Configuration\Handler;
+namespace Behat\Behat\Config\Handler;
 
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
@@ -20,10 +20,9 @@ use Behat\Testwork\EventDispatcher\Event\SuiteTested;
 use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
 use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Enables stop on failure via configuration.
+ * Enables stop on failure via config.
  */
 final class StopOnFailureHandler
 {
