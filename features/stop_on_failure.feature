@@ -53,7 +53,7 @@ Feature: Stop on failure
            And I have another step that fails
           Then I should have a scenario that failed
 
-        Scenario: 2st Failing
+        Scenario: 2nd Failing
           When I have a step that fails
           Then I should have a scenario that failed
       """
@@ -81,7 +81,7 @@ Feature: Stop on failure
            And I have another step that is missing
           Then I should have a scenario that failed
 
-        Scenario: 2st Failing
+        Scenario: 2nd Failing
           When I have a step that is missing
           Then I should have a scenario that failed
       """

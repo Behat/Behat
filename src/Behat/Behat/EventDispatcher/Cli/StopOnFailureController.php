@@ -37,6 +37,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class StopOnFailureController implements Controller
 {
      /**
+      * @deprecated events are now dispatched in the StopOnFailureHandler
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;

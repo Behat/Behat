@@ -60,7 +60,7 @@ final class ConfigExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadStopOnFailureController($container, $config);
+        $this->loadStopOnFailureHandler($container, $config);
     }
 
     /**
@@ -74,7 +74,7 @@ final class ConfigExtension implements Extension
     /**
      * Loads stop on failure controller.
      */
-    private function loadStopOnFailureController(ContainerBuilder $container, array $config)
+    private function loadStopOnFailureHandler(ContainerBuilder $container, array $config)
     {
         $definition = new Definition('Behat\Behat\Config\Handler\StopOnFailureHandler', array(
             new Reference(EventDispatcherExtension::DISPATCHER_ID)

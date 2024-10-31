@@ -48,7 +48,7 @@ Feature: Stop on failure via config
            And I have another step that fails
           Then I should have a scenario that failed
 
-        Scenario: 2st Failing
+        Scenario: 2nd Failing
           When I have a step that fails
           Then I should have a scenario that failed
 
@@ -102,6 +102,24 @@ Feature: Stop on failure via config
           stop_on_failure: true
       """
     When I run "behat --no-colors --format-settings='{\"paths\": false}' features/failing.feature"
+    Then it should fail with:
+      """
+      --- Failed scenarios:
+
+          features/failing.feature:13
+
+      2 scenarios (1 passed, 1 failed)
+      7 steps (5 passed, 1 failed, 1 skipped)
+      """
+
+  Scenario: with stop_on_failure set to false, but cli option set to true
+   Given a file named "behat.yml" with:
+      """
+      default:
+        config:
+          stop_on_failure: false
+      """
+    When I run "behat --no-colors --stop-on-failure --format-settings='{\"paths\": false}' features/failing.feature"
     Then it should fail with:
       """
       --- Failed scenarios:
