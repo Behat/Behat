@@ -29,7 +29,7 @@
 
     "require-dev": {
         "symfony/process": "^5.4 || ^6.4 || ^7.0",
-        "phpunit/phpunit": "^8.5 || ^9.0",
+        "phpunit/phpunit": "^9.6",
         "herrera-io/box": "~1.6.1",
         "vimeo/psalm": "^4.8"
     },
