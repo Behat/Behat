@@ -35,7 +35,14 @@ so that we adhere to [Semantic Versioning v2.0.0](http://semver.org/spec/v2.0.0.
 6. Make sure you [ran the tests](#running-tests) and didn't break anything. That will save some time on
 [GitHub actions](https://github.com/Behat/Behat/actions)
 7. Commit your code and submit a Pull Request, providing a clear description of the change, including
-the motivation for the proposal
+the motivation for the proposal. 
+
+Please note: Each Pull Request should contain only one new feature or bugfix. If the changes are large, 
+please structure them into multiple smaller commits. If you need to make small refactorings or internal
+changes - for example to fix an already-failing test, rename private variables, or reformat an existing 
+method to make your own change readable - this can be included in the Pull Request but must be 
+committed separately with its own commit message(s). If possible, make these the first commits on 
+your branch to make review easier.
 
 ## Backwards compatibility
 
