@@ -1,0 +1,10 @@
+{
+    "name": "behat/behat-tools",
+    "description": "Behat - Tools",
+    "require-dev": {
+        "humbug/box": "^4.6"
+    },
+    "config": {
+        "allow-plugins": false
+    }
+}

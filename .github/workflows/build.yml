@@ -143,8 +143,8 @@ jobs:
           composer config platform.php 8.1.0
           composer update --no-dev -o
 
-      - name: Build the PHAR
-        run: box compile
+      - name: "Build PHAR file"
+        run: "composer build:phar"
 
       - name: cache artifact
         uses: actions/upload-artifact@v4

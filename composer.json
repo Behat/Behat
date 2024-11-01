@@ -30,7 +30,6 @@
     "require-dev": {
         "symfony/process": "^5.4 || ^6.4 || ^7.0",
         "phpunit/phpunit": "^9.6",
-        "herrera-io/box": "~1.6.1",
         "vimeo/psalm": "^4.8"
     },
 
@@ -59,5 +58,23 @@
         }
     },
 
-    "bin": ["bin/behat"]
+    "bin": ["bin/behat"],
+
+    "scripts": {
+        "build:phar": [
+            "tools/box/vendor/bin/box compile --config ./box.json"
+        ],
+        "post-install-cmd": [
+            "@tools:install"
+        ],
+        "post-update-cmd": [
+            "@tools:update"
+        ],
+        "tools:install": [
+            "composer install --working-dir=./tools/box"
+        ],
+        "tools:update": [
+            "composer update --working-dir=./tools/box"
+        ]
+    }
 }

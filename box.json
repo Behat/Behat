@@ -1,10 +1,16 @@
 {
+    "alias": "behat.phar",
+    "banner": false,
+    "blacklist": [
+        ".github",
+        "features",
+        "tests",
+        "tools"
+    ],
+    "compression": "GZ",
     "files": [
         "LICENSE",
         "i18n.php"
-    ],
-    "compactors": [
-        "KevinGH\\Box\\Compactor\\Php"
     ],
     "output": "behat.phar"
 }
