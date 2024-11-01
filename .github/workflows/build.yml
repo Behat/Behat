@@ -18,13 +18,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4]
+        php: [8.1, 8.2, 8.3, 8.4]
         os: [ubuntu-latest]
         composer-mode: [update]
         symfony-version: ['']
         include:
-          # 7.2 build with lowest dependencies
-          - php: 7.2
+          # Build on the lowest supported PHP with the lowest supported dependencies
+          - php: 8.1
             os: ubuntu-latest
             composer-mode: lowest
             symfony-version: ''
@@ -41,23 +41,16 @@ jobs:
             composer-mode: update
             symfony-version: ''
 
-          # Symfony jobs:
-          - php: 8.1
-            os: ubuntu-latest
-            composer-mode: update
-            symfony-version: '4.4'
+          # Symfony LTS jobs:
           - php: 8.2
             os: ubuntu-latest
             composer-mode: update
             symfony-version: '5.4'
+
           - php: 8.2
             os: ubuntu-latest
             composer-mode: update
-            symfony-version: '6.0'
-          - php: 8.2
-            os: ubuntu-latest
-            composer-mode: update
-            symfony-version: '7.0'
+            symfony-version: '6.4'
 
     steps:
       - uses: actions/checkout@v4
@@ -110,11 +103,19 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.2
+          php-version: 8.1
           ini-values: "zend.exception_ignore_args=Off"
           coverage: none
 
+      # until psalm is updated to v5 which is compatible with Symfony 7
+      - name: Force symfony version for psalm compatibility
+        run: |
+          composer config --global --no-plugins allow-plugins.symfony/flex true &&
+          composer global require symfony/flex
+
       - name: Install dependencies
+        env:
+          SYMFONY_REQUIRE: 5.4.*
         run: composer update
 
       - name: Run Psalm
@@ -129,16 +130,21 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.2"
           ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
           coverage: none
           tools: box
 
-      - name: Build the PHAR
+      # We have to force the composer platform because box only runs on ^8.2, but we need to make sure the dependencies
+      # inside the phar support 8.1.0 (our lowest supported PHP version).
+      # When we drop 8.1, we may be able to drop this (if we can still get box to run on 8.2).
+      - name: Force dependencies for lowest supported PHP version
         run: |
-          composer config platform.php 7.2.34
+          composer config platform.php 8.1.0
           composer update --no-dev -o
-          box compile
+
+      - name: Build the PHAR
+        run: box compile
 
       - name: cache artifact
         uses: actions/upload-artifact@v4
@@ -153,9 +159,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
+        php: ['8.1', '8.2', '8.3', '8.4']
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -166,18 +173,15 @@ jobs:
       - name: Install dependencies
         run: composer install
 
-
       - uses: actions/download-artifact@v4
         with:
           name: behat.phar
 
       - name: Check content
-        run: |
-          ls -R .
+        run: ls -R .
 
       - name: Test the PHAR
-        run: |
-          php ./behat.phar --version
+        run: php ./behat.phar --version
 
   publish-phar:
     name: Publish the PHAR for release
@@ -189,6 +193,7 @@ jobs:
         with:
           name: behat.phar
           path: .
+
       - name: Upload behat.phar
         uses: basefas/upload-release-asset-action@v1
         env:
