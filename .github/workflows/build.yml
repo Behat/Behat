@@ -195,10 +195,9 @@ jobs:
           path: .
 
       - name: Upload behat.phar
-        uses: basefas/upload-release-asset-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: svenstaro/upload-release-action@v2
         with:
-          release_id: ${{ github.event.release.id }}
-          asset_path: behat.phar
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: behat.phar
           asset_name: behat.phar
+          tag: ${{ github.ref }}
