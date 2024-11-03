@@ -19,6 +19,7 @@ use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\SuiteTested;
 use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
 use Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation;
+use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -37,15 +38,11 @@ final class StopOnFailureHandler
      */
     private $resultInterpretation;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(EventDispatcherInterface $eventDispatcher, bool $strict)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->resultInterpretation = new SoftInterpretation();
-    }
+        $this->resultInterpretation = $strict ? new StrictInterpretation() : new SoftInterpretation();
 
-    public function setResultInterpretation(ResultInterpretation $resultInterpretation)
-    {
-        $this->resultInterpretation = $resultInterpretation;
     }
     
     public function registerListeners()
