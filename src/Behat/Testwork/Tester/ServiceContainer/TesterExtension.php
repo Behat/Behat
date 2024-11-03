@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Tester\ServiceContainer;
 
+use Behat\Behat\Config\ServiceContainer\ConfigExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -150,6 +151,7 @@ abstract class TesterExtension implements Extension
             new Reference(self::RESULT_INTERPRETER_ID),
             $strict
         ));
+        $definition->addMethodCall(('setStrictHandler'), array(new Reference(ConfigExtension::STRICT_ID)));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
     }
