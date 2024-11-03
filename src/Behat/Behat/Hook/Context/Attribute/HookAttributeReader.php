@@ -15,9 +15,11 @@ use Behat\Behat\Context\Attribute\AttributeReader;
 use Behat\Hook\AfterFeature;
 use Behat\Hook\AfterScenario;
 use Behat\Hook\AfterStep;
+use Behat\Hook\AfterSuite;
 use Behat\Hook\BeforeFeature;
 use Behat\Hook\BeforeScenario;
 use Behat\Hook\BeforeStep;
+use Behat\Hook\BeforeSuite;
 use Behat\Hook\Hook;
 use ReflectionMethod;
 
@@ -33,6 +35,8 @@ final class HookAttributeReader implements AttributeReader
         BeforeFeature::class => 'Behat\Behat\Hook\Call\BeforeFeature',
         BeforeScenario::class => 'Behat\Behat\Hook\Call\BeforeScenario',
         BeforeStep::class => 'Behat\Behat\Hook\Call\BeforeStep',
+        BeforeSuite::class => 'Behat\Testwork\Hook\Call\BeforeSuite',
+        AfterSuite::class => 'Behat\Testwork\Hook\Call\AfterSuite',
     );
 
     /**
