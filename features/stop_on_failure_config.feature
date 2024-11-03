@@ -57,6 +57,24 @@ Feature: Stop on failure via config
            And I have another step that passes
           Then I should have a scenario that passed
       """
+    And a file named "features/missing-step.feature" with:
+      """
+      Feature: Missing Step Feature
+        In order to test the stop-on-failure and strict features
+        As a behat developer
+        I need to have a feature with a missing step
+
+        Background:
+          Given I have a step that passes
+
+        Scenario: 1st Failing
+          When I have a step that is missing
+          Then I should have a scenario that failed
+
+        Scenario: 1st Passing
+          When I have a step that passes
+          Then I should have a scenario that passed
+      """
 
   Scenario: with stop_on_failure set to false
    Given a file named "behat.yml" with:
@@ -110,6 +128,35 @@ Feature: Stop on failure via config
 
       2 scenarios (1 passed, 1 failed)
       7 steps (5 passed, 1 failed, 1 skipped)
+      """
+      
+  Scenario: with stop_on_failure set to true and a missing step
+   Given a file named "behat.yml" with:
+      """
+      default:
+        config:
+          stop_on_failure: true
+      """
+    When I run "behat --no-colors --format-settings='{\"paths\": false}' features/missing-step.feature"
+    Then it should pass with:
+      """
+      2 scenarios (1 passed, 1 undefined)
+      6 steps (4 passed, 1 undefined, 1 skipped)
+      """
+      
+  Scenario: with stop_on_failure set to true and a missing step in strict mode
+   Given a file named "behat.yml" with:
+      """
+      default:
+        config:
+          stop_on_failure: true
+      """
+      
+    When I run "behat --no-colors --format-settings='{\"paths\": false}' --strict features/missing-step.feature"
+    Then it should fail with:
+      """
+      1 scenario (1 undefined)
+      3 steps (1 passed, 1 undefined, 1 skipped)
       """
 
   Scenario: with stop_on_failure set to false, but cli option set to true

@@ -18,7 +18,7 @@ use Behat\Testwork\EventDispatcher\Event\AfterSuiteAborted;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\SuiteTested;
 use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
-use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
+use Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -40,18 +40,16 @@ final class StopOnFailureHandler
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->resultInterpretation = new StrictInterpretation();
+        $this->resultInterpretation = new SoftInterpretation();
+    }
+
+    public function setResultInterpretation(ResultInterpretation $resultInterpretation)
+    {
+        $this->resultInterpretation = $resultInterpretation;
     }
     
-    /**
-     * @param ?ResultInterpretation $resultInterpretation 
-     */
-    public function registerListeners($resultInterpretation = null)
+    public function registerListeners()
     {
-        if ($resultInterpretation) {
-            $this->resultInterpretation = $resultInterpretation;
-        }
-
         $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'exitOnFailure'), -100);
         $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'exitOnFailure'), -100);
     }

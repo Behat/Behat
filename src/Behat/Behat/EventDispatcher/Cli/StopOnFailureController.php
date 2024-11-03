@@ -87,18 +87,15 @@ final class StopOnFailureController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('strict')) {
+            $this->stopOnFailureHandler->setResultInterpretation(new StrictInterpretation());
+        }
+        
         if (!$input->getOption('stop-on-failure')) {
             return null;
         }
 
-        
-        if ($input->getOption('strict')) {
-            $resultInterpretation = new StrictInterpretation();
-        } else {
-            $resultInterpretation = new SoftInterpretation();
-        }
-
-        $this->stopOnFailureHandler->registerListeners($resultInterpretation);
+        $this->stopOnFailureHandler->registerListeners();
     }
 
 }
