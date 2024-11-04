@@ -23,6 +23,7 @@ use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
 use Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation;
 use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
+use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -87,10 +88,6 @@ final class StopOnFailureController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('strict')) {
-            $this->stopOnFailureHandler->setResultInterpretation(new StrictInterpretation());
-        }
-        
         if (!$input->getOption('stop-on-failure')) {
             return null;
         }

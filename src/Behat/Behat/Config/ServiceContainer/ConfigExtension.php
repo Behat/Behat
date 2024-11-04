@@ -25,7 +25,6 @@ use Symfony\Component\DependencyInjection\Reference;
 final class ConfigExtension implements Extension
 {
     public const STOP_ON_FAILURE_ID = 'config.stop_on_failure';
-    public const STRICT_ID = 'config.strict';
 
     /**
      * {@inheritdoc}
@@ -83,9 +82,10 @@ final class ConfigExtension implements Extension
     private function loadStopOnFailureHandler(ContainerBuilder $container, array $config)
     {
         $definition = new Definition('Behat\Behat\Config\Handler\StopOnFailureHandler', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID),
-            $config['strict']
+            new Reference(EventDispatcherExtension::DISPATCHER_ID)
         ));
+        $definition->addMethodCall('setResultInterpreter', array(new Reference(TesterExtension::RESULT_INTERPRETER_ID)));
+
         if ($config['stop_on_failure'] === true) {
             $definition->addMethodCall('registerListeners');
         }
@@ -97,13 +97,10 @@ final class ConfigExtension implements Extension
      */
     private function loadStrictHandler(ContainerBuilder $container, array $config)
     {
-        $definition = new Definition('Behat\Behat\Config\Handler\StrictHandler', array(
-            new Reference(TesterExtension::RESULT_INTERPRETER_ID)
-        ));
         if ($config['strict'] === true) {
-            $definition->addMethodCall('registerStrictInterpretation');
+            $definition = new Definition('Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation');
+            $definition->addTag(TesterExtension::RESULT_INTERPRETATION_TAG);
+            $container->setDefinition(TesterExtension::RESULT_INTERPRETATION_TAG . '.strict', $definition);
         }
-
-        $container->setDefinition(self::STRICT_ID, $definition);
     }
 }

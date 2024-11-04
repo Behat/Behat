@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\Tester\Cli;
 
-use Behat\Behat\Config\Handler\StrictHandler;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
 use Behat\Testwork\Tester\Result\ResultInterpreter;
@@ -27,7 +26,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class StrictController implements Controller
 {
     /**
-      * @deprecated resultInterpreter is handled in StrictHandler
      * @var ResultInterpreter
      */
     private $resultInterpreter;
@@ -35,8 +33,6 @@ final class StrictController implements Controller
      * @var bool
      */
     private $strict;
-
-    private StrictHandler $strictHandler;
 
     /**
      * Initializes controller.
@@ -48,12 +44,6 @@ final class StrictController implements Controller
     {
         $this->resultInterpreter = $resultInterpreter;
         $this->strict = $strict;
-    }
-
-    /** @required */
-    public function setStrictHandler(StrictHandler $strictHandler)
-    {
-        $this->strictHandler = $strictHandler;
     }
 
     /**
@@ -75,6 +65,6 @@ final class StrictController implements Controller
             return;
         }
 
-        $this->strictHandler->registerStrictInterpretation();
+        $this->resultInterpreter->registerResultInterpretation(new StrictInterpretation());
     }
 }

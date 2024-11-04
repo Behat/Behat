@@ -17,9 +17,7 @@ use Behat\Testwork\EventDispatcher\Event\AfterExerciseAborted;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteAborted;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\SuiteTested;
-use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
-use Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation;
-use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
+use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -27,19 +25,17 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 final class StopOnFailureHandler
 {
-    private ResultInterpretation $resultInterpretation;
+    private ResultInterpreter $resultInterpreter;
 
     public function __construct(
-        private readonly EventDispatcherInterface $eventDispatcher,
-        bool $strict
+        private readonly EventDispatcherInterface $eventDispatcher
     ) {
-        $this->resultInterpretation = $strict ? new StrictInterpretation() : new SoftInterpretation();
 
     }
 
-    public function setResultInterpretation(ResultInterpretation $resultInterpretation)
+    public function setResultInterpreter(ResultInterpreter $resultInterpreter)
     {
-        $this->resultInterpretation = $resultInterpretation;
+        $this->resultInterpreter = $resultInterpreter;
     }
     
     public function registerListeners()
@@ -53,7 +49,7 @@ final class StopOnFailureHandler
      */
     public function exitOnFailure(AfterScenarioTested $event)
     {
-        if (!$this->resultInterpretation->isFailure($event->getTestResult())) {
+        if (0 === $this->resultInterpreter->interpretResult($event->getTestResult())) {
             return;
         }
 
