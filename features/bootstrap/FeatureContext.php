@@ -397,12 +397,17 @@ EOL;
         $message = '';
 
         if ('fail' === $success) {
+            Assert::assertNotEquals(0, $this->getExitCode(), 'Step should FAIL but it PASS.');
+
             if (0 === $this->getExitCode()) {
                 $message = 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
             }
 
             Assert::assertNotEquals(0, $this->getExitCode(), $message);
         } else {
+            Assert::assertEquals(0, $this->getExitCode(), 'Step should PASS but it FAIL.');
+
+
             if (0 !== $this->getExitCode()) {
                 $message = 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
             }
