@@ -27,22 +27,19 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 final class StopOnFailureHandler
 {
-    
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
+    private ResultInterpretation $resultInterpretation;
 
-    /**
-     * @var ResultInterpretation
-     */
-    private $resultInterpretation;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher, bool $strict)
-    {
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher,
+        bool $strict
+    ) {
         $this->resultInterpretation = $strict ? new StrictInterpretation() : new SoftInterpretation();
 
+    }
+
+    public function setResultInterpretation(ResultInterpretation $resultInterpretation)
+    {
+        $this->resultInterpretation = $resultInterpretation;
     }
     
     public function registerListeners()
@@ -53,8 +50,6 @@ final class StopOnFailureHandler
 
     /**
      * Exits if scenario is a failure and if stopper is enabled.
-     *
-     * @param AfterScenarioTested $event
      */
     public function exitOnFailure(AfterScenarioTested $event)
     {

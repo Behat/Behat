@@ -18,14 +18,9 @@ use Behat\Testwork\Tester\Result\ResultInterpreter;
  */
 final class StrictHandler
 {
-    /**
-     * @var ResultInterpreter
-     */
-    private $resultInterpreter;
-
-    public function __construct(ResultInterpreter $resultInterpreter)
-    {
-        $this->resultInterpreter = $resultInterpreter;
+    public function __construct(
+        private readonly ResultInterpreter $resultInterpreter
+    ) {
     }
 
     public function registerStrictInterpretation()
