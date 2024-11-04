@@ -36,10 +36,7 @@ final class StrictController implements Controller
      */
     private $strict;
 
-    /**
-     * @var StrictHandler
-     */
-    private $strictHandler;
+    private StrictHandler $strictHandler;
 
     /**
      * Initializes controller.
