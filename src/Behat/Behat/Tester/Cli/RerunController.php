@@ -15,6 +15,7 @@ use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
+use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,6 +51,8 @@ final class RerunController implements Controller
      */
     private $basepath;
 
+    private ResultInterpreter $resultInterpreter;
+
     /**
      * Initializes controller.
      *
@@ -62,6 +65,11 @@ final class RerunController implements Controller
         $this->eventDispatcher = $eventDispatcher;
         $this->cachePath = null !== $cachePath ? rtrim($cachePath, DIRECTORY_SEPARATOR) : null;
         $this->basepath = $basepath;
+    }
+
+    public function setResultInterpreter(ResultInterpreter $resultInterpreter)
+    {
+        $this->resultInterpreter = $resultInterpreter;
     }
 
     /**
@@ -122,7 +130,7 @@ final class RerunController implements Controller
             return;
         }
 
-        if ($event->getTestResult()->getResultCode() !== TestResult::FAILED) {
+        if ($this->resultInterpreter->interpretResult($event->getTestResult()) === 0) {
             return;
         }
 

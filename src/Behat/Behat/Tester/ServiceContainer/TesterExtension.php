@@ -248,6 +248,9 @@ class TesterExtension extends BaseExtension
             $container->getParameter('paths.base')
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 200));
+        $definition->addMethodCall('setResultInterpreter', array(
+            new Reference(TesterExtension::RESULT_INTERPRETER_ID)
+        ));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.rerun', $definition);
     }
 
