@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.15.0] - 2024-10-29
 
+***Note:** This release also bumps the minor version of behat/gherkin to 4.10.0, which was released on 2024-10-19 with
+  a behaviour-changing bugfix related to the parsing of `\` characters in scenarios.
+  See [the Behat/Gherkin CHANGELOG](https://github.com/Behat/Gherkin/blob/master/CHANGES.md#4100--2024-10-19).*
+
 ### Added
 
 * PHP 8.4 support by @heiglandreas in [#1473](https://github.com/Behat/Behat/pull/1473), @jrfnl in [#1478](https://github.com/Behat/Behat/pull/1478),
