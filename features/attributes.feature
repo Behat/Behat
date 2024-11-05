@@ -283,6 +283,108 @@ Feature: attributes
       6 steps (6 passed)
       """
 
+  @php8 @suite-hooks
+  Scenario: PHP 8 Hook Suite Hook Attributes
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Step\Given, Behat\Step\When, Behat\Step\Then;
+      use Behat\Hook\BeforeSuite, Behat\Hook\AfterSuite;
+
+      class FeatureContext implements \Behat\Behat\Context\Context
+      {
+          #[BeforeSuite]
+          public static function beforeSuite()
+          {
+              echo '= BEFORE SUITE =';
+          }
+
+          #[BeforeSuite('apples')]
+          public static function beforeSuiteApples()
+          {
+              echo '= BEFORE APPLES =';
+          }
+
+          #[AfterSuite]
+          public static function afterSuite()
+          {
+              echo '= AFTER SUITE =';
+          }
+
+          #[AfterSuite('apples')]
+          public static function afterSuiteApples()
+          {
+              echo '= AFTER APPLES =';
+          }
+
+          #[Given('I have :count apple(s)')]
+          public function iHaveFruit($count) { }
+
+          #[When('I eat :count apple(s)')]
+          public function iEatFruit($count) { }
+
+          #[Then('I should have :count apple(s)')]
+          public function iShouldHaveFruit($count) { }
+      }
+      """
+    And a file named "features/some.feature" with:
+      """
+      Feature: Fruit story
+        In order to eat fruit
+        As a little kid
+        I need to have fruit in my pocket
+
+        Scenario: I'm little hungry for apples
+          Given I have 3 apples
+          When I eat 1 apple
+          Then I should have 2 apples
+      """
+    And a file named "behat.yaml" with:
+      """
+      default:
+        suites:
+          apples:
+            contexts:
+              - FeatureContext
+      """
+    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features --suite apples"
+    Then it should pass with:
+      """
+      ┌─ @BeforeSuite # FeatureContext::beforeSuite()
+      │
+      │  = BEFORE SUITE =
+      │
+
+      ┌─ @BeforeSuite apples # FeatureContext::beforeSuiteApples()
+      │
+      │  = BEFORE APPLES =
+      │
+
+      Feature: Fruit story
+        In order to eat fruit
+        As a little kid
+        I need to have fruit in my pocket
+
+        Scenario: I'm little hungry for apples # features/some.feature:6
+          Given I have 3 apples                # FeatureContext::iHaveFruit()
+          When I eat 1 apple                   # FeatureContext::iEatFruit()
+          Then I should have 2 apples          # FeatureContext::iShouldHaveFruit()
+
+      │
+      │  = AFTER SUITE =
+      │
+      └─ @AfterSuite # FeatureContext::afterSuite()
+
+      │
+      │  = AFTER APPLES =
+      │
+      └─ @AfterSuite apples # FeatureContext::afterSuiteApples()
+
+      1 scenario (1 passed)
+      3 steps (3 passed)
+      """
+
   @php8
   Scenario: PHP 8 Hook Step Hook Attributes
     Given a file named "features/bootstrap/FeatureContext.php" with:
