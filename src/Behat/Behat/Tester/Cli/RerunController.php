@@ -130,7 +130,7 @@ final class RerunController implements Controller
             return;
         }
 
-        if ($this->resultInterpreter->interpretResult($event->getTestResult()) === 0) {
+        if ($this->resultInterpreter->interpretResult($event->getTestResult()) === ResultInterpreter::PASS) {
             return;
         }
 
