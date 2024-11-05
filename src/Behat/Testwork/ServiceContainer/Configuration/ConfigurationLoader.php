@@ -213,6 +213,8 @@ final class ConfigurationLoader
     {
         $configs = array();
 
+        $profile = $this->getProfileName($config, $profile);
+
         // first load default profile from current config, but only if custom profile requested
         if ('default' !== $profile && isset($config['default'])) {
             $configs[] = $config['default'];
@@ -229,7 +231,31 @@ final class ConfigurationLoader
             $this->profileFound = true;
         }
 
+        if (!$this->profileFound && isset($config['preferredProfileName'])) {
+            throw new ConfigurationLoadingException(sprintf(
+                'Can not find configuration for `%s` profile.',
+                $config['preferredProfileName']
+            ));
+        }
+
         return $configs;
+    }
+
+    /**
+     * Get the name of the requested profile, after considering any preferred profile name.
+     *
+     * @param array $config
+     * @param string $profile
+     *
+     * @return string
+     */
+    private function getProfileName(array $config, string $profile): string
+    {
+        if (isset($config['preferredProfileName']) && 'default' === $profile) {
+            return $config['preferredProfileName'];
+        }
+
+        return $profile;
     }
 
     /**

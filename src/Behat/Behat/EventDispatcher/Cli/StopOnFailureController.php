@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\EventDispatcher\Cli;
 
+use Behat\Behat\Config\Handler\StopOnFailureHandler;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
@@ -35,15 +36,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 final class StopOnFailureController implements Controller
 {
-    /**
+     /**
+      * @deprecated events are now dispatched in the StopOnFailureHandler
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
     /**
-     * @var ResultInterpretation
+     * @var StopOnFailureHandler
      */
-    private $resultInterpretation;
+    private $stopOnFailureHandler;
 
     /**
      * Initializes controller.
@@ -53,7 +55,14 @@ final class StopOnFailureController implements Controller
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->resultInterpretation = new SoftInterpretation();
+    }
+
+    /**
+     * @required
+     */
+    public function setStopOnFailureHandler(StopOnFailureHandler $stopOnFailureHandler)
+    {
+        $this->stopOnFailureHandler = $stopOnFailureHandler;
     }
 
     /**
@@ -78,32 +87,15 @@ final class StopOnFailureController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('strict')) {
+            $this->stopOnFailureHandler->setResultInterpretation(new StrictInterpretation());
+        }
+        
         if (!$input->getOption('stop-on-failure')) {
             return null;
         }
 
-        if ($input->getOption('strict')) {
-            $this->resultInterpretation = new StrictInterpretation();
-        }
-
-        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'exitOnFailure'), -100);
-        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'exitOnFailure'), -100);
+        $this->stopOnFailureHandler->registerListeners();
     }
 
-    /**
-     * Exits if scenario is a failure and if stopper is enabled.
-     *
-     * @param AfterScenarioTested $event
-     */
-    public function exitOnFailure(AfterScenarioTested $event)
-    {
-        if (!$this->resultInterpretation->isFailure($event->getTestResult())) {
-            return;
-        }
-
-        $this->eventDispatcher->dispatch(new AfterSuiteAborted($event->getEnvironment()), SuiteTested::AFTER);
-        $this->eventDispatcher->dispatch(new AfterExerciseAborted(), ExerciseCompleted::AFTER);
-
-        exit(1);
-    }
 }
