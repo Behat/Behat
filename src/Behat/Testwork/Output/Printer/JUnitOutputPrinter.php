@@ -88,7 +88,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
     /**
      * Extends the current <testsuite> node.
      *
-     * @param array $testsuiteAttributes
+     * @param array<string, string|int|null> $testsuiteAttributes
      */
     public function extendTestsuiteAttributes(array $testsuiteAttributes)
     {
