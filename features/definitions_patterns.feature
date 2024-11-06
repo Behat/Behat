@@ -220,7 +220,7 @@ Feature: Step Definition Pattern
       class FeatureContext implements Context
       {
           /**
-           * @Given I provide parameter :too1234567891123456789012345678901
+           * @Given I provide parameter :too12345678911234567890123456789012
            */
           public function parameterCouldBeNull($param) {}
       }
@@ -234,7 +234,7 @@ Feature: Step Definition Pattern
     When I run "behat -f progress --no-colors"
     Then it should fail with:
       """
-      Token name should not exceed 32 characters, but `too1234567891123456789012345678901` was used.
+      Token name should not exceed 32 characters, but `too12345678911234567890123456789012` was used.
       """
 
   Scenario: Multiline definitions

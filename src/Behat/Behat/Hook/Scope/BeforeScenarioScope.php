@@ -11,7 +11,7 @@
 namespace Behat\Behat\Hook\Scope;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ScenarioInterface as Scenario;
+use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Suite\Suite;
 
@@ -31,7 +31,7 @@ final class BeforeScenarioScope implements ScenarioScope
      */
     private $feature;
     /**
-     * @var Scenario
+     * @var ScenarioInterface
      */
     private $scenario;
 
@@ -40,9 +40,9 @@ final class BeforeScenarioScope implements ScenarioScope
      *
      * @param Environment $env
      * @param FeatureNode $feature
-     * @param Scenario    $scenario
+     * @param ScenarioInterface $scenario
      */
-    public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario)
+    public function __construct(Environment $env, FeatureNode $feature, ScenarioInterface $scenario)
     {
         $this->environment = $env;
         $this->feature = $feature;
@@ -92,7 +92,7 @@ final class BeforeScenarioScope implements ScenarioScope
     /**
      * Returns scenario.
      *
-     * @return Scenario
+     * @return ScenarioInterface
      */
     public function getScenario()
     {

@@ -268,8 +268,8 @@ EOL;
      */
     public function itShouldPassWith($success, PyStringNode $text)
     {
-        $this->itShouldFail($success);
         $this->theOutputShouldContain($text);
+        $this->itShouldFail($success);
     }
 
     /**
@@ -281,8 +281,8 @@ EOL;
      */
     public function itShouldPassWithNoOutput($success)
     {
-        $this->itShouldFail($success);
         Assert::assertEmpty($this->getOutput());
+        $this->itShouldFail($success);
     }
 
     /**
@@ -395,6 +395,7 @@ EOL;
     public function itShouldFail($success)
     {
         $message = '';
+
         if ('fail' === $success) {
             if (0 === $this->getExitCode()) {
                 $message = 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();

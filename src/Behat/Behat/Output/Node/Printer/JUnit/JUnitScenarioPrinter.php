@@ -36,7 +36,7 @@ final class JUnitScenarioPrinter
      */
     private $durationListener;
 
-    public function __construct(ResultToStringConverter $resultConverter, JUnitDurationListener $durationListener = null)
+    public function __construct(ResultToStringConverter $resultConverter, ?JUnitDurationListener $durationListener = null)
     {
         $this->resultConverter = $resultConverter;
         $this->durationListener = $durationListener;
@@ -45,7 +45,7 @@ final class JUnitScenarioPrinter
     /**
      * {@inheritDoc}
      */
-    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, string $file = null): void
+    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null): void
     {
         $name = $this->convertMultipleLinesToOne(
             $scenario instanceof ExampleNode

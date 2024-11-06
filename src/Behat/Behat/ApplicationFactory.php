@@ -10,6 +10,7 @@
 
 namespace Behat\Behat;
 
+use Behat\Behat\Config\ServiceContainer\ConfigExtension;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -93,7 +94,8 @@ final class ApplicationFactory extends BaseFactory
             new HookExtension(),
             new TransformationExtension($processor),
             new OrderingExtension($processor),
-            new HelperContainerExtension($processor)
+            new HelperContainerExtension($processor),
+            new ConfigExtension()
         );
     }
 
@@ -117,10 +119,14 @@ final class ApplicationFactory extends BaseFactory
             $cwd . 'behat.yml',
             $cwd . 'behat.yaml.dist',
             $cwd . 'behat.yml.dist',
+            $cwd . 'behat.dist.yaml',
+            $cwd . 'behat.dist.yml',
             $configDir . 'behat.yaml',
             $configDir . 'behat.yml',
             $configDir . 'behat.yaml.dist',
             $configDir . 'behat.yml.dist',
+            $configDir . 'behat.dist.yaml',
+            $configDir . 'behat.dist.yml',
         );
 
         foreach ($paths as $path) {

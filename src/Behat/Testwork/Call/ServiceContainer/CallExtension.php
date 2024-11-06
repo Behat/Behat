@@ -47,7 +47,7 @@ final class CallExtension implements Extension
      *
      * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ? : new ServiceProcessor();
     }
@@ -77,7 +77,7 @@ final class CallExtension implements Extension
             ->children()
                 ->scalarNode('error_reporting')
                     ->info('Call executor will catch exceptions matching this level')
-                    ->defaultValue(E_ALL | E_STRICT)
+                    ->defaultValue(E_ALL)
                 ->end()
             ->end()
         ;
