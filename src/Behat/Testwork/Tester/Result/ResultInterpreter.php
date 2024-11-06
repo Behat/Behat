@@ -19,6 +19,9 @@ use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
  */
 final class ResultInterpreter
 {
+    public const PASS = 0;
+    public const FAIL = 1;
+
     /**
      * @var ResultInterpretation[]
      */
@@ -45,10 +48,10 @@ final class ResultInterpreter
     {
         foreach ($this->interpretations as $interpretation) {
             if ($interpretation->isFailure($result)) {
-                return 1;
+                return self::FAIL;
             }
         }
 
-        return 0;
+        return self::PASS;
     }
 }

@@ -10,6 +10,7 @@
 
 namespace Behat\Behat;
 
+use Behat\Behat\Config\ServiceContainer\ConfigExtension;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -93,7 +94,8 @@ final class ApplicationFactory extends BaseFactory
             new HookExtension(),
             new TransformationExtension($processor),
             new OrderingExtension($processor),
-            new HelperContainerExtension($processor)
+            new HelperContainerExtension($processor),
+            new ConfigExtension()
         );
     }
 

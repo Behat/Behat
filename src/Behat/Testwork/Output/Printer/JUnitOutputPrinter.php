@@ -85,6 +85,16 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
         $this->addAttributesToNode($this->currentTestsuite, $testsuiteAttributes);
     }
 
+    /**
+     * Extends the current <testsuite> node.
+     *
+     * @param array<string, string|int|null> $testsuiteAttributes
+     */
+    public function extendTestsuiteAttributes(array $testsuiteAttributes)
+    {
+        $this->addAttributesToNode($this->currentTestsuite, $testsuiteAttributes);
+    }
+
 
     /**
      * Adds a new <testcase> node.

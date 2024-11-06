@@ -5,16 +5,16 @@ namespace Behat\Tests\Definition\Pattern;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\Pattern\Policy\PatternPolicy;
 use PHPUnit\Framework\TestCase;
+use Behat\Behat\Definition\Exception\UnknownPatternException;
 
 /**
- * Class PatternTransformerTest
  * @author Julien Deniau <julien.deniau@mapado.com>
  */
 class PatternTransformerTest extends TestCase
 {
-    public function testTransformPatternToRegexCache()
+    public function testTransformPatternToRegexCache(): void
     {
-        $policy = $this->createStub('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
+        $policy = $this->createStub(PatternPolicy::class);
         $policy->method('supportsPattern')
             ->willReturn(true);
         $policy->method('transformPatternToRegex')
@@ -35,10 +35,10 @@ class PatternTransformerTest extends TestCase
         $this->assertEquals('/hi world/', $regex3);
     }
 
-    public function testTransformPatternToRegexCacheAndRegisterNewPolicy()
+    public function testTransformPatternToRegexCacheAndRegisterNewPolicy(): void
     {
         // first pattern
-        $policy1 = $this->createMock('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
+        $policy1 = $this->createMock(PatternPolicy::class);
         $policy1->method('supportsPattern')->willReturn(true);
         $policy1->expects($this->exactly(2))
             ->method('transformPatternToRegex')
@@ -46,7 +46,7 @@ class PatternTransformerTest extends TestCase
             ->willReturn('/hello world/');
 
         // second pattern
-        $policy2 = $this->createMock('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
+        $policy2 = $this->createMock(PatternPolicy::class);
         $policy2->expects($this->never())->method('supportsPattern');
         $policy2->expects($this->never())->method('transformPatternToRegex');
 
@@ -63,9 +63,9 @@ class PatternTransformerTest extends TestCase
         $this->assertEquals('/hello world/', $regex3);
     }
 
-    public function testTransformPatternToRegexNoMatch()
+    public function testTransformPatternToRegexNoMatch(): void
     {
-        $policy = $this->createMock('Behat\Behat\Definition\Pattern\Policy\PatternPolicy');
+        $policy = $this->createMock(PatternPolicy::class);
         $policy->method('supportsPattern')
             ->with($this->equalTo('hello world'))
             ->willReturn(false);
@@ -75,7 +75,7 @@ class PatternTransformerTest extends TestCase
         $testedInstance = new PatternTransformer();
         $testedInstance->registerPatternPolicy($policy);
 
-        $this->expectException('\Behat\Behat\Definition\Exception\UnknownPatternException');
+        $this->expectException(UnknownPatternException::class);
         $this->expectExceptionMessage("Can not find policy for a pattern `hello world`.");
         $regex = $testedInstance->transformPatternToRegex('hello world');
     }

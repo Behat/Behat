@@ -4,6 +4,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.15.0] - 2024-10-29
+
+***Note:** This release also bumps the minor version of behat/gherkin to 4.10.0, which was released on 2024-10-19 with
+  a behaviour-changing bugfix related to the parsing of `\` characters in scenarios.
+  See [the Behat/Gherkin CHANGELOG](https://github.com/Behat/Gherkin/blob/master/CHANGES.md#4100--2024-10-19).*
+
+### Added
+
+* PHP 8.4 support by @heiglandreas in [#1473](https://github.com/Behat/Behat/pull/1473), @jrfnl in [#1478](https://github.com/Behat/Behat/pull/1478),
+  @jrfnl in [#1477](https://github.com/Behat/Behat/pull/1477)
+* Support config files named `behat.dist.y[a]ml` by @uuf6429 in [#1464](https://github.com/Behat/Behat/pull/1464)
+* Add a `--rerun-only` flag to immediately exit 0 without running anything if there were no failures on the previous run
+  by @Treast in [#1466](https://github.com/Behat/Behat/pull/1466)
+* Allow profiles to override extensions in the config file by @Zayon in [#1341](https://github.com/Behat/Behat/pull/1341)
+* Support configuring a preferred profile to use instead of `default` if nothing was specified at runtime
+  by @andrewnicols in [#1334](https://github.com/Behat/Behat/pull/1334)
+* Add void return type when generating new snippets by @carlos-granados in [#1463](https://github.com/Behat/Behat/pull/1463)
+
+### Fixed
+
+* Fix enforcing that 32 character (or longer) turnip pattern names are not allowed
+  by @ivastly in [#1457](https://github.com/Behat/Behat/pull/1457) and @acoulton in [#1483](https://github.com/Behat/Behat/pull/1483)
+* Fix generating the PHAR for releases by upgrading the build tooling by @heiglandreas in [#1462](https://github.com/Behat/Behat/pull/1462)
+
+### Internal
+
+* Improve code readability; use ::class references by @uuf6429 in [#1485](https://github.com/Behat/Behat/pull/1485)
+* Fix autoloading unit tests and improve some code style & assertion failure messages by @uuf6429 in [#1427](https://github.com/Behat/Behat/pull/1427),
+  [#1486](https://github.com/Behat/Behat/pull/1486) and [#1487](https://github.com/Behat/Behat/pull/1487) and by
+  @jrfnl in [#1479](https://github.com/Behat/Behat/pull/1479)
+* Add .editorconfig file by @chapeupreto in [#1418](https://github.com/Behat/Behat/pull/1418)
+* Updates to github actions workflows @jrfnl in [#1475](https://github.com/Behat/Behat/pull/1475),[#1474](https://github.com/Behat/Behat/pull/1474),
+* Update contributing docs and README links by @carlos-granados in [#1489](https://github.com/Behat/Behat/pull/1489) and
+  [#1492](https://github.com/Behat/Behat/pull/1492)
+
+## [3.14.0] - 2024-01-10
+
+### Added
+
+* 🎉 Symfony 7 is now supported 🎉 by @dmaicher in [#1442](https://github.com/Behat/Behat/pull/1442)
+* PHP 8.3 is now supported (no code changes were required) by @jrfnl in [#1440](https://github.com/Behat/Behat/pull/1440)
+
+### Fixed
+
+* Renamed method parameters to match signatures from interfaces by @ciaranmcnulty in [#1434](https://github.com/Behat/Behat/pull/1434)
+
+### Internal
+
+* CI improvements by @stof in [#1430](https://github.com/Behat/Behat/pull/1430)
+
 ## [3.13.0] - 2023-04-18
 
 ### Added

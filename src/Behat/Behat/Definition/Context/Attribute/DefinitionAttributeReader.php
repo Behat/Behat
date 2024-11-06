@@ -12,10 +12,8 @@ namespace Behat\Behat\Definition\Context\Attribute;
 
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
-use Behat\Step\Definition;
-use Behat\Step\Given;
-use Behat\Step\Then;
-use Behat\Step\When;
+use Behat\Step as Attribute;
+use Behat\Behat\Definition\Call;
 use ReflectionMethod;
 
 /**
@@ -26,12 +24,12 @@ use ReflectionMethod;
 final class DefinitionAttributeReader implements AttributeReader
 {
     /**
-     * @var string[]
+     * @var array<class-string<Attribute\Definition>, class-string<Call\RuntimeDefinition>>
      */
-    private static $classes = array(
-        Given::class => 'Behat\Behat\Definition\Call\Given',
-        When::class  => 'Behat\Behat\Definition\Call\When',
-        Then::class  => 'Behat\Behat\Definition\Call\Then',
+    private static $attributeToCallMap = array(
+        Attribute\Given::class => Call\Given::class,
+        Attribute\When::class  => Call\When::class,
+        Attribute\Then::class  => Call\Then::class,
     );
 
     /**
@@ -61,11 +59,11 @@ final class DefinitionAttributeReader implements AttributeReader
         /**
          * @psalm-suppress UndefinedClass (ReflectionAttribute is PHP 8.0 only)
          */
-        $attributes = $method->getAttributes(Definition::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $method->getAttributes(Attribute\Definition::class, \ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];
         foreach ($attributes as $attribute) {
-            $class = self::$classes[$attribute->getName()];
+            $class = self::$attributeToCallMap[$attribute->getName()];
             $callable = array($contextClass, $method->getName());
             $description = null;
             if ($docBlock = $method->getDocComment()) {
