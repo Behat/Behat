@@ -32,6 +32,11 @@ final class JUnitFeaturePrinter implements FeaturePrinter
     private $statistics;
 
     /**
+     * @var FeatureNode
+     */
+    private $currentFeature;
+
+    /**
      * @var JUnitDurationListener|null
      */
     private $durationListener;
@@ -47,6 +52,18 @@ final class JUnitFeaturePrinter implements FeaturePrinter
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature)
     {
+        $this->statistics->reset();
+        $this->currentFeature = $feature;
+        /** @var JUnitOutputPrinter $outputPrinter */
+        $outputPrinter = $formatter->getOutputPrinter();
+        $outputPrinter->addTestsuite();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function printFooter(Formatter $formatter, TestResult $result)
+    {
         $stats = $this->statistics->getScenarioStatCounts();
 
         if (0 === count($stats)) {
@@ -58,21 +75,16 @@ final class JUnitFeaturePrinter implements FeaturePrinter
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $outputPrinter->addTestsuite(array(
-            'name' => $feature->getTitle(),
+        $outputPrinter->extendTestsuiteAttributes(array(
+            'name' => $this->currentFeature->getTitle(),
             'tests' => $totalCount,
             'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[StepResult::UNDEFINED],
-            'time' => $this->durationListener ? $this->durationListener->getFeatureDuration($feature) : '',
+            'time' => $this->durationListener ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
         ));
-        $this->statistics->reset();
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function printFooter(Formatter $formatter, TestResult $result)
-    {
+        $this->statistics->reset();
+        $this->currentFeature = null;
     }
 }
