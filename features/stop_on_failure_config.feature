@@ -80,7 +80,7 @@ Feature: Stop on failure via config
    Given a file named "behat.yml" with:
       """
       default:
-        config:
+        testers:
           stop_on_failure: false
       """
     When I run "behat --no-colors --format-settings='{\"paths\": false}' features/failing.feature"
@@ -116,7 +116,7 @@ Feature: Stop on failure via config
    Given a file named "behat.yml" with:
       """
       default:
-        config:
+        testers:
           stop_on_failure: true
       """
     When I run "behat --no-colors --format-settings='{\"paths\": false}' features/failing.feature"
@@ -134,7 +134,7 @@ Feature: Stop on failure via config
    Given a file named "behat.yml" with:
       """
       default:
-        config:
+        testers:
           stop_on_failure: true
       """
     When I run "behat --no-colors --format-settings='{\"paths\": false}' features/missing-step.feature"
@@ -148,7 +148,7 @@ Feature: Stop on failure via config
    Given a file named "behat.yml" with:
       """
       default:
-        config:
+        testers:
           stop_on_failure: true
       """
       
@@ -163,7 +163,7 @@ Feature: Stop on failure via config
    Given a file named "behat.yml" with:
       """
       default:
-        config:
+        testers:
           stop_on_failure: false
       """
     When I run "behat --no-colors --stop-on-failure --format-settings='{\"paths\": false}' features/failing.feature"

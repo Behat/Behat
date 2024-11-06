@@ -8,7 +8,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Config\Handler;
+namespace Behat\Testwork\Tester\Handler;
+
 
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;

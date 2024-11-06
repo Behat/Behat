@@ -12,6 +12,7 @@ namespace Behat\Testwork\Tester\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
+use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -36,6 +37,7 @@ abstract class TesterExtension implements Extension
     public const SUITE_TESTER_ID = 'tester.suite';
     public const SPECIFICATION_TESTER_ID = 'tester.specification';
     public const RESULT_INTERPRETER_ID = 'tester.result.interpreter';
+    public const STOP_ON_FAILURE_ID = 'tester.stop_on_failure';
 
     /**
      * Available extension points
@@ -83,6 +85,9 @@ abstract class TesterExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
+                    ->scalarNode('stop_on_failure')
+                    ->defaultValue(null)
+                ->end()
                 ->booleanNode('strict')
                     ->info('Sets the strict mode for result interpretation')
                     ->defaultFalse()
@@ -101,8 +106,9 @@ abstract class TesterExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadExerciseController($container, $config['skip']);
+        $this->loadStopOnFailureHandler($container, $config['stop_on_failure']);
         $this->loadStrictController($container, $config['strict']);
-        $this->loadResultInterpreter($container);
+        $this->loadResultInterpreter($container, $config['strict']);
         $this->loadExercise($container);
         $this->loadSuiteTester($container);
         $this->loadSpecificationTester($container);
@@ -137,6 +143,23 @@ abstract class TesterExtension implements Extension
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
     }
+    
+    
+    /**
+     * Loads stop on failure controller.
+     */
+    private function loadStopOnFailureHandler(ContainerBuilder $container, ?bool $stopOnFailure)
+    {
+        $definition = new Definition('Behat\Testwork\Tester\Handler\StopOnFailureHandler', array(
+            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+        ));
+        $definition->addMethodCall('setResultInterpreter', array(new Reference(TesterExtension::RESULT_INTERPRETER_ID)));
+
+        if ($stopOnFailure === true) {
+            $definition->addMethodCall('registerListeners');
+        }
+        $container->setDefinition(self::STOP_ON_FAILURE_ID, $definition);
+    }
 
     /**
      * Loads exercise cli controllers.
@@ -147,8 +170,7 @@ abstract class TesterExtension implements Extension
     protected function loadStrictController(ContainerBuilder $container, $strict = false)
     {
         $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', array(
-            new Reference(self::RESULT_INTERPRETER_ID),
-            $strict
+            new Reference(self::RESULT_INTERPRETER_ID)
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
@@ -159,7 +181,7 @@ abstract class TesterExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadResultInterpreter(ContainerBuilder $container)
+    protected function loadResultInterpreter(ContainerBuilder $container, bool $strict)
     {
         $definition = new Definition('Behat\Testwork\Tester\Result\ResultInterpreter');
         $container->setDefinition(self::RESULT_INTERPRETER_ID, $definition);
@@ -167,6 +189,13 @@ abstract class TesterExtension implements Extension
         $definition = new Definition('Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation');
         $definition->addTag(self::RESULT_INTERPRETATION_TAG);
         $container->setDefinition(self::RESULT_INTERPRETATION_TAG . '.soft', $definition);
+
+        
+        if ($strict) {
+            $definition = new Definition('Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation');
+            $definition->addTag(TesterExtension::RESULT_INTERPRETATION_TAG);
+            $container->setDefinition(TesterExtension::RESULT_INTERPRETATION_TAG . '.strict', $definition);
+        }
     }
 
     /**

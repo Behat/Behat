@@ -36,7 +36,7 @@ Feature: Strict type defined in configuration file
     And a file named "behat.yml" with:
       """
       default:
-        config:
+        testers:
           strict: false
       """
     When I run "behat --no-colors -f progress features/coffee.feature"
@@ -51,7 +51,7 @@ Feature: Strict type defined in configuration file
     Given a file named "behat.yml" with:
       """
       default:
-        config:
+        testers:
           strict: true
       """
     When I run "behat --no-colors -f progress features/coffee.feature"

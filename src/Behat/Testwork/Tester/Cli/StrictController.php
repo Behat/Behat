@@ -29,10 +29,6 @@ final class StrictController implements Controller
      * @var ResultInterpreter
      */
     private $resultInterpreter;
-    /**
-     * @var bool
-     */
-    private $strict;
 
     /**
      * Initializes controller.
@@ -40,10 +36,9 @@ final class StrictController implements Controller
      * @param ResultInterpreter $resultInterpreter
      * @param bool           $strict
      */
-    public function __construct(ResultInterpreter $resultInterpreter, $strict = false)
+    public function __construct(ResultInterpreter $resultInterpreter)
     {
         $this->resultInterpreter = $resultInterpreter;
-        $this->strict = $strict;
     }
 
     /**
@@ -61,7 +56,7 @@ final class StrictController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->strict && !$input->getOption('strict')) {
+        if (!$input->getOption('strict')) {
             return;
         }
 
