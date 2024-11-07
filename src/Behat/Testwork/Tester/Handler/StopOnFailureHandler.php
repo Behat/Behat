@@ -50,7 +50,7 @@ final class StopOnFailureHandler
      */
     public function exitOnFailure(AfterScenarioTested $event)
     {
-        if (0 === $this->resultInterpreter->interpretResult($event->getTestResult())) {
+        if (ResultInterpreter::PASS === $this->resultInterpreter->interpretResult($event->getTestResult())) {
             return;
         }
 

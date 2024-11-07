@@ -108,7 +108,7 @@ abstract class TesterExtension implements Extension
         $this->loadExerciseController($container, $config['skip']);
         $this->loadStopOnFailureHandler($container, $config['stop_on_failure']);
         $this->loadStrictController($container, $config['strict']);
-        $this->loadResultInterpreter($container, $config['strict']);
+        $this->loadResultInterpreter($container);
         $this->loadExercise($container);
         $this->loadSuiteTester($container);
         $this->loadSpecificationTester($container);
@@ -170,7 +170,8 @@ abstract class TesterExtension implements Extension
     protected function loadStrictController(ContainerBuilder $container, $strict = false)
     {
         $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', array(
-            new Reference(self::RESULT_INTERPRETER_ID)
+            new Reference(self::RESULT_INTERPRETER_ID),
+            $strict
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
@@ -181,7 +182,7 @@ abstract class TesterExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadResultInterpreter(ContainerBuilder $container, bool $strict)
+    protected function loadResultInterpreter(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Tester\Result\ResultInterpreter');
         $container->setDefinition(self::RESULT_INTERPRETER_ID, $definition);
@@ -189,13 +190,6 @@ abstract class TesterExtension implements Extension
         $definition = new Definition('Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation');
         $definition->addTag(self::RESULT_INTERPRETATION_TAG);
         $container->setDefinition(self::RESULT_INTERPRETATION_TAG . '.soft', $definition);
-
-        
-        if ($strict) {
-            $definition = new Definition('Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation');
-            $definition->addTag(TesterExtension::RESULT_INTERPRETATION_TAG);
-            $container->setDefinition(TesterExtension::RESULT_INTERPRETATION_TAG . '.strict', $definition);
-        }
     }
 
     /**
