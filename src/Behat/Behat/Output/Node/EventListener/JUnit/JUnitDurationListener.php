@@ -15,13 +15,17 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 
 final class JUnitDurationListener implements EventListener
 {
+    /** @var array<string, Timer> */
     private $scenarioTimerStore = array();
+    /** @var array<string, Timer> */
     private $featureTimerStore = array();
+    /** @var array<string, float> */
     private $resultStore = array();
+    /** @var array<string, float> */
     private $featureResultStore = array();
 
     /** @inheritdoc */
-    public function listenEvent(Formatter $formatter, Event $event, $eventName)
+    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         $this->captureBeforeScenarioEvent($event);
         $this->captureBeforeFeatureTested($event);
@@ -29,19 +33,23 @@ final class JUnitDurationListener implements EventListener
         $this->captureAfterFeatureEvent($event);
     }
 
-    public function getDuration(ScenarioLikeInterface $scenario)
+    public function getDuration(ScenarioLikeInterface $scenario): string
     {
         $key = $this->getHash($scenario);
-        return array_key_exists($key, $this->resultStore) ? $this->resultStore[$key] : '';
+        return array_key_exists($key, $this->resultStore)
+            ? number_format($this->resultStore[$key], 3, '.', '')
+            : '';
     }
 
-    public function getFeatureDuration(FeatureNode $feature)
+    public function getFeatureDuration(FeatureNode $feature): string
     {
         $key = $this->getHash($feature);
-        return array_key_exists($key, $this->featureResultStore) ? $this->featureResultStore[$key] : '';
+        return array_key_exists($key, $this->featureResultStore)
+            ? number_format($this->featureResultStore[$key], 3, '.', '')
+            : '';
     }
 
-    private function captureBeforeFeatureTested(Event $event)
+    private function captureBeforeFeatureTested(Event $event): void
     {
         if (!$event instanceof BeforeFeatureTested) {
             return;
@@ -50,7 +58,7 @@ final class JUnitDurationListener implements EventListener
         $this->featureTimerStore[$this->getHash($event->getFeature())] = $this->startTimer();
     }
 
-    private function captureBeforeScenarioEvent(Event $event)
+    private function captureBeforeScenarioEvent(Event $event): void
     {
         if (!$event instanceof BeforeScenarioTested) {
             return;
@@ -59,7 +67,7 @@ final class JUnitDurationListener implements EventListener
         $this->scenarioTimerStore[$this->getHash($event->getScenario())] = $this->startTimer();
     }
 
-    private function captureAfterScenarioEvent(Event $event)
+    private function captureAfterScenarioEvent(Event $event): void
     {
         if (!$event instanceof AfterScenarioTested) {
             return;
@@ -69,11 +77,12 @@ final class JUnitDurationListener implements EventListener
         $timer = $this->scenarioTimerStore[$key];
         if ($timer instanceof Timer) {
             $timer->stop();
-            $this->resultStore[$key] = round($timer->getTime());
+            $this->resultStore[$key] = $timer->getTime();
+            unset($this->scenarioTimerStore[$key]);
         }
     }
 
-    private function captureAfterFeatureEvent(Event $event)
+    private function captureAfterFeatureEvent(Event $event): void
     {
         if (!$event instanceof AfterFeatureTested) {
             return;
@@ -83,17 +92,17 @@ final class JUnitDurationListener implements EventListener
         $timer = $this->featureTimerStore[$key];
         if ($timer instanceof Timer) {
             $timer->stop();
-            $this->featureResultStore[$key] = round($timer->getTime());
+            $this->featureResultStore[$key] = $timer->getTime();
+            unset($this->featureTimerStore[$key]);
         }
     }
 
-    private function getHash(KeywordNodeInterface $node)
+    private function getHash(KeywordNodeInterface $node): string
     {
         return spl_object_hash($node);
     }
 
-    /** @return Timer */
-    private function startTimer()
+    private function startTimer(): Timer
     {
         $timer = new Timer();
         $timer->start();
