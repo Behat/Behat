@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.16.0] - 2024-11-08
+
+### Changed
+
+* Drop support for PHP < 8.1, Symfony < 5.4 and Symfony 6.0 - 6.3. In future Behat will drop support for PHP and symfony
+  versions as they reach EOL. by @AlexSkrypnyk in [#1504](https://github.com/Behat/Behat/pull/1504)
+* ApplicationFactory::VERSION is deprecated and will not be updated, Behat now internally uses composer's runtime API
+  to report the running version. by @acoulton in [#1520](https://github.com/Behat/Behat/pull/1520)
+* API changes to 2 final Behat classes that are not considered part of the public API (but were not explicitly marked
+  as such). This may affect users who are creating instances direct rather than through the DI container as expected.
+  See Behat\Behat\EventDispatcher\Cli\StopOnFailureController in #1501 and Behat\Behat\Tester\Cli\RerunController in #1518.
+
+### Added
+
+* Render JUnit test durations with millisecond precision e.g. `1.234` rather than only as integer seconds
+  by @uuf6429 in [#1460](https://github.com/Behat/Behat/pull/1460)
+* Support specifying `stop_on_failure` within behat.yml by @jdeniau in [#1512](https://github.com/Behat/Behat/pull/1512),
+  [#1501](https://github.com/Behat/Behat/pull/1501) and [#1516](https://github.com/Behat/Behat/pull/1516)
+* Allow BeforeSuite/AfterSuite hooks to be marked with attributes by @rpkamp in [#1511](https://github.com/Behat/Behat/pull/1511)
+
+### Fixed
+
+* `--rerun` all tests that should be considered failed (including undefined, when strict) by @carlos-granados in [#1518](https://github.com/Behat/Behat/pull/1518)
+* Improve handling exceptions from unsupported PHPUnit versions by @acoulton and @uuf6429 in [#1521](https://github.com/Behat/Behat/pull/1521)
+* Fix high memory consumption when using Junit formatter by @simon-auch in [#1423](https://github.com/Behat/Behat/pull/1423)
+* Fix error when attempting to format long output messages by @jonpugh in [#1439](https://github.com/Behat/Behat/pull/1439)
+
+### Internal
+
+* Remove the unnecessary alias of the ScenarioInterface as it just causes confusion by @carlos-granados in [#1500](https://github.com/Behat/Behat/pull/1500)
+* Improve output when behat's own tests pass or fail unexpectedly by @jdeniau in [#1515](https://github.com/Behat/Behat/pull/1515)
+* Update guidance on submitting PRs by @acoulton in [#1505](https://github.com/Behat/Behat/pull/1505)
+* Fix indentation in Github Actions config by @AlexSkrypnyk in [#1502](https://github.com/Behat/Behat/pull/1502)
+* Fix Github Actions phar upload for the release by @carlos-granados in [#1509](https://github.com/Behat/Behat/pull/1509)
+
 ## [3.15.0] - 2024-10-29
 
 ***Note:** This release also bumps the minor version of behat/gherkin to 4.10.0, which was released on 2024-10-19 with
@@ -1066,6 +1101,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.16.0]: https://github.com/Behat/Behat/compare/v3.15.0...v3.16.0
+[3.15.0]: https://github.com/Behat/Behat/compare/v3.14.0...v3.15.0
+[3.14.0]: https://github.com/Behat/Behat/compare/v3.13.0...v3.14.0
 [3.13.0]: https://github.com/Behat/Behat/compare/v3.12.0...v3.13.0
 [3.12.0]: https://github.com/Behat/Behat/compare/v3.11.0...v3.12.0
 [3.11.0]: https://github.com/Behat/Behat/compare/v3.10.0...v3.11.0
