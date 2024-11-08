@@ -29,6 +29,7 @@
     },
 
     "require-dev": {
+        "symfony/polyfill-php84": "^1.31",
         "symfony/process": "^5.4 || ^6.4 || ^7.0",
         "phpunit/phpunit": "^9.6",
         "herrera-io/box": "~1.6.1",
