@@ -67,7 +67,7 @@ final class JUnitScenarioPrinter
     {
         $name = implode(' ', array_map(function ($l) {
             return trim($l);
-        }, explode("\n", $scenario->getTitle())));
+        }, explode("\n", $scenario->getTitle() ?? '')));
 
         if ($scenario instanceof ExampleNode) {
             $name = $this->buildExampleName($scenario);
