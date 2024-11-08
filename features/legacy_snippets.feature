@@ -12,7 +12,7 @@ Feature: Legacy Snippets
           Given I have magically created 10$
 
         Scenario: Single quotes
-          When I have chose 'coffee with turkey' in coffee machine
+          When I have chosen 'coffee with turkey' in coffee machine
           Then I should have 'turkey with coffee sauce'
           And I should get a 'super/string':
             '''
@@ -24,7 +24,7 @@ Feature: Legacy Snippets
             '''
 
         Scenario: Double quotes
-          When I have chose "pizza tea" in coffee machine
+          When I have chosen "pizza tea" in coffee machine
           And do something undefined with \1
           Then I should have "pizza tea"
           And I should get a "super/string":
@@ -70,9 +70,9 @@ Feature: Legacy Snippets
           }
 
           /**
-           * @When /^I have chose '([^']*)' in coffee machine$/
+           * @When /^I have chosen '([^']*)' in coffee machine$/
            */
-          public function iHaveChoseCoffeeWithTurkeyInCoffeeMachine($arg1): void
+          public function iHaveChosenInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
@@ -80,7 +80,7 @@ Feature: Legacy Snippets
           /**
            * @Then /^I should have '([^']*)'$/
            */
-          public function iShouldHaveTurkeyWithCoffeeSauce($arg1): void
+          public function iShouldHave($arg1): void
           {
               throw new PendingException();
           }
@@ -88,7 +88,7 @@ Feature: Legacy Snippets
           /**
            * @Then /^I should get a '([^']*)':$/
            */
-          public function iShouldGetASuperString($arg1, PyStringNode $string): void
+          public function iShouldGetA($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -102,9 +102,9 @@ Feature: Legacy Snippets
           }
 
           /**
-           * @When /^I have chose "([^"]*)" in coffee machine$/
+           * @When /^I have chosen "([^"]*)" in coffee machine$/
            */
-          public function iHaveChoseInCoffeeMachine($arg1): void
+          public function iHaveChosenInCoffeeMachine2($arg1): void
           {
               throw new PendingException();
           }
@@ -120,7 +120,7 @@ Feature: Legacy Snippets
           /**
            * @Then /^I should have "([^"]*)"$/
            */
-          public function iShouldHave($arg1): void
+          public function iShouldHave2($arg1): void
           {
               throw new PendingException();
           }
@@ -128,7 +128,7 @@ Feature: Legacy Snippets
           /**
            * @Then /^I should get a "([^"]*)":$/
            */
-          public function iShouldGetA($arg1, PyStringNode $string): void
+          public function iShouldGetA2($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
@@ -199,9 +199,9 @@ Feature: Legacy Snippets
           }
 
           /**
-           * @When I have chose :arg1 in coffee machine
+           * @When I have chosen :arg1 in coffee machine
            */
-          public function iHaveChoseInCoffeeMachine($arg1): void
+          public function iHaveChosenInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
