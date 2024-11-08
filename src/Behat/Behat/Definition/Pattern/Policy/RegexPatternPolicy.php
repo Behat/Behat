@@ -98,7 +98,7 @@ final class RegexPatternPolicy implements PatternPolicy
      */
     private function generateCanonicalText($stepText)
     {
-        $canonicalText = preg_replace(array_keys(self::$replacePatterns), '', $stepText);
+        $canonicalText = preg_replace(array_keys(self::$replacePatterns), '', $this->escapeStepText($stepText));
         $canonicalText = Transliterator::transliterate($canonicalText, ' ');
         $canonicalText = preg_replace('/[^a-zA-Z\_\ ]/', '', $canonicalText);
         $canonicalText = str_replace(' ', '', ucwords($canonicalText));
