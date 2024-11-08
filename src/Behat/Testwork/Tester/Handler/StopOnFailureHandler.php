@@ -26,17 +26,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 final class StopOnFailureHandler
 {
-    private ResultInterpreter $resultInterpreter;
-
     public function __construct(
-        private readonly EventDispatcherInterface $eventDispatcher
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly ResultInterpreter $resultInterpreter
     ) {
 
-    }
-
-    public function setResultInterpreter(ResultInterpreter $resultInterpreter)
-    {
-        $this->resultInterpreter = $resultInterpreter;
     }
     
     public function registerListeners()

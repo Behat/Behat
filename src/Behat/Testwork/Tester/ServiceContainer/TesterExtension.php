@@ -146,14 +146,14 @@ abstract class TesterExtension implements Extension
     
     
     /**
-     * Loads stop on failure controller.
+     * Loads stop on failure handler.
      */
     private function loadStopOnFailureHandler(ContainerBuilder $container, ?bool $stopOnFailure)
     {
         $definition = new Definition('Behat\Testwork\Tester\Handler\StopOnFailureHandler', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+            new Reference(EventDispatcherExtension::DISPATCHER_ID),
+            new Reference(TesterExtension::RESULT_INTERPRETER_ID)
         ));
-        $definition->addMethodCall('setResultInterpreter', array(new Reference(TesterExtension::RESULT_INTERPRETER_ID)));
 
         if ($stopOnFailure === true) {
             $definition->addMethodCall('registerListeners');
