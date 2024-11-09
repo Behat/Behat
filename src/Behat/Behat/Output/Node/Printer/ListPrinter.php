@@ -130,12 +130,14 @@ final class ListPrinter
     /**
      * Prints failed hooks list.
      *
-     * @param OutputPrinter $printer
-     * @param string        $intro
      * @param HookStat[]    $failedHookStats
      */
-    public function printFailedHooksList(OutputPrinter $printer, $intro, array $failedHookStats)
-    {
+    public function printFailedHooksList(
+        OutputPrinter $printer,
+        string $intro,
+        array $failedHookStats,
+        bool $simple = false
+    ): void {
         if (!count($failedHookStats)) {
             return;
         }
@@ -145,7 +147,10 @@ final class ListPrinter
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
         foreach ($failedHookStats as $hookStat) {
-            $this->printHookStat($printer, $hookStat, $style);
+            $this->printHookStat($printer, $hookStat, $style, $simple);
+        }
+        if ($simple) {
+            $printer->writeln();
         }
     }
 
@@ -184,12 +189,8 @@ final class ListPrinter
 
     /**
      * Prints hook stat.
-     *
-     * @param OutputPrinter $printer
-     * @param HookStat      $hookStat
-     * @param string        $style
      */
-    private function printHookStat(OutputPrinter $printer, HookStat $hookStat, $style)
+    private function printHookStat(OutputPrinter $printer, HookStat $hookStat, string $style, bool $simple): void
     {
         $location = $this->getLocationFromScope($hookStat->getScope());
         $printer->writeln(
@@ -202,6 +203,9 @@ final class ListPrinter
             )
         );
 
+        if ($simple) {
+            return;
+        }
         $pad = function ($line) { return '      ' . $line; };
 
         if (null !== $hookStat->getStdOut()) {
