@@ -120,7 +120,9 @@ final class HookStatsListener implements EventListener
             : null;
 
         $stat = new HookStat($hook, $path, $error, $stdOut);
-        $stat->setScope($scope);
+        if (!$stat->isSuccessful()) {
+            $stat->setScope($scope);
+        }
         $this->statistics->registerHookStat($stat);
     }
 }
