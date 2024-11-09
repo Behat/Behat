@@ -79,6 +79,7 @@ final class JUnitFormatterFactory implements FormatterFactory
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter', array(
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+            new Reference('output.node.listener.junit.outline'),
             new Reference('output.node.listener.junit.duration')
         ));
         $container->setDefinition('output.node.printer.junit.scenario', $definition);

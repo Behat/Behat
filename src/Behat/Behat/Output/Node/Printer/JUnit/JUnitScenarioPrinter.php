@@ -11,6 +11,7 @@
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
@@ -36,7 +37,10 @@ final class JUnitScenarioPrinter
      */
     private $durationListener;
 
-    public function __construct(ResultToStringConverter $resultConverter, ?JUnitDurationListener $durationListener = null)
+    /**
+     * @param JUnitOutlineStoreListener $outlineListener Unused but temporarily kept for BC and will be removed in the next major version {@see https://github.com/Behat/Behat/issues/1519}.
+     */
+    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, JUnitDurationListener $durationListener = null)
     {
         $this->resultConverter = $resultConverter;
         $this->durationListener = $durationListener;
