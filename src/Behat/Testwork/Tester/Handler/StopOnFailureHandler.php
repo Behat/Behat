@@ -8,7 +8,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Config\Handler;
+namespace Behat\Testwork\Tester\Handler;
+
 
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
@@ -17,8 +18,7 @@ use Behat\Testwork\EventDispatcher\Event\AfterExerciseAborted;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteAborted;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\SuiteTested;
-use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
-use Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation;
+use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -26,26 +26,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 final class StopOnFailureHandler
 {
-    
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly ResultInterpreter $resultInterpreter
+    ) {
 
-    /**
-     * @var ResultInterpretation
-     */
-    private $resultInterpretation;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->resultInterpretation = new SoftInterpretation();
-    }
-
-    public function setResultInterpretation(ResultInterpretation $resultInterpretation)
-    {
-        $this->resultInterpretation = $resultInterpretation;
     }
     
     public function registerListeners()
@@ -56,12 +41,10 @@ final class StopOnFailureHandler
 
     /**
      * Exits if scenario is a failure and if stopper is enabled.
-     *
-     * @param AfterScenarioTested $event
      */
     public function exitOnFailure(AfterScenarioTested $event)
     {
-        if (!$this->resultInterpretation->isFailure($event->getTestResult())) {
+        if (ResultInterpreter::PASS === $this->resultInterpreter->interpretResult($event->getTestResult())) {
             return;
         }
 

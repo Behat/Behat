@@ -10,7 +10,6 @@
 
 namespace Behat\Behat;
 
-use Behat\Behat\Config\ServiceContainer\ConfigExtension;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -39,6 +38,7 @@ use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
+use Composer\InstalledVersions;
 
 /**
  * Defines the way behat is created.
@@ -47,6 +47,11 @@ use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
  */
 final class ApplicationFactory extends BaseFactory
 {
+    /**
+     * @deprecated this constant will not be updated for releases after 3.13.0 and will be removed in the next major.
+     * You can use composer's runtime API to get the behat version if you need it - see getVersion() in this class for
+     * an example. Note that composer's versions will not always be simple numeric values.
+     */
     public const VERSION = '3.13.0';
 
     /**
@@ -62,7 +67,8 @@ final class ApplicationFactory extends BaseFactory
      */
     protected function getVersion()
     {
-        return self::VERSION;
+        // Get the currently installed behat version from composer's runtime API
+        return InstalledVersions::getVersion('behat/behat');
     }
 
     /**
@@ -95,7 +101,6 @@ final class ApplicationFactory extends BaseFactory
             new TransformationExtension($processor),
             new OrderingExtension($processor),
             new HelperContainerExtension($processor),
-            new ConfigExtension()
         );
     }
 

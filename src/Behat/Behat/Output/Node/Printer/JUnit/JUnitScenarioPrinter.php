@@ -50,7 +50,7 @@ final class JUnitScenarioPrinter
         $name = $this->convertMultipleLinesToOne(
             $scenario instanceof ExampleNode
                 ? $this->buildExampleName($scenario)
-                : $scenario->getTitle()
+                : $scenario->getTitle() ?? ''
         );
 
         /** @var JUnitOutputPrinter $outputPrinter */

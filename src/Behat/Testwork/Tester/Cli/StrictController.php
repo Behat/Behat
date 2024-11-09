@@ -33,7 +33,7 @@ final class StrictController implements Controller
      * @var bool
      */
     private $strict;
-
+    
     /**
      * Initializes controller.
      *

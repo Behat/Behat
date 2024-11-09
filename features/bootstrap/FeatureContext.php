@@ -263,13 +263,12 @@ EOL;
      *
      * @Then /^it should (fail|pass) with:$/
      *
-     * @param string       $success "fail" or "pass"
-     * @param PyStringNode $text    PyString text instance
+     * @param 'pass'|'fail' $success
      */
-    public function itShouldPassWith($success, PyStringNode $text)
+    public function itShouldPassOrFailWith($success, PyStringNode $text)
     {
         $this->theOutputShouldContain($text);
-        $this->itShouldFail($success);
+        $this->itShouldPassOrFail($success);
     }
 
     /**
@@ -277,12 +276,12 @@ EOL;
      *
      * @Then /^it should (fail|pass) with no output$/
      *
-     * @param string $success "fail" or "pass"
+     * @param 'pass'|'fail' $success
      */
-    public function itShouldPassWithNoOutput($success)
+    public function itShouldPassOrFailWithNoOutput($success)
     {
         Assert::assertEmpty($this->getOutput());
-        $this->itShouldFail($success);
+        $this->itShouldPassOrFail($success);
     }
 
     /**
@@ -322,7 +321,7 @@ EOL;
 
         $fileContent = trim(file_get_contents($path));
 
-        $fileContent = preg_replace('/time="(.*)"/U', 'time="-IGNORE-VALUE-"', $fileContent);
+        $fileContent = preg_replace('/time="\d\.\d{3}"/U', 'time="-IGNORE-VALUE-"', $fileContent);
 
         // The placeholder is necessary because of different separators on Unix and Windows environments
         $text = str_replace('-DIRECTORY-SEPARATOR-', DIRECTORY_SEPARATOR, $text);
@@ -390,25 +389,26 @@ EOL;
      *
      * @Then /^it should (fail|pass)$/
      *
-     * @param string $success "fail" or "pass"
+     * @param 'pass'|'fail' $success  
      */
-    public function itShouldFail($success)
+    public function itShouldPassOrFail($success)
     {
-        $message = '';
-
-        if ('fail' === $success) {
-            if (0 === $this->getExitCode()) {
-                $message = 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
-            }
-
-            Assert::assertNotEquals(0, $this->getExitCode(), $message);
-        } else {
-            if (0 !== $this->getExitCode()) {
-                $message = 'Actual output:' . PHP_EOL . PHP_EOL . $this->getOutput();
-            }
-
-            Assert::assertEquals(0, $this->getExitCode(), $message);
-        }
+        $is_correct = match($success) {
+            'fail' => 0 !== $this->getExitCode(),
+            'pass' => 0 === $this->getExitCode(),
+       };
+     
+       if ($is_correct) {
+          return;
+       }
+    
+       throw new UnexpectedValueException(
+            'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode() . PHP_EOL
+            . PHP_EOL
+            . '##### Actual output #####' . PHP_EOL
+            . '> ' . str_replace(PHP_EOL, PHP_EOL  .  '> ', $this->getOutput()) . PHP_EOL
+            . '##### End of output #####'
+        );
     }
 
     /**
