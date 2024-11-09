@@ -11,12 +11,21 @@
 namespace Behat\Behat\Output\Node\Printer;
 
 use Behat\Behat\Definition\Translator\TranslatorInterface;
+use Behat\Behat\Hook\Scope\AfterFeatureScope;
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Behat\Hook\Scope\BeforeFeatureScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Statistics\HookStat;
 use Behat\Behat\Output\Statistics\ScenarioStat;
 use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Testwork\Exception\ExceptionPresenter;
+use Behat\Testwork\Hook\Scope\AfterSuiteScope;
+use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
+use Behat\Testwork\Hook\Scope\HookScope;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
@@ -182,9 +191,14 @@ final class ListPrinter
      */
     private function printHookStat(OutputPrinter $printer, HookStat $hookStat, $style)
     {
+        $location = $this->getLocationFromScope($hookStat->getScope());
         $printer->writeln(
-            sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}',
-                $style, $hookStat->getName(), $style, $this->relativizePaths($hookStat->getPath())
+            sprintf('    {+%s}%s{-%s}%s {+comment}# %s{-comment}',
+                $style,
+                $hookStat->getName(),
+                $style,
+                $location ? " \"$location\"" : '',
+                $this->relativizePaths($hookStat->getPath())
             )
         );
 
@@ -267,5 +281,24 @@ final class ListPrinter
         }
 
         return str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $path);
+    }
+
+    private function getLocationFromScope(?HookScope $scope): ?string
+    {
+        if ($scope !== null) {
+            return match(true) {
+                $scope instanceof BeforeSuiteScope, $scope instanceof AfterSuiteScope =>
+                $scope->getSuite()->getName(),
+                $scope instanceof BeforeFeatureScope, $scope instanceof AfterFeatureScope =>
+                    $this->relativizePaths($scope->getFeature()->getFile()),
+                $scope instanceof BeforeScenarioScope, $scope instanceof AfterScenarioScope =>
+                    $this->relativizePaths($scope->getFeature()->getFile()) .
+                    ':' . $scope->getScenario()->getLine(),
+                $scope instanceof BeforeStepScope, $scope instanceof AfterStepScope =>
+                    $this->relativizePaths($scope->getFeature()->getFile()) .
+                    ':' . $scope->getStep()->getLine()
+            };
+        }
+        return null;
     }
 }

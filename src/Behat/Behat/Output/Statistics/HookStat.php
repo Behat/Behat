@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Output\Statistics;
 
+use Behat\Testwork\Hook\Scope\HookScope;
+
 /**
  * Represents hook stat.
  *
@@ -33,6 +35,10 @@ final class HookStat
      * @var string|null
      */
     private $stdOut;
+    /**
+     * @var HookScope|null
+     */
+    private $scope;
 
     /**
      * Initializes hook stat.
@@ -48,6 +54,11 @@ final class HookStat
         $this->path = $path;
         $this->error = $error;
         $this->stdOut = $stdOut;
+    }
+
+    public function setScope(HookScope $scope)
+    {
+        $this->scope = $scope;
     }
 
     /**
@@ -94,5 +105,10 @@ final class HookStat
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function getScope(): HookScope
+    {
+        return $this->scope;
     }
 }
