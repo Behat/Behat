@@ -389,7 +389,7 @@ EOL;
      *
      * @Then /^it should (fail|pass)$/
      *
-     * @param 'pass'|'fail' $success  
+     * @param 'pass'|'fail' $success
      */
     public function itShouldPassOrFail($success)
     {
@@ -397,11 +397,11 @@ EOL;
             'fail' => 0 !== $this->getExitCode(),
             'pass' => 0 === $this->getExitCode(),
        };
-     
+
        if ($is_correct) {
           return;
        }
-    
+
        throw new UnexpectedValueException(
             'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode() . PHP_EOL
             . PHP_EOL
