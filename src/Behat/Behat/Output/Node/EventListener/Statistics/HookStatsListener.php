@@ -109,8 +109,10 @@ final class HookStatsListener implements EventListener
      */
     private function captureHookStat(CallResult $hookCallResult)
     {
-        $callee = $hookCallResult->getCall()->getCallee();
+        $call = $hookCallResult->getCall();
+        $callee = $call->getCallee();
         $hook = (string) $callee;
+        $scope = $call->getScope();
         $path = $callee->getPath();
         $stdOut = $hookCallResult->getStdOut();
         $error = $hookCallResult->getException()
@@ -118,6 +120,9 @@ final class HookStatsListener implements EventListener
             : null;
 
         $stat = new HookStat($hook, $path, $error, $stdOut);
+        if (!$stat->isSuccessful()) {
+            $stat->setScope($scope);
+        }
         $this->statistics->registerHookStat($stat);
     }
 }
