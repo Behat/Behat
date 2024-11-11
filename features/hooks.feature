@@ -383,6 +383,11 @@ Feature: hooks
       │
       └─ @AfterFeature # FeatureContext::doSomethingAfterFeature()
 
+      --- Failed hooks:
+
+          BeforeScenario @exception "features/background.feature:4" # FeatureContext::beforeScenarioException()
+          BeforeScenario @exception "features/background.feature:11" # FeatureContext::beforeScenarioException()
+
       --- Skipped scenarios:
 
           features/background.feature:4
@@ -545,6 +550,11 @@ Feature: hooks
         @failing-before-hook
         Scenario:            # features/test.feature:13
           Given passing step # FeatureContext::passingStep()
+
+      --- Failed hooks:
+
+          BeforeStep passing step with failing hook "features/test.feature:10" # FeatureContext::failingBeforeStep()
+          BeforeScenario @failing-before-hook "features/test.feature:13" # FeatureContext::failingBeforeScenarioHook()
 
       --- Skipped scenarios:
 

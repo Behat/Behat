@@ -196,6 +196,10 @@ class PrettyFormatterFactory implements FormatterFactory
                             new Reference('output.pretty.statistics'),
                             new Reference(ExceptionExtension::PRESENTER_ID)
                         )),
+                        new Definition('Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener', array(
+                            new Reference('output.pretty.statistics'),
+                            new Reference(ExceptionExtension::PRESENTER_ID)
+                        )),
                     )
                 )
             )

@@ -52,6 +52,9 @@ final class PrettyStatisticsPrinter implements StatisticsPrinter
     {
         $printer = $formatter->getOutputPrinter();
 
+        $hookStats = $statistics->getFailedHookStats();
+        $this->listPrinter->printFailedHooksList($printer, 'failed_hooks_title', $hookStats, true);
+
         $scenarioStats = $statistics->getSkippedScenarios();
         $this->listPrinter->printScenariosList($printer, 'skipped_scenarios_title', TestResult::SKIPPED, $scenarioStats);
 
