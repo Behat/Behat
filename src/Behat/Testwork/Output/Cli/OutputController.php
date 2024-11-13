@@ -56,7 +56,7 @@ class OutputController implements Controller
                 '--out', '-o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Write format output to a file/directory instead of' . PHP_EOL .
                 'STDOUT <comment>(output_path)</comment>. You can also provide different' . PHP_EOL .
-                'outputs to multiple formats.'
+                'outputs to multiple formats. This option is mandatory for the junit formatter.'
             )
             ->addOption(
                 '--format-settings', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,

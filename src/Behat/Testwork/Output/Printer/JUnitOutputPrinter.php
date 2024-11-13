@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Output\Printer;
 
 use Behat\Testwork\Output\Exception\MissingExtensionException;
+use Behat\Testwork\Output\Exception\MissingOutputPathException;
 use Behat\Testwork\Output\Printer\Factory\FilesystemOutputFactory;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -151,11 +152,17 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
     public function flush()
     {
         if($this->domDocument instanceof \DOMDocument){
-            $this->getWritingStream()->write(
-                $this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG),
-                false,
-                OutputInterface::OUTPUT_RAW
-            );
+            try {
+                $this->getWritingStream()->write(
+                    $this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG),
+                    false,
+                    OutputInterface::OUTPUT_RAW
+                );
+            } catch (MissingOutputPathException) {
+                throw new MissingOutputPathException(
+                    'The `output_path` option must be specified for the junit formatter.',
+                );
+            }
         }
 
         parent::flush();
