@@ -5,6 +5,7 @@ Behat is a BDD framework for PHP to help you test business expectations.
 [![Gitter chat](https://badges.gitter.im/Behat/Behat.svg)](https://gitter.im/Behat/Behat)
 [![License](https://poser.pugx.org/behat/behat/license.svg)](https://packagist.org/packages/behat/behat)
 [![Build Status](https://github.com/Behat/Behat/workflows/Build/badge.svg)](https://github.com/Behat/Behat/actions?query=workflow%3ABuild)
+[![Gurubase](https://img.shields.io/badge/Gurubase-Ask%20Behat%20Guru-006BFF)](https://gurubase.io/g/behat)
 
 Installing Behat
 ----------------
