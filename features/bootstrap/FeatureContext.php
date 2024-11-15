@@ -14,6 +14,8 @@ use Behat\Gherkin\Node\PyStringNode;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
+use SebastianBergmann\Diff\Differ;
+use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
 
 /**
  * Behat test suite context.
@@ -267,8 +269,30 @@ EOL;
      */
     public function itShouldPassOrFailWith($success, PyStringNode $text)
     {
-        $this->theOutputShouldContain($text);
-        $this->itShouldPassOrFail($success);
+        $isCorrect = $this->exitCodeIsCorrect($success);
+
+        $outputMessage = [];
+        $hasError = false;
+
+        if (!$isCorrect) {
+            $hasError = true;
+            $outputMessage[] = 'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode();
+        } else {
+            $outputMessage[] = 'Command did ' . strtoupper($success) . ' as expected.';
+        }
+
+        if (!str_contains($this->getOutput(), $this->getExpectedOutput($text))) {
+            $hasError = true;
+            $outputMessage[] =  $this->getOutputDiff($text);
+        } else {
+            $outputMessage[] = 'Output is as expected.';
+        }
+
+        if ($hasError) {
+            throw new UnexpectedValueException(
+                implode(PHP_EOL . PHP_EOL, $outputMessage)
+            );
+        }
     }
 
     /**
@@ -343,7 +367,13 @@ EOL;
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        Assert::assertStringContainsString($this->getExpectedOutput($text), $this->getOutput());
+        if (str_contains($this->getOutput(), $this->getExpectedOutput($text))) {
+            return;
+        }
+
+        throw new UnexpectedValueException(
+            $this->getOutputDiff($text)
+        );
     }
 
     private function getExpectedOutput(PyStringNode $expectedText)
@@ -393,21 +423,14 @@ EOL;
      */
     public function itShouldPassOrFail($success)
     {
-        $is_correct = match($success) {
-            'fail' => 0 !== $this->getExitCode(),
-            'pass' => 0 === $this->getExitCode(),
-       };
+        $isCorrect = $this->exitCodeIsCorrect($success);
 
-       if ($is_correct) {
-          return;
-       }
+        if ($isCorrect) {
+            return;
+        }
 
-       throw new UnexpectedValueException(
-            'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode() . PHP_EOL
-            . PHP_EOL
-            . '##### Actual output #####' . PHP_EOL
-            . '> ' . str_replace(PHP_EOL, PHP_EOL  .  '> ', $this->getOutput()) . PHP_EOL
-            . '##### End of output #####'
+        throw new UnexpectedValueException(
+            'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode()
         );
     }
 
@@ -477,6 +500,24 @@ EOL;
         }
 
         $this->workingDir = $newWorkingDir;
+    }
+    
+    /**
+     * @param 'fail'|'pass' $success
+     */
+    private function exitCodeIsCorrect(string $success): bool
+    {
+        return match($success) {
+            'fail' => 0 !== $this->getExitCode(),
+            'pass' => 0 === $this->getExitCode(),
+        };
+    }
+
+    private function getOutputDiff(PyStringNode $expectedText): string
+    {
+        $differ = new Differ(new DiffOnlyOutputBuilder());
+        
+        return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput());
     }
 
     private static function clearDirectory($path)
