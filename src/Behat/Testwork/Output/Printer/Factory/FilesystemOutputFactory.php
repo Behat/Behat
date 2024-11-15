@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Output\Printer\Factory;
 
 use Behat\Testwork\Output\Exception\BadOutputPathException;
+use Behat\Testwork\Output\Exception\MissingOutputPathException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
@@ -44,6 +45,11 @@ class FilesystemOutputFactory extends OutputFactory
      */
     public function createOutput($stream = null)
     {
+        if ($this->getOutputPath() === null) {
+            throw new MissingOutputPathException(
+                'The `output_path` option must be specified.',
+            );
+        }
         if (is_file($this->getOutputPath())) {
             throw new BadOutputPathException(
                 'Directory expected for the `output_path` option, but a filename was given.',
