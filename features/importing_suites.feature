@@ -1,4 +1,4 @@
-Feature: Import suites
+Feature: Importing suites
   In order to add more suites
   As a feature writer
   I need an ability to import external suite configuration files
@@ -117,8 +117,10 @@ Feature: Import suites
       <?php
 
       $config = new Behat\Config\Config();
-      $config->import('config/suites/first.php');
-      $config->import('config/suites/second.php');
+      $config
+        ->import('config/suites/first.php')
+        ->import('config/suites/second.php')
+      ;
 
       return $config;
 
@@ -146,8 +148,7 @@ Feature: Import suites
       <?php
 
       $config = new Behat\Config\Config();
-      $config->import('config/suites/first.php');
-      $config->import('config/suites/second.php');
+      $config->import(['config/suites/first.php', 'config/suites/second.php']);
 
       return $config;
 
