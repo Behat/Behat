@@ -11,6 +11,13 @@ final class Config implements ConfigInterface
     ) {
     }
 
+    public function import(string $file): self
+    {
+        $this->settings['imports'][] = $file;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return $this->settings;
