@@ -131,6 +131,45 @@ Feature: Config
           When this scenario executes
       """
 
+  Scenario: Alternative PHP configuration file
+    Given a file named "alternative-behat.php" with:
+      """
+      <?php
+
+      use Behat\Config\Config;
+
+      return new Config();
+
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+      }
+      """
+    And a file named "features/config.feature" with:
+      """
+      Feature:
+        Scenario:
+          When this scenario executes
+      """
+    When I run "behat -f progress --no-colors --append-snippets --config=alternative-behat.php"
+    Then it should pass with:
+      """
+      U
+
+      1 scenario (1 undefined)
+      1 step (1 undefined)
+
+      --- Use --snippets-for CLI option to generate snippets for following default suite steps:
+
+          When this scenario executes
+      """
+
   Scenario: Prioritize *.yaml config file
     Given a file named "behat.yaml"
     Given a file named "behat.yml"
