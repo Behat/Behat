@@ -127,7 +127,6 @@ final class ApplicationFactory extends BaseFactory
             $cwd . 'behat.dist.yaml',
             $cwd . 'behat.dist.yml',
             $cwd . 'behat.php',
-            $cwd . 'behat.php.dist',
             $cwd . 'behat.dist.php',
             $configDir . 'behat.yaml',
             $configDir . 'behat.yml',
@@ -136,7 +135,6 @@ final class ApplicationFactory extends BaseFactory
             $configDir . 'behat.dist.yaml',
             $configDir . 'behat.dist.yml',
             $configDir . 'behat.php',
-            $configDir . 'behat.php.dist',
             $configDir . 'behat.dist.php',
         );
 
