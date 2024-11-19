@@ -97,7 +97,9 @@ Feature: Config
       """
       <?php
 
-      return new Behat\Config\Config();
+      use Behat\Config\Config;
+
+      return new Config();
 
       """
     And a file named "features/bootstrap/FeatureContext.php" with:
@@ -116,7 +118,7 @@ Feature: Config
         Scenario:
           When this scenario executes
       """
-    When I run "behat -f progress --no-colors --append-snippets --config=behat.php"
+    When I run "behat -f progress --no-colors --append-snippets"
     Then it should pass with:
       """
       U

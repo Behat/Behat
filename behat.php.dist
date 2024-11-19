@@ -1,6 +1,8 @@
 <?php
 
-$config = new Behat\Config\Config([
+use Behat\Config\Config;
+
+$config = new Config([
     'default' => [
         'gherkin' => [
             'filters' => [
