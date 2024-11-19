@@ -120,13 +120,13 @@ final class JUnitFormatterFactory implements FormatterFactory
         $definition = new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
             array(
                 new Reference('output.node.listener.junit.duration'),
-                new Reference('output.node.listener.junit.outline'),
                 new Definition('Behat\Behat\Output\Node\EventListener\JUnit\JUnitFeatureElementListener', array(
                     new Reference('output.node.printer.junit.feature'),
                     new Reference('output.node.printer.junit.scenario'),
                     new Reference('output.node.printer.junit.step'),
                     new Reference('output.node.printer.junit.setup'),
                 )),
+                new Reference('output.node.listener.junit.outline'),
             ),
         ));
         $container->setDefinition(self::ROOT_LISTENER_ID, $definition);

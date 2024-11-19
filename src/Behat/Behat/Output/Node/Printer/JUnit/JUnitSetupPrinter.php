@@ -68,11 +68,11 @@ class JUnitSetupPrinter implements SetupPrinter
                 /** @var JUnitOutputPrinter $outputPrinter */
                 $outputPrinter = $formatter->getOutputPrinter();
 
-                $message = '';
+                $message = $call->getCallee()->getName();
                 if ($scope instanceof StepScope) {
-                    $message .= $scope->getStep()->getKeyword() . ' ' . $scope->getStep()->getText() . ': ';
+                    $message .= ': ' . $scope->getStep()->getKeyword() . ' ' . $scope->getStep()->getText();
                 }
-                $message .= $this->exceptionPresenter->presentException($hookCallResult->getException());
+                $message .= ': ' . $this->exceptionPresenter->presentException($hookCallResult->getException());
 
                 $attributes = array(
                     'message' => $message,

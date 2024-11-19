@@ -456,8 +456,12 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
         <testsuite name="World consistency" tests="2" skipped="2" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="Skipped" classname="World consistency" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature"/>
-          <testcase name="Another skipped" classname="World consistency" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature"/>
+          <testcase name="Skipped" classname="World consistency" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
+            <failure message="BeforeScenario: (Exception)" type="setup"></failure>
+          </testcase>
+          <testcase name="Another skipped" classname="World consistency" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
+            <failure message="BeforeScenario: (Exception)" type="setup"></failure>
+          </testcase>
         </testsuite>
       </testsuites>
       """
@@ -649,7 +653,7 @@
       <testsuites name="default">
         <testsuite name="World consistency" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Failed" classname="World consistency" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
-            <failure message="Given I have entered 10: failure (Exception)" type="setup"></failure>
+            <failure message="BeforeStep: Given I have entered 10: failure (Exception)" type="setup"></failure>
           </testcase>
         </testsuite>
       </testsuites>
@@ -705,7 +709,7 @@
       <testsuites name="default">
         <testsuite name="World consistency" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Failed" classname="World consistency" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-World.feature">
-            <failure message="Given I have entered 10: failure (Exception)" type="teardown"></failure>
+            <failure message="AfterStep: Given I have entered 10: failure (Exception)" type="teardown"></failure>
           </testcase>
         </testsuite>
       </testsuites>
