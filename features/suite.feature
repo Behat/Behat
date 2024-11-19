@@ -48,14 +48,20 @@ Feature: Suites
           When I ate 1 apple
           Then I should have 2 apples
       """
-    And a file named "behat.yml" with:
+    And a file named "behat.php" with:
       """
-      default:
-        suites:
-          first:
-            contexts: [ FirstContext ]
-          second:
-            contexts: [ SecondContext ]
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+
+      $profile = (new Profile('default'))
+        ->withSuite(new Suite('first', ['contexts' => ['FirstContext']]))
+        ->withSuite((new Suite('second'))->withContexts('SecondContext'))
+      ;
+
+      return (new Config())->withProfile($profile);
       """
     When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
     Then it should pass with:
