@@ -181,7 +181,15 @@ Feature: Config
       {
         public function toArray(): array
         {
-          return [];
+          return [
+            'default' => [
+              'gherkin' => [
+                'filters' => [
+                  'tags' => '@second'
+                ],
+              ],
+            ],
+          ];
         }
       }
 
@@ -201,8 +209,13 @@ Feature: Config
     And a file named "features/config.feature" with:
       """
       Feature:
+        @first
         Scenario:
-          When this scenario executes
+          When this first scenario executes
+
+        @second
+        Scenario:
+          When this second scenario executes
       """
     When I run "behat -f progress --no-colors --append-snippets --config=custom-config-object.php"
     Then it should pass with:
@@ -214,7 +227,7 @@ Feature: Config
 
       --- Use --snippets-for CLI option to generate snippets for following default suite steps:
 
-          When this scenario executes
+          When this second scenario executes
       """
 
   Scenario: Prioritize *.yaml config file
