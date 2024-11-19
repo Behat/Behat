@@ -1,0 +1,13 @@
+<?php
+
+$config = new Behat\Config\Config([
+    'default' => [
+        'gherkin' => [
+            'filters' => [
+                'tags' => '~@php8'
+            ],
+        ],
+    ],
+]);
+
+return $config;

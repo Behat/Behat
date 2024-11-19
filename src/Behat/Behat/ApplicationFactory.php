@@ -126,12 +126,16 @@ final class ApplicationFactory extends BaseFactory
             $cwd . 'behat.yml.dist',
             $cwd . 'behat.dist.yaml',
             $cwd . 'behat.dist.yml',
+            $cwd . 'behat.php',
+            $cwd . 'behat.php.dist',
             $configDir . 'behat.yaml',
             $configDir . 'behat.yml',
             $configDir . 'behat.yaml.dist',
             $configDir . 'behat.yml.dist',
             $configDir . 'behat.dist.yaml',
             $configDir . 'behat.dist.yml',
+            $configDir . 'behat.php',
+            $configDir . 'behat.php.dist',
         );
 
         foreach ($paths as $path) {

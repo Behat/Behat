@@ -92,6 +92,43 @@ Feature: Config
       The requested config file does not exist
       """
 
+  Scenario: PHP configuration file
+    Given a file named "behat.php" with:
+      """
+      <?php
+
+      return new Behat\Config\Config();
+
+      """
+    And a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+
+      class FeatureContext implements Context
+      {
+      }
+      """
+    And a file named "features/config.feature" with:
+      """
+      Feature:
+        Scenario:
+          When this scenario executes
+      """
+    When I run "behat -f progress --no-colors --append-snippets --config=behat.php"
+    Then it should pass with:
+      """
+      U
+
+      1 scenario (1 undefined)
+      1 step (1 undefined)
+
+      --- Use --snippets-for CLI option to generate snippets for following default suite steps:
+
+          When this scenario executes
+      """
+
   Scenario: Prioritize *.yaml config file
     Given a file named "behat.yaml"
     Given a file named "behat.yml"
@@ -112,6 +149,17 @@ Feature: Config
     Then the output should contain:
       """
       behat.yml
+      """
+
+  Scenario: Load custom php config instead of distribution
+    Given a file named "behat.php"
+    Given a file named "behat.php.dist"
+    Given a some feature context
+    And a some feature scenarios
+    When I run behat in debug mode
+    Then the output should contain:
+      """
+      behat.php
       """
 
   Scenario: Prioritize config file from root
