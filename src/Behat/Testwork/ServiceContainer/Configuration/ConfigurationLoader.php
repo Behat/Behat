@@ -11,6 +11,7 @@
 namespace Behat\Testwork\ServiceContainer\Configuration;
 
 use Behat\Config\Config;
+use Behat\Config\ConfigInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -202,8 +203,8 @@ final class ConfigurationLoader
             || \str_ends_with($configPath, '.php.dist')
         ) {
             $phpConfig = require $configPath;
-            if (!$phpConfig instanceof Config) {
-                throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must be an instance of `%s`.', $configPath, Config::class));
+            if (!$phpConfig instanceof ConfigInterface) {
+                throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must implements `%s`.', $configPath, ConfigInterface::class));
             }
 
             $config = $phpConfig->toArray();
