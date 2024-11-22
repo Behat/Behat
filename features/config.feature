@@ -251,7 +251,7 @@ Feature: Config
 
   Scenario: Load custom php config instead of distribution
     Given a file named "behat.php"
-    Given a file named "behat.php.dist"
+    Given a file named "behat.dist.php"
     Given a some feature context
     And a some feature scenarios
     When I run behat in debug mode
