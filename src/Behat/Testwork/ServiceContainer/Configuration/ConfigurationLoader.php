@@ -204,7 +204,7 @@ final class ConfigurationLoader
         ) {
             $phpConfig = require $configPath;
             if (!$phpConfig instanceof ConfigInterface) {
-                throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must implements `%s`.', $configPath, ConfigInterface::class));
+                throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must return an instance of `%s`.', $configPath, ConfigInterface::class));
             }
 
             $config = $phpConfig->toArray();
