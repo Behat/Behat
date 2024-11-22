@@ -44,6 +44,7 @@
     "autoload": {
         "psr-4": {
             "Behat\\Behat\\": "src/Behat/Behat/",
+            "Behat\\Config\\": "src/Behat/Config/",
             "Behat\\Testwork\\": "src/Behat/Testwork/",
             "Behat\\Step\\": "src/Behat/Step/",
             "Behat\\Hook\\": "src/Behat/Hook/"

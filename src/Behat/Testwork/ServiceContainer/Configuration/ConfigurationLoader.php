@@ -10,8 +10,11 @@
 
 namespace Behat\Testwork\ServiceContainer\Configuration;
 
+use Behat\Config\ConfigInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use Symfony\Component\Yaml\Yaml;
+
+use function str_ends_with;
 
 /**
  * Loads configuration from different sources.
@@ -195,7 +198,17 @@ final class ConfigurationLoader
         }
 
         $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
-        $config = (array) Yaml::parse(file_get_contents($configPath));
+
+        if (str_ends_with($configPath, '.php')) {
+            $phpConfig = require $configPath;
+            if (!$phpConfig instanceof ConfigInterface) {
+                throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must return an instance of `%s`.', $configPath, ConfigInterface::class));
+            }
+
+            $config = $phpConfig->toArray();
+        } else {
+            $config = (array) Yaml::parse(file_get_contents($configPath));
+        }
 
         return $this->loadConfigs($basePath, $config, $profile);
     }
