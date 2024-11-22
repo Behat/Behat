@@ -99,7 +99,7 @@ Feature: Config
 
       use Behat\Config\Config;
 
-      return new Config();
+      return new Config(['default' => ['formatters' => ['progress' => true]]]);
 
       """
     And a file named "features/bootstrap/FeatureContext.php" with:
@@ -118,7 +118,7 @@ Feature: Config
         Scenario:
           When this scenario executes
       """
-    When I run "behat -f progress --no-colors --append-snippets"
+    When I run "behat --no-colors --append-snippets"
     Then it should pass with:
       """
       U
@@ -138,7 +138,7 @@ Feature: Config
 
       use Behat\Config\Config;
 
-      return new Config();
+      return new Config(['default' => ['formatters' => ['progress' => true]]]);
 
       """
     And a file named "features/bootstrap/FeatureContext.php" with:
@@ -157,7 +157,7 @@ Feature: Config
         Scenario:
           When this scenario executes
       """
-    When I run "behat -f progress --no-colors --append-snippets --config=alternative-behat.php"
+    When I run "behat --no-colors --append-snippets --config=alternative-behat.php"
     Then it should pass with:
       """
       U
