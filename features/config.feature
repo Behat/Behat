@@ -183,11 +183,7 @@ Feature: Config
         {
           return [
             'default' => [
-              'gherkin' => [
-                'filters' => [
-                  'tags' => '@second'
-                ],
-              ],
+              'testers' => ['strict' => true],
             ],
           ];
         }
@@ -217,16 +213,17 @@ Feature: Config
         Scenario:
           When this second scenario executes
       """
-    When I run "behat -f progress --no-colors --append-snippets --config=custom-config-object.php"
-    Then it should pass with:
+    When I run "behat -f progress --no-colors -n --config=custom-config-object.php"
+    Then it should fail with:
       """
-      U
+      UU
 
-      1 scenario (1 undefined)
-      1 step (1 undefined)
+      2 scenarios (2 undefined)
+      2 steps (2 undefined)
 
       --- Use --snippets-for CLI option to generate snippets for following default suite steps:
 
+          When this first scenario executes
           When this second scenario executes
       """
 

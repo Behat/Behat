@@ -10,10 +10,11 @@
 
 namespace Behat\Testwork\ServiceContainer\Configuration;
 
-use Behat\Config\Config;
 use Behat\Config\ConfigInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use Symfony\Component\Yaml\Yaml;
+
+use function str_ends_with;
 
 /**
  * Loads configuration from different sources.
@@ -199,8 +200,8 @@ final class ConfigurationLoader
         $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
 
         if (
-            \str_ends_with($configPath, '.php')
-            || \str_ends_with($configPath, '.php.dist')
+            str_ends_with($configPath, '.php')
+            || str_ends_with($configPath, '.php.dist')
         ) {
             $phpConfig = require $configPath;
             if (!$phpConfig instanceof ConfigInterface) {
