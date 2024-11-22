@@ -71,7 +71,7 @@ final class JUnitFeatureElementListener implements EventListener
      */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
-        $this->printSuiteSetupEvent($formatter, $event);
+        $this->captureSuiteSetupEvent($formatter, $event);
         $this->printFeatureOnBeforeEvent($formatter, $event);
         $this->captureStepEvent($event);
         $this->printScenarioEvent($formatter, $event);
@@ -80,9 +80,10 @@ final class JUnitFeatureElementListener implements EventListener
     }
 
     /**
-     * Prints any failures in suite setup.
+     * Captures any failures in suite setup.
+     * They will be printed later when the first scenario is printed
      */
-    private function printSuiteSetupEvent(Formatter $formatter, Event $event): void
+    private function captureSuiteSetupEvent(Formatter $formatter, Event $event): void
     {
         if ($event instanceof AfterSuiteSetup) {
             $this->afterSuiteSetup = $event;
@@ -95,6 +96,7 @@ final class JUnitFeatureElementListener implements EventListener
     private function printSuiteTeardownEvent(Formatter $formatter, Event $event): void
     {
         if ($event instanceof AfterSuiteTested) {
+            // if needed, add a failure node to the last testCase node that has been created
             $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
         }
     }
@@ -109,6 +111,8 @@ final class JUnitFeatureElementListener implements EventListener
             return;
         }
         if ($event instanceof AfterFeatureSetup) {
+            // Captures any failures in feature setup.
+            // They will be printed later when the first scenario is printed
             $this->afterFeatureSetup = $event;
         }
     }
