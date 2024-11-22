@@ -199,10 +199,7 @@ final class ConfigurationLoader
 
         $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
 
-        if (
-            str_ends_with($configPath, '.php')
-            || str_ends_with($configPath, '.php.dist')
-        ) {
+        if (str_ends_with($configPath, '.php')) {
             $phpConfig = require $configPath;
             if (!$phpConfig instanceof ConfigInterface) {
                 throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must return an instance of `%s`.', $configPath, ConfigInterface::class));
