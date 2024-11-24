@@ -60,6 +60,7 @@ class FeatureContext implements Context
         if (is_dir($dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat')) {
             self::clearDirectory($dir);
         }
+        self::clearDirectory('tests/Fixtures/temp', false);
     }
 
     /**
@@ -189,6 +190,30 @@ EOL;
     public function iSetBehatParamsEnvironmentVariable(PyStringNode $value)
     {
         $this->env = array('BEHAT_PARAMS' => (string) $value);
+    }
+
+    /**
+     * @When I set the working directory to :dir
+     */
+    public function iSetTheWorkingDirectoryTo($dir): void
+    {
+        $this->workingDir = realpath($dir);
+    }
+
+    /**
+     * @Given I want to run the suite :suite
+     */
+    public function iWantToRunTheSuite($suite): void
+    {
+        $this->options .= ' --suite=' . $suite;
+    }
+
+    /**
+     * @Given I want to run the config :config
+     */
+    public function iWantToRunTheconfig($config): void
+    {
+        $this->options .= ' --config=' . $config;
     }
 
     /**
@@ -333,7 +358,7 @@ EOL;
     /**
      * Checks whether specified content and structure of the xml is correct without worrying about layout.
      *
-     * @Then /^"([^"]*)" file xml should be like:$/
+     * @Then /^(?:the\s)?"([^"]*)" file xml should be like:$/
      *
      * @param string       $path file path
      * @param PyStringNode $text file content
@@ -520,13 +545,16 @@ EOL;
         return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput());
     }
 
-    private static function clearDirectory($path)
+    private static function clearDirectory($path, bool $removeDir = true)
     {
         $files = scandir($path);
         array_shift($files);
         array_shift($files);
 
         foreach ($files as $file) {
+            if ($file === '.gitkeep') {
+                continue;
+            }
             $file = $path . DIRECTORY_SEPARATOR . $file;
             if (is_dir($file)) {
                 self::clearDirectory($file);
@@ -535,6 +563,8 @@ EOL;
             }
         }
 
-        rmdir($path);
+        if ($removeDir) {
+            rmdir($path);
+        }
     }
 }
