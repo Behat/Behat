@@ -38,7 +38,7 @@ final class TransformationAttributeReader implements AttributeReader
 
         $callees = [];
         foreach ($attributes as $attribute) {
-            $pattern = $attribute->newInstance()->pattern ?? '';
+            $pattern = $attribute->newInstance()->pattern;
 
             $description = null;
             if ($docBlock = $method->getDocComment()) {

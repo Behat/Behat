@@ -16,10 +16,8 @@ namespace Behat\Transformation;
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 final class Transform
 {
-    public ?string $pattern;
-
-    public function __construct(?string $pattern = null)
-    {
-        $this->pattern = $pattern;
+    public function __construct(
+        public string $pattern = ''
+    ) {
     }
 }

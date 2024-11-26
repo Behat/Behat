@@ -24,6 +24,8 @@ use ReflectionMethod;
  * Generates the callee for a transformation
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @internal
  */
 class TransformationCalleeFactory
 {
