@@ -8,30 +8,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Definition\Context\Attribute;
+namespace Behat\Behat\Transformation\Context\Attribute;
 
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
-use Behat\Step as Attribute;
-use Behat\Behat\Definition\Call;
+use Behat\Behat\Transformation\Context\Annotation\TransformationAnnotationReader;
+use Behat\Transformation as Attribute;
 use ReflectionMethod;
 
 /**
- * Reads definition Attributes from the context class.
+ * Reads transformation Attributes from the context class.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class DefinitionAttributeReader implements AttributeReader
+final class TrasnformationAttributeReader extends TransformationAnnotationReader implements AttributeReader
 {
-    /**
-     * @var array<class-string<Attribute\Definition>, class-string<Call\RuntimeDefinition>>
-     */
-    private static $attributeToCallMap = array(
-        Attribute\Given::class => Call\Given::class,
-        Attribute\When::class  => Call\When::class,
-        Attribute\Then::class  => Call\Then::class,
-    );
-
     /**
      * @var DocBlockHelper
      */
@@ -52,18 +43,26 @@ final class DefinitionAttributeReader implements AttributeReader
      */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
-        $attributes = $method->getAttributes(Attribute\Definition::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $method->getAttributes(Attribute\Transformation::class, \ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];
         foreach ($attributes as $attribute) {
-            $class = self::$attributeToCallMap[$attribute->getName()];
-            $callable = array($contextClass, $method->getName());
+            $docLine = '@Transform';
+            $pattern = $attribute->newInstance()->pattern;;
+            if ($pattern !== null) {
+                $docLine .= ' ' . $pattern;
+            }
+
             $description = null;
             if ($docBlock = $method->getDocComment()) {
                 $description = $this->docBlockHelper->extractDescription($docBlock);
             }
 
-            $callees[] = new $class($attribute->newInstance()->pattern, $callable, $description);
+            $callee = $this->readCallee($contextClass, $method, $docLine, $description);
+
+            if ($callee !== null) {
+                $callees[] = $callee;
+            }
         }
 
         return $callees;

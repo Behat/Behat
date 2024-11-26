@@ -47,7 +47,8 @@
             "Behat\\Config\\": "src/Behat/Config/",
             "Behat\\Testwork\\": "src/Behat/Testwork/",
             "Behat\\Step\\": "src/Behat/Step/",
-            "Behat\\Hook\\": "src/Behat/Hook/"
+            "Behat\\Hook\\": "src/Behat/Hook/",
+            "Behat\\Transformation\\": "src/Behat/Transformation/"
         }
     },
 

@@ -87,6 +87,7 @@ class TransformationExtension implements Extension
         $this->loadDefinitionArgumentsTransformer($container);
         $this->loadDefaultTransformers($container);
         $this->loadAnnotationReader($container);
+        $this->loadAttributeReader($container);
         $this->loadRepository($container);
     }
 
@@ -140,6 +141,20 @@ class TransformationExtension implements Extension
     }
 
     /**
+     * Loads transformation attribute reader.
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadAttributeReader(ContainerBuilder $container)
+    {
+        $definition = new Definition('\Behat\Behat\Transformation\Context\Attribute\TrasnformationAttributeReader', array(
+            new Reference(DefinitionExtension::DOC_BLOCK_HELPER_ID)
+        ));
+        $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, array('priority' => 50));
+        $container->setDefinition(ContextExtension::ATTRIBUTE_READER_TAG . '.transformation', $definition);
+    }
+
+    /**
      * Loads transformations repository.
      *
      * @param ContainerBuilder $container
@@ -171,9 +186,9 @@ class TransformationExtension implements Extension
      * Returns definition argument transformer service id.
      *
      * @return string
-     * 
+     *
      * @deprecated Use DEFINITION_ARGUMENT_TRANSFORMER_ID constant instead
-     * 
+     *
      * @todo Remove method in next major version
      */
     protected function getDefinitionArgumentTransformerId()
