@@ -13,6 +13,7 @@ final class Config implements ConfigInterface
     ) {
     }
 
+    /** @param string|string[] $resource **/
     public function import(string|array $resource): self
     {
         $resources = is_string($resource) ? [$resource] : $resource;
