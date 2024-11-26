@@ -9,16 +9,14 @@ Feature: Step Arguments Transformations with Attributes
       <?php
       class User
       {
-          private $username;
-          private $age;
-
-          public function __construct($username, $age = 20) {
-              $this->username = $username;
-              $this->age = $age;
+          public function __construct(
+              private string $username,
+              private int $age = 20
+          ) {
           }
 
-          public function getUsername() { return $this->username; }
-          public function getAge() { return $this->age; }
+          public function getUsername(): string { return $this->username; }
+          public function getAge(): int { return $this->age; }
       }
       """
 
@@ -35,25 +33,25 @@ Feature: Step Arguments Transformations with Attributes
 
       class FeatureContext implements Context
       {
-          private $user;
+          private User $user;
 
           #[Transform('/"([^\ "]+)(?: - (\d+))?" user/')]
-          public function createUserFromUsername($username, $age = 20) {
+          public function createUserFromUsername(string $username, int $age = 20): User {
               return new User($username, $age);
           }
 
           #[Given('/I am (".*" user)/')]
-          public function iAmUser(User $user) {
+          public function iAmUser(User $user): void {
               $this->user = $user;
           }
 
           #[Then('/Username must be "([^"]+)"/')]
-          public function usernameMustBe($username) {
+          public function usernameMustBe(string $username): void {
               Assert::assertEquals($username, $this->user->getUsername());
           }
 
            #[Then('/Age must be (\d+)/')]
-          public function ageMustBe($age) {
+          public function ageMustBe(string $age): void {
               Assert::assertEquals($age, $this->user->getAge());
           }
       }
@@ -93,20 +91,20 @@ Feature: Step Arguments Transformations with Attributes
 
       class FeatureContext implements Context
       {
-          private $user;
+          private User $user;
 
           #[Transform]
-          public function userFromName($username) : User {
+          public function userFromName(string $username): User {
               return new User($username);
           }
 
           #[Given('I am :user')]
-          public function iAm(User $user) {
+          public function iAm(User $user): void {
               $this->user = $user;
           }
 
           #[Then('I should be a user named :name')]
-          public function iShouldBeAUserNamed($username) {
+          public function iShouldBeAUserNamed(string $username): void {
               Assert::assertEquals($username, $this->user->getUserName());
           }
       }
@@ -140,27 +138,27 @@ Feature: Step Arguments Transformations with Attributes
 
       class FeatureContext implements Context
       {
-          private $user;
+          private User $user;
 
           #[Transform('/"([^\ "]+)(?: - (\d+))?" user/')]
           #[Transform(':user')]
-          public function createUserFromUsername($username, $age = 20) {
+          public function createUserFromUsername($username, $age = 20): User {
               return new User($username, $age);
           }
 
           #[Given('/I am (".*" user)/')]
           #[Given('I am :user')]
-          public function iAmUser(User $user) {
+          public function iAmUser(User $user): void {
               $this->user = $user;
           }
 
           #[Then('/Username must be "([^"]+)"/')]
-          public function usernameMustBe($username) {
+          public function usernameMustBe(string $username): void {
               Assert::assertEquals($username, $this->user->getUsername());
           }
 
           #[Then('/Age must be (\d+)/')]
-          public function ageMustBe($age) {
+          public function ageMustBe(string $age): void {
               Assert::assertEquals($age, $this->user->getAge());
           }
       }

@@ -142,10 +142,8 @@ class TransformationExtension implements Extension
 
     /**
      * Loads transformation attribute reader.
-     *
-     * @param ContainerBuilder $container
      */
-    private function loadAttributeReader(ContainerBuilder $container)
+    private function loadAttributeReader(ContainerBuilder $container): void
     {
         $definition = new Definition('\Behat\Behat\Transformation\Context\Attribute\TrasnformationAttributeReader', array(
             new Reference(DefinitionExtension::DOC_BLOCK_HELPER_ID)

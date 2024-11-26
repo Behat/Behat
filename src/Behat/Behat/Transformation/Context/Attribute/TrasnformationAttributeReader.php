@@ -13,6 +13,7 @@ namespace Behat\Behat\Transformation\Context\Attribute;
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
 use Behat\Behat\Transformation\Context\Annotation\TransformationAnnotationReader;
+use Behat\Behat\Transformation\Transformation;
 use Behat\Transformation as Attribute;
 use ReflectionMethod;
 
@@ -23,25 +24,15 @@ use ReflectionMethod;
  */
 final class TrasnformationAttributeReader extends TransformationAnnotationReader implements AttributeReader
 {
-    /**
-     * @var DocBlockHelper
-     */
-    private $docBlockHelper;
-
-    /**
-     * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
-     */
-    public function __construct(DocBlockHelper $docBlockHelper)
-    {
-        $this->docBlockHelper = $docBlockHelper;
+    public function __construct(
+        private DocBlockHelper $docBlockHelper
+    ) {
     }
 
     /**
-     * @{inheritdoc}
+     * @return Transformation[]
      */
-    public function readCallees(string $contextClass, ReflectionMethod $method)
+    public function readCallees(string $contextClass, ReflectionMethod $method): array
     {
         $attributes = $method->getAttributes(Attribute\Transformation::class, \ReflectionAttribute::IS_INSTANCEOF);
 
