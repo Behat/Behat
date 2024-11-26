@@ -145,7 +145,7 @@ class TransformationExtension implements Extension
      */
     private function loadAttributeReader(ContainerBuilder $container): void
     {
-        $definition = new Definition('\Behat\Behat\Transformation\Context\Attribute\TrasnformationAttributeReader', array(
+        $definition = new Definition('\Behat\Behat\Transformation\Context\Attribute\TransformationAttributeReader', array(
             new Reference(DefinitionExtension::DOC_BLOCK_HELPER_ID)
         ));
         $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, array('priority' => 50));

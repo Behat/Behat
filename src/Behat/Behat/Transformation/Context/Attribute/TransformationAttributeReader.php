@@ -12,7 +12,7 @@ namespace Behat\Behat\Transformation\Context\Attribute;
 
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
-use Behat\Behat\Transformation\Context\Annotation\TransformationAnnotationReader;
+use Behat\Behat\Transformation\Context\Factory\TransformationCalleeFactory;
 use Behat\Behat\Transformation\Transformation;
 use Behat\Transformation as Attribute;
 use ReflectionMethod;
@@ -22,7 +22,7 @@ use ReflectionMethod;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TrasnformationAttributeReader extends TransformationAnnotationReader implements AttributeReader
+final class TransformationAttributeReader implements AttributeReader
 {
     public function __construct(
         private DocBlockHelper $docBlockHelper
@@ -34,26 +34,18 @@ final class TrasnformationAttributeReader extends TransformationAnnotationReader
      */
     public function readCallees(string $contextClass, ReflectionMethod $method): array
     {
-        $attributes = $method->getAttributes(Attribute\Transformation::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $method->getAttributes(Attribute\Transform::class);
 
         $callees = [];
         foreach ($attributes as $attribute) {
-            $docLine = '@Transform';
-            $pattern = $attribute->newInstance()->pattern;;
-            if ($pattern !== null) {
-                $docLine .= ' ' . $pattern;
-            }
+            $pattern = $attribute->newInstance()->pattern ?? '';
 
             $description = null;
             if ($docBlock = $method->getDocComment()) {
                 $description = $this->docBlockHelper->extractDescription($docBlock);
             }
 
-            $callee = $this->readCallee($contextClass, $method, $docLine, $description);
-
-            if ($callee !== null) {
-                $callees[] = $callee;
-            }
+            $callees[] = TransformationCalleeFactory::create($contextClass, $method, $pattern, $description);
         }
 
         return $callees;
