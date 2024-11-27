@@ -9,7 +9,6 @@
  */
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Gherkin\Node\PyStringNode;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Process\PhpExecutableFinder;
@@ -39,6 +38,10 @@ class FeatureContext implements Context
     /**
      * @var string
      */
+    private $tempDir;
+    /**
+     * @var string
+     */
     private $options = '--format-settings=\'{"timer": false}\' --no-interaction';
     /**
      * @var array
@@ -48,6 +51,8 @@ class FeatureContext implements Context
      * @var string
      */
     private $answerString;
+
+    private bool $workingDirChanged = false;
 
     /**
      * Cleans test folders in the temporary directory.
@@ -60,7 +65,6 @@ class FeatureContext implements Context
         if (is_dir($dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat')) {
             self::clearDirectory($dir);
         }
-        self::clearDirectory('tests/Fixtures/temp', false);
     }
 
     /**
@@ -74,13 +78,13 @@ class FeatureContext implements Context
             md5(microtime() . rand(0, 10000));
 
         mkdir($dir . '/features/bootstrap/i18n', 0777, true);
-        mkdir($dir . '/junit');
 
         $phpFinder = new PhpExecutableFinder();
         if (false === $php = $phpFinder->find()) {
             throw new \RuntimeException('Unable to find the PHP executable.');
         }
         $this->workingDir = $dir;
+        $this->tempDir = $dir;
         $this->phpBin = $php;
     }
 
@@ -193,11 +197,17 @@ EOL;
     }
 
     /**
-     * @When I set the working directory to :dir
+     * @When I set the working directory to the :dir fixtures folder
      */
-    public function iSetTheWorkingDirectoryTo($dir): void
+    public function iSetTheWorkingDirectoryToTheFixturesFolder($dir): void
     {
-        $this->workingDir = realpath($dir);
+        $basePath = dirname(__DIR__, 2) . '/tests/Fixtures/';
+        $dir = $basePath . $dir;
+        if (!is_dir($dir)) {
+            throw new RuntimeException(sprintf('The directory "%s" does not exist', $dir));
+        }
+        $this->workingDir = $dir; ;
+        $this->workingDirChanged = true;
     }
 
     /**
@@ -214,6 +224,14 @@ EOL;
     public function iWantToRunTheconfig($config): void
     {
         $this->options .= ' --config=' . $config;
+    }
+
+    /**
+     * @Given I set the output folder to the system temp folder
+     */
+    public function iSetTheOutputFolderToTheSystemTempFolder(): void
+    {
+        $this->options .= ' --out=' . $this->tempDir;
     }
 
     /**
@@ -366,6 +384,20 @@ EOL;
     public function fileXmlShouldBeLike($path, PyStringNode $text)
     {
         $path = $this->workingDir . '/' . $path;
+        $this->checkXmlFileContents($path, $text);
+    }
+
+    /**
+     * @Then the temp :path file xml should be like:
+     */
+    public function theTempFileFileXmlShouldBeLike($path, PyStringNode $text): void
+    {
+        $path = $this->tempDir . '/' . $path;
+        $this->checkXmlFileContents($path, $text);
+    }
+
+    private function checkXmlFileContents($path, PyStringNode $text)
+    {
         Assert::assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
@@ -381,7 +413,6 @@ EOL;
 
         Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
     }
-
 
     /**
      * Checks whether last command output contains provided string.
@@ -469,8 +500,23 @@ EOL;
      */
     public function xmlShouldBeValid($xmlFile, $schemaPath)
     {
+        $path = $this->workingDir . '/' . $xmlFile;
+        $this->checkXmlIsValid($path, $schemaPath);
+    }
+
+    /**
+     * @Then the temp file :xmlFile should be a valid document according to :schemaPath
+     */
+    public function theTempFileShouldBeAValidDocumentAccordingTo($xmlFile, $schemaPath): void
+    {
+        $path = $this->tempDir . '/' . $xmlFile;
+        $this->checkXmlIsValid($path, $schemaPath);
+    }
+
+    private function checkXmlIsValid(string $xmlFile, string $schemaPath): void
+    {
         $dom = new DomDocument();
-        $dom->load($this->workingDir . '/' . $xmlFile);
+        $dom->load($xmlFile);
 
         $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);
     }
@@ -504,6 +550,9 @@ EOL;
 
     private function createFile($filename, $content)
     {
+        if ($this->workingDirChanged) {
+            throw new RuntimeException('Trying to write a file in a fixtures folder');
+        }
         $path = dirname($filename);
         $this->createDirectory($path);
 
@@ -526,7 +575,7 @@ EOL;
 
         $this->workingDir = $newWorkingDir;
     }
-    
+
     /**
      * @param 'fail'|'pass' $success
      */
@@ -541,30 +590,23 @@ EOL;
     private function getOutputDiff(PyStringNode $expectedText): string
     {
         $differ = new Differ(new DiffOnlyOutputBuilder());
-        
+
         return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput());
     }
 
-    private static function clearDirectory($path, bool $removeDir = true)
+    private static function clearDirectory($path)
     {
         $files = scandir($path);
         array_shift($files);
         array_shift($files);
 
         foreach ($files as $file) {
-            if ($file === '.gitkeep') {
-                continue;
-            }
             $file = $path . DIRECTORY_SEPARATOR . $file;
             if (is_dir($file)) {
                 self::clearDirectory($file);
             } else {
                 unlink($file);
             }
-        }
-
-        if ($removeDir) {
-            rmdir($path);
         }
     }
 }
