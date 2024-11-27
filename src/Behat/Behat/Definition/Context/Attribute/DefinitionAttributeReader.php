@@ -52,13 +52,6 @@ final class DefinitionAttributeReader implements AttributeReader
      */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
-        if (\PHP_MAJOR_VERSION < 8) {
-            return [];
-        }
-
-        /**
-         * @psalm-suppress UndefinedClass (ReflectionAttribute is PHP 8.0 only)
-         */
         $attributes = $method->getAttributes(Attribute\Definition::class, \ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];

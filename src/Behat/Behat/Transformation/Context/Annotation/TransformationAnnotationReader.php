@@ -11,6 +11,7 @@
 namespace Behat\Behat\Transformation\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
+use Behat\Behat\Transformation\Context\Factory\TransformationCalleeFactory;
 use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\Transformation;
 use ReflectionMethod;
@@ -36,41 +37,15 @@ class TransformationAnnotationReader implements AnnotationReader
      * @param ReflectionMethod $method
      * @param string           $docLine
      * @param string           $description
-     *
-     * @return null|Transformation
      */
-    public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description)
+    public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description): ?Transformation
     {
         if (!preg_match(self::$regex, $docLine, $match)) {
             return null;
         }
 
         $pattern = $match[1];
-        $callable = array($contextClass, $method->getName());
 
-        foreach ($this->simpleTransformations() as $transformation) {
-            if ($transformation::supportsPatternAndMethod($pattern, $method)) {
-                return new $transformation($pattern, $callable, $description);
-            }
-        }
-
-        return new PatternTransformation($pattern, $callable, $description);
-    }
-
-    /**
-     * Returns list of default transformations.
-     *
-     * @return array
-     */
-    private function simpleTransformations()
-    {
-        return array(
-            'Behat\Behat\Transformation\Transformation\RowBasedTableTransformation',
-            'Behat\Behat\Transformation\Transformation\ColumnBasedTableTransformation',
-            'Behat\Behat\Transformation\Transformation\TableRowTransformation',
-            'Behat\Behat\Transformation\Transformation\TokenNameAndReturnTypeTransformation',
-            'Behat\Behat\Transformation\Transformation\ReturnTypeTransformation',
-            'Behat\Behat\Transformation\Transformation\TokenNameTransformation'
-        );
+        return TransformationCalleeFactory::create($contextClass, $method, $pattern, $description);
     }
 }
