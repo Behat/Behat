@@ -200,7 +200,8 @@ final class ConfigurationLoader
         $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
 
         if (str_ends_with($configPath, '.php')) {
-            $phpConfig = require $configPath;
+            $phpConfig = $this->getPHPConfigObjectClosure($configPath)();
+
             if (!$phpConfig instanceof ConfigInterface) {
                 throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must return an instance of `%s`.', $configPath, ConfigInterface::class));
             }
@@ -211,6 +212,20 @@ final class ConfigurationLoader
         }
 
         return $this->loadConfigs($basePath, $config, $profile);
+    }
+
+    /**
+     * Scope isolated include.
+     *
+     * Prevents access to $this/self from included files.
+     */
+    private function getPHPConfigObjectClosure(string $configPath): \Closure
+    {
+        return \Closure::bind(function () use ($configPath): mixed {
+            $config = require $configPath;
+
+            return $config;
+        }, null, null);
     }
 
     /**
