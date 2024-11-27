@@ -25,6 +25,13 @@ final class Config implements ConfigInterface
         return $this;
     }
 
+    public function withProfile(Profile $profile): self
+    {
+        $this->settings[$profile->name()] = $profile->toArray();
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return $this->settings;

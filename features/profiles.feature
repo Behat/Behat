@@ -80,21 +80,32 @@ Feature: Profiles
           progress: false
           pretty: ~
       """
-    And a file named "behat.yml" with:
+    And a file named "behat.php" with:
       """
-      default:
-        formatters:
-          pretty:   false
-          progress: ~
+      <?php
 
-      pretty_without_paths:
-        formatters:
-          progress: false
-          pretty:
-            paths: false
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
 
-      imports:
-        - pretty.yml
+      $config = new Config(['imports' => ['pretty.yml']]);
+      $config
+        ->withProfile(new Profile('default', [
+          'formatters' => [
+            'pretty' => false,
+            'progress' => null,
+          ],
+        ]))
+        ->withProfile(new Profile('pretty_without_paths', [
+          'formatters' => [
+            'progress' => false,
+            'pretty' => [
+              'paths' => false,
+            ],
+          ],
+        ]))
+      ;
+
+      return $config;
       """
 
   Scenario:

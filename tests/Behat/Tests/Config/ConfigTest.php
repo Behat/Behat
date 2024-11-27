@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behat\Tests\Config;
 
 use Behat\Config\Config;
+use Behat\Config\Profile;
 use PHPUnit\Framework\TestCase;
 
 final class ConfigTest extends TestCase
@@ -43,6 +46,25 @@ final class ConfigTest extends TestCase
             'imports' => [
                 'config/first_suite.php',
                 'config/second_suite.php',
+            ],
+        ], $config->toArray());
+    }
+
+    public function testAddingProfile(): void
+    {
+        $config = new Config();
+
+        $config->withProfile(new Profile('default', [
+            'extensions' => [
+                'some_extension' => [],
+            ],
+        ]));
+
+        $this->assertEquals([
+            'default' => [
+                'extensions' => [
+                    'some_extension' => [],
+                ],
             ],
         ], $config->toArray());
     }
