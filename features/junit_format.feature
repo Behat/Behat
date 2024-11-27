@@ -4,11 +4,12 @@
   I need to be able to generate a JUnit-compatible report
 
   Background:
-    Given I set the working directory to "tests/Fixtures/JunitFormat"
+    Given I set the working directory to the "JunitFormat" fixtures folder
 
   Scenario: Run a single feature
     Given I want to run the suite "single_feature"
-    And I run "behat --no-colors -f junit -o ../temp --snippets-for=SingleFeatureContext --snippets-type=regex"
+    And I set the output folder to the system temp folder
+    And I run "behat --no-colors -f junit --snippets-for=SingleFeatureContext --snippets-type=regex"
     Then it should fail with:
       """
       --- SingleFeatureContext has missing steps. Define them with these snippets:
@@ -21,7 +22,7 @@
               throw new PendingException();
           }
       """
-    And the "../temp/single_feature.xml" file xml should be like:
+    And the temp "single_feature.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="single_feature">
@@ -47,13 +48,14 @@
         </testsuite>
       </testsuites>
       """
-    And the file "../temp/single_feature.xml" should be a valid document according to "junit.xsd"
+    And the temp file "single_feature.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Run multiple Features
     Given I want to run the suite "multiple_features"
-    When I run "behat --no-colors -f junit -o ../temp"
+    And I set the output folder to the system temp folder
+    When I run "behat --no-colors -f junit"
     Then it should pass
-    And the "../temp/multiple_features.xml" file xml should be like:
+    And the temp "multiple_features.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="multiple_features">
@@ -65,13 +67,14 @@
         </testsuite>
       </testsuites>
       """
-    And the file "../temp/multiple_features.xml" should be a valid document according to "junit.xsd"
+    And the temp file "multiple_features.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Confirm multiline scenario titles are printed correctly
     Given I want to run the suite "multiline_titles"
-    When I run "behat --no-colors -f junit -o ../temp"
+    And I set the output folder to the system temp folder
+    When I run "behat --no-colors -f junit"
     Then it should pass with no output
-    And the "../temp/multiline_titles.xml" file xml should be like:
+    And the temp "multiline_titles.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="multiline_titles">
@@ -81,13 +84,14 @@
         </testsuite>
       </testsuites>
       """
-    And the file "../temp/multiline_titles.xml" should be a valid document according to "junit.xsd"
+    And the temp file "multiline_titles.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Multiple suites
     Given I want to run the config "two_suites.php"
-    When I run "behat --no-colors -f junit -o ../temp"
+    And I set the output folder to the system temp folder
+    When I run "behat --no-colors -f junit"
     Then it should fail with no output
-    And the "../temp/small_kid.xml" file xml should be like:
+    And the temp "small_kid.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="small_kid">
@@ -96,8 +100,8 @@
         </testsuite>
       </testsuites>
       """
-    And the file "../temp/small_kid.xml" should be a valid document according to "junit.xsd"
-    And the "../temp/old_man.xml" file xml should be like:
+    And the temp file "small_kid.xml" should be a valid document according to "junit.xsd"
+    And the temp "old_man.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="old_man">
@@ -108,12 +112,13 @@
         </testsuite>
       </testsuites>
       """
-    And the file "../temp/old_man.xml" should be a valid document according to "junit.xsd"
+    And the temp file "old_man.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Report skipped testcases
     Given I want to run the suite "skipped_test_cases"
-    When I run "behat --no-colors -f junit -o ../temp"
-    And the "../temp/skipped_test_cases.xml" file xml should be like:
+    And I set the output folder to the system temp folder
+    When I run "behat --no-colors -f junit"
+    And the temp "skipped_test_cases.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="skipped_test_cases">
@@ -127,13 +132,14 @@
         </testsuite>
       </testsuites>
       """
-    And the file "../temp/skipped_test_cases.xml" should be a valid document according to "junit.xsd"
+    And the temp file "skipped_test_cases.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Stop on Failure
     Given I want to run the suite "stop_on_failure"
-    When I run "behat --no-colors -f junit -o ../temp"
+    And I set the output folder to the system temp folder
+    When I run "behat --no-colors -f junit"
     Then it should fail with no output
-    And the "../temp/stop_on_failure.xml" file xml should be like:
+    And the temp "stop_on_failure.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="stop_on_failure">
@@ -144,16 +150,17 @@
         </testsuite>
       </testsuites>
       """
-    And the file "../temp/stop_on_failure.xml" should be a valid document according to "junit.xsd"
+    And the temp file "stop_on_failure.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Aborting due to PHP error
     Given I want to run the suite "abort_on_php_error"
-    When I run "behat --no-colors -f junit -o ../temp"
+    And I set the output folder to the system temp folder
+    When I run "behat --no-colors -f junit"
     Then it should fail with:
     """
     cannot implement Foo - it is not an interface
     """
-    And the "../temp/abort_on_php_error.xml" file xml should be like:
+    And the temp "abort_on_php_error.xml" file xml should be like:
     """
     <?xml version="1.0" encoding="UTF-8"?>
     <testsuites name="abort_on_php_error"/>
