@@ -2,15 +2,14 @@
 <psalm
     errorLevel="7"
     resolveFromConfigFile="true"
+    findUnusedBaselineEntry="false"
+    findUnusedCode="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
         <directory name="src" />
-        <ignoreFiles>
-            <directory name="vendor" />
-        </ignoreFiles>
     </projectFiles>
 
     <issueHandlers>
@@ -23,21 +22,6 @@
                 <file name="src/Behat/Behat/HelperContainer/Exception/NotFoundException.php" />
             </errorLevel>
         </UnrecognizedStatement>
-
-        <!-- Suppress errors due to PSR exceptions not implementing Throwable -->
-        <!-- https://github.com/vimeo/psalm/issues/1856 -->
-        <InvalidThrow>
-            <errorLevel type="suppress">
-                <referencedClass name="Psr\Container\ContainerExceptionInterface" />
-            </errorLevel>
-        </InvalidThrow>
-
-        <!-- suppress errors related to Symfony return types including enums -->
-        <UndefinedDocblockClass>
-            <errorLevel type="suppress">
-                <referencedClass name="UnitEnum" />
-            </errorLevel>
-        </UndefinedDocblockClass>
 
         <!-- Suppress errors related to legacy PHPUnit classes -->
         <UndefinedClass>
@@ -56,7 +40,16 @@
         <MethodSignatureMismatch>
             <errorLevel type="suppress">
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
             </errorLevel>
         </MethodSignatureMismatch>
+
+        <!-- Psalm does not correctly understand the spread operator being applied on array_merge -->
+        <NamedArgumentNotAllowed>
+            <errorLevel type="suppress">
+                <file name="src/Behat/Behat/Snippet/AggregateSnippet.php" />
+            </errorLevel>
+        </NamedArgumentNotAllowed>
     </issueHandlers>
+
 </psalm>

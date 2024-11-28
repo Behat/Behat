@@ -69,11 +69,6 @@ jobs:
           composer config --global --no-plugins allow-plugins.symfony/flex true &&
           composer global require symfony/flex
 
-      # until psalm is updated to v5 which is compatible with Symfony 7
-      - name: Remove vimeo/psalm
-        if: matrix.symfony-version == '7.0'
-        run: composer remove vimeo/psalm --no-update --dev
-
       - name: Install latest dependencies
         if: matrix.composer-mode == 'update'
         env:
@@ -94,31 +89,8 @@ jobs:
         if: matrix.php >= 8.0
         run: ./bin/behat -fprogress --strict --tags=@php8
 
-  static-analysis:
-    name: Static analysis
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.1
-          ini-values: "zend.exception_ignore_args=Off"
-          coverage: none
-
-      # until psalm is updated to v5 which is compatible with Symfony 7
-      - name: Force symfony version for psalm compatibility
-        run: |
-          composer config --global --no-plugins allow-plugins.symfony/flex true &&
-          composer global require symfony/flex
-
-      - name: Install dependencies
-        env:
-          SYMFONY_REQUIRE: 5.4.*
-        run: composer update
-
       - name: Run Psalm
+        if: matrix.php != 8.4 && matrix.composer-mode != 'lowest'
         run: ./vendor/bin/psalm --output-format=github
 
   build-phar:
@@ -171,7 +143,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer install
+        run: composer install --no-dev ${{ matrix.php == '8.4' && '--ignore-platform-req=php+' || '' }}
 
       - uses: actions/download-artifact@v4
         with:

@@ -42,21 +42,13 @@ class RuntimeCallee implements Callee
     /**
      * Initializes callee.
      *
-     * @param callable    $callable
+     * @param callable $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If invalid callback provided
      */
     public function __construct($callable, $description = null)
     {
-        if (!is_array($callable) && !is_callable($callable)) {
-            throw new BadCallbackException(sprintf(
-                '%s expects a valid callable, but `%s` given',
-                get_class($this),
-                gettype($callable)
-            ), $callable);
-        }
-
         if (is_array($callable)) {
             $this->reflection = new ReflectionMethod($callable[0], $callable[1]);
             $this->path = $callable[0] . '::' . $callable[1] . '()';

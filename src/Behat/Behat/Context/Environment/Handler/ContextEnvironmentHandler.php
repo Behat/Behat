@@ -155,7 +155,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
      *
      * @param Suite $suite
      *
-     * @return string[]
+     * @return array<string|array>
      *
      * @throws SuiteConfigurationException If `contexts` setting is not an array
      */

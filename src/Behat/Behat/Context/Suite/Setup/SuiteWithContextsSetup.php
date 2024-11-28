@@ -108,7 +108,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      *
      * @param Suite $suite
      *
-     * @return string[]
+     * @return array<string|array>
      *
      * @throws SuiteConfigurationException If `contexts` setting is not an array
      */
