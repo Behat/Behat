@@ -30,4 +30,20 @@ final class ConfigTest extends TestCase
 
         $this->assertEquals($settings, $config->toArray());
     }
+
+    public function testAddingImports(): void
+    {
+        $config = new Config();
+        $config
+            ->import('config/first_suite.php')
+            ->import('config/second_suite.php')
+        ;
+
+        $this->assertEquals([
+            'imports' => [
+                'config/first_suite.php',
+                'config/second_suite.php',
+            ],
+        ], $config->toArray());
+    }
 }
