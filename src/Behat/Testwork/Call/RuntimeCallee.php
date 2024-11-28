@@ -41,13 +41,8 @@ class RuntimeCallee implements Callee
 
     /**
      * Initializes callee.
-     *
-     * @param callable $callable
-     * @param null|string $description
-     *
-     * @throws BadCallbackException If invalid callback provided
      */
-    public function __construct($callable, $description = null)
+    public function __construct(callable $callable, ?string $description = null)
     {
         if (is_array($callable)) {
             $this->reflection = new ReflectionMethod($callable[0], $callable[1]);

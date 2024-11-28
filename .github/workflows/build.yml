@@ -89,9 +89,29 @@ jobs:
         if: matrix.php >= 8.0
         run: ./bin/behat -fprogress --strict --tags=@php8
 
+  static-analysis:
+    name: Static analysis
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        #runs on the lowest and highest supported versions (change this to 8.4 once psalm supports it)
+        php: [8.1, 8.3]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
+          ini-values: "zend.exception_ignore_args=Off"
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update
+
       - name: Run Psalm
-        if: matrix.php != 8.4 && matrix.composer-mode != 'lowest'
-        run: ./vendor/bin/psalm --output-format=github
+        run: ./vendor/bin/psalm --output-format=github --php-version=${{ matrix.php }}
 
   build-phar:
     name: Build PHAR file
