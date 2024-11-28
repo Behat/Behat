@@ -10,8 +10,6 @@
 
 namespace Behat\Behat\Context\Snippet\Generator;
 
-use Behat\Behat\Context\Context;
-
 /**
  * Identifier that always returns same pattern type.
  *
@@ -19,17 +17,12 @@ use Behat\Behat\Context\Context;
  */
 final class FixedPatternIdentifier implements PatternIdentifier
 {
-    /**
-     * @var string
-     */
-    private $patternType;
+    private ?string $patternType;
 
     /**
      * Initialises identifier.
-     *
-     * @param string $patternType
      */
-    public function __construct($patternType)
+    public function __construct(?string $patternType = null)
     {
         $this->patternType = $patternType;
     }
@@ -37,7 +30,7 @@ final class FixedPatternIdentifier implements PatternIdentifier
     /**
      * {@inheritdoc}
      */
-    public function guessPatternType($contextClass)
+    public function guessPatternType($contextClass): ?string
     {
         return $this->patternType;
     }
