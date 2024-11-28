@@ -113,15 +113,17 @@ final class AggregateSnippet
 
         return array_unique(
             array_merge(
-                ...array_map(
-                    function (Snippet $snippet) {
-                        if (!$snippet instanceof ContextSnippet) {
-                            return array();
-                        }
+                ...array_values(
+                    array_map(
+                        function (Snippet $snippet) {
+                            if (!$snippet instanceof ContextSnippet) {
+                                return array();
+                            }
 
-                        return $snippet->getUsedClasses();
-                    },
-                    $this->snippets
+                            return $snippet->getUsedClasses();
+                        },
+                        $this->snippets
+                    )
                 )
             )
         );

@@ -43,13 +43,6 @@
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
             </errorLevel>
         </MethodSignatureMismatch>
-
-        <!-- Psalm does not correctly understand the spread operator being applied on array_merge -->
-        <NamedArgumentNotAllowed>
-            <errorLevel type="suppress">
-                <file name="src/Behat/Behat/Snippet/AggregateSnippet.php" />
-            </errorLevel>
-        </NamedArgumentNotAllowed>
     </issueHandlers>
 
 </psalm>
