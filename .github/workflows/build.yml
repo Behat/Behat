@@ -162,9 +162,6 @@ jobs:
           ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
           coverage: none
 
-      - name: Install dependencies
-        run: composer install --no-dev ${{ matrix.php == '8.4' && '--ignore-platform-req=php+' || '' }}
-
       - uses: actions/download-artifact@v4
         with:
           name: behat.phar
