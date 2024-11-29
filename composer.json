@@ -19,13 +19,13 @@
         "behat/gherkin": "^4.10.0",
         "behat/transliterator": "^1.5",
         "composer-runtime-api": "^2.2",
-        "symfony/console": "^5.4 || ^6.4 || ^7.0",
+        "psr/container": "^1.0 || ^2.0",
         "symfony/config": "^5.4 || ^6.4 || ^7.0",
+        "symfony/console": "^5.4 || ^6.4 || ^7.0",
         "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0",
         "symfony/event-dispatcher": "^5.4 || ^6.4 || ^7.0",
         "symfony/translation": "^5.4 || ^6.4 || ^7.0",
-        "symfony/yaml": "^5.4 || ^6.4 || ^7.0",
-        "psr/container": "^1.0 || ^2.0"
+        "symfony/yaml": "^5.4 || ^6.4 || ^7.0"
     },
 
     "require-dev": {
@@ -62,6 +62,18 @@
         "branch-alias": {
             "dev-master": "3.x-dev"
         }
+    },
+
+    "scripts": {
+        "all-tests": [
+            "@behat-progress",
+            "@phpunit",
+            "@psalm"
+        ],
+        "behat": "LANG=C bin/behat",
+        "behat-progress": "LANG=C bin/behat --format=progress",
+        "phpunit": "phpunit",
+        "psalm": "psalm"
     },
 
     "bin": ["bin/behat"]

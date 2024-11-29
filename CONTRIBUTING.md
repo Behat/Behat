@@ -58,8 +58,11 @@ You can read detailed guidance on what BC means in [Symfony2 BC guide](http://sy
 ## Running tests
 
 Make sure that you don't break anything with your changes by running the test
-suite with your locale set to english:
+suite with this command:
 
 ```bash
-$> LANG=C bin/behat --format=progress
+composer all-tests
 ```
+
+This will run all the Behat tests, all the PHPUnit tests and Psalm. If the tests find any issues,
+you can run these tools individually by running `composer behat`, `composer phpunit` or `composer psalm`.
