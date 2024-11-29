@@ -20,7 +20,7 @@ final class ConfigTest extends TestCase
             'default' => [
                 'gherkin' => [
                     'filters' => [
-                        'tags' => '~@php8'
+                        'tags' => '~@test'
                     ],
                 ],
             ],

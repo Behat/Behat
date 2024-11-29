@@ -1,10 +1,9 @@
 Feature: attributes
   In order to keep annotations shorter and faster to parse
   As a tester
-  I need to be able to use PHP8 Attributes
+  I need to be able to use PHP Attributes
 
-  @php8
-  Scenario: PHP 8 Step Attributes
+  Scenario: Step Attributes
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
@@ -65,8 +64,7 @@ Feature: attributes
       6 steps (6 passed)
       """
 
-  @php8
-  Scenario: PHP 8 Hook Feature Hook Attributes
+  Scenario: Hook Feature Hook Attributes
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
@@ -170,8 +168,7 @@ Feature: attributes
       6 steps (6 passed)
       """
 
-  @php8
-  Scenario: PHP 8 Hook Scenario Hook Attributes
+  Scenario: Hook Scenario Hook Attributes
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
@@ -283,8 +280,8 @@ Feature: attributes
       6 steps (6 passed)
       """
 
-  @php8 @suite-hooks
-  Scenario: PHP 8 Hook Suite Hook Attributes
+  @suite-hooks
+  Scenario: Hook Suite Hook Attributes
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
@@ -385,8 +382,7 @@ Feature: attributes
       3 steps (3 passed)
       """
 
-  @php8
-  Scenario: PHP 8 Hook Step Hook Attributes
+  Scenario: Hook Step Hook Attributes
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
