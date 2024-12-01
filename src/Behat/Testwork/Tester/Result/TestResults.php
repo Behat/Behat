@@ -18,6 +18,8 @@ use IteratorAggregate;
  * Aggregates multiple test results into a collection and provides informational API on top of that.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements IteratorAggregate<int, TestResult>
  */
 final class TestResults implements TestResult, Countable, IteratorAggregate
 {

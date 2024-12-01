@@ -20,6 +20,8 @@ use IteratorAggregate;
  * Used to compose formatter event listeners.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements IteratorAggregate<int, EventListener>
  */
 class ChainEventListener implements EventListener, Countable, IteratorAggregate
 {

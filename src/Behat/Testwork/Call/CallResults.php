@@ -18,6 +18,8 @@ use IteratorAggregate;
  * Aggregates multiple call results into a collection and provides an informational API on top of that.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements IteratorAggregate<int, CallResult>
  */
 final class CallResults implements Countable, IteratorAggregate
 {

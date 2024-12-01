@@ -34,7 +34,7 @@
         "sebastian/diff": "^4.0",
         "symfony/polyfill-php84": "^1.31",
         "symfony/process": "^5.4 || ^6.4 || ^7.0",
-        "vimeo/psalm": "^4.8"
+        "vimeo/psalm": "^5.0"
     },
 
     "suggest": {
