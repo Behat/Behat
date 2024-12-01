@@ -85,10 +85,6 @@ jobs:
       - name: Run tests (Behat)
         run: ./bin/behat -fprogress --strict
 
-      - name: Run tests (Behat for PHP 8.0)
-        if: matrix.php >= 8.0
-        run: ./bin/behat -fprogress --strict --tags=@php8
-
   static-analysis:
     name: Static analysis
     runs-on: ubuntu-latest
