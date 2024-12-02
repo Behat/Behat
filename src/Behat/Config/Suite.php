@@ -13,7 +13,7 @@ final class Suite
     ) {
     }
 
-    public function withContexts(string ...$contexts): self
+    public function withContexts(string|array ...$contexts): self
     {
         foreach ($contexts as $context) {
             $this->settings['contexts'][] = $context;
