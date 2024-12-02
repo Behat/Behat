@@ -50,6 +50,18 @@ final class ProfileTest extends TestCase
         ], $profile->toArray());
     }
 
+    public function testItThrowsAnExceptionWhenAddingExistingExtension(): void
+    {
+        $profile = new Profile('default');
+
+        $profile->withExtension(new Extension('custom_extension'));
+
+        $this->expectException(ConfigurationLoadingException::class);
+        $this->expectExceptionMessage('The extension "custom_extension" already exists.');
+
+        $profile->withExtension(new Extension('custom_extension'));
+    }
+
     public function testAddingSuites(): void
     {
         $profile = new Profile('default');

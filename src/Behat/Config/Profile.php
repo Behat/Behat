@@ -32,6 +32,10 @@ final class Profile
 
     public function withExtension(ExtensionConfigInterface $extension): self
     {
+        if (array_key_exists($extension->name(), $this->settings['extensions'] ?? [])) {
+            throw new ConfigurationLoadingException(sprintf('The extension "%s" already exists.', $extension->name()));
+        }
+
         $this->settings['extensions'][$extension->name()] = $extension->toArray();
 
         return $this;
