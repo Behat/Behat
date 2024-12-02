@@ -4,12 +4,25 @@ declare(strict_types=1);
 
 namespace Behat\Config;
 
+use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
+
 final class Profile
 {
     public function __construct(
         private string $name,
         private array $settings = []
     ) {
+    }
+
+    public function withSuite(Suite $suite): self
+    {
+        if (array_key_exists($suite->name(), $this->settings['suites'] ?? [])) {
+            throw new ConfigurationLoadingException(sprintf('The suite "%s" already exists.', $suite->name()));
+        }
+
+        $this->settings['suites'][$suite->name()] = $suite->toArray();
+
+        return $this;
     }
 
     public function name(): string
