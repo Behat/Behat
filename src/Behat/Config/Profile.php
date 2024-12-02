@@ -30,6 +30,13 @@ final class Profile
         return $this->name;
     }
 
+    public function withExtension(ExtensionConfigInterface $extension): self
+    {
+        $this->settings['extensions'][$extension->name()] = $extension->toArray();
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return $this->settings;
