@@ -9,7 +9,6 @@ final class Suite
     public function __construct(
         private string $name,
         private array $settings = [],
-        private string $profile = 'default',
     ) {
     }
 
@@ -45,11 +44,6 @@ final class Suite
     public function name(): string
     {
         return $this->name;
-    }
-
-    public function profile(): ?string
-    {
-        return $this->profile;
     }
 
     public function toArray(): array
