@@ -41,4 +41,19 @@ final class SuiteTest extends TestCase
             ]
         ], $config->toArray());
     }
+
+    public function testAddingPaths(): void
+    {
+        $config = new Suite('first');
+        $config->withPaths('features/admin/first', 'features/front/first');
+        $config->withPaths('features/api/first');
+
+        $this->assertEquals([
+            'paths' => [
+                'features/admin/first',
+                'features/front/first',
+                'features/api/first',
+            ]
+        ], $config->toArray());
+    }
 }

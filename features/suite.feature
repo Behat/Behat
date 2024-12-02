@@ -147,16 +147,30 @@ Feature: Suites
           When I ate 10 apple
           Then I should have 20 apples
       """
-    And a file named "behat.yml" with:
+    And a file named "behat.php" with:
       """
-      default:
-        suites:
-          first:
-            paths:    [ '%paths.base%/features/first' ]
-            contexts: [ FirstContext ]
-          second:
-            paths:    [ '%paths.base%/features/second' ]
-            contexts: [ SecondContext ]
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+
+      $firstSuite = (new Suite('first'))
+        ->withPaths('%paths.base%/features/first')
+        ->withContexts('FirstContext')
+      ;
+
+      $secondSuite = (new Suite('second'))
+        ->withPaths('%paths.base%/features/second')
+        ->withContexts('SecondContext')
+      ;
+
+      $profile = (new Profile('default'))
+        ->withSuite($firstSuite)
+        ->withSuite($secondSuite)
+      ;
+
+      return (new Config())->withProfile($profile);
       """
     When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
     Then it should pass with:

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Behat\Config;
 
-final class Suite implements SuiteConfigInterface
+final class Suite
 {
     public function __construct(
         private string $name,
@@ -13,10 +13,19 @@ final class Suite implements SuiteConfigInterface
     ) {
     }
 
-    public function withContexts(...$contexts): self
+    public function withContexts(string ...$contexts): self
     {
         foreach ($contexts as $context) {
             $this->settings['contexts'][] = $context;
+        }
+
+        return $this;
+    }
+
+    public function withPaths(string ...$paths): self
+    {
+        foreach ($paths as $path) {
+            $this->settings['paths'][] = $path;
         }
 
         return $this;
