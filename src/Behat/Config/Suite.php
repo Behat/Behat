@@ -13,11 +13,22 @@ final class Suite
     ) {
     }
 
-    public function withContexts(string|array ...$contexts): self
+    public function withContexts(string ...$contexts): self
     {
         foreach ($contexts as $context) {
             $this->settings['contexts'][] = $context;
         }
+
+        return $this;
+    }
+
+    /**
+     * @param array<mixed> $constructorArgs
+     */
+
+    public function addContext(string $context, array $constructorArgs = []): self
+    {
+        $this->settings['contexts'][][$context] = $constructorArgs;
 
         return $this;
     }
