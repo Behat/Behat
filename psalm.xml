@@ -63,6 +63,9 @@
         <InvalidCast>
             <errorLevel type="error"/>
         </InvalidCast>
+        <InvalidCatch>
+            <errorLevel type="error"/>
+        </InvalidCatch>
     </issueHandlers>
 
 </psalm>
