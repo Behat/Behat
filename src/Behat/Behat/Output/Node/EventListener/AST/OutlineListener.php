@@ -25,7 +25,6 @@ use Behat\Gherkin\Node\ExampleNode;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
-use phpDocumentor\Reflection\DocBlock\Tags\Example;
 
 /**
  * Listens to expanded outline events and calls appropriate printers.
