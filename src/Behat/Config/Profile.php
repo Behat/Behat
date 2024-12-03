@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Behat\Config;
 
+use Behat\Config\Gherkin\Filter\FilterInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 
 final class Profile
@@ -37,6 +38,17 @@ final class Profile
         }
 
         $this->settings['extensions'][$extension->name()] = $extension->toArray();
+
+        return $this;
+    }
+
+    public function withFilter(FilterInterface $filter): self
+    {
+        if (array_key_exists($filter->name(), $this->settings['gherkin']['filters'] ?? [])) {
+            throw new ConfigurationLoadingException(sprintf('The filter "%s" already exists.', $filter->name()));
+        }
+
+        $this->settings['gherkin']['filters'][$filter->name()] = $filter->value();
 
         return $this;
     }
