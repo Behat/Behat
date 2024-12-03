@@ -39,7 +39,7 @@ final class RerunController implements Controller
      */
     private $key;
     /**
-     * @var string[]
+     * @var array<string, string[]>
      */
     private $lines = array();
 

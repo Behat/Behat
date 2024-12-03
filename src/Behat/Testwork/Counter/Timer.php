@@ -51,7 +51,7 @@ final class Timer
     }
 
     /**
-     * @return null|float
+     * @return float
      *
      * @throws TimerException If timer has not been started
      */

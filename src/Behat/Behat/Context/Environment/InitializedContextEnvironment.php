@@ -28,7 +28,7 @@ use Psr\Container\ContainerInterface;
 final class InitializedContextEnvironment implements ContextEnvironment, ServiceContainerEnvironment
 {
     /**
-     * @var string
+     * @var Suite
      */
     private $suite;
     /**

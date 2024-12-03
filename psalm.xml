@@ -66,6 +66,33 @@
         <InvalidCatch>
             <errorLevel type="error"/>
         </InvalidCatch>
+        <InvalidClass>
+            <errorLevel type="error"/>
+        </InvalidClass>
+        <InvalidClone>
+            <errorLevel type="error"/>
+        </InvalidClone>
+        <InvalidFunctionCall>
+            <errorLevel type="error"/>
+        </InvalidFunctionCall>
+        <InvalidIterator>
+            <errorLevel type="error"/>
+        </InvalidIterator>
+        <InvalidMethodCall>
+            <errorLevel type="error"/>
+            <errorLevel type="suppress">
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
+            </errorLevel>
+        </InvalidMethodCall>
+        <InvalidNamedArgument>
+            <errorLevel type="error"/>
+        </InvalidNamedArgument>
+        <InvalidPropertyAssignment>
+            <errorLevel type="error"/>
+        </InvalidPropertyAssignment>
+        <InvalidPropertyAssignmentValue>
+            <errorLevel type="error"/>
+        </InvalidPropertyAssignmentValue>
     </issueHandlers>
 
 </psalm>
