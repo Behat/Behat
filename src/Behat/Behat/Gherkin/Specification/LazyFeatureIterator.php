@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Gherkin\Specification;
 
-use Behat\Gherkin\Filter\FilterInterface;
+use Behat\Gherkin\Filter\FeatureFilterInterface;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\NarrativeFilter;
 use Behat\Gherkin\Filter\RoleFilter;
@@ -41,7 +41,7 @@ final class LazyFeatureIterator implements SpecificationIterator
      */
     private $paths = array();
     /**
-     * @var FilterInterface[]
+     * @var FeatureFilterInterface[]
      */
     private $filters = array();
     /**
@@ -63,7 +63,7 @@ final class LazyFeatureIterator implements SpecificationIterator
      * @param Suite             $suite
      * @param Gherkin           $gherkin
      * @param string[]          $paths
-     * @param FilterInterface[] $filters
+     * @param FeatureFilterInterface[] $filters
      */
     public function __construct(Suite $suite, Gherkin $gherkin, array $paths, array $filters = array())
     {
@@ -127,7 +127,7 @@ final class LazyFeatureIterator implements SpecificationIterator
      *
      * @param Suite $suite
      *
-     * @return FilterInterface[]
+     * @return FeatureFilterInterface[]
      */
     private function getSuiteFilters(Suite $suite)
     {
@@ -150,7 +150,7 @@ final class LazyFeatureIterator implements SpecificationIterator
      * @param string $filterString
      * @param Suite  $suite
      *
-     * @return FilterInterface
+     * @return FeatureFilterInterface
      *
      * @throws SuiteConfigurationException If filter type is not recognised
      */

@@ -12,7 +12,7 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\Tester\Setup\Setup;
@@ -67,7 +67,7 @@ final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
     /**
      * Returns scenario node.
      *
-     * @return ScenarioInterface
+     * @return ScenarioLikeInterface
      */
     public function getScenario()
     {
