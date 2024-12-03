@@ -44,25 +44,19 @@ Feature: Different result types
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Given /^I have magically created (\d+)\$$/
-           */
+          #[Given('/^I have magically created (\d+)\$$/')]
           public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I have chose "([^"]*)" in coffee machine$/
-           */
+          #[When('/^I have chose "([^"]*)" in coffee machine$/')]
           public function iHaveChoseInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have "([^"]*)"$/
-           */
+          #[Then('/^I should have "([^"]*)"$/')]
           public function iShouldHave($arg1): void
           {
               throw new PendingException();
@@ -78,25 +72,19 @@ Feature: Different result types
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Given /^I have magically created (\d+)\$$/
-           */
+          #[Given('/^I have magically created (\d+)\$$/')]
           public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I have chose "([^"]*)" in coffee machine$/
-           */
+          #[When('/^I have chose "([^"]*)" in coffee machine$/')]
           public function iHaveChoseInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have "([^"]*)"$/
-           */
+          #[Then('/^I should have "([^"]*)"$/')]
           public function iShouldHave($arg1): void
           {
               throw new PendingException();
@@ -160,9 +148,7 @@ Feature: Different result types
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^I should say "([^"]*)"$/
-           */
+          #[Then('/^I should say "([^"]*)"$/')]
           public function iShouldSay($arg1): void
           {
               throw new PendingException();
@@ -184,9 +170,7 @@ Feature: Different result types
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^I should say "([^"]*)"$/
-           */
+          #[Then('/^I should say "([^"]*)"$/')]
           public function iShouldSay($arg1): void
           {
               throw new PendingException();
