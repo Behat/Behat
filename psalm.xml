@@ -104,6 +104,12 @@
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
             </errorLevel>
         </InvalidReturnStatement>
+        <InvalidTemplateParam>
+            <errorLevel type="error"/>
+        </InvalidTemplateParam>
+        <NullArgument>
+            <errorLevel type="error"/>
+        </NullArgument>
     </issueHandlers>
 
 </psalm>

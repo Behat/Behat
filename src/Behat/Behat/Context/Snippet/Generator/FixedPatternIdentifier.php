@@ -17,9 +17,6 @@ namespace Behat\Behat\Context\Snippet\Generator;
  */
 final class FixedPatternIdentifier implements PatternIdentifier
 {
-    /**
-     * Initialises identifier.
-     */
     public function __construct(
         private readonly ?string $patternType = null
     ) {
