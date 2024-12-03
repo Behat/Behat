@@ -14,6 +14,7 @@ use Behat\Testwork\Call\Exception\BadCallbackException;
 use Behat\Testwork\Hook\Scope\HookScope;
 use Behat\Testwork\Hook\Scope\SuiteScope;
 use Behat\Testwork\Suite\Suite;
+use ReflectionMethod;
 
 /**
  * Represents suite hook executed in the runtime.
@@ -27,7 +28,7 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
      *
      * @param string      $scopeName
      * @param null|string $filterString
-     * @param callable    $callable
+     * @param callable|array $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
@@ -37,10 +38,19 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
         parent::__construct($scopeName, $filterString, $callable, $description);
 
         if ($this->isAnInstanceMethod()) {
+            if (is_array($callable)) {
+                $className = $callable[0];
+                $methodName = $callable[1];
+            } else {
+                $reflection = new ReflectionMethod($callable);
+                $className = $reflection->getDeclaringClass()->getShortName();
+                $methodName = $reflection->getName();
+            }
+
             throw new BadCallbackException(sprintf(
                 'Suite hook callback: %s::%s() must be a static method',
-                $callable[0],
-                $callable[1]
+                $className,
+                $methodName
             ), $callable);
         }
     }

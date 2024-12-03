@@ -149,7 +149,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
     {
         $callable = $callee->getCallable();
 
-        if ($callee->isAnInstanceMethod()) {
+        if ($callee->isAnInstanceMethod() && is_array($callable)) {
             return array($this->getContext($callable[0]), $callable[1]);
         }
 

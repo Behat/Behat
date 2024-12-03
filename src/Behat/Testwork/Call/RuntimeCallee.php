@@ -23,7 +23,7 @@ use ReflectionMethod;
 class RuntimeCallee implements Callee
 {
     /**
-     * @var callable
+     * @var callable|array
      */
     private $callable;
     /**
@@ -79,7 +79,7 @@ class RuntimeCallee implements Callee
     /**
      * Returns callable.
      *
-     * @return callable
+     * @return callable|array
      */
     public function getCallable()
     {
