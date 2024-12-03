@@ -117,7 +117,7 @@ final class PrettySetupPrinter implements SetupPrinter
         $style = $this->resultConverter->convertResultCodeToString($resultCode);
         $hook = $callResult->getCall()->getCallee();
         $path = $hook->getPath();
-        $hookName = (string) $hook;
+        $hookName = $hook->__toString();
 
         $printer->writeln(
             sprintf('%s┌─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hookName, $style, $path)
@@ -149,7 +149,7 @@ final class PrettySetupPrinter implements SetupPrinter
         $style = $this->resultConverter->convertResultCodeToString($resultCode);
         $hook = $callResult->getCall()->getCallee();
         $path = $hook->getPath();
-        $hookName = (string) $hook;
+        $hookName = $hook->__toString();
 
         $printer->writeln(sprintf('%s│', $this->indentText));
 

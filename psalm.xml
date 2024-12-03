@@ -60,6 +60,9 @@
         <InvalidArrayOffset>
             <errorLevel type="error"/>
         </InvalidArrayOffset>
+        <InvalidCast>
+            <errorLevel type="error"/>
+        </InvalidCast>
     </issueHandlers>
 
 </psalm>

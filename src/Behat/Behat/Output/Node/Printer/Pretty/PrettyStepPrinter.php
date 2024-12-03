@@ -196,7 +196,7 @@ final class PrettyStepPrinter implements StepPrinter
             return $text;
         }
 
-        return (string) $argument;
+        return $argument->__toString();
     }
 
     /**

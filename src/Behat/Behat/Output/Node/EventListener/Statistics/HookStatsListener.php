@@ -111,7 +111,7 @@ final class HookStatsListener implements EventListener
     {
         $call = $hookCallResult->getCall();
         $callee = $call->getCallee();
-        $hook = (string) $callee;
+        $hook = $callee->__toString();
         $scope = $call->getScope();
         $path = $callee->getPath();
         $stdOut = $hookCallResult->getStdOut();
