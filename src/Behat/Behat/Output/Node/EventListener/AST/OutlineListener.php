@@ -25,6 +25,7 @@ use Behat\Gherkin\Node\ExampleNode;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
+use phpDocumentor\Reflection\DocBlock\Tags\Example;
 
 /**
  * Listens to expanded outline events and calls appropriate printers.
@@ -136,10 +137,12 @@ final class OutlineListener implements EventListener
             return;
         }
 
-        $this->example = $event->getScenario();
-
         $this->exampleSetupPrinter->printSetup($formatter, $event->getSetup());
-        $this->examplePrinter->printHeader($formatter, $event->getFeature(), $this->example);
+
+        $this->example = $event->getScenario();
+        if ($this->example instanceof ExampleNode) {
+            $this->examplePrinter->printHeader($formatter, $event->getFeature(), $this->example);
+        }
     }
 
     /**

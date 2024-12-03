@@ -23,6 +23,7 @@ use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
 use Behat\Behat\Output\Node\Printer\OutlineTablePrinter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Behat\Tester\Result\StepResult;
+use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
@@ -215,7 +216,9 @@ final class OutlineTableListener implements EventListener
             $this->stepSetupPrinter->printSetup($formatter, $beforeEvent->getSetup());
         }
 
-        $this->exampleRowPrinter->printExampleRow($formatter, $this->outline, $example, $this->stepAfterTestedEvents);
+        if ($example instanceof ExampleNode) {
+            $this->exampleRowPrinter->printExampleRow($formatter, $this->outline, $example, $this->stepAfterTestedEvents);
+        }
 
         foreach ($this->stepAfterTestedEvents as $afterEvent) {
             $this->stepSetupPrinter->printTeardown($formatter, $afterEvent->getTeardown());

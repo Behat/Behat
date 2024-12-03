@@ -15,6 +15,7 @@ use Behat\Behat\Context\Snippet\ContextSnippet;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Snippet\Exception\EnvironmentSnippetGenerationException;
 use Behat\Behat\Snippet\Generator\SnippetGenerator;
+use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\TableNode;
@@ -339,14 +340,7 @@ TPL;
         self::$proposedMethods[$contextClass][$stepPattern] = $methodName;
     }
 
-    /**
-     * Returns method argument.
-     *
-     * @param string $argument
-     *
-     * @return string
-     */
-    private function getMethodArgument($argument)
+    private function getMethodArgument(ArgumentInterface $argument): string
     {
         $arg = '__unknown__';
         if ($argument instanceof PyStringNode) {

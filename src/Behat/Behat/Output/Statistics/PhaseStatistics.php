@@ -110,9 +110,9 @@ final class PhaseStatistics implements Statistics
     /**
      * Returns counters for different scenario result codes.
      *
-     * @return array[]
+     * @return int[]
      */
-    public function getScenarioStatCounts()
+    public function getScenarioStatCounts(): array
     {
         return $this->statistics->getScenarioStatCounts();
     }

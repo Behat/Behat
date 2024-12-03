@@ -26,11 +26,8 @@ final class WrongContextClassException extends InvalidArgumentException implemen
 
     /**
      * Initializes exception.
-     *
-     * @param integer $message
-     * @param string  $class
      */
-    public function __construct($message, $class)
+    public function __construct(string $message, string $class)
     {
         $this->class = $class;
 
