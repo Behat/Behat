@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Transformation\Context\Factory;
 
+use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Transformation\Transformation\ColumnBasedTableTransformation;
 use Behat\Behat\Transformation\Transformation\PatternTransformation;
@@ -45,7 +46,7 @@ class TransformationCalleeFactory
     /**
      * Returns list of default transformations.
      *
-     * @return class-string<Transformation>[]
+     * @return class-string<SimpleArgumentTransformation>[]
      */
     private static function simpleTransformations()
     {

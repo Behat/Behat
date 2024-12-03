@@ -109,6 +109,21 @@
         <NullArgument>
             <errorLevel type="error"/>
         </NullArgument>
+        <NullArrayOffset>
+            <errorLevel type="error"/>
+        </NullArrayOffset>
+        <TooManyTemplateParams>
+            <errorLevel type="error"/>
+        </TooManyTemplateParams>
+        <TraitMethodSignatureMismatch>
+            <errorLevel type="error"/>
+        </TraitMethodSignatureMismatch>
+        <UndefinedMethod>
+            <errorLevel type="error"/>
+            <errorLevel type="suppress">
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
+            </errorLevel>
+        </UndefinedMethod>
     </issueHandlers>
 
 </psalm>

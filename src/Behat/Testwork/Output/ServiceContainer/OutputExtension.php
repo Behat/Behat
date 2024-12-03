@@ -95,7 +95,7 @@ final class OutputExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
+        $builder = $builder
             ->defaultValue(array($this->defaultFormatter => array('enabled' => true)))
             ->useAttributeAsKey('name')
             ->prototype('array')
@@ -107,6 +107,9 @@ final class OutputExtension implements Extension
                         return array_merge($a, array('enabled' => true));
                     })
                 ->end()
+            ;
+        assert($builder instanceof ArrayNodeDefinition);
+        $builder
                 ->useAttributeAsKey('name')
                 ->treatTrueLike(array('enabled' => true))
                 ->treatNullLike(array('enabled' => true))

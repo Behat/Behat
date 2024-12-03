@@ -73,7 +73,7 @@ final class SuiteExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
+        $builder = $builder
             ->defaultValue(array('default' => array(
                 'enabled'    => true,
                 'type'       => null,
@@ -102,6 +102,9 @@ final class SuiteExtension implements Extension
                         return $suite;
                     })
                 ->end()
+            ;
+        assert($builder instanceof ArrayNodeDefinition);
+        $builder
                 ->normalizeKeys(false)
                 ->addDefaultsIfNotSet()
                 ->treatTrueLike(array('enabled' => true))
