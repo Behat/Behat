@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behat\Tests\Config;
 
+use Behat\Config\Filter\NameFilter;
+use Behat\Config\Filter\TagFilter;
 use Behat\Config\Suite;
 use PHPUnit\Framework\TestCase;
 
@@ -58,6 +62,20 @@ final class SuiteTest extends TestCase
                 'features/admin/first',
                 'features/front/first',
                 'features/api/first',
+            ]
+        ], $config->toArray());
+    }
+
+    public function testAddingFilters(): void
+    {
+        $config = new Suite('first');
+        $config->withFilter(new TagFilter('tag1'));
+        $config->withFilter(new NameFilter('name1'));
+
+        $this->assertEquals([
+            'filters' => [
+                'tags' => 'tag1',
+                'name' => 'name1',
             ]
         ], $config->toArray());
     }

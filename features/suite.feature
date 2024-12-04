@@ -330,18 +330,29 @@ Feature: Suites
           When I ate 10 apple
           Then I should have 5 apples
       """
-    And a file named "behat.yml" with:
+    And a file named "behat.php" with:
       """
-      default:
-        suites:
-          little_kid:
-            contexts: [ LittleKidContext ]
-            filters:
-              role:   little kid
-          big_brother:
-            contexts: [ BigBrotherContext ]
-            filters:
-              role:   big brother
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+      use Behat\Config\Filter\RoleFilter;
+
+      $profile = (new Profile('default'))
+        ->withSuite(
+          (new Suite('little_kid'))
+            ->withContexts(LittleKidContext::class)
+            ->withFilter(new RoleFilter('little kid'))
+        )
+        ->withSuite(
+          (new Suite('big_brother'))
+            ->withContexts(BigBrotherContext::class)
+            ->withFilter(new RoleFilter('big brother'))
+        )
+      ;
+
+      return (new Config())->withProfile($profile);
       """
     When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
     Then it should pass with:
@@ -427,18 +438,29 @@ Feature: Suites
           When I ate 10 apple
           Then I should have 5 apples
       """
-    And a file named "behat.yml" with:
+    And a file named "behat.php" with:
       """
-      default:
-        suites:
-          little_kid:
-            contexts: [ LittleKidContext ]
-            filters:
-              narrative: '/As a little kid/'
-          big_brother:
-            contexts: [ BigBrotherContext ]
-            filters:
-              narrative: '/As a big brother/'
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+      use Behat\Config\Filter\NarrativeFilter;
+
+      $profile = (new Profile('default'))
+        ->withSuite(
+          (new Suite('little_kid'))
+            ->withContexts(LittleKidContext::class)
+            ->withFilter(new NarrativeFilter('/As a little kid/'))
+        )
+        ->withSuite(
+          (new Suite('big_brother'))
+            ->withContexts(BigBrotherContext::class)
+            ->withFilter(new NarrativeFilter('/As a big brother/'))
+        )
+      ;
+
+      return (new Config())->withProfile($profile);
       """
     When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
     Then it should pass with:
@@ -524,18 +546,29 @@ Feature: Suites
           When I ate 10 apple
           Then I should have 5 apples
       """
-    And a file named "behat.yml" with:
+    And a file named "behat.php" with:
       """
-      default:
-        suites:
-          little_kid:
-            contexts: [ LittleKidContext ]
-            filters:
-              role:   little kid
-          big_brother:
-            contexts: [ BigBrotherContext ]
-            filters:
-              role:   big brother
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+      use Behat\Config\Filter\RoleFilter;
+
+      $profile = (new Profile('default'))
+        ->withSuite(
+          (new Suite('little_kid'))
+            ->withContexts(LittleKidContext::class)
+            ->withFilter(new RoleFilter('little kid'))
+        )
+        ->withSuite(
+          (new Suite('big_brother'))
+            ->withContexts(BigBrotherContext::class)
+            ->withFilter(new RoleFilter('big brother'))
+        )
+      ;
+
+      return (new Config())->withProfile($profile);
       """
     When I run "behat --no-colors -s big_brother -fpretty --format-settings='{\"paths\": true}' features"
     Then it should pass with:
