@@ -70,7 +70,7 @@
             "@phpunit",
             "@psalm"
         ],
-        "behat": "LANG=C bin/behat",
+        "behat": "LANG=C bin/behat  --rerun",
         "behat-progress": "LANG=C bin/behat --format=progress",
         "phpunit": "phpunit",
         "psalm": "psalm"
