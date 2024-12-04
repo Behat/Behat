@@ -84,12 +84,20 @@ Feature: Filters
       """
 
   Scenario: Tag filters
-    Given a file named "behat.yml" with:
+    Given a file named "behat.php" with:
       """
-      default:
-        gherkin:
-          filters:
-            tags: tag2
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Filter\TagFilter;
+
+      return (new Config())
+        ->withProfile(
+          (new Profile('default'))
+            ->withFilter(new TagFilter('tag2'))
+        )
+      ;
       """
     When I run "behat --no-colors -f pretty"
     Then it should pass with:
@@ -131,12 +139,20 @@ Feature: Filters
       """
 
   Scenario: Role filters
-    Given a file named "behat.yml" with:
+    Given a file named "behat.php" with:
       """
-      default:
-        gherkin:
-          filters:
-            role: second user
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Filter\RoleFilter;
+
+      return (new Config())
+        ->withProfile(
+          (new Profile('default'))
+            ->withFilter(new RoleFilter('second user'))
+        )
+      ;
       """
     When I run "behat --no-colors -f pretty"
     Then it should pass with:
@@ -161,13 +177,21 @@ Feature: Filters
       5 steps (5 passed)
       """
 
-  Scenario: Narrative Filter 
-    Given a file named "behat.yml" with:
+  Scenario: Narrative filters
+    Given a file named "behat.php" with:
       """
-      default:
-        gherkin:
-          filters:
-            narrative: /As a (?:second|third) user/
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Filter\NarrativeFilter;
+
+      return (new Config())
+        ->withProfile(
+          (new Profile('default'))
+            ->withFilter(new NarrativeFilter('/As a (?:second|third) user/'))
+        )
+      ;
       """
     When I run "behat --no-colors -f pretty"
     Then it should pass with:
@@ -209,12 +233,20 @@ Feature: Filters
       """
 
   Scenario: Name filters
-    Given a file named "behat.yml" with:
+    Given a file named "behat.php" with:
       """
-      default:
-        gherkin:
-          filters:
-            name: simple feature
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Filter\NameFilter;
+
+      return (new Config())
+        ->withProfile(
+          (new Profile('default'))
+            ->withFilter(new NameFilter('simple feature'))
+        )
+      ;
       """
     When I run "behat --no-colors -f pretty"
     Then it should pass with:

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Behat\Tests\Config;
 
 use Behat\Config\Extension;
+use Behat\Config\Filter\NameFilter;
+use Behat\Config\Filter\TagFilter;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
@@ -88,5 +90,35 @@ final class ProfileTest extends TestCase
         $this->expectExceptionMessage('The suite "admin_dashboard" already exists.');
 
         $profile->withSuite(new Suite('admin_dashboard'));
+    }
+
+    public function testAddingFilters(): void
+    {
+        $profile = new Profile('default');
+        $profile
+            ->withFilter(new TagFilter('admin'))
+            ->withFilter(new NameFilter('Managing administrators'))
+        ;
+
+        $this->assertEquals([
+            'gherkin' => [
+                'filters' => [
+                    'tags' => 'admin',
+                    'name' => 'Managing administrators',
+                ],
+            ],
+        ], $profile->toArray());
+    }
+
+    public function testItThrowsAnExceptionWhenAddingExistingFilter(): void
+    {
+        $profile = new Profile('default');
+
+        $profile->withFilter(new TagFilter('tag1'));
+
+        $this->expectException(ConfigurationLoadingException::class);
+        $this->expectExceptionMessage('The filter "tags" already exists.');
+
+        $profile->withFilter(new TagFilter('tag1'));
     }
 }
