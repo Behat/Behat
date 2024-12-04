@@ -8,5 +8,5 @@ interface FilterInterface
 {
     public function name(): string;
 
-    public function value(): mixed;
+    public function value(): string;
 }
