@@ -1,8 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behat\Tests\Config;
 
+use Behat\Config\Filter\NameFilter;
+use Behat\Config\Filter\TagFilter;
 use Behat\Config\Suite;
+use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PHPUnit\Framework\TestCase;
 
 final class SuiteTest extends TestCase
@@ -60,5 +65,31 @@ final class SuiteTest extends TestCase
                 'features/api/first',
             ]
         ], $config->toArray());
+    }
+
+    public function testAddingFilters(): void
+    {
+        $config = new Suite('first');
+        $config->withFilter(new TagFilter('tag1'));
+        $config->withFilter(new NameFilter('name1'));
+
+        $this->assertEquals([
+            'filters' => [
+                'tags' => 'tag1',
+                'name' => 'name1',
+            ]
+        ], $config->toArray());
+    }
+
+    public function testItThrowsAnExceptionWhenAddingExistingFilter(): void
+    {
+        $suite = new Suite('first');
+
+        $suite->withFilter(new TagFilter('tag1'));
+
+        $this->expectException(ConfigurationLoadingException::class);
+        $this->expectExceptionMessage('The filter "tags" already exists.');
+
+        $suite->withFilter(new TagFilter('tag1'));
     }
 }

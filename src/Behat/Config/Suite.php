@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Behat\Config;
 
+use Behat\Config\Filter\FilterInterface;
+use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
+
 final class Suite
 {
     public function __construct(
@@ -37,6 +40,17 @@ final class Suite
         foreach ($paths as $path) {
             $this->settings['paths'][] = $path;
         }
+
+        return $this;
+    }
+
+    public function withFilter(FilterInterface $filter): self
+    {
+        if (array_key_exists($filter->name(), $this->settings['filters'] ?? [])) {
+            throw new ConfigurationLoadingException(sprintf('The filter "%s" already exists.', $filter->name()));
+        }
+
+        $this->settings['filters'][$filter->name()] = $filter->value();
 
         return $this;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behat\Tests\Config;
 
 use Behat\Config\Config;
