@@ -90,7 +90,7 @@ Feature: Filters
 
       use Behat\Config\Config;
       use Behat\Config\Profile;
-      use Behat\Config\Gherkin\Filter\TagFilter;
+      use Behat\Config\Filter\TagFilter;
 
       return (new Config())
         ->withProfile(
@@ -145,7 +145,7 @@ Feature: Filters
 
       use Behat\Config\Config;
       use Behat\Config\Profile;
-      use Behat\Config\Gherkin\Filter\RoleFilter;
+      use Behat\Config\Filter\RoleFilter;
 
       return (new Config())
         ->withProfile(
@@ -184,7 +184,7 @@ Feature: Filters
 
       use Behat\Config\Config;
       use Behat\Config\Profile;
-      use Behat\Config\Gherkin\Filter\NarrativeFilter;
+      use Behat\Config\Filter\NarrativeFilter;
 
       return (new Config())
         ->withProfile(
@@ -239,7 +239,7 @@ Feature: Filters
 
       use Behat\Config\Config;
       use Behat\Config\Profile;
-      use Behat\Config\Gherkin\Filter\NameFilter;
+      use Behat\Config\Filter\NameFilter;
 
       return (new Config())
         ->withProfile(

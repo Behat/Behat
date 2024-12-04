@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Behat\Config\Gherkin\Filter;
+namespace Behat\Config\Filter;
 
-final class TagFilter implements FilterInterface
+final class NarrativeFilter implements FilterInterface
 {
     public function __construct(
         private readonly string $value,
@@ -13,7 +13,7 @@ final class TagFilter implements FilterInterface
 
     public function name(): string
     {
-        return 'tags';
+        return 'narrative';
     }
 
     public function value(): string

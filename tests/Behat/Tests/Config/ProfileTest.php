@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Behat\Tests\Config;
 
 use Behat\Config\Extension;
-use Behat\Config\Gherkin\Filter\NameFilter;
-use Behat\Config\Gherkin\Filter\TagFilter;
+use Behat\Config\Filter\NameFilter;
+use Behat\Config\Filter\TagFilter;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;

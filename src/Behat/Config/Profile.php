@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Behat\Config;
 
-use Behat\Config\Gherkin\Filter\FilterInterface;
+use Behat\Config\Filter\FilterInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 
 final class Profile

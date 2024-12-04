@@ -2,21 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Behat\Config\Gherkin;
+namespace Behat\Config\Filter;
 
-use Behat\Config\Gherkin\Filter\FilterInterface;
-
-final class SimpleFilter implements FilterInterface
+final class TagFilter implements FilterInterface
 {
     public function __construct(
-        private readonly string $name,
         private readonly string $value,
     ) {
     }
 
     public function name(): string
     {
-        return $this->name;
+        return 'tags';
     }
 
     public function value(): string

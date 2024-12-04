@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Behat\Config\Gherkin\Filter;
+namespace Behat\Config\Filter;
 
 interface FilterInterface
 {
