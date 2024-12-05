@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Behat\Tests\Config;
 
+use Behat\Config\Config;
 use Behat\Config\Extension;
 use Behat\Config\Filter\NameFilter;
 use Behat\Config\Filter\TagFilter;
+use Behat\Config\Formatter;
+use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
@@ -120,5 +123,26 @@ final class ProfileTest extends TestCase
         $this->expectExceptionMessage('The filter "tags" already exists.');
 
         $profile->withFilter(new TagFilter('tag1'));
+    }
+
+    public function testAddingFormatters(): void
+    {
+        $profile = new Profile('default');
+
+        $profile->withFormatters(new Formatter('pretty', [
+            'verbose' => true,
+            'paths' => false,
+            'snippets' => true,
+        ]));
+
+        $this->assertEquals([
+            'formatters' => [
+                'pretty' => [
+                    'verbose' => true,
+                    'paths' => false,
+                    'snippets' => true,
+                ],
+            ],
+        ], $profile->toArray());
     }
 }

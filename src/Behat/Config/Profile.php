@@ -53,6 +53,15 @@ final class Profile
         return $this;
     }
 
+    public function withFormatters(FormatterConfigInterface ...$formatters): self
+    {
+        foreach ($formatters as $formatter) {
+            $this->settings['formatters'][$formatter->name()] = $formatter->toArray();
+        }
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return $this->settings;
