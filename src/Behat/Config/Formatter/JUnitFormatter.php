@@ -8,11 +8,8 @@ final class JUnitFormatter extends Formatter
 {
     public const NAME = 'junit';
 
-    public function __construct(
-        bool $timer = true,
-    ) {
-        parent::__construct(name: self::NAME, settings: [
-            'timer' => $timer,
-        ]);
+    public function __construct()
+    {
+        parent::__construct(name: self::NAME);
     }
 }

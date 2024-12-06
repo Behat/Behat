@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Behat\Config\Formatter;
 
 use Behat\Config\Profile;
+use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 
 class Formatter implements FormatterConfigInterface
 {
@@ -14,6 +15,9 @@ class Formatter implements FormatterConfigInterface
     ) {
     }
 
+    /**
+     * @param int $level use Behat\Testwork\Output\Printer\Factory\OutputFactory::VERBOSITY_*
+     */
     public function withOutputVerbosity(int $level): self
     {
         $this->settings['output_verbosity'] = $level;
@@ -30,7 +34,7 @@ class Formatter implements FormatterConfigInterface
 
     public function withOutputDecorated(bool $decorated = true): self
     {
-        $this->settings['output_decorated'] = $decorated;
+        $this->settings['output_decorate'] = $decorated;
 
         return $this;
     }

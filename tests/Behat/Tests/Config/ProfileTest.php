@@ -12,6 +12,7 @@ use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
+use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PHPUnit\Framework\TestCase;
 
@@ -130,9 +131,9 @@ final class ProfileTest extends TestCase
         $profile = new Profile('default');
 
         $profile
-            ->withFormatter((new PrettyFormatter(expand: true, paths: false))->withOutputVerbosity(2))
+            ->withFormatter((new PrettyFormatter(expand: true, paths: false))->withOutputVerbosity(OutputFactory::VERBOSITY_VERBOSE))
             ->withFormatter(new ProgressFormatter(timer: false))
-            ->withFormatter(new JUnitFormatter(timer: false))
+            ->withFormatter(new JUnitFormatter())
         ;
 
         $this->assertEquals([
@@ -147,9 +148,7 @@ final class ProfileTest extends TestCase
                 'progress' => [
                     'timer' => false,
                 ],
-                'junit' => [
-                    'timer' => false,
-                ],
+                'junit' => [],
             ],
         ], $profile->toArray());
     }
