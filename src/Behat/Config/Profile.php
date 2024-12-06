@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Behat\Config;
 
 use Behat\Config\Filter\FilterInterface;
+use Behat\Config\Formatter\FormatterConfigInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 
 final class Profile
@@ -56,6 +57,12 @@ final class Profile
     public function withFormatters(FormatterConfigInterface ...$formatters): self
     {
         foreach ($formatters as $formatter) {
+            if (!$formatter->isEnabled()) {
+                $this->settings['formatters'][$formatter->name()] = false;
+
+                continue;
+            }
+
             $this->settings['formatters'][$formatter->name()] = $formatter->toArray();
         }
 

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Behat\Tests\Config;
 
-use Behat\Config\Config;
 use Behat\Config\Extension;
 use Behat\Config\Filter\NameFilter;
 use Behat\Config\Filter\TagFilter;
-use Behat\Config\Formatter;
+use Behat\Config\Formatter\Formatter;
+use Behat\Config\Formatter\JUnitFormatter;
 use Behat\Config\Formatter\PrettyFormatter;
+use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
@@ -129,19 +130,39 @@ final class ProfileTest extends TestCase
     {
         $profile = new Profile('default');
 
-        $profile->withFormatters(new Formatter('pretty', [
-            'verbose' => true,
-            'paths' => false,
-            'snippets' => true,
-        ]));
+        $profile->withFormatters(
+            new PrettyFormatter(expand: true, paths: false),
+            new ProgressFormatter(timer: false),
+            new JUnitFormatter(timer: false),
+        );
 
         $this->assertEquals([
             'formatters' => [
                 'pretty' => [
-                    'verbose' => true,
+                    'timer' => true,
+                    'expand' => true,
                     'paths' => false,
-                    'snippets' => true,
+                    'multiline' => true,
                 ],
+                'progress' => [
+                    'timer' => false,
+                ],
+                'junit' => [
+                    'timer' => false,
+                ],
+            ],
+        ], $profile->toArray());
+    }
+
+    public function testDisablingFormatters(): void
+    {
+        $profile = new Profile('default');
+
+        $profile->withFormatters((new PrettyFormatter())->disable());
+
+        $this->assertEquals([
+            'formatters' => [
+                'pretty' => false,
             ],
         ], $profile->toArray());
     }
