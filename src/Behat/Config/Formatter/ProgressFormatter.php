@@ -9,10 +9,19 @@ final class ProgressFormatter extends Formatter
     public const NAME = 'progress';
 
     public function __construct(
-        bool $timer = true,
+        ?bool $timer = null,
     ) {
-        parent::__construct(name: self::NAME, settings: [
-            'timer' => $timer,
-        ]);
+        $settings = self::defaults();
+
+        if (null !== $timer) {
+            $settings['timer'] = $timer;
+        }
+
+        parent::__construct(name: self::NAME, settings: $settings);
+    }
+
+    public static function defaults(): array
+    {
+        return ['timer' => true];
     }
 }

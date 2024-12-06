@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Output\ServiceContainer\Formatter;
 
+use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
@@ -141,9 +142,7 @@ class ProgressFormatterFactory implements FormatterFactory
         $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', array(
             'progress',
             'Prints one character per step.',
-            array(
-                'timer' => true
-            ),
+            ProgressFormatter::defaults(),
             $this->createOutputPrinterDefinition(),
             new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
                     array(

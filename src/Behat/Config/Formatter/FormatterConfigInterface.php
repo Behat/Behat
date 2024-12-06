@@ -9,4 +9,6 @@ use Behat\Config\ConfigInterface;
 interface FormatterConfigInterface extends ConfigInterface
 {
     public function name(): string;
+
+    public static function defaults(): array;
 }

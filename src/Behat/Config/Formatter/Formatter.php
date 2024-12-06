@@ -55,4 +55,9 @@ class Formatter implements FormatterConfigInterface
     {
         return $this->settings;
     }
+
+    public static function defaults(): array
+    {
+        return [];
+    }
 }

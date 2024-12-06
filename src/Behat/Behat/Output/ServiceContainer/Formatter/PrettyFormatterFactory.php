@@ -14,6 +14,7 @@ use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\EventDispatcher\Event\BackgroundTested;
 use Behat\Behat\EventDispatcher\Event\OutlineTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
@@ -173,12 +174,7 @@ class PrettyFormatterFactory implements FormatterFactory
         $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', array(
             'pretty',
             'Prints the feature as is.',
-            array(
-                'timer'     => true,
-                'expand'    => false,
-                'paths'     => true,
-                'multiline' => true,
-            ),
+            PrettyFormatter::defaults(),
             $this->createOutputPrinterDefinition(),
             new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
                     array(
