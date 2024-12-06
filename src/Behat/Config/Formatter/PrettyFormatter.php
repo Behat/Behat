@@ -16,21 +16,10 @@ final class PrettyFormatter extends Formatter
     ) {
         $settings = self::defaults();
 
-        if (null !== $timer) {
-            $settings['timer'] = $timer;
-        }
-
-        if (null !== $expand) {
-            $settings['expand'] = $expand;
-        }
-
-        if (null !== $paths) {
-            $settings['paths'] = $paths;
-        }
-
-        if (null !== $multiline) {
-            $settings['multiline'] = $multiline;
-        }
+        $settings['timer'] = $timer ?? $settings['timer'];
+        $settings['expand'] = $expand ?? $settings['expand'];
+        $settings['paths'] = $paths ?? $settings['paths'];
+        $settings['multiline'] = $multiline ?? $settings['multiline'];
 
         parent::__construct(name: self::NAME, settings: $settings);
     }

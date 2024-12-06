@@ -13,9 +13,7 @@ final class ProgressFormatter extends Formatter
     ) {
         $settings = self::defaults();
 
-        if (null !== $timer) {
-            $settings['timer'] = $timer;
-        }
+        $settings['timer'] = $timer ?? $settings['timer'];
 
         parent::__construct(name: self::NAME, settings: $settings);
     }
