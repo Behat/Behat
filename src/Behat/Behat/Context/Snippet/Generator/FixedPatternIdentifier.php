@@ -17,14 +17,12 @@ namespace Behat\Behat\Context\Snippet\Generator;
  */
 final class FixedPatternIdentifier implements PatternIdentifier
 {
-    private ?string $patternType;
-
     /**
      * Initialises identifier.
      */
-    public function __construct(?string $patternType = null)
-    {
-        $this->patternType = $patternType;
+    public function __construct(
+        private readonly ?string $patternType = null
+    ) {
     }
 
     /**

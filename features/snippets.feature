@@ -112,6 +112,14 @@ Feature: Snippets generation and addition
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 5 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Given;
+          use Behat\Step\When;
+          use Behat\Step\Then;
+          use Behat\Gherkin\Node\PyStringNode;
       """
 
   Scenario: Appending regex snippets to a particular context
@@ -203,6 +211,14 @@ Feature: Snippets generation and addition
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 5 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Given;
+          use Behat\Step\When;
+          use Behat\Step\Then;
+          use Behat\Gherkin\Node\PyStringNode;
       """
 
   Scenario: Appending turnip snippets to a particular context
@@ -298,6 +314,11 @@ Feature: Snippets generation and addition
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 2 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Given;
       """
 
   Scenario: Generating snippets for steps with slashes
@@ -330,6 +351,11 @@ Feature: Snippets generation and addition
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 2 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Then;
       """
 
   Scenario: Generating snippets using interactive --snippets-for
@@ -385,6 +411,14 @@ Feature: Snippets generation and addition
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 5 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Given;
+          use Behat\Step\When;
+          use Behat\Step\Then;
+          use Behat\Gherkin\Node\PyStringNode;
       """
 
   Scenario: Generating snippets for steps with apostrophes
@@ -431,4 +465,11 @@ Feature: Snippets generation and addition
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 4 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Given;
+          use Behat\Step\When;
+          use Behat\Step\Then;
       """

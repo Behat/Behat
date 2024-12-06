@@ -2,6 +2,7 @@
     'en'    => array(
         'snippet_context_choice'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> suite has undefined steps. Please choose the context to generate snippets:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> has missing steps. Define them with these snippets:</snippet_undefined>',
+        'snippet_proposal_use'    => 'Don\'t forget these %count% use statements:',
         'snippet_missing_title'   => '<snippet_undefined>Use <snippet_keyword>--snippets-for</snippet_keyword> CLI option to generate snippets for following <snippet_keyword>%count%</snippet_keyword> suite steps:</snippet_undefined>',
         'skipped_scenarios_title' => 'Skipped scenarios:',
         'failed_scenarios_title'  => 'Failed scenarios:',
@@ -20,6 +21,7 @@
     'bg'    => array(
         'snippet_context_choice'  => 'В сет <snippet_undefined><snippet_keyword>%count%</snippet_keyword> има недекларирани стъпки. Изберете в кой Context да бъдат създадени:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> има липсващи стъпки. Можете да ги създадете чрез:</snippet_undefined>',
+        'snippet_proposal_use'    => 'Не забравяйте тези %count% use изрази:',
         'snippet_missing_title'   => '<snippet_undefined>Използвайте този снипет <snippet_keyword>--snippets-for</snippet_keyword> за да генерирате кода за следните стъпки <snippet_keyword>%count%</snippet_keyword> през конзолата:</snippet_undefined>',
         'skipped_scenarios_title' => 'Пропуснати сценарии:',
         'failed_scenarios_title'  => 'Провалени сценарии:',
@@ -37,6 +39,7 @@
     ),
     'cs'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> obsahuje chybné kroky. Definujte je za použití následujícího kódu:</snippet_undefined>',
+        'snippet_proposal_use'   => 'Nezapomeňte na těchto %count% use příkazů:',
         'snippet_missing_title'  => '<snippet_undefined>Snippety pro následující kroky v sadě <snippet_keyword>%count%</snippet_keyword> nebyly vygenerovány (zkontrolujte správnost konfigurace):</snippet_undefined>',
         'failed_scenarios_title' => 'Chybné scénáře:',
         'failed_hooks_title'     => 'Chybné hooky:',
@@ -53,6 +56,7 @@
     ),
     'de'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> hat fehlende Schritte. Definiere diese mit den folgenden Snippets:</snippet_undefined>',
+        'snippet_proposal_use'   => 'Vergessen Sie nicht diese %count% use-Anweisungen:',
         'snippet_missing_title'  => '<snippet_undefined>Snippets für die folgenden Schritte in der <snippet_keyword>%count%</snippet_keyword> Suite wurden nicht generiert (Konfiguration überprüfen):</snippet_undefined>',
         'failed_scenarios_title' => 'Fehlgeschlagene Szenarien:',
         'failed_hooks_title'     => 'Fehlgeschlagene Hooks:',
@@ -69,6 +73,7 @@
     ),
     'es'    => array(
         'snippet_proposal_title' => '<snippet_undefined>A <snippet_keyword>%count%</snippet_keyword> le faltan pasos. Defínelos con estos pasos:</snippet_undefined>',
+        'snippet_proposal_use'   => 'No olvides estas %count% declaraciones de use:',
         'snippet_missing_title'  => '<snippet_undefined>Las plantillas para los siguientes pasos en <snippet_keyword>%count%</snippet_keyword> no fueron generadas (revisa tu configuración):</snippet_undefined>',
         'failed_scenarios_title' => 'Escenarios fallidos:',
         'failed_hooks_title'     => 'Hooks fallidos:',
@@ -85,6 +90,7 @@
     ),
     'fr'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> a des étapes manquantes. Définissez-les avec les modèles suivants :</snippet_undefined>',
+        'snippet_proposal_use'   => 'N\'oubliez pas d\'ajouter ces %count% use :',
         'snippet_missing_title'  => '<snippet_undefined>Les modèles des étapes de la suite <snippet_keyword>%count%</snippet_keyword> n\'ont pas été générés (vérifiez votre configuration):</snippet_undefined>',
         'failed_scenarios_title' => 'Scénarios échoués:',
         'failed_hooks_title'     => 'Hooks échoués:',
@@ -102,6 +108,7 @@
     'hu'    => array(
         'snippet_context_choice'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> sorozat meghatározatlan lépéseket tartalmaz. Válaszd ki a környezetet kódrészlet készítéséhez:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> lépései hiányosak. Hozd létre az alábbi kódrészletekkel:</snippet_undefined>',
+        'snippet_proposal_use'    => 'Ne felejtsd el ezeket a %count% use utasításokat:',
         'snippet_missing_title'   => '<snippet_undefined>Használd a <snippet_keyword>--snippets-for</snippet_keyword> parancssori kapcsolót kódrészletek készítéséhez a <snippet_keyword>%count%</snippet_keyword> sorozat lépéseihez:</snippet_undefined>',
         'skipped_scenarios_title' => 'Kihagyott forgatókönyvek:',
         'failed_scenarios_title'  => 'Sikertelen forgatókönyvek:',
@@ -120,6 +127,7 @@
     'it'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> ha dei passaggi mancanti. Definiscili con questi snippet:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Gli snippet per i seguenti passaggi della suite <snippet_keyword>%count%</snippet_keyword> non sono stati generati (verifica la configurazione):</snippet_undefined>',
+        'snippet_proposal_use'   => 'Non dimenticare queste %count% istruzioni di use:',
         'failed_scenarios_title' => 'Scenari falliti:',
         'failed_hooks_title'     => 'Hook falliti:',
         'failed_steps_title'     => 'Passaggi falliti:',
@@ -136,6 +144,7 @@
     'ja'    => array(
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> のステップが見つかりません。 次のスニペットで定義できます:</snippet_undefined>',
         'snippet_missing_title'   => '<snippet_undefined>以下のステップのスニペットは<snippet_keyword>%count%</snippet_keyword>スイートに生成されませんでした(設定を確認してください):</snippet_undefined>',
+        'snippet_proposal_use'    => 'これらの %count% use 文を忘れずに:',
         'skipped_scenarios_title' => 'スキップした シナリオ:',
         'failed_scenarios_title'  => '失敗した シナリオ:',
         'failed_hooks_title'      => '失敗した フック:',
@@ -153,6 +162,7 @@
     'ko'    => array(
         'snippet_proposal_title'  => '<snippet_keyword>%count%</snippet_keyword> <snippet_undefined> 정의가 되지 않았습니다. 스니펫을 생성할 컨텍스트를 선택하십시오:</snippet_undefined>',
         'snippet_missing_title'   => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> 단계가 누락되었습니다. 스니펫을 정의해주세요:</snippet_undefined>',
+        'snippet_proposal_use'    => '이 %count% 개의 use 문을 잊지 마세요:',
         'skipped_scenarios_title' => '건너뛴 시나리오:',
         'failed_scenarios_title'  => '실패한 시나리오:',
         'failed_hooks_title'      => '실패한 훅 연결:',
@@ -170,6 +180,7 @@
     'nl'    => array(
         'snippet_proposal_title' => '<snippet_undefined>Ontbrekende stappen in <snippet_keyword>%count%</snippet_keyword>. Definieer ze met de volgende fragmenten:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Fragmenten voor de volgende stappen in de <snippet_keyword>%count%</snippet_keyword> suite werden niet gegenereerd (controleer de configuratie):</snippet_undefined>',
+        'snippet_proposal_use'   => 'Vergeet deze %count% use-verklaringen niet:',
         'failed_scenarios_title' => 'Gefaalde scenario\'s:',
         'failed_hooks_title'     => 'Gefaalde hooks:',
         'failed_steps_title'     => 'Gefaalde stappen:',
@@ -186,6 +197,7 @@
     'no'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> mangler steg. Definer dem med disse snuttene:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Snutter for de følgende stegene i <snippet_keyword>%count%</snippet_keyword>-samlingen ble ikke laget. (Sjekk konfigurasjonen din.):</snippet_undefined>',
+        'snippet_proposal_use'   => 'Ikke glem disse %count% use-setningene:',
         'failed_scenarios_title' => 'Feilende scenarier:',
         'failed_hooks_title'     => 'Feilende hooks:',
         'failed_steps_title'     => 'Feilende steg:',
@@ -202,6 +214,7 @@
     'pl'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> zawiera brakujące kroki. Utwórz je korzystając z tych fragmentów kodu:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Fragmenty kodu dla następujących kroków <snippet_keyword>%count%</snippet_keyword> nie zostały wygenerowane (sprawdź swoją konfigurację):</snippet_undefined>',
+        'snippet_proposal_use'   => 'Nie zapomnij o tych %count% wpisach use:',
         'failed_scenarios_title' => 'Nieudane scenariusze:',
         'failed_hooks_title'     => 'Nieudane hooki:',
         'failed_steps_title'     => 'Nieudane kroki',
@@ -218,6 +231,7 @@
     'pt'    => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> contém definições em falta. Defina-as com estes exemplos:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Os exemplos para as seguintes definições da suite <snippet_keyword>%count%</snippet_keyword> não foram gerados (verifique a configuração):</snippet_undefined>',
+        'snippet_proposal_use'   => 'Não te esqueças destas %count% declarações de use:',
         'failed_scenarios_title' => 'Cenários que falharam:',
         'failed_hooks_title'     => 'Hooks que falharam:',
         'failed_steps_title'     => 'Definições que falharam:',
@@ -234,6 +248,7 @@
     'pt-BR' => array(
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> possue etapas faltando. Defina elas com esse(s) trecho(s) de código:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Trecho de códigos para as seguintes etapas em <snippet_keyword>%count%</snippet_keyword> suite não foram geradas (verique sua configuração):</snippet_undefined>',
+        'snippet_proposal_use'   => 'Não se esqueça destas %count% declarações de use:',
         'failed_scenarios_title' => 'Cenários falhados:',
         'failed_hooks_title'     => 'Hooks falhados:',
         'failed_steps_title'     => 'Etapas falhadas:',
@@ -250,6 +265,7 @@
     'ro'    => array(
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> are pași lipsa. Puteți implementa pașii cu ajutorul acestor fragmente de cod:</snippet_undefined>',
         'snippet_missing_title'   => '<snippet_undefined>Fragmentele de cod pentru urmatorii pași din suita <snippet_keyword>%count%</snippet_keyword> nu au fost generate (contextul tau implementeaza interfata SnippetAcceptingContext?):</snippet_undefined>',
+        'snippet_proposal_use'    => 'Nu uitați aceste %count% instrucțiuni de use:',
         'skipped_scenarios_title' => 'Scenarii omise:',
         'failed_scenarios_title'  => 'Scenarii eșuate:',
         'failed_hooks_title'      => 'Hook-uri eșuate:',
@@ -267,6 +283,7 @@
     'ru'    => array(
         'snippet_proposal_title'  => '<snippet_keyword>%count%</snippet_keyword> <snippet_undefined>не содержит необходимых определений. Вы можете добавить их используя шаблоны:</snippet_undefined>',
         'snippet_missing_title'   => '<snippet_undefined>Шаблоны для следующих шагов в среде <snippet_keyword>%count%</snippet_keyword> не были сгенерированы (проверьте ваши настройки):</snippet_undefined>',
+        'snippet_proposal_use'    => 'Не забудьте эти %count% use утверждения:',
         'skipped_scenarios_title' => 'Пропущенные сценарии:',
         'failed_scenarios_title'  => 'Проваленные сценарии:',
         'failed_hooks_title'      => 'Проваленные хуки:',
@@ -284,6 +301,7 @@
     'zh'    => array(
         'snippet_context_choice'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> 有新的场景步骤， 请选择要生成代码片段的ContextClass:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> 已经更新。 请检查生成片段:</snippet_undefined>',
+        'snippet_proposal_use'    => '别忘了这 %count% 个 use 声明:',
         'snippet_missing_title'   => '<snippet_undefined>您可以使用 <snippet_keyword>--snippets-for</snippet_keyword> CLI命令更新 <snippet_keyword>%count%</snippet_keyword> 的ContextClass:</snippet_undefined>',
         'skipped_scenarios_title' => '跳过场景:',
         'failed_scenarios_title'  => '失败的场景:',

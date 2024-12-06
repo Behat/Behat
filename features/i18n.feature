@@ -142,6 +142,11 @@ Feature: I18n
           {
               throw new PendingException();
           }
+
+      --- Не забудьте эти 2 use утверждения:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Then;
       """
 
   Scenario: Progress
@@ -180,6 +185,11 @@ Feature: I18n
           {
               throw new PendingException();
           }
+
+      --- Не забудьте эти 2 use утверждения:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Then;
       """
 
   Scenario: Progress with unexisting locale
@@ -218,6 +228,11 @@ Feature: I18n
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 2 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Then;
       """
 
   Scenario: Progress with unexisting locale
@@ -256,4 +271,9 @@ Feature: I18n
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 2 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Then;
       """

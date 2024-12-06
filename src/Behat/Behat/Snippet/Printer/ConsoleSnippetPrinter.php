@@ -57,13 +57,20 @@ class ConsoleSnippetPrinter implements SnippetPrinter
      */
     public function printSnippets($targetName, array $snippets)
     {
-        $message = $this->translator->trans('snippet_proposal_title', array('%count%' => $targetName), 'output');
+        $message = $this->translator->trans('snippet_proposal_title', ['%count%' => $targetName], 'output');
 
         $this->output->writeln('--- ' . $message . PHP_EOL);
 
+        $usedClasses = [];
         foreach ($snippets as $snippet) {
+            foreach ($snippet->getUsedClasses() as $usedClass) {
+                $usedClasses[$usedClass] = true;
+            }
+
             $this->output->writeln(sprintf('<snippet_undefined>%s</snippet_undefined>', $snippet->getSnippet()) . PHP_EOL);
         }
+
+        $this->outputClassesUsesStatements(array_keys($usedClasses));
     }
 
     /**
@@ -83,5 +90,23 @@ class ConsoleSnippetPrinter implements SnippetPrinter
         }
 
         $this->output->writeln('');
+    }
+
+    /**
+     * @param array<string> $usedClasses
+     */
+    public function outputClassesUsesStatements(array $usedClasses): void
+    {
+        if ([] === $usedClasses) {
+            return;
+        }
+
+        $message = $this->translator->trans('snippet_proposal_use', ['%count%' => \count($usedClasses)], 'output');
+
+        $this->output->writeln('--- '.$message.PHP_EOL);
+
+        foreach ($usedClasses as $usedClass) {
+            $this->output->writeln(sprintf('    <snippet_undefined>use %s;</snippet_undefined>', $usedClass));
+        }
     }
 }

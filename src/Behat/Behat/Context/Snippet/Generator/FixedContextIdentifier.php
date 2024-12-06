@@ -19,14 +19,12 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
  */
 final class FixedContextIdentifier implements TargetContextIdentifier
 {
-    private ?string $contextClass;
-
     /**
      * Initialises identifier.
      */
-    public function __construct(?string $contextClass = null)
-    {
-        $this->contextClass = $contextClass;
+    public function __construct(
+        private readonly ?string $contextClass = null
+    ) {
     }
 
     /**

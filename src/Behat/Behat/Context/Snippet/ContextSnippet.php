@@ -20,28 +20,17 @@ use Behat\Gherkin\Node\StepNode;
  */
 final class ContextSnippet implements Snippet
 {
-    private StepNode $step;
-
-    private string $template;
-
-    private string $contextClass;
-
-    /**
-     * @var string[]
-     */
-    private array $usedClasses;
-
     /**
      * Initializes definition snippet.
      *
      * @param string[] $usedClasses
      */
-    public function __construct(StepNode $step, string $template, string $contextClass, array $usedClasses = [])
-    {
-        $this->step = $step;
-        $this->template = $template;
-        $this->contextClass = $contextClass;
-        $this->usedClasses = $usedClasses;
+    public function __construct(
+        private readonly StepNode $step,
+        private readonly string $template,
+        private readonly string $contextClass,
+        private readonly array $usedClasses = [],
+    ) {
     }
 
     /**
