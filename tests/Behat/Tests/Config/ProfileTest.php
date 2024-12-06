@@ -7,7 +7,6 @@ namespace Behat\Tests\Config;
 use Behat\Config\Extension;
 use Behat\Config\Filter\NameFilter;
 use Behat\Config\Filter\TagFilter;
-use Behat\Config\Formatter\Formatter;
 use Behat\Config\Formatter\JUnitFormatter;
 use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Config\Formatter\ProgressFormatter;
@@ -130,11 +129,11 @@ final class ProfileTest extends TestCase
     {
         $profile = new Profile('default');
 
-        $profile->withFormatters(
-            new PrettyFormatter(expand: true, paths: false),
-            new ProgressFormatter(timer: false),
-            new JUnitFormatter(timer: false),
-        );
+        $profile
+            ->withFormatter((new PrettyFormatter(expand: true, paths: false))->withOutputVerbosity(2))
+            ->withFormatter(new ProgressFormatter(timer: false))
+            ->withFormatter(new JUnitFormatter(timer: false))
+        ;
 
         $this->assertEquals([
             'formatters' => [
@@ -143,6 +142,7 @@ final class ProfileTest extends TestCase
                     'expand' => true,
                     'paths' => false,
                     'multiline' => true,
+                    'output_verbosity' => 2,
                 ],
                 'progress' => [
                     'timer' => false,
@@ -158,11 +158,15 @@ final class ProfileTest extends TestCase
     {
         $profile = new Profile('default');
 
-        $profile->withFormatters((new PrettyFormatter())->disable());
+        $profile->disableFormatter(PrettyFormatter::NAME);
+        $profile->disableFormatter(ProgressFormatter::NAME);
+        $profile->disableFormatter(JUnitFormatter::NAME);
 
         $this->assertEquals([
             'formatters' => [
                 'pretty' => false,
+                'progress' => false,
+                'junit' => false,
             ],
         ], $profile->toArray());
     }

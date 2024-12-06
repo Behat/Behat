@@ -54,17 +54,16 @@ final class Profile
         return $this;
     }
 
-    public function withFormatters(FormatterConfigInterface ...$formatters): self
+    public function withFormatter(FormatterConfigInterface $formatter): self
     {
-        foreach ($formatters as $formatter) {
-            if (!$formatter->isEnabled()) {
-                $this->settings['formatters'][$formatter->name()] = false;
+        $this->settings['formatters'][$formatter->name()] = $formatter->toArray();
 
-                continue;
-            }
+        return $this;
+    }
 
-            $this->settings['formatters'][$formatter->name()] = $formatter->toArray();
-        }
+    public function disableFormatter(string $name): self
+    {
+        $this->settings['formatters'][$name] = false;
 
         return $this;
     }

@@ -6,10 +6,12 @@ namespace Behat\Config\Formatter;
 
 final class JUnitFormatter extends Formatter
 {
+    public const NAME = 'junit';
+
     public function __construct(
         bool $timer = true,
     ) {
-        parent::__construct(name: 'junit', settings: [
+        parent::__construct(name: self::NAME, settings: [
             'timer' => $timer,
         ]);
     }

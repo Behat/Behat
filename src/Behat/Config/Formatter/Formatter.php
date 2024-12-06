@@ -4,26 +4,40 @@ declare(strict_types=1);
 
 namespace Behat\Config\Formatter;
 
+use Behat\Config\Profile;
+
 class Formatter implements FormatterConfigInterface
 {
-    private bool $enabled = true;
-
     public function __construct(
         private readonly string $name,
         private array $settings = [],
     ) {
     }
 
-    public function enable(): self
+    public function withOutputVerbosity(int $level): self
     {
-        $this->enabled = true;
+        $this->settings['output_verbosity'] = $level;
 
         return $this;
     }
 
-    public function disable(): self
+    public function withOutputPath(string $path): self
     {
-        $this->enabled = false;
+        $this->settings['output_path'] = $path;
+
+        return $this;
+    }
+
+    public function withOutputDecorated(bool $decorated = true): self
+    {
+        $this->settings['output_decorated'] = $decorated;
+
+        return $this;
+    }
+
+    public function withOutputStyles(array $styles): self
+    {
+        $this->settings['output_styles'] = $styles;
 
         return $this;
     }
@@ -31,11 +45,6 @@ class Formatter implements FormatterConfigInterface
     public function name(): string
     {
         return $this->name;
-    }
-
-    public function isEnabled(): bool
-    {
-        return $this->enabled;
     }
 
     public function toArray(): array
