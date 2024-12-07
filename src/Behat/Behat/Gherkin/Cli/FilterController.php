@@ -11,6 +11,7 @@
 namespace Behat\Behat\Gherkin\Cli;
 
 use Behat\Gherkin\Filter\NameFilter;
+use Behat\Gherkin\Filter\NarrativeFilter;
 use Behat\Gherkin\Filter\RoleFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Gherkin;
@@ -52,19 +53,25 @@ final class FilterController implements Controller
         $command
             ->addOption(
                 '--name', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                "Only executeCall the feature elements which match part" . PHP_EOL .
+                "Only execute the feature elements which match part" . PHP_EOL .
                 "of the given name or regex."
             )
             ->addOption(
                 '--tags', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                "Only executeCall the features or scenarios with tags" . PHP_EOL .
+                "Only execute the features or scenarios with tags" . PHP_EOL .
                 "matching tag filter expression."
             )
             ->addOption(
                 '--role', null, InputOption::VALUE_REQUIRED,
-                "Only executeCall the features with actor role matching" . PHP_EOL .
+                "Only execute the features with actor role matching" . PHP_EOL .
                 "a wildcard."
-            );
+            )
+            ->addOption(
+                '--narrative', null, InputOption::VALUE_REQUIRED,
+                "Only execute the features with actor description" . PHP_EOL .
+                "matching a regex."
+            )
+        ;
     }
 
     /**
@@ -89,6 +96,10 @@ final class FilterController implements Controller
 
         if ($role = $input->getOption('role')) {
             $filters[] = new RoleFilter($role);
+        }
+
+        if ($narrative = $input->getOption('narrative')) {
+            $filters[] = new NarrativeFilter($narrative);
         }
 
         if (count($filters)) {
