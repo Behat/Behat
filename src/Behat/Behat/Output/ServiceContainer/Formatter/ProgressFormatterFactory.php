@@ -140,7 +140,7 @@ class ProgressFormatterFactory implements FormatterFactory
         $container->setDefinition('output.progress.statistics', $definition);
 
         $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', array(
-            'progress',
+            ProgressFormatter::NAME,
             'Prints one character per step.',
             ProgressFormatter::defaults(),
             $this->createOutputPrinterDefinition(),

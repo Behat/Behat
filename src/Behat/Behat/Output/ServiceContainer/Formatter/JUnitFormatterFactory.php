@@ -144,7 +144,7 @@ final class JUnitFormatterFactory implements FormatterFactory
         $container->setDefinition('output.junit.statistics', $definition);
 
         $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', array(
-            'junit',
+            JUnitFormatter::NAME,
             'Outputs the failures in JUnit compatible files.',
             JUnitFormatter::defaults(),
             $this->createOutputPrinterDefinition(),

@@ -9,28 +9,21 @@ final class PrettyFormatter extends Formatter
     public const NAME = 'pretty';
 
     public function __construct(
-        ?bool $timer = null,
-        ?bool $expand = null,
-        ?bool $paths = null,
-        ?bool $multiline = null,
+        bool $timer = true,
+        bool $expand = false,
+        bool $paths = true,
+        bool $multiline = true,
     ) {
-        $settings = self::defaults();
-
-        $settings['timer'] = $timer ?? $settings['timer'];
-        $settings['expand'] = $expand ?? $settings['expand'];
-        $settings['paths'] = $paths ?? $settings['paths'];
-        $settings['multiline'] = $multiline ?? $settings['multiline'];
-
-        parent::__construct(name: self::NAME, settings: $settings);
+        parent::__construct(name: self::NAME, settings: [
+            'timer' => $timer,
+            'expand' => $expand,
+            'paths' => $paths,
+            'multiline' => $multiline,
+        ]);
     }
 
     public static function defaults(): array
     {
-        return [
-            'timer' => true,
-            'expand' => false,
-            'paths' => true,
-            'multiline' => true,
-        ];
+        return (new self())->toArray();
     }
 }

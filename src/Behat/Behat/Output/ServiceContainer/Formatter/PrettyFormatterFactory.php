@@ -172,7 +172,7 @@ class PrettyFormatterFactory implements FormatterFactory
         $container->setDefinition('output.pretty.statistics', $definition);
 
         $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', array(
-            'pretty',
+            PrettyFormatter::NAME,
             'Prints the feature as is.',
             PrettyFormatter::defaults(),
             $this->createOutputPrinterDefinition(),
