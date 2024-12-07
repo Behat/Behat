@@ -216,9 +216,8 @@ final class OutlineTableListener implements EventListener
             $this->stepSetupPrinter->printSetup($formatter, $beforeEvent->getSetup());
         }
 
-        if ($example instanceof ExampleNode) {
-            $this->exampleRowPrinter->printExampleRow($formatter, $this->outline, $example, $this->stepAfterTestedEvents);
-        }
+        assert($example instanceof ExampleNode);
+        $this->exampleRowPrinter->printExampleRow($formatter, $this->outline, $example, $this->stepAfterTestedEvents);
 
         foreach ($this->stepAfterTestedEvents as $afterEvent) {
             $this->stepSetupPrinter->printTeardown($formatter, $afterEvent->getTeardown());
