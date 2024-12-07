@@ -51,7 +51,7 @@ final class TestworkEventDispatcher extends EventDispatcher
         return $this->bcAwareDispatch($eventName, $event);
     }
 
-    private function bcAwareDispatch(object $event, $eventName)
+    private function bcAwareDispatch(?object $event, $eventName)
     {
         if (null === $event) {
             $event = new Event();

@@ -94,7 +94,10 @@ final class RepositorySearchEngine implements SearchEngine
             }
 
             $result = $newResult;
-            $definitions[] = $newResult->getMatchedDefinition();
+            $matchedDefinition = $newResult->getMatchedDefinition();
+            if ($matchedDefinition instanceof Definition) {
+                $definitions[] = $matchedDefinition;
+            }
         }
 
         if (count($definitions) > 1) {

@@ -43,6 +43,14 @@
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
             </errorLevel>
         </MethodSignatureMismatch>
+
+        <InvalidArgument>
+            <errorLevel type="error"/>
+            <errorLevel type="suppress">
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcher.php" />
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
+            </errorLevel>
+        </InvalidArgument>
     </issueHandlers>
 
 </psalm>

@@ -117,9 +117,10 @@ final class PrettySetupPrinter implements SetupPrinter
         $style = $this->resultConverter->convertResultCodeToString($resultCode);
         $hook = $callResult->getCall()->getCallee();
         $path = $hook->getPath();
+        $hookName = (string) $hook;
 
         $printer->writeln(
-            sprintf('%s┌─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hook, $style, $path)
+            sprintf('%s┌─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hookName, $style, $path)
         );
 
         $printer->writeln(sprintf('%s│', $this->indentText));
@@ -148,6 +149,7 @@ final class PrettySetupPrinter implements SetupPrinter
         $style = $this->resultConverter->convertResultCodeToString($resultCode);
         $hook = $callResult->getCall()->getCallee();
         $path = $hook->getPath();
+        $hookName = (string) $hook;
 
         $printer->writeln(sprintf('%s│', $this->indentText));
 
@@ -155,7 +157,7 @@ final class PrettySetupPrinter implements SetupPrinter
         $this->printHookCallException($printer, $callResult, $this->indentText);
 
         $printer->writeln(
-            sprintf('%s└─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hook, $style, $path)
+            sprintf('%s└─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hookName, $style, $path)
         );
 
         if ($this->newlineAfter) {

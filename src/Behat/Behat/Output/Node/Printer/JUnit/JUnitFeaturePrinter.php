@@ -69,7 +69,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
         if (0 === count($stats)) {
             $totalCount = 0;
         } else {
-            $totalCount = array_sum($stats);
+            $totalCount = (int) array_sum($stats);
         }
 
         /** @var JUnitOutputPrinter $outputPrinter */

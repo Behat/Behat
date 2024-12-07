@@ -175,9 +175,9 @@ final class TotalStatistics implements Statistics
     /**
      * Returns counters for different scenario result codes.
      *
-     * @return array[]
+     * @return array<TestResult::*, int>
      */
-    public function getScenarioStatCounts()
+    public function getScenarioStatCounts(): array
     {
         return $this->scenarioCounters;
     }
@@ -205,7 +205,7 @@ final class TotalStatistics implements Statistics
     /**
      * Returns counters for different step result codes.
      *
-     * @return array[]
+     * @return array<TestResult::*, int>
      */
     public function getStepStatCounts()
     {
