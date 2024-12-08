@@ -19,6 +19,7 @@
         "behat/gherkin": "^4.10.0",
         "behat/transliterator": "^1.5",
         "composer-runtime-api": "^2.2",
+        "composer/xdebug-handler": "^3.0",
         "psr/container": "^1.0 || ^2.0",
         "symfony/config": "^5.4 || ^6.4 || ^7.0",
         "symfony/console": "^5.4 || ^6.4 || ^7.0",

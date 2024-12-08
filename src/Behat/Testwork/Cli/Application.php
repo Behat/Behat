@@ -14,6 +14,7 @@ use Behat\Testwork\ServiceContainer\Configuration\ConfigurationLoader;
 use Behat\Testwork\ServiceContainer\ContainerLoader;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use Composer\XdebugHandler\XdebugHandler;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -84,6 +85,7 @@ final class Application extends BaseApplication
                 'guessed based on your platform and the output if not specified.'
             ),
             new InputOption('--no-colors', null, InputOption::VALUE_NONE, 'Force no ANSI color in the output.'),
+            new InputOption('--xdebug', null, InputOption::VALUE_NONE, 'Allow Xdebug to run.'),
         ));
     }
 
@@ -97,6 +99,14 @@ final class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
+        $isXdebugAllowed = $input->hasParameterOption('--xdebug');
+        if (!$isXdebugAllowed) {
+            $xdebugHandler = new XdebugHandler('behat');
+            $xdebugHandler->setPersistent();
+            $xdebugHandler->check();
+            unset($xdebugHandler);
+        }
+
         // xdebug's default nesting level of 100 is not enough
         if (extension_loaded('xdebug')
             && false === strpos(ini_get('disable_functions'), 'ini_set')
