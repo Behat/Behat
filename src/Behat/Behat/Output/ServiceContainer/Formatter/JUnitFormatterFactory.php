@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Output\ServiceContainer\Formatter;
 
+use Behat\Config\Formatter\JUnitFormatter;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
@@ -143,11 +144,9 @@ final class JUnitFormatterFactory implements FormatterFactory
         $container->setDefinition('output.junit.statistics', $definition);
 
         $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', array(
-            'junit',
+            JUnitFormatter::NAME,
             'Outputs the failures in JUnit compatible files.',
-            array(
-                'timer' => true,
-            ),
+            JUnitFormatter::defaults(),
             $this->createOutputPrinterDefinition(),
             new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
                 array(
