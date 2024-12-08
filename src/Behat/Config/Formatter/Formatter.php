@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Behat\Config\Formatter;
 
-use Behat\Config\Profile;
 use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 
 class Formatter implements FormatterConfigInterface
@@ -16,7 +15,7 @@ class Formatter implements FormatterConfigInterface
     }
 
     /**
-     * @param int $level use Behat\Testwork\Output\Printer\Factory\OutputFactory::VERBOSITY_*
+     * @param int $level use OutputFactory::VERBOSITY_*
      */
     public function withOutputVerbosity(int $level): self
     {
