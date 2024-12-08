@@ -272,17 +272,13 @@ Feature: Context consistency
 
     --- CustomContext has missing steps. Define them with these snippets:
 
-        /**
-         * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
-         */
+        #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
         public function contextParameterShouldBeEqualTo($arg1, $arg2): void
         {
             throw new PendingException();
         }
 
-        /**
-         * @Then /^context parameter "([^"]*)" should be array with (\d+) elements$/
-         */
+        #[Then('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
         public function contextParameterShouldBeArrayWithElements($arg1, $arg2): void
         {
             throw new PendingException();

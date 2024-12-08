@@ -123,6 +123,8 @@ Feature: Append snippets option
       """
       <?php
 
+      use Behat\Step\Given;
+      use Behat\Step\Then;
       use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
@@ -182,41 +184,31 @@ Feature: Append snippets option
 
           private function doSomethingUndefinedWith() {}
 
-          /**
-           * @Then /^do something undefined with \$$/
-           */
+          #[Then('/^do something undefined with \$$/')]
           public function doSomethingUndefinedWith2(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^do something undefined with \\(\d+)$/
-           */
+          #[Then('/^do something undefined with \\\\(\d+)$/')]
           public function doSomethingUndefinedWith3($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
+          #[Given('/^pystring:$/')]
           public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring (\d+):$/
-           */
+          #[Given('/^pystring (\d+):$/')]
           public function pystring2($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
+          #[Given('/^table:$/')]
           public function table(TableNode $table): void
           {
               throw new PendingException();
@@ -293,6 +285,8 @@ Feature: Append snippets option
       """
       <?php
 
+      use Behat\Step\Given;
+      use Behat\Step\Then;
       use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
@@ -352,41 +346,31 @@ Feature: Append snippets option
 
           private function doSomethingUndefinedWith() {}
 
-          /**
-           * @Then /^do something undefined with \$$/
-           */
+          #[Then('/^do something undefined with \$$/')]
           public function doSomethingUndefinedWith2(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^do something undefined with \\(\d+)$/
-           */
+          #[Then('/^do something undefined with \\\\(\d+)$/')]
           public function doSomethingUndefinedWith3($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
+          #[Given('/^pystring:$/')]
           public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring (\d+):$/
-           */
+          #[Given('/^pystring (\d+):$/')]
           public function pystring2($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
+          #[Given('/^table:$/')]
           public function table(TableNode $table): void
           {
               throw new PendingException();
@@ -463,6 +447,8 @@ Feature: Append snippets option
 
       use Behat\Gherkin\Node\TableNode;
       use Behat\Gherkin\Node\PyStringNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
       use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Behat\Context\Context;
 
@@ -520,41 +506,31 @@ Feature: Append snippets option
 
           private function doSomethingUndefinedWith() {}
 
-          /**
-           * @Then /^do something undefined with \$$/
-           */
+          #[Then('/^do something undefined with \$$/')]
           public function doSomethingUndefinedWith2(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^do something undefined with \\(\d+)$/
-           */
+          #[Then('/^do something undefined with \\\\(\d+)$/')]
           public function doSomethingUndefinedWith3($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
+          #[Given('/^pystring:$/')]
           public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring (\d+):$/
-           */
+          #[Given('/^pystring (\d+):$/')]
           public function pystring2($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
+          #[Given('/^table:$/')]
           public function table(TableNode $table): void
           {
               throw new PendingException();
@@ -641,6 +617,9 @@ Feature: Append snippets option
       """
       <?php
 
+      use Behat\Step\Then;
+      use Behat\Step\When;
+      use Behat\Step\Given;
       use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\TableNode;
@@ -649,81 +628,61 @@ Feature: Append snippets option
       class FirstContext implements Context
       {
 
-          /**
-           * @Given /^I have (\d+) apples$/
-           */
+          #[Given('/^I have (\d+) apples$/')]
           public function iHaveApples($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I ate (\d+) apple$/
-           */
+          #[When('/^I ate (\d+) apple$/')]
           public function iAteApple($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I found (\d+) apples$/
-           */
+          #[When('/^I found (\d+) apples$/')]
           public function iFoundApples($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^do something undefined with \$$/
-           */
+          #[Then('/^do something undefined with \$$/')]
           public function doSomethingUndefinedWith(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I ate (\d+) apples$/
-           */
+          #[When('/^I ate (\d+) apples$/')]
           public function iAteApples($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^do something undefined with \\(\d+)$/
-           */
+          #[Then('/^do something undefined with \\\\(\d+)$/')]
           public function doSomethingUndefinedWith2($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
+          #[Given('/^pystring:$/')]
           public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring (\d+):$/
-           */
+          #[Given('/^pystring (\d+):$/')]
           public function pystring2($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
+          #[Given('/^table:$/')]
           public function table(TableNode $table): void
           {
               throw new PendingException();

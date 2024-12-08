@@ -168,25 +168,19 @@ Feature: Format options
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^do something undefined$/
-           */
+          #[Then('/^do something undefined$/')]
           public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
+          #[Given('/^pystring:$/')]
           public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
+          #[Given('/^table:$/')]
           public function table(TableNode $table): void
           {
               throw new PendingException();
@@ -251,25 +245,19 @@ Feature: Format options
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^do something undefined$/
-           */
+          #[Then('/^do something undefined$/')]
           public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
+          #[Given('/^pystring:$/')]
           public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
+          #[Given('/^table:$/')]
           public function table(TableNode $table): void
           {
               throw new PendingException();
@@ -399,25 +387,19 @@ Feature: Format options
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^do something undefined$/
-           */
+          #[Then('/^do something undefined$/')]
           public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
+          #[Given('/^pystring:$/')]
           public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
+          #[Given('/^table:$/')]
           public function table(TableNode $table): void
           {
               throw new PendingException();
@@ -479,25 +461,19 @@ Feature: Format options
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^do something undefined$/
-           */
+          #[Then('/^do something undefined$/')]
           public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
+          #[Given('/^pystring:$/')]
           public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
+          #[Given('/^table:$/')]
           public function table(TableNode $table): void
           {
               throw new PendingException();

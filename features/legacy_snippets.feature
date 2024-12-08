@@ -61,73 +61,55 @@ Feature: Legacy Snippets
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Given /^I have magically created (\d+)\$$/
-           */
+          #[Given('/^I have magically created (\d+)\$$/')]
           public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I have chosen '([^']*)' in coffee machine$/
-           */
+          #[When('/^I have chosen \'([^\']*)\' in coffee machine$/')]
           public function iHaveChosenInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have '([^']*)'$/
-           */
+          #[Then('/^I should have \'([^\']*)\'$/')]
           public function iShouldHave($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should get a '([^']*)':$/
-           */
+          #[Then('/^I should get a \'([^\']*)\':$/')]
           public function iShouldGetA($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should get a simple string:$/
-           */
+          #[Then('/^I should get a simple string:$/')]
           public function iShouldGetASimpleString(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I have chosen "([^"]*)" in coffee machine$/
-           */
+          #[When('/^I have chosen "([^"]*)" in coffee machine$/')]
           public function iHaveChosenInCoffeeMachine2($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When /^do something undefined with \\(\d+)$/
-           */
+          #[When('/^do something undefined with \\\\(\d+)$/')]
           public function doSomethingUndefinedWith($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have "([^"]*)"$/
-           */
+          #[Then('/^I should have "([^"]*)"$/')]
           public function iShouldHave2($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should get a "([^"]*)":$/
-           */
+          #[Then('/^I should get a "([^"]*)":$/')]
           public function iShouldGetA2($arg1, PyStringNode $string): void
           {
               throw new PendingException();
@@ -190,49 +172,37 @@ Feature: Legacy Snippets
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Given I have magically created :arg1$
-           */
+          #[Given('I have magically created :arg1$')]
           public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When I have chosen :arg1 in coffee machine
-           */
+          #[When('I have chosen :arg1 in coffee machine')]
           public function iHaveChosenInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then I should have :arg1
-           */
+          #[Then('I should have :arg1')]
           public function iShouldHave($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then I should get a :arg1:
-           */
+          #[Then('I should get a :arg1:')]
           public function iShouldGetA($arg1, PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then I should get a simple string:
-           */
+          #[Then('I should get a simple string:')]
           public function iShouldGetASimpleString(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When do something undefined with \:arg1
-           */
+          #[When('do something undefined with \:arg1')]
           public function doSomethingUndefinedWith($arg1): void
           {
               throw new PendingException();
@@ -330,9 +300,7 @@ Feature: Legacy Snippets
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Given I have a package v2.5
-           */
+          #[Given('I have a package v2.5')]
           public function iHaveAPackageV(): void
           {
               throw new PendingException();
@@ -367,9 +335,7 @@ Feature: Legacy Snippets
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then images should be uploaded to web\/uploads\/media\/default\/:arg1\/:arg2\/
-           */
+          #[Then('images should be uploaded to web\/uploads\/media\/default\/:arg1\/:arg2\/')]
           public function imagesShouldBeUploadedToWebUploadsMediaDefault($arg1, $arg2): void
           {
               throw new PendingException();

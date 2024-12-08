@@ -134,9 +134,7 @@ Feature: Pretty Formatter
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^Something new$/
-           */
+          #[Then('/^Something new$/')]
           public function somethingNew(): void
           {
               throw new PendingException();

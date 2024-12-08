@@ -27,18 +27,12 @@ interface SnippetGenerator
     /**
      * Checks if generator supports search query.
      *
-     * @param Environment $environment
-     * @param StepNode    $step
-     *
      * @return bool
      */
     public function supportsEnvironmentAndStep(Environment $environment, StepNode $step);
 
     /**
      * Generates snippet from search.
-     *
-     * @param Environment $environment
-     * @param StepNode    $step
      *
      * @return Snippet
      */
