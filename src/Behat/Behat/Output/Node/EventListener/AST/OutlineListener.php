@@ -136,9 +136,10 @@ final class OutlineListener implements EventListener
             return;
         }
 
-        $this->example = $event->getScenario();
-
         $this->exampleSetupPrinter->printSetup($formatter, $event->getSetup());
+
+        $this->example = $event->getScenario();
+        assert($this->example instanceof ExampleNode);
         $this->examplePrinter->printHeader($formatter, $event->getFeature(), $this->example);
     }
 
