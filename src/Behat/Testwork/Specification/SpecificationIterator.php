@@ -17,6 +17,8 @@ use Iterator;
  * Iterates over test specifications.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @extends Iterator<int, Suite>
  */
 interface SpecificationIterator extends Iterator
 {

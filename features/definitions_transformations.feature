@@ -642,7 +642,6 @@ Feature: Step Arguments Transformations
       8 steps (8 passed)
       """
 
-  @php8
   Scenario: By-type transformations don't trigger from union types
     Given a file named "features/union-transforms.feature" with:
       """

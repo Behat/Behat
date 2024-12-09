@@ -98,7 +98,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     /**
      * Creates container from the setting passed.
      *
-     * @param string $settings
+     * @param string|array $settings
      *
      * @return mixed
      *

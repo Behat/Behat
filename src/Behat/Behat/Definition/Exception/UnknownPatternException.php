@@ -24,13 +24,7 @@ final class UnknownPatternException extends InvalidArgumentException implements 
      */
     private $pattern;
 
-    /**
-     * Initializes exception.
-     *
-     * @param string  $message
-     * @param integer $pattern
-     */
-    public function __construct($message, $pattern)
+    public function __construct(string $message, string $pattern)
     {
         $this->pattern = $pattern;
 
