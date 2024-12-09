@@ -73,13 +73,21 @@ Feature: Preferred Profiles
             | 5       | 3       | 8      |
             | 5       | 5       | 10     |
       """
-    And a file named "pretty.yml" with:
+    And a file named "pretty.php" with:
       """
-      pretty_without_paths:
-        formatters:
-          progress: false
-          pretty:
-            paths: false
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Formatter\PrettyFormatter;
+      use Behat\Config\Formatter\ProgressFormatter;
+
+      $profile = (new Profile('pretty_without_paths'))
+        ->disableFormatter(ProgressFormatter::NAME)
+        ->withFormatter(new PrettyFormatter(paths: false))
+      ;
+
+      return (new Config())->withProfile($profile);
 
       """
     And a file named "behat.yml" with:
@@ -95,7 +103,7 @@ Feature: Preferred Profiles
         progress
 
       imports:
-        - pretty.yml
+        - pretty.php
       """
 
   Scenario:

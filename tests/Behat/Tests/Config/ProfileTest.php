@@ -7,8 +7,12 @@ namespace Behat\Tests\Config;
 use Behat\Config\Extension;
 use Behat\Config\Filter\NameFilter;
 use Behat\Config\Filter\TagFilter;
+use Behat\Config\Formatter\JUnitFormatter;
+use Behat\Config\Formatter\PrettyFormatter;
+use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
+use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PHPUnit\Framework\TestCase;
 
@@ -120,5 +124,49 @@ final class ProfileTest extends TestCase
         $this->expectExceptionMessage('The filter "tags" already exists.');
 
         $profile->withFilter(new TagFilter('tag1'));
+    }
+
+    public function testAddingFormatters(): void
+    {
+        $profile = new Profile('default');
+
+        $profile
+            ->withFormatter((new PrettyFormatter(expand: true, paths: false))->withOutputVerbosity(OutputFactory::VERBOSITY_VERBOSE))
+            ->withFormatter(new ProgressFormatter(timer: false))
+            ->withFormatter(new JUnitFormatter())
+        ;
+
+        $this->assertEquals([
+            'formatters' => [
+                'pretty' => [
+                    'timer' => true,
+                    'expand' => true,
+                    'paths' => false,
+                    'multiline' => true,
+                    'output_verbosity' => 2,
+                ],
+                'progress' => [
+                    'timer' => false,
+                ],
+                'junit' => [],
+            ],
+        ], $profile->toArray());
+    }
+
+    public function testDisablingFormatters(): void
+    {
+        $profile = new Profile('default');
+
+        $profile->disableFormatter(PrettyFormatter::NAME);
+        $profile->disableFormatter(ProgressFormatter::NAME);
+        $profile->disableFormatter(JUnitFormatter::NAME);
+
+        $this->assertEquals([
+            'formatters' => [
+                'pretty' => false,
+                'progress' => false,
+                'junit' => false,
+            ],
+        ], $profile->toArray());
     }
 }
