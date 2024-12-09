@@ -21,42 +21,22 @@ use Behat\Gherkin\Node\StepNode;
 final class ContextSnippet implements Snippet
 {
     /**
-     * @var StepNode
-     */
-    private $step;
-    /**
-     * @var string
-     */
-    private $template;
-    /**
-     * @var string
-     */
-    private $contextClass;
-    /**
-     * @var string[]
-     */
-    private $usedClasses;
-
-    /**
      * Initializes definition snippet.
      *
-     * @param StepNode $step
-     * @param string   $template
-     * @param string   $contextClass
      * @param string[] $usedClasses
      */
-    public function __construct(StepNode $step, $template, $contextClass, array $usedClasses = array())
-    {
-        $this->step = $step;
-        $this->template = $template;
-        $this->contextClass = $contextClass;
-        $this->usedClasses = $usedClasses;
+    public function __construct(
+        private readonly StepNode $step,
+        private readonly string $template,
+        private readonly string $contextClass,
+        private readonly array $usedClasses = [],
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return 'context';
     }
@@ -64,7 +44,7 @@ final class ContextSnippet implements Snippet
     /**
      * {@inheritdoc}
      */
-    public function getHash()
+    public function getHash(): string
     {
         return md5($this->template);
     }
@@ -72,7 +52,7 @@ final class ContextSnippet implements Snippet
     /**
      * {@inheritdoc}
      */
-    public function getSnippet()
+    public function getSnippet(): string
     {
         return sprintf($this->template, $this->step->getKeywordType());
     }
@@ -80,7 +60,7 @@ final class ContextSnippet implements Snippet
     /**
      * {@inheritdoc}
      */
-    public function getStep()
+    public function getStep(): StepNode
     {
         return $this->step;
     }
@@ -88,7 +68,7 @@ final class ContextSnippet implements Snippet
     /**
      * {@inheritdoc}
      */
-    public function getTarget()
+    public function getTarget(): string
     {
         return $this->contextClass;
     }
@@ -98,7 +78,7 @@ final class ContextSnippet implements Snippet
      *
      * @return string[]
      */
-    public function getUsedClasses()
+    public function getUsedClasses(): array
     {
         return $this->usedClasses;
     }

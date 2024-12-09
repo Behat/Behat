@@ -17,15 +17,15 @@ namespace Behat\Behat\Definition\Call;
  */
 final class Then extends RuntimeDefinition
 {
+    public const KEYWORD = 'Then';
+
     /**
      * Initializes definition.
      *
-     * @param string      $pattern
-     * @param callable    $callable
-     * @param null|string $description
+     * @param array<object|string, string>|callable $callable
      */
-    public function __construct($pattern, $callable, $description = null)
+    public function __construct(string $pattern, $callable, ?string $description = null)
     {
-        parent::__construct('Then', $pattern, $callable, $description);
+        parent::__construct(self::KEYWORD, $pattern, $callable, $description);
     }
 }
