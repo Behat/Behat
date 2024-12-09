@@ -17,7 +17,6 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Call\Exception\BadCallbackException;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
 use Behat\Testwork\Hook\Scope\HookScope;
-use ReflectionFunction;
 use ReflectionMethod;
 
 /**
@@ -32,7 +31,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      *
      * @param string      $scopeName
      * @param null|string $filterString
-     * @param callable|array $callable
+     * @param callable|array{class-string, string} $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If callback is method, but not a static one

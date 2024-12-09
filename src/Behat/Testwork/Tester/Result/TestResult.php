@@ -20,6 +20,7 @@ interface TestResult
     public const PASSED = 0;
     public const SKIPPED = 10;
     public const PENDING = 20;
+    public const UNDEFINED = 30;
     public const FAILED = 99;
 
     /**

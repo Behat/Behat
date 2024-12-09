@@ -69,7 +69,7 @@ class JUnitStepPrinter implements StepPrinter
                 $outputPrinter->addTestcaseChild('error', $attributes);
                 break;
 
-            case StepResult::UNDEFINED:
+            case TestResult::UNDEFINED:
                 $attributes['type'] = 'undefined';
                 $outputPrinter->addTestcaseChild('error', $attributes);
                 break;

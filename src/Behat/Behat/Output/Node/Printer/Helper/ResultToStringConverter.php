@@ -10,7 +10,6 @@
 
 namespace Behat\Behat\Output\Node\Printer\Helper;
 
-use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -48,7 +47,7 @@ final class ResultToStringConverter
                 return 'pending';
             case TestResult::FAILED:
                 return 'failed';
-            case StepResult::UNDEFINED:
+            case TestResult::UNDEFINED:
                 return 'undefined';
         }
 

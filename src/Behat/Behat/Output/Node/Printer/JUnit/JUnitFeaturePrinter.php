@@ -13,7 +13,6 @@ namespace Behat\Behat\Output\Node\Printer\JUnit;
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Behat\Output\Statistics\PhaseStatistics;
-use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
@@ -80,7 +79,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
             'tests' => $totalCount,
             'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
-            'errors' => $stats[TestResult::PENDING] + $stats[StepResult::UNDEFINED],
+            'errors' => $stats[TestResult::PENDING] + $stats[TestResult::UNDEFINED],
             'time' => $this->durationListener ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
         ));
 

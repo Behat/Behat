@@ -13,6 +13,7 @@ namespace Behat\Behat\Output\Statistics;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Counter\Memory;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * A TotalStatistics decorator to get statistics per phase.
@@ -111,7 +112,7 @@ final class PhaseStatistics implements Statistics
     /**
      * Returns counters for different scenario result codes.
      *
-     * @return array<StepResult::*, int>
+     * @return array<TestResult::*, int>
      */
     public function getScenarioStatCounts(): array
     {

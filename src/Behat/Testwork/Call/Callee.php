@@ -50,7 +50,7 @@ interface Callee
     /**
      * Returns callable.
      *
-     * @return callable|array
+     * @return callable|array{class-string, string}
      */
     public function getCallable();
 
