@@ -176,7 +176,7 @@ final class LazyFeatureIterator implements SpecificationIterator
             '`%s` filter is not supported by the `%s` suite. Supported types are `%s`.',
             $type,
             $suite->getName(),
-            implode('`, `', array('role', 'name', 'tags'))
+            implode('`, `', array('narrative', 'role', 'name', 'tags'))
         ), $suite->getName());
     }
 
