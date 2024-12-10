@@ -40,9 +40,7 @@ Feature: Display hook failures location in junit printer
               throw new \Exception('Error in beforeSuite hook');
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -84,9 +82,7 @@ Feature: Display hook failures location in junit printer
               throw new \Exception('Error in afterSuite hook');
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -133,9 +129,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -182,9 +176,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -231,9 +223,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -280,9 +270,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -329,9 +317,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -378,9 +364,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }

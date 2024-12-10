@@ -105,23 +105,17 @@ Feature: hooks
               $this->number = 100;
           }
 
-          /**
-           * @Given /^I have entered (\d+)$/
-           */
+          #[Given('/^I have entered (\d+)$/')]
           public function iHaveEntered($number) {
               $this->number = intval($number);
           }
 
-          /**
-           * @Then /^I must have (\d+)$/
-           */
+          #[Then('/^I must have (\d+)$/')]
           public function iMustHave($number) {
               \PHPUnit\Framework\Assert::assertEquals(intval($number), $this->number);
           }
 
-          /**
-           * @Then I must have a scenario filter value of :value
-           */
+          #[Then('I must have a scenario filter value of :value')]
           public function iMustHaveScenarioFilter($filterValue) {
               \PHPUnit\Framework\Assert::assertEquals($filterValue, $this->scenarioFilter);
           }

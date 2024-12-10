@@ -23,30 +23,22 @@ Feature: Support traits
       {
           private $apples = 0;
 
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               $this->apples = intval($count);
           }
 
-          /**
-           * @When /^I ate (\d+) apples?$/
-           */
+          #[When('/^I ate (\d+) apples?$/')]
           public function iAteApples($count) {
               $this->apples -= intval($count);
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               $this->apples += intval($count);
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
           }

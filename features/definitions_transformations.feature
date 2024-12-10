@@ -31,17 +31,20 @@ Feature: Step Arguments Transformations
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Transformation\Transform;
 
       class FeatureContext implements Context
       {
           private $user;
 
-          /** @Transform /"([^\ "]+)(?: - (\d+))?" user/ */
+          #[Transform('/"([^\ "]+)(?: - (\d+))?" user/')]
           public function createUserFromUsername($username, $age = 20) {
               return new User($username, $age);
           }
 
-          /** @Transform table:username,age */
+          #[Transform('table:username,age')]
           public function createUserFromTable(TableNode $table) {
               $hash     = $table->getHash();
               $username = $hash[0]['username'];
@@ -50,7 +53,7 @@ Feature: Step Arguments Transformations
               return new User($username, $age);
           }
 
-          /** @Transform rowtable:username,age */
+          #[Transform('rowtable:username,age')]
           public function createUserFromRowTable(TableNode $table) {
               $hash     = $table->getRowsHash();
               $username = $hash['username'];
@@ -59,12 +62,12 @@ Feature: Step Arguments Transformations
               return new User($username, $age);
           }
 
-          /** @Transform row:username */
+          #[Transform('row:username')]
           public function createUserNamesFromTable($tableRow) {
               return $tableRow['username'];
           }
 
-          /** @Transform table:%username@,age# */
+          #[Transform('table:%username@,age#')]
           public function createUserFromTableWithSymbol(TableNode $table) {
               $hash     = $table->getHash();
               $username = $hash[0]['%username@'];
@@ -73,7 +76,7 @@ Feature: Step Arguments Transformations
               return new User($username, $age);
           }
 
-          /** @Transform rowtable:--username,age */
+          #[Transform('rowtable:--username,age')]
           public function createUserFromRowTableWithSymbol(TableNode $table) {
               $hash     = $table->getRowsHash();
               $username = $hash['--username'];
@@ -82,62 +85,50 @@ Feature: Step Arguments Transformations
               return new User($username, $age);
           }
 
-          /** @Transform row:$username */
+          #[Transform('row:$username')]
           public function createUserNamesFromTableWithSymbol($tableRow) {
               return $tableRow['$username'];
           }
 
-          /** @Transform /^\d+$/ */
+          #[Transform('/^\d+$/')]
           public function castToNumber($number) {
               return intval($number);
           }
 
-          /** @Transform :user */
+          #[Transform(':user')]
           public function castToUser($username) {
               return new User($username);
           }
 
-          /**
-           * @Transform /^(yes|no)$/
-           */
+          #[Transform('/^(yes|no)$/')]
           public function castEinenOrKeinenToBoolean($expected) {
               return 'yes' === $expected;
           }
 
-          /**
-           * @Given /I am (".*" user)/
-           * @Given I am user:
-           * @Given I am :user
-           */
+          #[Given('/I am (".*" user)/')]
+          #[Given('I am user:')]
+          #[Given('I am :user')]
           public function iAmUser(User $user) {
               $this->user = $user;
           }
 
-          /**
-           * @Then /Username must be "([^"]+)"/
-           */
+          #[Then('/Username must be "([^"]+)"/')]
           public function usernameMustBe($username) {
               PHPUnit\Framework\Assert::assertEquals($username, $this->user->getUsername());
           }
 
-          /**
-           * @Then /Age must be (\d+)/
-           */
+          #[Then('/Age must be (\d+)/')]
           public function ageMustBe($age) {
               PHPUnit\Framework\Assert::assertEquals($age, $this->user->getAge());
               PHPUnit\Framework\Assert::assertIsInt($age);
           }
 
-          /**
-           * @Then the Usernames must be:
-           */
+          #[Then('the Usernames must be:')]
           public function usernamesMustBe(array $usernames) {
               PHPUnit\Framework\Assert::assertEquals($usernames[0], $this->user->getUsername());
           }
 
-          /**
-           * @Then /^the boolean (no) should be transformed to false$/
-           */
+          #[Then('/^the boolean (no) should be transformed to false$/')]
           public function theBooleanShouldBeTransformed($boolean) {
               PHPUnit\Framework\Assert::assertSame(false, $boolean);
           }
@@ -272,22 +263,25 @@ Feature: Step Arguments Transformations
 
       use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Transformation\Transform;
 
       class FeatureContext implements Context
       {
           private $data;
 
-          /** @Transform table:* */
+          #[Transform('table:*')]
           public function transformTable(TableNode $table) {
               return $table->getHash();
           }
 
-          /** @Given data: */
+          #[Given('data:')]
           public function givenData(array $data) {
               $this->data = $data;
           }
 
-          /** @Then the :field should be :value */
+          #[Then('the :field should be :value')]
           public function theFieldShouldBe($field, $value) {
               PHPUnit\Framework\Assert::assertSame($value, $this->data[0][$field]);
           }
@@ -353,6 +347,10 @@ Feature: Step Arguments Transformations
       """
       <?php
 
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Transformation\Transform;
+
       class FeatureContext implements Behat\Behat\Context\Context
       {
           private $value;
@@ -362,49 +360,37 @@ Feature: Step Arguments Transformations
               unset($this->value);
           }
 
-          /**
-           * @Transform /^".*"$/
-           */
+          #[Transform('/^".*"$/')]
           public function transformString($string)
           {
               return strval($string);
           }
 
-          /**
-           * @Transform :number workdays ago
-           */
+          #[Transform(':number workdays ago')]
           public function transformDate($number)
           {
               return new \DateTime("-$number days");
           }
 
-          /**
-           * @Transform /^\d+$/
-           */
+          #[Transform('/^\d+$/')]
           public function transformInt($int)
           {
               return intval($int);
           }
 
-          /**
-           * @Transform /^null/
-           */
+          #[Transform('/^null/')]
           public function transformNull($null)
           {
               return null;
           }
 
-          /**
-           * @Given I have the value ":value"
-           */
+          #[Given('I have the value ":value"')]
           public function iHaveTheValue($value)
           {
               $this->value = $value;
           }
 
-          /**
-           * @Then it should be of type :type
-           */
+          #[Then('it should be of type :type')]
           public function itShouldBeOfType($type)
           {
               if (gettype($this->value) != $type && get_class($this->value) != $type) {
@@ -435,32 +421,38 @@ Feature: Step Arguments Transformations
     And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
+
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Transformation\Transform;
+
       class User {
           public $name;
           private function __construct($name) { $this->name = $name; }
           static public function named($name) { return new static($name); }
       }
+
       class FeatureContext implements Behat\Behat\Context\Context
       {
           private $I;
           private $he;
 
-          /** @Transform */
+          #[Transform]
           public function userFromName($name) : User {
               return User::named($name);
           }
 
-          /** @Given I am :user */
+          #[Given('I am :user')]
           public function iAm(User $user) {
               $this->I = $user;
           }
 
-          /** @Given /^he is \"([^\"]+)\"$/ */
+          #[Given('/^he is \"([^\"]+)\"$/')]
           public function heIs(User $user) {
               $this->he = $user;
           }
 
-          /** @Then I should be a user named :name */
+          #[Then('I should be a user named :name')]
           public function iShouldHaveName($name) {
               if ('User' !== get_class($this->I)) {
                   throw new Exception("User expected, {gettype($this->I)} given");
@@ -470,7 +462,7 @@ Feature: Step Arguments Transformations
               }
           }
 
-          /** @Then he should be a user named :name */
+          #[Then('he should be a user named :name')]
           public function heShouldHaveName($name) {
           if ('User' !== get_class($this->he)) {
                   throw new Exception("User expected, {gettype($this->he)} given");
@@ -503,6 +495,11 @@ Feature: Step Arguments Transformations
     And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
+
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Transformation\Transform;
+
       class User {
           public $name;
           private function __construct($name) { $this->name = $name; }
@@ -513,32 +510,32 @@ Feature: Step Arguments Transformations
           private $I;
           private $she;
 
-          /** @Transform */
+          #[Transform]
           public function userFromName($name) : User {
               return User::named($name);
           }
 
-          /** @Transform :admin */
+          #[Transform(':admin')]
           public function adminFromName($name) : User {
               return User::named('admin: ' . $name);
           }
 
-          /** @Transform :admin */
+          #[Transform(':admin')]
           public function adminString($name) {
               return 'admin';
           }
 
-          /** @Given I am :user */
+          #[Given('I am :user')]
           public function iAm(User $user) {
               $this->I = $user;
           }
 
-          /** @Given she is :admin */
+          #[Given('she is :admin')]
           public function sheIs(User $admin) {
               $this->she = $admin;
           }
 
-          /** @Then I should be a user named :name */
+          #[Then('I should be a user named :name')]
           public function iShouldHaveName($name) {
               if ('User' !== get_class($this->I)) {
                   throw new Exception("User expected, {gettype($this->I)} given");
@@ -548,7 +545,7 @@ Feature: Step Arguments Transformations
               }
           }
 
-          /** @Then she should be an admin named :name */
+          #[Then('she should be an admin named :name')]
           public function sheShouldHaveName($name) {
               if ('User' !== get_class($this->she)) {
                   throw new Exception("User expected, {gettype($this->she)} given");
@@ -596,22 +593,25 @@ Feature: Step Arguments Transformations
 
       use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Transformation\Transform;
 
       class FeatureContext implements Context
       {
           private $index;
 
-          /** @Transform /^(0|[1-9]\d*)(?:st|nd|rd|th)?$/ */
+          #[Transform('/^(0|[1-9]\d*)(?:st|nd|rd|th)?$/')]
           public function castToInt($number) {
             return intval($number) < PHP_INT_MAX ? intval($number) : $number;
           }
 
-          /** @Given I pick the :index thing */
+          #[Given('I pick the :index thing')]
           public function iPickThing($index) {
               $this->index = $index;
           }
 
-          /** @Then the index should be :value */
+          #[Then('the index should be :value')]
           public function theIndexShouldBe($value) {
               PHPUnit\Framework\Assert::assertSame($value, $this->index);
           }
@@ -653,22 +653,26 @@ Feature: Step Arguments Transformations
     And a file named "features/bootstrap/FeatureContext.php" with:
       """
       <?php
+
+      use Behat\Step\Given;
+      use Behat\Transformation\Transform;
+
       class User {
       }
+
       class FeatureContext implements Behat\Behat\Context\Context
       {
           private $I;
 
-          /** @Transform */
+          #[Transform]
           public function userFromName($name) : User|int
           {
               return new User();
           }
 
-          /**
-           * @Given I am :user
-           * @Given she is :user
-           */
+
+          #[Given('I am :user')]
+          #[Given('she is :user')]
           public function iAm(User $user) {
               $this->I = $user;
           }
@@ -692,18 +696,17 @@ Feature: Step Arguments Transformations
       """
       <?php
 
+      use Behat\Step\Then;
+      use Behat\Transformation\Transform;
+
       class FeatureContext implements Behat\Behat\Context\Context
       {
-          /**
-           * @Transform
-           */
+          #[Transform]
            public function transformToFoo($input): Foo
            {
            }
 
-          /**
-           * @Then :string should be passed
-           */
+          #[Then(':string should be passed')]
           public function doSomething(string $job)
           {
 

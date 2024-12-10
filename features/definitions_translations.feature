@@ -29,23 +29,17 @@ Feature: Definitions translations
           private $numbers = array();
           private $result = 0;
 
-          /**
-           * @Given /^I have entered (\d+) into calculator$/
-           */
+          #[Given('/^I have entered (\d+) into calculator$/')]
           public function iHaveEnteredIntoCalculator($number) {
               $this->numbers[] = intval($number);
           }
 
-          /**
-           * @Given /^I have clicked "+"$/
-           */
+          #[Given('/^I have clicked "+"$/')]
           public function iHaveClickedPlus() {
               $this->result = array_sum($this->numbers);
           }
 
-          /**
-           * @Then /^I should see (\d+) on the screen$/
-           */
+          #[Then('/^I should see (\d+) on the screen$/')]
           public function iShouldSeeOnTheScreen($result) {
               PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
           }
@@ -55,9 +49,7 @@ Feature: Definitions translations
               return (Object) array('name' => $username);
           }
 
-          /**
-           * @Then /^the ("[^"]+" user) name should be "([^"]*)"$/
-           */
+          #[Then('/^the ("[^"]+" user) name should be "([^"]*)"$/')]
           public function theUserUsername($user, $username) {
               PHPUnit\Framework\Assert::assertEquals($username, $user->name);
           }
@@ -132,23 +124,17 @@ Feature: Definitions translations
           private $numbers = array();
           private $result = 0;
 
-          /**
-           * @Given /^I have entered (\d+) into calculator$/
-           */
+          #[Given('/^I have entered (\d+) into calculator$/')]
           public function iHaveEnteredIntoCalculator($number) {
               $this->numbers[] = intval($number);
           }
 
-          /**
-           * @Given /^I have clicked "+"$/
-           */
+          #[Given('/^I have clicked "+"$/')]
           public function iHaveClickedPlus() {
               $this->result = array_sum($this->numbers);
           }
 
-          /**
-           * @Then /^I should see (\d+) on the screen$/
-           */
+          #[Then('/^I should see (\d+) on the screen$/')]
           public function iShouldSeeOnTheScreen($result) {
               PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
           }
@@ -158,9 +144,7 @@ Feature: Definitions translations
               return (Object) array('name' => $username);
           }
 
-          /**
-           * @Then /^the ("[^"]+" user) name should be "([^"]*)"$/
-           */
+          #[Then('/^the ("[^"]+" user) name should be "([^"]*)"$/')]
           public function theUserUsername($user, $username) {
               PHPUnit\Framework\Assert::assertEquals($username, $user->name);
           }
@@ -213,23 +197,17 @@ Feature: Definitions translations
           private $numbers = array();
           private $result = 0;
 
-          /**
-           * @Given /^I have entered (\d+) into calculator$/
-           */
+          #[Given('/^I have entered (\d+) into calculator$/')]
           public function iHaveEnteredIntoCalculator($number) {
               $this->numbers[] = intval($number);
           }
 
-          /**
-           * @Given /^I have clicked "+"$/
-           */
+          #[Given('/^I have clicked "+"$/')]
           public function iHaveClickedPlus() {
               $this->result = array_sum($this->numbers);
           }
 
-          /**
-           * @Then /^I should see (\d+) on the screen$/
-           */
+          #[Then('/^I should see (\d+) on the screen$/')]
           public function iShouldSeeOnTheScreen($result) {
               PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
           }
@@ -239,9 +217,7 @@ Feature: Definitions translations
               return (Object) array('name' => $username);
           }
 
-          /**
-           * @Then /^the ("[^"]+" user) name should be "([^"]*)"$/
-           */
+          #[Then('/^the ("[^"]+" user) name should be "([^"]*)"$/')]
           public function theUserUsername($user, $username) {
               PHPUnit\Framework\Assert::assertEquals($username, $user->name);
           }
@@ -303,23 +279,17 @@ Feature: Definitions translations
           private $numbers = array();
           private $result = 0;
 
-          /**
-           * @Given /^I have entered (\d+) into calculator$/
-           */
+          #[Given('/^I have entered (\d+) into calculator$/')]
           public function iHaveEnteredIntoCalculator($number) {
               $this->numbers[] = intval($number);
           }
 
-          /**
-           * @Given /^I have clicked "+"$/
-           */
+          #[Given('/^I have clicked "+"$/')]
           public function iHaveClickedPlus() {
               $this->result = array_sum($this->numbers);
           }
 
-          /**
-           * @Then /^I should see (\d+) on the screen$/
-           */
+          #[Then('/^I should see (\d+) on the screen$/')]
           public function iShouldSeeOnTheScreen($result) {
               PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
           }
@@ -329,9 +299,7 @@ Feature: Definitions translations
               return (Object) array('name' => $username);
           }
 
-          /**
-           * @Then /^the ("[^"]+" user) name should be "([^"]*)"$/
-           */
+          #[Then('/^the ("[^"]+" user) name should be "([^"]*)"$/')]
           public function theUserUsername($user, $username) {
               PHPUnit\Framework\Assert::assertEquals($username, $user->name);
           }
