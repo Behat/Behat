@@ -17,30 +17,22 @@ Feature: Pretty Formatter
       {
           private $value;
 
-          /**
-           * @Given /I have entered (\d+)/
-           */
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($num) {
               $this->value = $num;
           }
 
-          /**
-           * @Then /I must have (\d+)/
-           */
+          #[Then('/I must have (\d+)/')]
           public function iMustHave($num) {
               PHPUnit\Framework\Assert::assertEquals($num, $this->value);
           }
 
-          /**
-           * @When /I add (\d+)/
-           */
+          #[When('/I add (\d+)/')]
           public function iAdd($num) {
               $this->value += $num;
           }
 
-          /**
-           * @When /^Something not done yet$/
-           */
+          #[When('/^Something not done yet$/')]
           public function somethingNotDoneYet() {
               throw new PendingException();
           }
@@ -152,23 +144,17 @@ Feature: Pretty Formatter
       {
           private $value;
 
-          /**
-           * @Given /I have entered (\d+)/
-           */
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($num) {
               $this->value = $num;
           }
 
-          /**
-           * @Then /I must have (\d+)/
-           */
+          #[Then('/I must have (\d+)/')]
           public function iMustHave($num) {
               PHPUnit\Framework\Assert::assertEquals($num, $this->value);
           }
 
-          /**
-           * @When /I (add|subtract) the value (\d+)/
-           */
+          #[When('/I (add|subtract) the value (\d+)/')]
           public function iAddOrSubtract($op, $num) {
               if ($op == 'add')
                 $this->value += $num;
@@ -241,16 +227,12 @@ Feature: Pretty Formatter
         {
             private $value = 10;
 
-            /**
-             * @Then /I must have "([^"]+)"/
-             */
+            #[Then('/I must have "([^"]+)"/')]
             public function iMustHave($num) {
                 PHPUnit\Framework\Assert::assertEquals(intval(preg_replace('/[^\d]+/', '', $num)), $this->value);
             }
 
-            /**
-             * @When /I add "([^"]+)"/
-             */
+            #[When('/I add "([^"]+)"/')]
             public function iAdd($num) {
                 $this->value += intval(preg_replace('/[^\d]+/', '', $num));
             }
@@ -423,9 +405,7 @@ Feature: Pretty Formatter
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given /^.*$/
-           */
+          #[Given('/^.*$/')]
           public function anything() {
               throw new PendingException();
           }

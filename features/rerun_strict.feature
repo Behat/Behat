@@ -12,17 +12,13 @@ Feature: Rerun with strict
 
       class FeatureContext implements Context
       {
-          /**
-           * @When I have a failing step
-           */
+          #[When('I have a failing step')]
           public function iHaveAFailingStep(): void
           {
               throw new \Exception();
           }
 
-          /**
-           * @When I have a passing step
-           */
+          #[When('I have a passing step')]
           public function iHaveAPassingStep(): void
           {
           }

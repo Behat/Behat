@@ -14,9 +14,7 @@ Feature: Setting order of execution
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given I have :num orange(s)
-           */
+          #[Given('I have :num orange(s)')]
            public function iHaveOranges($num){}
       }
       """

@@ -86,30 +86,22 @@ Feature: Syntax helpers
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given /^(?:I|We) have (\d+) apples?$/
-           */
+          #[Given('/^(?:I|We) have (\d+) apples?$/')]
           public function iHaveApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^(?:I|We) ate (\d+) apples?$/
-           */
+          #[When('/^(?:I|We) ate (\d+) apples?$/')]
           public function iAteApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^(?:I|We) found (\d+) apples?$/
-           */
+          #[When('/^(?:I|We) found (\d+) apples?$/')]
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^(?:I|We) should have (\d+) apples$/
-           */
+          #[Then('/^(?:I|We) should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }
@@ -135,30 +127,22 @@ Feature: Syntax helpers
 
       class FeatureContext implements TranslatableContext
       {
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I ate (\d+) apples?$/
-           */
+          #[When('/^I ate (\d+) apples?$/')]
           public function iAteApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }
@@ -205,9 +189,7 @@ Feature: Syntax helpers
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               throw new PendingException();
           }
@@ -227,16 +209,12 @@ Feature: Syntax helpers
               throw new PendingException();
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }
@@ -272,16 +250,14 @@ Feature: Syntax helpers
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               throw new PendingException();
           }
 
           /**
            * Eating apples
-           * 
+           *
            * More details on eating apples, and a list:
            * - one
            * - two
@@ -294,16 +270,12 @@ Feature: Syntax helpers
               throw new PendingException();
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }
@@ -345,30 +317,22 @@ Feature: Syntax helpers
 
       class FeatureContext implements TranslatableContext
       {
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I ate (\d+) apples?$/
-           */
+          #[When('/^I ate (\d+) apples?$/')]
           public function iAteApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }

@@ -18,9 +18,7 @@ Feature: Symfony Env Var Placeholders
               $this->value = $value;
           }
 
-          /**
-           * @Then /the value should be configured as "([^"]+)"/
-           */
+          #[Then('/the value should be configured as "([^"]+)"/')]
           public function theValueShouldBeConfiguredAs($expected) {
               PHPUnit\Framework\Assert::assertEquals($expected, $this->value);
           }
