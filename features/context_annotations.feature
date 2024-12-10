@@ -1,7 +1,7 @@
-Feature: Context consistency
+Feature: Context Consistency Annotations
   In order to maintain stable behavior tests
   As a feature writer
-  I need a separate context for every scenario/outline
+  I need a separate context for every scenario/outline using annotations
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:

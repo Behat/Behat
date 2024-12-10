@@ -12,56 +12,47 @@ Feature: Error Reporting
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $array;
           private $result;
 
-          /**
-           * @Given /^I have an empty array$/
-           */
+          #[Given('/^I have an empty array$/')]
           public function iHaveAnEmptyArray()
           {
               $this->array = array();
           }
 
-          /**
-           * @When /^I access array index (\d+)$/
-           */
+          #[When('/^I access array index (\d+)$/')]
           public function iAccessArrayIndex($arg1)
           {
               $index = intval($arg1);
               $this->result = $this->array[$index];
           }
 
-          /**
-           * @Then /^I should get NULL$/
-           */
+          #[Then('/^I should get NULL$/')]
           public function iShouldGetNull()
           {
               PHPUnit\Framework\Assert::assertNull($this->result);
           }
 
-          /**
-           * @When /^I push "([^"]*)" to that array$/
-           */
+          #[When('/^I push "([^"]*)" to that array$/')]
           public function iPushToThatArray($arg1)
           {
               array_push($this->array, $arg1);
           }
 
-          /**
-           * @Then /^I should get "([^"]*)"$/
-           */
+          #[Then('/^I should get "([^"]*)"$/')]
           public function iShouldGet($arg1)
           {
               PHPUnit\Framework\Assert::assertEquals($arg1, $this->result);
           }
 
-          /**
-           * @When an exception is thrown
-           */
+          #[When('an exception is thrown')]
           public function anExceptionIsThrown()
           {
               throw new \Exception('Exception is thrown');
@@ -108,7 +99,7 @@ Feature: Error Reporting
 
     001 Scenario: Access undefined index # features/e_notice_in_scenario.feature:9
           When I access array index 0    # features/e_notice_in_scenario.feature:10
-            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 27
+            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 26
 
     2 scenarios (1 passed, 1 failed)
     7 steps (5 passed, 1 failed, 1 skipped)
@@ -133,7 +124,7 @@ Feature: Error Reporting
 
     001 Scenario: Exception thrown    # features/exception_in_scenario.feature:6
           When an exception is thrown # features/exception_in_scenario.feature:7
-            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:59
+            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:50
             Stack trace:
 
     1 scenario (1 failed)
@@ -149,7 +140,7 @@ Feature: Error Reporting
 
     001 Scenario: Exception thrown    # features/exception_in_scenario.feature:6
           When an exception is thrown # features/exception_in_scenario.feature:7
-            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:59
+            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:50
             Stack trace:
             #0 src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(110): FeatureContext->anExceptionIsThrown()
             #1 src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(64): Behat\Testwork\Call\Handler\RuntimeCallHandler->executeCall(

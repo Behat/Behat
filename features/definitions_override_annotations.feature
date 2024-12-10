@@ -1,7 +1,7 @@
-Feature: Step Definitions Override
+Feature: Step Definitions Override Annotations
   In order to fine-tune definitions defined in parent classes
   As a step definitions developer
-  I need to be able to override definition methods using annotations
+  I need to be able to override definition methods using step definition annotations
 
   Scenario: Overridden method without own annotation will inherit parent pattern
     Given a file named "features/bootstrap/FeatureContext.php" with:

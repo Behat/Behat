@@ -11,40 +11,34 @@ Feature: Dry run
       use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Hook\BeforeScenario;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
-          /**
-           * @BeforeScenario
-           */
+          #[BeforeScenario]
           public static function beforeScenario() {
               echo "HOOK: before scenario";
           }
 
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               echo "STEP: I have $count apples";
           }
 
-          /**
-           * @When /^I ate (\d+) apples?$/
-           */
+          #[When('/^I ate (\d+) apples?$/')]
           public function iAteApples($count) {
               echo "STEP: I ate $count apples";
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               echo "STEP: I found $count apples";
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               echo "STEP: I should have $count apples";
           }
