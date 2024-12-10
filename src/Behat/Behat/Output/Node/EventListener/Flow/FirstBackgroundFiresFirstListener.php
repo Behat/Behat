@@ -38,7 +38,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
      */
     private $firstBackgroundEnded = false;
     /**
-     * @var Event[]
+     * @var array<array{0: Event, 1: string}>
      */
     private $delayedUntilBackgroundEnd = array();
 

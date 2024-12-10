@@ -51,6 +51,15 @@
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
             </errorLevel>
         </InvalidArgument>
+        <InvalidArrayAccess>
+            <errorLevel type="error"/>
+        </InvalidArrayAccess>
+        <InvalidArrayAssignment>
+            <errorLevel type="error"/>
+        </InvalidArrayAssignment>
+        <InvalidArrayOffset>
+            <errorLevel type="error"/>
+        </InvalidArrayOffset>
     </issueHandlers>
 
 </psalm>
