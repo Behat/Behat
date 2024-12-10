@@ -117,7 +117,10 @@ class RuntimeCallee implements Callee
             && !$this->reflection->isStatic();
     }
 
-    public function throwIfInstanceMethod(callable|array $callable, string $hookType): void
+    /**
+     * @param callable|array{class-string, string} $callable
+     */
+    protected function throwIfInstanceMethod(callable|array $callable, string $hookType): void
     {
         if ($this->isAnInstanceMethod()) {
             if (is_array($callable)) {
