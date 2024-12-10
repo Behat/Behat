@@ -37,22 +37,7 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 
-        if ($this->isAnInstanceMethod()) {
-            if (is_array($callable)) {
-                $className = $callable[0];
-                $methodName = $callable[1];
-            } else {
-                $reflection = new ReflectionMethod($callable);
-                $className = $reflection->getDeclaringClass()->getShortName();
-                $methodName = $reflection->getName();
-            }
-
-            throw new BadCallbackException(sprintf(
-                'Suite hook callback: %s::%s() must be a static method',
-                $className,
-                $methodName
-            ), $callable);
-        }
+        $this->throwIfInstanceMethod($callable, 'Suite');
     }
 
     /**

@@ -116,4 +116,25 @@ class RuntimeCallee implements Callee
         return $this->reflection instanceof ReflectionMethod
             && !$this->reflection->isStatic();
     }
+
+    public function throwIfInstanceMethod(callable|array $callable, string $hookType): void
+    {
+        if ($this->isAnInstanceMethod()) {
+            if (is_array($callable)) {
+                $className = $callable[0];
+                $methodName = $callable[1];
+            } else {
+                $reflection = new ReflectionMethod($callable);
+                $className = $reflection->getDeclaringClass()->getShortName();
+                $methodName = $reflection->getName();
+            }
+
+            throw new BadCallbackException(sprintf(
+                '%s hook callback: %s::%s() must be a static method',
+                $hookType,
+                $className,
+                $methodName
+            ), $callable);
+        }
+    }
 }
