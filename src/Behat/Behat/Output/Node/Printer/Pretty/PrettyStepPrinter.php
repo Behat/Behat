@@ -20,6 +20,7 @@ use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
+use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
@@ -195,8 +196,10 @@ final class PrettyStepPrinter implements StepPrinter
 
             return $text;
         }
-
-        return $argument->__toString();
+        if ($argument instanceof TableNode) {
+            return (string) $argument;
+        }
+        return '';
     }
 
     /**

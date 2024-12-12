@@ -14,6 +14,7 @@ use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Exception\ExceptionPresenter;
+use Behat\Testwork\Hook\Call\RuntimeHook;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
@@ -117,10 +118,10 @@ final class PrettySetupPrinter implements SetupPrinter
         $style = $this->resultConverter->convertResultCodeToString($resultCode);
         $hook = $callResult->getCall()->getCallee();
         $path = $hook->getPath();
-        $hookName = $hook->__toString();
 
+        assert($hook instanceof RuntimeHook);
         $printer->writeln(
-            sprintf('%s┌─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hookName, $style, $path)
+            sprintf('%s┌─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hook, $style, $path)
         );
 
         $printer->writeln(sprintf('%s│', $this->indentText));
@@ -149,15 +150,15 @@ final class PrettySetupPrinter implements SetupPrinter
         $style = $this->resultConverter->convertResultCodeToString($resultCode);
         $hook = $callResult->getCall()->getCallee();
         $path = $hook->getPath();
-        $hookName = $hook->__toString();
 
         $printer->writeln(sprintf('%s│', $this->indentText));
 
         $this->printHookCallStdOut($printer, $callResult, $this->indentText);
         $this->printHookCallException($printer, $callResult, $this->indentText);
 
+        assert($hook instanceof RuntimeHook);
         $printer->writeln(
-            sprintf('%s└─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hookName, $style, $path)
+            sprintf('%s└─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hook, $style, $path)
         );
 
         if ($this->newlineAfter) {
