@@ -32,11 +32,11 @@ final class TotalStatistics implements Statistics
      */
     private $memory;
     /**
-     * @var array
+     * @var array<TestResult::*, int>
      */
     private $scenarioCounters = array();
     /**
-     * @var array
+     * @var array<StepResult::*, int>
      */
     private $stepCounters = array();
     /**
@@ -76,7 +76,7 @@ final class TotalStatistics implements Statistics
         $this->scenarioCounters = $this->stepCounters = array(
             TestResult::PASSED    => 0,
             TestResult::FAILED    => 0,
-            StepResult::UNDEFINED => 0,
+            TestResult::UNDEFINED => 0,
             TestResult::PENDING   => 0,
             TestResult::SKIPPED   => 0
         );
@@ -205,7 +205,7 @@ final class TotalStatistics implements Statistics
     /**
      * Returns counters for different step result codes.
      *
-     * @return array<TestResult::*, int>
+     * @return array<StepResult::*, int>
      */
     public function getStepStatCounts()
     {

@@ -17,6 +17,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Call\Exception\BadCallbackException;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
 use Behat\Testwork\Hook\Scope\HookScope;
+use ReflectionMethod;
 
 /**
  * Represents a feature hook.
@@ -30,7 +31,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      *
      * @param string      $scopeName
      * @param null|string $filterString
-     * @param callable    $callable
+     * @param callable|array{class-string, string} $callable
      * @param null|string $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
@@ -39,13 +40,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 
-        if ($this->isAnInstanceMethod()) {
-            throw new BadCallbackException(sprintf(
-                'Feature hook callback: %s::%s() must be a static method',
-                $callable[0],
-                $callable[1]
-            ), $callable);
-        }
+        $this->throwIfInstanceMethod($callable, 'Feature');
     }
 
     /**

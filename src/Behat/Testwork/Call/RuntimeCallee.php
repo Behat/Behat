@@ -23,7 +23,7 @@ use ReflectionMethod;
 class RuntimeCallee implements Callee
 {
     /**
-     * @var callable
+     * @var callable|array{class-string, string}
      */
     private $callable;
     /**
@@ -79,7 +79,7 @@ class RuntimeCallee implements Callee
     /**
      * Returns callable.
      *
-     * @return callable
+     * @return callable|array{class-string, string}
      */
     public function getCallable()
     {
@@ -115,5 +115,29 @@ class RuntimeCallee implements Callee
     {
         return $this->reflection instanceof ReflectionMethod
             && !$this->reflection->isStatic();
+    }
+
+    /**
+     * @param callable|array{class-string, string} $callable
+     */
+    protected function throwIfInstanceMethod(callable|array $callable, string $hookType): void
+    {
+        if ($this->isAnInstanceMethod()) {
+            if (is_array($callable)) {
+                $className = $callable[0];
+                $methodName = $callable[1];
+            } else {
+                $reflection = new ReflectionMethod($callable);
+                $className = $reflection->getDeclaringClass()->getShortName();
+                $methodName = $reflection->getName();
+            }
+
+            throw new BadCallbackException(sprintf(
+                '%s hook callback: %s::%s() must be a static method',
+                $hookType,
+                $className,
+                $methodName
+            ), $callable);
+        }
     }
 }

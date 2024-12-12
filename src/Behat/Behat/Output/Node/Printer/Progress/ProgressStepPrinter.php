@@ -62,7 +62,7 @@ final class ProgressStepPrinter implements StepPrinter
             case TestResult::PENDING:
                 $printer->write("{+$style}P{-$style}");
                 break;
-            case StepResult::UNDEFINED:
+            case TestResult::UNDEFINED:
                 $printer->write("{+$style}U{-$style}");
                 break;
             case TestResult::FAILED:
