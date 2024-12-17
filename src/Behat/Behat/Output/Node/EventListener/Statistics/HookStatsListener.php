@@ -17,6 +17,7 @@ use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
+use Behat\Testwork\Hook\Call\RuntimeHook;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
@@ -111,7 +112,6 @@ final class HookStatsListener implements EventListener
     {
         $call = $hookCallResult->getCall();
         $callee = $call->getCallee();
-        $hook = (string) $callee;
         $scope = $call->getScope();
         $path = $callee->getPath();
         $stdOut = $hookCallResult->getStdOut();
@@ -119,7 +119,8 @@ final class HookStatsListener implements EventListener
             ? $this->exceptionPresenter->presentException($hookCallResult->getException())
             : null;
 
-        $stat = new HookStat($hook, $path, $error, $stdOut);
+        assert($callee instanceof RuntimeHook);
+        $stat = new HookStat((string) $callee, $path, $error, $stdOut);
         if (!$stat->isSuccessful()) {
             $stat->setScope($scope);
         }
