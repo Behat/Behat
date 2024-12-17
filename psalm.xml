@@ -99,7 +99,6 @@
         <InvalidReturnStatement>
             <errorLevel type="error"/>
             <errorLevel type="suppress">
-                <file name="src/Behat/Behat/Context/Environment/InitializedContextEnvironment.php" />
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
             </errorLevel>
