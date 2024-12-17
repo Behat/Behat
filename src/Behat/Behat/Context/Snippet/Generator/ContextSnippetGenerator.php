@@ -278,7 +278,7 @@ TPL;
     /**
      * Returns already proposed method names.
      *
-     * @return array<string, array<string, string>
+     * @return array<string, string>
      */
     private function getAlreadyProposedMethods(string $contextClass): array
     {
