@@ -79,6 +79,8 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
     /**
      * Returns scenario node.
      *
+     * @deprecated Use getBackground() instead
+     *
      * @return ScenarioLikeInterface
      */
     public function getScenario()

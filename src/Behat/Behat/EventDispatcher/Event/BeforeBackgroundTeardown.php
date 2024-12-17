@@ -71,6 +71,8 @@ final class BeforeBackgroundTeardown extends BackgroundTested implements BeforeT
     /**
      * Returns scenario node.
      *
+     * @deprecated Use getBackground() instead
+     *
      * @return ScenarioLikeInterface
      */
     public function getScenario()

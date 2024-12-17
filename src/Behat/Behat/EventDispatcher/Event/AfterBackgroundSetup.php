@@ -67,6 +67,8 @@ final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
     /**
      * Returns scenario node.
      *
+     * @deprecated Use getBackground() instead
+     *
      * @return ScenarioLikeInterface
      */
     public function getScenario()
