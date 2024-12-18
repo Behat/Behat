@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="7"
+    errorLevel="6"
     resolveFromConfigFile="true"
     findUnusedBaselineEntry="false"
     findUnusedCode="false"
@@ -31,7 +31,7 @@
             </errorLevel>
         </UndefinedClass>
 
-        <!-- Suppress deliberately mismatching parameters and methods in Symfony legacy layer -->
+        <!-- Suppress false positives in Symfony legacy layer -->
         <ParamNameMismatch>
             <errorLevel type="suppress">
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
@@ -43,72 +43,34 @@
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
             </errorLevel>
         </MethodSignatureMismatch>
-
         <InvalidArgument>
-            <errorLevel type="error"/>
             <errorLevel type="suppress">
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcher.php" />
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
             </errorLevel>
         </InvalidArgument>
-        <InvalidArrayAccess>
-            <errorLevel type="error"/>
-        </InvalidArrayAccess>
-        <InvalidArrayAssignment>
-            <errorLevel type="error"/>
-        </InvalidArrayAssignment>
-        <InvalidArrayOffset>
-            <errorLevel type="error"/>
-        </InvalidArrayOffset>
-        <InvalidCast>
-            <errorLevel type="error"/>
-        </InvalidCast>
-        <InvalidCatch>
-            <errorLevel type="error"/>
-        </InvalidCatch>
-        <InvalidClass>
-            <errorLevel type="error"/>
-        </InvalidClass>
-        <InvalidClone>
-            <errorLevel type="error"/>
-        </InvalidClone>
-        <InvalidFunctionCall>
-            <errorLevel type="error"/>
-        </InvalidFunctionCall>
-        <InvalidIterator>
-            <errorLevel type="error"/>
-        </InvalidIterator>
         <InvalidMethodCall>
-            <errorLevel type="error"/>
             <errorLevel type="suppress">
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
             </errorLevel>
         </InvalidMethodCall>
-        <InvalidNamedArgument>
-            <errorLevel type="error"/>
-        </InvalidNamedArgument>
-        <InvalidPropertyAssignment>
-            <errorLevel type="error"/>
-        </InvalidPropertyAssignment>
-        <InvalidPropertyAssignmentValue>
-            <errorLevel type="error"/>
-        </InvalidPropertyAssignmentValue>
-        <InvalidPropertyFetch>
-            <errorLevel type="error"/>
-        </InvalidPropertyFetch>
         <InvalidReturnStatement>
-            <errorLevel type="error"/>
             <errorLevel type="suppress">
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
                 <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
             </errorLevel>
         </InvalidReturnStatement>
-        <InvalidTemplateParam>
-            <errorLevel type="error"/>
-        </InvalidTemplateParam>
-        <NullArgument>
-            <errorLevel type="error"/>
-        </NullArgument>
+        <InvalidReturnType>
+            <errorLevel type="suppress">
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
+            </errorLevel>
+        </InvalidReturnType>
+        <UndefinedMethod>
+            <errorLevel type="suppress">
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
+            </errorLevel>
+        </UndefinedMethod>
     </issueHandlers>
 
 </psalm>

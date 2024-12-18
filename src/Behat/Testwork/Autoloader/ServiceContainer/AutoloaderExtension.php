@@ -67,7 +67,7 @@ final class AutoloaderExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
+        $builder = $builder
             ->beforeNormalization()
                 ->ifString()->then(function ($path) {
                     return array('' => $path);
@@ -78,7 +78,9 @@ final class AutoloaderExtension implements Extension
             ->treatTrueLike($this->defaultPaths)
             ->treatNullLike(array())
             ->treatFalseLike(array())
-
+            ;
+        assert($builder instanceof ArrayNodeDefinition);
+        $builder
             ->prototype('scalar')->end()
         ;
     }

@@ -141,8 +141,9 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
         if ('.'.$extension !== substr($fileName, strlen($extension) + 1)) {
             $fileName .= '.'.$extension;
         }
-
-        $this->getOutputFactory()->setFileName($fileName);
+        $outputFactory = $this->getOutputFactory();
+        assert($outputFactory instanceof FilesystemOutputFactory);
+        $outputFactory->setFileName($fileName);
         $this->flush();
     }
 

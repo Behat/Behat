@@ -12,8 +12,10 @@ namespace Behat\Testwork\Argument;
 
 use ReflectionFunctionAbstract;
 use ReflectionClass;
+use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionException;
+use ReflectionUnionType;
 
 /**
  * Organises function arguments using its reflection.
@@ -241,13 +243,10 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         $type = $parameter->getType();
 
-        /**
-         * @psalm-suppress UndefinedClass (ReflectionUnionType)
-         */
-        if ($type instanceof \ReflectionNamedType) {
+        if ($type instanceof ReflectionNamedType) {
             $types = [$type];
         }
-        elseif ($parameter->getType() instanceof \ReflectionUnionType) {
+        elseif ($type instanceof ReflectionUnionType) {
             $types = $type->getTypes();
         }
         else {

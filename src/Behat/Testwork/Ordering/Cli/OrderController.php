@@ -77,7 +77,7 @@ final class OrderController implements Controller
         $orderer = $input->getOption('order');
 
         if (!$orderer) {
-            return;
+            return null;
         }
 
         if (!array_key_exists($orderer, $this->orderers)) {
@@ -85,6 +85,7 @@ final class OrderController implements Controller
         }
 
         $this->exercise->setOrderer($this->orderers[$orderer]);
+        return null;
     }
 
     /**

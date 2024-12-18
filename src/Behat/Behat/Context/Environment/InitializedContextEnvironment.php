@@ -87,7 +87,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
 
     /**
      * {@inheritdoc}
-     * @psalm-suppress InvalidReturnStatement
+     * @psalm-suppress InvalidReturnStatement, InvalidReturnType
      */
     public function getContextClasses()
     {
@@ -106,7 +106,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      * Returns list of registered context instances.
      *
      * @return list<Context>
-     * @psalm-suppress InvalidReturnStatement
+     * @psalm-suppress InvalidReturnStatement, InvalidReturnType
      */
     public function getContexts()
     {
