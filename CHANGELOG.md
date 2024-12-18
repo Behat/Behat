@@ -4,6 +4,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.17.0] - 2024-12-18
+
+### Changed
+
+* Use attributes rather than annotations when generating suggested Context snippets
+  by @fmatsos in [#1549](https://github.com/Behat/Behat/pull/1549) and [#1569](https://github.com/Behat/Behat/pull/1569)
+* Disable Xdebug unless `--xdebug` is specified on the CLI, to improve performance by @carlos-granados in [#1560](https://github.com/Behat/Behat/pull/1560)
+
+### Added
+
+* :partying_face: Support configuring Behat with a PHP file and helper objects / methods - see [the docs](https://docs.behat.org/en/latest/user_guide/configuration/suites.html)
+  by @loic425 in [#1537](https://github.com/Behat/Behat/pull/1537), [#1538](https://github.com/Behat/Behat/pull/1538),
+  [#1550](https://github.com/Behat/Behat/pull/1550), [#1547](https://github.com/Behat/Behat/pull/1547),
+  [#1540](https://github.com/Behat/Behat/pull/1540), [#1546](https://github.com/Behat/Behat/pull/1546),
+  [#1556](https://github.com/Behat/Behat/pull/1556), [#1557](https://github.com/Behat/Behat/pull/1557) and
+  [#1558](https://github.com/Behat/Behat/pull/1558).
+* Display location of hook failure in progress printer by @carlos-granados in [#1526](https://github.com/Behat/Behat/pull/1526)
+* Print failed hooks summary at the end of the pretty format by @carlos-granados in [#1530](https://github.com/Behat/Behat/pull/1530)
+* Print `<failure>` nodes for all hook failures in the junit output by @carlos-granados in [#1536](https://github.com/Behat/Behat/pull/1536)
+* Add the `#[Transform]` attribute, equivalent to the `@Transform` annotation by @carlos-granados in [#1545](https://github.com/Behat/Behat/pull/1545)
+* Allow using the `--narrative` filter on the command line by @carlos-granados in [#1559](https://github.com/Behat/Behat/pull/1559)
+
+### Fixed
+
+* Show more meaningful message if no `output_path` is specified for the junit formatter by @carlos-granados in [#1533](https://github.com/Behat/Behat/pull/1533)
+* Fix error from the JUnit printer if scenario has no title by @mvhirsch in [#1525](https://github.com/Behat/Behat/pull/1525)
+* Fix naming of suggested methods when generating regex snippets for steps defined with single quotes by @carlos-granados in [#1524](https://github.com/Behat/Behat/pull/1524)
+
+### Internal
+
+* Improve / fix docblock annotations and type-safety within methods to achieve Psalm level 6
+  by @carlos-granados in [#1554](https://github.com/Behat/Behat/pull/1554), [#1562](https://github.com/Behat/Behat/pull/1562),
+  [#1566](https://github.com/Behat/Behat/pull/1566), [#1568](https://github.com/Behat/Behat/pull/1568)
+  [#1570](https://github.com/Behat/Behat/pull/1570).
+* Improve failure output of Behat's own tests with unexpected status code or output by @jdeniau in [#1532](https://github.com/Behat/Behat/pull/1532)
+* Remove redundant tests for hook failures in junit formatter by @carlos-granados in [#1543](https://github.com/Behat/Behat/pull/1543)
+* Update .editorconfig indent size to 2 for feature files by @carlos-granados in [#1528](https://github.com/Behat/Behat/pull/1528)
+* Update static analysis to use Psalm v5 by @carlos-granados in [#1548](https://github.com/Behat/Behat/pull/1548)
+* Remove tagging of tests that require PHP8, as these now always run by @carlos-granados in [#1551](https://github.com/Behat/Behat/pull/1551)
+* Add composer scripts for testing tools by @carlos-granados in [#1555](https://github.com/Behat/Behat/pull/1555)
+
 ## [3.16.0] - 2024-11-08
 
 ### Changed
@@ -1101,6 +1142,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.17.0]: https://github.com/Behat/Behat/compare/v3.16.0...v3.17.0
 [3.16.0]: https://github.com/Behat/Behat/compare/v3.15.0...v3.16.0
 [3.15.0]: https://github.com/Behat/Behat/compare/v3.14.0...v3.15.0
 [3.14.0]: https://github.com/Behat/Behat/compare/v3.13.0...v3.14.0
