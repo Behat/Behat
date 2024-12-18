@@ -109,6 +109,9 @@ jobs:
       - name: Run Psalm
         run: ./vendor/bin/psalm --output-format=github --php-version=${{ matrix.php }}
 
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan
+
   build-phar:
     name: Build PHAR file
     runs-on: ubuntu-latest

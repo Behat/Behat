@@ -31,6 +31,7 @@
 
     "require-dev": {
         "herrera-io/box": "~1.6.1",
+        "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^9.6",
         "sebastian/diff": "^4.0",
         "symfony/polyfill-php84": "^1.31",
@@ -69,10 +70,12 @@
         "all-tests": [
             "@behat-progress",
             "@phpunit",
-            "@psalm"
+            "@psalm",
+            "@phpstan"
         ],
         "behat": "LANG=C bin/behat  --rerun",
         "behat-progress": "LANG=C bin/behat --format=progress",
+        "phpstan": "phpstan",
         "phpunit": "phpunit",
         "psalm": "psalm"
     },
