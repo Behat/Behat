@@ -12,6 +12,7 @@ namespace Behat\Behat\Context\Reader;
 
 use Behat\Behat\Context\Attribute\AttributeReader;
 use Behat\Behat\Context\Environment\ContextEnvironment;
+use Behat\Testwork\Call\Callee;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -45,6 +46,7 @@ final class AttributeContextReader implements ContextReader
         $reflection = new ReflectionClass($contextClass);
 
         $callees = array();
+
         foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             foreach ($this->readMethodCallees($reflection->getName(), $method) as $callee) {
                 $callees[] = $callee;
@@ -57,8 +59,33 @@ final class AttributeContextReader implements ContextReader
     private function readMethodCallees(string $contextClass, ReflectionMethod $method)
     {
         $callees = [];
+
         foreach ($this->readers as $reader) {
-            $callees = array_merge($callees, $reader->readCallees($contextClass, $method));
+            $callees = array_merge(
+                $this->readParentCallees($contextClass, $method, $reader, $callees),
+                $reader->readCallees($contextClass, $method)
+            );
+        }
+
+        return $callees;
+    }
+
+    /**
+     * @return array<int, Callee>
+     */
+    public function readParentCallees(
+        string $contextClass,
+        ReflectionMethod $method,
+        AttributeReader $reader,
+        array $callees
+    ): array {
+        try {
+            $prototype = $method->getPrototype();
+
+            if ($prototype->getDeclaringClass()->getName() !== $method->getDeclaringClass()->getName()) {
+                $callees = array_merge($callees, $reader->readCallees($contextClass, $prototype));
+            }
+        } catch (\ReflectionException) {
         }
 
         return $callees;
