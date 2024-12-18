@@ -106,7 +106,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      * Prints scenario title (first line of long title).
      *
      * @param OutputPrinter $printer
-     * @param string        $longTitle
+     * @param string|null   $longTitle
      */
     private function printTitle(OutputPrinter $printer, $longTitle)
     {
@@ -122,7 +122,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      * Prints scenario description (other lines of long title).
      *
      * @param OutputPrinter $printer
-     * @param string        $longTitle
+     * @param string|null   $longTitle
      */
     private function printDescription(OutputPrinter $printer, $longTitle)
     {
