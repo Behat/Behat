@@ -93,6 +93,22 @@
         <InvalidPropertyAssignmentValue>
             <errorLevel type="error"/>
         </InvalidPropertyAssignmentValue>
+        <InvalidPropertyFetch>
+            <errorLevel type="error"/>
+        </InvalidPropertyFetch>
+        <InvalidReturnStatement>
+            <errorLevel type="error"/>
+            <errorLevel type="suppress">
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
+                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
+            </errorLevel>
+        </InvalidReturnStatement>
+        <InvalidTemplateParam>
+            <errorLevel type="error"/>
+        </InvalidTemplateParam>
+        <NullArgument>
+            <errorLevel type="error"/>
+        </NullArgument>
     </issueHandlers>
 
 </psalm>

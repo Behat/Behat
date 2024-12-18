@@ -242,7 +242,7 @@ TPL;
     /**
      * Tries to guess method name that is not yet defined in the context class.
      *
-     * @return array<string, int>
+     * @return array{string, int}
      */
     private function getMethodNameNotExistentInContext(ReflectionClass $reflection, string $methodName, int $methodNumber): array
     {
