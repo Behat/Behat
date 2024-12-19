@@ -90,9 +90,6 @@ final class SnippetsController implements Controller
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->eventDispatcher->addListener(StepTested::AFTER, array($this, 'registerUndefinedStep'), -999);

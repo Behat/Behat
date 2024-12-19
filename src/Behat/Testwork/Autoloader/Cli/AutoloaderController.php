@@ -38,9 +38,6 @@ final class AutoloaderController implements Controller
         $this->loader = $loader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
     }

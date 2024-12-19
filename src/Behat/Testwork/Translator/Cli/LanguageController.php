@@ -49,13 +49,10 @@ final class LanguageController implements Controller
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getOption('lang')) {
-            return;
+            return null;
         }
 
         $this->translator->setLocale($input->getOption('lang'));

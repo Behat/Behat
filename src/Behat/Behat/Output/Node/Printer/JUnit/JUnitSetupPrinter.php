@@ -57,16 +57,13 @@ class JUnitSetupPrinter implements SetupPrinter
     private function handleHookCalls(Formatter $formatter, CallResults $results, string $messageType): void
     {
         foreach ($results as $hookCallResult) {
-            assert($hookCallResult instanceof CallResult);
             if ($hookCallResult->hasException()) {
                 $call = $hookCallResult->getCall();
-                assert($call instanceof HookCall);
                 $scope = $call->getScope();
                 $outputPrinter = $formatter->getOutputPrinter();
                 assert($outputPrinter instanceof JUnitOutputPrinter);
 
                 $callee = $call->getCallee();
-                assert($callee instanceof Hook);
                 $message = $callee->getName();
                 if ($scope instanceof StepScope) {
                     $message .= ': ' . $scope->getStep()->getKeyword() . ' ' . $scope->getStep()->getText();
