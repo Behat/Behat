@@ -10,35 +10,30 @@
 
       use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $value;
 
-          /**
-           * @Given /I have entered (\d+)/
-           */
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($num) {
               $this->value = $num;
           }
 
-          /**
-           * @Then /I must have (\d+)/
-           */
+          #[Then('/I must have (\d+)/')]
           public function iMustHave($num) {
               PHPUnit\Framework\Assert::assertEquals($num, $this->value);
           }
 
-          /**
-           * @When /I add (\d+)/
-           */
+          #[When('/I add (\d+)/')]
           public function iAdd($num) {
               $this->value += $num;
           }
 
-          /**
-           * @When /^Something not done yet$/
-           */
+          #[When('/^Something not done yet$/')]
           public function somethingNotDoneYet() {
               throw new PendingException();
           }
@@ -133,28 +128,25 @@
 
       use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $value;
 
-          /**
-           * @Given /I have entered (\d+)/
-           */
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($num) {
               $this->value = $num;
           }
 
-          /**
-           * @Then /I must have (\d+)/
-           */
+          #[Then('/I must have (\d+)/')]
           public function iMustHave($num) {
               PHPUnit\Framework\Assert::assertEquals($num, $this->value);
           }
 
-          /**
-           * @When /I add (\d+)/
-           */
+          #[When('/I add (\d+)/')]
           public function iAdd($num) {
               $this->value += $num;
           }
@@ -205,28 +197,25 @@
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $value;
 
-          /**
-           * @Given /I have entered (\d+)/
-           */
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($num) {
               $this->value = $num;
           }
 
-          /**
-           * @Then /I must have (\d+)/
-           */
+          #[Then('/I must have (\d+)/')]
           public function iMustHave($num) {
               PHPUnit\Framework\Assert::assertEquals($num, $this->value);
           }
 
-          /**
-           * @When /I (add|subtract) the value (\d+)/
-           */
+          #[When('/I (add|subtract) the value (\d+)/')]
           public function iAddOrSubstact($op, $num) {
               if ($op == 'add')
                 $this->value += $num;
@@ -278,28 +267,25 @@
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class SmallKidContext implements Context
       {
           protected $strongLevel;
 
-          /**
-           * @Given I am not strong
-           */
+          #[Given('I am not strong')]
           public function iAmNotStrong() {
               $this->strongLevel = 0;
           }
 
-          /**
-           * @When /I eat an apple/
-           */
+          #[When('/I eat an apple/')]
           public function iEatAnApple() {
               $this->strongLevel += 2;
           }
 
-          /**
-           * @Then /I will be stronger/
-           */
+          #[Then('/I will be stronger/')]
           public function iWillBeStronger() {
               PHPUnit\Framework\Assert::assertNotEquals(0, $this->strongLevel);
           }
@@ -310,26 +296,23 @@
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class OldManContext implements Context
       {
           protected $strongLevel;
 
-          /**
-           * @Given I am not strong
-           */
+          #[Given('I am not strong')]
           public function iAmNotStrong() {
               $this->strongLevel = 0;
           }
 
-          /**
-           * @When /I eat an apple/
-           */
+          #[When('/I eat an apple/')]
           public function iEatAnApple() { }
 
-          /**
-           * @Then /I will be stronger/
-           */
+          #[Then('/I will be stronger/')]
           public function iWillBeStronger() {
               PHPUnit\Framework\Assert::assertNotEquals(0, $this->strongLevel);
           }
@@ -410,22 +393,21 @@
 
       use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Hook\BeforeScenario;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
 
       class FeatureContext implements Context
       {
           private $value;
 
-          /**
-           * @BeforeScenario
-           */
+          #[BeforeScenario]
           public function setup() {
             throw new \Exception();
           }
 
-          /**
-           * @Given /I have entered (\d+)/
-           * @Then /^I must have (\d+)$/
-           */
+          #[Given('/I have entered (\d+)/')]
+          #[Then('/^I must have (\d+)$/')]
           public function action($num)
           {
           }
@@ -472,28 +454,25 @@
 
       use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $value;
 
-          /**
-           * @Given /I have entered (\d+)/
-           */
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($num) {
               $this->value = $num;
           }
 
-          /**
-           * @Then /I must have (\d+)/
-           */
+          #[Then('/I must have (\d+)/')]
           public function iMustHave($num) {
               PHPUnit\Framework\Assert::assertEquals($num, $this->value);
           }
 
-          /**
-           * @When /I add (\d+)/
-           */
+          #[When('/I add (\d+)/')]
           public function iAdd($num) {
               $this->value += $num;
           }
@@ -534,25 +513,27 @@
       <?php
       use Behat\Behat\Context\Context,
           Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
+
       class Foo {}
+
       class FeatureContext implements Context
       {
           private $value;
-          /**
-           * @Given /I have entered (\d+)/
-           */
+
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($num) {
               $this->value = $num;
           }
-          /**
-           * @Then /I must have (\d+)/
-           */
+
+          #[Then('/I must have (\d+)/')]
           public function iMustHave($num) {
               $foo = new class extends Foo implements Foo {};
           }
-          /**
-           * @When /I add (\d+)/
-           */
+
+          #[When('/I add (\d+)/')]
           public function iAdd($num) {
               $this->value += $num;
           }

@@ -1,9 +1,7 @@
-Feature: Step Arguments Transformations
+Feature: Step Arguments Transformations Annotations
   In order to follow DRY
   As a feature writer
-  I need to be able to move common
-  arguments transformations
-  into transformation functions
+  I need to use transformation functions using annotations
 
   Background:
     Given a file named "features/bootstrap/User.php" with:

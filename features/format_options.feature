@@ -12,6 +12,9 @@ Feature: Format options
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
@@ -22,44 +25,32 @@ Feature: Format options
               $this->parameters = $parameters;
           }
 
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               $this->apples = intval($count);
           }
 
-          /**
-           * @When /^I ate (\d+) apples?$/
-           */
+          #[When('/^I ate (\d+) apples?$/')]
           public function iAteApples($count) {
               $this->apples -= intval($count);
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               $this->apples += intval($count);
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
           }
 
-          /**
-           * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
-           */
+          #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
           public function contextParameterShouldBeEqualTo($key, $val) {
               PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
           }
 
-          /**
-           * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
-           */
+          #[Given('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
           public function contextParameterShouldBeArrayWithElements($key, $count) {
               PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
               PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));

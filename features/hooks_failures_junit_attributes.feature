@@ -1,7 +1,7 @@
-Feature: Display hook failures location in junit printer
+Feature: Display hook failures location in junit printer using attributes
   In order to be able to locate the code that generated a failure
   As a feature developer using the junit printer
-  When a hook throws an error I want to see the related item where the code failed
+  When a hook throws an error I want to see the related item where the code failed using attributes
 
   Background:
     Given a file named "features/one.feature" with:
@@ -29,20 +29,18 @@ Feature: Display hook failures location in junit printer
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Hook\BeforeSuite;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
-          /**
-           * @BeforeSuite
-           */
+          #[BeforeSuite]
           public static function beforeSuiteHook()
           {
               throw new \Exception('Error in beforeSuite hook');
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -73,20 +71,18 @@ Feature: Display hook failures location in junit printer
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Hook\AfterSuite;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
-          /**
-           * @AfterSuite
-           */
+          #[AfterSuite]
           public static function afterSuiteHook()
           {
               throw new \Exception('Error in afterSuite hook');
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -117,14 +113,14 @@ Feature: Display hook failures location in junit printer
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Hook\BeforeFeature;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private static $hasThrownError = false;
 
-          /**
-           * @BeforeFeature
-           */
+          #[BeforeFeature]
           public static function beforeFeatureHook()
           {
               if (!self::$hasThrownError) {
@@ -133,9 +129,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -166,14 +160,14 @@ Feature: Display hook failures location in junit printer
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Hook\AfterFeature;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private static $hasThrownError = false;
 
-          /**
-           * @AfterFeature
-           */
+          #[AfterFeature]
           public static function afterFeatureHook()
           {
               if (!self::$hasThrownError) {
@@ -182,9 +176,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -215,14 +207,14 @@ Feature: Display hook failures location in junit printer
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Hook\BeforeScenario;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private static $hasThrownError = false;
 
-          /**
-           * @BeforeScenario
-           */
+          #[BeforeScenario]
           public function beforeScenarioHook()
           {
               if (!self::$hasThrownError) {
@@ -231,9 +223,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -264,14 +254,14 @@ Feature: Display hook failures location in junit printer
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Hook\AfterScenario;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private static $hasThrownError = false;
 
-          /**
-           * @AfterScenario
-           */
+          #[AfterScenario]
           public function afterScenarioHook()
           {
               if (!self::$hasThrownError) {
@@ -280,9 +270,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -313,14 +301,14 @@ Feature: Display hook failures location in junit printer
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Hook\BeforeStep;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private static $hasThrownError = false;
 
-          /**
-           * @BeforeStep
-           */
+          #[BeforeStep]
           public function beforeStepHook()
           {
               if (!self::$hasThrownError) {
@@ -329,9 +317,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }
@@ -362,14 +348,14 @@ Feature: Display hook failures location in junit printer
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Hook\AfterStep;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private static $hasThrownError = false;
 
-          /**
-           * @AfterStep
-           */
+          #[AfterStep]
           public function afterStepHook()
           {
               if (!self::$hasThrownError) {
@@ -378,9 +364,7 @@ Feature: Display hook failures location in junit printer
               }
           }
 
-          /**
-           * @When I have a simple step
-           */
+          #[When('I have a simple step')]
           public function iHaveASimpleStep()
           {
           }

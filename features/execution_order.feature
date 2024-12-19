@@ -11,12 +11,11 @@ Feature: Setting order of execution
       use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given I have :num orange(s)
-           */
+          #[Given('I have :num orange(s)')]
            public function iHaveOranges($num){}
       }
       """

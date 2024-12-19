@@ -1,7 +1,7 @@
-Feature: I18n
+Feature: I18n Annotations
   In order to write i18nal features
   As a feature writer
-  I need to have i18n support
+  I need to have i18n support using annotations
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:

@@ -110,3 +110,41 @@ Feature: Step Definitions Override Attributes
       1 scenario (1 passed)
       2 steps (2 passed)
       """
+
+  Scenario: Overridden method with parent annotation and child attribute
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+      use Behat\Step\Then;
+
+      class ParentContext
+      {
+          /**
+           * @Then :token should be :value
+           */
+          public function shouldBe($token, $value) {}
+      }
+
+      class FeatureContext extends ParentContext implements Context
+      {
+          #[Then(':token should be equal to :value')]
+          public function shouldBe($token, $value) {}
+      }
+      """
+    And a file named "features/step_patterns.feature" with:
+      """
+      Feature: Step Pattern
+        Scenario:
+          Then 5 should be equal to 10
+          Then 5 should be 10
+      """
+    When I run "behat -f progress --no-colors"
+    Then it should pass with:
+      """
+      ..
+
+      1 scenario (1 passed)
+      2 steps (2 passed)
+      """

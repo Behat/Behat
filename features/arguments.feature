@@ -11,6 +11,8 @@ Feature: Step Arguments
       use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
 
       class FeatureContext implements Context
       {
@@ -26,37 +28,27 @@ Feature: Step Arguments
               );
           }
 
-          /**
-           * @Given /^a pystring:$/
-           */
+          #[Given('/^a pystring:$/')]
           public function aPystring(PyStringNode $string) {
               $this->input = $string;
           }
 
-          /**
-           * @Given /^a table:$/
-           */
+          #[Given('/^a table:$/')]
           public function aTable(TableNode $table) {
               $this->input = $table;
           }
 
-          /**
-           * @Then /^it must be equals to string (\d+)$/
-           */
+          #[Then('/^it must be equals to string (\d+)$/')]
           public function itMustBeEqualsToString($number) {
               \PHPUnit\Framework\Assert::assertEquals($this->strings[intval($number)], (string) $this->input);
           }
 
-          /**
-           * @Then /^it must be equals to table (\d+)$/
-           */
+          #[Then('/^it must be equals to table (\d+)$/')]
           public function itMustBeEqualsToTable($number) {
               \PHPUnit\Framework\Assert::assertEquals($this->tables[intval($number)], $this->input->getHash());
           }
 
-          /**
-           * @Given /^I have number2 = (?P<number2>\d+) and number1 = (?P<number1>\d+)$/
-           */
+          #[Given('/^I have number2 = (?P<number2>\d+) and number1 = (?P<number1>\d+)$/')]
           public function iHaveNumberAndNumber($number1, $number2) {
               \PHPUnit\Framework\Assert::assertEquals(13, intval($number1));
               \PHPUnit\Framework\Assert::assertEquals(243, intval($number2));

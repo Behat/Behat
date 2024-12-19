@@ -1,7 +1,7 @@
-Feature: Definitions translations
+Feature: Definitions Translations Annotations
   In order to be able to use predefined steps in native language
   As a step definitions developer
-  I need to be able to write definition translations
+  I need to be able to write definition translations using annotations
 
   Scenario: In place XLIFF translations
     Given a file named "features/calc_ru.feature" with:

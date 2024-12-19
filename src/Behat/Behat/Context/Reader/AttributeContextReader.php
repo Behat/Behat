@@ -73,7 +73,7 @@ final class AttributeContextReader implements ContextReader
     /**
      * @return array<int, Callee>
      */
-    public function readParentCallees(
+    private function readParentCallees(
         string $contextClass,
         ReflectionMethod $method,
         AttributeReader $reader,
