@@ -77,9 +77,7 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
     }
 
     /**
-     * Returns scenario node.
-     *
-     * @return ScenarioNode
+     * @return Scenario
      */
     public function getScenario()
     {

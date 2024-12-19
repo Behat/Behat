@@ -69,9 +69,7 @@ final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeard
     }
 
     /**
-     * Returns scenario node.
-     *
-     * @return ScenarioNode
+     * @return Scenario
      */
     public function getScenario()
     {

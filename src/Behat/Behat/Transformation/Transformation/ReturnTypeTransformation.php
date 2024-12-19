@@ -107,7 +107,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      */
     public function getPattern()
     {
-        return null;
+        return '';
     }
 
     /**
