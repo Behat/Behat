@@ -74,9 +74,6 @@ final class RerunController implements Controller
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'collectFailedScenario'), -50);

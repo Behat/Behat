@@ -74,9 +74,6 @@ final class FilterController implements Controller
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $filters = array();

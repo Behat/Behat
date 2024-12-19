@@ -47,9 +47,6 @@ final class VerbosityController implements Controller
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if ($output->getVerbosity() !== OutputInterface::VERBOSITY_NORMAL) {
