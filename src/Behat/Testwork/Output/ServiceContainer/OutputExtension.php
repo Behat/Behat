@@ -115,7 +115,6 @@ final class OutputExtension implements Extension
                 ->treatNullLike(array('enabled' => true))
                 ->treatFalseLike(array('enabled' => false))
                 ->prototype('variable')->end()
-            ->end()
         ;
     }
 

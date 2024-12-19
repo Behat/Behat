@@ -447,7 +447,6 @@ class PrettyFormatterFactory implements FormatterFactory
      *
      * @param string $name
      * @param mixed  $value
-     * @param mixed  $listener
      *
      * @return Definition
      */

@@ -81,8 +81,6 @@ class TesterExtension extends BaseExtension
                             ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat_rerun_cache'
                             : null
                     )
-                ->end()
-            ->end()
         ;
     }
 

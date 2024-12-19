@@ -48,17 +48,13 @@ final class VerbosityController implements Controller
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if ($output->getVerbosity() !== OutputInterface::VERBOSITY_NORMAL) {
             $this->exceptionPresenter->setDefaultVerbosity($output->getVerbosity());
         }
+        return null;
     }
 }

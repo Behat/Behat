@@ -83,9 +83,9 @@ final class ScenarioNodeListener implements EventListener
      * @param ScenarioLikeTested|AfterSetup $event
      * @param string                        $eventName
      */
-    private function printHeaderOnBeforeEvent(Formatter $formatter, ScenarioLikeTested $event, $eventName)
+    private function printHeaderOnBeforeEvent(Formatter $formatter, ScenarioLikeTested|AfterSetup $event, $eventName)
     {
-        if ($this->beforeEventName !== $eventName || !$event instanceof AfterSetup) {
+        if ($this->beforeEventName !== $eventName || !$event instanceof AfterSetup || !$event instanceof ScenarioLikeTested) {
             return;
         }
 
@@ -103,7 +103,7 @@ final class ScenarioNodeListener implements EventListener
      * @param ScenarioLikeTested|AfterTested $event
      * @param string                         $eventName
      */
-    private function printFooterOnAfterEvent(Formatter $formatter, ScenarioLikeTested $event, $eventName)
+    private function printFooterOnAfterEvent(Formatter $formatter, ScenarioLikeTested|AfterTested $event, $eventName)
     {
         if ($this->afterEventName !== $eventName || !$event instanceof AfterTested) {
             return;

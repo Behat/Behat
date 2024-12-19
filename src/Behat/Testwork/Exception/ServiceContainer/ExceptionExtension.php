@@ -84,8 +84,6 @@ final class ExceptionExtension implements Extension
                         OutputPrinter::VERBOSITY_DEBUG
                     ))
                     ->defaultValue(OutputPrinter::VERBOSITY_NORMAL)
-                ->end()
-            ->end()
         ;
     }
 

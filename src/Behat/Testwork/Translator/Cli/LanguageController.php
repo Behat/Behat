@@ -59,5 +59,6 @@ final class LanguageController implements Controller
         }
 
         $this->translator->setLocale($input->getOption('lang'));
+        return null;
     }
 }

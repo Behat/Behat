@@ -75,12 +75,7 @@ final class RerunController implements Controller
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -91,7 +86,7 @@ final class RerunController implements Controller
         $this->key = $this->generateKey($input);
 
         if (!$input->getOption('rerun') && !$input->getOption('rerun-only')) {
-            return;
+            return null;
         }
 
         if (!$this->getFileName() || !file_exists($this->getFileName())) {
@@ -104,6 +99,7 @@ final class RerunController implements Controller
         }
 
         $input->setArgument('paths', $this->getFileName());
+        return null;
     }
 
     /**

@@ -17,6 +17,7 @@ use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
+use Behat\Testwork\Hook\Call\HookCall;
 use Behat\Testwork\Hook\Call\RuntimeHook;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
@@ -111,6 +112,7 @@ final class HookStatsListener implements EventListener
     private function captureHookStat(CallResult $hookCallResult)
     {
         $call = $hookCallResult->getCall();
+        assert($call instanceof HookCall);
         $callee = $call->getCallee();
         $scope = $call->getScope();
         $path = $callee->getPath();

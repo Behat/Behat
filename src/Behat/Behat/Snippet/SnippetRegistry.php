@@ -55,7 +55,7 @@ final class SnippetRegistry implements SnippetRepository
      * @param Environment $environment
      * @param StepNode    $step
      *
-     * @return null|Snippet
+     * @return void
      */
     public function registerUndefinedStep(Environment $environment, StepNode $step)
     {

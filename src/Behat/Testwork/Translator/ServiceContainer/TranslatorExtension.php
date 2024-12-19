@@ -52,18 +52,20 @@ final class TranslatorExtension implements Extension
     {
         $defaultLanguage = $this->getDefaultLanguage() ?: 'en';
 
-        $builder
+        $childrenBuilder = $builder
             ->addDefaultsIfNotSet()
             ->children()
+        ;
+        $childrenBuilder
                 ->scalarNode('locale')
                     ->info('Sets output locale for the tester')
                     ->defaultValue($defaultLanguage)
-                ->end()
+        ;
+        $childrenBuilder
                 ->scalarNode('fallback_locale')
                     ->info('Sets fallback output locale for the tester')
                     ->defaultValue('en')
-                ->end()
-            ->end();
+        ;
     }
 
     /**

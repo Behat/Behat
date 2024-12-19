@@ -81,12 +81,7 @@ final class StopOnFailureController implements Controller
     }
 
     /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -95,6 +90,7 @@ final class StopOnFailureController implements Controller
         }
 
         $this->stopOnFailureHandler->registerListeners();
+        return null;
     }
 
 }
