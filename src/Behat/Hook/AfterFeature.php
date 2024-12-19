@@ -17,12 +17,17 @@ namespace Behat\Hook;
 final class AfterFeature implements Hook
 {
     /**
-     * @var string
+     * @var string|null
      */
     public $filterString;
 
     public function __construct($filterString = null)
     {
         $this->filterString = $filterString;
+    }
+
+    public function getFilterString(): ?string
+    {
+        return $this->filterString;
     }
 }

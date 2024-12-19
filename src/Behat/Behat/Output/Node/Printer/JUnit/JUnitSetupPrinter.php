@@ -7,10 +7,12 @@ use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Hook\Call\HookCall;
+use Behat\Testwork\Hook\Hook;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
@@ -52,23 +54,20 @@ class JUnitSetupPrinter implements SetupPrinter
         }
     }
 
-    /**
-     * @param Formatter $formatter
-     * @param CallResults $results
-     * @param string $messageType
-     */
-    private function handleHookCalls(Formatter $formatter, CallResults $results, $messageType)
+    private function handleHookCalls(Formatter $formatter, CallResults $results, string $messageType): void
     {
-        /** @var CallResult $hookCallResult */
         foreach ($results as $hookCallResult) {
+            assert($hookCallResult instanceof CallResult);
             if ($hookCallResult->hasException()) {
-                /** @var HookCall $call */
                 $call = $hookCallResult->getCall();
+                assert($call instanceof HookCall);
                 $scope = $call->getScope();
-                /** @var JUnitOutputPrinter $outputPrinter */
                 $outputPrinter = $formatter->getOutputPrinter();
+                assert($outputPrinter instanceof JUnitOutputPrinter);
 
-                $message = $call->getCallee()->getName();
+                $callee = $call->getCallee();
+                assert($callee instanceof Hook);
+                $message = $callee->getName();
                 if ($scope instanceof StepScope) {
                     $message .= ': ' . $scope->getStep()->getKeyword() . ' ' . $scope->getStep()->getText();
                 }

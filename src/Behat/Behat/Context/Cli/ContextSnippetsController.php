@@ -87,5 +87,6 @@ final class ContextSnippetsController implements Controller
                 new FixedPatternIdentifier($input->getOption('snippets-type'))
             ))
         );
+        return null;
     }
 }

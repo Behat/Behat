@@ -18,4 +18,5 @@ namespace Behat\Hook;
  */
 interface Hook
 {
+    public function getFilterString(): ?string;
 }
