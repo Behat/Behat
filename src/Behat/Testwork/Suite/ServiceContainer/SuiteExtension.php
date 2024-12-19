@@ -104,29 +104,30 @@ final class SuiteExtension implements Extension
                 ->end()
             ;
         assert($builder instanceof ArrayNodeDefinition);
-        $builder
+        $childrenBuilder = $builder
                 ->normalizeKeys(false)
                 ->addDefaultsIfNotSet()
                 ->treatTrueLike(array('enabled' => true))
                 ->treatNullLike(array('enabled' => true))
                 ->treatFalseLike(array('enabled' => false))
                 ->children()
+        ;
+        $childrenBuilder
                     ->booleanNode('enabled')
                         ->info('Enables/disables suite')
                         ->defaultTrue()
-                    ->end()
+        ;
+        $childrenBuilder
                     ->scalarNode('type')
                         ->info('Specifies suite type')
                         ->defaultValue(null)
-                    ->end()
+        ;
+        $childrenBuilder
                     ->arrayNode('settings')
                         ->info('Specifies suite extra settings')
                         ->defaultValue(array())
                         ->useAttributeAsKey('name')
                         ->prototype('variable')->end()
-                    ->end()
-                ->end()
-            ->end()
         ;
     }
 

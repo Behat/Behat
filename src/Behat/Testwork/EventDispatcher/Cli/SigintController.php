@@ -48,9 +48,6 @@ final class SigintController implements Controller
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (function_exists('pcntl_signal')) {
@@ -61,6 +58,7 @@ final class SigintController implements Controller
              */
             pcntl_signal(SIGINT, array($this, 'abortExercise'));
         }
+        return null;
     }
 
     /**

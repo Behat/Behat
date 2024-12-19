@@ -22,7 +22,7 @@ use Behat\Transliterator\Transliterator;
 final class RegexPatternPolicy implements PatternPolicy
 {
     /**
-     * @var string[string]
+     * @var array<string,string>
      */
     private static $replacePatterns = array(
         "/(?<=\W|^)\\\'(?:((?!\\').)*)\\\'(?=\W|$)/" => "'([^']*)'", // Single quoted strings

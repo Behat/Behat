@@ -38,9 +38,6 @@ final class AutoloaderController implements Controller
         $this->loader = $loader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
     }
@@ -51,5 +48,6 @@ final class AutoloaderController implements Controller
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->loader->register();
+        return null;
     }
 }

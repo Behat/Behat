@@ -74,14 +74,6 @@ final class FilterController implements Controller
         ;
     }
 
-    /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $filters = array();
@@ -105,5 +97,6 @@ final class FilterController implements Controller
         if (count($filters)) {
             $this->gherkin->setFilters($filters);
         }
+        return null;
     }
 }

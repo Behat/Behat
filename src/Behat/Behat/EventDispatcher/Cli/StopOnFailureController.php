@@ -80,14 +80,6 @@ final class StopOnFailureController implements Controller
         );
     }
 
-    /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getOption('stop-on-failure')) {
@@ -95,6 +87,7 @@ final class StopOnFailureController implements Controller
         }
 
         $this->stopOnFailureHandler->registerListeners();
+        return null;
     }
 
 }

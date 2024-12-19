@@ -45,9 +45,6 @@ final class GherkinTranslationsController implements Controller
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $i18nPath = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . DIRECTORY_SEPARATOR . 'i18n.php';
@@ -55,5 +52,6 @@ final class GherkinTranslationsController implements Controller
         foreach (require($i18nPath) as $lang => $messages) {
             $this->translator->addResource('array', $messages, $lang, 'output');
         }
+        return null;
     }
 }

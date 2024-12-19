@@ -56,9 +56,6 @@ final class SuiteController implements Controller
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $exerciseSuiteName = $input->getOption('suite');
@@ -79,5 +76,6 @@ final class SuiteController implements Controller
                 $name, $config['type'], $config['settings']
             );
         }
+        return null;
     }
 }

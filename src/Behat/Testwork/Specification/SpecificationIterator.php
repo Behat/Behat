@@ -18,7 +18,7 @@ use Iterator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
- * @extends Iterator<int, Suite>
+ * @extends Iterator<int, mixed>
  */
 interface SpecificationIterator extends Iterator
 {
