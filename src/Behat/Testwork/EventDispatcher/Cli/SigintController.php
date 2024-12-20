@@ -53,9 +53,6 @@ final class SigintController implements Controller
         if (function_exists('pcntl_signal')) {
             pcntl_async_signals(true);
 
-            /**
-             * @psalm-suppress UndefinedConstant (SIGINT is defined in pcntl)
-             */
             pcntl_signal(SIGINT, array($this, 'abortExercise'));
         }
         return null;

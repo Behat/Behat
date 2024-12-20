@@ -34,8 +34,7 @@
         "phpunit/phpunit": "^9.6",
         "sebastian/diff": "^4.0",
         "symfony/polyfill-php84": "^1.31",
-        "symfony/process": "^5.4 || ^6.4 || ^7.0",
-        "vimeo/psalm": "^5.0"
+        "symfony/process": "^5.4 || ^6.4 || ^7.0"
     },
 
     "suggest": {
@@ -69,14 +68,12 @@
         "all-tests": [
             "@behat-progress",
             "@phpunit",
-            "@psalm",
             "@phpstan"
         ],
         "behat": "LANG=C bin/behat  --rerun",
         "behat-progress": "LANG=C bin/behat --format=progress",
         "phpstan": "phpstan",
-        "phpunit": "phpunit",
-        "psalm": "psalm"
+        "phpunit": "phpunit"
     },
 
     "bin": ["bin/behat"]
