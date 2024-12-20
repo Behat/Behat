@@ -30,10 +30,6 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      */
     private $output;
     /**
-     * @var PatternTransformer
-     */
-    private $patternTransformer;
-    /**
      * @var DefinitionTranslator
      */
     private $translator;
@@ -57,7 +53,6 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
         KeywordsInterface $keywords
     ) {
         $this->output = $output;
-        $this->patternTransformer = $patternTransformer;
         $this->translator = $translator;
         $this->keywords = $keywords;
 

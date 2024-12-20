@@ -169,7 +169,7 @@ final class CallCenter
      *
      * @param Throwable $exception
      *
-     * @return Throwable
+     * @return Exception
      */
     private function handleException($exception)
     {
@@ -181,7 +181,7 @@ final class CallCenter
             $exception = $handler->handleException($exception);
         }
 
-        if ($exception instanceof Throwable) {
+        if (!$exception instanceof Exception) {
             return new FatalThrowableError($exception);
         }
 

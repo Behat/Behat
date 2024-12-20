@@ -100,7 +100,7 @@ final class ExerciseController implements Controller
     }
 
     /**
-     * {@inheritdoc}
+     * @return int
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

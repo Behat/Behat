@@ -190,6 +190,8 @@ final class ConfigurationLoader
      * @return array
      *
      * @throws ConfigurationLoadingException If config file is not found
+     *
+     * @phpstan-impure
      */
     protected function loadFileConfiguration($configPath, $profile)
     {

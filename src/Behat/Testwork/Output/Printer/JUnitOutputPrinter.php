@@ -13,6 +13,8 @@ namespace Behat\Testwork\Output\Printer;
 use Behat\Testwork\Output\Exception\MissingExtensionException;
 use Behat\Testwork\Output\Exception\MissingOutputPathException;
 use Behat\Testwork\Output\Printer\Factory\FilesystemOutputFactory;
+use DOMDocument;
+use DOMElement;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -27,22 +29,13 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
     public const XML_VERSION  = '1.0';
     public const XML_ENCODING = 'UTF-8';
 
-    /**
-     * @var \DOMDocument
-     */
-    private $domDocument;
-    /**
-     * @var \DOMElement
-     */
-    private $currentTestsuite;
-    /**
-     * @var \DOMElement
-     */
-    private $currentTestcase;
-    /**
-     * @var \DOMElement
-     */
-    private $testSuites;
+    private ?DOMDocument $domDocument = null;
+
+    private DOMElement $currentTestsuite;
+
+    private DOMElement $currentTestcase;
+
+    private DOMElement $testSuites;
 
     public function __construct(FilesystemOutputFactory $outputFactory)
     {

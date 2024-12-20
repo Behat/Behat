@@ -24,15 +24,6 @@ use RuntimeException;
 final class AmbiguousMatchException extends RuntimeException implements SearchException
 {
     /**
-     * @var string
-     */
-    private $text;
-    /**
-     * @var Definition[]
-     */
-    private $matches = array();
-
-    /**
      * Initializes ambiguous exception.
      *
      * @param string       $text    step description
@@ -40,9 +31,6 @@ final class AmbiguousMatchException extends RuntimeException implements SearchEx
      */
     public function __construct($text, array $matches)
     {
-        $this->text = $text;
-        $this->matches = $matches;
-
         $message = sprintf("Ambiguous match of \"%s\":", $text);
         foreach ($matches as $definition) {
             $message .= sprintf(

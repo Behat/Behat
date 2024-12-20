@@ -146,13 +146,9 @@ final class ExtensionManager
     /**
      * Initializes extension by id.
      *
-     * @param string $locator
-     *
-     * @return Extension
-     *
      * @throws ExtensionInitializationException
      */
-    private function initialize($locator)
+    private function initialize(string $locator): Extension
     {
         if (isset($this->locatedExtensions[$locator])) {
             return $this->locatedExtensions[$locator];
@@ -167,13 +163,9 @@ final class ExtensionManager
     /**
      * Instantiates extension from its locator.
      *
-     * @param string $locator
-     *
-     * @return Extension
-     *
      * @throws ExtensionInitializationException
      */
-    private function instantiateExtension($locator)
+    private function instantiateExtension(string $locator): mixed
     {
         if (class_exists($class = $locator)) {
             return new $class;
@@ -200,12 +192,9 @@ final class ExtensionManager
     /**
      * Validates extension instance.
      *
-     * @param Extension $extension
-     * @param string    $locator
-     *
      * @throws ExtensionInitializationException
      */
-    private function validateExtensionInstance($extension, $locator)
+    private function validateExtensionInstance(mixed $extension, string $locator): void
     {
         if (null === $extension) {
             throw new ExtensionInitializationException(sprintf(

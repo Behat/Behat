@@ -42,10 +42,6 @@ final class ListPrinter
      */
     private $resultConverter;
     /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-    /**
      * @var TranslatorInterface
      */
     private $translator;
@@ -69,7 +65,6 @@ final class ListPrinter
         $basePath
     ) {
         $this->resultConverter = $resultConverter;
-        $this->exceptionPresenter = $exceptionPresenter;
         $this->translator = $translator;
         $this->basePath = $basePath;
     }
@@ -316,7 +311,8 @@ final class ListPrinter
                     ':' . $scope->getScenario()->getLine(),
                 $scope instanceof BeforeStepScope, $scope instanceof AfterStepScope =>
                     $this->relativizePaths($scope->getFeature()->getFile()) .
-                    ':' . $scope->getStep()->getLine()
+                    ':' . $scope->getStep()->getLine(),
+                default => null
             };
         }
         return null;

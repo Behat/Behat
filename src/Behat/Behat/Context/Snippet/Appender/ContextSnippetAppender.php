@@ -27,19 +27,9 @@ final class ContextSnippetAppender implements SnippetAppender
      */
     public const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Tester\Exception\PendingException';
 
-    /**
-     * @var FilesystemLogger
-     */
-    private $logger;
-
-    /**
-     * Initializes appender.
-     *
-     * @param null|FilesystemLogger $logger
-     */
-    public function __construct(?FilesystemLogger $logger = null)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private ?FilesystemLogger $logger = null
+    ) {
     }
 
     /**

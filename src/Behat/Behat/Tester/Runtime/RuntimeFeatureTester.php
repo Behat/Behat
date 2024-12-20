@@ -41,10 +41,6 @@ final class RuntimeFeatureTester implements SpecificationTester
      * @var OutlineTester
      */
     private $outlineTester;
-    /**
-     * @var EnvironmentManager
-     */
-    private $envManager;
 
     /**
      * Initializes tester.
@@ -62,7 +58,6 @@ final class RuntimeFeatureTester implements SpecificationTester
     ) {
         $this->scenarioTester = $scenarioTester;
         $this->outlineTester = $outlineTester;
-        $this->envManager = $envManager;
     }
 
     /**
