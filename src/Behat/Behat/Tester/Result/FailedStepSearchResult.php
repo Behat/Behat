@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester\Result;
 
 use Behat\Behat\Definition\Exception\SearchException;
 use Behat\Testwork\Tester\Result\ExceptionResult;
+use Throwable;
 
 /**
  * Represents a step test result with a failed definition search.
@@ -44,7 +45,7 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
     }
 
     /**
-     * {@inheritdoc}
+     * @return Throwable
      */
     public function getException()
     {

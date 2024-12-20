@@ -25,7 +25,7 @@ interface PatternPolicy
     /**
      * Checks if policy supports pattern type.
      *
-     * @param string $type
+     * @param string|null $type
      *
      * @return bool
      */

@@ -74,8 +74,8 @@ final class JUnitDurationListener implements EventListener
         }
 
         $key = $this->getHash($event->getScenario());
-        $timer = $this->scenarioTimerStore[$key];
-        if ($timer instanceof Timer) {
+        if (isset($this->scenarioTimerStore[$key])) {
+            $timer = $this->scenarioTimerStore[$key];
             $timer->stop();
             $this->resultStore[$key] = $timer->getTime();
             unset($this->scenarioTimerStore[$key]);
@@ -89,8 +89,8 @@ final class JUnitDurationListener implements EventListener
         }
 
         $key = $this->getHash($event->getFeature());
-        $timer = $this->featureTimerStore[$key];
-        if ($timer instanceof Timer) {
+        if (isset($this->featureTimerStore[$key])) {
+            $timer = $this->featureTimerStore[$key];
             $timer->stop();
             $this->featureResultStore[$key] = $timer->getTime();
             unset($this->featureTimerStore[$key]);

@@ -31,10 +31,9 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      * @var Suite
      */
     private $suite;
-    /**
-     * @var ContainerInterface
-     */
-    private $serviceContainer;
+
+    private ?ContainerInterface $serviceContainer = null;
+
     /**
      * @var array<class-string<Context>, Context>
      * @psalm-var class-string-map<T as Context, T>

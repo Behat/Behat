@@ -23,14 +23,9 @@ use Behat\Testwork\Suite\Suite;
  */
 final class JUnitSuitePrinter implements SuitePrinter
 {
-    /**
-     * @var PhaseStatistics
-     */
-    private $statistics;
-
-    public function __construct(?PhaseStatistics $statistics = null)
-    {
-        $this->statistics = $statistics;
+    public function __construct(
+        private ?PhaseStatistics $statistics = null
+    ) {
     }
 
     /**
