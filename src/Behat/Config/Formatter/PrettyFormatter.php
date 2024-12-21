@@ -14,18 +14,21 @@ final class PrettyFormatter extends Formatter
      * @param bool $paths display the file path and line number for each scenario
      *                    and the context file and method for each step
      * @param bool $multiline print out PyStrings and TableNodes in full
+     * @param string $showOutput show the test stdout output as part of the formatter output (yes, no, on-fail)
      */
     public function __construct(
         bool $timer = true,
         bool $expand = false,
         bool $paths = true,
         bool $multiline = true,
+        string $showOutput = 'yes',
     ) {
         parent::__construct(name: self::NAME, settings: [
             'timer' => $timer,
             'expand' => $expand,
             'paths' => $paths,
             'multiline' => $multiline,
+            'show_output' => $showOutput
         ]);
     }
 

@@ -12,10 +12,12 @@ namespace Behat\Behat\Output\Node\Printer\Progress;
 
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
+use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Output\Formatter;
+use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -33,6 +35,8 @@ final class ProgressStepPrinter implements StepPrinter
      * @var integer
      */
     private $stepsPrinted = 0;
+
+    private bool $hasPrintedOutput = false;
 
     /**
      * Initializes printer.
@@ -52,6 +56,10 @@ final class ProgressStepPrinter implements StepPrinter
         $printer = $formatter->getOutputPrinter();
         $style = $this->resultConverter->convertResultToString($result);
 
+        if ($this->hasPrintedOutput) {
+            $printer->writeln('');
+        }
+
         switch ($result->getResultCode()) {
             case TestResult::PASSED:
                 $printer->write("{+$style}.{-$style}");
@@ -70,8 +78,34 @@ final class ProgressStepPrinter implements StepPrinter
                 break;
         }
 
+        $showOutput = $formatter->getParameter('show_output');
+        if ($showOutput === 'yes' || ($showOutput === 'on-fail' && !$result->isPassed())) {
+            $this->printStdOut($formatter->getOutputPrinter(), $result);
+        }
+
         if (++$this->stepsPrinted % 70 == 0) {
             $printer->writeln(' ' . $this->stepsPrinted);
         }
+    }
+
+    /**
+     * Prints step output (if has one).
+     */
+    private function printStdOut(OutputPrinter $printer, StepResult $result): void
+    {
+        if (!$result instanceof ExecutedStepResult || null === $result->getCallResult()->getStdOut()) {
+            return;
+        }
+
+        $printer->writeln("\n" . $result->getStepDefinition()->getPath() . ':');
+        $callResult = $result->getCallResult();
+        $pad = function ($line) {
+            return sprintf(
+                '  | {+stdout}%s{-stdout}', $line
+            );
+        };
+
+        $printer->write(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
+        $this->hasPrintedOutput = true;
     }
 }

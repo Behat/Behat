@@ -102,13 +102,17 @@ final class ListPrinter
     /**
      * Prints step list.
      *
-     * @param OutputPrinter $printer
      * @param string        $intro
      * @param integer       $resultCode
      * @param StepStat[]    $stepStats
      */
-    public function printStepList(OutputPrinter $printer, $intro, $resultCode, array $stepStats)
-    {
+    public function printStepList(
+        OutputPrinter $printer,
+        $intro,
+        $resultCode,
+        array $stepStats,
+        string $showOutput = "in-summary"
+    ) {
         if (!count($stepStats)) {
             return;
         }
@@ -120,9 +124,17 @@ final class ListPrinter
 
         foreach ($stepStats as $num => $stepStat) {
             if ($stepStat instanceof StepStatV2) {
-                $this->printStepStat($printer, $num + 1, $stepStat, $style);
+                $this->printStepStat($printer, $num + 1, $stepStat, $style, $showOutput);
             } elseif ($stepStat instanceof StepStat) {
-                $this->printStat($printer, $stepStat->getText(), $stepStat->getPath(), $style, $stepStat->getStdOut(), $stepStat->getError());
+                $this->printStat(
+                    $printer,
+                    $stepStat->getText(),
+                    $stepStat->getPath(),
+                    $style,
+                    $stepStat->getStdOut(),
+                    $stepStat->getError(),
+                    $showOutput
+                );
             }
         }
     }
@@ -157,7 +169,6 @@ final class ListPrinter
     /**
      * Prints hook stat.
      *
-     * @param OutputPrinter $printer
      * @param string        $name
      * @param string        $path
      * @param string        $style
@@ -166,14 +177,21 @@ final class ListPrinter
      *
      * @deprecated Remove in 4.0
      */
-    private function printStat(OutputPrinter $printer, $name, $path, $style, $stdOut, $error)
-    {
+    private function printStat(
+        OutputPrinter $printer,
+        string $name,
+        string $path,
+        string $style,
+        ?string $stdOut,
+        ?string $error,
+        string $showOutput
+    ) {
         $path = $this->relativizePaths($path);
         $printer->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $name, $style, $path));
 
         $pad = function ($line) { return '      ' . $line; };
 
-        if (null !== $stdOut) {
+        if (null !== $stdOut && $showOutput !== 'no') {
             $padText = function ($line) { return '      │ ' . $line; };
             $stdOutString = array_map($padText, explode("\n", $stdOut));
             $printer->writeln(implode("\n", $stdOutString));
@@ -222,16 +240,13 @@ final class ListPrinter
         $printer->writeln();
     }
 
-    /**
-     * Prints hook stat.
-     *
-     * @param OutputPrinter $printer
-     * @param integer       $number
-     * @param StepStatV2    $stat
-     * @param string        $style
-     */
-    private function printStepStat(OutputPrinter $printer, $number, StepStatV2 $stat, $style)
-    {
+    private function printStepStat(
+        OutputPrinter $printer,
+        int $number,
+        StepStatV2 $stat,
+        string $style,
+        string $showOutput
+    ) {
         $maxLength = max(mb_strlen($stat->getScenarioText(), 'utf8'), mb_strlen($stat->getStepText(), 'utf8') + 2) + 1;
 
         $printer->writeln(
@@ -257,7 +272,7 @@ final class ListPrinter
 
         $pad = function ($line) { return '        ' . $line; };
 
-        if (null !== $stat->getStdOut()) {
+        if (null !== $stat->getStdOut() && $showOutput !== 'no') {
             $padText = function ($line) { return '        │ ' . $line; };
             $stdOutString = array_map($padText, explode("\n", $stat->getStdOut()));
             $printer->writeln(implode("\n", $stdOutString));
