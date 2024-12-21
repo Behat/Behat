@@ -24,11 +24,14 @@ use Behat\Testwork\Tester\SuiteTester;
  * Suite tester which dispatches hooks during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template TSpec
+ * @implements SuiteTester<TSpec>
  */
 final class HookableSuiteTester implements SuiteTester
 {
     /**
-     * @var SuiteTester
+     * @var SuiteTester<TSpec>
      */
     private $baseTester;
     /**
@@ -39,7 +42,7 @@ final class HookableSuiteTester implements SuiteTester
     /**
      * Initializes tester.
      *
-     * @param SuiteTester    $baseTester
+     * @param SuiteTester<TSpec> $baseTester
      * @param HookDispatcher $hookDispatcher
      */
     public function __construct(SuiteTester $baseTester, HookDispatcher $hookDispatcher)
@@ -48,9 +51,6 @@ final class HookableSuiteTester implements SuiteTester
         $this->hookDispatcher = $hookDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, SpecificationIterator $iterator, $skip)
     {
         $setup = $this->baseTester->setUp($env, $iterator, $skip);
@@ -65,17 +65,11 @@ final class HookableSuiteTester implements SuiteTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, SpecificationIterator $iterator, $skip)
     {
         return $this->baseTester->test($env, $iterator, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);

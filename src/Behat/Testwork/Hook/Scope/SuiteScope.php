@@ -25,7 +25,7 @@ interface SuiteScope extends HookScope
     /**
      * Returns specification iterator.
      *
-     * @return SpecificationIterator
+     * @return SpecificationIterator<mixed>
      */
     public function getSpecificationIterator();
 }

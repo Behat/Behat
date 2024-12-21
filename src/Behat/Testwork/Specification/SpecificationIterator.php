@@ -18,7 +18,8 @@ use Iterator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
- * @extends Iterator<int, Suite>
+ * @template-covariant T
+ * @extends Iterator<int, T>
  */
 interface SpecificationIterator extends Iterator
 {

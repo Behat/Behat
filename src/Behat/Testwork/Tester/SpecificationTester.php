@@ -19,6 +19,8 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Prepares and tests provided specification against provided environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template TSpec
  */
 interface SpecificationTester
 {
@@ -26,7 +28,7 @@ interface SpecificationTester
      * Sets up specification for a test.
      *
      * @param Environment $env
-     * @param mixed       $spec
+     * @param TSpec       $spec
      * @param bool     $skip
      *
      * @return Setup
@@ -37,7 +39,7 @@ interface SpecificationTester
      * Tests provided specification.
      *
      * @param Environment $env
-     * @param mixed       $spec
+     * @param TSpec       $spec
      * @param bool     $skip
      *
      * @return TestResult
@@ -48,7 +50,7 @@ interface SpecificationTester
      * Tears down specification after a test.
      *
      * @param Environment $env
-     * @param mixed       $spec
+     * @param TSpec       $spec
      * @param bool     $skip
      * @param TestResult  $result
      *

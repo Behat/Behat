@@ -12,6 +12,7 @@ namespace Behat\Behat\Hook\Tester;
 
 use Behat\Behat\Hook\Scope\AfterFeatureScope;
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\HookDispatcher;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
@@ -23,11 +24,13 @@ use Behat\Testwork\Tester\SpecificationTester;
  * Feature tester which dispatches hooks during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements SpecificationTester<FeatureNode>
  */
 final class HookableFeatureTester implements SpecificationTester
 {
     /**
-     * @var SpecificationTester
+     * @var SpecificationTester<FeatureNode>
      */
     private $baseTester;
     /**
@@ -38,8 +41,8 @@ final class HookableFeatureTester implements SpecificationTester
     /**
      * Initializes tester.
      *
-     * @param SpecificationTester $baseTester
-     * @param HookDispatcher      $hookDispatcher
+     * @param SpecificationTester<FeatureNode> $baseTester
+     * @param HookDispatcher                   $hookDispatcher
      */
     public function __construct(SpecificationTester $baseTester, HookDispatcher $hookDispatcher)
     {

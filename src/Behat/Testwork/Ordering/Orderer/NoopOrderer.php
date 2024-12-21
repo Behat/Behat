@@ -10,8 +10,6 @@
 
 namespace Behat\Testwork\Ordering\Orderer;
 
-use Behat\Testwork\Specification\SpecificationIterator;
-
 /**
  * Null implementation of Orderer that does no ordering
  *
@@ -19,11 +17,6 @@ use Behat\Testwork\Specification\SpecificationIterator;
  */
 final class NoopOrderer implements Orderer
 {
-
-    /**
-     * @param SpecificationIterator[] $scenarioIterators
-     * @return SpecificationIterator[]
-     */
     public function order(array $scenarioIterators)
     {
         return $scenarioIterators;

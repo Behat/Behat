@@ -22,7 +22,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 final class AfterSuiteSetup extends SuiteTested implements AfterSetup
 {
     /**
-     * @var SpecificationIterator
+     * @var SpecificationIterator<mixed>
      */
     private $iterator;
     /**
@@ -34,7 +34,7 @@ final class AfterSuiteSetup extends SuiteTested implements AfterSetup
      * Initializes event.
      *
      * @param Environment           $env
-     * @param SpecificationIterator $iterator
+     * @param SpecificationIterator<mixed> $iterator
      * @param Setup                 $setup
      */
     public function __construct(Environment $env, SpecificationIterator $iterator, Setup $setup)
@@ -45,11 +45,6 @@ final class AfterSuiteSetup extends SuiteTested implements AfterSetup
         $this->setup = $setup;
     }
 
-    /**
-     * Returns specification iterator.
-     *
-     * @return SpecificationIterator
-     */
     public function getSpecificationIterator()
     {
         return $this->iterator;

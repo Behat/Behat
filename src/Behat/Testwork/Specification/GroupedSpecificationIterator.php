@@ -16,6 +16,9 @@ use Behat\Testwork\Suite\Suite;
  * Iterates over specification iterators grouped by their suite.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template T
+ * @implements SpecificationIterator<T>
  */
 final class GroupedSpecificationIterator implements SpecificationIterator
 {
@@ -35,8 +38,8 @@ final class GroupedSpecificationIterator implements SpecificationIterator
     /**
      * Initializes iterator.
      *
-     * @param Suite                   $suite
-     * @param SpecificationIterator[] $specificationIterators
+     * @param Suite                          $suite
+     * @param list<SpecificationIterator<T>> $specificationIterators
      */
     public function __construct(Suite $suite, array $specificationIterators)
     {
@@ -47,9 +50,11 @@ final class GroupedSpecificationIterator implements SpecificationIterator
     /**
      * Groups specifications by their suite.
      *
-     * @param SpecificationIterator[] $specificationIterators
+     * @template TSpec
      *
-     * @return GroupedSpecificationIterator[]
+     * @param SpecificationIterator<TSpec>[] $specificationIterators
+     *
+     * @return array<string, GroupedSpecificationIterator<TSpec>>
      */
     public static function group(array $specificationIterators)
     {

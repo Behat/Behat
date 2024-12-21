@@ -22,6 +22,9 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Exercise that is ordered according to a specified algorithm
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
+ *
+ * @template TSpec
+ * @implements Exercise<TSpec>
  */
 final class OrderedExercise implements Exercise
 {
@@ -31,22 +34,22 @@ final class OrderedExercise implements Exercise
     private $orderer;
 
     /**
-     * @var SpecificationIterator[]
+     * @var SpecificationIterator<TSpec>[]|null
      */
     private $unordered;
 
     /**
-     * @var SpecificationIterator[]
+     * @var SpecificationIterator<TSpec>[]|null
      */
     private $ordered;
 
     /**
-     * @var Exercise
+     * @var Exercise<TSpec>
      */
     private $decoratedExercise;
 
     /**
-     * @param Exercise $decoratedExercise
+     * @param Exercise<TSpec> $decoratedExercise
      */
     public function __construct(Exercise $decoratedExercise)
     {
@@ -54,41 +57,16 @@ final class OrderedExercise implements Exercise
         $this->decoratedExercise = $decoratedExercise;
     }
 
-    /**
-     * Sets up exercise for a test.
-     *
-     * @param SpecificationIterator[] $iterators
-     * @param bool $skip
-     *
-     * @return Setup
-     */
     public function setUp(array $iterators, $skip)
     {
         return $this->decoratedExercise->setUp($this->order($iterators), $skip);
     }
 
-    /**
-     * Tests suites specifications.
-     *
-     * @param SpecificationIterator[] $iterators
-     * @param bool $skip
-     *
-     * @return TestResult
-     */
     public function test(array $iterators, $skip)
     {
         return $this->decoratedExercise->test($this->order($iterators), $skip);
     }
 
-    /**
-     * Tears down exercise after a test.
-     *
-     * @param SpecificationIterator[] $iterators
-     * @param bool $skip
-     * @param TestResult $result
-     *
-     * @return Teardown
-     */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
         return $this->decoratedExercise->tearDown($this->order($iterators), $skip, $result);
@@ -105,8 +83,8 @@ final class OrderedExercise implements Exercise
     }
 
     /**
-     * @param SpecificationIterator[] $iterators
-     * @return SpecificationIterator[]
+     * @param SpecificationIterator<TSpec>[] $iterators
+     * @return SpecificationIterator<TSpec>[]
      */
     private function order(array $iterators)
     {

@@ -20,8 +20,10 @@ use Behat\Testwork\Specification\SpecificationIterator;
 interface Orderer
 {
     /**
-     * @param SpecificationIterator[] $scenarioIterators
-     * @return SpecificationIterator[]
+     * @template T
+     *
+     * @param SpecificationIterator<T>[] $scenarioIterators
+     * @return SpecificationIterator<T>[]
      */
     public function order(array $scenarioIterators);
 

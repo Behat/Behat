@@ -17,18 +17,20 @@ use Behat\Testwork\Suite\Suite;
  * Finds test specifications for provided suites using registered locators.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template T
  */
 final class SpecificationFinder
 {
     /**
-     * @var SpecificationLocator[]
+     * @var SpecificationLocator<T>[]
      */
     private $specificationLocators = array();
 
     /**
      * Registers specification locator.
      *
-     * @param SpecificationLocator $locator
+     * @param SpecificationLocator<T> $locator
      */
     public function registerSpecificationLocator(SpecificationLocator $locator)
     {
@@ -56,7 +58,7 @@ final class SpecificationFinder
      * @param Suite[]     $suites
      * @param null|string $locator
      *
-     * @return SpecificationIterator[]
+     * @return list<SpecificationIterator<T>>
      */
     public function findSuitesSpecifications(array $suites, $locator = null)
     {
@@ -74,7 +76,7 @@ final class SpecificationFinder
      * @param Suite       $suite
      * @param null|string $locator
      *
-     * @return SpecificationIterator[]
+     * @return list<SpecificationIterator<T>>
      */
     private function findSuiteSpecifications(Suite $suite, $locator = null)
     {
