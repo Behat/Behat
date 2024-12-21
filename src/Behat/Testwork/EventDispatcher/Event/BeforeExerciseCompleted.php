@@ -20,25 +20,20 @@ use Behat\Testwork\Specification\SpecificationIterator;
 final class BeforeExerciseCompleted extends ExerciseCompleted implements BeforeTested
 {
     /**
-     * @var SpecificationIterator[]
+     * @var SpecificationIterator<mixed>[]
      */
     private $specificationIterators;
 
     /**
      * Initializes event.
      *
-     * @param SpecificationIterator[] $specificationIterators
+     * @param SpecificationIterator<mixed>[] $specificationIterators
      */
     public function __construct(array $specificationIterators)
     {
         $this->specificationIterators = $specificationIterators;
     }
 
-    /**
-     * Returns specification iterators.
-     *
-     * @return SpecificationIterator[]
-     */
     public function getSpecificationIterators()
     {
         return $this->specificationIterators;

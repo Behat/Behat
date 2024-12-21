@@ -12,6 +12,7 @@ namespace Behat\Behat\Gherkin\Specification\Locator;
 
 use Behat\Behat\Gherkin\Specification\LazyFeatureIterator;
 use Behat\Gherkin\Gherkin;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Specification\Locator\SpecificationLocator;
 use Behat\Testwork\Specification\NoSpecificationsIterator;
 use Behat\Testwork\Suite\Suite;
@@ -20,6 +21,8 @@ use Behat\Testwork\Suite\Suite;
  * Loads gherkin features using a file with the list of scenarios.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements SpecificationLocator<FeatureNode>
  */
 final class FilesystemScenariosListLocator implements SpecificationLocator
 {

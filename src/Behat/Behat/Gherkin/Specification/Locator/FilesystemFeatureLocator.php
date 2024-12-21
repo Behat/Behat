@@ -13,6 +13,7 @@ namespace Behat\Behat\Gherkin\Specification\Locator;
 use Behat\Behat\Gherkin\Specification\LazyFeatureIterator;
 use Behat\Gherkin\Filter\PathsFilter;
 use Behat\Gherkin\Gherkin;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Specification\Locator\SpecificationLocator;
 use Behat\Testwork\Specification\NoSpecificationsIterator;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
@@ -25,6 +26,8 @@ use RegexIterator;
  * Loads gherkin features from the filesystem using gherkin parser.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements SpecificationLocator<FeatureNode>
  */
 final class FilesystemFeatureLocator implements SpecificationLocator
 {

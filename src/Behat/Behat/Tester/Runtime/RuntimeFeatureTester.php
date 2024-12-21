@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester\Runtime;
 
 use Behat\Behat\Tester\OutlineTester;
 use Behat\Behat\Tester\ScenarioTester;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Environment\EnvironmentManager;
@@ -27,6 +28,8 @@ use Behat\Testwork\Tester\SpecificationTester;
  * Tester executing feature tests in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements SpecificationTester<FeatureNode>
  */
 final class RuntimeFeatureTester implements SpecificationTester
 {
