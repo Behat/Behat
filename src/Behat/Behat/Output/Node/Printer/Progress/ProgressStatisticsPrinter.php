@@ -58,11 +58,12 @@ final class ProgressStatisticsPrinter implements StatisticsPrinter
         $hookStats = $statistics->getFailedHookStats();
         $this->listPrinter->printFailedHooksList($printer, 'failed_hooks_title', $hookStats);
 
+        $showOutput = $formatter->getParameter('show_output');
         $stepStats = $statistics->getFailedSteps();
-        $this->listPrinter->printStepList($printer, 'failed_steps_title', TestResult::FAILED, $stepStats);
+        $this->listPrinter->printStepList($printer, 'failed_steps_title', TestResult::FAILED, $stepStats, $showOutput);
 
         $stepStats = $statistics->getPendingSteps();
-        $this->listPrinter->printStepList($printer, 'pending_steps_title', TestResult::PENDING, $stepStats);
+        $this->listPrinter->printStepList($printer, 'pending_steps_title', TestResult::PENDING, $stepStats, $showOutput);
 
         $this->counterPrinter->printCounters($printer, 'scenarios_count', $statistics->getScenarioStatCounts());
         $this->counterPrinter->printCounters($printer, 'steps_count', $statistics->getStepStatCounts());
