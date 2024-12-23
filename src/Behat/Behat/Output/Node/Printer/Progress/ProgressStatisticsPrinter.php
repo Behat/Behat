@@ -14,6 +14,7 @@ use Behat\Behat\Output\Node\Printer\CounterPrinter;
 use Behat\Behat\Output\Node\Printer\ListPrinter;
 use Behat\Behat\Output\Node\Printer\StatisticsPrinter;
 use Behat\Behat\Output\Statistics\Statistics;
+use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Result\TestResult;
 
@@ -58,7 +59,7 @@ final class ProgressStatisticsPrinter implements StatisticsPrinter
         $hookStats = $statistics->getFailedHookStats();
         $this->listPrinter->printFailedHooksList($printer, 'failed_hooks_title', $hookStats);
 
-        $showOutput = $formatter->getParameter('show_output');
+        $showOutput = $formatter->getParameter(ShowOutputOption::OPTION_NAME);
         $stepStats = $statistics->getFailedSteps();
         $this->listPrinter->printStepList($printer, 'failed_steps_title', TestResult::FAILED, $stepStats, $showOutput);
 

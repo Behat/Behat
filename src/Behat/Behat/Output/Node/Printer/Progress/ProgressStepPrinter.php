@@ -14,6 +14,7 @@ use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
+use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Output\Formatter;
@@ -56,8 +57,11 @@ final class ProgressStepPrinter implements StepPrinter
         $printer = $formatter->getOutputPrinter();
         $style = $this->resultConverter->convertResultToString($result);
 
+        // After printing any output, we need to print a new line before continuing
+        // to print the "dots" of the progress
         if ($this->hasPrintedOutput) {
             $printer->writeln('');
+            $this->hasPrintedOutput = false;
         }
 
         switch ($result->getResultCode()) {
@@ -78,8 +82,9 @@ final class ProgressStepPrinter implements StepPrinter
                 break;
         }
 
-        $showOutput = $formatter->getParameter('show_output');
-        if ($showOutput === 'yes' || ($showOutput === 'on-fail' && !$result->isPassed())) {
+        $showOutput = $formatter->getParameter(ShowOutputOption::OPTION_NAME);
+        if ($showOutput === ShowOutputOption::Yes ||
+            ($showOutput === ShowOutputOption::OnFail && !$result->isPassed())) {
             $this->printStdOut($formatter->getOutputPrinter(), $result);
         }
 

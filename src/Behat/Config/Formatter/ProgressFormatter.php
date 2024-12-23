@@ -10,15 +10,16 @@ final class ProgressFormatter extends Formatter
 
     /**
      * @param bool $timer show time and memory usage at the end of the test run
-     * @param string $showOutput show the test stdout output as part of the formatter output (yes, no, on-fail, in-summary)
+     * @param ShowOutputOption $showOutput show the test stdout output as part of the
+     *                                     formatter output (yes, no, on-fail, in-summary)
      */
     public function __construct(
-        bool $timer = true,
-        string $showOutput = 'in-summary',
+        bool             $timer = true,
+        ShowOutputOption $showOutput = ShowOutputOption::InSummary,
     ) {
         parent::__construct(name: self::NAME, settings: [
             'timer' => $timer,
-            'show_output' => $showOutput
+            ShowOutputOption::OPTION_NAME => $showOutput->value
         ]);
     }
 

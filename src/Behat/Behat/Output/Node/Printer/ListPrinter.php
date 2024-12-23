@@ -22,6 +22,7 @@ use Behat\Behat\Output\Statistics\HookStat;
 use Behat\Behat\Output\Statistics\ScenarioStat;
 use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Output\Statistics\StepStat;
+use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Hook\Scope\AfterSuiteScope;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
@@ -111,7 +112,7 @@ final class ListPrinter
         $intro,
         $resultCode,
         array $stepStats,
-        string $showOutput = "in-summary"
+        ShowOutputOption $showOutput = ShowOutputOption::InSummary
     ) {
         if (!count($stepStats)) {
             return;
@@ -184,14 +185,14 @@ final class ListPrinter
         string $style,
         ?string $stdOut,
         ?string $error,
-        string $showOutput
+        ShowOutputOption $showOutput
     ) {
         $path = $this->relativizePaths($path);
         $printer->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $name, $style, $path));
 
         $pad = function ($line) { return '      ' . $line; };
 
-        if (null !== $stdOut && $showOutput !== 'no') {
+        if (null !== $stdOut && $showOutput !== ShowOutputOption::No) {
             $padText = function ($line) { return '      │ ' . $line; };
             $stdOutString = array_map($padText, explode("\n", $stdOut));
             $printer->writeln(implode("\n", $stdOutString));
@@ -245,7 +246,7 @@ final class ListPrinter
         int $number,
         StepStatV2 $stat,
         string $style,
-        string $showOutput
+        ShowOutputOption $showOutput
     ) {
         $maxLength = max(mb_strlen($stat->getScenarioText(), 'utf8'), mb_strlen($stat->getStepText(), 'utf8') + 2) + 1;
 
@@ -272,7 +273,7 @@ final class ListPrinter
 
         $pad = function ($line) { return '        ' . $line; };
 
-        if (null !== $stat->getStdOut() && $showOutput !== 'no') {
+        if (null !== $stat->getStdOut() && $showOutput !== ShowOutputOption::No) {
             $padText = function ($line) { return '        │ ' . $line; };
             $stdOutString = array_map($padText, explode("\n", $stat->getStdOut()));
             $printer->writeln(implode("\n", $stdOutString));

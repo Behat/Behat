@@ -10,11 +10,13 @@ use Behat\Config\Filter\TagFilter;
 use Behat\Config\Formatter\JUnitFormatter;
 use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Config\Formatter\ProgressFormatter;
+use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
 use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 
 final class ProfileTest extends TestCase
 {
@@ -170,5 +172,34 @@ final class ProfileTest extends TestCase
                 'junit' => false,
             ],
         ], $profile->toArray());
+    }
+
+    public function testSettingShowOutputOption(): void
+    {
+        $profile = new Profile('default');
+
+        $profile->disableFormatter(PrettyFormatter::NAME);
+        $profile->disableFormatter(JUnitFormatter::NAME);
+        $profile->withFormatter(new ProgressFormatter(showOutput: ShowOutputOption::Yes));
+
+        $this->assertEquals([
+            'formatters' => [
+                'pretty' => false,
+                'progress' => [
+                    'timer' => true,
+                    'show_output' => 'yes'
+                ],
+                'junit' => false,
+            ],
+        ], $profile->toArray());
+    }
+
+    public function testSettingInvalidShowOutputOption(): void
+    {
+        $profile = new Profile('default');
+
+        $this->expectException(UnexpectedValueException::class);
+
+        $profile->withFormatter(new PrettyFormatter(showOutput: ShowOutputOption::InSummary));
     }
 }

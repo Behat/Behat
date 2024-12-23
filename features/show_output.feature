@@ -196,9 +196,10 @@ Feature: Show output
       use Behat\Config\Config;
       use Behat\Config\Profile;
       use Behat\Config\Formatter\ProgressFormatter;
+      use Behat\Config\Formatter\ShowOutputOption;
 
       $profile = (new Profile('default'))
-        ->withFormatter(new ProgressFormatter(showOutput: 'no'))
+        ->withFormatter(new ProgressFormatter(showOutput: ShowOutputOption::No))
       ;
 
       return (new Config())->withProfile($profile);
