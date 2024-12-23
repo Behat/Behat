@@ -14,6 +14,7 @@ use Behat\Behat\EventDispatcher\Event\AfterFeatureSetup;
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTeardown;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -24,11 +25,13 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Feature tester dispatching BEFORE/AFTER events during tests.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements SpecificationTester<FeatureNode>
  */
 final class EventDispatchingFeatureTester implements SpecificationTester
 {
     /**
-     * @var SpecificationTester
+     * @var SpecificationTester<FeatureNode>
      */
     private $baseTester;
     /**
@@ -39,8 +42,8 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     /**
      * Initializes tester.
      *
-     * @param SpecificationTester      $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param SpecificationTester<FeatureNode> $baseTester
+     * @param EventDispatcherInterface         $eventDispatcher
      */
     public function __construct(SpecificationTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {

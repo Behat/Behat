@@ -25,11 +25,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Suite tester dispatching BEFORE/AFTER events during testing.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template TSpec
+ * @implements SuiteTester<TSpec>
  */
 final class EventDispatchingSuiteTester implements SuiteTester
 {
     /**
-     * @var SuiteTester
+     * @var SuiteTester<TSpec>
      */
     private $baseTester;
     /**
@@ -40,7 +43,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
     /**
      * Initializes tester.
      *
-     * @param SuiteTester              $baseTester
+     * @param SuiteTester<TSpec>       $baseTester
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(SuiteTester $baseTester, EventDispatcherInterface $eventDispatcher)
@@ -49,9 +52,6 @@ final class EventDispatchingSuiteTester implements SuiteTester
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, SpecificationIterator $iterator, $skip)
     {
         $event = new BeforeSuiteTested($env, $iterator);
@@ -67,17 +67,11 @@ final class EventDispatchingSuiteTester implements SuiteTester
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
     {
         return $this->baseTester->test($env, $iterator, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         $event = new BeforeSuiteTeardown($env, $iterator, $result);

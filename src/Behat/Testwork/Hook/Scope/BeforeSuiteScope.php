@@ -25,7 +25,7 @@ final class BeforeSuiteScope implements SuiteScope
      */
     private $environment;
     /**
-     * @var SpecificationIterator
+     * @var SpecificationIterator<mixed>
      */
     private $iterator;
 
@@ -33,7 +33,7 @@ final class BeforeSuiteScope implements SuiteScope
      * Initializes scope.
      *
      * @param Environment           $env
-     * @param SpecificationIterator $iterator
+     * @param SpecificationIterator<mixed> $iterator
      */
     public function __construct(Environment $env, SpecificationIterator $iterator)
     {
@@ -65,9 +65,6 @@ final class BeforeSuiteScope implements SuiteScope
         return $this->environment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSpecificationIterator()
     {
         return $this->iterator;

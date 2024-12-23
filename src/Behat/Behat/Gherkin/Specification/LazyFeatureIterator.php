@@ -25,6 +25,8 @@ use Behat\Testwork\Suite\Suite;
  * Lazily iterates (parses one-by-one) over features.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements SpecificationIterator<FeatureNode>
  */
 final class LazyFeatureIterator implements SpecificationIterator
 {

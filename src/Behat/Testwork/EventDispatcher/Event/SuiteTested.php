@@ -27,7 +27,7 @@ abstract class SuiteTested extends LifecycleEvent
     /**
      * Returns specification iterator.
      *
-     * @return SpecificationIterator
+     * @return SpecificationIterator<mixed>
      */
     abstract public function getSpecificationIterator();
 }

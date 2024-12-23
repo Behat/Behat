@@ -29,7 +29,7 @@ abstract class ExerciseCompleted extends Event
     /**
      * Returns specification iterators.
      *
-     * @return SpecificationIterator[]
+     * @return SpecificationIterator<mixed>[]
      */
     abstract public function getSpecificationIterators();
 }
