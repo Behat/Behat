@@ -79,25 +79,26 @@ final class GherkinExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
+        $childrenBuilder = $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('cache')
-                    ->info('Sets the gherkin parser cache folder')
-                    ->defaultValue(
-                        is_writable(sys_get_temp_dir())
-                            ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat_gherkin_cache'
-                            : null
-                    )
-                ->end()
-                ->arrayNode('filters')
-                    ->info('Sets the gherkin filters (overridable by CLI options)')
-                    ->performNoDeepMerging()
-                    ->defaultValue(array())
-                    ->useAttributeAsKey('name')
-                    ->prototype('scalar')->end()
-                ->end()
-            ->end()
+        ;
+        $childrenBuilder
+            ->scalarNode('cache')
+                ->info('Sets the gherkin parser cache folder')
+                ->defaultValue(
+                    is_writable(sys_get_temp_dir())
+                        ? sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat_gherkin_cache'
+                        : null
+                )
+        ;
+        $childrenBuilder
+            ->arrayNode('filters')
+                ->info('Sets the gherkin filters (overridable by CLI options)')
+                ->performNoDeepMerging()
+                ->defaultValue(array())
+                ->useAttributeAsKey('name')
+                ->prototype('scalar')->end()
         ;
     }
 

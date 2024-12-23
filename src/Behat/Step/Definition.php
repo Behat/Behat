@@ -18,4 +18,5 @@ namespace Behat\Step;
  */
 interface Definition
 {
+    public function getPattern(): ?string;
 }

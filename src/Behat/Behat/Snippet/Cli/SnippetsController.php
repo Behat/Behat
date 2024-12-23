@@ -90,14 +90,6 @@ final class SnippetsController implements Controller
             );
     }
 
-    /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->eventDispatcher->addListener(StepTested::AFTER, array($this, 'registerUndefinedStep'), -999);
@@ -114,6 +106,7 @@ final class SnippetsController implements Controller
         if (!$input->getOption('no-snippets')) {
             $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'printUndefinedSteps'), -995);
         }
+        return null;
     }
 
     /**

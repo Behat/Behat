@@ -18,6 +18,7 @@ use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Event\Event;
@@ -186,7 +187,9 @@ final class StepStatsListener implements EventListener
         $path = sprintf('%s:%d', $this->currentFeaturePath, $event->getStep()->getLine());
 
         if ($exception && $exception instanceof PendingException) {
-            $path = $event->getTestResult()->getStepDefinition()->getPath();
+            $testResult = $event->getTestResult();
+            assert($testResult instanceof DefinedStepResult);
+            $path = $testResult->getStepDefinition()->getPath();
         }
 
         return $path;

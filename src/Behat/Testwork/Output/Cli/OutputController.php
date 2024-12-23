@@ -65,9 +65,6 @@ class OutputController implements Controller
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $formats = $input->getOption('format');
@@ -75,6 +72,7 @@ class OutputController implements Controller
 
         $this->configureFormatters($formats, $input, $output);
         $this->configureOutputs($formats, $outputs, $output->isDecorated());
+        return null;
     }
 
     /**
