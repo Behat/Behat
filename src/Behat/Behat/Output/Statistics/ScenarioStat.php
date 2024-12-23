@@ -27,6 +27,7 @@ final class ScenarioStat
         private string $path,
         private int $resultCode
     ) {
+        $this->title = null;
     }
 
     /**

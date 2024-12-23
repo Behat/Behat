@@ -37,9 +37,9 @@ use Behat\Testwork\Tester\Setup\Setup;
  */
 final class OutlineTableListener implements EventListener
 {
-    private ?OutlineNode $outline;
+    private ?OutlineNode $outline = null;
 
-    private ?Setup $exampleSetup;
+    private ?Setup $exampleSetup = null;
 
     private bool $headerPrinted = false;
 

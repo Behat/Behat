@@ -29,7 +29,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class StepListener implements EventListener
 {
-    private ?ScenarioLikeInterface $scenario;
+    private ?ScenarioLikeInterface $scenario = null;
 
     public function __construct(
         private StepPrinter $stepPrinter,

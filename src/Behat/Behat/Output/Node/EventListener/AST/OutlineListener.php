@@ -33,7 +33,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class OutlineListener implements EventListener
 {
-    private ?ExampleNode $example;
+    private ?ExampleNode $example = null;
 
     public function __construct(
         private OutlinePrinter $outlinePrinter,

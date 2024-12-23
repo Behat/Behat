@@ -26,7 +26,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class ScenarioStatsListener implements EventListener
 {
-    private ?string $currentFeaturePath;
+    private ?string $currentFeaturePath = null;
 
     public function __construct(
         private Statistics $statistics

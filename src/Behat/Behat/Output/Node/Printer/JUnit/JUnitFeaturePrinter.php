@@ -25,7 +25,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class JUnitFeaturePrinter implements FeaturePrinter
 {
-    private ?FeatureNode $currentFeature;
+    private ?FeatureNode $currentFeature = null;
 
     public function __construct(
         private PhaseStatistics $statistics,

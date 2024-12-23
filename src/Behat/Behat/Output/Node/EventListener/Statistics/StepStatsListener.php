@@ -36,11 +36,11 @@ use Throwable;
  */
 final class StepStatsListener implements EventListener
 {
-    private ?string $currentFeaturePath;
+    private ?string $currentFeaturePath = null;
 
-    private ?string $scenarioTitle;
+    private ?string $scenarioTitle = null;
 
-    private ?string $scenarioPath;
+    private ?string $scenarioPath = null;
 
     public function __construct(
         private Statistics $statistics,
