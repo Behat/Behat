@@ -70,7 +70,7 @@ final class HookAttributeReader implements AttributeReader
                 $description = $this->docBlockHelper->extractDescription($docBlock);
             }
 
-            $callees[] = new $class($attribute->newInstance()->filterString, $callable, $description);
+            $callees[] = new $class($attribute->newInstance()->getFilterString(), $callable, $description);
         }
 
         return $callees;

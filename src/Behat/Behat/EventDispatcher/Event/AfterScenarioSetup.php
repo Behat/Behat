@@ -65,9 +65,7 @@ final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
     }
 
     /**
-     * Returns scenario node.
-     *
-     * @return ScenarioNode
+     * @return Scenario
      */
     public function getScenario()
     {

@@ -17,12 +17,17 @@ namespace Behat\Step;
 final class Given implements Definition
 {
     /**
-     * @var string
+     * @var string|null
      */
     public $pattern;
 
     public function __construct($pattern = null)
     {
         $this->pattern = $pattern;
+    }
+
+    public function getPattern(): ?string
+    {
+        return $this->pattern;
     }
 }

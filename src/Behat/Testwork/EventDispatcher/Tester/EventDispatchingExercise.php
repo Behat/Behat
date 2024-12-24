@@ -23,11 +23,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Exercise dispatching BEFORE/AFTER events during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template TSpec
+ * @implements Exercise<TSpec>
  */
 final class EventDispatchingExercise implements Exercise
 {
     /**
-     * @var Exercise
+     * @var Exercise<TSpec>
      */
     private $baseExercise;
     /**
@@ -38,7 +41,7 @@ final class EventDispatchingExercise implements Exercise
     /**
      * Initializes exercise.
      *
-     * @param Exercise                 $baseExercise
+     * @param Exercise<TSpec>          $baseExercise
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(Exercise $baseExercise, EventDispatcherInterface $eventDispatcher)

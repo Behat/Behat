@@ -25,25 +25,12 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class JUnitFeaturePrinter implements FeaturePrinter
 {
-    /**
-     * @var PhaseStatistics
-     */
-    private $statistics;
+    private ?FeatureNode $currentFeature = null;
 
-    /**
-     * @var FeatureNode
-     */
-    private $currentFeature;
-
-    /**
-     * @var JUnitDurationListener|null
-     */
-    private $durationListener;
-
-    public function __construct(PhaseStatistics $statistics, ?JUnitDurationListener $durationListener = null)
-    {
-        $this->statistics = $statistics;
-        $this->durationListener = $durationListener;
+    public function __construct(
+        private PhaseStatistics $statistics,
+        private ?JUnitDurationListener $durationListener = null
+    ) {
     }
 
     /**

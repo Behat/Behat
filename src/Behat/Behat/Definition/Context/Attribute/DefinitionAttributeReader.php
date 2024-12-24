@@ -63,7 +63,7 @@ final class DefinitionAttributeReader implements AttributeReader
                 $description = $this->docBlockHelper->extractDescription($docBlock);
             }
 
-            $callees[] = new $class($attribute->newInstance()->pattern, $callable, $description);
+            $callees[] = new $class($attribute->newInstance()->getPattern(), $callable, $description);
         }
 
         return $callees;

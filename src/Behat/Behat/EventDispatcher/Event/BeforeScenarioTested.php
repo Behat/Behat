@@ -58,9 +58,7 @@ final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
     }
 
     /**
-     * Returns scenario node.
-     *
-     * @return ScenarioNode
+     * @return Scenario
      */
     public function getScenario()
     {

@@ -46,9 +46,6 @@ final class StrictController implements Controller
         $this->strict = $strict;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $command->addOption('--strict', null, InputOption::VALUE_NONE,
@@ -62,9 +59,10 @@ final class StrictController implements Controller
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->strict && !$input->getOption('strict')) {
-            return;
+            return null;
         }
 
         $this->resultInterpreter->registerResultInterpretation(new StrictInterpretation());
+        return null;
     }
 }

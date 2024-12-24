@@ -82,21 +82,23 @@ abstract class TesterExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
+        $childrenBuilder = $builder
             ->addDefaultsIfNotSet()
             ->children()
-                    ->scalarNode('stop_on_failure')
-                    ->defaultValue(null)
-                ->end()
+        ;
+        $childrenBuilder
+                ->scalarNode('stop_on_failure')
+                ->defaultValue(null)
+        ;
+        $childrenBuilder
                 ->booleanNode('strict')
                     ->info('Sets the strict mode for result interpretation')
                     ->defaultFalse()
-                ->end()
+        ;
+        $childrenBuilder
                 ->booleanNode('skip')
                     ->info('Tells tester to skip all tests')
                     ->defaultFalse()
-                ->end()
-            ->end()
         ;
     }
 

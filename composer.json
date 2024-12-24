@@ -30,7 +30,6 @@
     },
 
     "require-dev": {
-        "herrera-io/box": "~1.6.1",
         "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^9.6",
         "sebastian/diff": "^4.0",

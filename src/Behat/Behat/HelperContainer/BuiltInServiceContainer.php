@@ -115,13 +115,8 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Gets and validates a class from schema.
-     *
-     * @param string       $id
-     * @param string|array $schema
-     *
-     * @return string
      */
-    private function getAndValidateClass($id, array $schema)
+    private function getAndValidateClass(string $id, array $schema): string
     {
         if (!isset($schema['class'])) {
             $schema['class'] = $id;

@@ -37,61 +37,28 @@ use Behat\Testwork\Tester\Setup\Setup;
  */
 final class OutlineTableListener implements EventListener
 {
-    /**
-     * @var OutlineTablePrinter
-     */
-    private $tablePrinter;
-    /**
-     * @var ExampleRowPrinter
-     */
-    private $exampleRowPrinter;
-    /**
-     * @var SetupPrinter
-     */
-    private $stepSetupPrinter;
-    /**
-     * @var SetupPrinter
-     */
-    private $exampleSetupPrinter;
-    /**
-     * @var OutlineNode
-     */
-    private $outline;
-    /**
-     * @var Setup
-     */
-    private $exampleSetup;
-    /**
-     * @var bool
-     */
-    private $headerPrinted = false;
+    private ?OutlineNode $outline = null;
+
+    private ?Setup $exampleSetup = null;
+
+    private bool $headerPrinted = false;
+
     /**
      * @var AfterStepSetup[]
      */
-    private $stepBeforeTestedEvents = array();
+    private array $stepBeforeTestedEvents = [];
+
     /**
      * @var AfterStepTested[]
      */
-    private $stepAfterTestedEvents = array();
+    private array $stepAfterTestedEvents = [];
 
-    /**
-     * Initializes listener.
-     *
-     * @param OutlineTablePrinter $tablePrinter
-     * @param ExampleRowPrinter   $exampleRowPrinter
-     * @param SetupPrinter        $exampleSetupPrinter
-     * @param SetupPrinter        $stepSetupPrinter
-     */
     public function __construct(
-        OutlineTablePrinter $tablePrinter,
-        ExampleRowPrinter $exampleRowPrinter,
-        SetupPrinter $exampleSetupPrinter,
-        SetupPrinter $stepSetupPrinter
+        private OutlineTablePrinter $tablePrinter,
+        private ExampleRowPrinter $exampleRowPrinter,
+        private SetupPrinter $exampleSetupPrinter,
+        private SetupPrinter $stepSetupPrinter
     ) {
-        $this->tablePrinter = $tablePrinter;
-        $this->exampleRowPrinter = $exampleRowPrinter;
-        $this->exampleSetupPrinter = $exampleSetupPrinter;
-        $this->stepSetupPrinter = $stepSetupPrinter;
     }
 
     /**
@@ -123,7 +90,7 @@ final class OutlineTableListener implements EventListener
     {
         if ($event instanceof AfterStepSetup) {
             $this->stepBeforeTestedEvents[$event->getStep()->getLine()] = $event;
-        } else {
+        } elseif ($event instanceof AfterStepTested) {
             $this->stepAfterTestedEvents[$event->getStep()->getLine()] = $event;
         }
     }
@@ -250,7 +217,7 @@ final class OutlineTableListener implements EventListener
      *
      * @return StepResult[]
      */
-    private function getStepTestResults()
+    private function getStepTestResults(): array
     {
         return array_map(
             function (AfterStepTested $event) {

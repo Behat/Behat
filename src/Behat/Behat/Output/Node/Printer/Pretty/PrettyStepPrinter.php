@@ -16,6 +16,7 @@ use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
+use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
@@ -92,7 +93,11 @@ final class PrettyStepPrinter implements StepPrinter
         $this->printText($formatter->getOutputPrinter(), $step->getKeyword(), $step->getText(), $result);
         $this->pathPrinter->printStepPath($formatter, $scenario, $step, $result, mb_strlen($this->indentText, 'utf8'));
         $this->printArguments($formatter, $step->getArguments(), $result);
-        $this->printStdOut($formatter->getOutputPrinter(), $result);
+        $showOutput = $formatter->getParameter(ShowOutputOption::OPTION_NAME);
+        if ($showOutput === ShowOutputOption::Yes ||
+            ($showOutput === ShowOutputOption::OnFail && !$result->isPassed())) {
+            $this->printStdOut($formatter->getOutputPrinter(), $result);
+        }
         $this->printException($formatter->getOutputPrinter(), $result);
     }
 
