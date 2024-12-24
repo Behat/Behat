@@ -19,18 +19,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class StreamOutputPrinter implements OutputPrinter
 {
-    /**
-     * @var OutputInterface
-     */
-    private $output;
-    /**
-     * @var OutputFactory
-     */
-    private $outputFactory;
+    private ?OutputInterface $output = null;
 
-    public function __construct(OutputFactory $outputFactory)
-    {
-        $this->outputFactory = $outputFactory;
+    public function __construct(
+        private OutputFactory $outputFactory
+    ) {
     }
 
     /**

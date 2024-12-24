@@ -33,52 +33,15 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class OutlineListener implements EventListener
 {
-    /**
-     * @var OutlinePrinter
-     */
-    private $outlinePrinter;
-    /**
-     * @var ExamplePrinter
-     */
-    private $examplePrinter;
-    /**
-     * @var StepPrinter
-     */
-    private $stepPrinter;
-    /**
-     * @var SetupPrinter
-     */
-    private $stepSetupPrinter;
-    /**
-     * @var SetupPrinter
-     */
-    private $exampleSetupPrinter;
-    /**
-     * @var ExampleNode
-     */
-    private $example;
+    private ?ExampleNode $example = null;
 
-    /**
-     * Initializes listener.
-     *
-     * @param OutlinePrinter $outlinePrinter
-     * @param ExamplePrinter $examplePrinter
-     * @param StepPrinter    $stepPrinter
-     * @param SetupPrinter   $exampleSetupPrinter
-     * @param SetupPrinter   $stepSetupPrinter
-     */
     public function __construct(
-        OutlinePrinter $outlinePrinter,
-        ExamplePrinter $examplePrinter,
-        StepPrinter $stepPrinter,
-        SetupPrinter $exampleSetupPrinter,
-        SetupPrinter $stepSetupPrinter
+        private OutlinePrinter $outlinePrinter,
+        private ExamplePrinter $examplePrinter,
+        private StepPrinter $stepPrinter,
+        private SetupPrinter $exampleSetupPrinter,
+        private SetupPrinter $stepSetupPrinter
     ) {
-        $this->outlinePrinter = $outlinePrinter;
-        $this->examplePrinter = $examplePrinter;
-        $this->stepPrinter = $stepPrinter;
-        $this->exampleSetupPrinter = $exampleSetupPrinter;
-        $this->stepSetupPrinter = $stepSetupPrinter;
     }
 
     /**

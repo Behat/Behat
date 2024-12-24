@@ -153,12 +153,8 @@ final class FilesystemFeatureLocator implements SpecificationLocator
 
     /**
      * Finds absolute path for provided relative (relative to base features path).
-     *
-     * @param string $path Relative path
-     *
-     * @return string
      */
-    private function findAbsolutePath($path)
+    private function findAbsolutePath(string $path): string|false
     {
         if (is_file($path) || is_dir($path)) {
             return realpath($path);
