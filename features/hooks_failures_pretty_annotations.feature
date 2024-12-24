@@ -1,7 +1,7 @@
-Feature: Display hook failures location in pretty printer
+Feature: Display hook failures location in pretty printer using annotations
   In order to be able to locate the code that generated a failure
   As a feature developer using the pretty printer
-  When a hook throws an error I want to see the related item where the code failed
+  When a hook throws an error I want to see the related item where the code failed using annotations
 
   Background:
     Given a file named "features/simple.feature" with:

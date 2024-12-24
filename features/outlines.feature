@@ -12,30 +12,27 @@ Feature: Scenario Outlines
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $result;
           private $numbers;
 
-          /**
-           * @Given /^I have basic calculator$/
-           */
+          #[Given('/^I have basic calculator$/')]
            public function iHaveBasicCalculator() {
               $this->result = 0;
               $this->numbers = array();
            }
 
-           /**
-            * @Given /^I have entered (\d+)$/
-            */
+           #[Given('/^I have entered (\d+)$/')]
            public function iHaveEntered($number) {
               $this->numbers[] = intval($number);
            }
 
-           /**
-            * @When /^I add$/
-            */
+           #[When('/^I add$/')]
            public function iAdd() {
                foreach ($this->numbers as $number) {
                    $this->result += $number;
@@ -43,9 +40,7 @@ Feature: Scenario Outlines
                $this->numbers = array();
            }
 
-           /**
-            * @When /^I sub$/
-            */
+           #[When('/^I sub$/')]
            public function iSub() {
                $this->result = array_shift($this->numbers);
                foreach ($this->numbers as $number) {
@@ -54,9 +49,7 @@ Feature: Scenario Outlines
                $this->numbers = array();
            }
 
-           /**
-            * @When /^I multiply$/
-            */
+           #[When('/^I multiply$/')]
            public function iMultiply() {
                $this->result = array_shift($this->numbers);
                foreach ($this->numbers as $number) {
@@ -65,9 +58,7 @@ Feature: Scenario Outlines
                $this->numbers = array();
            }
 
-           /**
-            * @When /^I div$/
-            */
+           #[When('/^I div$/')]
            public function iDiv() {
                $this->result = array_shift($this->numbers);
                foreach ($this->numbers as $number) {
@@ -76,9 +67,7 @@ Feature: Scenario Outlines
                $this->numbers = array();
            }
 
-           /**
-            * @Then /^The result should be (\d+)$/
-            */
+           #[Then('/^The result should be (\d+)$/')]
            public function theResultShouldBe($result) {
               PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
            }
@@ -226,21 +215,19 @@ Feature: Scenario Outlines
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $number = 0;
 
-          /**
-           * @When I add :number
-           */
+          #[When('I add :number')]
            public function iAdd($number) {
               $this->number += intval($number);
            }
 
-           /**
-            * @Then the result should be :result
-            */
+           #[Then('the result should be :result')]
            public function theResultShouldBe($result) {
               PHPUnit\Framework\Assert::assertEquals(intval($result), $this->number);
            }
