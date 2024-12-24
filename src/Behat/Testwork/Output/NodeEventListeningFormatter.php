@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Output;
 
+use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
@@ -127,6 +128,10 @@ final class NodeEventListeningFormatter implements Formatter
      */
     public function getParameter($name)
     {
-        return $this->parameters[$name] ?? null;
+        $value = $this->parameters[$name] ?? null;
+        if ($value !== null && $name === ShowOutputOption::OPTION_NAME) {
+            return ShowOutputOption::from($value);
+        }
+        return $value;
     }
 }
