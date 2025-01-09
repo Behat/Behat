@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.18.0] - 2025-01-09
+
+### Changed
+
+* Add new methods to the `Behat\Hook\Hook` and `Behat\Step\Definition` interfaces used internally by step definition
+  attributes by @carlos-granados in [#1573](https://github.com/Behat/Behat/pull/1573)
+
+### Added
+
+* Add `show_output` formatter option to control if/when to display stdout generated during tests
+  by @carlos-granados in [#1576](https://github.com/Behat/Behat/pull/1576)
+
+### Fixed
+
+* Do not disable xdebug if there is an active debugging connection by @carlos-granados in [#1581](https://github.com/Behat/Behat/pull/1581)
+* Inherit step definition attributes on methods extended from parent Context by @fmatsos in [#1567](https://github.com/Behat/Behat/pull/1567)
+
+### Internal
+
+* Add PHPStan and improve / fix docblock annotations and type-safety within methods to achieve level 3 by
+  @carlos-granados in [#1571](https://github.com/Behat/Behat/pull/1571), [#1573](https://github.com/Behat/Behat/pull/1573)
+  [#1578](https://github.com/Behat/Behat/pull/1578) and by @stof in [#1575](https://github.com/Behat/Behat/pull/1575)
+* Use annotations rather than attributes for step definitions in Behat's own feature suites by @fmatsos in [#1564](https://github.com/Behat/Behat/pull/1564)
+* Remove composer dev dependency on legacy herrera-io/box by @acoulton in [#1580](https://github.com/Behat/Behat/pull/1580)
+* Do not run ci builds if only markdown files have changed by @codisart in [#1582](https://github.com/Behat/Behat/pull/1582)
+
 ## [3.17.0] - 2024-12-18
 
 ### Changed
@@ -1142,6 +1168,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.18.0]: https://github.com/Behat/Behat/compare/v3.17.0...v3.18.0
 [3.17.0]: https://github.com/Behat/Behat/compare/v3.16.0...v3.17.0
 [3.16.0]: https://github.com/Behat/Behat/compare/v3.15.0...v3.16.0
 [3.15.0]: https://github.com/Behat/Behat/compare/v3.14.0...v3.15.0
