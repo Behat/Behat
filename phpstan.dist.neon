@@ -2,9 +2,6 @@ parameters:
     level: 3
     paths:
         - src
-    excludePaths:
-        - src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php
-        - src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php
     ignoreErrors:
         -
             identifier: class.notFound
