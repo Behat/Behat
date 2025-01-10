@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.18.1] - 2025-01-10
+
+### Fixed
+
+* Fix handling of `show_output` option when used with a custom formatter that does not define it by @carlos-granados in
+  [#1587](https://github.com/Behat/Behat/pull/1587)
+
 ## [3.18.0] - 2025-01-09
 
 ### Changed
