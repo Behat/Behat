@@ -5,11 +5,18 @@
 
   Background:
     Given I set the working directory to the "JunitFormat" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option          | value            |
+      | --no-colors     |                  |
+      | --snippets-type | regex            |
+      | --format        | junit            |
+      | --out           | {SYSTEM_TMP_DIR} |
 
-  Scenario: Run a single feature
-    Given I want to run the suite "single_feature"
-    And I set the output folder to the system temp folder
-    And I run "behat --no-colors -f junit --snippets-for=SingleFeatureContext --snippets-type=regex"
+    Scenario: Run a single feature
+    When I run behat with the following additional options:
+      | option         | value                |
+      | --snippets-for | SingleFeatureContext |
+      | --suite        | single_feature       |
     Then it should fail with:
       """
       --- SingleFeatureContext has missing steps. Define them with these snippets:
@@ -49,9 +56,9 @@
     And the temp file "single_feature.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Run multiple Features
-    Given I want to run the suite "multiple_features"
-    And I set the output folder to the system temp folder
-    When I run "behat --no-colors -f junit"
+    When I run behat with the following additional options:
+      | option  | value             |
+      | --suite | multiple_features |
     Then it should pass
     And the temp "multiple_features.xml" file xml should be like:
       """
@@ -68,9 +75,9 @@
     And the temp file "multiple_features.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Confirm multiline scenario titles are printed correctly
-    Given I want to run the suite "multiline_titles"
-    And I set the output folder to the system temp folder
-    When I run "behat --no-colors -f junit"
+    When I run behat with the following additional options:
+      | option  | value            |
+      | --suite | multiline_titles |
     Then it should pass with no output
     And the temp "multiline_titles.xml" file xml should be like:
       """
@@ -85,9 +92,9 @@
     And the temp file "multiline_titles.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Multiple suites
-    Given I want to run the config "two_suites.php"
-    And I set the output folder to the system temp folder
-    When I run "behat --no-colors -f junit"
+    When I run behat with the following additional options:
+      | option   | value          |
+      | --config | two_suites.php |
     Then it should fail with no output
     And the temp "small_kid.xml" file xml should be like:
       """
@@ -114,8 +121,9 @@
 
   Scenario: Report skipped testcases
     Given I want to run the suite "skipped_test_cases"
-    And I set the output folder to the system temp folder
-    When I run "behat --no-colors -f junit"
+    When I run behat with the following additional options:
+      | option  | value              |
+      | --suite | skipped_test_cases |
     And the temp "skipped_test_cases.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
@@ -134,8 +142,9 @@
 
   Scenario: Stop on Failure
     Given I want to run the suite "stop_on_failure"
-    And I set the output folder to the system temp folder
-    When I run "behat --no-colors -f junit"
+    When I run behat with the following additional options:
+      | option  | value           |
+      | --suite | stop_on_failure |
     Then it should fail with no output
     And the temp "stop_on_failure.xml" file xml should be like:
       """
@@ -151,9 +160,9 @@
     And the temp file "stop_on_failure.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Aborting due to PHP error
-    Given I want to run the suite "abort_on_php_error"
-    And I set the output folder to the system temp folder
-    When I run "behat --no-colors -f junit"
+    When I run behat with the following additional options:
+      | option  | value              |
+      | --suite | abort_on_php_error |
     Then it should fail with:
     """
     cannot implement Foo - it is not an interface
@@ -165,7 +174,7 @@
     """
 
   Scenario: Aborting due invalid output path
-    When I run "behat --no-colors -f junit -o behat.php"
+    When I run "behat -o behat.php"
     Then it should fail with:
       """
       Directory expected for the `output_path` option, but a filename was given.

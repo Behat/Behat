@@ -10,6 +10,9 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
+use Behat\Step\When;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -226,12 +229,17 @@ EOL;
         $this->options .= ' --config=' . $config;
     }
 
-    /**
-     * @Given I set the output folder to the system temp folder
-     */
-    public function iSetTheOutputFolderToTheSystemTempFolder(): void
+    #[Given('I provide the following options for all behat invocations:')]
+    public function iProvideTheFollowingOptionsForAllBehatInvocations(TableNode $table): void
     {
-        $this->options .= ' --out=' . $this->tempDir;
+        $this->addBehatOptions($table);
+    }
+
+    #[When('I run behat with the following additional options:')]
+    public function iRunBehatWithTheFollowingAdditionalOptions(TableNode $table): void
+    {
+        $this->addBehatOptions($table);
+        $this->iRunBehat();
     }
 
     /**
@@ -607,6 +615,22 @@ EOL;
             } else {
                 unlink($file);
             }
+        }
+    }
+
+    private function addBehatOptions(TableNode $table): void
+    {
+        $rows = $table->getHash();
+        foreach ($rows as $row) {
+            $option = $row['option'];
+            $value = $row['value'];
+            if ($value !== '') {
+                if ($value === '{SYSTEM_TMP_DIR}') {
+                    $value = $this->tempDir;
+                }
+                $option .= '=' . $value;
+            }
+            $this->options .= ' ' . $option;
         }
     }
 }
