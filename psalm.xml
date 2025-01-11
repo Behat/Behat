@@ -30,47 +30,6 @@
                 <referencedClass name="PHPUnit_Framework_TestFailure" />
             </errorLevel>
         </UndefinedClass>
-
-        <!-- Suppress false positives in Symfony legacy layer -->
-        <ParamNameMismatch>
-            <errorLevel type="suppress">
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
-            </errorLevel>
-        </ParamNameMismatch>
-        <MethodSignatureMismatch>
-            <errorLevel type="suppress">
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
-            </errorLevel>
-        </MethodSignatureMismatch>
-        <InvalidArgument>
-            <errorLevel type="suppress">
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcher.php" />
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
-            </errorLevel>
-        </InvalidArgument>
-        <InvalidMethodCall>
-            <errorLevel type="suppress">
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
-            </errorLevel>
-        </InvalidMethodCall>
-        <InvalidReturnStatement>
-            <errorLevel type="suppress">
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
-            </errorLevel>
-        </InvalidReturnStatement>
-        <InvalidReturnType>
-            <errorLevel type="suppress">
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfony5.php" />
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
-            </errorLevel>
-        </InvalidReturnType>
-        <UndefinedMethod>
-            <errorLevel type="suppress">
-                <file name="src/Behat/Testwork/EventDispatcher/TestworkEventDispatcherSymfonyLegacy.php" />
-            </errorLevel>
-        </UndefinedMethod>
     </issueHandlers>
 
 </psalm>

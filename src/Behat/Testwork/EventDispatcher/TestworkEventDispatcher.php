@@ -42,21 +42,8 @@ final class TestworkEventDispatcher extends EventDispatcher
         );
     }
 
-    public function dispatch($event, $eventName = null): object
+    public function dispatch(object $event, ?string $eventName = null): object
     {
-        if (is_object($event)) {
-            return $this->bcAwareDispatch($event, $eventName);
-        }
-
-        return $this->bcAwareDispatch($eventName, $event);
-    }
-
-    private function bcAwareDispatch(?object $event, $eventName)
-    {
-        if (null === $event) {
-            $event = new Event();
-        }
-
         if (method_exists($event, 'setName')) {
             $event->setName($eventName);
         }
