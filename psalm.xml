@@ -13,15 +13,6 @@
     </projectFiles>
 
     <issueHandlers>
-        <!-- Psalm does not understand classes/interfaces defined inside if (false) {} -->
-        <!-- https://github.com/vimeo/psalm/issues/5750 -->
-        <UnrecognizedStatement>
-            <errorLevel type="suppress">
-                <file name="src/Behat/Behat/HelperContainer/ContainerInterface.php" />
-                <file name="src/Behat/Behat/HelperContainer/Exception/ContainerException.php" />
-                <file name="src/Behat/Behat/HelperContainer/Exception/NotFoundException.php" />
-            </errorLevel>
-        </UnrecognizedStatement>
 
         <!-- Suppress errors related to legacy PHPUnit classes -->
         <UndefinedClass>
