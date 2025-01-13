@@ -26,41 +26,12 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class ScenarioNodeListener implements EventListener
 {
-    /**
-     * @var string
-     */
-    private $beforeEventName;
-    /**
-     * @var string
-     */
-    private $afterEventName;
-    /**
-     * @var ScenarioPrinter
-     */
-    private $scenarioPrinter;
-    /**
-     * @var SetupPrinter
-     */
-    private $setupPrinter;
-
-    /**
-     * Initializes listener.
-     *
-     * @param string            $beforeEventName
-     * @param string            $afterEventName
-     * @param ScenarioPrinter   $scenarioPrinter
-     * @param null|SetupPrinter $setupPrinter
-     */
     public function __construct(
-        $beforeEventName,
-        $afterEventName,
-        ScenarioPrinter $scenarioPrinter,
-        ?SetupPrinter $setupPrinter = null
+        private string $beforeEventName,
+        private string $afterEventName,
+        private ScenarioPrinter $scenarioPrinter,
+        private ?SetupPrinter $setupPrinter = null
     ) {
-        $this->beforeEventName = $beforeEventName;
-        $this->afterEventName = $afterEventName;
-        $this->scenarioPrinter = $scenarioPrinter;
-        $this->setupPrinter = $setupPrinter;
     }
 
     /**

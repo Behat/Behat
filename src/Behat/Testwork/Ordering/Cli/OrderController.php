@@ -28,10 +28,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class OrderController implements Controller
 {
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
      * @var OrderedExercise
      */
     private $exercise;
@@ -41,14 +37,10 @@ final class OrderController implements Controller
     private $orderers = array();
 
     /**
-     * Initializes controller.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param OrderedExercise $exercise
+     * @param EventDispatcherInterface $eventDispatcher deprecated, will be removed in the next major version
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, OrderedExercise $exercise)
     {
-        $this->eventDispatcher = $eventDispatcher;
         $this->exercise = $exercise;
     }
 

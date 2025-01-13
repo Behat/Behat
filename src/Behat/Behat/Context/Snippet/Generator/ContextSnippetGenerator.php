@@ -161,17 +161,18 @@ TPL;
     {
         $usedClasses = [PendingException::class];
 
-        $usedClasses[] = match ($step->getKeywordType()) {
+        $definitionClass = match ($step->getKeywordType()) {
             DefinitionCall\Given::KEYWORD => Given::class,
             DefinitionCall\When::KEYWORD => When::class,
             DefinitionCall\Then::KEYWORD => Then::class,
+            default => null
         };
+        if ($definitionClass) {
+            $usedClasses[] = $definitionClass;
+        }
 
         foreach ($step->getArguments() as $argument) {
-            $usedClasses[] = match (true) {
-                $argument instanceof TableNode => TableNode::class,
-                $argument instanceof PyStringNode => PyStringNode::class,
-            };
+            $usedClasses[] = $argument::class;
         }
 
         return $usedClasses;
