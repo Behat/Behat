@@ -37,10 +37,7 @@ final class OrderController implements Controller
     private $orderers = array();
 
     /**
-     * Initializes controller.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param OrderedExercise $exercise
+     * @param EventDispatcherInterface $eventDispatcher deprecated, will be removed in the next major version
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, OrderedExercise $exercise)
     {

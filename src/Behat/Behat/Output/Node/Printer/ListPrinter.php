@@ -51,12 +51,8 @@ final class ListPrinter
     private $basePath;
 
     /**
-     * Initializes printer.
-     *
-     * @param ResultToStringConverter $resultConverter
-     * @param ExceptionPresenter      $exceptionPresenter
-     * @param TranslatorInterface     $translator
-     * @param string                  $basePath
+     * @param ExceptionPresenter $exceptionPresenter deprecated , will be removed in the next major version
+     * @param string $basePath
      */
     public function __construct(
         ResultToStringConverter $resultConverter,
