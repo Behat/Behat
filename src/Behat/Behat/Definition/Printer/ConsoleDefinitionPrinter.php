@@ -39,12 +39,7 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
     private $keywords;
 
     /**
-     * Initializes printer.
-     *
-     * @param OutputInterface     $output
-     * @param PatternTransformer  $patternTransformer
-     * @param DefinitionTranslator $translator
-     * @param KeywordsInterface   $keywords
+     * @param PatternTransformer $patternTransformer deprecated, will be removed in the next major version
      */
     public function __construct(
         OutputInterface $output,

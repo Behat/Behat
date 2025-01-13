@@ -43,13 +43,7 @@ final class RuntimeFeatureTester implements SpecificationTester
     private $outlineTester;
 
     /**
-     * Initializes tester.
-     *
-     * @param ScenarioTester     $scenarioTester
-     * @param OutlineTester      $outlineTester
-     * @param EnvironmentManager $envManager
-     *
-     * TODO: Remove EnvironmentManager parameter in next major
+     * @param EnvironmentManager $envManager deprecated , will be removed in the next major version
      */
     public function __construct(
         ScenarioTester $scenarioTester,
