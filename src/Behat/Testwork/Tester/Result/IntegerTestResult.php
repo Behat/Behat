@@ -18,14 +18,14 @@ namespace Behat\Testwork\Tester\Result;
 final class IntegerTestResult implements TestResult
 {
     /**
-     * @var integer
+     * @var TestResult::*
      */
     private $resultCode;
 
     /**
      * Initializes test result.
      *
-     * @param integer $resultCode
+     * @param TestResult::* $resultCode
      */
     public function __construct($resultCode)
     {
@@ -41,7 +41,7 @@ final class IntegerTestResult implements TestResult
     }
 
     /**
-     * {@inheritdoc}
+     * @return TestResult::*
      */
     public function getResultCode()
     {

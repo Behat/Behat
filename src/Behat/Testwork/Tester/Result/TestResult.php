@@ -33,7 +33,7 @@ interface TestResult
     /**
      * Returns tester result code.
      *
-     * @return integer
+     * @return TestResult::*|TestResults::NO_TESTS
      */
     public function getResultCode();
 }

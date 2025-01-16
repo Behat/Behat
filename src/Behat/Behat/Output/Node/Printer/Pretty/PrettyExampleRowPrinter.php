@@ -130,7 +130,9 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     private function printStepExceptionsAndStdOut(OutputPrinter $printer, array $events)
     {
         foreach ($events as $event) {
-            $this->printStepStdOut($printer, $event->getTestResult());
+            $stepResult = $event->getTestResult();
+            assert($stepResult instanceof StepResult);
+            $this->printStepStdOut($printer, $stepResult);
             $this->printStepException($printer, $event);
         }
     }

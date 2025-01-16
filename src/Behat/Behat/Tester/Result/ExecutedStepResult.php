@@ -88,7 +88,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
     }
 
     /**
-     * {@inheritdoc}
+     * @return self::PENDING | self::FAILED | self::PASSED
      */
     public function getResultCode()
     {

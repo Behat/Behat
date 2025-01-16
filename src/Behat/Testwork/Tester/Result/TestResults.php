@@ -49,7 +49,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * @return TestResult::*|TestResults::NO_TESTS
      */
     public function getResultCode()
     {

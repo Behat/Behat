@@ -20,6 +20,8 @@ use Behat\Testwork\Environment\Environment;
  * Enhances environment call with definition information.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @method Definition getCallee()
  */
 final class DefinitionCall extends EnvironmentCall
 {

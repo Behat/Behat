@@ -61,7 +61,7 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
     }
 
     /**
-     * {@inheritdoc}
+     * @return self::FAILED
      */
     public function getResultCode()
     {

@@ -41,6 +41,7 @@ abstract class ClassNotFoundHandler implements ExceptionHandler
      */
     final public function handleException($exception)
     {
+        assert($exception instanceof Error);
         $this->handleNonExistentClass($this->extractNonExistentClass($exception));
 
         return $exception;

@@ -61,7 +61,7 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
     }
 
     /**
-     * {@inheritdoc}
+     * @return self::SKIPPED
      */
     public function getResultCode()
     {
