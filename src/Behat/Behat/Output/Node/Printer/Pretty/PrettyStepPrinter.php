@@ -111,7 +111,7 @@ final class PrettyStepPrinter implements StepPrinter
      */
     private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result)
     {
-        if ($result && $result instanceof DefinedStepResult && $result->getStepDefinition()) {
+        if ($result instanceof DefinedStepResult && $result->getStepDefinition()) {
             $definition = $result->getStepDefinition();
             $stepText = $this->textPainter->paintText($stepText, $definition, $result);
         }

@@ -50,9 +50,7 @@ final class PrettyFeaturePrinter implements FeaturePrinter
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature)
     {
-        if ($feature instanceof TaggedNodeInterface) {
-            $this->printTags($formatter->getOutputPrinter(), $feature->getTags());
-        }
+        $this->printTags($formatter->getOutputPrinter(), $feature->getTags());
 
         $this->printTitle($formatter->getOutputPrinter(), $feature);
         $this->printDescription($formatter->getOutputPrinter(), $feature);

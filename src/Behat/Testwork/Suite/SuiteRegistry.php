@@ -98,15 +98,9 @@ final class SuiteRegistry implements SuiteRepository
     /**
      * Generates suite using registered generators.
      *
-     * @param string $name
-     * @param string $type
-     * @param array  $settings
-     *
-     * @return Suite
-     *
      * @throws SuiteGenerationException If no appropriate generator found
      */
-    private function generateSuite($name, $type, array $settings)
+    private function generateSuite(string $name, ?string $type, array $settings): Suite
     {
         foreach ($this->generators as $generator) {
             if (!$generator->supportsTypeAndSettings($type, $settings)) {

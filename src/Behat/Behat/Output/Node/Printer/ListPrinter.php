@@ -42,10 +42,6 @@ final class ListPrinter
      */
     private $resultConverter;
     /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-    /**
      * @var TranslatorInterface
      */
     private $translator;
@@ -55,12 +51,8 @@ final class ListPrinter
     private $basePath;
 
     /**
-     * Initializes printer.
-     *
-     * @param ResultToStringConverter $resultConverter
-     * @param ExceptionPresenter      $exceptionPresenter
-     * @param TranslatorInterface     $translator
-     * @param string                  $basePath
+     * @param ExceptionPresenter $exceptionPresenter deprecated , will be removed in the next major version
+     * @param string $basePath
      */
     public function __construct(
         ResultToStringConverter $resultConverter,
@@ -69,7 +61,6 @@ final class ListPrinter
         $basePath
     ) {
         $this->resultConverter = $resultConverter;
-        $this->exceptionPresenter = $exceptionPresenter;
         $this->translator = $translator;
         $this->basePath = $basePath;
     }
@@ -316,7 +307,8 @@ final class ListPrinter
                     ':' . $scope->getScenario()->getLine(),
                 $scope instanceof BeforeStepScope, $scope instanceof AfterStepScope =>
                     $this->relativizePaths($scope->getFeature()->getFile()) .
-                    ':' . $scope->getStep()->getLine()
+                    ':' . $scope->getStep()->getLine(),
+                default => null
             };
         }
         return null;
