@@ -9,8 +9,10 @@
  */
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
+use Behat\Step\When;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -39,6 +41,10 @@ class FeatureContext implements Context
     /**
      * @var string
      */
+    private $tempDir;
+    /**
+     * @var string
+     */
     private $options = '--format-settings=\'{"timer": false}\' --no-interaction';
     /**
      * @var array
@@ -48,6 +54,8 @@ class FeatureContext implements Context
      * @var string
      */
     private $answerString;
+
+    private bool $workingDirChanged = false;
 
     /**
      * Cleans test folders in the temporary directory.
@@ -73,13 +81,13 @@ class FeatureContext implements Context
             md5(microtime() . rand(0, 10000));
 
         mkdir($dir . '/features/bootstrap/i18n', 0777, true);
-        mkdir($dir . '/junit');
 
         $phpFinder = new PhpExecutableFinder();
         if (false === $php = $phpFinder->find()) {
             throw new \RuntimeException('Unable to find the PHP executable.');
         }
         $this->workingDir = $dir;
+        $this->tempDir = $dir;
         $this->phpBin = $php;
     }
 
@@ -189,6 +197,33 @@ EOL;
     public function iSetBehatParamsEnvironmentVariable(PyStringNode $value)
     {
         $this->env = array('BEHAT_PARAMS' => (string) $value);
+    }
+
+    /**
+     * @When I set the working directory to the :dir fixtures folder
+     */
+    public function iSetTheWorkingDirectoryToTheFixturesFolder($dir): void
+    {
+        $basePath = dirname(__DIR__, 2) . '/tests/Fixtures/';
+        $dir = $basePath . $dir;
+        if (!is_dir($dir)) {
+            throw new RuntimeException(sprintf('The directory "%s" does not exist', $dir));
+        }
+        $this->workingDir = $dir; ;
+        $this->workingDirChanged = true;
+    }
+
+    #[Given('I provide the following options for all behat invocations:')]
+    public function iProvideTheFollowingOptionsForAllBehatInvocations(TableNode $table): void
+    {
+        $this->addBehatOptions($table);
+    }
+
+    #[When('I run behat with the following additional options:')]
+    public function iRunBehatWithTheFollowingAdditionalOptions(TableNode $table): void
+    {
+        $this->addBehatOptions($table);
+        $this->iRunBehat();
     }
 
     /**
@@ -333,7 +368,7 @@ EOL;
     /**
      * Checks whether specified content and structure of the xml is correct without worrying about layout.
      *
-     * @Then /^"([^"]*)" file xml should be like:$/
+     * @Then /^(?:the\s)?"([^"]*)" file xml should be like:$/
      *
      * @param string       $path file path
      * @param PyStringNode $text file content
@@ -341,6 +376,20 @@ EOL;
     public function fileXmlShouldBeLike($path, PyStringNode $text)
     {
         $path = $this->workingDir . '/' . $path;
+        $this->checkXmlFileContents($path, $text);
+    }
+
+    /**
+     * @Then the temp :path file xml should be like:
+     */
+    public function theTempFileFileXmlShouldBeLike($path, PyStringNode $text): void
+    {
+        $path = $this->tempDir . '/' . $path;
+        $this->checkXmlFileContents($path, $text);
+    }
+
+    private function checkXmlFileContents($path, PyStringNode $text)
+    {
         Assert::assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
@@ -356,7 +405,6 @@ EOL;
 
         Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
     }
-
 
     /**
      * Checks whether last command output contains provided string.
@@ -444,8 +492,23 @@ EOL;
      */
     public function xmlShouldBeValid($xmlFile, $schemaPath)
     {
+        $path = $this->workingDir . '/' . $xmlFile;
+        $this->checkXmlIsValid($path, $schemaPath);
+    }
+
+    /**
+     * @Then the temp file :xmlFile should be a valid document according to :schemaPath
+     */
+    public function theTempFileShouldBeAValidDocumentAccordingTo($xmlFile, $schemaPath): void
+    {
+        $path = $this->tempDir . '/' . $xmlFile;
+        $this->checkXmlIsValid($path, $schemaPath);
+    }
+
+    private function checkXmlIsValid(string $xmlFile, string $schemaPath): void
+    {
         $dom = new DomDocument();
-        $dom->load($this->workingDir . '/' . $xmlFile);
+        $dom->load($xmlFile);
 
         $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);
     }
@@ -479,6 +542,9 @@ EOL;
 
     private function createFile($filename, $content)
     {
+        if ($this->workingDirChanged) {
+            throw new RuntimeException('Trying to write a file in a fixtures folder');
+        }
         $path = dirname($filename);
         $this->createDirectory($path);
 
@@ -501,7 +567,7 @@ EOL;
 
         $this->workingDir = $newWorkingDir;
     }
-    
+
     /**
      * @param 'fail'|'pass' $success
      */
@@ -516,7 +582,7 @@ EOL;
     private function getOutputDiff(PyStringNode $expectedText): string
     {
         $differ = new Differ(new DiffOnlyOutputBuilder());
-        
+
         return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput());
     }
 
@@ -534,7 +600,21 @@ EOL;
                 unlink($file);
             }
         }
+    }
 
-        rmdir($path);
+    private function addBehatOptions(TableNode $table): void
+    {
+        $rows = $table->getHash();
+        foreach ($rows as $row) {
+            $option = $row['option'];
+            $value = $row['value'];
+            if ($value !== '') {
+                if ($value === '{SYSTEM_TMP_DIR}') {
+                    $value = $this->tempDir;
+                }
+                $option .= '=' . $value;
+            }
+            $this->options .= ' ' . $option;
+        }
     }
 }
