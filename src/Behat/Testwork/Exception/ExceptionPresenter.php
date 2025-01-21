@@ -10,10 +10,12 @@
 
 namespace Behat\Testwork\Exception;
 
+use Behat\Testwork\Call\Exception\FatalThrowableError;
 use Behat\Testwork\Exception\Stringer\ExceptionStringer;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Exception;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Presents exceptions as strings using registered stringers.
@@ -78,15 +80,14 @@ final class ExceptionPresenter
 
     /**
      * Presents exception as a string.
-     *
-     * @param Exception $exception
-     * @param integer   $verbosity
-     *
-     * @return string
      */
-    public function presentException(Exception $exception, $verbosity = null)
+    public function presentException(Throwable $exception, ?int $verbosity = null): string
     {
         $verbosity = $verbosity ?: $this->defaultVerbosity;
+
+        if (!$exception instanceof Exception) {
+            $exception = new FatalThrowableError($exception);
+        }
 
         foreach ($this->stringers as $stringer) {
             if ($stringer->supportsException($exception)) {

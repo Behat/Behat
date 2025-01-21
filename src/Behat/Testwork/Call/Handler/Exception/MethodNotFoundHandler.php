@@ -41,6 +41,7 @@ abstract class MethodNotFoundHandler implements ExceptionHandler
      */
     final public function handleException($exception)
     {
+        assert($exception instanceof Error);
         $this->handleNonExistentMethod($this->extractNonExistentCallable($exception));
 
         return $exception;

@@ -26,7 +26,7 @@ final class UndefinedStepResult implements StepResult
     }
 
     /**
-     * {@inheritdoc}
+     * @return self::UNDEFINED
      */
     public function getResultCode()
     {

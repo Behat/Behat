@@ -152,15 +152,6 @@ final class ServicesResolver implements CallFilter
     {
         $definition = $call->getCallee();
 
-        if (!$definition instanceof Definition) {
-            throw new UnsupportedCallException(
-                sprintf(
-                    'Something is wrong in callee associated with `%s` call.',
-                    get_class($call)
-                ), $call
-            );
-        }
-
         return new DefinitionCall(
             $call->getEnvironment(),
             $call->getFeature(),
