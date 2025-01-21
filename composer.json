@@ -30,6 +30,7 @@
     },
 
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.68",
         "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^9.6",
         "sebastian/diff": "^4.0",
@@ -66,6 +67,7 @@
 
     "scripts": {
         "all-tests": [
+            "@cs",
             "@behat-progress",
             "@phpunit",
             "@phpstan"
@@ -73,7 +75,9 @@
         "behat": "LANG=C bin/behat  --rerun",
         "behat-progress": "LANG=C bin/behat --format=progress",
         "phpstan": "phpstan",
-        "phpunit": "phpunit"
+        "phpunit": "phpunit",
+        "cs": "php-cs-fixer fix --dry-run --verbose --diff",
+        "cs-fix": "php-cs-fixer fix"
     },
 
     "bin": ["bin/behat"]
