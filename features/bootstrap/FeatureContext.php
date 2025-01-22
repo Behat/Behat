@@ -209,7 +209,7 @@ EOL;
         if (!is_dir($dir)) {
             throw new RuntimeException(sprintf('The directory "%s" does not exist', $dir));
         }
-        $this->workingDir = $dir; ;
+        $this->workingDir = $dir;
         $this->workingDirChanged = true;
     }
 

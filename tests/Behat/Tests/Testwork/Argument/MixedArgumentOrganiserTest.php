@@ -59,7 +59,7 @@ final class MixedArgumentOrganiserTest extends TestCase
     }
 
    public function testThatItMatchesArgsByType(): void
-    {
+   {
         $r = new ReflectionFunction(
             static function (\DateTimeInterface $d) {}
         );

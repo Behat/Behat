@@ -118,7 +118,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
 
     private function addAttributesToNode(\DOMElement $node, array $attributes)
     {
-        foreach ($attributes as $name => $value){
+        foreach ($attributes as $name => $value) {
             $node->setAttribute($name, $value ?? '');
         }
     }
@@ -145,7 +145,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function flush()
     {
-        if ($this->domDocument instanceof \DOMDocument){
+        if ($this->domDocument instanceof \DOMDocument) {
             try {
                 $this->getWritingStream()->write(
                     $this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG),
