@@ -24,6 +24,8 @@ use Psr\Container\ContainerInterface;
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template T of Context
  */
 final class InitializedContextEnvironment implements ContextEnvironment, ServiceContainerEnvironment
 {
@@ -35,8 +37,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
     private ?ContainerInterface $serviceContainer = null;
 
     /**
-     * @var array<class-string<Context>, Context>
-     * @psalm-var class-string-map<T as Context, T>
+     * @var array<class-string<T>, T>
      */
     private $contexts = array();
 
@@ -86,7 +87,6 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
 
     /**
      * {@inheritdoc}
-     * @psalm-suppress InvalidReturnStatement, InvalidReturnType
      */
     public function getContextClasses()
     {
@@ -105,7 +105,6 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      * Returns list of registered context instances.
      *
      * @return list<Context>
-     * @psalm-suppress InvalidReturnStatement, InvalidReturnType
      */
     public function getContexts()
     {
@@ -114,8 +113,6 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
 
     /**
      * Returns registered context by its class name.
-     *
-     * @template T of Context
      *
      * @param class-string<T> $class
      *

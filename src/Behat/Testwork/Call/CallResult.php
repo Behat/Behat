@@ -75,8 +75,8 @@ final class CallResult
     /**
      * Check if call thrown exception.
      *
-     * @psalm-assert-if-true Exception $this->exception
-     * @psalm-assert-if-true Exception $this->getException()
+     * @phpstan-assert-if-true Exception $this->exception
+     * @phpstan-assert-if-true Exception $this->getException()
      *
      * @return bool
      */
