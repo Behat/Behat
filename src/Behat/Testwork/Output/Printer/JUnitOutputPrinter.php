@@ -145,7 +145,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function flush()
     {
-        if($this->domDocument instanceof \DOMDocument){
+        if ($this->domDocument instanceof \DOMDocument){
             try {
                 $this->getWritingStream()->write(
                     $this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG),

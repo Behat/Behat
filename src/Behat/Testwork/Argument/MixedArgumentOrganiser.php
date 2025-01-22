@@ -136,8 +136,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      */
     private function isValueMatchesTypehintedParameter($value, ReflectionParameter $parameter) : bool
     {
-        foreach($this->getReflectionClassesFromParameter($parameter) as $typehintRefl) {
-            if($typehintRefl->isInstance($value)) {
+        foreach ($this->getReflectionClassesFromParameter($parameter) as $typehintRefl) {
+            if ($typehintRefl->isInstance($value)) {
                 return true;
             }
         }
@@ -221,7 +221,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     private function filterApplicableTypehintedParameters(array $parameters) : array
     {
         return array_filter($parameters,
-            function($parameter, $num) {
+            function ($parameter, $num) {
                 return !$this->isArgumentDefined($num)
                 && $this->getReflectionClassesFromParameter($parameter);
             },
@@ -245,11 +245,9 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         if ($type instanceof ReflectionNamedType) {
             $types = [$type];
-        }
-        elseif ($type instanceof ReflectionUnionType) {
+        } elseif ($type instanceof ReflectionUnionType) {
             $types = $type->getTypes();
-        }
-        else {
+        } else {
             $types = [];
         }
 
@@ -319,7 +317,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         $predicate
     ) {
         foreach ($candidates as $candidateIndex => $candidate) {
-            foreach($this->getReflectionClassesFromParameter($parameter) as $class) {
+            foreach ($this->getReflectionClassesFromParameter($parameter) as $class) {
                 if ($predicate($class, $candidate)) {
                     $num = $parameter->getPosition();
 

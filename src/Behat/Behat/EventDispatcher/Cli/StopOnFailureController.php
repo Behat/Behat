@@ -32,7 +32,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Stops tests on first scenario failure.
- * 
+ *
  * TODO this should be moved in the Behat\Testwork\Tester\Cli namespace
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>

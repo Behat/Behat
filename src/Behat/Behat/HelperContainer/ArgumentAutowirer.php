@@ -97,8 +97,7 @@ final class ArgumentAutowirer
 
             if ($typeString == 'self') {
                 return $parameter->getDeclaringClass()->getName();
-            }
-            elseif ($typeString == 'parent') {
+            } elseif ($typeString == 'parent') {
                 return $parameter->getDeclaringClass()->getParentClass()->getName();
             }
 

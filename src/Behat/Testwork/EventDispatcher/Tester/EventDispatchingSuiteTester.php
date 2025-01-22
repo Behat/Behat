@@ -75,13 +75,13 @@ final class EventDispatchingSuiteTester implements SuiteTester
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         $event = new BeforeSuiteTeardown($env, $iterator, $result);
-        $this->eventDispatcher->dispatch( $event, $event::BEFORE_TEARDOWN);
+        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);
 
         $event = new AfterSuiteTested($env, $iterator, $result, $teardown);
 
-        $this->eventDispatcher->dispatch( $event, $event::AFTER);
+        $this->eventDispatcher->dispatch($event, $event::AFTER);
 
         return $teardown;
     }
