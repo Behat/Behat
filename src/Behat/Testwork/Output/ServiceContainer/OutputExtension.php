@@ -107,7 +107,7 @@ final class OutputExtension implements Extension
                         return array_merge($a, array('enabled' => true));
                     })
                 ->end()
-            ;
+        ;
         assert($builder instanceof ArrayNodeDefinition);
         $builder
                 ->useAttributeAsKey('name')

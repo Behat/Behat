@@ -102,7 +102,7 @@ final class SuiteExtension implements Extension
                         return $suite;
                     })
                 ->end()
-            ;
+        ;
         assert($builder instanceof ArrayNodeDefinition);
         $childrenBuilder = $builder
                 ->normalizeKeys(false)

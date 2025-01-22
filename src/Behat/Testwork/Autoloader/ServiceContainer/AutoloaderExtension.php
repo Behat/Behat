@@ -78,7 +78,7 @@ final class AutoloaderExtension implements Extension
             ->treatTrueLike($this->defaultPaths)
             ->treatNullLike(array())
             ->treatFalseLike(array())
-            ;
+        ;
         assert($builder instanceof ArrayNodeDefinition);
         $builder
             ->prototype('scalar')->end()

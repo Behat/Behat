@@ -58,8 +58,8 @@ final class MixedArgumentOrganiserTest extends TestCase
         $this->assertSame(['date' => $date], $organised);
     }
 
-   public function testThatItMatchesArgsByType(): void
-   {
+    public function testThatItMatchesArgsByType(): void
+    {
         $r = new ReflectionFunction(
             static function (\DateTimeInterface $d) {}
         );
