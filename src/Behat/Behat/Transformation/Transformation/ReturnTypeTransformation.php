@@ -148,7 +148,8 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     private function getParameterClassNameByIndex(DefinitionCall $definitionCall, $argumentIndex)
     {
         $parameters = array_filter(
-            array_filter($this->getCallParameters($definitionCall),
+            array_filter(
+                $this->getCallParameters($definitionCall),
                 $this->hasIndex($argumentIndex)
             ),
             $this->getClassReflection()

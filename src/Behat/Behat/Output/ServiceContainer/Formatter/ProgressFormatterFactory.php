@@ -144,7 +144,9 @@ class ProgressFormatterFactory implements FormatterFactory
             'Prints one character per step.',
             ProgressFormatter::defaults(),
             $this->createOutputPrinterDefinition(),
-            new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
+            new Definition(
+                'Behat\Testwork\Output\Node\EventListener\ChainEventListener',
+                array(
                     array(
                         new Reference(self::ROOT_LISTENER_ID),
                         new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StatisticsListener', array(

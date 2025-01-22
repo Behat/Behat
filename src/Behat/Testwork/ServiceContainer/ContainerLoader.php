@@ -148,7 +148,8 @@ final class ContainerLoader
         foreach ($config as $extensionConfigKey => $extensionConfig) {
             if (null === $extension = $this->extensionManager->getExtension($extensionConfigKey)) {
                 throw new ExtensionException(
-                    sprintf('None of the activated extensions use `%s` config section.', $extensionConfigKey), $extensionConfigKey
+                    sprintf('None of the activated extensions use `%s` config section.', $extensionConfigKey),
+                    $extensionConfigKey
                 );
             }
 

@@ -68,7 +68,10 @@ final class StopOnFailureController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption('--stop-on-failure', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--stop-on-failure',
+            null,
+            InputOption::VALUE_NONE,
             'Stop processing on first failed scenario.'
         );
     }

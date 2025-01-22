@@ -156,7 +156,9 @@ final class PrettyStepPrinter implements StepPrinter
 
         $pad = function ($line) use ($indentedText) {
             return sprintf(
-                '%s│ {+stdout}%s{-stdout}', $indentedText, $line
+                '%s│ {+stdout}%s{-stdout}',
+                $indentedText,
+                $line
             );
         };
 

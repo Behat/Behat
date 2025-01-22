@@ -51,7 +51,10 @@ final class OrderController implements Controller
      */
     public function configure(SymfonyCommand $command)
     {
-        $command->addOption('--order', null, InputOption::VALUE_REQUIRED,
+        $command->addOption(
+            '--order',
+            null,
+            InputOption::VALUE_REQUIRED,
             'Set an order in which to execute the specifications (this will result in slower feedback).'
         );
     }

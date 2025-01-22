@@ -47,19 +47,25 @@ class OutputController implements Controller
     {
         $command
             ->addOption(
-                '--format', '-f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                '--format',
+                '-f',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'How to format tests output. <comment>pretty</comment> is default.' . PHP_EOL .
                 'Available formats are:' . PHP_EOL . $this->getFormatterDescriptions() .
                 'You can use multiple formats at the same time.'
             )
             ->addOption(
-                '--out', '-o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                '--out',
+                '-o',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Write format output to a file/directory instead of' . PHP_EOL .
                 'STDOUT <comment>(output_path)</comment>. You can also provide different' . PHP_EOL .
                 'outputs to multiple formats. This option is mandatory for the junit formatter.'
             )
             ->addOption(
-                '--format-settings', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                '--format-settings',
+                null,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Set formatters parameters using json object.' . PHP_EOL .
                 'Keys are parameter names, values are values.'
             );
@@ -199,7 +205,8 @@ class OutputController implements Controller
     private function isAbsolutePath($file)
     {
         if ($file[0] == '/' || $file[0] == '\\'
-            || (strlen($file) > 3 && ctype_alpha($file[0])
+            || (
+                strlen($file) > 3 && ctype_alpha($file[0])
                 && $file[1] == ':'
                 && ($file[2] == '\\' || $file[2] == '/')
             )
@@ -226,7 +233,8 @@ class OutputController implements Controller
                     $comment .= $formatter->getDescription();
 
                     return $comment;
-                }, $this->manager->getFormatters()
+                },
+                $this->manager->getFormatters()
             )
         ) . PHP_EOL;
     }

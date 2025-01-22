@@ -106,7 +106,8 @@ final class ProgressStepPrinter implements StepPrinter
         $callResult = $result->getCallResult();
         $pad = function ($line) {
             return sprintf(
-                '  | {+stdout}%s{-stdout}', $line
+                '  | {+stdout}%s{-stdout}',
+                $line
             );
         };
 

@@ -87,14 +87,20 @@ final class ExerciseController implements Controller
         $locatorsExamples = implode(PHP_EOL, array_map(
             function ($locator) {
                 return '- ' . $locator;
-            }, $this->specificationFinder->getExampleLocators()
+            },
+            $this->specificationFinder->getExampleLocators()
         ));
 
         $command
-            ->addArgument('paths', InputArgument::OPTIONAL,
+            ->addArgument(
+                'paths',
+                InputArgument::OPTIONAL,
                 'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples
             )
-            ->addOption('--dry-run', null, InputOption::VALUE_NONE,
+            ->addOption(
+                '--dry-run',
+                null,
+                InputOption::VALUE_NONE,
                 'Invokes formatters without executing the tests and hooks.'
             );
     }

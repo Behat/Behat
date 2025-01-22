@@ -220,7 +220,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      */
     private function filterApplicableTypehintedParameters(array $parameters) : array
     {
-        return array_filter($parameters,
+        return array_filter(
+            $parameters,
             function ($parameter, $num) {
                 return !$this->isArgumentDefined($num)
                 && $this->getReflectionClassesFromParameter($parameter);

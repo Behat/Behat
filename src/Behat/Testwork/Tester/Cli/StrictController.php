@@ -48,7 +48,10 @@ final class StrictController implements Controller
 
     public function configure(Command $command)
     {
-        $command->addOption('--strict', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--strict',
+            null,
+            InputOption::VALUE_NONE,
             'Passes only if all tests are explicitly passing.'
         );
     }

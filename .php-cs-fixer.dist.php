@@ -19,7 +19,7 @@ return (new PhpCsFixer\Config())
 //        'indentation_type' => true,
 //        'line_ending' => true,
 //        'lowercase_keywords' => true,
-//        'method_argument_space' => ['attribute_placement' => 'ignore', 'on_multiline' => 'ensure_fully_multiline'],
+        'method_argument_space' => ['attribute_placement' => 'ignore', 'on_multiline' => 'ensure_fully_multiline'],
 //        'no_break_comment' => true,
 //        'no_closing_tag' => true,
 //        'no_multiple_statements_per_line' => true,

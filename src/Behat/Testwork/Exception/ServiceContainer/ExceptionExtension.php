@@ -77,7 +77,8 @@ final class ExceptionExtension implements Extension
             ->children()
                 ->scalarNode('verbosity')
                     ->info('Output verbosity')
-                    ->example(sprintf('%d, %d, %d, %d',
+                    ->example(sprintf(
+                        '%d, %d, %d, %d',
                         OutputPrinter::VERBOSITY_NORMAL,
                         OutputPrinter::VERBOSITY_VERBOSE,
                         OutputPrinter::VERBOSITY_VERY_VERBOSE,

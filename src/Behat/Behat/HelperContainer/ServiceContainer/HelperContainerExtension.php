@@ -98,7 +98,8 @@ final class HelperContainerExtension implements Extension
         foreach ($references as $reference) {
             if ($container->getDefinition((string) $reference)->isShared()) {
                 throw new WrongServicesConfigurationException(sprintf(
-                    'Container services must not be configured as shared, but `@%s` is.', $reference
+                    'Container services must not be configured as shared, but `@%s` is.',
+                    $reference
                 ));
             }
         }

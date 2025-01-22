@@ -48,7 +48,8 @@ final class ContextReaderCachedPerContext implements ContextReader
         }
 
         return $this->cachedCallees[$contextClass] = $this->childReader->readContextCallees(
-            $environment, $contextClass
+            $environment,
+            $contextClass
         );
     }
 }

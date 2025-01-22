@@ -51,7 +51,10 @@ final class InitializationController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption('--init', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--init',
+            null,
+            InputOption::VALUE_NONE,
             'Initialize all registered test suites.'
         );
     }
