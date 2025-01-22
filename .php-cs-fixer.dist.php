@@ -36,6 +36,6 @@ return (new PhpCsFixer\Config())
         'statement_indentation' => true,
 //        'switch_case_semicolon_to_colon' => true,
         'switch_case_space' => true,
-//        'visibility_required' => ['elements' => ['method', 'property']]
+        'visibility_required' => ['elements' => ['method', 'property']]
     ])
     ->setFinder($finder);
