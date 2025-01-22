@@ -24,8 +24,6 @@ use Psr\Container\ContainerInterface;
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @template T of Context
  */
 final class InitializedContextEnvironment implements ContextEnvironment, ServiceContainerEnvironment
 {
@@ -37,7 +35,9 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
     private ?ContainerInterface $serviceContainer = null;
 
     /**
-     * @var array<class-string<T>, T>
+     * @var array<class-string<Context>, Context>
+     *
+     * TODO use a class-string-map type to have an accurate type once https://github.com/phpstan/phpstan/issues/9521 is implemented
      */
     private $contexts = array();
 
@@ -113,6 +113,8 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
 
     /**
      * Returns registered context by its class name.
+     *
+     * @template T of Context
      *
      * @param class-string<T> $class
      *
