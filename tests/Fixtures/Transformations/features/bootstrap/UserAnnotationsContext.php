@@ -7,6 +7,8 @@ class UserAnnotationsContext implements Context
 {
     private User $user;
 
+    private int $totalAge;
+
     /**
      * @Given /I am (".*" user)/
      * @Given I am user:
@@ -14,6 +16,38 @@ class UserAnnotationsContext implements Context
      */
     public function iAmUser(User $user): void {
         $this->user = $user;
+    }
+
+    /**
+     * @Given I am a user with this age:
+     */
+    public function iAmAUserWithAge(array $data): void {
+        $this->user = $data[0]['user'];
+        $this->user->setAge($data[0]['age']);
+    }
+
+    /**
+     * @Given I am a Russian user with this age:
+     */
+    public function iAmARussianUserWithAgeIn(array $data): void {
+        $this->user = $data[0]['логин'];
+        $this->user->setAge($data[0]['age']);
+    }
+
+    /**
+     * @Given I am a user with this hex age:
+     */
+    public function iAmAUserWithHexAge(array $data): void {
+        $this->user = $data[0]['user'];
+        $this->user->setAge($data[0]['hex age']);
+    }
+
+    /**
+     * @Given I have two users and I add their ages
+     */
+    public function addTwoUsersAges(array $data): void {
+        $this->totalAge = $data[0]['user']->getAge();
+        $this->totalAge += $data[0]['other user']->getAge();
     }
 
     /**
@@ -29,6 +63,13 @@ class UserAnnotationsContext implements Context
     public function ageMustBe(int $age): void {
         Assert::assertEquals($age, $this->user->getAge());
         Assert::assertIsInt($age);
+    }
+
+    /**
+     * @Then /total age must be (\d+)/
+     */
+    public function totalAgeMustBe(int $age): void {
+        Assert::assertEquals($age, $this->totalAge);
     }
 
     /**

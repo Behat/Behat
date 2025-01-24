@@ -71,6 +71,15 @@ return (new Config())
                 'UserAnnotationsContext'
             )
         )
+        ->withSuite((new Suite('table_column_argument_transformation'))
+            ->withPaths(
+                'features/table_column_argument_transformation.feature'
+            )
+            ->withContexts(
+                'TransformationAnnotationsContext',
+                'UserAnnotationsContext'
+            )
+        )
         ->withSuite((new Suite('whole_table_argument_transformation'))
             ->withPaths(
                 'features/whole_table_argument_transformation.feature'

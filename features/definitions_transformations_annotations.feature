@@ -29,10 +29,10 @@ Feature: Step Arguments Transformations Annotations
       | --suite        | table_argument_transformation |
     Then it should pass with:
       """
-      ......
+      ............
 
-      3 scenarios (3 passed)
-      9 steps (9 passed)
+      4 scenarios (4 passed)
+      12 steps (12 passed)
       """
 
   Scenario: Row Table Arguments Transformations
@@ -41,10 +41,10 @@ Feature: Step Arguments Transformations Annotations
       | --suite        | row_table_argument_transformation |
     Then it should pass with:
       """
-      ......
+      ............
 
-      3 scenarios (3 passed)
-      9 steps (9 passed)
+      4 scenarios (4 passed)
+      12 steps (12 passed)
       """
 
   Scenario: Table Row Arguments Transformations
@@ -53,10 +53,22 @@ Feature: Step Arguments Transformations Annotations
       | --suite        | table_row_argument_transformation |
     Then it should pass with:
       """
-      ....
+      ......
 
-      2 scenarios (2 passed)
-      4 steps (4 passed)
+      3 scenarios (3 passed)
+      6 steps (6 passed)
+      """
+
+  Scenario: Table Column Arguments Transformations
+    When I run behat with the following additional options:
+      | option         | value                                |
+      | --suite        | table_column_argument_transformation |
+    Then it should pass with:
+      """
+      ...........
+
+      4 scenarios (4 passed)
+      11 steps (11 passed)
       """
 
   Scenario: Whole table transformation

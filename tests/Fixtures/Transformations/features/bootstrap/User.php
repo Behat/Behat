@@ -13,6 +13,11 @@ class User
         return $this->username;
     }
 
+    public function setAge(int $age): void
+    {
+        $this->age = $age;
+    }
+
     public function getAge(): int
     {
         return $this->age;
