@@ -57,6 +57,11 @@ final class DefinitionTranslator
         return $definition;
     }
 
+    public function translateInfoText(string $infoText, array $parameters): string
+    {
+        return $this->translator->trans($infoText, $parameters, 'output');
+    }
+
     public function getLocale()
     {
         return $this->translator->getLocale();

@@ -11,6 +11,7 @@
 namespace Behat\Behat\Tester\Runtime;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Definition\Call\RuntimeDefinition;
 use Behat\Behat\Definition\DefinitionFinder;
 use Behat\Behat\Definition\Exception\SearchException;
 use Behat\Behat\Definition\SearchResult;
@@ -115,6 +116,11 @@ final class RuntimeStepTester implements StepTester
     {
         if (!$search->hasMatch()) {
             return new UndefinedStepResult();
+        }
+
+        $definition = $search->getMatchedDefinition();
+        if ($definition instanceof RuntimeDefinition) {
+            $definition->markAsUsed();
         }
 
         if ($skip) {

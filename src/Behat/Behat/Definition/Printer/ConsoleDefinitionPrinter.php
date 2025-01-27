@@ -67,8 +67,11 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      *
      * @param string $text
      */
-    final protected function write($text)
+    final protected function write($text, bool $addEmptyLine = false)
     {
+        if ($addEmptyLine) {
+            $this->output->writeln('');
+        }
         $this->output->writeln($text);
         $this->output->writeln('');
     }
@@ -99,6 +102,11 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
     final protected function translateDefinition(Suite $suite, Definition $definition)
     {
         return $this->translator->translateDefinition($suite, $definition);
+    }
+
+    final protected function translateInfoText(string $infoText, array $parameters): string
+    {
+        return $this->translator->translateInfoText($infoText, $parameters);
     }
 
     /**
