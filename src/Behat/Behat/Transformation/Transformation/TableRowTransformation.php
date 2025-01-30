@@ -25,7 +25,7 @@ use ReflectionMethod;
  */
 final class TableRowTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    public const PATTERN_REGEX = '/^row\:[[:print:]]+$/';
+    public const PATTERN_REGEX = '/^row\:[[:print:]]+$/u';
 
     /**
      * @var string

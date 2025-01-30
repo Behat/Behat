@@ -48,6 +48,15 @@ Feature: Step Arguments Transformations Annotations
               return new User($username, $age);
           }
 
+          /** @Transform table:логин,возраст */
+          public function createUserFromTableInRussian(TableNode $table) {
+              $hash     = $table->getHash();
+              $username = $hash[0]['логин'];
+              $age      = $hash[0]['возраст'];
+
+              return new User($username, $age);
+          }
+
           /** @Transform rowtable:username,age */
           public function createUserFromRowTable(TableNode $table) {
               $hash     = $table->getRowsHash();
@@ -57,9 +66,23 @@ Feature: Step Arguments Transformations Annotations
               return new User($username, $age);
           }
 
+          /** @Transform rowtable:логин,возраст */
+          public function createUserFromRowTableInRussian(TableNode $table) {
+              $hash     = $table->getRowsHash();
+              $username = $hash['логин'];
+              $age      = $hash['возраст'];
+
+              return new User($username, $age);
+          }
+
           /** @Transform row:username */
           public function createUserNamesFromTable($tableRow) {
               return $tableRow['username'];
+          }
+
+          /** @Transform row:логин */
+          public function createUserNamesFromTableInRussian($tableRow) {
+              return $tableRow['логин'];
           }
 
           /** @Transform table:%username@,age# */
@@ -186,6 +209,13 @@ Feature: Step Arguments Transformations Annotations
 
         Scenario:
           Given I am user:
+            | логин    | возраст |
+            | vasiljev | 30      |
+          Then Username must be "vasiljev"
+          And Age must be 30
+
+        Scenario:
+          Given I am user:
             | %username@ | age# |
             | rajesh     | 35  |
           Then Username must be "rajesh"
@@ -194,10 +224,10 @@ Feature: Step Arguments Transformations Annotations
     When I run "behat -f progress --no-colors"
     Then it should pass with:
       """
-      ......
+      ............
 
-      3 scenarios (3 passed)
-      9 steps (9 passed)
+      4 scenarios (4 passed)
+      12 steps (12 passed)
       """
 
   Scenario: Row Table Arguments Transformations
@@ -220,6 +250,13 @@ Feature: Step Arguments Transformations Annotations
 
         Scenario:
           Given I am user:
+            | логин   | vasiljev |
+            | возраст | 30       |
+          Then Username must be "vasiljev"
+          And Age must be 30
+
+        Scenario:
+          Given I am user:
             | --username | rajesh |
             | age        | 35     |
           Then Username must be "rajesh"
@@ -228,10 +265,10 @@ Feature: Step Arguments Transformations Annotations
     When I run "behat -f progress --no-colors"
     Then it should pass with:
       """
-      ......
+      ............
 
-      3 scenarios (3 passed)
-      9 steps (9 passed)
+      4 scenarios (4 passed)
+      12 steps (12 passed)
       """
 
   Scenario: Table Row Arguments Transformations
@@ -253,14 +290,22 @@ Feature: Step Arguments Transformations Annotations
           Then the Usernames must be:
             | $username |
             | rajesh    |
+
+        Scenario:
+          Given I am user:
+            | username | age |
+            | ever.zet | 22  |
+          Then the Usernames must be:
+            | логин    |
+            | ever.zet |
       """
     When I run "behat -f progress --no-colors"
     Then it should pass with:
       """
-      ....
+      ......
 
-      2 scenarios (2 passed)
-      4 steps (4 passed)
+      3 scenarios (3 passed)
+      6 steps (6 passed)
       """
 
   Scenario: Whole table transformation

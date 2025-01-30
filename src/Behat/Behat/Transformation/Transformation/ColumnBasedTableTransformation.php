@@ -25,7 +25,7 @@ use ReflectionMethod;
  */
 final class ColumnBasedTableTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    public const PATTERN_REGEX = '/^table\:(?:\*|[[:print:]]+)$/';
+    public const PATTERN_REGEX = '/^table\:(?:\*|[[:print:]]+)$/u';
 
     /**
      * @var string
