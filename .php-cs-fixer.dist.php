@@ -11,9 +11,9 @@ return (new PhpCsFixer\Config())
         'binary_operator_spaces' => [
             'default' => 'at_least_single_space',
         ],
-//        'blank_line_after_opening_tag' => true,
-//        'blank_line_between_import_groups' => true,
-//        'blank_lines_before_namespace' => true,
+        'blank_line_after_opening_tag' => true,
+        'blank_line_between_import_groups' => true,
+        'blank_lines_before_namespace' => true,
 //        'braces_position' => [
 //            'allow_single_line_empty_anonymous_classes' => true,
 //        ],
@@ -26,14 +26,14 @@ return (new PhpCsFixer\Config())
 //        'lowercase_cast' => true,
 //        'lowercase_static_reference' => true,
 //        'new_with_parentheses' => true,
-//        'no_blank_lines_after_class_opening' => true,
-//        'no_extra_blank_lines' => [
-//            'tokens' => [
-//                'use', // defined in PSR12 ¶3. Declare Statements, Namespace, and Import Statements
-//            ],
-//        ],
+        'no_blank_lines_after_class_opening' => true,
+        'no_extra_blank_lines' => [
+            'tokens' => [
+                'use', // defined in PSR12 ¶3. Declare Statements, Namespace, and Import Statements
+            ],
+        ],
 //        'no_leading_import_slash' => true,
-//        'no_whitespace_in_blank_line' => true,
+        'no_whitespace_in_blank_line' => true,
 //        'ordered_class_elements' => [
 //            'order' => [
 //                'use_trait',

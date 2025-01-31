@@ -33,7 +33,7 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
     {
         $this->searchResult = $searchResult;
     }
-    
+
     /**
      * Returns definition search result.
      *

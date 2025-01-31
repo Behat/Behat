@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Behat\Config;
 
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
+
 use function is_string;
 
 final class Config implements ConfigInterface

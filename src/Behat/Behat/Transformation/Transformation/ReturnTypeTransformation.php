@@ -30,7 +30,6 @@ use ReflectionNamedType;
  */
 final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-
     /**
      * {@inheritdoc}
      */

@@ -1,4 +1,5 @@
 <?php
+
 namespace Behat\Behat\Output\Node\EventListener\JUnit;
 
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;

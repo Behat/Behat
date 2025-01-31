@@ -8,7 +8,6 @@ use Behat\Step\When;
 
 class FeatureContext implements Context
 {
-
     #[Given('I call a step used in the first feature')]
     public function stepUsedInFirstFeature(): void
     {

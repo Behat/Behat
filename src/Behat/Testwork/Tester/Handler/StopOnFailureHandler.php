@@ -31,7 +31,7 @@ final class StopOnFailureHandler
     ) {
 
     }
-    
+
     public function registerListeners()
     {
         $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'exitOnFailure'), -100);

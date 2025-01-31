@@ -27,7 +27,6 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class JUnitOutlineStoreListener implements EventListener
 {
-
     /**
      * @var SuitePrinter
      */
