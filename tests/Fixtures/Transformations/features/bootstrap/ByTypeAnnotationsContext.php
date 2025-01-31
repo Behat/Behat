@@ -8,7 +8,7 @@ class ByTypeAnnotationsContext implements Context
     private User $he;
 
     /** @Transform */
-    public function userFromName(string $name) : User
+    public function userFromName(string $name): User
     {
         return new User($name);
     }

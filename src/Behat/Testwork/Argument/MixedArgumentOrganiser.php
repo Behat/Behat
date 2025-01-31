@@ -134,7 +134,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks if value matches typehint of provided parameter.
      */
-    private function isValueMatchesTypehintedParameter($value, ReflectionParameter $parameter) : bool
+    private function isValueMatchesTypehintedParameter($value, ReflectionParameter $parameter): bool
     {
         foreach ($this->getReflectionClassesFromParameter($parameter) as $typehintRefl) {
             if ($typehintRefl->isInstance($value)) {
@@ -218,7 +218,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param  ReflectionParameter[] $parameters Constructor Arguments
      * @return ReflectionParameter[]             Filtered $parameters
      */
-    private function filterApplicableTypehintedParameters(array $parameters) : array
+    private function filterApplicableTypehintedParameters(array $parameters): array
     {
         return array_filter(
             $parameters,

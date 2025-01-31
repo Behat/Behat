@@ -57,7 +57,7 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
             ), $contextClass);
         }
 
-        $this->contextClasses[$contextClass] = $arguments ? : array();
+        $this->contextClasses[$contextClass] = $arguments ?: array();
     }
 
     /**
