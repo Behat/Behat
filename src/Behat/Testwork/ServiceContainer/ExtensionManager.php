@@ -168,11 +168,11 @@ final class ExtensionManager
     private function instantiateExtension(string $locator): mixed
     {
         if (class_exists($class = $locator)) {
-            return new $class;
+            return new $class();
         }
 
         if (class_exists($class = $this->getFullExtensionClass($locator))) {
-            return new $class;
+            return new $class();
         }
 
         if (file_exists($locator)) {

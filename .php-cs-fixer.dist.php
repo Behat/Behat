@@ -17,22 +17,22 @@ return (new PhpCsFixer\Config())
 //        'braces_position' => [
 //            'allow_single_line_empty_anonymous_classes' => true,
 //        ],
-//        'class_definition' => [
-//            'inline_constructor_arguments' => false, // handled by method_argument_space fixer
-//            'space_before_parenthesis' => true, // defined in PSR12 ¶8. Anonymous Classes
-//        ],
+        'class_definition' => [
+            'inline_constructor_arguments' => false, // handled by method_argument_space fixer
+            'space_before_parenthesis' => true, // defined in PSR12 ¶8. Anonymous Classes
+        ],
 //        'compact_nullable_type_declaration' => true,
-//        'declare_equal_normalize' => true,
+        'declare_equal_normalize' => true,
 //        'lowercase_cast' => true,
 //        'lowercase_static_reference' => true,
-//        'new_with_parentheses' => true,
+        'new_with_parentheses' => true,
         'no_blank_lines_after_class_opening' => true,
         'no_extra_blank_lines' => [
             'tokens' => [
                 'use', // defined in PSR12 ¶3. Declare Statements, Namespace, and Import Statements
             ],
         ],
-//        'no_leading_import_slash' => true,
+        'no_leading_import_slash' => true,
         'no_whitespace_in_blank_line' => true,
 //        'ordered_class_elements' => [
 //            'order' => [

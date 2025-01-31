@@ -19,7 +19,7 @@ class TestworkEventDispatcherTest extends TestCase
     public function testDispatchLegacyCall(): void
     {
         $dispatcher = new TestworkEventDispatcher();
-        $event = new class extends Event {};
+        $event = new class () extends Event {};
         $eventName = 'TEST_EVENT';
         $listener = $this->createListenerSpy();
 
@@ -33,7 +33,7 @@ class TestworkEventDispatcherTest extends TestCase
     public function testDispatchCurrentCall(): void
     {
         $dispatcher = new TestworkEventDispatcher();
-        $event = new class extends Event {};
+        $event = new class () extends Event {};
         $listener = $this->createListenerSpy();
 
         $dispatcher->addListener(get_class($event), $listener);
@@ -46,7 +46,7 @@ class TestworkEventDispatcherTest extends TestCase
     public function testSetNameOnEvent(): void
     {
         $dispatcher = new TestworkEventDispatcher();
-        $event = new class extends Event {
+        $event = new class () extends Event {
             public $name;
             public function setName($name): void
             {
@@ -66,7 +66,7 @@ class TestworkEventDispatcherTest extends TestCase
     public function testBeforeAllListener(): void
     {
         $dispatcher = new TestworkEventDispatcher();
-        $event = new class extends Event {};
+        $event = new class () extends Event {};
         $listener = $this->createListenerSpy();
 
         $dispatcher->addListener(TestworkEventDispatcher::BEFORE_ALL_EVENTS, $listener);
@@ -79,7 +79,7 @@ class TestworkEventDispatcherTest extends TestCase
     public function testAfterAllListener(): void
     {
         $dispatcher = new TestworkEventDispatcher();
-        $event = new class extends Event {};
+        $event = new class () extends Event {};
         $listener = $this->createListenerSpy();
 
         $dispatcher->addListener(TestworkEventDispatcher::AFTER_ALL_EVENTS, $listener);
@@ -94,7 +94,7 @@ class TestworkEventDispatcherTest extends TestCase
      */
     public function createListenerSpy()
     {
-        return new class() {
+        return new class () {
             public $receivedEvents = [];
 
             public function __invoke(Event $event)
