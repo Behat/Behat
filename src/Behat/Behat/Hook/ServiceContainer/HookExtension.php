@@ -52,7 +52,9 @@ final class HookExtension extends BaseExtension
         $definition->addTag(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG, array('priority' => 9999));
         $container->setDefinition(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG . '.hookable', $definition);
 
-        $definition = new Definition('Behat\Behat\Hook\Tester\HookableScenarioTester', array(
+        $definition = new Definition(
+            'Behat\Behat\Hook\Tester\HookableScenarioTester',
+            array(
                 new Reference(TesterExtension::SCENARIO_TESTER_ID),
                 new Reference(self::DISPATCHER_ID)
             )
@@ -60,7 +62,9 @@ final class HookExtension extends BaseExtension
         $definition->addTag(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG, array('priority' => 9999));
         $container->setDefinition(TesterExtension::SCENARIO_TESTER_WRAPPER_TAG . '.hookable', $definition);
 
-        $definition = new Definition('Behat\Behat\Hook\Tester\HookableScenarioTester', array(
+        $definition = new Definition(
+            'Behat\Behat\Hook\Tester\HookableScenarioTester',
+            array(
                 new Reference(TesterExtension::EXAMPLE_TESTER_ID),
                 new Reference(self::DISPATCHER_ID)
             )

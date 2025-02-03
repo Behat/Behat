@@ -204,7 +204,8 @@ final class ListPrinter
     {
         $location = $this->getLocationFromScope($hookStat->getScope());
         $printer->writeln(
-            sprintf('    {+%s}%s{-%s}%s {+comment}# %s{-comment}',
+            sprintf(
+                '    {+%s}%s{-%s}%s {+comment}# %s{-comment}',
                 $style,
                 $hookStat->getName(),
                 $style,
@@ -242,7 +243,8 @@ final class ListPrinter
         $maxLength = max(mb_strlen($stat->getScenarioText(), 'utf8'), mb_strlen($stat->getStepText(), 'utf8') + 2) + 1;
 
         $printer->writeln(
-            sprintf('%03d {+%s}%s{-%s}%s{+comment}# %s{-comment}',
+            sprintf(
+                '%03d {+%s}%s{-%s}%s{+comment}# %s{-comment}',
                 $number,
                 $style,
                 $stat->getScenarioText(),
@@ -253,7 +255,8 @@ final class ListPrinter
         );
 
         $printer->writeln(
-            sprintf('      {+%s}%s{-%s}%s{+comment}# %s{-comment}',
+            sprintf(
+                '      {+%s}%s{-%s}%s{+comment}# %s{-comment}',
                 $style,
                 $stat->getStepText(),
                 $style,

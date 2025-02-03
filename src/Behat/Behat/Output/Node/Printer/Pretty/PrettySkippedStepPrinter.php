@@ -101,7 +101,9 @@ final class PrettySkippedStepPrinter implements StepPrinter
         if ($result instanceof DefinedStepResult && $result->getStepDefinition()) {
             $definition = $result->getStepDefinition();
             $stepText = $this->textPainter->paintText(
-                $stepText, $definition, new IntegerTestResult(TestResult::SKIPPED)
+                $stepText,
+                $definition,
+                new IntegerTestResult(TestResult::SKIPPED)
             );
         }
 

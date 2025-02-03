@@ -148,7 +148,9 @@ class TesterExtension extends BaseExtension
         $container->setDefinition(self::SCENARIO_TESTER_ID, $definition);
 
         // Proper isolation for scenarios
-        $definition = new Definition('Behat\Behat\Tester\Runtime\IsolatingScenarioTester', array(
+        $definition = new Definition(
+            'Behat\Behat\Tester\Runtime\IsolatingScenarioTester',
+            array(
                 new Reference(self::SCENARIO_TESTER_ID),
                 new Reference(EnvironmentExtension::MANAGER_ID)
             )
@@ -191,7 +193,9 @@ class TesterExtension extends BaseExtension
         $container->setDefinition(self::EXAMPLE_TESTER_ID, $definition);
 
         // Proper isolation for examples
-        $definition = new Definition('Behat\Behat\Tester\Runtime\IsolatingScenarioTester', array(
+        $definition = new Definition(
+            'Behat\Behat\Tester\Runtime\IsolatingScenarioTester',
+            array(
                 new Reference(self::EXAMPLE_TESTER_ID),
                 new Reference(EnvironmentExtension::MANAGER_ID)
             )

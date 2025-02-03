@@ -66,10 +66,16 @@ final class RerunController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption('--rerun', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--rerun',
+            null,
+            InputOption::VALUE_NONE,
             'Re-run scenarios that failed during last execution, or run everything if there were no failures.'
         );
-        $command->addOption('--rerun-only', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--rerun-only',
+            null,
+            InputOption::VALUE_NONE,
             'Re-run scenarios that failed during last execution, or exit if there were no failures.'
         );
     }

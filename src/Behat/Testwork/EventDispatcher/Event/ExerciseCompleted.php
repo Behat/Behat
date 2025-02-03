@@ -13,7 +13,6 @@ namespace Behat\Testwork\EventDispatcher\Event;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\Specification\SpecificationIterator;
 
-
 /**
  * Represents an exercise event.
  *

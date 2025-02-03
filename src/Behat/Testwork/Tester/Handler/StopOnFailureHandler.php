@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\Tester\Handler;
 
-
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;

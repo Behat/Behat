@@ -44,7 +44,10 @@ final class LanguageController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption('--lang', null, InputOption::VALUE_REQUIRED,
+        $command->addOption(
+            '--lang',
+            null,
+            InputOption::VALUE_REQUIRED,
             'Print output in particular language.'
         );
     }

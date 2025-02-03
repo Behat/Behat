@@ -209,7 +209,7 @@ EOL;
         if (!is_dir($dir)) {
             throw new RuntimeException(sprintf('The directory "%s" does not exist', $dir));
         }
-        $this->workingDir = $dir; ;
+        $this->workingDir = $dir;
         $this->workingDirChanged = true;
     }
 
@@ -436,26 +436,34 @@ EOL;
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
-                '/[ "]features\/[^\n "]+/', function ($matches) {
+                '/[ "]features\/[^\n "]+/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
             );
             $text = preg_replace_callback(
-                '/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
+                '/\<span class\="path"\>features\/[^\<]+/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
             );
             $text = preg_replace_callback(
-                '/\+[fd] [^ ]+/', function ($matches) {
+                '/\+[fd] [^ ]+/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
             );
 
             // error stacktrace
             $text = preg_replace_callback(
-                '/#\d+ [^:]+:/', function ($matches) {
+                '/#\d+ [^:]+:/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
             );
         }
 
@@ -534,7 +542,7 @@ EOL;
         $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);
 
         // replace error messages that changed in PHP8
-        $output = str_replace('Warning: Undefined array key','Notice: Undefined offset:', $output);
+        $output = str_replace('Warning: Undefined array key', 'Notice: Undefined offset:', $output);
         $output = preg_replace('/Class "([^"]+)" not found/', 'Class \'$1\' not found', $output);
 
         return trim(preg_replace("/ +$/m", '', $output));

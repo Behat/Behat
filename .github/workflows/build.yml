@@ -112,6 +112,25 @@ jobs:
       - name: Run PHPStan
         run: ./vendor/bin/phpstan
 
+  coding-standard:
+    name: Coding standards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          ini-values: "zend.exception_ignore_args=Off"
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update
+
+      - name: Run PHP CS Fixer
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --verbose --diff
+
   build-phar:
     name: Build PHAR file
     runs-on: ubuntu-latest

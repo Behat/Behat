@@ -1,0 +1,25 @@
+# Git 2.23+ allows ignoring commits from git-blame, useful to not display large automated commits.
+#
+# This file is a list of such commits, that you most probably are not interested in.
+# To make this work for your local setup, you need to run the following command:
+#
+# $ git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# A few rules for changing this file:
+# - Commits are in chronological order - oldest on top. Therefore new commits should be added in the end.
+# - The purpose is specifically for large commits - avoid adding commits with a very small impact, even if related
+#   to automated code style formatting.
+# - Each commit should be preceded with a comment detailing the purpose of the commit.
+
+# PHP-CS-Fixer - Apply PSR2 rules related to spacing
+2b85b5c1a94c21946ac179ec93dfc08d050f3991
+# PHP-CS-Fixer - Fixes method argument spacing, including making sure that multiline argument lists are fully multiline
+ab71677a60a77a8e14c194babbeabfa2003219f3
+# PHP-CS-Fixer - Fix line endings and empty line at EOF
+a947e21cd9b95e1f8077f7b690f9fa79254f25e7
+# PHP-CS-Fixer - Fix braces position
+ba740b59cff1f5aa8f5e4eed8577b986b8b6b1d3
+# PHP-CS-Fixer - Fix indentation
+ba52edd29e43302f4a4254626fd27af8f92dbf32
+# PHP-CS-Fixer - Fix visibility declarations
+40e62bde42a457ebee38e08f92784fdb68719fc5

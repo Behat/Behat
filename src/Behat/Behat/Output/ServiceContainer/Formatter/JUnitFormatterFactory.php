@@ -91,7 +91,8 @@ final class JUnitFormatterFactory implements FormatterFactory
         $container->setDefinition('output.node.printer.junit.step', $definition);
 
         $definition = new Definition(
-            'Behat\Behat\Output\Node\Printer\JUnit\JUnitSetupPrinter', array(
+            'Behat\Behat\Output\Node\Printer\JUnit\JUnitSetupPrinter',
+            array(
             new Reference(ExceptionExtension::PRESENTER_ID),
         )
         );
@@ -106,7 +107,9 @@ final class JUnitFormatterFactory implements FormatterFactory
     private function loadRootNodeListener(ContainerBuilder $container)
     {
 
-        $definition = new Definition('Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener', array(
+        $definition = new Definition(
+            'Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener',
+            array(
                 new Reference('output.node.printer.junit.suite')
             )
         );

@@ -34,7 +34,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * {@inheritdoc}
      */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         $returnClass = self::getReturnClass($method);
 
@@ -125,7 +125,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      *
      * @return null|string
      */
-    static private function getReturnClass(ReflectionFunctionAbstract $reflection)
+    private static function getReturnClass(ReflectionFunctionAbstract $reflection)
     {
         $type = $reflection->getReturnType();
 
@@ -148,7 +148,8 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     private function getParameterClassNameByIndex(DefinitionCall $definitionCall, $argumentIndex)
     {
         $parameters = array_filter(
-            array_filter($this->getCallParameters($definitionCall),
+            array_filter(
+                $this->getCallParameters($definitionCall),
                 $this->hasIndex($argumentIndex)
             ),
             $this->getClassReflection()
@@ -220,15 +221,13 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      */
     private function getClassReflection() : closure
     {
-        return function (ReflectionParameter $parameter) : ?ReflectionClass
-        {
+        return function (ReflectionParameter $parameter) : ?ReflectionClass {
             $t = $parameter->getType();
 
             if ($t instanceof ReflectionNamedType) {
                 try {
                     return new ReflectionClass($t->getName());
-                }
-                catch (ReflectionException $t) {
+                } catch (ReflectionException $t) {
                     return null;
                 }
             }

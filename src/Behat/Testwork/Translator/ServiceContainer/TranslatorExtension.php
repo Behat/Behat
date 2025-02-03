@@ -98,25 +98,29 @@ final class TranslatorExtension implements Extension
 
         $definition->addMethodCall('setFallbackLocales', array(array($fallbackLocale)));
         $definition->addMethodCall(
-            'addLoader', array(
+            'addLoader',
+            array(
                 'xliff',
                 new Definition('Symfony\Component\Translation\Loader\XliffFileLoader')
             )
         );
         $definition->addMethodCall(
-            'addLoader', array(
+            'addLoader',
+            array(
                 'yaml',
                 new Definition('Symfony\Component\Translation\Loader\YamlFileLoader')
             )
         );
         $definition->addMethodCall(
-            'addLoader', array(
+            'addLoader',
+            array(
                 'php',
                 new Definition('Symfony\Component\Translation\Loader\PhpFileLoader')
             )
         );
         $definition->addMethodCall(
-            'addLoader', array(
+            'addLoader',
+            array(
                 'array',
                 new Definition('Symfony\Component\Translation\Loader\ArrayLoader')
             )

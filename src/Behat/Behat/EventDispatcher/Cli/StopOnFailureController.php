@@ -32,7 +32,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Stops tests on first scenario failure.
- * 
+ *
  * TODO this should be moved in the Behat\Testwork\Tester\Cli namespace
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
@@ -68,7 +68,10 @@ final class StopOnFailureController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption('--stop-on-failure', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--stop-on-failure',
+            null,
+            InputOption::VALUE_NONE,
             'Stop processing on first failed scenario.'
         );
     }

@@ -15,7 +15,6 @@ use Behat\Testwork\Counter\Memory;
 use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Tester\Result\TestResult;
 
-
 /**
  * Collects and provided exercise statistics.
  *

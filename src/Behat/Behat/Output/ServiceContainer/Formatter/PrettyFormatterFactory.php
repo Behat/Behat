@@ -176,7 +176,9 @@ class PrettyFormatterFactory implements FormatterFactory
             'Prints the feature as is.',
             PrettyFormatter::defaults(),
             $this->createOutputPrinterDefinition(),
-            new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', array(
+            new Definition(
+                'Behat\Testwork\Output\Node\EventListener\ChainEventListener',
+                array(
                     array(
                         $this->rearrangeBackgroundEvents(
                             new Reference(self::ROOT_LISTENER_ID)
@@ -433,7 +435,8 @@ class PrettyFormatterFactory implements FormatterFactory
      */
     protected function proxySiblingEvents($beforeEventName, $afterEventName, array $listeners)
     {
-        return new Definition('Behat\Behat\Output\Node\EventListener\Flow\FireOnlySiblingsListener',
+        return new Definition(
+            'Behat\Behat\Output\Node\EventListener\Flow\FireOnlySiblingsListener',
             array(
                 $beforeEventName,
                 $afterEventName,
@@ -452,7 +455,8 @@ class PrettyFormatterFactory implements FormatterFactory
      */
     protected function proxyEventsIfParameterIsSet($name, $value, Definition $listener)
     {
-        return new Definition('Behat\Testwork\Output\Node\EventListener\Flow\FireOnlyIfFormatterParameterListener',
+        return new Definition(
+            'Behat\Testwork\Output\Node\EventListener\Flow\FireOnlyIfFormatterParameterListener',
             array($name, $value, $listener)
         );
     }

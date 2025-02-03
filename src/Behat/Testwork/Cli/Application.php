@@ -70,7 +70,9 @@ final class Application extends BaseApplication
             new InputOption('--profile', '-p', InputOption::VALUE_REQUIRED, 'Specify config profile to use.'),
             new InputOption('--config', '-c', InputOption::VALUE_REQUIRED, 'Specify config file to use.'),
             new InputOption(
-                '--verbose', '-v', InputOption::VALUE_OPTIONAL,
+                '--verbose',
+                '-v',
+                InputOption::VALUE_OPTIONAL,
                 'Increase verbosity of exceptions.' . PHP_EOL .
                 'Use -vv or --verbose=2 to display backtraces in addition to exceptions.'
             ),
@@ -80,7 +82,9 @@ final class Application extends BaseApplication
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display version.'),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
             new InputOption(
-                '--colors', null, InputOption::VALUE_NONE,
+                '--colors',
+                null,
+                InputOption::VALUE_NONE,
                 'Force ANSI color in the output. By default color support is' . PHP_EOL .
                 'guessed based on your platform and the output if not specified.'
             ),

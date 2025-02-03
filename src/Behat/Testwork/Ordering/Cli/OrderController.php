@@ -51,7 +51,10 @@ final class OrderController implements Controller
      */
     public function configure(SymfonyCommand $command)
     {
-        $command->addOption('--order', null, InputOption::VALUE_REQUIRED,
+        $command->addOption(
+            '--order',
+            null,
+            InputOption::VALUE_REQUIRED,
             'Set an order in which to execute the specifications (this will result in slower feedback).'
         );
     }
@@ -73,7 +76,7 @@ final class OrderController implements Controller
         }
 
         if (!array_key_exists($orderer, $this->orderers)) {
-           throw new InvalidOrderException(sprintf("Order option '%s' was not recognised", $orderer));
+            throw new InvalidOrderException(sprintf("Order option '%s' was not recognised", $orderer));
         }
 
         $this->exercise->setOrderer($this->orderers[$orderer]);

@@ -104,7 +104,8 @@ final class FilesystemFeatureLocator implements SpecificationLocator
     {
         if (!is_array($suite->getSetting('paths'))) {
             throw new SuiteConfigurationException(
-                sprintf('`paths` setting of the "%s" suite is expected to be an array, %s given.',
+                sprintf(
+                    '`paths` setting of the "%s" suite is expected to be an array, %s given.',
                     $suite->getName(),
                     gettype($suite->getSetting('paths'))
                 ),

@@ -76,7 +76,8 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
         $pattern = $definition->getPattern();
         $lines = array();
         $lines[] = strtr(
-            '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>', array(
+            '{suite} <def_dimmed>|</def_dimmed> <info>{type}</info> <def_regex>{regex}</def_regex>',
+            array(
                 '{suite}' => $suite->getName(),
                 '{type}'  => $this->getDefinitionType($definition),
                 '{regex}' => $pattern,
@@ -102,7 +103,8 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
         if ($description = $definition->getDescription()) {
             foreach (explode("\n", $description) as $descriptionLine) {
                 $lines[] = strtr(
-                    '{space}<def_dimmed>|</def_dimmed> {description}', array(
+                    '{space}<def_dimmed>|</def_dimmed> {description}',
+                    array(
                         '{space}'       => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
                         '{description}' => $descriptionLine
                     )
@@ -125,7 +127,8 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
     {
         $lines = array();
         $lines[] = strtr(
-            '{space}<def_dimmed>|</def_dimmed> at `{path}`', array(
+            '{space}<def_dimmed>|</def_dimmed> at `{path}`',
+            array(
                 '{space}' => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
                 '{path}'  => $definition->getPath()
             )
@@ -133,7 +136,8 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
 
         if ($this->isVerbose()) {
             $lines[] = strtr(
-                '{space}<def_dimmed>|</def_dimmed> on `{filepath}[{start}:{end}]`', array(
+                '{space}<def_dimmed>|</def_dimmed> on `{filepath}[{start}:{end}]`',
+                array(
                     '{space}' => str_pad('', mb_strlen($suite->getName(), 'utf8') + 1),
                     '{filepath}' => $definition->getReflection()->getFileName(),
                     '{start}' => $definition->getReflection()->getStartLine(),

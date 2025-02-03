@@ -70,7 +70,10 @@ final class AvailableDefinitionsController implements Controller
      */
     public function configure(Command $command)
     {
-        $command->addOption('--definitions', '-d', InputOption::VALUE_REQUIRED,
+        $command->addOption(
+            '--definitions',
+            '-d',
+            InputOption::VALUE_REQUIRED,
             "Print all available step definitions:" . PHP_EOL .
             "- use <info>--definitions l</info> to just list definition expressions." . PHP_EOL .
             "- use <info>--definitions i</info> to show definitions with extended info." . PHP_EOL .
