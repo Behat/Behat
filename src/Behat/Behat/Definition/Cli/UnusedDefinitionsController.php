@@ -46,7 +46,9 @@ final class UnusedDefinitionsController implements Controller
     {
         $command
             ->addOption(
-                '--print-unused-definitions', null, InputOption::VALUE_NONE,
+                '--print-unused-definitions',
+                null,
+                InputOption::VALUE_NONE,
                 "Reports definitions that were never used."
             )
         ;
