@@ -118,6 +118,8 @@ final class RuntimeStepTester implements StepTester
             return new UndefinedStepResult();
         }
 
+        // If a definition has been found, we mark it as used even if it may be skipped,
+        // as we want to count skipped definitions as used
         $definition = $search->getMatchedDefinition();
         if ($definition instanceof RuntimeDefinition) {
             $definition->markAsUsed();

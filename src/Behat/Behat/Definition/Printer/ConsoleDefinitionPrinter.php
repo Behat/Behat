@@ -67,9 +67,9 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      *
      * @param string $text
      */
-    final protected function write($text, bool $addEmptyLine = false)
+    final protected function write($text, bool $lineBreakBefore = false)
     {
-        if ($addEmptyLine) {
+        if ($lineBreakBefore) {
             $this->output->writeln('');
         }
         $this->output->writeln($text);
