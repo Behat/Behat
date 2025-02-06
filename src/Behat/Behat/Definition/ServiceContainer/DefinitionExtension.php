@@ -84,6 +84,12 @@ final class DefinitionExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
+        $builder
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->scalarNode('print_unused_definitions')
+            ->defaultFalse()
+        ;
     }
 
     /**
@@ -101,7 +107,7 @@ final class DefinitionExtension implements Extension
         $this->loadAnnotationReader($container);
         $this->loadAttributeReader($container);
         $this->loadDefinitionPrinters($container);
-        $this->loadControllers($container);
+        $this->loadControllers($container, $config['print_unused_definitions']);
         $this->loadDocblockHelper($container);
     }
 
@@ -259,7 +265,7 @@ final class DefinitionExtension implements Extension
         $container->setDefinition($this->getListPrinterId(), $definition);
     }
 
-    private function loadControllers(ContainerBuilder $container)
+    private function loadControllers(ContainerBuilder $container, bool $printUnusedDefinitions): void
     {
         $definition = new Definition('Behat\Behat\Definition\Cli\AvailableDefinitionsController', array(
             new Reference(SuiteExtension::REGISTRY_ID),
@@ -273,7 +279,8 @@ final class DefinitionExtension implements Extension
         $definition = new Definition('Behat\Behat\Definition\Cli\UnusedDefinitionsController', array(
             new Reference(self::REPOSITORY_ID),
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
-            new Reference($this->getInformationPrinterId())
+            new Reference($this->getInformationPrinterId()),
+            $printUnusedDefinitions
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.unused_definitions', $definition);

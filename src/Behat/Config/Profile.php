@@ -68,6 +68,13 @@ final class Profile
         return $this;
     }
 
+    public function withPrintUnusedDefinitions(bool $printUnusedDefinitions = true): self
+    {
+        $this->settings['definitions']['print_unused_definitions'] = $printUnusedDefinitions;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return $this->settings;

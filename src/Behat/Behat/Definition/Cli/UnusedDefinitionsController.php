@@ -39,6 +39,7 @@ final class UnusedDefinitionsController implements Controller
         private DefinitionRepository $definitionRepository,
         private EventDispatcherInterface $eventDispatcher,
         private ConsoleDefinitionInformationPrinter $printer,
+        private bool $printUnusedDefinitions
     ) {
     }
 
@@ -57,6 +58,9 @@ final class UnusedDefinitionsController implements Controller
     public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         if ($input->getOption('print-unused-definitions')) {
+            $this->printUnusedDefinitions = true;
+        }
+        if ($this->printUnusedDefinitions) {
             $this->eventDispatcher->addListener(SuiteTested::AFTER, array($this, 'registerDefinitionUsages'), -999);
             $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'printUnusedDefinitions'), -999);
         }

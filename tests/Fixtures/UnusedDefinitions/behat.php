@@ -19,4 +19,11 @@ return (new Config())
                 'features/second_feature.feature',
             )
         )
-    );
+    )
+    ->withProfile(
+        (new Profile('unused_definitions'))
+        ->withPrintUnusedDefinitions()
+    )
+;
+
+;
