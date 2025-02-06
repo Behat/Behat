@@ -5,8 +5,10 @@ use Behat\Config\Profile;
 use Behat\Config\Suite;
 
 return (new Config())
-    ->withProfile((new Profile('attributes'))
-        ->withSuite((new Suite('simple_step_argument_transformation'))
+    ->withProfile(
+        (new Profile('attributes'))
+        ->withSuite(
+            (new Suite('simple_step_argument_transformation'))
             ->withPaths(
                 'features/simple_step_argument_transformation.feature'
             )
@@ -15,7 +17,8 @@ return (new Config())
                 'UserAttributesContext'
             )
         )
-        ->withSuite((new Suite('step_argument_transformation_without_parameters'))
+        ->withSuite(
+            (new Suite('step_argument_transformation_without_parameters'))
             ->withPaths(
                 'features/step_argument_transformation_without_parameters.feature'
             )
@@ -24,7 +27,8 @@ return (new Config())
                 'UserAttributesContext'
             )
         )
-        ->withSuite((new Suite('multiple_transformations_in_one_function'))
+        ->withSuite(
+            (new Suite('multiple_transformations_in_one_function'))
             ->withPaths(
                 'features/multiple_transformations_in_one_function.feature'
             )
@@ -34,8 +38,10 @@ return (new Config())
             )
         )
     )
-    ->withProfile((new Profile('annotations'))
-        ->withSuite((new Suite('simple_step_argument_transformation'))
+    ->withProfile(
+        (new Profile('annotations'))
+        ->withSuite(
+            (new Suite('simple_step_argument_transformation'))
             ->withPaths(
                 'features/simple_step_argument_transformation.feature'
             )
@@ -44,7 +50,8 @@ return (new Config())
                 'UserAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('table_argument_transformation'))
+        ->withSuite(
+            (new Suite('table_argument_transformation'))
             ->withPaths(
                 'features/table_argument_transformation.feature'
             )
@@ -53,7 +60,8 @@ return (new Config())
                 'UserAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('row_table_argument_transformation'))
+        ->withSuite(
+            (new Suite('row_table_argument_transformation'))
             ->withPaths(
                 'features/row_table_argument_transformation.feature'
             )
@@ -62,7 +70,8 @@ return (new Config())
                 'UserAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('table_row_argument_transformation'))
+        ->withSuite(
+            (new Suite('table_row_argument_transformation'))
             ->withPaths(
                 'features/table_row_argument_transformation.feature'
             )
@@ -71,7 +80,8 @@ return (new Config())
                 'UserAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('table_column_argument_transformation'))
+        ->withSuite(
+            (new Suite('table_column_argument_transformation'))
             ->withPaths(
                 'features/table_column_argument_transformation.feature'
             )
@@ -80,7 +90,8 @@ return (new Config())
                 'UserAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('whole_table_argument_transformation'))
+        ->withSuite(
+            (new Suite('whole_table_argument_transformation'))
             ->withPaths(
                 'features/whole_table_argument_transformation.feature'
             )
@@ -88,7 +99,8 @@ return (new Config())
                 'WholeTableAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('named_argument_transformation'))
+        ->withSuite(
+            (new Suite('named_argument_transformation'))
             ->withPaths(
                 'features/named_argument_transformation.feature'
             )
@@ -97,7 +109,8 @@ return (new Config())
                 'UserAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('transform_different_types'))
+        ->withSuite(
+            (new Suite('transform_different_types'))
             ->withPaths(
                 'features/transform_different_types.feature'
             )
@@ -105,7 +118,8 @@ return (new Config())
                 'MultipleTypesAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('by_type_object_transformation'))
+        ->withSuite(
+            (new Suite('by_type_object_transformation'))
             ->withPaths(
                 'features/by_type_object_transformation.feature'
             )
@@ -113,7 +127,8 @@ return (new Config())
                 'ByTypeAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('by_type_and_by_name_object_transformation'))
+        ->withSuite(
+            (new Suite('by_type_and_by_name_object_transformation'))
             ->withPaths(
                 'features/by_type_and_by_name_object_transformation.feature'
             )
@@ -121,7 +136,8 @@ return (new Config())
                 'ByTypeAndByNameAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('unicode_named_argument_transformation'))
+        ->withSuite(
+            (new Suite('unicode_named_argument_transformation'))
             ->withPaths(
                 'features/unicode_named_argument_transformation.feature'
             )
@@ -130,7 +146,8 @@ return (new Config())
                 'UserAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('ordinal_argument_transformation'))
+        ->withSuite(
+            (new Suite('ordinal_argument_transformation'))
             ->withPaths(
                 'features/ordinal_argument_transformation.feature'
             )
@@ -138,7 +155,8 @@ return (new Config())
                 'OrdinalTransformationAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('by_type_union_transformation'))
+        ->withSuite(
+            (new Suite('by_type_union_transformation'))
             ->withPaths(
                 'features/by_type_union_transformation.feature'
             )
@@ -146,7 +164,8 @@ return (new Config())
                 'ByTypeUnionAnnotationsContext'
             )
         )
-        ->withSuite((new Suite('scalar_type_transformation'))
+        ->withSuite(
+            (new Suite('scalar_type_transformation'))
             ->withPaths(
                 'features/scalar_type_transformation.feature'
             )

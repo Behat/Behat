@@ -14,6 +14,7 @@ class ByTypeUnionAnnotationsContext implements Context
      * @Given I am :user
      * @Given she is :user
      */
-    public function iAm(User $user): void {
+    public function iAm(User $user): void
+    {
     }
 }

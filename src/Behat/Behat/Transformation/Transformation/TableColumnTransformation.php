@@ -24,7 +24,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
 
     private string $pattern;
 
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
@@ -81,8 +81,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
         DefinitionCall $definitionCall,
         $argumentIndex,
         $argumentValue
-    ): array
-    {
+    ): array {
         $columnNames = explode(',', substr($this->pattern, 7));
         $rows = [];
         foreach ($argumentValue as $row) {

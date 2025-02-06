@@ -29,7 +29,8 @@ class UserAttributesContext implements Context
     }
 
     #[Then('/^the boolean (no) should be transformed to false$/')]
-    public function theBooleanShouldBeTransformed(bool $boolean): void {
+    public function theBooleanShouldBeTransformed(bool $boolean): void
+    {
         Assert::assertSame(false, $boolean);
     }
 }

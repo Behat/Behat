@@ -12,7 +12,8 @@ class SimpleTransformationAttributesContext implements Context
     }
 
     #[Transform('/^(yes|no)$/')]
-    public function castYesOrNoToBoolean($expected): bool {
+    public function castYesOrNoToBoolean($expected): bool
+    {
         return 'yes' === $expected;
     }
 }
