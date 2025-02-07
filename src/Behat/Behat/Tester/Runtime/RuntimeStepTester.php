@@ -15,6 +15,7 @@ use Behat\Behat\Definition\Call\RuntimeDefinition;
 use Behat\Behat\Definition\DefinitionFinder;
 use Behat\Behat\Definition\Exception\SearchException;
 use Behat\Behat\Definition\SearchResult;
+use Behat\Behat\Definition\Translator\TranslatedDefinition;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\FailedStepSearchResult;
 use Behat\Behat\Tester\Result\SkippedStepResult;
@@ -118,9 +119,13 @@ final class RuntimeStepTester implements StepTester
             return new UndefinedStepResult();
         }
 
+        $definition = $search->getMatchedDefinition();
+        // If the definition found is a translated definition, we need to mark the original definition
+        if ($definition instanceof TranslatedDefinition) {
+            $definition = $definition->getOriginalDefinition();
+        }
         // If a definition has been found, we mark it as used even if it may be skipped,
         // as we want to count skipped definitions as used
-        $definition = $search->getMatchedDefinition();
         if ($definition instanceof RuntimeDefinition) {
             $definition->markAsUsed();
         }

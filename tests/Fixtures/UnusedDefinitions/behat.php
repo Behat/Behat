@@ -21,9 +21,19 @@ return (new Config())
         )
     )
     ->withProfile(
+        (new Profile('translated_definitions'))
+            ->withSuite(
+                (new Suite('translated_definitions'))
+                    ->withPaths(
+                        'features/translated_definitions.feature'
+                    )
+                    ->withContexts(
+                        'TranslatedDefinitionsContext',
+                    )
+            )
+    )
+    ->withProfile(
         (new Profile('unused_definitions'))
         ->withPrintUnusedDefinitions()
     )
-;
-
 ;

@@ -71,11 +71,17 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
         return $this->getType() . ' ' . $this->getPattern();
     }
 
+    /**
+     * @internal
+     */
     public function markAsUsed(): void
     {
         $this->used = true;
     }
 
+    /**
+     * @internal
+     */
     public function hasBeenUsed(): bool
     {
         return $this->used;

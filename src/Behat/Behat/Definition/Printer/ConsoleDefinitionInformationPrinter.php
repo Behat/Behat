@@ -18,7 +18,7 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
+final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter implements UnusedDefinitionPrinter
 {
     /**
      * @var null|string
@@ -43,9 +43,6 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
         $this->printDefinitionsWithOptionalSuite($definitions, $suite);
     }
 
-    /**
-     * @param Definition[] $definitions
-     */
     public function printUnusedDefinitions(array $definitions): void
     {
         $unusedDefinitionsText = $this->translateInfoText(
