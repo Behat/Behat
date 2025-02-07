@@ -41,6 +41,9 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
         $argumentIndex,
         $argumentArgumentValue
     ): bool {
+        // The argument passed initially will be a TableNode but if a column transformation
+        // has already been applied then this will have been transformed into an array already,
+        // so we need to accept both possibilities
         if (!$argumentArgumentValue instanceof TableNode && !is_array($argumentArgumentValue)) {
             return false;
         };
@@ -52,12 +55,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
 
         if ($argumentArgumentValue instanceof TableNode) {
             $tableHeadings = $argumentArgumentValue->getRow(0);
-            foreach ($columnNames as $columnName) {
-                if (in_array($columnName, $tableHeadings, true)) {
-                    return true;
-                }
-                return false;
-            }
+            return array_intersect($columnNames, $tableHeadings) !== [];
         }
         foreach ($argumentArgumentValue as $row) {
             $rowHasColumn = false;
@@ -110,7 +108,8 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
     }
 
     /**
-     * {@inheritdoc}
+     * The priority of this transformer needs to be less that the priority of the other table transformers because
+     * we want to be able to transform whole tables or whole rows before we attempt to transform any column
      */
     public function getPriority()
     {

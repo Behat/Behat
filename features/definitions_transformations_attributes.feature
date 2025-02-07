@@ -46,3 +46,16 @@ Feature: Step Arguments Transformations with Attributes
       2 scenarios (2 passed)
       6 steps (6 passed)
       """
+
+  Scenario: Table Column Arguments Transformations
+    When I run behat with the following additional options:
+      | option         | value                                |
+      | --suite        | table_column_argument_transformation |
+    Then it should pass with:
+      """
+      ...........
+
+      4 scenarios (4 passed)
+      11 steps (11 passed)
+      """
+

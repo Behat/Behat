@@ -14,7 +14,7 @@ return (new Config())
             )
             ->withContexts(
                 'SimpleTransformationAttributesContext',
-                'UserAttributesContext'
+                'UserContext'
             )
         )
         ->withSuite(
@@ -24,7 +24,7 @@ return (new Config())
             )
             ->withContexts(
                 'TransformationWithoutParametersAttributesContext',
-                'UserAttributesContext'
+                'UserContext'
             )
         )
         ->withSuite(
@@ -34,8 +34,18 @@ return (new Config())
             )
             ->withContexts(
                 'MultipleTransformationsInOneFunctionAttributesContext',
-                'UserAttributesContext'
+                'UserContext'
             )
+        )
+        ->withSuite(
+            (new Suite('table_column_argument_transformation'))
+                ->withPaths(
+                    'features/table_column_argument_transformation.feature'
+                )
+                ->withContexts(
+                    'ColumnTransformationContext',
+                    'UserContext'
+                )
         )
     )
     ->withProfile(
@@ -47,7 +57,7 @@ return (new Config())
             )
             ->withContexts(
                 'TransformationAnnotationsContext',
-                'UserAnnotationsContext'
+                'UserContext'
             )
         )
         ->withSuite(
@@ -57,7 +67,7 @@ return (new Config())
             )
             ->withContexts(
                 'TransformationAnnotationsContext',
-                'UserAnnotationsContext'
+                'UserContext'
             )
         )
         ->withSuite(
@@ -67,7 +77,7 @@ return (new Config())
             )
             ->withContexts(
                 'TransformationAnnotationsContext',
-                'UserAnnotationsContext'
+                'UserContext'
             )
         )
         ->withSuite(
@@ -77,17 +87,7 @@ return (new Config())
             )
             ->withContexts(
                 'TransformationAnnotationsContext',
-                'UserAnnotationsContext'
-            )
-        )
-        ->withSuite(
-            (new Suite('table_column_argument_transformation'))
-            ->withPaths(
-                'features/table_column_argument_transformation.feature'
-            )
-            ->withContexts(
-                'TransformationAnnotationsContext',
-                'UserAnnotationsContext'
+                'UserContext'
             )
         )
         ->withSuite(
@@ -106,7 +106,7 @@ return (new Config())
             )
             ->withContexts(
                 'TransformationAnnotationsContext',
-                'UserAnnotationsContext'
+                'UserContext'
             )
         )
         ->withSuite(
@@ -143,7 +143,7 @@ return (new Config())
             )
             ->withContexts(
                 'TransformationAnnotationsContext',
-                'UserAnnotationsContext'
+                'UserContext'
             )
         )
         ->withSuite(
