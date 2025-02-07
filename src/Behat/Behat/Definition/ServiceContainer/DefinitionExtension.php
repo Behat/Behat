@@ -15,6 +15,7 @@ use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
+use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -83,6 +84,12 @@ final class DefinitionExtension implements Extension
      */
     public function configure(ArrayNodeDefinition $builder)
     {
+        $builder
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->scalarNode('print_unused_definitions')
+            ->defaultFalse()
+        ;
     }
 
     /**
@@ -100,7 +107,7 @@ final class DefinitionExtension implements Extension
         $this->loadAnnotationReader($container);
         $this->loadAttributeReader($container);
         $this->loadDefinitionPrinters($container);
-        $this->loadController($container);
+        $this->loadControllers($container, $config['print_unused_definitions']);
         $this->loadDocblockHelper($container);
     }
 
@@ -258,12 +265,7 @@ final class DefinitionExtension implements Extension
         $container->setDefinition($this->getListPrinterId(), $definition);
     }
 
-    /**
-     * Loads definition controller.
-     *
-     * @param ContainerBuilder $container
-     */
-    private function loadController(ContainerBuilder $container)
+    private function loadControllers(ContainerBuilder $container, bool $printUnusedDefinitions): void
     {
         $definition = new Definition('Behat\Behat\Definition\Cli\AvailableDefinitionsController', array(
             new Reference(SuiteExtension::REGISTRY_ID),
@@ -273,6 +275,15 @@ final class DefinitionExtension implements Extension
         ));
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 500));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.available_definitions', $definition);
+
+        $definition = new Definition('Behat\Behat\Definition\Cli\UnusedDefinitionsController', array(
+            new Reference(self::REPOSITORY_ID),
+            new Reference(EventDispatcherExtension::DISPATCHER_ID),
+            new Reference($this->getInformationPrinterId()),
+            $printUnusedDefinitions
+        ));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
+        $container->setDefinition(CliExtension::CONTROLLER_TAG . '.unused_definitions', $definition);
     }
 
     /**

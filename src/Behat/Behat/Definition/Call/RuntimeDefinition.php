@@ -29,6 +29,8 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
      */
     private $pattern;
 
+    private bool $used = false;
+
     /**
      * Initializes definition.
      *
@@ -67,5 +69,15 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
     public function __toString()
     {
         return $this->getType() . ' ' . $this->getPattern();
+    }
+
+    public function markAsUsed(): void
+    {
+        $this->used = true;
+    }
+
+    public function hasBeenUsed(): bool
+    {
+        return $this->used;
     }
 }
