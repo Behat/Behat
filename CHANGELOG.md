@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.19.0] - 2025-02-13
+
+### Changed
+
+* Remove internal wrappers for PSR Container interfaces - may affect projects using container-interop/container-interop
+  < 1.2.0 (released in 2017, package now deprecated and unsupported by behat since 2021).
+  By @acoulton in [#1584](https://github.com/Behat/Behat/pull/1584)
+* Remove legacy Symfony event dispatchers - these were internal wrappers to support symfony <5 and >=5, both now
+  redundant. By @carlos-granados in [#1585](https://github.com/Behat/Behat/pull/1585)
+
+### Added
+
+* Add option to print unused definitions by @carlos-granados in [#1594](https://github.com/Behat/Behat/pull/1594) and
+  [#1597](https://github.com/Behat/Behat/pull/1597)
+* Support transforming named column(s) in any table by @carlos-granados in [#1593](https://github.com/Behat/Behat/pull/1593)
+
+### Fixed
+
+* Allow unicode characters in table transformations by @carlos-granados in [#1595](https://github.com/Behat/Behat/pull/1595)
+
+### Internal
+
+* Use real files instead of generated files in local tests by @carlos-granados in [#1544](https://github.com/Behat/Behat/pull/1544)
+* Adopt PHP CS Fixer and apply PSR2 styles by @carlos-granados in [#1592](https://github.com/Behat/Behat/pull/1592)
+* Migrate from Psalm to PHPStan and improve internal type safety by @carlos-granados in [#1583](https://github.com/Behat/Behat/pull/1583),
+  [#1589](https://github.com/Behat/Behat/pull/1589) and [#1590](https://github.com/Behat/Behat/pull/1590) and by
+  @stof in [#1591](https://github.com/Behat/Behat/pull/1591)
+
 ## [3.18.1] - 2025-01-10
 
 ### Fixed
@@ -1175,6 +1203,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.19.0]: https://github.com/Behat/Behat/compare/v3.18.1...v3.19.0
+[3.18.1]: https://github.com/Behat/Behat/compare/v3.18.0...v3.18.1
 [3.18.0]: https://github.com/Behat/Behat/compare/v3.17.0...v3.18.0
 [3.17.0]: https://github.com/Behat/Behat/compare/v3.16.0...v3.17.0
 [3.16.0]: https://github.com/Behat/Behat/compare/v3.15.0...v3.16.0
