@@ -16,6 +16,7 @@ use Behat\Behat\Transformation\Transformation\ColumnBasedTableTransformation;
 use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\Transformation\ReturnTypeTransformation;
 use Behat\Behat\Transformation\Transformation\RowBasedTableTransformation;
+use Behat\Behat\Transformation\Transformation\TableColumnTransformation;
 use Behat\Behat\Transformation\Transformation\TableRowTransformation;
 use Behat\Behat\Transformation\Transformation\TokenNameAndReturnTypeTransformation;
 use Behat\Behat\Transformation\Transformation\TokenNameTransformation;
@@ -54,6 +55,7 @@ class TransformationCalleeFactory
             RowBasedTableTransformation::class,
             ColumnBasedTableTransformation::class,
             TableRowTransformation::class,
+            TableColumnTransformation::class,
             TokenNameAndReturnTypeTransformation::class,
             ReturnTypeTransformation::class,
             TokenNameTransformation::class
