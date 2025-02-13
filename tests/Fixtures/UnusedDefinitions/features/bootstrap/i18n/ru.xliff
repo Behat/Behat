@@ -1,0 +1,15 @@
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="global" source-language="en" target-language="ru" datatype="plaintext">
+    <header />
+    <body>
+      <trans-unit id="i-have-entered">
+        <source>/^I have entered (\d+) into calculator$/</source>
+        <target>/^Я набрал число (\d+) на калькуляторе$/</target>
+      </trans-unit>
+      <trans-unit id="i-have-clicked-plus">
+        <source>/^I have clicked "+"$/</source>
+        <target>/^Я нажал "([^"]*)"$/</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

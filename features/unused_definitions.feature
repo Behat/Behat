@@ -65,3 +65,18 @@ Feature: Unused definitions
       This is a step that is never used and should be removed
       `FeatureContext::stepNotUsedInAnyFeature()`
       """
+
+  Scenario: Print unused definitions when using translated definitions
+    When I run behat with the following additional options:
+      | option                     | value                   |
+      | --profile                  | translated_definitions  |
+      | --suite                    | translated_definitions  |
+      | --print-unused-definitions |                         |
+    Then it should pass with:
+      """
+      --- 1 unused definition:
+
+      [Given|*] /^I have clicked "+"$/
+      `TranslatedDefinitionsContext::iHaveClickedPlus()`
+      """
+

@@ -12,7 +12,7 @@ namespace Behat\Behat\Definition\Cli;
 
 use Behat\Behat\Definition\Call\RuntimeDefinition;
 use Behat\Behat\Definition\DefinitionRepository;
-use Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter;
+use Behat\Behat\Definition\Printer\UnusedDefinitionPrinter;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
@@ -38,7 +38,7 @@ final class UnusedDefinitionsController implements Controller
     public function __construct(
         private DefinitionRepository $definitionRepository,
         private EventDispatcherInterface $eventDispatcher,
-        private ConsoleDefinitionInformationPrinter $printer,
+        private UnusedDefinitionPrinter $printer,
         private bool $printUnusedDefinitions
     ) {
     }

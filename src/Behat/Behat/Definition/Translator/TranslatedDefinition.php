@@ -130,6 +130,11 @@ final class TranslatedDefinition implements Definition
         return $this->definition->getReflection();
     }
 
+    public function getOriginalDefinition(): Definition
+    {
+        return $this->definition;
+    }
+
     /**
      * {@inheritdoc}
      */
