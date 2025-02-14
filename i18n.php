@@ -1,4 +1,6 @@
-<?php return array(
+<?php
+
+return array(
     'en'    => array(
         'snippet_context_choice'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> suite has undefined steps. Please choose the context to generate snippets:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> has missing steps. Define them with these snippets:</snippet_undefined>',

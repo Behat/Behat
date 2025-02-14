@@ -86,7 +86,7 @@ final class ArgumentAutowirer
         return (bool) $this->getClassFromParameter($parameter);
     }
 
-    private function getClassFromParameter(ReflectionParameter $parameter) : ?string
+    private function getClassFromParameter(ReflectionParameter $parameter): ?string
     {
         if (!($type = $parameter->getType()) || !($type instanceof ReflectionNamedType)) {
             return null;

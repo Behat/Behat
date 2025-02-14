@@ -59,7 +59,7 @@ abstract class TesterExtension implements Extension
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
@@ -145,8 +145,8 @@ abstract class TesterExtension implements Extension
         $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
     }
-    
-    
+
+
     /**
      * Loads stop on failure handler.
      */

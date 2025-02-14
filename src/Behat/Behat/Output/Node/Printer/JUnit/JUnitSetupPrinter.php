@@ -1,4 +1,5 @@
 <?php
+
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Hook\Scope\StepScope;
@@ -21,7 +22,6 @@ use Behat\Testwork\Tester\Setup\Teardown;
  */
 class JUnitSetupPrinter implements SetupPrinter
 {
-
     /** @var ExceptionPresenter */
     private $exceptionPresenter;
 

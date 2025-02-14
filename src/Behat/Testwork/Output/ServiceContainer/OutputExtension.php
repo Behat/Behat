@@ -62,7 +62,7 @@ final class OutputExtension implements Extension
     {
         $this->defaultFormatter = $defaultFormatter;
         $this->factories = $formatterFactories;
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**

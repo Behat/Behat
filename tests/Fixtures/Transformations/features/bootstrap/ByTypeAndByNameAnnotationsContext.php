@@ -8,13 +8,13 @@ class ByTypeAndByNameAnnotationsContext implements Context
     private User $she;
 
     /** @Transform */
-    public function userFromName(string $name) : User
+    public function userFromName(string $name): User
     {
         return new User($name);
     }
 
     /** @Transform :admin */
-    public function adminFromName(string $name) : User
+    public function adminFromName(string $name): User
     {
         return new User('admin: ' . $name);
     }

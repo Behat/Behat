@@ -23,3 +23,9 @@ ba740b59cff1f5aa8f5e4eed8577b986b8b6b1d3
 ba52edd29e43302f4a4254626fd27af8f92dbf32
 # PHP-CS-Fixer - Fix visibility declarations
 40e62bde42a457ebee38e08f92784fdb68719fc5
+# PHP-CS-Fixer - PSR12 spacing
+90fa446e782f14afe3c7a47b58934eff537f6e94
+# PHP-CS-Fixer - PSR12 blank lines
+4ee4d6e9d81598fe48f2e0a6b2755648aa241cb9
+# PHP-CS-Fixer - PSR12 other miscellaneous changes
+efb86c8d82cdf25017a1adfdbddf7c286e49c0c8

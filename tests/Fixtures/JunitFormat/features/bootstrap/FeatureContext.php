@@ -44,6 +44,6 @@ class FeatureContext implements Context
     #[When('/^I have a PHP error$/')]
     public function iHaveAPHPError()
     {
-        $foo = new class extends Context {};
+        $foo = new class () extends Context {};
     }
 }

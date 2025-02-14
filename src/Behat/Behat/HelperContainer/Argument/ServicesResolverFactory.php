@@ -186,7 +186,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
             return call_user_func($constructor);
         }
 
-        return new $constructor[0];
+        return new $constructor[0]();
     }
 
     /**

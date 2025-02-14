@@ -10,7 +10,7 @@ final class MixedArgumentOrganiserTest extends TestCase
 {
     private $organiser;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->organiser = new MixedArgumentOrganiser();
     }
