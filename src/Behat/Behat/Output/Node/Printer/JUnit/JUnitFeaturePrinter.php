@@ -68,6 +68,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[TestResult::UNDEFINED],
             'time' => $this->durationListener ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
+            'file' => $this->currentFeature->getFile(),
         ));
 
         $this->statistics->reset();
