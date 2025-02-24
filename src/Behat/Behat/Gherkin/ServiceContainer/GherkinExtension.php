@@ -155,7 +155,7 @@ final class GherkinExtension implements Extension
     private function getLibPath()
     {
         $reflection = new ReflectionClass('Behat\Gherkin\Gherkin');
-        $libPath = rtrim(dirname($reflection->getFilename()) . '/../../../', DIRECTORY_SEPARATOR);
+        $libPath = rtrim(dirname($reflection->getFilename()) . '/../', DIRECTORY_SEPARATOR);
 
         return $libPath;
     }
