@@ -19,6 +19,7 @@ use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
+use Composer\InstalledVersions;
 use ReflectionClass;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -154,10 +155,7 @@ final class GherkinExtension implements Extension
      */
     private function getLibPath()
     {
-        $reflection = new ReflectionClass('Behat\Gherkin\Gherkin');
-        $libPath = rtrim(dirname($reflection->getFilename()) . '/../../../', DIRECTORY_SEPARATOR);
-
-        return $libPath;
+        return InstalledVersions::getInstallPath('behat/gherkin');
     }
 
     /**
