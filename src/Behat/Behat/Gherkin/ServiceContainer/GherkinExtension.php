@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Gherkin\ServiceContainer;
 
+use Behat\Gherkin\Keywords\CachedArrayKeywords;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionException;
@@ -136,8 +137,6 @@ final class GherkinExtension implements Extension
      */
     private function loadParameters(ContainerBuilder $container)
     {
-        $container->setParameter('gherkin.paths.lib', $this->getLibPath());
-        $container->setParameter('gherkin.paths.i18n', '%gherkin.paths.lib%/i18n.php');
         $container->setParameter(
             'suite.generic.default_settings',
             array(
@@ -145,19 +144,6 @@ final class GherkinExtension implements Extension
                 'contexts' => array('FeatureContext')
             )
         );
-    }
-
-    /**
-     * Returns gherkin library path.
-     *
-     * @return string
-     */
-    private function getLibPath()
-    {
-        $reflection = new ReflectionClass('Behat\Gherkin\Gherkin');
-        $libPath = rtrim(dirname($reflection->getFilename()) . '/../../../', DIRECTORY_SEPARATOR);
-
-        return $libPath;
     }
 
     /**
@@ -178,9 +164,8 @@ final class GherkinExtension implements Extension
      */
     private function loadKeywords(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Gherkin\Keywords\CachedArrayKeywords', array(
-            '%gherkin.paths.i18n%'
-        ));
+        $definition = new Definition(CachedArrayKeywords::class);
+        $definition->setFactory([CachedArrayKeywords::class, 'withDefaultKeywords']);
         $container->setDefinition(self::KEYWORDS_ID, $definition);
 
         $definition = new Definition('Behat\Gherkin\Keywords\KeywordsDumper', array(
