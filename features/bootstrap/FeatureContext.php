@@ -13,6 +13,7 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Behat\Step\When;
+use Behat\Step\Then;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -213,6 +214,12 @@ EOL;
         $this->workingDirChanged = true;
     }
 
+    #[Given('I clear the default behat options')]
+    public function iClearTheDefaultBehatOptions(): void
+    {
+        $this->options = '';
+    }
+
     #[Given('I provide the following options for all behat invocations:')]
     public function iProvideTheFollowingOptionsForAllBehatInvocations(TableNode $table): void
     {
@@ -377,6 +384,32 @@ EOL;
     {
         $path = $this->workingDir . '/' . $path;
         $this->checkXmlFileContents($path, $text);
+    }
+
+    #[When('I copy the :file file to the temp folder')]
+    public function iCopyTheFileToTheTempFolder($file): void
+    {
+        $origin = $this->workingDir . '/' . $file;
+        $destination = $this->tempDir . '/' . $file;
+        copy($origin, $destination);
+    }
+
+    #[Then('the temp :file file should be like:')]
+    public function theTempFileShouldBeLike($file, PyStringNode $string): void
+    {
+        $path = $this->tempDir . '/' . $file;
+        Assert::assertFileExists($path);
+
+        $fileContent = trim(file_get_contents($path));
+
+        Assert::assertSame($string->getRaw(), $fileContent);
+    }
+
+    #[Then('the temp :file file should have been removed')]
+    public function theTempFileShouldHaveBeenRemoved($file): void
+    {
+        $path = $this->tempDir . '/' . $file;
+        Assert::assertFileDoesNotExist($path);
     }
 
     /**
@@ -617,8 +650,8 @@ EOL;
             $option = $row['option'];
             $value = $row['value'];
             if ($value !== '') {
-                if ($value === '{SYSTEM_TMP_DIR}') {
-                    $value = $this->tempDir;
+                if (str_contains($value, '{SYSTEM_TMP_DIR}')) {
+                    $value = str_replace('{SYSTEM_TMP_DIR}', $this->tempDir, $value);
                 }
                 $option .= '=' . $value;
             }

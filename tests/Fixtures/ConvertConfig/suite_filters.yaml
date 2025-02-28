@@ -1,0 +1,5 @@
+default:
+    suites:
+        my_suite:
+            filters:
+                tags: "@run"
