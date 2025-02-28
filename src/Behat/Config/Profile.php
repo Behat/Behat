@@ -16,12 +16,13 @@ use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
+use Behat\Testwork\ServiceContainer\ExtensionManager;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name\FullyQualified;
 
-final class Profile
+final class Profile implements ConfigConverterInterface
 {
     private const SUITES_SETTING = 'suites';
     private const EXTENSIONS_SETTING = 'extensions';
@@ -39,6 +40,8 @@ final class Profile
     private const SUITE_FUNCTION = 'withSuite';
 
     private BuilderFactory $builderFactory;
+
+    private static ExtensionManager $extensionManager;
 
     public function __construct(
         private string $name,
@@ -111,6 +114,9 @@ final class Profile
         return $this->settings;
     }
 
+    /**
+     * @internal
+     */
     public function toPhpExpr(): Node\Expr
     {
         $profileObject =  $this->builderFactory->new(new FullyQualified(self::class));
@@ -130,6 +136,14 @@ final class Profile
         $profileObject->args = $args;
 
         return $expr;
+    }
+
+    /**
+     * @internal
+     */
+    public static function setExtensioManager(ExtensionManager $extensionManager): void
+    {
+        self::$extensionManager = $extensionManager;
     }
 
     private function addFormattersToExpr(Expr &$expr): void
@@ -208,7 +222,13 @@ final class Profile
     {
         if (isset($this->settings[self::EXTENSIONS_SETTING])) {
             foreach ($this->settings[self::EXTENSIONS_SETTING] as $name => $extensionSettings) {
-                $extensionObject = new Extension($name, $extensionSettings ?? []);
+                $extension = self::$extensionManager->activateExtension($name);
+                if ($extension instanceof ConfigurableExtensionInterface) {
+                    $extensionObject = $extension->getExtensionConfigObject($name, $extensionSettings);
+                } else {
+                    $extensionObject = new Extension($name, $extensionSettings ?? []);
+                }
+
                 $args = $this->builderFactory->args([$extensionObject->toPhpExpr()]);
                 $expr = $this->builderFactory->methodCall($expr, self::EXTENSION_FUNCTION, $args);
                 unset($this->settings[self::EXTENSIONS_SETTING][$name]);

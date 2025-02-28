@@ -54,6 +54,9 @@ final class PrettyFormatter extends Formatter
         return (new self())->toArray();
     }
 
+    /**
+     * @internal
+     */
     public function toPhpExpr(): Expr
     {
         return $this->toPhpExprForNamedFormatter();

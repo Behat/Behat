@@ -14,7 +14,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name\FullyQualified;
 
-final class Suite
+final class Suite implements ConfigConverterInterface
 {
     private BuilderFactory $builderFactory;
 
@@ -83,6 +83,9 @@ final class Suite
         return $this->settings;
     }
 
+    /**
+     * @internal
+     */
     public function toPhpExpr(): Expr
     {
         $suiteObject =  $this->builderFactory->new(new FullyQualified(self::class));

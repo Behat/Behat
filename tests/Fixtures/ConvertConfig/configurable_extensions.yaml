@@ -1,0 +1,8 @@
+default:
+    extensions:
+        configurable_extension.php:
+            property: value
+            other_properties:
+                my_tags:
+                    - one_tag
+                    - another_tag

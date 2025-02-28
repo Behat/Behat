@@ -63,6 +63,9 @@ final class Config implements ConfigInterface, ConfigConverterInterface
         return $this->settings;
     }
 
+    /**
+     * @internal
+     */
     public function toPhpExpr(): Node\Expr
     {
         $configObject =  $this->builderFactory->new(new FullyQualified(self::class));

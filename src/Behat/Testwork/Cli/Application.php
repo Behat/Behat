@@ -147,7 +147,7 @@ final class Application extends BaseApplication
 
         $commands[] = new DumpReferenceCommand($this->extensionManager);
         $commands[] = new DebugCommand($this, $this->configurationLoader, $this->extensionManager);
-        $commands[] = new ConvertConfigCommand($this->configurationLoader);
+        $commands[] = new ConvertConfigCommand($this->configurationLoader, $this->extensionManager);
 
         return $commands;
     }

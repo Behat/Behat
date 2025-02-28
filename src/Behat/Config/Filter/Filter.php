@@ -30,6 +30,9 @@ class Filter implements FilterInterface, ConfigConverterInterface
         return $this->value;
     }
 
+    /**
+     * @internal
+     */
     public function toPhpExpr(): Expr
     {
         $filterObject =  $this->builderFactory->new(new FullyQualified(static::class));

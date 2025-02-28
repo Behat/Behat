@@ -8,13 +8,13 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name\FullyQualified;
 
-final class Extension implements ExtensionConfigInterface
+class Extension implements ExtensionConfigInterface, ConfigConverterInterface
 {
-    private BuilderFactory $builderFactory;
+    protected BuilderFactory $builderFactory;
 
     public function __construct(
-        private string $name,
-        private array $settings = [],
+        protected string $name,
+        protected array $settings = [],
     ) {
         $this->builderFactory = new BuilderFactory();
     }
@@ -29,6 +29,9 @@ final class Extension implements ExtensionConfigInterface
         return $this->settings;
     }
 
+    /**
+     * @internal
+     */
     public function toPhpExpr(): Expr
     {
         $extensionObject =  $this->builderFactory->new(new FullyQualified(self::class));

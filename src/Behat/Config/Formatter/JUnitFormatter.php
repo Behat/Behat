@@ -15,6 +15,9 @@ final class JUnitFormatter extends Formatter
         parent::__construct(name: self::NAME, settings: $baseOptions);
     }
 
+    /**
+     * @internal
+     */
     public function toPhpExpr(): Expr
     {
         return $this->toPhpExprForNamedFormatter();

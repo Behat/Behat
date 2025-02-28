@@ -78,6 +78,14 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
         return $this->settings;
     }
 
+    public static function defaults(): array
+    {
+        return [];
+    }
+
+    /**
+     * @internal
+     */
     public function toPhpExpr(): Expr
     {
         $formatterObject =  $this->builderFactory->new(new FullyQualified(self::class));
@@ -94,24 +102,9 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
         return $expr;
     }
 
-    public static function defaults(): array
-    {
-        return [];
-    }
-
-    public function applyBaseSettings(Expr $expr): Expr
-    {
-        foreach ($this->settings as $settingName => $setting) {
-            $functionName = Formatter::FORMATTER_FUNCTION_NAMES_PER_SETTING[$settingName] ?? null;
-            if ($functionName !== null) {
-                $args = $this->builderFactory->args([$setting]);
-                $expr = $this->builderFactory->methodCall($expr, $functionName, $args);
-                unset($this->settings[$settingName]);
-            }
-        }
-        return $expr;
-    }
-
+    /**
+     * @internal
+     */
     protected function toPhpExprForNamedFormatter(): Expr
     {
         $formatterObject =  $this->builderFactory->new(new FullyQualified(static::class));
@@ -135,6 +128,19 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
             $formatterObject->args = $args;
         }
 
+        return $expr;
+    }
+
+    private function applyBaseSettings(Expr $expr): Expr
+    {
+        foreach ($this->settings as $settingName => $setting) {
+            $functionName = Formatter::FORMATTER_FUNCTION_NAMES_PER_SETTING[$settingName] ?? null;
+            if ($functionName !== null) {
+                $args = $this->builderFactory->args([$setting]);
+                $expr = $this->builderFactory->methodCall($expr, $functionName, $args);
+                unset($this->settings[$settingName]);
+            }
+        }
         return $expr;
     }
 }

@@ -253,6 +253,33 @@ Feature: Convert config
       """
     And the temp "extensions.yaml" file should have been removed
 
+  Scenario: Configurable Extensions
+    When I copy the "configurable_extensions.yaml" file to the temp folder
+    When I run behat with the following additional options:
+      | option   | value                          |
+      | --config | {SYSTEM_TMP_DIR}/configurable_extensions.yaml |
+    Then the temp "configurable_extensions.php" file should be like:
+      """
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use ConfigurableExtensionConfig;
+
+      return (new Config())
+          ->withProfile((new Profile('default'))
+              ->withExtension((new ConfigurableExtensionConfig([
+                  'other_properties' => [
+                      'my_tags' => [
+                          'one_tag',
+                          'another_tag',
+                      ],
+                  ],
+              ]))
+                  ->withProperty('value')));
+      """
+    And the temp "configurable_extensions.yaml" file should have been removed
+
   Scenario: Profile filters
     When I copy the "profile_filters.yaml" file to the temp folder
     When I run behat with the following additional options:

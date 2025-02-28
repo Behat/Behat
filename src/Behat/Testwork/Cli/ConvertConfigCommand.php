@@ -13,8 +13,10 @@ namespace Behat\Testwork\Cli;
 use Behat\Config\Config;
 use Behat\Config\Converter\CustomPrettyPrinter;
 use Behat\Config\Converter\UseStatementAdder;
+use Behat\Config\Profile;
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationLoader;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
+use Behat\Testwork\ServiceContainer\ExtensionManager;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
@@ -30,8 +32,10 @@ final class ConvertConfigCommand extends BaseCommand
 
     public function __construct(
         private ConfigurationLoader $configurationLoader,
+        ExtensionManager $extensionManager
     ) {
         parent::__construct('convert-config');
+        Profile::setExtensioManager($extensionManager);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
