@@ -1,0 +1,6 @@
+default:
+    suites:
+        my_suite:
+            contexts:
+                - MyContext
+                - App\AnotherContext

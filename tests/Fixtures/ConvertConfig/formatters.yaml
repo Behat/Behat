@@ -1,0 +1,12 @@
+default:
+    formatters:
+        pretty:
+            paths:    false
+            output_decorate: false
+        progress: ~
+        junit: false
+        custom_formatter:
+            output_verbosity: 2
+            other_property: value
+    extensions:
+        custom_extension.php: ~

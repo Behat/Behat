@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace Behat\Config\Filter;
 
-final class TagFilter implements FilterInterface
+final class TagFilter extends Filter
 {
+    public const NAME = 'tags';
+
     public function __construct(
-        private readonly string $value,
+        string $value,
     ) {
-    }
-
-    public function name(): string
-    {
-        return 'tags';
-    }
-
-    public function value(): string
-    {
-        return $this->value;
+        parent::__construct(self::NAME, $value);
     }
 }

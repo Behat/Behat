@@ -1,0 +1,5 @@
+imports:
+    - imported.yaml
+    - other_imported.yaml
+
+default:

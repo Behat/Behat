@@ -5,6 +5,7 @@ namespace Behat\Config\Formatter;
 enum ShowOutputOption: string
 {
     public const OPTION_NAME = 'show_output';
+    public const PARAMETER_NAME = 'showOutput';
 
     case Yes = 'yes';
     case No = 'no';
