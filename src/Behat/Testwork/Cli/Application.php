@@ -77,6 +77,7 @@ final class Application extends BaseApplication
                 'Use -vv or --verbose=2 to display backtraces in addition to exceptions.'
             ),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
+            new InputOption('--convert-config', null, InputOption::VALUE_NONE, 'Convert the configuration to the PHP format.'),
             new InputOption('--config-reference', null, InputOption::VALUE_NONE, 'Display the configuration reference.'),
             new InputOption('--debug', null, InputOption::VALUE_NONE, 'Provide debugging information about current environment.'),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display version.'),
@@ -146,6 +147,7 @@ final class Application extends BaseApplication
 
         $commands[] = new DumpReferenceCommand($this->extensionManager);
         $commands[] = new DebugCommand($this, $this->configurationLoader, $this->extensionManager);
+        $commands[] = new ConvertConfigCommand($this->configurationLoader);
 
         return $commands;
     }
@@ -234,6 +236,10 @@ final class Application extends BaseApplication
 
         if ($input->hasParameterOption(array('--debug'))) {
             return 'debug';
+        }
+
+        if ($input->hasParameterOption(array('--convert-config'))) {
+            return 'convert-config';
         }
 
         return $this->getName();

@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace Behat\Config\Formatter;
 
+use PhpParser\Node\Expr;
 use UnexpectedValueException;
 
 final class PrettyFormatter extends Formatter
 {
     public const NAME = 'pretty';
+
+    private const TIMER_SETTING = 'timer';
+    private const EXPAND_SETTING = 'expand';
+    private const PATHS_SETTING = 'paths';
+    private const MULTILINE_SETTING = 'multiline';
 
     /**
      * @param bool $timer show time and memory usage at the end of the test run
@@ -25,23 +31,31 @@ final class PrettyFormatter extends Formatter
         bool             $paths = true,
         bool             $multiline = true,
         ShowOutputOption $showOutput = ShowOutputOption::Yes,
+        ...$baseOptions
     ) {
         if ($showOutput === ShowOutputOption::InSummary) {
             throw new UnexpectedValueException(
                 'The pretty formatter does not support the "in-summary" show output option'
             );
         }
-        parent::__construct(name: self::NAME, settings: [
-            'timer' => $timer,
-            'expand' => $expand,
-            'paths' => $paths,
-            'multiline' => $multiline,
+        $settings = [
+            self::TIMER_SETTING => $timer,
+            self::EXPAND_SETTING => $expand,
+            self::PATHS_SETTING => $paths,
+            self::MULTILINE_SETTING => $multiline,
             ShowOutputOption::OPTION_NAME => $showOutput->value
-        ]);
+        ];
+        $settings = [...$settings, ...$baseOptions];
+        parent::__construct(name: self::NAME, settings: $settings);
     }
 
     public static function defaults(): array
     {
         return (new self())->toArray();
+    }
+
+    public function toPhpExpr(): Expr
+    {
+        return $this->toPhpExprForNamedFormatter();
     }
 }

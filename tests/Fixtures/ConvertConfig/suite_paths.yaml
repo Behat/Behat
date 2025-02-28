@@ -1,0 +1,6 @@
+default:
+    suites:
+        my_suite:
+            paths:
+                - "one.feature"
+                - "other.feature"
