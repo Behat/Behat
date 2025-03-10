@@ -77,7 +77,7 @@ final class SuiteExtension implements Extension
             ->defaultValue(['default' => [
                 'enabled'    => true,
                 'type'       => null,
-                'settings'   => []
+                'settings'   => [],
             ]])
             ->treatNullLike([])
             ->treatFalseLike([])
@@ -185,7 +185,7 @@ final class SuiteExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Suite\Cli\SuiteController', [
             new Reference(self::REGISTRY_ID),
-            '%suite.configurations%'
+            '%suite.configurations%',
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 1100]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.suite', $definition);
@@ -200,7 +200,7 @@ final class SuiteExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Suite\Cli\InitializationController', [
             new Reference(self::REGISTRY_ID),
-            new Reference(self::BOOTSTRAPPER_ID)
+            new Reference(self::BOOTSTRAPPER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 900]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.initialization', $definition);
@@ -238,7 +238,7 @@ final class SuiteExtension implements Extension
         $container->setParameter('suite.generic.default_settings', []);
 
         $definition = new Definition('Behat\Testwork\Suite\Generator\GenericSuiteGenerator', [
-            '%suite.generic.default_settings%'
+            '%suite.generic.default_settings%',
         ]);
         $definition->addTag(SuiteExtension::GENERATOR_TAG, ['priority' => 50]);
         $container->setDefinition(SuiteExtension::GENERATOR_TAG . '.generic', $definition);

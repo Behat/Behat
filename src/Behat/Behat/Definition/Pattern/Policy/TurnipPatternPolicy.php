@@ -38,7 +38,7 @@ final class TurnipPatternPolicy implements PatternPolicy
     private static $placeholderPatterns = [
         "/(?<!\w)\"[^\"]+\"(?!\w)/",
         "/(?<!\w)'[^']+'(?!\w)/",
-        "/(?<!\w|\.|\,)\-?\d+(?:[\.\,]\d+)?(?!\w|\.|\,)/"
+        "/(?<!\w|\.|\,)\-?\d+(?:[\.\,]\d+)?(?!\w|\.|\,)/",
     ];
 
     /**

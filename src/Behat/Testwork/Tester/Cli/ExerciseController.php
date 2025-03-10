@@ -70,7 +70,7 @@ final class ExerciseController implements Controller
         SpecificationFinder $specificationFinder,
         Exercise $exercise,
         ResultInterpreter $resultInterpreter,
-        $skip = false
+        $skip = false,
     ) {
         $this->suiteRepository = $suiteRepository;
         $this->specificationFinder = $specificationFinder;

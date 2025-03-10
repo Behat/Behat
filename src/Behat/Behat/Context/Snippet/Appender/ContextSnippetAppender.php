@@ -28,7 +28,7 @@ final class ContextSnippetAppender implements SnippetAppender
     public const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Tester\Exception\PendingException';
 
     public function __construct(
-        private ?FilesystemLogger $logger = null
+        private ?FilesystemLogger $logger = null,
     ) {
     }
 

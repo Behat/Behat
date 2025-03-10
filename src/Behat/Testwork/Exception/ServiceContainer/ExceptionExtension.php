@@ -116,7 +116,7 @@ final class ExceptionExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Exception\ExceptionPresenter', [
             '%paths.base%',
-            $verbosity
+            $verbosity,
         ]);
         $container->setDefinition(self::PRESENTER_ID, $definition);
     }
@@ -160,7 +160,7 @@ final class ExceptionExtension implements Extension
     protected function loadVerbosityController($container)
     {
         $definition = new Definition('Behat\Testwork\Exception\Cli\VerbosityController', [
-            new Reference(self::PRESENTER_ID)
+            new Reference(self::PRESENTER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exception_verbosity', $definition);

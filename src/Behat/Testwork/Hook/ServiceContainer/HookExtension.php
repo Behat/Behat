@@ -81,7 +81,7 @@ class HookExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Hook\HookDispatcher', [
             new Reference(self::REPOSITORY_ID),
-            new Reference(CallExtension::CALL_CENTER_ID)
+            new Reference(CallExtension::CALL_CENTER_ID),
         ]);
         $container->setDefinition(self::DISPATCHER_ID, $definition);
     }
@@ -94,7 +94,7 @@ class HookExtension implements Extension
     protected function loadRepository(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Hook\HookRepository', [
-            new Reference(EnvironmentExtension::MANAGER_ID)
+            new Reference(EnvironmentExtension::MANAGER_ID),
         ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
     }
@@ -108,7 +108,7 @@ class HookExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Hook\Tester\HookableSuiteTester', [
             new Reference(TesterExtension::SUITE_TESTER_ID),
-            new Reference(self::DISPATCHER_ID)
+            new Reference(self::DISPATCHER_ID),
         ]);
         $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, ['priority' => 9999]);
         $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.hookable', $definition);

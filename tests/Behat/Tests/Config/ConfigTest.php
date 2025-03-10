@@ -24,7 +24,7 @@ final class ConfigTest extends TestCase
             'default' => [
                 'gherkin' => [
                     'filters' => [
-                        'tags' => '~@test'
+                        'tags' => '~@test',
                     ],
                 ],
             ],

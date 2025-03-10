@@ -62,7 +62,7 @@ final class JUnitFeatureElementListener implements EventListener
         private FeaturePrinter $featurePrinter,
         private JUnitScenarioPrinter $scenarioPrinter,
         private StepPrinter $stepPrinter,
-        private SetupPrinter $setupPrinter
+        private SetupPrinter $setupPrinter,
     ) {
     }
 

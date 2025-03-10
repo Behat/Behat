@@ -27,7 +27,7 @@ final class StopOnFailureHandler
 {
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly ResultInterpreter $resultInterpreter
+        private readonly ResultInterpreter $resultInterpreter,
     ) {
 
     }

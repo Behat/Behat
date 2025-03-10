@@ -60,7 +60,7 @@ final class RepositorySearchEngine implements SearchEngine
         DefinitionRepository $repository,
         PatternTransformer $patternTransformer,
         DefinitionTranslator $translator,
-        ArgumentOrganiser $argumentOrganiser
+        ArgumentOrganiser $argumentOrganiser,
     ) {
         $this->repository = $repository;
         $this->patternTransformer = $patternTransformer;
@@ -76,7 +76,7 @@ final class RepositorySearchEngine implements SearchEngine
     public function searchDefinition(
         Environment $environment,
         FeatureNode $feature,
-        StepNode $step
+        StepNode $step,
     ) {
         $suite = $environment->getSuite();
         $language = $feature->getLanguage();

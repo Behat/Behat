@@ -122,7 +122,7 @@ class TransformationExtension implements Extension
             new Reference(self::REPOSITORY_ID),
             new Reference(CallExtension::CALL_CENTER_ID),
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $definition->addTag(self::ARGUMENT_TRANSFORMER_TAG, ['priority' => 50]);
         $container->setDefinition(self::ARGUMENT_TRANSFORMER_TAG . '.repository', $definition);
@@ -146,7 +146,7 @@ class TransformationExtension implements Extension
     private function loadAttributeReader(ContainerBuilder $container): void
     {
         $definition = new Definition('\Behat\Behat\Transformation\Context\Attribute\TransformationAttributeReader', [
-            new Reference(DefinitionExtension::DOC_BLOCK_HELPER_ID)
+            new Reference(DefinitionExtension::DOC_BLOCK_HELPER_ID),
         ]);
         $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, ['priority' => 50]);
         $container->setDefinition(ContextExtension::ATTRIBUTE_READER_TAG . '.transformation', $definition);
@@ -160,7 +160,7 @@ class TransformationExtension implements Extension
     protected function loadRepository(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Transformation\TransformationRepository', [
-            new Reference(EnvironmentExtension::MANAGER_ID)
+            new Reference(EnvironmentExtension::MANAGER_ID),
         ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
     }

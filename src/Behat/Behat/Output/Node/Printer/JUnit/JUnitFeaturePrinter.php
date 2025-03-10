@@ -29,7 +29,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
 
     public function __construct(
         private PhaseStatistics $statistics,
-        private ?JUnitDurationListener $durationListener = null
+        private ?JUnitDurationListener $durationListener = null,
     ) {
     }
 

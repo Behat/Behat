@@ -57,7 +57,7 @@ final class OutlineTableListener implements EventListener
         private OutlineTablePrinter $tablePrinter,
         private ExampleRowPrinter $exampleRowPrinter,
         private SetupPrinter $exampleSetupPrinter,
-        private SetupPrinter $stepSetupPrinter
+        private SetupPrinter $stepSetupPrinter,
     ) {
     }
 

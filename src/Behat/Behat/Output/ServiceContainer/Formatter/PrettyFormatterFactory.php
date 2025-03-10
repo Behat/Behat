@@ -92,11 +92,11 @@ class PrettyFormatterFactory implements FormatterFactory
         $definition = new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', [
             [
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\SuiteListener', [
-                    new Reference('output.node.printer.pretty.suite_setup')
+                    new Reference('output.node.printer.pretty.suite_setup'),
                 ]),
                 new Definition('Behat\Behat\Output\Node\EventListener\AST\FeatureListener', [
                     new Reference('output.node.printer.pretty.feature'),
-                    new Reference('output.node.printer.pretty.feature_setup')
+                    new Reference('output.node.printer.pretty.feature_setup'),
                 ]),
                 $this->proxySiblingEvents(
                     BackgroundTested::BEFORE,
@@ -105,11 +105,11 @@ class PrettyFormatterFactory implements FormatterFactory
                         new Definition('Behat\Behat\Output\Node\EventListener\AST\ScenarioNodeListener', [
                             BackgroundTested::AFTER_SETUP,
                             BackgroundTested::AFTER,
-                            new Reference('output.node.printer.pretty.scenario')
+                            new Reference('output.node.printer.pretty.scenario'),
                         ]),
                         new Definition('Behat\Behat\Output\Node\EventListener\AST\StepListener', [
                             new Reference('output.node.printer.pretty.step'),
-                            new Reference('output.node.printer.pretty.step_setup')
+                            new Reference('output.node.printer.pretty.step_setup'),
                         ]),
                     ]
                 ),
@@ -121,11 +121,11 @@ class PrettyFormatterFactory implements FormatterFactory
                             ScenarioTested::AFTER_SETUP,
                             ScenarioTested::AFTER,
                             new Reference('output.node.printer.pretty.scenario'),
-                            new Reference('output.node.printer.pretty.scenario_setup')
+                            new Reference('output.node.printer.pretty.scenario_setup'),
                         ]),
                         new Definition('Behat\Behat\Output\Node\EventListener\AST\StepListener', [
                             new Reference('output.node.printer.pretty.step'),
-                            new Reference('output.node.printer.pretty.step_setup')
+                            new Reference('output.node.printer.pretty.step_setup'),
                         ]),
                     ]
                 ),
@@ -140,7 +140,7 @@ class PrettyFormatterFactory implements FormatterFactory
                                 new Reference('output.node.printer.pretty.outline_table'),
                                 new Reference('output.node.printer.pretty.example_row'),
                                 new Reference('output.node.printer.pretty.example_setup'),
-                                new Reference('output.node.printer.pretty.example_step_setup')
+                                new Reference('output.node.printer.pretty.example_step_setup'),
                             ])
                         ),
                         $this->proxyEventsIfParameterIsSet(
@@ -151,12 +151,12 @@ class PrettyFormatterFactory implements FormatterFactory
                                 new Reference('output.node.printer.pretty.example'),
                                 new Reference('output.node.printer.pretty.example_step'),
                                 new Reference('output.node.printer.pretty.example_setup'),
-                                new Reference('output.node.printer.pretty.example_step_setup')
+                                new Reference('output.node.printer.pretty.example_step_setup'),
                             ])
-                        )
+                        ),
                     ]
                 ),
-            ]
+            ],
         ]);
         $container->setDefinition(self::ROOT_LISTENER_ID, $definition);
     }
@@ -185,22 +185,22 @@ class PrettyFormatterFactory implements FormatterFactory
                         ),
                         new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StatisticsListener', [
                             new Reference('output.pretty.statistics'),
-                            new Reference('output.node.printer.pretty.statistics')
+                            new Reference('output.node.printer.pretty.statistics'),
                         ]),
                         new Definition('Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener', [
-                            new Reference('output.pretty.statistics')
+                            new Reference('output.pretty.statistics'),
                         ]),
                         new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StepStatsListener', [
                             new Reference('output.pretty.statistics'),
-                            new Reference(ExceptionExtension::PRESENTER_ID)
+                            new Reference(ExceptionExtension::PRESENTER_ID),
                         ]),
                         new Definition('Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener', [
                             new Reference('output.pretty.statistics'),
-                            new Reference(ExceptionExtension::PRESENTER_ID)
+                            new Reference(ExceptionExtension::PRESENTER_ID),
                         ]),
-                    ]
+                    ],
                 ]
-            )
+            ),
         ]);
         $definition->addTag(OutputExtension::FORMATTER_TAG, ['priority' => 100]);
         $container->setDefinition(OutputExtension::FORMATTER_TAG . '.pretty', $definition);
@@ -218,7 +218,7 @@ class PrettyFormatterFactory implements FormatterFactory
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyPathPrinter', [
             new Reference('output.node.printer.pretty.width_calculator'),
-            '%paths.base%'
+            '%paths.base%',
         ]);
         $container->setDefinition('output.node.printer.pretty.path', $definition);
 
@@ -231,7 +231,7 @@ class PrettyFormatterFactory implements FormatterFactory
             new Reference('output.node.printer.pretty.step_text_painter'),
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference('output.node.printer.pretty.path'),
-            new Reference(ExceptionExtension::PRESENTER_ID)
+            new Reference(ExceptionExtension::PRESENTER_ID),
         ]);
         $container->setDefinition('output.node.printer.pretty.step', $definition);
 
@@ -253,14 +253,14 @@ class PrettyFormatterFactory implements FormatterFactory
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyOutlineTablePrinter', [
             new Reference('output.node.printer.pretty.scenario'),
             new Reference('output.node.printer.pretty.skipped_step'),
-            new Reference(self::RESULT_TO_STRING_CONVERTER_ID)
+            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
         ]);
         $container->setDefinition('output.node.printer.pretty.outline_table', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyExampleRowPrinter', [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(ExceptionExtension::PRESENTER_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $container->setDefinition('output.node.printer.pretty.example_row', $definition);
     }
@@ -275,7 +275,7 @@ class PrettyFormatterFactory implements FormatterFactory
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyOutlinePrinter', [
             new Reference('output.node.printer.pretty.scenario'),
             new Reference('output.node.printer.pretty.skipped_step'),
-            new Reference(self::RESULT_TO_STRING_CONVERTER_ID)
+            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
         ]);
         $container->setDefinition('output.node.printer.pretty.outline', $definition);
 
@@ -289,7 +289,7 @@ class PrettyFormatterFactory implements FormatterFactory
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference('output.node.printer.pretty.path'),
             new Reference(ExceptionExtension::PRESENTER_ID),
-            8
+            8,
         ]);
         $container->setDefinition('output.node.printer.pretty.example_step', $definition);
     }
@@ -306,7 +306,7 @@ class PrettyFormatterFactory implements FormatterFactory
             new Reference(ExceptionExtension::PRESENTER_ID),
             0,
             true,
-            true
+            true,
         ]);
         $container->setDefinition('output.node.printer.pretty.suite_setup', $definition);
 
@@ -315,35 +315,35 @@ class PrettyFormatterFactory implements FormatterFactory
             new Reference(ExceptionExtension::PRESENTER_ID),
             0,
             false,
-            true
+            true,
         ]);
         $container->setDefinition('output.node.printer.pretty.feature_setup', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettySetupPrinter', [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(ExceptionExtension::PRESENTER_ID),
-            2
+            2,
         ]);
         $container->setDefinition('output.node.printer.pretty.scenario_setup', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettySetupPrinter', [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(ExceptionExtension::PRESENTER_ID),
-            4
+            4,
         ]);
         $container->setDefinition('output.node.printer.pretty.step_setup', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettySetupPrinter', [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(ExceptionExtension::PRESENTER_ID),
-            8
+            8,
         ]);
         $container->setDefinition('output.node.printer.pretty.example_step_setup', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettySetupPrinter', [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(ExceptionExtension::PRESENTER_ID),
-            6
+            6,
         ]);
         $container->setDefinition('output.node.printer.pretty.example_setup', $definition);
     }
@@ -365,13 +365,13 @@ class PrettyFormatterFactory implements FormatterFactory
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(ExceptionExtension::PRESENTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
-            '%paths.base%'
+            '%paths.base%',
         ]);
         $container->setDefinition('output.node.printer.list', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyStatisticsPrinter', [
             new Reference('output.node.printer.counter'),
-            new Reference('output.node.printer.list')
+            new Reference('output.node.printer.list'),
         ]);
         $container->setDefinition('output.node.printer.pretty.statistics', $definition);
     }
@@ -388,7 +388,7 @@ class PrettyFormatterFactory implements FormatterFactory
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Helper\StepTextPainter', [
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
-            new Reference(self::RESULT_TO_STRING_CONVERTER_ID)
+            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
         ]);
         $container->setDefinition('output.node.printer.pretty.step_text_painter', $definition);
 
@@ -419,8 +419,8 @@ class PrettyFormatterFactory implements FormatterFactory
     {
         return new Definition('Behat\Behat\Output\Node\EventListener\Flow\FirstBackgroundFiresFirstListener', [
             new Definition('Behat\Behat\Output\Node\EventListener\Flow\OnlyFirstBackgroundFiresListener', [
-                $listener
-            ])
+                $listener,
+            ]),
         ]);
     }
 
@@ -440,7 +440,7 @@ class PrettyFormatterFactory implements FormatterFactory
             [
                 $beforeEventName,
                 $afterEventName,
-                new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', [$listeners])
+                new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', [$listeners]),
             ]
         );
     }

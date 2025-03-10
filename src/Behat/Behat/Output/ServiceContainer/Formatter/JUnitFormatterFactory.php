@@ -74,14 +74,14 @@ final class JUnitFormatterFactory implements FormatterFactory
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitFeaturePrinter', [
             new Reference('output.junit.statistics'),
-            new Reference('output.node.listener.junit.duration')
+            new Reference('output.node.listener.junit.duration'),
         ]);
         $container->setDefinition('output.node.printer.junit.feature', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter', [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference('output.node.listener.junit.outline'),
-            new Reference('output.node.listener.junit.duration')
+            new Reference('output.node.listener.junit.duration'),
         ]);
         $container->setDefinition('output.node.printer.junit.scenario', $definition);
 
@@ -110,7 +110,7 @@ final class JUnitFormatterFactory implements FormatterFactory
         $definition = new Definition(
             'Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener',
             [
-                new Reference('output.node.printer.junit.suite')
+                new Reference('output.node.printer.junit.suite'),
             ]
         );
         $container->setDefinition('output.node.listener.junit.outline', $definition);
@@ -155,15 +155,15 @@ final class JUnitFormatterFactory implements FormatterFactory
                 [
                     new Reference(self::ROOT_LISTENER_ID),
                     new Definition('Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener', [
-                        new Reference('output.junit.statistics')
+                        new Reference('output.junit.statistics'),
                     ]),
                     new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StepStatsListener', [
                         new Reference('output.junit.statistics'),
-                        new Reference(ExceptionExtension::PRESENTER_ID)
+                        new Reference(ExceptionExtension::PRESENTER_ID),
                     ]),
                     new Definition('Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener', [
                         new Reference('output.junit.statistics'),
-                        new Reference(ExceptionExtension::PRESENTER_ID)
+                        new Reference(ExceptionExtension::PRESENTER_ID),
                     ]),
                 ],
             ]),

@@ -122,7 +122,7 @@ final class AutoloaderExtension implements Extension
     private function loadController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Autoloader\Cli\AutoloaderController', [
-            new Reference(self::CLASS_LOADER_ID)
+            new Reference(self::CLASS_LOADER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
 

@@ -39,7 +39,7 @@ final class TransformationCall extends EnvironmentCall
         Environment $environment,
         Definition $definition,
         Transformation $transformation,
-        array $arguments
+        array $arguments,
     ) {
         parent::__construct($environment, $transformation, $arguments);
 

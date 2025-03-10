@@ -117,7 +117,7 @@ final class OrderingExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Ordering\Cli\OrderController', [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
-            new Reference(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering')
+            new Reference(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering'),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 250]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.order', $definition);
@@ -131,7 +131,7 @@ final class OrderingExtension implements Extension
     private function loadOrderedExercise(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Ordering\OrderedExercise', [
-            new Reference(TesterExtension::EXERCISE_ID)
+            new Reference(TesterExtension::EXERCISE_ID),
         ]);
         $definition->addTag(TesterExtension::EXERCISE_WRAPPER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering', $definition);

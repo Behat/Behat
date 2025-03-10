@@ -62,7 +62,7 @@ final class FilesystemFeatureLocator implements SpecificationLocator
             "a feature <comment>(*.feature)</comment>",
             "a scenario at specific line <comment>(*.feature:10)</comment>.",
             "all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.",
-            "all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>."
+            "all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>.",
         ];
     }
 

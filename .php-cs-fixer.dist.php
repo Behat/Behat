@@ -66,14 +66,14 @@ return (new PhpCsFixer\Config())
                 'use_lambda',
             ],
         ],
-//        'trailing_comma_in_multiline' => [ // overrides @PER-CS2.0
-//            'after_heredoc' => true,
-//            'elements' => [
-//                'array_destructuring',
-//                'arrays',
-//                'match',
-//                'parameters',
-//            ],
-//        ],
+        'trailing_comma_in_multiline' => [ // overrides @PER-CS2.0
+            'after_heredoc' => true,
+            'elements' => [
+                'array_destructuring',
+                'arrays',
+                'match',
+                'parameters',
+            ],
+        ],
     ])
     ->setFinder($finder);

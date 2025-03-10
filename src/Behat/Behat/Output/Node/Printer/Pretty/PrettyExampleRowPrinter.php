@@ -66,7 +66,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         ExceptionPresenter $exceptionPresenter,
         TranslatorInterface $translator,
         $indentation = 6,
-        $subIndentation = 2
+        $subIndentation = 2,
     ) {
         $this->resultConverter = $resultConverter;
         $this->exceptionPresenter = $exceptionPresenter;

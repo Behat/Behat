@@ -39,7 +39,7 @@ final class UnusedDefinitionsController implements Controller
         private DefinitionRepository $definitionRepository,
         private EventDispatcherInterface $eventDispatcher,
         private UnusedDefinitionPrinter $printer,
-        private bool $printUnusedDefinitions
+        private bool $printUnusedDefinitions,
     ) {
     }
 

@@ -122,7 +122,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
                     $indent . '{description}',
                     [
                         '{space}'       => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
-                        '{description}' => $descriptionLine
+                        '{description}' => $descriptionLine,
                     ]
                 );
             }
@@ -144,7 +144,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
             $indent . '`{path}`',
             [
                 '{space}' => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
-                '{path}'  => $definition->getPath()
+                '{path}'  => $definition->getPath(),
             ]
         );
 
@@ -156,7 +156,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
                     '{space}' => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
                     '{filepath}' => $definition->getReflection()->getFileName(),
                     '{start}' => $definition->getReflection()->getStartLine(),
-                    '{end}' => $definition->getReflection()->getEndLine()
+                    '{end}' => $definition->getReflection()->getEndLine(),
                 ]
             );
         }

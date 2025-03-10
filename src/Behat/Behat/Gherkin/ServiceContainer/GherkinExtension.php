@@ -141,7 +141,7 @@ final class GherkinExtension implements Extension
             'suite.generic.default_settings',
             [
                 'paths'    => ['%paths.base%/features'],
-                'contexts' => ['FeatureContext']
+                'contexts' => ['FeatureContext'],
             ]
         );
     }
@@ -169,7 +169,7 @@ final class GherkinExtension implements Extension
         $container->setDefinition(self::KEYWORDS_ID, $definition);
 
         $definition = new Definition('Behat\Gherkin\Keywords\KeywordsDumper', [
-            new Reference(self::KEYWORDS_ID)
+            new Reference(self::KEYWORDS_ID),
         ]);
         $container->setDefinition(self::KEYWORDS_DUMPER_ID, $definition);
     }
@@ -182,12 +182,12 @@ final class GherkinExtension implements Extension
     private function loadParser(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Gherkin\Parser', [
-            new Reference('gherkin.lexer')
+            new Reference('gherkin.lexer'),
         ]);
         $container->setDefinition('gherkin.parser', $definition);
 
         $definition = new Definition('Behat\Gherkin\Lexer', [
-            new Reference('gherkin.keywords')
+            new Reference('gherkin.keywords'),
         ]);
         $container->setDefinition('gherkin.lexer', $definition);
     }
@@ -201,7 +201,7 @@ final class GherkinExtension implements Extension
     private function loadDefaultLoaders(ContainerBuilder $container, $cachePath)
     {
         $definition = new Definition('Behat\Gherkin\Loader\GherkinFileLoader', [
-            new Reference('gherkin.parser')
+            new Reference('gherkin.parser'),
         ]);
 
         if ($cachePath) {
@@ -240,7 +240,7 @@ final class GherkinExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Gherkin\Cli\SyntaxController', [
             new Reference(self::KEYWORDS_DUMPER_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 600]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.gherkin_syntax', $definition);
@@ -254,7 +254,7 @@ final class GherkinExtension implements Extension
     private function loadFilterController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Gherkin\Cli\FilterController', [
-            new Reference(self::MANAGER_ID)
+            new Reference(self::MANAGER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 700]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.gherkin_filters', $definition);
@@ -269,7 +269,7 @@ final class GherkinExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Gherkin\Suite\Setup\SuiteWithPathsSetup', [
             '%paths.base%',
-            new Reference(FilesystemExtension::LOGGER_ID)
+            new Reference(FilesystemExtension::LOGGER_ID),
         ]);
         $definition->addTag(SuiteExtension::SETUP_TAG, ['priority' => 50]);
         $container->setDefinition(SuiteExtension::SETUP_TAG . '.suite_with_paths', $definition);
@@ -284,7 +284,7 @@ final class GherkinExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemFeatureLocator', [
             new Reference(self::MANAGER_ID),
-            '%paths.base%'
+            '%paths.base%',
         ]);
         $definition->addTag(SpecificationExtension::LOCATOR_TAG, ['priority' => 60]);
         $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_feature', $definition);
@@ -298,7 +298,7 @@ final class GherkinExtension implements Extension
     private function loadFilesystemScenariosListLocator(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemScenariosListLocator', [
-            new Reference(self::MANAGER_ID)
+            new Reference(self::MANAGER_ID),
         ]);
         $definition->addTag(SpecificationExtension::LOCATOR_TAG, ['priority' => 50]);
         $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_scenarios_list', $definition);
@@ -312,7 +312,7 @@ final class GherkinExtension implements Extension
     private function loadFilesystemRerunScenariosListLocator(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Gherkin\Specification\Locator\FilesystemRerunScenariosListLocator', [
-            new Reference(self::MANAGER_ID)
+            new Reference(self::MANAGER_ID),
         ]);
         $definition->addTag(SpecificationExtension::LOCATOR_TAG, ['priority' => 50]);
         $container->setDefinition(SpecificationExtension::LOCATOR_TAG . '.filesystem_rerun_scenarios_list', $definition);

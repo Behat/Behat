@@ -36,7 +36,7 @@ final class PrettyFormatter extends Formatter
             'expand' => $expand,
             'paths' => $paths,
             'multiline' => $multiline,
-            ShowOutputOption::OPTION_NAME => $showOutput->value
+            ShowOutputOption::OPTION_NAME => $showOutput->value,
         ]);
     }
 

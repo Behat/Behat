@@ -78,7 +78,7 @@ final class HelperContainerExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         $definition = new Definition('Behat\Behat\HelperContainer\Argument\ServicesResolverFactory', [
-            new Reference('service_container')
+            new Reference('service_container'),
         ]);
         $definition->addTag(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG, ['priority' => 0]);
         $container->setDefinition(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG . '.helper_container', $definition);

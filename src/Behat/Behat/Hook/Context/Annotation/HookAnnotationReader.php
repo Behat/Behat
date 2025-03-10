@@ -36,7 +36,7 @@ final class HookAnnotationReader implements AnnotationReader
         'beforescenario' => 'Behat\Behat\Hook\Call\BeforeScenario',
         'afterscenario'  => 'Behat\Behat\Hook\Call\AfterScenario',
         'beforestep'     => 'Behat\Behat\Hook\Call\BeforeStep',
-        'afterstep'      => 'Behat\Behat\Hook\Call\AfterStep'
+        'afterstep'      => 'Behat\Behat\Hook\Call\AfterStep',
     ];
 
     /**

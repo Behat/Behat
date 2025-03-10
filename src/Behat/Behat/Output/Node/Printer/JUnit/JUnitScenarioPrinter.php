@@ -80,7 +80,7 @@ final class JUnitScenarioPrinter
             'name'      => $name,
             'classname' => $feature->getTitle(),
             'status'    => $this->resultConverter->convertResultToString($result),
-            'time'      => $this->durationListener ? $this->durationListener->getDuration($scenario) : ''
+            'time'      => $this->durationListener ? $this->durationListener->getDuration($scenario) : '',
         ];
 
         if ($file) {

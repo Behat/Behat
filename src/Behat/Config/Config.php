@@ -11,7 +11,7 @@ use function is_string;
 final class Config implements ConfigInterface
 {
     public function __construct(
-        private array $settings = []
+        private array $settings = [],
     ) {
     }
 

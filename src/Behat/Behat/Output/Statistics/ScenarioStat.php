@@ -26,7 +26,7 @@ final class ScenarioStat
     public function __construct(
         private ?string $title,
         private string $path,
-        private int $resultCode
+        private int $resultCode,
     ) {
         $this->title = null;
     }

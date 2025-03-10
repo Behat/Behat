@@ -40,7 +40,7 @@ final class OutlineListener implements EventListener
         private ExamplePrinter $examplePrinter,
         private StepPrinter $stepPrinter,
         private SetupPrinter $exampleSetupPrinter,
-        private SetupPrinter $stepSetupPrinter
+        private SetupPrinter $stepSetupPrinter,
     ) {
     }
 

@@ -65,7 +65,7 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
         StepPrinter $stepPrinter,
         ResultToStringConverter $resultConverter,
         $indentation = 4,
-        $subIndentation = 2
+        $subIndentation = 2,
     ) {
         $this->scenarioPrinter = $scenarioPrinter;
         $this->stepPrinter = $stepPrinter;

@@ -58,7 +58,7 @@ final class ListPrinter
         ResultToStringConverter $resultConverter,
         ExceptionPresenter $exceptionPresenter,
         TranslatorInterface $translator,
-        $basePath
+        $basePath,
     ) {
         $this->resultConverter = $resultConverter;
         $this->translator = $translator;
@@ -103,7 +103,7 @@ final class ListPrinter
         $intro,
         $resultCode,
         array $stepStats,
-        ?ShowOutputOption $showOutput = ShowOutputOption::InSummary
+        ?ShowOutputOption $showOutput = ShowOutputOption::InSummary,
     ) {
         if (!count($stepStats)) {
             return;
@@ -140,7 +140,7 @@ final class ListPrinter
         OutputPrinter $printer,
         string $intro,
         array $failedHookStats,
-        bool $simple = false
+        bool $simple = false,
     ): void {
         if (!count($failedHookStats)) {
             return;
@@ -176,7 +176,7 @@ final class ListPrinter
         string $style,
         ?string $stdOut,
         ?string $error,
-        ?ShowOutputOption $showOutput
+        ?ShowOutputOption $showOutput,
     ) {
         $path = $this->relativizePaths($path);
         $printer->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $name, $style, $path));
@@ -238,7 +238,7 @@ final class ListPrinter
         int $number,
         StepStatV2 $stat,
         string $style,
-        ?ShowOutputOption $showOutput
+        ?ShowOutputOption $showOutput,
     ) {
         $maxLength = max(mb_strlen($stat->getScenarioText(), 'utf8'), mb_strlen($stat->getStepText(), 'utf8') + 2) + 1;
 
@@ -311,7 +311,7 @@ final class ListPrinter
                 $scope instanceof BeforeStepScope, $scope instanceof AfterStepScope =>
                     $this->relativizePaths($scope->getFeature()->getFile()) .
                     ':' . $scope->getStep()->getLine(),
-                default => null
+                default => null,
             };
         }
         return null;

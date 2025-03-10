@@ -78,7 +78,7 @@ final class TotalStatistics implements Statistics
             TestResult::FAILED    => 0,
             TestResult::UNDEFINED => 0,
             TestResult::PENDING   => 0,
-            TestResult::SKIPPED   => 0
+            TestResult::SKIPPED   => 0,
         ];
     }
 

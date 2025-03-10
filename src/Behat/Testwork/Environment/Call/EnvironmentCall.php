@@ -50,7 +50,7 @@ class EnvironmentCall implements Call
         Environment $environment,
         Callee $callee,
         array $arguments,
-        $errorReportingLevel = null
+        $errorReportingLevel = null,
     ) {
         $this->environment = $environment;
         $this->callee = $callee;

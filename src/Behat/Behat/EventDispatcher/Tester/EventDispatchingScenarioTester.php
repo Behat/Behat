@@ -70,7 +70,7 @@ final class EventDispatchingScenarioTester implements ScenarioTester
         $beforeEventName,
         $afterSetupEventName,
         $beforeTeardownEventName,
-        $afterEventName
+        $afterEventName,
     ) {
         $this->baseTester = $baseTester;
         $this->eventDispatcher = $eventDispatcher;

@@ -55,7 +55,7 @@ final class AfterOutlineTested extends OutlineTested implements AfterTested
         FeatureNode $feature,
         OutlineNode $outline,
         TestResult $result,
-        Teardown $teardown
+        Teardown $teardown,
     ) {
         parent::__construct($env);
 

@@ -77,7 +77,7 @@ final class AttributeContextReader implements ContextReader
         string $contextClass,
         ReflectionMethod $method,
         AttributeReader $reader,
-        array $callees
+        array $callees,
     ): array {
         try {
             $prototype = $method->getPrototype();

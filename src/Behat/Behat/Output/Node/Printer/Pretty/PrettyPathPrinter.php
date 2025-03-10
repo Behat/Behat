@@ -87,7 +87,7 @@ final class PrettyPathPrinter
         Scenario $scenario,
         StepNode $step,
         StepResult $result,
-        $indentation
+        $indentation,
     ) {
         $printer = $formatter->getOutputPrinter();
 

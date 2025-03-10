@@ -75,7 +75,7 @@ final class PrettyStepPrinter implements StepPrinter
         PrettyPathPrinter $pathPrinter,
         ExceptionPresenter $exceptionPresenter,
         $indentation = 4,
-        $subIndentation = 2
+        $subIndentation = 2,
     ) {
         $this->textPainter = $textPainter;
         $this->resultConverter = $resultConverter;

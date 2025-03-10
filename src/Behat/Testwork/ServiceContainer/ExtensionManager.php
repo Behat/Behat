@@ -32,7 +32,7 @@ final class ExtensionManager
      */
     private $locatedExtensions = [];
     private $debugInformation = [
-        'extensions_list' => []
+        'extensions_list' => [],
     ];
 
     /**

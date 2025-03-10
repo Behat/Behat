@@ -145,7 +145,7 @@ final class OutputExtension implements Extension
     private function loadOutputController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Output\Cli\OutputController', [
-            new Reference(self::MANAGER_ID)
+            new Reference(self::MANAGER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 1000]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.output', $definition);
@@ -160,7 +160,7 @@ final class OutputExtension implements Extension
     private function loadManager(ContainerBuilder $container, array $formatters)
     {
         $definition = new Definition('Behat\Testwork\Output\OutputManager', [
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+            new Reference(EventDispatcherExtension::DISPATCHER_ID),
         ]);
 
         foreach ($formatters as $name => $parameters) {

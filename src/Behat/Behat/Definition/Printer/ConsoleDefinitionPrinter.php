@@ -45,7 +45,7 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
         OutputInterface $output,
         PatternTransformer $patternTransformer,
         DefinitionTranslator $translator,
-        KeywordsInterface $keywords
+        KeywordsInterface $keywords,
     ) {
         $this->output = $output;
         $this->translator = $translator;

@@ -76,7 +76,7 @@ final class FilesystemExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Filesystem\ConsoleFilesystemLogger', [
             '%paths.base%',
-            new Reference(CliExtension::OUTPUT_ID)
+            new Reference(CliExtension::OUTPUT_ID),
         ]);
         $container->setDefinition(self::LOGGER_ID, $definition);
     }

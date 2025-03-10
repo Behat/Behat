@@ -139,7 +139,7 @@ final class ContextExtension implements Extension
     private function loadFactory(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\ContextFactory', [
-            new Reference(ArgumentExtension::CONSTRUCTOR_ARGUMENT_ORGANISER_ID)
+            new Reference(ArgumentExtension::CONSTRUCTOR_ARGUMENT_ORGANISER_ID),
         ]);
         $container->setDefinition(self::FACTORY_ID, $definition);
     }
@@ -164,7 +164,7 @@ final class ContextExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler', [
             new Reference(self::FACTORY_ID),
-            new Reference(self::AGGREGATE_RESOLVER_FACTORY_ID)
+            new Reference(self::AGGREGATE_RESOLVER_FACTORY_ID),
         ]);
         $definition->addTag(EnvironmentExtension::HANDLER_TAG, ['priority' => 50]);
         $container->setDefinition(self::ENVIRONMENT_HANDLER_ID, $definition);
@@ -191,7 +191,7 @@ final class ContextExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Context\Suite\Setup\SuiteWithContextsSetup', [
             new Reference(AutoloaderExtension::CLASS_LOADER_ID),
-            new Reference(FilesystemExtension::LOGGER_ID)
+            new Reference(FilesystemExtension::LOGGER_ID),
         ]);
         $definition->addTag(SuiteExtension::SETUP_TAG, ['priority' => 20]);
         $container->setDefinition(self::SUITE_SETUP_ID, $definition);
@@ -205,7 +205,7 @@ final class ContextExtension implements Extension
     private function loadSnippetAppender(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Snippet\Appender\ContextSnippetAppender', [
-            new Reference(FilesystemExtension::LOGGER_ID)
+            new Reference(FilesystemExtension::LOGGER_ID),
         ]);
         $definition->addTag(SnippetExtension::APPENDER_TAG, ['priority' => 50]);
         $container->setDefinition(SnippetExtension::APPENDER_TAG . '.context', $definition);
@@ -219,7 +219,7 @@ final class ContextExtension implements Extension
     private function loadSnippetGenerators(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator', [
-            new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID)
+            new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
         ]);
         $definition->addTag(SnippetExtension::GENERATOR_TAG, ['priority' => 50]);
         $container->setDefinition(self::CONTEXT_SNIPPET_GENERATOR_ID, $definition);
@@ -232,7 +232,7 @@ final class ContextExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Context\Cli\ContextSnippetsController', [
             new Reference(self::CONTEXT_SNIPPET_GENERATOR_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 410]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.context_snippets', $definition);
@@ -272,12 +272,12 @@ final class ContextExtension implements Extension
     private function loadAnnotatedContextReader(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Reader\AnnotatedContextReader', [
-            new Reference(self::DOC_BLOCK_HELPER_ID)
+            new Reference(self::DOC_BLOCK_HELPER_ID),
         ]);
         $container->setDefinition(self::ANNOTATED_CONTEXT_READER_ID, $definition);
 
         $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerContext', [
-            new Reference(self::ANNOTATED_CONTEXT_READER_ID)
+            new Reference(self::ANNOTATED_CONTEXT_READER_ID),
         ]);
         $definition->addTag(self::READER_TAG, ['priority' => 50]);
         $container->setDefinition(self::ANNOTATED_CONTEXT_READER_ID . '.cached', $definition);
@@ -294,7 +294,7 @@ final class ContextExtension implements Extension
         $container->setDefinition(self::ATTRIBUTED_CONTEXT_READER_ID, $definition);
 
         $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerContext', [
-            new Reference(self::ATTRIBUTED_CONTEXT_READER_ID)
+            new Reference(self::ATTRIBUTED_CONTEXT_READER_ID),
         ]);
         $definition->addTag(self::READER_TAG, ['priority' => 50]);
         $container->setDefinition(self::ATTRIBUTED_CONTEXT_READER_ID . '.cached', $definition);
@@ -309,12 +309,12 @@ final class ContextExtension implements Extension
     private function loadTranslatableContextReader(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Reader\TranslatableContextReader', [
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $container->setDefinition(self::READER_TAG . '.translatable', $definition);
 
         $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerSuite', [
-            new Reference(self::READER_TAG . '.translatable')
+            new Reference(self::READER_TAG . '.translatable'),
         ]);
         $definition->addTag(self::READER_TAG, ['priority' => 50]);
         $container->setDefinition(self::READER_TAG . '.translatable.cached', $definition);

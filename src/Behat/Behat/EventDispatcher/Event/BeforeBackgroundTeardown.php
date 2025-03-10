@@ -49,7 +49,7 @@ final class BeforeBackgroundTeardown extends BackgroundTested implements BeforeT
         Environment $env,
         FeatureNode $feature,
         BackgroundNode $background,
-        TestResult $result
+        TestResult $result,
     ) {
         parent::__construct($env);
 

@@ -58,7 +58,7 @@ class TransformationCalleeFactory
             TableColumnTransformation::class,
             TokenNameAndReturnTypeTransformation::class,
             ReturnTypeTransformation::class,
-            TokenNameTransformation::class
+            TokenNameTransformation::class,
         ];
     }
 }

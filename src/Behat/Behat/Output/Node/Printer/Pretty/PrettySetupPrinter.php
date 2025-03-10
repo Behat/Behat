@@ -65,7 +65,7 @@ final class PrettySetupPrinter implements SetupPrinter
         ExceptionPresenter $exceptionPresenter,
         $indentation = 0,
         $newlineBefore = false,
-        $newlineAfter = false
+        $newlineAfter = false,
     ) {
         $this->resultConverter = $resultConverter;
         $this->exceptionPresenter = $exceptionPresenter;

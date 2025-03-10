@@ -64,7 +64,7 @@ final class SnippetsController implements Controller
         SnippetRegistry $registry,
         SnippetWriter $writer,
         ConsoleSnippetPrinter $printer,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
     ) {
         $this->registry = $registry;
         $this->writer = $writer;

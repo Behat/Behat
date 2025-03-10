@@ -36,7 +36,7 @@ final class AnnotatedContextReader implements ContextReader
         '@throws',
         '@see',
         '@uses',
-        '@todo'
+        '@todo',
     ];
     /**
      * @var AnnotationReader[]

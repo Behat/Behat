@@ -57,7 +57,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         TransformationRepository $repository,
         CallCenter $callCenter,
         PatternTransformer $patternTransformer,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ) {
         $this->repository = $repository;
         $this->callCenter = $callCenter;

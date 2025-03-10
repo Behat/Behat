@@ -29,7 +29,7 @@ final class StepStatV2 extends StepStat
         private string $stepPath,
         private int $resultCode,
         private ?string $error = null,
-        private ?string $stdOut = null
+        private ?string $stdOut = null,
     ) {
         parent::__construct($stepText, $stepPath, $resultCode, $error, $stdOut);
     }

@@ -41,7 +41,7 @@ final class ConfigurationLoader
     private $debugInformation = [
         'environment_variable_name' => 'none',
         'environment_variable_content' => 'none',
-        'configuration_file_path' => 'none'
+        'configuration_file_path' => 'none',
     ];
 
     /**

@@ -139,7 +139,7 @@ final class DefinitionExtension implements Extension
     private function loadRepository(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\DefinitionRepository', [
-            new Reference(EnvironmentExtension::MANAGER_ID)
+            new Reference(EnvironmentExtension::MANAGER_ID),
         ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
     }
@@ -153,7 +153,7 @@ final class DefinitionExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Definition\DefinitionWriter', [
             new Reference(EnvironmentExtension::MANAGER_ID),
-            new Reference(self::REPOSITORY_ID)
+            new Reference(self::REPOSITORY_ID),
         ]);
         $container->setDefinition(self::WRITER_ID, $definition);
     }
@@ -177,7 +177,7 @@ final class DefinitionExtension implements Extension
     private function loadDefinitionTranslator(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\Translator\DefinitionTranslator', [
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $container->setDefinition(self::DEFINITION_TRANSLATOR_ID, $definition);
     }
@@ -193,7 +193,7 @@ final class DefinitionExtension implements Extension
             new Reference(self::REPOSITORY_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
-            new Reference(ArgumentExtension::PREG_MATCH_ARGUMENT_ORGANISER_ID)
+            new Reference(ArgumentExtension::PREG_MATCH_ARGUMENT_ORGANISER_ID),
         ]);
         $definition->addTag(self::SEARCH_ENGINE_TAG, ['priority' => 50]);
         $container->setDefinition(self::SEARCH_ENGINE_TAG . '.repository', $definition);
@@ -235,7 +235,7 @@ final class DefinitionExtension implements Extension
     private function loadAttributeReader(ContainerBuilder $container)
     {
         $definition = new Definition('\Behat\Behat\Definition\Context\Attribute\DefinitionAttributeReader', [
-            new Reference(self::DOC_BLOCK_HELPER_ID)
+            new Reference(self::DOC_BLOCK_HELPER_ID),
         ]);
         $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, ['priority' => 50]);
         $container->setDefinition(ContextExtension::ATTRIBUTE_READER_TAG . '.definition', $definition);
@@ -252,7 +252,7 @@ final class DefinitionExtension implements Extension
             new Reference(CliExtension::OUTPUT_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
-            new Reference(GherkinExtension::KEYWORDS_ID)
+            new Reference(GherkinExtension::KEYWORDS_ID),
         ]);
         $container->setDefinition($this->getInformationPrinterId(), $definition);
 
@@ -260,7 +260,7 @@ final class DefinitionExtension implements Extension
             new Reference(CliExtension::OUTPUT_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
-            new Reference(GherkinExtension::KEYWORDS_ID)
+            new Reference(GherkinExtension::KEYWORDS_ID),
         ]);
         $container->setDefinition($this->getListPrinterId(), $definition);
     }
@@ -271,7 +271,7 @@ final class DefinitionExtension implements Extension
             new Reference(SuiteExtension::REGISTRY_ID),
             new Reference(self::WRITER_ID),
             new Reference($this->getListPrinterId()),
-            new Reference($this->getInformationPrinterId())
+            new Reference($this->getInformationPrinterId()),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 500]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.available_definitions', $definition);
@@ -280,7 +280,7 @@ final class DefinitionExtension implements Extension
             new Reference(self::REPOSITORY_ID),
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
             new Reference($this->getInformationPrinterId()),
-            $printUnusedDefinitions
+            $printUnusedDefinitions,
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 300]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.unused_definitions', $definition);

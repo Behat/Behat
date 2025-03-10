@@ -140,7 +140,7 @@ abstract class TesterExtension implements Extension
             new Reference(SpecificationExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
             new Reference(self::RESULT_INTERPRETER_ID),
-            $skip
+            $skip,
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 0]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
@@ -154,7 +154,7 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Tester\Handler\StopOnFailureHandler', [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
-            new Reference(TesterExtension::RESULT_INTERPRETER_ID)
+            new Reference(TesterExtension::RESULT_INTERPRETER_ID),
         ]);
 
         if ($stopOnFailure === true) {
@@ -173,7 +173,7 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', [
             new Reference(self::RESULT_INTERPRETER_ID),
-            $strict
+            $strict,
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 300]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
@@ -203,7 +203,7 @@ abstract class TesterExtension implements Extension
     {
         $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeExercise', [
             new Reference(EnvironmentExtension::MANAGER_ID),
-            new Reference(self::SUITE_TESTER_ID)
+            new Reference(self::SUITE_TESTER_ID),
         ]);
         $container->setDefinition(self::EXERCISE_ID, $definition);
     }
@@ -216,7 +216,7 @@ abstract class TesterExtension implements Extension
     protected function loadSuiteTester(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeSuiteTester', [
-            new Reference(self::SPECIFICATION_TESTER_ID)
+            new Reference(self::SPECIFICATION_TESTER_ID),
         ]);
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);
     }

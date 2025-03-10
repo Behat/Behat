@@ -33,7 +33,7 @@ final class StepListener implements EventListener
 
     public function __construct(
         private StepPrinter $stepPrinter,
-        private ?SetupPrinter $setupPrinter = null
+        private ?SetupPrinter $setupPrinter = null,
     ) {
     }
 

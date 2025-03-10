@@ -4,7 +4,7 @@ class User
 {
     public function __construct(
         private string $username,
-        private int $age = 20
+        private int $age = 20,
     ) {
     }
 

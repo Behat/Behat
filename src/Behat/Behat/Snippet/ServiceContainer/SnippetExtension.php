@@ -103,7 +103,7 @@ class SnippetExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Snippet\Printer\ConsoleSnippetPrinter', [
             new Reference(CliExtension::OUTPUT_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $container->setDefinition('snippet.printer', $definition);
 
@@ -111,7 +111,7 @@ class SnippetExtension implements Extension
             new Reference(self::REGISTRY_ID),
             new Reference(self::WRITER_ID),
             new Reference('snippet.printer'),
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
+            new Reference(EventDispatcherExtension::DISPATCHER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 400]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.snippet', $definition);

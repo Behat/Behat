@@ -48,7 +48,7 @@ final class RuntimeFeatureTester implements SpecificationTester
     public function __construct(
         ScenarioTester $scenarioTester,
         OutlineTester $outlineTester,
-        EnvironmentManager $envManager
+        EnvironmentManager $envManager,
     ) {
         $this->scenarioTester = $scenarioTester;
         $this->outlineTester = $outlineTester;

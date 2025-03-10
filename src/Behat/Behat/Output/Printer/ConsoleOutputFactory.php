@@ -56,7 +56,7 @@ final class ConsoleOutputFactory extends BaseFactory
             'skipped'       => new OutputFormatterStyle('cyan'),
             'skipped_param' => new OutputFormatterStyle('cyan', null, ['bold']),
             'comment'       => new OutputFormatterStyle('black'),
-            'tag'           => new OutputFormatterStyle('cyan')
+            'tag'           => new OutputFormatterStyle('cyan'),
         ];
     }
 }
