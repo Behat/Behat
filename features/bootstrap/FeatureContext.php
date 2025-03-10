@@ -536,7 +536,7 @@ EOL;
         }
 
         // Remove location of the project
-        $output = str_replace(realpath(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR, '', $output);
+        $output = str_replace(realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR, '', $output);
 
         // Replace wrong warning message of HHVM
         $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);
@@ -568,7 +568,7 @@ EOL;
 
     private function moveToNewPath($path)
     {
-        $newWorkingDir = $this->workingDir .'/' . $path;
+        $newWorkingDir = $this->workingDir . '/' . $path;
         if (!file_exists($newWorkingDir)) {
             mkdir($newWorkingDir, 0777, true);
         }
@@ -581,7 +581,7 @@ EOL;
      */
     private function exitCodeIsCorrect(string $success): bool
     {
-        return match($success) {
+        return match ($success) {
             'fail' => 0 !== $this->getExitCode(),
             'pass' => 0 === $this->getExitCode(),
         };

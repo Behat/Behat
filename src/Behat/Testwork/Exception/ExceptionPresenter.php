@@ -115,10 +115,10 @@ final class ExceptionPresenter
             }
 
             $traceOutput .= sprintf(
-                '#%d %s: %s()'.PHP_EOL,
+                '#%d %s: %s()' . PHP_EOL,
                 $i,
-                isset($trace['file']) ? $trace['file'].'('.$trace['line'].')' : '[internal function]',
-                isset($trace['class']) ? $trace['class'].$trace['type'].$trace['function'] : $trace['function']
+                isset($trace['file']) ? $trace['file'] . '(' . $trace['line'] . ')' : '[internal function]',
+                isset($trace['class']) ? $trace['class'] . $trace['type'] . $trace['function'] : $trace['function']
             );
         }
 

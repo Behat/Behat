@@ -131,8 +131,8 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function setFileName($fileName, $extension = 'xml')
     {
-        if ('.'.$extension !== substr($fileName, strlen($extension) + 1)) {
-            $fileName .= '.'.$extension;
+        if ('.' . $extension !== substr($fileName, strlen($extension) + 1)) {
+            $fileName .= '.' . $extension;
         }
         $outputFactory = $this->getOutputFactory();
         assert($outputFactory instanceof FilesystemOutputFactory);

@@ -93,8 +93,8 @@ final class JUnitFormatterFactory implements FormatterFactory
         $definition = new Definition(
             'Behat\Behat\Output\Node\Printer\JUnit\JUnitSetupPrinter',
             [
-            new Reference(ExceptionExtension::PRESENTER_ID),
-        ]
+                new Reference(ExceptionExtension::PRESENTER_ID),
+            ]
         );
         $container->setDefinition('output.node.printer.junit.setup', $definition);
     }

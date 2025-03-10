@@ -103,7 +103,7 @@ class ConsoleSnippetPrinter implements SnippetPrinter
 
         $message = $this->translator->trans('snippet_proposal_use', ['%count%' => \count($usedClasses)], 'output');
 
-        $this->output->writeln('--- '.$message.PHP_EOL);
+        $this->output->writeln('--- ' . $message . PHP_EOL);
 
         foreach ($usedClasses as $usedClass) {
             $this->output->writeln(sprintf('    <snippet_undefined>use %s;</snippet_undefined>', $usedClass));
