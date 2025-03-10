@@ -14,15 +14,15 @@ class UseStatementAdder extends NodeVisitorAbstract
 
     public function enterNode(Node $node): ?Node
     {
-        if ($node instanceof Node\Name\FullyQualified) {
-            $className = $node->toString();
-            $shortName = $node->getLast();
-
-            $this->uses[$shortName] = $className;
-
-            return new Node\Name($shortName);
+        if (!$node instanceof Node\Name\FullyQualified) {
+            return null;
         }
-        return null;
+        $className = $node->toString();
+        $shortName = $node->getLast();
+
+        $this->uses[$shortName] = $className;
+
+        return new Node\Name($shortName);
     }
 
     /**

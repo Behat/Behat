@@ -37,8 +37,7 @@ class Filter implements FilterInterface, ConfigConverterInterface
     {
         $filterObject =  $this->builderFactory->new(new FullyQualified(static::class));
 
-        $args = $this->builderFactory->args([$this->value]);
-        $filterObject->args = $args;
+        $filterObject->args = $this->builderFactory->args([$this->value]);
 
         return $filterObject;
     }

@@ -114,14 +114,15 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
         $defaults = static::defaults();
         $argValues = [];
         foreach ($defaults as $name => $defaultValue) {
-            if ($this->settings[$name] !== $defaultValue) {
-                $value = $this->settings[$name];
-                if ($name === ShowOutputOption::OPTION_NAME) {
-                    $value = ShowOutputOption::from($value);
-                    $name = ShowOutputOption::PARAMETER_NAME;
-                }
-                $argValues[$name] = $value;
+            if ($this->settings[$name] === $defaultValue) {
+                continue;
             }
+            $value = $this->settings[$name];
+            if ($name === ShowOutputOption::OPTION_NAME) {
+                $value = ShowOutputOption::from($value);
+                $name = ShowOutputOption::PARAMETER_NAME;
+            }
+            $argValues[$name] = $value;
         }
         if ($argValues !== []) {
             $args = $this->builderFactory->args($argValues);

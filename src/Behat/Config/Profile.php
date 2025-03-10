@@ -148,107 +148,112 @@ final class Profile implements ConfigConverterInterface
 
     private function addFormattersToExpr(Expr &$expr): void
     {
-        if (isset($this->settings[self::FORMATTERS_SETTING])) {
-            foreach ($this->settings[self::FORMATTERS_SETTING] as $name => $formatterSettings) {
-                if ($formatterSettings === false) {
-                    $args = $this->builderFactory->args([$name]);
-                    $expr = $this->builderFactory->methodCall($expr, self::DISABLE_FORMATTER_FUNCTION, $args);
-                } else {
-                    if ($formatterSettings === null) {
-                        $formatterSettings = true;
-                    }
-                    if (isset($formatterSettings[ShowOutputOption::OPTION_NAME])) {
-                        $formatterSettings[ShowOutputOption::PARAMETER_NAME] =
-                            ShowOutputOption::from($formatterSettings[ShowOutputOption::OPTION_NAME]);
-                        unset($formatterSettings[ShowOutputOption::OPTION_NAME]);
-                    }
-
-                    $formatter = match($name) {
-                        PrettyFormatter::NAME => $formatterSettings === true ? new PrettyFormatter() : new PrettyFormatter(...$formatterSettings),
-                        ProgressFormatter::NAME => $formatterSettings === true ? new ProgressFormatter() : new ProgressFormatter(...$formatterSettings),
-                        JUnitFormatter::NAME => new JUnitFormatter(),
-                        default => $formatterSettings === true ? new Formatter($name) : new Formatter($name, $formatterSettings),
-                    };
-                    $formatterExpr = $formatter->toPhpExpr();
-                    $args = $this->builderFactory->args([$formatterExpr]);
-                    $expr = $this->builderFactory->methodCall($expr, self::FORMATTER_FUNCTION, $args);
-                }
-            }
-            unset($this->settings[self::FORMATTERS_SETTING]);
+        if (!isset($this->settings[self::FORMATTERS_SETTING])) {
+            return;
         }
+        foreach ($this->settings[self::FORMATTERS_SETTING] as $name => $formatterSettings) {
+            if ($formatterSettings === false) {
+                $args = $this->builderFactory->args([$name]);
+                $expr = $this->builderFactory->methodCall($expr, self::DISABLE_FORMATTER_FUNCTION, $args);
+            } else {
+                if ($formatterSettings === null) {
+                    $formatterSettings = true;
+                }
+                if (isset($formatterSettings[ShowOutputOption::OPTION_NAME])) {
+                    $formatterSettings[ShowOutputOption::PARAMETER_NAME] =
+                        ShowOutputOption::from($formatterSettings[ShowOutputOption::OPTION_NAME]);
+                    unset($formatterSettings[ShowOutputOption::OPTION_NAME]);
+                }
+
+                $formatter = match($name) {
+                    PrettyFormatter::NAME => $formatterSettings === true ? new PrettyFormatter() : new PrettyFormatter(...$formatterSettings),
+                    ProgressFormatter::NAME => $formatterSettings === true ? new ProgressFormatter() : new ProgressFormatter(...$formatterSettings),
+                    JUnitFormatter::NAME => new JUnitFormatter(),
+                    default => $formatterSettings === true ? new Formatter($name) : new Formatter($name, $formatterSettings),
+                };
+                $formatterExpr = $formatter->toPhpExpr();
+                $args = $this->builderFactory->args([$formatterExpr]);
+                $expr = $this->builderFactory->methodCall($expr, self::FORMATTER_FUNCTION, $args);
+            }
+        }
+        unset($this->settings[self::FORMATTERS_SETTING]);
     }
 
     private function addFiltersToExpr(Expr &$expr): void
     {
-        if (isset($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING])) {
-            foreach ($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING] as $name => $filterValue) {
-                $filter = match($name) {
-                    NameFilter::NAME => new NameFilter($filterValue),
-                    NarrativeFilter::NAME => new NarrativeFilter($filterValue),
-                    RoleFilter::NAME => new RoleFilter($filterValue),
-                    TagFilter::NAME => new TagFilter($filterValue),
-                    default => null,
-                };
-                if ($filter !== null) {
-                    $args = $this->builderFactory->args([$filter->toPhpExpr()]);
-                    $expr = $this->builderFactory->methodCall($expr, self::FILTER_FUNCTION, $args);
-                    unset($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING][$name]);
-                }
+        if (!isset($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING])) {
+            return;
+        }
+        foreach ($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING] as $name => $filterValue) {
+            $filter = match($name) {
+                NameFilter::NAME => new NameFilter($filterValue),
+                NarrativeFilter::NAME => new NarrativeFilter($filterValue),
+                RoleFilter::NAME => new RoleFilter($filterValue),
+                TagFilter::NAME => new TagFilter($filterValue),
+                default => null,
+            };
+            if ($filter !== null) {
+                $args = $this->builderFactory->args([$filter->toPhpExpr()]);
+                $expr = $this->builderFactory->methodCall($expr, self::FILTER_FUNCTION, $args);
+                unset($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING][$name]);
             }
-            if ($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING] === []) {
-                unset($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING]);
-                if ($this->settings[self::GHERKIN_SETTING] === []) {
-                    unset($this->settings[self::GHERKIN_SETTING]);
-                }
+        }
+        if ($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING] === []) {
+            unset($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING]);
+            if ($this->settings[self::GHERKIN_SETTING] === []) {
+                unset($this->settings[self::GHERKIN_SETTING]);
             }
         }
     }
 
     private function addUnusedDefinitionsToExpr(Expr &$expr): void
     {
-        if (isset($this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING])) {
-            $args = $this->builderFactory->args([
-                $this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING]
-            ]);
-            $expr = $this->builderFactory->methodCall($expr, self::UNUSED_DEFINITIONS_FUNCTION, $args);
-            unset($this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING]);
-            if ($this->settings[self::DEFINITIONS_SETTING] === []) {
-                unset($this->settings[self::DEFINITIONS_SETTING]);
-            }
+        if (!isset($this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING])) {
+            return;
+        }
+        $args = $this->builderFactory->args([
+            $this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING]
+        ]);
+        $expr = $this->builderFactory->methodCall($expr, self::UNUSED_DEFINITIONS_FUNCTION, $args);
+        unset($this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING]);
+        if ($this->settings[self::DEFINITIONS_SETTING] === []) {
+            unset($this->settings[self::DEFINITIONS_SETTING]);
         }
     }
 
     private function addExtensionsToExpr(Expr &$expr): void
     {
-        if (isset($this->settings[self::EXTENSIONS_SETTING])) {
-            foreach ($this->settings[self::EXTENSIONS_SETTING] as $name => $extensionSettings) {
-                $extension = self::$extensionManager->activateExtension($name);
-                if ($extension instanceof ConfigurableExtensionInterface) {
-                    $extensionObject = $extension->getExtensionConfigObject($name, $extensionSettings);
-                } else {
-                    $extensionObject = new Extension($name, $extensionSettings ?? []);
-                }
+        if (!isset($this->settings[self::EXTENSIONS_SETTING])) {
+            return;
+        }
+        foreach ($this->settings[self::EXTENSIONS_SETTING] as $name => $extensionSettings) {
+            $extension = self::$extensionManager->activateExtension($name);
+            if ($extension instanceof ConfigurableExtensionInterface) {
+                $extensionObject = $extension->getExtensionConfigObject($name, $extensionSettings);
+            } else {
+                $extensionObject = new Extension($name, $extensionSettings ?? []);
+            }
 
-                $args = $this->builderFactory->args([$extensionObject->toPhpExpr()]);
-                $expr = $this->builderFactory->methodCall($expr, self::EXTENSION_FUNCTION, $args);
-                unset($this->settings[self::EXTENSIONS_SETTING][$name]);
-            }
-            if ($this->settings[self::EXTENSIONS_SETTING] === []) {
-                unset($this->settings[self::EXTENSIONS_SETTING]);
-            }
+            $args = $this->builderFactory->args([$extensionObject->toPhpExpr()]);
+            $expr = $this->builderFactory->methodCall($expr, self::EXTENSION_FUNCTION, $args);
+            unset($this->settings[self::EXTENSIONS_SETTING][$name]);
+        }
+        if ($this->settings[self::EXTENSIONS_SETTING] === []) {
+            unset($this->settings[self::EXTENSIONS_SETTING]);
         }
     }
 
     private function addSuitesToExpr(Expr &$expr): void
     {
-        if (isset($this->settings[self::SUITES_SETTING])) {
-            foreach ($this->settings[self::SUITES_SETTING] as $name => $suiteSettings) {
-                $suiteObject = new Suite($name, $suiteSettings ?? []);
-                $args = $this->builderFactory->args([$suiteObject->toPhpExpr()]);
-                $expr = $this->builderFactory->methodCall($expr, self::SUITE_FUNCTION, $args);
-                unset($this->settings[self::SUITES_SETTING][$name]);
-            }
-            unset($this->settings[self::SUITES_SETTING]);
+        if (!isset($this->settings[self::SUITES_SETTING])) {
+            return;
         }
+        foreach ($this->settings[self::SUITES_SETTING] as $name => $suiteSettings) {
+            $suiteObject = new Suite($name, $suiteSettings ?? []);
+            $args = $this->builderFactory->args([$suiteObject->toPhpExpr()]);
+            $expr = $this->builderFactory->methodCall($expr, self::SUITE_FUNCTION, $args);
+            unset($this->settings[self::SUITES_SETTING][$name]);
+        }
+        unset($this->settings[self::SUITES_SETTING]);
     }
 }
