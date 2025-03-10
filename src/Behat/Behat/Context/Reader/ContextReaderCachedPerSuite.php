@@ -26,7 +26,7 @@ final class ContextReaderCachedPerSuite implements ContextReader
     /**
      * @var array[]
      */
-    private $cachedCallees = array();
+    private $cachedCallees = [];
 
     /**
      * Initializes reader.

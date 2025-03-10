@@ -66,7 +66,7 @@ final class Application extends BaseApplication
      */
     public function getDefaultInputDefinition(): InputDefinition
     {
-        return new InputDefinition(array(
+        return new InputDefinition([
             new InputOption('--profile', '-p', InputOption::VALUE_REQUIRED, 'Specify config profile to use.'),
             new InputOption('--config', '-c', InputOption::VALUE_REQUIRED, 'Specify config file to use.'),
             new InputOption(
@@ -90,7 +90,7 @@ final class Application extends BaseApplication
             ),
             new InputOption('--no-colors', null, InputOption::VALUE_NONE, 'Force no ANSI color in the output.'),
             new InputOption('--xdebug', null, InputOption::VALUE_NONE, 'Allow Xdebug to run.'),
-        ));
+        ]);
     }
 
     /**
@@ -123,11 +123,11 @@ final class Application extends BaseApplication
             }
         }
 
-        if ($input->hasParameterOption(array('--config-reference'))) {
-            $input = new ArrayInput(array('--config-reference' => true));
+        if ($input->hasParameterOption(['--config-reference'])) {
+            $input = new ArrayInput(['--config-reference' => true]);
         }
 
-        if ($path = $input->getParameterOption(array('--config', '-c'))) {
+        if ($path = $input->getParameterOption(['--config', '-c'])) {
             if (!is_file($path)) {
                 throw new ConfigurationLoadingException("The requested config file does not exist");
             }
@@ -159,7 +159,7 @@ final class Application extends BaseApplication
      */
     private function loadConfiguration(InputInterface $input)
     {
-        $profile = $input->getParameterOption(array('--profile', '-p')) ?: 'default';
+        $profile = $input->getParameterOption(['--profile', '-p']) ?: 'default';
 
         return $this->configurationLoader->loadConfiguration($profile);
     }
@@ -228,11 +228,11 @@ final class Application extends BaseApplication
      */
     protected function getCommandName(InputInterface $input): string
     {
-        if ($input->hasParameterOption(array('--config-reference'))) {
+        if ($input->hasParameterOption(['--config-reference'])) {
             return 'dump-reference';
         }
 
-        if ($input->hasParameterOption(array('--debug'))) {
+        if ($input->hasParameterOption(['--debug'])) {
             return 'debug';
         }
 
@@ -241,9 +241,9 @@ final class Application extends BaseApplication
 
     protected function configureIO(InputInterface $input, OutputInterface $output): void
     {
-        if (true === $input->hasParameterOption(array('--colors'))) {
+        if (true === $input->hasParameterOption(['--colors'])) {
             $output->setDecorated(true);
-        } elseif (true === $input->hasParameterOption(array('--no-colors'))) {
+        } elseif (true === $input->hasParameterOption(['--no-colors'])) {
             $output->setDecorated(false);
         }
 

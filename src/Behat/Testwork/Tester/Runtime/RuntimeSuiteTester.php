@@ -53,7 +53,7 @@ final class RuntimeSuiteTester implements SuiteTester
 
     public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
     {
-        $results = array();
+        $results = [];
         foreach ($iterator as $specification) {
             $setup = $this->specTester->setUp($env, $specification, $skip);
             $localSkip = !$setup->isSuccessful() || $skip;

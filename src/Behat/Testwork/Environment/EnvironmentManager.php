@@ -27,11 +27,11 @@ final class EnvironmentManager
     /**
      * @var EnvironmentHandler[]
      */
-    private $handlers = array();
+    private $handlers = [];
     /**
      * @var EnvironmentReader[]
      */
-    private $readers = array();
+    private $readers = [];
 
     /**
      * Registers environment handler.
@@ -109,7 +109,7 @@ final class EnvironmentManager
      */
     public function readEnvironmentCallees(Environment $environment)
     {
-        $callees = array();
+        $callees = [];
         foreach ($this->readers as $reader) {
             if ($reader->supportsEnvironment($environment)) {
                 $callees = array_merge($callees, $reader->readEnvironmentCallees($environment));

@@ -70,10 +70,10 @@ final class GherkinTranslationsExtension implements Extension
      */
     private function loadController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Translator\Cli\GherkinTranslationsController', array(
+        $definition = new Definition('Behat\Behat\Translator\Cli\GherkinTranslationsController', [
             new Reference(TranslatorExtension::TRANSLATOR_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.gherkin_translations', $definition);
     }
 }

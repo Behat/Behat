@@ -109,7 +109,7 @@ final class SpecificationExtension implements Extension
         $definition = $container->getDefinition(self::FINDER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerSpecificationLocator', array($reference));
+            $definition->addMethodCall('registerSpecificationLocator', [$reference]);
         }
     }
 }

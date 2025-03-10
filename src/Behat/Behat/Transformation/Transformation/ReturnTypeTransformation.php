@@ -81,7 +81,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
             $definitionCall->getEnvironment(),
             $definitionCall->getCallee(),
             $this,
-            array($argumentValue)
+            [$argumentValue]
         );
 
         $result = $callCenter->makeCall($call);

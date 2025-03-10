@@ -24,7 +24,7 @@ final class Command extends BaseCommand
     /**
      * @var Controller[]
      */
-    private $controllers = array();
+    private $controllers = [];
 
     /**
      * Initializes command.

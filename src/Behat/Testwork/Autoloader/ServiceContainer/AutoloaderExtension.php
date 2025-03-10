@@ -33,14 +33,14 @@ final class AutoloaderExtension implements Extension
     /**
      * @var array
      */
-    private $defaultPaths = array();
+    private $defaultPaths = [];
 
     /**
      * Initializes extension.
      *
      * @param array $defaultPaths
      */
-    public function __construct(array $defaultPaths = array())
+    public function __construct(array $defaultPaths = [])
     {
         $this->defaultPaths = $defaultPaths;
     }
@@ -70,14 +70,14 @@ final class AutoloaderExtension implements Extension
         $builder = $builder
             ->beforeNormalization()
                 ->ifString()->then(function ($path) {
-                    return array('' => $path);
+                    return ['' => $path];
                 })
             ->end()
 
             ->defaultValue($this->defaultPaths)
             ->treatTrueLike($this->defaultPaths)
-            ->treatNullLike(array())
-            ->treatFalseLike(array())
+            ->treatNullLike([])
+            ->treatFalseLike([])
         ;
         assert($builder instanceof ArrayNodeDefinition);
         $builder
@@ -121,10 +121,10 @@ final class AutoloaderExtension implements Extension
      */
     private function loadController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Autoloader\Cli\AutoloaderController', array(
+        $definition = new Definition('Behat\Testwork\Autoloader\Cli\AutoloaderController', [
             new Reference(self::CLASS_LOADER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
 
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.autoloader', $definition);
     }
@@ -151,7 +151,7 @@ final class AutoloaderExtension implements Extension
         $prefixes = $container->getParameter('class_loader.prefixes');
 
         foreach ($prefixes as $prefix => $path) {
-            $loaderDefinition->addMethodCall('add', array($prefix, $path));
+            $loaderDefinition->addMethodCall('add', [$prefix, $path]);
         }
     }
 }

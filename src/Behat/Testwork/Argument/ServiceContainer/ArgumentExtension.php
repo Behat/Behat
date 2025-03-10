@@ -61,14 +61,14 @@ final class ArgumentExtension implements Extension
         $definition = new Definition('Behat\Testwork\Argument\MixedArgumentOrganiser');
         $container->setDefinition(self::MIXED_ARGUMENT_ORGANISER_ID, $definition);
 
-        $definition = new Definition('Behat\Testwork\Argument\PregMatchArgumentOrganiser', array(
+        $definition = new Definition('Behat\Testwork\Argument\PregMatchArgumentOrganiser', [
             new Reference(self::MIXED_ARGUMENT_ORGANISER_ID)
-        ));
+        ]);
         $container->setDefinition(self::PREG_MATCH_ARGUMENT_ORGANISER_ID, $definition);
 
-        $definition = new Definition('Behat\Testwork\Argument\ConstructorArgumentOrganiser', array(
+        $definition = new Definition('Behat\Testwork\Argument\ConstructorArgumentOrganiser', [
             new Reference(self::MIXED_ARGUMENT_ORGANISER_ID)
-        ));
+        ]);
         $container->setDefinition(self::CONSTRUCTOR_ARGUMENT_ORGANISER_ID, $definition);
     }
 

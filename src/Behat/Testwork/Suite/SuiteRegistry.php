@@ -29,15 +29,15 @@ final class SuiteRegistry implements SuiteRepository
     /**
      * @var SuiteGenerator[]
      */
-    private $generators = array();
+    private $generators = [];
     /**
      * @var array
      */
-    private $suiteConfigurations = array();
+    private $suiteConfigurations = [];
     /**
      * @var Suite[]
      */
-    private $suites = array();
+    private $suites = [];
 
     /**
      * Registers suite generator.
@@ -68,7 +68,7 @@ final class SuiteRegistry implements SuiteRepository
             ), $name);
         }
 
-        $this->suiteConfigurations[$name] = array($type, $settings);
+        $this->suiteConfigurations[$name] = [$type, $settings];
         $this->suitesGenerated = false;
     }
 
@@ -83,7 +83,7 @@ final class SuiteRegistry implements SuiteRepository
             return $this->suites;
         }
 
-        $this->suites = array();
+        $this->suites = [];
         foreach ($this->suiteConfigurations as $name => $configuration) {
             list($type, $settings) = $configuration;
 

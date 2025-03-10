@@ -93,37 +93,37 @@ final class TranslatorExtension implements Extension
      */
     private function loadTranslator(ContainerBuilder $container, $locale, $fallbackLocale)
     {
-        $definition = new Definition('Behat\Behat\Definition\Translator\Translator', array($locale));
+        $definition = new Definition('Behat\Behat\Definition\Translator\Translator', [$locale]);
         $container->setDefinition(self::TRANSLATOR_ID, $definition);
 
-        $definition->addMethodCall('setFallbackLocales', array(array($fallbackLocale)));
+        $definition->addMethodCall('setFallbackLocales', [[$fallbackLocale]]);
         $definition->addMethodCall(
             'addLoader',
-            array(
+            [
                 'xliff',
                 new Definition('Symfony\Component\Translation\Loader\XliffFileLoader')
-            )
+            ]
         );
         $definition->addMethodCall(
             'addLoader',
-            array(
+            [
                 'yaml',
                 new Definition('Symfony\Component\Translation\Loader\YamlFileLoader')
-            )
+            ]
         );
         $definition->addMethodCall(
             'addLoader',
-            array(
+            [
                 'php',
                 new Definition('Symfony\Component\Translation\Loader\PhpFileLoader')
-            )
+            ]
         );
         $definition->addMethodCall(
             'addLoader',
-            array(
+            [
                 'array',
                 new Definition('Symfony\Component\Translation\Loader\ArrayLoader')
-            )
+            ]
         );
         $container->setDefinition(self::TRANSLATOR_ID, $definition);
     }
@@ -135,10 +135,10 @@ final class TranslatorExtension implements Extension
      */
     private function loadController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Translator\Cli\LanguageController', array(
+        $definition = new Definition('Behat\Testwork\Translator\Cli\LanguageController', [
             new Reference(self::TRANSLATOR_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 800));
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 800]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.translator', $definition);
     }
 

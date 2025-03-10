@@ -102,7 +102,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         $resultConverter = $this->resultConverter;
 
         return function ($value, $column) use ($outline, $example, $stepEvents, $resultConverter) {
-            $results = array();
+            $results = [];
             foreach ($stepEvents as $event) {
                 $index = array_search($event->getStep(), $example->getSteps());
                 $header = $outline->getExampleTable()->getRow(0);
@@ -160,7 +160,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         }
 
         $text = $this->exceptionPresenter->presentException($result->getException());
-        $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+        $indentedText = implode("\n", array_map([$this, 'subIndent'], explode("\n", $text)));
         $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
     }
 

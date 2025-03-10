@@ -34,7 +34,7 @@ final class OrderController implements Controller
     /**
      * @var array
      */
-    private $orderers = array();
+    private $orderers = [];
 
     /**
      * @param EventDispatcherInterface $eventDispatcher deprecated, will be removed in the next major version

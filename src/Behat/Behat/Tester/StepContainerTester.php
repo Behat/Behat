@@ -51,7 +51,7 @@ final class StepContainerTester
      */
     public function test(Environment $env, FeatureNode $feature, StepContainerInterface $container, $skip)
     {
-        $results = array();
+        $results = [];
         foreach ($container->getSteps() as $step) {
             $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
             $skipSetup = !$setup->isSuccessful() || $skip;

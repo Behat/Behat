@@ -35,7 +35,7 @@ final class HookCall extends EnvironmentCall
      */
     public function __construct(HookScope $scope, Hook $hook, $errorReportingLevel = null)
     {
-        parent::__construct($scope->getEnvironment(), $hook, array($scope), $errorReportingLevel);
+        parent::__construct($scope->getEnvironment(), $hook, [$scope], $errorReportingLevel);
 
         $this->scope = $scope;
     }

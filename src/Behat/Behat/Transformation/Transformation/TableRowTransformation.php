@@ -71,13 +71,13 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        $rows = array();
+        $rows = [];
         foreach ($argumentValue as $row) {
             $call = new TransformationCall(
                 $definitionCall->getEnvironment(),
                 $definitionCall->getCallee(),
                 $this,
-                array($row)
+                [$row]
             );
 
             $result = $callCenter->makeCall($call);

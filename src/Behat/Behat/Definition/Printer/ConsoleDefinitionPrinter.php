@@ -54,11 +54,11 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
         $output->getFormatter()->setStyle('def_regex', new OutputFormatterStyle('yellow'));
         $output->getFormatter()->setStyle(
             'def_regex_capture',
-            new OutputFormatterStyle('yellow', null, array('bold'))
+            new OutputFormatterStyle('yellow', null, ['bold'])
         );
         $output->getFormatter()->setStyle(
             'def_dimmed',
-            new OutputFormatterStyle('black', null, array('bold'))
+            new OutputFormatterStyle('black', null, ['bold'])
         );
     }
 

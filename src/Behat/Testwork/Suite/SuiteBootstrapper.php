@@ -22,7 +22,7 @@ final class SuiteBootstrapper
     /**
      * @var SuiteSetup[]
      */
-    private $setups = array();
+    private $setups = [];
 
     /**
      * Registers suite setup.
@@ -41,7 +41,7 @@ final class SuiteBootstrapper
      */
     public function bootstrapSuites(array $suites)
     {
-        array_map(array($this, 'bootstrapSuite'), $suites);
+        array_map([$this, 'bootstrapSuite'], $suites);
     }
 
     /**

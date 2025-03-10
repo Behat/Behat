@@ -49,7 +49,7 @@ class FeatureContext implements Context
     /**
      * @var array
      */
-    private $env = array();
+    private $env = [];
     /**
      * @var string
      */
@@ -101,7 +101,7 @@ class FeatureContext implements Context
      */
     public function aFileNamedWith($filename, PyStringNode $content)
     {
-        $content = strtr((string) $content, array("'''" => '"""'));
+        $content = strtr((string) $content, ["'''" => '"""']);
         $this->createFile($this->workingDir . '/' . $filename, $content);
     }
 
@@ -184,7 +184,7 @@ EOL;
      */
     public function iSetEnvironmentVariable($name, $value)
     {
-        $this->env = array($name => (string) $value);
+        $this->env = [$name => (string) $value];
     }
 
     /**
@@ -196,7 +196,7 @@ EOL;
      */
     public function iSetBehatParamsEnvironmentVariable(PyStringNode $value)
     {
-        $this->env = array('BEHAT_PARAMS' => (string) $value);
+        $this->env = ['BEHAT_PARAMS' => (string) $value];
     }
 
     /**
@@ -235,14 +235,14 @@ EOL;
      */
     public function iRunBehat($argumentsString = '')
     {
-        $argumentsString = strtr($argumentsString, array('\'' => '"'));
+        $argumentsString = strtr($argumentsString, ['\'' => '"']);
 
         $cmd = sprintf(
             '%s %s %s %s',
             $this->phpBin,
             escapeshellarg(BEHAT_BIN_PATH),
             $argumentsString,
-            strtr($this->options, array('\'' => '"', '"' => '\"'))
+            strtr($this->options, ['\'' => '"', '"' => '\"'])
         );
 
         $this->process = Process::fromShellCommandline($cmd);
@@ -426,12 +426,12 @@ EOL;
 
     private function getExpectedOutput(PyStringNode $expectedText)
     {
-        $text = strtr($expectedText, array(
+        $text = strtr($expectedText, [
             '\'\'\'' => '"""',
             '%%TMP_DIR%%' => sys_get_temp_dir() . DIRECTORY_SEPARATOR,
             '%%WORKING_DIR%%' => realpath($this->workingDir . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR,
             '%%DS%%' => DIRECTORY_SEPARATOR,
-        ));
+        ]);
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {

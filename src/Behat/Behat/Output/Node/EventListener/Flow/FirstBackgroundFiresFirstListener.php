@@ -40,7 +40,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
     /**
      * @var array<array{0: Event, 1: string}>
      */
-    private $delayedUntilBackgroundEnd = array();
+    private $delayedUntilBackgroundEnd = [];
 
     /**
      * Initializes listener.
@@ -61,7 +61,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
         $this->markFirstBackgroundPrintedAfterBackground($eventName);
 
         if ($this->isEventDelayedUntilFirstBackgroundPrinted($event)) {
-            $this->delayedUntilBackgroundEnd[] = array($event, $eventName);
+            $this->delayedUntilBackgroundEnd[] = [$event, $eventName];
 
             return;
         }
@@ -132,6 +132,6 @@ class FirstBackgroundFiresFirstListener implements EventListener
             $this->descendant->listenEvent($formatter, $event, $eventName);
         }
 
-        $this->delayedUntilBackgroundEnd = array();
+        $this->delayedUntilBackgroundEnd = [];
     }
 }

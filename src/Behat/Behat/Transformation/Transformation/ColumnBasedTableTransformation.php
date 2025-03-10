@@ -76,7 +76,7 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
             $definitionCall->getEnvironment(),
             $definitionCall->getCallee(),
             $this,
-            array($argumentValue)
+            [$argumentValue]
         );
 
         $result = $callCenter->makeCall($call);

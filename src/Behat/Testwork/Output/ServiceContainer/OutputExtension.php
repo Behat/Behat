@@ -96,7 +96,7 @@ final class OutputExtension implements Extension
     public function configure(ArrayNodeDefinition $builder)
     {
         $builder = $builder
-            ->defaultValue(array($this->defaultFormatter => array('enabled' => true)))
+            ->defaultValue([$this->defaultFormatter => ['enabled' => true]])
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->beforeNormalization()
@@ -104,16 +104,16 @@ final class OutputExtension implements Extension
                         return is_array($a) && !isset($a['enabled']);
                     })
                     ->then(function ($a) {
-                        return array_merge($a, array('enabled' => true));
+                        return array_merge($a, ['enabled' => true]);
                     })
                 ->end()
         ;
         assert($builder instanceof ArrayNodeDefinition);
         $builder
                 ->useAttributeAsKey('name')
-                ->treatTrueLike(array('enabled' => true))
-                ->treatNullLike(array('enabled' => true))
-                ->treatFalseLike(array('enabled' => false))
+                ->treatTrueLike(['enabled' => true])
+                ->treatNullLike(['enabled' => true])
+                ->treatFalseLike(['enabled' => false])
                 ->prototype('variable')->end()
         ;
     }
@@ -144,10 +144,10 @@ final class OutputExtension implements Extension
      */
     private function loadOutputController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Output\Cli\OutputController', array(
+        $definition = new Definition('Behat\Testwork\Output\Cli\OutputController', [
             new Reference(self::MANAGER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 1000));
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 1000]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.output', $definition);
     }
 
@@ -159,19 +159,19 @@ final class OutputExtension implements Extension
      */
     private function loadManager(ContainerBuilder $container, array $formatters)
     {
-        $definition = new Definition('Behat\Testwork\Output\OutputManager', array(
+        $definition = new Definition('Behat\Testwork\Output\OutputManager', [
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
-        ));
+        ]);
 
         foreach ($formatters as $name => $parameters) {
             if ($parameters['enabled']) {
-                $definition->addMethodCall('enableFormatter', array($name));
+                $definition->addMethodCall('enableFormatter', [$name]);
             } else {
-                $definition->addMethodCall('disableFormatter', array($name));
+                $definition->addMethodCall('disableFormatter', [$name]);
             }
 
             unset($parameters['enabled']);
-            $definition->addMethodCall('setFormatterParameters', array($name, $parameters));
+            $definition->addMethodCall('setFormatterParameters', [$name, $parameters]);
         }
 
         $container->setDefinition(self::MANAGER_ID, $definition);
@@ -215,7 +215,7 @@ final class OutputExtension implements Extension
         $definition->setMethodCalls();
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerFormatter', array($reference));
+            $definition->addMethodCall('registerFormatter', [$reference]);
         }
 
         foreach ($previousCalls as $call) {

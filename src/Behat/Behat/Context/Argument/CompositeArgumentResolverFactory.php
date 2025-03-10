@@ -24,7 +24,7 @@ final class CompositeArgumentResolverFactory implements ArgumentResolverFactory
     /**
      * @var ArgumentResolverFactory[]
      */
-    private $factories = array();
+    private $factories = [];
 
     /**
      * Registers factory.
@@ -46,7 +46,7 @@ final class CompositeArgumentResolverFactory implements ArgumentResolverFactory
             function (array $resolvers, ArgumentResolverFactory $factory) use ($environment) {
                 return array_merge($resolvers, $factory->createArgumentResolvers($environment));
             },
-            array()
+            []
         );
     }
 }

@@ -57,7 +57,7 @@ class JUnitStepPrinter implements StepPrinter
             $message .= ': ' . $this->exceptionPresenter->presentException($result->getException());
         }
 
-        $attributes = array('message' => $message);
+        $attributes = ['message' => $message];
 
         switch ($result->getResultCode()) {
             case TestResult::FAILED:

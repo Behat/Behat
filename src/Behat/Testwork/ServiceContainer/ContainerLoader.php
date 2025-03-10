@@ -135,7 +135,7 @@ final class ContainerLoader
     {
         // Load default extensions first
         foreach ($this->extensionManager->getExtensions() as $extension) {
-            $extensionConfig = array();
+            $extensionConfig = [];
             if (isset($config[$extension->getConfigKey()])) {
                 $extensionConfig = $config[$extension->getConfigKey()];
                 unset($config[$extension->getConfigKey()]);
@@ -166,10 +166,10 @@ final class ContainerLoader
      */
     private function loadExtension(ContainerBuilder $container, Extension $extension, array $config)
     {
-        $tempContainer = new ContainerBuilder(new ParameterBag(array(
+        $tempContainer = new ContainerBuilder(new ParameterBag([
             'paths.base' => $container->getParameter('paths.base'),
             'extensions' => $container->getParameter('extensions'),
-        )));
+        ]));
         $tempContainer->addObjectResource($extension);
         $extension->load($container, $config);
         $container->merge($tempContainer);

@@ -100,10 +100,10 @@ class EventDispatcherExtension implements Extension
      */
     protected function loadSigintController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Cli\SigintController', array(
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Cli\SigintController', [
             new Reference(EventDispatcherExtension::DISPATCHER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.sigint', $definition);
     }
 
@@ -125,10 +125,10 @@ class EventDispatcherExtension implements Extension
      */
     protected function loadEventDispatchingExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingExercise', array(
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingExercise', [
             new Reference(TesterExtension::EXERCISE_ID),
             new Reference(self::DISPATCHER_ID)
-        ));
+        ]);
         $definition->addTag(TesterExtension::EXERCISE_WRAPPER_TAG);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.event_dispatching', $definition);
     }
@@ -140,11 +140,11 @@ class EventDispatcherExtension implements Extension
      */
     protected function loadEventDispatchingSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingSuiteTester', array(
+        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingSuiteTester', [
             new Reference(TesterExtension::SUITE_TESTER_ID),
             new Reference(self::DISPATCHER_ID)
-        ));
-        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => -9999));
+        ]);
+        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
@@ -159,7 +159,7 @@ class EventDispatcherExtension implements Extension
         $definition = $container->getDefinition(self::DISPATCHER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('addSubscriber', array($reference));
+            $definition->addMethodCall('addSubscriber', [$reference]);
         }
     }
 }

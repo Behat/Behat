@@ -74,10 +74,10 @@ final class FilesystemExtension implements Extension
      */
     protected function loadFilesystemLogger(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Filesystem\ConsoleFilesystemLogger', array(
+        $definition = new Definition('Behat\Testwork\Filesystem\ConsoleFilesystemLogger', [
             '%paths.base%',
             new Reference(CliExtension::OUTPUT_ID)
-        ));
+        ]);
         $container->setDefinition(self::LOGGER_ID, $definition);
     }
 }

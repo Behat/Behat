@@ -92,7 +92,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
             $definitionCall->getEnvironment(),
             $definitionCall->getCallee(),
             $this,
-            array($argumentValue)
+            [$argumentValue]
         );
 
         $result = $callCenter->makeCall($call);

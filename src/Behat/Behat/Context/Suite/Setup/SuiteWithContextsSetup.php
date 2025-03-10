@@ -36,7 +36,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * @var ClassGenerator[]
      */
-    private $classGenerators = array();
+    private $classGenerators = [];
 
     /**
      * Initializes setup.
@@ -235,13 +235,13 @@ final class SuiteWithContextsSetup implements SuiteSetup
             $classpath = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, 0, $pos)) . DIRECTORY_SEPARATOR;
             $classname = substr($class, $pos + 1);
 
-            return array($classpath, $classname);
+            return [$classpath, $classname];
         }
 
         // PEAR-like class name
         $classpath = null;
         $classname = $class;
 
-        return array($classpath, $classname);
+        return [$classpath, $classname];
     }
 }

@@ -43,7 +43,7 @@ final class SyntaxController implements Controller
      */
     public function __construct(KeywordsDumper $dumper, TranslatorInterface $translator)
     {
-        $dumper->setKeywordsDumperFunction(array($this, 'dumpKeywords'));
+        $dumper->setKeywordsDumperFunction([$this, 'dumpKeywords']);
         $this->keywordsDumper = $dumper;
         $this->translator = $translator;
     }
@@ -79,7 +79,7 @@ final class SyntaxController implements Controller
             return null;
         }
 
-        $output->getFormatter()->setStyle('gherkin_keyword', new OutputFormatterStyle('green', null, array('bold')));
+        $output->getFormatter()->setStyle('gherkin_keyword', new OutputFormatterStyle('green', null, ['bold']));
         $output->getFormatter()->setStyle('gherkin_comment', new OutputFormatterStyle('yellow'));
 
         $story = $this->keywordsDumper->dump($this->translator->getLocale());

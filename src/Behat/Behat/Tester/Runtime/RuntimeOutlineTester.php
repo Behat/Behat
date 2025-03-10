@@ -57,7 +57,7 @@ final class RuntimeOutlineTester implements OutlineTester
      */
     public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip = false)
     {
-        $results = array();
+        $results = [];
         foreach ($outline->getExamples() as $example) {
             $setup = $this->scenarioTester->setUp($env, $feature, $example, $skip);
             $localSkip = !$setup->isSuccessful() || $skip;

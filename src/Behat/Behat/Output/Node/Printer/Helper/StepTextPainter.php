@@ -63,7 +63,7 @@ final class StepTextPainter
         }
 
         // Find arguments with offsets
-        $matches = array();
+        $matches = [];
         preg_match($regex, $text, $matches, PREG_OFFSET_CAPTURE);
         array_shift($matches);
 

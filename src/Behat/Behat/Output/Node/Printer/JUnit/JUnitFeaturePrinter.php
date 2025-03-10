@@ -61,14 +61,14 @@ final class JUnitFeaturePrinter implements FeaturePrinter
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $outputPrinter->extendTestsuiteAttributes(array(
+        $outputPrinter->extendTestsuiteAttributes([
             'name' => $this->currentFeature->getTitle(),
             'tests' => $totalCount,
             'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[TestResult::UNDEFINED],
             'time' => $this->durationListener ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
-        ));
+        ]);
 
         $this->statistics->reset();
         $this->currentFeature = null;

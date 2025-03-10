@@ -78,18 +78,18 @@ final class ContextSnippetsController implements Controller
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->generator->setContextIdentifier(
-            new AggregateContextIdentifier(array(
+            new AggregateContextIdentifier([
                 new ContextInterfaceBasedContextIdentifier(),
                 new FixedContextIdentifier($input->getOption('snippets-for')),
                 new InteractiveContextIdentifier($this->translator, $input, $output)
-            ))
+            ])
         );
 
         $this->generator->setPatternIdentifier(
-            new AggregatePatternIdentifier(array(
+            new AggregatePatternIdentifier([
                 new ContextInterfaceBasedPatternIdentifier(),
                 new FixedPatternIdentifier($input->getOption('snippets-type'))
-            ))
+            ])
         );
         return null;
     }

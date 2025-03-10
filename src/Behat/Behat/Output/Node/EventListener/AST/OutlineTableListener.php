@@ -193,8 +193,8 @@ final class OutlineTableListener implements EventListener
         $this->exampleSetupPrinter->printTeardown($formatter, $event->getTeardown());
 
         $this->exampleSetup = null;
-        $this->stepBeforeTestedEvents = array();
-        $this->stepAfterTestedEvents = array();
+        $this->stepBeforeTestedEvents = [];
+        $this->stepAfterTestedEvents = [];
     }
 
     /**

@@ -64,7 +64,7 @@ final class RuntimeScenarioTester implements ScenarioTester
      */
     public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip = false)
     {
-        $results = array();
+        $results = [];
 
         if ($feature->hasBackground()) {
             $backgroundResult = $this->testBackground($env, $feature, $skip);

@@ -42,21 +42,21 @@ final class ConsoleOutputFactory extends BaseFactory
      */
     private function getDefaultStyles()
     {
-        return array(
-            'keyword'       => new OutputFormatterStyle(null, null, array('bold')),
-            'stdout'        => new OutputFormatterStyle(null, null, array()),
+        return [
+            'keyword'       => new OutputFormatterStyle(null, null, ['bold']),
+            'stdout'        => new OutputFormatterStyle(null, null, []),
             'exception'     => new OutputFormatterStyle('red'),
             'undefined'     => new OutputFormatterStyle('yellow'),
             'pending'       => new OutputFormatterStyle('yellow'),
-            'pending_param' => new OutputFormatterStyle('yellow', null, array('bold')),
+            'pending_param' => new OutputFormatterStyle('yellow', null, ['bold']),
             'failed'        => new OutputFormatterStyle('red'),
-            'failed_param'  => new OutputFormatterStyle('red', null, array('bold')),
+            'failed_param'  => new OutputFormatterStyle('red', null, ['bold']),
             'passed'        => new OutputFormatterStyle('green'),
-            'passed_param'  => new OutputFormatterStyle('green', null, array('bold')),
+            'passed_param'  => new OutputFormatterStyle('green', null, ['bold']),
             'skipped'       => new OutputFormatterStyle('cyan'),
-            'skipped_param' => new OutputFormatterStyle('cyan', null, array('bold')),
+            'skipped_param' => new OutputFormatterStyle('cyan', null, ['bold']),
             'comment'       => new OutputFormatterStyle('black'),
             'tag'           => new OutputFormatterStyle('cyan')
-        );
+        ];
     }
 }

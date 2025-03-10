@@ -32,7 +32,7 @@ final class ExceptionPresenter
     /**
      * @var ExceptionStringer[]
      */
-    private $stringers = array();
+    private $stringers = [];
     /**
      * @var integer
      */

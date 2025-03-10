@@ -59,7 +59,7 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
     private function cleanupMatchDuplicates(array $match)
     {
         $cleanMatch = array_slice($match, 1);
-        $arguments = array();
+        $arguments = [];
 
         $keys = array_keys($cleanMatch);
         for ($keyIndex = 0; $keyIndex < count($keys); $keyIndex++) {

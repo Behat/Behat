@@ -27,7 +27,7 @@ final class ContextEnvironmentReader implements EnvironmentReader
     /**
      * @var ContextReader[]
      */
-    private $contextReaders = array();
+    private $contextReaders = [];
 
     /**
      * Registers context loader.
@@ -59,7 +59,7 @@ final class ContextEnvironmentReader implements EnvironmentReader
             ), $environment);
         }
 
-        $callees = array();
+        $callees = [];
         foreach ($environment->getContextClasses() as $contextClass) {
             $callees = array_merge(
                 $callees,
@@ -80,7 +80,7 @@ final class ContextEnvironmentReader implements EnvironmentReader
      */
     private function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        $callees = array();
+        $callees = [];
         foreach ($this->contextReaders as $loader) {
             $callees = array_merge(
                 $callees,

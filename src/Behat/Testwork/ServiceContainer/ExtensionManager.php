@@ -26,14 +26,14 @@ final class ExtensionManager
     /**
      * @var Extension[]
      */
-    private $extensions = array();
+    private $extensions = [];
     /**
      * @var Extension[string]
      */
-    private $locatedExtensions = array();
-    private $debugInformation = array(
-        'extensions_list' => array()
-    );
+    private $locatedExtensions = [];
+    private $debugInformation = [
+        'extensions_list' => []
+    ];
 
     /**
      * Initializes manager.

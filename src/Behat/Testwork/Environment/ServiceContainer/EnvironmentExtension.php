@@ -111,7 +111,7 @@ final class EnvironmentExtension implements Extension
     protected function loadStaticEnvironmentHandler(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Environment\Handler\StaticEnvironmentHandler');
-        $definition->addTag(self::HANDLER_TAG, array('priority' => 0));
+        $definition->addTag(self::HANDLER_TAG, ['priority' => 0]);
         $container->setDefinition(self::HANDLER_TAG . '.static', $definition);
     }
 
@@ -126,7 +126,7 @@ final class EnvironmentExtension implements Extension
         $definition = $container->getDefinition(self::MANAGER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerEnvironmentHandler', array($reference));
+            $definition->addMethodCall('registerEnvironmentHandler', [$reference]);
         }
     }
 
@@ -141,7 +141,7 @@ final class EnvironmentExtension implements Extension
         $definition = $container->getDefinition(self::MANAGER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerEnvironmentReader', array($reference));
+            $definition->addMethodCall('registerEnvironmentReader', [$reference]);
         }
     }
 }

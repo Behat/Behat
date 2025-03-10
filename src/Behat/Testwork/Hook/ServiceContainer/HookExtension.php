@@ -79,10 +79,10 @@ class HookExtension implements Extension
      */
     protected function loadDispatcher(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\HookDispatcher', array(
+        $definition = new Definition('Behat\Testwork\Hook\HookDispatcher', [
             new Reference(self::REPOSITORY_ID),
             new Reference(CallExtension::CALL_CENTER_ID)
-        ));
+        ]);
         $container->setDefinition(self::DISPATCHER_ID, $definition);
     }
 
@@ -93,9 +93,9 @@ class HookExtension implements Extension
      */
     protected function loadRepository(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\HookRepository', array(
+        $definition = new Definition('Behat\Testwork\Hook\HookRepository', [
             new Reference(EnvironmentExtension::MANAGER_ID)
-        ));
+        ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
     }
 
@@ -106,11 +106,11 @@ class HookExtension implements Extension
      */
     protected function loadHookableTesters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\Tester\HookableSuiteTester', array(
+        $definition = new Definition('Behat\Testwork\Hook\Tester\HookableSuiteTester', [
             new Reference(TesterExtension::SUITE_TESTER_ID),
             new Reference(self::DISPATCHER_ID)
-        ));
-        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => 9999));
+        ]);
+        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, ['priority' => 9999]);
         $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.hookable', $definition);
     }
 }

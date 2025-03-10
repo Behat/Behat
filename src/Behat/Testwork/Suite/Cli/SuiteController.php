@@ -32,7 +32,7 @@ final class SuiteController implements Controller
     /**
      * @var array
      */
-    private $suiteConfigurations = array();
+    private $suiteConfigurations = [];
 
     /**
      * Initializes controller.

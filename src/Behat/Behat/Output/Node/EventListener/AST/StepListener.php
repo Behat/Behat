@@ -69,7 +69,7 @@ final class StepListener implements EventListener
      */
     private function forgetScenarioOnAfterEvent($eventName)
     {
-        if (!in_array($eventName, array(ScenarioTested::AFTER, ExampleTested::AFTER))) {
+        if (!in_array($eventName, [ScenarioTested::AFTER, ExampleTested::AFTER])) {
             return;
         }
 

@@ -35,7 +35,7 @@ final class RandomOrderer implements Orderer
      */
     private function orderFeatures(array $scenarioIterators)
     {
-        $orderedSuites = array();
+        $orderedSuites = [];
 
         foreach ($scenarioIterators as $scenarioIterator) {
             $orderedSpecifications = iterator_to_array($scenarioIterator);

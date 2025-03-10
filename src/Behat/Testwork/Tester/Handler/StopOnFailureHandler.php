@@ -34,8 +34,8 @@ final class StopOnFailureHandler
 
     public function registerListeners()
     {
-        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'exitOnFailure'), -100);
-        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'exitOnFailure'), -100);
+        $this->eventDispatcher->addListener(ScenarioTested::AFTER, [$this, 'exitOnFailure'], -100);
+        $this->eventDispatcher->addListener(ExampleTested::AFTER, [$this, 'exitOnFailure'], -100);
     }
 
     /**

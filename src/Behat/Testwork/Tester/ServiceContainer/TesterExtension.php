@@ -135,14 +135,14 @@ abstract class TesterExtension implements Extension
      */
     protected function loadExerciseController(ContainerBuilder $container, $skip = false)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', array(
+        $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', [
             new Reference(SuiteExtension::REGISTRY_ID),
             new Reference(SpecificationExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
             new Reference(self::RESULT_INTERPRETER_ID),
             $skip
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 0]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
     }
 
@@ -152,10 +152,10 @@ abstract class TesterExtension implements Extension
      */
     private function loadStopOnFailureHandler(ContainerBuilder $container, ?bool $stopOnFailure)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Handler\StopOnFailureHandler', array(
+        $definition = new Definition('Behat\Testwork\Tester\Handler\StopOnFailureHandler', [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
             new Reference(TesterExtension::RESULT_INTERPRETER_ID)
-        ));
+        ]);
 
         if ($stopOnFailure === true) {
             $definition->addMethodCall('registerListeners');
@@ -171,11 +171,11 @@ abstract class TesterExtension implements Extension
      */
     protected function loadStrictController(ContainerBuilder $container, $strict = false)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', array(
+        $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', [
             new Reference(self::RESULT_INTERPRETER_ID),
             $strict
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 300]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
     }
 
@@ -201,10 +201,10 @@ abstract class TesterExtension implements Extension
      */
     protected function loadExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeExercise', array(
+        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeExercise', [
             new Reference(EnvironmentExtension::MANAGER_ID),
             new Reference(self::SUITE_TESTER_ID)
-        ));
+        ]);
         $container->setDefinition(self::EXERCISE_ID, $definition);
     }
 
@@ -215,9 +215,9 @@ abstract class TesterExtension implements Extension
      */
     protected function loadSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeSuiteTester', array(
+        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeSuiteTester', [
             new Reference(self::SPECIFICATION_TESTER_ID)
-        ));
+        ]);
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);
     }
 
@@ -269,7 +269,7 @@ abstract class TesterExtension implements Extension
         $definition = $container->getDefinition(self::RESULT_INTERPRETER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerResultInterpretation', array($reference));
+            $definition->addMethodCall('registerResultInterpretation', [$reference]);
         }
     }
 }

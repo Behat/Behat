@@ -27,7 +27,7 @@ final class OutputManager
     /**
      * @var Formatter[]
      */
-    private $formatters = array();
+    private $formatters = [];
 
     /**
      * Initializes manager.
@@ -131,7 +131,7 @@ final class OutputManager
      */
     public function disableAllFormatters()
     {
-        array_map(array($this, 'disableFormatter'), array_keys($this->formatters));
+        array_map([$this, 'disableFormatter'], array_keys($this->formatters));
     }
 
     /**

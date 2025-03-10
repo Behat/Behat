@@ -30,11 +30,11 @@ final class DefinitionAnnotationReader implements AnnotationReader
     /**
      * @var string[]
      */
-    private static $classes = array(
+    private static $classes = [
         'given' => Given::class,
         'when'  => When::class,
         'then'  => Then::class,
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -48,7 +48,7 @@ final class DefinitionAnnotationReader implements AnnotationReader
         $type = strtolower($match[1]);
         $class = self::$classes[$type];
         $pattern = $match[2];
-        $callable = array($contextClass, $method->getName());
+        $callable = [$contextClass, $method->getName()];
 
         return new $class($pattern, $callable, $description);
     }

@@ -80,7 +80,7 @@ final class ListPrinter
         }
 
         $style = $this->resultConverter->convertResultCodeToString($resultCode);
-        $intro = $this->translator->trans($intro, array(), 'output');
+        $intro = $this->translator->trans($intro, [], 'output');
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
         foreach ($scenarioStats as $stat) {
@@ -110,7 +110,7 @@ final class ListPrinter
         }
 
         $style = $this->resultConverter->convertResultCodeToString($resultCode);
-        $intro = $this->translator->trans($intro, array(), 'output');
+        $intro = $this->translator->trans($intro, [], 'output');
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
 
@@ -147,7 +147,7 @@ final class ListPrinter
         }
 
         $style = $this->resultConverter->convertResultCodeToString(TestResult::FAILED);
-        $intro = $this->translator->trans($intro, array(), 'output');
+        $intro = $this->translator->trans($intro, [], 'output');
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
         foreach ($failedHookStats as $hookStat) {

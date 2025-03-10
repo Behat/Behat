@@ -83,7 +83,7 @@ final class RepositorySearchEngine implements SearchEngine
         $stepText = $step->getText();
         $multi = $step->getArguments();
 
-        $definitions = array();
+        $definitions = [];
         $result = null;
 
         foreach ($this->repository->getEnvironmentDefinitions($environment) as $definition) {

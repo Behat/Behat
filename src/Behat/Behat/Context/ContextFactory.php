@@ -30,11 +30,11 @@ final class ContextFactory
     /**
      * @var ArgumentResolver[]
      */
-    private $argumentResolvers = array();
+    private $argumentResolvers = [];
     /**
      * @var ContextInitializer[]
      */
-    private $contextInitializers = array();
+    private $contextInitializers = [];
     /**
      * @var Validator
      */
@@ -80,7 +80,7 @@ final class ContextFactory
      *
      * @return Context
      */
-    public function createContext($class, array $arguments = array(), array $singleUseResolvers = array())
+    public function createContext($class, array $arguments = [], array $singleUseResolvers = [])
     {
         $reflection = new ReflectionClass($class);
         $resolvers = array_merge($singleUseResolvers, $this->argumentResolvers);

@@ -123,7 +123,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
         foreach ($arguments as $argument) {
             $text = $this->getArgumentString($argument, !$formatter->getParameter('multiline'));
 
-            $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+            $indentedText = implode("\n", array_map([$this, 'subIndent'], explode("\n", $text)));
             $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
         }
     }

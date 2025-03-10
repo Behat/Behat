@@ -38,11 +38,11 @@ final class ConfigurationLoader
     /**
      * @var array
      */
-    private $debugInformation = array(
+    private $debugInformation = [
         'environment_variable_name' => 'none',
         'environment_variable_content' => 'none',
         'configuration_file_path' => 'none'
-    );
+    ];
 
     /**
      * Constructs reader.
@@ -107,7 +107,7 @@ final class ConfigurationLoader
      */
     public function loadConfiguration($profile = 'default')
     {
-        $configs = array();
+        $configs = [];
         $this->profileFound = false;
 
         // first is ENV config
@@ -154,7 +154,7 @@ final class ConfigurationLoader
      */
     protected function loadEnvironmentConfiguration()
     {
-        $configs = array();
+        $configs = [];
 
         if (!$this->environmentVariable) {
             return $configs;
@@ -241,7 +241,7 @@ final class ConfigurationLoader
      */
     private function loadConfigs($basePath, array $config, $profile)
     {
-        $configs = array();
+        $configs = [];
 
         $profile = $this->getProfileName($config, $profile);
 
@@ -299,7 +299,7 @@ final class ConfigurationLoader
      */
     private function loadImports($basePath, array $paths, $profile)
     {
-        $configs = array();
+        $configs = [];
         foreach ($paths as $path) {
             foreach ($this->parseImport($basePath, $path, $profile) as $importConfig) {
                 $configs[] = $importConfig;
