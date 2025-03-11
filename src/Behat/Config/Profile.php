@@ -41,8 +41,6 @@ final class Profile implements ConfigConverterInterface
 
     private BuilderFactory $builderFactory;
 
-    private static ExtensionManager $extensionManager;
-
     public function __construct(
         private string $name,
         private array $settings = [],
@@ -138,14 +136,6 @@ final class Profile implements ConfigConverterInterface
         return $expr;
     }
 
-    /**
-     * @internal
-     */
-    public static function setExtensioManager(ExtensionManager $extensionManager): void
-    {
-        self::$extensionManager = $extensionManager;
-    }
-
     private function addFormattersToExpr(Expr &$expr): void
     {
         if (!isset($this->settings[self::FORMATTERS_SETTING])) {
@@ -227,12 +217,7 @@ final class Profile implements ConfigConverterInterface
             return;
         }
         foreach ($this->settings[self::EXTENSIONS_SETTING] as $name => $extensionSettings) {
-            $extension = self::$extensionManager->activateExtension($name);
-            if ($extension instanceof ConfigurableExtensionInterface) {
-                $extensionObject = $extension->getExtensionConfigObject($name, $extensionSettings);
-            } else {
-                $extensionObject = new Extension($name, $extensionSettings ?? []);
-            }
+            $extensionObject = new Extension($name, $extensionSettings ?? []);
 
             $args = $this->builderFactory->args([$extensionObject->toPhpExpr()]);
             $expr = $this->builderFactory->methodCall($expr, self::EXTENSION_FUNCTION, $args);
